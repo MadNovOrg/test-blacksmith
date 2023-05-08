@@ -54,6 +54,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const [signUpError, setError] = useState('')
 
   const schema = useMemo(() => getFormSchema(t), [t])
+  const url = import.meta.env.VITE_BASE_WORDPRESS_URL
+  const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
 
   const {
     register,
@@ -247,10 +249,13 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                 <>
                   <Typography variant="body2">
                     <Trans i18nKey="pages.signup.tcs-label">
-                      I accept the <a href="">Terms of Business</a> and agree to
-                      Team Teach processing my personal data in accordance with
-                      our
-                      <a href="">Privacy Policy</a>
+                      I accept the{' '}
+                      <a href={`${origin}/terms-of-business/`}>
+                        Terms of Business
+                      </a>{' '}
+                      and agree to Team Teach processing my personal data in
+                      accordance with our
+                      <a href={`${origin}/privacy-policy`}>Privacy Policy</a>
                     </Trans>
                   </Typography>
                   {errors.tcs ? (

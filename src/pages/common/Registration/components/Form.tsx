@@ -58,6 +58,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
   const schema = useMemo(() => getFormSchema(t), [t])
 
+  const url = import.meta.env.VITE_BASE_WORDPRESS_URL
+  const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
+
   const {
     register,
     handleSubmit,
@@ -282,7 +285,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                     <Trans i18nKey="pages.signup.tcs-label">
                       I accept the
                       <a
-                        href="https://www.teamteach.co.uk/policies-procedures/terms-of-business/"
+                        href={`${origin}/terms-of-business/`}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -290,7 +293,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                       </a>
                       and agree to Team Teach processing my personal data in
                       accordance with our
-                      <a href="">Privacy Policy</a>
+                      <a href={`${origin}/privacy-policy`}>Privacy Policy</a>
                     </Trans>
                   </Typography>
                   {errors.tcs ? (

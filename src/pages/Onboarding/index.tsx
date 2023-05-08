@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -32,6 +32,9 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t, _t } = useScopedTranslation('pages.onboarding')
   const { profile, reloadCurrentProfile } = useAuth()
   const navigate = useNavigate()
+
+  const url = import.meta.env.VITE_BASE_WORDPRESS_URL
+  const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
 
   const schema = yup.object({
     givenName: yup.string().required(requiredMsg(_t, 'first-name')),
@@ -193,10 +196,13 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                 <>
                   <Typography variant="body2">
                     <Trans i18nKey="pages.onboarding.tcs-label">
-                      I accept the <a href="">Terms of Business</a> and agree to
-                      Team Teach processing my personal data in accordance with
-                      our
-                      <a href="">Privacy Policy</a>
+                      I accept the
+                      <a href={`${origin}/terms-of-business/`}>
+                        Terms of Business
+                      </a>
+                      and agree to Team Teach processing my personal data in
+                      accordance with our
+                      <a href={`${origin}/privacy-policy`}>Privacy Policy</a>
                     </Trans>
                   </Typography>
                   {errors.tcs ? (
