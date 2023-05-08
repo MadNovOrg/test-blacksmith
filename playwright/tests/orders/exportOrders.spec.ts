@@ -2,7 +2,6 @@ import { Download, expect, test as base } from '@playwright/test'
 import { readFile } from 'xlsx'
 
 import { OrderInfoFragment, Payment_Methods_Enum } from '@app/generated/graphql'
-import { InviteStatus } from '@app/types'
 
 import * as API from '../../api'
 import { UNIQUE_COURSE } from '../../data/courses'
@@ -24,8 +23,7 @@ const test = base.extend<{
       const newCourse = UNIQUE_COURSE()
       const courseId = await API.course.insertCourse(
         newCourse,
-        users.trainer.email,
-        InviteStatus.ACCEPTED
+        users.trainer.email
       )
       newCourse.id = courseId
       const newOrder = await UNIQUE_ORDER(newCourse, users.userOrgAdmin, [

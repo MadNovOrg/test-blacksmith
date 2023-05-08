@@ -1,7 +1,5 @@
 import { test as base } from '@playwright/test'
 
-import { InviteStatus } from '@app/types'
-
 import * as API from '../../../api'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
@@ -31,11 +29,7 @@ for (const data of testData) {
   const test = base.extend<{ course: Course }>({
     course: async ({}, use) => {
       const course = UNIQUE_COURSE()
-      course.id = await API.course.insertCourse(
-        course,
-        users.trainer.email,
-        InviteStatus.ACCEPTED
-      )
+      course.id = await API.course.insertCourse(course, users.trainer.email)
       await API.course.insertCourseParticipants(course.id, usersArray)
       await use(course)
       await API.course.deleteCourse(course.id)

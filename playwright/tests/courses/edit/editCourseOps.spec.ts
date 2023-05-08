@@ -1,7 +1,5 @@
 import { test as base } from '@playwright/test'
 
-import { InviteStatus } from '@app/types'
-
 import * as API from '../../../api'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
@@ -12,11 +10,7 @@ import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
-    course.id = await API.course.insertCourse(
-      course,
-      users.trainer.email,
-      InviteStatus.ACCEPTED
-    )
+    course.id = await API.course.insertCourse(course, users.trainer.email)
     await use(course)
     await API.course.deleteCourse(course.id)
   },

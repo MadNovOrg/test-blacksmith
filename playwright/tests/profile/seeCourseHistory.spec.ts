@@ -2,7 +2,6 @@ import { test as base } from '@playwright/test'
 import { addSeconds } from 'date-fns'
 
 import { Grade_Enum } from '@app/generated/graphql'
-import { InviteStatus } from '@app/types'
 
 import * as API from '../../api'
 import { UNIQUE_COURSE } from '../../data/courses'
@@ -20,11 +19,7 @@ const test = base.extend<{ course: Course }>({
         end: addSeconds(new Date(), 2),
       },
     ]
-    course.id = await API.course.insertCourse(
-      course,
-      users.trainer.email,
-      InviteStatus.ACCEPTED
-    )
+    course.id = await API.course.insertCourse(course, users.trainer.email)
     await API.course.insertCourseParticipants(course.id, [users.user1])
     await API.course.insertCourseGradingForParticipants(
       course,

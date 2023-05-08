@@ -1,6 +1,6 @@
 import { test as base } from '@playwright/test'
 
-import { InviteStatus, CourseType } from '@app/types'
+import { CourseType } from '@app/types'
 
 import * as API from '../../../api'
 import { UNIQUE_COURSE } from '../../../data/courses'
@@ -16,11 +16,7 @@ const test = base.extend<{ course: Course }>({
     course.organization = { name: 'London First School' }
     course.contactProfile = users.user1WithOrg
     course.salesRepresentative = users.user2WithOrg
-    course.id = await API.course.insertCourse(
-      course,
-      users.trainer.email,
-      InviteStatus.ACCEPTED
-    )
+    course.id = await API.course.insertCourse(course, users.trainer.email)
     await use(course)
     await API.course.deleteCourse(course.id)
   },

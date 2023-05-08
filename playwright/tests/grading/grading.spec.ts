@@ -1,7 +1,7 @@
 import { test as base } from '@playwright/test'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
-import { CourseParticipant, InviteStatus } from '@app/types'
+import { CourseParticipant } from '@app/types'
 
 import * as API from '../../api'
 import { FINISHED_COURSE } from '../../data/courses'
@@ -18,11 +18,7 @@ const test = base.extend<{
     const course = FINISHED_COURSE()
     course.gradingConfirmed = true
     course.status = Course_Status_Enum.GradeMissing
-    course.id = await API.course.insertCourse(
-      course,
-      users.trainer.email,
-      InviteStatus.ACCEPTED
-    )
+    course.id = await API.course.insertCourse(course, users.trainer.email)
     await use(course)
     await API.course.deleteCourse(course.id)
   },

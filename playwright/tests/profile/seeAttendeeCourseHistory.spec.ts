@@ -1,7 +1,5 @@
 import { test as base } from '@playwright/test'
 
-import { InviteStatus } from '@app/types'
-
 import * as API from '../../api'
 import { TEST_SETTINGS } from '../../constants'
 import { UNIQUE_COURSE } from '../../data/courses'
@@ -15,11 +13,7 @@ const createCourses = async (): Promise<Course[]> => {
   for (let i = 0; i < 2; i++) {
     const course = UNIQUE_COURSE()
     course.organization = { name: 'London First School' }
-    course.id = await API.course.insertCourse(
-      course,
-      users.trainer.email,
-      InviteStatus.ACCEPTED
-    )
+    course.id = await API.course.insertCourse(course, users.trainer.email)
     courses.push(course)
   }
   return courses

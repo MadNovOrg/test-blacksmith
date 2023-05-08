@@ -116,7 +116,7 @@ export const getModuleIds = async (
 export const insertCourse = async (
   course: Course,
   email: string,
-  trainerStatus = InviteStatus.PENDING,
+  trainerStatus = InviteStatus.ACCEPTED,
   modules = true
 ): Promise<number> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -232,7 +232,7 @@ export const makeSureTrainerHasCourses = async (
   const existingCourses = await getTrainerCourses(email)
   for (const course of courses) {
     if (!existingCourses.map(c => c.description).includes(course.description)) {
-      course.id = await insertCourse(course, email, InviteStatus.ACCEPTED)
+      course.id = await insertCourse(course, email)
     }
   }
   const allCourses = await getTrainerCourses(email)
