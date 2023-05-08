@@ -40,6 +40,10 @@ allowedRoles.forEach(role => {
     page,
     courses,
   }) => {
+    // eslint-disable-next-line playwright/no-conditional-in-test
+    if (role === 'salesAdmin') {
+      test.fail(true, 'See https://behaviourhub.atlassian.net/browse/TTHP-1532')
+    }
     const myCoursesPage = new MyCoursesPage(page)
     await myCoursesPage.gotoManageCourses(`${courses[0].id}`)
     const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(

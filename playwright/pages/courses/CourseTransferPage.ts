@@ -34,7 +34,6 @@ export class CourseTransferPage extends BasePage {
   }
 
   async clickConfirmTransfer() {
-    await this.waitForPageLoad()
     await Promise.all([
       waitForGraphQLResponse(this.page, 'transferParticipant', 'success'),
       this.confirmTransfer.click(),

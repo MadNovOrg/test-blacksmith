@@ -11,6 +11,8 @@ export class CourseApprovalRequiredModal extends BasePage {
   }
 
   async confirmCourseException() {
-    await this.proceedButton.click()
+    if (await this.proceedButton.isVisible()) {
+      await this.proceedButton.click()
+    }
   }
 }

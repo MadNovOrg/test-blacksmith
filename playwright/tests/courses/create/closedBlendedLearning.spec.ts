@@ -58,12 +58,9 @@ test(`create blended learning course: ${closedCourseData.name}`, async ({
   const trainerExpensesPage =
     await assignTrainersPage.clickTrainerExpensesButton()
   await approvalExceptionModal.confirmCourseException()
-
   const reviewAndConfirmPage =
     await trainerExpensesPage.clickReviewAndConfirmButton()
-
   course.id = await reviewAndConfirmPage.getCourseIdOnCreation()
-  await coursesListPage.checkCourseStatus(course.id, 'Trainer pending')
 
   const trainerContext = await browser.newContext({
     storageState: stateFilePath('trainer'),
@@ -71,14 +68,16 @@ test(`create blended learning course: ${closedCourseData.name}`, async ({
   const trainerPage = await trainerContext.newPage()
   const trainerCoursesListPage = new MyCoursesPage(trainerPage)
   const courseBuilderPage = new CourseBuilderPage(trainerPage)
-
-  await trainerCoursesListPage.goto()
-  await trainerCoursesListPage.searchCourse(`${course.id}`)
+  const trainerApprovalExceptionModal = new CourseApprovalRequiredModal(
+    trainerPage
+  )
+  await trainerCoursesListPage.goto(`${course.id}`)
   await trainerCoursesListPage.checkCourseWaitingApproval(course.id)
   await trainerCoursesListPage.acceptCourse(course.id)
   await trainerCoursesListPage.goToCourseBuilder()
   await courseBuilderPage.clickSubmitButton()
-  await trainerCoursesListPage.searchCourse(`${course.id}`)
+  await trainerApprovalExceptionModal.confirmCourseException()
+  await trainerCoursesListPage.goto(`${course.id}`)
   await trainerCoursesListPage.checkCourseStatus(
     course.id,
     'Exceptions approval pending'

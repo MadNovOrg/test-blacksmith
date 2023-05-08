@@ -15,6 +15,7 @@ export class AssignTrainersPage extends BasePage {
   readonly autocompleteOptions: Locator
   readonly trainerExpensesButton: Locator
   readonly createCourseButton: Locator
+  readonly proceedButton: Locator
 
   constructor(page: Page) {
     super(page)
@@ -42,6 +43,7 @@ export class AssignTrainersPage extends BasePage {
     this.createCourseButton = this.page.locator(
       '[data-testid="AssignTrainers-submit"]:text("Create course")'
     )
+    this.proceedButton = this.page.locator('data-testid=proceed-button')
   }
 
   async goto(courseType: string) {
@@ -62,6 +64,9 @@ export class AssignTrainersPage extends BasePage {
 
   async clickTrainerExpensesButton() {
     await this.trainerExpensesButton.click()
+    if (await this.proceedButton.isVisible()) {
+      await this.proceedButton.click()
+    }
     return new TrainerExpensesPage(this.page)
   }
 
