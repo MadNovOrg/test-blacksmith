@@ -36,33 +36,38 @@ values ('Positive Behaviour Training: Level One ', 'CLOSED', 'F2F', 'LEVEL_1', '
        ('Positive Behaviour Training: Level One ', 'INDIRECT', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
         false, 'SCHEDULED', 6, 6, false, false, 10014, null, 0, null, '810A Feb23', null, null, false, 305, '', 'ICM', null),
        ('Positive Behaviour Training: Level One ', 'OPEN', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
-        false, 'EVALUATION_MISSING', 6, 6, true, false, 10085, null, 0, null, '810A Feb23', null, null, false, 305, '', 'ICM', null);
+        false, 'EVALUATION_MISSING', 6, 6, true, false, 10085, null, 0, null, '810A Feb23', null, null, false, 305, '', 'ICM', null),
+       ('Positive Behaviour Training: Advanced Trainer ', 'CLOSED', 'F2F', 'ADVANCED_TRAINER', 'a24397aa-b059-46b9-a728-955580823ce4',
+        false, 'EVALUATION_MISSING', 6, 20, true, false, 10086, null, 0, null, '810A Nov22', null, null, true, 305,
+        null, 'ICM', null),
+        ('Positive Behaviour Training: Intermediate Trainer ', 'CLOSED', 'F2F', 'INTERMEDIATE_TRAINER', 'a24397aa-b059-46b9-a728-955580823ce4',
+        false, 'EVALUATION_MISSING', 6, 20, true, false, 10087, null, 0, null, '810A Nov22', null, null, true, 305,
+        null, 'ICM', null);
 
 SELECT setval('course_id_seq', 11000);
 
 insert into public.course_audit (course_id, authorized_by, type, payload)
-values (10016, '749791ef-e4c4-4a5f-881a-461e4724138d', 'CANCELLATION',
-        '{"cancellation_reason": "Changed my mind.", "cancellation_fee_percent": ""}'),
-       (10024, '22015a3e-8907-4333-8811-85f782265a63', 'CANCELLATION',
-        '{"cancellation_reason": "Wrong course date.", "cancellation_fee_percent": "25"}');
+values (10016, '749791ef-e4c4-4a5f-881a-461e4724138d', 'CANCELLATION', '{"cancellation_reason": "Changed my mind.", "cancellation_fee_percent": ""}'),
+       (10024, '22015a3e-8907-4333-8811-85f782265a63', 'CANCELLATION', '{"cancellation_reason": "Wrong course date.", "cancellation_fee_percent": "25"}');
 
 insert into public.course_cancellation_request (course_id, requested_by, reason)
 values (10026, '467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 'Wrong venue.');
 
 insert into public.course_certificate (id, course_id, number, expiry_date, profile_id, course_name, course_level,
                                        certification_date, is_revoked)
-values ('1e345ec4-f99f-4ce7-b765-ee2d36d7f338', 10019, 'INDR-L1-10019-1', '2025-12-06', '2e06729d-7436-427a-a5cf-ff7c9496b85c',
-        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
-       ('1fc58c17-0eae-40ff-81fb-b33daaf474c8', 10019, 'INDR-L1-10019-2', '2025-12-06', 'b5702c04-35a6-4c55-b24a-592dc0a05142',
-        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
-       ('c10eee83-dc6d-426d-af21-cf46a6202751', 10019, 'INDR-L1-10019-3', '2025-12-06', 'ae8f617c-2411-42aa-9501-f2f08b16a76e',
-        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
-       ('919645da-1eb0-4862-a1f4-6cf06558f61f', 10019, 'INDR-L1-10019-4', '2025-12-06', '47b5b128-0a47-4094-86f6-87005eb12d71',
-        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
-       ('df5b8cab-f132-4936-bb66-9219b3f0a6b9', 10019, 'INDR-L1-10019-5', '2025-12-06', 'fbe6eb48-ad58-40f9-9388-07e743240ce3',
-        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
-       ('54eba8c3-6355-4d96-8649-fe793f7f0983', 10085, 'OP-L1-10085-1', '2022-12-06', 'fbe6eb48-ad58-40f9-9388-07e743240ce3',
-        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2019-12-06', false);
+values ('1e345ec4-f99f-4ce7-b765-ee2d36d7f338', 10019, 'INDR-L1-10019-1', '2025-12-06', '2e06729d-7436-427a-a5cf-ff7c9496b85c', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
+       ('1fc58c17-0eae-40ff-81fb-b33daaf474c8', 10019, 'INDR-L1-10019-2', '2025-12-06', 'b5702c04-35a6-4c55-b24a-592dc0a05142', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
+       ('c10eee83-dc6d-426d-af21-cf46a6202751', 10019, 'INDR-L1-10019-3', '2025-12-06', 'ae8f617c-2411-42aa-9501-f2f08b16a76e', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
+       ('919645da-1eb0-4862-a1f4-6cf06558f61f', 10019, 'INDR-L1-10019-4', '2025-12-06', '47b5b128-0a47-4094-86f6-87005eb12d71', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
+       ('df5b8cab-f132-4936-bb66-9219b3f0a6b9', 10019, 'INDR-L1-10019-5', '2025-12-06', 'fbe6eb48-ad58-40f9-9388-07e743240ce3', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
+       ('54eba8c3-6355-4d96-8649-fe793f7f0983', 10085, 'OP-L1-10085-1', '2022-12-06', 'fbe6eb48-ad58-40f9-9388-07e743240ce3',   'Positive Behaviour Training: Level One ', 'LEVEL_1', '2019-12-06', false),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f331', 10086, 'CL-ADV-T-10086-1',  NOW() + interval '12 months', '5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f332', 10086, 'CL-ADV-T-10086-2',  NOW() + interval '12 months', '6ea4e91b-9856-4533-9544-949caba236fb', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f333', 10086, 'CL-ADV-T-10086-3',  NOW() + interval '12 months', '88072bb2-10e0-4417-b9ce-ec05265b8b56', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f334', 10086, 'CL-ADV-T-10086-3',  NOW() + interval '12 months', 'dccd780a-9745-4972-a43e-95ec3ef361df', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f335', 10087, 'CL-INT-T-10087-1',  NOW() + interval '12 months', '749791ef-e4c4-4a5f-881a-461e4724138d', 'Positive Behaviour Training: Intermediate Trainer', 'INTERMEDIATE_TRAINER', NOW() - interval '12 months', false),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f336', 10087, 'CL-INT-T-10087-2',  NOW() + interval '12 months', '6ea4e91b-9856-4533-9544-949caba236fb', 'Positive Behaviour Training: Intermediate Trainer', 'INTERMEDIATE_TRAINER', NOW() - interval '12 months', false),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f337', 10087, 'CL-INT-T-10087-3',  NOW() + interval '12 months', '30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', 'Positive Behaviour Training: Intermediate Trainer', 'INTERMEDIATE_TRAINER', NOW() - interval '12 months', false);
 
 insert into public.course_invites (status, email, course_id)
 values ('PENDING', 'rosemary12@teamteach.testinator.com', 10014),
@@ -93,7 +98,14 @@ values ('PENDING', 'rosemary12@teamteach.testinator.com', 10014),
        ('PENDING', 'charles.scanlon@teamteach.testinator.com', 10019),
        ('DECLINED', 'timothy.murphy@teamteach.testinator.com', 10019),
        ('DECLINED', 'marquis.pappas@teamteach.testinator.com', 10019),
-       ('ACCEPTED', 'lilac.reuben@teamteach.testinator.com', 10085);
+       ('ACCEPTED', 'lilac.reuben@teamteach.testinator.com', 10085),
+       ('ACCEPTED', 'tt.adv.trainer@teamteach.testinator.com', 10086),
+       ('ACCEPTED', 'tt.expired.adv.trainer@teamteach.testinator.com', 10086),
+       ('ACCEPTED', 'tt.principal.trainer@teamteach.testinator.com', 10086),
+       ('ACCEPTED', 'tt.senior.trainer@teamteach.testinator.com', 10086),
+       ('ACCEPTED', 'tt.int.trainer@teamteach.testinator.com', 10087),
+       ('ACCEPTED', 'tt.expired.adv.trainer@teamteach.testinator.com', 10087),
+       ('ACCEPTED', 'tt.expired.int.trainer@teamteach.testinator.com', 10087);
 
 insert into public.course_module (module_id, course_id)
 select module.id as module_id, 10014 as course_id
@@ -166,32 +178,36 @@ select module.id as module_id, 10085 as course_id
 from public.module
 where module.course_level = 'LEVEL_1';
 
-insert into public.course_participant (booking_date, profile_id, attended, grading_feedback, grade, date_graded,
-                                       course_id, certificate_id, hs_consent)
-values ('2022-12-06 12:42:07.622554 +00:00', '127ac7f5-9c91-4b1c-8c13-13e226d60f78', true, '', 'FAIL',
-        '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
-       ('2022-12-06 12:42:07.622554 +00:00', '2e06729d-7436-427a-a5cf-ff7c9496b85c', true, 'Some note here? Maybe?',
-        'OBSERVE_ONLY', '2022-12-06 11:43:48.227000 +00:00', 10019, '1e345ec4-f99f-4ce7-b765-ee2d36d7f338', false),
-       ('2022-12-06 12:42:07.622554 +00:00', 'b5702c04-35a6-4c55-b24a-592dc0a05142', true, 'Some note here? Maybe?',
-        'OBSERVE_ONLY', '2022-12-06 11:43:48.227000 +00:00', 10019, '1fc58c17-0eae-40ff-81fb-b33daaf474c8', false),
-       ('2022-12-06 12:42:07.622554 +00:00', 'fdedead5-1218-4332-8199-8b2bdce414a7', true, '', 'PASS',
-        '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
-       ('2022-12-06 12:42:07.622554 +00:00', '11935252-570f-42ef-a141-5cdf8f78270d', true, '', 'PASS',
-        '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
-       ('2022-12-06 12:42:07.622554 +00:00', '41e9fa1d-0712-43cd-8571-bbf219ab016b', true, '', 'PASS',
-        '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
-       ('2022-12-06 12:42:07.622554 +00:00', '43ead544-671c-46fb-ba8f-b5858c83a2d8', true, '', 'PASS',
-        '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
-       ('2022-12-06 12:42:07.622554 +00:00', '6896b053-0d36-45b4-889c-9472d846c4a1', true, '', 'PASS',
-        '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
-       ('2022-12-06 12:42:07.622554 +00:00', 'ae8f617c-2411-42aa-9501-f2f08b16a76e', true, '', 'PASS',
-        '2022-12-06 11:43:48.227000 +00:00', 10019, 'c10eee83-dc6d-426d-af21-cf46a6202751', false),
-       ('2022-12-06 12:42:07.622554 +00:00', '47b5b128-0a47-4094-86f6-87005eb12d71', true, '', 'PASS',
-        '2022-12-06 11:43:48.227000 +00:00', 10019, '919645da-1eb0-4862-a1f4-6cf06558f61f', false),
-       ('2022-12-06 12:42:07.622554 +00:00', 'fbe6eb48-ad58-40f9-9388-07e743240ce3', true, '', 'PASS',
-        '2022-12-06 11:43:48.227000 +00:00', 10019, 'df5b8cab-f132-4936-bb66-9219b3f0a6b9', false),
-       ('2022-12-06 12:42:07.622554 +00:00', 'fbe6eb48-ad58-40f9-9388-07e743240ce3', true, '', 'PASS',
-        '2022-12-06 11:43:48.227000 +00:00', 10085, '54eba8c3-6355-4d96-8649-fe793f7f0983', false);
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10086 as course_id
+from public.module
+where module.course_level = 'ADVANCED_TRAINER';
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10087 as course_id
+from public.module
+where module.course_level = 'INTERMEDIATE_TRAINER';
+
+insert into public.course_participant (booking_date, profile_id, attended, grading_feedback, grade, date_graded, course_id, certificate_id, hs_consent)
+values ('2022-12-06 12:42:07.622554 +00:00', '127ac7f5-9c91-4b1c-8c13-13e226d60f78', true, '', 'FAIL', '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
+       ('2022-12-06 12:42:07.622554 +00:00', '2e06729d-7436-427a-a5cf-ff7c9496b85c', true, 'Some note here? Maybe?', 'OBSERVE_ONLY', '2022-12-06 11:43:48.227000 +00:00', 10019, '1e345ec4-f99f-4ce7-b765-ee2d36d7f338', false),
+       ('2022-12-06 12:42:07.622554 +00:00', 'b5702c04-35a6-4c55-b24a-592dc0a05142', true, 'Some note here? Maybe?', 'OBSERVE_ONLY', '2022-12-06 11:43:48.227000 +00:00', 10019, '1fc58c17-0eae-40ff-81fb-b33daaf474c8', false),
+       ('2022-12-06 12:42:07.622554 +00:00', 'fdedead5-1218-4332-8199-8b2bdce414a7', true, '', 'PASS', '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
+       ('2022-12-06 12:42:07.622554 +00:00', '11935252-570f-42ef-a141-5cdf8f78270d', true, '', 'PASS', '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
+       ('2022-12-06 12:42:07.622554 +00:00', '41e9fa1d-0712-43cd-8571-bbf219ab016b', true, '', 'PASS', '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
+       ('2022-12-06 12:42:07.622554 +00:00', '43ead544-671c-46fb-ba8f-b5858c83a2d8', true, '', 'PASS', '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
+       ('2022-12-06 12:42:07.622554 +00:00', '6896b053-0d36-45b4-889c-9472d846c4a1', true, '', 'PASS', '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
+       ('2022-12-06 12:42:07.622554 +00:00', 'ae8f617c-2411-42aa-9501-f2f08b16a76e', true, '', 'PASS', '2022-12-06 11:43:48.227000 +00:00', 10019, 'c10eee83-dc6d-426d-af21-cf46a6202751', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '47b5b128-0a47-4094-86f6-87005eb12d71', true, '', 'PASS', '2022-12-06 11:43:48.227000 +00:00', 10019, '919645da-1eb0-4862-a1f4-6cf06558f61f', false),
+       ('2022-12-06 12:42:07.622554 +00:00', 'fbe6eb48-ad58-40f9-9388-07e743240ce3', true, '', 'PASS', '2022-12-06 11:43:48.227000 +00:00', 10019, 'df5b8cab-f132-4936-bb66-9219b3f0a6b9', false),
+       ('2022-12-06 12:42:07.622554 +00:00', 'fbe6eb48-ad58-40f9-9388-07e743240ce3', true, '', 'PASS', '2022-12-06 11:43:48.227000 +00:00', 10085, '54eba8c3-6355-4d96-8649-fe793f7f0983', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '5dd7b79c-9ef2-4712-833e-e2f12bdd672d', true, '', 'PASS','2022-12-06 11:43:48.227000 +00:00', 10086, '1e345ec4-f99f-4ce7-b765-ee2d36d7f331', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '6ea4e91b-9856-4533-9544-949caba236fb', true, '', 'PASS', '2022-12-06 11:43:48.227000 +00:00', 10086, '1e345ec4-f99f-4ce7-b765-ee2d36d7f332', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '88072bb2-10e0-4417-b9ce-ec05265b8b56', true, '', 'PASS', '2022-12-06 11:43:48.227000 +00:00', 10086, '1e345ec4-f99f-4ce7-b765-ee2d36d7f333', false),
+       ('2022-12-06 12:42:07.622554 +00:00', 'dccd780a-9745-4972-a43e-95ec3ef361df', true, '', 'PASS','2022-12-06 11:43:48.227000 +00:00', 10086, '1e345ec4-f99f-4ce7-b765-ee2d36d7f334', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '749791ef-e4c4-4a5f-881a-461e4724138d', true, '', 'PASS', '2022-12-06 11:43:48.227000 +00:00', 10087, '1e345ec4-f99f-4ce7-b765-ee2d36d7f335', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '6ea4e91b-9856-4533-9544-949caba236fb', true, '', 'PASS', '2022-12-06 11:43:48.227000 +00:00', 10087, '1e345ec4-f99f-4ce7-b765-ee2d36d7f336', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', true, '', 'PASS','2022-12-06 11:43:48.227000 +00:00', 10087, '1e345ec4-f99f-4ce7-b765-ee2d36d7f337', false);
 
 INSERT INTO public.course_participant_module (course_participant_id, module_id, completed)
 SELECT participant.id as course_participant_id, module.id as module_id, TRUE as completed
@@ -199,7 +215,7 @@ FROM public.course_participant participant
          JOIN public.course course ON participant.course_id = course.id
          JOIN public.course_module cmodule ON cmodule.course_id = course.id
          JOIN public.module module ON cmodule.module_id = module.id
-WHERE course.id IN (10014, 10015, 10016, 10017, 10018, 10019, 10020, 10021, 10022, 10023, 10024, 10025, 10026, 10085);
+WHERE course.id IN (10014, 10015, 10016, 10017, 10018, 10019, 10020, 10021, 10022, 10023, 10024, 10025, 10026, 10085, 10086, 10087);
 
 insert into public.venue (id, name, geo_coordinates, city, address_line_one, address_line_two, post_code,
                           google_places_id)
@@ -219,34 +235,22 @@ values ('b936752f-52fc-4d82-a212-90105a51c05e', 'London School of Economics and 
         'ChIJC_cuN3BGiEgRPhAolcA28Vc');
 
 insert into public.course_schedule (start, "end", venue_id, course_id)
-values (date(now()) + time '09:00' + interval '3 month', date(now()) + time '17:00' + interval '3 month',
-        'b936752f-52fc-4d82-a212-90105a51c05e', 10014),
-       (date(now()) + time '09:00' + interval '1 month', date(now()) + time '17:00' + interval '1 month',
-        '84daabd8-359f-4497-a421-293e95ae9a70', 10015),
-       (date(now()) + time '09:00' + interval '1 month', date(now()) + time '17:00' + interval '1 month',
-        '0a6e3839-b28f-4042-b42c-27d62fc1f92d', 10016),
-       (date(now()) + time '09:00' + interval '1 month', date(now()) + time '17:00' + interval '1 month',
-        '0a6e3839-b28f-4042-b42c-27d62fc1f92d', 10017),
-       (date(now()) + time '09:00' + interval '4 month', date(now()) + time '17:00' + interval '4 month',
-        '0a6e3839-b28f-4042-b42c-27d62fc1f92d', 10018),
-       (date(now()) + time '09:00' + interval '6 month', date(now()) + time '17:00' + interval '6 month',
-        'b936752f-52fc-4d82-a212-90105a51c05e', 10020),
-       (date(now()) + time '09:00' - interval '1 month', date(now()) + time '17:00' - interval '1 month',
-        '84daabd8-359f-4497-a421-293e95ae9a70', 10019),
-       (date(now()) + time '09:00' + interval '7 month', date(now()) + time '17:00' + interval '7 month',
-        '0a6e3839-b28f-4042-b42c-27d62fc1f92d', 10021),
-       (date(now()) + time '09:00' + interval '8 month', date(now()) + time '17:00' + interval '8 month',
-        'a7013539-a2c5-44cb-a014-e07598647648', 10022),
-       (date(now()) + time '09:00' + interval '9 month', date(now()) + time '17:00' + interval '9 month',
-        'a7013539-a2c5-44cb-a014-e07598647648', 10023),
-       (date(now()) + time '09:00' + interval '1 month', date(now()) + time '17:00' + interval '1 month',
-        'a7013539-a2c5-44cb-a014-e07598647648', 10024),
-       (date(now()) + time '09:00' + interval '10 month', date(now()) + time '17:00' + interval '10 month',
-        'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10025),
-       (date(now()) + time '09:00' + interval '11 month', date(now()) + time '17:00' + interval '11 month',
-        'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10026),
-        (date(now()) + time '09:00' - interval '12 months', date(now()) + time '17:00' - interval '12 months',
-        'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10085);
+values (date(now()) + time '09:00' + interval '3 month', date(now()) + time '17:00' + interval '3 month', 'b936752f-52fc-4d82-a212-90105a51c05e', 10014),
+       (date(now()) + time '09:00' + interval '1 month', date(now()) + time '17:00' + interval '1 month', '84daabd8-359f-4497-a421-293e95ae9a70', 10015),
+       (date(now()) + time '09:00' + interval '1 month', date(now()) + time '17:00' + interval '1 month', '0a6e3839-b28f-4042-b42c-27d62fc1f92d', 10016),
+       (date(now()) + time '09:00' + interval '1 month', date(now()) + time '17:00' + interval '1 month', '0a6e3839-b28f-4042-b42c-27d62fc1f92d', 10017),
+       (date(now()) + time '09:00' + interval '4 month', date(now()) + time '17:00' + interval '4 month', '0a6e3839-b28f-4042-b42c-27d62fc1f92d', 10018),
+       (date(now()) + time '09:00' + interval '6 month', date(now()) + time '17:00' + interval '6 month', 'b936752f-52fc-4d82-a212-90105a51c05e', 10020),
+       (date(now()) + time '09:00' - interval '1 month', date(now()) + time '17:00' - interval '1 month', '84daabd8-359f-4497-a421-293e95ae9a70', 10019),
+       (date(now()) + time '09:00' + interval '7 month', date(now()) + time '17:00' + interval '7 month', '0a6e3839-b28f-4042-b42c-27d62fc1f92d', 10021),
+       (date(now()) + time '09:00' + interval '8 month', date(now()) + time '17:00' + interval '8 month', 'a7013539-a2c5-44cb-a014-e07598647648', 10022),
+       (date(now()) + time '09:00' + interval '9 month', date(now()) + time '17:00' + interval '9 month', 'a7013539-a2c5-44cb-a014-e07598647648', 10023),
+       (date(now()) + time '09:00' + interval '1 month', date(now()) + time '17:00' + interval '1 month', 'a7013539-a2c5-44cb-a014-e07598647648', 10024),
+       (date(now()) + time '09:00' + interval '10 month', date(now()) + time '17:00' + interval '10 month', 'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10025),
+       (date(now()) + time '09:00' + interval '11 month', date(now()) + time '17:00' + interval '11 month', 'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10026),
+       (date(now()) + time '09:00' - interval '12 months', date(now()) + time '17:00' - interval '12 months', 'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10085),
+       (date(now()) + time '09:00' - interval '12 months', date(now()) + time '17:00' - interval '12 months', 'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10086),
+       (date(now()) + time '09:00' - interval '12 months', date(now()) + time '17:00' - interval '12 months', 'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10087);
 
 insert into public.course_trainer (profile_id, type, course_id, status)
 values  ('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'LEADER', 10014, 'ACCEPTED'),
@@ -263,4 +267,6 @@ values  ('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'LEADER', 10014, 'ACCEPTED'),
         ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10024, 'ACCEPTED'),
         ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10025, 'ACCEPTED'),
         ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10026, 'ACCEPTED'),
-        ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10085, 'ACCEPTED');
+        ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10085, 'ACCEPTED'),
+        ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10086, 'ACCEPTED'),
+        ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10087, 'ACCEPTED');
