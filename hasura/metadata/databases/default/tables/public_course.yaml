@@ -16,6 +16,8 @@ configuration:
       custom_name: type
     aol_region:
       custom_name: aolRegion
+    price_currency:
+      custom_name: priceCurrency
     aol_country:
       custom_name: aolCountry
     modules_duration:
@@ -53,6 +55,7 @@ configuration:
     aol_cost_of_course: aolCostOfCourse
     course_type: type
     aol_region: aolRegion
+    price_currency: priceCurrency
     aol_country: aolCountry
     modules_duration: modulesDuration
     course_status: status
@@ -212,6 +215,7 @@ insert_permissions:
         - cancellation_fee_percent
         - cancellation_reason
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -230,6 +234,7 @@ insert_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
         - reaccreditation
         - sales_representative_id
         - source
@@ -254,6 +259,7 @@ insert_permissions:
         - cancellation_fee_percent
         - cancellation_reason
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -272,6 +278,7 @@ insert_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
         - reaccreditation
         - sales_representative_id
         - source
@@ -324,6 +331,7 @@ insert_permissions:
         - cancellation_fee_percent
         - cancellation_reason
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -342,6 +350,7 @@ insert_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
         - reaccreditation
         - sales_representative_id
         - source
@@ -360,6 +369,7 @@ insert_permissions:
         - aol_country
         - aol_region
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -377,6 +387,7 @@ insert_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
         - reaccreditation
         - sales_representative_id
         - source
@@ -418,12 +429,14 @@ select_permissions:
     permission:
       columns:
         - account_code
+        - accredited_by
         - aol_cost_of_course
         - aol_country
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -443,6 +456,8 @@ select_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
+        - price_currency
         - reaccreditation
         - sales_representative_id
         - source
@@ -469,6 +484,7 @@ select_permissions:
         - cancellation_fee_percent
         - cancellation_reason
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -488,6 +504,8 @@ select_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
+        - price_currency
         - reaccreditation
         - sales_representative_id
         - source
@@ -511,6 +529,7 @@ select_permissions:
         - cancellation_fee_percent
         - cancellation_reason
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -530,6 +549,8 @@ select_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
+        - price_currency
         - reaccreditation
         - sales_representative_id
         - source
@@ -555,6 +576,7 @@ select_permissions:
         - aol_country
         - aol_region
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -631,6 +653,7 @@ select_permissions:
         - cancellation_fee_percent
         - cancellation_reason
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -650,6 +673,8 @@ select_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
+        - price_currency
         - reaccreditation
         - sales_representative_id
         - source
@@ -673,6 +698,7 @@ select_permissions:
         - cancellation_fee_percent
         - cancellation_reason
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -692,6 +718,8 @@ select_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
+        - price_currency
         - reaccreditation
         - sales_representative_id
         - source
@@ -828,6 +856,7 @@ update_permissions:
         - cancellation_fee_percent
         - cancellation_reason
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -846,6 +875,7 @@ update_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
         - reaccreditation
         - sales_representative_id
         - source
@@ -867,6 +897,7 @@ update_permissions:
         - cancellation_fee_percent
         - cancellation_reason
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -885,6 +916,7 @@ update_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
         - reaccreditation
         - sales_representative_id
         - source
@@ -906,6 +938,7 @@ update_permissions:
         - cancellation_fee_percent
         - cancellation_reason
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_status
         - course_type
@@ -923,6 +956,7 @@ update_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
         - reaccreditation
         - sales_representative_id
         - source
@@ -984,6 +1018,7 @@ update_permissions:
         - cancellation_fee_percent
         - cancellation_reason
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -1002,6 +1037,7 @@ update_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
         - reaccreditation
         - sales_representative_id
         - source
@@ -1019,6 +1055,7 @@ update_permissions:
         - cancellation_fee_percent
         - cancellation_reason
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
@@ -1037,6 +1074,7 @@ update_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
         - reaccreditation
         - sales_representative_id
         - source

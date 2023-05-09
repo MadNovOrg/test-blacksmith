@@ -13987,6 +13987,7 @@ export type Course = {
   /** An object relationship */
   contactProfile?: Maybe<Profile>;
   contactProfileId?: Maybe<Scalars['uuid']>;
+  conversion?: Maybe<Scalars['Boolean']>;
   /** A computed field, executes function "course_code" */
   course_code?: Maybe<Scalars['String']>;
   createdAt: Scalars['timestamptz'];
@@ -14034,6 +14035,8 @@ export type Course = {
   participants: Array<Course_Participant>;
   /** An aggregate relationship */
   participants_aggregate: Course_Participant_Aggregate;
+  price?: Maybe<Scalars['numeric']>;
+  priceCurrency?: Maybe<Scalars['String']>;
   /** An array relationship */
   promo_codes: Array<Course_Promo_Code>;
   /** An aggregate relationship */
@@ -14751,6 +14754,7 @@ export type Course_Avg_Fields = {
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "course" */
@@ -14762,6 +14766,7 @@ export type Course_Avg_Order_By = {
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "course_bild_module" */
@@ -15330,6 +15335,7 @@ export type Course_Bool_Exp = {
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Bool_Exp>;
   contactProfile?: InputMaybe<Profile_Bool_Exp>;
   contactProfileId?: InputMaybe<Uuid_Comparison_Exp>;
+  conversion?: InputMaybe<Boolean_Comparison_Exp>;
   course_code?: InputMaybe<String_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   createdBy?: InputMaybe<Profile_Bool_Exp>;
@@ -15357,6 +15363,8 @@ export type Course_Bool_Exp = {
   organization_id?: InputMaybe<Uuid_Comparison_Exp>;
   parking_instructions?: InputMaybe<String_Comparison_Exp>;
   participants?: InputMaybe<Course_Participant_Bool_Exp>;
+  price?: InputMaybe<Numeric_Comparison_Exp>;
+  priceCurrency?: InputMaybe<String_Comparison_Exp>;
   promo_codes?: InputMaybe<Course_Promo_Code_Bool_Exp>;
   reaccreditation?: InputMaybe<Boolean_Comparison_Exp>;
   salesRepresentative?: InputMaybe<Profile_Bool_Exp>;
@@ -18423,6 +18431,7 @@ export type Course_Inc_Input = {
   max_participants?: InputMaybe<Scalars['Int']>;
   min_participants?: InputMaybe<Scalars['Int']>;
   modulesDuration?: InputMaybe<Scalars['Int']>;
+  price?: InputMaybe<Scalars['numeric']>;
 };
 
 /** input type for inserting data into table "course" */
@@ -18439,6 +18448,7 @@ export type Course_Insert_Input = {
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Obj_Rel_Insert_Input>;
   contactProfile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   contactProfileId?: InputMaybe<Scalars['uuid']>;
+  conversion?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   createdBy?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   createdById?: InputMaybe<Scalars['uuid']>;
@@ -18463,6 +18473,8 @@ export type Course_Insert_Input = {
   organization_id?: InputMaybe<Scalars['uuid']>;
   parking_instructions?: InputMaybe<Scalars['String']>;
   participants?: InputMaybe<Course_Participant_Arr_Rel_Insert_Input>;
+  price?: InputMaybe<Scalars['numeric']>;
+  priceCurrency?: InputMaybe<Scalars['String']>;
   promo_codes?: InputMaybe<Course_Promo_Code_Arr_Rel_Insert_Input>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   salesRepresentative?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
@@ -19113,6 +19125,8 @@ export type Course_Max_Fields = {
   notes?: Maybe<Scalars['String']>;
   organization_id?: Maybe<Scalars['uuid']>;
   parking_instructions?: Maybe<Scalars['String']>;
+  price?: Maybe<Scalars['numeric']>;
+  priceCurrency?: Maybe<Scalars['String']>;
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
   special_instructions?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -19139,6 +19153,8 @@ export type Course_Max_Order_By = {
   notes?: InputMaybe<Order_By>;
   organization_id?: InputMaybe<Order_By>;
   parking_instructions?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  priceCurrency?: InputMaybe<Order_By>;
   salesRepresentativeId?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
@@ -19166,6 +19182,8 @@ export type Course_Min_Fields = {
   notes?: Maybe<Scalars['String']>;
   organization_id?: Maybe<Scalars['uuid']>;
   parking_instructions?: Maybe<Scalars['String']>;
+  price?: Maybe<Scalars['numeric']>;
+  priceCurrency?: Maybe<Scalars['String']>;
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
   special_instructions?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -19192,6 +19210,8 @@ export type Course_Min_Order_By = {
   notes?: InputMaybe<Order_By>;
   organization_id?: InputMaybe<Order_By>;
   parking_instructions?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  priceCurrency?: InputMaybe<Order_By>;
   salesRepresentativeId?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
@@ -19540,6 +19560,7 @@ export type Course_Order_By = {
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Order_By>;
   contactProfile?: InputMaybe<Profile_Order_By>;
   contactProfileId?: InputMaybe<Order_By>;
+  conversion?: InputMaybe<Order_By>;
   course_code?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   createdBy?: InputMaybe<Profile_Order_By>;
@@ -19567,6 +19588,8 @@ export type Course_Order_By = {
   organization_id?: InputMaybe<Order_By>;
   parking_instructions?: InputMaybe<Order_By>;
   participants_aggregate?: InputMaybe<Course_Participant_Aggregate_Order_By>;
+  price?: InputMaybe<Order_By>;
+  priceCurrency?: InputMaybe<Order_By>;
   promo_codes_aggregate?: InputMaybe<Course_Promo_Code_Aggregate_Order_By>;
   reaccreditation?: InputMaybe<Order_By>;
   salesRepresentative?: InputMaybe<Profile_Order_By>;
@@ -22114,6 +22137,8 @@ export enum Course_Select_Column {
   /** column name */
   ContactProfileId = 'contactProfileId',
   /** column name */
+  Conversion = 'conversion',
+  /** column name */
   CreatedAt = 'createdAt',
   /** column name */
   CreatedById = 'createdById',
@@ -22148,6 +22173,10 @@ export enum Course_Select_Column {
   /** column name */
   ParkingInstructions = 'parking_instructions',
   /** column name */
+  Price = 'price',
+  /** column name */
+  PriceCurrency = 'priceCurrency',
+  /** column name */
   Reaccreditation = 'reaccreditation',
   /** column name */
   SalesRepresentativeId = 'salesRepresentativeId',
@@ -22173,6 +22202,7 @@ export type Course_Set_Input = {
   cancellationFeePercent?: InputMaybe<Scalars['Int']>;
   cancellationReason?: InputMaybe<Scalars['String']>;
   contactProfileId?: InputMaybe<Scalars['uuid']>;
+  conversion?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   createdById?: InputMaybe<Scalars['uuid']>;
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
@@ -22190,6 +22220,8 @@ export type Course_Set_Input = {
   notes?: InputMaybe<Scalars['String']>;
   organization_id?: InputMaybe<Scalars['uuid']>;
   parking_instructions?: InputMaybe<Scalars['String']>;
+  price?: InputMaybe<Scalars['numeric']>;
+  priceCurrency?: InputMaybe<Scalars['String']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Course_Source_Enum>;
@@ -22461,6 +22493,7 @@ export type Course_Stddev_Fields = {
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "course" */
@@ -22472,6 +22505,7 @@ export type Course_Stddev_Order_By = {
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
@@ -22484,6 +22518,7 @@ export type Course_Stddev_Pop_Fields = {
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "course" */
@@ -22495,6 +22530,7 @@ export type Course_Stddev_Pop_Order_By = {
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -22507,6 +22543,7 @@ export type Course_Stddev_Samp_Fields = {
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "course" */
@@ -22518,6 +22555,7 @@ export type Course_Stddev_Samp_Order_By = {
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
 };
 
 /** aggregate sum on columns */
@@ -22530,6 +22568,7 @@ export type Course_Sum_Fields = {
   max_participants?: Maybe<Scalars['Int']>;
   min_participants?: Maybe<Scalars['Int']>;
   modulesDuration?: Maybe<Scalars['Int']>;
+  price?: Maybe<Scalars['numeric']>;
 };
 
 /** order by sum() on columns of table "course" */
@@ -22541,6 +22580,7 @@ export type Course_Sum_Order_By = {
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "course_trainer" */
@@ -23217,6 +23257,8 @@ export enum Course_Update_Column {
   /** column name */
   ContactProfileId = 'contactProfileId',
   /** column name */
+  Conversion = 'conversion',
+  /** column name */
   CreatedAt = 'createdAt',
   /** column name */
   CreatedById = 'createdById',
@@ -23251,6 +23293,10 @@ export enum Course_Update_Column {
   /** column name */
   ParkingInstructions = 'parking_instructions',
   /** column name */
+  Price = 'price',
+  /** column name */
+  PriceCurrency = 'priceCurrency',
+  /** column name */
   Reaccreditation = 'reaccreditation',
   /** column name */
   SalesRepresentativeId = 'salesRepresentativeId',
@@ -23276,6 +23322,7 @@ export type Course_Var_Pop_Fields = {
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "course" */
@@ -23287,6 +23334,7 @@ export type Course_Var_Pop_Order_By = {
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
@@ -23299,6 +23347,7 @@ export type Course_Var_Samp_Fields = {
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "course" */
@@ -23310,6 +23359,7 @@ export type Course_Var_Samp_Order_By = {
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
 };
 
 /** aggregate variance on columns */
@@ -23322,6 +23372,7 @@ export type Course_Variance_Fields = {
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "course" */
@@ -23333,6 +23384,7 @@ export type Course_Variance_Order_By = {
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
 };
 
 export type CreateSubscriptionOutput = {
@@ -43999,7 +44051,7 @@ export type CourseParticipantsQueryVariables = Exact<{
 }>;
 
 
-export type CourseParticipantsQuery = { __typename?: 'query_root', courseParticipants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, invoiceID?: any | null, bookingDate?: any | null, go1EnrolmentStatus?: Blended_Learning_Status_Enum | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null } | null, course: { __typename?: 'course', id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, notes?: string | null, start?: any | null, end?: any | null, organization?: { __typename?: 'organization', name: string, id: any } | null }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> }>, courseParticipantsAggregation: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
+export type CourseParticipantsQuery = { __typename?: 'query_root', courseParticipants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, invoiceID?: any | null, bookingDate?: any | null, go1EnrolmentStatus?: Blended_Learning_Status_Enum | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null } | null, course: { __typename?: 'course', accreditedBy: Accreditors_Enum, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, notes?: string | null, start?: any | null, end?: any | null, organization?: { __typename?: 'organization', name: string, id: any } | null }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> }>, courseParticipantsAggregation: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
 
 export type ArchiveProfileMutationVariables = Exact<{
   profileId: Scalars['uuid'];
