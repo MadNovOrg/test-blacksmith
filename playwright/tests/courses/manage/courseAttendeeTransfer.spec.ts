@@ -34,16 +34,18 @@ const test = base.extend<{ courses: Course[] }>({
 })
 
 allowedRoles.forEach(role => {
-  test.use({ storageState: stateFilePath(role) })
-
   test(`${role} can transfer an attendee to another course `, async ({
-    page,
+    browser,
     courses,
   }) => {
     // eslint-disable-next-line playwright/no-conditional-in-test
     if (role === 'salesAdmin') {
       test.fail(true, 'See https://behaviourhub.atlassian.net/browse/TTHP-1532')
     }
+    const context = await browser.newContext({
+      storageState: stateFilePath(role),
+    })
+    const page = await context.newPage()
     const myCoursesPage = new MyCoursesPage(page)
     await myCoursesPage.gotoManageCourses(`${courses[0].id}`)
     const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
