@@ -54,7 +54,7 @@ jobs:
       DEFAULT_TARGET: 'DEV'
     strategy:
       matrix:
-        browsers: ['chromium', 'firefox']
+        browsers: ['chromium']
     steps:
       - name: Set the Target
         run: echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV

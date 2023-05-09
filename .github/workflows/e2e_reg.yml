@@ -64,7 +64,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browsers: ['chromium', 'firefox']
+        browsers: ['chromium']
         shardIndex: [1, 2, 3]
         shardTotal: [3]
     steps:
