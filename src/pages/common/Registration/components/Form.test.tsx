@@ -119,7 +119,9 @@ describe('Form', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByText(/Please enter a valid date/)).toBeInTheDocument()
+      expect(
+        screen.getByText(/please enter your date of birth/i)
+      ).toBeInTheDocument()
     })
   })
 
