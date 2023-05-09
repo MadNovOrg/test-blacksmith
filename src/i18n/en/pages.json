@@ -395,8 +395,8 @@
         "other": "Other"
       },
       "specify-reason": "Specify reason",
-      "close-modal": "Close",
-      "cancel-entire-course": "Cancel entire course",
+      "close-modal": "Do not cancel this course",
+      "cancel-entire-course": "Cancel course",
       "fee": "Fee",
       "before-course-start-date": "Before course start date",
       "cancellation-fee": "Cancellation fee",
