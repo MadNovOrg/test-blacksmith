@@ -131,6 +131,7 @@ describe('component: ReviewLicenseOrder', () => {
     const endDate = addHours(startDate, 8)
 
     const courseData: Partial<Draft['courseData']> = {
+      accreditedBy: Accreditors_Enum.Icm,
       courseLevel: CourseLevel.Level_1,
       startDateTime: startDate,
       endDateTime: endDate,

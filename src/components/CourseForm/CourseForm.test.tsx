@@ -10,7 +10,7 @@ import {
   INPUT_TIME_FORMAT,
 } from '@app/util'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { act, render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { ZOOM_MOCKED_URL, selectLevel } from './test-utils'
@@ -103,16 +103,25 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.OPEN} />)
     })
 
-    screen.getByLabelText('Start date').focus()
+    act(() => {
+      screen.getByLabelText('Start date').focus()
+    })
+
     await userEvent.paste('12/05/2022')
 
-    screen.getByLabelText('Start time').focus()
+    act(() => {
+      screen.getByLabelText('Start time').focus()
+    })
     await userEvent.paste('09:00 AM')
 
-    screen.getByLabelText('End date').focus()
+    act(() => {
+      screen.getByLabelText('End date').focus()
+    })
     await userEvent.paste('12/04/2022')
 
-    screen.getByLabelText('End time').focus()
+    act(() => {
+      screen.getByLabelText('End time').focus()
+    })
     await userEvent.paste('08:00 AM')
 
     expect(
@@ -226,10 +235,16 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.CLOSED} />)
     })
 
-    screen.getByLabelText('Start date').focus()
+    act(() => {
+      screen.getByLabelText('Start date').focus()
+    })
+
     await userEvent.paste('12/05/2022')
 
-    screen.getByLabelText('Start time').focus()
+    act(() => {
+      screen.getByLabelText('Start time').focus()
+    })
+
     await userEvent.paste('09:00 AM')
 
     await waitFor(() => {

@@ -48,6 +48,8 @@ describe('context: Auth', () => {
         'activeRole',
         'verified',
         'loggedOut',
+        'trainerRoles',
+        'activeCertificates',
         ...expectedKeys,
       ])
     })

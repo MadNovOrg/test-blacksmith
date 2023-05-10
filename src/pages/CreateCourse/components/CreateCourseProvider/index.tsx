@@ -1,8 +1,6 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
-import { Accreditors_Enum } from '@app/generated/graphql'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import {
   CourseType,
@@ -19,7 +17,7 @@ import {
   CourseException,
 } from '../CourseExceptionsConfirmation/utils'
 
-import { getCourseAccreditor, getCourseType } from './helpers'
+import { getCourseType } from './helpers'
 
 export { getCourseType }
 
@@ -28,7 +26,6 @@ type ContextValue = {
   completedSteps: StepsEnum[]
   courseData?: ValidCourseInput
   courseType: CourseType
-  courseAccreditor: Accreditors_Enum
   currentStepKey: StepsEnum | null
   expenses: Record<string, ExpensesInput>
   saveDraft: () => Promise<void>
@@ -56,7 +53,6 @@ export const CreateCourseProvider: React.FC<
 > = ({ children, initialValue, courseType }) => {
   const { profile } = useAuth()
   const { setDraft } = useCourseDraft(profile?.id ?? '', courseType)
-  const [searchParams] = useSearchParams()
 
   const [courseData, setCourseData] = useState<ValidCourseInput | undefined>(
     initialValue?.courseData
@@ -75,16 +71,6 @@ export const CreateCourseProvider: React.FC<
   )
   const [go1Licensing, setGo1Licensing] = useState<Draft['go1Licensing']>(
     initialValue?.go1Licensing ?? undefined
-  )
-
-  const courseAccreditor = useMemo(
-    () =>
-      getCourseAccreditor(
-        profile?.id ?? 'unknown',
-        searchParams.get('accreditor'),
-        currentStepKey === StepsEnum.COURSE_DETAILS
-      ),
-    [profile, searchParams, currentStepKey]
   )
 
   const seniorOrPrincipalLead = useMemo(() => {
@@ -158,14 +144,12 @@ export const CreateCourseProvider: React.FC<
       go1Licensing,
       setGo1Licensing,
       exceptions,
-      courseAccreditor,
     }
   }, [
     completeStep,
     completedSteps,
     courseData,
     courseType,
-    courseAccreditor,
     currentStepKey,
     expenses,
     saveDraft,

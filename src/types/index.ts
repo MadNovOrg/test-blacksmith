@@ -558,6 +558,7 @@ export type CourseInput = {
   parkingInstructions: string
   source: Course_Source_Enum | ''
   bildStrategies: Record<BildStrategies, boolean> | null
+  accreditedBy: Accreditors_Enum | null
 }
 
 export type ValidCourseInput = DeepNonNullable<

@@ -10,6 +10,7 @@ import {
   Payment_Methods_Enum,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import { shouldGoIntoExceptionApproval } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
@@ -28,7 +29,11 @@ import {
   TrainerInput,
   TransportMethod,
 } from '@app/types'
-import { generateCourseName, LoadingStatus } from '@app/util'
+import {
+  generateBildCourseName,
+  generateCourseName,
+  LoadingStatus,
+} from '@app/util'
 
 import { useCreateCourse } from './components/CreateCourseProvider'
 
@@ -112,14 +117,8 @@ export function useSaveCourse(): {
   savingStatus: LoadingStatus
   saveCourse: SaveCourse
 } {
-  const {
-    courseData,
-    expenses,
-    trainers,
-    go1Licensing,
-    exceptions,
-    courseAccreditor,
-  } = useCreateCourse()
+  const { courseData, expenses, trainers, go1Licensing, exceptions } =
+    useCreateCourse()
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const fetcher = useFetcher()
   const { t } = useTranslation()
@@ -131,8 +130,10 @@ export function useSaveCourse(): {
 
   const { addSnackbarMessage } = useSnackbar()
 
+  const { strategies } = useBildStrategies(Boolean(courseData?.accreditedBy))
+
   const saveCourse = useCallback<SaveCourse>(async () => {
-    const isBild = courseAccreditor === Accreditors_Enum.Bild
+    const isBild = courseData?.accreditedBy === Accreditors_Enum.Bild
 
     try {
       if (courseData) {
@@ -154,15 +155,18 @@ export function useSaveCourse(): {
 
         const response = await fetcher<ResponseType, ParamsType>(MUTATION, {
           course: {
-            name: generateCourseName(
-              {
-                level: courseData.courseLevel,
-                reaccreditation: courseData.reaccreditation,
-              },
-              t
-            ),
+            name:
+              courseData.accreditedBy === Accreditors_Enum.Icm
+                ? generateCourseName(
+                    {
+                      level: courseData.courseLevel,
+                      reaccreditation: courseData.reaccreditation,
+                    },
+                    t
+                  )
+                : generateBildCourseName(courseData.bildStrategies, strategies),
             deliveryType: courseData.deliveryType,
-            accreditedBy: courseAccreditor,
+            accreditedBy: courseData.accreditedBy,
             bildStrategies: isBild
               ? {
                   data: Object.keys(courseData.bildStrategies).flatMap(s => {
@@ -308,7 +312,7 @@ export function useSaveCourse(): {
     addSnackbarMessage,
     removeDraft,
     exceptions,
-    courseAccreditor,
+    strategies,
   ])
 
   return {

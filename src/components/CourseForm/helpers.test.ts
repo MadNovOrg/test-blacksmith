@@ -36,8 +36,6 @@ describe('isEndDateTimeBeforeStartDateTime', () => {
   const validEndDate = new Date(2023, 2, 15) // The 15th of March 2023
   const validEndTime = '11:00'
 
-  console.log('validStartDate', validStartDate.toString())
-  console.log('validEndDate', validEndDate.toString())
   it('returns false if Start Date is null', () => {
     expect(
       isEndDateTimeBeforeStartDateTime(

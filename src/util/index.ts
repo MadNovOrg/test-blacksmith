@@ -19,11 +19,13 @@ import {
   Profile,
   Xero_Invoice_Status_Enum,
 } from '@app/generated/graphql'
+import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import {
   Address,
   AdminOnlyCourseStatus,
   AllCourseStatuses,
   AttendeeOnlyCourseStatus,
+  BildStrategies,
   CertificateStatus,
   Course,
   CourseInput,
@@ -198,6 +200,22 @@ export const generateCourseName = (
   }`
 }
 
+export const generateBildCourseName = (
+  strategies: Record<BildStrategies, boolean>,
+  allStrategies: ReturnType<typeof useBildStrategies>['strategies']
+) => {
+  const chosenStrategies = Object.keys(strategies).filter(
+    strategy => strategies[strategy as BildStrategies] === true
+  )
+
+  const strategyAbbreviations = chosenStrategies
+    .map(strategy => allStrategies.find(s => s.name === strategy)?.shortName)
+    .filter(Boolean)
+    .join('')
+
+  return `BILD Certified Course: ${strategyAbbreviations}`
+}
+
 export const COURSE_TYPE_TO_PREFIX = {
   [CourseType.OPEN]: 'OP',
   [CourseType.CLOSED]: 'CL',
@@ -255,6 +273,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     parkingInstructions: course.parking_instructions ?? '',
     source: course.source ?? '',
     bildStrategies: null,
+    accreditedBy: course.accreditedBy,
   }
 }
 

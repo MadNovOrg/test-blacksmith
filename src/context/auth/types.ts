@@ -1,6 +1,6 @@
 import { CognitoUser } from 'amazon-cognito-identity-js'
 
-import { Profile, RoleName } from '@app/types'
+import { CourseLevel, Profile, RoleName } from '@app/types'
 
 import { getACL } from './permissions'
 
@@ -20,6 +20,8 @@ export type AuthState = {
   activeRole?: RoleName
   verified?: boolean
   loggedOut?: boolean
+  trainerRoles?: string[]
+  activeCertificates?: CourseLevel[]
 }
 
 export interface AuthContextType extends AuthState {

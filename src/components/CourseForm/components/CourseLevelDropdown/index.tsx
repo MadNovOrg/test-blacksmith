@@ -1,5 +1,5 @@
 import { Select, SelectChangeEvent, MenuItem } from '@mui/material'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Accreditors_Enum } from '@app/generated/graphql'
@@ -15,6 +15,7 @@ interface Props {
   courseType: CourseType
   courseAccreditor: Accreditors_Enum
   disabled?: boolean
+  labelId?: string
 }
 
 export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
@@ -23,8 +24,14 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   courseType,
   courseAccreditor,
   disabled = false,
+  labelId,
 }) => {
   const { t } = useTranslation()
+  const onChangeRef = useRef<Props['onChange'] | undefined>()
+
+  useEffect(() => {
+    onChangeRef.current = onChange
+  }, [onChange])
 
   const levels = useMemo(
     () => getLevels(courseType, courseAccreditor),
@@ -39,6 +46,14 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
     }
   }, [levels, onChange, value, selected])
 
+  useEffect(() => {
+    if (onChangeRef.current) {
+      onChangeRef.current({
+        target: { value: levels[0] },
+      } as SelectChangeEvent<CourseLevel>)
+    }
+  }, [courseAccreditor, levels])
+
   return (
     <Select
       value={selected}
@@ -46,6 +61,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
       data-testid="course-level-select"
       id="course-level"
       disabled={disabled}
+      labelId={labelId}
     >
       {levels.map(level => (
         <MenuItem

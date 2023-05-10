@@ -1,11 +1,17 @@
 import { MarkOptional } from 'ts-essentials'
 
-import { CourseTrainerType, CourseType, RoleName } from '@app/types'
+import {
+  CourseLevel,
+  CourseTrainerType,
+  CourseType,
+  RoleName,
+} from '@app/types'
 
 import type { AuthContextType } from './types'
 
 export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
   const activeRole = auth.activeRole
+  const activeCertificates = auth.activeCertificates ?? []
 
   const acl = Object.freeze({
     isAdmin: () => acl.isTTOps() || acl.isTTAdmin() || acl.isLD(),
@@ -396,6 +402,35 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.SALES_ADMIN,
       ]
       return roles.some(r => r === auth.activeRole)
+    },
+    canCreateBildCourse: (type: CourseType) => {
+      if (!activeRole) {
+        return false
+      }
+
+      switch (type) {
+        case CourseType.INDIRECT: {
+          if (activeRole === RoleName.TRAINER) {
+            return [
+              CourseLevel.BildIntermediateTrainer,
+              CourseLevel.BildAdvancedTrainer,
+            ].some(level => activeCertificates.includes(level))
+          }
+
+          return false
+        }
+        case CourseType.OPEN:
+        case CourseType.CLOSED: {
+          return [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN]
+        }
+      }
+    },
+    canDeliveryTertiaryAdvancedStrategy: () => {
+      if (activeRole === RoleName.TRAINER) {
+        return activeCertificates.includes(CourseLevel.BildAdvancedTrainer)
+      }
+
+      return true
     },
   })
 

@@ -4,7 +4,12 @@ import { getUserProfile } from '@app/queries/users'
 import type { Claims, CognitoUser, Profile } from './types'
 
 type QueryResponseType = {
-  profile: (Profile & { adminRights: { aggregate: { count: number } } }) | null
+  profile:
+    | (Profile & {
+        adminRights: { aggregate: { count: number } }
+        trainerRoles: { trainer_role_type: { name: string } }[]
+      })
+    | null
 }
 
 export type CognitoProfileDetails = {

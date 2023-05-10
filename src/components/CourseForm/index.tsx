@@ -11,8 +11,10 @@ import {
   Grid,
   InputAdornment,
   InputLabel,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
   Switch,
   TextField,
   Typography,
@@ -21,7 +23,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { isDate, isValid as isValidDate } from 'date-fns'
 import React, { memo, useCallback, useEffect, useMemo } from 'react'
-import { Controller, useForm, useWatch } from 'react-hook-form'
+import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
@@ -29,7 +31,6 @@ import { FormPanel } from '@app/components/FormPanel'
 import { NumericTextField } from '@app/components/NumericTextField'
 import { useAuth } from '@app/context/auth'
 import { Accreditors_Enum, Course_Source_Enum } from '@app/generated/graphql'
-import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
@@ -55,11 +56,21 @@ import { CourseLevelDropdown } from './components/CourseLevelDropdown'
 import { CourseTimePicker } from './components/CourseTimePicker'
 import { SourceDropdown } from './components/SourceDropdown'
 import {
+  StrategyToggles,
+  schema as strategiesSchema,
+  validateStrategies,
+} from './components/StrategyToggles'
+import {
   canBeBlended,
+  canBeBlendedBild,
   canBeF2F,
+  canBeF2FBild,
   canBeMixed,
+  canBeMixedBild,
   canBeReacc,
+  canBeReaccBild,
   canBeVirtual,
+  canBeVirtualBild,
   getAccountCode,
   getDefaultSpecialInstructions,
   isEndDateTimeBeforeStartDateTime,
@@ -70,7 +81,6 @@ export type DisabledFields = Partial<keyof CourseInput>
 
 interface Props {
   type?: CourseType
-  accreditor?: Accreditors_Enum
   courseInput?: CourseInput
   disabledFields?: Set<DisabledFields>
   onChange?: (input: { data?: CourseInput; isValid?: boolean }) => void
@@ -78,30 +88,25 @@ interface Props {
 
 const accountCodeValue = getAccountCode()
 
-const defaultCourseLevels: Record<Accreditors_Enum, CourseLevel> = {
-  [Accreditors_Enum.Icm]: CourseLevel.Level_1,
-  [Accreditors_Enum.Bild]: CourseLevel.BildRegular,
-} as const
-
 const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
   type: courseType = CourseType.OPEN,
-  accreditor: courseAccreditor = Accreditors_Enum.Icm,
   courseInput,
   disabledFields = new Set(),
 }) => {
   const { t } = useTranslation()
-  const { activeRole } = useAuth()
+  const { activeRole, acl } = useAuth()
 
   const hasOrg = [CourseType.CLOSED, CourseType.INDIRECT].includes(courseType)
   const isClosedCourse = courseType === CourseType.CLOSED
   const hasMinParticipants = courseType === CourseType.OPEN
-  const isBild = courseAccreditor === Accreditors_Enum.Bild
-  const { strategies: bildStrategies } = useBildStrategies(isBild)
 
   const schema = useMemo(
     () =>
       yup.object({
+        accreditedBy: yup
+          .mixed()
+          .oneOf([Accreditors_Enum.Bild, Accreditors_Enum.Icm]),
         ...(hasOrg ? { organization: yup.object().required() } : null),
         ...(isClosedCourse
           ? {
@@ -216,6 +221,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         notes: yup.string().nullable(),
         specialInstructions: yup.string().nullable().default(''),
         parkingInstructions: yup.string().nullable().default(''),
+        bildStrategies: strategiesSchema.when('accreditedBy', {
+          is: Accreditors_Enum.Bild,
+          then: validateStrategies,
+          otherwise: s => s,
+        }),
       }),
 
     [t, hasOrg, isClosedCourse, hasMinParticipants, activeRole]
@@ -223,11 +233,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const defaultValues = useMemo<CourseInput>(
     () => ({
+      accreditedBy: courseInput?.accreditedBy ?? Accreditors_Enum.Icm,
       organization: courseInput?.organization ?? null,
       salesRepresentative: courseInput?.salesRepresentative ?? null,
       contactProfile: courseInput?.contactProfile ?? null,
-      courseLevel:
-        courseInput?.courseLevel ?? defaultCourseLevels[courseAccreditor],
+      courseLevel: courseInput?.courseLevel ?? '',
       blendedLearning: courseInput?.blendedLearning ?? false,
       reaccreditation: courseInput?.reaccreditation ?? false,
       deliveryType: courseInput?.deliveryType ?? CourseDeliveryType.F2F,
@@ -260,21 +270,22 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       courseCost: courseInput?.courseCost ?? null,
       accountCode: courseInput?.accountCode ?? accountCodeValue,
       type: courseType,
-      accreditor: courseAccreditor,
+      accreditor: Accreditors_Enum.Icm,
       notes: courseInput?.notes ?? null,
       specialInstructions: courseInput?.specialInstructions ?? '',
       parkingInstructions: courseInput?.parkingInstructions ?? '',
       source: courseInput?.source ?? '',
-      bildStrategies: isBild
-        ? bildStrategies.reduce((acc, strategy) => {
-            acc[strategy.name] =
-              courseInput?.bildStrategies?.[strategy.name] ?? false
-            return acc
-          }, {} as Record<BildStrategies, boolean>)
-        : null,
+      bildStrategies:
+        courseInput?.bildStrategies ?? ({} as Record<BildStrategies, boolean>),
     }),
-    [courseInput, courseType, courseAccreditor, bildStrategies, isBild]
+    [courseInput, courseType]
   )
+
+  const methods = useForm<CourseInput>({
+    resolver: yupResolver(schema),
+    mode: 'all',
+    defaultValues,
+  })
 
   const {
     register,
@@ -287,28 +298,43 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     resetField,
     setError,
     clearErrors,
-  } = useForm<CourseInput>({
-    resolver: yupResolver(schema),
-    mode: 'all',
-    defaultValues,
-  })
+  } = methods
 
   const errors = formState.errors
   const values = watch()
   const deliveryType = values.deliveryType
   const courseLevel = values.courseLevel
   const isBlended = values.blendedLearning
-  const isBildPrimary = values.bildStrategies?.[BildStrategies.Primary] ?? false
-  const canBlended = canBeBlended(
-    courseType,
-    courseLevel,
-    deliveryType,
-    isBildPrimary
-  )
-  const canReacc = canBeReacc(courseType, courseLevel, deliveryType, isBlended)
-  const canF2F = canBeF2F(courseType, courseLevel)
-  const canVirtual = canBeVirtual(courseType, courseLevel)
-  const canMixed = canBeMixed(courseType, courseLevel)
+
+  const canBlended =
+    values.accreditedBy === Accreditors_Enum.Icm
+      ? canBeBlended(courseType, courseLevel, deliveryType)
+      : canBeBlendedBild(courseType, values.bildStrategies)
+
+  const canReacc =
+    values.accreditedBy === Accreditors_Enum.Icm
+      ? canBeReacc(courseType, courseLevel, deliveryType, isBlended)
+      : canBeReaccBild(
+          courseType,
+          values.bildStrategies,
+          values.blendedLearning
+        )
+
+  const canF2F =
+    values.accreditedBy === Accreditors_Enum.Icm
+      ? canBeF2F(courseType, courseLevel)
+      : canBeF2FBild()
+
+  const canVirtual =
+    values.accreditedBy === Accreditors_Enum.Icm
+      ? canBeVirtual(courseType, courseLevel)
+      : canBeVirtualBild(courseType, values.bildStrategies)
+
+  const canMixed =
+    values.accreditedBy === Accreditors_Enum.Icm
+      ? canBeMixed(courseType, courseLevel)
+      : canBeMixedBild(courseType, values.courseLevel)
+
   const hasVenue = [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(
     deliveryType
   )
@@ -318,6 +344,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const startTime = useWatch({ control, name: 'startTime' })
   const endDate = useWatch({ control, name: 'endDate' })
   const endTime = useWatch({ control, name: 'endTime' })
+  const isBild = values.accreditedBy === Accreditors_Enum.Bild
 
   useEffect(() => {
     // I want to execute this check only at the first render.
@@ -504,670 +531,688 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <form>
-      <Typography variant="h5" fontWeight={500} gutterBottom>
-        {t('components.course-form.general-details-title')}
-      </Typography>
-      <FormPanel mb={2}>
-        {hasOrg ? (
-          <>
-            <Typography mb={2} fontWeight={600}>
-              {t('components.course-form.organization-label')}
-            </Typography>
-            <OrgSelector
-              allowAdding
-              value={values.organization ?? undefined}
-              onChange={org => {
-                setValue('organization', org, { shouldValidate: true })
-              }}
-              textFieldProps={{
-                variant: 'filled',
-              }}
-              sx={{ marginBottom: 2 }}
-              disabled={disabledFields.has('organization')}
+      <FormProvider {...methods}>
+        <Typography variant="h5" fontWeight={500} gutterBottom>
+          {t('components.course-form.general-details-title')}
+        </Typography>
+        <FormPanel mb={2}>
+          {acl.canCreateBildCourse(courseType) ? (
+            <FormControl
+              variant="filled"
+              sx={{ mb: theme.spacing(2) }}
+              fullWidth
+            >
+              <InputLabel id="course-category-label">
+                {t('course-category')}
+              </InputLabel>
+              <Controller
+                name="accreditedBy"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    onChange={e => {
+                      setValue('usesAOL', false)
+                      setValue('aolCountry', '')
+                      setValue('aolRegion', '')
+
+                      resetField('bildStrategies')
+
+                      field.onChange(e)
+                    }}
+                    labelId="course-category-label"
+                  >
+                    <MenuItem value={`${Accreditors_Enum.Icm}`}>ICM</MenuItem>
+                    <MenuItem value={`${Accreditors_Enum.Bild}`}>BILD</MenuItem>
+                  </Select>
+                )}
+              />
+            </FormControl>
+          ) : null}
+          {hasOrg ? (
+            <>
+              <Typography mb={2} fontWeight={600}>
+                {t('components.course-form.organization-label')}
+              </Typography>
+              <OrgSelector
+                allowAdding
+                value={values.organization ?? undefined}
+                onChange={org => {
+                  setValue('organization', org, { shouldValidate: true })
+                }}
+                textFieldProps={{
+                  variant: 'filled',
+                }}
+                sx={{ marginBottom: 2 }}
+                disabled={disabledFields.has('organization')}
+              />
+            </>
+          ) : null}
+
+          {isClosedCourse ? (
+            <>
+              <Typography mb={2} fontWeight={600}>
+                {t('components.course-form.contact-person-label')}
+              </Typography>
+
+              <ProfileSelector
+                value={values.contactProfile ?? undefined}
+                orgId={getValues('organization')?.id ?? undefined}
+                onChange={profile => {
+                  setValue('contactProfile', profile ?? null, {
+                    shouldValidate: true,
+                  })
+                }}
+                sx={{ marginBottom: 2 }}
+                textFieldProps={{ variant: 'filled' }}
+                disabled={
+                  !getValues('organization') ||
+                  disabledFields.has('contactProfile')
+                }
+                placeholder={t(
+                  'components.course-form.contact-person-placeholder'
+                )}
+              />
+            </>
+          ) : null}
+
+          <Typography mb={2} fontWeight={600}>
+            {t('components.course-form.course-level-section-title')}
+          </Typography>
+          <FormControl variant="filled" sx={{ mb: theme.spacing(2) }} fullWidth>
+            <InputLabel id="course-level-dropdown">
+              {t('components.course-form.course-level-placeholder')}
+            </InputLabel>
+            <Controller
+              name="courseLevel"
+              control={control}
+              render={({ field }) => (
+                <CourseLevelDropdown
+                  value={field.value}
+                  labelId="course-level-dropdown"
+                  onChange={event => {
+                    field.onChange(event)
+                    setValue(
+                      'specialInstructions',
+                      getDefaultSpecialInstructions(
+                        courseType,
+                        event.target.value as CourseLevel,
+                        deliveryType,
+                        values.reaccreditation,
+                        t
+                      )
+                    )
+                  }}
+                  courseType={courseType}
+                  courseAccreditor={values.accreditedBy ?? Accreditors_Enum.Icm}
+                  disabled={disabledFields.has('courseLevel')}
+                />
+              )}
             />
-          </>
-        ) : null}
+            {values.courseLevel === CourseLevel.Level_1 && (
+              <Alert severity="info" sx={{ mt: 2 }}>
+                {t('components.course-form.course-level-one-info')}
+              </Alert>
+            )}
+            {errors.courseLevel?.message ? (
+              <FormHelperText error>
+                {errors.courseLevel.message}
+              </FormHelperText>
+            ) : null}
+          </FormControl>
 
-        {isClosedCourse ? (
-          <>
-            <Typography mb={2} fontWeight={600}>
-              {t('components.course-form.contact-person-label')}
-            </Typography>
+          {isBild ? <StrategyToggles /> : null}
 
-            <ProfileSelector
-              value={values.contactProfile ?? undefined}
-              orgId={getValues('organization')?.id ?? undefined}
-              onChange={profile => {
-                setValue('contactProfile', profile ?? null, {
+          <Divider sx={{ my: 2 }} />
+
+          <Controller
+            name="blendedLearning"
+            control={control}
+            render={({ field }) => (
+              <FormControlLabel
+                sx={{ mr: theme.spacing(5) }}
+                disabled={!canBlended || disabledFields.has('blendedLearning')}
+                control={
+                  <Switch
+                    {...field}
+                    checked={values.blendedLearning}
+                    data-testid="blendedLearning-switch"
+                  />
+                }
+                label={t('components.course-form.blended-learning-label')}
+              />
+            )}
+          />
+
+          <Controller
+            name="reaccreditation"
+            control={control}
+            render={({ field }) => (
+              <FormControlLabel
+                disabled={!canReacc || disabledFields.has('reaccreditation')}
+                control={
+                  <Switch
+                    {...field}
+                    checked={values.reaccreditation}
+                    data-testid="reaccreditation-switch"
+                  />
+                }
+                label={t('components.course-form.reaccreditation-label')}
+              />
+            )}
+          />
+
+          {isBlended && courseType === CourseType.INDIRECT ? (
+            <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
+              {t('components.course-form.blended-learning-price-label')}
+            </Alert>
+          ) : null}
+
+          <Typography mb={2} mt={2} fontWeight={600}>
+            {t('components.course-form.delivery-type-section-title')}
+          </Typography>
+          <FormControl>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+              value={deliveryType}
+              onChange={e => {
+                const deliveryType = e.target.value as CourseDeliveryType
+                setValue('deliveryType', deliveryType)
+
+                if (deliveryType === CourseDeliveryType.VIRTUAL) {
+                  setValue('venue', null)
+                  setValue('parkingInstructions', '')
+                }
+                trigger(['venue', 'zoomMeetingUrl'])
+
+                setValue(
+                  'specialInstructions',
+                  getDefaultSpecialInstructions(
+                    courseType,
+                    courseLevel,
+                    deliveryType,
+                    values.reaccreditation,
+                    t
+                  )
+                )
+              }}
+            >
+              <FormControlLabel
+                value={CourseDeliveryType.F2F}
+                control={
+                  <Radio
+                    disabled={!canF2F || disabledFields.has('deliveryType')}
+                  />
+                }
+                label={t('components.course-form.f2f-option-label')}
+                data-testid={`delivery-${CourseDeliveryType.F2F}`}
+              />
+              <FormControlLabel
+                value={CourseDeliveryType.VIRTUAL}
+                control={
+                  <Radio
+                    disabled={!canVirtual || disabledFields.has('deliveryType')}
+                  />
+                }
+                label={t('components.course-form.virtual-option-label')}
+                data-testid={`delivery-${CourseDeliveryType.VIRTUAL}`}
+              />
+              <FormControlLabel
+                value={CourseDeliveryType.MIXED}
+                control={
+                  <Radio
+                    disabled={!canMixed || disabledFields.has('deliveryType')}
+                  />
+                }
+                label={t('components.course-form.mixed-option-label')}
+                data-testid={`delivery-${CourseDeliveryType.MIXED}`}
+              />
+            </RadioGroup>
+          </FormControl>
+
+          {hasVenue ? (
+            <VenueSelector
+              onChange={venue => {
+                return setValue('venue', venue ?? null, {
                   shouldValidate: true,
                 })
               }}
-              sx={{ marginBottom: 2 }}
+              value={values.venue ?? undefined}
               textFieldProps={{ variant: 'filled' }}
-              disabled={
-                !getValues('organization') ||
-                disabledFields.has('contactProfile')
-              }
-              placeholder={t(
-                'components.course-form.contact-person-placeholder'
-              )}
             />
-          </>
-        ) : null}
-
-        <Typography mb={2} fontWeight={600}>
-          {t('components.course-form.course-level-section-title')}
-        </Typography>
-        <FormControl variant="filled" sx={{ mb: theme.spacing(2) }} fullWidth>
-          <InputLabel>
-            {t('components.course-form.course-level-placeholder')}
-          </InputLabel>
-          <Controller
-            name="courseLevel"
-            control={control}
-            render={({ field }) => (
-              <CourseLevelDropdown
-                value={field.value}
-                onChange={event => {
-                  field.onChange(event)
-                  setValue(
-                    'specialInstructions',
-                    getDefaultSpecialInstructions(
-                      courseType,
-                      event.target.value as CourseLevel,
-                      deliveryType,
-                      values.reaccreditation,
-                      t
-                    )
-                  )
-                }}
-                courseType={courseType}
-                courseAccreditor={courseAccreditor}
-                disabled={disabledFields.has('courseLevel')}
-              />
-            )}
-          />
-          {values.courseLevel === CourseLevel.Level_1 && (
-            <Alert severity="info" sx={{ mt: 2 }}>
-              {t('components.course-form.course-level-one-info')}
-            </Alert>
-          )}
-          {errors.courseLevel?.message ? (
-            <FormHelperText error>{errors.courseLevel.message}</FormHelperText>
           ) : null}
-        </FormControl>
 
-        {bildStrategies.length ? (
-          <Box display="flex" flexWrap="wrap">
-            {bildStrategies.map(strategy => (
-              <Controller
-                key={strategy.id}
-                name={`bildStrategies.${strategy.name}`}
-                control={control}
-                render={({ field }) => (
-                  <FormControlLabel
-                    sx={{ width: '50%', mr: 0 }}
-                    control={
-                      <Switch
-                        {...field}
-                        checked={
-                          values.bildStrategies?.[strategy.name] ?? false
-                        }
-                      />
-                    }
-                    label={t(`common.bild-strategies.${strategy.name}`)}
-                  />
-                )}
-              />
-            ))}
-          </Box>
-        ) : null}
-
-        <Divider sx={{ my: 1 }} />
-
-        <Controller
-          name="blendedLearning"
-          control={control}
-          render={({ field }) => (
-            <FormControlLabel
-              sx={{ mr: theme.spacing(5) }}
-              disabled={!canBlended || disabledFields.has('blendedLearning')}
-              control={
-                <Switch
-                  {...field}
-                  checked={values.blendedLearning}
-                  data-testid="blendedLearning-switch"
-                />
-              }
-              label={t('components.course-form.blended-learning-label')}
-            />
-          )}
-        />
-
-        <Controller
-          name="reaccreditation"
-          control={control}
-          render={({ field }) => (
-            <FormControlLabel
-              disabled={!canReacc || disabledFields.has('reaccreditation')}
-              control={
-                <Switch
-                  {...field}
-                  checked={values.reaccreditation}
-                  data-testid="reaccreditation-switch"
-                />
-              }
-              label={t('components.course-form.reaccreditation-label')}
-            />
-          )}
-        />
-
-        {isBlended && courseType === CourseType.INDIRECT ? (
-          <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
-            {t('components.course-form.blended-learning-price-label')}
-          </Alert>
-        ) : null}
-
-        <Typography mb={2} mt={2} fontWeight={600}>
-          {t('components.course-form.delivery-type-section-title')}
-        </Typography>
-        <FormControl>
-          <RadioGroup
-            row
-            aria-labelledby="demo-row-radio-buttons-group-label"
-            name="row-radio-buttons-group"
-            value={deliveryType}
-            onChange={e => {
-              const deliveryType = e.target.value as CourseDeliveryType
-              setValue('deliveryType', deliveryType)
-
-              if (deliveryType === CourseDeliveryType.VIRTUAL) {
-                setValue('venue', null)
-                setValue('parkingInstructions', '')
-              }
-              trigger(['venue', 'zoomMeetingUrl'])
-
-              setValue(
-                'specialInstructions',
-                getDefaultSpecialInstructions(
-                  courseType,
-                  courseLevel,
-                  deliveryType,
-                  values.reaccreditation,
-                  t
-                )
-              )
-            }}
-          >
-            <FormControlLabel
-              value={CourseDeliveryType.F2F}
-              control={
-                <Radio
-                  disabled={!canF2F || disabledFields.has('deliveryType')}
-                />
-              }
-              label={t('components.course-form.f2f-option-label')}
-              data-testid={`delivery-${CourseDeliveryType.F2F}`}
-            />
-            <FormControlLabel
-              value={CourseDeliveryType.VIRTUAL}
-              control={
-                <Radio
-                  disabled={!canVirtual || disabledFields.has('deliveryType')}
-                />
-              }
-              label={t('components.course-form.virtual-option-label')}
-              data-testid={`delivery-${CourseDeliveryType.VIRTUAL}`}
-            />
-            <FormControlLabel
-              value={CourseDeliveryType.MIXED}
-              control={
-                <Radio
-                  disabled={!canMixed || disabledFields.has('deliveryType')}
-                />
-              }
-              label={t('components.course-form.mixed-option-label')}
-              data-testid={`delivery-${CourseDeliveryType.MIXED}`}
-            />
-          </RadioGroup>
-        </FormControl>
-
-        {hasVenue ? (
-          <VenueSelector
-            onChange={venue => {
-              return setValue('venue', venue ?? null, { shouldValidate: true })
-            }}
-            value={values.venue ?? undefined}
-            textFieldProps={{ variant: 'filled' }}
-          />
-        ) : null}
-
-        {hasZoomMeetingUrl ? (
-          <TextField
-            data-testid="onlineMeetingLink-input"
-            fullWidth
-            variant="filled"
-            {...register('zoomMeetingUrl')}
-            InputLabelProps={{ shrink: values.zoomMeetingUrl !== '' }}
-            helperText={
-              zoomLinkStatus === LoadingStatus.ERROR
-                ? errors.zoomMeetingUrl?.message
-                : null
-            }
-            error={Boolean(
-              errors.zoomMeetingUrl?.message &&
+          {hasZoomMeetingUrl ? (
+            <TextField
+              data-testid="onlineMeetingLink-input"
+              fullWidth
+              variant="filled"
+              {...register('zoomMeetingUrl')}
+              InputLabelProps={{ shrink: values.zoomMeetingUrl !== '' }}
+              helperText={
                 zoomLinkStatus === LoadingStatus.ERROR
-            )}
-            sx={{ marginTop: 2 }}
-            label={t('components.course-form.online-meeting-link-label')}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="start">
-                  {zoomLinkStatus === LoadingStatus.FETCHING ? (
-                    <CircularProgress size={20} />
-                  ) : null}
-                </InputAdornment>
-              ),
-            }}
-          />
-        ) : null}
-
-        <Controller
-          name="specialInstructions"
-          control={control}
-          render={({ field }) => (
-            <InstructionAccordionField
-              title={t('components.course-form.special-instructions.title')}
-              confirmResetTitle={t(
-                'components.course-form.special-instructions.modal-title'
+                  ? errors.zoomMeetingUrl?.message
+                  : null
+              }
+              error={Boolean(
+                errors.zoomMeetingUrl?.message &&
+                  zoomLinkStatus === LoadingStatus.ERROR
               )}
-              confirmResetMessage={t(
-                'components.course-form.special-instructions.modal-message'
-              )}
-              data-testid="course-form-special-instructions"
-              defaultValue={retrieveDefaultSpecialInstructions()}
-              value={field.value}
-              onSave={field.onChange}
-              editMode={false}
-              maxLength={2000}
+              sx={{ marginTop: 2 }}
+              label={t('components.course-form.online-meeting-link-label')}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="start">
+                    {zoomLinkStatus === LoadingStatus.FETCHING ? (
+                      <CircularProgress size={20} />
+                    ) : null}
+                  </InputAdornment>
+                ),
+              }}
             />
-          )}
-        />
-        {deliveryType === CourseDeliveryType.F2F ||
-        deliveryType === CourseDeliveryType.MIXED ? (
+          ) : null}
+
           <Controller
-            name="parkingInstructions"
+            name="specialInstructions"
             control={control}
             render={({ field }) => (
               <InstructionAccordionField
-                title={t('components.course-form.parking-instructions.title')}
+                title={t('components.course-form.special-instructions.title')}
                 confirmResetTitle={t(
-                  'components.course-form.parking-instructions.modal-title'
+                  'components.course-form.special-instructions.modal-title'
                 )}
                 confirmResetMessage={t(
-                  'components.course-form.parking-instructions.modal-message'
+                  'components.course-form.special-instructions.modal-message'
                 )}
-                data-testid="course-form-parking-instructions"
+                data-testid="course-form-special-instructions"
+                defaultValue={retrieveDefaultSpecialInstructions()}
                 value={field.value}
                 onSave={field.onChange}
                 editMode={false}
-                maxLength={1000}
+                maxLength={2000}
               />
             )}
           />
-        ) : null}
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Typography mb={2} mt={2} fontWeight={600}>
-            {t('components.course-form.start-datepicker-section-title')}
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Controller
-                name="startDate"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <CourseDatePicker
-                    label={t('components.course-form.start-date-placeholder')}
-                    value={field.value}
-                    minDate={new Date()}
-                    maxDate={values.endDate || undefined}
-                    onChange={newStartDate => {
-                      field.onChange(newStartDate)
-                      setValue(
-                        'startDateTime',
-                        makeDate(newStartDate, startTime)
-                      )
-                      trigger('endDate')
-                    }}
-                    onBlur={field.onBlur}
-                    error={fieldState.error}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Controller
-                name="startTime"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <CourseTimePicker
-                    id="start"
-                    label={t('components.course-form.start-time-placeholder')}
-                    value={field.value}
-                    onChange={newStartTime => {
-                      field.onChange(newStartTime)
-                      setValue(
-                        'startDateTime',
-                        makeDate(startDate, newStartTime)
-                      )
-                    }}
-                    error={fieldState.error}
-                  />
-                )}
-              />
-            </Grid>
-          </Grid>
-
-          <Typography mb={2} mt={2} fontWeight={600}>
-            {t('components.course-form.end-datepicker-section-title')}
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Controller
-                name="endDate"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <CourseDatePicker
-                    label={t('components.course-form.end-date-placeholder')}
-                    value={field.value}
-                    minDate={values.startDate ?? new Date()}
-                    onChange={newEndDate => {
-                      field.onChange(newEndDate)
-                      setValue('endDateTime', makeDate(newEndDate, endTime))
-                    }}
-                    onBlur={field.onBlur}
-                    error={
-                      fieldState.error || errors.endDateTime
-                        ? { ...fieldState.error, ...errors.endDateTime }
-                        : undefined
-                    }
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Controller
-                name="endTime"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <CourseTimePicker
-                    id="end"
-                    label={t('components.course-form.end-time-placeholder')}
-                    value={field.value}
-                    onChange={newEndTime => {
-                      field.onChange(newEndTime)
-                      setValue('endDateTime', makeDate(endDate, newEndTime))
-                    }}
-                    error={fieldState.error}
-                  />
-                )}
-              />
-            </Grid>
-          </Grid>
-        </LocalizationProvider>
-
-        {courseType === CourseType.INDIRECT ? (
-          <>
-            <Typography
-              mt={2}
-              fontWeight={600}
-              color={isBild ? 'text.disabled' : undefined}
-            >
-              {t('components.course-form.aol-title')}
-            </Typography>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onChange={e => {
-                    setValue('usesAOL', e.target.checked, {
-                      shouldValidate: true,
-                    })
-                    if (!e.target.checked) {
-                      resetField('courseCost')
-                    }
-                  }}
-                  checked={usesAOL}
-                  disabled={disabledFields.has('usesAOL') || isBild}
-                />
-              }
-              label={t('components.course-form.aol-label')}
-            />
-
-            {usesAOL ? (
-              <>
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <FormControl
-                      variant="filled"
-                      sx={{ mb: theme.spacing(2) }}
-                      fullWidth
-                      disabled={disabledFields.has('aolCountry')}
-                    >
-                      <Controller
-                        name="aolCountry"
-                        control={control}
-                        render={({ field }) => (
-                          <CourseAOLCountryDropdown
-                            value={field.value}
-                            onChange={field.onChange}
-                            usesAOL={usesAOL}
-                          />
-                        )}
-                      />
-                    </FormControl>
-                  </Grid>
-
-                  <Grid item xs={6}>
-                    <FormControl
-                      variant="filled"
-                      sx={{ mb: theme.spacing(2) }}
-                      fullWidth
-                    >
-                      <Controller
-                        name="aolRegion"
-                        control={control}
-                        render={({ field }) => (
-                          <CourseAOLRegionDropdown
-                            value={field.value}
-                            onChange={field.onChange}
-                            usesAOL={usesAOL}
-                            aolCountry={aolCountry}
-                            disabled={disabledFields.has('aolRegion')}
-                          />
-                        )}
-                      />
-                    </FormControl>
-                  </Grid>
-                </Grid>
-
-                <Typography mt={5} fontWeight={600}>
-                  {t('components.course-form.course-cost')}
-                </Typography>
-                <Typography mb={1} variant="body2">
-                  {t('components.course-form.course-cost-disclaimer')}
-                </Typography>
-                <TextField
-                  variant="filled"
-                  placeholder={t(
-                    'components.course-form.course-cost-placeholder'
+          {deliveryType === CourseDeliveryType.F2F ||
+          deliveryType === CourseDeliveryType.MIXED ? (
+            <Controller
+              name="parkingInstructions"
+              control={control}
+              render={({ field }) => (
+                <InstructionAccordionField
+                  title={t('components.course-form.parking-instructions.title')}
+                  confirmResetTitle={t(
+                    'components.course-form.parking-instructions.modal-title'
                   )}
-                  fullWidth
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">£</InputAdornment>
-                    ),
-                  }}
-                  disabled={disabledFields.has('courseCost')}
-                  {...register('courseCost')}
+                  confirmResetMessage={t(
+                    'components.course-form.parking-instructions.modal-message'
+                  )}
+                  data-testid="course-form-parking-instructions"
+                  value={field.value}
+                  onSave={field.onChange}
+                  editMode={false}
+                  maxLength={1000}
                 />
-              </>
-            ) : null}
-          </>
-        ) : null}
-      </FormPanel>
-      <Typography variant="h5" fontWeight={500} gutterBottom>
-        {t('components.course-form.attendees-section-title')}
-      </Typography>
-      <FormPanel>
-        <Typography fontWeight={600}>
-          {t('components.course-form.attendees-number-title')}
-        </Typography>
-        <Typography variant="body2" mb={2}>
-          {t('components.course-form.attendees-description')}
-        </Typography>
-
-        <Grid container spacing={2}>
-          {hasMinParticipants ? (
-            <Grid item xs={6}>
-              <NumericTextField
-                label={t('components.course-form.min-attendees-placeholder')}
-                variant="filled"
-                fullWidth
-                {...register('minParticipants', { valueAsNumber: true })}
-                error={Boolean(errors.minParticipants)}
-                helperText={errors.minParticipants?.message}
-                inputProps={{ min: 1 }}
-                data-testid="min-attendees"
-                disabled={disabledFields.has('minParticipants')}
-              />
-            </Grid>
-          ) : null}
-
-          <Grid item xs={6}>
-            <NumericTextField
-              id="filled-basic"
-              label={t(
-                courseType === CourseType.OPEN
-                  ? 'components.course-form.max-attendees-placeholder'
-                  : 'components.course-form.num-attendees-placeholder'
               )}
-              variant="filled"
-              fullWidth
-              {...register('maxParticipants', {
-                deps: ['minParticipants'],
-                valueAsNumber: true,
-              })}
-              error={Boolean(errors.maxParticipants)}
-              helperText={errors.maxParticipants?.message}
-              inputProps={{ min: 1 }}
-              data-testid="max-attendees"
-              disabled={disabledFields.has('maxParticipants')}
             />
-          </Grid>
-        </Grid>
-      </FormPanel>
-
-      <FormPanel mb={2} mt={2}>
-        <Typography fontWeight={600}>
-          {t('components.course-form.notes-title')}
-        </Typography>
-        <Typography variant="body2" mb={2}>
-          {t('components.course-form.notes-description')}
-        </Typography>
-
-        <TextField
-          label={t('components.course-form.notes-placeholder')}
-          variant="filled"
-          fullWidth
-          {...register('notes')}
-          error={Boolean(errors.notes)}
-          helperText={errors.notes?.message}
-          inputProps={{ min: 0 }}
-          data-testid="notes-input"
-          disabled={disabledFields.has('notes')}
-        />
-      </FormPanel>
-
-      {isClosedCourse ? (
-        <>
-          <FormPanel mb={2}>
-            <Typography fontWeight={600}>
-              {t('components.course-form.free-spaces-title')}
+          ) : null}
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Typography mb={2} mt={2} fontWeight={600}>
+              {t('components.course-form.start-datepicker-section-title')}
             </Typography>
-            <Typography variant="body2" mb={2}>
-              {t('components.course-form.free-spaces-description')}
-            </Typography>
-
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <NumericTextField
-                  label={t('components.course-form.free-spaces-placeholder')}
-                  variant="filled"
-                  fullWidth
-                  {...register('freeSpaces', { valueAsNumber: true })}
-                  error={Boolean(errors.freeSpaces)}
-                  helperText={errors.freeSpaces?.message}
-                  inputProps={{ min: 0 }}
-                  data-testid="free-spaces"
-                  disabled={disabledFields.has('freeSpaces')}
-                />
-              </Grid>
-            </Grid>
-          </FormPanel>
-
-          <Typography variant="h5" fontWeight={500} gutterBottom>
-            {t('components.course-form.finance-section-title')}
-          </Typography>
-          <FormPanel>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Typography fontWeight={600}>
-                  {t('components.course-form.sales-rep-title')}
-                </Typography>
-
-                <ProfileSelector
-                  value={values.salesRepresentative ?? undefined}
-                  onChange={profile => {
-                    setValue('salesRepresentative', profile ?? null, {
-                      shouldValidate: true,
-                    })
-                  }}
-                  textFieldProps={{ variant: 'filled' }}
-                  placeholder={t(
-                    'components.course-form.sales-rep-placeholder'
-                  )}
-                  testId="profile-selector-sales-representative"
-                  disabled={disabledFields.has('salesRepresentative')}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <Typography fontWeight={600}>
-                  {t('components.course-form.source-title')}
-                </Typography>
                 <Controller
-                  name="source"
+                  name="startDate"
                   control={control}
-                  render={({ field }) => (
-                    <SourceDropdown
-                      {...field}
-                      data-testid="source-dropdown"
-                      disabled={disabledFields.has('source')}
+                  render={({ field, fieldState }) => (
+                    <CourseDatePicker
+                      label={t('components.course-form.start-date-placeholder')}
+                      value={field.value}
+                      minDate={new Date()}
+                      maxDate={values.endDate || undefined}
+                      onChange={newStartDate => {
+                        field.onChange(newStartDate)
+                        setValue(
+                          'startDateTime',
+                          makeDate(newStartDate, startTime)
+                        )
+                        trigger('endDate')
+                      }}
+                      onBlur={field.onBlur}
+                      error={fieldState.error}
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Controller
+                  name="startTime"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <CourseTimePicker
+                      id="start"
+                      label={t('components.course-form.start-time-placeholder')}
+                      value={field.value}
+                      onChange={newStartTime => {
+                        field.onChange(newStartTime)
+                        setValue(
+                          'startDateTime',
+                          makeDate(startDate, newStartTime)
+                        )
+                      }}
+                      error={fieldState.error}
                     />
                   )}
                 />
               </Grid>
             </Grid>
 
-            <Box>
-              <Typography fontWeight={600} mb={1} mt={2}>
-                {t('components.course-form.account-code-title')}
+            <Typography mb={2} mt={2} fontWeight={600}>
+              {t('components.course-form.end-datepicker-section-title')}
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Controller
+                  name="endDate"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <CourseDatePicker
+                      label={t('components.course-form.end-date-placeholder')}
+                      value={field.value}
+                      minDate={values.startDate ?? new Date()}
+                      onChange={newEndDate => {
+                        field.onChange(newEndDate)
+                        setValue('endDateTime', makeDate(newEndDate, endTime))
+                      }}
+                      onBlur={field.onBlur}
+                      error={
+                        fieldState.error || errors.endDateTime
+                          ? { ...fieldState.error, ...errors.endDateTime }
+                          : undefined
+                      }
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Controller
+                  name="endTime"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <CourseTimePicker
+                      id="end"
+                      label={t('components.course-form.end-time-placeholder')}
+                      value={field.value}
+                      onChange={newEndTime => {
+                        field.onChange(newEndTime)
+                        setValue('endDateTime', makeDate(endDate, newEndTime))
+                      }}
+                      error={fieldState.error}
+                    />
+                  )}
+                />
+              </Grid>
+            </Grid>
+          </LocalizationProvider>
+
+          {courseType === CourseType.INDIRECT ? (
+            <>
+              <Typography
+                mt={2}
+                fontWeight={600}
+                color={isBild ? 'text.disabled' : undefined}
+              >
+                {t('components.course-form.aol-title')}
+              </Typography>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={e => {
+                      setValue('usesAOL', e.target.checked, {
+                        shouldValidate: true,
+                      })
+                      if (!e.target.checked) {
+                        resetField('courseCost')
+                      }
+                    }}
+                    checked={usesAOL}
+                    disabled={disabledFields.has('usesAOL') || isBild}
+                  />
+                }
+                label={t('components.course-form.aol-label')}
+              />
+
+              {usesAOL ? (
+                <>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <FormControl
+                        variant="filled"
+                        sx={{ mb: theme.spacing(2) }}
+                        fullWidth
+                        disabled={disabledFields.has('aolCountry')}
+                      >
+                        <Controller
+                          name="aolCountry"
+                          control={control}
+                          render={({ field }) => (
+                            <CourseAOLCountryDropdown
+                              value={field.value}
+                              onChange={field.onChange}
+                              usesAOL={usesAOL}
+                            />
+                          )}
+                        />
+                      </FormControl>
+                    </Grid>
+
+                    <Grid item xs={6}>
+                      <FormControl
+                        variant="filled"
+                        sx={{ mb: theme.spacing(2) }}
+                        fullWidth
+                      >
+                        <Controller
+                          name="aolRegion"
+                          control={control}
+                          render={({ field }) => (
+                            <CourseAOLRegionDropdown
+                              value={field.value}
+                              onChange={field.onChange}
+                              usesAOL={usesAOL}
+                              aolCountry={aolCountry}
+                              disabled={disabledFields.has('aolRegion')}
+                            />
+                          )}
+                        />
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+
+                  <Typography mt={5} fontWeight={600}>
+                    {t('components.course-form.course-cost')}
+                  </Typography>
+                  <Typography mb={1} variant="body2">
+                    {t('components.course-form.course-cost-disclaimer')}
+                  </Typography>
+                  <TextField
+                    variant="filled"
+                    placeholder={t(
+                      'components.course-form.course-cost-placeholder'
+                    )}
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">£</InputAdornment>
+                      ),
+                    }}
+                    disabled={disabledFields.has('courseCost')}
+                    {...register('courseCost')}
+                  />
+                </>
+              ) : null}
+            </>
+          ) : null}
+        </FormPanel>
+        <Typography variant="h5" fontWeight={500} gutterBottom>
+          {t('components.course-form.attendees-section-title')}
+        </Typography>
+        <FormPanel>
+          <Typography fontWeight={600}>
+            {t('components.course-form.attendees-number-title')}
+          </Typography>
+          <Typography variant="body2" mb={2}>
+            {t('components.course-form.attendees-description')}
+          </Typography>
+
+          <Grid container spacing={2}>
+            {hasMinParticipants ? (
+              <Grid item xs={6}>
+                <NumericTextField
+                  label={t('components.course-form.min-attendees-placeholder')}
+                  variant="filled"
+                  fullWidth
+                  {...register('minParticipants', { valueAsNumber: true })}
+                  error={Boolean(errors.minParticipants)}
+                  helperText={errors.minParticipants?.message}
+                  inputProps={{ min: 1 }}
+                  data-testid="min-attendees"
+                  disabled={disabledFields.has('minParticipants')}
+                />
+              </Grid>
+            ) : null}
+
+            <Grid item xs={6}>
+              <NumericTextField
+                id="filled-basic"
+                label={t(
+                  courseType === CourseType.OPEN
+                    ? 'components.course-form.max-attendees-placeholder'
+                    : 'components.course-form.num-attendees-placeholder'
+                )}
+                variant="filled"
+                fullWidth
+                {...register('maxParticipants', {
+                  deps: ['minParticipants'],
+                  valueAsNumber: true,
+                })}
+                error={Boolean(errors.maxParticipants)}
+                helperText={errors.maxParticipants?.message}
+                inputProps={{ min: 1 }}
+                data-testid="max-attendees"
+                disabled={disabledFields.has('maxParticipants')}
+              />
+            </Grid>
+          </Grid>
+        </FormPanel>
+
+        <FormPanel mb={2} mt={2}>
+          <Typography fontWeight={600}>
+            {t('components.course-form.notes-title')}
+          </Typography>
+          <Typography variant="body2" mb={2}>
+            {t('components.course-form.notes-description')}
+          </Typography>
+
+          <TextField
+            label={t('components.course-form.notes-placeholder')}
+            variant="filled"
+            fullWidth
+            {...register('notes')}
+            error={Boolean(errors.notes)}
+            helperText={errors.notes?.message}
+            inputProps={{ min: 0 }}
+            data-testid="notes-input"
+            disabled={disabledFields.has('notes')}
+          />
+        </FormPanel>
+
+        {isClosedCourse ? (
+          <>
+            <FormPanel mb={2}>
+              <Typography fontWeight={600}>
+                {t('components.course-form.free-spaces-title')}
+              </Typography>
+              <Typography variant="body2" mb={2}>
+                {t('components.course-form.free-spaces-description')}
               </Typography>
 
-              <Typography color="dimGrey.main">{values.accountCode}</Typography>
-            </Box>
-          </FormPanel>
-        </>
-      ) : null}
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <NumericTextField
+                    label={t('components.course-form.free-spaces-placeholder')}
+                    variant="filled"
+                    fullWidth
+                    {...register('freeSpaces', { valueAsNumber: true })}
+                    error={Boolean(errors.freeSpaces)}
+                    helperText={errors.freeSpaces?.message}
+                    inputProps={{ min: 0 }}
+                    data-testid="free-spaces"
+                    disabled={disabledFields.has('freeSpaces')}
+                  />
+                </Grid>
+              </Grid>
+            </FormPanel>
+
+            <Typography variant="h5" fontWeight={500} gutterBottom>
+              {t('components.course-form.finance-section-title')}
+            </Typography>
+            <FormPanel>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <Typography fontWeight={600}>
+                    {t('components.course-form.sales-rep-title')}
+                  </Typography>
+
+                  <ProfileSelector
+                    value={values.salesRepresentative ?? undefined}
+                    onChange={profile => {
+                      setValue('salesRepresentative', profile ?? null, {
+                        shouldValidate: true,
+                      })
+                    }}
+                    textFieldProps={{ variant: 'filled' }}
+                    placeholder={t(
+                      'components.course-form.sales-rep-placeholder'
+                    )}
+                    testId="profile-selector-sales-representative"
+                    disabled={disabledFields.has('salesRepresentative')}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography fontWeight={600}>
+                    {t('components.course-form.source-title')}
+                  </Typography>
+                  <Controller
+                    name="source"
+                    control={control}
+                    render={({ field }) => (
+                      <SourceDropdown
+                        {...field}
+                        data-testid="source-dropdown"
+                        disabled={disabledFields.has('source')}
+                      />
+                    )}
+                  />
+                </Grid>
+              </Grid>
+
+              <Box>
+                <Typography fontWeight={600} mb={1} mt={2}>
+                  {t('components.course-form.account-code-title')}
+                </Typography>
+
+                <Typography color="dimGrey.main">
+                  {values.accountCode}
+                </Typography>
+              </Box>
+            </FormPanel>
+          </>
+        ) : null}
+      </FormProvider>
     </form>
   )
 }

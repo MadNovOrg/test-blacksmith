@@ -52,6 +52,11 @@ export async function fetchUserProfile(
       activeRole,
       verified: emailVerified ?? false,
       loggedOut: false,
+      trainerRoles: profile.trainerRoles?.map(
+        role => role.trainer_role_type.name
+      ),
+      activeCertificates:
+        profile.certificates?.map(certificate => certificate.courseLevel) ?? [],
     }
   } catch (err) {
     console.error(err)

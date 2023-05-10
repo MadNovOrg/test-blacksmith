@@ -21,6 +21,14 @@ export const getUserProfile = gql`
           count
         }
       }
+      trainerRoles: trainer_role_types {
+        trainer_role_type {
+          name
+        }
+      }
+      certificates(where: { status: { _eq: "ACTIVE" } }) {
+        courseLevel
+      }
     }
   }
 `

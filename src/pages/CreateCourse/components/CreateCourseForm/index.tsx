@@ -58,7 +58,6 @@ export const CreateCourseForm = () => {
     completeStep,
     courseData,
     courseType,
-    courseAccreditor,
     saveDraft,
     setCourseData,
     setCurrentStepKey,
@@ -71,7 +70,7 @@ export const CreateCourseForm = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { profile, acl } = useAuth()
-  const isBild = courseAccreditor === Accreditors_Enum.Bild
+  const isBild = courseData?.accreditedBy === Accreditors_Enum.Bild
 
   const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
     []
@@ -124,16 +123,16 @@ export const CreateCourseForm = () => {
       return courseDataValid
     }
 
-    const evaluatedFlag =
-      courseType === CourseType.INDIRECT
-        ? omit(consentFlags, 'needsAnalysis')
-        : consentFlags
+    const evaluatedFlag = !isBild
+      ? omit(consentFlags, 'needsAnalysis')
+      : consentFlags
 
-    const hasCheckedAllFlags =
-      Object.values(evaluatedFlag).filter(flag => flag === false).length === 0
+    const hasCheckedAllFlags = Object.values(evaluatedFlag).every(
+      flag => flag === true
+    )
 
     return hasCheckedAllFlags && courseDataValid
-  }, [consentFlags, courseDataValid, courseType])
+  }, [consentFlags, courseDataValid, courseType, isBild])
 
   const submit = useCallback(async () => {
     if (!courseData || !profile) return
@@ -230,7 +229,6 @@ export const CreateCourseForm = () => {
       <CourseForm
         onChange={handleCourseFormChange}
         type={courseType}
-        accreditor={courseAccreditor}
         courseInput={courseData}
       />
 

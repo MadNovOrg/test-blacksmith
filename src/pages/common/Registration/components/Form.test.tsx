@@ -114,9 +114,7 @@ describe('Form', () => {
 
     await userEvent.click(screen.getByLabelText('T&Cs'))
 
-    await waitFor(async () => {
-      await userEvent.click(screen.getByTestId('signup-form-btn'))
-    })
+    await userEvent.click(screen.getByTestId('signup-form-btn'))
 
     await waitFor(() => {
       expect(

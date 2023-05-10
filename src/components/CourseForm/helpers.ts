@@ -2,7 +2,12 @@ import { format, isValid, isBefore, isEqual } from 'date-fns'
 import { TFunction } from 'i18next'
 
 import { Accreditors_Enum } from '@app/generated/graphql'
-import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
+import {
+  BildStrategies,
+  CourseDeliveryType,
+  CourseLevel,
+  CourseType,
+} from '@app/types'
 
 import aolRegionsByCountry from './aolRegions'
 
@@ -77,8 +82,17 @@ export function getLevels(
     },
 
     [`${Accreditors_Enum.Bild}-${CourseType.INDIRECT}`]: () => {
+      return [CourseLevel.BildRegular]
+    },
+
+    [`${Accreditors_Enum.Bild}-${CourseType.OPEN}`]: () => {
       return [
-        CourseLevel.BildRegular,
+        CourseLevel.BildIntermediateTrainer,
+        CourseLevel.BildAdvancedTrainer,
+      ]
+    },
+    [`${Accreditors_Enum.Bild}-${CourseType.CLOSED}`]: () => {
+      return [
         CourseLevel.BildIntermediateTrainer,
         CourseLevel.BildAdvancedTrainer,
       ]
@@ -88,17 +102,34 @@ export function getLevels(
   return types[`${courseAccreditor}-${courseType}`]()
 }
 
-const bildLevels = [
-  CourseLevel.BildRegular,
-  CourseLevel.BildIntermediateTrainer,
-  CourseLevel.BildAdvancedTrainer,
-]
+export function canBeBlendedBild(
+  courseType: CourseType,
+  strategies: Record<BildStrategies, boolean> | null
+): boolean {
+  if (!strategies) {
+    return false
+  }
+
+  const selectedStrategies = Object.keys(strategies).filter(
+    strategy => strategies[strategy as BildStrategies] === true
+  )
+
+  switch (courseType) {
+    case CourseType.INDIRECT: {
+      return (
+        selectedStrategies.includes(BildStrategies.Primary) &&
+        selectedStrategies.length === 1
+      )
+    }
+  }
+
+  return false
+}
 
 export function canBeBlended(
   courseType: CourseType,
   courseLevel: CourseLevel | '',
-  deliveryType: CourseDeliveryType,
-  isBildPrimary: boolean
+  deliveryType: CourseDeliveryType
 ) {
   const isF2F = deliveryType === CourseDeliveryType.F2F
   const isMixed = deliveryType === CourseDeliveryType.MIXED
@@ -138,10 +169,6 @@ export function canBeBlended(
     [CourseType.INDIRECT]: () => {
       if (!courseLevel) return false
 
-      if (bildLevels.includes(courseLevel)) {
-        return isBildPrimary
-      }
-
       if (isF2F) {
         const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
         return levels.includes(courseLevel)
@@ -161,6 +188,37 @@ export function canBeBlended(
   }
 
   return types[courseType]()
+}
+
+export function canBeReaccBild(
+  courseType: CourseType,
+  strategies: Record<BildStrategies, boolean> | null,
+  blended: boolean
+): boolean {
+  switch (courseType) {
+    case CourseType.INDIRECT: {
+      if (!strategies) {
+        return false
+      }
+      const selectedStrategies = Object.keys(strategies).filter(
+        strategy => strategies[strategy as BildStrategies] === true
+      )
+
+      return (
+        selectedStrategies.length === 1 &&
+        selectedStrategies.includes(BildStrategies.Primary)
+      )
+    }
+
+    case CourseType.OPEN:
+    case CourseType.CLOSED: {
+      if (blended) {
+        return false
+      }
+
+      return true
+    }
+  }
 }
 
 export function canBeReacc(
@@ -228,7 +286,7 @@ export function canBeReacc(
       if (!courseLevel) return false
 
       if (isF2F) {
-        const levels = [CourseLevel.Level_1]
+        const levels = [CourseLevel.Level_1, CourseLevel.BildRegular]
         if (levels.includes(courseLevel)) return !blended
         if (courseLevel === CourseLevel.Level_2) return true
       }
@@ -248,6 +306,50 @@ export function canBeReacc(
   }
 
   return types[courseType]()
+}
+
+export function canBeF2FBild() {
+  return true
+}
+
+export function canBeMixedBild(
+  courseType: CourseType,
+  courseLevel: CourseLevel | ''
+): boolean {
+  switch (courseType) {
+    case CourseType.INDIRECT: {
+      return true
+    }
+
+    case CourseType.OPEN:
+    case CourseType.CLOSED: {
+      return courseLevel === CourseLevel.BildIntermediateTrainer
+    }
+  }
+}
+
+export function canBeVirtualBild(
+  courseType: CourseType,
+  strategies: Record<BildStrategies, boolean> | null
+): boolean {
+  if (!strategies) {
+    return false
+  }
+
+  const selectedStrategies = Object.keys(strategies).filter(
+    strategy => strategies[strategy as BildStrategies] === true
+  )
+
+  switch (courseType) {
+    case CourseType.INDIRECT: {
+      return (
+        selectedStrategies.includes(BildStrategies.Primary) &&
+        selectedStrategies.length === 1
+      )
+    }
+  }
+
+  return false
 }
 
 export function canBeF2F(
@@ -287,7 +389,6 @@ export function canBeF2F(
         CourseLevel.Level_1,
         CourseLevel.Level_2,
         CourseLevel.Advanced,
-        CourseLevel.BildRegular,
       ]
       return levels.includes(courseLevel)
     },
