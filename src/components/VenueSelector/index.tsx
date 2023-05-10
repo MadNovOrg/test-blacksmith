@@ -32,6 +32,7 @@ import { Venue } from '@app/types'
 
 import { getGoogleMapsSuggestions, getPlaceDetails } from './maps-utils'
 import powerByGoogleImg from './powered-by-google.png'
+import { extractAdrStreetAddress } from './utils/adr-parser'
 
 import AutocompletePrediction = google.maps.places.AutocompletePrediction
 import PlaceResult = google.maps.places.PlaceResult
@@ -126,7 +127,7 @@ export const VenueSelector: React.FC<
         const placeDetails = await getPlaceDetails(value.place_id)
         setVenue({
           name: placeDetails.name || '',
-          addressLineOne: placeDetails.formatted_address || '',
+          addressLineOne: extractAdrStreetAddress(placeDetails.adr_address),
           city: getAddressPart(placeDetails, 'administrative_area_level_2'),
           postCode: getAddressPart(placeDetails, 'postal_code'),
           geoCoordinates: placeDetails.geometry?.location

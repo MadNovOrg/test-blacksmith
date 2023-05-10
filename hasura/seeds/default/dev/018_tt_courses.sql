@@ -220,18 +220,18 @@ WHERE course.id IN (10014, 10015, 10016, 10017, 10018, 10019, 10020, 10021, 1002
 insert into public.venue (id, name, geo_coordinates, city, address_line_one, address_line_two, post_code,
                           google_places_id)
 values ('b936752f-52fc-4d82-a212-90105a51c05e', 'London School of Economics and Political Science',
-        '(51.5144388,-0.1164513)', 'Greater London', 'Houghton St, London WC2A 2AE, UK', null, 'WC2A 2AE',
+        '(51.5144388,-0.1164513)', 'Greater London', 'Houghton St', null, 'WC2A 2AE',
         'ChIJWwWza3sadkgR77gsD5ccs70'),
        ('84daabd8-359f-4497-a421-293e95ae9a70', 'London Academy of Excellence Tottenham',
         '(51.60572939999999,-0.06638010000000001)', 'Greater London',
-        'Lilywhite House, 780 High Rd, London N17 0BX, UK', null, 'N17 0BX', 'ChIJS7qCPJkedkgRq5TrG1YF0Is'),
+        'Lilywhite House, 780 High Rd', null, 'N17 0BX', 'ChIJS7qCPJkedkgRq5TrG1YF0Is'),
        ('0a6e3839-b28f-4042-b42c-27d62fc1f92d', 'Barlows Primary School', '(53.468886,-2.9402807)', 'Merseyside',
-        'Barlow''s Ln, Fazakerley, Liverpool L9 9EH, UK', null, 'L9 9EH', 'ChIJA9sfnU8ie0gRTktxTrgWVnw'),
+        'Barlow''s Ln, Fazakerley', null, 'L9 9EH', 'ChIJA9sfnU8ie0gRTktxTrgWVnw'),
        ('a7013539-a2c5-44cb-a014-e07598647648', 'London School of Barbering - Liverpool Street',
-        '(51.5185185,-0.0787479)', 'Greater London', '13 Artillery Ln, London E1 7HY, UK', null, 'E1 7HY',
+        '(51.5185185,-0.0787479)', 'Greater London', '13 Artillery Ln', null, 'E1 7HY',
         'ChIJYx_Vnp0ddkgR5sZdvWuAQjs'),
        ('cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 'Glasgow School of Sport', '(55.8467257,-4.299916899999999)',
-        'Glasgow City', '30 Gower Terrace, Bellahouston, Glasgow G41 5QE, UK', null, 'G41 5QE',
+        'Glasgow City', '30 Gower Terrace', null, 'G41 5QE',
         'ChIJC_cuN3BGiEgRPhAolcA28Vc');
 
 insert into public.course_schedule (start, "end", venue_id, course_id)
