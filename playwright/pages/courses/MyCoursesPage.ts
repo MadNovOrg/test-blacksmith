@@ -1,12 +1,13 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { InviteStatus } from '@app/types'
+import { InviteStatus, CourseLevel } from '@app/types'
 
 import { waitForGraphQLResponse } from '../../commands'
 import { CreateCourseMenu } from '../../components/CreateCourseMenu'
 import { RoleSwitcher } from '../../components/RoleSwitcher'
 import { UiTable } from '../../components/UiTable'
 import { UserMenu } from '../../components/UserMenu'
+import { mapCourseTypesToShort } from '../../data/mappings'
 import { toCourseTableRow } from '../../data/mappings'
 import { Course, CourseTableRow } from '../../data/types'
 import { sortCoursesByAllFields } from '../../util'
@@ -68,15 +69,36 @@ export class MyCoursesPage extends BasePage {
     })) as CourseTableRow[]
     actualRows.sort(sortCoursesByAllFields)
     actualRows.forEach(row => {
-      return expect(
-        expectedRows.indexOf(row as unknown as Promise<CourseTableRow>)
-      ).toBeTruthy()
+      return expect(expectedRows.indexOf(row as CourseTableRow)).toBeTruthy()
     })
+  }
+
+  async checkCourseLevelInRows(
+    courseTypes: CourseLevel[] = [
+      CourseLevel.Level_1,
+      CourseLevel.Level_2,
+      CourseLevel.Advanced,
+    ]
+  ) {
+    const tableRows = await this.coursesTable.getRows()
+    let allRowsContainCourseCode = true
+    const mapCourseTypesToShortResult = mapCourseTypesToShort()
+    for (const row of tableRows) {
+      const shortCodes = courseTypes.map(
+        type => mapCourseTypesToShortResult[type]
+      )
+      if (!shortCodes.some(code => code && row.Name.includes(code))) {
+        allRowsContainCourseCode = false
+        break
+      }
+    }
+    expect(allRowsContainCourseCode).toBeTruthy()
   }
 
   async searchCourse(text: string) {
     await this.searchInput.fill(text)
   }
+
   async checkNumberOfTableRows(numberOfRows: number) {
     await expect(
       this.tableRoot.locator('[data-testid*="course-row"]')

@@ -52,7 +52,7 @@ export class UiTable {
             .nth(j)
             .textContent()) as string
         }
-        result.push(resultRow as unknown as CourseTableRow)
+        result.push(resultRow as CourseTableRow)
       }
     }
     return result

@@ -44,6 +44,7 @@ export type Course = {
       end: { date: Date }
     }
   }
+  createdAt?: Date
   go1Integration?: boolean
   min_participants: number
   max_participants: number

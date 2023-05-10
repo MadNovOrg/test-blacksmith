@@ -195,9 +195,18 @@ export const insertCourse = async (
       modules: modulesInput,
     },
   }
-  const response: { insert_course: { returning: [{ id: number }] } } =
-    await getClient().request(query, variables)
-  const id = response.insert_course.returning[0].id
+  // Race condition fix
+  let newId: number | null = null
+  while (newId === null) {
+    try {
+      const response: { insert_course: { returning: [{ id: number }] } } =
+        await getClient().request(query, variables)
+      newId = response.insert_course.returning[0].id
+    } finally {
+      // Final
+    }
+  }
+  const id = newId
   if (id) {
     console.log(`Inserted course with ID ${id} for ${email}`)
     return id

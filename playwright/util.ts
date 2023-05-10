@@ -27,12 +27,12 @@ export const sortModulesByName = (a: ModuleGroup, b: ModuleGroup) => {
 }
 
 export const sortCoursesByAllFields = (
-  a: Promise<CourseTableRow> | CourseTableRow,
-  b: Promise<CourseTableRow> | CourseTableRow
+  a: CourseTableRow,
+  b: CourseTableRow
 ) => {
-  if (JSON.stringify(a) < JSON.stringify(b)) return -1
-  if (JSON.stringify(a) > JSON.stringify(b)) return 1
-  return 0
+  const strA = JSON.stringify(a)
+  const strB = JSON.stringify(b)
+  return strA.localeCompare(strB)
 }
 
 export const toUiTime = (date: Date) => {
