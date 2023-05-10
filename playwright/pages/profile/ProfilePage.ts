@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { waitForGraphQLRequest } from '../../commands'
+import { waitForGraphQLResponse } from '../../commands'
 import { BasePage } from '../BasePage'
 import { CertificationPage } from '../certificate/CertificationPage'
 
@@ -42,9 +42,10 @@ export class ProfilePage extends BasePage {
 
   async clickSaveChanges() {
     await Promise.all([
-      waitForGraphQLRequest(this.page, 'UpdateProfile'),
+      waitForGraphQLResponse(this.page, 'updateUserProfile', 'true'),
       this.saveChanges.click(),
     ])
+    await this.waitForPageLoad()
   }
 
   async checkPhoneNumber(phoneNumber: string) {
