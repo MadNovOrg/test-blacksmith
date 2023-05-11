@@ -195,23 +195,28 @@ export const insertCourse = async (
       modules: modulesInput,
     },
   }
-  // Race condition fix
-  let newId: number | null = null
-  while (newId === null) {
+  for (let i = 1; i <= 10; i++) {
     try {
       const response: { insert_course: { returning: [{ id: number }] } } =
         await getClient().request(query, variables)
-      newId = response.insert_course.returning[0].id
-    } finally {
-      // Final
+      const id = response.insert_course.returning[0].id
+      if (id) {
+        console.log(`Inserted course with ID ${id} for ${email}`)
+        return id
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.message.includes('Uniqueness violation')) {
+        console.error(
+          `Failed to insert course for ${email}, due to uniqueness. Retrying...`
+        )
+        await new Promise(resolve => setTimeout(resolve, 1000))
+      } else {
+        throw error
+      }
     }
   }
-  const id = newId
-  if (id) {
-    console.log(`Inserted course with ID ${id} for ${email}`)
-    return id
-  }
-  throw new Error('Could not insert the course')
+  throw new Error(`Failed to insert course for ${email} after 10 attempts`)
 }
 
 export const deleteCourse = async (id?: number) => {
