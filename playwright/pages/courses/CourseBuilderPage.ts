@@ -28,7 +28,7 @@ export class CourseBuilderPage extends BasePage {
     this.courseInfo = this.page.locator('data-testid=course-info')
     this.draftText = this.page.locator('data-testid=draft-text')
     this.availableModule = (name: string) =>
-      this.page.locator(`*css=[data-testid="module-card"] >> text="${name}"`)
+      this.page.locator(`[data-testid="module-card"] >> text="${name}"`)
     this.availableModuleNames = this.page.locator(
       '[data-testid="all-modules"] [data-testid="module-name"]'
     )
@@ -61,21 +61,18 @@ export class CourseBuilderPage extends BasePage {
     await this.submitButton.scrollIntoViewIfNeeded()
     for (const name of modules) {
       const sourceBox = await this.availableModule(name).boundingBox()
-      const targetBox = await this.emptyModuleSlots.first().boundingBox()
-      if (!sourceBox || !targetBox) {
+      if (!sourceBox) {
         throw Error('Cannot get coordinates for drag and drop')
       }
       const sourceX = sourceBox.x + sourceBox.width / 2
       const sourceY = sourceBox.y + sourceBox.height / 2
-      const targetX = targetBox.x + targetBox.width / 2
-      const targetY = targetBox.y + targetBox.height / 2
-      await this.page.mouse.move(sourceX, sourceY)
+      await this.availableModule(name).hover()
       await this.page.mouse.down()
       // we have to move somewhere first, then to the target, otherwise won't work
       await this.page.mouse.move(sourceX + 50, sourceY)
-      await this.page.mouse.move(targetX, targetY)
+      await this.emptyModuleSlots.first().hover()
       await this.page.mouse.up()
-      await delay(2000)
+      await delay(1000)
     }
   }
 
