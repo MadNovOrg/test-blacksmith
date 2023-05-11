@@ -179,12 +179,7 @@ select_permissions:
         - profile_id
         - registration_id
         - updated_at
-      filter:
-        course:
-          course_type:
-            _in:
-              - CLOSED
-              - OPEN
+      filter: {}
       allow_aggregations: true
   - role: sales-representative
     permission:
@@ -192,27 +187,22 @@ select_permissions:
         - attended
         - booking_date
         - certificate_id
-        - completed_evaluation
         - course_id
+        - created_at
         - date_graded
+        - go1_enrolment_id
         - go1_enrolment_status
         - grade
         - grading_feedback
         - hs_consent
         - id
+        - invite_id
         - invoice_id
+        - order_id
         - profile_id
         - registration_id
-      filter:
-        _or:
-          - profile:
-              organizations:
-                organization:
-                  members:
-                    profile_id:
-                      _eq: X-Hasura-User-Id
-          - profile_id:
-              _eq: X-Hasura-User-Id
+        - updated_at
+      filter: {}
       allow_aggregations: true
   - role: trainer
     permission:

@@ -228,10 +228,7 @@ select_permissions:
         - fullName
         - givenName
         - phone
-      filter:
-        id:
-          _eq: X-Hasura-User-Id
-      allow_aggregations: true
+      filter: {}
   - role: tt-admin
     permission:
       columns:

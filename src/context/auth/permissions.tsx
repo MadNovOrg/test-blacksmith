@@ -433,6 +433,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.TT_ADMIN,
         RoleName.LD,
         RoleName.SALES_ADMIN,
+        RoleName.SALES_REPRESENTATIVE,
       ]
       return roles.some(r => r === auth.activeRole)
     },
