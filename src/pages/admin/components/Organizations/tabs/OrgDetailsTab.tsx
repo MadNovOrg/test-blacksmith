@@ -115,18 +115,20 @@ export const OrgDetailsTab: React.FC<
                 />
               </Grid>
 
-              <Grid item xs={4}>
-                <Box display="flex" justifyContent="flex-end">
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    size="large"
-                    onClick={() => navigate('./edit')}
-                  >
-                    {t('pages.org-details.edit-organization')}
-                  </Button>
-                </Box>
-              </Grid>
+              {acl.canEditOrgs() ? (
+                <Grid item xs={4}>
+                  <Box display="flex" justifyContent="flex-end">
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      size="large"
+                      onClick={() => navigate('./edit')}
+                    >
+                      {t('pages.org-details.edit-organization')}
+                    </Button>
+                  </Box>
+                </Grid>
+              ) : null}
             </Grid>
           </Box>
 
