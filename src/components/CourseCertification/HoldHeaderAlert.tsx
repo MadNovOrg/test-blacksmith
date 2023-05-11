@@ -57,16 +57,21 @@ const HoldHeaderAlert: React.FC<React.PropsWithChildren<HoldHeaderAlertProps>> =
                   }
                 )}
               </Typography>
-              {!acl.canManageCert() && (
+              {!acl.canHoldCert() && (
                 <Typography variant="body2" color="grey.900">
                   {t('on-hold-contact-us')}
-                  <Link href="mailto:info@teamteach.co.uk" component="a">
-                    info@teamteach.co.uk
+                  <Link
+                    href={`mailto:${
+                      import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
+                    }`}
+                    component="a"
+                  >
+                    {import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}
                   </Link>
                 </Typography>
               )}
             </Box>
-            {acl.canManageCert() && (
+            {acl.canHoldCert() && (
               <Box display="flex" justifyContent="flex-end" gap={2}>
                 <Button
                   variant="text"

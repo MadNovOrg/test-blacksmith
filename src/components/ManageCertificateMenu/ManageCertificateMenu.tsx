@@ -89,7 +89,7 @@ export const ManageCertificateMenu: React.FC<Props> = ({
             {t('modify-grade')}
           </MenuItem>
         )}
-        {acl.canViewCertifications() && (
+        {acl.canHoldCert() && (
           <MenuItem
             onClick={onShowPutOnHoldModal}
             disabled={isRevoked}

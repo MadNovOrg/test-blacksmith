@@ -207,6 +207,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const roles = [RoleName.TT_ADMIN, RoleName.TT_OPS]
       return roles.some(r => r === auth.activeRole)
     },
+
+    canHoldCert: () => {
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
+      return roles.some(r => r === auth.activeRole)
+    },
+
     canOverrideGrades: () => {
       const roles = [RoleName.TT_ADMIN]
       return roles.some(r => r === auth.activeRole)
@@ -399,13 +405,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return roles.some(r => r === auth.activeRole)
     },
     canManageCert: () => {
-      const roles = [
-        RoleName.TT_OPS,
-        RoleName.TT_ADMIN,
-        RoleName.LD,
-        RoleName.SALES_ADMIN,
-      ]
-      return roles.some(r => r === auth.activeRole)
+      return (
+        acl.canOverrideGrades() ||
+        acl.canHoldCert() ||
+        acl.isTTAdmin() ||
+        acl.canRevokeCert()
+      )
     },
     canCreateBildCourse: (type: CourseType) => {
       if (!activeRole) {
