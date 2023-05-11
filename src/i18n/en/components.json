@@ -218,6 +218,11 @@
     "add-manually": "Create new organisation",
     "my-organizations": "My organisations"
   },
+  "user-selector": {
+    "placeholder": "User email",
+    "min-chars": "Start typing to get suggestions",
+    "no-results": "No user found"
+  },
   "certification-list": {
     "title": "Certifications",
     "organisation": "Organisation",

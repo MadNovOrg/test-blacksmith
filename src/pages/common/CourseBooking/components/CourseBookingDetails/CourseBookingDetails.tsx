@@ -34,6 +34,7 @@ import {
   InvoiceForm,
 } from '@app/components/InvoiceForm'
 import { OrgSelector } from '@app/components/OrgSelector'
+import { Profile, UserSelector } from '@app/components/UserSelector'
 import { PaymentMethod } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
 import { CourseLevel, CourseType, InvoiceDetails } from '@app/types'
@@ -290,6 +291,14 @@ export const CourseBookingDetails: React.FC<
     course.type
   )
 
+  const handleEmailSelector = async (profile: Profile, index: number) => {
+    setValue(`participants.${index}`, {
+      email: profile.email || '',
+      firstName: profile.familyName || '',
+      lastName: profile.givenName || '',
+    })
+  }
+
   useEffect(() => {
     if (booking.quantity !== booking.participants.length) {
       const participants = booking.participants.slice(0, booking.quantity)
@@ -527,25 +536,17 @@ export const CourseBookingDetails: React.FC<
                 <Typography p={1}>{index + 1}</Typography>
                 <Grid container spacing={3} mb={3}>
                   <Grid item md={12}>
-                    <TextField
-                      label={t('email')}
-                      variant="filled"
-                      placeholder={t('email-placeholder')}
-                      {...register(`participants.${index}.email`)}
-                      inputProps={{
-                        'data-testid': `participant-${index}-input-email`,
+                    <UserSelector
+                      onChange={profile => handleEmailSelector(profile, index)}
+                      textFieldProps={{
+                        variant: 'filled',
                       }}
-                      sx={{ bgcolor: 'grey.100' }}
                       error={
-                        emailDuplicated || !!getParticipantError(index, 'email')
-                      }
-                      helperText={
                         emailDuplicated
                           ? t('pages.book-course.duplicated-email-addresses')
                           : getParticipantError(index, 'email')?.message ?? ''
                       }
-                      fullWidth
-                      required
+                      organisationId={values.orgId}
                     />
                   </Grid>
                   <Grid item md={6}>
@@ -562,6 +563,9 @@ export const CourseBookingDetails: React.FC<
                       helperText={
                         getParticipantError(index, 'firstName')?.message ?? ''
                       }
+                      InputLabelProps={{
+                        shrink: Boolean(values.participants[index].firstName),
+                      }}
                       fullWidth
                       required
                     />
@@ -580,6 +584,9 @@ export const CourseBookingDetails: React.FC<
                       helperText={
                         getParticipantError(index, 'lastName')?.message ?? ''
                       }
+                      InputLabelProps={{
+                        shrink: Boolean(values.participants[index].lastName),
+                      }}
                       fullWidth
                       required
                     />
