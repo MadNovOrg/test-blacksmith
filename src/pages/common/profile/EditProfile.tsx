@@ -254,7 +254,6 @@ export const EditProfilePage: React.FC<
         dob: yup.date().nullable(),
         jobTitle: yup.string(),
         org: yup.string(),
-        dbs: yup.string(),
         disabilities: disabilitiesSchema,
         dietaryRestrictions: dietaryRestrictionsSchema,
         roles: rolesFormSchema(),
@@ -272,7 +271,6 @@ export const EditProfilePage: React.FC<
       phone: '',
       dob: null,
       jobTitle: '',
-      dbs: '',
       disabilities: null,
       dietaryRestrictions: null,
       roles: [
@@ -311,7 +309,6 @@ export const EditProfilePage: React.FC<
       setValue('phone', profile.phone ?? '')
       setValue('dob', profile.dob ? new Date(profile.dob) : null)
       setValue('jobTitle', profile.jobTitle ?? '')
-      setValue('dbs', profile.dbs ?? '')
       setValue('disabilities', profile.disabilities ?? '')
       setValue('dietaryRestrictions', profile.dietaryRestrictions ?? '')
 
@@ -434,7 +431,6 @@ export const EditProfilePage: React.FC<
             phone: data.phone,
             dob: data.dob?.toISOString(),
             jobTitle: data.jobTitle,
-            dbs: data.dbs,
             disabilities: data.disabilities,
             dietaryRestrictions: data.dietaryRestrictions,
           },
@@ -777,24 +773,6 @@ export const EditProfilePage: React.FC<
                     />
                   </Grid>
                 </Grid>
-
-                <Grid container spacing={3} mb={3}>
-                  <Grid item md={9}>
-                    <TextField
-                      id="dbs"
-                      label={t('dbs-label')}
-                      variant="filled"
-                      error={!!errors.dbs}
-                      helperText={errors.dbs?.message}
-                      {...register('dbs')}
-                      fullWidth
-                      inputProps={{
-                        'data-testid': 'disclosure-barring-service',
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-
                 <Grid item md={12} pt={2}>
                   <FormControl>
                     <Typography variant="body1" fontWeight={600}>

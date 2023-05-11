@@ -62,7 +62,6 @@ export const PROFILE = gql`
     phone
     dob
     jobTitle
-    dbs
     lastActivity
   }
 `

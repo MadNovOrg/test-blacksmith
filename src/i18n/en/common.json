@@ -93,8 +93,6 @@
   "last-name": "Last Name",
   "date": "Date",
   "dietary-restrictions": "Dietary Requirements",
-  "dbs-label": "Disclosure and Barring Service (DBS) certificate number",
-  "dbs": "Disclosure and Barring Service",
   "dietary-restrictions-question": "Do you have any dietary requirements (intolerances, etc.)?",
   "dietary-restrictions-text-label": "What kind of requirements?",
   "disabilities": "Disabilities",

@@ -147,7 +147,6 @@ select_permissions:
         - avatar
         - contact_details
         - created_at
-        - dbs
         - dietary_restrictions
         - disabilities
         - dob
@@ -178,7 +177,6 @@ select_permissions:
         - avatar
         - contact_details
         - created_at
-        - dbs
         - dietary_restrictions
         - disabilities
         - dob
@@ -210,7 +208,6 @@ select_permissions:
         - avatar
         - contact_details
         - created_at
-        - dbs
         - dietary_restrictions
         - disabilities
         - dob
@@ -238,7 +235,6 @@ select_permissions:
         - avatar
         - contact_details
         - created_at
-        - dbs
         - dietary_restrictions
         - disabilities
         - dob
@@ -270,7 +266,6 @@ select_permissions:
         - avatar
         - contact_details
         - created_at
-        - dbs
         - dietary_restrictions
         - disabilities
         - dob
@@ -302,7 +297,6 @@ select_permissions:
         - avatar
         - contact_details
         - created_at
-        - dbs
         - dietary_restrictions
         - disabilities
         - dob
@@ -335,7 +329,6 @@ select_permissions:
         - avatar
         - contact_details
         - created_at
-        - dbs
         - dietary_restrictions
         - disabilities
         - dob

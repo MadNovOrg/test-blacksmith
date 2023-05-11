@@ -244,11 +244,6 @@ export const ViewProfilePage: React.FC<
                     value={profile.jobTitle}
                   />
                   <DetailsRow
-                    data-testid="profile-dbs"
-                    label={t('dbs')}
-                    value={profile.dbs}
-                  />
-                  <DetailsRow
                     data-testid="profile-dietary-restrictions"
                     label={t('dietary-restrictions')}
                     value={
