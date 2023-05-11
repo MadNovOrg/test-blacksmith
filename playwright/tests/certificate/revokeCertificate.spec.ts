@@ -10,6 +10,8 @@ import { users } from '../../data/users'
 import { stateFilePath } from '../../hooks/global-setup'
 import { CertificationPage } from '../../pages/certificate/CertificationPage'
 
+const allowedRoles = ['ops', 'admin']
+
 const test = base.extend<{ certificate: { course: Course; user: User } }>({
   certificate: async ({}, use) => {
     const user = users.user1
@@ -29,22 +31,24 @@ const test = base.extend<{ certificate: { course: Course; user: User } }>({
   },
 })
 
-test.use({ storageState: stateFilePath('admin') })
+allowedRoles.forEach(role => {
+  test.use({ storageState: stateFilePath(role) })
 
-test('admin can revoke a certificate', async ({ page, certificate }) => {
-  const certificationPage = new CertificationPage(page)
-  await certificationPage.goto(
-    `${certificate.user.givenName} ${certificate.user.familyName}`
-  )
-  const certPage = await certificationPage.clickViewCertificate(
-    certificate.course.id
-  )
-  await certPage.clickManageCertificateButton()
-  const revokeCertPopup = await certPage.clickRevokeCertificate()
-  //new popup page
-  await revokeCertPopup.selectReasonDropdown()
-  await revokeCertPopup.addAReason('reason')
-  await revokeCertPopup.tickCheckBox()
-  await revokeCertPopup.submitRevokePopup()
-  await certPage.displayRevokeCertAlert()
+  test(`${role} can revoke a certificate`, async ({ page, certificate }) => {
+    const certificationPage = new CertificationPage(page)
+    await certificationPage.goto(
+      `${certificate.user.givenName} ${certificate.user.familyName}`
+    )
+    const certPage = await certificationPage.clickViewCertificate(
+      certificate.course.id
+    )
+    await certPage.clickManageCertificateButton()
+    const revokeCertPopup = await certPage.clickRevokeCertificate()
+    //new popup page
+    await revokeCertPopup.selectReasonDropdown()
+    await revokeCertPopup.addAReason('reason')
+    await revokeCertPopup.tickCheckBox()
+    await revokeCertPopup.submitRevokePopup()
+    await certPage.displayRevokeCertAlert()
+  })
 })

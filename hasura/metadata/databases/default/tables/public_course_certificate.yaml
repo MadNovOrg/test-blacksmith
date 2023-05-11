@@ -291,6 +291,7 @@ update_permissions:
     permission:
       columns:
         - expiry_date
+        - is_revoked
       filter: {}
       check: null
 delete_permissions:
