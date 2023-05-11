@@ -72,6 +72,9 @@ export type Course = {
   special_instructions?: string
   parking_instructions?: string
   accreditedBy: Accreditors_Enum
+  bildStrategies: Array<{
+    strategyName: BildStrategies
+  }>
 } & Omit<Base, 'id'>
 
 export type CourseModule = {

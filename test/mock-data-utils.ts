@@ -235,6 +235,7 @@ export const buildCourse = build<Course>({
     accountCode: getAccountCode(),
     freeSpaces: 0,
     accreditedBy: Accreditors_Enum.Icm,
+    bildStrategies: [],
   },
 })
 
@@ -273,6 +274,7 @@ export const buildStartedCourse = build<Course>({
     contactProfileId: undefined,
     aolCostOfCourse: undefined,
     accreditedBy: Accreditors_Enum.Icm,
+    bildStrategies: [],
   },
 })
 
@@ -309,6 +311,7 @@ export const buildEndedCourse = build<Course>({
     modulesAgg: { aggregate: { count: 0 } },
     moduleGroupIds: [],
     accreditedBy: Accreditors_Enum.Icm,
+    bildStrategies: [],
   },
 })
 
@@ -345,6 +348,7 @@ export const buildNotStartedCourse = build<Course>({
     modulesAgg: { aggregate: { count: 0 } },
     moduleGroupIds: [],
     accreditedBy: Accreditors_Enum.Icm,
+    bildStrategies: [],
   },
 })
 

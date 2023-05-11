@@ -197,6 +197,7 @@
         "course-type": "Course Type",
         "modules-available": "Modules Available",
         "my-course": "My Course",
+        "course-summary": "Course Summary",
         "mandatory-modules": "Mandatory modules",
         "estimated-duration": "Estimated duration",
         "submit-course": "Submit Course",
@@ -208,7 +209,8 @@
         "time-commitment-message": "By submitting this course, you commit to at least {{hours}} hours of training.",
         "course-level-one-info": "Additional holds that are not listed above, will fall under the Level Two certification. If these are required, the course will need to be resubmitted as a Level Two.\n\nPlease contact Team Teach at ",
         "course-level-one-or":  " or on ",
-        "course-level-one-note": "\n\nPlease note: It may not effect your delivery timings."
+        "course-level-one-note": "\n\nPlease note: It may not effect your delivery timings.",
+        "strategy-validation-error": "At least one module from \"{{name}}\" should be selected"
       }
     }
   },

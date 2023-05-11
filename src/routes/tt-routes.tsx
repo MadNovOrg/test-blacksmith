@@ -22,7 +22,7 @@ import { ReviewAndConfirm } from '@app/pages/CreateCourse/components/ReviewAndCo
 import { ReviewLicenseOrder } from '@app/pages/CreateCourse/components/ReviewLicenseOrder'
 import { TrainerExpenses } from '@app/pages/CreateCourse/components/TrainerExpenses'
 import { EditCourse } from '@app/pages/EditCourse'
-import { CourseBuilder } from '@app/pages/trainer-pages/CourseBuilder'
+import { CourseBuilderCommon } from '@app/pages/trainer-pages/CourseBuilderCommon'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import {
   CourseDetails as TrainerCourseDetails,
@@ -80,7 +80,7 @@ const TTAdminRoutes = () => {
         <Route path="edit/:id" element={<EditCourse />} />
 
         <Route path=":id">
-          <Route path="modules" element={<CourseBuilder />} />
+          <Route path="modules" element={<CourseBuilderCommon />} />
           <Route path="details" element={<CourseDetails />} />
           <Route path="grading" element={<CourseGrading />} />
           <Route
@@ -113,7 +113,7 @@ const TTAdminRoutes = () => {
           <Route path=":orgId">
             <Route index element={<ManageCourses />} />
             <Route path=":id">
-              <Route path="modules" element={<CourseBuilder />} />
+              <Route path="modules" element={<CourseBuilderCommon />} />
               <Route path="details" element={<TrainerCourseDetails />} />
               <Route
                 path="transfer/:participantId"

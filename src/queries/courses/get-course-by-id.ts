@@ -16,6 +16,9 @@ export const QUERY = gql`
   query GetCourseById($id: Int!) {
     course: course_by_pk(id: $id) {
       ...Course
+      bildStrategies {
+        strategyName
+      }
       freeSpaces
       accountCode
       level

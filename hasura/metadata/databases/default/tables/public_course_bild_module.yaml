@@ -103,3 +103,13 @@ update_permissions:
         - id
       filter: {}
       check: null
+delete_permissions:
+  - role: trainer
+    permission:
+      filter: {}
+  - role: tt-admin
+    permission:
+      filter: {}
+  - role: tt-ops
+    permission:
+      filter: {}

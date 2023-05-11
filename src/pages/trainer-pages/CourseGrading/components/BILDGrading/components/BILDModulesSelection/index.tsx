@@ -280,11 +280,11 @@ function transformSelection(selected: Set<string>): Record<string, Strategy> {
     if (parts.length === 2) {
       const [groupName, moduleName] = parts
 
-      const existingGroup = transformedSelection[strategyName].groups.find(
+      const existingGroup = transformedSelection[strategyName].groups?.find(
         group => group.name === groupName
       )
 
-      let group = transformedSelection[strategyName].groups.find(
+      let group = transformedSelection[strategyName].groups?.find(
         group => group.name === groupName
       ) ?? {
         name: groupName,
@@ -292,7 +292,7 @@ function transformSelection(selected: Set<string>): Record<string, Strategy> {
       }
 
       if (!existingGroup) {
-        transformedSelection[strategyName].groups.push(group)
+        transformedSelection[strategyName].groups?.push(group)
       } else {
         group = existingGroup
       }

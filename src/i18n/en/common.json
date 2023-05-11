@@ -72,6 +72,8 @@
     "postCode": "Post code"
   },
   "view-cert": "View Certificate",
+  "minimumXHours": "Minimum {{hours}} hours",
+  "hrs": "{{hours}} hrs",
   "certificate": "Certificate",
   "certifications": "Certifications",
   "certifications-status": "Certifications status",

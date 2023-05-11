@@ -125,7 +125,6 @@ values ('PRIMARY', 'P', '{
         { "name": "Seperation" },
         { "name": "Punches & kicks" },
         { "name": "Half shield" },
-        { "name": "Arm waltz" },
         { "name": "Turn gather guide" }
       ]
     },

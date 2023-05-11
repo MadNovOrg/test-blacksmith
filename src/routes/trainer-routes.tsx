@@ -15,7 +15,7 @@ import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCours
 import { LicenseOrderDetails } from '@app/pages/CreateCourse/components/LicenseOrderDetails'
 import { ReviewLicenseOrder } from '@app/pages/CreateCourse/components/ReviewLicenseOrder'
 import { EditCourse } from '@app/pages/EditCourse'
-import { CourseBuilder } from '@app/pages/trainer-pages/CourseBuilder'
+import { CourseBuilderCommon } from '@app/pages/trainer-pages/CourseBuilderCommon'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
@@ -60,7 +60,7 @@ const TrainerBaseRoutes = () => {
 
         <Route path=":id">
           <Route index element={<Navigate replace to="details" />} />
-          <Route path="modules" element={<CourseBuilder />} />
+          <Route path="modules" element={<CourseBuilderCommon />} />
           <Route path="details" element={<CourseDetails />} />
           <Route path="grading" element={<CourseGrading />} />
           <Route

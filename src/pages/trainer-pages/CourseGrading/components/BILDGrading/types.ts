@@ -12,5 +12,5 @@ export type BILDModuleGroup = {
 
 export type Strategy = {
   modules?: BILDModule[]
-  groups: BILDModuleGroup[]
+  groups?: BILDModuleGroup[]
 }
