@@ -78,7 +78,9 @@ export default function useActionableCourses({
       const onlyUserOrgs = { organization: { id: { _in: organizationIds } } }
       const specificOrg = { organization: { id: { _eq: orgId } } }
       if (orgId === ALL_ORGS) {
-        conditions.push(acl.isTTAdmin() ? allAvailableOrgs : onlyUserOrgs)
+        conditions.push(
+          acl.canSeeActionableCourseTable() ? allAvailableOrgs : onlyUserOrgs
+        )
       } else {
         conditions.push(specificOrg)
       }
@@ -114,7 +116,7 @@ export default function useActionableCourses({
       }
     }
 
-    if (acl.isTTAdmin()) {
+    if (acl.canSeeActionableCourseTable()) {
       const cancellationPendingCondition = {
         cancellationRequest: {
           id: { _is_null: false },

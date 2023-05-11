@@ -32,6 +32,11 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     isOrgAdmin: () => auth.isOrgAdmin,
 
+    canSeeActionableCourseTable: () => {
+      const roles = [RoleName.TT_ADMIN, RoleName.LD]
+      return roles.some(r => r === auth.activeRole)
+    },
+
     canViewMyOrganization: () => {
       const roles = [RoleName.USER]
       return roles.some(r => r === auth.activeRole)
