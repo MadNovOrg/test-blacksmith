@@ -42,6 +42,7 @@ export type Course = {
   aolCountry?: string
   aolRegion?: string
   go1Integration: boolean
+  conversion: boolean
   notes?: string
   dates: {
     aggregate: {
@@ -72,6 +73,7 @@ export type Course = {
   special_instructions?: string
   parking_instructions?: string
   accreditedBy: Accreditors_Enum
+  price?: number
   bildStrategies: Array<{
     strategyName: BildStrategies
   }>
@@ -562,6 +564,8 @@ export type CourseInput = {
   source: Course_Source_Enum | ''
   bildStrategies: Record<BildStrategies, boolean> | null
   accreditedBy: Accreditors_Enum | null
+  conversion: boolean
+  price: number | null
 }
 
 export type ValidCourseInput = DeepNonNullable<

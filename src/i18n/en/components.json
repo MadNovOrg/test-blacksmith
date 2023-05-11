@@ -82,7 +82,7 @@
     "tt-admin": "Admin",
     "sales-admin": "Sales administrator",
     "sales-representative": "Sale Representative",
-    "finance": "Finance", 
+    "finance": "Finance",
     "ld": "L&D"
   },
   "course-form": {
@@ -94,6 +94,7 @@
     "blended-learning-label": "Blended learning",
     "blended-learning-price-label": "If not already pre-purchased by the chosen organisation, each additional license will result in a £25 (plus VAT) fee per person attending this course.",
     "reaccreditation-label": "Reaccreditation",
+    "conversion-label": "Conversion course",
     "delivery-type-section-title": "Delivery type",
     "f2f-option-label": "Face to face",
     "virtual-option-label": "Virtual",
@@ -142,6 +143,7 @@
     "sales-rep-placeholder": "Sales representative",
     "source-title": "Source",
     "account-code-title": "Account Code",
+    "price-placeholder": "Price per attendee",
     "notes-title": "Notes",
     "notes-description": "Additional course notes e.g. twilight session or any additional notes you would like to highlight within this area.",
     "notes-placeholder": "Additional notes",

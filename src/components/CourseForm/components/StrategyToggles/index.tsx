@@ -6,7 +6,7 @@ import { InferType } from 'yup'
 
 import { useAuth } from '@app/context/auth'
 import { yup } from '@app/schemas'
-import { BildStrategies } from '@app/types'
+import { BildStrategies, CourseInput, CourseLevel } from '@app/types'
 
 export const schema = yup.object({
   [BildStrategies.Primary]: yup.bool(),
@@ -25,20 +25,47 @@ export function validateStrategies(s: yup.Schema<InferType<typeof schema>>) {
 
 type FormFields = { bildStrategies: InferType<typeof schema> }
 
-export const StrategyToggles: React.FC = () => {
+type Props = {
+  courseLevel: CourseInput['courseLevel']
+}
+
+export const StrategyToggles: React.FC<Props> = ({ courseLevel }) => {
   const { t } = useTranslation()
-  const { control, setValue, watch } = useFormContext<FormFields>()
+  const { control, setValue } = useFormContext<FormFields>()
   const { acl } = useAuth()
 
-  const tertiaryIntermediate = watch(
-    'bildStrategies.RESTRICTIVE_TERTIARY_INTERMEDIATE'
+  const isTrainerLevel = Boolean(
+    courseLevel &&
+      [
+        CourseLevel.BildIntermediateTrainer,
+        CourseLevel.BildAdvancedTrainer,
+      ].includes(courseLevel)
   )
 
   useEffect(() => {
-    if (tertiaryIntermediate === true) {
-      setValue('bildStrategies.RESTRICTIVE_TERTIARY_ADVANCED', false as never)
+    if (!courseLevel) {
+      return
     }
-  }, [tertiaryIntermediate, setValue])
+
+    if (isTrainerLevel) {
+      setValue('bildStrategies', {
+        PRIMARY: true,
+        SECONDARY: true,
+        NON_RESTRICTIVE_TERTIARY: true,
+        RESTRICTIVE_TERTIARY_INTERMEDIATE: true,
+        RESTRICTIVE_TERTIARY_ADVANCED:
+          courseLevel === CourseLevel.BildAdvancedTrainer,
+      })
+    } else {
+      setValue('bildStrategies', {
+        PRIMARY: false,
+        SECONDARY: false,
+        NON_RESTRICTIVE_TERTIARY: false,
+        RESTRICTIVE_TERTIARY_INTERMEDIATE: false,
+        RESTRICTIVE_TERTIARY_ADVANCED: false,
+      })
+    }
+  }, [isTrainerLevel, setValue, courseLevel])
 
   return (
     <Grid container data-testid="strategy-toggles">
@@ -49,7 +76,13 @@ export const StrategyToggles: React.FC = () => {
           render={({ field }) => (
             <FormGroup>
               <FormControlLabel
-                control={<Switch {...field} checked={field.value === true} />}
+                control={
+                  <Switch
+                    {...field}
+                    checked={field.value === true}
+                    disabled={isTrainerLevel}
+                  />
+                }
                 label={t(`common.bild-strategies.${BildStrategies.Primary}`)}
               />
             </FormGroup>
@@ -62,7 +95,13 @@ export const StrategyToggles: React.FC = () => {
           render={({ field }) => (
             <FormGroup>
               <FormControlLabel
-                control={<Switch {...field} checked={field.value === true} />}
+                control={
+                  <Switch
+                    {...field}
+                    checked={field.value === true}
+                    disabled={isTrainerLevel}
+                  />
+                }
                 label={t(`common.bild-strategies.${BildStrategies.Secondary}`)}
               />
             </FormGroup>
@@ -75,7 +114,13 @@ export const StrategyToggles: React.FC = () => {
           render={({ field }) => (
             <FormGroup>
               <FormControlLabel
-                control={<Switch {...field} checked={field.value === true} />}
+                control={
+                  <Switch
+                    {...field}
+                    checked={field.value === true}
+                    disabled={isTrainerLevel}
+                  />
+                }
                 label={t(
                   `common.bild-strategies.${BildStrategies.NonRestrictiveTertiary}`
                 )}
@@ -92,7 +137,13 @@ export const StrategyToggles: React.FC = () => {
           render={({ field }) => (
             <FormGroup>
               <FormControlLabel
-                control={<Switch {...field} checked={field.value === true} />}
+                control={
+                  <Switch
+                    {...field}
+                    checked={field.value === true}
+                    disabled={isTrainerLevel}
+                  />
+                }
                 label={t(
                   `common.bild-strategies.${BildStrategies.RestrictiveTertiaryIntermediate}`
                 )}
@@ -112,7 +163,7 @@ export const StrategyToggles: React.FC = () => {
                     {...field}
                     checked={field.value === true}
                     disabled={
-                      tertiaryIntermediate === true ||
+                      isTrainerLevel ||
                       !acl.canDeliveryTertiaryAdvancedStrategy()
                     }
                   />

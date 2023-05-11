@@ -63,6 +63,7 @@ import {
 import {
   canBeBlended,
   canBeBlendedBild,
+  canBeConversion,
   canBeF2F,
   canBeF2FBild,
   canBeMixed,
@@ -226,9 +227,18 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           then: validateStrategies,
           otherwise: s => s,
         }),
+        conversion: yup.boolean(),
+        price: yup
+          .number()
+          .positive()
+          .when('accreditedBy', {
+            is: Accreditors_Enum.Bild && courseType === CourseType.CLOSED,
+            then: s => s.required(),
+            otherwise: s => s,
+          }),
       }),
 
-    [t, hasOrg, isClosedCourse, hasMinParticipants, activeRole]
+    [hasOrg, isClosedCourse, t, hasMinParticipants, courseType, activeRole]
   )
 
   const defaultValues = useMemo<CourseInput>(
@@ -277,6 +287,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       source: courseInput?.source ?? '',
       bildStrategies:
         courseInput?.bildStrategies ?? ({} as Record<BildStrategies, boolean>),
+      conversion: courseInput?.conversion ?? false,
+      price: courseInput?.price ?? null,
     }),
     [courseInput, courseType]
   )
@@ -305,6 +317,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const deliveryType = values.deliveryType
   const courseLevel = values.courseLevel
   const isBlended = values.blendedLearning
+  const isBild = values.accreditedBy === Accreditors_Enum.Bild
 
   const canBlended =
     values.accreditedBy === Accreditors_Enum.Icm
@@ -317,7 +330,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       : canBeReaccBild(
           courseType,
           values.bildStrategies,
-          values.blendedLearning
+          values.blendedLearning,
+          values.conversion
         )
 
   const canF2F =
@@ -335,6 +349,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       ? canBeMixed(courseType, courseLevel)
       : canBeMixedBild(courseType, values.courseLevel)
 
+  const conversionEnabled =
+    isBild && canBeConversion(values.reaccreditation, values.courseLevel)
+
   const hasVenue = [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(
     deliveryType
   )
@@ -344,7 +361,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const startTime = useWatch({ control, name: 'startTime' })
   const endDate = useWatch({ control, name: 'endDate' })
   const endTime = useWatch({ control, name: 'endTime' })
-  const isBild = values.accreditedBy === Accreditors_Enum.Bild
 
   useEffect(() => {
     // I want to execute this check only at the first render.
@@ -661,7 +677,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             ) : null}
           </FormControl>
 
-          {isBild ? <StrategyToggles /> : null}
+          {isBild ? <StrategyToggles courseLevel={values.courseLevel} /> : null}
 
           <Divider sx={{ my: 2 }} />
 
@@ -701,6 +717,28 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               />
             )}
           />
+
+          {isBild && courseType === CourseType.CLOSED ? (
+            <Controller
+              name="conversion"
+              control={control}
+              render={({ field }) => (
+                <FormControlLabel
+                  disabled={
+                    !conversionEnabled || disabledFields.has('conversion')
+                  }
+                  control={
+                    <Switch
+                      {...field}
+                      checked={values.conversion}
+                      data-testid="conversion-switch"
+                    />
+                  }
+                  label={t('components.course-form.conversion-label')}
+                />
+              )}
+            />
+          ) : null}
 
           {isBlended && courseType === CourseType.INDIRECT ? (
             <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
@@ -1201,6 +1239,20 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               </Grid>
 
               <Box>
+                <TextField
+                  variant="filled"
+                  placeholder={t('components.course-form.price-placeholder')}
+                  fullWidth
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">£</InputAdornment>
+                    ),
+                  }}
+                  disabled={disabledFields.has('price')}
+                  {...register('price')}
+                  sx={{ mt: 2 }}
+                />
+
                 <Typography fontWeight={600} mb={1} mt={2}>
                   {t('components.course-form.account-code-title')}
                 </Typography>

@@ -330,7 +330,9 @@ export const PageContent = () => {
         return []
       }
 
-      const pricing = data.coursePricing[0]
+      const pricing = data.coursePricing.length
+        ? data.coursePricing[0]
+        : { priceAmount: courseData.price }
 
       const courseBasePrice = roundToTwoDecimals(
         pricing.priceAmount * courseData.maxParticipants

@@ -5,6 +5,7 @@ import { Accreditors_Enum } from '@app/generated/graphql'
 import {
   BildStrategies,
   CourseDeliveryType,
+  CourseInput,
   CourseLevel,
   CourseType,
 } from '@app/types'
@@ -93,6 +94,7 @@ export function getLevels(
     },
     [`${Accreditors_Enum.Bild}-${CourseType.CLOSED}`]: () => {
       return [
+        CourseLevel.BildRegular,
         CourseLevel.BildIntermediateTrainer,
         CourseLevel.BildAdvancedTrainer,
       ]
@@ -193,7 +195,8 @@ export function canBeBlended(
 export function canBeReaccBild(
   courseType: CourseType,
   strategies: Record<BildStrategies, boolean> | null,
-  blended: boolean
+  blended: boolean,
+  conversion: boolean
 ): boolean {
   switch (courseType) {
     case CourseType.INDIRECT: {
@@ -212,7 +215,7 @@ export function canBeReaccBild(
 
     case CourseType.OPEN:
     case CourseType.CLOSED: {
-      if (blended) {
+      if (blended || conversion) {
         return false
       }
 
@@ -455,6 +458,20 @@ export function canBeVirtual(
   }
 
   return types[courseType]()
+}
+
+export function canBeConversion(
+  isReaccred: boolean,
+  courseLevel: CourseInput['courseLevel']
+) {
+  if (isReaccred || !courseLevel) {
+    return false
+  }
+
+  return [
+    CourseLevel.BildAdvancedTrainer,
+    CourseLevel.BildIntermediateTrainer,
+  ].includes(courseLevel)
 }
 
 export function getAOLCountries() {
