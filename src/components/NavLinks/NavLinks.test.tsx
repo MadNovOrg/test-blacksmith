@@ -40,6 +40,8 @@ describe('component: NavLinks', () => {
     expect(membershipLink).toBeInTheDocument()
     const resourcesLink = screen.getByRole('link', { name: 'Resources' })
     expect(resourcesLink).toBeInTheDocument()
+    const usersLink = screen.queryByRole('link', { name: 'Users' })
+    expect(usersLink).not.toBeInTheDocument()
   })
 
   it('do not render resource if user do not have 0 course and 0 certificates', async () => {
@@ -58,6 +60,8 @@ describe('component: NavLinks', () => {
     expect(membershipLink).toBeInTheDocument()
     const resourcesLink = screen.queryByRole('link', { name: 'Resources' })
     expect(resourcesLink).not.toBeInTheDocument()
+    const usersLink = screen.queryByRole('link', { name: 'Users' })
+    expect(usersLink).not.toBeInTheDocument()
   })
 
   it('renders SALES ADMIN role links', async () => {
@@ -72,7 +76,10 @@ describe('component: NavLinks', () => {
 
     const coursesLink = screen.getByRole('link', { name: 'Manage Courses' })
     expect(coursesLink).toBeInTheDocument()
-    expect(coursesLink).toBeInTheDocument()
+    const usersLink = screen.getByRole('link', {
+      name: 'Users',
+    })
+    expect(usersLink).toBeInTheDocument()
     const organisationsLink = screen.getByRole('link', {
       name: 'Organisations',
     })
@@ -97,6 +104,10 @@ describe('component: NavLinks', () => {
 
     const coursesLink = screen.getByRole('link', { name: 'Manage Courses' })
     expect(coursesLink).toBeInTheDocument()
+    const usersLink = screen.getByRole('link', {
+      name: 'Users',
+    })
+    expect(usersLink).toBeInTheDocument()
     const organisationsLink = screen.getByRole('link', {
       name: 'Organisations',
     })
@@ -120,6 +131,11 @@ describe('component: NavLinks', () => {
         allowedRoles: new Set([RoleName.TT_OPS]),
       },
     })
+
+    const usersLink = screen.getByRole('link', {
+      name: 'Users',
+    })
+    expect(usersLink).toBeInTheDocument()
 
     const organisationsLink = screen.getByRole('link', {
       name: 'Organisations',
@@ -152,5 +168,7 @@ describe('component: NavLinks', () => {
     expect(membershipLink).toBeInTheDocument()
     const resourcesLink = screen.getByRole('link', { name: 'Resources' })
     expect(resourcesLink).toBeInTheDocument()
+    const usersLink = screen.queryByRole('link', { name: 'Users' })
+    expect(usersLink).not.toBeInTheDocument()
   })
 })

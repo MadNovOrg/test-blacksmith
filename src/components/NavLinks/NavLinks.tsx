@@ -46,6 +46,12 @@ export const NavLinks = () => {
         </Link>
       ) : null}
 
+      {acl.canViewUsers() ? (
+        <Link component={StyledNavLink} to="/admin/users">
+          {t('users')}
+        </Link>
+      ) : null}
+
       {acl.canViewOrganizations() ? (
         <Link component={StyledNavLink} to="/organisations">
           {t('organizations')}

@@ -37,7 +37,10 @@ export const AppBar = () => {
               justifyContent="center"
               px={3}
               color="secondary.dark"
-              sx={{ display: { xs: 'none', lg: 'flex' } }}
+              sx={{
+                display: { xs: 'none', lg: 'flex' },
+                alignItems: 'center',
+              }}
             >
               <NavLinks />
             </Box>

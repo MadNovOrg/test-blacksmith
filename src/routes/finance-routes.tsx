@@ -8,6 +8,7 @@ import { CreateOrganization } from '@app/pages/admin/components/Organizations/Cr
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
 import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
+import { Users } from '@app/pages/admin/Users'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
@@ -113,6 +114,12 @@ const FinanceRoute = () => {
             path="grading/:participantId"
             element={<ParticipantGrading />}
           />
+        </Route>
+      </Route>
+
+      <Route path="admin">
+        <Route path="users" element={<Users />}>
+          <Route path="merge" />
         </Route>
       </Route>
 

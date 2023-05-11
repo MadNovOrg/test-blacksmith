@@ -126,6 +126,18 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return can
     },
 
+    canViewUsers: () => {
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.LD,
+        RoleName.SALES_ADMIN,
+        RoleName.SALES_REPRESENTATIVE,
+        RoleName.FINANCE,
+      ]
+      return roles.some(r => r === auth.activeRole)
+    },
+
     canViewAllOrganizations: () => {
       const roles = [
         RoleName.TT_OPS,
