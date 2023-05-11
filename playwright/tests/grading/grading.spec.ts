@@ -31,7 +31,7 @@ const test = base.extend<{
   },
 })
 
-const allowedRoles: string[] = ['trainer', 'admin']
+const allowedRoles: string[] = ['trainer', 'admin', 'tt-ops']
 
 allowedRoles.forEach(role => {
   test.use({ storageState: stateFilePath(role) })

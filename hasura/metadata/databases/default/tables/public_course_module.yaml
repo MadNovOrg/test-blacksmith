@@ -138,6 +138,17 @@ select_permissions:
         - module_id
       filter: {}
       allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - covered
+        - course_id
+        - created_at
+        - updated_at
+        - id
+        - module_id
+      filter: {}
+      allow_aggregations: true
   - role: user
     permission:
       columns:
@@ -161,6 +172,12 @@ update_permissions:
               _eq: X-Hasura-User-Id
       check: null
   - role: tt-admin
+    permission:
+      columns:
+        - covered
+      filter: {}
+      check: null
+  - role: tt-ops
     permission:
       columns:
         - covered

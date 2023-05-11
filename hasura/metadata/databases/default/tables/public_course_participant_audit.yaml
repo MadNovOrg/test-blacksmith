@@ -62,8 +62,38 @@ insert_permissions:
         - profile_id
         - course_id
       backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      set:
+        authorized_by: x-hasura-User-Id
+      columns:
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - profile_id
+        - course_id
+      backend_only: false
 select_permissions:
   - role: tt-admin
+    permission:
+      columns:
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - profile_id
+        - course_id
+      computed_fields:
+        - newAttendeeEmail
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
     permission:
       columns:
         - payload

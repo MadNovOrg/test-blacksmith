@@ -30,6 +30,14 @@ insert_permissions:
         - course_participant_id
         - module_id
       backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - completed
+        - course_participant_id
+        - module_id
+      backend_only: false
 select_permissions:
   - role: finance
     permission:
