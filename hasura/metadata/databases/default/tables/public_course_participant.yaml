@@ -441,7 +441,7 @@ event_triggers:
       enable_manual: true
       update:
         columns:
-          - grade
+          - completed_evaluation
     retry_conf:
       num_retries: 0
       interval_sec: 10

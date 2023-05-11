@@ -698,7 +698,8 @@
     "course-summary-button-after-completion": "Available after course",
     "resources-empty-message": "Trainer will provide course materials here",
     "change-my-attendance": "Change my attendance",
-    "manage-course": "Manage course"
+    "manage-course": "Manage course",
+    "feedback-required-alert": "To receive your certificate, please complete course summary evaluation."
   },
   "upcoming-training": {
     "course-upcoming": "Course Upcoming",

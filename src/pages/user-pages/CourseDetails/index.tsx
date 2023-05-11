@@ -128,6 +128,8 @@ export const CourseDetails = () => {
     courseHasStarted &&
     !didAttendeeSubmitFeedback &&
     courseParticipant?.attended
+  const showFeedbackRequiredAlert =
+    courseParticipant && courseParticipant.grade && !didAttendeeSubmitFeedback
 
   return (
     <>
@@ -229,6 +231,14 @@ export const CourseDetails = () => {
 
             <Container sx={{ pb: 2 }}>
               <TabPanel sx={{ px: 0 }} value="checklist">
+                {showFeedbackRequiredAlert ? (
+                  <Alert variant="outlined" severity="error" sx={{ m: 2 }}>
+                    <Typography>
+                      {t('pages.participant-course.feedback-required-alert')}
+                    </Typography>
+                  </Alert>
+                ) : null}
+
                 <CoursePrerequisitesAlert
                   courseId={courseId}
                   sx={{ m: 2 }}
