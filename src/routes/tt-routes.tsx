@@ -135,11 +135,13 @@ const TTAdminRoutes = () => {
       {acl.canViewOrganizations() ? (
         <Route path="organisations">
           <Route index element={<Navigate replace to="all" />} />
-          <Route path="new" element={<CreateOrganization />} />
+          {acl.canEditOrAddOrganizations() ? (
+            <Route path="new" element={<CreateOrganization />} />
+          ) : null}
           <Route path="list" element={<Organizations />} />
           <Route path=":id">
             <Route index element={<OrgDashboard />} />
-            {acl.canEditOrganizations() ? (
+            {acl.canEditOrAddOrganizations() ? (
               <Route path="edit" element={<EditOrgDetails />} />
             ) : null}
             <Route path="invite" element={<InviteUserToOrganization />} />

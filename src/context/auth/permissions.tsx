@@ -170,7 +170,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return auth.isOrgAdmin || roles.some(r => r === auth.activeRole)
     },
 
-    canEditOrganizations: () => {
+    canEditOrAddOrganizations: () => {
       const roles = [
         RoleName.TT_OPS,
         RoleName.TT_ADMIN,

@@ -4,7 +4,6 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import Organizations from '@app/pages/admin/components/Organizations'
-import { CreateOrganization } from '@app/pages/admin/components/Organizations/CreateOrganization'
 import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { Users } from '@app/pages/admin/Users'
@@ -124,7 +123,6 @@ const FinanceRoute = () => {
 
       <Route path="organisations">
         <Route index element={<Navigate replace to="all" />} />
-        <Route path="new" element={<CreateOrganization />} />
         <Route path="list" element={<Organizations />} />
         <Route path=":id">
           <Route index element={<OrgDashboard />} />
