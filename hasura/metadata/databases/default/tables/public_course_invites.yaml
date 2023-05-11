@@ -309,6 +309,16 @@ delete_permissions:
                 - is_admin:
                     _eq: true
 event_triggers:
+  - name: course_participant_added
+    definition:
+      enable_manual: false
+      update:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/participant-added'
   - name: send_invite_email
     definition:
       enable_manual: false
