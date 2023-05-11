@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
+import { useAuth } from '@app/context/auth'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -23,6 +24,7 @@ type Filters = {
 export const DiscountsList: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { acl } = useAuth()
 
   const { Pagination, limit, offset } = useTablePagination()
   const sorting = useTableSort('createdAt', 'asc')
@@ -68,21 +70,25 @@ export const DiscountsList: React.FC<React.PropsWithChildren<unknown>> = () => {
         <Box flex={1}>
           <Box
             display="flex"
-            alignItems="center"
-            justifyContent="space-between"
+            alignItems="flex-end"
+            flexDirection="column"
             mb={2}
           >
-            <Box sx={{ alignSelf: 'flex-end', position: 'relative', top: 10 }}>
-              <Typography fontWeight="bold">
-                {t('pages.promoCodes.list-title-pending')}
-              </Typography>
-            </Box>
             <Button variant="contained" onClick={() => navigate('./new')}>
               {t('pages.promoCodes.new-btn')}
             </Button>
           </Box>
 
-          <PendingApproval onAction={mutate} />
+          {acl.canApproveDiscount() ? (
+            <>
+              <Box>
+                <Typography fontWeight="bold">
+                  {t('pages.promoCodes.list-title-pending')}
+                </Typography>
+              </Box>
+              <PendingApproval onAction={mutate} />
+            </>
+          ) : null}
 
           <DiscountsTable
             promoCodes={promoCodes}

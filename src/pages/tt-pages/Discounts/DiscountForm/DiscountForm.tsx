@@ -1,27 +1,29 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { LoadingButton } from '@mui/lab'
 import {
+  Alert,
   Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  FormControlLabel,
+  FormHelperText,
+  InputAdornment,
+  MenuItem,
+  Radio,
   Stack,
   TextField,
   Typography,
-  FormControlLabel,
-  Radio,
-  Button,
-  FormHelperText,
-  Checkbox,
-  MenuItem,
-  InputAdornment,
-  Alert,
 } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { startOfDay, endOfDay } from 'date-fns'
+import { endOfDay, startOfDay } from 'date-fns'
 import { omit } from 'lodash-es'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import useSWR from 'swr'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { Dialog } from '@app/components/Dialog'
@@ -29,37 +31,50 @@ import { ProfileSelector } from '@app/components/ProfileSelector'
 import { SelectCourses } from '@app/components/SelectCourses'
 import { SelectLevels } from '@app/components/SelectLevels'
 import { useAuth } from '@app/context/auth'
-import { Promo_Code_Type_Enum } from '@app/generated/graphql'
+import {
+  GetPromoCodesQuery,
+  GetPromoCodesQueryVariables,
+  Promo_Code_Type_Enum,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { NotFound } from '@app/pages/common/NotFound'
 import {
   InputType,
+  QUERY as GET_PROMO_CODES_QUERY,
   ResponseType,
-  QUERY as GET_PROMOCODES,
 } from '@app/queries/promo-codes/get-promo-codes'
-import INSERT_PROMO_CODE from '@app/queries/promo-codes/insert-promo-code'
-import { CourseType } from '@app/types'
-import { INPUT_DATE_FORMAT } from '@app/util'
+import UPSERT_PROMO_CODE from '@app/queries/promo-codes/upsert-promo-code'
+import { CourseType, Profile } from '@app/types'
+import {
+  getSWRLoadingStatus,
+  INPUT_DATE_FORMAT,
+  LoadingStatus,
+} from '@app/util'
 
 import {
+  AMOUNT_PRESET_VALUE,
+  AMOUNT_PRESETS,
+  APPLIES_TO,
   DEFAULT_AMOUNT_PER_TYPE,
   FormInputs,
-  schema,
+  getAmountPreset,
   requiresApproval,
-  APPLIES_TO,
-  AMOUNT_PRESETS,
-  AMOUNT_PRESET_VALUE,
+  schema,
 } from './helpers'
 import { Wrapper } from './Wrapper'
 
-export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
+export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const fetcher = useFetcher()
+  const { id } = useParams()
+  const isEdit = !!id
+  const { activeRole } = useAuth()
 
   const [saving, setSaving] = useState(false)
 
   const { profile } = useAuth()
-  const [createdBy, setCreatedBy] = useState(profile)
+  const [createdBy, setCreatedBy] = useState<Profile>()
 
   const amountInputRef = useRef<HTMLInputElement>()
   const [amountPreset, setAmountPreset] = useState(AMOUNT_PRESETS.FIVE)
@@ -68,7 +83,22 @@ export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const [showApprovalNotice, setShowApprovalNotice] = useState(false)
 
-  const minDate = startOfDay(new Date())
+  const { data, error } = useSWR<
+    GetPromoCodesQuery,
+    Error,
+    [string, GetPromoCodesQueryVariables] | null
+  >(
+    id
+      ? [
+          GET_PROMO_CODES_QUERY,
+          {
+            where: { id: { _eq: id } },
+          },
+        ]
+      : null
+  )
+  const isLoading =
+    isEdit && getSWRLoadingStatus(data, error) === LoadingStatus.FETCHING
 
   const {
     register,
@@ -79,7 +109,7 @@ export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
     clearErrors,
     handleSubmit,
   } = useForm<FormInputs>({
-    resolver: yupResolver(schema({ t, minDate })),
+    resolver: yupResolver(schema({ t })),
     defaultValues: {
       code: '',
       description: '',
@@ -88,7 +118,7 @@ export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
       appliesTo: APPLIES_TO.ALL,
       levels: [],
       courses: [],
-      validFrom: minDate,
+      validFrom: startOfDay(new Date()),
       validTo: null,
       usesMax: null,
       bookerSingleUse: true,
@@ -96,14 +126,49 @@ export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
     },
   })
 
+  useEffect(() => {
+    if (data) {
+      if (data.promoCodes.length > 0) {
+        const promoCode = data?.promoCodes[0]
+        setValue('code', promoCode.code)
+        setValue('description', promoCode.description ?? '')
+        setValue('type', promoCode.type)
+        setValue('amount', promoCode.amount)
+        if (promoCode.courses?.length > 0) {
+          setValue('appliesTo', APPLIES_TO.COURSES)
+        } else if (promoCode?.levels?.length > 0) {
+          setValue('appliesTo', APPLIES_TO.LEVELS)
+        }
+        setValue('levels', promoCode.levels)
+        setValue(
+          'courses',
+          promoCode.courses.map(c => c.course?.id ?? 0)
+        )
+        if (promoCode?.validFrom) {
+          setValue('validFrom', new Date(promoCode.validFrom))
+        }
+        if (promoCode?.validTo) {
+          setValue('validTo', new Date(promoCode.validTo))
+        }
+        setValue('usesMax', promoCode.usesMax)
+        setValue('bookerSingleUse', promoCode.bookerSingleUse)
+        if (promoCode.creator) {
+          setCreatedBy(promoCode.creator as Profile)
+        }
+        setAmountPreset(getAmountPreset(promoCode.amount))
+      }
+    }
+  }, [data, setValue])
+
   const values = watch()
   const appliesToRadio = values.appliesTo
 
   const checkDuplicateCode = useDebouncedCallback(async () => {
+    if (data && data.promoCodes[0].code === values.code) return
     try {
       const where = { code: { _eq: values.code } }
       const { promoCodes } = await fetcher<ResponseType, InputType>(
-        GET_PROMOCODES,
+        GET_PROMO_CODES_QUERY,
         { where }
       )
       if (promoCodes.length) {
@@ -124,9 +189,12 @@ export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [values.code, checkDuplicateCode, clearErrors])
 
   useEffect(() => {
-    if (createdBy) setValue('createdBy', createdBy.id)
-    else setCreatedBy(profile)
-  }, [createdBy, setCreatedBy, setValue, profile])
+    if (!createdBy && !isEdit) {
+      setCreatedBy(profile)
+    } else if (createdBy && values.createdBy !== createdBy.id) {
+      setValue('createdBy', createdBy.id)
+    }
+  }, [createdBy, data, isEdit, profile, setValue, values.createdBy])
 
   const typeRadioChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const type = ev.target.value as Promo_Code_Type_Enum
@@ -205,14 +273,24 @@ export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
     setValue('usesMax', checked ? 1 : null)
   }
 
-  const insertPromoCode = async () => {
+  const sendForApproval = useMemo(() => {
+    const amountModified = data?.promoCodes[0].amount !== values.amount
+    return amountModified && requiresApproval(values, activeRole)
+  }, [activeRole, data?.promoCodes, values])
+
+  const upsertPromoCode = async () => {
     setSaving(true)
 
     try {
       const promoCode = omit(values, ['appliesTo', 'courses'])
-      await fetcher(INSERT_PROMO_CODE, {
+      await fetcher(UPSERT_PROMO_CODE, {
+        promoCondition: isEdit
+          ? { id: { _eq: id } }
+          : { id: { _is_null: true } },
         promoCode: {
+          id: isEdit ? id : undefined,
           ...promoCode,
+          approvedBy: sendForApproval ? null : profile?.id,
           courses: {
             data: values.courses.map(c => {
               return { course_id: c }
@@ -229,15 +307,36 @@ export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
   }
 
   const onSubmitValid = async () => {
-    if (requiresApproval(values)) {
+    if (sendForApproval) {
       setShowApprovalNotice(true)
     } else {
-      return insertPromoCode()
+      await upsertPromoCode()
     }
   }
 
+  if (isLoading) {
+    return (
+      <Stack
+        alignItems="center"
+        justifyContent="center"
+        data-testid="promocode-fetching"
+      >
+        <CircularProgress />
+      </Stack>
+    )
+  } else if (isEdit && (error || data?.promoCodes?.length === 0)) {
+    return <NotFound />
+  }
+
   return (
-    <Wrapper onSubmit={handleSubmit(onSubmitValid)}>
+    <Wrapper
+      onSubmit={handleSubmit(onSubmitValid)}
+      title={
+        isEdit
+          ? t(`pages.promoCodes.edit-title`)
+          : t(`pages.promoCodes.new-title`)
+      }
+    >
       <Typography variant="body1" fontWeight="bold">
         {t('pages.promoCodes.new-section-general')}
       </Typography>
@@ -247,7 +346,9 @@ export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
           <Typography fontWeight="bold">
             {t('pages.promoCodes.fld-createdBy-label')}
           </Typography>
-          <ProfileSelector value={createdBy} onChange={setCreatedBy} />
+          {createdBy ? (
+            <ProfileSelector value={createdBy} onChange={setCreatedBy} />
+          ) : null}
         </Box>
 
         {/* CODE + DESCRIPTION */}
@@ -417,7 +518,9 @@ export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
                 where={{
                   type: { _eq: CourseType.OPEN },
                   schedule: {
-                    start: { _gte: startOfDay(new Date()) },
+                    start: {
+                      _gte: isEdit ? undefined : startOfDay(new Date()),
+                    },
                   },
                 }}
               />
@@ -443,7 +546,6 @@ export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
                 onChange={d => {
                   setValue('validFrom', d ? startOfDay(d) : null)
                 }}
-                minDate={minDate}
                 maxDate={values.validTo}
                 slotProps={{
                   textField: {
@@ -537,7 +639,7 @@ export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
           loading={saving}
           data-testid="btn-submit"
         >
-          {t('pages.promoCodes.new-submit')}
+          {isEdit ? t('common.save-details') : t('pages.promoCodes.new-submit')}
         </LoadingButton>
       </Box>
 
@@ -568,7 +670,7 @@ export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
           <LoadingButton
             variant="contained"
             loading={saving}
-            onClick={insertPromoCode}
+            onClick={upsertPromoCode}
           >
             {t('pages.promoCodes.approvalNeeded-submit')}
           </LoadingButton>

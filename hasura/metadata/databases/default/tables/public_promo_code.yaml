@@ -48,11 +48,22 @@ array_relationships:
           schema: public
           name: course_promo_code
 insert_permissions:
-  - role: sales-admin
+  - role: ld
     permission:
       check: {}
+      columns: []
+      backend_only: false
+  - role: sales-admin
+    permission:
+      check:
+        _or:
+          - approved_by:
+              _eq: X-Hasura-User-Id
+          - approved_by:
+              _is_null: true
       columns:
         - amount
+        - approved_by
         - booker_single_use
         - code
         - created_by
@@ -67,9 +78,15 @@ insert_permissions:
       backend_only: false
   - role: tt-ops
     permission:
-      check: {}
+      check:
+        _or:
+          - approved_by:
+              _eq: X-Hasura-User-Id
+          - approved_by:
+              _is_null: true
       columns:
         - amount
+        - approved_by
         - booker_single_use
         - code
         - created_by
@@ -126,6 +143,11 @@ select_permissions:
       filter: {}
       allow_aggregations: true
 update_permissions:
+  - role: ld
+    permission:
+      columns: []
+      filter: {}
+      check: null
   - role: sales-admin
     permission:
       columns:
@@ -175,6 +197,9 @@ event_triggers:
       enable_manual: false
       insert:
         columns: '*'
+      update:
+        columns:
+          - amount
     retry_conf:
       num_retries: 0
       interval_sec: 10

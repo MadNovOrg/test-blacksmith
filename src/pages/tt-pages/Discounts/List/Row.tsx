@@ -2,6 +2,7 @@ import InfoIcon from '@mui/icons-material/Info'
 import {
   Box,
   Chip,
+  Link,
   TableCell,
   TableRow,
   Tooltip,
@@ -46,20 +47,22 @@ export const Row: React.FC<React.PropsWithChildren<Props>> = ({
   return (
     <TableRow key={promo.id}>
       <TableCell>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          <Ellipsize text={promo.code} len={20} />
-          {promo.description ? (
-            <Tooltip title={promo.description} placement="top" arrow={true}>
-              <InfoIcon fontSize="small" sx={{ ml: 1, fill: '#0D2860CC' }} />
-            </Tooltip>
-          ) : null}
-        </Box>
+        <Link href={`/admin/discounts/edit/${promo.id}`}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <Ellipsize text={promo.code} len={20} />
+            {promo.description ? (
+              <Tooltip title={promo.description} placement="top" arrow={true}>
+                <InfoIcon fontSize="small" sx={{ ml: 1, fill: '#0D2860CC' }} />
+              </Tooltip>
+            ) : null}
+          </Box>
+        </Link>
       </TableCell>
 
       <TableCell width="140" align="center">

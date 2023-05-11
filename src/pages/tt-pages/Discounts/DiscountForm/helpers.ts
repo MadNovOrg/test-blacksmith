@@ -2,7 +2,7 @@ import { TFunction } from 'i18next'
 
 import { Promo_Code_Type_Enum } from '@app/generated/graphql'
 import { yup } from '@app/schemas'
-import { CourseLevel } from '@app/types'
+import { CourseLevel, RoleName } from '@app/types'
 
 export type FormInputs = {
   code: string
@@ -43,7 +43,7 @@ export const DEFAULT_AMOUNT_PER_TYPE = {
   [Promo_Code_Type_Enum.FreePlaces]: 1,
 }
 
-export const schema = ({ t, minDate }: { t: TFunction; minDate: Date }) => {
+export const schema = ({ t }: { t: TFunction }) => {
   return yup.object({
     code: yup.string().required(
       t('validation-errors.required-field', {
@@ -68,13 +68,7 @@ export const schema = ({ t, minDate }: { t: TFunction; minDate: Date }) => {
     validFrom: yup
       .date()
       .typeError(t('validation-errors.this-field-is-required'))
-      .required(t('validation-errors.this-field-is-required'))
-      .min(
-        minDate,
-        t('validation-errors.date-gte', {
-          date: t('dates.default', { date: minDate }),
-        })
-      ),
+      .required(t('validation-errors.this-field-is-required')),
     validTo: yup
       .date()
       .nullable()
@@ -94,11 +88,27 @@ export const schema = ({ t, minDate }: { t: TFunction; minDate: Date }) => {
   })
 }
 
-export const requiresApproval = (data: FormInputs) => {
+export const requiresApproval = (data: FormInputs, role?: RoleName) => {
+  if (role && (role === RoleName.TT_ADMIN || role === RoleName.FINANCE)) {
+    return false
+  }
   if (data.type === Promo_Code_Type_Enum.Percent) {
     return data.amount > 15
   }
   if (data.type === Promo_Code_Type_Enum.FreePlaces) {
     return data.amount > 3
+  }
+}
+
+export const getAmountPreset = (value: number) => {
+  switch (value) {
+    case 5:
+      return AMOUNT_PRESETS.FIVE
+    case 10:
+      return AMOUNT_PRESETS.TEN
+    case 15:
+      return AMOUNT_PRESETS.FIFTEEN
+    default:
+      return AMOUNT_PRESETS.OTHER
   }
 }

@@ -2,10 +2,10 @@ import { expect, test as base } from '@playwright/test'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
-  InsertPromoCodeMutation,
-  InsertPromoCodeMutationVariables,
+  UpsertPromoCodeMutation,
+  UpsertPromoCodeMutationVariables,
 } from '@app/generated/graphql'
-import INSERT_PROMO_CODE from '@app/queries/promo-codes/insert-promo-code'
+import UPSERT_PROMO_CODE from '@app/queries/promo-codes/upsert-promo-code'
 import { CourseType } from '@app/types'
 
 import * as API from '../../../api'
@@ -22,7 +22,7 @@ const forbiddenRoles: HasuraRole[] = ['anonymous', 'unverified']
 function buildPromoCode(
   courseId: number,
   createdBy: string
-): InsertPromoCodeMutationVariables {
+): UpsertPromoCodeMutationVariables {
   return {
     promoCode: {
       courses: { data: [{ course_id: courseId }] },
@@ -44,13 +44,13 @@ const test = base.extend<{ course: Course }>({
 })
 
 allowedRoles.forEach(role => {
-  test(`@query InsertPromoCode: role ${role} should be able to run the mutation`, async ({
+  test(`@query UpsertPromoCode: role ${role} should be able to run the mutation`, async ({
     course,
   }) => {
     const adminId = await getProfileId(users.admin.email)
 
-    const results = await runQueryAsRole<InsertPromoCodeMutation>(
-      INSERT_PROMO_CODE,
+    const results = await runQueryAsRole<UpsertPromoCodeMutation>(
+      UPSERT_PROMO_CODE,
       buildPromoCode(course.id, adminId),
       role,
       {
@@ -71,7 +71,7 @@ forbiddenRoles.forEach(role => {
 
     await expect(
       runQueryAsRole(
-        INSERT_PROMO_CODE,
+        UPSERT_PROMO_CODE,
         buildPromoCode(course.id, adminId),
         role,
         {

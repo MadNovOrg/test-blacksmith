@@ -22,7 +22,7 @@ import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/
 import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
 import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
-import { DiscountCreate, DiscountsList } from '@app/pages/tt-pages/Discounts'
+import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
@@ -175,10 +175,13 @@ const SalesAdminRoutes = () => {
             <Route path="users" element={<Users />}>
               <Route path="merge" />
             </Route>
-            <Route path="discounts">
-              <Route index element={<DiscountsList />} />
-              <Route path="new" element={<DiscountCreate />} />
-            </Route>
+            {acl.canViewAdminDiscount() ? (
+              <Route path="discounts">
+                <Route index element={<DiscountsList />} />
+                <Route path="new" element={<DiscountForm />} />
+                <Route path="edit/:id" element={<DiscountForm />} />
+              </Route>
+            ) : null}
 
             <Route path="audit" element={<AuditsPage />} />
           </Route>

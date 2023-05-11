@@ -41,6 +41,14 @@ select_permissions:
         - promo_id
       filter: {}
 update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - id
+        - promo_id
+      filter: {}
+      check: null
   - role: tt-ops
     permission:
       columns:
@@ -49,3 +57,10 @@ update_permissions:
         - promo_id
       filter: {}
       check: {}
+delete_permissions:
+  - role: sales-admin
+    permission:
+      filter: {}
+  - role: tt-ops
+    permission:
+      filter: {}

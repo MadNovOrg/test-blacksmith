@@ -6,10 +6,10 @@ import { fromValue } from 'wonka'
 
 import { Promo_Code_Type_Enum } from '@app/generated/graphql'
 
-import { screen, render, within, userEvent, waitFor, chance } from '@test/index'
+import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 import { profile } from '@test/providers'
 
-import { Create } from './Create'
+import { DiscountForm } from './DiscountForm'
 import { APPLIES_TO } from './helpers'
 
 const mockNavigate = jest.fn()
@@ -34,7 +34,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('defaults createdBy to current user', async () => {
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     const profileSelector = screen.getByTestId('profile-selector')
     const createdBy = within(profileSelector).getByRole('combobox')
@@ -42,7 +42,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('defaults Type to Percent', async () => {
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     const { Percent, FreePlaces } = Promo_Code_Type_Enum
     const typePercent = screen.getByTestId(`discount-type-${Percent}`)
@@ -55,7 +55,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('defaults Amount to 5%', async () => {
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     const amount = screen.getByTestId('fld-amount-percent')
     expect(amount).toHaveValue('5')
@@ -64,7 +64,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('defaults free places to 1', async () => {
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     expect(screen.queryByTestId('fld-amount-freeplaces')).toBeNull()
 
@@ -78,7 +78,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('defaults AppliesTo to ALL', async () => {
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     const appliesToAll = screen.getByTestId(`appliesTo-${APPLIES_TO.ALL}`)
     expect(within(appliesToAll).getByRole('radio')).toBeChecked()
@@ -87,7 +87,7 @@ describe('page: CreateDiscount', () => {
   it('shows SelectLevels when appliesTo is LEVELS', async () => {
     const appliesTo = `appliesTo-${APPLIES_TO.LEVELS}`
 
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     expect(screen.queryByTestId('SelectLevels')).toBeNull()
 
@@ -103,7 +103,7 @@ describe('page: CreateDiscount', () => {
       fromValue({ data: { courses: [] } })
     )
 
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     expect(screen.queryByTestId('SelectCourses')).toBeNull()
 
@@ -113,7 +113,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('validates code is filled', async () => {
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     const btnSubmit = screen.getByTestId('btn-submit')
     await userEvent.click(btnSubmit)
@@ -132,7 +132,7 @@ describe('page: CreateDiscount', () => {
     const appliesTo = `appliesTo-${APPLIES_TO.LEVELS}`
     const levelsRequiredText = 'Please select at least one level'
 
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     const btnSubmit = screen.getByTestId('btn-submit')
     await userEvent.click(btnSubmit)
@@ -156,7 +156,7 @@ describe('page: CreateDiscount', () => {
     const appliesTo = `appliesTo-${APPLIES_TO.COURSES}`
     const coursesRequiredText = 'Please select at least one course'
 
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     const btnSubmit = screen.getByTestId('btn-submit')
     await userEvent.click(btnSubmit)
@@ -177,7 +177,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('validates validFrom is required', async () => {
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     const startDate = screen.getByLabelText(/start date/i) as HTMLInputElement
 
@@ -199,7 +199,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('validates validTo is >= to validFrom', async () => {
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     const startDate = screen.getByLabelText(/start date/i) as HTMLInputElement
     const endDate = screen.getByLabelText(/end date/i) as HTMLInputElement
@@ -228,7 +228,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('validates usesMax is greater than 0 if filled', async () => {
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     await userEvent.click(screen.getByLabelText(/limit number of bookings/i))
 
@@ -246,7 +246,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('navigates to Discounts list when cancel is clicked', async () => {
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     const btnCancel = screen.getByTestId('btn-cancel')
     await userEvent.click(btnCancel)
@@ -260,7 +260,7 @@ describe('page: CreateDiscount', () => {
   it('submits as expected when all data is valid', async () => {
     const code = chance.word({ length: 10 }).toUpperCase()
 
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     const fldCode = screen.getByTestId('fld-code')
     await userEvent.type(fldCode, code)
@@ -269,9 +269,10 @@ describe('page: CreateDiscount', () => {
     await waitFor(() => userEvent.click(btnSubmit))
 
     expect(mockFetcher).toHaveBeenCalledWith(
-      expect.stringContaining('mutation InsertPromoCode'),
+      expect.stringContaining('mutation UpsertPromoCode'),
       {
         promoCode: {
+          id: undefined,
           amount: 5,
           bookerSingleUse: true,
           code,
@@ -283,14 +284,22 @@ describe('page: CreateDiscount', () => {
           usesMax: null,
           validFrom: startOfDay(new Date()),
           validTo: null,
+          approvedBy: profile?.id,
+        },
+        promoCondition: {
+          id: {
+            _is_null: true,
+          },
         },
       }
     )
-    expect(mockNavigate).toHaveBeenCalledWith('..')
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('..')
+    })
   })
 
   it('shows Approval Needed if PERCENT exceeds 15', async () => {
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     await userEvent.type(screen.getByPlaceholderText(/discount code/i), 'code')
     await userEvent.click(screen.getByLabelText(/percent/i))
@@ -322,7 +331,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('shows Approval Needed if FREE_PLACES exceeds 3', async () => {
-    _render(<Create />)
+    _render(<DiscountForm />)
 
     await userEvent.type(screen.getByPlaceholderText(/discount code/i), 'code')
     await userEvent.click(screen.getByLabelText(/free spaces/i))

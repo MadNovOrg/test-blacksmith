@@ -1205,6 +1205,7 @@
     "neverExpires": "Always active",
     "new-btn": "Create discount",
     "new-title": "Create a discount",
+    "edit-title": "Edit a discount",
     "new-section-general": "General details",
     "new-section-usage": "Usage criteria",
     "fld-createdBy-label": "Created by",

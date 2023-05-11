@@ -44196,12 +44196,13 @@ export type GetPromoCodesQueryVariables = Exact<{
 
 export type GetPromoCodesQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, enabled: boolean, approvedBy?: any | null, deniedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, courses: Array<{ __typename?: 'course_promo_code', course?: { __typename?: 'course', id: number, course_code?: string | null } | null }>, creator: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, promo_code_aggregate: { __typename?: 'promo_code_aggregate', aggregate?: { __typename?: 'promo_code_aggregate_fields', count: number } | null } };
 
-export type InsertPromoCodeMutationVariables = Exact<{
+export type UpsertPromoCodeMutationVariables = Exact<{
+  promoCodition?: InputMaybe<Promo_Code_Bool_Exp>;
   promoCode: Promo_Code_Insert_Input;
 }>;
 
 
-export type InsertPromoCodeMutation = { __typename?: 'mutation_root', insert_promo_code_one?: { __typename?: 'promo_code', id: any } | null };
+export type UpsertPromoCodeMutation = { __typename?: 'mutation_root', delete_course_promo_code?: { __typename?: 'course_promo_code_mutation_response', affected_rows: number } | null, insert_promo_code_one?: { __typename?: 'promo_code', id: any } | null };
 
 export type TrainerScheduleQueryVariables = Exact<{ [key: string]: never; }>;
 

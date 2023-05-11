@@ -63,7 +63,17 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canViewAdminDiscount: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.SALES_ADMIN]
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.SALES_ADMIN,
+        RoleName.FINANCE,
+      ]
+      return roles.some(r => r === auth.activeRole)
+    },
+
+    canApproveDiscount: () => {
+      const roles = [RoleName.FINANCE, RoleName.TT_ADMIN]
       return roles.some(r => r === auth.activeRole)
     },
 

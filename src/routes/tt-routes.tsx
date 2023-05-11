@@ -41,7 +41,7 @@ import { TransferDetails } from '@app/pages/TransferParticipant/components/Trans
 import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
 import { UserTransferParticipant } from '@app/pages/TransferParticipant/UserTransferParticipant'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
-import { DiscountCreate, DiscountsList } from '@app/pages/tt-pages/Discounts'
+import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
 import { XeroConnect } from '@app/pages/tt-pages/Xero'
@@ -162,10 +162,13 @@ const TTAdminRoutes = () => {
             <Route path="users" element={<Users />}>
               <Route path="merge" />
             </Route>
-            <Route path="discounts">
-              <Route index element={<DiscountsList />} />
-              <Route path="new" element={<DiscountCreate />} />
-            </Route>
+            {acl.canViewAdminDiscount() ? (
+              <Route path="discounts">
+                <Route index element={<DiscountsList />} />
+                <Route path="new" element={<DiscountForm />} />
+                <Route path="edit/:id" element={<DiscountForm />} />
+              </Route>
+            ) : null}
 
             {acl.canViewXeroConnect() ? (
               <Route path="xero">

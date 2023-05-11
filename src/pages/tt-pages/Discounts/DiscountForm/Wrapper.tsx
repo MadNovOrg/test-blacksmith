@@ -5,10 +5,12 @@ import { useTranslation } from 'react-i18next'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 
 type Props = {
+  title: string
   onSubmit: React.FormEventHandler<HTMLFormElement>
 }
 
 export const Wrapper: React.FC<React.PropsWithChildren<Props>> = ({
+  title,
   children,
   onSubmit,
 }) => {
@@ -19,7 +21,7 @@ export const Wrapper: React.FC<React.PropsWithChildren<Props>> = ({
         <Box display="flex" gap={4}>
           <Box width={300}>
             <Typography variant="h2" mb={2}>
-              {t(`pages.promoCodes.new-title`)}
+              {title}
             </Typography>
             <Typography variant="body2">{t('validation-notice')}</Typography>
           </Box>

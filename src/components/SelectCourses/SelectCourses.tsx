@@ -2,13 +2,13 @@ import { Delete } from '@mui/icons-material'
 import {
   Box,
   Button,
-  Typography,
   Checkbox,
   FormControlLabel,
-  Stack,
   IconButton,
+  Stack,
+  Typography,
 } from '@mui/material'
-import React, { useState, useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
 
@@ -17,7 +17,7 @@ import { CourseLevel } from '@app/types'
 import { Dialog } from '../Dialog'
 import { SelectLevels } from '../SelectLevels'
 
-import { SearchCourse, SEARCH_COURSES, QueryResult } from './queries'
+import { QueryResult, SEARCH_COURSES, SearchCourse } from './queries'
 
 type Props = {
   value: number[]
@@ -46,7 +46,6 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
   const [searchResult] = useQuery<QueryResult>({
     query: SEARCH_COURSES,
     variables: { where: { ...where, level: levelFilter } },
-    pause: !showModal,
   })
 
   const searched = useMemo(
