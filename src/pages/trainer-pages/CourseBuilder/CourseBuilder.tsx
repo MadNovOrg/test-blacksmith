@@ -30,6 +30,7 @@ import {
   Course_Level_Enum,
   Course_Status_Enum,
   Course_Trainer_Type_Enum,
+  Course_Type_Enum,
   FinalizeCourseBuilderMutation,
   FinalizeCourseBuilderMutationVariables,
   GetCourseByIdQuery,
@@ -702,28 +703,36 @@ export const CourseBuilder: React.FC<
                 </Box>
                 {courseData?.course?.level === Course_Level_Enum.Level_1 && (
                   <Box mb={{ xs: 4, md: 2 }}>
-                    <Alert severity="info">
-                      {t(
-                        'pages.trainer-base.create-course.new-course.course-level-one-info'
-                      )}
-                      <Link
-                        href={`mailto:${
-                          import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
-                        }`}
-                        component="a"
-                      >
-                        {import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}
-                      </Link>
-                      {t(
-                        'pages.trainer-base.create-course.new-course.course-level-one-or'
-                      )}
-                      <Link href={phoneNumber?.getURI()} component="a">
-                        {phoneNumber?.formatInternational()}
-                      </Link>
-                      {t(
-                        'pages.trainer-base.create-course.new-course.course-level-one-note'
-                      )}
-                    </Alert>
+                    {courseData.course.type === Course_Type_Enum.Indirect ? (
+                      <Alert severity="info">
+                        {t(
+                          'pages.trainer-base.create-course.new-course.course-type-indirect-info'
+                        )}
+                      </Alert>
+                    ) : (
+                      <Alert severity="info">
+                        {t(
+                          'pages.trainer-base.create-course.new-course.course-level-one-info'
+                        )}
+                        <Link
+                          href={`mailto:${
+                            import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
+                          }`}
+                          component="a"
+                        >
+                          {import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}
+                        </Link>
+                        {t(
+                          'pages.trainer-base.create-course.new-course.course-level-one-or'
+                        )}
+                        <Link href={phoneNumber?.getURI()} component="a">
+                          {phoneNumber?.formatInternational()}
+                        </Link>
+                        {t(
+                          'pages.trainer-base.create-course.new-course.course-level-one-note'
+                        )}
+                      </Alert>
+                    )}
                   </Box>
                 )}
                 <Box

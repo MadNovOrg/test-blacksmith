@@ -14,7 +14,10 @@ import { CourseBuilder } from '.'
 jest.mock('swr')
 const useSWRMocked = jest.mocked(useSWR)
 
-const buildSWRCourseAndGroupsResponse = (level: CourseLevel) => {
+const buildSWRCourseAndGroupsResponse = (
+  level: CourseLevel,
+  type: CourseType
+) => {
   const moduleGroup = buildModuleGroup({
     overrides: {
       level,
@@ -24,7 +27,7 @@ const buildSWRCourseAndGroupsResponse = (level: CourseLevel) => {
 
   const course = buildCourse({
     overrides: {
-      type: CourseType.OPEN,
+      type,
       level,
       moduleGroupIds: [{ module: { moduleGroup: { id: moduleGroup.id } } }],
     },
@@ -44,9 +47,13 @@ describe('component: CourseBuilder', () => {
     const levelOneInfoMessage =
       /Additional holds that are not listed above, will fall under the Level Two certification./
 
+    const levelOneIndirectInfoMessage =
+      /Additional intermediate modules that are not listed would need to be delivered as part of Level Two course/
+
     it('shows the info alert for level 1 course', async () => {
       const levelOneCourseAndGroups = buildSWRCourseAndGroupsResponse(
-        CourseLevel.Level_1
+        CourseLevel.Level_1,
+        CourseType.OPEN
       )
       useSWRMocked.mockReturnValue(levelOneCourseAndGroups)
 
@@ -73,9 +80,41 @@ describe('component: CourseBuilder', () => {
       })
     })
 
+    it('shows a different info alert for level 1 indirect course', async () => {
+      const levelOneCourseAndGroups = buildSWRCourseAndGroupsResponse(
+        CourseLevel.Level_1,
+        CourseType.INDIRECT
+      )
+      useSWRMocked.mockReturnValue(levelOneCourseAndGroups)
+
+      const client = {
+        executeQuery: () => never,
+      } as unknown as Client
+
+      render(
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/:id/modules" element={<CourseBuilder />} />
+          </Routes>
+        </Provider>,
+        {},
+        {
+          initialEntries: [
+            `/courses/${levelOneCourseAndGroups.data.course.id}/modules`,
+          ],
+        }
+      )
+
+      await waitFor(() => {
+        expect(
+          screen.getByText(levelOneIndirectInfoMessage)
+        ).toBeInTheDocument()
+      })
+    })
     it('hides the info alert for level 2 course', async () => {
       const levelTwoCourseAndGroups = buildSWRCourseAndGroupsResponse(
-        CourseLevel.Level_2
+        CourseLevel.Level_2,
+        CourseType.OPEN
       )
       useSWRMocked.mockReturnValue(levelTwoCourseAndGroups)
 
