@@ -139,7 +139,9 @@ const TTAdminRoutes = () => {
           <Route path="list" element={<Organizations />} />
           <Route path=":id">
             <Route index element={<OrgDashboard />} />
-            <Route path="edit" element={<EditOrgDetails />} />
+            {acl.canEditOrganizations() ? (
+              <Route path="edit" element={<EditOrgDetails />} />
+            ) : null}
             <Route path="invite" element={<InviteUserToOrganization />} />
             <Route path="courses" element={<AvailableCourses />} />
           </Route>
