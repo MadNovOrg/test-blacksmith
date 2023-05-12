@@ -13,6 +13,5 @@ test('edit user profile as an attendee user', async ({ page }) => {
   await profilePage.clickEditButton()
   await profilePage.enterPhoneNumber(phoneNumber)
   await profilePage.clickSaveChanges()
-  await profilePage.page.reload() // Required as Playwright is too quick to check otherwise
   await profilePage.checkPhoneNumber(phoneNumber)
 })
