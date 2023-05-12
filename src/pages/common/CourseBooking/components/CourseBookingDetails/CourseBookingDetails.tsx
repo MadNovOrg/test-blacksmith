@@ -294,8 +294,8 @@ export const CourseBookingDetails: React.FC<
   const handleEmailSelector = async (profile: Profile, index: number) => {
     setValue(`participants.${index}`, {
       email: profile.email || '',
-      firstName: profile.familyName || '',
-      lastName: profile.givenName || '',
+      firstName: profile.givenName || '',
+      lastName: profile.familyName || '',
     })
   }
 
