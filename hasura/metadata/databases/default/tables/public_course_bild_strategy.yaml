@@ -85,6 +85,13 @@ select_permissions:
         - strategy_name
         - id
       filter: {}
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - id
+        - strategy_name
+      filter: {}
 update_permissions:
   - role: ld
     permission:
