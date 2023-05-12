@@ -232,9 +232,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .number()
           .positive()
           .when('accreditedBy', {
-            is: Accreditors_Enum.Bild && courseType === CourseType.CLOSED,
+            is: (v: Accreditors_Enum) =>
+              v === Accreditors_Enum.Bild && courseType === CourseType.CLOSED,
             then: s => s.required(),
-            otherwise: s => s,
+            otherwise: s => s.nullable(),
           }),
       }),
 
