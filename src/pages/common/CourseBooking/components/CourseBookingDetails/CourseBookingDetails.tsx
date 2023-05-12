@@ -299,6 +299,14 @@ export const CourseBookingDetails: React.FC<
     })
   }
 
+  const handleEmailChange = async (email: string, index: number) => {
+    const participant = values.participants[index]
+    setValue(`participants.${index}`, {
+      ...participant,
+      email,
+    })
+  }
+
   useEffect(() => {
     if (booking.quantity !== booking.participants.length) {
       const participants = booking.participants.slice(0, booking.quantity)
@@ -538,6 +546,7 @@ export const CourseBookingDetails: React.FC<
                   <Grid item md={12}>
                     <UserSelector
                       onChange={profile => handleEmailSelector(profile, index)}
+                      onEmailChange={email => handleEmailChange(email, index)}
                       textFieldProps={{
                         variant: 'filled',
                       }}

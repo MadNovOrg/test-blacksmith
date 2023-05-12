@@ -28,6 +28,7 @@ export type Profile = NonNullish<Member['profile']>
 
 export type UserSelectorProps = {
   onChange: (profile: Profile) => void
+  onEmailChange: (email: string) => void
   organisationId: string
   disabled?: boolean
   error?: string
@@ -39,6 +40,7 @@ export const UserSelector: React.FC<
   React.PropsWithChildren<UserSelectorProps>
 > = function ({
   onChange,
+  onEmailChange,
   sx,
   error,
   organisationId,
@@ -79,8 +81,9 @@ export const UserSelector: React.FC<
         setLoading(true)
         debouncedQuery(value)
       }
+      onEmailChange(value)
     },
-    [debouncedQuery, organisationId]
+    [debouncedQuery, onEmailChange, organisationId]
   )
 
   const getOptionLabel = (option: Member) => option.profile.email ?? ''

@@ -21,7 +21,9 @@ describe('component: UserSelector', () => {
   })
 
   it("doesn't display options initially", async () => {
-    render(<UserSelector onChange={noop} organisationId="1" />)
+    render(
+      <UserSelector onChange={noop} onEmailChange={noop} organisationId="1" />
+    )
 
     await userEvent.click(screen.getByPlaceholderText('User email'))
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
@@ -47,7 +49,9 @@ describe('component: UserSelector', () => {
     })
     useFetcherMock.mockReturnValue(fetcherMock)
 
-    render(<UserSelector onChange={noop} organisationId="1" />)
+    render(
+      <UserSelector onChange={noop} onEmailChange={noop} organisationId="1" />
+    )
 
     await userEvent.type(
       screen.getByPlaceholderText('User email'),
@@ -88,7 +92,13 @@ describe('component: UserSelector', () => {
     })
     useFetcherMock.mockReturnValue(fetcherMock)
 
-    render(<UserSelector onChange={onChangeMock} organisationId="1" />)
+    render(
+      <UserSelector
+        onChange={onChangeMock}
+        onEmailChange={noop}
+        organisationId="1"
+      />
+    )
 
     await userEvent.type(
       screen.getByPlaceholderText('User email'),
