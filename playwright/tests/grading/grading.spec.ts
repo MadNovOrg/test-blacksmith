@@ -31,15 +31,22 @@ const test = base.extend<{
   },
 })
 
-const allowedRoles: string[] = ['trainer', 'admin', 'tt-ops']
+const allowedRoles: string[] = ['trainer', 'admin', 'ops']
 
 allowedRoles.forEach(role => {
-  test.use({ storageState: stateFilePath(role) })
   test(`${role} can grade all participants`, async ({
-    page,
+    browser,
     course,
     participants,
   }) => {
+    // eslint-disable-next-line playwright/no-conditional-in-test
+    if (role === 'ops') {
+      test.fail(true, 'see https://behaviourhub.atlassian.net/browse/TTHP-1431')
+    }
+    const context = await browser.newContext({
+      storageState: stateFilePath(role),
+    })
+    const page = await context.newPage()
     const courseDetailsPage = new CourseDetailsPage(page)
     await courseDetailsPage.goto(`${course.id}`)
     await courseDetailsPage.clickGradingTab()
@@ -55,13 +62,19 @@ allowedRoles.forEach(role => {
 })
 
 allowedRoles.forEach(role => {
-  test.use({ storageState: stateFilePath(role) })
-
   test(`${role} can grade single participant`, async ({
-    page,
+    browser,
     course,
     participants,
   }) => {
+    // eslint-disable-next-line playwright/no-conditional-in-test
+    if (role === 'ops') {
+      test.fail(true, 'see https://behaviourhub.atlassian.net/browse/TTHP-1431')
+    }
+    const context = await browser.newContext({
+      storageState: stateFilePath(role),
+    })
+    const page = await context.newPage()
     const courseDetailsPage = new CourseDetailsPage(page)
     await courseDetailsPage.goto(`${course.id}`)
     await courseDetailsPage.clickGradingTab()
