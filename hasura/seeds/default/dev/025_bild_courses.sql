@@ -15,8 +15,8 @@ INSERT INTO public.course_trainer (profile_id, course_id, type, status) VALUES
     ('13a223a8-2184-42f1-ba37-b49e115e59a2', 10034, 'LEADER', 'ACCEPTED');
 
 INSERT INTO public.course_bild_strategy (course_id, strategy_name)
-VALUES (10032, 'PRIMARY'), 
-       (10032, 'SECONDARY'), 
+VALUES (10032, 'PRIMARY'),
+       (10032, 'SECONDARY'),
        (10033, 'PRIMARY'),
        (10033, 'SECONDARY'),
        (10033, 'NON_RESTRICTIVE_TERTIARY'),
@@ -52,47 +52,40 @@ VALUES (10034, '{
                   "name":"Front Ground recovery"
                }
             ]
+         }
+      ],
+      "modules":[
+         {
+            "name":"Single Elbow to FGR",
+            "duration":30
          },
          {
-            "name":"",
-            "duration":180,
-            "modules":[
-               {
-                  "name":"Single Elbow to FGR"
-               },
-               {
-                  "name":"Front Ground recovery"
-               }
-            ]
+            "name":"Front Ground recovery",
+            "duration":120
          },
          {
-            "name":"",
-            "modules":[
-               {
-                  "name":"Back ground recovery",
-                  "duration":180
-               },
-               {
-                  "name":"Hip Chair Emergency response",
-                  "duration":45
-               },
-               {
-                  "name":"Dead weight to standing",
-                  "duration":15
-               },
-               {
-                  "name":"Ground fights",
-                  "duration":30
-               },
-               {
-                  "name":"Ground assaults",
-                  "duration":30
-               },
-               {
-                  "name":"Response to everyday objects used as weapons",
-                  "duration":360
-               }
-            ]
+            "name":"Back ground recovery",
+            "duration":180
+         },
+         {
+            "name":"Hip Chair Emergency response",
+            "duration":45
+         },
+         {
+            "name":"Dead weight to standing",
+            "duration":15
+         },
+         {
+            "name":"Ground fights",
+            "duration":30
+         },
+         {
+            "name":"Ground assaults",
+            "duration":30
+         },
+         {
+            "name":"Response to everyday objects used as weapons",
+            "duration":360
          }
       ]
    }
