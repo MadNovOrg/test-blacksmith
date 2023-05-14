@@ -213,11 +213,15 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           }),
         courseCost: yup
           .number()
+          .typeError(t('components.course-form.course-cost-type-error'))
           .nullable()
-          .positive()
+          .positive(t('components.course-form.course-cost-type-error'))
           .when('usesAOL', {
             is: true,
-            then: schema => schema.required('Provide the price of the course'),
+            then: schema =>
+              schema.required(
+                t('components.course-form.course-cost-required-error')
+              ),
           }),
         notes: yup.string().nullable(),
         specialInstructions: yup.string().nullable().default(''),
@@ -230,7 +234,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         conversion: yup.boolean(),
         price: yup
           .number()
-          .positive()
+          .positive(t('components.course-form.price-number-error'))
+          .typeError(t('components.course-form.price-number-error'))
           .when('accreditedBy', {
             is: (v: Accreditors_Enum) =>
               v === Accreditors_Enum.Bild && courseType === CourseType.CLOSED,
@@ -572,6 +577,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       setValue('usesAOL', false)
                       setValue('aolCountry', '')
                       setValue('aolRegion', '')
+                      setValue('price', null)
 
                       resetField('bildStrategies')
 
@@ -1088,6 +1094,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                         <InputAdornment position="start">£</InputAdornment>
                       ),
                     }}
+                    error={Boolean(errors.courseCost)}
+                    helperText={errors.courseCost?.message ?? ''}
                     disabled={disabledFields.has('courseCost')}
                     {...register('courseCost')}
                   />
@@ -1240,19 +1248,23 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               </Grid>
 
               <Box>
-                <TextField
-                  variant="filled"
-                  placeholder={t('components.course-form.price-placeholder')}
-                  fullWidth
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">£</InputAdornment>
-                    ),
-                  }}
-                  disabled={disabledFields.has('price')}
-                  {...register('price')}
-                  sx={{ mt: 2 }}
-                />
+                {isBild ? (
+                  <TextField
+                    variant="filled"
+                    placeholder={t('components.course-form.price-placeholder')}
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">£</InputAdornment>
+                      ),
+                    }}
+                    error={Boolean(errors.price)}
+                    helperText={errors.price?.message ?? ''}
+                    disabled={disabledFields.has('price')}
+                    {...register('price')}
+                    sx={{ mt: 2 }}
+                  />
+                ) : null}
 
                 <Typography fontWeight={600} mb={1} mt={2}>
                   {t('components.course-form.account-code-title')}
