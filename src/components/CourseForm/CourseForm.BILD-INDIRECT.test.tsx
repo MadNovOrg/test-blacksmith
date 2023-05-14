@@ -3,7 +3,7 @@ import React from 'react'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { CourseLevel, CourseType, RoleName } from '@app/types'
 
-import { act, render, screen, userEvent, within } from '@test/index'
+import { render, screen, userEvent, waitFor, within } from '@test/index'
 
 import CourseForm from '.'
 
@@ -22,7 +22,7 @@ async function selectBildCategory() {
 
 describe('CourseForm - indirect BILD', () => {
   it('allows a trainer with a BILD Intermediate trainer certificate to create a BILD course', async () => {
-    act(() => {
+    await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
           activeCertificates: [CourseLevel.BildIntermediateTrainer],
@@ -39,7 +39,7 @@ describe('CourseForm - indirect BILD', () => {
   })
 
   it('allows a trainer with an BILD Advanced trainer certificate to create a BILD course', async () => {
-    act(() => {
+    await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
           activeCertificates: [CourseLevel.BildAdvancedTrainer],
@@ -56,7 +56,7 @@ describe('CourseForm - indirect BILD', () => {
   })
 
   it(`displays only ${Course_Level_Enum.BildRegular} course level`, async () => {
-    act(() => {
+    await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
           activeCertificates: [CourseLevel.BildAdvancedTrainer],
@@ -87,7 +87,7 @@ describe('CourseForm - indirect BILD', () => {
   })
 
   it("doesn't allow a trainer to toggle Restrictive Tertiary Advanced strategy if BILD Intermediate trainer certified", async () => {
-    act(() => {
+    await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
           activeCertificates: [CourseLevel.BildIntermediateTrainer],
@@ -104,7 +104,7 @@ describe('CourseForm - indirect BILD', () => {
   })
 
   it('allows a trainer to toggle Restrictive Tertiary Advanced strategy if BILD Advanced trainer certified', async () => {
-    act(() => {
+    await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
           activeCertificates: [CourseLevel.BildAdvancedTrainer],
@@ -121,7 +121,7 @@ describe('CourseForm - indirect BILD', () => {
   })
 
   it('enables Blended learning toggle if Primary strategy is the only one selected', async () => {
-    act(() => {
+    await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
           activeCertificates: [CourseLevel.BildAdvancedTrainer],
@@ -142,7 +142,7 @@ describe('CourseForm - indirect BILD', () => {
   })
 
   it('enables Virtual delivery type if Primary srategy is the only one selected', async () => {
-    act(() => {
+    await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
           activeCertificates: [CourseLevel.BildAdvancedTrainer],
@@ -163,7 +163,7 @@ describe('CourseForm - indirect BILD', () => {
   })
 
   it('allows both blended learning and reaccreditation toggles to be selected', async () => {
-    act(() => {
+    await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
           activeCertificates: [CourseLevel.BildAdvancedTrainer],

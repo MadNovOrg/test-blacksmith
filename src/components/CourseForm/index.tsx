@@ -238,7 +238,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .typeError(t('components.course-form.price-number-error'))
           .when('accreditedBy', {
             is: (v: Accreditors_Enum) =>
-              v === Accreditors_Enum.Bild && courseType === CourseType.CLOSED,
+              v === Accreditors_Enum.Bild &&
+              [CourseType.CLOSED, CourseType.OPEN].includes(courseType),
             then: s => s.required(),
             otherwise: s => s.nullable(),
           }),
@@ -725,7 +726,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             )}
           />
 
-          {isBild && courseType === CourseType.CLOSED ? (
+          {isBild &&
+          [CourseType.CLOSED, CourseType.OPEN].includes(courseType) ? (
             <Controller
               name="conversion"
               control={control}
@@ -1177,75 +1179,81 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           />
         </FormPanel>
 
-        {isClosedCourse ? (
+        {isClosedCourse || (isBild && courseType === CourseType.OPEN) ? (
           <>
-            <FormPanel mb={2}>
-              <Typography fontWeight={600}>
-                {t('components.course-form.free-spaces-title')}
-              </Typography>
-              <Typography variant="body2" mb={2}>
-                {t('components.course-form.free-spaces-description')}
-              </Typography>
+            {isClosedCourse ? (
+              <FormPanel mb={2}>
+                <Typography fontWeight={600}>
+                  {t('components.course-form.free-spaces-title')}
+                </Typography>
+                <Typography variant="body2" mb={2}>
+                  {t('components.course-form.free-spaces-description')}
+                </Typography>
 
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <NumericTextField
-                    label={t('components.course-form.free-spaces-placeholder')}
-                    variant="filled"
-                    fullWidth
-                    {...register('freeSpaces', { valueAsNumber: true })}
-                    error={Boolean(errors.freeSpaces)}
-                    helperText={errors.freeSpaces?.message}
-                    inputProps={{ min: 0 }}
-                    data-testid="free-spaces"
-                    disabled={disabledFields.has('freeSpaces')}
-                  />
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <NumericTextField
+                      label={t(
+                        'components.course-form.free-spaces-placeholder'
+                      )}
+                      variant="filled"
+                      fullWidth
+                      {...register('freeSpaces', { valueAsNumber: true })}
+                      error={Boolean(errors.freeSpaces)}
+                      helperText={errors.freeSpaces?.message}
+                      inputProps={{ min: 0 }}
+                      data-testid="free-spaces"
+                      disabled={disabledFields.has('freeSpaces')}
+                    />
+                  </Grid>
                 </Grid>
-              </Grid>
-            </FormPanel>
+              </FormPanel>
+            ) : null}
 
             <Typography variant="h5" fontWeight={500} gutterBottom>
               {t('components.course-form.finance-section-title')}
             </Typography>
             <FormPanel>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <Typography fontWeight={600}>
-                    {t('components.course-form.sales-rep-title')}
-                  </Typography>
+              {isClosedCourse ? (
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <Typography fontWeight={600}>
+                      {t('components.course-form.sales-rep-title')}
+                    </Typography>
 
-                  <ProfileSelector
-                    value={values.salesRepresentative ?? undefined}
-                    onChange={profile => {
-                      setValue('salesRepresentative', profile ?? null, {
-                        shouldValidate: true,
-                      })
-                    }}
-                    textFieldProps={{ variant: 'filled' }}
-                    placeholder={t(
-                      'components.course-form.sales-rep-placeholder'
-                    )}
-                    testId="profile-selector-sales-representative"
-                    disabled={disabledFields.has('salesRepresentative')}
-                  />
+                    <ProfileSelector
+                      value={values.salesRepresentative ?? undefined}
+                      onChange={profile => {
+                        setValue('salesRepresentative', profile ?? null, {
+                          shouldValidate: true,
+                        })
+                      }}
+                      textFieldProps={{ variant: 'filled' }}
+                      placeholder={t(
+                        'components.course-form.sales-rep-placeholder'
+                      )}
+                      testId="profile-selector-sales-representative"
+                      disabled={disabledFields.has('salesRepresentative')}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography fontWeight={600}>
+                      {t('components.course-form.source-title')}
+                    </Typography>
+                    <Controller
+                      name="source"
+                      control={control}
+                      render={({ field }) => (
+                        <SourceDropdown
+                          {...field}
+                          data-testid="source-dropdown"
+                          disabled={disabledFields.has('source')}
+                        />
+                      )}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                  <Typography fontWeight={600}>
-                    {t('components.course-form.source-title')}
-                  </Typography>
-                  <Controller
-                    name="source"
-                    control={control}
-                    render={({ field }) => (
-                      <SourceDropdown
-                        {...field}
-                        data-testid="source-dropdown"
-                        disabled={disabledFields.has('source')}
-                      />
-                    )}
-                  />
-                </Grid>
-              </Grid>
+              ) : null}
 
               <Box>
                 {isBild ? (
@@ -1266,13 +1274,17 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   />
                 ) : null}
 
-                <Typography fontWeight={600} mb={1} mt={2}>
-                  {t('components.course-form.account-code-title')}
-                </Typography>
+                {isClosedCourse ? (
+                  <>
+                    <Typography fontWeight={600} mb={1} mt={2}>
+                      {t('components.course-form.account-code-title')}
+                    </Typography>
 
-                <Typography color="dimGrey.main">
-                  {values.accountCode}
-                </Typography>
+                    <Typography color="dimGrey.main">
+                      {values.accountCode}
+                    </Typography>
+                  </>
+                ) : null}
               </Box>
             </FormPanel>
           </>

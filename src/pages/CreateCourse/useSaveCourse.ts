@@ -183,7 +183,8 @@ export function useSaveCourse(): {
             go1Integration: courseData.blendedLearning,
             conversion: isBild ? courseData.conversion : false,
             price:
-              isBild && courseData.type === CourseType.CLOSED
+              isBild &&
+              [CourseType.CLOSED, CourseType.OPEN].includes(courseData.type)
                 ? courseData.price
                 : null,
             status,
