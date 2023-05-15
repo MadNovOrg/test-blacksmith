@@ -1,17 +1,22 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
+import { useAuth } from '@app/context/auth'
+import { AdminPage } from '@app/pages/admin'
+import { AuditsPage } from '@app/pages/admin/Audits'
 import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import Organizations from '@app/pages/admin/components/Organizations'
 import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
+import { Contacts } from '@app/pages/admin/Contacts'
 import { Users } from '@app/pages/admin/Users'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
 import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
+import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
@@ -77,6 +82,8 @@ const MyCourses = React.lazy(() =>
 )
 
 const FinanceRoute = () => {
+  const { acl } = useAuth()
+
   return (
     <Routes>
       <Route index element={<Navigate replace to="manage-courses" />} />
@@ -149,6 +156,21 @@ const FinanceRoute = () => {
       <Route path="resources/*" element={<ResourcesRoutes />} />
 
       <Route path="*" element={<NotFound />} />
+      {acl.canViewAdmin() ? (
+        <>
+          <Route path="admin">
+            <Route index element={<AdminPage />} />
+            <Route path="contacts" element={<Contacts />} />
+            <Route path="users" element={<Users />} />
+            <Route path="discounts">
+              <Route index element={<DiscountsList />} />
+              <Route path="new" element={<DiscountForm />} />
+            </Route>
+
+            <Route path="audit" element={<AuditsPage />} />
+          </Route>
+        </>
+      ) : null}
     </Routes>
   )
 }

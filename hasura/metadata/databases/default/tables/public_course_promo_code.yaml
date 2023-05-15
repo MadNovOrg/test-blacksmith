@@ -9,6 +9,14 @@ object_relationships:
     using:
       foreign_key_constraint_on: promo_id
 insert_permissions:
+  - role: finance
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - id
+        - promo_id
+      backend_only: false
   - role: sales-admin
     permission:
       check: {}
@@ -26,6 +34,13 @@ insert_permissions:
         - promo_id
       backend_only: false
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - course_id
+        - id
+        - promo_id
+      filter: {}
   - role: sales-admin
     permission:
       columns:

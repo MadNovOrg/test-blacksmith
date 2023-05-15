@@ -212,7 +212,63 @@ insert_permissions:
         - user
       backend_only: false
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - client_purchase_order
+        - course_id
+        - created_at
+        - currency
+        - id
+        - order_due
+        - order_total
+        - organization_id
+        - payment_method
+        - price
+        - profile_id
+        - promo_codes
+        - quantity
+        - registrants
+        - stripePaymentId
+        - user
+        - vat
+        - xero_invoice_number
+      filter: {}
+      allow_aggregations: true
   - role: sales-admin
+    permission:
+      columns:
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - client_purchase_order
+        - course_id
+        - created_at
+        - currency
+        - id
+        - order_due
+        - order_total
+        - organization_id
+        - payment_method
+        - price
+        - profile_id
+        - promo_codes
+        - quantity
+        - registrants
+        - stripePaymentId
+        - user
+        - vat
+        - xero_invoice_number
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
     permission:
       columns:
         - billing_address

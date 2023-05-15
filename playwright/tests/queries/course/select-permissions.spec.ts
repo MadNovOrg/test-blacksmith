@@ -227,6 +227,56 @@ test('@query tt-ops can select all courses', async ({ courseIds }) => {
   expect(indirectCourse.course_by_pk?.id).toEqual(courseIds.indirectCourseId)
 })
 
+test('@query sales-representative can select open / closed courses', async ({
+  courseIds,
+}) => {
+  const [openCourse, closedCourse, indirectCourse] = await Promise.all([
+    runQueryAsRole<AdminCourseQuery>(
+      ADMIN_COURSE_QUERY,
+      { id: courseIds.openCourseId },
+      RoleName.SALES_REPRESENTATIVE
+    ),
+    runQueryAsRole<AdminCourseQuery>(
+      ADMIN_COURSE_QUERY,
+      { id: courseIds.closedCourseId },
+      RoleName.SALES_REPRESENTATIVE
+    ),
+    runQueryAsRole<AdminCourseQuery>(
+      ADMIN_COURSE_QUERY,
+      { id: courseIds.indirectCourseId },
+      RoleName.SALES_REPRESENTATIVE
+    ),
+  ])
+
+  expect(openCourse?.course_by_pk?.id).toEqual(courseIds.openCourseId)
+  expect(closedCourse.course_by_pk?.id).toEqual(courseIds.closedCourseId)
+  expect(indirectCourse.course_by_pk?.id).toEqual([])
+})
+
+test('@query finance can select any courses', async ({ courseIds }) => {
+  const [openCourse, closedCourse, indirectCourse] = await Promise.all([
+    runQueryAsRole<AdminCourseQuery>(
+      ADMIN_COURSE_QUERY,
+      { id: courseIds.openCourseId },
+      RoleName.FINANCE
+    ),
+    runQueryAsRole<AdminCourseQuery>(
+      ADMIN_COURSE_QUERY,
+      { id: courseIds.closedCourseId },
+      RoleName.FINANCE
+    ),
+    runQueryAsRole<AdminCourseQuery>(
+      ADMIN_COURSE_QUERY,
+      { id: courseIds.indirectCourseId },
+      RoleName.FINANCE
+    ),
+  ])
+
+  expect(openCourse?.course_by_pk?.id).toEqual(courseIds.openCourseId)
+  expect(closedCourse.course_by_pk?.id).toEqual(courseIds.closedCourseId)
+  expect(indirectCourse.course_by_pk?.id).toEqual(courseIds.indirectCourseId)
+})
+
 test('@query anonymous users can only select open courses in certain statuses', async ({
   courseIds,
 }) => {

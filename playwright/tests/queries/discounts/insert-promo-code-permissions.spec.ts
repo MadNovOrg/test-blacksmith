@@ -15,7 +15,12 @@ import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { HasuraRole, runQueryAsRole } from '../gql-query'
 
-const allowedRoles: HasuraRole[] = ['sales-admin', 'tt-ops']
+const allowedRoles: HasuraRole[] = [
+  'sales-admin',
+  'tt-ops',
+  'finance',
+  'sales-representative',
+]
 
 const forbiddenRoles: HasuraRole[] = ['anonymous', 'unverified']
 

@@ -48,6 +48,23 @@ array_relationships:
           schema: public
           name: course_promo_code
 insert_permissions:
+  - role: finance
+    permission:
+      check: {}
+      columns:
+        - amount
+        - booker_single_use
+        - code
+        - created_by
+        - description
+        - enabled
+        - id
+        - levels
+        - type
+        - uses_max
+        - valid_from
+        - valid_to
+      backend_only: false
   - role: ld
     permission:
       check: {}
@@ -100,6 +117,27 @@ insert_permissions:
         - valid_to
       backend_only: false
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - id
+        - code
+        - description
+        - type
+        - amount
+        - valid_from
+        - valid_to
+        - booker_single_use
+        - uses_max
+        - levels
+        - enabled
+        - approved_by
+        - created_by
+        - created_at
+        - updated_at
+        - denied_by
+      filter: {}
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
@@ -143,6 +181,24 @@ select_permissions:
       filter: {}
       allow_aggregations: true
 update_permissions:
+  - role: finance
+    permission:
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_by
+        - denied_by
+        - description
+        - enabled
+        - levels
+        - type
+        - uses_max
+        - valid_from
+        - valid_to
+      filter: {}
+      check: {}
   - role: ld
     permission:
       columns: []
@@ -185,6 +241,9 @@ update_permissions:
       filter: {}
       check: {}
 delete_permissions:
+  - role: finance
+    permission:
+      filter: {}
   - role: sales-admin
     permission:
       filter: {}

@@ -8,7 +8,9 @@ export type HasuraRole =
   | 'user'
   | 'trainer'
   | 'ld'
+  | 'finance'
   | 'sales-admin'
+  | 'sales-representative'
   | 'tt-ops'
   | 'tt-admin'
 

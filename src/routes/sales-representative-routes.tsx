@@ -1,6 +1,9 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
+import { useAuth } from '@app/context/auth'
+import { AdminPage } from '@app/pages/admin'
+import { AuditsPage } from '@app/pages/admin/Audits'
 import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import Organizations from '@app/pages/admin/components/Organizations'
@@ -8,6 +11,7 @@ import { CreateOrganization } from '@app/pages/admin/components/Organizations/Cr
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
 import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
+import { Contacts } from '@app/pages/admin/Contacts'
 import { Users } from '@app/pages/admin/Users'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
@@ -79,6 +83,8 @@ const MyCourses = React.lazy(() =>
 )
 
 const SalesRepresentativeRoute = () => {
+  const { acl } = useAuth()
+
   return (
     <Routes>
       <Route index element={<Navigate replace to="manage-courses" />} />
@@ -149,6 +155,18 @@ const SalesRepresentativeRoute = () => {
 
         <Route path=":id" element={<OrderDetails />} />
       </Route>
+
+      {acl.canViewAdmin() ? (
+        <>
+          <Route path="admin">
+            <Route index element={<AdminPage />} />
+            <Route path="contacts" element={<Contacts />} />
+            <Route path="users" element={<Users />} />
+
+            <Route path="audit" element={<AuditsPage />} />
+          </Route>
+        </>
+      ) : null}
 
       <Route path="resources/*" element={<ResourcesRoutes />} />
       <Route path="*" element={<NotFound />} />

@@ -224,6 +224,7 @@ select_permissions:
         - givenName
         - phone
       filter: {}
+      allow_aggregations: true
   - role: tt-admin
     permission:
       columns:

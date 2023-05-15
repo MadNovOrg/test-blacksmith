@@ -78,6 +78,36 @@ insert_permissions:
         - course_id
       backend_only: false
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - profile_id
+        - course_id
+      computed_fields:
+        - newAttendeeEmail
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - profile_id
+        - course_id
+      computed_fields:
+        - newAttendeeEmail
+      filter: {}
+      allow_aggregations: true
   - role: tt-admin
     permission:
       columns:

@@ -468,11 +468,8 @@ select_permissions:
         - end
         - freeSlots
         - start
-      filter:
-        course_type:
-          _in:
-            - CLOSED
-            - OPEN
+      filter: {}
+      allow_aggregations: true
   - role: ld
     permission:
       columns:

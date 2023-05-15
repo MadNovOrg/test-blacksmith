@@ -58,6 +58,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.TT_ADMIN,
         RoleName.LD,
         RoleName.SALES_ADMIN,
+        RoleName.FINANCE,
+        RoleName.SALES_REPRESENTATIVE,
       ]
       return roles.some(r => r === auth.activeRole)
     },
@@ -69,6 +71,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.SALES_ADMIN,
         RoleName.FINANCE,
       ]
+
       return roles.some(r => r === auth.activeRole)
     },
 
@@ -78,7 +81,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canViewAdminCancellationsTransfersReplacements: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.SALES_ADMIN]
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.SALES_ADMIN,
+        RoleName.FINANCE,
+        RoleName.SALES_REPRESENTATIVE,
+      ]
       return roles.some(r => r === auth.activeRole)
     },
 
@@ -111,6 +120,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.TT_ADMIN,
         RoleName.LD,
         RoleName.SALES_ADMIN,
+        RoleName.SALES_REPRESENTATIVE,
+        RoleName.FINANCE,
       ]
       return roles.some(r => r === auth.activeRole)
     },
