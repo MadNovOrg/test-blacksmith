@@ -164,7 +164,7 @@ const TTAdminRoutes = () => {
             <Route index element={<AdminPage />} />
             <Route path="contacts" element={<Contacts />} />
             <Route path="users" element={<Users />}>
-              <Route path="merge" />
+              {acl.canMergeProfiles() ? <Route path="merge" /> : undefined}
             </Route>
             {acl.canViewAdminDiscount() ? (
               <Route path="discounts">

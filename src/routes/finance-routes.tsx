@@ -125,9 +125,7 @@ const FinanceRoute = () => {
       </Route>
 
       <Route path="admin">
-        <Route path="users" element={<Users />}>
-          <Route path="merge" />
-        </Route>
+        <Route path="users" element={<Users />} />
       </Route>
 
       <Route path="organisations">

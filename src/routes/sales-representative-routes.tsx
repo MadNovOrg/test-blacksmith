@@ -127,7 +127,7 @@ const SalesRepresentativeRoute = () => {
 
       <Route path="admin">
         <Route path="users" element={<Users />}>
-          <Route path="merge" />
+          {acl.canMergeProfiles() ? <Route path="merge" /> : undefined}
         </Route>
       </Route>
 

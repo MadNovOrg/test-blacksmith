@@ -16,6 +16,12 @@ jest.mock('@app/hooks/useProfiles')
 
 const useProfilesMocked = jest.mocked(useProfiles)
 
+const notAllowedRoles = [
+  RoleName.FINANCE,
+  RoleName.SALES_REPRESENTATIVE,
+  RoleName.LD,
+]
+
 const mockProfile = build<
   Exclude<GetProfilesQuery['profiles'], undefined | null>[0]
 >({
@@ -239,7 +245,11 @@ describe('page: Users', () => {
       mutate: jest.fn(),
     })
 
-    render(<Users />)
+    render(<Users />, {
+      auth: {
+        activeRole: RoleName.TT_ADMIN,
+      },
+    })
 
     await userEvent.click(screen.getByText('Merge Users'))
 
@@ -248,6 +258,31 @@ describe('page: Users', () => {
     })
     expect(screen.getByText('Merge Selected')).toBeDisabled()
   })
+
+  notAllowedRoles.forEach(role =>
+    it(`do not renders merge for ${role}`, async () => {
+      const profile = mockProfile()
+      useProfilesMocked.mockReturnValue({
+        profiles: [profile],
+        isLoading: false,
+        count: 0,
+        error: undefined,
+        mutate: jest.fn(),
+      })
+
+      render(<Users />, {
+        auth: {
+          activeRole: role,
+        },
+      })
+
+      await waitFor(() => {
+        expect(
+          screen.queryByLabelText(/merge selected/i)
+        ).not.toBeInTheDocument()
+      })
+    })
+  )
 
   it('renders merge user page with merge selected button disabled', async () => {
     const profile = mockProfile()
@@ -259,7 +294,15 @@ describe('page: Users', () => {
       mutate: jest.fn(),
     })
 
-    render(<Users />, {}, { initialEntries: ['/users/merge'] })
+    render(
+      <Users />,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/users/merge'] }
+    )
 
     await waitFor(() => {
       expect(screen.getByText('Merge Selected')).toBeInTheDocument()

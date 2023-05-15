@@ -172,6 +172,7 @@ actions:
       handler: '{{ACTIONS_HOST}}/user/merge'
       forward_client_headers: true
     permissions:
+      - role: sales-admin
       - role: tt-ops
       - role: tt-admin
     comment: Merge users

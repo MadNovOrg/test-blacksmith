@@ -28,6 +28,7 @@ import { FilterSearch } from '@app/components/FilterSearch'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { TableHead, Col } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
+import { useAuth } from '@app/context/auth'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import useProfiles from '@app/hooks/useProfiles'
 import { useTablePagination } from '@app/hooks/useTablePagination'
@@ -40,6 +41,7 @@ export const Users = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const [showMergeDialog, setShowMergeDialog] = useState(false)
+  const { acl } = useAuth()
 
   const roleOptions = useMemo<FilterOption[]>(() => {
     return Object.values(RoleName).map<FilterOption>(role => ({
@@ -231,7 +233,6 @@ export const Users = () => {
               : t('pages.admin.back-to-settings')
           }
         />
-
         {merging ? (
           <Button
             variant="contained"
@@ -241,7 +242,8 @@ export const Users = () => {
           >
             {t('pages.admin.users.merge-selected')}
           </Button>
-        ) : (
+        ) : undefined}
+        {acl.canMergeProfiles() && !merging ? (
           <Button
             variant="contained"
             color="primary"
@@ -249,7 +251,7 @@ export const Users = () => {
           >
             {t('pages.admin.users.merge-users')}
           </Button>
-        )}
+        ) : undefined}
       </Box>
       <Box display="flex" gap={4}>
         <Box width={250}>
