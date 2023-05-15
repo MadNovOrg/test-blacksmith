@@ -194,7 +194,6 @@ describe('component: ReviewLicenseOrder', () => {
         course: {
           accreditedBy: Accreditors_Enum.Icm,
           bildStrategies: undefined,
-          conversion: false,
           deliveryType: courseData.deliveryType,
           name: expect.any(String),
           level: 'LEVEL_1',
@@ -205,7 +204,6 @@ describe('component: ReviewLicenseOrder', () => {
           type: courseData.type,
           organization_id: courseData.organization?.id,
           parking_instructions: undefined,
-          price: null,
           trainers: { data: [] },
           schedule: {
             data: [

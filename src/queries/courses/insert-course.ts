@@ -68,7 +68,7 @@ export type ParamsType = {
       data: Array<Order_Insert_Input>
     }
     conversion?: boolean
-    price: number | null
+    price?: number | null
   }
 }
 

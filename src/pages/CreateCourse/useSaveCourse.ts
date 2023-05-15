@@ -181,12 +181,10 @@ export function useSaveCourse(): {
             level: courseData.courseLevel,
             reaccreditation: courseData.reaccreditation,
             go1Integration: courseData.blendedLearning,
-            conversion: isBild ? courseData.conversion : false,
-            price:
-              isBild &&
-              [CourseType.CLOSED, CourseType.OPEN].includes(courseData.type)
-                ? courseData.price
-                : null,
+            ...(isBild &&
+            [CourseType.CLOSED, CourseType.OPEN].includes(courseData.type)
+              ? { price: courseData.price, conversion: courseData.conversion }
+              : null),
             status,
             ...(courseData.minParticipants
               ? { min_participants: courseData.minParticipants }
