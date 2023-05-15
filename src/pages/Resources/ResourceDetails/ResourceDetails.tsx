@@ -89,14 +89,14 @@ export const ResourceDetails = () => {
                   {resourceCategory?.children?.nodes?.map(categoryLevelOne => (
                     <Box key={categoryLevelOne?.id} sx={{ mb: 7 }}>
                       {categoryLevelOne?.resources?.nodes?.length ? (
-                        <>
+                        <Box sx={{ mb: 4 }}>
                           <Typography variant="h3" sx={{ mb: 2 }}>
                             {categoryLevelOne?.name}
                           </Typography>
                           <ResourcesList
                             resources={categoryLevelOne?.resources?.nodes}
                           />
-                        </>
+                        </Box>
                       ) : null}
 
                       {categoryLevelOne?.children?.nodes?.map(
