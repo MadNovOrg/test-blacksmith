@@ -44,7 +44,7 @@ const UserRoutes = () => {
 
   const showResources =
     (data?.certificates.aggregate?.count ||
-      0 + (data?.participant.aggregate?.count || 0)) > 0
+      0 + (data?.participant.aggregate?.count || 0)) > 0 || acl.isOrgAdmin()
 
   return (
     <Routes>

@@ -16,6 +16,8 @@ import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
+import ResourcesRoutes from './resources'
+
 const NotFound = React.lazy(() =>
   import('@app/pages/common/NotFound').then(module => ({
     default: module.NotFound,
@@ -143,6 +145,8 @@ const FinanceRoute = () => {
 
         <Route path=":id" element={<OrderDetails />} />
       </Route>
+
+      <Route path="resources/*" element={<ResourcesRoutes />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

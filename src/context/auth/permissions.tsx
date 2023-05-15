@@ -321,11 +321,23 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return false
     },
     canViewResources: (showResources: boolean) => {
+      if (acl.isOrgAdmin()) {
+        return true
+      }
+
       if (auth.activeRole === RoleName.USER) {
         return showResources
       }
 
-      const roles = [RoleName.TT_ADMIN, RoleName.TRAINER, RoleName.SALES_ADMIN]
+      const roles = [
+        RoleName.TT_ADMIN,
+        RoleName.TRAINER,
+        RoleName.SALES_ADMIN,
+        RoleName.FINANCE,
+        RoleName.LD,
+        RoleName.SALES_REPRESENTATIVE,
+        RoleName.TT_OPS,
+      ]
       return roles.some(r => r === auth.activeRole)
     },
     canViewCourseHistory: () => {
