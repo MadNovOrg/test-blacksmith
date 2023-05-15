@@ -301,6 +301,7 @@ actions:
       kind: ""
       handler: '{{ACTIONS_HOST}}/xero/contacts/search'
     permissions:
+      - role: sales-representative
       - role: finance
       - role: ld
       - role: tt-admin

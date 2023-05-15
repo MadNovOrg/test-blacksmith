@@ -147,16 +147,7 @@ select_permissions:
         - invoice_id
         - profile_id
         - registration_id
-      filter:
-        _or:
-          - profile:
-              organizations:
-                organization:
-                  members:
-                    profile_id:
-                      _eq: X-Hasura-User-Id
-          - profile_id:
-              _eq: X-Hasura-User-Id
+      filter: {}
       allow_aggregations: true
   - role: sales-admin
     permission:

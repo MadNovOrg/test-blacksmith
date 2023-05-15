@@ -154,6 +154,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.TT_ADMIN,
         RoleName.LD,
         RoleName.SALES_ADMIN,
+        RoleName.SALES_REPRESENTATIVE,
+        RoleName.FINANCE,
       ]
       return roles.some(r => r === auth.activeRole)
     },
@@ -254,7 +256,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return roles.some(r => r === auth.activeRole)
     },
     canCreateOrgs: () => {
-      const roles = [RoleName.TT_ADMIN, RoleName.SALES_ADMIN, RoleName.TT_OPS]
+      const roles = [
+        RoleName.TT_ADMIN,
+        RoleName.SALES_ADMIN,
+        RoleName.TT_OPS,
+        RoleName.SALES_REPRESENTATIVE,
+      ]
       return roles.some(r => r === auth.activeRole)
     },
 

@@ -36,25 +36,16 @@ select_permissions:
   - role: finance
     permission:
       columns:
-        - created_at
-        - id
         - is_admin
         - member_type
-        - organization_id
+        - _source
         - position
-        - profile_id
+        - created_at
         - updated_at
-      filter:
-        _or:
-          - profile_id:
-              _eq: X-Hasura-User-Id
-          - organization:
-              members:
-                _and:
-                  - profile_id:
-                      _eq: X-Hasura-User-Id
-                  - is_admin:
-                      _eq: true
+        - id
+        - organization_id
+        - profile_id
+      filter: {}
       allow_aggregations: true
   - role: sales-admin
     permission:
@@ -72,25 +63,16 @@ select_permissions:
   - role: sales-representative
     permission:
       columns:
-        - created_at
-        - id
         - is_admin
         - member_type
-        - organization_id
+        - _source
         - position
-        - profile_id
+        - created_at
         - updated_at
-      filter:
-        _or:
-          - profile_id:
-              _eq: X-Hasura-User-Id
-          - organization:
-              members:
-                _and:
-                  - profile_id:
-                      _eq: X-Hasura-User-Id
-                  - is_admin:
-                      _eq: true
+        - id
+        - organization_id
+        - profile_id
+      filter: {}
       allow_aggregations: true
   - role: tt-admin
     permission:

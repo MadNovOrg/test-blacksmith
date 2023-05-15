@@ -164,9 +164,7 @@ select_permissions:
         - fullName
         - givenName
         - phone
-      filter:
-        id:
-          _eq: X-Hasura-User-Id
+      filter: {}
       allow_aggregations: true
   - role: sales-admin
     permission:

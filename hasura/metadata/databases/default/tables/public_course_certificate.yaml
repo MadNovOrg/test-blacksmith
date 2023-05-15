@@ -88,24 +88,13 @@ select_permissions:
         - created_at
         - expiry_date
         - id
+        - is_revoked
         - number
         - profile_id
         - updated_at
       computed_fields:
         - status
-      filter:
-        _or:
-          - profile_id:
-              _eq: X-Hasura-User-Id
-          - profile:
-              organizations:
-                organization:
-                  members:
-                    _and:
-                      - profile_id:
-                          _eq: X-Hasura-User-Id
-                      - is_admin:
-                          _eq: true
+      filter: {}
       allow_aggregations: true
   - role: sales-admin
     permission:

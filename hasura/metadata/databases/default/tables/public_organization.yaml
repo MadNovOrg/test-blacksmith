@@ -124,9 +124,19 @@ insert_permissions:
       columns:
         - address
         - attributes
+        - contact_details
+        - geo_coordinates
+        - go1_licenses
         - name
+        - original_record
+        - preferences
+        - region
+        - reserved_go1_licenses
+        - sector
+        - tags
         - trust_name
         - trust_type
+        - xero_contact_id
       backend_only: false
   - role: tt-admin
     permission:
@@ -197,23 +207,26 @@ select_permissions:
   - role: finance
     permission:
       columns:
+        - name
+        - go1_licenses
+        - reserved_go1_licenses
         - address
         - attributes
         - contact_details
-        - created_at
-        - geo_coordinates
-        - id
-        - name
         - original_record
         - preferences
+        - tags
+        - geo_coordinates
         - region
         - sector
-        - tags
         - trust_name
         - trust_type
-        - updated_at
         - xero_contact_id
+        - created_at
+        - updated_at
+        - id
       filter: {}
+      allow_aggregations: true
   - role: ld
     permission:
       columns:
@@ -262,23 +275,26 @@ select_permissions:
   - role: sales-representative
     permission:
       columns:
+        - name
+        - go1_licenses
+        - reserved_go1_licenses
         - address
         - attributes
         - contact_details
-        - created_at
-        - geo_coordinates
-        - id
-        - name
         - original_record
         - preferences
+        - tags
+        - geo_coordinates
         - region
         - sector
-        - tags
         - trust_name
         - trust_type
-        - updated_at
         - xero_contact_id
+        - created_at
+        - updated_at
+        - id
       filter: {}
+      allow_aggregations: true
   - role: trainer
     permission:
       columns:
