@@ -433,7 +433,9 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const hubVisibilityDeniedRoles = [RoleName.TRAINER, RoleName.USER]
       return activeRole && !hubVisibilityDeniedRoles.includes(activeRole)
     },
-
+    canArchiveProfile: () => {
+      return acl.isTTOps() || acl.isTTAdmin()
+    },
     canViewArchivedProfileData: () => {
       const roles = [
         RoleName.TT_OPS,

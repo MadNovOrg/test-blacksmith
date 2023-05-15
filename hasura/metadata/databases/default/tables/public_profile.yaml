@@ -347,23 +347,14 @@ select_permissions:
       filter: {}
       allow_aggregations: true
 update_permissions:
-  - role: finance
-    permission:
-      columns:
-        - last_activity
-      filter:
-        id:
-          _eq: X-Hasura-User-Id
-      check: null
-  - role: sales-representative
-    permission:
-      columns:
-        - last_activity
-      filter:
-        id:
-          _eq: X-Hasura-User-Id
-      check: null
   - role: tt-admin
+    permission:
+      columns:
+        - archived
+        - last_activity
+      filter: {}
+      check: null
+  - role: tt-ops
     permission:
       columns:
         - archived

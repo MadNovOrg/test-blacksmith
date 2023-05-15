@@ -82,7 +82,8 @@ export const ViewProfilePage: React.FC<
         )
       ))
 
-  const archiveAllowed = !profile.archived && acl.isTTAdmin() && !isMyProfile
+  const archiveAllowed =
+    !profile.archived && acl.canArchiveProfile() && !isMyProfile
 
   const deleteAllowed =
     currentUserProfile?.id !== profile.id && // can't delete yourself
