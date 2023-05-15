@@ -1,27 +1,19 @@
-import { gql } from 'graphql-request'
-
 import {
   OrderInfoFragment,
   OrdersQuery,
   OrdersQueryVariables,
 } from '@app/generated/graphql'
 import { GET_ORDERS } from '@app/pages/tt-pages/Orders/query'
+import { MUTATION as CREATE_ORDER } from '@app/queries/order/create-order'
 
 import { OrderCreation } from '../../data/types'
 
 import { getClient } from './client'
 
 export async function insertOrder(input: OrderCreation): Promise<number> {
-  const mutation = gql`
-    mutation InsertOrder($object: order_insert_input!) {
-      order: insert_order_one(object: $object) {
-        id
-      }
-    }
-  `
   try {
     const response = await getClient().request<{ order: { id: number } }>(
-      mutation,
+      CREATE_ORDER,
       { object: input }
     )
     console.log(

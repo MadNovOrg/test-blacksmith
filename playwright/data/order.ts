@@ -22,11 +22,13 @@ export const UNIQUE_ORDER: (
   billingEmail: orderOwner.email,
   billingPhone: '+44 07849 123456',
   clientPurchaseOrder: '12345',
-  registrants: registrants.map(user => user.email),
+  registrants: registrants.map(user => ({
+    email: user.email,
+    firstName: user.givenName,
+    lastName: user.familyName,
+  })),
   organizationId: await API.organization.getOrganizationId(
     orderOwner.organization?.name ?? ''
   ),
   promoCodes: [],
-  profileId: await API.profile.getProfileId(orderOwner.email),
-  user: [],
 })

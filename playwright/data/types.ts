@@ -120,7 +120,9 @@ export type OrderCreation = {
   paymentMethod: PaymentMethod
   promoCodes?: string[]
   quantity: number
-  registrants: string[]
-  user?: string[]
-  profileId: string
+  registrants: {
+    email: string
+    firstName: string
+    lastName: string
+  }[]
 }
