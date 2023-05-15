@@ -38,7 +38,11 @@ insert_permissions:
       backend_only: false
   - role: tt-admin
     permission:
-      check: {}
+      check:
+        participant:
+          certificate:
+            is_revoked:
+              _eq: false
       set:
         author_id: x-hasura-User-Id
       columns:
