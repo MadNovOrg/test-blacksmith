@@ -249,7 +249,7 @@ export const BILDCourseBuilder: React.FC<
     Object.keys(selectedModules).forEach(key => {
       if (!selectedModules[key]) return
 
-      const [strategyName, groupName, moduleName] = key.split('.')
+      const [strategyName, ...parts] = key.split('.')
 
       const strategy = courseStrategies.find(s => s.name === strategyName)
 
@@ -263,7 +263,8 @@ export const BILDCourseBuilder: React.FC<
       }
 
       // that means there's a group
-      if (moduleName) {
+      if (parts.length === 2) {
+        const [groupName, moduleName] = parts
         const group = strategy.modules.groups?.find(g => g.name === groupName)
 
         if (!group) return
@@ -280,6 +281,7 @@ export const BILDCourseBuilder: React.FC<
 
         total += module.duration ?? 0
       } else {
+        const [moduleName] = parts
         const module = strategy.modules.modules?.find(
           m => m.name === moduleName
         )

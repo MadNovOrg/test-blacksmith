@@ -60,12 +60,8 @@ VALUES (10034, '{
             "duration":30
          },
          {
-            "name":"Front Ground recovery",
-            "duration":120
-         },
-         {
             "name":"Back ground recovery",
-            "duration":180
+            "duration":120
          },
          {
             "name":"Hip Chair Emergency response",
