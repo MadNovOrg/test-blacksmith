@@ -32,6 +32,13 @@ insert_permissions:
         - organization_id
         - profile_id
       backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - organization_id
+        - profile_id
+      backend_only: false
 select_permissions:
   - role: finance
     permission:
@@ -142,41 +149,14 @@ select_permissions:
                       _eq: true
       allow_aggregations: true
 update_permissions:
-  - role: finance
-    permission:
-      columns:
-        - is_admin
-        - position
-      filter:
-        _or:
-          - profile_id:
-              _eq: X-Hasura-User-Id
-          - organization:
-              members:
-                _and:
-                  - profile_id:
-                      _eq: X-Hasura-User-Id
-                  - is_admin:
-                      _eq: true
-      check: null
-  - role: sales-representative
-    permission:
-      columns:
-        - is_admin
-        - position
-      filter:
-        _or:
-          - profile_id:
-              _eq: X-Hasura-User-Id
-          - organization:
-              members:
-                _and:
-                  - profile_id:
-                      _eq: X-Hasura-User-Id
-                  - is_admin:
-                      _eq: true
-      check: null
   - role: tt-admin
+    permission:
+      columns:
+        - is_admin
+        - position
+      filter: {}
+      check: null
+  - role: tt-ops
     permission:
       columns:
         - is_admin

@@ -63,7 +63,7 @@ export const OrgUsersTable: React.FC<
 
   const cols = useMemo(() => {
     const _t = (col: string) => t(`pages.org-details.tabs.users.cols-${col}`)
-    return [
+    const mandatoryCols = [
       {
         id: 'fullName',
         label: _t('name'),
@@ -91,12 +91,20 @@ export const OrgUsersTable: React.FC<
         id: 'permissions',
         label: _t('permissions'),
       },
+    ]
+
+    const optionalCols = [
       {
         id: 'actions',
         label: '',
       },
+    ]
+
+    return [
+      ...mandatoryCols,
+      ...(acl.canEditOrgUser() ? optionalCols : []),
     ] as Col[]
-  }, [t])
+  }, [acl, t])
 
   const currentPageProfiles = useMemo(() => {
     const profiles = orgProfiles || []
@@ -254,20 +262,22 @@ export const OrgUsersTable: React.FC<
                       size="small"
                     />
                   </TableCell>
-                  <TableCell>
-                    <Button
-                      data-testid="edit-user-button"
-                      size="large"
-                      variant="text"
-                      color="primary"
-                      onClick={() => {
-                        setEditedUser(orgMember)
-                        setShowEditUserModal(true)
-                      }}
-                    >
-                      {t('common.edit')}
-                    </Button>
-                  </TableCell>
+                  {acl.canEditOrgUser() ? (
+                    <TableCell>
+                      <Button
+                        data-testid="edit-user-button"
+                        size="large"
+                        variant="text"
+                        color="primary"
+                        onClick={() => {
+                          setEditedUser(orgMember)
+                          setShowEditUserModal(true)
+                        }}
+                      >
+                        {t('common.edit')}
+                      </Button>
+                    </TableCell>
+                  ) : null}
                 </TableRow>
               )
             })}

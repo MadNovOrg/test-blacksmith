@@ -275,7 +275,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ]
       return roles.some(r => r === auth.activeRole)
     },
-
+    canEditOrgUser: () => {
+      const roles = [RoleName.TT_ADMIN, RoleName.SALES_ADMIN, RoleName.TT_OPS]
+      return roles.some(r => r === auth.activeRole)
+    },
     canEditOrgs: () => {
       const roles = [RoleName.TT_ADMIN, RoleName.SALES_ADMIN, RoleName.TT_OPS]
       return auth.isOrgAdmin || roles.some(r => r === auth.activeRole)
