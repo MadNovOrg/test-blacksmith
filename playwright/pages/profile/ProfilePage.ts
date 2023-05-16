@@ -45,11 +45,11 @@ export class ProfilePage extends BasePage {
       waitForGraphQLResponse(this.page, 'updateUserProfile', 'true'),
       this.saveChanges.click(),
     ])
+    await expect(this.editProfile).toBeVisible()
+    await this.page.reload()
   }
 
   async checkPhoneNumber(phoneNumber: string) {
-    await expect(this.viewPhoneNumber).toBeVisible()
-    await this.page.reload() // Required as Playwright refreshes too fast
     await expect(this.viewPhoneNumber).toHaveText(phoneNumber)
   }
 
