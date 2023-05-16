@@ -207,7 +207,6 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const roles = [
         RoleName.TT_OPS,
         RoleName.TT_ADMIN,
-        RoleName.LD,
         RoleName.SALES_ADMIN,
         RoleName.TRAINER,
       ]
@@ -218,8 +217,6 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       switch (auth.activeRole) {
         case RoleName.TT_ADMIN:
           return true
-        case RoleName.LD:
-          return [CourseType.OPEN].includes(type)
         case RoleName.TT_OPS:
           return [CourseType.OPEN, CourseType.CLOSED].includes(type)
         case RoleName.SALES_ADMIN: {
