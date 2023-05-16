@@ -20,7 +20,15 @@ describe('component: LinkToProfile', () => {
     expect(screen.getByText(label)).toBeInTheDocument()
   })
 
-  const canViewProfileRoles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
+  const canViewProfileRoles = [
+    RoleName.TT_OPS,
+    RoleName.TT_ADMIN,
+    RoleName.SALES_ADMIN,
+    RoleName.SALES_REPRESENTATIVE,
+    RoleName.FINANCE,
+    RoleName.LD,
+    RoleName.TRAINER,
+  ]
   const cannotViewProfileRoles = Object.values(RoleName).filter(
     r => !canViewProfileRoles.includes(r)
   )
@@ -70,6 +78,7 @@ describe('component: LinkToProfile', () => {
     RoleName.TT_ADMIN,
     RoleName.LD,
     RoleName.SALES_ADMIN,
+    RoleName.SALES_REPRESENTATIVE,
   ].filter(r => canViewProfileRoles.includes(r))
 
   const cannotViewArchivedProfileRoles = Object.values(RoleName).filter(

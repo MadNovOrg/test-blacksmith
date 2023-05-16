@@ -19,6 +19,7 @@
     "loading-participants": "There was an error loading course participants",
     "loading-course": "There was an error loading a course",
     "loading-order": "Unable to find the order",
+    "user-permission": "You don't have permission to see this user",
     "course-not-found": "Course not found",
     "generic": {
       "record-not-found": "Record not found.",

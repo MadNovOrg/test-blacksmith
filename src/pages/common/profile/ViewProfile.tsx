@@ -35,6 +35,7 @@ import { Course_Status_Enum } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 import { ProfileArchiveDialog } from '@app/pages/common/profile/components/ProfileArchiveDialog'
 import { CertificateStatus } from '@app/types'
+import { LoadingStatus } from '@app/util'
 
 import { CourseAsTrainer } from './components/CourseAsTrainer'
 import { ProfileDeleteDialog } from './components/ProfileDeleteDialog'
@@ -57,7 +58,7 @@ export const ViewProfilePage: React.FC<
 
   const orgId = searchParams.get('orgId')
 
-  const { profile, go1Licenses, certifications, mutate } = useProfile(
+  const { profile, go1Licenses, certifications, status, mutate } = useProfile(
     id ?? currentUserProfile?.id,
     undefined,
     orgId ?? undefined,
@@ -66,8 +67,35 @@ export const ViewProfilePage: React.FC<
 
   const isMyProfile = !id
 
-  if (!profile) {
+  if (status === LoadingStatus.FETCHING) {
     return <CircularProgress />
+  }
+
+  if (!profile) {
+    return (
+      <Alert severity="error" variant="outlined">
+        {t('common.errors.generic.loading-error')}
+      </Alert>
+    )
+  }
+
+  if (!acl.canViewProfiles() && !isMyProfile) {
+    return (
+      <Box pb={6} pt={3} flex={1}>
+        <Container>
+          <Grid container>
+            <Grid item sm={12}>
+              <BackButton label={t('common.back')} />
+            </Grid>
+            <Grid item sm={12}>
+              <Alert severity="error" variant="outlined">
+                {t('common.errors.user-permission')}
+              </Alert>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+    )
   }
 
   const editAllowed =

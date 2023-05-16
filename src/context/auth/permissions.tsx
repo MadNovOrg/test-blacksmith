@@ -127,8 +127,19 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canViewProfiles: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
-      return roles.some(r => r === auth.activeRole)
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.SALES_ADMIN,
+        RoleName.SALES_REPRESENTATIVE,
+        RoleName.FINANCE,
+        RoleName.LD,
+      ]
+      return (
+        roles.some(r => r === auth.activeRole) ||
+        acl.isTrainer() ||
+        acl.isOrgAdmin()
+      )
     },
 
     canViewEmailContacts: (courseType: CourseType) => {
