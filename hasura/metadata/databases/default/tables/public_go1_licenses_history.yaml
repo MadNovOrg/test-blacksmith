@@ -13,7 +13,37 @@ object_relationships:
     using:
       foreign_key_constraint_on: org_id
 insert_permissions:
+  - role: finance
+    permission:
+      check: {}
+      columns:
+        - balance
+        - change
+        - event
+        - org_id
+        - payload
+      backend_only: false
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - balance
+        - change
+        - event
+        - org_id
+        - payload
+      backend_only: false
   - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - balance
+        - change
+        - event
+        - org_id
+        - payload
+      backend_only: false
+  - role: tt-ops
     permission:
       check: {}
       columns:
@@ -26,9 +56,31 @@ insert_permissions:
 select_permissions:
   - role: finance
     permission:
-      columns: []
+      columns:
+        - balance
+        - change
+        - reserved_balance
+        - payload
+        - event
+        - captured_at
+        - id
+        - org_id
       filter: {}
+      allow_aggregations: true
   - role: sales-admin
+    permission:
+      columns:
+        - balance
+        - change
+        - reserved_balance
+        - payload
+        - event
+        - captured_at
+        - id
+        - org_id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
     permission:
       columns:
         - balance
@@ -66,4 +118,24 @@ select_permissions:
         - id
         - org_id
       filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - balance
+        - change
+        - reserved_balance
+        - payload
+        - event
+        - captured_at
+        - id
+        - org_id
+      filter:
+        organization:
+          members:
+            _and:
+              - is_admin:
+                  _eq: true
+              - profile_id:
+                  _eq: X-Hasura-User-Id
       allow_aggregations: true

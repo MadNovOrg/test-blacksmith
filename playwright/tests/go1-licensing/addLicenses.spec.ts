@@ -22,17 +22,20 @@ const test = base.extend<{
   },
 })
 
-test.use({ storageState: stateFilePath('admin') })
+const allowedRoles: string[] = ['admin', 'ops', 'salesAdmin']
+allowedRoles.forEach(role => {
+  test.use({ storageState: stateFilePath('role') })
 
-test('licenses can be added', async ({ page, orgId }) => {
-  const orgPage = new AllOrganisations(page)
-  await orgPage.gotoOrganisation(orgId)
-  await orgPage.clickBlendedLearningLicences()
-  await orgPage.expectLicencesRemaining('0')
-  await orgPage.clickManageButton()
-  await orgPage.fillNumberOfLicences('20')
-  await orgPage.fillInvoiceNumber('INV.123-test')
-  await orgPage.fillInvoiceNotes('This is a note')
-  await orgPage.clickSaveDetails()
-  await orgPage.expectLicencesRemaining('20')
+  test(`${role} can add licenses`, async ({ page, orgId }) => {
+    const orgPage = new AllOrganisations(page)
+    await orgPage.gotoOrganisation(orgId)
+    await orgPage.clickBlendedLearningLicences()
+    await orgPage.expectLicencesRemaining('0')
+    await orgPage.clickManageButton()
+    await orgPage.fillNumberOfLicences('20')
+    await orgPage.fillInvoiceNumber('INV.123-test')
+    await orgPage.fillInvoiceNotes('This is a note')
+    await orgPage.clickSaveDetails()
+    await orgPage.expectLicencesRemaining('20')
+  })
 })
