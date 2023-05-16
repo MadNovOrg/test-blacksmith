@@ -24,7 +24,7 @@ const test = base.extend<{
 
 const allowedRoles: string[] = ['admin', 'ops', 'salesAdmin']
 allowedRoles.forEach(role => {
-  test.use({ storageState: stateFilePath('role') })
+  test.use({ storageState: stateFilePath(role) })
 
   test(`${role} can add licenses`, async ({ page, orgId }) => {
     const orgPage = new AllOrganisations(page)
