@@ -99,7 +99,6 @@ describe('page: CourseDetails', () => {
 
     expect(screen.getByLabelText('Course participant tabs')).toBeInTheDocument()
     expect(screen.getByLabelText('Checklist')).toBeInTheDocument()
-    expect(screen.getByLabelText('Resources')).toBeInTheDocument()
   })
 
   it('has course evaluation button disabled if course has not started yet', () => {

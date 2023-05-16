@@ -175,13 +175,6 @@ export const CourseDetails = () => {
                         )}
                         value="checklist"
                       />
-                      <PillTab
-                        data-testid="participant-course-resources"
-                        label={t(
-                          'pages.participant-course.resources-tab-title'
-                        )}
-                        value="resources"
-                      />
                       {courseParticipant?.certificate ? (
                         <PillTab
                           data-testid="participant-course-certification"
@@ -309,10 +302,6 @@ export const CourseDetails = () => {
                       : t('pages.participant-course.evaluate-course')}
                   </Button>
                 </ChecklistItem>
-              </TabPanel>
-
-              <TabPanel sx={{ px: 0 }} value="resources">
-                {t('pages.participant-course.resources-empty-message')}
               </TabPanel>
 
               {courseParticipant?.certificate ? (
