@@ -133,7 +133,9 @@ const FinanceRoute = () => {
         <Route path="list" element={<Organizations />} />
         <Route path=":id">
           <Route index element={<OrgDashboard />} />
-          <Route path="invite" element={<InviteUserToOrganization />} />
+          {acl.canEditOrAddOrganizations() ? (
+            <Route path="invite" element={<InviteUserToOrganization />} />
+          ) : null}
           <Route path="courses" element={<AvailableCourses />} />
         </Route>
       </Route>

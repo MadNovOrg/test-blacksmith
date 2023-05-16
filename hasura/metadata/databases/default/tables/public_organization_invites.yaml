@@ -41,6 +41,19 @@ insert_permissions:
         - org_id
         - profile_id
       backend_only: false
+  - role: sales-representative
+    permission:
+      check: {}
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -89,6 +102,19 @@ insert_permissions:
       backend_only: false
 select_permissions:
   - role: sales-admin
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
     permission:
       columns:
         - is_admin
@@ -161,6 +187,19 @@ update_permissions:
         - profile_id
       filter: {}
       check: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter: {}
+      check: {}
   - role: tt-admin
     permission:
       columns:
@@ -204,6 +243,9 @@ update_permissions:
       check: null
 delete_permissions:
   - role: sales-admin
+    permission:
+      filter: {}
+  - role: sales-representative
     permission:
       filter: {}
   - role: tt-admin

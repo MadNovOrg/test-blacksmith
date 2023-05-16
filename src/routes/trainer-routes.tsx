@@ -97,7 +97,9 @@ const TrainerBaseRoutes = () => {
           <Route path=":id">
             <Route index element={<OrgDashboard />} />
             <Route path="edit" element={<EditOrgDetails />} />
-            <Route path="invite" element={<InviteUserToOrganization />} />
+            {acl.canEditOrAddOrganizations() ? (
+              <Route path="invite" element={<InviteUserToOrganization />} />
+            ) : null}
             <Route path="courses" element={<AvailableCourses />} />
           </Route>
         </Route>

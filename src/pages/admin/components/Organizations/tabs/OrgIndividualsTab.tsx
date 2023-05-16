@@ -83,16 +83,18 @@ export const OrgIndividualsTab: React.FC<
                     data-testid="tabInvites"
                   />
                 </TabList>
-                <Button
-                  variant="contained"
-                  startIcon={<PersonAddIcon />}
-                  onClick={() => navigate(`/organisations/${orgId}/invite`)}
-                  data-testid="invite-user-to-org"
-                >
-                  {t(
-                    'pages.org-details.tabs.users.invite-individual-to-organization'
-                  )}
-                </Button>
+                {acl.canInviteToOrganizations() ? (
+                  <Button
+                    variant="contained"
+                    startIcon={<PersonAddIcon />}
+                    onClick={() => navigate(`/organisations/${orgId}/invite`)}
+                    data-testid="invite-user-to-org"
+                  >
+                    {t(
+                      'pages.org-details.tabs.users.invite-individual-to-organization'
+                    )}
+                  </Button>
+                ) : undefined}
               </Box>
 
               <TabPanel
