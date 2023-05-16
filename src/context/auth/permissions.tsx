@@ -420,7 +420,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ]
       return roles.some(r => r === auth.activeRole)
     },
-    canManageParticipantAttendandance: () => {
+    canManageParticipantAttendance: () => {
       return (
         acl.canTransferParticipant() ||
         acl.canReplaceParticipant() ||

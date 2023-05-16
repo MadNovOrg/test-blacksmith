@@ -141,7 +141,7 @@ export const AttendingTab = ({
           label: t('pages.course-participants.documents'),
           sorting: false,
         },
-        !isCourseEnded && acl.canManageParticipantAttendandance()
+        !isCourseEnded && acl.canManageParticipantAttendance()
           ? {
               id: 'actions',
               label: '',
@@ -250,7 +250,7 @@ export const AttendingTab = ({
                   <TableCell>
                     {t('pages.course-details.tabs.attendees.view-documents')}
                   </TableCell>
-                  {!isCourseEnded && acl.canManageParticipantAttendandance() ? (
+                  {!isCourseEnded && acl.canManageParticipantAttendance() ? (
                     <TableCell>
                       {!isOpenCourse || acl.canOnlySendCourseInformation() ? (
                         <Button

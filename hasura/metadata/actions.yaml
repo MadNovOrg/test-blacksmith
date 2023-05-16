@@ -209,6 +209,8 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/replace-participant'
     permissions:
+      - role: tt-admin
+      - role: tt-ops
       - role: sales-admin
       - role: user
     comment: replaceParticipant
