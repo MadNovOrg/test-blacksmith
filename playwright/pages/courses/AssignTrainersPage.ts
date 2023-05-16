@@ -3,6 +3,7 @@ import { expect, Locator, Page } from '@playwright/test'
 import { waitForGraphQLResponse } from '../../commands'
 import { User } from '../../data/types'
 import { BasePage } from '../BasePage'
+import { CourseApprovalRequiredModal } from '../courses/CourseApprovalRequiredModal'
 
 import { TrainerExpensesPage } from './TrainerExpensesPage'
 
@@ -64,9 +65,8 @@ export class AssignTrainersPage extends BasePage {
 
   async clickTrainerExpensesButton() {
     await this.trainerExpensesButton.click()
-    if (await this.proceedButton.isVisible()) {
-      await this.proceedButton.click()
-    }
+    const approvalExceptionModal = new CourseApprovalRequiredModal(this.page)
+    await approvalExceptionModal.confirmCourseException()
     return new TrainerExpensesPage(this.page)
   }
 

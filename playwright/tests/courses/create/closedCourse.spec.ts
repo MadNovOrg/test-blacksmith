@@ -48,14 +48,7 @@ for (const data of dataSet) {
     },
   })
 
-  test(`create course: ${data.name}`, async ({
-    browser,
-    browserName,
-    course,
-  }) => {
-    // Disabled in firefox due to datepicker issues
-    // eslint-disable-next-line playwright/no-skipped-test
-    test.skip(browserName === 'firefox')
+  test(`create course: ${data.name}`, async ({ browser, course }) => {
     const context = await browser.newContext({
       storageState: stateFilePath(data.user),
     })
@@ -75,7 +68,6 @@ for (const data of dataSet) {
     const reviewAndConfirmPage =
       await trainerExpensesPage.clickReviewAndConfirmButton()
     course.id = await reviewAndConfirmPage.getCourseIdOnCreation()
-
     const trainerContext = await browser.newContext({
       storageState: stateFilePath('trainer'),
     })

@@ -39,10 +39,6 @@ allowedRoles.forEach(role => {
     course,
     participants,
   }) => {
-    // eslint-disable-next-line playwright/no-conditional-in-test
-    if (role === 'ops') {
-      test.fail(true, 'see https://behaviourhub.atlassian.net/browse/TTHP-1431')
-    }
     const context = await browser.newContext({
       storageState: stateFilePath(role),
     })
@@ -67,10 +63,6 @@ allowedRoles.forEach(role => {
     course,
     participants,
   }) => {
-    // eslint-disable-next-line playwright/no-conditional-in-test
-    if (role === 'ops') {
-      test.fail(true, 'see https://behaviourhub.atlassian.net/browse/TTHP-1431')
-    }
     const context = await browser.newContext({
       storageState: stateFilePath(role),
     })

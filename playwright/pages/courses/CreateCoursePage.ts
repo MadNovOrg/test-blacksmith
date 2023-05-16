@@ -6,6 +6,8 @@ import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
 import { Course } from '../../data/types'
+import { CourseApprovalRequiredModal } from '../../pages/courses/CourseApprovalRequiredModal'
+import { CourseOrderDetailsPage } from '../../pages/courses/CourseOrderDetailsPage'
 import { toUiTime } from '../../util'
 import { BasePage } from '../BasePage'
 
@@ -186,6 +188,9 @@ export class CreateCoursePage extends BasePage {
 
   async clickOrderDetailsButton() {
     await this.nextPageButton.click()
+    const approvalExceptionModal = new CourseApprovalRequiredModal(this.page)
+    await approvalExceptionModal.confirmCourseException()
+    return new CourseOrderDetailsPage(this.page)
   }
 
   async clickCreateCourseButton(): Promise<number> {

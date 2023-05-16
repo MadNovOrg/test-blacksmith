@@ -36,19 +36,14 @@ const test = base.extend<{ course: Course }>({
 
 test(`create blended learning course: ${closedCourseData.name}`, async ({
   browser,
-  browserName,
   course,
 }) => {
-  // Disabled in firefox due to datepicker issues
-  // eslint-disable-next-line playwright/no-skipped-test
-  test.skip(browserName === 'firefox')
   const context = await browser.newContext({
     storageState: stateFilePath(closedCourseData.user),
   })
   const page = await context.newPage()
 
   const coursesListPage = new MyCoursesPage(page)
-  const approvalExceptionModal = new CourseApprovalRequiredModal(page)
   await coursesListPage.goto()
   const createCoursePage =
     await coursesListPage.createCourseMenu.selectCreateCourseOption(course.type)
@@ -57,7 +52,6 @@ test(`create blended learning course: ${closedCourseData.name}`, async ({
   await assignTrainersPage.selectTrainer(users.trainer)
   const trainerExpensesPage =
     await assignTrainersPage.clickTrainerExpensesButton()
-  await approvalExceptionModal.confirmCourseException()
   const reviewAndConfirmPage =
     await trainerExpensesPage.clickReviewAndConfirmButton()
   course.id = await reviewAndConfirmPage.getCourseIdOnCreation()

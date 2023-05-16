@@ -46,7 +46,9 @@ export class CourseBuilderPage extends BasePage {
     this.estimatedDuration = this.page.locator('data-testid=progress-bar-label')
     this.submitButton = this.page.locator('data-testid=submit-button')
     this.clearButton = this.page.locator('data-testid=clear-button')
-    this.confirmWarningDialog = this.page.locator('data-testid=confirm-warning')
+    this.confirmWarningDialog = this.page.locator(
+      'data-testid=confirm-warning-dialog'
+    )
     this.confirmDialogSubmitButton = 'data-testid=dialog-confirm-button'
     this.timeCommitmentDialog = this.page.locator(
       'data-testid=time-commitment-dialog'

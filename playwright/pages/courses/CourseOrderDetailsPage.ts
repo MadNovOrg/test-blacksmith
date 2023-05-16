@@ -46,7 +46,7 @@ export class CourseOrderDetailsPage extends BasePage {
     await this.firstNameInput.type(invoiceDetails.firstName)
     await this.lastNameInput.type(invoiceDetails.lastName)
     await this.emailInput.type(invoiceDetails.email)
-    await this.phoneInput.type(invoiceDetails.phone)
+    await this.phoneInput.fill(invoiceDetails.phone)
     invoiceDetails.purchaseOrder &&
       (await this.purchaseOrderInput.type(invoiceDetails.purchaseOrder))
   }

@@ -87,15 +87,4 @@ jobs:
         with:
           name: test-artifacts
           path: |
-            playwright-report
             test-results
-
-      - name: Notify Job Status to Slack
-        if: failure()
-        env:
-          GH_JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: |
-          chmod +x ./.github/scripts/slack_notify.sh
-          ./.github/scripts/slack_notify.sh "${{ job.status }}" "${{ env.GH_JOB_URL }}" "${{ env.SLACK_WEBHOOK_URL }}"
-        shell: bash

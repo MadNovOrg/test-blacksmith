@@ -87,5 +87,4 @@ jobs:
         with:
           name: test-artifacts
           path: |
-            playwright-report
             test-results

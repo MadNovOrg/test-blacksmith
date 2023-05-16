@@ -7,9 +7,6 @@ import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
-import { CourseApprovalRequiredModal } from '../../../pages/courses/CourseApprovalRequiredModal'
-import { CourseBuilderPage } from '../../../pages/courses/CourseBuilderPage'
-import { CourseOrderDetailsPage } from '../../../pages/courses/CourseOrderDetailsPage'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 
 const indirectCourseData = {
@@ -44,33 +41,25 @@ const test = base.extend<{ course: Course }>({
 
 test(`create blended learning course: ${indirectCourseData.name}`, async ({
   browser,
-  browserName,
   course,
 }) => {
-  // Disabled in firefox due to datepicker issues
-  // eslint-disable-next-line playwright/no-skipped-test
-  test.skip(browserName === 'firefox')
   const context = await browser.newContext({
     storageState: stateFilePath(indirectCourseData.user),
   })
   const page = await context.newPage()
-
   const coursesListPage = new MyCoursesPage(page)
-  const orderDetailsPage = new CourseOrderDetailsPage(page)
-  const approvalExceptionModal = new CourseApprovalRequiredModal(page)
-  const courseBuilderPage = new CourseBuilderPage(page)
   await coursesListPage.goto()
   const createCoursePage =
     await coursesListPage.createCourseMenu.clickCreateCourseButton()
   await createCoursePage.fillCourseDetails(course)
-  await createCoursePage.clickOrderDetailsButton()
-  // TODO remove it after implementing the exceptions story
-  await approvalExceptionModal.confirmCourseException()
+  const orderDetailsPage = await createCoursePage.clickOrderDetailsButton()
   await orderDetailsPage.fillInvoiceDetails(course.invoiceDetails)
   const reviewPage = await orderDetailsPage.clickReviewAndConfirmButton()
-  course.id = await reviewPage.getCourseIdAfterProceedingToCourseBuilder()
+  const courseBuilder =
+    await reviewPage.getCourseIdAfterProceedingToCourseBuilder()
+  const courseBuilderPage = courseBuilder.courseBuilderPage
+  course.id = courseBuilder.id
   await courseBuilderPage.clickSubmitButton()
-  await approvalExceptionModal.confirmCourseException()
   await coursesListPage.searchCourse(`${course.id}`)
   await coursesListPage.checkCourseStatus(
     course.id,
