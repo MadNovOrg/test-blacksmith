@@ -46,6 +46,19 @@ insert_permissions:
         - email
         - status
       backend_only: false
+  - role: sales-representative
+    permission:
+      check:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+      columns:
+        - course_id
+        - email
+        - status
+      backend_only: false
   - role: trainer
     permission:
       check:
@@ -113,12 +126,7 @@ select_permissions:
         - note
         - status
         - updated_at
-      filter:
-        course:
-          trainers:
-            profile:
-              id:
-                _eq: X-Hasura-User-Id
+      filter: {}
   - role: sales-admin
     permission:
       columns:
@@ -140,18 +148,19 @@ select_permissions:
     permission:
       columns:
         - course_id
-        - created_at
         - email
-        - id
         - note
         - status
+        - created_at
         - updated_at
+        - id
       filter:
         course:
-          trainers:
-            profile:
-              id:
-                _eq: X-Hasura-User-Id
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+      allow_aggregations: true
   - role: trainer
     permission:
       columns:
@@ -165,8 +174,9 @@ select_permissions:
       filter:
         course:
           trainers:
-            profile_id:
-              _eq: X-Hasura-User-Id
+            profile:
+              id:
+                _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: tt-admin
     permission:
@@ -234,6 +244,19 @@ update_permissions:
               - CLOSED
               - OPEN
       check: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - course_id
+        - email
+        - status
+      filter:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+      check: {}
   - role: trainer
     permission:
       columns:
@@ -277,6 +300,14 @@ delete_permissions:
     permission:
       filter: {}
   - role: sales-admin
+    permission:
+      filter:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+  - role: sales-representative
     permission:
       filter:
         course:
