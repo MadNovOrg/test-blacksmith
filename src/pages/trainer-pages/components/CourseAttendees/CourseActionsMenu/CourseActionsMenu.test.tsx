@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { Accreditors_Enum } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
 import { render, chance, screen, userEvent } from '@test/index'
@@ -10,7 +11,10 @@ describe('component: CourseActionsMenu', () => {
   it('displays correct options for an admin user', async () => {
     render(
       <CourseActionsMenu
-        item={{ id: chance.guid() }}
+        item={{
+          id: chance.guid(),
+          course: { accreditedBy: Accreditors_Enum.Icm },
+        }}
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
         onTransferClick={jest.fn()}
@@ -34,7 +38,10 @@ describe('component: CourseActionsMenu', () => {
   it('renders correct options for an ops user', async () => {
     render(
       <CourseActionsMenu
-        item={{ id: chance.guid() }}
+        item={{
+          id: chance.guid(),
+          course: { accreditedBy: Accreditors_Enum.Icm },
+        }}
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
         onTransferClick={jest.fn()}
@@ -58,7 +65,10 @@ describe('component: CourseActionsMenu', () => {
   it('renders correct options for a sales admin user', async () => {
     render(
       <CourseActionsMenu
-        item={{ id: chance.guid() }}
+        item={{
+          id: chance.guid(),
+          course: { accreditedBy: Accreditors_Enum.Icm },
+        }}
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
         onTransferClick={jest.fn()}
@@ -82,7 +92,10 @@ describe('component: CourseActionsMenu', () => {
   it('renders correct options for a sales representative user', async () => {
     render(
       <CourseActionsMenu
-        item={{ id: chance.guid() }}
+        item={{
+          id: chance.guid(),
+          course: { accreditedBy: Accreditors_Enum.Icm },
+        }}
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
         onTransferClick={jest.fn()}
@@ -108,7 +121,10 @@ describe('component: CourseActionsMenu', () => {
   it('displays correct options for a trainer user', async () => {
     render(
       <CourseActionsMenu
-        item={{ id: chance.guid() }}
+        item={{
+          id: chance.guid(),
+          course: { accreditedBy: Accreditors_Enum.Icm },
+        }}
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
         onTransferClick={jest.fn()}
@@ -128,7 +144,10 @@ describe('component: CourseActionsMenu', () => {
   it('renders correct options for an org admin user', async () => {
     render(
       <CourseActionsMenu
-        item={{ id: chance.guid() }}
+        item={{
+          id: chance.guid(),
+          course: { accreditedBy: Accreditors_Enum.Icm },
+        }}
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
         onTransferClick={jest.fn()}
@@ -152,8 +171,41 @@ describe('component: CourseActionsMenu', () => {
     ).not.toBeInTheDocument()
   })
 
+  it('renders correct options for an org admin user for BILD course', async () => {
+    render(
+      <CourseActionsMenu
+        item={{
+          id: chance.guid(),
+          course: { accreditedBy: Accreditors_Enum.Bild },
+        }}
+        onRemoveClick={jest.fn()}
+        onReplaceClick={jest.fn()}
+        onTransferClick={jest.fn()}
+        onResendCourseInformationClick={jest.fn()}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.USER,
+          isOrgAdmin: true,
+        },
+      }
+    )
+
+    await userEvent.click(screen.getByText(/manage attendance/i))
+
+    expect(screen.getByText(/remove/i)).toBeInTheDocument()
+    expect(screen.queryByText(/replace/i)).not.toBeInTheDocument()
+    expect(screen.getByText(/transfer/i)).toBeInTheDocument()
+    expect(
+      screen.queryByText(/resend course information/i)
+    ).not.toBeInTheDocument()
+  })
+
   it('calls correct callbacks when clicked on an option', async () => {
-    const actionableItem = { id: chance.guid() }
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+    }
     const onRemoveMock = jest.fn()
     const onReplaceMock = jest.fn()
     const onTransferMock = jest.fn()
@@ -200,7 +252,10 @@ describe('component: CourseActionsMenu', () => {
   })
 
   it("doesn't display anything if a user doesn't have a permission to manage attendance", () => {
-    const actionableItem = { id: chance.guid() }
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+    }
     const onRemoveMock = jest.fn()
     const onReplaceMock = jest.fn()
     const onTransferMock = jest.fn()

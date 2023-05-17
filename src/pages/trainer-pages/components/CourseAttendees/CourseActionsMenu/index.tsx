@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import { ActionsMenu } from '@app/components/ActionsMenu'
 import { useAuth } from '@app/context/auth'
+import { Accreditors_Enum } from '@app/generated/graphql'
 import { isNotNullish } from '@app/util'
 
 type Props<T> = {
@@ -17,7 +18,9 @@ type Props<T> = {
   item: T
 }
 
-export const CourseActionsMenu = <T,>({
+export const CourseActionsMenu = <
+  T extends { course: { accreditedBy: Accreditors_Enum } }
+>({
   onRemoveClick,
   onReplaceClick,
   onTransferClick,
@@ -29,7 +32,7 @@ export const CourseActionsMenu = <T,>({
 
   const actions = useMemo(() => {
     return [
-      acl.canReplaceParticipant()
+      acl.canReplaceParticipant(item.course.accreditedBy)
         ? {
             label: t('common.replace'),
             icon: <MoveDownIcon color="primary" />,
@@ -64,6 +67,7 @@ export const CourseActionsMenu = <T,>({
     ].filter(isNotNullish)
   }, [
     acl,
+    item.course.accreditedBy,
     t,
     onReplaceClick,
     onTransferClick,

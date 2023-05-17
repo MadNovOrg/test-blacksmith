@@ -141,7 +141,8 @@ export const AttendingTab = ({
           label: t('pages.course-participants.documents'),
           sorting: false,
         },
-        !isCourseEnded && acl.canManageParticipantAttendance()
+        !isCourseEnded &&
+        acl.canManageParticipantAttendance(course.accreditedBy)
           ? {
               id: 'actions',
               label: '',
@@ -149,7 +150,7 @@ export const AttendingTab = ({
             }
           : null,
       ].filter(Boolean),
-    [t, isBlendedCourse, isCourseEnded, acl]
+    [t, isBlendedCourse, isCourseEnded, acl, course.accreditedBy]
   )
 
   const handleTransfer = useCallback(
@@ -250,9 +251,11 @@ export const AttendingTab = ({
                   <TableCell>
                     {t('pages.course-details.tabs.attendees.view-documents')}
                   </TableCell>
-                  {!isCourseEnded && acl.canManageParticipantAttendance() ? (
+                  {!isCourseEnded &&
+                  acl.canManageParticipantAttendance(course.accreditedBy) ? (
                     <TableCell>
-                      {!isOpenCourse || acl.canOnlySendCourseInformation() ? (
+                      {!isOpenCourse ||
+                      acl.canOnlySendCourseInformation(course.accreditedBy) ? (
                         <Button
                           startIcon={
                             <SendIcon color="primary" titleAccess="Send" />

@@ -1,5 +1,6 @@
 import { MarkOptional } from 'ts-essentials'
 
+import { Accreditors_Enum } from '@app/generated/graphql'
 import {
   CourseLevel,
   CourseTrainerType,
@@ -396,9 +397,9 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         r => r === auth.activeRole
       )
     },
-    canReplaceParticipant: () => {
+    canReplaceParticipant: (accreditedBy: Accreditors_Enum) => {
       if (auth.isOrgAdmin) {
-        return true
+        return accreditedBy === Accreditors_Enum.Icm
       }
 
       return [
@@ -427,18 +428,18 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ]
       return roles.some(r => r === auth.activeRole)
     },
-    canManageParticipantAttendance: () => {
+    canManageParticipantAttendance: (accreditedBy: Accreditors_Enum) => {
       return (
         acl.canTransferParticipant() ||
-        acl.canReplaceParticipant() ||
+        acl.canReplaceParticipant(accreditedBy) ||
         acl.canRemoveParticipant() ||
         acl.canSendCourseInformation()
       )
     },
-    canOnlySendCourseInformation: () => {
+    canOnlySendCourseInformation: (accreditedBy: Accreditors_Enum) => {
       return (
         !acl.canTransferParticipant() &&
-        !acl.canReplaceParticipant() &&
+        !acl.canReplaceParticipant(accreditedBy) &&
         !acl.canRemoveParticipant() &&
         acl.canSendCourseInformation()
       )
