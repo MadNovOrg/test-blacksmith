@@ -45,10 +45,6 @@ export const CreateCoursePage = () => {
                 <Typography variant="h2" mb={2}>
                   {t(`pages.create-course.${courseType}-course-title`)}
                 </Typography>
-
-                <Typography color={theme.palette.grey[700]}>
-                  {t('common.all-fields-are-mandatory')}
-                </Typography>
               </Box>
 
               <CreateCourseSteps
