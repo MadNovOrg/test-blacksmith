@@ -551,6 +551,10 @@ export const CourseCertification: React.FC<
       ? certificate.participant.certificateChanges[0]?.payload?.note
       : ''
 
+  if (isRevoked && (acl.isUser() || acl.isTrainer())) {
+    return null
+  }
+
   return (
     <Box mb={6}>
       <Container>

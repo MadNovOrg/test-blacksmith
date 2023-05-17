@@ -515,63 +515,74 @@ export const ViewProfilePage: React.FC<
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {(certifications ?? []).map(certificate => (
-                      <TableRow
-                        data-testid={'certificate-' + certificate.number}
-                        key={certificate.id}
-                        sx={{
-                          '&&.MuiTableRow-root': {
-                            backgroundColor: 'common.white',
-                          },
-                        }}
-                      >
-                        <TableCell>{certificate.courseName}</TableCell>
-                        <TableCell>{certificate.number}</TableCell>
-                        <TableCell>
-                          <Grid container direction="column" alignItems="start">
-                            {certificate.status ? (
-                              <CertificateStatusChip
-                                status={certificate.status as CertificateStatus}
-                                tooltip={
-                                  certificate.participant?.certificateChanges[0]
-                                    ?.payload?.note
-                                }
-                              />
-                            ) : null}
-                            {certificate.status !==
-                              CertificateStatus.REVOKED && (
-                              <Typography
-                                mt={1}
-                                variant="body2"
-                                color="grey.700"
-                              >
-                                {certificateExpired(
-                                  certificate.expiryDate ?? ''
-                                )
-                                  ? `${formatDistanceToNow(
-                                      new Date(certificate.expiryDate)
-                                    )} ${t('common.ago')}`
-                                  : certificate.expiryDate}
-                              </Typography>
-                            )}
-                          </Grid>
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            sx={{ ml: 2 }}
-                            onClick={() =>
-                              navigate(`/certification/${certificate.id}`)
-                            }
-                          >
-                            {t(
-                              'components.certification-list.view-certificate'
-                            )}
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {(certifications ?? []).map(certificate => {
+                      const isRevoked =
+                        certificate.status === CertificateStatus.REVOKED
+
+                      return (
+                        <TableRow
+                          data-testid={'certificate-' + certificate.number}
+                          key={certificate.id}
+                          sx={{
+                            '&&.MuiTableRow-root': {
+                              backgroundColor: 'common.white',
+                            },
+                          }}
+                        >
+                          <TableCell>{certificate.courseName}</TableCell>
+                          <TableCell>{certificate.number}</TableCell>
+                          <TableCell>
+                            <Grid
+                              container
+                              direction="column"
+                              alignItems="start"
+                            >
+                              {certificate.status ? (
+                                <CertificateStatusChip
+                                  status={
+                                    certificate.status as CertificateStatus
+                                  }
+                                  tooltip={
+                                    certificate.participant
+                                      ?.certificateChanges[0]?.payload?.note
+                                  }
+                                />
+                              ) : null}
+                              {!isRevoked && (
+                                <Typography
+                                  mt={1}
+                                  variant="body2"
+                                  color="grey.700"
+                                >
+                                  {certificateExpired(
+                                    certificate.expiryDate ?? ''
+                                  )
+                                    ? `${formatDistanceToNow(
+                                        new Date(certificate.expiryDate)
+                                      )} ${t('common.ago')}`
+                                    : certificate.expiryDate}
+                                </Typography>
+                              )}
+                            </Grid>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              sx={{ ml: 2 }}
+                              onClick={() =>
+                                navigate(`/certification/${certificate.id}`)
+                              }
+                              disabled={isRevoked}
+                            >
+                              {t(
+                                'components.certification-list.view-certificate'
+                              )}
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })}
                   </TableBody>
                 </Table>
               </>
