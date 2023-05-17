@@ -5,20 +5,25 @@ import OrgLicensesWithHistoryQuery from '@app/queries/go1-licensing/org-licenses
 
 import { HasuraRole, runQueryAsRole } from '../gql-query'
 
-const allowedRoles: HasuraRole[] = ['sales-admin', 'tt-ops', 'tt-admin', 'ld']
-
-const forbiddenRoles: HasuraRole[] = [
-  'unverified',
-  'anonymous',
-  'user',
+// Matches the permissions found at hasura/metadata/databases/default/tables/public_organization.yaml
+const allowedRoles: HasuraRole[] = [
+  'finance',
+  'sales-admin',
+  'sales-representative',
+  'tt-admin',
+  'tt-ops',
+  'ld',
   'trainer',
+  'user',
 ]
+const forbiddenRoles: HasuraRole[] = ['anonymous', 'unverified']
 
 const params = {
   id: uuidv4(),
   limit: 10,
   offset: 0,
 }
+
 allowedRoles.forEach(role => {
   test(`@query OrgLicensesWithHistoryQuery: role ${role} should be able to run the query`, async () => {
     await expect(
