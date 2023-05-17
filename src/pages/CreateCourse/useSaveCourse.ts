@@ -10,7 +10,6 @@ import {
   Payment_Methods_Enum,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import { shouldGoIntoExceptionApproval } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
@@ -29,11 +28,7 @@ import {
   TrainerInput,
   TransportMethod,
 } from '@app/types'
-import {
-  generateBildCourseName,
-  generateCourseName,
-  LoadingStatus,
-} from '@app/util'
+import { LoadingStatus } from '@app/util'
 
 import { useCreateCourse } from './components/CreateCourseProvider'
 
@@ -117,8 +112,15 @@ export function useSaveCourse(): {
   savingStatus: LoadingStatus
   saveCourse: SaveCourse
 } {
-  const { courseData, expenses, trainers, go1Licensing, exceptions } =
-    useCreateCourse()
+  const {
+    courseData,
+    expenses,
+    trainers,
+    go1Licensing,
+    exceptions,
+    courseName,
+    invoiceDetails,
+  } = useCreateCourse()
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const fetcher = useFetcher()
   const { t } = useTranslation()
@@ -129,8 +131,6 @@ export function useSaveCourse(): {
   )
 
   const { addSnackbarMessage } = useSnackbar()
-
-  const { strategies } = useBildStrategies(Boolean(courseData?.accreditedBy))
 
   const saveCourse = useCallback<SaveCourse>(async () => {
     const isBild = courseData?.accreditedBy === Accreditors_Enum.Bild
@@ -154,18 +154,19 @@ export function useSaveCourse(): {
           ? Course_Status_Enum.TrainerMissing
           : Course_Status_Enum.TrainerPending
 
+        const shouldInsertOrder =
+          (courseData.type === CourseType.INDIRECT &&
+            courseData.blendedLearning) ||
+          courseData.type === CourseType.CLOSED
+
+        const invoiceData =
+          courseData.type === CourseType.INDIRECT
+            ? go1Licensing?.invoiceDetails
+            : invoiceDetails
+
         const response = await fetcher<ResponseType, ParamsType>(MUTATION, {
           course: {
-            name:
-              courseData.accreditedBy === Accreditors_Enum.Icm
-                ? generateCourseName(
-                    {
-                      level: courseData.courseLevel,
-                      reaccreditation: courseData.reaccreditation,
-                    },
-                    t
-                  )
-                : generateBildCourseName(courseData.bildStrategies, strategies),
+            name: courseName,
             deliveryType: courseData.deliveryType,
             accreditedBy: courseData.accreditedBy,
             bildStrategies: isBild
@@ -243,26 +244,26 @@ export function useSaveCourse(): {
                   salesRepresentativeId: courseData.salesRepresentative?.id,
                 }
               : null),
-            ...(courseData.type === CourseType.INDIRECT &&
-            go1Licensing?.prices.amountDue
+            ...(shouldInsertOrder && invoiceData
               ? {
                   [exceptions?.length && !acl.isAdmin()
                     ? 'tempOrders'
                     : 'orders']: {
                     data: [
                       {
-                        registrants: [], // we are buying Go1 licenses, not registering participants
-                        billingEmail: go1Licensing.invoiceDetails.email,
-                        billingGivenName: go1Licensing.invoiceDetails.firstName,
-                        billingFamilyName: go1Licensing.invoiceDetails.surname,
-                        billingPhone: go1Licensing.invoiceDetails.phone,
-                        organizationId: go1Licensing.invoiceDetails.orgId,
-                        billingAddress:
-                          go1Licensing.invoiceDetails.billingAddress,
-                        clientPurchaseOrder:
-                          go1Licensing.invoiceDetails.purchaseOrder,
+                        registrants: [],
+                        billingEmail: invoiceData.email,
+                        billingGivenName: invoiceData.firstName,
+                        billingFamilyName: invoiceData.surname,
+                        billingPhone: invoiceData.phone,
+                        organizationId: invoiceData.orgId,
+                        billingAddress: invoiceData.billingAddress,
+                        clientPurchaseOrder: invoiceData.purchaseOrder,
                         paymentMethod: Payment_Methods_Enum.Invoice,
-                        quantity: 0, // it will be updated on the backend with the correct number of licenses depending on the org's allowance
+                        quantity:
+                          courseData.type === CourseType.CLOSED
+                            ? courseData.maxParticipants
+                            : 0,
                         currency: Currency.GBP,
                         user: {
                           fullName: profile?.fullName,
@@ -308,16 +309,19 @@ export function useSaveCourse(): {
   }, [
     courseData,
     trainers,
+    exceptions.length,
     acl,
+    go1Licensing?.invoiceDetails,
+    invoiceDetails,
     fetcher,
-    t,
+    courseName,
     expenses,
-    go1Licensing,
-    profile,
+    profile?.fullName,
+    profile?.email,
+    profile?.phone,
     addSnackbarMessage,
+    t,
     removeDraft,
-    exceptions,
-    strategies,
   ])
 
   return {

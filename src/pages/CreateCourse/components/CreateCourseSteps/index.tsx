@@ -39,7 +39,12 @@ export const CreateCourseSteps: React.FC<React.PropsWithChildren<Props>> = ({
 
     const licenseOrderDetailsStep = {
       key: StepsEnum.LICENSE_ORDER_DETAILS,
-      label: t('step-navigation-license-order-details'),
+      label: t('step-navigation-order-details'),
+    }
+
+    const orderDetailsStep = {
+      key: StepsEnum.ORDER_DETAILS,
+      label: t('step-navigation-order-details'),
     }
 
     const reviewAndConfirmStep = {
@@ -65,6 +70,7 @@ export const CreateCourseSteps: React.FC<React.PropsWithChildren<Props>> = ({
 
     if (type === CourseType.CLOSED) {
       steps.push(trainerExpensesStep)
+      steps.push(orderDetailsStep)
       steps.push(reviewAndConfirmStep)
     } else {
       steps.push(courseBuilderStep)

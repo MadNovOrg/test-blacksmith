@@ -24,11 +24,11 @@ describe('component: CreateCourseSteps', () => {
 
     expect(screen.getByText('Course details')).toBeInTheDocument()
     expect(screen.getByText('Assign trainer(s)')).toBeInTheDocument()
-    expect(screen.getByText('Review & confirm')).toBeInTheDocument()
     expect(screen.getByText('Trainer expenses')).toBeInTheDocument()
+    expect(screen.queryByText('Order details')).toBeInTheDocument()
+    expect(screen.getByText('Review & confirm')).toBeInTheDocument()
 
     expect(screen.queryByText('Course builder')).not.toBeInTheDocument()
-    expect(screen.queryByText('Order details')).not.toBeInTheDocument()
   })
 
   it('displays correct steps for INDIRECT course type', () => {

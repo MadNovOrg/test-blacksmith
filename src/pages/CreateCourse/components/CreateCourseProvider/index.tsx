@@ -1,6 +1,9 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
+import { Accreditors_Enum } from '@app/generated/graphql'
+import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import {
   CourseType,
@@ -10,34 +13,15 @@ import {
   TrainerRoleTypeName,
   ValidCourseInput,
 } from '@app/types'
+import { generateBildCourseName, generateCourseName } from '@app/util'
 
-import { StepsEnum } from '../../types'
-import {
-  checkCourseDetailsForExceptions,
-  CourseException,
-} from '../CourseExceptionsConfirmation/utils'
+import { useCoursePrice } from '../../hooks/useCoursePrice'
+import { ContextValue, StepsEnum } from '../../types'
+import { checkCourseDetailsForExceptions } from '../CourseExceptionsConfirmation/utils'
 
 import { getCourseType } from './helpers'
 
 export { getCourseType }
-
-type ContextValue = {
-  completeStep: (step: StepsEnum) => void
-  completedSteps: StepsEnum[]
-  courseData?: ValidCourseInput
-  courseType: CourseType
-  currentStepKey: StepsEnum | null
-  expenses: Record<string, ExpensesInput>
-  saveDraft: () => Promise<void>
-  setCourseData: (courseData: ValidCourseInput) => void
-  setCurrentStepKey: (step: StepsEnum) => void
-  setExpenses: (expenses: Record<string, ExpensesInput>) => void
-  setTrainers: (trainers: TrainerInput[]) => void
-  trainers: TrainerInput[]
-  setGo1Licensing: (go1Licensing: Draft['go1Licensing']) => void
-  go1Licensing: Draft['go1Licensing']
-  exceptions: CourseException[]
-}
 
 const CreateCourseContext = React.createContext<ContextValue | undefined>(
   undefined
@@ -51,6 +35,7 @@ export type CreateCourseProviderProps = {
 export const CreateCourseProvider: React.FC<
   React.PropsWithChildren<CreateCourseProviderProps>
 > = ({ children, initialValue, courseType }) => {
+  const { t } = useTranslation()
   const { profile } = useAuth()
   const { setDraft } = useCourseDraft(profile?.id ?? '', courseType)
 
@@ -72,6 +57,16 @@ export const CreateCourseProvider: React.FC<
   const [go1Licensing, setGo1Licensing] = useState<Draft['go1Licensing']>(
     initialValue?.go1Licensing ?? undefined
   )
+
+  const [invoiceDetails, setInvoiceDetails] = useState<
+    ContextValue['invoiceDetails']
+  >(initialValue?.invoiceDetails ?? undefined)
+
+  const { strategies } = useBildStrategies(
+    Boolean(courseData?.accreditedBy === Accreditors_Enum.Bild)
+  )
+
+  const pricing = useCoursePrice(courseData)
 
   const seniorOrPrincipalLead = useMemo(() => {
     return (
@@ -101,6 +96,24 @@ export const CreateCourseProvider: React.FC<
     [completedSteps, setCompletedSteps]
   )
 
+  const courseName = useMemo(() => {
+    if (!courseData) {
+      return ''
+    }
+
+    if (courseData.accreditedBy === Accreditors_Enum.Bild) {
+      return generateBildCourseName(courseData.bildStrategies, strategies)
+    }
+
+    return generateCourseName(
+      {
+        level: courseData.courseLevel,
+        reaccreditation: courseData.reaccreditation,
+      },
+      t
+    )
+  }, [courseData, strategies, t])
+
   const saveDraft = useCallback(async () => {
     if (!profile?.id) {
       return
@@ -113,6 +126,7 @@ export const CreateCourseProvider: React.FC<
       currentStepKey,
       completedSteps,
       go1Licensing,
+      invoiceDetails,
     }
 
     setDraft(draft)
@@ -125,9 +139,10 @@ export const CreateCourseProvider: React.FC<
     setDraft,
     trainers,
     go1Licensing,
+    invoiceDetails,
   ])
 
-  const value = useMemo(() => {
+  const value: ContextValue = useMemo(() => {
     return {
       completeStep,
       completedSteps,
@@ -144,6 +159,13 @@ export const CreateCourseProvider: React.FC<
       go1Licensing,
       setGo1Licensing,
       exceptions,
+      courseName,
+      pricing: {
+        amount: pricing.price,
+        error: Boolean(pricing.error),
+      },
+      invoiceDetails,
+      setInvoiceDetails,
     }
   }, [
     completeStep,
@@ -153,14 +175,13 @@ export const CreateCourseProvider: React.FC<
     currentStepKey,
     expenses,
     saveDraft,
-    setCourseData,
-    setCurrentStepKey,
-    setExpenses,
-    setTrainers,
     trainers,
     go1Licensing,
-    setGo1Licensing,
     exceptions,
+    courseName,
+    pricing.price,
+    pricing.error,
+    invoiceDetails,
   ])
 
   return (

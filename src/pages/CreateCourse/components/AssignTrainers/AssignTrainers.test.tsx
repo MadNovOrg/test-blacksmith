@@ -1,4 +1,6 @@
 import React from 'react'
+import { Client, Provider } from 'urql'
+import { never } from 'wonka'
 
 import { CourseType, RoleName, ValidCourseInput } from '@app/types'
 import { courseToCourseInput } from '@app/util'
@@ -24,12 +26,20 @@ jest.mock('@app/hooks/use-fetcher', () => ({
 const placeholder = 'Search eligible trainers...'
 const selectedTestId = 'SearchTrainers-selected'
 
+function createFetchingClient() {
+  return {
+    executeQuery: () => never,
+  } as unknown as Client
+}
+
 describe('component: AssignTrainers', () => {
   it('renders alert if course is not found', async () => {
     render(
-      <CreateCourseProvider courseType={CourseType.OPEN}>
-        <AssignTrainers />
-      </CreateCourseProvider>,
+      <Provider value={createFetchingClient()}>
+        <CreateCourseProvider courseType={CourseType.OPEN}>
+          <AssignTrainers />
+        </CreateCourseProvider>
+      </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } }
     )
 
@@ -46,14 +56,16 @@ describe('component: AssignTrainers', () => {
     const course = buildCourse({ overrides })
 
     render(
-      <CreateCourseProvider
-        initialValue={{
-          courseData: courseToCourseInput(course) as ValidCourseInput,
-        }}
-        courseType={CourseType.OPEN}
-      >
-        <AssignTrainers />
-      </CreateCourseProvider>,
+      <Provider value={createFetchingClient()}>
+        <CreateCourseProvider
+          initialValue={{
+            courseData: courseToCourseInput(course) as ValidCourseInput,
+          }}
+          courseType={CourseType.OPEN}
+        >
+          <AssignTrainers />
+        </CreateCourseProvider>
+      </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } }
     )
 
@@ -70,14 +82,16 @@ describe('component: AssignTrainers', () => {
     const course = buildCourse({ overrides })
 
     render(
-      <CreateCourseProvider
-        initialValue={{
-          courseData: courseToCourseInput(course) as ValidCourseInput,
-        }}
-        courseType={CourseType.OPEN}
-      >
-        <AssignTrainers />
-      </CreateCourseProvider>,
+      <Provider value={createFetchingClient()}>
+        <CreateCourseProvider
+          initialValue={{
+            courseData: courseToCourseInput(course) as ValidCourseInput,
+          }}
+          courseType={CourseType.OPEN}
+        >
+          <AssignTrainers />
+        </CreateCourseProvider>
+      </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } }
     )
 

@@ -1,5 +1,7 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
+import { Client, Provider } from 'urql'
+import { never } from 'wonka'
 
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import { CourseType, RoleName } from '@app/types'
@@ -14,6 +16,12 @@ import { CreateCourse } from '.'
 jest.mock('@app/hooks/useCourseDraft')
 const useCourseDraftMocked = jest.mocked(useCourseDraft)
 
+function createFetchingClient() {
+  return {
+    executeQuery: () => never,
+  } as unknown as Client
+}
+
 describe('page: CreateCourse', () => {
   beforeAll(() => {
     useCourseDraftMocked.mockReturnValue({
@@ -25,11 +33,13 @@ describe('page: CreateCourse', () => {
 
   it("doesn't mark any step as done if on course details page", () => {
     render(
-      <Routes>
-        <Route path="/courses/new" element={<CreateCourse />}>
-          <Route index element={<h1>Create course form page</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route index element={<h1>Create course form page</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
@@ -48,11 +58,13 @@ describe('page: CreateCourse', () => {
 
   it("doesn't mark course details page as done if on assign trainers page but course details page wasn't marked as complete", () => {
     render(
-      <Routes>
-        <Route path="/courses/new" element={<CreateCourse />}>
-          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
@@ -71,20 +83,22 @@ describe('page: CreateCourse', () => {
 
   it('marks course details page as done if on assign trainers page and details page was marked as complete', () => {
     render(
-      <Routes>
-        <Route
-          path="/courses/new"
-          element={
-            <CreateCourse
-              initialContextValue={{
-                completedSteps: [StepsEnum.COURSE_DETAILS],
-              }}
-            />
-          }
-        >
-          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route
+            path="/courses/new"
+            element={
+              <CreateCourse
+                initialContextValue={{
+                  completedSteps: [StepsEnum.COURSE_DETAILS],
+                }}
+              />
+            }
+          >
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
@@ -105,11 +119,13 @@ describe('page: CreateCourse', () => {
 
   it('renders correct title when creating open course', () => {
     render(
-      <Routes>
-        <Route path="/courses/new" element={<CreateCourse />}>
-          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
@@ -123,11 +139,13 @@ describe('page: CreateCourse', () => {
 
   it('renders correct title when creating closed course', () => {
     render(
-      <Routes>
-        <Route path="/courses/new" element={<CreateCourse />}>
-          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
@@ -141,11 +159,13 @@ describe('page: CreateCourse', () => {
 
   it('renders correct title when creating indirect course', () => {
     render(
-      <Routes>
-        <Route path="/courses/new" element={<CreateCourse />}>
-          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
@@ -159,11 +179,13 @@ describe('page: CreateCourse', () => {
 
   it('displays correct steps for the indirect course', () => {
     render(
-      <Routes>
-        <Route path="/courses/new" element={<CreateCourse />}>
-          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
@@ -179,11 +201,13 @@ describe('page: CreateCourse', () => {
 
   it("doesn't allow trainer to create open course", () => {
     render(
-      <Routes>
-        <Route path="/courses/new" element={<CreateCourse />}>
-          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.TRAINER,
@@ -197,11 +221,13 @@ describe('page: CreateCourse', () => {
 
   it("doesn't allow attendee user to create open course", () => {
     render(
-      <Routes>
-        <Route path="/courses/new" element={<CreateCourse />}>
-          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.USER,
@@ -215,11 +241,13 @@ describe('page: CreateCourse', () => {
 
   it("doesn't allow trainer to create closed course", () => {
     render(
-      <Routes>
-        <Route path="/courses/new" element={<CreateCourse />}>
-          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.TRAINER,
@@ -233,11 +261,13 @@ describe('page: CreateCourse', () => {
 
   it("doesn't allow attendee user to create closed course", () => {
     render(
-      <Routes>
-        <Route path="/courses/new" element={<CreateCourse />}>
-          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.USER,
@@ -251,11 +281,13 @@ describe('page: CreateCourse', () => {
 
   it("doesn't allow Ops role to create indirect course", () => {
     render(
-      <Routes>
-        <Route path="/courses/new" element={<CreateCourse />}>
-          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.TT_OPS,
@@ -269,11 +301,13 @@ describe('page: CreateCourse', () => {
 
   it("doesn't allow sales admin role to create indirect course", () => {
     render(
-      <Routes>
-        <Route path="/courses/new" element={<CreateCourse />}>
-          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.SALES_ADMIN,
@@ -287,11 +321,13 @@ describe('page: CreateCourse', () => {
 
   it("doesn't allow attendee user to create indirect course", () => {
     render(
-      <Routes>
-        <Route path="/courses/new" element={<CreateCourse />}>
-          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-        </Route>
-      </Routes>,
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.USER,

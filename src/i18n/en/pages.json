@@ -209,7 +209,7 @@
         "time-commitment-message": "By submitting this course, you commit to at least {{hours}} hours of training.",
         "course-type-indirect-info": "Additional intermediate modules that are not listed would need to be delivered as part of Level Two course.\n\nIf these modules are required, you will need to resubmit the course as a Level Two.",
         "course-level-one-info": "Additional holds that are not listed above, will fall under the Level Two certification. If these are required, the course will need to be resubmitted as a Level Two.\n\nPlease contact Team Teach at ",
-        "course-level-one-or":  " or on ",
+        "course-level-one-or": " or on ",
         "course-level-one-note": "\n\nPlease note: It may not effect your delivery timings.",
         "strategy-validation-error": "At least one module from \"{{name}}\" should be selected"
       }
@@ -249,7 +249,7 @@
     "INDIRECT-course-title": "Course creation",
     "back-button-text": "All courses",
     "step-navigation-course-details": "Course details",
-    "step-navigation-license-order-details": "Order details",
+    "step-navigation-order-details": "Order details",
     "step-navigation-assign-trainer": "Assign trainer(s)",
     "step-navigation-trainer-expenses": "Trainer expenses",
     "step-navigation-review-and-confirm": "Review & confirm",
@@ -275,6 +275,11 @@
       "moderator-error-min": "Moderator is required",
       "moderator-error-max": "There can be only one Moderator"
     },
+    "order-details": {
+      "title": "Order details",
+      "invoice-contact": "Invoice to:",
+      "back-btn": "Trainer expenses"
+    },
     "license-order-details": {
       "title": "Order details",
       "order-title": "Blended learning licence",
@@ -295,7 +300,7 @@
     "trainer-expenses": {
       "title": "Trainer Expenses",
       "back-btn": "Assign trainers",
-      "submit-btn": "Review & confirm",
+      "submit-btn": "Order details",
       "method-error": "Method is required",
       "name-error": "Name is required",
       "value-error": "Value is required",
@@ -329,7 +334,7 @@
     "review-and-confirm": {
       "unknown-error": "Something went wrong. Please try again later",
       "pricing-fetching-error": "Error fetching course pricing information",
-      "back-btn": "Trainer details",
+      "back-btn": "Order details",
       "submit-btn": "Create course",
       "title": "Confirm to complete creation",
       "sales-representative": "Sales representative",
@@ -1084,7 +1089,6 @@
         "members-with-active-certificates": "Members with active certificates",
         "members-with-certificates-to-expire": "Members with certificates due to expire within the next 3 months.",
         "members-with-expired-certificates": "Members with certificates that have expired in the last 3 months."
-
       },
       "licenses": {
         "title": "Blended learning licences",

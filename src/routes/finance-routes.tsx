@@ -11,6 +11,7 @@ import { InviteUserToOrganization } from '@app/pages/admin/components/Organizati
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { Contacts } from '@app/pages/admin/Contacts'
 import { Users } from '@app/pages/admin/Users'
+import { OrderDetails as CourseOrderDetails } from '@app/pages/CreateCourse/components/OrderDetails'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
@@ -109,6 +110,7 @@ const FinanceRoute = () => {
           <Route index element={<CreateCourseForm />} />
           <Route path="assign-trainers" element={<AssignTrainers />} />
           <Route path="trainer-expenses" element={<TrainerExpenses />} />
+          <Route path="order-details" element={<CourseOrderDetails />} />
           <Route path="review-and-confirm" element={<ReviewAndConfirm />} />
         </Route>
 

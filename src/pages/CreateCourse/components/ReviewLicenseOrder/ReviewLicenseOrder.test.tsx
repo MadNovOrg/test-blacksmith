@@ -1,6 +1,8 @@
 import { addHours, addWeeks, format } from 'date-fns'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { Client, Provider } from 'urql'
+import { never } from 'wonka'
 
 import {
   Accreditors_Enum,
@@ -35,12 +37,20 @@ jest.mock('@app/hooks/useCourseDraft', () => ({
 jest.mock('@app/hooks/use-fetcher')
 const useFetcherMock = jest.mocked(useFetcher)
 
+function createFetchingClient() {
+  return {
+    executeQuery: () => never,
+  } as unknown as Client
+}
+
 describe('component: ReviewLicenseOrder', () => {
   it('displays an alert if there is no course or pricing data in the context', () => {
     render(
-      <CreateCourseProvider courseType={CourseType.INDIRECT}>
-        <ReviewLicenseOrder />
-      </CreateCourseProvider>
+      <Provider value={createFetchingClient()}>
+        <CreateCourseProvider courseType={CourseType.INDIRECT}>
+          <ReviewLicenseOrder />
+        </CreateCourseProvider>
+      </Provider>
     )
 
     expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
@@ -77,12 +87,14 @@ describe('component: ReviewLicenseOrder', () => {
     }
 
     render(
-      <CreateCourseProvider
-        courseType={CourseType.INDIRECT}
-        initialValue={{ courseData, go1Licensing } as Draft}
-      >
-        <ReviewLicenseOrder />
-      </CreateCourseProvider>
+      <Provider value={createFetchingClient()}>
+        <CreateCourseProvider
+          courseType={CourseType.INDIRECT}
+          initialValue={{ courseData, go1Licensing } as Draft}
+        >
+          <ReviewLicenseOrder />
+        </CreateCourseProvider>
+      </Provider>
     )
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
@@ -171,15 +183,17 @@ describe('component: ReviewLicenseOrder', () => {
     useFetcherMock.mockReturnValue(fetcherMock)
 
     render(
-      <CreateCourseProvider
-        courseType={CourseType.INDIRECT}
-        initialValue={{ courseData, go1Licensing } as Draft}
-      >
-        <Routes>
-          <Route path="/" element={<ReviewLicenseOrder />} />
-          <Route path="/courses/:id/modules" element={<p>Modules page</p>} />
-        </Routes>
-      </CreateCourseProvider>
+      <Provider value={createFetchingClient()}>
+        <CreateCourseProvider
+          courseType={CourseType.INDIRECT}
+          initialValue={{ courseData, go1Licensing } as Draft}
+        >
+          <Routes>
+            <Route path="/" element={<ReviewLicenseOrder />} />
+            <Route path="/courses/:id/modules" element={<p>Modules page</p>} />
+          </Routes>
+        </CreateCourseProvider>
+      </Provider>
     )
     await userEvent.click(screen.getByText(/course builder/i))
 

@@ -1,12 +1,13 @@
 import { add, addHours } from 'date-fns'
 import React from 'react'
 import useSWR from 'swr'
+import { Client, CombinedError, Provider } from 'urql'
+import { fromValue, never } from 'wonka'
 
-import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import { CoursePriceQuery } from '@app/generated/graphql'
 import {
   CourseLevel,
   CourseType,
-  Currency,
   ExpensesInput,
   RoleName,
   TransportMethod,
@@ -75,10 +76,16 @@ describe('component: ReviewAndConfirm', () => {
       isLoading: false,
     })
 
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
     render(
-      <CreateCourseProvider courseType={CourseType.CLOSED}>
-        <ReviewAndConfirm />
-      </CreateCourseProvider>,
+      <Provider value={client}>
+        <CreateCourseProvider courseType={CourseType.CLOSED}>
+          <ReviewAndConfirm />
+        </CreateCourseProvider>
+      </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } }
     )
 
@@ -92,21 +99,24 @@ describe('component: ReviewAndConfirm', () => {
   })
 
   it('renders alert if pricing info could not be fetched', async () => {
-    mockSWR.mockReturnValue({
-      data: null,
-      error: new Error(),
-      mutate: jest.fn(),
-      isValidating: false,
-      isLoading: false,
-    })
+    const client = {
+      executeQuery: () =>
+        fromValue({
+          error: new CombinedError({
+            networkError: Error('something went wrong!'),
+          }),
+        }),
+    } as unknown as Client
 
     render(
-      <CreateCourseProvider
-        initialValue={{ courseData, expenses, trainers }}
-        courseType={CourseType.CLOSED}
-      >
-        <ReviewAndConfirm />
-      </CreateCourseProvider>,
+      <Provider value={client}>
+        <CreateCourseProvider
+          initialValue={{ courseData, expenses, trainers }}
+          courseType={CourseType.CLOSED}
+        >
+          <ReviewAndConfirm />
+        </CreateCourseProvider>
+      </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } }
     )
 
@@ -139,34 +149,24 @@ describe('component: ReviewAndConfirm', () => {
       })
     ) as ValidCourseInput
 
-    mockSWR.mockReturnValue({
-      data: {
-        coursePricing: [
-          {
-            id: '',
-            level: Course_Level_Enum.Level_1,
-            type: Course_Type_Enum.Closed,
-            blended: false,
-            reaccreditation: false,
-            priceAmount: 100,
-            priceCurrency: Currency.GBP,
-            xeroCode: '',
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: CoursePriceQuery }>({
+          data: {
+            coursePrice: [{ priceAmount: 100, priceCurrency: 'GBP' }],
           },
-        ],
-      },
-      mutate: jest.fn(),
-      isValidating: false,
-      error: null,
-      isLoading: false,
-    })
+        }),
+    } as unknown as Client
 
     render(
-      <CreateCourseProvider
-        initialValue={{ courseData, expenses, trainers }}
-        courseType={CourseType.CLOSED}
-      >
-        <ReviewAndConfirm />
-      </CreateCourseProvider>,
+      <Provider value={client}>
+        <CreateCourseProvider
+          initialValue={{ courseData, expenses, trainers }}
+          courseType={CourseType.CLOSED}
+        >
+          <ReviewAndConfirm />
+        </CreateCourseProvider>
+      </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } }
     )
 
@@ -249,26 +249,16 @@ describe('component: ReviewAndConfirm', () => {
 
     const trainers = [leadTrainer, assistantTrainer]
 
-    mockSWR.mockReturnValue({
-      data: {
-        coursePricing: [
-          {
-            id: '',
-            level: Course_Level_Enum.Level_1,
-            type: Course_Type_Enum.Closed,
-            blended: false,
-            reaccreditation: false,
-            priceAmount: PRICING_PER_PARTICIPANT,
-            priceCurrency: Currency.GBP,
-            xeroCode: '',
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: CoursePriceQuery }>({
+          data: {
+            coursePrice: [
+              { priceAmount: PRICING_PER_PARTICIPANT, priceCurrency: 'GBP' },
+            ],
           },
-        ],
-      },
-      mutate: jest.fn(),
-      isValidating: false,
-      error: null,
-      isLoading: false,
-    })
+        }),
+    } as unknown as Client
 
     const trainerExpenses = 610
     const freeSpacesDiscount = PRICING_PER_PARTICIPANT * courseData.freeSpaces
@@ -277,16 +267,18 @@ describe('component: ReviewAndConfirm', () => {
     const vat = 1.2
 
     render(
-      <CreateCourseProvider
-        initialValue={{
-          courseData,
-          expenses,
-          trainers,
-        }}
-        courseType={CourseType.CLOSED}
-      >
-        <ReviewAndConfirm />
-      </CreateCourseProvider>,
+      <Provider value={client}>
+        <CreateCourseProvider
+          initialValue={{
+            courseData,
+            expenses,
+            trainers,
+          }}
+          courseType={CourseType.CLOSED}
+        >
+          <ReviewAndConfirm />
+        </CreateCourseProvider>
+      </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } }
     )
 

@@ -1,7 +1,10 @@
-import useSWR from 'swr'
 import { Merge } from 'ts-essentials'
+import { useQuery } from 'urql'
 
-import { GetBildStrategiesQuery } from '@app/generated/graphql'
+import {
+  GetBildStrategiesQuery,
+  GetBildStrategiesQueryVariables,
+} from '@app/generated/graphql'
 import { Strategy } from '@app/pages/trainer-pages/CourseGrading/components/BILDGrading/types'
 import { QUERY } from '@app/queries/bild/get-bild-strategies'
 import { BildStrategies } from '@app/types'
@@ -15,14 +18,13 @@ export type Strategies = Array<
 >
 
 export const useBildStrategies = (shouldFetch = false) => {
-  const { data, error } = useSWR<GetBildStrategiesQuery, Error>(
-    shouldFetch ? QUERY : null,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
-  )
+  const [{ data, error }] = useQuery<
+    GetBildStrategiesQuery,
+    GetBildStrategiesQueryVariables
+  >({
+    query: QUERY,
+    pause: !shouldFetch,
+  })
 
   const status = getSWRLoadingStatus(data, error)
 

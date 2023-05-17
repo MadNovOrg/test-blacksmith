@@ -796,6 +796,7 @@ export type Draft = {
     prices: Go1LicensingPrices
     invoiceDetails: InvoiceDetails
   }
+  invoiceDetails?: InvoiceDetails
 }
 
 export type AllCourseStatuses =

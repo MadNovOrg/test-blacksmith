@@ -33,7 +33,7 @@ export const TrainerExpenses = () => {
 
   const handleSubmit = useCallback(() => {
     completeStep(StepsEnum.TRAINER_EXPENSES)
-    navigate('../review-and-confirm')
+    navigate('../order-details')
   }, [completeStep, navigate])
 
   const onChange = useCallback(
@@ -70,7 +70,10 @@ export const TrainerExpenses = () => {
         justifyContent="space-between"
         sx={{ marginTop: 4 }}
       >
-        <Button onClick={() => navigate(-1)} startIcon={<ArrowBackIcon />}>
+        <Button
+          onClick={() => navigate('../assign-trainers')}
+          startIcon={<ArrowBackIcon />}
+        >
           {t('pages.create-course.trainer-expenses.back-btn')}
         </Button>
 

@@ -1,6 +1,8 @@
 import { fireEvent } from '@testing-library/react'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { Client, Provider } from 'urql'
+import { never } from 'wonka'
 
 import { VenueSelector } from '@app/components/VenueSelector'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
@@ -55,17 +57,23 @@ describe('component: CreateCourseForm', () => {
   })
 
   it('renders assign assists for indirect course type', async () => {
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
     render(
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <CreateCourseProvider courseType={CourseType.INDIRECT}>
-              <CreateCourseForm />
-            </CreateCourseProvider>
-          }
-        />
-      </Routes>,
+      <Provider value={client}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <CreateCourseProvider courseType={CourseType.INDIRECT}>
+                <CreateCourseForm />
+              </CreateCourseProvider>
+            }
+          />
+        </Routes>
+      </Provider>,
       {},
       { initialEntries: ['/?type=INDIRECT'] }
     )
@@ -103,22 +111,28 @@ describe('component: CreateCourseForm', () => {
     ]
     mockTrainerSearch.mockResolvedValue({ trainers: availableTrainers })
 
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
     render(
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <CreateCourseProvider
-              initialValue={{
-                courseData: courseToCourseInput(course) as ValidCourseInput,
-              }}
-              courseType={CourseType.INDIRECT}
-            >
-              <CreateCourseForm />
-            </CreateCourseProvider>
-          }
-        />
-      </Routes>,
+      <Provider value={client}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <CreateCourseProvider
+                initialValue={{
+                  courseData: courseToCourseInput(course) as ValidCourseInput,
+                }}
+                courseType={CourseType.INDIRECT}
+              >
+                <CreateCourseForm />
+              </CreateCourseProvider>
+            }
+          />
+        </Routes>
+      </Provider>,
       {},
       { initialEntries: ['/?type=INDIRECT'] }
     )
