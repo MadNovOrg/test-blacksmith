@@ -155,7 +155,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canInviteAttendees: (courseType: CourseType) => {
       const can =
-        auth.activeRole !== RoleName.TRAINER ||
+        (auth.activeRole !== RoleName.TRAINER &&
+          auth.activeRole !== RoleName.LD) ||
         courseType === CourseType.INDIRECT
 
       return can
