@@ -27,11 +27,15 @@ type FormFields = { bildStrategies: InferType<typeof schema> }
 
 type Props = {
   courseLevel: CourseInput['courseLevel']
+  disabled?: boolean
 }
 
-export const StrategyToggles: React.FC<Props> = ({ courseLevel }) => {
+export const StrategyToggles: React.FC<Props> = ({
+  courseLevel,
+  disabled = false,
+}) => {
   const { t } = useTranslation()
-  const { control, setValue } = useFormContext<FormFields>()
+  const { control, setValue, resetField } = useFormContext<FormFields>()
   const { acl } = useAuth()
 
   const isTrainerLevel = Boolean(
@@ -57,15 +61,9 @@ export const StrategyToggles: React.FC<Props> = ({ courseLevel }) => {
           courseLevel === CourseLevel.BildAdvancedTrainer,
       })
     } else {
-      setValue('bildStrategies', {
-        PRIMARY: false,
-        SECONDARY: false,
-        NON_RESTRICTIVE_TERTIARY: false,
-        RESTRICTIVE_TERTIARY_INTERMEDIATE: false,
-        RESTRICTIVE_TERTIARY_ADVANCED: false,
-      })
+      resetField('bildStrategies')
     }
-  }, [isTrainerLevel, setValue, courseLevel])
+  }, [isTrainerLevel, setValue, courseLevel, resetField])
 
   return (
     <Grid container data-testid="strategy-toggles">
@@ -80,7 +78,7 @@ export const StrategyToggles: React.FC<Props> = ({ courseLevel }) => {
                   <Switch
                     {...field}
                     checked={field.value === true}
-                    disabled={isTrainerLevel}
+                    disabled={isTrainerLevel || disabled}
                   />
                 }
                 label={t(`common.bild-strategies.${BildStrategies.Primary}`)}
@@ -99,7 +97,7 @@ export const StrategyToggles: React.FC<Props> = ({ courseLevel }) => {
                   <Switch
                     {...field}
                     checked={field.value === true}
-                    disabled={isTrainerLevel}
+                    disabled={isTrainerLevel || disabled}
                   />
                 }
                 label={t(`common.bild-strategies.${BildStrategies.Secondary}`)}
@@ -118,7 +116,7 @@ export const StrategyToggles: React.FC<Props> = ({ courseLevel }) => {
                   <Switch
                     {...field}
                     checked={field.value === true}
-                    disabled={isTrainerLevel}
+                    disabled={isTrainerLevel || disabled}
                   />
                 }
                 label={t(
@@ -141,7 +139,7 @@ export const StrategyToggles: React.FC<Props> = ({ courseLevel }) => {
                   <Switch
                     {...field}
                     checked={field.value === true}
-                    disabled={isTrainerLevel}
+                    disabled={isTrainerLevel || disabled}
                   />
                 }
                 label={t(
@@ -164,7 +162,8 @@ export const StrategyToggles: React.FC<Props> = ({ courseLevel }) => {
                     checked={field.value === true}
                     disabled={
                       isTrainerLevel ||
-                      !acl.canDeliveryTertiaryAdvancedStrategy()
+                      !acl.canDeliveryTertiaryAdvancedStrategy() ||
+                      disabled
                     }
                   />
                 }

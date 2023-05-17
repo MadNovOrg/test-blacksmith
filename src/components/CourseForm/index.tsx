@@ -293,7 +293,14 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       parkingInstructions: courseInput?.parkingInstructions ?? '',
       source: courseInput?.source ?? '',
       bildStrategies:
-        courseInput?.bildStrategies ?? ({} as Record<BildStrategies, boolean>),
+        courseInput?.bildStrategies ??
+        ({
+          PRIMARY: false,
+          SECONDARY: false,
+          NON_RESTRICTIVE_TERTIARY: false,
+          RESTRICTIVE_TERTIARY_INTERMEDIATE: false,
+          RESTRICTIVE_TERTIARY_ADVANCED: false,
+        } as Record<BildStrategies, boolean>),
       conversion: courseInput?.conversion ?? false,
       price: courseInput?.price ?? null,
     }),
@@ -685,7 +692,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             ) : null}
           </FormControl>
 
-          {isBild ? <StrategyToggles courseLevel={values.courseLevel} /> : null}
+          {isBild ? (
+            <StrategyToggles
+              courseLevel={values.courseLevel}
+              disabled={disabledFields.has('bildStrategies')}
+            />
+          ) : null}
 
           <Divider sx={{ my: 2 }} />
 

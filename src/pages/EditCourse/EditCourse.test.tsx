@@ -4,11 +4,12 @@ import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
 import { VenueSelector } from '@app/components/VenueSelector'
+import { Accreditors_Enum } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
-import { CourseType, RoleName } from '@app/types'
+import { BildStrategies, CourseLevel, CourseType, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen } from '@test/index'
+import { render, screen, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { EditCourse } from '.'
@@ -310,5 +311,70 @@ describe('page: EditCourse', () => {
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
+  })
+
+  it('pre-selects and disables BILD strategy toggles when editing', async () => {
+    const openCourse = buildCourse({
+      overrides: {
+        accreditedBy: Accreditors_Enum.Bild,
+        type: CourseType.CLOSED,
+        bildStrategies: [
+          { strategyName: BildStrategies.Primary },
+          { strategyName: BildStrategies.Secondary },
+        ],
+        level: CourseLevel.BildRegular,
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: openCourse,
+      status: LoadingStatus.IDLE,
+      mutate: jest.fn(),
+    })
+
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
+    await waitFor(() => {
+      render(
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/edit/:id" element={<EditCourse />} />
+          </Routes>
+        </Provider>,
+        { auth: { activeRole: RoleName.TT_ADMIN } },
+        { initialEntries: ['/courses/edit/1'] }
+      )
+    })
+
+    const primaryToggle = screen.getByLabelText(/primary/i)
+    const secondaryToggle = screen.getByLabelText(/secondary/i)
+    const nonRestrictiveToggle = screen.getByLabelText(
+      /non restrictive tertiary/i
+    )
+    const intermediateToggle = screen.getByLabelText(
+      /restrictive tertiary intermediate/i
+    )
+    const advancedToggle = screen.getByLabelText(
+      /restrictive tertiary advanced/i
+    )
+
+    const selectedToggles = [primaryToggle, secondaryToggle]
+    const notSelectedToggles = [
+      nonRestrictiveToggle,
+      intermediateToggle,
+      advancedToggle,
+    ]
+
+    selectedToggles.forEach(toggle => {
+      expect(toggle).toBeChecked()
+      expect(toggle).toBeDisabled()
+    })
+
+    notSelectedToggles.forEach(toggle => {
+      expect(toggle).not.toBeChecked()
+      expect(toggle).toBeDisabled()
+    })
   })
 })

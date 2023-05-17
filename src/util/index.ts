@@ -243,6 +243,12 @@ export function extractTime(date: Date | string | null) {
 }
 
 export const courseToCourseInput = (course: Course): CourseInput => {
+  const bildStrategies: Record<string, boolean> = {}
+
+  course.bildStrategies.forEach(strategy => {
+    bildStrategies[strategy.strategyName] = true
+  })
+
   return {
     type: course.type,
     deliveryType: course.deliveryType,
@@ -272,7 +278,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     specialInstructions: course.special_instructions ?? '',
     parkingInstructions: course.parking_instructions ?? '',
     source: course.source ?? '',
-    bildStrategies: null,
+    bildStrategies,
     accreditedBy: course.accreditedBy,
     conversion: course.conversion,
     price: course.price ?? null,

@@ -402,9 +402,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           'aolRegion',
           'minParticipants',
           'maxParticipants',
+          'bildStrategies',
         ])
       }
-      return new Set<DisabledFields>(['courseLevel'])
+      return new Set<DisabledFields>(['courseLevel', 'bildStrategies'])
     }
 
     return new Set([])
