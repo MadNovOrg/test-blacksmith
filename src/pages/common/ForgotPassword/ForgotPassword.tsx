@@ -31,6 +31,7 @@ export const ForgotPasswordPage = () => {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm<yup.InferType<typeof schema>>({
     resolver: yupResolver(schema),
     defaultValues: { email: '' },
@@ -78,7 +79,9 @@ export const ForgotPasswordPage = () => {
 
       {error ? (
         <Alert severity="error" sx={{ mt: 2 }}>
-          {t('pages.forgot-password.generic-error')}
+          {t('pages.forgot-password.generic-error', {
+            email: getValues('email'),
+          })}
         </Alert>
       ) : null}
 

@@ -746,7 +746,7 @@
     "password-resent": "Your temporary password has been resent."
   },
   "forgot-password": {
-    "generic-error": "An error occurred. Please contact your administrator",
+    "generic-error": "If there is an account registered to {{email}}, an email was sent to allow you to reset your password.",
     "generic-email-error": "Please enter a valid email address",
     "title": "Reset password",
     "subtitle": "If you've forgotten your password, simply enter your email address below and we'll send you a link to reset your password ",
@@ -809,7 +809,7 @@
       "InvalidPasswordException": "Password does not conform to policy",
       "CodeMismatchException": "Passcode is incorrect",
       "ExpiredCodeException": "Invalid passcode",
-      "UnknownError": "An error occurred. Please contact your administrator",
+      "UnknownError": "If there is an account registered to {{email}}, an email was sent to allow you to reset your password.",
       "LimitExceededException": "Attempt limit exceeded, please try again after some time"
     }
   },

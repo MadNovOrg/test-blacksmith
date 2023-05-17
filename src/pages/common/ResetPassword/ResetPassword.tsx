@@ -115,7 +115,9 @@ export const ResetPasswordPage = () => {
       const error = err as E
       setResetError(
         t(`pages.reset-password.auth-errors.${error.code}`) ||
-          t(`pages.reset-password.auth-errors.UnknownError`)
+          t(`pages.reset-password.auth-errors.UnknownError`, {
+            email: data.email,
+          })
       )
     }
   }
