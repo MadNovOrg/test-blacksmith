@@ -83,7 +83,10 @@ export const ManageCertificateMenu: React.FC<Props> = ({
         {acl.canOverrideGrades() && (
           <MenuItem
             data-testid="manage-certificate-modify-grade"
-            onClick={onShowModifyGrade}
+            onClick={() => {
+              setOpen(false)
+              onShowModifyGrade()
+            }}
             disabled={isRevoked}
           >
             {t('modify-grade')}
@@ -91,7 +94,10 @@ export const ManageCertificateMenu: React.FC<Props> = ({
         )}
         {acl.canHoldCert() && (
           <MenuItem
-            onClick={onShowPutOnHoldModal}
+            onClick={() => {
+              setOpen(false)
+              onShowPutOnHoldModal()
+            }}
             disabled={isRevoked}
             data-testid="manage-certificate-hold-certificate"
           >
@@ -102,7 +108,10 @@ export const ManageCertificateMenu: React.FC<Props> = ({
         {acl.isTTAdmin() && certificateChangeLength ? (
           <MenuItem
             data-testid="manage-certificate-change-log"
-            onClick={onShowChangelogModal}
+            onClick={() => {
+              setOpen(false)
+              onShowChangelogModal()
+            }}
           >
             {t('change-log')}
           </MenuItem>
@@ -112,14 +121,20 @@ export const ManageCertificateMenu: React.FC<Props> = ({
           (isRevoked ? (
             <MenuItem
               data-testid="manage-certificate-undo-revoke"
-              onClick={onShowUndoRevokeModal}
+              onClick={() => {
+                setOpen(false)
+                onShowUndoRevokeModal()
+              }}
             >
               {t('undo-revoke')}
             </MenuItem>
           ) : (
             <MenuItem
               data-testid="manage-certificate-revoke-certificate"
-              onClick={onShowRevokeModal}
+              onClick={() => {
+                setOpen(false)
+                onShowRevokeModal()
+              }}
             >
               {t('revoke-certificate')}
             </MenuItem>
