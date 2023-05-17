@@ -27,7 +27,7 @@ INSERT INTO profile (id, _given_name, _family_name, _email) VALUES
 ('6987feba-0877-4a2a-b7da-982de1977eb3', 'Learning', 'Development', 'ld@teamteach.testinator.com');
 
 INSERT INTO identity (provider_id, profile_id, type) VALUES
-('98306366-b6fa-46b2-bed3-06c778d2c8aa', '13a223a8-2184-42f1-ba37-b49e115e59a2', 'cognito'), -- trainer@teamteach.testinator.com
+('b7cc8b4e-b567-42d2-8edf-0b359fb68171', '13a223a8-2184-42f1-ba37-b49e115e59a2', 'cognito'), -- trainer@teamteach.testinator.com
 ('966a5a92-b112-48d3-9031-31d85b5e14b4', '13a223a8-2184-42f1-ba37-b49e115e59a2', 'cognito'), -- trainer@teamteach.testinator.com staging
 
 ('4008910a-8c74-45f5-a9f8-4bc5aa9d0eb2', '5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'cognito'), -- trainer.with.org@teamteach.testinator.com
