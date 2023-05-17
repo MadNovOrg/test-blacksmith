@@ -142,6 +142,7 @@ export function useSaveCourse(): {
         const leadTrainerMissing =
           trainers.filter(t => t.type === CourseTrainerType.Leader).length === 0
         const approveExceptions =
+          !isBild &&
           exceptions.length > 0 &&
           shouldGoIntoExceptionApproval(acl, courseData.type)
 
