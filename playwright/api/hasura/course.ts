@@ -362,10 +362,7 @@ export async function insertCourseGradingForParticipants(
   }
 }
 
-export async function insertCertificateForParticipants(
-  course: Course,
-  users: User[]
-): Promise<void> {
+export async function insertCertificate(course: Course, users: User[]) {
   const variables = users.map(async user => ({
     certificationDate: new Date().toISOString(),
     courseId: course.id,
@@ -391,7 +388,6 @@ export async function insertCertificateForParticipants(
     }>(certificateQuery, {
       objects: await Promise.all(variables),
     })
-
     console.log(`
       Inserted certificates for the following users on course "${course.id}":
         - ${users
@@ -402,12 +398,16 @@ export async function insertCertificateForParticipants(
     console.error(e)
     throw e
   }
+  return certificateResult.insert_course_certificate.returning.map(
+    certificate => certificate.id
+  )
+}
 
-  const certificateIds =
-    certificateResult.insert_course_certificate.returning.map(
-      certificate => certificate.id
-    )
-
+export async function insertCertificateForParticipants(
+  course: Course,
+  users: User[]
+): Promise<void> {
+  const certificateIds = await insertCertificate(course, users)
   const participantQuery = gql`
     mutation updateParticipant($id: uuid!, $certificateId: uuid!) {
       update_course_participant(

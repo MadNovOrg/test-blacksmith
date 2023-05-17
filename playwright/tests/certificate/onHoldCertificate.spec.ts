@@ -17,13 +17,17 @@ const test = base.extend<{ certificate: { course: Course; user: User } }>({
     course.type = CourseType.CLOSED
     course.gradingConfirmed = true
     course.id = await API.course.insertCourse(course, users.trainer.email)
-    await API.course.insertCourseParticipants(course.id, [user])
-    await API.course.insertCourseGradingForParticipants(
-      course,
-      [user],
-      Grade_Enum.Pass
-    )
-    await API.course.insertCertificateForParticipants(course, [user])
+    if (course.id) {
+      await API.course.insertCourseParticipants(course.id, [user])
+      await API.course.insertCourseGradingForParticipants(
+        course,
+        [user],
+        Grade_Enum.Pass
+      )
+      await API.course.insertCertificateForParticipants(course, [user])
+    } else {
+      console.error('Failed to insert course. Course ID is not set.')
+    }
     await use({ course: course, user: user })
     await API.course.deleteCourse(course.id)
   },
@@ -31,14 +35,7 @@ const test = base.extend<{ certificate: { course: Course; user: User } }>({
 
 test.use({ storageState: stateFilePath('admin') })
 
-test('admin can put a certificate on hold', async ({
-  page,
-  browserName,
-  certificate,
-}) => {
-  // Disabled in firefox due to datepicker issues
-  // eslint-disable-next-line playwright/no-skipped-test
-  test.skip(browserName === 'firefox')
+test('admin can put a certificate on hold', async ({ page, certificate }) => {
   const certificationPage = new CertificationPage(page)
   await certificationPage.goto(
     `${certificate.user.givenName} ${certificate.user.familyName}`
