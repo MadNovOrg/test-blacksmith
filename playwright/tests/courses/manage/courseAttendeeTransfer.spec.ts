@@ -7,7 +7,8 @@ import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 
-const allowedRoles = ['userOrgAdmin', 'salesAdmin']
+const allowedRoles = ['userOrgAdmin']
+// No 'salesAdmin' see https://behaviourhub.atlassian.net/browse/TTHP-1532
 
 const createCourses = async (): Promise<Course[]> => {
   const courses: Course[] = []
@@ -38,10 +39,6 @@ allowedRoles.forEach(role => {
     browser,
     courses,
   }) => {
-    // eslint-disable-next-line playwright/no-conditional-in-test
-    if (role === 'salesAdmin') {
-      test.fail(true, 'See https://behaviourhub.atlassian.net/browse/TTHP-1532')
-    }
     const context = await browser.newContext({
       storageState: stateFilePath(role),
     })
