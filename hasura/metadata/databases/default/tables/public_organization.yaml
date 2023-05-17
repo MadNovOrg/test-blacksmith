@@ -198,6 +198,7 @@ insert_permissions:
       columns:
         - address
         - attributes
+        - go1_licenses
         - name
         - trust_name
         - trust_type
@@ -391,11 +392,13 @@ select_permissions:
         - contact_details
         - created_at
         - geo_coordinates
+        - go1_licenses
         - id
         - name
         - original_record
         - preferences
         - region
+        - reserved_go1_licenses
         - sector
         - tags
         - trust_name
@@ -403,6 +406,7 @@ select_permissions:
         - updated_at
         - xero_contact_id
       filter: {}
+      allow_aggregations: true
 update_permissions:
   - role: sales-admin
     permission:
