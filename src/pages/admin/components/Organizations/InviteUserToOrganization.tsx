@@ -26,6 +26,7 @@ import { BackButton } from '@app/components/BackButton'
 import { FormPanel } from '@app/components/FormPanel'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
+import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useOrganizations } from '@app/hooks/useOrganizations'
 import { OrgDashboardTabs } from '@app/pages/admin/components/Organizations/OrgDashboard'
@@ -37,6 +38,7 @@ import { getFieldError, requiredMsg } from '@app/util'
 
 export const InviteUserToOrganization = () => {
   const theme = useTheme()
+  const { acl } = useAuth()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const fetcher = useFetcher()
@@ -243,32 +245,34 @@ export const InviteUserToOrganization = () => {
                 {t('pages.invite-to-org.permissions')}
               </Typography>
 
-              <FormPanel>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={isOrgAdmin}
-                      onChange={e => {
-                        setIsOrgAdmin(e.target.checked)
-                      }}
-                      sx={{ px: 2 }}
-                    />
-                  }
-                  label={
-                    <Box>
-                      <Typography variant="body1">
-                        {t('pages.invite-to-org.organization-admin')}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color={theme.palette.grey[700]}
-                      >
-                        {t('pages.invite-to-org.organization-admin-hint')}
-                      </Typography>
-                    </Box>
-                  }
-                />
-              </FormPanel>
+              {acl.canSetOrgAdminRole() ? (
+                <FormPanel>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={isOrgAdmin}
+                        onChange={e => {
+                          setIsOrgAdmin(e.target.checked)
+                        }}
+                        sx={{ px: 2 }}
+                      />
+                    }
+                    label={
+                      <Box>
+                        <Typography variant="body1">
+                          {t('pages.invite-to-org.organization-admin')}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color={theme.palette.grey[700]}
+                        >
+                          {t('pages.invite-to-org.organization-admin-hint')}
+                        </Typography>
+                      </Box>
+                    }
+                  />
+                </FormPanel>
+              ) : undefined}
 
               {error ? (
                 <FormPanel>

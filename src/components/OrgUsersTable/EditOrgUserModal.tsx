@@ -14,6 +14,7 @@ import { uniq } from 'lodash-es'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { ProfileType } from '@app/hooks/useOrg'
 import { positions } from '@app/pages/common/CourseBooking/components/org-data'
@@ -37,6 +38,7 @@ export const EditOrgUserModal: React.FC<
   React.PropsWithChildren<EditOrgUserModalProps>
 > = function ({ orgMember, onClose, onChange }) {
   const { t } = useTranslation()
+  const { acl } = useAuth()
   const fetcher = useFetcher()
   const [error, setError] = useState<string>()
   const [isAdmin, setIsAdmin] = useState(orgMember.isAdmin)
@@ -96,32 +98,34 @@ export const EditOrgUserModal: React.FC<
         )}
       />
 
-      <FormControlLabel
-        sx={{ py: 2 }}
-        control={
-          <Switch
-            checked={isAdmin ?? false}
-            onChange={e => {
-              setIsAdmin(e.target.checked)
-            }}
-            sx={{ px: 2 }}
-          />
-        }
-        label={
-          <Box>
-            <Typography variant="body1">
-              {t(
-                'pages.org-details.tabs.users.edit-user-modal.organization-admin'
-              )}
-            </Typography>
-            <Typography variant="body2" color={theme.palette.grey[700]}>
-              {t(
-                'pages.org-details.tabs.users.edit-user-modal.organization-admin-hint'
-              )}
-            </Typography>
-          </Box>
-        }
-      />
+      {acl.canSetOrgAdminRole() ? (
+        <FormControlLabel
+          sx={{ py: 2 }}
+          control={
+            <Switch
+              checked={isAdmin ?? false}
+              onChange={e => {
+                setIsAdmin(e.target.checked)
+              }}
+              sx={{ px: 2 }}
+            />
+          }
+          label={
+            <Box>
+              <Typography variant="body1">
+                {t(
+                  'pages.org-details.tabs.users.edit-user-modal.organization-admin'
+                )}
+              </Typography>
+              <Typography variant="body2" color={theme.palette.grey[700]}>
+                {t(
+                  'pages.org-details.tabs.users.edit-user-modal.organization-admin-hint'
+                )}
+              </Typography>
+            </Box>
+          }
+        />
+      ) : undefined}
 
       {error && <Alert severity="error">{error}</Alert>}
 
