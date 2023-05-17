@@ -18,7 +18,33 @@ configuration:
     last_name: lastName
     email_address: emailAddress
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - addresses
+        - phones
+        - email_address
+        - first_name
+        - last_name
+        - name
+        - xero_id
+        - id
+      filter: {}
+      allow_aggregations: true
   - role: sales-admin
+    permission:
+      columns:
+        - addresses
+        - phones
+        - email_address
+        - first_name
+        - last_name
+        - name
+        - xero_id
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
     permission:
       columns:
         - addresses

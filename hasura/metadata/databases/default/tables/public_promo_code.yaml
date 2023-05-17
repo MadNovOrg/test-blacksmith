@@ -120,22 +120,22 @@ select_permissions:
   - role: finance
     permission:
       columns:
-        - id
-        - code
-        - description
-        - type
         - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_at
+        - created_by
+        - denied_by
+        - description
+        - enabled
+        - id
+        - levels
+        - type
+        - updated_at
+        - uses_max
         - valid_from
         - valid_to
-        - booker_single_use
-        - uses_max
-        - levels
-        - enabled
-        - approved_by
-        - created_by
-        - created_at
-        - updated_at
-        - denied_by
       filter: {}
       allow_aggregations: true
   - role: sales-admin
@@ -157,6 +157,27 @@ select_permissions:
         - created_at
         - updated_at
         - denied_by
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_at
+        - created_by
+        - denied_by
+        - description
+        - enabled
+        - id
+        - levels
+        - type
+        - updated_at
+        - uses_max
+        - valid_from
+        - valid_to
       filter: {}
       allow_aggregations: true
   - role: tt-ops

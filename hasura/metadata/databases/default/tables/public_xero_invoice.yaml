@@ -50,7 +50,51 @@ computed_fields:
         name: calculate_invoice_status
     comment: Calculated invoice status that takes due_date into account
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - amount_due
+        - amount_paid
+        - currency_code
+        - due_date
+        - fully_paid_on_date
+        - id
+        - invoice_number
+        - issued_date
+        - line_items
+        - reference
+        - subtotal
+        - total
+        - total_tax
+        - xero_contact_id
+        - xero_id
+      computed_fields:
+        - status
+      filter: {}
+      allow_aggregations: true
   - role: sales-admin
+    permission:
+      columns:
+        - amount_due
+        - amount_paid
+        - currency_code
+        - due_date
+        - fully_paid_on_date
+        - id
+        - invoice_number
+        - issued_date
+        - line_items
+        - reference
+        - subtotal
+        - total
+        - total_tax
+        - xero_contact_id
+        - xero_id
+      computed_fields:
+        - status
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
     permission:
       columns:
         - amount_due
