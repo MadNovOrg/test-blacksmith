@@ -9,6 +9,9 @@ import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 
+import { FullHeightPage } from '../../../../components/FullHeightPage'
+import theme from '../../../../theme'
+
 import { Filters } from './Filters'
 import { PendingApproval } from './PendingApproval'
 import { DiscountsTable } from './Table'
@@ -51,56 +54,68 @@ export const DiscountsList: React.FC<React.PropsWithChildren<unknown>> = () => {
   const count = promoCodes.length ?? 0
 
   return (
-    <Container maxWidth="lg" sx={{ py: 5 }}>
-      <Box mb={4}>
-        <BackButton label={t('pages.admin.back-to-settings')} />
-      </Box>
-      <Box display="flex" gap={4}>
-        <Box width={250}>
-          <Typography variant="h1">{t('pages.promoCodes.title')}</Typography>
-          <Typography variant="body2" color="grey.500" mt={1}>
-            {loading ? <>&nbsp;</> : t('x-items', { count })}
+    <FullHeightPage>
+      <Box sx={{ bgcolor: theme.palette.grey[100] }}>
+        <Container maxWidth="lg" sx={{ py: 2 }}>
+          <BackButton label={t('pages.admin.back-to-settings')} />
+
+          <Typography variant="h1" py={2} fontWeight={600}>
+            {t('pages.promoCodes.title')}
           </Typography>
+        </Container>
+      </Box>
 
-          <Stack gap={4} mt={4}>
-            <Filters onChange={onFilterChange} />
-          </Stack>
+      <Container maxWidth="lg" sx={{ py: 5 }}>
+        <Box mb={4}>
+          <BackButton label={t('pages.admin.back-to-settings')} />
         </Box>
+        <Box display="flex" gap={4}>
+          <Box width={250}>
+            <Typography variant="h1">{t('pages.promoCodes.title')}</Typography>
+            <Typography variant="body2" color="grey.500" mt={1}>
+              {loading ? <>&nbsp;</> : t('x-items', { count })}
+            </Typography>
 
-        <Box flex={1}>
-          <Box
-            display="flex"
-            alignItems="flex-end"
-            flexDirection="column"
-            mb={2}
-          >
-            <Button variant="contained" onClick={() => navigate('./new')}>
-              {t('pages.promoCodes.new-btn')}
-            </Button>
+            <Stack gap={4} mt={4}>
+              <Filters onChange={onFilterChange} />
+            </Stack>
           </Box>
 
-          {acl.canApproveDiscount() ? (
-            <>
-              <Box>
-                <Typography fontWeight="bold">
-                  {t('pages.promoCodes.list-title-pending')}
-                </Typography>
-              </Box>
-              <PendingApproval onAction={mutate} />
-            </>
-          ) : null}
+          <Box flex={1}>
+            <Box
+              display="flex"
+              alignItems="flex-end"
+              flexDirection="column"
+              mb={2}
+            >
+              <Button variant="contained" onClick={() => navigate('./new')}>
+                {t('pages.promoCodes.new-btn')}
+              </Button>
+            </Box>
 
-          <DiscountsTable
-            promoCodes={promoCodes}
-            sorting={sorting}
-            loading={isLoading}
-            filtered={filtered}
-            onAction={mutate}
-          />
+            {acl.canApproveDiscount() ? (
+              <>
+                <Box>
+                  <Typography fontWeight="bold">
+                    {t('pages.promoCodes.list-title-pending')}
+                  </Typography>
+                </Box>
+                <PendingApproval onAction={mutate} />
+              </>
+            ) : null}
 
-          <Pagination total={total} />
+            <DiscountsTable
+              promoCodes={promoCodes}
+              sorting={sorting}
+              loading={isLoading}
+              filtered={filtered}
+              onAction={mutate}
+            />
+
+            <Pagination total={total} />
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </FullHeightPage>
   )
 }

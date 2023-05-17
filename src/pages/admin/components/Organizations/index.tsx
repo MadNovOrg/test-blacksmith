@@ -26,12 +26,14 @@ import { BackButton } from '@app/components/BackButton'
 import { DialogExportBlended } from '@app/components/DialogExportBlended'
 import { FilterOrgSector } from '@app/components/FilterOrgSector'
 import { FilterSearch } from '@app/components/FilterSearch'
-import { Sticky } from '@app/components/Sticky'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
 import { useOrganizations } from '@app/hooks/useOrganizations'
 import { useTableSort } from '@app/hooks/useTableSort'
+
+import { FullHeightPage } from '../../../../components/FullHeightPage'
+import theme from '../../../../theme'
 
 type OrganizationsProps = unknown
 
@@ -139,19 +141,21 @@ export const Organizations: React.FC<
   }, [orgs])
 
   return (
-    <>
+    <FullHeightPage>
+      <Box sx={{ bgcolor: theme.palette.grey[100] }}>
+        <Container maxWidth="lg" sx={{ py: 2 }}>
+          <BackButton label={t('pages.admin.back-to-settings')} />
+
+          <Typography variant="h1" py={2} fontWeight={600}>
+            {t('pages.admin.organizations.title')}
+          </Typography>
+        </Container>
+      </Box>
+
       <Container maxWidth="lg" sx={{ py: 5 }}>
-        <Sticky top={20}>
-          <Box mb={1}>
-            <BackButton />
-          </Box>
-        </Sticky>
         <Box display="flex" gap={4}>
           <Box width={250}>
-            <Typography variant="h1">
-              {t('pages.admin.organizations.title')}
-            </Typography>
-            <Typography variant="body2" color="grey.500" mt={1}>
+            <Typography variant="body2" color="grey.500">
               {loading ? <>&nbsp;</> : t('x-items', { count })}
             </Typography>
 
@@ -256,7 +260,7 @@ export const Organizations: React.FC<
           </Box>
         </Box>
       </Container>
-    </>
+    </FullHeightPage>
   )
 }
 

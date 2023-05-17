@@ -1,19 +1,19 @@
 import {
   Box,
+  Button,
+  Checkbox,
+  Chip,
   CircularProgress,
   Container,
-  Stack,
-  Typography,
+  FormControlLabel,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
-  Chip,
-  Checkbox,
-  FormControlLabel,
-  Button,
+  Typography,
 } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -26,13 +26,16 @@ import { FilterCertificateValidity } from '@app/components/FilterCertificateVali
 import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
-import { TableHead, Col } from '@app/components/Table/TableHead'
+import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import useProfiles from '@app/hooks/useProfiles'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { CertificateStatus, RoleName, TrainerRoleTypeName } from '@app/types'
+
+import { FullHeightPage } from '../../../components/FullHeightPage'
+import theme from '../../../theme'
 
 import { MergeUsersDialog } from './components/MergeUsersDialog'
 
@@ -224,210 +227,222 @@ export const Users = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 3 }}>
-      <Box mb={4} justifyContent="space-between" display="flex">
-        <BackButton
-          label={
-            merging
-              ? t('pages.admin.back-to-user-mgmt')
-              : t('pages.admin.back-to-settings')
-          }
-        />
-        {merging ? (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setShowMergeDialog(true)}
-            disabled={selected.length !== 2}
-          >
-            {t('pages.admin.users.merge-selected')}
-          </Button>
-        ) : undefined}
-        {acl.canMergeProfiles() && !merging ? (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => navigate('./merge')}
-          >
-            {t('pages.admin.users.merge-users')}
-          </Button>
-        ) : undefined}
+    <FullHeightPage>
+      <Box sx={{ bgcolor: theme.palette.grey[100] }}>
+        <Container maxWidth="lg" sx={{ py: 2 }}>
+          <Box justifyContent="space-between" display="flex">
+            <BackButton
+              label={
+                merging
+                  ? t('pages.admin.back-to-user-mgmt')
+                  : t('pages.admin.back-to-settings')
+              }
+            />
+
+            {merging ? (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setShowMergeDialog(true)}
+                disabled={selected.length !== 2}
+              >
+                {t('pages.admin.users.merge-selected')}
+              </Button>
+            ) : undefined}
+            {acl.canMergeProfiles() && !merging ? (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate('./merge')}
+              >
+                {t('pages.admin.users.merge-users')}
+              </Button>
+            ) : undefined}
+          </Box>
+          <Box>
+            <Typography variant="h1" py={2} fontWeight={600}>
+              {t('pages.admin.users.title')}
+            </Typography>
+          </Box>
+        </Container>
       </Box>
-      <Box display="flex" gap={4}>
-        <Box width={250}>
-          <Typography component="h1" variant="h2">
-            {t('pages.admin.users.title')}
-          </Typography>
-
-          <Stack gap={4} mt={4}>
-            <FilterSearch
-              value={keyword}
-              onChange={setKeyword}
-              placeholder={t('common.search')}
-            />
-            <FilterAccordion
-              options={roleFilter}
-              title={t('role')}
-              onChange={setRoleFilter}
-              defaultExpanded={false}
-              data-testid="FilterUserRole"
-            />
-            <FilterAccordion
-              options={trainerTypeFilter}
-              title={t('trainer-type')}
-              onChange={setTrainerTypeFilter}
-              defaultExpanded={false}
-              data-testid="FilterTrainerType"
-            />
-            <FilterCourseLevel
-              onChange={setFilteredByCertificateLEvel}
-              excludedStatuses={
-                new Set([
-                  Course_Level_Enum.Advanced,
-                  Course_Level_Enum.BildRegular,
-                  Course_Level_Enum.BildIntermediateTrainer,
-                  Course_Level_Enum.BildAdvancedTrainer,
-                  Course_Level_Enum.Level_1,
-                  Course_Level_Enum.Level_2,
-                ])
-              }
-            />
-            <FilterCertificateValidity onChange={setCertificateStatus} />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onChange={e => {
-                    setFilterByModerator(e.target.checked)
-                  }}
-                  data-testid="FilterModerator"
-                />
-              }
-              label={t('moderator')}
-            />
-          </Stack>
-        </Box>
-
-        <Box flex={1}>
-          {isLoading ? (
-            <Stack
-              alignItems="center"
-              justifyContent="center"
-              data-testid="users-fetching"
-            >
-              <CircularProgress />
-            </Stack>
-          ) : (
-            <TableContainer component={Paper} elevation={0}>
-              <Table>
-                <TableHead cols={cols}></TableHead>
-                <TableBody data-testid={'table-body'}>
-                  <TableNoRows
-                    noRecords={!users.length}
-                    filtered={filtered}
-                    colSpan={cols.length}
-                    itemsName={t('users').toLowerCase()}
+      <Container maxWidth="lg" sx={{ py: 3 }}>
+        <Box display="flex" gap={4}>
+          <Box width={250}>
+            <Stack gap={4}>
+              <FilterSearch
+                value={keyword}
+                onChange={setKeyword}
+                placeholder={t('common.search')}
+              />
+              <FilterAccordion
+                options={roleFilter}
+                title={t('role')}
+                onChange={setRoleFilter}
+                defaultExpanded={false}
+                data-testid="FilterUserRole"
+              />
+              <FilterAccordion
+                options={trainerTypeFilter}
+                title={t('trainer-type')}
+                onChange={setTrainerTypeFilter}
+                defaultExpanded={false}
+                data-testid="FilterTrainerType"
+              />
+              <FilterCourseLevel
+                onChange={setFilteredByCertificateLEvel}
+                excludedStatuses={
+                  new Set([
+                    Course_Level_Enum.Advanced,
+                    Course_Level_Enum.BildRegular,
+                    Course_Level_Enum.BildIntermediateTrainer,
+                    Course_Level_Enum.BildAdvancedTrainer,
+                    Course_Level_Enum.Level_1,
+                    Course_Level_Enum.Level_2,
+                  ])
+                }
+              />
+              <FilterCertificateValidity onChange={setCertificateStatus} />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={e => {
+                      setFilterByModerator(e.target.checked)
+                    }}
+                    data-testid="FilterModerator"
                   />
+                }
+                label={t('moderator')}
+              />
+            </Stack>
+          </Box>
 
-                  {users?.map(user => {
-                    return (
-                      <TableRow key={user.id} data-testid={`row-${user.id}`}>
-                        <TableCell>
-                          {merging && (
-                            <Checkbox
-                              value={user.id}
-                              onChange={e => {
-                                setSelected(s => {
-                                  if (e.target.checked) {
-                                    return [...s, e.target.value]
-                                  } else {
-                                    return s.filter(id => id !== e.target.value)
-                                  }
-                                })
-                              }}
-                              checked={selected.includes(user.id)}
-                            />
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <ProfileAvatar profile={user} />
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant="body2" color="secondary">
-                            {user.email}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          {user.organizations.map(obj => (
-                            <Typography
-                              variant="body2"
-                              color="secondary"
-                              key={obj.organization.id}
-                            >
-                              {obj.organization.name}
-                            </Typography>
-                          ))}
-                        </TableCell>
+          <Box flex={1}>
+            {isLoading ? (
+              <Stack
+                alignItems="center"
+                justifyContent="center"
+                data-testid="users-fetching"
+              >
+                <CircularProgress />
+              </Stack>
+            ) : (
+              <TableContainer component={Paper} elevation={0}>
+                <Table>
+                  <TableHead cols={cols}></TableHead>
+                  <TableBody data-testid={'table-body'}>
+                    <TableNoRows
+                      noRecords={!users.length}
+                      filtered={filtered}
+                      colSpan={cols.length}
+                      itemsName={t('users').toLowerCase()}
+                    />
 
-                        <TableCell>
-                          <Box display="flex" flexWrap="wrap">
-                            {user.roles.map(obj => (
-                              <Chip
-                                key={obj.role.id}
-                                sx={{
-                                  fontSize: '12px',
-                                  margin: '0 4px 4px 0',
+                    {users?.map(user => {
+                      return (
+                        <TableRow key={user.id} data-testid={`row-${user.id}`}>
+                          <TableCell>
+                            {merging && (
+                              <Checkbox
+                                value={user.id}
+                                onChange={e => {
+                                  setSelected(s => {
+                                    if (e.target.checked) {
+                                      return [...s, e.target.value]
+                                    } else {
+                                      return s.filter(
+                                        id => id !== e.target.value
+                                      )
+                                    }
+                                  })
                                 }}
-                                size="small"
-                                color={
-                                  isExternalRole(obj.role.name)
-                                    ? 'success'
-                                    : 'info'
-                                }
-                                label={t(`role-names.${obj.role.name}`)}
-                                data-testid="user-role-chip"
+                                checked={selected.includes(user.id)}
                               />
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <ProfileAvatar profile={user} />
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="body2" color="secondary">
+                              {user.email}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            {user.organizations.map(obj => (
+                              <Typography
+                                variant="body2"
+                                color="secondary"
+                                key={obj.organization.id}
+                              >
+                                {obj.organization.name}
+                              </Typography>
                             ))}
-                          </Box>
-                        </TableCell>
-                        <TableCell>
-                          <Box display="flex" flexWrap="wrap">
-                            {user.trainer_role_types.map(obj => {
-                              const { trainer_role_type } = obj
-                              return trainer_role_type ? (
+                          </TableCell>
+
+                          <TableCell>
+                            <Box display="flex" flexWrap="wrap">
+                              {user.roles.map(obj => (
                                 <Chip
-                                  key={trainer_role_type.id}
+                                  key={obj.role.id}
                                   sx={{
                                     fontSize: '12px',
                                     margin: '0 4px 4px 0',
                                   }}
                                   size="small"
-                                  label={t(
-                                    `trainer-role-types.${trainer_role_type.name}`
-                                  )}
-                                  data-testid="trainer-role-type-chip"
+                                  color={
+                                    isExternalRole(obj.role.name)
+                                      ? 'success'
+                                      : 'info'
+                                  }
+                                  label={t(`role-names.${obj.role.name}`)}
+                                  data-testid="user-role-chip"
                                 />
-                              ) : null
-                            })}
-                          </Box>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  })}
-                </TableBody>
-              </Table>
-              {usersTotalCount ? <Pagination total={usersTotalCount} /> : null}
-            </TableContainer>
-          )}
+                              ))}
+                            </Box>
+                          </TableCell>
+                          <TableCell>
+                            <Box display="flex" flexWrap="wrap">
+                              {user.trainer_role_types.map(obj => {
+                                const { trainer_role_type } = obj
+                                return trainer_role_type ? (
+                                  <Chip
+                                    key={trainer_role_type.id}
+                                    sx={{
+                                      fontSize: '12px',
+                                      margin: '0 4px 4px 0',
+                                    }}
+                                    size="small"
+                                    label={t(
+                                      `trainer-role-types.${trainer_role_type.name}`
+                                    )}
+                                    data-testid="trainer-role-type-chip"
+                                  />
+                                ) : null
+                              })}
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })}
+                  </TableBody>
+                </Table>
+                {usersTotalCount ? (
+                  <Pagination total={usersTotalCount} />
+                ) : null}
+              </TableContainer>
+            )}
+          </Box>
         </Box>
-      </Box>
-      {showMergeDialog && (
-        <MergeUsersDialog
-          onClose={handleMergeCancel}
-          onSuccess={handleMergeSuccess}
-          profileId1={selected[0]}
-          profileId2={selected[1]}
-        />
-      )}
-    </Container>
+        {showMergeDialog && (
+          <MergeUsersDialog
+            onClose={handleMergeCancel}
+            onSuccess={handleMergeSuccess}
+            profileId1={selected[0]}
+            profileId2={selected[1]}
+          />
+        )}
+      </Container>
+    </FullHeightPage>
   )
 }
