@@ -1,4 +1,6 @@
+import EditIcon from '@mui/icons-material/Edit'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
 import {
   Accordion,
   Alert,
@@ -179,6 +181,7 @@ type CertificateInfoProps = {
   statusTooltip?: string
   expireHoldDate?: string
   onShowChangelogModal: VoidFunction
+  onShowReinstateModal: VoidFunction
 }
 
 const CertificateInfo: React.FC<
@@ -194,6 +197,7 @@ const CertificateInfo: React.FC<
   statusTooltip,
   expireHoldDate,
   onShowChangelogModal,
+  onShowReinstateModal,
 }) => {
   const imageSize = '10%'
   const { t, _t } = useScopedTranslation('common.course-certificate')
@@ -228,20 +232,31 @@ const CertificateInfo: React.FC<
           variant="outlined"
           data-testid="revoked-cert-alert"
         >
-          {t('revoked-warning')}
+          {t('revoked-warning', { date: revokedDate })}
           {acl.isTTAdmin() ? (
-            <Button
-              variant="text"
-              color="primary"
-              sx={{ ml: 1, py: 0 }}
-              size="small"
-              onClick={onShowChangelogModal}
-            >
-              {_t('view-details')}
-            </Button>
-          ) : (
-            t('revoked-warning-user')
-          )}
+            <>
+              <Button
+                variant="text"
+                color="primary"
+                sx={{ ml: 1, py: 0 }}
+                size="small"
+                onClick={onShowChangelogModal}
+                startIcon={<RemoveRedEyeIcon />}
+              >
+                {_t('view-details')}
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ ml: 1, py: 0 }}
+                size="small"
+                onClick={onShowReinstateModal}
+                startIcon={<EditIcon />}
+              >
+                {_t('reinstate')}
+              </Button>
+            </>
+          ) : null}
         </Alert>
       ) : null}
 
@@ -655,6 +670,7 @@ export const CourseCertification: React.FC<
               statusTooltip={statusTooltip}
               expireHoldDate={holdRequest ? holdRequest.expiry_date : undefined}
               onShowChangelogModal={() => setShowChangelogModal(true)}
+              onShowReinstateModal={() => setShowUndoRevokeModal(true)}
             />
           </Grid>
         </Grid>

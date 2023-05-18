@@ -75,6 +75,7 @@
   "view-cert": "View Certificate",
   "minimumXHours": "Minimum {{hours}} hours",
   "hrs": "{{hours}} hrs",
+  "reinstate": "Reinstate",
   "certificate": "Certificate",
   "certifications": "Certifications",
   "certifications-status": "Certifications status",
@@ -398,7 +399,7 @@
         "others": "Other"
       }
     },
-    "revoked-warning": "This certificate has been revoked and can no longer be accessed by the user.",
+    "revoked-warning": "This certificate has been revoked on {{date, date_default}}.",
     "revoked-generic-warning": "This certificate has been revoked due to a policy violation.",
     "revoked-warning-user": "If you wish reinstate this certificate, please contact us at info@teamteach.co.uk",
     "modify-grade-modal": {
