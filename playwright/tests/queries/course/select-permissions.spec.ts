@@ -11,7 +11,7 @@ import {
   TrainerCourseQuery,
   UnverifiedUserCoursesQuery,
 } from '../../../generated/graphql'
-import { runQueryAsRole } from '../../queries/gql-query'
+import { HasuraRole, runQueryAsRole } from '../../queries/gql-query'
 
 import {
   ADMIN_COURSE_QUERY,
@@ -151,30 +151,40 @@ const test = base.extend<{
   },
 })
 
-test('@query sales admin can select open and closed courses, but not indirect course', async ({
-  courseIds,
-}) => {
-  const [openCourse, closedCourse, indirectCourse] = await Promise.all([
-    runQueryAsRole<AdminCourseQuery>(
-      ADMIN_COURSE_QUERY,
-      { id: courseIds.openCourseId },
-      RoleName.SALES_ADMIN
-    ),
-    runQueryAsRole<AdminCourseQuery>(
-      ADMIN_COURSE_QUERY,
-      { id: courseIds.closedCourseId },
-      RoleName.SALES_ADMIN
-    ),
-    runQueryAsRole<AdminCourseQuery>(
-      ADMIN_COURSE_QUERY,
-      { id: courseIds.indirectCourseId },
-      RoleName.SALES_ADMIN
-    ),
-  ])
+// Permissions found in
+// hasura/metadata/databases/default/tables/public_course.yaml
+const allowedRoles: HasuraRole[] = [
+  RoleName.TT_ADMIN,
+  RoleName.FINANCE,
+  RoleName.SALES_ADMIN,
+  RoleName.SALES_REPRESENTATIVE,
+]
+allowedRoles.forEach(role => {
+  test(`@query ${role} can select open, closed and indirect courses`, async ({
+    courseIds,
+  }) => {
+    const [openCourse, closedCourse, indirectCourse] = await Promise.all([
+      runQueryAsRole<AdminCourseQuery>(
+        ADMIN_COURSE_QUERY,
+        { id: courseIds.openCourseId },
+        RoleName.SALES_ADMIN
+      ),
+      runQueryAsRole<AdminCourseQuery>(
+        ADMIN_COURSE_QUERY,
+        { id: courseIds.closedCourseId },
+        RoleName.SALES_ADMIN
+      ),
+      runQueryAsRole<AdminCourseQuery>(
+        ADMIN_COURSE_QUERY,
+        { id: courseIds.indirectCourseId },
+        RoleName.SALES_ADMIN
+      ),
+    ])
 
-  expect(openCourse?.course_by_pk?.id).toEqual(courseIds.openCourseId)
-  expect(closedCourse.course_by_pk?.id).toEqual(courseIds.closedCourseId)
-  expect(indirectCourse.course_by_pk?.id).toBeFalsy()
+    expect(openCourse?.course_by_pk?.id).toEqual(courseIds.openCourseId)
+    expect(closedCourse.course_by_pk?.id).toEqual(courseIds.closedCourseId)
+    expect(indirectCourse.course_by_pk?.id).toEqual(courseIds.indirectCourseId)
+  })
 })
 
 test('@query trainer can select only courses where they are a trainer', async ({
@@ -203,154 +213,46 @@ test('@query trainer can select only courses where they are a trainer', async ({
   test.expect(notTrainerCourse.course_by_pk).toBeFalsy()
 })
 
-test('@query tt-ops can select all courses', async ({ courseIds }) => {
-  const [openCourse, closedCourse, indirectCourse] = await Promise.all([
-    runQueryAsRole<AdminCourseQuery>(
-      ADMIN_COURSE_QUERY,
-      { id: courseIds.openCourseId },
-      RoleName.TT_OPS
-    ),
-    runQueryAsRole<AdminCourseQuery>(
-      ADMIN_COURSE_QUERY,
-      { id: courseIds.closedCourseId },
-      RoleName.TT_OPS
-    ),
-    runQueryAsRole<AdminCourseQuery>(
-      ADMIN_COURSE_QUERY,
-      { id: courseIds.indirectCourseId },
-      RoleName.TT_OPS
-    ),
-  ])
+const restrictedRoles: HasuraRole[] = [RoleName.UNVERIFIED, 'anonymous']
+restrictedRoles.forEach(role => {
+  test(`@query ${role} users can only select open courses in certain statuses`, async ({
+    courseIds,
+  }) => {
+    const courses = await runQueryAsRole<UnverifiedUserCoursesQuery>(
+      UNVERIFIED_USER_COURSES_QUERY,
+      {
+        ids: [
+          courseIds.confirmModulesCourseId,
+          courseIds.scheduledCourseId,
+          courseIds.trainerMissingCourseId,
+          courseIds.trainerPendingCourseId,
+          courseIds.trainerUnavailableCourseId,
+          courseIds.closedCourseId,
+          courseIds.indirectCourseId,
+        ],
+      },
+      role
+    )
 
-  expect(openCourse?.course_by_pk?.id).toEqual(courseIds.openCourseId)
-  expect(closedCourse.course_by_pk?.id).toEqual(courseIds.closedCourseId)
-  expect(indirectCourse.course_by_pk?.id).toEqual(courseIds.indirectCourseId)
-})
+    const fetchedCoursesIds = courses.course.map(c => c.id)
 
-test('@query sales-representative can select open / closed courses', async ({
-  courseIds,
-}) => {
-  const [openCourse, closedCourse, indirectCourse] = await Promise.all([
-    runQueryAsRole<AdminCourseQuery>(
-      ADMIN_COURSE_QUERY,
-      { id: courseIds.openCourseId },
-      RoleName.SALES_REPRESENTATIVE
-    ),
-    runQueryAsRole<AdminCourseQuery>(
-      ADMIN_COURSE_QUERY,
-      { id: courseIds.closedCourseId },
-      RoleName.SALES_REPRESENTATIVE
-    ),
-    runQueryAsRole<AdminCourseQuery>(
-      ADMIN_COURSE_QUERY,
-      { id: courseIds.indirectCourseId },
-      RoleName.SALES_REPRESENTATIVE
-    ),
-  ])
+    test
+      .expect(fetchedCoursesIds.includes(courseIds.indirectCourseId))
+      .toBeFalsy()
+    test
+      .expect(fetchedCoursesIds.includes(courseIds.closedCourseId))
+      .toBeFalsy()
 
-  expect(openCourse?.course_by_pk?.id).toEqual(courseIds.openCourseId)
-  expect(closedCourse.course_by_pk?.id).toEqual(courseIds.closedCourseId)
-  expect(indirectCourse.course_by_pk?.id).toEqual([])
-})
+    const allowedCourseIds = [
+      courseIds.confirmModulesCourseId,
+      courseIds.scheduledCourseId,
+      courseIds.trainerMissingCourseId,
+      courseIds.trainerPendingCourseId,
+      courseIds.trainerUnavailableCourseId,
+    ]
 
-test('@query finance can select any courses', async ({ courseIds }) => {
-  const [openCourse, closedCourse, indirectCourse] = await Promise.all([
-    runQueryAsRole<AdminCourseQuery>(
-      ADMIN_COURSE_QUERY,
-      { id: courseIds.openCourseId },
-      RoleName.FINANCE
-    ),
-    runQueryAsRole<AdminCourseQuery>(
-      ADMIN_COURSE_QUERY,
-      { id: courseIds.closedCourseId },
-      RoleName.FINANCE
-    ),
-    runQueryAsRole<AdminCourseQuery>(
-      ADMIN_COURSE_QUERY,
-      { id: courseIds.indirectCourseId },
-      RoleName.FINANCE
-    ),
-  ])
-
-  expect(openCourse?.course_by_pk?.id).toEqual(courseIds.openCourseId)
-  expect(closedCourse.course_by_pk?.id).toEqual(courseIds.closedCourseId)
-  expect(indirectCourse.course_by_pk?.id).toEqual(courseIds.indirectCourseId)
-})
-
-test('@query anonymous users can only select open courses in certain statuses', async ({
-  courseIds,
-}) => {
-  const courses = await runQueryAsRole<UnverifiedUserCoursesQuery>(
-    UNVERIFIED_USER_COURSES_QUERY,
-    {
-      ids: [
-        courseIds.confirmModulesCourseId,
-        courseIds.scheduledCourseId,
-        courseIds.trainerMissingCourseId,
-        courseIds.trainerPendingCourseId,
-        courseIds.trainerUnavailableCourseId,
-        courseIds.closedCourseId,
-        courseIds.indirectCourseId,
-      ],
-    },
-    RoleName.UNVERIFIED
-  )
-
-  const fetchedCoursesIds = courses.course.map(c => c.id)
-
-  test
-    .expect(fetchedCoursesIds.includes(courseIds.indirectCourseId))
-    .toBeFalsy()
-  test.expect(fetchedCoursesIds.includes(courseIds.closedCourseId)).toBeFalsy()
-
-  const allowedCourseIds = [
-    courseIds.confirmModulesCourseId,
-    courseIds.scheduledCourseId,
-    courseIds.trainerMissingCourseId,
-    courseIds.trainerPendingCourseId,
-    courseIds.trainerUnavailableCourseId,
-  ]
-
-  allowedCourseIds.forEach(id => {
-    test.expect(fetchedCoursesIds.includes(id)).toBeTruthy()
-  })
-})
-
-test('@query unverified users can only select open courses in certain statuses', async ({
-  courseIds,
-}) => {
-  const courses = await runQueryAsRole<UnverifiedUserCoursesQuery>(
-    UNVERIFIED_USER_COURSES_QUERY,
-    {
-      ids: [
-        courseIds.confirmModulesCourseId,
-        courseIds.scheduledCourseId,
-        courseIds.trainerMissingCourseId,
-        courseIds.trainerPendingCourseId,
-        courseIds.trainerUnavailableCourseId,
-        courseIds.closedCourseId,
-        courseIds.indirectCourseId,
-      ],
-    },
-    'anonymous'
-  )
-
-  const fetchedCoursesIds = courses.course.map(c => c.id)
-
-  test
-    .expect(fetchedCoursesIds.includes(courseIds.indirectCourseId))
-    .toBeFalsy()
-  test.expect(fetchedCoursesIds.includes(courseIds.closedCourseId)).toBeFalsy()
-
-  const allowedCourseIds = [
-    courseIds.confirmModulesCourseId,
-    courseIds.scheduledCourseId,
-    courseIds.trainerMissingCourseId,
-    courseIds.trainerPendingCourseId,
-    courseIds.trainerUnavailableCourseId,
-  ]
-
-  allowedCourseIds.forEach(id => {
-    test.expect(fetchedCoursesIds.includes(id)).toBeTruthy()
+    allowedCourseIds.forEach(id => {
+      test.expect(fetchedCoursesIds.includes(id)).toBeTruthy()
+    })
   })
 })
