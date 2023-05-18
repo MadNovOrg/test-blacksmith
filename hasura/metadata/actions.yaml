@@ -77,6 +77,8 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/invite/decline'
       forward_client_headers: true
+    permissions:
+      - role: anonymous
   - name: declineOrgInvite
     definition:
       kind: synchronous
