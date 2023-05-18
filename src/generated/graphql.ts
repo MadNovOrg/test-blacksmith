@@ -43251,7 +43251,7 @@ export type RevokeCertMutationVariables = Exact<{
 }>;
 
 
-export type RevokeCertMutation = { __typename?: 'mutation_root', revoked?: { __typename?: 'course_certificate', id: any } | null, insertChangeLog?: { __typename?: 'course_certificate_changelog', id: any } | null };
+export type RevokeCertMutation = { __typename?: 'mutation_root', insertChangeLog?: { __typename?: 'course_certificate_changelog', id: any } | null, revoked?: { __typename?: 'course_certificate', id: any } | null };
 
 export type UndoRevokeCertMutationVariables = Exact<{
   id: Scalars['uuid'];
@@ -43382,16 +43382,6 @@ export type CourseModulesQueryVariables = Exact<{
 
 export type CourseModulesQuery = { __typename?: 'query_root', courseModules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }> };
 
-export type GetCoursePricingNoIdQueryVariables = Exact<{
-  type: Course_Type_Enum;
-  level: Course_Level_Enum;
-  blended: Scalars['Boolean'];
-  reaccreditation: Scalars['Boolean'];
-}>;
-
-
-export type GetCoursePricingNoIdQuery = { __typename?: 'query_root', coursePricing: Array<{ __typename?: 'course_pricing', id: any, level: Course_Level_Enum, type: Course_Type_Enum, blended: boolean, reaccreditation: boolean, priceAmount: any, priceCurrency: string, xeroCode: string }> };
-
 export type GetCoursePricingQueryVariables = Exact<{
   courseId: Scalars['Int'];
 }>;
@@ -43469,10 +43459,12 @@ export type SaveCourseAttendanceMutation = { __typename?: 'mutation_root', saveA
 export type SaveCourseModulesBildMutationVariables = Exact<{
   courseId: Scalars['Int'];
   modules: Scalars['jsonb'];
+  duration: Scalars['Int'];
+  status?: InputMaybe<Course_Status_Enum>;
 }>;
 
 
-export type SaveCourseModulesBildMutation = { __typename?: 'mutation_root', deleted?: { __typename?: 'course_bild_module_mutation_response', count: number } | null, inserted?: { __typename?: 'course_bild_module_mutation_response', count: number } | null };
+export type SaveCourseModulesBildMutation = { __typename?: 'mutation_root', deleted?: { __typename?: 'course_bild_module_mutation_response', count: number } | null, inserted?: { __typename?: 'course_bild_module_mutation_response', count: number } | null, course?: { __typename?: 'course', id: number } | null };
 
 export type SaveModuleSelectionMutationVariables = Exact<{
   coveredModules: Array<Scalars['uuid']> | Scalars['uuid'];

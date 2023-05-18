@@ -181,59 +181,6 @@ export const BILDCourseBuilder: React.FC<
     resetBuilder()
   }, [resetBuilder])
 
-  const handleSubmit = async () => {
-    const course = courseData?.course
-    if (!course) return
-
-    setSubmitError(undefined)
-
-    let hasError = false
-
-    courseData.course?.bildStrategies?.forEach(strategy => {
-      const strategyName = strategy.strategyName
-
-      if (strategyName === 'PRIMARY' || strategyName === 'SECONDARY') return
-
-      if (!hasKeyStartingWith(selectedModules, `${strategyName}.`)) {
-        hasError = true
-        setSubmitError(
-          t(
-            'pages.trainer-base.create-course.new-course.strategy-validation-error',
-            { name: t(`common.bild-strategies.${strategyName}`) }
-          )
-        )
-        return
-      }
-    })
-
-    if (hasError) return
-
-    try {
-      const transformedSelection = transformSelection(selectedModules)
-
-      await fetcher<
-        SaveCourseModulesBildMutation,
-        SaveCourseModulesBildMutationVariables
-      >(SAVE_COURSE_MODULES_BILD_MUTATION, {
-        courseId: course.id,
-        modules: transformedSelection,
-      })
-
-      if (!courseCreated) {
-        addSnackbarMessage('course-submitted', {
-          label: t(
-            'pages.trainer-base.create-course.new-course.submitted-course',
-            { code: course.course_code }
-          ),
-        })
-      }
-
-      navigate('../details')
-    } catch (e: unknown) {
-      setSubmitError((e as Error).message)
-    }
-  }
-
   const courseStrategies = useMemo(() => {
     return bildStrategies.filter(s =>
       courseData?.course?.bildStrategies.find(cs => cs.strategyName === s.name)
@@ -294,6 +241,61 @@ export const BILDCourseBuilder: React.FC<
 
     return total
   }, [selectedModules, courseStrategies])
+
+  const handleSubmit = async () => {
+    const course = courseData?.course
+    if (!course) return
+
+    setSubmitError(undefined)
+
+    let hasError = false
+
+    courseData.course?.bildStrategies?.forEach(strategy => {
+      const strategyName = strategy.strategyName
+
+      if (strategyName === 'PRIMARY' || strategyName === 'SECONDARY') return
+
+      if (!hasKeyStartingWith(selectedModules, `${strategyName}.`)) {
+        hasError = true
+        setSubmitError(
+          t(
+            'pages.trainer-base.create-course.new-course.strategy-validation-error',
+            { name: t(`common.bild-strategies.${strategyName}`) }
+          )
+        )
+        return
+      }
+    })
+
+    if (hasError) return
+
+    try {
+      const transformedSelection = transformSelection(selectedModules)
+
+      await fetcher<
+        SaveCourseModulesBildMutation,
+        SaveCourseModulesBildMutationVariables
+      >(SAVE_COURSE_MODULES_BILD_MUTATION, {
+        courseId: course.id,
+        modules: transformedSelection,
+        duration: estimatedDuration,
+        status: null,
+      })
+
+      if (!courseCreated) {
+        addSnackbarMessage('course-submitted', {
+          label: t(
+            'pages.trainer-base.create-course.new-course.submitted-course',
+            { code: course.course_code }
+          ),
+        })
+      }
+
+      navigate('../details')
+    } catch (e: unknown) {
+      setSubmitError((e as Error).message)
+    }
+  }
 
   if (courseLoadingStatus === LoadingStatus.SUCCESS && !courseData?.course) {
     return (
