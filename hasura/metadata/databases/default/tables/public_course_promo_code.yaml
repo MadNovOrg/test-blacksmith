@@ -83,6 +83,9 @@ update_permissions:
       filter: {}
       check: {}
 delete_permissions:
+  - role: finance
+    permission:
+      filter: {}
   - role: sales-admin
     permission:
       filter: {}

@@ -15,20 +15,23 @@ import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { HasuraRole, runQueryAsRole } from '../gql-query'
 
-const allowedRoles: HasuraRole[] = [
-  'sales-admin',
-  'tt-ops',
-  'finance',
-  'sales-representative',
-]
+// Based on the permissions found in
+// hasura/metadata/databases/default/tables/public_course_promo_code.yaml
+const allowedRoles: HasuraRole[] = ['finance', 'sales-admin', 'tt-ops']
 
-const forbiddenRoles: HasuraRole[] = ['anonymous', 'unverified']
+const forbiddenRoles: HasuraRole[] = [
+  'anonymous',
+  'ld',
+  'sales-representative',
+  'unverified',
+]
 
 function buildPromoCode(
   courseId: number,
   createdBy: string
 ): UpsertPromoCodeMutationVariables {
   return {
+    promoCondition: { id: { _is_null: true } },
     promoCode: {
       courses: { data: [{ course_id: courseId }] },
       amount: 100,
