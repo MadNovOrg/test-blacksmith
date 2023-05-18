@@ -469,9 +469,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       )
     },
     canBuildCourse: () => {
-      return [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.TRAINER].some(
-        role => role === auth.activeRole
-      )
+      return RoleName.TRAINER === auth.activeRole
     },
 
     canManageBlendedLicenses: () => {
