@@ -153,6 +153,7 @@
     "notes-placeholder": "Additional notes",
     "course-level-one-info": "Please be aware some holds may fall under Level Two certification.",
     "reset-instructions-button": "Reset to default",
+    "bild-strategies-required": "At least one BILD strategy should be selected",
     "special-instructions": {
       "title": "Special Instructions",
       "modal-title": "Reset to default special instructions",

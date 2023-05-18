@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { Course_Level_Enum } from '@app/generated/graphql'
-import { CourseType, RoleName } from '@app/types'
+import { CourseLevel, CourseType, RoleName } from '@app/types'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { render, screen, userEvent, waitFor } from '@test/index'
+
+import { selectBildCategory, selectLevel } from './test-utils'
 
 import CourseForm from '.'
 
@@ -14,16 +15,6 @@ jest.mock('@app/components/OrgSelector', () => ({
 jest.mock('@app/components/VenueSelector', () => ({
   VenueSelector: jest.fn(() => <p>Venue Selector</p>),
 }))
-
-async function selectBildCategory() {
-  await userEvent.click(screen.getByLabelText(/course category/i))
-  await userEvent.click(within(screen.getByRole('listbox')).getByText(/bild/i))
-}
-
-async function selectCourseLevel(level: Course_Level_Enum) {
-  await userEvent.click(screen.getByLabelText(/course level/i))
-  await userEvent.click(screen.getByTestId(`course-level-option-${level}`))
-}
 
 describe('CourseForm - open BILD', () => {
   ;[RoleName.TT_ADMIN, RoleName.SALES_ADMIN, RoleName.TT_OPS].forEach(role => {
@@ -50,20 +41,18 @@ describe('CourseForm - open BILD', () => {
 
     expect(
       screen.getByTestId(
-        `course-level-option-${Course_Level_Enum.BildAdvancedTrainer}`
+        `course-level-option-${CourseLevel.BildAdvancedTrainer}`
       )
     ).toBeInTheDocument()
 
     expect(
       screen.getByTestId(
-        `course-level-option-${Course_Level_Enum.BildIntermediateTrainer}`
+        `course-level-option-${CourseLevel.BildIntermediateTrainer}`
       )
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(
-        `course-level-option-${Course_Level_Enum.BildRegular}`
-      )
+      screen.queryByTestId(`course-level-option-${CourseLevel.BildRegular}`)
     ).not.toBeInTheDocument()
   })
 
@@ -75,7 +64,7 @@ describe('CourseForm - open BILD', () => {
     })
 
     await selectBildCategory()
-    await selectCourseLevel(Course_Level_Enum.BildIntermediateTrainer)
+    await selectLevel(CourseLevel.BildIntermediateTrainer)
 
     expect(screen.getByLabelText(/face to face/i)).toBeEnabled()
     expect(screen.getByLabelText(/both/i)).toBeEnabled()
@@ -90,7 +79,7 @@ describe('CourseForm - open BILD', () => {
     })
 
     await selectBildCategory()
-    await selectCourseLevel(Course_Level_Enum.BildAdvancedTrainer)
+    await selectLevel(CourseLevel.BildAdvancedTrainer)
 
     expect(screen.getByLabelText(/face to face/i)).toBeEnabled()
     expect(screen.getByLabelText(/both/i)).toBeDisabled()

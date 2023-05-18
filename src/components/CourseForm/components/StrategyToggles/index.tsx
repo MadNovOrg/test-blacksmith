@@ -1,4 +1,5 @@
 import { FormControlLabel, FormGroup, Grid, Switch } from '@mui/material'
+import { TFunction } from 'i18next'
 import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -16,14 +17,33 @@ export const schema = yup.object({
   [BildStrategies.RestrictiveTertiaryAdvanced]: yup.bool(),
 })
 
-export function validateStrategies(s: yup.Schema<InferType<typeof schema>>) {
+export function validateStrategies(
+  s: yup.Schema<InferType<typeof schema>>,
+  t: TFunction
+) {
   return s.test(
     'strategies-selected',
-    strategies => Object.keys(strategies).length > 0
+    t('components.course-form.bild-strategies-required'),
+    strategies => {
+      const selectedStrategies = Object.keys(strategies).filter(
+        name => strategies[name as BildStrategies]
+      )
+      return selectedStrategies.length > 0
+    }
   )
 }
 
-type FormFields = { bildStrategies: InferType<typeof schema> }
+type Schema = InferType<typeof schema>
+
+export const defaultStrategies = {
+  PRIMARY: false,
+  SECONDARY: false,
+  NON_RESTRICTIVE_TERTIARY: false,
+  RESTRICTIVE_TERTIARY_INTERMEDIATE: false,
+  RESTRICTIVE_TERTIARY_ADVANCED: false,
+} as const
+
+type FormFields = { bildStrategies: Schema }
 
 type Props = {
   courseLevel: CourseInput['courseLevel']

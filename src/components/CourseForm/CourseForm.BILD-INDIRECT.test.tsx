@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { Course_Level_Enum } from '@app/generated/graphql'
 import { CourseLevel, CourseType, RoleName } from '@app/types'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
+
+import { selectBildCategory } from './test-utils'
 
 import CourseForm from '.'
 
@@ -14,11 +15,6 @@ jest.mock('@app/components/OrgSelector', () => ({
 jest.mock('@app/components/VenueSelector', () => ({
   VenueSelector: jest.fn(() => <p>Venue Selector</p>),
 }))
-
-async function selectBildCategory() {
-  await userEvent.click(screen.getByLabelText(/course category/i))
-  await userEvent.click(within(screen.getByRole('listbox')).getByText(/bild/i))
-}
 
 describe('CourseForm - indirect BILD', () => {
   it('allows a trainer with a BILD Intermediate trainer certificate to create a BILD course', async () => {
@@ -55,7 +51,7 @@ describe('CourseForm - indirect BILD', () => {
     ).toBeInTheDocument()
   })
 
-  it(`displays only ${Course_Level_Enum.BildRegular} course level`, async () => {
+  it(`displays only ${CourseLevel.BildRegular} course level`, async () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
@@ -71,18 +67,18 @@ describe('CourseForm - indirect BILD', () => {
 
     expect(
       screen.queryByTestId(
-        `course-level-option-${Course_Level_Enum.BildAdvancedTrainer}`
+        `course-level-option-${CourseLevel.BildAdvancedTrainer}`
       )
     ).not.toBeInTheDocument()
 
     expect(
       screen.queryByTestId(
-        `course-level-option-${Course_Level_Enum.BildIntermediateTrainer}`
+        `course-level-option-${CourseLevel.BildIntermediateTrainer}`
       )
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`course-level-option-${Course_Level_Enum.BildRegular}`)
+      screen.getByTestId(`course-level-option-${CourseLevel.BildRegular}`)
     ).toBeInTheDocument()
   })
 

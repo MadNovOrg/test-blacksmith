@@ -35,7 +35,6 @@ import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 import {
-  BildStrategies,
   CourseDeliveryType,
   CourseInput,
   CourseLevel,
@@ -57,6 +56,7 @@ import { CourseTimePicker } from './components/CourseTimePicker'
 import { SourceDropdown } from './components/SourceDropdown'
 import {
   StrategyToggles,
+  defaultStrategies,
   schema as strategiesSchema,
   validateStrategies,
 } from './components/StrategyToggles'
@@ -228,7 +228,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         parkingInstructions: yup.string().nullable().default(''),
         bildStrategies: strategiesSchema.when('accreditedBy', {
           is: Accreditors_Enum.Bild,
-          then: validateStrategies,
+          then: s => validateStrategies(s, t),
           otherwise: s => s,
         }),
         conversion: yup.boolean(),
@@ -287,20 +287,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       courseCost: courseInput?.courseCost ?? null,
       accountCode: courseInput?.accountCode ?? accountCodeValue,
       type: courseType,
-      accreditor: Accreditors_Enum.Icm,
       notes: courseInput?.notes ?? null,
       specialInstructions: courseInput?.specialInstructions ?? '',
       parkingInstructions: courseInput?.parkingInstructions ?? '',
       source: courseInput?.source ?? '',
-      bildStrategies:
-        courseInput?.bildStrategies ??
-        ({
-          PRIMARY: false,
-          SECONDARY: false,
-          NON_RESTRICTIVE_TERTIARY: false,
-          RESTRICTIVE_TERTIARY_INTERMEDIATE: false,
-          RESTRICTIVE_TERTIARY_ADVANCED: false,
-        } as Record<BildStrategies, boolean>),
+      bildStrategies: courseInput?.bildStrategies ?? defaultStrategies,
       conversion: courseInput?.conversion ?? false,
       price: courseInput?.price ?? null,
     }),

@@ -50,3 +50,8 @@ export async function selectDelivery(del: CourseDeliveryType) {
     await userEvent.click(radio)
   })
 }
+
+export async function selectBildCategory() {
+  await userEvent.click(screen.getByLabelText(/course category/i))
+  await userEvent.click(within(screen.getByRole('listbox')).getByText(/bild/i))
+}
