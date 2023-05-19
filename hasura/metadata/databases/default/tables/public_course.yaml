@@ -1075,11 +1075,7 @@ update_permissions:
         - source
         - special_instructions
         - updated_at
-      filter:
-        course_type:
-          _in:
-            - CLOSED
-            - OPEN
+      filter: {}
       check: null
   - role: user
     permission:
