@@ -411,11 +411,12 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     return new Set([])
   }, [acl, course])
 
+  const leader = course?.trainers?.find(
+    c => c.type === CourseTrainerType.Leader
+  )
+
   const requiredAssistants = useMemo(() => {
     if (course) {
-      const leader = course.trainers?.find(
-        c => c.type === CourseTrainerType.Leader
-      )
       return getRequiredAssistants({
         courseLevel: course.level,
         deliveryType: course.deliveryType,
@@ -434,7 +435,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       min: 0,
       max: 0,
     }
-  }, [course])
+  }, [course, leader])
 
   const seniorOrPrincipalLead = useMemo(() => {
     return (
@@ -509,7 +510,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   if (
     (courseStatus === LoadingStatus.SUCCESS && !course) ||
-    (course && !acl.canEditCourses(course.type))
+    (course &&
+      !acl.canEditCourses(course.type, leader?.profile.id === profile?.id))
   ) {
     return <NotFound />
   }
