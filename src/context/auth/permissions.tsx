@@ -252,9 +252,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canEditCourses: (type: CourseType) => {
       switch (auth.activeRole) {
         case RoleName.TT_ADMIN:
-          return true
         case RoleName.TT_OPS:
-          return [CourseType.OPEN, CourseType.CLOSED].includes(type)
+          return true
         case RoleName.SALES_ADMIN: {
           return [CourseType.CLOSED, CourseType.OPEN].includes(type)
         }

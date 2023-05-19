@@ -57,6 +57,16 @@ select_permissions:
         - created_at
         - updated_at
       filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - id
+        - course_id
+        - requested_by
+        - reason
+        - created_at
+        - updated_at
+      filter: {}
   - role: user
     permission:
       columns:
@@ -83,6 +93,9 @@ delete_permissions:
     permission:
       filter: {}
   - role: tt-admin
+    permission:
+      filter: {}
+  - role: tt-ops
     permission:
       filter: {}
   - role: user

@@ -223,36 +223,6 @@ describe('page: EditCourse', () => {
     expect(screen.getByText('Page not found')).toBeInTheDocument()
   })
 
-  it("doesn't allow Ops role to edit indirect course", () => {
-    const openCourse = buildCourse({
-      overrides: {
-        type: CourseType.INDIRECT,
-      },
-    })
-
-    useCourseMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: openCourse,
-      mutate: jest.fn(),
-    })
-
-    const client = {
-      executeQuery: () => never,
-    } as unknown as Client
-
-    render(
-      <Provider value={client}>
-        <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
-        </Routes>
-      </Provider>,
-      { auth: { activeRole: RoleName.TT_OPS } },
-      { initialEntries: ['/courses/edit/1'] }
-    )
-
-    expect(screen.getByText('Page not found')).toBeInTheDocument()
-  })
-
   it("doesn't allow Sales admin role to edit indirect course", () => {
     const openCourse = buildCourse({
       overrides: {

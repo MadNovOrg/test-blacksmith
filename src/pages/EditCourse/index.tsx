@@ -509,7 +509,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   if (
     (courseStatus === LoadingStatus.SUCCESS && !course) ||
-    (course && !acl.canCreateCourse(course.type))
+    (course && !acl.canEditCourses(course.type))
   ) {
     return <NotFound />
   }
