@@ -7,15 +7,15 @@ import { useMount } from 'react-use'
 import { useAuth } from '@app/context/auth'
 import { gqlRequest } from '@app/lib/gql-request'
 import {
-  QUERY as INIT_AUTH_QUERY,
   ParamsType as InitAuthParamsType,
+  QUERY as INIT_AUTH_QUERY,
   ResponseType as InitAuthResponseType,
 } from '@app/queries/invites/init-auth'
 
 export const AutoLogin = () => {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const { profile, loadProfile } = useAuth()
+  const { profile, loadProfile, logout } = useAuth()
 
   const token = searchParams.get('token')
   const continueUrl = searchParams.get('continue')
@@ -28,6 +28,7 @@ export const AutoLogin = () => {
       headers: { 'x-auth': `Bearer ${token}` },
     })
 
+    await logout()
     const user = await Auth.signIn(initAuth.email)
     await Auth.sendCustomChallengeAnswer(user, initAuth.authChallenge)
 
