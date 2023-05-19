@@ -98,7 +98,7 @@ describe('components: CreateCourseMenu', () => {
     })
   })
 
-  it("given the user is TT ops, it doesn't display the indirect course creation option", async () => {
+  it('given the user is TT ops, it does display the indirect course creation option', async () => {
     render(
       <Routes>
         <Route path="/" element={<CreateCourseMenu />} />
@@ -118,7 +118,7 @@ describe('components: CreateCourseMenu', () => {
       within(screen.getByTestId('create-course-options')).queryByText(
         'Indirect course'
       )
-    ).not.toBeInTheDocument()
+    ).toBeInTheDocument()
   })
 
   it("given the user is a trainer it doesn't display options and navigates to the create course page for indirect course", async () => {

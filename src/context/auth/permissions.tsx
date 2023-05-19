@@ -154,12 +154,27 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canInviteAttendees: (courseType: CourseType) => {
-      const can =
-        (auth.activeRole !== RoleName.TRAINER &&
-          auth.activeRole !== RoleName.LD) ||
-        courseType === CourseType.INDIRECT
-
-      return can
+      switch (courseType) {
+        case CourseType.OPEN:
+          return false
+        case CourseType.CLOSED: {
+          const roles = [
+            RoleName.TT_ADMIN,
+            RoleName.SALES_REPRESENTATIVE,
+            RoleName.SALES_ADMIN,
+            RoleName.TT_OPS,
+          ]
+          return roles.some(r => r === auth.activeRole) || acl.isOrgAdmin()
+        }
+        case CourseType.INDIRECT: {
+          const roles = [
+            RoleName.TT_ADMIN,
+            RoleName.SALES_ADMIN,
+            RoleName.TT_OPS,
+          ]
+          return roles.some(r => r === auth.activeRole) || acl.isOrgAdmin()
+        }
+      }
     },
 
     canViewUsers: () => {
@@ -236,9 +251,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canCreateCourse: (type: CourseType) => {
       switch (auth.activeRole) {
         case RoleName.TT_ADMIN:
-          return true
         case RoleName.TT_OPS:
-          return [CourseType.OPEN, CourseType.CLOSED].includes(type)
+          return true
         case RoleName.SALES_ADMIN: {
           return [CourseType.CLOSED, CourseType.OPEN].includes(type)
         }

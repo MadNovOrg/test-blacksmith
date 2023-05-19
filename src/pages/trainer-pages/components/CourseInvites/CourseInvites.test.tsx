@@ -2,7 +2,7 @@ import { add, sub } from 'date-fns'
 import React from 'react'
 
 import useCourseInvites from '@app/hooks/useCourseInvites'
-import { Course, CourseType, InviteStatus } from '@app/types'
+import { Course, CourseType, InviteStatus, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { chance, render, userEvent, waitForCalls } from '@test/index'
@@ -48,7 +48,9 @@ describe('CourseInvites', () => {
   it('renders as expected', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    const { queryByTestId } = render(<CourseInvites course={course} />)
+    const { queryByTestId } = render(<CourseInvites course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
 
     const expectedMsg = `${course.max_participants} invites left`
     expect(queryByTestId('invites-left')).toHaveTextContent(expectedMsg)
@@ -70,7 +72,9 @@ describe('CourseInvites', () => {
     })
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    const { queryByTestId } = render(<CourseInvites course={course} />)
+    const { queryByTestId } = render(<CourseInvites course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
     expect(queryByTestId('course-invite-btn')).not.toBeInTheDocument()
   })
 
@@ -88,7 +92,9 @@ describe('CourseInvites', () => {
   it('shows modal when clicked', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    const { getByTestId } = render(<CourseInvites course={course} />)
+    const { getByTestId } = render(<CourseInvites course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
     await userEvent.click(getByTestId('course-invite-btn'))
 
     const expectedMsg = `${course.max_participants} invites left`
@@ -105,7 +111,9 @@ describe('CourseInvites', () => {
       data: [buildInvite(), buildInvite(), buildInvite()],
     })
 
-    const { getByTestId } = render(<CourseInvites course={course} />)
+    const { getByTestId } = render(<CourseInvites course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
     const inviteBtn = getByTestId('course-invite-btn')
 
     expect(inviteBtn).toBeDisabled()
@@ -122,7 +130,9 @@ describe('CourseInvites', () => {
       ],
     })
 
-    const { getByTestId } = render(<CourseInvites course={course} />)
+    const { getByTestId } = render(<CourseInvites course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
     await userEvent.click(getByTestId('course-invite-btn'))
 
     const invitesPending = 1
@@ -144,7 +154,10 @@ describe('CourseInvites', () => {
 
     const participants = chance.integer({ min: 1, max: 3 })
     const { getByTestId } = render(
-      <CourseInvites course={course} attendeesCount={participants} />
+      <CourseInvites course={course} attendeesCount={participants} />,
+      {
+        auth: { activeRole: RoleName.TT_ADMIN },
+      }
     )
     await userEvent.click(getByTestId('course-invite-btn'))
 
@@ -158,7 +171,9 @@ describe('CourseInvites', () => {
   it('does not accept invalid emails', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    const { getByTestId } = render(<CourseInvites course={course} />)
+    const { getByTestId } = render(<CourseInvites course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
     await userEvent.click(getByTestId('course-invite-btn'))
 
     const autocomplete = getByTestId('modal-invites-emails')
@@ -178,7 +193,9 @@ describe('CourseInvites', () => {
   it('calls invites.send with a single valid email address', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    const { getByTestId } = render(<CourseInvites course={course} />)
+    const { getByTestId } = render(<CourseInvites course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
     await userEvent.click(getByTestId('course-invite-btn'))
 
     const autocomplete = getByTestId('modal-invites-emails')
@@ -198,7 +215,9 @@ describe('CourseInvites', () => {
   it('calls invites.send with a csv email addresses', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    const { getByTestId } = render(<CourseInvites course={course} />)
+    const { getByTestId } = render(<CourseInvites course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
     await userEvent.click(getByTestId('course-invite-btn'))
 
     const autocomplete = getByTestId('modal-invites-emails')
@@ -218,7 +237,9 @@ describe('CourseInvites', () => {
   it('calls invites.send when all emails are valid', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    const { getByTestId } = render(<CourseInvites course={course} />)
+    const { getByTestId } = render(<CourseInvites course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
     await userEvent.click(getByTestId('course-invite-btn'))
 
     const autocomplete = getByTestId('modal-invites-emails')
@@ -241,7 +262,9 @@ describe('CourseInvites', () => {
   it('calls invites.send with left overs (not tagged)', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    const { getByTestId } = render(<CourseInvites course={course} />)
+    const { getByTestId } = render(<CourseInvites course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
     await userEvent.click(getByTestId('course-invite-btn'))
 
     const autocomplete = getByTestId('modal-invites-emails')
@@ -267,7 +290,9 @@ describe('CourseInvites', () => {
   it('should accept emails with whitespace paddings', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    const { getByTestId } = render(<CourseInvites course={course} />)
+    const { getByTestId } = render(<CourseInvites course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
     await userEvent.click(getByTestId('course-invite-btn'))
 
     const autocomplete = getByTestId('modal-invites-emails')

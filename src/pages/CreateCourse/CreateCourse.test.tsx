@@ -199,6 +199,28 @@ describe('page: CreateCourse', () => {
     expect(within(nav).queryByText('Assign trainer(s)')).not.toBeInTheDocument()
   })
 
+  it('displays correct steps for the indirect course with TT-OPS', () => {
+    render(
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TT_OPS,
+        },
+      },
+      { initialEntries: [`/courses/new?type=${CourseType.INDIRECT}`] }
+    )
+
+    const nav = screen.getByTestId('create-course-nav')
+
+    expect(within(nav).queryByText('Assign trainer(s)')).not.toBeInTheDocument()
+  })
+
   it("doesn't allow trainer to create open course", () => {
     render(
       <Provider value={createFetchingClient()}>
@@ -274,26 +296,6 @@ describe('page: CreateCourse', () => {
         },
       },
       { initialEntries: [`/courses/new?type=${CourseType.CLOSED}`] }
-    )
-
-    expect(screen.getByText('Page not found')).toBeInTheDocument()
-  })
-
-  it("doesn't allow Ops role to create indirect course", () => {
-    render(
-      <Provider value={createFetchingClient()}>
-        <Routes>
-          <Route path="/courses/new" element={<CreateCourse />}>
-            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-          </Route>
-        </Routes>
-      </Provider>,
-      {
-        auth: {
-          activeRole: RoleName.TT_OPS,
-        },
-      },
-      { initialEntries: [`/courses/new?type=${CourseType.INDIRECT}`] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
