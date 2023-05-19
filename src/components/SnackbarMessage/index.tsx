@@ -17,7 +17,7 @@ export const SnackbarMessage: React.FC<
 
   const [isOpen, setIsOpen] = useState(false)
 
-  useUnmount(() => () => removeSnackbarMessage(messageKey))
+  useUnmount(() => removeSnackbarMessage(messageKey))
 
   useEffect(() => {
     if (message) {
