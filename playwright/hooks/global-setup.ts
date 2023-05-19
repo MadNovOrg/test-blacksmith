@@ -2,9 +2,9 @@ import fs from 'fs/promises'
 
 import { Browser, chromium } from '@playwright/test'
 
-import { TARGET_ENV, TEMP_DIR } from '../constants'
-import { users } from '../data/users'
-import { LoginPage } from '../pages/auth/LoginPage'
+import { TARGET_ENV, TEMP_DIR } from '@qa/constants'
+import { users } from '@qa/data/users'
+import { LoginPage } from '@qa/pages/auth/LoginPage'
 
 export const stateFilePath = (userKey: string) =>
   `${TEMP_DIR}/storage-${userKey}-${TARGET_ENV}.json`

@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 import { RoleName } from '@app/types'
 
-import * as API from '../../api'
+import * as API from '@qa/api'
 
 const insertRoles = [
   'anonymous',

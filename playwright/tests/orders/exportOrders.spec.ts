@@ -1,12 +1,12 @@
 import { test as base } from '@playwright/test'
 
-import * as API from '../../api'
-import { TEST_SETTINGS } from '../../constants'
-import { UNIQUE_COURSE } from '../../data/courses'
-import { UNIQUE_ORDER } from '../../data/order'
-import { users } from '../../data/users'
-import { stateFilePath } from '../../hooks/global-setup'
-import { OrderPage } from '../../pages/orders/OrderPage'
+import * as API from '@qa/api'
+import { TEST_SETTINGS } from '@qa/constants'
+import { UNIQUE_COURSE } from '@qa/data/courses'
+import { UNIQUE_ORDER } from '@qa/data/order'
+import { users } from '@qa/data/users'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { OrderPage } from '@qa/pages/orders/OrderPage'
 
 type Orders = Awaited<ReturnType<typeof API.order.getOrders>>
 

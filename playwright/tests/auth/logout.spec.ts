@@ -1,9 +1,9 @@
 import { test } from '@playwright/test'
 
-import { Option } from '../../components/UserMenu'
-import { stateFilePath } from '../../hooks/global-setup'
-import { LoginPage } from '../../pages/auth/LoginPage'
-import { MyCoursesPage } from '../../pages/courses/MyCoursesPage'
+import { Option } from '@qa/components/UserMenu'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { LoginPage } from '@qa/pages/auth/LoginPage'
+import { MyCoursesPage } from '@qa/pages/courses/MyCoursesPage'
 
 test.use({ storageState: stateFilePath('trainer') })
 

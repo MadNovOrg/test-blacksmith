@@ -1,6 +1,6 @@
 import { GraphQLClient, Variables } from 'graphql-request'
 
-import { HASURA_BASE_URL, HASURA_SECRET } from '../../constants'
+import { HASURA_BASE_URL, HASURA_SECRET } from '@qa/constants'
 
 export type HasuraRole =
   | 'anonymous'

@@ -4,10 +4,11 @@ import { TrainerCoursesQuery } from '@app/generated/graphql'
 import { QUERY as GetTrainerCourses } from '@app/queries/courses/get-trainer-courses'
 import { CourseType, RoleName } from '@app/types'
 
-import * as API from '../../../api'
-import { UNIQUE_COURSE } from '../../../data/courses'
-import { users } from '../../../data/users'
-import { runQueryAsRole } from '../../queries/gql-query'
+import * as API from '@qa/api'
+import { UNIQUE_COURSE } from '@qa/data/courses'
+import { users } from '@qa/data/users'
+
+import { runQueryAsRole } from '../../../queries/gql-query'
 
 const test = base.extend<{ courseIds: number[] }>({
   courseIds: async ({}, use) => {
@@ -41,6 +42,8 @@ test('@query sales admin can select open and closed courses', async ({
     RoleName.SALES_ADMIN
   )
   for (const id of courseIds) {
-    expect(coursesResponse.courses.find(c => c.id === id)).not.toBeUndefined()
+    expect(
+      coursesResponse.courses.find((c: { id: number }) => c.id === id)
+    ).not.toBeUndefined()
   }
 })

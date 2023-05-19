@@ -1,6 +1,7 @@
 import { Locator, Page } from '@playwright/test'
 
-import { getFormattedDate } from '../../util'
+import { getFormattedDate } from '@qa/util'
+
 import { BasePage } from '../BasePage'
 
 import { CertificatePage } from './CertificatePage'

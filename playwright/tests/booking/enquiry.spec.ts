@@ -2,11 +2,11 @@ import { test as base } from '@playwright/test'
 
 import { CourseType } from '@app/types'
 
-import * as API from '../../api'
-import { UNIQUE_COURSE } from '../../data/courses'
-import { Course } from '../../data/types'
-import { users } from '../../data/users'
-import { EnquiryPage } from '../../pages/booking/EnquiryPage'
+import * as API from '@qa/api'
+import { UNIQUE_COURSE } from '@qa/data/courses'
+import { Course } from '@qa/data/types'
+import { users } from '@qa/data/users'
+import { EnquiryPage } from '@qa/pages/booking/EnquiryPage'
 
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {

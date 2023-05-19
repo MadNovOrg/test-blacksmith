@@ -1,7 +1,8 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { ModuleGroup } from '../../data/types'
-import { delay, sortModulesByName } from '../../util'
+import { ModuleGroup } from '@qa/data/types'
+import { delay, sortModulesByName } from '@qa/util'
+
 import { BasePage } from '../BasePage'
 
 import { CourseDetailsPage } from './course-details/CourseDetailsPage'

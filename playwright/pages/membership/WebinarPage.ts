@@ -2,7 +2,8 @@ import { expect, Locator, Page } from '@playwright/test'
 
 import { WebinarSummaryFragment } from '@app/generated/graphql'
 
-import { PER_PAGE } from '../../constants'
+import { PER_PAGE } from '@qa/constants'
+
 import { BasePage } from '../BasePage'
 
 export class WebinarPage extends BasePage {

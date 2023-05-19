@@ -5,13 +5,14 @@ import { Course_Source_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
-import { Course } from '../../data/types'
-import { CourseApprovalRequiredModal } from '../../pages/courses/CourseApprovalRequiredModal'
-import { CourseOrderDetailsPage } from '../../pages/courses/CourseOrderDetailsPage'
-import { toUiTime } from '../../util'
+import { Course } from '@qa/data/types'
+import { toUiTime } from '@qa/util'
+
 import { BasePage } from '../BasePage'
 
 import { AssignTrainersPage } from './AssignTrainersPage'
+import { CourseApprovalRequiredModal } from './CourseApprovalRequiredModal'
+import { CourseOrderDetailsPage } from './CourseOrderDetailsPage'
 
 export class CreateCoursePage extends BasePage {
   readonly creationSteps: Locator

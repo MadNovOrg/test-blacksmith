@@ -2,14 +2,14 @@ import { test as base } from '@playwright/test'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
 
-import * as API from '../../../api'
-import { TEST_SETTINGS } from '../../../constants'
-import { UNIQUE_COURSE } from '../../../data/courses'
-import { Audit_Type } from '../../../data/enums'
-import { Course } from '../../../data/types'
-import { users } from '../../../data/users'
-import { stateFilePath } from '../../../hooks/global-setup'
-import { AuditPage } from '../../../pages/administration/AuditPage'
+import * as API from '@qa/api'
+import { TEST_SETTINGS } from '@qa/constants'
+import { UNIQUE_COURSE } from '@qa/data/courses'
+import { Audit_Type } from '@qa/data/enums'
+import { Course } from '@qa/data/types'
+import { users } from '@qa/data/users'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { AuditPage } from '@qa/pages/administration/AuditPage'
 
 const test = base.extend<{ course: Course; role: string }>({
   course: async ({}, use) => {

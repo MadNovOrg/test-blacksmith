@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import * as API from '../../api'
+import * as API from '@qa/api'
 ;(
   [
     'anonymous',

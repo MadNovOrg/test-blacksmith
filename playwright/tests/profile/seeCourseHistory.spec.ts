@@ -3,12 +3,12 @@ import { addSeconds } from 'date-fns'
 
 import { Grade_Enum } from '@app/generated/graphql'
 
-import * as API from '../../api'
-import { UNIQUE_COURSE } from '../../data/courses'
-import { Course } from '../../data/types'
-import { users } from '../../data/users'
-import { stateFilePath } from '../../hooks/global-setup'
-import { ProfilePage } from '../../pages/profile/ProfilePage'
+import * as API from '@qa/api'
+import { UNIQUE_COURSE } from '@qa/data/courses'
+import { Course } from '@qa/data/types'
+import { users } from '@qa/data/users'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { ProfilePage } from '@qa/pages/profile/ProfilePage'
 
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {

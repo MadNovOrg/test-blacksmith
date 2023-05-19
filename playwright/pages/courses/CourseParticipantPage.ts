@@ -1,6 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { CourseHeader } from '../../components/CourseHeader'
+import { CourseHeader } from '@qa/components/CourseHeader'
+
 import { BasePage } from '../BasePage'
 
 export class CourseParticipantPage extends BasePage {

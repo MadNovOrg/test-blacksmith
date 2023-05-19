@@ -1,12 +1,12 @@
 import { test as base } from '@playwright/test'
 
-import * as API from '../../api'
-import { TEST_SETTINGS } from '../../constants'
-import { UNIQUE_COURSE } from '../../data/courses'
-import { Course } from '../../data/types'
-import { users } from '../../data/users'
-import { stateFilePath } from '../../hooks/global-setup'
-import { ProfilePage } from '../../pages/profile/ProfilePage'
+import * as API from '@qa/api'
+import { TEST_SETTINGS } from '@qa/constants'
+import { UNIQUE_COURSE } from '@qa/data/courses'
+import { Course } from '@qa/data/types'
+import { users } from '@qa/data/users'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { ProfilePage } from '@qa/pages/profile/ProfilePage'
 
 const createCourses = async (): Promise<Course[]> => {
   const courses: Course[] = []

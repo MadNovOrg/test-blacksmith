@@ -2,9 +2,9 @@ import { test as base } from '@playwright/test'
 
 import { Podcast } from '@app/generated/graphql'
 
-import * as API from '../../api'
-import { stateFilePath } from '../../hooks/global-setup'
-import { PodcastPage } from '../../pages/membership/PodcastPage'
+import * as API from '@qa/api'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { PodcastPage } from '@qa/pages/membership/PodcastPage'
 
 const test = base.extend<{ podcasts: Podcast[] }>({
   podcasts: async ({}, use) => {

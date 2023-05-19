@@ -1,10 +1,10 @@
 import { test as base } from '@playwright/test'
 import { addYears } from 'date-fns'
 
-import * as API from '../../api'
-import { users } from '../../data/users'
-import { stateFilePath } from '../../hooks/global-setup'
-import { ProfilePage } from '../../pages/profile/ProfilePage'
+import * as API from '@qa/api'
+import { users } from '@qa/data/users'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { ProfilePage } from '@qa/pages/profile/ProfilePage'
 
 type Go1LicenseContext = {
   orgId: string

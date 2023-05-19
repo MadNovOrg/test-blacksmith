@@ -1,7 +1,8 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import * as API from '../../api'
-import { PER_PAGE } from '../../constants'
+import * as API from '@qa/api'
+import { PER_PAGE } from '@qa/constants'
+
 import { BasePage } from '../BasePage'
 
 export class TermPage extends BasePage {

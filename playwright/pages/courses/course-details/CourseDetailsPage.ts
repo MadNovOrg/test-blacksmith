@@ -1,10 +1,11 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { CourseHeader } from '../../../components/CourseHeader'
-import { UiTable } from '../../../components/UiTable'
-import { toAttendeesTableRow } from '../../../data/mappings'
-import { User } from '../../../data/types'
-import { BasePage } from '../../BasePage'
+import { CourseHeader } from '@qa/components/CourseHeader'
+import { UiTable } from '@qa/components/UiTable'
+import { toAttendeesTableRow } from '@qa/data/mappings'
+import { User } from '@qa/data/types'
+import { BasePage } from '@qa/pages/BasePage'
+
 import { CourseGradingPage } from '../CourseGradingPage'
 import { CourseTransferPage } from '../CourseTransferPage'
 

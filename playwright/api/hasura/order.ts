@@ -6,7 +6,7 @@ import {
 import { GET_ORDERS } from '@app/pages/tt-pages/Orders/query'
 import { MUTATION as CREATE_ORDER } from '@app/queries/order/create-order'
 
-import { OrderCreation } from '../../data/types'
+import { OrderCreation } from '@qa/data/types'
 
 import { getClient } from './client'
 

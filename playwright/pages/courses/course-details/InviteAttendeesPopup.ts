@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test'
 
-import { BasePage } from '../../BasePage'
+import { BasePage } from '@qa/pages/BasePage'
 
 export class InviteAttendeesPopUp extends BasePage {
   readonly emailInput: Locator

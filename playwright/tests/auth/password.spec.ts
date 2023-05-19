@@ -1,13 +1,13 @@
 import { test as base } from '@playwright/test'
 
-import { getLatestEmail } from '../../api/email-api'
-import { TARGET_ENV } from '../../constants'
-import { users } from '../../data/users'
-import { ForgotPasswordPage } from '../../pages/auth/ForgotPasswordPage'
-import { LoginPage } from '../../pages/auth/LoginPage'
-import { ResetPasswordPage } from '../../pages/auth/ResetPasswordPage'
-import { contactYouText } from '../../pages/contact/texts'
-import { EmailPage } from '../../pages/EmailPage'
+import { getLatestEmail } from '@qa/api/email-api'
+import { TARGET_ENV } from '@qa/constants'
+import { users } from '@qa/data/users'
+import { ForgotPasswordPage } from '@qa/pages/auth/ForgotPasswordPage'
+import { LoginPage } from '@qa/pages/auth/LoginPage'
+import { ResetPasswordPage } from '@qa/pages/auth/ResetPasswordPage'
+import { contactYouText } from '@qa/pages/contact/texts'
+import { EmailPage } from '@qa/pages/EmailPage'
 
 const test = base.extend<{ resetPasswordPage: ResetPasswordPage }>({
   resetPasswordPage: async ({ page }, use) => {

@@ -2,12 +2,12 @@ import { test as base } from '@playwright/test'
 
 import { InviteStatus } from '@app/types'
 
-import * as API from '../../../api'
-import { MODULES_SETUP } from '../../../data/modules'
-import { Course } from '../../../data/types'
-import { users } from '../../../data/users'
-import { stateFilePath } from '../../../hooks/global-setup'
-import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
+import * as API from '@qa/api'
+import { MODULES_SETUP } from '@qa/data/modules'
+import { Course } from '@qa/data/types'
+import { users } from '@qa/data/users'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { MyCoursesPage } from '@qa/pages/courses/MyCoursesPage'
 
 for (const data of MODULES_SETUP) {
   const test = base.extend<{ course: Course }>({

@@ -3,12 +3,12 @@ import { test as base } from '@playwright/test'
 import { Grade_Enum } from '@app/generated/graphql'
 import { CourseType } from '@app/types'
 
-import * as API from '../../api'
-import { FINISHED_COURSE } from '../../data/courses'
-import { Course, User } from '../../data/types'
-import { users } from '../../data/users'
-import { stateFilePath } from '../../hooks/global-setup'
-import { ProfilePage } from '../../pages/profile/ProfilePage'
+import * as API from '@qa/api'
+import { FINISHED_COURSE } from '@qa/data/courses'
+import { Course, User } from '@qa/data/types'
+import { users } from '@qa/data/users'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { ProfilePage } from '@qa/pages/profile/ProfilePage'
 
 const test = base.extend<{ grade: { course: Course; user: User } }>({
   grade: async ({}, use) => {

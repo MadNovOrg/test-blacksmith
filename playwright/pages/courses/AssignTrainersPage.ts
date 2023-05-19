@@ -1,10 +1,11 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { waitForGraphQLResponse } from '../../commands'
-import { User } from '../../data/types'
-import { BasePage } from '../BasePage'
-import { CourseApprovalRequiredModal } from '../courses/CourseApprovalRequiredModal'
+import { waitForGraphQLResponse } from '@qa/commands'
+import { User } from '@qa/data/types'
 
+import { BasePage } from '../BasePage'
+
+import { CourseApprovalRequiredModal } from './CourseApprovalRequiredModal'
 import { TrainerExpensesPage } from './TrainerExpensesPage'
 
 export class AssignTrainersPage extends BasePage {

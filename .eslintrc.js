@@ -54,6 +54,7 @@ module.exports = {
         pathGroupsExcludedImportTypes: ['builtin'],
         pathGroups: [
           { pattern: '@app/**', group: 'external', position: 'after' },
+          { pattern: '@qa/**', group: 'external', position: 'after' },
           { pattern: '@test/**', group: 'external', position: 'after' },
         ],
       },

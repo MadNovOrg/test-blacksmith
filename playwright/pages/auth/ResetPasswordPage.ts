@@ -1,7 +1,8 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+import { ContactUsPage } from '@qa/pages/contact/ContactUsPage'
+
 import { BasePage } from '../BasePage'
-import { ContactUsPage } from '../contact/ContactUsPage'
 
 import { LoginPage } from './LoginPage'
 

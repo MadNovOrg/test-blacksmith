@@ -5,7 +5,8 @@ import { readFile } from 'xlsx'
 
 import { Go1_Licenses_History_Set_Input } from '@app/generated/graphql'
 
-import { User } from '../../data/types'
+import { User } from '@qa/data/types'
+
 import { BasePage } from '../BasePage'
 
 import { EditUserModal } from './EditUserModal'

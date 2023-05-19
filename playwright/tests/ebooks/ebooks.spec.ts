@@ -1,8 +1,8 @@
 import { test as base } from '@playwright/test'
 
-import * as API from '../../api'
-import { stateFilePath } from '../../hooks/global-setup'
-import { EBookPage } from '../../pages/membership/EBookPage'
+import * as API from '@qa/api'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { EBookPage } from '@qa/pages/membership/EBookPage'
 
 const test = base.extend<{
   ebooks: Awaited<ReturnType<typeof API.ebook.getEbooks>>

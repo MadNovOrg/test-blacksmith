@@ -1,7 +1,7 @@
 import { test } from '@playwright/test'
 
-import { users } from '../../data/users'
-import { LoginPage } from '../../pages/auth/LoginPage'
+import { users } from '@qa/data/users'
+import { LoginPage } from '@qa/pages/auth/LoginPage'
 
 test('login successfully @smoke', async ({ page }) => {
   const loginPage = new LoginPage(page)

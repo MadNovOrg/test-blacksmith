@@ -3,14 +3,15 @@ import { expect, test as base } from '@playwright/test'
 import { Course_Source_Enum, Course_Status_Enum } from '@app/generated/graphql'
 import { CourseType, RoleName } from '@app/types'
 
-import * as API from '../../../api'
-import { UNIQUE_COURSE } from '../../../data/courses'
-import { users } from '../../../data/users'
+import * as API from '@qa/api'
+import { UNIQUE_COURSE } from '@qa/data/courses'
+import { users } from '@qa/data/users'
 import {
   AdminCourseQuery,
   TrainerCourseQuery,
   UnverifiedUserCoursesQuery,
-} from '../../../generated/graphql'
+} from '@qa/generated/graphql'
+
 import { HasuraRole, runQueryAsRole } from '../../queries/gql-query'
 
 import {

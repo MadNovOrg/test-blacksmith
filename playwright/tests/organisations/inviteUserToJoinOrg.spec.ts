@@ -2,11 +2,11 @@ import { setTimeout } from 'timers/promises'
 
 import { test as base } from '@playwright/test'
 
-import * as API from '../../api'
-import { users } from '../../data/users'
-import { stateFilePath } from '../../hooks/global-setup'
-import { EmailPage } from '../../pages/EmailPage'
-import { AllOrganisations } from '../../pages/org/AllOrganisations'
+import * as API from '@qa/api'
+import { users } from '@qa/data/users'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { EmailPage } from '@qa/pages/EmailPage'
+import { AllOrganisations } from '@qa/pages/org/AllOrganisations'
 
 const test = base.extend<{
   org: { id: string; name: string }

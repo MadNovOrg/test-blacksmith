@@ -2,7 +2,7 @@ import { gql, GraphQLClient } from 'graphql-request'
 
 import { RoleName } from '@app/types'
 
-import { HASURA_BASE_URL, HASURA_SECRET } from '../constants'
+import { HASURA_BASE_URL, HASURA_SECRET } from '@qa/constants'
 
 const endpoint = `${HASURA_BASE_URL}/v1/graphql`
 const headers = {

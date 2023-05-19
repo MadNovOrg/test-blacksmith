@@ -2,7 +2,7 @@ import { expect, Locator, Page } from '@playwright/test'
 
 import { CourseType } from '@app/types'
 
-import { CreateCoursePage } from '../pages/courses/CreateCoursePage'
+import { CreateCoursePage } from '@qa/pages/courses/CreateCoursePage'
 
 export class CreateCourseMenu {
   readonly page: Page

@@ -1,8 +1,8 @@
 import { test } from '@playwright/test'
 
-import * as API from '../../api'
-import { stateFilePath } from '../../hooks/global-setup'
-import { AllOrganisations } from '../../pages/org/AllOrganisations'
+import * as API from '@qa/api'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { AllOrganisations } from '@qa/pages/org/AllOrganisations'
 
 test.use({ storageState: stateFilePath('admin') })
 

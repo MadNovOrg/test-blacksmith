@@ -2,14 +2,14 @@ import { test as base } from '@playwright/test'
 
 import { CourseDeliveryType, CourseType } from '@app/types'
 
-import * as API from '../../../api'
-import { UNIQUE_COURSE } from '../../../data/courses'
-import { Course } from '../../../data/types'
-import { users } from '../../../data/users'
-import { stateFilePath } from '../../../hooks/global-setup'
-import { CourseApprovalRequiredModal } from '../../../pages/courses/CourseApprovalRequiredModal'
-import { CourseBuilderPage } from '../../../pages/courses/CourseBuilderPage'
-import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
+import * as API from '@qa/api'
+import { UNIQUE_COURSE } from '@qa/data/courses'
+import { Course } from '@qa/data/types'
+import { users } from '@qa/data/users'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { CourseApprovalRequiredModal } from '@qa/pages/courses/CourseApprovalRequiredModal'
+import { CourseBuilderPage } from '@qa/pages/courses/CourseBuilderPage'
+import { MyCoursesPage } from '@qa/pages/courses/MyCoursesPage'
 
 const closedCourseData = {
   name: 'closed virtual as salesAdmin',

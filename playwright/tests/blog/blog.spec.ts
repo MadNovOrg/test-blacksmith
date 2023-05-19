@@ -2,9 +2,9 @@ import { test as base } from '@playwright/test'
 
 import { PostSummaryFragment } from '@app/generated/graphql'
 
-import * as API from '../../api'
-import { stateFilePath } from '../../hooks/global-setup'
-import { BlogPage } from '../../pages/membership/BlogPage'
+import * as API from '@qa/api'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { BlogPage } from '@qa/pages/membership/BlogPage'
 
 const test = base.extend<{
   posts: (PostSummaryFragment | null)[]

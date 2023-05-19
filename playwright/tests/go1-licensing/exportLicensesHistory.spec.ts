@@ -5,9 +5,9 @@ import {
   Go1_Licenses_History_Set_Input,
 } from '@app/generated/graphql'
 
-import * as API from '../../api'
-import { stateFilePath } from '../../hooks/global-setup'
-import { AllOrganisations } from '../../pages/org/AllOrganisations'
+import * as API from '@qa/api'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { AllOrganisations } from '@qa/pages/org/AllOrganisations'
 
 const invoiceData: Go1_Licenses_History_Set_Input = {
   event: Go1_History_Events_Enum.LicensesAdded,

@@ -1,8 +1,8 @@
 import { test as base } from '@playwright/test'
 
-import * as API from '../../api'
-import { stateFilePath } from '../../hooks/global-setup'
-import { WebinarPage } from '../../pages/membership/WebinarPage'
+import * as API from '@qa/api'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { WebinarPage } from '@qa/pages/membership/WebinarPage'
 
 const test = base.extend<{
   webinars: Awaited<ReturnType<typeof API.webinar.getWebinars>>

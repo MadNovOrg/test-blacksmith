@@ -3,12 +3,12 @@ import { test as base } from '@playwright/test'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import { CourseParticipant } from '@app/types'
 
-import * as API from '../../api'
-import { FINISHED_COURSE } from '../../data/courses'
-import { Course } from '../../data/types'
-import { users } from '../../data/users'
-import { stateFilePath } from '../../hooks/global-setup'
-import { CourseDetailsPage } from '../../pages/courses/course-details/CourseDetailsPage'
+import * as API from '@qa/api'
+import { FINISHED_COURSE } from '@qa/data/courses'
+import { Course } from '@qa/data/types'
+import { users } from '@qa/data/users'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { CourseDetailsPage } from '@qa/pages/courses/course-details/CourseDetailsPage'
 
 const test = base.extend<{
   course: Course

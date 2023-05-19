@@ -1,8 +1,10 @@
 import { Locator, Page } from '@playwright/test'
 
-import { waitForGraphQLRequest } from '../../commands'
-import { AllOrganisations } from '../../pages/org/AllOrganisations'
+import { waitForGraphQLRequest } from '@qa/commands'
+
 import { BasePage } from '../BasePage'
+
+import { AllOrganisations } from './AllOrganisations'
 
 export class OrgInvitationPage extends BasePage {
   readonly continueToOrganisationButton: Locator

@@ -1,7 +1,7 @@
 import { GraphQLClient } from 'graphql-request'
 import { v4 as uuidv4 } from 'uuid'
 
-import { HASURA_BASE_URL, HASURA_SECRET, TEST_SETTINGS } from '../../constants'
+import { HASURA_BASE_URL, HASURA_SECRET, TEST_SETTINGS } from '@qa/constants'
 
 const endpoint = `${HASURA_BASE_URL}/v1/graphql`
 

@@ -1,8 +1,8 @@
 import { test } from '@playwright/test'
 import { Chance } from 'chance'
 
-import { stateFilePath } from '../../hooks/global-setup'
-import { ProfilePage } from '../../pages/profile/ProfilePage'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { ProfilePage } from '@qa/pages/profile/ProfilePage'
 
 test.use({ storageState: stateFilePath('user1') })
 

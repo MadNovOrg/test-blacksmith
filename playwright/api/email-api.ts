@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-import { Email } from '../data/types'
-import { delay } from '../util'
+import { Email } from '@qa/data/types'
+import { delay } from '@qa/util'
 
 type EmailPart = {
   headers: {

@@ -9,13 +9,14 @@ import {
 import { MUTATION as SaveInvites } from '@app/queries/invites/save-course-invites'
 import { CourseType, RoleName } from '@app/types'
 
+import * as API from '@qa/api'
+import { getProfileId } from '@qa/api/hasura/profile'
+import { UNIQUE_COURSE } from '@qa/data/courses'
+import { Course } from '@qa/data/types'
+import { users } from '@qa/data/users'
+
 import { buildInvite } from '@test/mock-data-utils'
 
-import * as API from '../../../api'
-import { getProfileId } from '../../../api/hasura/profile'
-import { UNIQUE_COURSE } from '../../../data/courses'
-import { Course } from '../../../data/types'
-import { users } from '../../../data/users'
 import { HasuraRole, runQueryAsRole } from '../gql-query'
 
 const allowedRoles: HasuraRole[] = [

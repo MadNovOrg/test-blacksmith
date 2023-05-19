@@ -2,7 +2,8 @@ import { expect, Locator, Page } from '@playwright/test'
 
 import { Grade_Enum } from '@app/generated/graphql'
 
-import { UiTable } from '../../components/UiTable'
+import { UiTable } from '@qa/components/UiTable'
+
 import { BasePage } from '../BasePage'
 import { ProfilePage } from '../profile/ProfilePage'
 

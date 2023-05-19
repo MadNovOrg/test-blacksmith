@@ -1,7 +1,7 @@
 import { Locator, Page } from '@playwright/test'
 
-import { User } from '../../../data/types'
-import { BasePage } from '../../BasePage'
+import { User } from '@qa/data/types'
+import { BasePage } from '@qa/pages/BasePage'
 export class ReplaceAttendeePopUp extends BasePage {
   readonly firstNameInput: Locator
   readonly surnameInput: Locator

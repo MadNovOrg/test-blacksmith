@@ -15,8 +15,8 @@ import {
   ModuleGroup,
 } from '@app/types'
 
-import { getModulesByLevel } from '../../data/modules'
-import { Course, User } from '../../data/types'
+import { getModulesByLevel } from '@qa/data/modules'
+import { Course, User } from '@qa/data/types'
 
 import { getClient } from './client'
 import { getOrganizationId } from './organization'

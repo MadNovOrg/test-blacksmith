@@ -2,12 +2,12 @@ import { test as base } from '@playwright/test'
 
 import { CourseType } from '@app/types'
 
-import * as API from '../../../api'
-import { FINISHED_COURSE } from '../../../data/courses'
-import { Course } from '../../../data/types'
-import { users } from '../../../data/users'
-import { stateFilePath } from '../../../hooks/global-setup'
-import { CourseEvaluationPage } from '../../../pages/courses/evaluation-page/CourseEvaluationPage'
+import * as API from '@qa/api'
+import { FINISHED_COURSE } from '@qa/data/courses'
+import { Course } from '@qa/data/types'
+import { users } from '@qa/data/users'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { CourseEvaluationPage } from '@qa/pages/courses/evaluation-page/CourseEvaluationPage'
 
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {

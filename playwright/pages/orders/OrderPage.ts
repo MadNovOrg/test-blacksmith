@@ -3,7 +3,8 @@ import { readFile } from 'xlsx'
 
 import { OrderInfoFragment, Payment_Methods_Enum } from '@app/generated/graphql'
 
-import * as API from '../../api'
+import * as API from '@qa/api'
+
 import { BasePage } from '../BasePage'
 
 type Orders = Awaited<ReturnType<typeof API.order.getOrders>>

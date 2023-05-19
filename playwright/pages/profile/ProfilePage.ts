@@ -1,6 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { waitForGraphQLResponse } from '../../commands'
+import { waitForGraphQLResponse } from '@qa/commands'
+
 import { BasePage } from '../BasePage'
 import { CertificationPage } from '../certificate/CertificationPage'
 

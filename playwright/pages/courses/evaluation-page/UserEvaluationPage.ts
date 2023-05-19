@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BasePage } from '../../BasePage'
+import { BasePage } from '@qa/pages/BasePage'
 
 import { fillEvaluationForm, Questions } from './Common'
 

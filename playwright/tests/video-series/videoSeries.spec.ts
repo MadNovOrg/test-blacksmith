@@ -2,9 +2,9 @@ import { test as base } from '@playwright/test'
 
 import { VideoItemSummaryFragment } from '@app/generated/graphql'
 
-import * as API from '../../api'
-import { stateFilePath } from '../../hooks/global-setup'
-import { VideoPage } from '../../pages/membership/VideoPage'
+import * as API from '@qa/api'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { VideoPage } from '@qa/pages/membership/VideoPage'
 
 const test = base.extend<{
   videoItems: Array<VideoItemSummaryFragment | null>

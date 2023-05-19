@@ -2,12 +2,12 @@ import { test as base } from '@playwright/test'
 
 import { CourseLevel } from '@app/types'
 
-import * as API from '../../../api'
-import { COURSES_TO_VIEW } from '../../../data/courses'
-import { Course } from '../../../data/types'
-import { users } from '../../../data/users'
-import { stateFilePath } from '../../../hooks/global-setup'
-import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
+import * as API from '@qa/api'
+import { COURSES_TO_VIEW } from '@qa/data/courses'
+import { Course } from '@qa/data/types'
+import { users } from '@qa/data/users'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { MyCoursesPage } from '@qa/pages/courses/MyCoursesPage'
 
 const deleteCourses = async (courses: Course[]) => {
   const deletePromises = courses.map(course =>

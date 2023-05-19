@@ -1,8 +1,10 @@
 import { Locator, Page } from '@playwright/test'
 
-import { waitForGraphQLResponse } from '../../commands'
-import { CourseBuilderPage } from '../../pages/courses/CourseBuilderPage'
+import { waitForGraphQLResponse } from '@qa/commands'
+
 import { BasePage } from '../BasePage'
+
+import { CourseBuilderPage } from './CourseBuilderPage'
 
 export class ReviewAndConfirmPage extends BasePage {
   readonly createCourseButton: Locator

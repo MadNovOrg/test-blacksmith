@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BASE_URL } from '../constants'
+import { BASE_URL } from '@qa/constants'
 
 export class BasePage {
   readonly page: Page

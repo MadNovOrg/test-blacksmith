@@ -1,6 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { Audit_Type } from '../../data/enums'
+import { Audit_Type } from '@qa/data/enums'
+
 import { BasePage } from '../BasePage'
 
 export class AuditPage extends BasePage {

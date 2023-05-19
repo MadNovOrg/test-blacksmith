@@ -1,7 +1,7 @@
 import { test } from '@playwright/test'
 
-import { stateFilePath } from '../../hooks/global-setup'
-import { MembershipPage } from '../../pages/membership/MembershipPage'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { MembershipPage } from '@qa/pages/membership/MembershipPage'
 
 test.use({ storageState: stateFilePath('trainer') })
 

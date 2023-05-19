@@ -7,9 +7,10 @@ import {
 } from '@app/generated/graphql'
 import { MUTATION as InsertOrgLeadMutation } from '@app/queries/organization/insert-org-lead'
 
+import * as API from '@qa/api'
+
 import { buildOrganization } from '@test/mock-data-utils'
 
-import * as API from '../../../api'
 import { HasuraRole, runQueryAsRole } from '../gql-query'
 
 const allowedRoles: HasuraRole[] = [

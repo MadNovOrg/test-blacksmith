@@ -1,6 +1,6 @@
 import { expect, Locator } from '@playwright/test'
 
-import { CourseTableRow } from '../data/types'
+import { CourseTableRow } from '@qa/data/types'
 
 export class UiTable {
   readonly root: Locator

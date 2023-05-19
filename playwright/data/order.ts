@@ -1,6 +1,6 @@
 import { PaymentMethod } from '@app/types'
 
-import * as API from '../api'
+import * as API from '@qa/api'
 
 import { Course, OrderCreation, User } from './types'
 

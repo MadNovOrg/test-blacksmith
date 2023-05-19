@@ -1,6 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { PER_PAGE } from '../../constants'
+import { PER_PAGE } from '@qa/constants'
+
 import { BasePage } from '../BasePage'
 
 export class ResearchSummariesPage extends BasePage {

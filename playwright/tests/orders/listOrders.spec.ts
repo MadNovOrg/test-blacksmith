@@ -6,9 +6,9 @@ import {
   Payment_Methods_Enum,
 } from '@app/generated/graphql'
 
-import * as API from '../../api'
-import { stateFilePath } from '../../hooks/global-setup'
-import { OrderPage } from '../../pages/orders/OrderPage'
+import * as API from '@qa/api'
+import { stateFilePath } from '@qa/hooks/global-setup'
+import { OrderPage } from '@qa/pages/orders/OrderPage'
 
 const test = base.extend<{
   unfilteredOrders: OrderInfoFragment[]

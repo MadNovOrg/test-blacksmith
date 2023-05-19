@@ -1,6 +1,7 @@
 import { Locator, Page } from '@playwright/test'
 
-import { InvoiceDetails } from '../../data/types'
+import { InvoiceDetails } from '@qa/data/types'
+
 import { BasePage } from '../BasePage'
 
 import { ReviewAndConfirmPage } from './ReviewAndConfirmPage'
