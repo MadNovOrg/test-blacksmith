@@ -201,15 +201,16 @@ export enum PaymentMethod {
 }
 
 export enum RoleName {
-  TT_ADMIN = 'tt-admin',
-  TT_OPS = 'tt-ops',
-  SALES_ADMIN = 'sales-admin',
-  SALES_REPRESENTATIVE = 'sales-representative',
+  ANONYMOUS = 'anonymous',
   FINANCE = 'finance',
   LD = 'ld',
+  SALES_ADMIN = 'sales-admin',
+  SALES_REPRESENTATIVE = 'sales-representative',
   TRAINER = 'trainer',
-  USER = 'user',
+  TT_ADMIN = 'tt-admin',
+  TT_OPS = 'tt-ops',
   UNVERIFIED = 'unverified',
+  USER = 'user',
 }
 
 export enum TrainerRoleTypeName {

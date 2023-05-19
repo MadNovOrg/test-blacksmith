@@ -168,20 +168,19 @@ allowedRoles.forEach(role => {
       runQueryAsRole<AdminCourseQuery>(
         ADMIN_COURSE_QUERY,
         { id: courseIds.openCourseId },
-        RoleName.SALES_ADMIN
+        role
       ),
       runQueryAsRole<AdminCourseQuery>(
         ADMIN_COURSE_QUERY,
         { id: courseIds.closedCourseId },
-        RoleName.SALES_ADMIN
+        role
       ),
       runQueryAsRole<AdminCourseQuery>(
         ADMIN_COURSE_QUERY,
         { id: courseIds.indirectCourseId },
-        RoleName.SALES_ADMIN
+        role
       ),
     ])
-
     expect(openCourse?.course_by_pk?.id).toEqual(courseIds.openCourseId)
     expect(closedCourse.course_by_pk?.id).toEqual(courseIds.closedCourseId)
     expect(indirectCourse.course_by_pk?.id).toEqual(courseIds.indirectCourseId)
@@ -192,9 +191,6 @@ test('@query trainer can select only courses where they are a trainer', async ({
   courseIds,
 }) => {
   const profileId = await API.profile.getProfileId(users.trainer.email)
-
-  console.log(profileId)
-
   const [trainerCourse, notTrainerCourse] = await Promise.all([
     runQueryAsRole<TrainerCourseQuery>(
       TRAINER_COURSE_QUERY,
@@ -209,12 +205,11 @@ test('@query trainer can select only courses where they are a trainer', async ({
       { 'x-hasura-user-id': profileId }
     ),
   ])
-
   test.expect(trainerCourse.course_by_pk?.id).toEqual(courseIds.trainerCourseId)
   test.expect(notTrainerCourse.course_by_pk).toBeFalsy()
 })
 
-const restrictedRoles: HasuraRole[] = [RoleName.UNVERIFIED, 'anonymous']
+const restrictedRoles: HasuraRole[] = [RoleName.UNVERIFIED, RoleName.ANONYMOUS]
 restrictedRoles.forEach(role => {
   test(`@query ${role} users can only select open courses in certain statuses`, async ({
     courseIds,
@@ -234,16 +229,13 @@ restrictedRoles.forEach(role => {
       },
       role
     )
-
     const fetchedCoursesIds = courses.course.map(c => c.id)
-
     test
       .expect(fetchedCoursesIds.includes(courseIds.indirectCourseId))
       .toBeFalsy()
     test
       .expect(fetchedCoursesIds.includes(courseIds.closedCourseId))
       .toBeFalsy()
-
     const allowedCourseIds = [
       courseIds.confirmModulesCourseId,
       courseIds.scheduledCourseId,
@@ -251,7 +243,6 @@ restrictedRoles.forEach(role => {
       courseIds.trainerPendingCourseId,
       courseIds.trainerUnavailableCourseId,
     ]
-
     allowedCourseIds.forEach(id => {
       test.expect(fetchedCoursesIds.includes(id)).toBeTruthy()
     })

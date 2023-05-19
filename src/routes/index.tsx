@@ -51,6 +51,7 @@ const roleRoutesMap = {
   [RoleName.TT_OPS]: TTRoutes,
   [RoleName.TT_ADMIN]: TTRoutes,
   [RoleName.UNVERIFIED]: UnverifiedRoutes,
+  [RoleName.ANONYMOUS]: UnverifiedRoutes,
 } as const
 
 export const AppRoutes = () => {

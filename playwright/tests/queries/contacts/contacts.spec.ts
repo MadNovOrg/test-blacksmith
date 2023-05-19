@@ -5,14 +5,14 @@ import { RoleName } from '@app/types'
 import * as API from '@qa/api'
 
 const insertRoles = [
-  'anonymous',
-  'unverified',
-  'user',
-  'trainer',
-  'sales-admin',
-  'tt-ops',
-  'tt-admin',
-  'sales-representative',
+  RoleName.ANONYMOUS,
+  RoleName.SALES_ADMIN,
+  RoleName.SALES_REPRESENTATIVE,
+  RoleName.TRAINER,
+  RoleName.TT_ADMIN,
+  RoleName.TT_OPS,
+  RoleName.UNVERIFIED,
+  RoleName.USER,
 ] as RoleName[]
 
 insertRoles.forEach(role => {
@@ -30,13 +30,13 @@ insertRoles.forEach(role => {
 })
 
 const selectRoles = [
-  'sales-admin',
-  'tt-ops',
-  'tt-admin',
-  'ld',
-  'user',
-  'trainer',
-  'sales-representative',
+  RoleName.SALES_ADMIN,
+  RoleName.TT_OPS,
+  RoleName.TT_ADMIN,
+  RoleName.LD,
+  RoleName.USER,
+  RoleName.TRAINER,
+  RoleName.SALES_REPRESENTATIVE,
 ] as RoleName[]
 
 selectRoles.forEach(role => {
@@ -71,7 +71,10 @@ selectRoles.forEach(role => {
   })
 })
 
-const cannotSelectRoles = ['unverified', 'anonymous'] as RoleName[]
+const cannotSelectRoles = [
+  RoleName.ANONYMOUS,
+  RoleName.UNVERIFIED,
+] as RoleName[]
 
 cannotSelectRoles.forEach(role => {
   test(`@query doesn't allow role ${role} to select a contact`, async () => {

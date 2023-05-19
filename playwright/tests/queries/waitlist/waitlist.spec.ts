@@ -1,18 +1,21 @@
 import { expect, test } from '@playwright/test'
 
+import { RoleName } from '@app/types'
+
 import * as API from '@qa/api'
-;(
-  [
-    'anonymous',
-    'unverified',
-    'user',
-    'trainer',
-    'sales-admin',
-    'tt-ops',
-    'tt-admin',
-  ] as const
-).forEach(role => {
-  test(`it allows ${role} user to insert a waitlist`, async () => {
+
+const insertWaitlistTests: ReadonlyArray<RoleName> = [
+  RoleName.ANONYMOUS,
+  RoleName.SALES_ADMIN,
+  RoleName.TRAINER,
+  RoleName.TT_ADMIN,
+  RoleName.TT_OPS,
+  RoleName.UNVERIFIED,
+  RoleName.USER,
+]
+
+insertWaitlistTests.forEach(role => {
+  test(`@query allows ${role} user to insert a waitlist`, async () => {
     const schema = await API.introspection.introspection(role)
     const allowedFields = [
       'courseId',
@@ -23,6 +26,7 @@ import * as API from '@qa/api'
       'phone',
     ]
     const forbiddenFields = ['confirmed', 'created_at', 'id']
+
     const waitlistMutation = schema.__schema.mutationType.fields.find(
       m => m.name === 'insert_waitlist'
     )
@@ -36,13 +40,22 @@ import * as API from '@qa/api'
     const hasForbiddenFields = forbiddenFields.some(f =>
       mutationFields?.includes(f)
     )
+
     expect(waitlistMutation).toBeTruthy()
     expect(hasAllowedFields).toEqual(true)
     expect(hasForbiddenFields).toBe(false)
   })
 })
-;(['sales-admin', 'trainer', 'tt-ops', 'tt-admin'] as const).forEach(role => {
-  test(`it allows role ${role} to select waitlist`, async () => {
+
+const selectWaitlistTests: ReadonlyArray<RoleName> = [
+  RoleName.SALES_ADMIN,
+  RoleName.TRAINER,
+  RoleName.TT_ADMIN,
+  RoleName.TT_OPS,
+]
+
+selectWaitlistTests.forEach(role => {
+  test(`@query allows role ${role} to select waitlist`, async () => {
     const schema = await API.introspection.introspection(role)
     const allowedFields = [
       'confirmed',
@@ -53,6 +66,7 @@ import * as API from '@qa/api'
       'orgName',
       'phone',
     ]
+
     const waitlistsQuery = schema.__schema.queryType.fields.find(
       f => f.name === 'waitlist'
     )
@@ -70,8 +84,14 @@ import * as API from '@qa/api'
     expect(hasAllowedFields).toBe(true)
   })
 })
-;(['unverified', 'anonymous'] as const).forEach(role => {
-  test(`doesn't allow role ${role} to select waitlist`, async () => {
+
+const selectWaitlistNotAllowedTests: ReadonlyArray<RoleName> = [
+  RoleName.ANONYMOUS,
+  RoleName.UNVERIFIED,
+]
+
+selectWaitlistNotAllowedTests.forEach(role => {
+  test(`@query doesn't allow role ${role} to select waitlist`, async () => {
     const schema = await API.introspection.introspection(role)
     const waitlistsQuery = schema.__schema.queryType.fields.find(
       f => f.name === 'waitlist'
@@ -79,6 +99,7 @@ import * as API from '@qa/api'
     const waitlistQuery = schema.__schema.queryType.fields.find(
       f => f.name === 'waitlist_by_pk'
     )
+
     expect(waitlistQuery).toBeFalsy()
     expect(waitlistsQuery).toBeFalsy()
   })

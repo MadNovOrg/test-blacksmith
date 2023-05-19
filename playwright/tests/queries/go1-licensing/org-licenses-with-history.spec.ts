@@ -2,21 +2,22 @@ import { expect, test } from '@playwright/test'
 import { v4 as uuidv4 } from 'uuid'
 
 import OrgLicensesWithHistoryQuery from '@app/queries/go1-licensing/org-licenses-with-history'
+import { RoleName } from '@app/types'
 
 import { HasuraRole, runQueryAsRole } from '../gql-query'
 
 // Matches the permissions found at hasura/metadata/databases/default/tables/public_organization.yaml
 const allowedRoles: HasuraRole[] = [
-  'finance',
-  'sales-admin',
-  'sales-representative',
-  'tt-admin',
-  'tt-ops',
-  'ld',
-  'trainer',
-  'user',
+  RoleName.FINANCE,
+  RoleName.SALES_ADMIN,
+  RoleName.SALES_REPRESENTATIVE,
+  RoleName.TT_ADMIN,
+  RoleName.TT_OPS,
+  RoleName.LD,
+  RoleName.TRAINER,
+  RoleName.USER,
 ]
-const forbiddenRoles: HasuraRole[] = ['anonymous', 'unverified']
+const forbiddenRoles: HasuraRole[] = [RoleName.ANONYMOUS, RoleName.UNVERIFIED]
 
 const params = {
   id: uuidv4(),

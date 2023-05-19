@@ -6,7 +6,7 @@ import {
   UpsertPromoCodeMutationVariables,
 } from '@app/generated/graphql'
 import UPSERT_PROMO_CODE from '@app/queries/promo-codes/upsert-promo-code'
-import { CourseType } from '@app/types'
+import { CourseType, RoleName } from '@app/types'
 
 import * as API from '@qa/api'
 import { getProfileId } from '@qa/api/hasura/profile'
@@ -18,13 +18,17 @@ import { HasuraRole, runQueryAsRole } from '../gql-query'
 
 // Based on the permissions found in
 // hasura/metadata/databases/default/tables/public_course_promo_code.yaml
-const allowedRoles: HasuraRole[] = ['finance', 'sales-admin', 'tt-ops']
+const allowedRoles: HasuraRole[] = [
+  RoleName.FINANCE,
+  RoleName.SALES_ADMIN,
+  RoleName.TT_OPS,
+]
 
 const forbiddenRoles: HasuraRole[] = [
-  'anonymous',
-  'ld',
-  'sales-representative',
-  'unverified',
+  RoleName.ANONYMOUS,
+  RoleName.LD,
+  RoleName.SALES_REPRESENTATIVE,
+  RoleName.UNVERIFIED,
 ]
 
 function buildPromoCode(

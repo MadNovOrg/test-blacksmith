@@ -6,6 +6,7 @@ import {
   Trust_Type_Enum,
 } from '@app/generated/graphql'
 import { MUTATION as InsertOrgLeadMutation } from '@app/queries/organization/insert-org-lead'
+import { RoleName } from '@app/types'
 
 import * as API from '@qa/api'
 
@@ -14,14 +15,18 @@ import { buildOrganization } from '@test/mock-data-utils'
 import { HasuraRole, runQueryAsRole } from '../gql-query'
 
 const allowedRoles: HasuraRole[] = [
-  'unverified',
-  'sales-admin',
-  'tt-ops',
-  'tt-admin',
-  'ld',
+  RoleName.UNVERIFIED,
+  RoleName.SALES_ADMIN,
+  RoleName.TT_OPS,
+  RoleName.TT_ADMIN,
+  RoleName.LD,
 ]
 
-const forbiddenRoles: HasuraRole[] = ['anonymous', 'user', 'trainer']
+const forbiddenRoles: HasuraRole[] = [
+  RoleName.ANONYMOUS,
+  RoleName.USER,
+  RoleName.TRAINER,
+]
 
 function buildMutationInput(): InsertOrgMutationVariables {
   const org = buildOrganization()

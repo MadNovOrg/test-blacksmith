@@ -20,13 +20,13 @@ import { buildInvite } from '@test/mock-data-utils'
 import { HasuraRole, runQueryAsRole } from '../gql-query'
 
 const allowedRoles: HasuraRole[] = [
-  'trainer',
-  'sales-admin',
-  'tt-ops',
-  'tt-admin',
+  RoleName.TRAINER,
+  RoleName.SALES_ADMIN,
+  RoleName.TT_OPS,
+  RoleName.TT_ADMIN,
 ]
 
-const forbiddenRoles: HasuraRole[] = ['anonymous', 'unverified']
+const forbiddenRoles: HasuraRole[] = [RoleName.ANONYMOUS, RoleName.UNVERIFIED]
 
 function buildMutationInput(
   courseId: number

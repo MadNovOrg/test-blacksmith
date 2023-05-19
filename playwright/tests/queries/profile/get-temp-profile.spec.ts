@@ -2,19 +2,20 @@ import { expect, test } from '@playwright/test'
 import { v4 as uuidv4 } from 'uuid'
 
 import { QUERY as GetTempProfileQuery } from '@app/queries/profile/get-temp-profile'
+import { RoleName } from '@app/types'
 
 import { HasuraRole, runQueryAsRole } from '../gql-query'
 
 const allowedRoles: HasuraRole[] = [
-  'unverified',
-  'user',
-  'trainer',
-  'sales-admin',
-  'tt-ops',
-  'tt-admin',
+  RoleName.UNVERIFIED,
+  RoleName.USER,
+  RoleName.TRAINER,
+  RoleName.SALES_ADMIN,
+  RoleName.TT_OPS,
+  RoleName.TT_ADMIN,
 ]
 
-const forbiddenRoles: HasuraRole[] = ['anonymous']
+const forbiddenRoles: HasuraRole[] = [RoleName.ANONYMOUS]
 
 allowedRoles.forEach(role => {
   test(`@query GetTempProfile: role ${role} should be able to run the query`, async () => {
