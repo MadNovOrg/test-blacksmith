@@ -56,7 +56,7 @@ export const CourseDetails = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { id: courseId } = useParams()
-  const { acl, isOrgAdmin } = useAuth()
+  const { acl, isOrgAdmin, profile } = useAuth()
   const [searchParams] = useSearchParams()
   const fetcher = useFetcher()
 
@@ -88,12 +88,12 @@ export const CourseDetails = () => {
   const exceptionsApprovalPending =
     course?.status === Course_Status_Enum.ExceptionsApprovalPending
 
+  const leader = course?.trainers?.find(
+    c => c.type === CourseTrainerType.Leader
+  )
+
   const courseExceptions = useMemo(() => {
     if (!course || !course.trainers || !exceptionsApprovalPending) return []
-
-    const leader = course.trainers.find(
-      c => c.type === CourseTrainerType.Leader
-    )
 
     return checkCourseDetailsForExceptions(
       {
@@ -121,7 +121,7 @@ export const CourseDetails = () => {
         })),
       }))
     )
-  }, [course, exceptionsApprovalPending])
+  }, [course, exceptionsApprovalPending, leader])
 
   const onExceptionsReject = useCallback(async () => {
     if (!course) return
@@ -176,7 +176,10 @@ export const CourseDetails = () => {
               <CourseHeroSummary
                 course={course}
                 renderButton={() =>
-                  acl.canEditCourses(course.type) &&
+                  acl.canEditCourses(
+                    course.type,
+                    leader?.profile.id === profile?.id
+                  ) &&
                   !courseEnded(course) &&
                   !courseCancelled ? (
                     <Button
