@@ -1,13 +1,20 @@
 import { fireEvent } from '@testing-library/react'
+import { addDays, addHours } from 'date-fns'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
 import { VenueSelector } from '@app/components/VenueSelector'
+import { Accreditors_Enum } from '@app/generated/graphql'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
-import { CourseType, ValidCourseInput } from '@app/types'
+import {
+  CourseLevel,
+  CourseType,
+  ValidCourseInput,
+  BildStrategies,
+} from '@app/types'
 import { courseToCourseInput, LoadingStatus } from '@app/util'
 
 import {
@@ -18,7 +25,7 @@ import {
   waitFor,
   waitForCalls,
 } from '@test/index'
-import { buildCourse } from '@test/mock-data-utils'
+import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
 
 import { CreateCourseProvider } from '../CreateCourseProvider'
 
@@ -169,6 +176,75 @@ describe('component: CreateCourseForm', () => {
         'placeholder',
         '(max allowed reached)'
       )
+    )
+  })
+
+  it("doesn't allow an indirect BILD course to be created with exceptions", async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        accreditedBy: Accreditors_Enum.Bild,
+        level: CourseLevel.BildRegular,
+        bildStrategies: [{ strategyName: BildStrategies.Primary }],
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <CreateCourseProvider
+                initialValue={{
+                  courseData: courseToCourseInput(course) as ValidCourseInput,
+                }}
+                courseType={CourseType.INDIRECT}
+              >
+                <CreateCourseForm />
+              </CreateCourseProvider>
+            }
+          />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/?type=INDIRECT'] }
+    )
+
+    const confirmations = [
+      'I confirm that I will ensure all course registrants have read the Health Guidance & Training Information.',
+      'I confirm that I will follow Team Teach protocols and have the correct first aid protocols in place.',
+      'I confirm that I will check that all course attendees have a valid form of ID before commencing the training through either passport, driving licence or organisation verification.',
+      'My training needs analysis form has been submitted and approved.',
+    ]
+
+    for (const label of confirmations) {
+      await userEvent.click(screen.getByLabelText(label))
+    }
+
+    await userEvent.click(
+      screen.getByRole('button', { name: /course builder/i })
+    )
+
+    const dialog = await screen.findByRole('dialog')
+
+    expect(dialog).toBeInTheDocument()
+    expect(dialog.textContent).toMatchInlineSnapshot(
+      `"No exceptions allowedThis course does not meet training protocols. Please contact a Team Teach Administrator if you wish to discuss further."`
     )
   })
 })

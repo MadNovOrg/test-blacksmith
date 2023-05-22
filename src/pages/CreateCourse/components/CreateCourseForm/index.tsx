@@ -43,6 +43,7 @@ import { LoadingStatus } from '@app/util'
 import { StepsEnum } from '../../types'
 import { useSaveCourse } from '../../useSaveCourse'
 import { useCreateCourse } from '../CreateCourseProvider'
+import { NoExceptionsDialog } from '../NoExceptionsDialog'
 
 function assertCourseDataValid(
   data: CourseInput,
@@ -156,9 +157,7 @@ export const CreateCourseForm = () => {
     if (!courseData || !profile) return
     assertCourseDataValid(courseData, courseDataValid)
 
-    // If course is indirect, check if there are any exceptions
-    // No need to check for exceptions for BILD courses
-    if (!isBild && courseType === CourseType.INDIRECT && !acl.isTTAdmin()) {
+    if (courseType === CourseType.INDIRECT && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
         { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
         assistants.map(assistant => ({
@@ -339,13 +338,20 @@ export const CreateCourseForm = () => {
         </LoadingButton>
       </Box>
 
-      <CourseExceptionsConfirmation
-        open={courseExceptions.length > 0}
-        onCancel={() => setCourseExceptions([])}
-        onSubmit={submit}
-        exceptions={courseExceptions}
-        courseType={courseType}
-      />
+      {isBild && courseData.type === CourseType.INDIRECT ? (
+        <NoExceptionsDialog
+          open={courseExceptions.length > 0}
+          onClose={() => setCourseExceptions([])}
+        />
+      ) : (
+        <CourseExceptionsConfirmation
+          open={courseExceptions.length > 0}
+          onCancel={() => setCourseExceptions([])}
+          onSubmit={submit}
+          exceptions={courseExceptions}
+          courseType={courseType}
+        />
+      )}
     </Box>
   )
 }

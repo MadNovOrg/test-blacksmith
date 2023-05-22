@@ -375,7 +375,9 @@
       "type_OUTSIDE_NOTICE_PERIOD": "Start date is less than 4 weeks away",
       "type_LEAD_TRAINER_IN_GRACE_PERIOD": "Lead trainer certification is expired (within grace period) or expiring soon",
       "type_TRAINER_RATIO_NOT_MET": "Insufficient amount of trainers per participants",
-      "proceed": "Proceed"
+      "proceed": "Proceed",
+      "no-exceptions-message": "This course does not meet training protocols. Please contact a Team Teach Administrator if you wish to discuss further.",
+      "no-exceptions-title": "No exceptions allowed"
     }
   },
   "edit-course": {
