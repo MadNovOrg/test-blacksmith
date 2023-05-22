@@ -573,7 +573,7 @@ export const ViewProfilePage: React.FC<
                               onClick={() =>
                                 navigate(`/certification/${certificate.id}`)
                               }
-                              disabled={isRevoked}
+                              disabled={isRevoked && !acl.canViewRevokedCert()}
                             >
                               {t(
                                 'components.certification-list.view-certificate'

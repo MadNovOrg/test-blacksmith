@@ -35,6 +35,16 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     isOrgAdmin: () => auth.isOrgAdmin,
 
+    canViewRevokedCert: () => {
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.LD,
+        RoleName.SALES_ADMIN,
+      ]
+      return roles.some(r => r === auth.activeRole)
+    },
+
     canSeeActionableCourseTable: () => {
       const roles = [RoleName.TT_ADMIN, RoleName.LD]
       return roles.some(r => r === auth.activeRole)
