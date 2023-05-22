@@ -548,7 +548,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
             ].some(level => activeCertificates.includes(level))
           }
 
-          return false
+          return [RoleName.TT_OPS, RoleName.TT_ADMIN].includes(activeRole)
         }
         case CourseType.OPEN:
         case CourseType.CLOSED: {

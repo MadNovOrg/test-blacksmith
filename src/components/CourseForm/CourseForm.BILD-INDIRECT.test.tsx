@@ -17,6 +17,25 @@ jest.mock('@app/components/VenueSelector', () => ({
 }))
 
 describe('CourseForm - indirect BILD', () => {
+  ;[RoleName.TT_ADMIN, RoleName.TT_OPS].forEach(role => {
+    it(`allows ${role} to create a BILD course`, async () => {
+      await waitFor(() => {
+        render(<CourseForm type={CourseType.INDIRECT} />, {
+          auth: {
+            activeCertificates: [CourseLevel.BildIntermediateTrainer],
+            activeRole: role,
+          },
+        })
+      })
+
+      await userEvent.click(screen.getByLabelText(/course category/i))
+
+      expect(
+        within(screen.getByRole('listbox')).getByText(/bild/i)
+      ).toBeInTheDocument()
+    })
+  })
+
   it('allows a trainer with a BILD Intermediate trainer certificate to create a BILD course', async () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
