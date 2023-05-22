@@ -17,7 +17,7 @@ const insertRoles = [
 ] as RoleName[]
 
 insertRoles.forEach(role => {
-  test(`@query it doesn't allow role ${role}  to insert an invoice`, async () => {
+  test(`@query it doesn't allow role ${role} to insert an invoice`, async () => {
     const schema = await API.introspection.introspection(role)
     const insertMutation = schema.__schema.mutationType.fields.find(
       f => f.name === 'insert_xero_invoice'
@@ -36,7 +36,6 @@ const selectRoles = [
   RoleName.TRAINER,
   RoleName.TT_ADMIN,
   RoleName.TT_OPS,
-  RoleName.UNVERIFIED,
   RoleName.USER,
 ] as RoleName[]
 

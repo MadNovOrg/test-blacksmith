@@ -1,0 +1,87 @@
+name: Query tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  tests:
+    name: Query tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    env:
+      CI: true
+    services:
+      postgres:
+        image: postgres:14
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: tth-db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      graphql-engine:
+        image: hasura/graphql-engine:v2.6.1.cli-migrations-v3
+        ports:
+          - 8080:8080
+        env:
+          HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@postgres:5432/tth-db
+          HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
+          HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
+          HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_JYEuK9iJg/.well-known/jwks.json","claims_format":"stringified_json"}'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.14.2'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm pkg delete scripts.prepare && npm ci
+
+      - name: Hasura Migration
+        run: |
+          cp hasura/.env.sample hasura/.env
+          npm run hasura -- metadata apply
+          npm run hasura -- migrate apply --database-name default
+          npm run hasura -- migrate status --database-name default
+          npm run hasura -- metadata reload
+          npm run hasura -- migrate apply --goto 101 --database-name default
+          npm run hasura -- migrate status --database-name default
+          npm run hasura -- migrate apply --database-name default
+          npm run hasura -- migrate status --database-name default
+          npm run hasura -- metadata reload
+
+      - name: Hasura Seed Data
+        run: npm run hasura -- seed apply --database-name default
+
+      - name: Playwright setup
+        run: |
+          npm run dev &
+          npx playwright install chromium
+
+      - name: Playwright tests
+        id: playwright
+        run: |
+          while ! curl --silent --output /dev/null --fail --max-time 300 http://localhost:3000; do sleep 1; done &&
+          npm run test:queries
+
+      - name: Playwright report
+        uses: actions/upload-artifact@v3
+        if: failure() && steps.playwright.outcome == 'failure'
+        with:
+          name: test-artifacts
+          path: |
+            test-results
