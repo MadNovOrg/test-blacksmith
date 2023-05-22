@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Chip,
   CircularProgress,
   FormControlLabel,
   FormHelperText,
@@ -19,7 +20,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { endOfDay, startOfDay } from 'date-fns'
 import { omit } from 'lodash-es'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -31,13 +32,17 @@ import { ProfileSelector } from '@app/components/ProfileSelector'
 import { SelectCourses } from '@app/components/SelectCourses'
 import { SelectLevels } from '@app/components/SelectLevels'
 import { useAuth } from '@app/context/auth'
+import { useSnackbar } from '@app/context/snackbar'
 import {
+  DisablePromoCodeMutation,
+  DisablePromoCodeMutationVariables,
   GetPromoCodesQuery,
   GetPromoCodesQueryVariables,
   Promo_Code_Type_Enum,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { NotFound } from '@app/pages/common/NotFound'
+import DisablePromoCode from '@app/queries/promo-codes/disable-promo-code'
 import {
   InputType,
   QUERY as GET_PROMO_CODES_QUERY,
@@ -69,7 +74,8 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   const fetcher = useFetcher()
   const { id } = useParams()
   const isEdit = !!id
-  const { activeRole } = useAuth()
+  const { activeRole, acl } = useAuth()
+  const { addSnackbarMessage } = useSnackbar()
 
   const [saving, setSaving] = useState(false)
 
@@ -82,6 +88,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [limitBookings, setLimitBookings] = useState(false)
 
   const [showApprovalNotice, setShowApprovalNotice] = useState(false)
+  const [showDisableModal, setShowDisableModal] = useState(false)
 
   const { data, error } = useSWR<
     GetPromoCodesQuery,
@@ -160,6 +167,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
     }
   }, [data, setValue])
 
+  const disabled = data?.promoCodes[0].disabled
   const values = watch()
   const appliesToRadio = values.appliesTo
 
@@ -218,6 +226,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
             value={value}
             checked={values.type === value}
             onChange={typeRadioChange}
+            disabled={disabled}
           />
         }
       />
@@ -262,6 +271,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
             value={value}
             checked={appliesToRadio === value}
             onChange={appliesToRadioChange}
+            disabled={disabled}
           />
         }
       />
@@ -301,10 +311,27 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
       return navigate('..')
     } catch (err) {
       console.error((err as Error).message)
+    } finally {
+      setSaving(false)
     }
-
-    setSaving(false)
   }
+
+  const disablePromoCode = useCallback(async () => {
+    setSaving(true)
+    try {
+      await fetcher<
+        DisablePromoCodeMutation,
+        DisablePromoCodeMutationVariables
+      >(DisablePromoCode, { id })
+      setSaving(false)
+      addSnackbarMessage('discount-disabled', {
+        label: t('pages.promoCodes.discount-has-been-disabled'),
+      })
+      navigate('..')
+    } catch (err) {
+      console.error((err as Error).message)
+    }
+  }, [addSnackbarMessage, fetcher, id, navigate, t])
 
   const onSubmitValid = async () => {
     if (sendForApproval) {
@@ -341,13 +368,23 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
         {t('pages.promoCodes.new-section-general')}
       </Typography>
       <Stack gap={3} flex={1} sx={{ p: 4, backgroundColor: '#fff' }}>
+        {disabled ? (
+          <Alert severity="warning" variant="outlined">
+            {t('pages.promoCodes.alert-disabled')}
+          </Alert>
+        ) : null}
+
         {/* CREATED BY */}
         <Box>
           <Typography fontWeight="bold">
             {t('pages.promoCodes.fld-createdBy-label')}
           </Typography>
           {createdBy ? (
-            <ProfileSelector value={createdBy} onChange={setCreatedBy} />
+            <ProfileSelector
+              value={createdBy}
+              onChange={setCreatedBy}
+              disabled={disabled}
+            />
           ) : null}
         </Box>
 
@@ -368,6 +405,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
             {...register('code')}
             error={!!formState.errors.code}
             helperText={formState.errors.code?.message ?? ' '}
+            disabled={disabled}
           />
           <TextField
             variant="filled"
@@ -380,6 +418,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
             {...register('description')}
             error={!!formState.errors.description}
             helperText={formState.errors.description?.message ?? ''}
+            disabled={disabled}
           />
         </Box>
 
@@ -404,6 +443,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
                   onChange={amountRadioChange}
                   sx={{ minWidth: 130 }}
                   data-testid="percent-shortcuts"
+                  disabled={disabled}
                 >
                   <MenuItem
                     value={AMOUNT_PRESETS.FIVE}
@@ -453,6 +493,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
                     maxWidth: 70,
                     opacity: amountPreset === AMOUNT_PRESETS.OTHER ? 1 : 0,
                   }}
+                  disabled={disabled}
                 />
 
                 <FormHelperText error sx={{ ml: 2 }}>
@@ -478,6 +519,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
                 {...register('amount')}
                 error={!!formState.errors.amount}
                 sx={{ maxWidth: 130 }}
+                disabled={disabled}
               />
               <FormHelperText error sx={{ ml: 2 }}>
                 {formState.errors.amount?.message ?? ' '}
@@ -498,15 +540,25 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Box>
           {appliesToRadio === APPLIES_TO.LEVELS ? (
             <>
-              <SelectLevels
-                value={values.levels}
-                onChange={ev => setValue('levels', ev.target.value)}
-              />
-              <FormHelperText error>
-                {formState.errors.levels
-                  ? t('pages.promoCodes.appliesTo-LEVELS-required')
-                  : ' '}
-              </FormHelperText>
+              {!disabled ? (
+                <>
+                  <SelectLevels
+                    value={values.levels}
+                    onChange={ev => setValue('levels', ev.target.value)}
+                  />
+                  <FormHelperText error>
+                    {formState.errors.levels
+                      ? t('pages.promoCodes.appliesTo-LEVELS-required')
+                      : ' '}
+                  </FormHelperText>
+                </>
+              ) : (
+                <Box>
+                  {values.levels.map(l => (
+                    <Chip label={l} key={l} />
+                  ))}
+                </Box>
+              )}
             </>
           ) : null}
           {appliesToRadio === APPLIES_TO.COURSES ? (
@@ -523,6 +575,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
                     },
                   },
                 }}
+                disabled={disabled}
               />
               <FormHelperText error>
                 {formState.errors.courses
@@ -563,6 +616,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
                       t('pages.promoCodes.fld-validFrom-hint'),
                   },
                 }}
+                disabled={disabled}
               />
               <DatePicker
                 format={INPUT_DATE_FORMAT}
@@ -585,63 +639,103 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
                       t('pages.promoCodes.fld-validTo-hint'),
                   },
                 }}
+                disabled={disabled}
               />
             </LocalizationProvider>
           </Box>
         </Box>
       </Stack>
 
-      <Typography variant="body1" fontWeight="bold" mt={4}>
-        {t('pages.promoCodes.new-section-usage')}
-      </Typography>
-      <Stack gap={2} flex={1} sx={{ p: 4, backgroundColor: '#fff' }}>
-        {/* BOOKER SINGLE USE */}
-        <Box>
-          <FormControlLabel
-            label={t('pages.promoCodes.fld-bookerSingleUse-label')}
-            control={<Checkbox />}
-            checked={values.bookerSingleUse}
-            onChange={(_, on) => setValue('bookerSingleUse', on)}
-            sx={{ userSelect: 'none' }}
-          />
-        </Box>
+      {!disabled ? (
+        <>
+          <Typography variant="body1" fontWeight="bold" mt={4}>
+            {t('pages.promoCodes.new-section-usage')}
+          </Typography>
+          <Stack gap={2} flex={1} sx={{ p: 4, backgroundColor: '#fff' }}>
+            {/* BOOKER SINGLE USE */}
+            <Box>
+              <FormControlLabel
+                label={t('pages.promoCodes.fld-bookerSingleUse-label')}
+                control={<Checkbox />}
+                checked={values.bookerSingleUse}
+                onChange={(_, on) => setValue('bookerSingleUse', on)}
+                sx={{ userSelect: 'none' }}
+              />
+            </Box>
 
-        {/* MAX USAGE */}
-        <Box>
-          <FormControlLabel
-            label={t('pages.promoCodes.fld-limitBookings-label')}
-            control={<Checkbox data-testid="fld-limitBookings" />}
-            checked={limitBookings}
-            onChange={limitBookingsChange}
-            sx={{ userSelect: 'none' }}
-          />
-          {limitBookings ? (
-            <TextField
-              variant="filled"
-              label={t('pages.promoCodes.fld-usesMax-label')}
-              inputProps={{ 'data-testid': 'fld-usesMax' }}
-              {...register('usesMax')}
-              error={!!formState.errors.usesMax}
-              helperText={formState.errors.usesMax?.message ?? ' '}
-              sx={{ display: 'block' }}
-            />
+            {/* MAX USAGE */}
+            <Box>
+              <FormControlLabel
+                label={t('pages.promoCodes.fld-limitBookings-label')}
+                control={<Checkbox data-testid="fld-limitBookings" />}
+                checked={limitBookings}
+                onChange={limitBookingsChange}
+                sx={{ userSelect: 'none' }}
+              />
+              {limitBookings ? (
+                <TextField
+                  variant="filled"
+                  label={t('pages.promoCodes.fld-usesMax-label')}
+                  inputProps={{ 'data-testid': 'fld-usesMax' }}
+                  {...register('usesMax')}
+                  error={!!formState.errors.usesMax}
+                  helperText={formState.errors.usesMax?.message ?? ' '}
+                  sx={{ display: 'block' }}
+                />
+              ) : null}
+            </Box>
+          </Stack>
+
+          {acl.canDisableDiscounts() ? (
+            <>
+              <Typography variant="body1" fontWeight="bold" mt={4}>
+                {t('pages.promoCodes.disable-this-discount')}
+              </Typography>
+              <Stack gap={2} flex={1} sx={{ p: 4, backgroundColor: 'white' }}>
+                <Typography variant="body2">
+                  {t('pages.promoCodes.disable-description')}
+                </Typography>
+
+                <Box display="flex">
+                  <Button
+                    variant="outlined"
+                    data-testid="btn-disable"
+                    onClick={() => setShowDisableModal(true)}
+                  >
+                    {t('pages.promoCodes.disable-discount')}
+                  </Button>
+                </Box>
+              </Stack>
+            </>
           ) : null}
-        </Box>
-      </Stack>
 
-      <Box display="flex" justifyContent="space-between" mt={3}>
-        <Button data-testid="btn-cancel" onClick={() => navigate('..')}>
-          {t('cancel')}
-        </Button>
-        <LoadingButton
-          variant="contained"
-          type="submit"
-          loading={saving}
-          data-testid="btn-submit"
-        >
-          {isEdit ? t('common.save-details') : t('pages.promoCodes.new-submit')}
-        </LoadingButton>
-      </Box>
+          <Box display="flex" justifyContent="space-between" mt={3}>
+            <Button data-testid="btn-cancel" onClick={() => navigate('..')}>
+              {t('cancel')}
+            </Button>
+            <LoadingButton
+              variant="contained"
+              type="submit"
+              loading={saving}
+              data-testid="btn-submit"
+            >
+              {isEdit
+                ? t('common.save-details')
+                : t('pages.promoCodes.new-submit')}
+            </LoadingButton>
+          </Box>
+        </>
+      ) : (
+        <Box display="flex" justifyContent="space-between" mt={3}>
+          <Button
+            data-testid="btn-back"
+            variant="outlined"
+            onClick={() => navigate('..')}
+          >
+            {t('back')}
+          </Button>
+        </Box>
+      )}
 
       {/* APPROVAL NEEDED */}
       <Dialog
@@ -673,6 +767,32 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
             onClick={upsertPromoCode}
           >
             {t('pages.promoCodes.approvalNeeded-submit')}
+          </LoadingButton>
+        </Box>
+      </Dialog>
+
+      <Dialog
+        title={t('pages.promoCodes.disable-modal-title', { code: values.code })}
+        open={showDisableModal}
+        onClose={() => setShowDisableModal(false)}
+        showClose={false}
+        minWidth={500}
+      >
+        <Typography variant="body2">
+          {t('pages.promoCodes.disable-modal-description')}
+        </Typography>
+        <Box
+          sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', gap: 2 }}
+        >
+          <Button variant="outlined" onClick={() => setShowDisableModal(false)}>
+            {t('cancel')}
+          </Button>
+          <LoadingButton
+            variant="contained"
+            loading={saving}
+            onClick={disablePromoCode}
+          >
+            {t('pages.promoCodes.disable')}
           </LoadingButton>
         </Box>
       </Dialog>

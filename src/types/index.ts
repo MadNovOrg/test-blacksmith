@@ -650,6 +650,7 @@ export enum PromoCodeStatus {
   SCHEDULED = 'SCHEDULED',
   EXPIRED = 'EXPIRED',
   DENIED = 'DENIED',
+  DISABLED = 'DISABLED',
 }
 
 export enum AttendeeOnlyCourseStatus {

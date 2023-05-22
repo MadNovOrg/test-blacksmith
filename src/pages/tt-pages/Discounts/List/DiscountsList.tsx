@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
+import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useTablePagination } from '@app/hooks/useTablePagination'
@@ -65,13 +66,14 @@ export const DiscountsList: React.FC<React.PropsWithChildren<unknown>> = () => {
         </Container>
       </Box>
 
-      <Container maxWidth="lg" sx={{ py: 5 }}>
-        <Box mb={4}>
-          <BackButton label={t('pages.admin.back-to-settings')} />
-        </Box>
+      <Container maxWidth="lg" sx={{ py: 5, position: 'relative' }}>
+        <SnackbarMessage
+          messageKey="discount-disabled"
+          sx={{ position: 'absolute' }}
+        />
+
         <Box display="flex" gap={4}>
           <Box width={250}>
-            <Typography variant="h1">{t('pages.promoCodes.title')}</Typography>
             <Typography variant="body2" color="grey.500" mt={1}>
               {loading ? <>&nbsp;</> : t('x-items', { count })}
             </Typography>

@@ -13,6 +13,7 @@ export type SnackbarMessageKey =
   | 'course-evaluated'
   | 'participant-transferred'
   | 'course-submitted'
+  | 'discount-disabled'
 export type SnackbarMessage = { label: string }
 
 export type SnackbarState = {

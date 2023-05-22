@@ -10,11 +10,11 @@ import {
   GetPromoCodesQuery,
   Payment_Methods_Enum,
   Promo_Code_Type_Enum,
-  XeroLineItemSummaryFragment,
-  XeroPhoneType,
   Xero_Contact,
   Xero_Invoice,
   Xero_Invoice_Status_Enum,
+  XeroLineItemSummaryFragment,
+  XeroPhoneType,
 } from '@app/generated/graphql'
 import { NonNullish } from '@app/types'
 
@@ -137,5 +137,6 @@ export const buildPromo = build<
       fullName: chance.name({ full: true }),
     },
     courses: [],
+    disabled: false,
   },
 })

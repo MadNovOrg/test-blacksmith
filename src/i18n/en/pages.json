@@ -1208,6 +1208,7 @@
     "status-SCHEDULED": "Scheduled",
     "status-APPROVAL_PENDING": "Approval pending",
     "status-DENIED": "Declined",
+    "status-DISABLED": "Disabled",
     "neverExpires": "Always active",
     "new-btn": "Create discount",
     "new-title": "Create a discount",
@@ -1248,7 +1249,15 @@
     "approvalNeeded-intro": "This discount requires approval from a Team Teach Administrator due to the following reason:",
     "approvalNeeded-reason-PERCENT": "Percentage exceeds 15%",
     "approvalNeeded-reason-FREE_PLACES": "Number of free spaces exceeds 3",
-    "approvalNeeded-submit": "Send for approval"
+    "approvalNeeded-submit": "Send for approval",
+    "disable-this-discount": "Disable this discount",
+    "disable-discount": "Disable discount",
+    "disable": "Disable",
+    "disable-description": "This action will expire the discount code immediately.",
+    "disable-modal-description": "This action cannot be undone.",
+    "disable-modal-title": "Disable {{ code }}?",
+    "alert-disabled": "This discount has been disabled and editing it is not possible.",
+    "discount-has-been-disabled": "The discount has been disabled."
   },
   "org-invite": {
     "title": "You're invited to join {{orgName}}",

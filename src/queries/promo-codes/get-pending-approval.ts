@@ -4,6 +4,7 @@ export const QUERY = gql`
   query GetPromoCodesPendingApproval {
     promoCodes: promo_code(
       where: {
+        disabled: { _eq: false }
         approvedBy: { _is_null: true }
         deniedBy: { _is_null: true }
         _or: [
@@ -23,6 +24,7 @@ export const QUERY = gql`
       bookerSingleUse
       usesMax
       levels
+      disabled
       courses {
         course {
           id

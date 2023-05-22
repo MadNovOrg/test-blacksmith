@@ -35178,6 +35178,7 @@ export type Promo_Code = {
   creator: Profile;
   deniedBy?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
+  disabled: Scalars['Boolean'];
   enabled: Scalars['Boolean'];
   id: Scalars['uuid'];
   levels: Scalars['jsonb'];
@@ -35272,6 +35273,7 @@ export type Promo_Code_Bool_Exp = {
   creator?: InputMaybe<Profile_Bool_Exp>;
   deniedBy?: InputMaybe<Uuid_Comparison_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
+  disabled?: InputMaybe<Boolean_Comparison_Exp>;
   enabled?: InputMaybe<Boolean_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   levels?: InputMaybe<Jsonb_Comparison_Exp>;
@@ -35324,6 +35326,7 @@ export type Promo_Code_Insert_Input = {
   creator?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   deniedBy?: InputMaybe<Scalars['uuid']>;
   description?: InputMaybe<Scalars['String']>;
+  disabled?: InputMaybe<Scalars['Boolean']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['uuid']>;
   levels?: InputMaybe<Scalars['jsonb']>;
@@ -35404,6 +35407,7 @@ export type Promo_Code_Order_By = {
   creator?: InputMaybe<Profile_Order_By>;
   deniedBy?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
+  disabled?: InputMaybe<Order_By>;
   enabled?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   levels?: InputMaybe<Order_By>;
@@ -35443,6 +35447,8 @@ export enum Promo_Code_Select_Column {
   /** column name */
   Description = 'description',
   /** column name */
+  Disabled = 'disabled',
+  /** column name */
   Enabled = 'enabled',
   /** column name */
   Id = 'id',
@@ -35470,6 +35476,7 @@ export type Promo_Code_Set_Input = {
   createdBy?: InputMaybe<Scalars['uuid']>;
   deniedBy?: InputMaybe<Scalars['uuid']>;
   description?: InputMaybe<Scalars['String']>;
+  disabled?: InputMaybe<Scalars['Boolean']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['uuid']>;
   levels?: InputMaybe<Scalars['jsonb']>;
@@ -35642,6 +35649,8 @@ export enum Promo_Code_Update_Column {
   DeniedBy = 'deniedBy',
   /** column name */
   Description = 'description',
+  /** column name */
+  Disabled = 'disabled',
   /** column name */
   Enabled = 'enabled',
   /** column name */
@@ -44171,10 +44180,17 @@ export type CanApplyPromoCodeQueryVariables = Exact<{
 
 export type CanApplyPromoCodeQuery = { __typename?: 'query_root', canApplyPromoCode: { __typename?: 'CanApplyPromoCodeOutput', result?: { __typename?: 'PromoCodeOutput', code: string, amount: number, type: string } | null } };
 
+export type DisablePromoCodeMutationVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type DisablePromoCodeMutation = { __typename?: 'mutation_root', update_promo_code?: { __typename?: 'promo_code_mutation_response', affected_rows: number } | null };
+
 export type GetPromoCodesPendingApprovalQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPromoCodesPendingApprovalQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, enabled: boolean, approvedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, courses: Array<{ __typename?: 'course_promo_code', course?: { __typename?: 'course', id: number, course_code?: string | null } | null }>, creator: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> };
+export type GetPromoCodesPendingApprovalQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, disabled: boolean, enabled: boolean, approvedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, courses: Array<{ __typename?: 'course_promo_code', course?: { __typename?: 'course', id: number, course_code?: string | null } | null }>, creator: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> };
 
 export type GetPromoCodesQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Promo_Code_Order_By> | Promo_Code_Order_By>;
@@ -44184,7 +44200,7 @@ export type GetPromoCodesQueryVariables = Exact<{
 }>;
 
 
-export type GetPromoCodesQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, enabled: boolean, approvedBy?: any | null, deniedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, courses: Array<{ __typename?: 'course_promo_code', course?: { __typename?: 'course', id: number, course_code?: string | null } | null }>, creator: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, promo_code_aggregate: { __typename?: 'promo_code_aggregate', aggregate?: { __typename?: 'promo_code_aggregate_fields', count: number } | null } };
+export type GetPromoCodesQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, disabled: boolean, enabled: boolean, approvedBy?: any | null, deniedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, courses: Array<{ __typename?: 'course_promo_code', course?: { __typename?: 'course', id: number, course_code?: string | null } | null }>, creator: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, promo_code_aggregate: { __typename?: 'promo_code_aggregate', aggregate?: { __typename?: 'promo_code_aggregate_fields', count: number } | null } };
 
 export type UpsertPromoCodeMutationVariables = Exact<{
   promoCondition?: InputMaybe<Promo_Code_Bool_Exp>;

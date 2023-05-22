@@ -1,21 +1,33 @@
 import { startOfDay } from 'date-fns'
 import { setMedia } from 'mock-match-media'
 import React from 'react'
+import useSWR from 'swr'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
 import { Promo_Code_Type_Enum } from '@app/generated/graphql'
+import { buildPromo } from '@app/pages/tt-pages/OrderDetails/mock-utils'
 
-import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+import {
+  chance,
+  render,
+  screen,
+  userEvent,
+  useSWRDefaultResponse,
+  waitFor,
+  within,
+} from '@test/index'
 import { profile } from '@test/providers'
 
 import { DiscountForm } from './DiscountForm'
 import { APPLIES_TO } from './helpers'
 
 const mockNavigate = jest.fn()
+const mockUseParams = jest.fn()
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
+  useParams: () => mockUseParams,
 }))
 
 const mockFetcher = jest.fn()
@@ -23,14 +35,19 @@ jest.mock('@app/hooks/use-fetcher', () => ({
   useFetcher: () => mockFetcher,
 }))
 
+jest.mock('swr')
+const useSWRMock = jest.mocked(useSWR)
+
 const client = {
   executeQuery: jest.fn(),
   executeMutation: jest.fn(),
 }
 
-describe('page: CreateDiscount', () => {
+describe('page: DiscountForm', () => {
   beforeAll(() => {
     setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
+    mockUseParams.mockReturnValue({})
+    useSWRMock.mockReturnValue(useSWRDefaultResponse)
   })
 
   it('defaults createdBy to current user', async () => {
@@ -351,6 +368,63 @@ describe('page: CreateDiscount', () => {
       expect(
         within(dialog).getByText(/number of free spaces exceeds 3/i)
       ).toBeInTheDocument()
+    })
+  })
+
+  describe('disabled discount', () => {
+    const mockPromo = buildPromo({
+      overrides: {
+        id: '123',
+        disabled: true,
+        type: Promo_Code_Type_Enum.Percent,
+      },
+    })
+
+    beforeAll(() => {
+      mockUseParams.mockReset()
+      mockUseParams.mockReturnValue({ id: '123' })
+    })
+
+    it('renders alert', async () => {
+      useSWRMock.mockReturnValue({
+        ...useSWRDefaultResponse,
+        data: {
+          promoCodes: [mockPromo],
+        },
+      })
+
+      _render(<DiscountForm />)
+
+      await waitFor(() => {
+        expect(
+          screen.queryByText(
+            'This discount has been disabled and editing it is not possible.'
+          )
+        ).toBeInTheDocument()
+      })
+    })
+
+    it('disables input fields', async () => {
+      useSWRMock.mockReturnValue({
+        ...useSWRDefaultResponse,
+        data: {
+          promoCodes: [mockPromo],
+        },
+      })
+
+      _render(<DiscountForm />)
+
+      await waitFor(() => {
+        expect(
+          within(screen.getByTestId('profile-selector')).getByRole('combobox')
+        ).toBeDisabled()
+        expect(screen.getByTestId('fld-code')).toBeDisabled()
+        expect(screen.getByTestId('fld-description')).toBeDisabled()
+        expect(screen.getByTestId('fld-amount-percent')).toBeDisabled()
+        expect(screen.getByTestId('fld-validFrom')).toBeDisabled()
+        expect(screen.getByTestId('fld-validTo')).toBeDisabled()
+        expect(screen.queryByTestId('btn-submit')).not.toBeInTheDocument()
+      })
     })
   })
 })

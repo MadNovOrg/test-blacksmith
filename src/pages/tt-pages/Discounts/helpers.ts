@@ -12,9 +12,19 @@ export const promoCodeNeedsApproval = (
 export const getPromoCodeStatus = (
   promoCode: Pick<
     Promo_Code,
-    'approvedBy' | 'deniedBy' | 'validFrom' | 'validTo' | 'type' | 'amount'
+    | 'approvedBy'
+    | 'deniedBy'
+    | 'validFrom'
+    | 'validTo'
+    | 'type'
+    | 'amount'
+    | 'disabled'
   >
 ) => {
+  if (promoCode.disabled) {
+    return PromoCodeStatus.DISABLED
+  }
+
   if ('approvedBy' in promoCode && promoCodeNeedsApproval(promoCode)) {
     if (promoCode.approvedBy === null && promoCode.deniedBy === null) {
       return PromoCodeStatus.APPROVAL_PENDING
@@ -47,4 +57,5 @@ export const DISCOUNT_STATUS_COLOR: Record<
   [PromoCodeStatus.SCHEDULED]: 'info',
   [PromoCodeStatus.EXPIRED]: 'gray',
   [PromoCodeStatus.DENIED]: 'error',
+  [PromoCodeStatus.DISABLED]: 'gray',
 }

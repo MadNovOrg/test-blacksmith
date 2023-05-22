@@ -128,6 +128,7 @@ select_permissions:
         - created_by
         - denied_by
         - description
+        - disabled
         - enabled
         - id
         - levels
@@ -141,11 +142,21 @@ select_permissions:
   - role: sales-admin
     permission:
       columns:
-        - id
-        - code
-        - description
-        - type
         - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_at
+        - created_by
+        - denied_by
+        - description
+        - disabled
+        - enabled
+        - id
+        - levels
+        - type
+        - updated_at
+        - uses_max
         - valid_from
         - valid_to
         - booker_single_use
@@ -191,6 +202,7 @@ select_permissions:
         - created_by
         - denied_by
         - description
+        - disabled
         - enabled
         - id
         - levels
@@ -253,6 +265,7 @@ update_permissions:
         - created_by
         - denied_by
         - description
+        - disabled
         - enabled
         - levels
         - type

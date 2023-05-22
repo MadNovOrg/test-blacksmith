@@ -32,6 +32,7 @@ export const QUERY = gql`
       bookerSingleUse
       usesMax
       levels
+      disabled
       courses {
         course {
           id

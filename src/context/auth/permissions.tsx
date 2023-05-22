@@ -563,6 +563,11 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
       return true
     },
+
+    canDisableDiscounts: () => {
+      const roles = [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.FINANCE]
+      return roles.some(r => r === auth.activeRole)
+    },
   })
 
   return acl

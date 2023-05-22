@@ -24,6 +24,7 @@ type Props = {
   onChange: (ev: { target: { value: number[] } }) => void
   titleHint: string
   where: object
+  disabled?: boolean
 }
 
 export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
@@ -31,6 +32,7 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
   onChange,
   titleHint,
   where,
+  disabled,
 }) => {
   const { t } = useTranslation()
   const [showModal, setShowModal] = useState(false)
@@ -124,16 +126,20 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
                   </Box>
                 </Typography>
               </Box>
-              <IconButton onClick={() => unselectCourse(c.id)}>
-                <Delete />
-              </IconButton>
+              {disabled ? null : (
+                <IconButton onClick={() => unselectCourse(c.id)}>
+                  <Delete />
+                </IconButton>
+              )}
             </Box>
           )
         })}
       </Box>
-      <Button variant="outlined" onClick={openModal}>
-        {t('components.selectCourses.btn-browse')}
-      </Button>
+      {disabled ? null : (
+        <Button variant="outlined" onClick={openModal}>
+          {t('components.selectCourses.btn-browse')}
+        </Button>
+      )}
 
       <Dialog
         open={showModal}

@@ -179,6 +179,10 @@ export const usePromoCodes = ({
           }
           break
 
+        case PromoCodeStatus.DISABLED:
+          q.disabled = { _eq: true }
+          break
+
         default:
           break
       }

@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@mui/material/styles'
-import { waitFor, render as _render, screen } from '@testing-library/react'
+import { render as _render, screen, waitFor } from '@testing-library/react'
 import Chance from 'chance'
 import { deepmerge } from 'deepmerge-ts'
 import React, { PropsWithChildren } from 'react'
@@ -99,4 +99,12 @@ export {
   chance,
   waitForText,
   formatCurrency,
+}
+
+export const useSWRDefaultResponse = {
+  data: null,
+  error: null,
+  isValidating: false,
+  mutate: jest.fn(),
+  isLoading: false,
 }
