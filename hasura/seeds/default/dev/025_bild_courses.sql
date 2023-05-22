@@ -206,4 +206,4 @@ VALUES (10034, '{
    }
 }'::jsonb);
 
-SELECT setval('course_id_seq', 10034);
+SELECT setval('course_id_seq', 11000);
