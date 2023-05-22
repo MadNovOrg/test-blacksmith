@@ -48,7 +48,7 @@
     "@react-pdf/renderer": "^3.1.9",
     "@sentry/integrations": "^7.48.0",
     "@sentry/react": "^7.48.0",
-    "@sentry/tracing": "^7.48.0",
+    "@sentry/tracing": "^7.52.1",
     "@stripe/react-stripe-js": "^2.1.0",
     "@stripe/stripe-js": "^1.52.1",
     "@types/chance": "1.1.3",
