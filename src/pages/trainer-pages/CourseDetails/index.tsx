@@ -224,15 +224,9 @@ export const CourseDetails = () => {
                       gap={1}
                     >
                       <Box>
-                        {acl.canApproveCourseExceptions() ? (
-                          <Typography variant="body1" fontWeight={600}>
-                            {t('pages.create-course.exceptions.admin-header')}
-                          </Typography>
-                        ) : (
-                          <Typography variant="body1" fontWeight={600}>
-                            {t('pages.create-course.exceptions.warning-header')}
-                          </Typography>
-                        )}
+                        <Typography variant="body1" fontWeight={600}>
+                          {t('pages.create-course.exceptions.approval-header')}
+                        </Typography>
                         <ul>
                           {courseExceptions.map(exception => (
                             <li key={exception}>
