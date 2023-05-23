@@ -1,4 +1,4 @@
-name: E2E tests
+name: E2E smoke tests
 
 on:
   pull_request:
@@ -78,7 +78,8 @@ jobs:
       - name: Playwright tests
         id: playwright
         run: |
-          while ! curl --silent --output /dev/null --fail --max-time 300 http://localhost:3000; do sleep 1; done &&
+          while ! response=$(curl --silent --output /dev/null --write-out "%{http_code}" --fail --max-time 300 http://localhost:3000); do sleep 1; done && echo "Server started succesfully and responding!"
+          sleep 10
           npm run test:e2e:smoke -- --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Playwright report
@@ -86,5 +87,4 @@ jobs:
         if: failure() && steps.playwright.outcome == 'failure'
         with:
           name: test-artifacts
-          path: |
-            test-results
+          path: test-results
