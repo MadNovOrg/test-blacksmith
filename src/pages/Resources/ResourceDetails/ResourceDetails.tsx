@@ -74,7 +74,7 @@ export const ResourceDetails = () => {
                 <ResourceItemsSkeleton />
               ) : (
                 <>
-                  {resourceCategory?.resources?.nodes ? (
+                  {resourceCategory?.resources?.nodes?.length ? (
                     <Box sx={{ mt: 2, mb: 4 }}>
                       <ResourcesList
                         resources={resourceCategory?.resources?.nodes}
@@ -85,7 +85,6 @@ export const ResourceDetails = () => {
                       {t('pages.resources.resource-details.empty')}
                     </Typography>
                   )}
-
                   {resourceCategory?.children?.nodes?.map(categoryLevelOne => (
                     <Box key={categoryLevelOne?.id} sx={{ mb: 7 }}>
                       {categoryLevelOne?.resources?.nodes?.length ? (
