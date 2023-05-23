@@ -15,6 +15,7 @@
 - "!include public_course_certificate_changelog_type.yaml"
 - "!include public_course_certificate_hold_request.yaml"
 - "!include public_course_delivery_type.yaml"
+- "!include public_course_delivery_type_prefix.yaml"
 - "!include public_course_draft.yaml"
 - "!include public_course_end_jobs.yaml"
 - "!include public_course_enquiry.yaml"
