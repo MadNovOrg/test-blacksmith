@@ -35,12 +35,7 @@ insert_permissions:
       backend_only: false
   - role: sales-admin
     permission:
-      check:
-        course:
-          course_type:
-            _in:
-              - CLOSED
-              - OPEN
+      check: {}
       columns:
         - course_id
         - email
@@ -137,12 +132,7 @@ select_permissions:
         - created_at
         - updated_at
         - id
-      filter:
-        course:
-          course_type:
-            _in:
-              - CLOSED
-              - OPEN
+      filter: {}
       allow_aggregations: true
   - role: sales-representative
     permission:
@@ -237,12 +227,7 @@ update_permissions:
         - course_id
         - email
         - status
-      filter:
-        course:
-          course_type:
-            _in:
-              - CLOSED
-              - OPEN
+      filter: {}
       check: {}
   - role: sales-representative
     permission:
@@ -301,12 +286,7 @@ delete_permissions:
       filter: {}
   - role: sales-admin
     permission:
-      filter:
-        course:
-          course_type:
-            _in:
-              - CLOSED
-              - OPEN
+      filter: {}
   - role: sales-representative
     permission:
       filter:
