@@ -1,17 +1,24 @@
 import { test } from '@playwright/test'
 import { Chance } from 'chance'
 
+import { getProfileId } from '@qa/api/hasura/profile'
+import { users } from '@qa/data/users'
 import { stateFilePath } from '@qa/hooks/global-setup'
 import { ProfilePage } from '@qa/pages/profile/ProfilePage'
 
-test.use({ storageState: stateFilePath('user1') })
+const allowedRoles = ['salesAdmin']
 
-test('edit user profile as an attendee user', async ({ page }) => {
-  const phoneNumber = new Chance().phone()
-  const profilePage = new ProfilePage(page)
-  await profilePage.goto()
-  await profilePage.clickEditButton()
-  await profilePage.enterPhoneNumber(phoneNumber)
-  await profilePage.clickSaveChanges()
-  await profilePage.checkPhoneNumber(phoneNumber)
+allowedRoles.forEach(role => {
+  test.use({ storageState: stateFilePath(role) })
+
+  test(`edit user profile as ${role}`, async ({ page }) => {
+    const profileId = await getProfileId(users.user1.email)
+    const phoneNumber = new Chance().phone()
+    const profilePage = new ProfilePage(page)
+    await profilePage.goto(profileId)
+    await profilePage.clickEditButton()
+    await profilePage.enterPhoneNumber(phoneNumber)
+    await profilePage.clickSaveChanges()
+    await profilePage.checkPhoneNumber(phoneNumber)
+  })
 })

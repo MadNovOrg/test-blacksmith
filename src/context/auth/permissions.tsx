@@ -155,6 +155,11 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       )
     },
 
+    canEditProfiles: () => {
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.SALES_ADMIN]
+      return roles.some(r => r === auth.activeRole)
+    },
+
     canViewEmailContacts: (courseType: CourseType) => {
       const can =
         auth.activeRole !== RoleName.TRAINER ||

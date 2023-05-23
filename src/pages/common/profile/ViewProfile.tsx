@@ -98,17 +98,7 @@ export const ViewProfilePage: React.FC<
     )
   }
 
-  const editAllowed =
-    !profile.archived &&
-    (!id ||
-      acl.isTTAdmin() ||
-      currentUserProfile?.organizations.some(orgMember =>
-        profile.organizations.some(
-          profileOrgMember =>
-            profileOrgMember.organization.id === orgMember.organization.id &&
-            orgMember.isAdmin
-        )
-      ))
+  const editAllowed = !profile.archived && (!id || acl.canEditProfiles())
 
   const archiveAllowed =
     !profile.archived && acl.canArchiveProfile() && !isMyProfile

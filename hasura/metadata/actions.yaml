@@ -269,6 +269,9 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/user/update'
     permissions:
+      - role: tt-ops
+      - role: sales-admin
+      - role: tt-admin
       - role: unverified
       - role: anonymous
       - role: user
