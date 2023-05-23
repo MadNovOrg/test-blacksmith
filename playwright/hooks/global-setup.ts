@@ -25,6 +25,8 @@ const login = async (browser: Browser, userKey: string, role: string) => {
 }
 
 async function globalSetup() {
+  // We skip the login when running the 'query' tests as it isn't required
+  if (process.env.QUERY) return
   // Remove temp directory if requested
   if (process.env.REMOVE_TMP_DIR) {
     await fs.rm(TEMP_DIR, { recursive: true, force: true })

@@ -67,21 +67,13 @@ jobs:
       - name: Hasura Seed Data
         run: npm run hasura -- seed apply --database-name default
 
-      - name: Playwright setup
-        run: |
-          npm run dev &
-          npx playwright install chromium
-
       - name: Playwright tests
         id: playwright
-        run: |
-          while ! curl --silent --output /dev/null --fail --max-time 300 http://localhost:3000; do sleep 1; done &&
-          npm run test:queries
+        run: npm run test:queries
 
       - name: Playwright report
         uses: actions/upload-artifact@v3
         if: failure() && steps.playwright.outcome == 'failure'
         with:
           name: test-artifacts
-          path: |
-            test-results
+          path: test-results

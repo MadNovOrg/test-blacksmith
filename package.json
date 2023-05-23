@@ -19,7 +19,7 @@
     "test:e2e:webkit": "playwright test --config=playwright/playwright.config.ts --project=webkit playwright/tests/e2e",
     "test:e2e:smoke": "npm run test:e2e -- --grep @smoke",
     "test:e2e:report": "playwright show-report",
-    "test:queries": "playwright test --config=playwright/playwright.config.ts --project=chromium playwright/tests/queries",
+    "test:queries": "QUERY=true playwright test --config=playwright/playwright.config.ts --project=chromium playwright/tests/queries",
     "hasura": "env-cmd -f ./hasura/.env -- hasura --project hasura --skip-update-check",
     "hasura:console": "npm run hasura -- console",
     "hasura:squash": "npm run hasura -- migrate squash",
