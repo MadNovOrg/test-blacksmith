@@ -1077,7 +1077,7 @@
         "certificates": {
           "level-one": "Level One ({{ count }})",
           "level-two": "Level Two ({{ count }})",
-          "advanced": "Advanced ({{ count }})",
+          "advanced": "Advanced Modules ({{ count }})",
           "bild-act-certified": "BILD ACT Certified ({{ count }})",
           "level_1": "Level One ({{ count }})",
           "level_2": "Level Two ({{ count }})",
