@@ -60,6 +60,12 @@ export const CourseGrading: React.FC<
   )
 
   const canEditGradingDetails = !course.gradingStarted
+  const disableGradeAll = useMemo(() => {
+    const participantFiltered =
+      participants?.filter(participant => participant.grade !== null) || []
+    return participantFiltered.length === participants?.length
+  }, [participants])
+
   const canGradeParticipants = acl.canGradeParticipants(course.trainers ?? [])
 
   const cols = useMemo(() => {
@@ -218,6 +224,7 @@ export const CourseGrading: React.FC<
                       <Button
                         variant="contained"
                         color="primary"
+                        disabled={disableGradeAll}
                         sx={{ ml: 2 }}
                         onClick={() =>
                           navigate(`/courses/${course.id}/grading`)
