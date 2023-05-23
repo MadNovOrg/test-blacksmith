@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Alert,
@@ -38,6 +39,7 @@ import { Avatar } from '@app/components/Avatar'
 import { ConfirmDialog } from '@app/components/ConfirmDialog'
 import { DetailsRow } from '@app/components/DetailsRow'
 import { Dialog } from '@app/components/Dialog'
+import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
   Profile_Role_Insert_Input,
@@ -70,6 +72,7 @@ import theme from '@app/theme'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 import { EditRoles, RolesFields, rolesFormSchema } from './components/EditRoles'
+import { InviteUserToOrganisation } from './components/InviteUserToOrganisation'
 import { UserGo1License } from './components/UserGo1License'
 import { getRoleColor } from './utils'
 
@@ -173,7 +176,6 @@ export const EditProfilePage: React.FC<
   const navigate = useNavigate()
   const { id } = useParams()
   const [searchParams] = useSearchParams()
-
   const orgId = searchParams.get('orgId')
 
   const { profile, certifications, go1Licenses, mutate, updateAvatar } =
@@ -187,6 +189,8 @@ export const EditProfilePage: React.FC<
   const [disabilitiesRadioValue, setDisabilitiesRadioValue] =
     useState<DisabilitiesRadioValues | null>(null)
   const [showImportModal, setShowImportModal] = useState(false)
+  const [showInviteOrgModal, setShowInviteOrgModal] = useState(false)
+
   const [orgToLeave, setOrgToLeave] = useState<OrgMemberType>()
 
   const ratherNotSayText = t<string>('rather-not-say')
@@ -595,6 +599,10 @@ export const EditProfilePage: React.FC<
   return (
     <Box bgcolor="grey.100" pb={6} pt={3}>
       <Container>
+        <SnackbarMessage
+          messageKey="user-invited"
+          sx={{ position: 'absolute' }}
+        />
         <FormProvider {...methods}>
           <Grid
             container
@@ -655,8 +663,22 @@ export const EditProfilePage: React.FC<
               <Typography variant="body1" color="grey.700">
                 {profile.email}
               </Typography>
+              <Box m={2}>
+                {acl.canInviteToOrganizations() ? (
+                  <Button
+                    variant="contained"
+                    startIcon={<PersonAddIcon />}
+                    onClick={() => setShowInviteOrgModal(true)}
+                    data-testid="edit-invite-user-to-org"
+                  >
+                    {t(
+                      'pages.org-details.tabs.users.invite-individual-to-organization'
+                    )}
+                  </Button>
+                ) : undefined}
+              </Box>
 
-              <Box mt={5}>
+              <Box mt={3}>
                 <Button
                   variant="outlined"
                   color="primary"
@@ -1117,6 +1139,18 @@ export const EditProfilePage: React.FC<
             await mutate()
             setShowImportModal(false)
           }}
+        />
+      </Dialog>
+
+      <Dialog
+        open={showInviteOrgModal}
+        onClose={() => setShowInviteOrgModal(false)}
+        title={t('pages.invite-to-org.title')}
+        maxWidth={600}
+      >
+        <InviteUserToOrganisation
+          email={profile.email || ''}
+          onClose={() => setShowInviteOrgModal(false)}
         />
       </Dialog>
 

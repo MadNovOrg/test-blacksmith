@@ -1185,6 +1185,8 @@
     "work-email-hint": "Press ENTER to add multiple emails.",
     "notice": "Please make sure the emails are entered correctly. Recipients will receive an invite to the organisation.",
     "invite-users": "Invite user(s)",
+    "invite-user": "Invite user",
+    "user-invited-success": "The user has been invited. They will be added to the organisation after accepting the invite.",
     "permissions": "Permissions",
     "organization-admin": "Organisation admin",
     "organization-admin-hint": "Ability to manage users within the organisation, book private courses for the organisation, and same access as a user. ",

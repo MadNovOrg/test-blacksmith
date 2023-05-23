@@ -12,6 +12,7 @@ export type SnackbarMessageKey =
   | 'course-canceled'
   | 'course-evaluated'
   | 'participant-transferred'
+  | 'user-invited'
   | 'course-submitted'
   | 'discount-disabled'
 export type SnackbarMessage = { label: string }
