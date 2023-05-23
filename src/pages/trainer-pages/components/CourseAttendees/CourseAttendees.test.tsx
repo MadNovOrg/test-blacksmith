@@ -418,7 +418,9 @@ describe('component: CourseAttendees', () => {
         total: 3,
       })
 
-      render(<CourseAttendees course={course} />)
+      render(<CourseAttendees course={course} />, {
+        auth: { activeRole: RoleName.TT_ADMIN },
+      })
 
       await userEvent.click(screen.getByText('Pending (3)', { exact: false }))
 

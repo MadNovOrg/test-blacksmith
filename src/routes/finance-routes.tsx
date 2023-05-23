@@ -167,6 +167,7 @@ const FinanceRoute = () => {
             <Route path="discounts">
               <Route index element={<DiscountsList />} />
               <Route path="new" element={<DiscountForm />} />
+              <Route path="edit/:id" element={<DiscountForm />} />
             </Route>
 
             <Route path="audit" element={<AuditsPage />} />

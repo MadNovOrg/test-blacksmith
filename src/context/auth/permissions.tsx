@@ -436,7 +436,6 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.TT_OPS,
         RoleName.SALES_ADMIN,
         RoleName.SALES_REPRESENTATIVE,
-        RoleName.FINANCE,
       ].some(r => r === auth.activeRole)
     },
     canRemoveParticipant: () => {

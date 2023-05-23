@@ -14,6 +14,7 @@ import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
+import { useAuth } from '@app/context/auth'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import { Course, CourseInvite, InviteStatus, SortOrder } from '@app/types'
 import { LoadingStatus } from '@app/util'
@@ -28,6 +29,7 @@ const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
 
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
@@ -111,29 +113,30 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
                     {t('dates.default', { date: invite.createdAt })}
                   </TableCell>
                   <TableCell sx={{ textAlign: 'right' }}>
-                    {invite.status === InviteStatus.PENDING && (
-                      <>
-                        <Button
-                          variant="text"
-                          color="primary"
-                          sx={{ ml: 2 }}
-                          onClick={() => handleResendInvite(invite)}
-                          data-testid={`course-resend-invite-btn-${invite.id}`}
-                        >
-                          {t('pages.course-participants.resend-invite')}
-                        </Button>
+                    {invite.status === InviteStatus.PENDING &&
+                      acl.canInviteAttendees(course.type) && (
+                        <>
+                          <Button
+                            variant="text"
+                            color="primary"
+                            sx={{ ml: 2 }}
+                            onClick={() => handleResendInvite(invite)}
+                            data-testid={`course-resend-invite-btn-${invite.id}`}
+                          >
+                            {t('pages.course-participants.resend-invite')}
+                          </Button>
 
-                        <Button
-                          variant="text"
-                          color="primary"
-                          sx={{ ml: 2 }}
-                          onClick={() => handleCancelInvite(invite)}
-                          data-testid={`course-cancel-invite-btn-${invite.id}`}
-                        >
-                          {t('pages.course-participants.cancel-invite')}
-                        </Button>
-                      </>
-                    )}
+                          <Button
+                            variant="text"
+                            color="primary"
+                            sx={{ ml: 2 }}
+                            onClick={() => handleCancelInvite(invite)}
+                            data-testid={`course-cancel-invite-btn-${invite.id}`}
+                          >
+                            {t('pages.course-participants.cancel-invite')}
+                          </Button>
+                        </>
+                      )}
                   </TableCell>
                 </TableRow>
               ))}

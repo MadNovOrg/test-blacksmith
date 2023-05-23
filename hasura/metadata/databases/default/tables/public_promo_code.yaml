@@ -53,6 +53,7 @@ insert_permissions:
       check: {}
       columns:
         - amount
+        - approved_by
         - booker_single_use
         - code
         - created_by
