@@ -11,17 +11,19 @@ export const COURSES_TO_VIEW: Course[] = [
   {
     id: 0,
     name: 'Positive Behaviour Training: Level One',
-    description: 'Some description 1 V',
+    description: 'Some description 1 F2F',
     level: CourseLevel.Level_1,
     status: Course_Status_Enum.ConfirmModules,
-    deliveryType: CourseDeliveryType.VIRTUAL,
+    deliveryType: CourseDeliveryType.F2F,
     type: CourseType.OPEN,
     reaccreditation: false,
     schedule: [
       {
         start: addMonths(new Date(), 2),
         end: addMonths(new Date(), 2),
-        virtualLink: 'https://zoom.us/dummy.link',
+        venue: buildVenue({
+          overrides: { name: 'Queen Elizabeth II Centre' },
+        }),
       },
     ],
     min_participants: 6,
@@ -31,10 +33,10 @@ export const COURSES_TO_VIEW: Course[] = [
   {
     id: 0,
     name: 'Positive Behaviour Training: Level Two',
-    description: 'Some description 2 F2F',
+    description: 'Some description 2 Mixed',
     level: CourseLevel.Level_2,
     status: Course_Status_Enum.ConfirmModules,
-    deliveryType: CourseDeliveryType.F2F,
+    deliveryType: CourseDeliveryType.MIXED,
     type: CourseType.CLOSED,
     reaccreditation: false,
     organization: { name: 'London First School' },
@@ -45,6 +47,7 @@ export const COURSES_TO_VIEW: Course[] = [
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
+        virtualLink: 'https://zoom.us/dummy.link',
       },
     ],
     min_participants: 6,
@@ -54,10 +57,10 @@ export const COURSES_TO_VIEW: Course[] = [
   {
     id: 0,
     name: 'Positive Behaviour Training: Advanced Modules',
-    description: 'Some description 3 F2F',
+    description: 'Some description 3 Virtual',
     level: CourseLevel.Advanced,
     status: Course_Status_Enum.ConfirmModules,
-    deliveryType: CourseDeliveryType.F2F,
+    deliveryType: CourseDeliveryType.VIRTUAL,
     type: CourseType.CLOSED,
     reaccreditation: false,
     organization: { name: 'London First School' },
@@ -65,9 +68,7 @@ export const COURSES_TO_VIEW: Course[] = [
       {
         start: addMonths(new Date(), 2),
         end: addMonths(new Date(), 2),
-        venue: buildVenue({
-          overrides: { name: 'Queen Elizabeth II Centre' },
-        }),
+        virtualLink: 'https://zoom.us/dummy.link',
       },
     ],
     min_participants: 6,
