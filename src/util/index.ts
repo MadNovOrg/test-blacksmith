@@ -242,13 +242,17 @@ export function extractTime(date: Date | string | null) {
   }
 }
 
-export const courseToCourseInput = (course: Course): CourseInput => {
+export function bildStrategiesToRecord(strategies: Course['bildStrategies']) {
   const bildStrategies: Record<string, boolean> = {}
 
-  course.bildStrategies.forEach(strategy => {
+  strategies.forEach(strategy => {
     bildStrategies[strategy.strategyName] = true
   })
 
+  return bildStrategies
+}
+
+export const courseToCourseInput = (course: Course): CourseInput => {
   return {
     type: course.type,
     deliveryType: course.deliveryType,
@@ -278,7 +282,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     specialInstructions: course.special_instructions ?? '',
     parkingInstructions: course.parking_instructions ?? '',
     source: course.source ?? '',
-    bildStrategies,
+    bildStrategies: bildStrategiesToRecord(course.bildStrategies),
     accreditedBy: course.accreditedBy,
     conversion: course.conversion,
     price: course.price ?? null,

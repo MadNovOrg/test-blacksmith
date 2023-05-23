@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 import ChooseTrainers, { FormValues } from '@app/components/ChooseTrainers'
 import { useAuth } from '@app/context/auth'
+import { Accreditors_Enum } from '@app/generated/graphql'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
   checkCourseDetailsForExceptions,
@@ -23,7 +24,7 @@ import {
   TrainerRoleTypeName,
 } from '@app/types'
 import { LoadingStatus } from '@app/util'
-import { getRequiredAssistants } from '@app/util/trainerRatio'
+import { getRequiredLeads } from '@app/util/trainerRatio'
 
 import { StepsEnum } from '../../types'
 import { useSaveCourse } from '../../useSaveCourse'
@@ -41,6 +42,7 @@ const formValuesToTrainerInput = (trainers?: FormValues): TrainerInput[] => {
       fullName: assistant.fullName,
       levels: assistant.levels,
       seniorOrPrincipalLeader: false,
+      trainer_role_types: assistant.trainer_role_types,
     })),
     ...trainers.moderator.map(moderator => ({
       profile_id: moderator.id,
@@ -48,12 +50,14 @@ const formValuesToTrainerInput = (trainers?: FormValues): TrainerInput[] => {
       fullName: moderator.fullName,
       levels: moderator.levels,
       seniorOrPrincipalLeader: false,
+      trainer_role_types: moderator.trainer_role_types,
     })),
     ...trainers.lead.map(trainer => ({
       profile_id: trainer.id,
       type: CourseTrainerType.Leader,
       fullName: trainer.fullName,
       levels: trainer.levels,
+      trainer_role_types: trainer.trainer_role_types,
     })),
   ]
 }
@@ -134,20 +138,6 @@ export const AssignTrainers = () => {
     [setTrainers]
   )
 
-  const requiredAssistants = useMemo(() => {
-    if (courseData) {
-      return getRequiredAssistants({
-        ...courseData,
-        hasSeniorOrPrincipalLeader:
-          courseData.type === CourseType.INDIRECT && seniorOrPrincipalLead,
-      })
-    }
-    return {
-      min: 0,
-      max: 0,
-    }
-  }, [courseData, seniorOrPrincipalLead])
-
   const submit = useCallback(async () => {
     if (courseData && trainers) {
       const isClosedCourse = courseData.type === CourseType.CLOSED
@@ -186,20 +176,37 @@ export const AssignTrainers = () => {
     }
   }, [courseData, seniorOrPrincipalLead, submit, trainers])
 
+  const requiredLeaders = useMemo(() => {
+    if (courseData) {
+      return getRequiredLeads({
+        ...courseData,
+        accreditedBy: courseData?.accreditedBy ?? Accreditors_Enum.Icm,
+        level: courseData.courseLevel,
+        max_participants: courseData.maxParticipants,
+        hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+      })
+    } else {
+      return { max: 1, min: 0 }
+    }
+  }, [courseData, seniorOrPrincipalLead])
+
   const showTrainerRatioWarning = useMemo(() => {
     return (
       courseData?.courseLevel &&
       isTrainersRatioNotMet(
-        { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
+        {
+          ...courseData,
+          level: courseData.courseLevel,
+          max_participants: courseData.maxParticipants,
+          hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+        },
         trainers.map(trainer => ({
-          profile_id: trainer.profile_id,
           type: trainer.type,
-          fullName: trainer.fullName,
-          levels: trainer.levels,
+          trainer_role_types: trainer.trainer_role_types,
         }))
       )
     )
-  }, [trainers, courseData, seniorOrPrincipalLead])
+  }, [courseData, seniorOrPrincipalLead, trainers])
 
   if (!courseData) {
     return (
@@ -230,8 +237,8 @@ export const AssignTrainers = () => {
           }}
           onChange={handleTrainersDataChange}
           trainers={trainerInputToCourseTrainer(trainers)}
-          requiredAssistants={requiredAssistants}
           isReAccreditation={courseData.reaccreditation}
+          requiredLeaders={requiredLeaders}
         />
 
         {showTrainerRatioWarning ? (

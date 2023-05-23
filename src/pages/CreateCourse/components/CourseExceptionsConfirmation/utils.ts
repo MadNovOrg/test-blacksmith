@@ -2,6 +2,7 @@ import { differenceInDays, isFuture } from 'date-fns'
 
 import { getACL } from '@app/context/auth/permissions'
 import {
+  Accreditors_Enum,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Trainer_Type_Enum,
@@ -12,10 +13,13 @@ import {
   CourseLevel,
   CourseTrainerType,
   CourseType,
+  TrainerInput,
 } from '@app/types'
 import {
   getRequiredAssistants,
-  TrainerRatioCriteria,
+  getRequiredLeads,
+  RatioCourseData,
+  RatioTrainerData,
 } from '@app/util/trainerRatio'
 
 export enum CourseException {
@@ -53,12 +57,16 @@ export type CourseData = {
   type: CourseType | Course_Type_Enum
   deliveryType: CourseDeliveryType | Course_Delivery_Type_Enum
   reaccreditation: boolean
+  conversion: boolean
   maxParticipants: number
   modulesDuration?: number
   hasSeniorOrPrincipalLeader: boolean
+  accreditedBy: Accreditors_Enum
+  bildStrategies?: Record<string, boolean>
 }
 export type TrainerData = {
   type: Course_Trainer_Type_Enum | CourseTrainerType
+  trainer_role_types: TrainerInput['trainer_role_types']
   levels: {
     courseLevel: CourseLevel
     expiryDate: string
@@ -90,14 +98,21 @@ export const isLeadTrainerInGracePeriod = (
 }
 
 export const isTrainersRatioNotMet = (
-  courseData: TrainerRatioCriteria,
-  trainers: TrainerData
+  courseData: RatioCourseData,
+  trainers: RatioTrainerData
 ) => {
   const { min } = getRequiredAssistants(courseData)
+  const { min: minLead } = getRequiredLeads(courseData)
+
   const missingAssistants =
-    trainers.filter(t => t.type === Course_Trainer_Type_Enum.Assistant).length <
-    min
-  return missingAssistants
+    trainers.filter(t => t.type === CourseTrainerType.Assistant).length < min
+
+  const missingLeads =
+    trainers.filter(t => t.type === CourseTrainerType.Leader).length < minLead
+
+  console.log({ min, minLead })
+
+  return missingAssistants || missingLeads
 }
 
 export const isAdvisedTimeExceeded = (courseData: CourseData) => {
@@ -121,7 +136,25 @@ export function checkCourseDetailsForExceptions(
     exceptions.push(CourseException.LEAD_TRAINER_IN_GRACE_PERIOD)
   }
 
-  if (isTrainersRatioNotMet(courseData, trainerData)) {
+  if (
+    isTrainersRatioNotMet(
+      {
+        level: courseData.courseLevel as CourseLevel,
+        reaccreditation: courseData.reaccreditation,
+        conversion: courseData.conversion,
+        accreditedBy: courseData.accreditedBy,
+        max_participants: courseData.maxParticipants,
+        type: courseData.type as CourseType,
+        deliveryType: courseData.deliveryType as CourseDeliveryType,
+        bildStrategies: courseData.bildStrategies,
+        hasSeniorOrPrincipalLeader: courseData.hasSeniorOrPrincipalLeader,
+      },
+      trainerData.map(t => ({
+        type: t.type as CourseTrainerType,
+        trainer_role_types: t.trainer_role_types,
+      }))
+    )
+  ) {
     exceptions.push(CourseException.TRAINER_RATIO_NOT_MET)
   }
 

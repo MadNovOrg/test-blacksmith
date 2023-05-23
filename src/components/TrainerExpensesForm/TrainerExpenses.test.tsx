@@ -9,11 +9,12 @@ import TrainerExpensesForm from '.'
 
 const chance = new Chance()
 
-const makeTrainer = (type: CourseTrainerType) => ({
+const makeTrainer = (type: CourseTrainerType): TrainerInput => ({
   fullName: chance.name(),
   profile_id: chance.guid(),
   type,
   levels: [],
+  trainer_role_types: [],
 })
 
 const makeTrainers = ({

@@ -19,6 +19,8 @@ export const QUERY = gql`
       bildStrategies {
         strategyName
       }
+      accreditedBy
+      conversion
       freeSpaces
       accountCode
       level

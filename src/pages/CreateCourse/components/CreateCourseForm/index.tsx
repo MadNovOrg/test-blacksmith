@@ -94,12 +94,14 @@ export const CreateCourseForm = () => {
           type: CourseTrainerType.Leader,
           status: InviteStatus.ACCEPTED,
           levels: certifications as TrainerInput['levels'],
+          trainer_role_types: [],
         },
         ...assistants.map(assistant => ({
           profile_id: assistant.id,
           type: CourseTrainerType.Assistant,
           status: InviteStatus.PENDING,
           levels: certifications as TrainerInput['levels'],
+          trainer_role_types: [],
         })),
       ])
     }
@@ -161,9 +163,8 @@ export const CreateCourseForm = () => {
       const exceptions = checkCourseDetailsForExceptions(
         { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
         assistants.map(assistant => ({
-          profile_id: assistant.id,
           type: CourseTrainerType.Assistant,
-          fullName: assistant.fullName,
+          trainer_role_types: assistant.trainer_role_types,
           levels: assistant.levels,
         }))
       )
@@ -207,11 +208,15 @@ export const CreateCourseForm = () => {
     return (
       courseData?.courseLevel &&
       isTrainersRatioNotMet(
-        { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
+        {
+          ...courseData,
+          level: courseData.courseLevel,
+          max_participants: courseData.maxParticipants,
+          hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+        },
         assistants.map(assistant => ({
-          profile_id: assistant.id,
           type: CourseTrainerType.Assistant,
-          fullName: assistant.fullName,
+          trainer_role_types: assistant.trainer_role_types,
           levels: assistant.levels,
         }))
       )

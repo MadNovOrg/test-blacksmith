@@ -75,7 +75,7 @@ export type Course = {
   accreditedBy: Accreditors_Enum
   price?: number
   bildStrategies: Array<{
-    strategyName: BildStrategies
+    strategyName: string
   }>
 } & Omit<Base, 'id'>
 
@@ -667,6 +667,7 @@ export type TrainerInput = {
   type: CourseTrainerType
   fullName?: string
   status?: InviteStatus
+  trainer_role_types: { trainer_role_type?: { name?: string } | null }[]
   levels: {
     courseLevel: CourseLevel
     expiryDate: string

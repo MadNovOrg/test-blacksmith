@@ -52,6 +52,7 @@ import { MUTATION as SetCourseStatus } from '@app/queries/courses/set-course-sta
 import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups'
 import { CourseLevel, TrainerRoleTypeName } from '@app/types'
 import {
+  bildStrategiesToRecord,
   formatDateForDraft,
   formatDurationShort,
   getPercentage,
@@ -383,6 +384,11 @@ export const CourseBuilder: React.FC<
           type: courseData.course.type,
           deliveryType: courseData.course.deliveryType,
           reaccreditation: courseData.course.reaccreditation ?? false,
+          conversion: courseData.course.conversion ?? false,
+          accreditedBy: courseData.course.accreditedBy,
+          bildStrategies: bildStrategiesToRecord(
+            courseData.course.bildStrategies
+          ),
           hasSeniorOrPrincipalLeader:
             (leader &&
               leader.profile.trainer_role_types.some(
@@ -394,6 +400,7 @@ export const CourseBuilder: React.FC<
         },
         courseData.course.trainers.map(t => ({
           type: t.type,
+          trainer_role_types: t.profile.trainer_role_types,
           levels: t.profile.certificates.map(c => ({
             courseLevel: c.courseLevel as CourseLevel,
             expiryDate: c.expiryDate,

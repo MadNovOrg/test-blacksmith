@@ -27,6 +27,7 @@ import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
+  Accreditors_Enum,
   Course_Audit_Type_Enum,
   Course_Level_Enum,
   Course_Status_Enum,
@@ -74,7 +75,6 @@ import {
   LoadingStatus,
   profileToInput,
 } from '@app/util'
-import { getRequiredAssistants } from '@app/util/trainerRatio'
 
 import { NotFound } from '../common/NotFound'
 
@@ -415,28 +415,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     c => c.type === CourseTrainerType.Leader
   )
 
-  const requiredAssistants = useMemo(() => {
-    if (course) {
-      return getRequiredAssistants({
-        courseLevel: course.level,
-        deliveryType: course.deliveryType,
-        maxParticipants: course.max_participants,
-        reaccreditation: course.reaccreditation,
-        type: course.type,
-        hasSeniorOrPrincipalLeader:
-          leader?.profile.trainer_role_types.some(
-            ({ trainer_role_type: role }) =>
-              role.name === TrainerRoleTypeName.SENIOR ||
-              role.name === TrainerRoleTypeName.PRINCIPAL
-          ) ?? false,
-      })
-    }
-    return {
-      min: 0,
-      max: 0,
-    }
-  }, [course, leader])
-
   const seniorOrPrincipalLead = useMemo(() => {
     return (
       profile?.trainer_role_types.some(
@@ -448,24 +426,23 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [profile])
 
   const submitButtonHandler = useCallback(async () => {
-    if (!courseData || !profile || !trainersData) return
+    if (!courseData?.courseLevel || !profile || !trainersData) return
 
     if (courseData.type !== CourseType.OPEN && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
         {
           ...courseData,
-          courseLevel: courseData.courseLevel
-            ? courseData.courseLevel
-            : CourseLevel.Level_1,
+          accreditedBy: courseData.accreditedBy ?? Accreditors_Enum.Icm,
+          bildStrategies: courseData.bildStrategies ?? {},
+          courseLevel: courseData.courseLevel ?? CourseLevel.Level_1,
           type: Course_Type_Enum.Indirect,
           maxParticipants: courseData.maxParticipants ?? 0,
           startDateTime: courseData.startDateTime ?? new Date(),
           hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
         },
         trainersData.assist.map(assistant => ({
-          profile_id: assistant.id,
           type: CourseTrainerType.Assistant,
-          fullName: assistant.fullName,
+          trainer_role_types: assistant.trainer_role_types,
           levels: assistant.levels,
         }))
       )
@@ -488,25 +465,28 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     if (
       !courseData?.courseLevel ||
       !courseData?.type ||
-      !courseData?.maxParticipants
+      !courseData?.maxParticipants ||
+      !courseData?.accreditedBy
     )
       return false
+
     return isTrainersRatioNotMet(
       {
         ...courseData,
-        courseLevel: courseData.courseLevel as unknown as CourseLevel,
+        accreditedBy: courseData.accreditedBy ?? Accreditors_Enum.Icm,
+        bildStrategies: courseData.bildStrategies ?? {},
+        level: courseData.courseLevel as unknown as CourseLevel,
         type: courseData.type as unknown as CourseType,
-        maxParticipants: courseData.maxParticipants as unknown as number,
+        max_participants: courseData.maxParticipants as unknown as number,
         hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
       },
       (trainersData?.assist ?? []).map(assistant => ({
-        profile_id: assistant.id,
         type: CourseTrainerType.Assistant,
-        fullName: assistant.fullName,
+        trainer_role_types: assistant.trainer_role_types,
         levels: assistant.levels,
       }))
     )
-  }, [trainersData, courseData, seniorOrPrincipalLead])
+  }, [courseData, seniorOrPrincipalLead, trainersData?.assist])
 
   if (
     (courseStatus === LoadingStatus.SUCCESS && !course) ||
@@ -627,7 +607,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     trainers={course.trainers}
                     onChange={handleTrainersDataChange}
                     autoFocus={false}
-                    requiredAssistants={requiredAssistants}
                     isReAccreditation={courseData.reaccreditation}
                   />
                 ) : null}

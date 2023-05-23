@@ -13,7 +13,7 @@ import {
 } from '@app/generated/graphql'
 import { yup } from '@app/schemas'
 import { CourseLevel, CourseTrainer, CourseType } from '@app/types'
-import { RequiredAssistants } from '@app/util/trainerRatio'
+import { RequiredTrainers } from '@app/util/trainerRatio/types'
 
 import { SearchTrainers } from '../SearchTrainers'
 
@@ -31,8 +31,8 @@ type Props = {
   onChange?: (data: FormValues, isValid: boolean) => void
   autoFocus?: boolean
   disabled?: boolean
-  requiredAssistants: RequiredAssistants
   isReAccreditation: boolean
+  requiredLeaders?: RequiredTrainers
 }
 
 const courseTrainerToFormValues = (
@@ -60,20 +60,15 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
   courseType,
   courseLevel,
   courseSchedule,
-  requiredAssistants,
   trainers = [],
   onChange = noop,
   autoFocus = true,
   disabled = false,
   isReAccreditation = false,
+  requiredLeaders = { min: 0, max: 1 },
 }) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
-
-  const leadMin = useMemo(
-    () => (courseType === CourseType.OPEN ? 0 : 1),
-    [courseType]
-  )
 
   const needsModerator = useMemo(() => {
     if (courseType === CourseType.INDIRECT) return false
@@ -89,8 +84,14 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
     return yup.object({
       lead: yup
         .array()
-        .min(leadMin, t('pages.create-course.assign-trainers.lead-error-min'))
-        .max(1, t('pages.create-course.assign-trainers.lead-error-max')),
+        .min(
+          requiredLeaders.min,
+          t('pages.create-course.assign-trainers.lead-error-min')
+        )
+        .max(
+          requiredLeaders.max,
+          t('pages.create-course.assign-trainers.lead-error-max')
+        ),
       assist: yup.array().min(0),
       moderator: yup
         .array()
@@ -103,7 +104,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
           t('pages.create-course.assign-trainers.moderator-error-max')
         ),
     })
-  }, [leadMin, t, needsModerator])
+  }, [requiredLeaders.min, requiredLeaders.max, t, needsModerator])
 
   const formTrainers = useMemo(
     () => courseTrainerToFormValues(trainers),
@@ -153,7 +154,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
                 trainerType={CourseTrainerType.Leader}
                 courseLevel={courseLevel}
                 courseSchedule={courseSchedule}
-                max={1}
+                max={requiredLeaders.max}
                 autoFocus={autoFocus}
                 value={field.value}
                 onChange={field.onChange}
@@ -171,9 +172,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
       ) : null}
       <Box data-testid="AssignTrainers-assist">
         <Typography variant="subtitle1">
-          {t('pages.create-course.assign-trainers.assist-title', {
-            count: requiredAssistants.min,
-          })}
+          {t('pages.create-course.assign-trainers.assist-title')}
         </Typography>
         <Controller
           name="assist"

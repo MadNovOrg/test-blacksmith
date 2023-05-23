@@ -186,7 +186,12 @@ describe('component: ReviewLicenseOrder', () => {
       <Provider value={createFetchingClient()}>
         <CreateCourseProvider
           courseType={CourseType.INDIRECT}
-          initialValue={{ courseData, go1Licensing } as Draft}
+          initialValue={
+            {
+              courseData,
+              go1Licensing,
+            } as Draft
+          }
         >
           <Routes>
             <Route path="/" element={<ReviewLicenseOrder />} />

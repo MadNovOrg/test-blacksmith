@@ -8,7 +8,7 @@ import {
 import {
   getRequiredAssistants,
   TrainerRatioCriteria,
-} from '@app/util/trainerRatio'
+} from '@app/util/trainerRatio/trainerRatio.icm'
 
 describe('trainerRatio utils', () => {
   describe('getRequiredTrainers', () => {

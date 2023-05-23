@@ -1,6 +1,7 @@
 import { extend } from 'lodash-es'
 
 import {
+  Accreditors_Enum,
   Course_Delivery_Type_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
@@ -14,6 +15,8 @@ import { CourseLevel, CourseTrainerType } from '@app/types'
 
 describe('course exception utils', () => {
   const defaultCourseData: CourseData = {
+    conversion: false,
+    accreditedBy: Accreditors_Enum.Icm,
     deliveryType: Course_Delivery_Type_Enum.F2F,
     reaccreditation: false,
     type: Course_Type_Enum.Open,
@@ -25,6 +28,7 @@ describe('course exception utils', () => {
   }
   const defaultTrainerData = {
     type: CourseTrainerType.Leader,
+    trainer_role_types: [],
     levels: [
       {
         courseLevel: CourseLevel.IntermediateTrainer,

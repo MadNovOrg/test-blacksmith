@@ -309,7 +309,7 @@ export function useSaveCourse(): {
   }, [
     courseData,
     trainers,
-    exceptions.length,
+    exceptions,
     acl,
     go1Licensing?.invoiceDetails,
     invoiceDetails,

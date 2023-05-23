@@ -41,7 +41,7 @@ import {
   CourseType,
   TrainerRoleTypeName,
 } from '@app/types'
-import { courseEnded, LoadingStatus } from '@app/util'
+import { bildStrategiesToRecord, courseEnded, LoadingStatus } from '@app/util'
 
 import { OrderYourWorkbookAlert } from './components/OrderYourWorkbookAlert'
 
@@ -104,6 +104,9 @@ export const CourseDetails = () => {
         type: course.type,
         deliveryType: course.deliveryType,
         reaccreditation: course.reaccreditation ?? false,
+        conversion: course.conversion,
+        accreditedBy: course.accreditedBy,
+        bildStrategies: bildStrategiesToRecord(course.bildStrategies),
         hasSeniorOrPrincipalLeader:
           (leader &&
             leader.profile.trainer_role_types.some(
@@ -115,6 +118,7 @@ export const CourseDetails = () => {
       },
       course.trainers.map(t => ({
         type: t.type,
+        trainer_role_types: t.profile.trainer_role_types,
         levels: (t.profile.certificates ?? []).map(c => ({
           courseLevel: c.courseLevel as CourseLevel,
           expiryDate: c.expiryDate,

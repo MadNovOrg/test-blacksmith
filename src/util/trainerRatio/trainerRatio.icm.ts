@@ -5,6 +5,8 @@ import {
 } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
+import { RequiredTrainers } from './types'
+
 type TrainerRatio = {
   initialAssistants: number
   threshold: number
@@ -18,11 +20,6 @@ export type TrainerRatioCriteria = {
   reaccreditation: boolean
   maxParticipants: number
   hasSeniorOrPrincipalLeader: boolean
-}
-
-export type RequiredAssistants = {
-  min: number
-  max: number
 }
 
 const ratio = (
@@ -63,7 +60,7 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
 
 export const getRequiredAssistants = (
   criteria: TrainerRatioCriteria
-): RequiredAssistants => {
+): RequiredTrainers => {
   const ratio = getTrainerRatio(criteria)
   const { maxParticipants } = criteria
   let assistants = ratio.initialAssistants
@@ -75,6 +72,7 @@ export const getRequiredAssistants = (
       optionalAssistant = true
     }
   }
+
   return {
     min: assistants,
     max: optionalAssistant ? assistants + 1 : assistants,

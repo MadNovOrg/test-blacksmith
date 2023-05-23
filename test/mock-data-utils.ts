@@ -630,6 +630,7 @@ export const buildTrainerInput = build<TrainerInput>({
     fullName: perBuild(() => chance.name({ full: true })),
     status: InviteStatus.ACCEPTED,
     levels: [],
+    trainer_role_types: [],
   },
 })
 
