@@ -25,7 +25,7 @@ JOIN public.module module ON cmodule.module_id = module.id
 WHERE course.id = 10011;
 
 INSERT INTO public.course_certificate (course_id, profile_id, number, expiry_date, course_name, course_level, certification_date, is_revoked)
-SELECT 10011 as course_id, participant.profile_id as profile_id, 'OP-L1-10011' as number,
+SELECT 10011 as course_id, participant.profile_id as profile_id, 'L1.F.OP.10011' as number,
        NOW() + interval '36 months' as expiry_date, course.name as course_name, course.course_level as course_level,
        NOW() as certification_date, false as is_revoked
 FROM public.course_participant participant
