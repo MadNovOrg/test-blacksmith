@@ -116,6 +116,7 @@ export const ModulesSelectionList: React.FC<React.PropsWithChildren<Props>> = ({
             >
               <FormGroup key={group.id}>
                 <FormControlLabel
+                  onClick={e => e.stopPropagation()}
                   control={
                     <Checkbox
                       checked={groupIsChecked || groupIsMandatory || false}
@@ -123,12 +124,12 @@ export const ModulesSelectionList: React.FC<React.PropsWithChildren<Props>> = ({
                       onChange={() => {
                         toggleModuleGroupChange(group.id)
                       }}
-                      onClick={e => e.stopPropagation()}
                       disabled={groupIsMandatory}
                     />
                   }
                   label={
                     <Typography
+                      component="span"
                       color={
                         groupIsChecked
                           ? theme.palette.text.primary
@@ -149,6 +150,7 @@ export const ModulesSelectionList: React.FC<React.PropsWithChildren<Props>> = ({
                     control={
                       <Checkbox
                         onChange={() => toggleModuleHold(module.id)}
+                        onClick={e => e.stopPropagation()}
                         checked={holds[module.id] || groupIsMandatory || false}
                         disabled={groupIsMandatory}
                       />

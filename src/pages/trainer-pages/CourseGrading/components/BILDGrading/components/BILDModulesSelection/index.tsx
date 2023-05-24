@@ -147,6 +147,7 @@ export const BILDModulesSelection: FC<Props> = ({
             sx={{ display: 'flex', alignItems: 'center' }}
           >
             <FormControlLabel
+              onClick={e => e.stopPropagation()}
               control={
                 <Checkbox
                   checked={Boolean(selectedStrategyModules.has(strategyName))}
@@ -156,7 +157,6 @@ export const BILDModulesSelection: FC<Props> = ({
                     // @ts-expect-error valid custom attribute
                     'data-testid': `strategy-checkbox-${strategyName}`,
                   }}
-                  onClick={e => e.stopPropagation()}
                   onChange={(_, checked) => {
                     if (
                       checked ||
