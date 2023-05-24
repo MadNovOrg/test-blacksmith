@@ -129,7 +129,7 @@ export const OrgSummaryList: React.FC<
                 <Chip
                   label={stats[org.id].certificates.expiringSoon.count}
                   size="small"
-                  color="warning"
+                  color="error"
                 />
               </TableCell>
               <TableCell align="center">
@@ -143,7 +143,6 @@ export const OrgSummaryList: React.FC<
                 <Chip
                   label={stats[org.id].certificates.expired.count}
                   size="small"
-                  color="error"
                 />
               </TableCell>
             </TableRow>
