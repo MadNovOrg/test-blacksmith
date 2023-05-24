@@ -775,6 +775,7 @@ select_permissions:
         - aol_country
         - aol_region
         - contact_profile_id
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
