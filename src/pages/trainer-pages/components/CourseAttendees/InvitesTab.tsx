@@ -174,7 +174,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
       <Snackbar
         open={messageSnackbarOpen}
         autoHideDuration={3000}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setMessageSnackbarOpen(false)}
       >
         <Alert onClose={() => setMessageSnackbarOpen(false)} severity="info">
