@@ -118,10 +118,7 @@ export function canBeBlendedBild(
 
   switch (courseType) {
     case CourseType.INDIRECT: {
-      return (
-        selectedStrategies.includes(BildStrategies.Primary) &&
-        selectedStrategies.length === 1
-      )
+      return selectedStrategies.includes(BildStrategies.Primary)
     }
   }
 

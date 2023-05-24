@@ -135,7 +135,7 @@ describe('CourseForm - indirect BILD', () => {
     ).toBeEnabled()
   })
 
-  it('enables Blended learning toggle if Primary strategy is the only one selected', async () => {
+  it('enables Blended learning toggle if Primary strategy is selected', async () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
@@ -153,6 +153,9 @@ describe('CourseForm - indirect BILD', () => {
     expect(blendedLearningToggle).toBeEnabled()
 
     await userEvent.click(screen.getByLabelText(/secondary/i))
+    expect(blendedLearningToggle).toBeEnabled()
+
+    await userEvent.click(screen.getByLabelText(/primary/i))
     expect(blendedLearningToggle).toBeDisabled()
   })
 
