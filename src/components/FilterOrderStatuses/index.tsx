@@ -33,7 +33,6 @@ export const FilterOrderStatuses: React.FC<React.PropsWithChildren<Props>> = ({
         } else {
           res.push({
             ...entry,
-            highlight: entry.id === Xero_Invoice_Status_Enum.Overdue,
           })
 
           usedTitles.push(entry.title)
