@@ -11,7 +11,7 @@ export const colorsMap: Record<CertificateStatus, ChipProps['color']> = {
   [CertificateStatus.REVOKED]: 'critical',
   [CertificateStatus.EXPIRED]: 'gray',
   [CertificateStatus.EXPIRED_RECENTLY]: 'gray',
-  [CertificateStatus.EXPIRING_SOON]: 'error',
+  [CertificateStatus.EXPIRING_SOON]: 'warning',
 } as const
 
 type Props = {
