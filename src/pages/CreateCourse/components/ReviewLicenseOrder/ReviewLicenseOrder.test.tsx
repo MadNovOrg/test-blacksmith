@@ -1,4 +1,4 @@
-import { addHours, addWeeks, format } from 'date-fns'
+import { addHours, addMonths, addWeeks, format } from 'date-fns'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
@@ -16,9 +16,11 @@ import { MUTATION } from '@app/queries/courses/insert-course'
 import {
   CourseDeliveryType,
   CourseLevel,
+  CourseTrainerType,
   CourseType,
   Draft,
   Organization,
+  TrainerInput,
 } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
@@ -141,6 +143,17 @@ describe('component: ReviewLicenseOrder', () => {
   it('creates a course with the order when clicked on the save button', async () => {
     const startDate = addWeeks(new Date(), 5)
     const endDate = addHours(startDate, 8)
+    const trainer: TrainerInput = {
+      profile_id: chance.guid(),
+      trainer_role_types: [],
+      type: CourseTrainerType.Leader,
+      levels: [
+        {
+          courseLevel: CourseLevel.AdvancedTrainer,
+          expiryDate: addMonths(new Date(), 6).toISOString(),
+        },
+      ],
+    }
 
     const courseData: Partial<Draft['courseData']> = {
       accreditedBy: Accreditors_Enum.Icm,
@@ -190,6 +203,7 @@ describe('component: ReviewLicenseOrder', () => {
             {
               courseData,
               go1Licensing,
+              trainers: [trainer],
             } as Draft
           }
         >
@@ -223,7 +237,9 @@ describe('component: ReviewLicenseOrder', () => {
           type: courseData.type,
           organization_id: courseData.organization?.id,
           parking_instructions: undefined,
-          trainers: { data: [] },
+          trainers: {
+            data: [{ type: trainer.type, profile_id: trainer.profile_id }],
+          },
           schedule: {
             data: [
               {

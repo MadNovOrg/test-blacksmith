@@ -58,7 +58,7 @@ export function getRequiredLeads(
   courseData: RatioCourseData
 ): RequiredTrainers {
   if (courseData.accreditedBy === Accreditors_Enum.Icm) {
-    return { min: 0, max: courseData.type === CourseType.OPEN ? 0 : 1 }
+    return { min: courseData.type === CourseType.OPEN ? 0 : 1, max: 1 }
   } else if (courseData.accreditedBy === Accreditors_Enum.Bild) {
     const strategies = courseData.bildStrategies ?? {}
     return getRequiredLeadsBild({
