@@ -215,6 +215,10 @@ export const AvailableCourses: React.FC<
                 <FilterSearch value={keyword} onChange={setKeyword} />
 
                 <Box>
+                  <Typography variant="body2" fontWeight="bold">
+                    {t('pages.available-courses.date-filter')}
+                  </Typography>
+
                   <Stack gap={1}>
                     <DatePicker
                       value={dateFrom}

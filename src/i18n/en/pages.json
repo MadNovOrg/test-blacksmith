@@ -1295,6 +1295,7 @@
   },
   "available-courses": {
     "title": "Book a course",
+    "date-filter": "Filter by course date",
     "sorting": {
       "distance-to-org": "Distance to organisation",
       "date-ascending": "Sort by earliest date",
