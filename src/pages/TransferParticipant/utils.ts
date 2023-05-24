@@ -6,6 +6,8 @@ export function isTrainTheTrainerCourse(courseLevel: CourseLevel) {
   return [
     CourseLevel.IntermediateTrainer,
     CourseLevel.AdvancedTrainer,
+    CourseLevel.BildIntermediateTrainer,
+    CourseLevel.BildAdvancedTrainer,
   ].includes(courseLevel)
 }
 

@@ -32,6 +32,7 @@ export const getReschedulingTermsFee = (
       Course_Level_Enum.Level_1,
       Course_Level_Enum.Level_2,
       Course_Level_Enum.Advanced,
+      Course_Level_Enum.BildRegular,
     ].includes(level)
   ) {
     if (diffInWeeks < 2) {
@@ -47,6 +48,8 @@ export const getReschedulingTermsFee = (
     [
       Course_Level_Enum.IntermediateTrainer,
       Course_Level_Enum.AdvancedTrainer,
+      Course_Level_Enum.BildIntermediateTrainer,
+      Course_Level_Enum.BildAdvancedTrainer,
     ].includes(level)
   ) {
     if (diffInWeeks < 1) {
