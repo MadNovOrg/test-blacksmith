@@ -87,7 +87,7 @@ export const RatingSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 {t(label)}
               </Typography>
               <Typography variant="body2" fontWeight="600" sx={{ width: 30 }}>
-                {values[index]}
+                {values[index]}%
               </Typography>
             </Box>
           </Box>
