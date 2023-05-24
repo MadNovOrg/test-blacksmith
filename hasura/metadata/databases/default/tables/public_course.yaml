@@ -365,6 +365,7 @@ select_permissions:
         - max_participants
         - min_participants
         - name
+        - price
         - reaccreditation
         - updated_at
       computed_fields:
@@ -591,6 +592,7 @@ select_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
         - reaccreditation
         - sales_representative_id
         - source
@@ -749,6 +751,7 @@ select_permissions:
         - min_participants
         - name
         - organization_id
+        - price
         - reaccreditation
         - updated_at
       computed_fields:
@@ -795,6 +798,7 @@ select_permissions:
         - notes
         - organization_id
         - parking_instructions
+        - price
         - reaccreditation
         - sales_representative_id
         - source

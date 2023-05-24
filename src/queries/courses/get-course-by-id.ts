@@ -27,6 +27,7 @@ export const QUERY = gql`
       special_instructions
       parking_instructions
       accreditedBy
+      price
       cancellationRequest {
         id
         reason
