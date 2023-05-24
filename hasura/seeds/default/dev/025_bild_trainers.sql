@@ -45,4 +45,3 @@ INSERT INTO public.course_certificate (id, course_id, number, expiry_date, profi
 ('1a98205a-e742-49d5-a852-0a148d74bb16', 10034, 'OP-BILD-10034', '2025-05-05', '1b37b4d3-0dcc-4f17-96d5-bc27c029010f', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
 ('83e36c16-0fd8-44e8-ad00-f8d5d234487d', 10034, 'OP-BILD-10034', '2025-05-05', '2be41d95-40ee-49d5-810c-fae16135cccc', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
 ('5beb390c-450b-40b2-905e-d79d54b9daca', 10033, 'CL-BILD-10033', '2025-05-05', '2c4b16db-bfba-4a21-a092-55ef9010ca2f', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false);
-
