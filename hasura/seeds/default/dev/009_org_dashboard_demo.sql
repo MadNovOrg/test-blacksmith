@@ -1,11 +1,11 @@
 insert into "profile" (id, _given_name, _family_name, _email)
-values ('117c12fc-d7c6-4987-9841-a499765ade4b', 'Krista', 'Kuhn', 'krista.kuhn@somethingwhatever.com'),
-       ('95e897bf-6d61-43d5-9c5c-efc0d0a5aaed', 'Curtis', 'Ondricka', 'curtis.ondricka@somethingwhatever.com'),
-       ('b9bea8d0-cde4-4c01-94e2-d6bcf56dcd0e', 'Tim', 'Hintz', 'tim.hintz@somethingwhatever.com'),
-       ('38290d3f-7614-44be-ac70-cd0db7b71b1e', 'Levi', 'Tromp', 'levi.tromp@somethingwhatever.com'),
-       ('a63484d5-efcc-4f53-bc4e-86c6e9852e8d', 'Rachael', 'Dicki', 'rachael.dicki@somethingwhatever.com'),
-       ('85687c6e-d8a4-4e98-a47e-a66c8059919b', 'Ralph', 'Smith', 'ralph.smith@somethingwhatever.com'),
-       ('49f34a78-a73d-46c3-a17f-5cee00feb1ca', 'Martin', 'Cartwright', 'martin.cartwright@somethingwhatever.com');
+values ('117c12fc-d7c6-4987-9841-a499765ade4b', 'Krista', 'Kuhn', 'krista.kuhn@teamteach.testinator.com'),
+       ('95e897bf-6d61-43d5-9c5c-efc0d0a5aaed', 'Curtis', 'Ondricka', 'curtis.ondricka@teamteach.testinator.com'),
+       ('b9bea8d0-cde4-4c01-94e2-d6bcf56dcd0e', 'Tim', 'Hintz', 'tim.hintz@teamteach.testinator.com'),
+       ('38290d3f-7614-44be-ac70-cd0db7b71b1e', 'Levi', 'Tromp', 'levi.tromp@teamteach.testinator.com'),
+       ('a63484d5-efcc-4f53-bc4e-86c6e9852e8d', 'Rachael', 'Dicki', 'rachael.dicki@teamteach.testinator.com'),
+       ('85687c6e-d8a4-4e98-a47e-a66c8059919b', 'Ralph', 'Smith', 'ralph.smith@teamteach.testinator.com'),
+       ('49f34a78-a73d-46c3-a17f-5cee00feb1ca', 'Martin', 'Cartwright', 'martin.cartwright@teamteach.testinator.com');
 
 insert into "organization" (id, name, address, attributes, sector, trust_type, trust_name)
 values ('d787defd-481c-414b-95ff-ecbcc12ae500',
