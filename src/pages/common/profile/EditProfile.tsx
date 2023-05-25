@@ -601,7 +601,8 @@ export const EditProfilePage: React.FC<
       <Container>
         <SnackbarMessage
           messageKey="user-invited"
-          sx={{ position: 'absolute' }}
+          sx={{ marginTop: '3em', position: 'absolute' }}
+          autoHideDuration={3000}
         />
         <FormProvider {...methods}>
           <Grid
@@ -1147,6 +1148,7 @@ export const EditProfilePage: React.FC<
         onClose={() => setShowInviteOrgModal(false)}
         title={t('pages.invite-to-org.title')}
         maxWidth={600}
+        minWidth={400}
       >
         <InviteUserToOrganisation
           email={profile.email || ''}

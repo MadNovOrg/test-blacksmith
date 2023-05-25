@@ -13,7 +13,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
@@ -35,7 +35,7 @@ export const InviteUserToOrganisation: React.FC<
   React.PropsWithChildren<ImportCertificateModalProps>
 > = ({ email, onClose }) => {
   const theme = useTheme()
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const [loading, setLoading] = useState(false)
@@ -46,7 +46,22 @@ export const InviteUserToOrganisation: React.FC<
   const { addSnackbarMessage, getSnackbarMessage } = useSnackbar()
   const userInvited = Boolean(getSnackbarMessage('user-invited'))
 
-  const { orgs, loading: loadingOrgs } = useOrganizations()
+  const where = useMemo(
+    () =>
+      acl.isOrgAdmin()
+        ? {
+            members: {
+              _and: {
+                isAdmin: { _eq: true },
+                profile_id: { _eq: profile?.id },
+              },
+            },
+          }
+        : undefined,
+    [acl, profile]
+  )
+
+  const { orgs, loading: loadingOrgs } = useOrganizations(undefined, where)
 
   const { handleSubmit } = useForm<{ emails: string[] }>()
 
@@ -57,9 +72,9 @@ export const InviteUserToOrganisation: React.FC<
   }, [id, orgs, selectedOrg])
 
   const submit = async () => {
-    setLoading(true)
     setError('')
     if (!selectedOrg) return
+    setLoading(true)
     try {
       await fetcher(SaveOrgInvitesQuery, {
         invites: [
@@ -131,34 +146,38 @@ export const InviteUserToOrganisation: React.FC<
             />
           </FormPanel>
 
-          <Typography variant="subtitle1">
-            {t('pages.invite-to-org.permissions')}
-          </Typography>
-
           {acl.canSetOrgAdminRole() ? (
-            <FormPanel>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={isOrgAdmin}
-                    onChange={e => {
-                      setIsOrgAdmin(e.target.checked)
-                    }}
-                    sx={{ px: 2 }}
-                  />
-                }
-                label={
-                  <Box>
-                    <Typography variant="body1">
-                      {t('pages.invite-to-org.organization-admin')}
-                    </Typography>
-                    <Typography variant="body2" color={theme.palette.grey[700]}>
-                      {t('pages.invite-to-org.organization-admin-hint')}
-                    </Typography>
-                  </Box>
-                }
-              />
-            </FormPanel>
+            <>
+              <Typography variant="subtitle1">
+                {t('pages.invite-to-org.permissions')}
+              </Typography>
+              <FormPanel>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={isOrgAdmin}
+                      onChange={e => {
+                        setIsOrgAdmin(e.target.checked)
+                      }}
+                      sx={{ px: 2 }}
+                    />
+                  }
+                  label={
+                    <Box>
+                      <Typography variant="body1">
+                        {t('pages.invite-to-org.organization-admin')}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color={theme.palette.grey[700]}
+                      >
+                        {t('pages.invite-to-org.organization-admin-hint')}
+                      </Typography>
+                    </Box>
+                  }
+                />
+              </FormPanel>
+            </>
           ) : undefined}
 
           {error ? <Alert severity="error">{error}</Alert> : null}
@@ -186,6 +205,7 @@ export const InviteUserToOrganisation: React.FC<
               color="primary"
               data-testid="edit-invite-user-submit-btn"
               size="large"
+              disabled={!selectedOrg}
             >
               {t('pages.invite-to-org.invite-user')}
             </LoadingButton>

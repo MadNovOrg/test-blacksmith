@@ -2,6 +2,7 @@ import React from 'react'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useOrganizations } from '@app/hooks/useOrganizations'
+import { RoleName } from '@app/types'
 
 import {
   chance,
@@ -47,7 +48,12 @@ describe('InviteUserToOrganisation', () => {
     useOrganisationMock.mockReturnValue(organisations)
 
     return render(
-      <InviteUserToOrganisation onClose={onCloseMock} email={email} />
+      <InviteUserToOrganisation onClose={onCloseMock} email={email} />,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      }
     )
   }
 
@@ -58,7 +64,7 @@ describe('InviteUserToOrganisation', () => {
     expect(within(dialog).getByText(/permissions/i)).toBeInTheDocument()
 
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeEnabled()
-    expect(screen.getByRole('button', { name: 'Invite user' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'Invite user' })).toBeDisabled()
   })
 
   it('invite user to org if at least one org selected', async () => {
@@ -80,7 +86,14 @@ describe('InviteUserToOrganisation', () => {
   it('not invite user to org if there is no selection', async () => {
     setup()
 
-    await userEvent.click(screen.getByRole('button', { name: 'Invite user' }))
+    const autocomplete = screen.getByTestId('edit-invite-user-org-selector')
+    const input = within(autocomplete).getByRole('combobox')
+    autocomplete.focus()
+    fireEvent.change(input, { target: { value: orgs[0].name } })
+    fireEvent.keyDown(autocomplete, { key: 'ArrowDown' })
+    fireEvent.keyDown(autocomplete, { key: 'Esc' })
+
+    expect(screen.getByRole('button', { name: 'Invite user' })).toBeDisabled()
 
     expect(fetcherMock).toHaveBeenCalledTimes(0)
     expect(onCloseMock).toHaveBeenCalledTimes(0)
