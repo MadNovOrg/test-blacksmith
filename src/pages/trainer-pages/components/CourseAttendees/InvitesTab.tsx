@@ -62,7 +62,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
     () => [
       {
         id: 'contact',
-        label: t('pages.course-participants.email'),
+        label: t('common.email'),
         sorting: true,
       },
       {

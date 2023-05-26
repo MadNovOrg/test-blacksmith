@@ -44,6 +44,19 @@ describe('component: CourseGrading', () => {
 
     render(<CourseGrading course={course} />)
 
+    const table = screen.getByRole('table')
+    expect(table).toBeInTheDocument()
+    const tableHead = within(table).getByTestId('table-head')
+    expect(tableHead).toBeInTheDocument()
+    const columnHeaders = within(tableHead).getAllByRole('columnheader')
+    expect(columnHeaders).toHaveLength(4)
+    expect(within(columnHeaders[0]).getByText('Name')).toBeInTheDocument()
+    expect(within(columnHeaders[1]).getByText('Email')).toBeInTheDocument()
+    expect(
+      within(columnHeaders[2]).getByText('Organisation')
+    ).toBeInTheDocument()
+    expect(within(columnHeaders[3]).getByText('Grade')).toBeInTheDocument()
+
     const gradeCells = screen.getAllByTestId(`grade-cell`)
 
     expect(

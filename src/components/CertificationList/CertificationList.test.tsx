@@ -30,7 +30,7 @@ describe('component: CertificationList', () => {
     const columnHeaders = within(tableHead).getAllByRole('columnheader')
     expect(columnHeaders).toHaveLength(7)
     expect(within(columnHeaders[1]).getByText('Name')).toBeInTheDocument()
-    expect(within(columnHeaders[2]).getByText('Contact')).toBeInTheDocument()
+    expect(within(columnHeaders[2]).getByText('Email')).toBeInTheDocument()
     expect(
       within(columnHeaders[3]).getByText('Organisation')
     ).toBeInTheDocument()
@@ -74,7 +74,7 @@ describe('component: CertificationList', () => {
     const columnHeaders = within(tableHead).getAllByRole('columnheader')
     expect(columnHeaders).toHaveLength(10)
     expect(within(columnHeaders[1]).getByText('Name')).toBeInTheDocument()
-    expect(within(columnHeaders[2]).getByText('Contact')).toBeInTheDocument()
+    expect(within(columnHeaders[2]).getByText('Email')).toBeInTheDocument()
     expect(
       within(columnHeaders[3]).getByText('Organisation')
     ).toBeInTheDocument()

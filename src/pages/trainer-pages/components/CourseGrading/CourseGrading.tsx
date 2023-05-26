@@ -102,7 +102,7 @@ export const CourseGrading: React.FC<
       },
       {
         id: 'contact',
-        label: t('pages.course-participants.email'),
+        label: t('common.email'),
         sorting: true,
       },
       {
