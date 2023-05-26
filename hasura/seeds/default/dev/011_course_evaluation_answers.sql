@@ -12,7 +12,6 @@ INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, c
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Preparation and organisation'), '5', 'd394a9ff-7517-4e35-91aa-466f9d4c1b77', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Group participation'), '5', 'd394a9ff-7517-4e35-91aa-466f9d4c1b77', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Workbook and presentation materials'), '5', 'd394a9ff-7517-4e35-91aa-466f9d4c1b77', 10011);
-INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Lunch & refreshments'), '5', 'd394a9ff-7517-4e35-91aa-466f9d4c1b77', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Suitability of training environment'), '5', 'd394a9ff-7517-4e35-91aa-466f9d4c1b77', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Were there any injuries?'), 'NO-', 'd394a9ff-7517-4e35-91aa-466f9d4c1b77', 10011);
 
@@ -29,7 +28,6 @@ INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, c
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Preparation and organisation'), '5', 'a39bb4b3-a07a-4610-8da1-b0ce885cc263', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Group participation'), '5', 'a39bb4b3-a07a-4610-8da1-b0ce885cc263', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Workbook and presentation materials'), '5', 'a39bb4b3-a07a-4610-8da1-b0ce885cc263', 10011);
-INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Lunch & refreshments'), '5', 'a39bb4b3-a07a-4610-8da1-b0ce885cc263', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Suitability of training environment'), '5', 'a39bb4b3-a07a-4610-8da1-b0ce885cc263', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Were there any injuries?'), 'NO-', 'a39bb4b3-a07a-4610-8da1-b0ce885cc263', 10011);
 
@@ -46,7 +44,6 @@ INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, c
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Preparation and organisation'), '5', '6b72504a-6447-4b30-9909-e8e6fc1d300f', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Group participation'), '5', '6b72504a-6447-4b30-9909-e8e6fc1d300f', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Workbook and presentation materials'), '5', '6b72504a-6447-4b30-9909-e8e6fc1d300f', 10011);
-INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Lunch & refreshments'), '5', '6b72504a-6447-4b30-9909-e8e6fc1d300f', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Suitability of training environment'), '5', '6b72504a-6447-4b30-9909-e8e6fc1d300f', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Were there any injuries?'), 'NO-', '6b72504a-6447-4b30-9909-e8e6fc1d300f', 10011);
 
@@ -63,7 +60,6 @@ INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, c
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Preparation and organisation'), '5', 'fb523ef0-7fd1-42b2-b078-dce29a1713fe', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Group participation'), '5', 'fb523ef0-7fd1-42b2-b078-dce29a1713fe', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Workbook and presentation materials'), '5', 'fb523ef0-7fd1-42b2-b078-dce29a1713fe', 10011);
-INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Lunch & refreshments'), '5', 'fb523ef0-7fd1-42b2-b078-dce29a1713fe', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Suitability of training environment'), '5', 'fb523ef0-7fd1-42b2-b078-dce29a1713fe', 10011);
 INSERT INTO public.course_evaluation_answers (question_id, answer, profile_id, course_id) VALUES ((SELECT id from course_evaluation_questions WHERE question = 'Were there any injuries?'), 'NO-', 'fb523ef0-7fd1-42b2-b078-dce29a1713fe', 10011);
 
