@@ -54,6 +54,23 @@ insert_permissions:
         - type
         - payload
       backend_only: false
+  - role: tt-ops
+    permission:
+      check:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+      columns:
+        - course_id
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+      backend_only: false
 select_permissions:
   - role: tt-admin
     permission:
