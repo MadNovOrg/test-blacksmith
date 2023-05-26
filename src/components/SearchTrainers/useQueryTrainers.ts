@@ -12,6 +12,8 @@ import { Props, SEARCH_TRAINERS } from './helpers'
 export const useQueryTrainers = ({
   trainerType,
   courseLevel,
+  courseType,
+  bildStrategies,
   schedule: { start, end },
 }: Props) => {
   const fetcher = useFetcher()
@@ -28,6 +30,8 @@ export const useQueryTrainers = ({
           courseLevel,
           courseStart,
           courseEnd,
+          courseType,
+          bildStrategies,
         }
 
         return fetcher<SearchTrainersQuery, SearchTrainersQueryVariables>(
@@ -39,7 +43,15 @@ export const useQueryTrainers = ({
         return { trainers: [] }
       }
     },
-    [fetcher, trainerType, courseLevel, courseStart, courseEnd]
+    [
+      trainerType,
+      courseLevel,
+      courseStart,
+      courseEnd,
+      courseType,
+      bildStrategies,
+      fetcher,
+    ]
   )
 
   return { search }

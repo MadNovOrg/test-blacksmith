@@ -98,12 +98,6 @@ type Query {
 }
 
 type Query {
-  getTrainersLevels(
-    input: GetTrainersLevelsInput!
-  ): [TrainerLevels]
-}
-
-type Query {
   getXeroInvoicesForOrders(
     invoiceNumbers: [String!]!
   ): [XeroInvoice]!
@@ -409,6 +403,14 @@ enum SendCourseInformationError {
   ATTENDEE_LIST_IS_EMPTY
 }
 
+enum BildStrategy {
+  PRIMARY
+  SECONDARY
+  NON_RESTRICTIVE_TERTIARY
+  RESTRICTIVE_TERTIARY_INTERMEDIATE
+  RESTRICTIVE_TERTIARY_ADVANCED
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -443,6 +445,8 @@ input SearchTrainersInput {
   courseLevel: CourseLevel
   courseStart: date
   courseEnd: date
+  bildStrategies: [BildStrategy!]
+  courseType: CourseType
 }
 
 input Ordering {

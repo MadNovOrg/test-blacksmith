@@ -1,5 +1,6 @@
 import { gql } from 'graphql-request'
 
+import { BildStrategy, CourseType } from '@app/generated/graphql'
 import { CourseLevel, CourseTrainerType, SearchTrainer } from '@app/types'
 
 export type SearchTrainersSchedule = {
@@ -11,6 +12,8 @@ export type Props = {
   trainerType: CourseTrainerType
   courseLevel: CourseLevel
   schedule: SearchTrainersSchedule
+  bildStrategies?: BildStrategy[]
+  courseType: CourseType
 }
 
 export type SearchTrainersInput = {

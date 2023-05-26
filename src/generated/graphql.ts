@@ -85,6 +85,14 @@ export enum AvatarRatingEnum {
   X = 'X'
 }
 
+export enum BildStrategy {
+  NonRestrictiveTertiary = 'NON_RESTRICTIVE_TERTIARY',
+  Primary = 'PRIMARY',
+  RestrictiveTertiaryAdvanced = 'RESTRICTIVE_TERTIARY_ADVANCED',
+  RestrictiveTertiaryIntermediate = 'RESTRICTIVE_TERTIARY_INTERMEDIATE',
+  Secondary = 'SECONDARY'
+}
+
 export enum BillingInterval {
   Day = 'day',
   Month = 'month',
@@ -2935,14 +2943,6 @@ export type GetCoursePricingOutput = {
   reaccreditation?: Maybe<Scalars['Boolean']>;
   type?: Maybe<CourseType>;
   xeroCode: Scalars['String'];
-};
-
-export type GetTrainersLevelsInput = {
-  courseEnd: Scalars['date'];
-  courseLevel: CourseLevel;
-  courseStart: Scalars['date'];
-  ids: Array<Scalars['uuid']>;
-  trainerType: CourseTrainerType;
 };
 
 export enum Go1ChangeError {
@@ -9751,9 +9751,11 @@ export enum SearchTrainerAvailability {
 }
 
 export type SearchTrainersInput = {
+  bildStrategies?: InputMaybe<Array<BildStrategy>>;
   courseEnd?: InputMaybe<Scalars['date']>;
   courseLevel?: InputMaybe<CourseLevel>;
   courseStart?: InputMaybe<Scalars['date']>;
+  courseType?: InputMaybe<CourseType>;
   query?: InputMaybe<Scalars['String']>;
   trainerType?: InputMaybe<CourseTrainerType>;
 };
@@ -10405,13 +10407,6 @@ export type Theme = Node & {
   themeUri?: Maybe<Scalars['String']>;
   /** The current version of the theme. This field is equivalent to WP_Theme-&gt;get( &quot;Version&quot; ). */
   version?: Maybe<Scalars['String']>;
-};
-
-export type TrainerLevels = {
-  __typename?: 'TrainerLevels';
-  availability: SearchTrainerAvailability;
-  levels: Array<CourseLevel>;
-  profile_id: Scalars['uuid'];
 };
 
 export type TrainerRoleType = {
@@ -36169,7 +36164,6 @@ export type Query_Root = {
   getCoursePricing?: Maybe<GetCoursePricingOutput>;
   getInvite?: Maybe<CourseInvite>;
   getOrgInvite?: Maybe<OrgInvite>;
-  getTrainersLevels?: Maybe<Array<Maybe<TrainerLevels>>>;
   getXeroInvoicesForOrders: Array<Maybe<XeroInvoice>>;
   /** fetch data from the table: "go1_history_events" */
   go1_history_events: Array<Go1_History_Events>;
@@ -37510,11 +37504,6 @@ export type Query_RootExpire_Go1_License_Jobs_By_PkArgs = {
 
 export type Query_RootGetCoursePricingArgs = {
   input: GetCoursePricingInput;
-};
-
-
-export type Query_RootGetTrainersLevelsArgs = {
-  input: GetTrainersLevelsInput;
 };
 
 

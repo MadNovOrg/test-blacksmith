@@ -19,6 +19,7 @@ import { SearchTrainers } from '@app/components/SearchTrainers'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
+  BildStrategy,
   CourseLevel,
   CourseTrainerType,
   SearchTrainer,
@@ -38,7 +39,7 @@ import {
   TrainerRoleTypeName,
   ValidCourseInput,
 } from '@app/types'
-import { LoadingStatus } from '@app/util'
+import { LoadingStatus, bildStrategiesToArray } from '@app/util'
 
 import { StepsEnum } from '../../types'
 import { useSaveCourse } from '../../useSaveCourse'
@@ -254,6 +255,14 @@ export const CreateCourseForm = () => {
             onChange={event => {
               setAssistants(event.target.value)
             }}
+            courseType={courseType}
+            bildStrategies={
+              courseData?.bildStrategies
+                ? (bildStrategiesToArray(
+                    courseData?.bildStrategies
+                  ) as unknown as BildStrategy[])
+                : []
+            }
           />
 
           {showTrainerRatioWarning ? (

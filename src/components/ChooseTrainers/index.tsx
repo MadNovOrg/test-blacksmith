@@ -7,6 +7,7 @@ import { noop } from 'ts-essentials'
 
 import { useAuth } from '@app/context/auth'
 import {
+  BildStrategy,
   CourseTrainerType,
   SearchTrainer,
   SearchTrainerDetailsFragment,
@@ -27,6 +28,7 @@ type Props = {
   trainers?: CourseTrainer[]
   courseType: CourseType
   courseLevel: CourseLevel
+  bildStrategies?: BildStrategy[]
   courseSchedule: { start: Date; end: Date }
   onChange?: (data: FormValues, isValid: boolean) => void
   autoFocus?: boolean
@@ -60,6 +62,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
   courseType,
   courseLevel,
   courseSchedule,
+  bildStrategies,
   trainers = [],
   onChange = noop,
   autoFocus = true,
@@ -160,6 +163,8 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
                 onChange={field.onChange}
                 matchesFilter={notUsedElsewhere('lead')}
                 disabled={disabled}
+                bildStrategies={bildStrategies}
+                courseType={courseType}
               />
             )}
           />
@@ -186,6 +191,8 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
               onChange={field.onChange}
               matchesFilter={notUsedElsewhere('assist')}
               disabled={disabled}
+              bildStrategies={bildStrategies}
+              courseType={courseType}
             />
           )}
         />
@@ -215,6 +222,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
                 value={field.value}
                 onChange={field.onChange}
                 matchesFilter={notUsedElsewhere('moderator')}
+                courseType={courseType}
               />
             )}
           />

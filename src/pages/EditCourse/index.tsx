@@ -28,6 +28,7 @@ import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   Accreditors_Enum,
+  BildStrategy,
   Course_Audit_Type_Enum,
   Course_Level_Enum,
   Course_Status_Enum,
@@ -70,6 +71,7 @@ import {
   ValidCourseInput,
 } from '@app/types'
 import {
+  bildStrategiesToArray,
   courseToCourseInput,
   generateCourseName,
   LoadingStatus,
@@ -596,9 +598,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
                 {courseData?.maxParticipants &&
                 courseData?.startDateTime &&
-                courseData.endDateTime ? (
+                courseData.endDateTime &&
+                courseData.type ? (
                   <ChooseTrainers
-                    courseType={courseData.type || CourseType.CLOSED}
+                    courseType={courseData.type}
                     courseLevel={courseData.courseLevel || CourseLevel.Level_1}
                     courseSchedule={{
                       start: courseData.startDateTime,
@@ -608,6 +611,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     onChange={handleTrainersDataChange}
                     autoFocus={false}
                     isReAccreditation={courseData.reaccreditation}
+                    bildStrategies={
+                      courseData.bildStrategies
+                        ? (bildStrategiesToArray(
+                            courseData.bildStrategies
+                          ) as unknown as BildStrategy[])
+                        : undefined
+                    }
                   />
                 ) : null}
 

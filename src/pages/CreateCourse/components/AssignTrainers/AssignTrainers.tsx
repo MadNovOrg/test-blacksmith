@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 import ChooseTrainers, { FormValues } from '@app/components/ChooseTrainers'
 import { useAuth } from '@app/context/auth'
-import { Accreditors_Enum } from '@app/generated/graphql'
+import { Accreditors_Enum, BildStrategy } from '@app/generated/graphql'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
   checkCourseDetailsForExceptions,
@@ -23,7 +23,7 @@ import {
   TrainerInput,
   TrainerRoleTypeName,
 } from '@app/types'
-import { LoadingStatus } from '@app/util'
+import { LoadingStatus, bildStrategiesToArray } from '@app/util'
 import { getRequiredLeads } from '@app/util/trainerRatio'
 
 import { StepsEnum } from '../../types'
@@ -239,6 +239,11 @@ export const AssignTrainers = () => {
           trainers={trainerInputToCourseTrainer(trainers)}
           isReAccreditation={courseData.reaccreditation}
           requiredLeaders={requiredLeaders}
+          bildStrategies={
+            bildStrategiesToArray(
+              courseData.bildStrategies
+            ) as unknown as BildStrategy[]
+          }
         />
 
         {showTrainerRatioWarning ? (

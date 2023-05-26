@@ -252,6 +252,14 @@ export function bildStrategiesToRecord(strategies: Course['bildStrategies']) {
   return bildStrategies
 }
 
+export function bildStrategiesToArray(
+  strategies: Record<BildStrategies, boolean>
+) {
+  return Object.keys(strategies).filter(
+    strategyName => strategies[strategyName as BildStrategies]
+  ) as BildStrategies[]
+}
+
 export const courseToCourseInput = (course: Course): CourseInput => {
   return {
     type: course.type,

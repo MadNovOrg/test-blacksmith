@@ -3,6 +3,7 @@ import React from 'react'
 import {
   CourseLevel,
   CourseTrainerType,
+  CourseType,
   SearchTrainer,
   TrainerRoleTypeName,
 } from '@app/types'
@@ -34,6 +35,7 @@ describe('component: SearchTrainers', () => {
         trainerType={CourseTrainerType.Leader}
         courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
+        courseType={CourseType.OPEN}
       />
     )
 
@@ -59,6 +61,7 @@ describe('component: SearchTrainers', () => {
         courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
         placeholder={placeholder}
+        courseType={CourseType.OPEN}
       />
     )
 
@@ -75,6 +78,7 @@ describe('component: SearchTrainers', () => {
         trainerType={CourseTrainerType.Leader}
         courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
+        courseType={CourseType.OPEN}
       />
     )
     const input = screen.getByTestId('SearchTrainers-input')
@@ -143,6 +147,7 @@ describe('component: SearchTrainers', () => {
         trainerType={CourseTrainerType.Leader}
         courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
+        courseType={CourseType.OPEN}
       />
     )
     const input = screen.getByTestId('SearchTrainers-input')
@@ -179,6 +184,7 @@ describe('component: SearchTrainers', () => {
         courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
         matchesFilter={matchesFilter}
+        courseType={CourseType.OPEN}
       />
     )
     const input = screen.getByTestId('SearchTrainers-input')
@@ -233,6 +239,7 @@ describe('component: SearchTrainers', () => {
         courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
         max={1}
+        courseType={CourseType.OPEN}
       />
     )
     const input = screen.getByTestId('SearchTrainers-input')
@@ -263,6 +270,7 @@ describe('component: SearchTrainers', () => {
         courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
         onChange={onChange}
+        courseType={CourseType.OPEN}
       />
     )
     const input = screen.getByTestId('SearchTrainers-input')
@@ -291,6 +299,7 @@ describe('component: SearchTrainers', () => {
         trainerType={CourseTrainerType.Leader}
         courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
+        courseType={CourseType.OPEN}
       />
     )
     const input = screen.getByTestId('SearchTrainers-input')

@@ -17,11 +17,14 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import { Avatar } from '@app/components/Avatar'
 import {
+  BildStrategy,
   CourseLevel,
   CourseTrainerType,
   SearchTrainer,
   SearchTrainerAvailability,
+  CourseType as CourseTypeEnum,
 } from '@app/generated/graphql'
+import { CourseType } from '@app/types'
 import { noop } from '@app/util'
 
 import { SearchTrainersSchedule } from './helpers'
@@ -31,6 +34,8 @@ type Props = {
   trainerType: CourseTrainerType
   courseLevel: CourseLevel
   courseSchedule: SearchTrainersSchedule
+  bildStrategies?: BildStrategy[]
+  courseType: CourseType
   placeholder?: string
   max?: number
   maxReachedPlaceholder?: string
@@ -47,6 +52,8 @@ export function SearchTrainers({
   trainerType,
   courseLevel,
   courseSchedule,
+  bildStrategies,
+  courseType,
   placeholder,
   max = Infinity,
   maxReachedPlaceholder,
@@ -66,6 +73,8 @@ export function SearchTrainers({
     trainerType,
     courseLevel,
     schedule: courseSchedule,
+    bildStrategies,
+    courseType: courseType as unknown as CourseTypeEnum,
   })
 
   const isControlled = value != null

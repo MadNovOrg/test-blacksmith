@@ -127,12 +127,6 @@ actions:
       forward_client_headers: true
     permissions:
       - role: anonymous
-  - name: getTrainersLevels
-    definition:
-      kind: ""
-      handler: '{{ACTIONS_HOST}}/trainers/levels'
-    permissions:
-      - role: trainer
   - name: getXeroInvoicesForOrders
     definition:
       kind: ""
@@ -635,6 +629,23 @@ custom_types:
           is_deprecated: null
           description: null
         - value: ATTENDEE_LIST_IS_EMPTY
+          is_deprecated: null
+          description: null
+    - name: BildStrategy
+      values:
+        - value: PRIMARY
+          is_deprecated: null
+          description: null
+        - value: SECONDARY
+          is_deprecated: null
+          description: null
+        - value: NON_RESTRICTIVE_TERTIARY
+          is_deprecated: null
+          description: null
+        - value: RESTRICTIVE_TERTIARY_INTERMEDIATE
+          is_deprecated: null
+          description: null
+        - value: RESTRICTIVE_TERTIARY_ADVANCED
           is_deprecated: null
           description: null
   input_objects:
