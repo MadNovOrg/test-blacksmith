@@ -482,13 +482,25 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
         max_participants: courseData.maxParticipants as unknown as number,
         hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
       },
-      (trainersData?.assist ?? []).map(assistant => ({
-        type: CourseTrainerType.Assistant,
-        trainer_role_types: assistant.trainer_role_types,
-        levels: assistant.levels,
-      }))
+      [
+        ...(trainersData?.assist ?? []).map(assistant => ({
+          type: CourseTrainerType.Assistant,
+          trainer_role_types: assistant.trainer_role_types,
+          levels: assistant.levels,
+        })),
+        ...(trainersData?.lead ?? []).map(lead => ({
+          type: CourseTrainerType.Leader,
+          trainer_role_types: lead.trainer_role_types,
+          levels: lead.levels,
+        })),
+      ]
     )
-  }, [courseData, seniorOrPrincipalLead, trainersData?.assist])
+  }, [
+    courseData,
+    seniorOrPrincipalLead,
+    trainersData?.assist,
+    trainersData?.lead,
+  ])
 
   if (
     (courseStatus === LoadingStatus.SUCCESS && !course) ||
