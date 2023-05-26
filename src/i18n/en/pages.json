@@ -77,9 +77,18 @@
       "certificates_one": "certificate",
       "certificates_other": "certificates",
       "levels": {
-        "advanced": "$t(certificates.level-two)",
-        "intermediate-trainer": "$t(certificates.level-one)/$t(certificates.level-two)",
-        "advanced-trainer": "$t(certificates.level-one)/$t(certificates.level-two) & $t(certificates.advanced)"
+        "advanced": {
+          "default": "$t(certificates.level-two)",
+          "reaccreditation": "$t(certificates.level-two)"
+        },
+        "intermediate-trainer": {
+          "default": "$t(certificates.level-one)/$t(certificates.level-two)",
+          "reaccreditation": "$t(certificates.intermediate_trainer)"
+        },
+        "advanced-trainer": {
+          "default": "$t(certificates.intermediate_trainer) and the equivalent of a $t(certificates.first-aid)",
+          "reaccreditation": "$t(certificates.advanced_trainer) and the equivalent of a $t(certificates.first-aid)"
+        }
       }
     },
     "duplicated-email-addresses": "Duplicated email address."

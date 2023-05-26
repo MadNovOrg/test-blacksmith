@@ -47,39 +47,52 @@ export type AttendeeValidCertificateProps = {
   control: Control<FormInputs>
   errors: FieldErrors
   courseLevel: CourseLevel
+  reaccreditation: boolean
   totalAttendees: number
 }
 
 const AttendeeValidCertificate: React.FC<
   React.PropsWithChildren<AttendeeValidCertificateProps>
-> = ({ control, courseLevel, totalAttendees, errors }) => {
+> = ({ control, courseLevel, reaccreditation, totalAttendees, errors }) => {
   const { t } = useTranslation()
   const showAttendeeTranslationOptions = useCallback(
-    (courseLevel: CourseLevel, attendees: number) => {
+    (courseLevel: CourseLevel, reaccreditation: boolean, attendees: number) => {
       switch (courseLevel) {
         case CourseLevel.Advanced:
           return {
             attendees,
             certificates: 1,
-            levels: t(
-              'pages.book-course.attendee-with-valid-certificate.levels.advanced'
-            ),
+            levels: reaccreditation
+              ? t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.advanced.reaccreditation'
+                )
+              : t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.advanced.default'
+                ),
           }
         case CourseLevel.IntermediateTrainer:
           return {
             attendees,
-            certificates: 2,
-            levels: t(
-              'pages.book-course.attendee-with-valid-certificate.levels.intermediate-trainer'
-            ),
+            certificates: 1,
+            levels: reaccreditation
+              ? t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.intermediate-trainer.reaccreditation'
+                )
+              : t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.intermediate-trainer.default'
+                ),
           }
         case CourseLevel.AdvancedTrainer:
           return {
             attendees,
-            certificates: 3,
-            levels: t(
-              'pages.book-course.attendee-with-valid-certificate.levels.advanced-trainer'
-            ),
+            certificates: 2,
+            levels: reaccreditation
+              ? t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.advanced-trainer.reaccreditation'
+                )
+              : t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.advanced-trainer.default'
+                ),
           }
         default:
           return {}
@@ -101,7 +114,11 @@ const AttendeeValidCertificate: React.FC<
               <Typography color="grey.700">
                 {t(
                   'pages.book-course.attendee-with-valid-certificate.message',
-                  showAttendeeTranslationOptions(courseLevel, totalAttendees)
+                  showAttendeeTranslationOptions(
+                    courseLevel,
+                    reaccreditation,
+                    totalAttendees
+                  )
                 )}
               </Typography>
             }
@@ -604,17 +621,16 @@ export const CourseBookingDetails: React.FC<
               </Box>
             )
           })}
-
           <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
             <b>{t('important')}:</b> {`${t('pages.book-course.notice')}\n`}
             <b>{t('important')}:</b> {t('pages.book-course.repeat-own-email')}
           </Alert>
-
           {showAttendeeValidCertificate && (
             <AttendeeValidCertificate
               control={control}
               errors={errors}
               courseLevel={course.level}
+              reaccreditation={course.reaccreditation}
               totalAttendees={values.quantity}
             />
           )}

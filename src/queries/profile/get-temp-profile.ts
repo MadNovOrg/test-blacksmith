@@ -19,6 +19,7 @@ export type ResponseType = {
       dates: Course['dates']
       deliveryType: CourseDeliveryType
       level: CourseLevel
+      reaccreditation: boolean
       maxParticipants: number
       participants: {
         aggregate: {
@@ -63,6 +64,7 @@ export const QUERY = gql`
         type
         deliveryType
         level
+        reaccreditation
         freeSpaces
         expenses {
           id
