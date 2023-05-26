@@ -366,6 +366,7 @@ select_permissions:
         - min_participants
         - name
         - price
+        - price_currency
         - reaccreditation
         - updated_at
       computed_fields:
