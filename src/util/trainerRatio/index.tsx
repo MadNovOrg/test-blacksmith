@@ -42,6 +42,7 @@ export function getRequiredAssistants(
     })
   } else if (courseData.accreditedBy === Accreditors_Enum.Bild) {
     const strategies = courseData.bildStrategies ?? {}
+
     return getRequiredAssistantsBild({
       level: courseData.level,
       isReaccreditation: courseData.reaccreditation,

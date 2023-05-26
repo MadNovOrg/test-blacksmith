@@ -114,7 +114,6 @@ INSERT INTO public.course_certificate (id, course_id, number, expiry_date, profi
 ('1a98205a-e742-49d5-a852-0a148d74bb16', 10034, 'B.BILD-ADV.F.OP.A.10034', '2025-05-05', '1b37b4d3-0dcc-4f17-96d5-bc27c029010f', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
 ('da8ef2ec-a7b4-41ad-8008-b74448cc7bac', 10034, 'B.BILD-ADV.F.OP.A.10034', '2025-05-05', '00d14fc3-7fa6-4d52-9ae4-f3bcb26baade', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
 ('a5adb1b9-3bc8-45e3-ae29-7372b47310f1', 10034, 'B.BILD-ADV.F.OP.A.10034', '2025-05-05', '98920ae3-ab16-424f-a0cd-302136c7b413', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
-('83e36c16-0fd8-44e8-ad00-f8d5d234487d', 10034, 'B.BILD-ADV.F.OP.A.10034', '2025-05-05', '2be41d95-40ee-49d5-810c-fae16135cccc', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
 ('9bd03085-6448-4870-8da3-7ec1eea5fe9f', 10034, 'B.BILD-ADV.F.OP.A.10034', '2025-05-05', 'd1c5fa19-30da-4512-88f6-dc9ef6a26958', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
 ('970ff9d0-5a99-4eb1-b021-d815ab8a938a', 10034, 'B.BILD-ADV.F.OP.A.10034', '2025-05-05', '4c6194ad-6dd3-461e-b4da-d3562b1007d1', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
 ('5beb390c-450b-40b2-905e-d79d54b9daca', 10033, 'B.BILD-INT.F.CL.PSTI.10033', '2025-05-05', '2c4b16db-bfba-4a21-a092-55ef9010ca2f', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false),

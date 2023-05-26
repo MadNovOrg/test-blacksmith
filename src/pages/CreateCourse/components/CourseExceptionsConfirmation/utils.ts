@@ -108,7 +108,10 @@ export const isTrainersRatioNotMet = (
     trainers.filter(t => t.type === CourseTrainerType.Assistant).length < min
 
   const missingLeads =
-    trainers.filter(t => t.type === CourseTrainerType.Leader).length < minLead
+    courseData.type !== CourseType.INDIRECT
+      ? trainers.filter(t => t.type === CourseTrainerType.Leader).length <
+        minLead
+      : false
 
   return missingAssistants || missingLeads
 }
