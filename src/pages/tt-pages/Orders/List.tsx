@@ -28,8 +28,6 @@ import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
 import { INVOICE_STATUS_COLOR } from '@app/util'
 
-import { BillToCell } from './components/BillToCell'
-
 const formatBillToForExcel = (organization?: OrderOrganizationInfoFragment) => {
   if (organization && organization.name) {
     let address
@@ -214,7 +212,13 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
                   </span>
                 </TableCell>
 
-                <BillToCell organization={order.organization} />
+                <TableCell>
+                  {order.organization && (
+                    <Link href={`/organisations/${order.organization.id}`}>
+                      {order.organization.name}
+                    </Link>
+                  )}
+                </TableCell>
 
                 <TableCell>
                   {t(`pages.orders.paymentMethod-${order.paymentMethod}`)}
