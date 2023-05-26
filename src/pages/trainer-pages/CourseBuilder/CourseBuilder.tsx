@@ -23,13 +23,11 @@ import { BackButton } from '@app/components/BackButton'
 import { ConfirmDialog } from '@app/components/ConfirmDialog'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import ProgressBar from '@app/components/ProgressBar'
-import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Status_Enum,
-  Course_Trainer_Type_Enum,
   Course_Type_Enum,
   FinalizeCourseBuilderMutation,
   FinalizeCourseBuilderMutationVariables,
@@ -40,19 +38,14 @@ import {
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { NotFound } from '@app/pages/common/NotFound'
-import {
-  checkCourseDetailsForExceptions,
-  shouldGoIntoExceptionApproval,
-} from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import { getMinimumTimeCommitment } from '@app/pages/trainer-pages/CourseBuilder/helpers'
 import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/queries/courses/finalize-course-builder'
 import { QUERY as GetCourseById } from '@app/queries/courses/get-course-by-id'
 import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-modules'
 import { MUTATION as SetCourseStatus } from '@app/queries/courses/set-course-status'
 import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups'
-import { CourseLevel, TrainerRoleTypeName } from '@app/types'
+import { CourseLevel } from '@app/types'
 import {
-  bildStrategiesToRecord,
   formatDateForDraft,
   formatDurationShort,
   getPercentage,
@@ -101,8 +94,6 @@ export const CourseBuilder: React.FC<
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false)
   const [isTimeCommitmentModalOpen, setIsTimeCommitmentModalOpen] =
     useState(false)
-
-  const { acl } = useAuth()
 
   const [submitError, setSubmitError] = useState<string>()
   const [mandatoryModules, setMandatoryModules] = useState<ModuleGroup[]>([])
@@ -370,48 +361,6 @@ export const CourseBuilder: React.FC<
         await saveModules(modulesData.filter(group => group.mandatory))
       }
       setSubmitError(undefined)
-      const leader = courseData.course.trainers.find(
-        c => c.type === Course_Trainer_Type_Enum.Leader
-      )
-      const exceptions = checkCourseDetailsForExceptions(
-        {
-          startDateTime: new Date(
-            courseData.course.dates?.aggregate?.start?.date
-          ),
-          courseLevel: courseData.course.level,
-          maxParticipants: courseData.course.max_participants,
-          modulesDuration: estimatedCourseDuration,
-          type: courseData.course.type,
-          deliveryType: courseData.course.deliveryType,
-          reaccreditation: courseData.course.reaccreditation ?? false,
-          conversion: courseData.course.conversion ?? false,
-          accreditedBy: courseData.course.accreditedBy,
-          bildStrategies: bildStrategiesToRecord(
-            courseData.course.bildStrategies
-          ),
-          hasSeniorOrPrincipalLeader:
-            (leader &&
-              leader.profile.trainer_role_types.some(
-                ({ trainer_role_type: role }) =>
-                  role.name === TrainerRoleTypeName.SENIOR ||
-                  role.name === TrainerRoleTypeName.PRINCIPAL
-              )) ??
-            false,
-        },
-        courseData.course.trainers.map(t => ({
-          type: t.type,
-          trainer_role_types: t.profile.trainer_role_types,
-          levels: t.profile.certificates.map(c => ({
-            courseLevel: c.courseLevel as CourseLevel,
-            expiryDate: c.expiryDate,
-          })),
-        }))
-      )
-      const status =
-        exceptions.length > 0 &&
-        shouldGoIntoExceptionApproval(acl, courseData.course.type)
-          ? Course_Status_Enum.ExceptionsApprovalPending
-          : null
       try {
         await fetcher<
           FinalizeCourseBuilderMutation,
@@ -419,7 +368,6 @@ export const CourseBuilder: React.FC<
         >(FINALIZE_COURSE_BUILDER_MUTATION, {
           id: courseData.course.id,
           duration: estimatedCourseDuration,
-          status,
         })
 
         if (!courseCreated) {
@@ -431,20 +379,15 @@ export const CourseBuilder: React.FC<
           })
         }
 
-        navigate(
-          status === Course_Status_Enum.ExceptionsApprovalPending
-            ? '/'
-            : '../details'
-        )
+        navigate('../details')
       } catch (e: unknown) {
         setSubmitError((e as Error).message)
       }
     }
   }, [
-    acl,
     addSnackbarMessage,
     courseCreated,
-    courseData?.course,
+    courseData,
     estimatedCourseDuration,
     fetcher,
     modulesData,

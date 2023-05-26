@@ -1,14 +1,10 @@
 import { gql } from 'graphql-request'
 
 export const FINALIZE_COURSE_BUILDER_MUTATION = gql`
-  mutation FinalizeCourseBuilder(
-    $id: Int!
-    $duration: Int!
-    $status: course_status_enum
-  ) {
+  mutation FinalizeCourseBuilder($id: Int!, $duration: Int!) {
     update_course_by_pk(
       pk_columns: { id: $id }
-      _set: { modulesDuration: $duration, status: $status }
+      _set: { modulesDuration: $duration, status: null }
     ) {
       id
     }
