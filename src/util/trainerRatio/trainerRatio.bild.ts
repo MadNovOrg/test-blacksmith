@@ -24,9 +24,9 @@ export function getRequiredAssistantsBild(criteria: BildRatioCriteria): {
     criteria.strategies.length >= 1 &&
     !criteria.strategies.includes(BildStrategies.RestrictiveTertiaryAdvanced)
 
-  const allStrategiesSelected =
+  const advancedSelected =
     criteria.level === CourseLevel.BildRegular &&
-    Object.keys(BildStrategies).length === criteria.strategies.length
+    criteria.strategies.includes(BildStrategies.RestrictiveTertiaryAdvanced)
 
   if (criteria.isConversion) {
     return toRange(Math.abs(Math.ceil((criteria.numberParticipants - 12) / 12)))
@@ -44,7 +44,7 @@ export function getRequiredAssistantsBild(criteria: BildRatioCriteria): {
   }
 
   if (
-    allStrategiesSelected &&
+    advancedSelected &&
     criteria.level === CourseLevel.BildRegular &&
     criteria.numberParticipants > 8
   ) {

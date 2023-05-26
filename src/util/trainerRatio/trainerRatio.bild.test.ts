@@ -313,19 +313,13 @@ describe('Bild trainer ratios', () => {
     ).toEqual(toRange(2))
   })
 
-  it(`requires 1 lead regardless of participants and 1 assist per next 8 participants after 8 participants have been registered given a course is ${Course_Level_Enum.BildRegular} and all strategies have been selected`, () => {
+  it(`requires 1 lead regardless of participants and 1 assist per next 8 participants after 8 participants have been registered given a course is ${Course_Level_Enum.BildRegular} and Restrictive Tertiary advanced strategy is selected`, () => {
     const criteria: BildRatioCriteria = {
       isConversion: false,
       numberParticipants: 25,
       level: CourseLevel.BildRegular,
       isReaccreditation: false,
-      strategies: [
-        BildStrategies.Primary,
-        BildStrategies.Secondary,
-        BildStrategies.NonRestrictiveTertiary,
-        BildStrategies.RestrictiveTertiaryIntermediate,
-        BildStrategies.RestrictiveTertiaryAdvanced,
-      ],
+      strategies: [BildStrategies.RestrictiveTertiaryAdvanced],
     }
 
     expect(
