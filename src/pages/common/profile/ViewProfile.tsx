@@ -105,6 +105,7 @@ export const ViewProfilePage: React.FC<
 
   const deleteAllowed =
     currentUserProfile?.id !== profile.id && // can't delete yourself
+    !profile.archived && // can't delete archived profiles
     certifications?.length === 0 && // can't delete if you have certifications
     (acl.isTTAdmin() || acl.isTTOps()) // only TT Admins and TT Ops can delete
 
@@ -182,6 +183,7 @@ export const ViewProfilePage: React.FC<
                 onClick={() => setShowDeleteDialog(true)}
                 startIcon={<DeleteIcon />}
                 sx={{ mt: 2 }}
+                data-testid="delete-profile-button"
               >
                 {t('delete-profile')}
               </Button>
