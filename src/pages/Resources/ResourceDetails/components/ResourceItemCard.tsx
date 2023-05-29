@@ -3,6 +3,7 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
 import SlideshowIcon from '@mui/icons-material/Slideshow'
 import { Card, Box, Typography, Link } from '@mui/material'
 import React, { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ResourceSummaryFragment } from '@app/generated/graphql'
 
@@ -16,6 +17,8 @@ const iconsByResourceType: Record<string, ReactNode> = {
 }
 
 export const ResourceItemCard = ({ resource }: Props) => {
+  const { t } = useTranslation()
+
   const resourceType = resource.resourceAttachment?.resourcetype
   const attachmentURL =
     resourceType === 'video'
@@ -24,7 +27,12 @@ export const ResourceItemCard = ({ resource }: Props) => {
 
   return (
     <Card sx={{ boxShadow: 'none', p: 1 }}>
-      <Link target="_blank" component={'a'} href={attachmentURL ?? ''}>
+      <Link
+        target="_blank"
+        component={'a'}
+        href={attachmentURL ?? ''}
+        aria-label={`${resource.title} (${t('opens-new-window')})`}
+      >
         <Box display="flex" alignItems="center">
           {resourceType && iconsByResourceType[resourceType]}
           <Typography

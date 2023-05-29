@@ -197,12 +197,22 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                   <Typography variant="body2">
                     <Trans i18nKey="pages.onboarding.tcs-label">
                       I accept the
-                      <a href={`${origin}/terms-of-business/`}>
+                      <a
+                        href={`${origin}/terms-of-business/`}
+                        aria-label={`${t(
+                          'terms-of-business'
+                        )} (${'opens-new-window'})`}
+                      >
                         Terms of Business
                       </a>
                       and agree to Team Teach processing my personal data in
                       accordance with our
-                      <a href={`${origin}/privacy-policy`}>Privacy Policy</a>
+                      <a
+                        href={`${origin}/privacy-policy`}
+                        aria-label={`${'privacy-policy'} (${'opens-new-window'})`}
+                      >
+                        Privacy Policy
+                      </a>
                     </Trans>
                   </Typography>
                   {errors.tcs ? (

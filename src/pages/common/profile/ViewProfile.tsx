@@ -593,6 +593,9 @@ export const ViewProfilePage: React.FC<
                 underline="always"
                 sx={{ mr: 2 }}
                 component="a"
+                aria-label={`${t('pages.my-profile.manage-data')} (${t(
+                  'opens-new-window'
+                )})`}
               >
                 {t('pages.my-profile.manage-data')}
               </Link>
@@ -602,6 +605,9 @@ export const ViewProfilePage: React.FC<
                 rel="noopener noreferrer"
                 underline="always"
                 component="a"
+                aria-label={`${t('pages.my-profile.unsubscribe')} (${t(
+                  'opens-new-window'
+                )})`}
               >
                 {t('pages.my-profile.unsubscribe')}
               </Link>

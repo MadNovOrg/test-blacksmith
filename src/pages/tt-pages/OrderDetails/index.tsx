@@ -191,6 +191,9 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     data-testid="order-details-view-in-xero-button"
                     href={xeroInvoiceUrl}
                     target="_blank"
+                    aria-label={`${t('view-in-xero')} (${t(
+                      'opens-new-window'
+                    )})`}
                   >
                     {t('view-in-xero')}
                   </Button>

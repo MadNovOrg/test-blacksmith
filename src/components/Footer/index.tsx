@@ -34,6 +34,7 @@ export const Footer = () => {
             mr={1}
             target="_blank"
             component={'a'}
+            aria-label={`${t('socials.facebook')} (${t('opens-new-window')})`}
           >
             <FacebookIcon htmlColor={theme.palette.common.white} />
           </Link>
@@ -42,6 +43,7 @@ export const Footer = () => {
             mr={1}
             target="_blank"
             component={'a'}
+            aria-label={`${t('socials.instagram')} (${t('opens-new-window')})`}
           >
             <InstagramIcon htmlColor={theme.palette.common.white} />
           </Link>
@@ -50,6 +52,7 @@ export const Footer = () => {
             target="_blank"
             mr={1}
             component={'a'}
+            aria-label={`${t('socials.twitter')} (${t('opens-new-window')})`}
           >
             <TwitterIcon htmlColor={theme.palette.common.white} />
           </Link>
@@ -57,6 +60,7 @@ export const Footer = () => {
             href="https://www.youtube.com/channel/UCpMhNpsL3ICI_K9H8OnfI6Q"
             target="_blank"
             component={'a'}
+            aria-label={`${t('socials.youtube')} (${t('opens-new-window')})`}
           >
             <YouTubeIcon htmlColor={theme.palette.common.white} />
           </Link>

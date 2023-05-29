@@ -625,5 +625,14 @@
     "TENDER": "Tender"
   },
   "save-details": "Save details",
-  "course-category": "Course category"
+  "course-category": "Course category",
+  "terms-of-business": "Terms of Business",
+  "privacy-policy": "Privacy Policy",
+  "opens-new-window": "opens in a new window",
+  "socials": {
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "twitter": "Twitter",
+    "youtube": "YouTube"
+  }
 }
