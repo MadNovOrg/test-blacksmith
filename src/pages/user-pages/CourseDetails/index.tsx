@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material'
 import { styled } from '@mui/system'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
@@ -65,6 +65,8 @@ export const CourseDetails = () => {
   const alertMessage = alertType ? successAlerts[alertType] : null
   const courseId = params.id as string
 
+  const [pollCertificateCounter, setPollCertificateCounter] = useState(10)
+
   const { data: courseData, error: courseError } = useSWR<
     {
       course: GetCourseResponseType['course'] & {
@@ -86,7 +88,7 @@ export const CourseDetails = () => {
   }
 
   const profileId = profile?.id
-  const { data } = useSWR([GetParticipant, { profileId, courseId }])
+  const { data, mutate } = useSWR([GetParticipant, { profileId, courseId }])
   const courseParticipant: CourseParticipant | null =
     data?.course_participant?.length > 0 ? data?.course_participant[0] : null
 
@@ -109,6 +111,41 @@ export const CourseDetails = () => {
     )
   }, [course, profileId])
 
+  const courseHasStarted = course && courseStarted(course)
+  const courseHasEnded = course && courseEnded(course)
+  const canSubmitFeedback =
+    !loading &&
+    courseHasStarted &&
+    !didAttendeeSubmitFeedback &&
+    courseParticipant?.attended
+  const showFeedbackRequiredAlert =
+    courseParticipant && courseParticipant.grade && !didAttendeeSubmitFeedback
+
+  useEffect(() => {
+    if (
+      courseHasEnded &&
+      didAttendeeSubmitFeedback &&
+      courseParticipant &&
+      pollCertificateCounter > 0
+    ) {
+      if (courseParticipant.certificate) {
+        setPollCertificateCounter(0)
+      } else {
+        const ref = setTimeout(() => {
+          setPollCertificateCounter(counter => counter - 1)
+          return mutate()
+        }, 1000)
+        return () => clearTimeout(ref)
+      }
+    }
+  }, [
+    courseHasEnded,
+    courseParticipant,
+    didAttendeeSubmitFeedback,
+    mutate,
+    pollCertificateCounter,
+  ])
+
   if (courseLoadingStatus === LoadingStatus.FETCHING) {
     return (
       <Stack
@@ -120,16 +157,6 @@ export const CourseDetails = () => {
       </Stack>
     )
   }
-
-  const courseHasStarted = course && courseStarted(course)
-  const courseHasEnded = course && courseEnded(course)
-  const canSubmitFeedback =
-    !loading &&
-    courseHasStarted &&
-    !didAttendeeSubmitFeedback &&
-    courseParticipant?.attended
-  const showFeedbackRequiredAlert =
-    courseParticipant && courseParticipant.grade && !didAttendeeSubmitFeedback
 
   return (
     <>
