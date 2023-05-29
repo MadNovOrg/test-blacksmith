@@ -37,7 +37,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
     () => getLevels(courseType, courseAccreditor),
     [courseType, courseAccreditor]
   )
-  const selected = value || levels[0]
+  const selected = value && levels.includes(value) ? value : levels[0]
 
   useEffect(() => {
     if (value !== selected) {
@@ -49,10 +49,10 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     if (onChangeRef.current) {
       onChangeRef.current({
-        target: { value: levels[0] },
+        target: { value: selected },
       } as SelectChangeEvent<CourseLevel>)
     }
-  }, [courseAccreditor, levels])
+  }, [courseAccreditor, selected])
 
   return (
     <Select
