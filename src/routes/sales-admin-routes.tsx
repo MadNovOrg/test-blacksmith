@@ -18,6 +18,7 @@ import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCerti
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
 import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
+import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { AdminTransferParticipantPage } from '@app/pages/TransferParticipant/AdminTransferParticipant'
 import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
 import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
@@ -103,6 +104,7 @@ const SalesAdminRoutes = () => {
           <Route path=":id">
             <Route path="details" element={<TrainerCourseDetails />} />
             <Route path="evaluation">
+              <Route path="submit" element={<TrainerFeedback />} />
               <Route path="view" element={<CourseEvaluation />} />
               <Route path="summary" element={<EvaluationSummary />} />
             </Route>

@@ -10,7 +10,7 @@ import { styled } from '@mui/system'
 import { groupBy, map, uniqBy } from 'lodash-es'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { AttendeeMenu } from '@app/components/AttendeeMenu'
@@ -95,6 +95,8 @@ export const EvaluationSummary = () => {
   const params = useParams()
   const { acl } = useAuth()
   const { t } = useTranslation()
+  const navigate = useNavigate()
+
   const courseId = params.id as string
 
   const { pathname, hash, key } = useLocation()
@@ -147,15 +149,23 @@ export const EvaluationSummary = () => {
 
   const attendees = useMemo(() => {
     return uniqBy(
-      attendeeAnswers?.map(a => ({
-        id: a.profile.id,
-        name: a.profile.fullName,
-        avatar: a.profile.avatar,
-        archived: a.profile.archived,
-      })) ?? [],
+      [
+        ...(attendeeAnswers?.map(a => ({
+          id: a.profile.id,
+          name: a.profile.fullName,
+          avatar: a.profile.avatar,
+          archived: a.profile.archived,
+        })) ?? []),
+        ...(trainerAnswers?.map(a => ({
+          id: a.profile.id,
+          name: a.profile.fullName,
+          avatar: a.profile.avatar,
+          archived: a.profile.archived,
+        })) ?? []),
+      ],
       u => u.id
     )
-  }, [attendeeAnswers])
+  }, [attendeeAnswers, trainerAnswers])
 
   const { grouped, ungrouped, injuryQuestion } = useMemo(
     () => normalizeAnswers(attendeeAnswers),
@@ -175,10 +185,7 @@ export const EvaluationSummary = () => {
           <Grid item md={3}>
             <Sticky top={20}>
               <Box mt={5} pr={3}>
-                <BackButton
-                  label={t('back')}
-                  to={`/courses/${courseId}/details?tab=EVALUATION`}
-                />
+                <BackButton label={t('back')} />
 
                 <Typography variant="h2" gutterBottom my={2}>
                   {t('pages.course-details.tabs.evaluation.title')}
@@ -190,6 +197,17 @@ export const EvaluationSummary = () => {
                     placeholder={t(
                       'pages.course-details.tabs.evaluation.full-summary'
                     )}
+                    onSelect={(id: string) => {
+                      if (course?.trainers?.find(t => t.profile.id === id)) {
+                        navigate(`../../evaluation/submit?profile_id=${id}`, {
+                          replace: false,
+                        })
+                      } else {
+                        navigate(`../../evaluation/view?profile_id=${id}`, {
+                          replace: true,
+                        })
+                      }
+                    }}
                   />
                 </Box>
 

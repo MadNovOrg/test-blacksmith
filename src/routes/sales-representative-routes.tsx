@@ -18,6 +18,7 @@ import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCerti
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
 import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
+import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
@@ -97,6 +98,7 @@ const SalesRepresentativeRoute = () => {
           <Route path=":id">
             <Route path="details" element={<TrainerCourseDetails />} />
             <Route path="evaluation">
+              <Route path="submit" element={<TrainerFeedback />} />
               <Route path="view" element={<CourseEvaluation />} />
               <Route path="summary" element={<EvaluationSummary />} />
             </Route>

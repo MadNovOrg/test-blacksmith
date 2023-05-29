@@ -36,6 +36,7 @@ import { CourseAttendance } from '@app/pages/trainer-pages/CourseGradingDetails/
 import { ModulesSelection } from '@app/pages/trainer-pages/CourseGradingDetails/ModulesSelection'
 import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
+import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { AdminTransferParticipantPage } from '@app/pages/TransferParticipant/AdminTransferParticipant'
 import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
 import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
@@ -94,6 +95,7 @@ const TTAdminRoutes = () => {
             <Route path="modules" element={<ModulesSelection />} />
           </Route>
           <Route path="evaluation">
+            <Route path="submit" element={<TrainerFeedback />} />
             <Route path="view" element={<CourseEvaluation />} />
             <Route path="summary" element={<EvaluationSummary />} />
           </Route>
@@ -126,6 +128,7 @@ const TTAdminRoutes = () => {
                 <Route path="review" element={<TransferReview />} />
               </Route>
               <Route path="evaluation">
+                <Route path="submit" element={<TrainerFeedback />} />
                 <Route path="view" element={<CourseEvaluation />} />
                 <Route path="summary" element={<EvaluationSummary />} />
               </Route>

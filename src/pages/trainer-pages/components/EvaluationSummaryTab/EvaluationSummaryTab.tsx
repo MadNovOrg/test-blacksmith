@@ -251,7 +251,13 @@ export const EvaluationSummaryTab: React.FC<
                     </TableCell>
                     <TableCell>
                       <Link
-                        href={`../evaluation/view?profile_id=${e.profile.id}`}
+                        href={
+                          data?.trainers.find(
+                            t => t.profile.id === e.profile.id
+                          )
+                            ? `../evaluation/submit?profile_id=${e.profile.id}`
+                            : `../evaluation/view?profile_id=${e.profile.id}`
+                        }
                         variant="body2"
                         fontWeight="600"
                         color="primary"

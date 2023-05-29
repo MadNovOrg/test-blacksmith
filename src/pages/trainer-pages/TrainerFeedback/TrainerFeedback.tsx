@@ -9,10 +9,15 @@ import {
 } from '@mui/material'
 import { Box } from '@mui/material'
 import { groupBy, map } from 'lodash-es'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
+import {
+  Navigate,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom'
 import useSWR from 'swr'
 import * as yup from 'yup'
 
@@ -24,6 +29,11 @@ import { useAuth } from '@app/context/auth'
 import { SaveTrainerCourseEvaluationMutation } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
+import {
+  ParamsType as GetAnswersParamsType,
+  QUERY as GET_ANSWERS_QUERY,
+  ResponseType as GetAnswersResponseType,
+} from '@app/queries/course-evaluation/get-answers'
 import {
   QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY,
   ResponseType as GetCourseEvaluationQuestionsResponseType,
@@ -45,15 +55,33 @@ export const TrainerFeedback = () => {
   const fetcher = useFetcher()
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
-  const { id: courseId } = useParams()
+  const { id: courseId = '' } = useParams()
   const { profile } = useAuth()
 
-  const { data: course } = useCourse(courseId ?? '')
+  const { data: course } = useCourse(courseId)
   const [loading, setLoading] = useState(false)
+  const [searchParams] = useSearchParams()
+
+  const profileId = searchParams.get('profile_id') as string
+  const readOnly = !!profileId
 
   const { data: questions } = useSWR<GetCourseEvaluationQuestionsResponseType>(
     GET_COURSE_EVALUATION_QUESTIONS_QUERY
   )
+
+  const { data: evaluation } = useSWR<
+    GetAnswersResponseType,
+    Error,
+    [string, GetAnswersParamsType] | null
+  >(
+    profileId
+      ? [GET_ANSWERS_QUERY, { courseId: courseId as string, profileId }]
+      : null
+  )
+
+  const hasSubmitted = useMemo(() => {
+    return Boolean(evaluation?.answers.length)
+  }, [evaluation])
 
   const { UNGROUPED: ungroupedQuestions } = groupBy(
     questions?.questions,
@@ -104,6 +132,13 @@ export const TrainerFeedback = () => {
 
   const values = watch()
 
+  useEffect(() => {
+    if (!evaluation?.answers) return
+    evaluation.answers.forEach(a => {
+      setValue(a.question.id, a.answer)
+    })
+  }, [setValue, evaluation])
+
   const onSubmit = async (data: Record<string, string>) => {
     setLoading(true)
 
@@ -133,6 +168,10 @@ export const TrainerFeedback = () => {
       setError(t('course-evaluation.error-submitting'))
       setLoading(false)
     }
+  }
+
+  if (!(hasSubmitted || readOnly)) {
+    return <Navigate to="../details" />
   }
 
   return (
@@ -180,6 +219,7 @@ export const TrainerFeedback = () => {
                       }
                       infoText={t('course-evaluation.provide-details')}
                       data-testid="course-evaluation-boolean-question"
+                      disabled={readOnly}
                     />
                   </QuestionGroup>
                 )
@@ -199,6 +239,7 @@ export const TrainerFeedback = () => {
                       inputProps={{ sx: { px: 1, py: 1.5 } }}
                       data-testid="course-evaluation-text-question"
                       {...register(q.id)}
+                      disabled={readOnly}
                     />
                   </QuestionGroup>
                 )
@@ -225,34 +266,37 @@ export const TrainerFeedback = () => {
                 error={!!errors[signatureQuestion.id]}
                 helperText={errors[signatureQuestion.id]?.message}
                 data-testid="course-evaluation-signature"
+                disabled={readOnly}
               />
             )}
           </Grid>
         </Grid>
 
-        <Box
-          sx={{ mt: 6 }}
-          alignItems="center"
-          display="flex"
-          flexDirection="column"
-          data-testid="submit-course-evaluation"
-        >
-          <LoadingButton
-            loading={loading}
-            type="submit"
-            variant="contained"
-            color="primary"
-            size="large"
+        {!readOnly && (
+          <Box
+            sx={{ mt: 6 }}
+            alignItems="center"
+            display="flex"
+            flexDirection="column"
+            data-testid="submit-course-evaluation"
           >
-            {t('course-evaluation.submit')}
-          </LoadingButton>
+            <LoadingButton
+              loading={loading}
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="large"
+            >
+              {t('course-evaluation.submit')}
+            </LoadingButton>
 
-          {error && (
-            <Box mt={2}>
-              <FormHelperText error>{error}</FormHelperText>
-            </Box>
-          )}
-        </Box>
+            {error && (
+              <Box mt={2}>
+                <FormHelperText error>{error}</FormHelperText>
+              </Box>
+            )}
+          </Box>
+        )}
       </Container>
     </Box>
   )

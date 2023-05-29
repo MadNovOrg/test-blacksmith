@@ -16,6 +16,7 @@ import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCerti
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
 import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
+import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
@@ -96,6 +97,7 @@ const FinanceRoute = () => {
           <Route path=":id">
             <Route path="details" element={<TrainerCourseDetails />} />
             <Route path="evaluation">
+              <Route path="submit" element={<TrainerFeedback />} />
               <Route path="view" element={<CourseEvaluation />} />
               <Route path="summary" element={<EvaluationSummary />} />
             </Route>

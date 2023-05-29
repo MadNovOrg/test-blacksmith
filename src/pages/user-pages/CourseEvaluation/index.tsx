@@ -266,10 +266,7 @@ export const CourseEvaluation = () => {
           <Grid item md={3}>
             <Sticky top={20}>
               <Box mt={5} pr={3}>
-                <BackButton
-                  label={t('back')}
-                  to={`/courses/${courseId}/details?tab=EVALUATION`}
-                />
+                <BackButton label={t('back')} />
 
                 <Typography
                   variant="h2"
@@ -292,9 +289,22 @@ export const CourseEvaluation = () => {
                       <AttendeeMenu
                         options={attendees}
                         value={profileId}
-                        onSelect={(id: string) =>
-                          navigate(`.?profile_id=${id}`, { replace: true })
-                        }
+                        onSelect={(id: string) => {
+                          if (
+                            course?.trainers?.find(t => t.profile.id === id)
+                          ) {
+                            navigate(
+                              `../../evaluation/submit?profile_id=${id}`,
+                              {
+                                replace: false,
+                              }
+                            )
+                          } else {
+                            navigate(`../../evaluation/view?profile_id=${id}`, {
+                              replace: true,
+                            })
+                          }
+                        }}
                       />
                     </Box>
                   </Box>
