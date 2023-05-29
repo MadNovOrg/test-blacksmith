@@ -249,7 +249,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canSetOrgAdminRole: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.SALES_ADMIN]
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.SALES_ADMIN,
+        RoleName.SALES_REPRESENTATIVE,
+      ]
       return roles.some(r => r === auth.activeRole)
     },
 

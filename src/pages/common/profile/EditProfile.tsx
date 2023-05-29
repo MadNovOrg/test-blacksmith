@@ -31,7 +31,12 @@ import React, {
 } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import {
+  Navigate,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom'
 import * as yup from 'yup'
 import { InferType } from 'yup'
 
@@ -595,6 +600,10 @@ export const EditProfilePage: React.FC<
   )
 
   if (!profile || !systemRoles) return null
+
+  if (!acl.canEditProfiles() && !isMyProfile) {
+    return <Navigate to=".." />
+  }
 
   return (
     <Box bgcolor="grey.100" pb={6} pt={3}>

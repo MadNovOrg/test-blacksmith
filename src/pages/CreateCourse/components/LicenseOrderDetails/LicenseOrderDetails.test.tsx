@@ -222,9 +222,16 @@ describe('component: LicenseOrderDetails', () => {
       delay: 100,
     })
 
-    await waitFor(() => {
-      expect(screen.getByText('Review & confirm')).toBeEnabled()
-    })
+    await waitFor(
+      () => {
+        expect(screen.getByLabelText('Phone *')).toHaveValue('1234 567890')
+        expect(screen.getByText('Review & confirm')).toBeEnabled()
+      },
+      {
+        timeout: 2000,
+        interval: 100,
+      }
+    )
 
     await userEvent.click(screen.getByText('Review & confirm'))
 

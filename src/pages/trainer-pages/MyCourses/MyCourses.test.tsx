@@ -228,8 +228,16 @@ describe('trainers-pages/MyCourses', () => {
       </Provider>
     )
 
+    await waitFor(() => {
+      expect(screen.getByTestId('FilterSearch-Input')).toBeVisible()
+    })
+
     const search = screen.getByTestId('FilterSearch-Input')
     await userEvent.type(search, keyword)
+
+    await waitFor(() => {
+      expect(screen.getByTestId('courses-table')).toBeVisible()
+    })
 
     const table = screen.getByTestId('courses-table')
     await expectCourseTableTo({
