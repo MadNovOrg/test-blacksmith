@@ -235,6 +235,36 @@ describe('page: Users', () => {
     })
   })
 
+  it('filters archived users', async () => {
+    const profile = mockProfile()
+    const filteredProfile = mockProfile()
+
+    useProfilesMocked.mockImplementation(
+      ({ where }: GetProfilesQueryVariables) => {
+        const profiles =
+          where?.archived?._eq === true ? [filteredProfile] : [profile]
+        return {
+          profiles,
+          isLoading: false,
+          count: 0,
+          error: undefined,
+          mutate: jest.fn(),
+        }
+      }
+    )
+
+    render(<Users />)
+
+    await userEvent.click(screen.getByLabelText('Archived'))
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(`${filteredProfile.fullName}`)
+      ).toBeInTheDocument()
+      expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
+    })
+  })
+
   it('navigates to merge page with checkboxes enabled', async () => {
     const profile = mockProfile()
     useProfilesMocked.mockReturnValue({

@@ -55,6 +55,7 @@
   "resend-course-information": "Resend course information",
   "admin": "Administrator",
   "moderator": "Moderator",
+  "archived": "Archived",
   "invoice-contact": "Invoice contact details",
   "error-no-booking": "Unable to find booking",
   "error-no-pricing": "Unable to load course pricing",

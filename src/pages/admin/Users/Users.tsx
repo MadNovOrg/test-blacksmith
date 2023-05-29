@@ -67,6 +67,7 @@ export const Users = () => {
   const [keywordDebounced] = useDebounce(keyword, 300)
   const [roleFilter, setRoleFilter] = useState<FilterOption[]>(roleOptions)
   const [filterByModerator, setFilterByModerator] = useState(false)
+  const [filterByArchived, setFilterByArchived] = useState(false)
   const [trainerTypeFilter, setTrainerTypeFilter] =
     useState<FilterOption[]>(trainerTypeOptions)
   const [filterByCertificateLevel, setFilteredByCertificateLEvel] = useState<
@@ -157,6 +158,12 @@ export const Users = () => {
       isFiltered = true
     }
 
+    if (filterByArchived) {
+      obj.archived = {
+        _eq: true,
+      }
+    }
+
     return [obj, isFiltered]
   }, [
     roleFilter,
@@ -164,6 +171,7 @@ export const Users = () => {
     filterByCertificateLevel,
     keywordDebounced,
     filterByModerator,
+    filterByArchived,
     certificateStatus,
   ])
 
@@ -313,6 +321,17 @@ export const Users = () => {
                   />
                 }
                 label={t('moderator')}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={e => {
+                      setFilterByArchived(e.target.checked)
+                    }}
+                    data-testid="FilterArchived"
+                  />
+                }
+                label={t('archived')}
               />
             </Stack>
           </Box>
