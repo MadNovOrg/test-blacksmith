@@ -222,6 +222,10 @@ describe('component: LicenseOrderDetails', () => {
       delay: 100,
     })
 
+    await waitFor(() => {
+      expect(screen.getByText('Review & confirm')).toBeEnabled()
+    })
+
     await userEvent.click(screen.getByText('Review & confirm'))
 
     await waitFor(() => {

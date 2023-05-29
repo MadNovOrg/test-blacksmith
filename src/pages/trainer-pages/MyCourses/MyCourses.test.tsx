@@ -1049,15 +1049,26 @@ describe('trainers-pages/MyCourses', () => {
       )
 
       const actionableTbl = screen.getByTestId('actionable-courses-table')
-      userEvent.click(within(actionableTbl).getByText('Name'))
 
       await waitFor(() => {
-        expect(
-          within(actionableTbl).getByTestId(
-            `actionable-course-${courses[0].id}`
-          )
-        ).toHaveAttribute('data-index', '0')
+        expect(within(actionableTbl).getByText('Name')).toBeVisible()
       })
+
+      userEvent.click(within(actionableTbl).getByText('Name'))
+
+      await waitFor(
+        () => {
+          expect(
+            within(actionableTbl).getByTestId(
+              `actionable-course-${courses[0].id}`
+            )
+          ).toHaveAttribute('data-index', '0')
+        },
+        {
+          timeout: 2000,
+          interval: 200,
+        }
+      )
     })
 
     it('filters by search', async () => {

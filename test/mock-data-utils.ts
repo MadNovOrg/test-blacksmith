@@ -486,7 +486,7 @@ export const buildCategory = build<CategorySummaryFragment>({
 export const buildPost = build<PostSummaryFragment>({
   fields: {
     id: perBuild(() => chance.guid()),
-    title: perBuild(() => chance.word()),
+    title: perBuild(() => chance.string()),
     excerpt: perBuild(() => chance.sentence()),
     featuredImage: {
       node: {
