@@ -462,7 +462,8 @@
     "PAID": "Paid",
     "VOIDED": "Void",
     "OVERDUE": "Overdue",
-    "GBP": "GBP"
+    "GBP": "GBP",
+    "archived": "Show certificates of archived users"
   },
   "pagination": {
     "rows-per-page": "Rows per page"

@@ -577,6 +577,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const roles = [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.FINANCE]
       return roles.some(r => r === auth.activeRole)
     },
+
+    canViewArchivedUsersCertificates: () => {
+      return acl.isAdmin()
+    },
   })
 
   return acl

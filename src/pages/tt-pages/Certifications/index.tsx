@@ -1,4 +1,10 @@
-import { CircularProgress, Container, Stack } from '@mui/material'
+import {
+  Checkbox,
+  CircularProgress,
+  Container,
+  FormControlLabel,
+  Stack,
+} from '@mui/material'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -18,6 +24,8 @@ import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { CertificateStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
+
+import { useAuth } from '../../../context/auth'
 
 type CertificationsProps = unknown
 
@@ -40,6 +48,9 @@ export const Certifications: React.FC<
   const [certificateStatus, setCertificateStatus] = useState<
     CertificateStatus[]
   >([])
+
+  const { acl } = useAuth()
+  const [archived, setArchived] = useState<boolean>(false)
 
   const where = useMemo(() => {
     const conditions: Course_Participant_Bool_Exp[] = [
@@ -78,10 +89,18 @@ export const Certifications: React.FC<
       conditions.push({ certificate: { status: { _in: certificateStatus } } })
     }
 
+    if (archived) {
+      conditions.push({
+        profile: {
+          archived: { _eq: true },
+        },
+      })
+    }
+
     return {
       _and: conditions,
     }
-  }, [keyword, filterType, dateFrom, dateTo, certificateStatus])
+  }, [keyword, filterType, dateFrom, dateTo, certificateStatus, archived])
 
   const { Pagination, limit, offset } = useTablePagination()
 
@@ -120,6 +139,18 @@ export const Certifications: React.FC<
             />
             <FilterCourseType onChange={setFilterType} />
             <FilterCertificateValidity onChange={setCertificateStatus} />
+
+            {acl.canViewArchivedUsersCertificates() && (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={e => setArchived(e.target.checked)}
+                    data-testid="FilterArchived"
+                  />
+                }
+                label={t('filters.archived')}
+              />
+            )}
           </Stack>
         </Box>
 
