@@ -75,7 +75,7 @@ export const FilterCourseLevel: React.FC<React.PropsWithChildren<Props>> = ({
   return (
     <FilterAccordion
       options={options}
-      title={t('level')}
+      title={t('trainer-level')}
       onChange={_onChange}
       data-testid="FilterCourseLevel"
     />
