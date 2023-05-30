@@ -92,7 +92,7 @@ export const getModuleIds = async (
   level: CourseLevel
 ): Promise<string[]> => {
   const query = gql`
-    query MyQuery {
+    query ModuleGroupsByLevel {
       module_group(
         where: {
           name: { _in: ${JSON.stringify(moduleGroups)} }
