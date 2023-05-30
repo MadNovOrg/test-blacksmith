@@ -1,0 +1,4 @@
+table:
+  schema: public
+  name: certificate_expiry_notification_timeframe
+is_enum: true

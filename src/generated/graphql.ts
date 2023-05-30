@@ -13735,6 +13735,259 @@ export enum Blended_Learning_Status_Update_Column {
   Name = 'name'
 }
 
+/** Stores scheduled jobs ids for the certificate expiry notification */
+export type Certificate_Expiry_Notification_Jobs = {
+  __typename?: 'certificate_expiry_notification_jobs';
+  course_certificate_id: Scalars['uuid'];
+  id: Scalars['uuid'];
+  job_id: Scalars['uuid'];
+  timeframe: Certificate_Expiry_Notification_Timeframe_Enum;
+};
+
+/** aggregated selection of "certificate_expiry_notification_jobs" */
+export type Certificate_Expiry_Notification_Jobs_Aggregate = {
+  __typename?: 'certificate_expiry_notification_jobs_aggregate';
+  aggregate?: Maybe<Certificate_Expiry_Notification_Jobs_Aggregate_Fields>;
+  nodes: Array<Certificate_Expiry_Notification_Jobs>;
+};
+
+/** aggregate fields of "certificate_expiry_notification_jobs" */
+export type Certificate_Expiry_Notification_Jobs_Aggregate_Fields = {
+  __typename?: 'certificate_expiry_notification_jobs_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Certificate_Expiry_Notification_Jobs_Max_Fields>;
+  min?: Maybe<Certificate_Expiry_Notification_Jobs_Min_Fields>;
+};
+
+
+/** aggregate fields of "certificate_expiry_notification_jobs" */
+export type Certificate_Expiry_Notification_Jobs_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Certificate_Expiry_Notification_Jobs_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "certificate_expiry_notification_jobs". All fields are combined with a logical 'AND'. */
+export type Certificate_Expiry_Notification_Jobs_Bool_Exp = {
+  _and?: InputMaybe<Array<Certificate_Expiry_Notification_Jobs_Bool_Exp>>;
+  _not?: InputMaybe<Certificate_Expiry_Notification_Jobs_Bool_Exp>;
+  _or?: InputMaybe<Array<Certificate_Expiry_Notification_Jobs_Bool_Exp>>;
+  course_certificate_id?: InputMaybe<Uuid_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  job_id?: InputMaybe<Uuid_Comparison_Exp>;
+  timeframe?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Enum_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "certificate_expiry_notification_jobs" */
+export enum Certificate_Expiry_Notification_Jobs_Constraint {
+  /** unique or primary key constraint */
+  CertificateExpiryNotificatiCourseCertificateIdJobIdKey = 'certificate_expiry_notificati_course_certificate_id_job_id__key',
+  /** unique or primary key constraint */
+  CertificateExpiryNotificationJobsPkey = 'certificate_expiry_notification_jobs_pkey'
+}
+
+/** input type for inserting data into table "certificate_expiry_notification_jobs" */
+export type Certificate_Expiry_Notification_Jobs_Insert_Input = {
+  course_certificate_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  job_id?: InputMaybe<Scalars['uuid']>;
+  timeframe?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Enum>;
+};
+
+/** aggregate max on columns */
+export type Certificate_Expiry_Notification_Jobs_Max_Fields = {
+  __typename?: 'certificate_expiry_notification_jobs_max_fields';
+  course_certificate_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  job_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate min on columns */
+export type Certificate_Expiry_Notification_Jobs_Min_Fields = {
+  __typename?: 'certificate_expiry_notification_jobs_min_fields';
+  course_certificate_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  job_id?: Maybe<Scalars['uuid']>;
+};
+
+/** response of any mutation on the table "certificate_expiry_notification_jobs" */
+export type Certificate_Expiry_Notification_Jobs_Mutation_Response = {
+  __typename?: 'certificate_expiry_notification_jobs_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Certificate_Expiry_Notification_Jobs>;
+};
+
+/** on_conflict condition type for table "certificate_expiry_notification_jobs" */
+export type Certificate_Expiry_Notification_Jobs_On_Conflict = {
+  constraint: Certificate_Expiry_Notification_Jobs_Constraint;
+  update_columns?: Array<Certificate_Expiry_Notification_Jobs_Update_Column>;
+  where?: InputMaybe<Certificate_Expiry_Notification_Jobs_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "certificate_expiry_notification_jobs". */
+export type Certificate_Expiry_Notification_Jobs_Order_By = {
+  course_certificate_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  job_id?: InputMaybe<Order_By>;
+  timeframe?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: certificate_expiry_notification_jobs */
+export type Certificate_Expiry_Notification_Jobs_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "certificate_expiry_notification_jobs" */
+export enum Certificate_Expiry_Notification_Jobs_Select_Column {
+  /** column name */
+  CourseCertificateId = 'course_certificate_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  JobId = 'job_id',
+  /** column name */
+  Timeframe = 'timeframe'
+}
+
+/** input type for updating data in table "certificate_expiry_notification_jobs" */
+export type Certificate_Expiry_Notification_Jobs_Set_Input = {
+  course_certificate_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  job_id?: InputMaybe<Scalars['uuid']>;
+  timeframe?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Enum>;
+};
+
+/** update columns of table "certificate_expiry_notification_jobs" */
+export enum Certificate_Expiry_Notification_Jobs_Update_Column {
+  /** column name */
+  CourseCertificateId = 'course_certificate_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  JobId = 'job_id',
+  /** column name */
+  Timeframe = 'timeframe'
+}
+
+/** Timeframe of the notification sent to the user about an expiring certificate */
+export type Certificate_Expiry_Notification_Timeframe = {
+  __typename?: 'certificate_expiry_notification_timeframe';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "certificate_expiry_notification_timeframe" */
+export type Certificate_Expiry_Notification_Timeframe_Aggregate = {
+  __typename?: 'certificate_expiry_notification_timeframe_aggregate';
+  aggregate?: Maybe<Certificate_Expiry_Notification_Timeframe_Aggregate_Fields>;
+  nodes: Array<Certificate_Expiry_Notification_Timeframe>;
+};
+
+/** aggregate fields of "certificate_expiry_notification_timeframe" */
+export type Certificate_Expiry_Notification_Timeframe_Aggregate_Fields = {
+  __typename?: 'certificate_expiry_notification_timeframe_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Certificate_Expiry_Notification_Timeframe_Max_Fields>;
+  min?: Maybe<Certificate_Expiry_Notification_Timeframe_Min_Fields>;
+};
+
+
+/** aggregate fields of "certificate_expiry_notification_timeframe" */
+export type Certificate_Expiry_Notification_Timeframe_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "certificate_expiry_notification_timeframe". All fields are combined with a logical 'AND'. */
+export type Certificate_Expiry_Notification_Timeframe_Bool_Exp = {
+  _and?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Bool_Exp>>;
+  _not?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Bool_Exp>;
+  _or?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "certificate_expiry_notification_timeframe" */
+export enum Certificate_Expiry_Notification_Timeframe_Constraint {
+  /** unique or primary key constraint */
+  CertificateExpiryNotificationTimeframePkey = 'certificate_expiry_notification_timeframe_pkey'
+}
+
+export enum Certificate_Expiry_Notification_Timeframe_Enum {
+  OneMonth = 'ONE_MONTH',
+  SixMonths = 'SIX_MONTHS',
+  ThreeMonths = 'THREE_MONTHS',
+  TwelveMonths = 'TWELVE_MONTHS'
+}
+
+/** Boolean expression to compare columns of type "certificate_expiry_notification_timeframe_enum". All fields are combined with logical 'AND'. */
+export type Certificate_Expiry_Notification_Timeframe_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Enum>;
+  _in?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Enum>;
+  _nin?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Enum>>;
+};
+
+/** input type for inserting data into table "certificate_expiry_notification_timeframe" */
+export type Certificate_Expiry_Notification_Timeframe_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Certificate_Expiry_Notification_Timeframe_Max_Fields = {
+  __typename?: 'certificate_expiry_notification_timeframe_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Certificate_Expiry_Notification_Timeframe_Min_Fields = {
+  __typename?: 'certificate_expiry_notification_timeframe_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "certificate_expiry_notification_timeframe" */
+export type Certificate_Expiry_Notification_Timeframe_Mutation_Response = {
+  __typename?: 'certificate_expiry_notification_timeframe_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Certificate_Expiry_Notification_Timeframe>;
+};
+
+/** on_conflict condition type for table "certificate_expiry_notification_timeframe" */
+export type Certificate_Expiry_Notification_Timeframe_On_Conflict = {
+  constraint: Certificate_Expiry_Notification_Timeframe_Constraint;
+  update_columns?: Array<Certificate_Expiry_Notification_Timeframe_Update_Column>;
+  where?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "certificate_expiry_notification_timeframe". */
+export type Certificate_Expiry_Notification_Timeframe_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: certificate_expiry_notification_timeframe */
+export type Certificate_Expiry_Notification_Timeframe_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** select columns of table "certificate_expiry_notification_timeframe" */
+export enum Certificate_Expiry_Notification_Timeframe_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "certificate_expiry_notification_timeframe" */
+export type Certificate_Expiry_Notification_Timeframe_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "certificate_expiry_notification_timeframe" */
+export enum Certificate_Expiry_Notification_Timeframe_Update_Column {
+  /** column name */
+  Name = 'name'
+}
+
 /** columns and relationships of "certificate_status" */
 export type Certificate_Status = {
   __typename?: 'certificate_status';
@@ -26383,6 +26636,14 @@ export type Mutation_Root = {
   delete_blended_learning_status?: Maybe<Blended_Learning_Status_Mutation_Response>;
   /** delete single row from the table: "blended_learning_status" */
   delete_blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
+  /** delete data from the table: "certificate_expiry_notification_jobs" */
+  delete_certificate_expiry_notification_jobs?: Maybe<Certificate_Expiry_Notification_Jobs_Mutation_Response>;
+  /** delete single row from the table: "certificate_expiry_notification_jobs" */
+  delete_certificate_expiry_notification_jobs_by_pk?: Maybe<Certificate_Expiry_Notification_Jobs>;
+  /** delete data from the table: "certificate_expiry_notification_timeframe" */
+  delete_certificate_expiry_notification_timeframe?: Maybe<Certificate_Expiry_Notification_Timeframe_Mutation_Response>;
+  /** delete single row from the table: "certificate_expiry_notification_timeframe" */
+  delete_certificate_expiry_notification_timeframe_by_pk?: Maybe<Certificate_Expiry_Notification_Timeframe>;
   /** delete data from the table: "certificate_status" */
   delete_certificate_status?: Maybe<Certificate_Status_Mutation_Response>;
   /** delete single row from the table: "certificate_status" */
@@ -26714,6 +26975,14 @@ export type Mutation_Root = {
   insert_blended_learning_status?: Maybe<Blended_Learning_Status_Mutation_Response>;
   /** insert a single row into the table: "blended_learning_status" */
   insert_blended_learning_status_one?: Maybe<Blended_Learning_Status>;
+  /** insert data into the table: "certificate_expiry_notification_jobs" */
+  insert_certificate_expiry_notification_jobs?: Maybe<Certificate_Expiry_Notification_Jobs_Mutation_Response>;
+  /** insert a single row into the table: "certificate_expiry_notification_jobs" */
+  insert_certificate_expiry_notification_jobs_one?: Maybe<Certificate_Expiry_Notification_Jobs>;
+  /** insert data into the table: "certificate_expiry_notification_timeframe" */
+  insert_certificate_expiry_notification_timeframe?: Maybe<Certificate_Expiry_Notification_Timeframe_Mutation_Response>;
+  /** insert a single row into the table: "certificate_expiry_notification_timeframe" */
+  insert_certificate_expiry_notification_timeframe_one?: Maybe<Certificate_Expiry_Notification_Timeframe>;
   /** insert data into the table: "certificate_status" */
   insert_certificate_status?: Maybe<Certificate_Status_Mutation_Response>;
   /** insert a single row into the table: "certificate_status" */
@@ -27058,6 +27327,14 @@ export type Mutation_Root = {
   update_blended_learning_status?: Maybe<Blended_Learning_Status_Mutation_Response>;
   /** update single row of the table: "blended_learning_status" */
   update_blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
+  /** update data of the table: "certificate_expiry_notification_jobs" */
+  update_certificate_expiry_notification_jobs?: Maybe<Certificate_Expiry_Notification_Jobs_Mutation_Response>;
+  /** update single row of the table: "certificate_expiry_notification_jobs" */
+  update_certificate_expiry_notification_jobs_by_pk?: Maybe<Certificate_Expiry_Notification_Jobs>;
+  /** update data of the table: "certificate_expiry_notification_timeframe" */
+  update_certificate_expiry_notification_timeframe?: Maybe<Certificate_Expiry_Notification_Timeframe_Mutation_Response>;
+  /** update single row of the table: "certificate_expiry_notification_timeframe" */
+  update_certificate_expiry_notification_timeframe_by_pk?: Maybe<Certificate_Expiry_Notification_Timeframe>;
   /** update data of the table: "certificate_status" */
   update_certificate_status?: Maybe<Certificate_Status_Mutation_Response>;
   /** update single row of the table: "certificate_status" */
@@ -27486,6 +27763,30 @@ export type Mutation_RootDelete_Blended_Learning_StatusArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Blended_Learning_Status_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Certificate_Expiry_Notification_JobsArgs = {
+  where: Certificate_Expiry_Notification_Jobs_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Certificate_Expiry_Notification_Jobs_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Certificate_Expiry_Notification_TimeframeArgs = {
+  where: Certificate_Expiry_Notification_Timeframe_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Certificate_Expiry_Notification_Timeframe_By_PkArgs = {
   name: Scalars['String'];
 };
 
@@ -28491,6 +28792,34 @@ export type Mutation_RootInsert_Blended_Learning_StatusArgs = {
 export type Mutation_RootInsert_Blended_Learning_Status_OneArgs = {
   object: Blended_Learning_Status_Insert_Input;
   on_conflict?: InputMaybe<Blended_Learning_Status_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Certificate_Expiry_Notification_JobsArgs = {
+  objects: Array<Certificate_Expiry_Notification_Jobs_Insert_Input>;
+  on_conflict?: InputMaybe<Certificate_Expiry_Notification_Jobs_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Certificate_Expiry_Notification_Jobs_OneArgs = {
+  object: Certificate_Expiry_Notification_Jobs_Insert_Input;
+  on_conflict?: InputMaybe<Certificate_Expiry_Notification_Jobs_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Certificate_Expiry_Notification_TimeframeArgs = {
+  objects: Array<Certificate_Expiry_Notification_Timeframe_Insert_Input>;
+  on_conflict?: InputMaybe<Certificate_Expiry_Notification_Timeframe_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Certificate_Expiry_Notification_Timeframe_OneArgs = {
+  object: Certificate_Expiry_Notification_Timeframe_Insert_Input;
+  on_conflict?: InputMaybe<Certificate_Expiry_Notification_Timeframe_On_Conflict>;
 };
 
 
@@ -29714,6 +30043,34 @@ export type Mutation_RootUpdate_Blended_Learning_StatusArgs = {
 export type Mutation_RootUpdate_Blended_Learning_Status_By_PkArgs = {
   _set?: InputMaybe<Blended_Learning_Status_Set_Input>;
   pk_columns: Blended_Learning_Status_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Certificate_Expiry_Notification_JobsArgs = {
+  _set?: InputMaybe<Certificate_Expiry_Notification_Jobs_Set_Input>;
+  where: Certificate_Expiry_Notification_Jobs_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Certificate_Expiry_Notification_Jobs_By_PkArgs = {
+  _set?: InputMaybe<Certificate_Expiry_Notification_Jobs_Set_Input>;
+  pk_columns: Certificate_Expiry_Notification_Jobs_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Certificate_Expiry_Notification_TimeframeArgs = {
+  _set?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Set_Input>;
+  where: Certificate_Expiry_Notification_Timeframe_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Certificate_Expiry_Notification_Timeframe_By_PkArgs = {
+  _set?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Set_Input>;
+  pk_columns: Certificate_Expiry_Notification_Timeframe_Pk_Columns_Input;
 };
 
 
@@ -35891,6 +36248,18 @@ export type Query_Root = {
   blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
   /** Checks whether a promo code can be applied to a given course by the current user */
   canApplyPromoCode: CanApplyPromoCodeOutput;
+  /** fetch data from the table: "certificate_expiry_notification_jobs" */
+  certificate_expiry_notification_jobs: Array<Certificate_Expiry_Notification_Jobs>;
+  /** fetch aggregated fields from the table: "certificate_expiry_notification_jobs" */
+  certificate_expiry_notification_jobs_aggregate: Certificate_Expiry_Notification_Jobs_Aggregate;
+  /** fetch data from the table: "certificate_expiry_notification_jobs" using primary key columns */
+  certificate_expiry_notification_jobs_by_pk?: Maybe<Certificate_Expiry_Notification_Jobs>;
+  /** fetch data from the table: "certificate_expiry_notification_timeframe" */
+  certificate_expiry_notification_timeframe: Array<Certificate_Expiry_Notification_Timeframe>;
+  /** fetch aggregated fields from the table: "certificate_expiry_notification_timeframe" */
+  certificate_expiry_notification_timeframe_aggregate: Certificate_Expiry_Notification_Timeframe_Aggregate;
+  /** fetch data from the table: "certificate_expiry_notification_timeframe" using primary key columns */
+  certificate_expiry_notification_timeframe_by_pk?: Maybe<Certificate_Expiry_Notification_Timeframe>;
   /** fetch data from the table: "certificate_status" */
   certificate_status: Array<Certificate_Status>;
   /** fetch aggregated fields from the table: "certificate_status" */
@@ -36481,6 +36850,52 @@ export type Query_RootBlended_Learning_Status_By_PkArgs = {
 
 export type Query_RootCanApplyPromoCodeArgs = {
   input: CanApplyPromoCodeInput;
+};
+
+
+export type Query_RootCertificate_Expiry_Notification_JobsArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expiry_Notification_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expiry_Notification_Jobs_Order_By>>;
+  where?: InputMaybe<Certificate_Expiry_Notification_Jobs_Bool_Exp>;
+};
+
+
+export type Query_RootCertificate_Expiry_Notification_Jobs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expiry_Notification_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expiry_Notification_Jobs_Order_By>>;
+  where?: InputMaybe<Certificate_Expiry_Notification_Jobs_Bool_Exp>;
+};
+
+
+export type Query_RootCertificate_Expiry_Notification_Jobs_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootCertificate_Expiry_Notification_TimeframeArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Order_By>>;
+  where?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Bool_Exp>;
+};
+
+
+export type Query_RootCertificate_Expiry_Notification_Timeframe_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Order_By>>;
+  where?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Bool_Exp>;
+};
+
+
+export type Query_RootCertificate_Expiry_Notification_Timeframe_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -38628,6 +39043,18 @@ export type Subscription_Root = {
   blended_learning_status_aggregate: Blended_Learning_Status_Aggregate;
   /** fetch data from the table: "blended_learning_status" using primary key columns */
   blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
+  /** fetch data from the table: "certificate_expiry_notification_jobs" */
+  certificate_expiry_notification_jobs: Array<Certificate_Expiry_Notification_Jobs>;
+  /** fetch aggregated fields from the table: "certificate_expiry_notification_jobs" */
+  certificate_expiry_notification_jobs_aggregate: Certificate_Expiry_Notification_Jobs_Aggregate;
+  /** fetch data from the table: "certificate_expiry_notification_jobs" using primary key columns */
+  certificate_expiry_notification_jobs_by_pk?: Maybe<Certificate_Expiry_Notification_Jobs>;
+  /** fetch data from the table: "certificate_expiry_notification_timeframe" */
+  certificate_expiry_notification_timeframe: Array<Certificate_Expiry_Notification_Timeframe>;
+  /** fetch aggregated fields from the table: "certificate_expiry_notification_timeframe" */
+  certificate_expiry_notification_timeframe_aggregate: Certificate_Expiry_Notification_Timeframe_Aggregate;
+  /** fetch data from the table: "certificate_expiry_notification_timeframe" using primary key columns */
+  certificate_expiry_notification_timeframe_by_pk?: Maybe<Certificate_Expiry_Notification_Timeframe>;
   /** fetch data from the table: "certificate_status" */
   certificate_status: Array<Certificate_Status>;
   /** fetch aggregated fields from the table: "certificate_status" */
@@ -39191,6 +39618,52 @@ export type Subscription_RootBlended_Learning_Status_AggregateArgs = {
 
 
 export type Subscription_RootBlended_Learning_Status_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Subscription_RootCertificate_Expiry_Notification_JobsArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expiry_Notification_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expiry_Notification_Jobs_Order_By>>;
+  where?: InputMaybe<Certificate_Expiry_Notification_Jobs_Bool_Exp>;
+};
+
+
+export type Subscription_RootCertificate_Expiry_Notification_Jobs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expiry_Notification_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expiry_Notification_Jobs_Order_By>>;
+  where?: InputMaybe<Certificate_Expiry_Notification_Jobs_Bool_Exp>;
+};
+
+
+export type Subscription_RootCertificate_Expiry_Notification_Jobs_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCertificate_Expiry_Notification_TimeframeArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Order_By>>;
+  where?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Bool_Exp>;
+};
+
+
+export type Subscription_RootCertificate_Expiry_Notification_Timeframe_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Order_By>>;
+  where?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Bool_Exp>;
+};
+
+
+export type Subscription_RootCertificate_Expiry_Notification_Timeframe_By_PkArgs = {
   name: Scalars['String'];
 };
 
