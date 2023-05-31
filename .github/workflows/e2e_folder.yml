@@ -56,11 +56,10 @@ jobs:
       matrix:
         browsers: ['chromium']
     steps:
-      - name: Set the Target
-        run: echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
-
-      - name: Set Hasura secret
-        run: echo "HASURA_SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment || env.DEFAULT_TARGET)] }}" >> $GITHUB_ENV
+      - name: Set Target and Hasura Secret
+        run: |
+          echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
+          echo "HASURA_SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment || env.DEFAULT_TARGET)] }}" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -86,5 +85,4 @@ jobs:
         if: failure() && steps.playwright.outcome == 'failure'
         with:
           name: test-artifacts
-          path: |
-            test-results
+          path: test-results

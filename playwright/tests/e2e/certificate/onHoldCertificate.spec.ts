@@ -16,8 +16,12 @@ const test = base.extend<{ certificate: { course: Course; user: User } }>({
     const course = FINISHED_COURSE()
     course.type = CourseType.CLOSED
     course.gradingConfirmed = true
-    course.id = await API.course.insertCourse(course, users.trainer.email)
-    if (course.id) {
+    try {
+      course.id = await API.course.insertCourse(course, users.trainer.email)
+      if (!course.id) {
+        console.error('Failed to insert course. Course ID is not set.')
+        return
+      }
       await API.course.insertCourseParticipants(course.id, [user])
       await API.course.insertCourseGradingForParticipants(
         course,
@@ -25,11 +29,12 @@ const test = base.extend<{ certificate: { course: Course; user: User } }>({
         Grade_Enum.Pass
       )
       await API.course.insertCertificateForParticipants(course, [user])
-    } else {
-      console.error('Failed to insert course. Course ID is not set.')
+      await use({ course: course, user: user })
+    } catch (error) {
+      console.error('An error occurred:', error)
+    } finally {
+      await API.course.deleteCourse(course.id)
     }
-    await use({ course: course, user: user })
-    await API.course.deleteCourse(course.id)
   },
 })
 

@@ -261,10 +261,9 @@ export const insertCourseParticipants = async (
   users: User[],
   bookingDate = new Date()
 ): Promise<CourseParticipant[]> => {
-  const participants = []
-  for (const user of users) {
+  const participants = users.map(async user => {
     const profileId = await getProfileId(user.email)
-    participants.push({
+    return {
       attended: true,
       bookingDate: bookingDate.toISOString(),
       course_id: courseId,
@@ -276,8 +275,8 @@ export const insertCourseParticipants = async (
         },
       },
       profile_id: profileId,
-    })
-  }
+    }
+  })
   const query = gql`
     mutation InsertCourseParticipants(
       $objects: [course_participant_insert_input!] = []
@@ -298,15 +297,15 @@ export const insertCourseParticipants = async (
   try {
     const response = await getClient().request<{
       insert_course_participant: { returning: CourseParticipant[] }
-    }>(query, { objects: participants })
+    }>(query, { objects: await Promise.all(participants) })
     response.insert_course_participant.returning.forEach(user => {
       console.log(`Adding ${user.profile.email} to ${courseId}`)
     })
     return response.insert_course_participant.returning
   } catch (e) {
     console.error(e)
+    return []
   }
-  return []
 }
 
 async function setStatus(
@@ -419,26 +418,24 @@ export async function insertCertificateForParticipants(
     }
   `
   try {
-    await Promise.all(
-      users.map(async participant => {
-        const certificateId = certificateIds.shift()
-        if (!certificateId) {
-          return
-        }
-
-        try {
-          await getClient().request<{
-            update_course_participant: { affected_rows: number }
-          }>(participantQuery, {
-            id: await getCourseParticipantId(course.id, participant.email),
-            certificateId,
-          })
-        } catch (e) {
-          console.error(e)
-          throw e
-        }
-      })
-    )
+    const requests = users.map(async participant => {
+      const certificateId = certificateIds.shift()
+      if (!certificateId) {
+        return
+      }
+      try {
+        await getClient().request<{
+          update_course_participant: { affected_rows: number }
+        }>(participantQuery, {
+          id: await getCourseParticipantId(course.id, participant.email),
+          certificateId,
+        })
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    })
+    await Promise.all(requests)
   } catch (e) {
     console.error(e)
     throw e

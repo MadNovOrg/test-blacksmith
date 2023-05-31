@@ -68,11 +68,10 @@ jobs:
         shardIndex: [1, 2, 3]
         shardTotal: [3]
     steps:
-      - name: Set the Target
-        run: echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
-
-      - name: Set Hasura secret
-        run: echo "HASURA_SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment || env.DEFAULT_TARGET)] }}" >> $GITHUB_ENV
+      - name: Set Target and Hasura Secret
+        run: |
+          echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
+          echo "HASURA_SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment || env.DEFAULT_TARGET)] }}" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -83,19 +82,19 @@ jobs:
           node-version: '18.14.2'
           cache: 'npm'
 
-      - name: Cache node_modules
+      - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: |
             node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
-
-      - name: Cache Playwright
-        uses: actions/cache@v3
-        with:
-          path: |
             ~/.cache/ms-playwright
-          key: playwright-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+      
+      - name: Install Dependencies
+        run: npm pkg delete scripts.prepare && npm ci
+  
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
 
       - name: Playwright tests
         id: playwright
@@ -106,8 +105,7 @@ jobs:
         if: failure() && steps.playwright.outcome == 'failure'
         with:
           name: test-artifacts
-          path: |
-            test-results
+          path: test-results
 
       - name: Notify Job Status to Slack
         if: failure()
