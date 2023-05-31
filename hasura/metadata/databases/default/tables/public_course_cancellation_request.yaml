@@ -112,3 +112,14 @@ delete_permissions:
                         _eq: true
           - requested_by:
               _eq: X-Hasura-User-Id
+event_triggers:
+  - name: course_cancellation_request_added
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/pending-course-cancellation'
