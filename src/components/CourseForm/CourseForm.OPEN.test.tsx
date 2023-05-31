@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { useCoursePrice } from '@app/hooks/useCoursePrice'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
@@ -8,8 +9,23 @@ import { selectDelivery, selectLevel } from './test-utils'
 
 import CourseForm from '.'
 
+jest.mock('@app/hooks/useCoursePrice', () => ({
+  useCoursePrice: jest.fn(),
+}))
+
+const useCoursePriceMock = jest.mocked(useCoursePrice)
+
 describe('component: CourseForm - OPEN', () => {
   const type = CourseType.OPEN
+
+  beforeEach(() => {
+    useCoursePriceMock.mockReturnValue({
+      price: null,
+      fetching: false,
+      currency: undefined,
+      error: undefined,
+    })
+  })
 
   // Delivery
   it('restricts OPEN+LEVEL_1 to be F2F or VIRTUAL', async () => {

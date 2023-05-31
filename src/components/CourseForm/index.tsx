@@ -31,6 +31,7 @@ import { FormPanel } from '@app/components/FormPanel'
 import { NumericTextField } from '@app/components/NumericTextField'
 import { useAuth } from '@app/context/auth'
 import { Accreditors_Enum, Course_Source_Enum } from '@app/generated/graphql'
+import { useCoursePrice } from '@app/hooks/useCoursePrice'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
@@ -72,6 +73,7 @@ import {
   canBeReaccBild,
   canBeVirtual,
   canBeVirtualBild,
+  courseNeedsManualPrice,
   getAccountCode,
   getDefaultSpecialInstructions,
   isEndDateTimeBeforeStartDateTime,
@@ -236,13 +238,31 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .number()
           .positive(t('components.course-form.price-number-error'))
           .typeError(t('components.course-form.price-number-error'))
-          .when('accreditedBy', {
-            is: (v: Accreditors_Enum) =>
-              v === Accreditors_Enum.Bild &&
-              [CourseType.CLOSED, CourseType.OPEN].includes(courseType),
-            then: s => s.required(),
-            otherwise: s => s.nullable(),
-          }),
+          .when(
+            [
+              'accreditedBy',
+              'blendedLearning',
+              'maxParticipants',
+              'courseLevel',
+            ],
+            {
+              is: (
+                accreditedBy: Accreditors_Enum,
+                blendedLearning: boolean,
+                maxParticipants: number,
+                courseLevel: CourseLevel
+              ) =>
+                courseNeedsManualPrice({
+                  accreditedBy,
+                  blendedLearning,
+                  maxParticipants,
+                  courseLevel,
+                  courseType,
+                }),
+              then: s => s.required(),
+              otherwise: s => s.nullable(),
+            }
+          ),
       }),
 
     [hasOrg, isClosedCourse, t, hasMinParticipants, courseType, activeRole]
@@ -366,6 +386,51 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const startTime = useWatch({ control, name: 'startTime' })
   const endDate = useWatch({ control, name: 'endDate' })
   const endTime = useWatch({ control, name: 'endTime' })
+
+  const priceArgs = useMemo(
+    () =>
+      values.courseLevel === '' || !values.accreditedBy
+        ? undefined
+        : {
+            type: courseType,
+            courseLevel: values.courseLevel,
+            reaccreditation: values.reaccreditation,
+            blendedLearning: values.blendedLearning,
+            accreditedBy: values.accreditedBy,
+            price: values.price,
+          },
+    [
+      courseType,
+      values.accreditedBy,
+      values.blendedLearning,
+      values.courseLevel,
+      values.price,
+      values.reaccreditation,
+    ]
+  )
+
+  const { price: automaticPrice } = useCoursePrice(priceArgs)
+
+  const needsManualPrice =
+    values.accreditedBy && values.courseLevel
+      ? courseNeedsManualPrice({
+          accreditedBy: values.accreditedBy,
+          blendedLearning: values.blendedLearning,
+          courseType,
+          courseLevel: values.courseLevel,
+          maxParticipants: values.maxParticipants ?? 0,
+        })
+      : false
+
+  useEffect(() => {
+    if (needsManualPrice && automaticPrice && !values.price) {
+      setValue('price', automaticPrice)
+    }
+
+    if (!needsManualPrice) {
+      resetField('price')
+    }
+  }, [needsManualPrice, automaticPrice, values.price, setValue, resetField])
 
   useEffect(() => {
     // I want to execute this check only at the first render.
@@ -1259,7 +1324,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               ) : null}
 
               <Box>
-                {isBild ? (
+                {needsManualPrice ? (
                   <TextField
                     variant="filled"
                     placeholder={t('components.course-form.price-placeholder')}

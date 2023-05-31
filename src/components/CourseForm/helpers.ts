@@ -516,3 +516,32 @@ export function getDefaultSpecialInstructions(
   const translation = t(key)
   return translation
 }
+
+export function courseNeedsManualPrice({
+  accreditedBy,
+  blendedLearning,
+  maxParticipants,
+  courseType,
+  courseLevel,
+}: {
+  accreditedBy: Accreditors_Enum
+  blendedLearning: boolean
+  maxParticipants: number
+  courseType: CourseType
+  courseLevel: CourseLevel
+}) {
+  if (
+    accreditedBy === Accreditors_Enum.Icm &&
+    courseType === CourseType.CLOSED &&
+    courseLevel === CourseLevel.Level_2 &&
+    blendedLearning &&
+    maxParticipants <= 8
+  ) {
+    return true
+  }
+
+  return (
+    [CourseType.OPEN, CourseType.CLOSED].includes(courseType) &&
+    accreditedBy === Accreditors_Enum.Bild
+  )
+}

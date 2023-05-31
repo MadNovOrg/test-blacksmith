@@ -9,6 +9,7 @@ import {
   CoursePriceQuery,
   GetBildStrategiesQuery,
 } from '@app/generated/graphql'
+import { COURSE_PRICE_QUERY } from '@app/hooks/useCoursePrice'
 import { QUERY as BILD_STRATEGIES_QUERY } from '@app/queries/bild/get-bild-strategies'
 import {
   BildStrategies,
@@ -19,7 +20,6 @@ import {
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
 
-import { COURSE_PRICE_QUERY } from '../../hooks/useCoursePrice'
 import { CreateCourseProvider, useCreateCourse } from '../CreateCourseProvider'
 
 import { OrderDetails } from '.'

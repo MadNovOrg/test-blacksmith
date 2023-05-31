@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { useCoursePrice } from '@app/hooks/useCoursePrice'
 import {
   CourseDeliveryType,
   CourseLevel,
@@ -13,8 +14,23 @@ import { selectDelivery, selectLevel } from './test-utils'
 
 import CourseForm from '.'
 
+jest.mock('@app/hooks/useCoursePrice', () => ({
+  useCoursePrice: jest.fn(),
+}))
+
+const useCoursePriceMock = jest.mocked(useCoursePrice)
+
 describe('component: CourseForm - CLOSED', () => {
   const type = CourseType.CLOSED
+
+  beforeEach(() => {
+    useCoursePriceMock.mockReturnValue({
+      price: null,
+      fetching: false,
+      currency: undefined,
+      error: undefined,
+    })
+  })
 
   // Delivery
   it('allows CLOSED+LEVEL_1 to be F2F, VIRTUAL or MIXED', async () => {
@@ -292,5 +308,50 @@ describe('component: CourseForm - CLOSED', () => {
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
+  })
+
+  it('displays price field for a Level two blended closed course that has 8 or less participants', async () => {
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.CLOSED} />, {
+        auth: { activeRole: RoleName.TT_ADMIN },
+      })
+    })
+
+    await selectLevel(CourseLevel.Level_2)
+    await userEvent.type(screen.getByLabelText(/number of attendees/i), '8')
+    await userEvent.click(screen.getByLabelText(/blended learning/i))
+
+    expect(screen.getByPlaceholderText(/price/i)).toBeInTheDocument()
+  })
+
+  it('prepopulates price field a Level two blended closed course that has 8 or less participants', async () => {
+    const pricePerAttendee = 100
+
+    useCoursePriceMock.mockReturnValue({
+      price: pricePerAttendee,
+      currency: 'GBP',
+      fetching: false,
+      error: undefined,
+    })
+
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.CLOSED} />, {
+        auth: { activeRole: RoleName.TT_ADMIN },
+      })
+    })
+
+    await selectLevel(CourseLevel.Level_2)
+    await userEvent.type(screen.getByLabelText(/number of attendees/i), '8')
+    await userEvent.click(screen.getByLabelText(/blended learning/i))
+
+    const priceField = screen.getByPlaceholderText(/price/i)
+
+    expect(priceField).toHaveValue(String(pricePerAttendee))
+
+    await userEvent.clear(priceField)
+
+    expect(
+      screen.getByText(/price per attendee must be a positive number/i)
+    ).toBeInTheDocument()
   })
 })

@@ -3,6 +3,7 @@ import { setMedia } from 'mock-match-media'
 import React from 'react'
 import { getI18n } from 'react-i18next'
 
+import { useCoursePrice } from '@app/hooks/useCoursePrice'
 import { CourseType, CourseLevel } from '@app/types'
 import {
   courseToCourseInput,
@@ -25,7 +26,22 @@ const blendedLearningInfoMessage = t(
   `components.course-form.blended-learning-price-label`
 )
 
+jest.mock('@app/hooks/useCoursePrice', () => ({
+  useCoursePrice: jest.fn(),
+}))
+
+const useCoursePriceMock = jest.mocked(useCoursePrice)
+
 describe('component: CourseForm', () => {
+  beforeEach(() => {
+    useCoursePriceMock.mockReturnValue({
+      price: null,
+      fetching: false,
+      currency: undefined,
+      error: undefined,
+    })
+  })
+
   it('displays venue selector if F2F delivery type', async () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.CLOSED} />)

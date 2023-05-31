@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { useCoursePrice } from '@app/hooks/useCoursePrice'
 import { CourseLevel, CourseType, RoleName } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
@@ -16,7 +17,21 @@ jest.mock('@app/components/VenueSelector', () => ({
   VenueSelector: jest.fn(() => <p>Venue Selector</p>),
 }))
 
+jest.mock('@app/hooks/useCoursePrice', () => ({
+  useCoursePrice: jest.fn(),
+}))
+
+const useCoursePriceMock = jest.mocked(useCoursePrice)
+
 describe('CourseForm - open BILD', () => {
+  beforeEach(() => {
+    useCoursePriceMock.mockReturnValue({
+      price: null,
+      fetching: false,
+      currency: undefined,
+      error: undefined,
+    })
+  })
   ;[RoleName.TT_ADMIN, RoleName.SALES_ADMIN, RoleName.TT_OPS].forEach(role => {
     it(`allows ${role} to create open BILD course`, async () => {
       await waitFor(() => {

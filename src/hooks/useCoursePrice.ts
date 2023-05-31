@@ -7,8 +7,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-
-import { ContextValue } from '../types'
+import { CourseLevel, CourseType } from '@app/types'
 
 export const COURSE_PRICE_QUERY = gql`
   query CoursePrice(
@@ -31,7 +30,14 @@ export const COURSE_PRICE_QUERY = gql`
   }
 `
 
-export function useCoursePrice(courseData: ContextValue['courseData']) {
+export function useCoursePrice(courseData?: {
+  type: CourseType
+  courseLevel: CourseLevel
+  blendedLearning: boolean
+  reaccreditation: boolean
+  accreditedBy: Accreditors_Enum
+  price?: number | null
+}) {
   const [{ data, fetching, error }] = useQuery<
     CoursePriceQuery,
     CoursePriceQueryVariables

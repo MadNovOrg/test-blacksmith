@@ -5,6 +5,7 @@ import { useAuth } from '@app/context/auth'
 import { Accreditors_Enum } from '@app/generated/graphql'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
+import { useCoursePrice } from '@app/hooks/useCoursePrice'
 import {
   CourseType,
   Draft,
@@ -15,7 +16,6 @@ import {
 } from '@app/types'
 import { generateBildCourseName, generateCourseName } from '@app/util'
 
-import { useCoursePrice } from '../../hooks/useCoursePrice'
 import { ContextValue, StepsEnum } from '../../types'
 import { checkCourseDetailsForExceptions } from '../CourseExceptionsConfirmation/utils'
 
