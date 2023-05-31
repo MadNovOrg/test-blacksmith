@@ -1,6 +1,11 @@
 import React from 'react'
 
-import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
+import {
+  CourseDeliveryType,
+  CourseLevel,
+  CourseType,
+  RoleName,
+} from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
@@ -33,7 +38,11 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+ADVANCED to be F2F', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() =>
+      render(<CourseForm type={type} />, {
+        auth: { activeRole: RoleName.TT_ADMIN },
+      })
+    )
 
     await selectLevel(CourseLevel.Advanced)
 
@@ -128,7 +137,11 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+ADVANCED+F2F to Non-Blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() =>
+      render(<CourseForm type={type} />, {
+        auth: { activeRole: RoleName.TT_ADMIN },
+      })
+    )
 
     await selectLevel(CourseLevel.Advanced)
     await selectDelivery(CourseDeliveryType.F2F)

@@ -283,6 +283,26 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return false
     },
 
+    allowedCourseLevels: (levels: CourseLevel[]) => {
+      if (!activeRole) {
+        return []
+      }
+
+      if (
+        [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].includes(
+          activeRole
+        )
+      ) {
+        return levels
+      }
+
+      if (activeCertificates.includes(CourseLevel.AdvancedTrainer)) {
+        return levels
+      }
+
+      return levels.filter(l => l !== CourseLevel.Advanced)
+    },
+
     canEditCourses: (type: CourseType, isLeader: boolean) => {
       switch (auth.activeRole) {
         case RoleName.TT_ADMIN:

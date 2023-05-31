@@ -19,7 +19,7 @@ INSERT INTO public.identity (profile_id, provider_id, type) VALUES
 ('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', '0b6fe2b3-3254-4a83-97e2-5e0ff91fd5ca', 'cognito'),
 ('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', '092155d5-e837-4a56-a1d4-36c05f84f14b', 'cognito'),
 
-('749791ef-e4c4-4a5f-881a-461e4724138d', '5febe03a-74dd-4317-8063-dfc9a7da3871', 'cognito'),
+('749791ef-e4c4-4a5f-881a-461e4724138d', 'ca5638aa-12cd-41fd-ae20-96cefb0c563d', 'cognito'),
 ('749791ef-e4c4-4a5f-881a-461e4724138d', '4676c08a-2eb7-44ab-bf54-a435b49eddec', 'cognito'),
 
 ('6ea4e91b-9856-4533-9544-949caba236fb', '65b3becd-512b-4a7d-99ad-653b0f6afac3', 'cognito'),
