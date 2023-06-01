@@ -24,6 +24,8 @@ export const QUERY = gql`
         name
         type
         source
+        go1Integration
+        max_participants
         salesRepresentative {
           fullName
           avatar

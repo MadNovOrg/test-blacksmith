@@ -340,6 +340,19 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </Stack>
                   </DetailsItemBox>
 
+                  {course?.go1Integration ? (
+                    <DetailsItemBox>
+                      <ItemRow data-testid="order-subtotal">
+                        <Typography color="grey.700">
+                          {t('licenses-redeemed')}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {course?.max_participants}
+                        </Typography>
+                      </ItemRow>
+                    </DetailsItemBox>
+                  ) : null}
+
                   <DetailsItemBox>
                     <ItemRow data-testid="order-total">
                       <Typography color="grey.700">{t('total')}</Typography>

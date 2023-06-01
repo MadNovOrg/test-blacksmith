@@ -36,6 +36,8 @@ export const buildOrder = build<NonNullish<GetOrderQuery['order']>>({
     organizationId: chance.guid(),
     course: {
       id: chance.integer(),
+      max_participants: chance.integer(),
+      go1Integration: chance.bool(),
       course_code: 'course-code',
       level: Course_Level_Enum.Level_1,
       name: chance.name(),
