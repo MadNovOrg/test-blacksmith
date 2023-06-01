@@ -26,7 +26,7 @@ export const CourseBookingDone: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { t } = useTranslation()
-  const { profile } = useAuth()
+  const { profile, acl } = useAuth()
   const fetcher = useFetcher()
   const [searchParams] = useSearchParams()
   const orderId = searchParams.get('order_id') as string
@@ -99,9 +99,13 @@ export const CourseBookingDone: React.FC<
                 ) : (
                   <Alert variant="outlined" color="success" sx={{ mb: 4 }}>
                     {t('pages.book-course.order-success-info')}
-                    <Link href={`/orders/${order?.id}`}>
-                      {order?.xeroInvoiceNumber}
-                    </Link>
+                    {acl.canViewOrders() ? (
+                      <Link href={`/orders/${order?.id}`}>
+                        {order?.xeroInvoiceNumber}
+                      </Link>
+                    ) : (
+                      order?.xeroInvoiceNumber
+                    )}
                   </Alert>
                 )}
 
