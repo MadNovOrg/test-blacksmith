@@ -83,6 +83,17 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
     return false
   }, [isReAccreditation, courseType, courseLevel])
 
+  const isModeratorMandatory = useMemo(() => {
+    if (courseType === CourseType.INDIRECT) return false
+    if (courseType === CourseType.OPEN) return false
+    if (courseLevel === CourseLevel.AdvancedTrainer && !isReAccreditation)
+      return true
+    if (courseLevel === CourseLevel.IntermediateTrainer && !isReAccreditation)
+      return true
+
+    return false
+  }, [isReAccreditation, courseType, courseLevel])
+
   const schema = useMemo(() => {
     return yup.object({
       lead: yup
@@ -99,15 +110,15 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
       moderator: yup
         .array()
         .min(
-          needsModerator ? 1 : 0,
+          isModeratorMandatory ? 1 : 0,
           t('pages.create-course.assign-trainers.moderator-error-min')
         )
         .max(
-          needsModerator ? 1 : 0,
+          isModeratorMandatory ? 1 : 0,
           t('pages.create-course.assign-trainers.moderator-error-max')
         ),
     })
-  }, [requiredLeaders.min, requiredLeaders.max, t, needsModerator])
+  }, [requiredLeaders.min, requiredLeaders.max, t, isModeratorMandatory])
 
   const formTrainers = useMemo(
     () => courseTrainerToFormValues(trainers),
