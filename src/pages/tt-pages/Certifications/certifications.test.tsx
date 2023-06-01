@@ -16,5 +16,6 @@ describe('page: Certifications', () => {
     expect(screen.getByText('Certifications')).toBeInTheDocument()
     expect(screen.getByText('Filter by date obtained')).toBeInTheDocument()
     expect(screen.getByTestId('FilterSearch-Input')).toBeInTheDocument()
+    expect(screen.getByTestId('FilterCourseLevel')).toBeInTheDocument()
   })
 })

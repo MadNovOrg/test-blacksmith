@@ -12,11 +12,13 @@ import { useTranslation } from 'react-i18next'
 
 import { CertificationList } from '@app/components/CertificationList'
 import { FilterCertificateValidity } from '@app/components/FilterCertificateValidity'
+import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterDates } from '@app/components/FilterDates'
 import { FilterSearch } from '@app/components/FilterSearch'
 import {
   Course_Participant_Bool_Exp,
+  Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
@@ -48,6 +50,7 @@ export const Certifications: React.FC<
   const [certificateStatus, setCertificateStatus] = useState<
     CertificateStatus[]
   >([])
+  const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
 
   const { acl } = useAuth()
   const [archived, setArchived] = useState<boolean>(false)
@@ -97,10 +100,24 @@ export const Certifications: React.FC<
       })
     }
 
+    if (filterLevel.length) {
+      conditions.push({
+        course: { level: { _in: filterLevel } },
+      })
+    }
+
     return {
       _and: conditions,
     }
-  }, [keyword, filterType, dateFrom, dateTo, certificateStatus, archived])
+  }, [
+    keyword,
+    filterType,
+    dateFrom,
+    dateTo,
+    certificateStatus,
+    archived,
+    filterLevel,
+  ])
 
   const { Pagination, limit, offset } = useTablePagination()
 
@@ -119,7 +136,14 @@ export const Certifications: React.FC<
   })
 
   const loading = status === LoadingStatus.FETCHING
-  const filtered = !!keyword || !!dateFrom || !!dateTo || !!certificateStatus
+  const filtered =
+    !!keyword ||
+    !!dateFrom ||
+    !!dateTo ||
+    !!certificateStatus.length ||
+    !!filterType.length ||
+    !!filterLevel.length ||
+    archived
   const count = participants?.length ?? 0
 
   return (
@@ -139,6 +163,7 @@ export const Certifications: React.FC<
             />
             <FilterCourseType onChange={setFilterType} />
             <FilterCertificateValidity onChange={setCertificateStatus} />
+            <FilterCourseLevel onChange={setFilterLevel} />
 
             {acl.canViewArchivedUsersCertificates() && (
               <FormControlLabel
