@@ -469,7 +469,7 @@
     "tabs": {
       "attendees": {
         "title": "Attendees",
-        "view-documents": "View"
+        "hs-consent": "H&S submitted"
       },
       "grading": {
         "title": "Grading",
@@ -596,7 +596,7 @@
     "invite-error-LIMIT_REACHED": "Invites limit reached",
     "invite-error-UNKNOWN": "Unknown error",
     "status": "Status",
-    "documents": "Documents",
+    "hs-consent": "H&S submitted",
     "tabs": {
       "attending": "Attending ({{number}})",
       "pending": "Pending ({{number}})",

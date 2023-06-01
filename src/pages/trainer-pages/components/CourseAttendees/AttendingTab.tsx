@@ -137,8 +137,8 @@ export const AttendingTab = ({
             }
           : null,
         {
-          id: 'documents',
-          label: t('pages.course-participants.documents'),
+          id: 'hs-consent',
+          label: t('pages.course-participants.hs-consent'),
           sorting: false,
         },
         !isCourseEnded &&
@@ -249,7 +249,9 @@ export const AttendingTab = ({
                     </TableCell>
                   )}
                   <TableCell>
-                    {t('pages.course-details.tabs.attendees.view-documents')}
+                    {courseParticipant.healthSafetyConsent
+                      ? t('common.yes')
+                      : t('common.no')}
                   </TableCell>
                   {!isCourseEnded &&
                   acl.canManageParticipantAttendance(course.accreditedBy) ? (

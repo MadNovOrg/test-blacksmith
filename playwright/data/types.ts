@@ -13,6 +13,7 @@ export type User = {
   familyName: string
   email: string
   password: string
+  healthSafetyConsent?: boolean
   organization?: Organization
 }
 
@@ -95,8 +96,8 @@ export type AttendeesTableRow = {
   Name: string
   Email: string
   Organisation: string
-  Documents: string
-  [key: string]: string
+  HsSubmitted: boolean
+  [key: string]: string | boolean
 }
 
 export type InvoiceDetails = {

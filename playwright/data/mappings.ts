@@ -49,12 +49,13 @@ export function toAttendeesTableRow({
   familyName,
   email,
   organization,
+  healthSafetyConsent,
 }: User): AttendeesTableRow {
   return {
     Name: `${givenName} ${familyName}`,
     Email: email,
     Organisation: organization?.name || '',
-    Documents: 'View',
+    HsSubmitted: healthSafetyConsent ?? false,
     '': 'SendResend course information',
   }
 }

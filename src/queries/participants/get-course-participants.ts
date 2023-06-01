@@ -60,6 +60,7 @@ export const QUERY = gql`
       bookingDate
       go1EnrolmentStatus
       grade
+      healthSafetyConsent
       certificate {
         ...Certificate
       }
