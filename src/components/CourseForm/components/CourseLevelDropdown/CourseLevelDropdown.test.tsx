@@ -8,8 +8,12 @@ import { render, screen, userEvent, within } from '@test/index'
 
 import { CourseLevelDropdown } from './index'
 
-const getOption = (level: string | RegExp) => {
+const getOption = (level: string | RegExp, query = false) => {
   const dropdown = screen.getByRole('listbox')
+
+  if (query) {
+    return within(dropdown).queryByText(level)
+  }
 
   return within(dropdown).getByText(level)
 }
@@ -78,7 +82,7 @@ describe('component: CourseLevelDropdown', () => {
     expect(getOption(/advanced modules/i)).toBeInTheDocument()
   })
 
-  it("doesn't render Advanced modules if a trainer doesn't have an Advanced trainer certificate", async () => {
+  it("doesn't render Advanced modules if a trainer isn't Advanced Trainer or BILD Advanced trainer certified", async () => {
     render(
       <CourseLevelDropdown
         value=""
@@ -100,9 +104,56 @@ describe('component: CourseLevelDropdown', () => {
 
     expect(getOption(/level one/i)).toBeInTheDocument()
     expect(getOption(/level two/i)).toBeInTheDocument()
+    expect(getOption(/advanced modules/i, true)).not.toBeInTheDocument()
+  })
 
-    expect(
-      within(screen.getByRole('listbox')).queryByText(/advanced modules/i)
-    ).not.toBeInTheDocument()
+  it('renders Advanced modules if a trainer has an Advanced trainer certificate', async () => {
+    render(
+      <CourseLevelDropdown
+        value=""
+        onChange={noop}
+        courseType={CourseType.INDIRECT}
+        courseAccreditor={Accreditors_Enum.Icm}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+          activeCertificates: [CourseLevel.AdvancedTrainer],
+        },
+      }
+    )
+
+    await userEvent.click(screen.getByRole('button'))
+
+    expect(screen.queryAllByRole('option').length).toBe(3)
+
+    expect(getOption(/level one/i)).toBeInTheDocument()
+    expect(getOption(/level two/i)).toBeInTheDocument()
+    expect(getOption(/advanced modules/i)).toBeInTheDocument()
+  })
+
+  it('renders Advanced modules if a trainer has a BILD Advanced trainer certificate', async () => {
+    render(
+      <CourseLevelDropdown
+        value=""
+        onChange={noop}
+        courseType={CourseType.INDIRECT}
+        courseAccreditor={Accreditors_Enum.Icm}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+        },
+      }
+    )
+
+    await userEvent.click(screen.getByRole('button'))
+
+    expect(screen.queryAllByRole('option').length).toBe(3)
+
+    expect(getOption(/level one/i)).toBeInTheDocument()
+    expect(getOption(/level two/i)).toBeInTheDocument()
+    expect(getOption(/advanced modules/i)).toBeInTheDocument()
   })
 })
