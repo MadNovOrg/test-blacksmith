@@ -47,12 +47,6 @@ export const makeSchema = (t: TFunction) =>
             .required(t('pages.create-course.trainer-expenses.method-error')),
           value: yup
             .number()
-            .min(
-              0,
-              t('pages.create-course.trainer-expenses.num-error', {
-                min: 0,
-              })
-            )
             .typeError(
               t('pages.create-course.trainer-expenses.num-error', {
                 min: 0,
@@ -60,32 +54,39 @@ export const makeSchema = (t: TFunction) =>
             )
             .when('method', ([method], s) => {
               if (method === TransportMethod.NONE) {
-                return s.optional()
+                return s
               }
-              return s.required(
-                t('pages.create-course.trainer-expenses.value-error')
-              )
+              return s
+                .required(t('pages.create-course.trainer-expenses.value-error'))
+                .min(
+                  1,
+                  t('pages.create-course.trainer-expenses.num-error', {
+                    min: 0,
+                  })
+                )
             }),
           flightDays: yup
             .number()
             .integer()
-            .positive(
-              t('pages.create-course.trainer-expenses.num-error', {
-                min: 1,
-              })
-            )
             .typeError(
               t('pages.create-course.trainer-expenses.num-error', {
-                min: 1,
+                min: 0,
               })
             )
             .when('method', ([method], s) => {
               if (method === TransportMethod.FLIGHTS) {
-                return s.required(
-                  t('pages.create-course.trainer-expenses.days-error')
-                )
+                return s
+                  .required(
+                    t('pages.create-course.trainer-expenses.days-error')
+                  )
+                  .min(
+                    1,
+                    t('pages.create-course.trainer-expenses.num-error', {
+                      min: 1,
+                    })
+                  )
               }
-              return s.optional()
+              return s
             }),
           accommodationRequired: yup.boolean(),
           accommodationNights: yup
@@ -93,39 +94,48 @@ export const makeSchema = (t: TFunction) =>
             .integer()
             .typeError(
               t('pages.create-course.trainer-expenses.num-error', {
-                min: 1,
+                min: 0,
               })
             )
-            .when('accommodationRequired', ([accommodationRequired], s) => {
-              if (accommodationRequired) {
-                return s.min(
-                  1,
-                  t('pages.create-course.trainer-expenses.num-error', {
-                    min: 1,
-                  })
-                )
+            .when(
+              ['accommodationRequired', 'method'],
+              ([accommodationRequired, method], s) => {
+                if (accommodationRequired && method !== TransportMethod.NONE) {
+                  return s.min(
+                    1,
+                    t('pages.create-course.trainer-expenses.num-error', {
+                      min: 1,
+                    })
+                  )
+                }
+                return s
               }
-              return s
-            }),
+            ),
           accommodationCost: yup
             .number()
-            .min(
-              0,
-              t('pages.create-course.trainer-expenses.num-error', { min: 0 })
-            )
             .typeError(
               t('pages.create-course.trainer-expenses.num-error', { min: 0 })
             )
-            .when('accommodationNights', ([accommodationNights], s) => {
-              if (accommodationNights) {
-                return s.required(
-                  t(
-                    'pages.create-course.trainer-expenses.accommodation-cost-error'
-                  )
-                )
+            .when(
+              ['accommodationNights', 'method'],
+              ([accommodationNights, method], s) => {
+                if (accommodationNights && method !== TransportMethod.NONE) {
+                  return s
+                    .required(
+                      t(
+                        'pages.create-course.trainer-expenses.accommodation-cost-error'
+                      )
+                    )
+                    .min(
+                      0,
+                      t('pages.create-course.trainer-expenses.num-error', {
+                        min: 1,
+                      })
+                    )
+                }
+                return s
               }
-              return s
-            }),
+            ),
         })
       )
       .required(),
@@ -155,7 +165,9 @@ export const makeSchema = (t: TFunction) =>
 
 export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
   trainer,
-  value = undefined,
+  value = {
+    transport: [{ method: TransportMethod.NONE, value: 0 }],
+  },
   onChange = noop,
 }) => {
   const { t } = useTranslation()
@@ -168,7 +180,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
 
   const { control, formState, register, setValue, unregister } =
     useForm<FormValues>({
-      defaultValues: value ?? { transport: [{ method: TransportMethod.NONE }] },
+      defaultValues: value,
       mode: 'all',
       resolver: yupResolver(schema) as Resolver<FormValues>,
     })
@@ -227,7 +239,15 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                         items={Object.values(TransportMethod).map(
                           transportMethodToDropdownItem
                         )}
-                        onChange={field.onChange}
+                        onChange={e => {
+                          if (e.target.value === TransportMethod.NONE) {
+                            setValue(`transport.${idx}.accommodationNights`, 0)
+                            setValue(`transport.${idx}.accommodationCost`, 0)
+                            setValue(`transport.${idx}.value`, 0)
+                            setValue(`transport.${idx}.flightDays`, 0)
+                          }
+                          field.onChange(e)
+                        }}
                       />
                     )}
                   />
@@ -248,6 +268,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                     })}
                     variant="filled"
                     fullWidth
+                    defaultValue={1}
                     inputProps={{
                       min: 0,
                       step: 0.01,
@@ -307,6 +328,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                     })}
                     variant="filled"
                     fullWidth
+                    defaultValue={1}
                     inputProps={{
                       min: 1,
                       step: 1,
@@ -374,6 +396,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                     })}
                     variant="filled"
                     fullWidth
+                    defaultValue={1}
                     inputProps={{
                       min: 1,
                       step: 1,
@@ -400,6 +423,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                     })}
                     variant="filled"
                     fullWidth
+                    defaultValue={1}
                     inputProps={{
                       min: 0,
                       step: 0.01,
