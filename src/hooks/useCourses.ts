@@ -6,6 +6,7 @@ import {
   Accreditors_Enum,
   Course_Bool_Exp,
   Course_Invite_Status_Enum,
+  Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Order_By,
   Course_Status_Enum,
@@ -37,6 +38,7 @@ export type CoursesFilters = {
     end?: Date
   }
   accreditedBy?: Accreditors_Enum[]
+  deliveryTypes?: Course_Delivery_Type_Enum[]
 }
 
 type Props = {
@@ -95,6 +97,10 @@ export const filtersToWhereClause = (
 
   if (filters?.accreditedBy?.length) {
     where.accreditedBy = { _in: filters.accreditedBy }
+  }
+
+  if (filters?.deliveryTypes?.length) {
+    where.deliveryType = { _in: filters.deliveryTypes }
   }
 
   const query = filters?.keyword?.trim()

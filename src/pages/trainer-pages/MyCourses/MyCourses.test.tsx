@@ -10,6 +10,7 @@ import { fromValue, never } from 'wonka'
 import {
   Accreditors_Enum,
   Course_Bool_Exp,
+  Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Status_Enum,
   Course_Type_Enum,
@@ -666,6 +667,54 @@ describe('trainers-pages/MyCourses', () => {
       within(screen.getByTestId('FilterCourseStatus')).getByText('Completed')
     )
 
+    const table = screen.getByTestId('courses-table')
+    await expectCourseTableTo({
+      table,
+      include: [filteredCourse],
+      exclude: [course],
+    })
+  })
+
+  it('filters by delivery type', async () => {
+    const course = buildTrainerCourse()
+    const filteredCourse = buildTrainerCourse()
+
+    const client = {
+      executeQuery: ({
+        variables,
+      }: {
+        variables: TrainerCoursesQueryVariables
+      }) => {
+        const courses = variables.where?.deliveryType?._in?.includes(
+          Course_Delivery_Type_Enum.Virtual
+        )
+          ? [filteredCourse]
+          : [course]
+
+        return fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses,
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        })
+      },
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <TrainerCourses />
+      </Provider>
+    )
+
+    await userEvent.click(
+      within(screen.getByTestId('FilterCourseDeliveryType')).getByText(
+        'Virtual'
+      )
+    )
     const table = screen.getByTestId('courses-table')
     await expectCourseTableTo({
       table,
@@ -1658,6 +1707,61 @@ describe('trainers-pages/MyCourses', () => {
       const table = screen.getByTestId('courses-table')
       await expectCourseTableTo({
         table,
+        include: [filteredCourse],
+        exclude: [course],
+      })
+    })
+
+    it('filters by delivery type', async () => {
+      const course = buildActionableTrainerCourse(TRAINER_PROFILE_ID)
+      const filteredCourse = buildActionableTrainerCourse(TRAINER_PROFILE_ID)
+
+      const client = {
+        executeQuery: ({
+          variables,
+        }: {
+          variables: TrainerCoursesQueryVariables
+        }) => {
+          const courses = variables.where?.deliveryType?._in?.includes(
+            Course_Delivery_Type_Enum.Virtual
+          )
+            ? [filteredCourse]
+            : [course]
+
+          return fromValue<{ data: TrainerCoursesQuery }>({
+            data: {
+              courses,
+              course_aggregate: {
+                aggregate: {
+                  count: courses.length,
+                },
+              },
+            },
+          })
+        },
+      }
+
+      _render(
+        <Provider value={client as unknown as Client}>
+          <TrainerCourses />
+        </Provider>
+      )
+
+      const actionableTbl = screen.getByTestId('actionable-courses-table')
+      await expectActionableTableTo({
+        table: actionableTbl,
+        include: [course],
+        exclude: [filteredCourse],
+      })
+
+      await userEvent.click(
+        within(screen.getByTestId('FilterCourseDeliveryType')).getByText(
+          'Virtual'
+        )
+      )
+
+      await expectActionableTableTo({
+        table: actionableTbl,
         include: [filteredCourse],
         exclude: [course],
       })

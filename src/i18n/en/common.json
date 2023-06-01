@@ -190,6 +190,7 @@
   "course-name-prefix": "Positive Behaviour Training",
   "reaccreditation": "Reaccreditation",
   "modules": "Modules",
+  "delivery": "Delivery",
   "course-delivery-type": {
     "F2F": "Face to Face",
     "BLENDED": "Blended",

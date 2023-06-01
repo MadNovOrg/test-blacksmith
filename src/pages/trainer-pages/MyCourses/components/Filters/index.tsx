@@ -13,6 +13,7 @@ import {
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterByBlendedLearning } from '@app/components/FilterByBlendedLearning'
 import { FilterByCourseStatusWarnings } from '@app/components/FilterByCourseStatusWarnings'
+import { FilterCourseDeliveryType } from '@app/components/FilterCourseDeliveryType'
 import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterCourseStatus } from '@app/components/FilterCourseStatus'
 import { FilterCourseType } from '@app/components/FilterCourseType'
@@ -24,6 +25,7 @@ import {
   Course_Level_Enum,
   Course_Status_Enum,
   Course_Type_Enum,
+  Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
 import { CoursesFilters } from '@app/hooks/useCourses'
 import { AdminOnlyCourseStatus } from '@app/types'
@@ -55,6 +57,9 @@ export function Filters({ onChange }: Props) {
   const [dateFilters, setDateFilters] = useState<DateFilters>()
   const [filterWarningStatuses, setFilterWarningStatuses] = useState<
     Course_Status_Enum[]
+  >([])
+  const [filterDeliveryType, setFilterDeliveryType] = useState<
+    Course_Delivery_Type_Enum[]
   >([])
 
   const [filterBlendedLearning, setFilterBlendedLearning] = useQueryParam(
@@ -148,6 +153,7 @@ export function Filters({ onChange }: Props) {
       creation: { start: createStartDate, end: createEndDate },
       schedule: { start: startDate, end: endDate },
       accreditedBy,
+      deliveryTypes: filterDeliveryType,
     }
 
     onChange(filters)
@@ -162,6 +168,7 @@ export function Filters({ onChange }: Props) {
     keyword,
     onChange,
     accreditedBy,
+    filterDeliveryType,
   ])
 
   return (
@@ -205,6 +212,7 @@ export function Filters({ onChange }: Props) {
             onChange={onAccreditedByChange}
             data-testid="filter-accredited-by"
           />
+          <FilterCourseDeliveryType onChange={setFilterDeliveryType} />
         </Stack>
       </Box>
     </>
