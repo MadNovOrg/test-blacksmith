@@ -39,13 +39,13 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('d7c2e0cd-ea1f-4f63-8a9a-5e1912465626', '4d43e8b0-1143-4cfa-bbb7-bac97e76ddf5', 'cognito'), -- assistant@teamteach.testinator.com
 ('d1b41d43-5796-4560-8f40-d3f0f22fa242', '4d43e8b0-1143-4cfa-bbb7-bac97e76ddf5', 'cognito'), -- assistant@teamteach.testinator.com staging
 
-('2ccbc79f-4aef-4190-b852-615d9340c420', 'b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', 'cognito'), -- assistant.with.org@teamteach.testinator.com
+('7272f4f1-280f-441a-ab3c-cc4c42c6f84e', 'b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', 'cognito'), -- assistant.with.org@teamteach.testinator.com
 ('6b59bac0-91cc-453e-9df5-cba479fddd3e', 'b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', 'cognito'), -- assistant.with.org@teamteach.testinator.com staging
 
 ('a9260d24-b804-49bb-9d2b-5b79b6c13cb7', '6b72504a-6447-4b30-9909-e8e6fc1d300f', 'cognito'), -- user1@teamteach.testinator.com
 ('5fb6bb03-6c64-4c49-bae7-e8810c27b994', '6b72504a-6447-4b30-9909-e8e6fc1d300f', 'cognito'), -- user1@teamteach.testinator.com staging
 
-('fca602f7-4ae4-49a1-8aaf-8edbd31de22d', 'd394a9ff-7517-4e35-91aa-466f9d4c1b77', 'cognito'), -- user2@teamteach.testinator.com
+('1acd84e4-07ea-488b-a2ff-fe77efc91d5f', 'd394a9ff-7517-4e35-91aa-466f9d4c1b77', 'cognito'), -- user2@teamteach.testinator.com
 ('40eff78d-fff8-467f-b95d-fb26683263e5', 'd394a9ff-7517-4e35-91aa-466f9d4c1b77', 'cognito'), -- user2@teamteach.testinator.com staging
 
 ('890ec06c-6a6a-454c-a7cb-fb11c53a80a4', 'fb523ef0-7fd1-42b2-b078-dce29a1713fe', 'cognito'), -- user1.with.org@teamteach.testinator.com
@@ -67,7 +67,7 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('8080870a-9be0-4a16-97f5-3cb2b29a8c65', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.adm@teamteach.testinator.com staging
 
 ('c353ca53-bc7f-46e0-8736-920acb4ccce8', '8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', 'cognito'), -- password@teamteach.testinator.com
-('1fcf4206-b89e-4127-be93-a6197fd73309', '8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', 'cognito'), -- password@teamteach.testinator.com staging
+('c47a09ce-59b9-4c2d-a038-cea7adf4d711', '8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', 'cognito'), -- password@teamteach.testinator.com staging
 
 ('1252e945-3ef3-4e13-9a7c-595119e2164e', '921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', 'cognito'), -- trainer01@teamteach.testinator.com
 ('5abd6b91-6d6b-4fd4-9fac-9798158fe22a', '921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', 'cognito'), -- trainer01@teamteach.testinator.com staging

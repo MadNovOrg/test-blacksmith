@@ -13,25 +13,25 @@ INSERT INTO public.profile (id, _given_name, _family_name, _email) VALUES
 ('dccd780a-9745-4972-a43e-95ec3ef361df', 'TeamTeach', 'Senior-Trainer', 'tt.senior.trainer@teamteach.testinator.com');
 
 INSERT INTO public.identity (profile_id, provider_id, type) VALUES
-('467b4ac5-d86e-40ee-b25f-87e4ed2ce618', '185a79fd-6294-46b5-97d2-beebaee5e355', 'cognito'),
+('467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 'c8768f2f-6c9b-40c6-973a-450ecc454162', 'cognito'),
 ('467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 'c1a2b5ce-eec7-4827-a781-f86a20acc2c3', 'cognito'),
 
-('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', '0b6fe2b3-3254-4a83-97e2-5e0ff91fd5ca', 'cognito'),
+('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', '2d9a3619-8502-4a9a-9f57-ae4f8622a49e', 'cognito'),
 ('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', '092155d5-e837-4a56-a1d4-36c05f84f14b', 'cognito'),
 
 ('749791ef-e4c4-4a5f-881a-461e4724138d', 'ca5638aa-12cd-41fd-ae20-96cefb0c563d', 'cognito'),
 ('749791ef-e4c4-4a5f-881a-461e4724138d', '4676c08a-2eb7-44ab-bf54-a435b49eddec', 'cognito'),
 
-('6ea4e91b-9856-4533-9544-949caba236fb', '65b3becd-512b-4a7d-99ad-653b0f6afac3', 'cognito'),
+('6ea4e91b-9856-4533-9544-949caba236fb', 'd674ff9f-c270-4ded-ace4-6d90109ff24f', 'cognito'),
 ('6ea4e91b-9856-4533-9544-949caba236fb', 'a46f119a-b3ce-4c7f-90bd-97cb52c96608', 'cognito'),
 
-('30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', '5b4a7273-4e8d-421f-80b1-5814f54f2300', 'cognito'),
+('30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', '5cfd74eb-4109-4c18-a3a3-615f798d87d1', 'cognito'),
 ('30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', 'b449aa5d-b7fb-470a-984a-bdca4585b0ed', 'cognito'),
 
-('88072bb2-10e0-4417-b9ce-ec05265b8b56', 'f2c1476a-d34a-4add-86e2-ec8ecda4d9a8', 'cognito'),
+('88072bb2-10e0-4417-b9ce-ec05265b8b56', '261e6dde-0eed-4661-96c2-09fb196b0252', 'cognito'),
 ('88072bb2-10e0-4417-b9ce-ec05265b8b56', '4fcb85e0-86be-401d-96c2-6b75ee70ad1f', 'cognito'),
 
-('dccd780a-9745-4972-a43e-95ec3ef361df', '567ccb5b-a36d-469f-a25e-66edd10bf253', 'cognito'),
+('dccd780a-9745-4972-a43e-95ec3ef361df', '07bcfa2d-7635-4b40-a568-da3c05e221d6', 'cognito'),
 ('dccd780a-9745-4972-a43e-95ec3ef361df', '9482f354-1cfb-466c-8b3c-98ee8c7137af', 'cognito');
 
 INSERT INTO public.organization_member (organization_id, profile_id, is_admin) VALUES
