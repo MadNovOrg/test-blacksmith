@@ -204,10 +204,7 @@ export function canBeReaccBild(
         strategy => strategies[strategy as BildStrategies] === true
       )
 
-      return (
-        selectedStrategies.length === 1 &&
-        selectedStrategies.includes(BildStrategies.Primary)
-      )
+      return selectedStrategies.length > 0
     }
 
     case CourseType.OPEN:

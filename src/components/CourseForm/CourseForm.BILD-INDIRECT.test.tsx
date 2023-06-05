@@ -214,6 +214,7 @@ describe('CourseForm - indirect BILD', () => {
     expect(reaccreditationToggle).toBeDisabled()
 
     await userEvent.click(screen.getByLabelText(/primary/i))
+    await userEvent.click(screen.getByLabelText(/secondary/i))
 
     expect(blendedLearningToggle).toBeEnabled()
     expect(reaccreditationToggle).toBeEnabled()
