@@ -114,11 +114,11 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
           t('pages.create-course.assign-trainers.moderator-error-min')
         )
         .max(
-          isModeratorMandatory ? 1 : 0,
+          needsModerator ? 1 : 0,
           t('pages.create-course.assign-trainers.moderator-error-max')
         ),
     })
-  }, [requiredLeaders.min, requiredLeaders.max, t, isModeratorMandatory])
+  }, [requiredLeaders, t, isModeratorMandatory, needsModerator])
 
   const formTrainers = useMemo(
     () => courseTrainerToFormValues(trainers),
