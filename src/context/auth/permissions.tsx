@@ -418,6 +418,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         case CourseType.CLOSED: {
           return [RoleName.TT_OPS].includes(auth.activeRole)
         }
+
+        case CourseType.OPEN: {
+          return [RoleName.SALES_ADMIN, RoleName.TT_OPS].includes(
+            auth.activeRole
+          )
+        }
       }
 
       return false
