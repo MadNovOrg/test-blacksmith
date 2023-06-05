@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { LoadingButton } from '@mui/lab'
 import { Box, FormHelperText, Grid, MenuItem, TextField } from '@mui/material'
-import map from 'lodash-es/map'
 import React, { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -114,15 +113,6 @@ export const CourseEnquiryForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const values = watch()
 
-  const sectorOptions = useMemo(
-    () =>
-      map(sectors, (label, value) => ({
-        label,
-        value,
-      })),
-    []
-  )
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       {courseType === CourseType.Open ? (
@@ -230,13 +220,9 @@ export const CourseEnquiryForm: React.FC<React.PropsWithChildren<Props>> = ({
           <MenuItem value="" disabled>
             {t('sector')}
           </MenuItem>
-          {sectorOptions.map(option => (
-            <MenuItem
-              key={option.value}
-              value={option.value}
-              data-testid={`sector-${option.value}`}
-            >
-              {option.label}
+          {Object.entries(sectors).map(([value, label]) => (
+            <MenuItem key={value} value={value} data-testid={`sector-${value}`}>
+              {label}
             </MenuItem>
           ))}
         </TextField>

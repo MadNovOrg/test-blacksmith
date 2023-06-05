@@ -16,7 +16,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { map } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import {
   Control,
@@ -288,15 +287,6 @@ export const CourseBookingDetails: React.FC<
     }
   }, [booking, setBooking, values.quantity])
 
-  const sectorOptions = useMemo(
-    () =>
-      map(sectors, (label, value) => ({
-        label,
-        value,
-      })),
-    [sectors]
-  )
-
   const formatCurrency = (amount: number) => {
     return t('currency', { amount, currency: booking.currency })
   }
@@ -491,9 +481,13 @@ export const CourseBookingDetails: React.FC<
               <MenuItem value="" disabled>
                 {t('sector')}
               </MenuItem>
-              {sectorOptions.map(option => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
+              {Object.entries(sectors).map(([value, label]) => (
+                <MenuItem
+                  key={value}
+                  value={value}
+                  data-testid={`sector-${value}`}
+                >
+                  {label}
                 </MenuItem>
               ))}
             </TextField>

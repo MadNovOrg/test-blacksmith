@@ -8,6 +8,7 @@ export const MUTATION = gql`
     $name: String!
     $trustName: String!
     $trustType: trust_type_enum!
+    $sector: String
     $address: jsonb!
     $attributes: jsonb = {}
     $xeroId: String
@@ -18,6 +19,7 @@ export const MUTATION = gql`
         name: $name
         trustName: $trustName
         trustType: $trustType
+        sector: $sector
         address: $address
         attributes: $attributes
         xeroContactId: $xeroId

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { DetailsRow } from '@app/components/DetailsRow'
 import { useAuth } from '@app/context/auth'
 import useOrg from '@app/hooks/useOrg'
+import { sectors } from '@app/pages/common/CourseBooking/components/org-data'
 import { LoadingStatus } from '@app/util'
 
 type OrgDetailsTabParams = {
@@ -27,6 +28,10 @@ export const OrgDetailsTab: React.FC<
   )
 
   const org = data?.length ? data[0] : null
+  const [, sector = org?.sector] =
+    Object.entries(sectors).find(
+      ([key, value]) => key === org?.sector && value
+    ) || []
 
   return (
     <Box sx={{ pt: 2, pb: 4 }}>
@@ -65,7 +70,7 @@ export const OrgDetailsTab: React.FC<
                   label={t(
                     'pages.org-details.tabs.details.org-details-section.sector'
                   )}
-                  value={org.sector}
+                  value={sector || ''}
                 />
                 <DetailsRow
                   label={t(

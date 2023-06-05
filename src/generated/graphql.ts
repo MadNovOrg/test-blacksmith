@@ -44698,6 +44698,7 @@ export type InsertOrgMutationVariables = Exact<{
   name: Scalars['String'];
   trustName: Scalars['String'];
   trustType: Trust_Type_Enum;
+  sector?: InputMaybe<Scalars['String']>;
   address: Scalars['jsonb'];
   attributes?: InputMaybe<Scalars['jsonb']>;
   xeroId?: InputMaybe<Scalars['String']>;

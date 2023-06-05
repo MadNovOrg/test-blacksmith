@@ -27,9 +27,10 @@ import {
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useOrg from '@app/hooks/useOrg'
+import { sectors } from '@app/pages/common/CourseBooking/components/org-data'
 import { MUTATION as UPDATE_ORG_MUTATION } from '@app/queries/organization/update-org'
 import { OfstedRating, TrustType } from '@app/types'
-import { INPUT_DATE_FORMAT } from '@app/util'
+import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
 
 type OrgDetailsInput = {
   orgName: string
@@ -82,19 +83,27 @@ export const EditOrgDetails: React.FC<
           .required(
             t('validation-errors.required-field', { name: t('org-name') })
           ),
-        trustType: yup.string(),
-        trustName: yup.string(),
+        trustType: yup
+          .string()
+          .required(
+            t('validation-errors.required-field', { name: t('trust-type') })
+          ),
+        trustName: yup
+          .string()
+          .required(
+            t('validation-errors.required-field', { name: t('trust-name') })
+          ),
         orgEmail: yup.string(),
         orgPhone: yup.string(),
         sector: yup.string(),
         localAuthority: yup.string(),
         ofstedRating: yup.string(),
         ofstedLastInspection: yup.date().nullable(),
-        line1: yup.string(),
+        line1: yup.string().required(requiredMsg(t, 'addr.line1')),
         line2: yup.string(),
-        city: yup.string(),
-        country: yup.string(),
-        postCode: yup.string(),
+        city: yup.string().required(requiredMsg(t, 'addr.city')),
+        country: yup.string().required(requiredMsg(t, 'addr.country')),
+        postCode: yup.string().required(requiredMsg(t, 'addr.postCode')),
       })
       .required()
   }, [t])
@@ -105,6 +114,7 @@ export const EditOrgDetails: React.FC<
     formState: { errors },
     setValue,
     control,
+    watch,
   } = useForm<OrgDetailsInput>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -129,6 +139,8 @@ export const EditOrgDetails: React.FC<
       postCode: '',
     },
   })
+
+  const values = watch()
 
   useEffect(() => {
     if (org) {
@@ -260,6 +272,7 @@ export const EditOrgDetails: React.FC<
                   render={({ field }) => (
                     <TextField
                       id="trustType"
+                      required
                       select
                       label={t('pages.edit-org-details.trust-type')}
                       variant="filled"
@@ -287,6 +300,7 @@ export const EditOrgDetails: React.FC<
               <Box mb={3}>
                 <TextField
                   id="trustName"
+                  required
                   label={t('pages.edit-org-details.trust-name')}
                   variant="filled"
                   error={!!errors.trustName}
@@ -326,15 +340,29 @@ export const EditOrgDetails: React.FC<
               <Grid container spacing={3} mb={3}>
                 <Grid item md={6}>
                   <TextField
-                    id="sector"
-                    label={t('pages.edit-org-details.sector')}
-                    variant="filled"
-                    error={!!errors.sector}
-                    helperText={errors.sector?.message}
+                    select
+                    value={values.sector}
                     {...register('sector')}
-                    inputProps={{ 'data-testid': 'sector' }}
+                    variant="filled"
                     fullWidth
-                  />
+                    label={t('sector')}
+                    error={!!errors.sector}
+                    sx={{ bgcolor: 'grey.100' }}
+                    data-testid="sector-select"
+                  >
+                    <MenuItem value="" disabled>
+                      {t('sector')}
+                    </MenuItem>
+                    {Object.entries(sectors).map(([value, label]) => (
+                      <MenuItem
+                        key={value}
+                        value={value}
+                        data-testid={`sector-${value}`}
+                      >
+                        {label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                 </Grid>
                 <Grid item md={6}>
                   <TextField
@@ -418,6 +446,7 @@ export const EditOrgDetails: React.FC<
               <Box mb={3}>
                 <TextField
                   id="line1"
+                  required
                   label={t('common.addr.line1')}
                   variant="filled"
                   error={!!errors.line1}
@@ -442,6 +471,7 @@ export const EditOrgDetails: React.FC<
               <Box mb={3}>
                 <TextField
                   id="city"
+                  required
                   label={t('common.addr.city')}
                   variant="filled"
                   error={!!errors.city}
@@ -454,6 +484,7 @@ export const EditOrgDetails: React.FC<
               <Box mb={3}>
                 <TextField
                   id="country"
+                  required
                   label={t('common.addr.country')}
                   variant="filled"
                   error={!!errors.country}
@@ -466,6 +497,7 @@ export const EditOrgDetails: React.FC<
               <Box mb={3}>
                 <TextField
                   id="postCode"
+                  required
                   label={t('common.addr.postCode')}
                   variant="filled"
                   error={!!errors.postCode}
