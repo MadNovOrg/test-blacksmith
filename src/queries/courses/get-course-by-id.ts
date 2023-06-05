@@ -64,7 +64,7 @@ export const QUERY = gql`
       organization {
         ...Organization
       }
-      contactProfile {
+      bookingContact {
         id
         fullName
         avatar

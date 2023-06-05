@@ -57,7 +57,7 @@ values (10100, '95e897bf-6d61-43d5-9c5c-efc0d0a5aaed');
 
 insert into public.course (name, course_type, course_delivery_type, course_level, organization_id, reaccreditation,
                            course_status, min_participants, max_participants, grading_confirmed, go1_integration, id,
-                           contact_profile_id, free_spaces, sales_representative_id, account_code, cancellation_reason,
+                           booking_contact_profile_id, free_spaces, sales_representative_id, account_code, cancellation_reason,
                            cancellation_fee_percent, grading_started, modules_duration, notes, accredited_by, source)
 values  ('Positive Behaviour Training: Level Two ', 'CLOSED', 'F2F', 'LEVEL_2', 'd787defd-481c-414b-95ff-ecbcc12ae500',
         false, 'EVALUATION_MISSING', 6, 20, false, false, 10101, null, 0, null, '810A Jan23', 'Changed my mind.', null, false,

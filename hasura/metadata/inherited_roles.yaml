@@ -1,3 +1,6 @@
+- role_name: booking-contact
+  role_set:
+    - user
 - role_name: finance
   role_set:
     - trainer

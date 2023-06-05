@@ -1,6 +1,6 @@
 insert into public.course (name, course_type, course_delivery_type, course_level, organization_id, reaccreditation,
                            course_status, min_participants, max_participants, grading_confirmed, go1_integration, id,
-                           contact_profile_id, free_spaces, sales_representative_id, account_code, cancellation_reason,
+                           booking_contact_profile_id, free_spaces, sales_representative_id, account_code, cancellation_reason,
                            cancellation_fee_percent, grading_started, modules_duration, notes, accredited_by, source)
 values ('Positive Behaviour Training: Level One ', 'CLOSED', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
         false, 'SCHEDULED', 6, 6, false, false, 10026, 'dccd780a-9745-4972-a43e-95ec3ef361df', 0,

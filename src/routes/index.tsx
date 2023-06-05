@@ -46,6 +46,7 @@ const roleRoutesMap = {
   [RoleName.SALES_ADMIN]: SalesAdminRoutes,
   [RoleName.FINANCE]: FinanceRoute,
   [RoleName.TRAINER]: TrainerRoutes,
+  [RoleName.BOOKING_CONTACT]: UserRoutes,
   [RoleName.USER]: UserRoutes,
   [RoleName.LD]: TTRoutes,
   [RoleName.TT_OPS]: TTRoutes,

@@ -10,7 +10,7 @@ export const ADMIN_COURSE_QUERY = gql`
       aolRegion
       cancellationFeePercent
       cancellationReason
-      contactProfileId
+      bookingContactProfileId
       course_code
       createdAt
       createdById
@@ -49,7 +49,7 @@ export const TRAINER_COURSE_QUERY = gql`
       aolCostOfCourse
       aolCountry
       aolRegion
-      contactProfileId
+      bookingContactProfileId
       course_code
       createdAt
       createdById

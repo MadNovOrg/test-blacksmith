@@ -56,9 +56,9 @@ import { CourseLevelDropdown } from './components/CourseLevelDropdown'
 import { CourseTimePicker } from './components/CourseTimePicker'
 import { SourceDropdown } from './components/SourceDropdown'
 import {
-  StrategyToggles,
   defaultStrategies,
   schema as strategiesSchema,
+  StrategyToggles,
   validateStrategies,
 } from './components/StrategyToggles'
 import {
@@ -113,7 +113,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         ...(hasOrg ? { organization: yup.object().required() } : null),
         ...(isClosedCourse
           ? {
-              contactProfile: yup.object().required(),
+              bookingContact: yup.object().required(),
               freeSpaces: yup
                 .number()
                 .typeError(t('components.course-form.free-spaces-required'))
@@ -273,7 +273,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       accreditedBy: courseInput?.accreditedBy ?? Accreditors_Enum.Icm,
       organization: courseInput?.organization ?? null,
       salesRepresentative: courseInput?.salesRepresentative ?? null,
-      contactProfile: courseInput?.contactProfile ?? null,
+      bookingContact: courseInput?.bookingContact ?? null,
       courseLevel: courseInput?.courseLevel ?? '',
       blendedLearning: courseInput?.blendedLearning ?? false,
       reaccreditation: courseInput?.reaccreditation ?? false,
@@ -683,10 +683,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               </Typography>
 
               <ProfileSelector
-                value={values.contactProfile ?? undefined}
+                value={values.bookingContact ?? undefined}
                 orgId={getValues('organization')?.id ?? undefined}
                 onChange={profile => {
-                  setValue('contactProfile', profile ?? null, {
+                  setValue('bookingContact', profile ?? null, {
                     shouldValidate: true,
                   })
                 }}
@@ -694,7 +694,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 textFieldProps={{ variant: 'filled' }}
                 disabled={
                   !getValues('organization') ||
-                  disabledFields.has('contactProfile')
+                  disabledFields.has('bookingContact')
                 }
                 placeholder={t(
                   'components.course-form.contact-person-placeholder'

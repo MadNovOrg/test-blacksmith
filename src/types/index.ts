@@ -29,10 +29,10 @@ export type Course = {
   status: Course_Status_Enum
   reaccreditation: boolean
   organization?: Organization
-  contactProfile?: Profile
+  bookingContact?: Profile
   salesRepresentative?: Profile
   source?: Course_Source_Enum
-  contactProfileId?: string
+  bookingContactProfileId?: string
   salesRepresentativeId?: string
   schedule: CourseSchedule[]
   trainers?: CourseTrainer[]
@@ -211,6 +211,7 @@ export enum RoleName {
   TT_OPS = 'tt-ops',
   UNVERIFIED = 'unverified',
   USER = 'user',
+  BOOKING_CONTACT = 'booking-contact',
 }
 
 export enum TrainerRoleTypeName {
@@ -537,7 +538,7 @@ export type CourseCertificateChangelog = {
 export type CourseInput = {
   type: CourseType | null
   organization: Organization | null
-  contactProfile: Profile | null
+  bookingContact: Profile | null
   salesRepresentative: Profile | null
   courseLevel: CourseLevel | ''
   blendedLearning: boolean

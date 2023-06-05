@@ -199,8 +199,8 @@ export function useSaveCourse(): {
             ...(courseData.organization
               ? { organization_id: courseData.organization.id }
               : null),
-            ...(courseData.contactProfile
-              ? { contactProfileId: courseData.contactProfile.id }
+            ...(courseData.bookingContact
+              ? { bookingContactProfileId: courseData.bookingContact.id }
               : null),
             ...(courseData.usesAOL
               ? {

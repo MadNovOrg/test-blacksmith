@@ -22,6 +22,8 @@ configuration:
       custom_name: aolCountry
     modules_duration:
       custom_name: modulesDuration
+    booking_contact_invite_email:
+      custom_name: bookingContactInviteEmail
     course_status:
       custom_name: status
     sales_representative_id:
@@ -40,12 +42,12 @@ configuration:
       custom_name: accreditedBy
     created_at:
       custom_name: createdAt
+    booking_contact_profile_id:
+      custom_name: bookingContactProfileId
     go1_integration:
       custom_name: go1Integration
     account_code:
       custom_name: accountCode
-    contact_profile_id:
-      custom_name: contactProfileId
     course_delivery_type:
       custom_name: deliveryType
   custom_column_names:
@@ -58,6 +60,7 @@ configuration:
     price_currency: priceCurrency
     aol_country: aolCountry
     modules_duration: modulesDuration
+    booking_contact_invite_email: bookingContactInviteEmail
     course_status: status
     sales_representative_id: salesRepresentativeId
     created_by_id: createdById
@@ -67,11 +70,14 @@ configuration:
     updated_at: updatedAt
     accredited_by: accreditedBy
     created_at: createdAt
+    booking_contact_profile_id: bookingContactProfileId
     go1_integration: go1Integration
     account_code: accountCode
-    contact_profile_id: contactProfileId
     course_delivery_type: deliveryType
 object_relationships:
+  - name: bookingContact
+    using:
+      foreign_key_constraint_on: booking_contact_profile_id
   - name: cancellationRequest
     using:
       foreign_key_constraint_on:
@@ -79,9 +85,6 @@ object_relationships:
         table:
           schema: public
           name: course_cancellation_request
-  - name: contactProfile
-    using:
-      foreign_key_constraint_on: contact_profile_id
   - name: createdBy
     using:
       foreign_key_constraint_on: created_by_id
@@ -215,7 +218,7 @@ insert_permissions:
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -252,7 +255,7 @@ insert_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
-        - contact_profile_id
+        - booking_contact_profile_id
         - course_delivery_type
         - course_level
         - course_status
@@ -287,7 +290,7 @@ insert_permissions:
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -325,7 +328,7 @@ insert_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -394,7 +397,7 @@ select_permissions:
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -439,7 +442,7 @@ select_permissions:
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -484,7 +487,7 @@ select_permissions:
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -529,7 +532,7 @@ select_permissions:
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -572,7 +575,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -650,7 +653,7 @@ select_permissions:
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -695,7 +698,7 @@ select_permissions:
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -736,7 +739,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
-        - contact_profile_id
+        - booking_contact_profile_id
         - course_delivery_type
         - course_level
         - course_status
@@ -778,7 +781,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -856,7 +859,7 @@ update_permissions:
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -897,7 +900,7 @@ update_permissions:
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -938,7 +941,7 @@ update_permissions:
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_status
@@ -976,7 +979,7 @@ update_permissions:
         - aol_country
         - aol_region
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - course_delivery_type
         - course_status
         - created_at
@@ -1018,7 +1021,7 @@ update_permissions:
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -1055,7 +1058,7 @@ update_permissions:
         - aol_region
         - cancellation_fee_percent
         - cancellation_reason
-        - contact_profile_id
+        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level

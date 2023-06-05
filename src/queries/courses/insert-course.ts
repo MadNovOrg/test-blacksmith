@@ -24,7 +24,7 @@ export type ParamsType = {
     bildStrategies?: { data: Array<{ strategyName: BildStrategies }> }
     level?: CourseLevel
     organization_id?: string
-    contactProfileId?: string
+    bookingContactProfileId?: string
     salesRepresentativeId?: string
     source?: Course_Source_Enum
     reaccreditation?: boolean

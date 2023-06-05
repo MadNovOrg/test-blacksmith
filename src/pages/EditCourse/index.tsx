@@ -279,8 +279,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               ...(courseData.organization
                 ? { organization_id: courseData.organization.id }
                 : null),
-              ...(courseData.contactProfile
-                ? { contactProfileId: courseData.contactProfile.id }
+              ...(courseData.bookingContact
+                ? { bookingContactProfileId: courseData.bookingContact.id }
                 : null),
               ...(courseData.salesRepresentative
                 ? { salesRepresentativeId: courseData.salesRepresentative.id }
@@ -394,7 +394,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       if (!acl.canEditWithoutRestrictions(course.type)) {
         return new Set<DisabledFields>([
           'organization',
-          'contactProfile',
+          'bookingContact',
           'courseLevel',
           'blendedLearning',
           'reaccreditation',
