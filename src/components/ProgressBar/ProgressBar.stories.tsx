@@ -3,9 +3,12 @@ import React from 'react'
 
 import ProgressBar from '.'
 
+import withMuiThemeProvider from '@storybook-decorators/withMuiThemeProvider'
+
 export default {
   title: 'components/ProgressBar',
   component: ProgressBar,
+  decorators: [withMuiThemeProvider],
 } as ComponentMeta<typeof ProgressBar>
 
 const Template: ComponentStory<typeof ProgressBar> = args => {
