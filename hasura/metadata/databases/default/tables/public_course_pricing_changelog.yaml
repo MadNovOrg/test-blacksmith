@@ -1,0 +1,82 @@
+table:
+  schema: public
+  name: course_pricing_changelog
+configuration:
+  custom_root_fields: {}
+  column_config:
+    author_id:
+      custom_name: authorId
+    updated_at:
+      custom_name: updatedAt
+    created_at:
+      custom_name: createdAt
+    old_price:
+      custom_name: oldPrice
+    course_pricing_id:
+      custom_name: coursePricingId
+    new_price:
+      custom_name: newPrice
+  custom_column_names:
+    author_id: authorId
+    updated_at: updatedAt
+    created_at: createdAt
+    old_price: oldPrice
+    course_pricing_id: coursePricingId
+    new_price: newPrice
+object_relationships:
+  - name: author
+    using:
+      foreign_key_constraint_on: author_id
+  - name: coursePricing
+    using:
+      foreign_key_constraint_on: course_pricing_id
+insert_permissions:
+  - role: finance
+    permission:
+      check: {}
+      columns:
+        - new_price
+        - old_price
+        - created_at
+        - updated_at
+        - author_id
+        - course_pricing_id
+        - id
+      backend_only: false
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - id
+        - course_pricing_id
+        - old_price
+        - new_price
+        - author_id
+        - created_at
+        - updated_at
+      backend_only: false
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - new_price
+        - old_price
+        - created_at
+        - updated_at
+        - author_id
+        - course_pricing_id
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - new_price
+        - old_price
+        - created_at
+        - updated_at
+        - author_id
+        - course_pricing_id
+        - id
+      filter: {}
+      allow_aggregations: true

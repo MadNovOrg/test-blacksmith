@@ -910,6 +910,10 @@
         "title": "Discounts",
         "description": "Manage discounts."
       },
+      "course-pricing": {
+        "title": "Course pricing",
+        "description": "Manage course pricing."
+      },
       "cancellations-transfers-replacements": {
         "title": "Cancellations, Transfers & Replacements",
         "description": "An audit log of all cancellations, transfers and replacements."
@@ -1201,6 +1205,37 @@
     "organization-admin": "Organisation admin",
     "organization-admin-hint": "Ability to manage users within the organisation, book private courses for the organisation, and same access as a user. ",
     "duplicate-email": "User with provided email address has already been invited to this organisation."
+  },
+  "course-pricing": {
+    "title": "Pricing",
+    "bulk-edit-btn": "Bulk edit prices",
+    "change-blended-btn": "Change blended license fee",
+    "cols-course": "Course level",
+    "cols-type": "Course type",
+    "cols-delivery": "Delivery",
+    "cols-attributes": "Attributes",
+    "cols-price": "Price",
+    "cols-modified": "Last modified",
+    "cols-was": "Was",
+    "cols-now": "Now",
+    "cols-administrator": "Administered by",
+    "cols-date": "Date",
+    "cols-event": "Event",
+    "edit-pricing": "Edit",
+    "view-history": "View history",
+    "modal-price-label": "Price per participant",
+    "modal-details-label": "Course details",
+    "modal-save": "Save details",
+    "modal-cancel": "Cancel",
+    "modal-individual-edit-title": "Edit price",
+    "modal-individual-edit-description": "Please review the course details before proceeding. Price changes are effective immediately after saving.",
+    "modal-multiple-edit-title": "Bulk edit prices",
+    "modal-multiple-edit-intro": "Please make sure your selection is correct before proceeding.",
+    "modal-multiple-edit-notice": "Price changes are effective immediately after saving.",
+    "modal-multiple-edit-price-reduction": "Change of price is lower than the original cost.",
+    "modal-multiple-edit-remove-errors": "Remove errors",
+    "modal-changelog-title": "Pricing history",
+    "modal-changelog-event": "Changed price from {{ oldPrice }} to {{ newPrice }}"
   },
   "promoCodes": {
     "title": "Discounts",

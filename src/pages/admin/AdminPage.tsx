@@ -20,6 +20,9 @@ export const AdminPage: React.FC<
       { name: 'users', link: '/admin/users' },
       { name: 'organisations', link: '/organisations/list' },
     ]
+    if (acl.canViewAdminPricing()) {
+      hubSettings.push({ name: 'course-pricing', link: '/admin/pricing' })
+    }
     if (acl.canViewAdminDiscount()) {
       hubSettings.push({ name: 'discounts', link: '/admin/discounts' })
     }

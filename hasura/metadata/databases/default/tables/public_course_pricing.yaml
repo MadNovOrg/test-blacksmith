@@ -10,10 +10,16 @@ configuration:
       custom_name: priceCurrency
     price_amount:
       custom_name: priceAmount
+    updated_at:
+      custom_name: updatedAt
+    created_at:
+      custom_name: createdAt
   custom_column_names:
     xero_code: xeroCode
     price_currency: priceCurrency
     price_amount: priceAmount
+    updated_at: updatedAt
+    created_at: createdAt
 select_permissions:
   - role: anonymous
     permission:
@@ -27,6 +33,21 @@ select_permissions:
         _and:
           - type:
               _eq: OPEN
+  - role: finance
+    permission:
+      columns:
+        - blended
+        - reaccreditation
+        - level
+        - price_currency
+        - type
+        - xero_code
+        - created_at
+        - updated_at
+        - id
+        - price_amount
+      filter: {}
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
@@ -42,15 +63,18 @@ select_permissions:
   - role: tt-admin
     permission:
       columns:
+        - id
+        - type
+        - level
         - blended
         - reaccreditation
-        - level
-        - price_currency
-        - type
-        - xero_code
-        - id
         - price_amount
+        - price_currency
+        - xero_code
+        - created_at
+        - updated_at
       filter: {}
+      allow_aggregations: true
   - role: tt-ops
     permission:
       columns:
@@ -63,3 +87,16 @@ select_permissions:
         - id
         - price_amount
       filter: {}
+update_permissions:
+  - role: finance
+    permission:
+      columns:
+        - price_amount
+      filter: {}
+      check: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - price_amount
+      filter: {}
+      check: {}

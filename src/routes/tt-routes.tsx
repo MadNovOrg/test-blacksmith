@@ -46,6 +46,7 @@ import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
+import { PricingList } from '@app/pages/tt-pages/Pricing'
 import { XeroConnect } from '@app/pages/tt-pages/Xero'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
@@ -173,6 +174,13 @@ const TTAdminRoutes = () => {
             <Route path="users" element={<Users />}>
               {acl.canMergeProfiles() ? <Route path="merge" /> : undefined}
             </Route>
+
+            {acl.canViewAdminPricing() ? (
+              <Route path="pricing">
+                <Route index element={<PricingList />} />
+              </Route>
+            ) : null}
+
             {acl.canViewAdminDiscount() ? (
               <Route path="discounts">
                 <Route index element={<DiscountsList />} />

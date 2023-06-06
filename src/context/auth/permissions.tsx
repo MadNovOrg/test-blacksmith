@@ -88,6 +88,11 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return roles.some(r => r === auth.activeRole)
     },
 
+    canViewAdminPricing: () => {
+      const roles = [RoleName.TT_ADMIN, RoleName.FINANCE]
+      return roles.some(r => r === auth.activeRole)
+    },
+
     canApproveDiscount: () => {
       const roles = [RoleName.FINANCE, RoleName.TT_ADMIN]
       return roles.some(r => r === auth.activeRole)

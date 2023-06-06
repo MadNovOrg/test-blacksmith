@@ -13,9 +13,10 @@ type Props = {
   onChange: (selected: boolean) => void
 }
 
-export const FilterByBlendedLearning: React.FC<
-  React.PropsWithChildren<Props>
-> = ({ selected = false, onChange = noop }) => {
+export const FilterByReaccreditation: React.FC<Props> = ({
+  selected = false,
+  onChange = noop,
+}) => {
   const { t } = useTranslation()
   return (
     <Box
@@ -31,8 +32,8 @@ export const FilterByBlendedLearning: React.FC<
             onChange={(event, checked) => onChange(checked)}
           />
         }
-        label={t('common.blended-learning')}
-        data-testid="FilterByBlendedLearning"
+        label={t('common.reaccreditation')}
+        data-testid="FilterByReaccreditation"
         sx={{
           [`& .${formControlLabelClasses.label}`]: {
             fontSize: '.95rem',

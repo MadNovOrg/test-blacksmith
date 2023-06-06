@@ -21,6 +21,7 @@ import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
+import { PricingList } from '@app/pages/tt-pages/Pricing'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 import ResourcesRoutes from './resources'
@@ -166,6 +167,11 @@ const FinanceRoute = () => {
             <Route index element={<AdminPage />} />
             <Route path="contacts" element={<Contacts />} />
             <Route path="users" element={<Users />} />
+            {acl.canViewAdminPricing() ? (
+              <Route path="pricing">
+                <Route index element={<PricingList />} />
+              </Route>
+            ) : null}
             <Route path="discounts">
               <Route index element={<DiscountsList />} />
               <Route path="new" element={<DiscountForm />} />

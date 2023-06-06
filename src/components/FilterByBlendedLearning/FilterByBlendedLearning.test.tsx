@@ -9,7 +9,7 @@ describe('component: FilterByBlendedLearning', () => {
     const onChange = jest.fn()
     render(<FilterByBlendedLearning onChange={onChange} selected />)
 
-    await userEvent.click(screen.getByLabelText('Blended Learning'))
+    await userEvent.click(screen.getByLabelText('Blended learning'))
 
     expect(onChange).toHaveBeenCalled()
   })
