@@ -3,6 +3,7 @@ import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
 import {
+  GetCourseParticipantOrderQuery,
   ReplaceParticipantError,
   ReplaceParticipantMutation,
   ReplaceParticipantMutationVariables,
@@ -16,6 +17,7 @@ describe('component: ReplaceParticipantDialog', () => {
   it('displays participant information', () => {
     const client = {
       executeMutation: () => never,
+      executeQuery: () => never,
     } as unknown as Client
 
     const participant: Props['participant'] = {
@@ -36,6 +38,7 @@ describe('component: ReplaceParticipantDialog', () => {
   it('validates email field', async () => {
     const client = {
       executeMutation: () => never,
+      executeQuery: () => never,
     } as unknown as Client
 
     const participant: Props['participant'] = {
@@ -62,6 +65,7 @@ describe('component: ReplaceParticipantDialog', () => {
   it('calls cancel prop when closing dialog', async () => {
     const client = {
       executeMutation: () => never,
+      executeQuery: () => never,
     } as unknown as Client
 
     const participant: Props['participant'] = {
@@ -110,6 +114,7 @@ describe('component: ReplaceParticipantDialog', () => {
           },
         })
       },
+      executeQuery: () => never,
     } as unknown as Client
 
     const participant: Props['participant'] = {
@@ -154,6 +159,7 @@ describe('component: ReplaceParticipantDialog', () => {
             },
           },
         }),
+      executeQuery: () => never,
     } as unknown as Client
 
     const participant: Props['participant'] = {
@@ -195,6 +201,7 @@ describe('component: ReplaceParticipantDialog', () => {
   it('requires accepting the terms if an org admin is doing the replacement', async () => {
     const client = {
       executeMutation: () => never,
+      executeQuery: () => never,
     } as unknown as Client
 
     const participant: Props['participant'] = {
@@ -227,6 +234,42 @@ describe('component: ReplaceParticipantDialog', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/replace attendee/i)).toBeEnabled()
+    })
+  })
+
+  it('displays related orders invoice number', async () => {
+    const invoiceNumber = chance.string()
+
+    const client = {
+      executeMutation: () => never,
+      executeQuery: () =>
+        fromValue<{ data: GetCourseParticipantOrderQuery }>({
+          data: {
+            participant: {
+              order: {
+                xeroInvoiceNumber: invoiceNumber,
+                id: chance.guid(),
+              },
+            },
+          },
+        }),
+    } as unknown as Client
+
+    const participant: Props['participant'] = {
+      id: chance.guid(),
+      fullName: chance.name(),
+      avatar: chance.url(),
+    }
+
+    render(
+      <Provider value={client}>
+        <ReplaceParticipantDialog participant={participant} />
+      </Provider>
+    )
+
+    await waitFor(() => {
+      expect(screen.getByText(/invoice no/i)).toBeInTheDocument()
+      expect(screen.getByText(invoiceNumber)).toBeInTheDocument()
     })
   })
 })

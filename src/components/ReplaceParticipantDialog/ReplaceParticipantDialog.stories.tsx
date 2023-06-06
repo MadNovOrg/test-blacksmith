@@ -31,6 +31,7 @@ const participant: Props['participant'] = {
 export const WithFetchingState = () => {
   const client = {
     executeMutation: () => never,
+    executeQuery: () => never,
   } as unknown as Client
 
   return (
@@ -51,6 +52,7 @@ export const WithErrorState = () => {
           },
         },
       }),
+    executeQuery: () => never,
   } as unknown as Client
 
   return (
@@ -66,6 +68,7 @@ export const WithGQLError = () => {
       fromValue({
         error: new CombinedError({ networkError: Error('network error') }),
       }),
+    executeQuery: () => never,
   } as unknown as Client
 
   return (
@@ -85,6 +88,7 @@ export const WithSuccess = () => {
           },
         },
       }),
+    executeQuery: () => never,
   } as unknown as Client
 
   return (
@@ -107,6 +111,7 @@ export const AsOrgAdmin = () => {
           },
         },
       }),
+    executeQuery: () => never,
   } as unknown as Client
 
   return (
@@ -131,6 +136,7 @@ export const WithParticipantExistsError = () => {
           },
         },
       }),
+    executeQuery: () => never,
   } as unknown as Client
 
   return (

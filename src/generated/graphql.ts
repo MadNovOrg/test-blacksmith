@@ -21648,6 +21648,7 @@ export type Course_Pk_Columns_Input = {
 export type Course_Pricing = {
   __typename?: 'course_pricing';
   blended: Scalars['Boolean'];
+  created_at?: Maybe<Scalars['timestamptz']>;
   id: Scalars['uuid'];
   level: Course_Level_Enum;
   /** Price per participant without any discounts */
@@ -21655,6 +21656,7 @@ export type Course_Pricing = {
   priceCurrency: Scalars['String'];
   reaccreditation: Scalars['Boolean'];
   type: Course_Type_Enum;
+  updated_at?: Maybe<Scalars['timestamptz']>;
   xeroCode: Scalars['String'];
 };
 
@@ -21701,12 +21703,14 @@ export type Course_Pricing_Bool_Exp = {
   _not?: InputMaybe<Course_Pricing_Bool_Exp>;
   _or?: InputMaybe<Array<Course_Pricing_Bool_Exp>>;
   blended?: InputMaybe<Boolean_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   level?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
   priceAmount?: InputMaybe<Numeric_Comparison_Exp>;
   priceCurrency?: InputMaybe<String_Comparison_Exp>;
   reaccreditation?: InputMaybe<Boolean_Comparison_Exp>;
   type?: InputMaybe<Course_Type_Enum_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   xeroCode?: InputMaybe<String_Comparison_Exp>;
 };
 
@@ -21727,6 +21731,7 @@ export type Course_Pricing_Inc_Input = {
 /** input type for inserting data into table "course_pricing" */
 export type Course_Pricing_Insert_Input = {
   blended?: InputMaybe<Scalars['Boolean']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   level?: InputMaybe<Course_Level_Enum>;
   /** Price per participant without any discounts */
@@ -21734,26 +21739,31 @@ export type Course_Pricing_Insert_Input = {
   priceCurrency?: InputMaybe<Scalars['String']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<Course_Type_Enum>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
   xeroCode?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
 export type Course_Pricing_Max_Fields = {
   __typename?: 'course_pricing_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
   /** Price per participant without any discounts */
   priceAmount?: Maybe<Scalars['numeric']>;
   priceCurrency?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
   xeroCode?: Maybe<Scalars['String']>;
 };
 
 /** aggregate min on columns */
 export type Course_Pricing_Min_Fields = {
   __typename?: 'course_pricing_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
   /** Price per participant without any discounts */
   priceAmount?: Maybe<Scalars['numeric']>;
   priceCurrency?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
   xeroCode?: Maybe<Scalars['String']>;
 };
 
@@ -21776,12 +21786,14 @@ export type Course_Pricing_On_Conflict = {
 /** Ordering options when selecting data from "course_pricing". */
 export type Course_Pricing_Order_By = {
   blended?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   level?: InputMaybe<Order_By>;
   priceAmount?: InputMaybe<Order_By>;
   priceCurrency?: InputMaybe<Order_By>;
   reaccreditation?: InputMaybe<Order_By>;
   type?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
   xeroCode?: InputMaybe<Order_By>;
 };
 
@@ -21795,6 +21807,8 @@ export enum Course_Pricing_Select_Column {
   /** column name */
   Blended = 'blended',
   /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
   Id = 'id',
   /** column name */
   Level = 'level',
@@ -21807,12 +21821,15 @@ export enum Course_Pricing_Select_Column {
   /** column name */
   Type = 'type',
   /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
   XeroCode = 'xeroCode'
 }
 
 /** input type for updating data in table "course_pricing" */
 export type Course_Pricing_Set_Input = {
   blended?: InputMaybe<Scalars['Boolean']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   level?: InputMaybe<Course_Level_Enum>;
   /** Price per participant without any discounts */
@@ -21820,6 +21837,7 @@ export type Course_Pricing_Set_Input = {
   priceCurrency?: InputMaybe<Scalars['String']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<Course_Type_Enum>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
   xeroCode?: InputMaybe<Scalars['String']>;
 };
 
@@ -21856,6 +21874,8 @@ export enum Course_Pricing_Update_Column {
   /** column name */
   Blended = 'blended',
   /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
   Id = 'id',
   /** column name */
   Level = 'level',
@@ -21867,6 +21887,8 @@ export enum Course_Pricing_Update_Column {
   Reaccreditation = 'reaccreditation',
   /** column name */
   Type = 'type',
+  /** column name */
+  UpdatedAt = 'updated_at',
   /** column name */
   XeroCode = 'xeroCode'
 }
@@ -44768,6 +44790,13 @@ export type GetCourseParticipantIdQueryVariables = Exact<{
 
 
 export type GetCourseParticipantIdQuery = { __typename?: 'query_root', course_participant: Array<{ __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, attended?: boolean | null, healthSafetyConsent: boolean, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null } | null }> };
+
+export type GetCourseParticipantOrderQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type GetCourseParticipantOrderQuery = { __typename?: 'query_root', participant?: { __typename?: 'course_participant', order?: { __typename?: 'order', xeroInvoiceNumber?: string | null, id: any } | null } | null };
 
 export type CourseParticipantsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;

@@ -14,15 +14,18 @@ import React, { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Trans } from 'react-i18next'
 import { noop } from 'ts-essentials'
-import { useMutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import { InferType } from 'yup'
 
 import { CourseTitleAndDuration } from '@app/components/CourseTitleAndDuration'
 import {
+  GetCourseParticipantOrderQuery,
+  GetCourseParticipantOrderQueryVariables,
   ReplaceParticipantMutation,
   ReplaceParticipantMutationVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { GET_PARTICIPANT_ORDER } from '@app/queries/participants/get-course-participant-order'
 import { schemas, yup } from '@app/schemas'
 import { Course } from '@app/types'
 import { requiredMsg } from '@app/util'
@@ -104,6 +107,22 @@ export const ReplaceParticipantDialog: React.FC<
 
   const hasError = error || data?.replaceParticipant?.error
 
+  const [
+    {
+      data: participantData,
+      fetching: participantFetching,
+      error: participantError,
+    },
+  ] = useQuery<
+    GetCourseParticipantOrderQuery,
+    GetCourseParticipantOrderQueryVariables
+  >({ query: GET_PARTICIPANT_ORDER, variables: { id: participant.id } })
+
+  const order =
+    !participantFetching &&
+    !participantError &&
+    participantData?.participant?.order
+
   return (
     <Dialog
       title={
@@ -143,6 +162,16 @@ export const ReplaceParticipantDialog: React.FC<
               level: course.level,
             }}
           />
+        )}
+        {order && (
+          <>
+            <Typography color="grey.700" fontWeight={600} mb={1}>
+              {_t('common.invoice-no')}
+            </Typography>
+            <Box display="flex" mb={2}>
+              <ListItemText primary={order.xeroInvoiceNumber} />
+            </Box>
+          </>
         )}
         <Typography color="grey.700" fontWeight={600} mb={1}>
           {t('participant-title')}
