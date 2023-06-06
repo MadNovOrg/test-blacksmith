@@ -311,18 +311,14 @@ export function canBeF2FBild() {
 
 export function canBeMixedBild(
   courseType: CourseType,
-  courseLevel: CourseLevel | ''
+  courseLevel: CourseLevel | '',
+  selectedStrategies: BildStrategies[]
 ): boolean {
-  switch (courseType) {
-    case CourseType.INDIRECT: {
-      return true
-    }
-
-    case CourseType.OPEN:
-    case CourseType.CLOSED: {
-      return courseLevel === CourseLevel.BildIntermediateTrainer
-    }
+  if (courseLevel === CourseLevel.BildRegular) {
+    return selectedStrategies.includes(BildStrategies.Primary)
   }
+
+  return courseLevel === CourseLevel.BildIntermediateTrainer
 }
 
 export function canBeVirtualBild(

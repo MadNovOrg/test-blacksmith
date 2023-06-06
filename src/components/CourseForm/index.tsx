@@ -42,7 +42,7 @@ import {
   CourseType,
   RoleName,
 } from '@app/types'
-import { extractTime, LoadingStatus } from '@app/util'
+import { bildStrategiesToArray, extractTime, LoadingStatus } from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
 import { ProfileSelector } from '../ProfileSelector'
@@ -372,7 +372,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const canMixed =
     values.accreditedBy === Accreditors_Enum.Icm
       ? canBeMixed(courseType, courseLevel)
-      : canBeMixedBild(courseType, values.courseLevel)
+      : canBeMixedBild(
+          courseType,
+          values.courseLevel,
+          values.bildStrategies
+            ? bildStrategiesToArray(values.bildStrategies)
+            : []
+        )
 
   const conversionEnabled =
     isBild && canBeConversion(values.reaccreditation, values.courseLevel)

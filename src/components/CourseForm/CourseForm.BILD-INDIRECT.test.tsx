@@ -5,7 +5,7 @@ import { CourseLevel, CourseType, RoleName } from '@app/types'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 
-import { selectBildCategory } from './test-utils'
+import { selectBildCategory, selectLevel } from './test-utils'
 
 import CourseForm from '.'
 
@@ -218,5 +218,27 @@ describe('CourseForm - indirect BILD', () => {
 
     expect(blendedLearningToggle).toBeEnabled()
     expect(reaccreditationToggle).toBeEnabled()
+  })
+
+  it('allows mixed delivery only if primary strategy is selected', async () => {
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.INDIRECT} />, {
+        auth: {
+          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+          activeRole: RoleName.TRAINER,
+        },
+      })
+    })
+
+    await selectBildCategory()
+    await selectLevel(CourseLevel.BildRegular)
+
+    const mixedDeliveryToggle = screen.getByLabelText(/both/i)
+
+    expect(mixedDeliveryToggle).toBeDisabled()
+
+    await userEvent.click(screen.getByLabelText(/primary/i))
+
+    expect(mixedDeliveryToggle).toBeEnabled()
   })
 })
