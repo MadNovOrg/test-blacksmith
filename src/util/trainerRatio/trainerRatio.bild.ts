@@ -1,4 +1,4 @@
-import { BildStrategies, CourseLevel } from '@app/types'
+import { BildStrategies, CourseLevel, CourseType } from '@app/types'
 
 export type BildRatioCriteria = {
   isConversion: boolean
@@ -6,13 +6,14 @@ export type BildRatioCriteria = {
   strategies: BildStrategies[]
   level: CourseLevel
   numberParticipants: number
+  type: CourseType
 }
 
-export function getRequiredLeadsBild(_criteria: BildRatioCriteria): {
+export function getRequiredLeadsBild(criteria: BildRatioCriteria): {
   min: number
   max: number
 } {
-  return toRange(1)
+  return criteria.type === CourseType.OPEN ? { min: 0, max: 1 } : toRange(1)
 }
 
 export function getRequiredAssistantsBild(criteria: BildRatioCriteria): {

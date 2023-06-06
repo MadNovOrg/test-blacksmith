@@ -51,6 +51,7 @@ export function getRequiredAssistants(
         strategy => strategies[strategy]
       ) as BildStrategies[],
       numberParticipants: courseData.max_participants,
+      type: courseData.type,
     })
   }
   return { min: 0, max: 0 }
@@ -70,6 +71,7 @@ export function getRequiredLeads(
         strategy => strategies[strategy]
       ) as BildStrategies[],
       numberParticipants: courseData.max_participants,
+      type: courseData.type,
     })
   }
 
