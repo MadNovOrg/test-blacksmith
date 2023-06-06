@@ -18,6 +18,8 @@ import {
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useEffectOnce } from 'react-use'
+import { noop } from 'ts-essentials'
 
 import { Grade } from '@app/components/Grade'
 import { LinkBehavior } from '@app/components/LinkBehavior'
@@ -32,11 +34,12 @@ import { GradingDetailsAlert } from './components/GradingDetailsAlert'
 
 type CourseGradingProps = {
   course: Course
+  refreshCourse?: () => void
 }
 
 export const CourseGrading: React.FC<
   React.PropsWithChildren<CourseGradingProps>
-> = ({ course }) => {
+> = ({ course, refreshCourse = noop }) => {
   const { t } = useTranslation()
   const theme = useTheme()
   const navigate = useNavigate()
@@ -145,6 +148,10 @@ export const CourseGrading: React.FC<
     },
     []
   )
+
+  useEffectOnce(() => {
+    refreshCourse()
+  })
 
   return (
     <>

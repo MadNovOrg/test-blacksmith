@@ -5,6 +5,7 @@ import { Grade_Enum } from '@app/generated/graphql'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
+import { noop } from '@app/util'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildCourse, buildParticipant } from '@test/mock-data-utils'
@@ -23,7 +24,7 @@ describe('component: CourseGrading', () => {
       mutate: jest.fn(),
     })
 
-    render(<CourseGrading course={course} />)
+    render(<CourseGrading course={course} refreshCourse={noop} />)
 
     expect(screen.getByTestId('course-fetching')).toBeInTheDocument()
   })
@@ -42,7 +43,7 @@ describe('component: CourseGrading', () => {
       mutate: jest.fn(),
     })
 
-    render(<CourseGrading course={course} />)
+    render(<CourseGrading course={course} refreshCourse={noop} />)
 
     const table = screen.getByRole('table')
     expect(table).toBeInTheDocument()
@@ -91,7 +92,7 @@ describe('component: CourseGrading', () => {
       <Routes>
         <Route
           path="/courses/:id/details"
-          element={<CourseGrading course={course} />}
+          element={<CourseGrading course={course} refreshCourse={noop} />}
         />
         <Route
           path="/courses/:id/grading-details"
@@ -126,7 +127,7 @@ describe('component: CourseGrading', () => {
       mutate: jest.fn(),
     })
 
-    render(<CourseGrading course={course} />, {
+    render(<CourseGrading course={course} refreshCourse={noop} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
     const button = screen.getByRole('button', {
@@ -151,7 +152,7 @@ describe('component: CourseGrading', () => {
       mutate: jest.fn(),
     })
 
-    render(<CourseGrading course={course} />, {
+    render(<CourseGrading course={course} refreshCourse={noop} />, {
       auth: { activeRole: RoleName.SALES_ADMIN },
     })
 
@@ -173,7 +174,7 @@ describe('component: CourseGrading', () => {
       mutate: jest.fn(),
     })
 
-    render(<CourseGrading course={course} />, {
+    render(<CourseGrading course={course} refreshCourse={noop} />, {
       auth: { activeRole: RoleName.SALES_ADMIN },
     })
 
@@ -204,7 +205,7 @@ describe('component: CourseGrading', () => {
       mutate: jest.fn(),
     })
 
-    render(<CourseGrading course={course} />, {
+    render(<CourseGrading course={course} refreshCourse={noop} />, {
       auth: { activeRole: RoleName.SALES_ADMIN },
     })
 

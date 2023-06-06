@@ -160,6 +160,10 @@ export const CourseDetails = () => {
     }
   }, [course, fetcher, mutate])
 
+  const onRefreshCourse = useCallback(async () => {
+    await mutate()
+  }, [mutate])
+
   return (
     <>
       {courseError && (
@@ -346,7 +350,10 @@ export const CourseDetails = () => {
 
                   {courseHasEnded ? (
                     <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.GRADING}>
-                      <CourseGrading course={course} />
+                      <CourseGrading
+                        course={course}
+                        refreshCourse={onRefreshCourse}
+                      />
                     </TabPanel>
                   ) : null}
 
