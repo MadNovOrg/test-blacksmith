@@ -347,4 +347,95 @@ describe('page: EditCourse', () => {
       expect(toggle).toBeDisabled()
     })
   })
+
+  it('pre-selects and disables blended learning, reaccreditation toggles on ICM course', async () => {
+    const closedCourse = buildCourse({
+      overrides: {
+        accreditedBy: Accreditors_Enum.Icm,
+        type: CourseType.CLOSED,
+        level: CourseLevel.Level_1,
+        go1Integration: true,
+        reaccreditation: false,
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: closedCourse,
+      status: LoadingStatus.IDLE,
+      mutate: jest.fn(),
+    })
+
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
+    await waitFor(() => {
+      render(
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/edit/:id" element={<EditCourse />} />
+          </Routes>
+        </Provider>,
+        { auth: { activeRole: RoleName.TT_ADMIN } },
+        { initialEntries: ['/courses/edit/1'] }
+      )
+    })
+
+    const blendedLearningToggle = screen.getByLabelText(/blended learning/i)
+    const reaccreditationToggle = screen.getByLabelText(/reaccreditation/i)
+
+    expect(blendedLearningToggle).toBeDisabled()
+    expect(blendedLearningToggle).toBeChecked()
+
+    expect(reaccreditationToggle).toBeDisabled()
+    expect(reaccreditationToggle).not.toBeChecked()
+  })
+
+  it('pre-selects and disables blended learning, reaccreditation toggles on BILD course', async () => {
+    const openCourse = buildCourse({
+      overrides: {
+        accreditedBy: Accreditors_Enum.Bild,
+        type: CourseType.OPEN,
+        level: CourseLevel.BildIntermediateTrainer,
+        go1Integration: false,
+        reaccreditation: false,
+        conversion: true,
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: openCourse,
+      status: LoadingStatus.IDLE,
+      mutate: jest.fn(),
+    })
+
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
+    await waitFor(() => {
+      render(
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/edit/:id" element={<EditCourse />} />
+          </Routes>
+        </Provider>,
+        { auth: { activeRole: RoleName.TT_ADMIN } },
+        { initialEntries: ['/courses/edit/1'] }
+      )
+    })
+
+    const blendedLearningToggle = screen.getByLabelText(/blended learning/i)
+    const reaccreditationToggle = screen.getByLabelText(/reaccreditation/i)
+    const conversionToggle = screen.getByLabelText(/conversion course/i)
+
+    expect(blendedLearningToggle).toBeDisabled()
+    expect(blendedLearningToggle).not.toBeChecked()
+
+    expect(conversionToggle).toBeDisabled()
+    expect(conversionToggle).toBeChecked()
+
+    expect(reaccreditationToggle).toBeDisabled()
+    expect(reaccreditationToggle).not.toBeChecked()
+  })
 })

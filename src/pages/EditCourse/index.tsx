@@ -405,9 +405,16 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           'minParticipants',
           'maxParticipants',
           'bildStrategies',
+          'conversion',
         ])
       }
-      return new Set<DisabledFields>(['courseLevel', 'bildStrategies'])
+      return new Set<DisabledFields>([
+        'courseLevel',
+        'bildStrategies',
+        'blendedLearning',
+        'reaccreditation',
+        'conversion',
+      ])
     }
 
     return new Set([])
