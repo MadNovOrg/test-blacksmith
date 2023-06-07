@@ -1251,6 +1251,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             data-testid="notes-input"
             disabled={disabledFields.has('notes')}
           />
+
+          <Alert severity="warning" variant="outlined" sx={{ marginTop: 2 }}>
+            {t('components.course-form.notes-warning')}
+          </Alert>
         </FormPanel>
 
         {isClosedCourse || (isBild && courseType === CourseType.OPEN) ? (
