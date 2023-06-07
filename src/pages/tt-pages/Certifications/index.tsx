@@ -163,7 +163,10 @@ export const Certifications: React.FC<
             />
             <FilterCourseType onChange={setFilterType} />
             <FilterCertificateValidity onChange={setCertificateStatus} />
-            <FilterCourseLevel onChange={setFilterLevel} />
+            <FilterCourseLevel
+              title={t('course-level')}
+              onChange={setFilterLevel}
+            />
 
             {acl.canViewArchivedUsersCertificates() && (
               <FormControlLabel

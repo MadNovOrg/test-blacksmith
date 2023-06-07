@@ -207,7 +207,10 @@ export const AttendeeCourses: React.FC<
               </Typography>
 
               <Stack gap={1}>
-                <FilterCourseLevel onChange={setFilterLevel} />
+                <FilterCourseLevel
+                  title={t('course-level')}
+                  onChange={setFilterLevel}
+                />
                 <FilterAccordion
                   options={statusOptions}
                   onChange={opts => {

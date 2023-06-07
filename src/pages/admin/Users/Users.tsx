@@ -298,6 +298,7 @@ export const Users = () => {
                 data-testid="FilterTrainerType"
               />
               <FilterCourseLevel
+                title={t('trainer-level')}
                 onChange={setFilteredByCertificateLEvel}
                 excludedStatuses={
                   new Set([

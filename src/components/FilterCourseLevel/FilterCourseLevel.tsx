@@ -13,6 +13,7 @@ import { noop } from '@app/util'
 import { FilterAccordion, FilterOption } from '../FilterAccordion'
 
 type Props = {
+  title?: string
   onChange: (selected: Course_Level_Enum[]) => void
   excludedStatuses?: Set<Course_Level_Enum>
   customStatuses?: Set<Course_Level_Enum>
@@ -26,6 +27,7 @@ const CourseLevelParam = withDefault(
 )
 
 export const FilterCourseLevel: React.FC<React.PropsWithChildren<Props>> = ({
+  title,
   onChange = noop,
   excludedStatuses = new Set(),
   customStatuses = new Set(),
@@ -75,7 +77,7 @@ export const FilterCourseLevel: React.FC<React.PropsWithChildren<Props>> = ({
   return (
     <FilterAccordion
       options={options}
-      title={t('trainer-level')}
+      title={title || t('level')}
       onChange={_onChange}
       data-testid="FilterCourseLevel"
     />

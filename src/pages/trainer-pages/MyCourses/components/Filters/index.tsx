@@ -195,7 +195,10 @@ export function Filters({ onChange }: Props) {
             selected={filterBlendedLearning}
             onChange={setFilterBlendedLearning}
           />
-          <FilterCourseLevel onChange={setFilterLevel} />
+          <FilterCourseLevel
+            title={t('course-level')}
+            onChange={setFilterLevel}
+          />
           <FilterCourseType onChange={setFilterType} />
           <FilterCourseStatus
             onChange={setFilterStatus}
