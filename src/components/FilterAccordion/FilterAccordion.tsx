@@ -65,23 +65,25 @@ export const FilterAccordion = <T,>({
         {title}
       </AccordionSummary>
       <AccordionDetails>
-        {options.map(o => (
-          <ListItemButton
-            key={String(o.id)}
-            className={o.selected ? 'selected' : ''}
-            onClick={() => handleChange(o)}
-            data-testid={`${testId}-option-${o.id}`}
-            data-id={o.id}
-          >
-            <ListItemText
-              primary={o.title}
-              sx={o.highlight ? { color: theme.palette.error.dark } : {}}
-            />
-            <ListItemIcon>
-              <Check />
-            </ListItemIcon>
-          </ListItemButton>
-        ))}
+        {options
+          .sort((a, b) => a.title.localeCompare(b.title))
+          .map(o => (
+            <ListItemButton
+              key={String(o.id)}
+              className={o.selected ? 'selected' : ''}
+              onClick={() => handleChange(o)}
+              data-testid={`${testId}-option-${o.id}`}
+              data-id={o.id}
+            >
+              <ListItemText
+                primary={o.title}
+                sx={o.highlight ? { color: theme.palette.error.dark } : {}}
+              />
+              <ListItemIcon>
+                <Check />
+              </ListItemIcon>
+            </ListItemButton>
+          ))}
       </AccordionDetails>
     </StyledAccordion>
   )
