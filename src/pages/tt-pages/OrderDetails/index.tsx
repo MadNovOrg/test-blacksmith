@@ -342,7 +342,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
 
                   {course?.go1Integration ? (
                     <DetailsItemBox>
-                      <ItemRow data-testid="order-subtotal">
+                      <ItemRow data-testid="licenses-redemeed">
                         <Typography color="grey.700">
                           {t('licenses-redeemed')}
                         </Typography>
