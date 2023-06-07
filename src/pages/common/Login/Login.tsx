@@ -1,13 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import LoadingButton from '@mui/lab/LoadingButton'
+import { LoadingButton } from '@mui/lab'
 import {
   Alert,
-  Box,
+  Typography,
+  TextField,
   FormHelperText,
   Link,
-  TextField,
-  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
+import { Box } from '@mui/system'
 import React, { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -25,7 +27,7 @@ import { useAuth } from '@app/context/auth'
 
 type LocationState = { from: { pathname: string; search: string } }
 
-type LoginInput = {
+export type LoginInput = {
   email: string
   password: string
 }
@@ -36,6 +38,9 @@ export const LoginPage = () => {
   const location = useLocation()
   const auth = useAuth()
   const { t } = useTranslation()
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const [isLoading, setIsLoading] = useState(false)
   const [loginError, setLoginError] = useState<string | null>(null)
@@ -124,7 +129,7 @@ export const LoginPage = () => {
         variant="h3"
         sx={{ textAlign: 'center', fontWeight: 600, color: 'grey.800' }}
       >
-        Log in to Team Teach
+        {t('pages.login.login-in-tt')}
       </Typography>
 
       <Box
@@ -176,6 +181,7 @@ export const LoginPage = () => {
             color="primary"
             data-testid="login-submit"
             size="large"
+            fullWidth={isMobile}
           >
             {t('pages.login.submit-label')}
           </LoadingButton>

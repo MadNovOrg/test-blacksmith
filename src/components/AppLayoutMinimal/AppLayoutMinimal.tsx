@@ -1,4 +1,4 @@
-import { Box, SxProps } from '@mui/material'
+import { Box, SxProps, useTheme, useMediaQuery } from '@mui/material'
 import React from 'react'
 
 import { Logo } from '@app/components/Logo'
@@ -15,27 +15,43 @@ export const AppLayoutMinimal: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   footer,
 }) => {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   return (
     <Box
-      bgcolor="grey.200"
+      bgcolor={isMobile ? 'transparent' : 'grey.200'}
       width="100%"
       height="100%"
-      p={10}
+      p={isMobile ? 0 : 10}
       display="flex"
       flexDirection="column"
       alignItems="center"
       overflow="scroll"
     >
-      <Logo width={80} height={80} />
+      {isMobile ? (
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent={'center'}
+          width={'100%'}
+          py={1}
+          sx={{ borderBottom: 0.1, borderColor: 'grey.200' }}
+        >
+          <Logo width={230} height={48} variant="full" data-testid="app-logo" />
+        </Box>
+      ) : (
+        <Logo width={80} height={80} />
+      )}
       <Box
         mt={3}
         bgcolor="common.white"
         py={5}
-        px={8}
+        px={isMobile ? 4 : 8}
         borderRadius={2}
-        width={width}
         position="relative"
         sx={contentBoxStyles}
+        width={isMobile ? '100%' : width}
       >
         {children}
       </Box>
