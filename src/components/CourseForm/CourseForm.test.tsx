@@ -4,7 +4,7 @@ import React from 'react'
 import { getI18n } from 'react-i18next'
 
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
-import { CourseType, CourseLevel } from '@app/types'
+import { CourseLevel, CourseType } from '@app/types'
 import {
   courseToCourseInput,
   INPUT_DATE_FORMAT,
@@ -14,7 +14,7 @@ import {
 import { act, render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
-import { ZOOM_MOCKED_URL, selectLevel } from './test-utils'
+import { selectLevel, ZOOM_MOCKED_URL } from './test-utils'
 
 import CourseForm from '.'
 
@@ -176,13 +176,13 @@ describe('component: CourseForm', () => {
     })
   })
 
-  it('displays organisation selector and contact profile selector if course type is closed', async () => {
+  it('displays organisation selector and booking contact user selector if course type is closed', async () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.CLOSED} />)
     })
 
     expect(screen.getByText('Org Selector')).toBeInTheDocument()
-    expect(screen.getByTestId('profile-selector')).toBeInTheDocument()
+    expect(screen.getByTestId('user-selector')).toBeInTheDocument()
   })
 
   it('renders correct organisation fields for indirect course type', async () => {

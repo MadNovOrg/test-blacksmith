@@ -14232,7 +14232,7 @@ export type Course = {
   bildStrategies_aggregate: Course_Bild_Strategy_Aggregate;
   /** An object relationship */
   bookingContact?: Maybe<Profile>;
-  bookingContactInviteEmail?: Maybe<Scalars['String']>;
+  bookingContactInviteData?: Maybe<Scalars['jsonb']>;
   bookingContactProfileId?: Maybe<Scalars['uuid']>;
   cancellationFeePercent?: Maybe<Scalars['Int']>;
   cancellationReason?: Maybe<Scalars['String']>;
@@ -14359,6 +14359,12 @@ export type CourseBildStrategies_AggregateArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Course_Bild_Strategy_Order_By>>;
   where?: InputMaybe<Course_Bild_Strategy_Bool_Exp>;
+};
+
+
+/** columns and relationships of "course" */
+export type CourseBookingContactInviteDataArgs = {
+  path?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -14604,6 +14610,11 @@ export type Course_Aggregate_Order_By = {
   var_pop?: InputMaybe<Course_Var_Pop_Order_By>;
   var_samp?: InputMaybe<Course_Var_Samp_Order_By>;
   variance?: InputMaybe<Course_Variance_Order_By>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Course_Append_Input = {
+  bookingContactInviteData?: InputMaybe<Scalars['jsonb']>;
 };
 
 /** input type for inserting array relation for remote table "course" */
@@ -15582,7 +15593,7 @@ export type Course_Bool_Exp = {
   bildModules?: InputMaybe<Course_Bild_Module_Bool_Exp>;
   bildStrategies?: InputMaybe<Course_Bild_Strategy_Bool_Exp>;
   bookingContact?: InputMaybe<Profile_Bool_Exp>;
-  bookingContactInviteEmail?: InputMaybe<String_Comparison_Exp>;
+  bookingContactInviteData?: InputMaybe<Jsonb_Comparison_Exp>;
   bookingContactProfileId?: InputMaybe<Uuid_Comparison_Exp>;
   cancellationFeePercent?: InputMaybe<Int_Comparison_Exp>;
   cancellationReason?: InputMaybe<String_Comparison_Exp>;
@@ -16776,6 +16787,21 @@ export enum Course_Constraint {
   /** unique or primary key constraint */
   CoursePkey = 'course_pkey'
 }
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Course_Delete_At_Path_Input = {
+  bookingContactInviteData?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Course_Delete_Elem_Input = {
+  bookingContactInviteData?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Course_Delete_Key_Input = {
+  bookingContactInviteData?: InputMaybe<Scalars['String']>;
+};
 
 /** columns and relationships of "course_delivery_type" */
 export type Course_Delivery_Type = {
@@ -18822,7 +18848,7 @@ export type Course_Insert_Input = {
   bildModules?: InputMaybe<Course_Bild_Module_Arr_Rel_Insert_Input>;
   bildStrategies?: InputMaybe<Course_Bild_Strategy_Arr_Rel_Insert_Input>;
   bookingContact?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
-  bookingContactInviteEmail?: InputMaybe<Scalars['String']>;
+  bookingContactInviteData?: InputMaybe<Scalars['jsonb']>;
   bookingContactProfileId?: InputMaybe<Scalars['uuid']>;
   cancellationFeePercent?: InputMaybe<Scalars['Int']>;
   cancellationReason?: InputMaybe<Scalars['String']>;
@@ -19489,7 +19515,6 @@ export type Course_Max_Fields = {
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
   aolCountry?: Maybe<Scalars['String']>;
   aolRegion?: Maybe<Scalars['String']>;
-  bookingContactInviteEmail?: Maybe<Scalars['String']>;
   bookingContactProfileId?: Maybe<Scalars['uuid']>;
   cancellationFeePercent?: Maybe<Scalars['Int']>;
   cancellationReason?: Maybe<Scalars['String']>;
@@ -19518,7 +19543,6 @@ export type Course_Max_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
   aolCountry?: InputMaybe<Order_By>;
   aolRegion?: InputMaybe<Order_By>;
-  bookingContactInviteEmail?: InputMaybe<Order_By>;
   bookingContactProfileId?: InputMaybe<Order_By>;
   cancellationFeePercent?: InputMaybe<Order_By>;
   cancellationReason?: InputMaybe<Order_By>;
@@ -19548,7 +19572,6 @@ export type Course_Min_Fields = {
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
   aolCountry?: Maybe<Scalars['String']>;
   aolRegion?: Maybe<Scalars['String']>;
-  bookingContactInviteEmail?: Maybe<Scalars['String']>;
   bookingContactProfileId?: Maybe<Scalars['uuid']>;
   cancellationFeePercent?: Maybe<Scalars['Int']>;
   cancellationReason?: Maybe<Scalars['String']>;
@@ -19577,7 +19600,6 @@ export type Course_Min_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
   aolCountry?: InputMaybe<Order_By>;
   aolRegion?: InputMaybe<Order_By>;
-  bookingContactInviteEmail?: InputMaybe<Order_By>;
   bookingContactProfileId?: InputMaybe<Order_By>;
   cancellationFeePercent?: InputMaybe<Order_By>;
   cancellationReason?: InputMaybe<Order_By>;
@@ -19939,7 +19961,7 @@ export type Course_Order_By = {
   bildModules_aggregate?: InputMaybe<Course_Bild_Module_Aggregate_Order_By>;
   bildStrategies_aggregate?: InputMaybe<Course_Bild_Strategy_Aggregate_Order_By>;
   bookingContact?: InputMaybe<Profile_Order_By>;
-  bookingContactInviteEmail?: InputMaybe<Order_By>;
+  bookingContactInviteData?: InputMaybe<Order_By>;
   bookingContactProfileId?: InputMaybe<Order_By>;
   cancellationFeePercent?: InputMaybe<Order_By>;
   cancellationReason?: InputMaybe<Order_By>;
@@ -21647,6 +21669,11 @@ export type Course_Pk_Columns_Input = {
   id: Scalars['Int'];
 };
 
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Course_Prepend_Input = {
+  bookingContactInviteData?: InputMaybe<Scalars['jsonb']>;
+};
+
 /** Prices per participant for various course variants */
 export type Course_Pricing = {
   __typename?: 'course_pricing';
@@ -22792,7 +22819,7 @@ export enum Course_Select_Column {
   /** column name */
   AolRegion = 'aolRegion',
   /** column name */
-  BookingContactInviteEmail = 'bookingContactInviteEmail',
+  BookingContactInviteData = 'bookingContactInviteData',
   /** column name */
   BookingContactProfileId = 'bookingContactProfileId',
   /** column name */
@@ -22862,7 +22889,7 @@ export type Course_Set_Input = {
   aolCostOfCourse?: InputMaybe<Scalars['numeric']>;
   aolCountry?: InputMaybe<Scalars['String']>;
   aolRegion?: InputMaybe<Scalars['String']>;
-  bookingContactInviteEmail?: InputMaybe<Scalars['String']>;
+  bookingContactInviteData?: InputMaybe<Scalars['jsonb']>;
   bookingContactProfileId?: InputMaybe<Scalars['uuid']>;
   cancellationFeePercent?: InputMaybe<Scalars['Int']>;
   cancellationReason?: InputMaybe<Scalars['String']>;
@@ -23915,7 +23942,7 @@ export enum Course_Update_Column {
   /** column name */
   AolRegion = 'aolRegion',
   /** column name */
-  BookingContactInviteEmail = 'bookingContactInviteEmail',
+  BookingContactInviteData = 'bookingContactInviteData',
   /** column name */
   BookingContactProfileId = 'bookingContactProfileId',
   /** column name */
@@ -30435,7 +30462,12 @@ export type Mutation_RootUpdate_Color_By_PkArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_CourseArgs = {
+  _append?: InputMaybe<Course_Append_Input>;
+  _delete_at_path?: InputMaybe<Course_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Course_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Course_Delete_Key_Input>;
   _inc?: InputMaybe<Course_Inc_Input>;
+  _prepend?: InputMaybe<Course_Prepend_Input>;
   _set?: InputMaybe<Course_Set_Input>;
   where: Course_Bool_Exp;
 };
@@ -30525,7 +30557,12 @@ export type Mutation_RootUpdate_Course_Bild_Strategy_By_PkArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Course_By_PkArgs = {
+  _append?: InputMaybe<Course_Append_Input>;
+  _delete_at_path?: InputMaybe<Course_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Course_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Course_Delete_Key_Input>;
   _inc?: InputMaybe<Course_Inc_Input>;
+  _prepend?: InputMaybe<Course_Prepend_Input>;
   _set?: InputMaybe<Course_Set_Input>;
   pk_columns: Course_Pk_Columns_Input;
 };

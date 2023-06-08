@@ -199,9 +199,11 @@ export function useSaveCourse(): {
             ...(courseData.organization
               ? { organization_id: courseData.organization.id }
               : null),
-            ...(courseData.bookingContact
-              ? { bookingContactProfileId: courseData.bookingContact.id }
-              : null),
+            ...(courseData.bookingContact?.profileId
+              ? {
+                  bookingContactProfileId: courseData.bookingContact.profileId,
+                }
+              : { bookingContactInviteData: courseData.bookingContact }),
             ...(courseData.usesAOL
               ? {
                   aolCostOfCourse: courseData.courseCost,

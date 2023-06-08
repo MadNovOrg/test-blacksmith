@@ -29,11 +29,12 @@ import { noop } from 'ts-essentials'
 
 import { FormPanel } from '@app/components/FormPanel'
 import { NumericTextField } from '@app/components/NumericTextField'
+import { UserSelector } from '@app/components/UserSelector'
 import { useAuth } from '@app/context/auth'
 import { Accreditors_Enum, Course_Source_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
-import { yup } from '@app/schemas'
+import { schemas, yup } from '@app/schemas'
 import theme from '@app/theme'
 import {
   CourseDeliveryType,
@@ -42,7 +43,12 @@ import {
   CourseType,
   RoleName,
 } from '@app/types'
-import { bildStrategiesToArray, extractTime, LoadingStatus } from '@app/util'
+import {
+  bildStrategiesToArray,
+  extractTime,
+  LoadingStatus,
+  requiredMsg,
+} from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
 import { ProfileSelector } from '../ProfileSelector'
@@ -113,7 +119,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         ...(hasOrg ? { organization: yup.object().required() } : null),
         ...(isClosedCourse
           ? {
-              bookingContact: yup.object().required(),
+              bookingContact: yup.object({
+                profileId: yup.string(),
+                firstName: yup.string().required(requiredMsg(t, 'first-name')),
+                lastName: yup.string().required(requiredMsg(t, 'last-name')),
+                email: schemas.email(t).required(requiredMsg(t, 'email')),
+              }),
               freeSpaces: yup
                 .number()
                 .typeError(t('components.course-form.free-spaces-required'))
@@ -273,7 +284,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       accreditedBy: courseInput?.accreditedBy ?? Accreditors_Enum.Icm,
       organization: courseInput?.organization ?? null,
       salesRepresentative: courseInput?.salesRepresentative ?? null,
-      bookingContact: courseInput?.bookingContact ?? null,
+      bookingContact: courseInput?.bookingContact ?? {
+        firstName: '',
+        lastName: '',
+        email: '',
+      },
       courseLevel: courseInput?.courseLevel ?? '',
       blendedLearning: courseInput?.blendedLearning ?? false,
       reaccreditation: courseInput?.reaccreditation ?? false,
@@ -688,24 +703,70 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 {t('components.course-form.contact-person-label')}
               </Typography>
 
-              <ProfileSelector
-                value={values.bookingContact ?? undefined}
-                orgId={getValues('organization')?.id ?? undefined}
-                onChange={profile => {
-                  setValue('bookingContact', profile ?? null, {
-                    shouldValidate: true,
-                  })
-                }}
-                sx={{ marginBottom: 2 }}
-                textFieldProps={{ variant: 'filled' }}
-                disabled={
-                  !getValues('organization') ||
-                  disabledFields.has('bookingContact')
-                }
-                placeholder={t(
-                  'components.course-form.contact-person-placeholder'
-                )}
-              />
+              <Grid container spacing={3} mb={3}>
+                <Grid item md={12}>
+                  <UserSelector
+                    onChange={p => {
+                      setValue(
+                        'bookingContact',
+                        {
+                          profileId: p?.id || undefined,
+                          email: p?.email || '',
+                          firstName: p?.givenName || '',
+                          lastName: p?.familyName || '',
+                        },
+                        { shouldValidate: true }
+                      )
+                    }}
+                    onEmailChange={email =>
+                      setValue('bookingContact.email', email, {
+                        shouldValidate: true,
+                      })
+                    }
+                    organisationId={getValues('organization')?.id ?? ''}
+                    textFieldProps={{
+                      variant: 'filled',
+                    }}
+                    error={errors.bookingContact?.email?.message}
+                    disabled={
+                      !getValues('organization') ||
+                      disabledFields.has('bookingContact')
+                    }
+                  />
+                </Grid>
+                <Grid item md={6}>
+                  <TextField
+                    label={t('first-name')}
+                    variant="filled"
+                    placeholder={t('first-name-placeholder')}
+                    {...register(`bookingContact.firstName`)}
+                    error={!!errors.bookingContact?.firstName}
+                    helperText={errors.bookingContact?.firstName?.message ?? ''}
+                    disabled={
+                      !getValues('organization') ||
+                      disabledFields.has('bookingContact') ||
+                      !!getValues('bookingContact')?.profileId
+                    }
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item md={6}>
+                  <TextField
+                    label={t('surname')}
+                    variant="filled"
+                    placeholder={t('surname-placeholder')}
+                    {...register(`bookingContact.lastName`)}
+                    error={!!errors.bookingContact?.lastName}
+                    helperText={errors.bookingContact?.lastName?.message ?? ''}
+                    disabled={
+                      !getValues('organization') ||
+                      disabledFields.has('bookingContact') ||
+                      !!getValues('bookingContact')?.profileId
+                    }
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
             </>
           ) : null}
 

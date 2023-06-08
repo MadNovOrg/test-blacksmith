@@ -24,7 +24,7 @@ export type Member = Pick<
   'profile'
 >
 
-export type Profile = NonNullish<Member['profile']>
+export type Profile = Member['profile'] | null
 
 export type UserSelectorProps = {
   onChange: (profile: Profile) => void
@@ -90,10 +90,7 @@ export const UserSelector: React.FC<
 
   const handleChange = (event: React.SyntheticEvent, option: Member | null) => {
     event.preventDefault()
-
-    if (option?.profile) {
-      onChange(option?.profile)
-    }
+    onChange(option?.profile ?? null)
   }
 
   const noOptionsText =
@@ -133,7 +130,6 @@ export const UserSelector: React.FC<
         disabled={disabled}
         renderInput={params => (
           <TextField
-            {...textFieldProps}
             {...params}
             placeholder={t('components.user-selector.placeholder')}
             InputProps={{
@@ -149,6 +145,7 @@ export const UserSelector: React.FC<
             }}
             error={!!error}
             helperText={error || ''}
+            {...textFieldProps}
           />
         )}
         renderOption={(props, option) => {

@@ -22,8 +22,6 @@ configuration:
       custom_name: aolCountry
     modules_duration:
       custom_name: modulesDuration
-    booking_contact_invite_email:
-      custom_name: bookingContactInviteEmail
     course_status:
       custom_name: status
     sales_representative_id:
@@ -38,6 +36,8 @@ configuration:
       custom_name: level
     updated_at:
       custom_name: updatedAt
+    booking_contact_invite_data:
+      custom_name: bookingContactInviteData
     accredited_by:
       custom_name: accreditedBy
     created_at:
@@ -60,7 +60,6 @@ configuration:
     price_currency: priceCurrency
     aol_country: aolCountry
     modules_duration: modulesDuration
-    booking_contact_invite_email: bookingContactInviteEmail
     course_status: status
     sales_representative_id: salesRepresentativeId
     created_by_id: createdById
@@ -68,6 +67,7 @@ configuration:
     grading_confirmed: gradingConfirmed
     course_level: level
     updated_at: updatedAt
+    booking_contact_invite_data: bookingContactInviteData
     accredited_by: accreditedBy
     created_at: createdAt
     booking_contact_profile_id: bookingContactProfileId
@@ -216,9 +216,10 @@ insert_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_invite_data
+        - booking_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
-        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -255,6 +256,7 @@ insert_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_invite_data
         - booking_contact_profile_id
         - course_delivery_type
         - course_level
@@ -288,9 +290,10 @@ insert_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_invite_data
+        - booking_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
-        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -328,6 +331,7 @@ insert_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_invite_data
         - booking_contact_profile_id
         - conversion
         - course_delivery_type

@@ -88,7 +88,7 @@
   "course-form": {
     "general-details-title": "General details",
     "organization-label": "Organisation",
-    "contact-person-label": "Contact",
+    "contact-person-label": "Booking contact",
     "course-level-section-title": "Course level and attributes",
     "course-level-placeholder": "Course level",
     "blended-learning-label": "Blended learning",
@@ -126,7 +126,6 @@
     "venue-required": "Venue is required field",
     "online-meeting-link-label": "Online meeting link",
     "online-meeting-link-required": "Online meeting link is a required field",
-    "contact-person-placeholder": "Contact name",
     "aol-title": "Area Operating License (AOL)",
     "aol-label": "I will be using an AOL for this course",
     "course-cost-placeholder": "Cost of course",

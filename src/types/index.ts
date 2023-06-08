@@ -540,7 +540,12 @@ export type CourseCertificateChangelog = {
 export type CourseInput = {
   type: CourseType | null
   organization: Organization | null
-  bookingContact: Profile | null
+  bookingContact: {
+    profileId?: string
+    firstName: string
+    lastName: string
+    email: string
+  } | null
   salesRepresentative: Profile | null
   courseLevel: CourseLevel | ''
   blendedLearning: boolean

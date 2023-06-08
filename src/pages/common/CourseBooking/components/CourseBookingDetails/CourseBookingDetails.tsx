@@ -338,17 +338,17 @@ export const CourseBookingDetails: React.FC<
     index: number
   ) => {
     setValue(`participants.${index}`, {
-      email: profile.email || '',
-      firstName: profile.givenName || '',
-      lastName: profile.familyName || '',
+      email: profile?.email || '',
+      firstName: profile?.givenName || '',
+      lastName: profile?.familyName || '',
     })
   }
 
   const handleChangeBookingContact = async (profile: UserSelectorProfile) => {
     setValue('bookingContact', {
-      email: profile.email || '',
-      firstName: profile.givenName || '',
-      lastName: profile.familyName || '',
+      email: profile?.email || '',
+      firstName: profile?.givenName || '',
+      lastName: profile?.familyName || '',
     })
   }
 
