@@ -6,14 +6,14 @@ import { COURSE, COURSE_SCHEDULE, ORGANIZATION, VENUE } from '../fragments'
 
 export type ResponseType = { course: Course }
 
-export type ParamsType = { id: string }
+export type ParamsType = { id: string; withOrders?: boolean }
 
 export const QUERY = gql`
   ${COURSE}
   ${COURSE_SCHEDULE}
   ${VENUE}
   ${ORGANIZATION}
-  query GetCourseById($id: Int!) {
+  query GetCourseById($id: Int!, $withOrders: Boolean = false) {
     course: course_by_pk(id: $id) {
       ...Course
       bildStrategies {
@@ -70,7 +70,7 @@ export const QUERY = gql`
         avatar
         archived
       }
-      orders {
+      orders @include(if: $withOrders) {
         salesRepresentative {
           id
           fullName
