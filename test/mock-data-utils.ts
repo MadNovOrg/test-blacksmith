@@ -232,11 +232,11 @@ export const buildCourse = build<Course>({
     moduleGroupIds: [],
     bookingContact: perBuild(() => buildProfile()),
     aolCostOfCourse: undefined,
-    salesRepresentative: perBuild(() => buildProfile()),
     accountCode: getAccountCode(),
     freeSpaces: 0,
     accreditedBy: Accreditors_Enum.Icm,
     bildStrategies: [],
+    orders: [{ salesRepresentative: perBuild(() => buildProfile()) }],
   },
 })
 

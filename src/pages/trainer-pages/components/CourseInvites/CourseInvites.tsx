@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 
 import { Dialog } from '@app/components/Dialog'
@@ -28,6 +29,7 @@ const emailSchema = yup.string().email().required()
 
 export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const { acl } = useAuth()
 
   const [showModal, setShowModal] = useState(false)
@@ -162,9 +164,30 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
     <>
       <Grid container item xs="auto" alignItems="center">
         {!courseHasStarted &&
-          !isOpenCourse &&
           !courseCancelled &&
-          acl.canInviteAttendees(course.type) && (
+          acl.canInviteAttendees(course.type) &&
+          (isOpenCourse ? (
+            <>
+              <Typography variant="subtitle2" data-testid="seats-left">
+                {t('pages.course-participants.seats-left', {
+                  count: invitesLeft - emails.length,
+                })}
+              </Typography>
+
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{ ml: 2 }}
+                onClick={() => {
+                  navigate(`/registration?course_id=${course.id}&quantity=1`)
+                }}
+                disabled={invitesLeft === 0}
+                data-testid="add-registrants-btn"
+              >
+                {t('pages.course-participants.add-registrants-btn')}
+              </Button>
+            </>
+          ) : (
             <>
               <Typography variant="subtitle2" data-testid="invites-left">
                 {t('pages.course-participants.invites-left', {
@@ -183,7 +206,7 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
                 {t('pages.course-participants.invite-btn')}
               </Button>
             </>
-          )}
+          ))}
       </Grid>
 
       <Dialog

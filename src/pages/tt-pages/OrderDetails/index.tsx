@@ -446,6 +446,47 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </DetailsItemBox>
                   ) : null}
 
+                  {order.source && (
+                    <DetailsItemBox>
+                      <Stack spacing={2}>
+                        <Typography fontWeight={600}>
+                          {_t('components.course-form.source-title')}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {_t(`course-sources.${order.source}`)}
+                        </Typography>
+                      </Stack>
+                    </DetailsItemBox>
+                  )}
+
+                  {order.salesRepresentative && (
+                    <DetailsItemBox>
+                      <Stack spacing={2}>
+                        <Typography fontWeight={600}>
+                          {_t('components.course-form.sales-rep-placeholder')}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {order.salesRepresentative?.fullName}
+                        </Typography>
+                      </Stack>
+                    </DetailsItemBox>
+                  )}
+
+                  {order.bookingContact && (
+                    <DetailsItemBox>
+                      <Stack spacing={2}>
+                        <Typography fontWeight={600}>
+                          {_t('components.course-form.booking-contact')}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {order.bookingContact.firstName +
+                            ' ' +
+                            order.bookingContact.lastName}
+                        </Typography>
+                      </Stack>
+                    </DetailsItemBox>
+                  )}
+
                   <DetailsItemBox>
                     <Stack spacing={2}>
                       <Typography fontWeight={600}>

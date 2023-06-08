@@ -240,8 +240,6 @@ export function useSaveCourse(): {
             ...(courseData.type === CourseType.CLOSED
               ? {
                   expenses: { data: prepareExpensesData(expenses) },
-                  source: courseData.source,
-                  salesRepresentativeId: courseData.salesRepresentative?.id,
                 }
               : null),
             ...(shouldInsertOrder && invoiceData
@@ -270,6 +268,9 @@ export function useSaveCourse(): {
                           email: profile?.email,
                           phone: profile?.phone,
                         },
+                        source: courseData.source,
+                        salesRepresentativeId:
+                          courseData.salesRepresentative?.id,
                       },
                     ],
                   },

@@ -18,6 +18,10 @@ configuration:
       custom_name: billingAddress
     order_due:
       custom_name: orderDue
+    booking_contact:
+      custom_name: bookingContact
+    sales_representative_id:
+      custom_name: salesRepresentativeId
     promo_codes:
       custom_name: promoCodes
     organization_id:
@@ -42,6 +46,8 @@ configuration:
     payment_method: paymentMethod
     billing_address: billingAddress
     order_due: orderDue
+    booking_contact: bookingContact
+    sales_representative_id: salesRepresentativeId
     promo_codes: promoCodes
     organization_id: organizationId
     billing_given_name: billingGivenName
@@ -64,6 +70,9 @@ object_relationships:
   - name: organization
     using:
       foreign_key_constraint_on: organization_id
+  - name: salesRepresentative
+    using:
+      foreign_key_constraint_on: sales_representative_id
 insert_permissions:
   - role: finance
     permission:
@@ -91,6 +100,8 @@ insert_permissions:
         - promo_codes
         - quantity
         - registrants
+        - sales_representative_id
+        - source
         - user
         - xero_invoice_number
       backend_only: false
@@ -142,6 +153,8 @@ insert_permissions:
         - promo_codes
         - quantity
         - registrants
+        - sales_representative_id
+        - source
         - user
         - xero_invoice_number
       backend_only: false
@@ -166,6 +179,8 @@ insert_permissions:
         - promo_codes
         - quantity
         - registrants
+        - sales_representative_id
+        - source
         - user
         - xero_invoice_number
       backend_only: false
@@ -248,6 +263,7 @@ select_permissions:
         - billing_family_name
         - billing_given_name
         - billing_phone
+        - booking_contact
         - client_purchase_order
         - course_id
         - created_at
@@ -262,6 +278,8 @@ select_permissions:
         - promo_codes
         - quantity
         - registrants
+        - sales_representative_id
+        - source
         - stripePaymentId
         - user
         - vat
@@ -276,6 +294,7 @@ select_permissions:
         - billing_family_name
         - billing_given_name
         - billing_phone
+        - booking_contact
         - client_purchase_order
         - course_id
         - created_at
@@ -290,6 +309,8 @@ select_permissions:
         - promo_codes
         - quantity
         - registrants
+        - sales_representative_id
+        - source
         - stripePaymentId
         - user
         - vat
@@ -304,6 +325,7 @@ select_permissions:
         - billing_family_name
         - billing_given_name
         - billing_phone
+        - booking_contact
         - course_id
         - created_at
         - currency
@@ -317,6 +339,8 @@ select_permissions:
         - promo_codes
         - quantity
         - registrants
+        - sales_representative_id
+        - source
         - stripePaymentId
         - user
         - vat
@@ -331,6 +355,7 @@ select_permissions:
         - billing_family_name
         - billing_given_name
         - billing_phone
+        - booking_contact
         - course_id
         - created_at
         - currency
@@ -344,6 +369,8 @@ select_permissions:
         - promo_codes
         - quantity
         - registrants
+        - sales_representative_id
+        - source
         - stripePaymentId
         - user
         - vat

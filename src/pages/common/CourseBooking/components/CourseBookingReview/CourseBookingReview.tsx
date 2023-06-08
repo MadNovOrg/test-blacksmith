@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { BackButton } from '@app/components/BackButton'
 import { useAuth } from '@app/context/auth'
 import { PaymentMethod } from '@app/generated/graphql'
+import { CourseType } from '@app/types'
 import {
   formatCourseVenue,
   getOrderDueDate,
@@ -37,7 +38,7 @@ export const CourseBookingReview: React.FC<
 > = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { profile } = useAuth()
+  const { profile, acl } = useAuth()
   const { course, booking, amounts, placeOrder } = useBooking()
 
   const [accept, setAccept] = useState(false)
@@ -50,8 +51,6 @@ export const CourseBookingReview: React.FC<
     try {
       const order = await placeOrder()
       setCreatingOrder(false)
-
-      console.log(order)
 
       if (!order) {
         setError(t('pages.book-course.error-creating-order'))
@@ -153,6 +152,34 @@ export const CourseBookingReview: React.FC<
             <Typography>{booking.quantity}</Typography>
           </Stack>
         </Box>
+        {acl.canInviteAttendees(CourseType.OPEN) && (
+          <>
+            <Divider sx={{ my: 2 }} />
+            <Typography gutterBottom fontWeight="600">
+              {t('booking-details')}
+            </Typography>
+            <InfoRow
+              label={t('components.course-form.source-title')}
+              value={t(`course-sources.${booking.source}`)}
+            />
+            {booking.salesRepresentative ? (
+              <InfoRow
+                label={t('components.course-form.sales-rep-placeholder')}
+                value={booking.salesRepresentative?.fullName}
+              />
+            ) : null}
+            {booking.bookingContact ? (
+              <InfoRow
+                label={t('components.course-form.booking-contact')}
+                value={
+                  booking.bookingContact?.firstName +
+                  ' ' +
+                  booking.bookingContact?.lastName
+                }
+              />
+            ) : null}
+          </>
+        )}
         <Divider sx={{ my: 2 }} />
         <Typography gutterBottom fontWeight="600">
           {t('pages.book-course.payment-method')}

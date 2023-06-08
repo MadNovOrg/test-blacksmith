@@ -175,8 +175,15 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canInviteAttendees: (courseType: CourseType) => {
       switch (courseType) {
-        case CourseType.OPEN:
-          return false
+        case CourseType.OPEN: {
+          const roles = [
+            RoleName.TT_ADMIN,
+            RoleName.SALES_REPRESENTATIVE,
+            RoleName.SALES_ADMIN,
+            RoleName.TT_OPS,
+          ]
+          return roles.some(r => r === auth.activeRole) || acl.isOrgAdmin()
+        }
         case CourseType.CLOSED: {
           const roles = [
             RoleName.TT_ADMIN,

@@ -30,10 +30,7 @@ export type Course = {
   reaccreditation: boolean
   organization?: Organization
   bookingContact?: Profile
-  salesRepresentative?: Profile
-  source?: Course_Source_Enum
   bookingContactProfileId?: string
-  salesRepresentativeId?: string
   schedule: CourseSchedule[]
   trainers?: CourseTrainer[]
   gradingConfirmed: boolean
@@ -76,6 +73,11 @@ export type Course = {
   price?: number
   bildStrategies: Array<{
     strategyName: string
+  }>
+  orders?: Array<{
+    salesRepresentativeId?: string
+    salesRepresentative?: Profile
+    source?: Course_Source_Enum
   }>
 } & Omit<Base, 'id'>
 

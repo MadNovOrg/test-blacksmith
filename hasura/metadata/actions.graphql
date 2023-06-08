@@ -523,6 +523,9 @@ input CreateOrderInput {
   registrants: [CreateOrderParticipantInput!]!
   organizationId: String!
   promoCodes: [String!]!
+  source: String
+  salesRepresentativeId: String
+  bookingContact: jsonb
 }
 
 input ReplaceParticipantInput {

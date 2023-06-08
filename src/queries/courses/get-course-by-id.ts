@@ -70,13 +70,15 @@ export const QUERY = gql`
         avatar
         archived
       }
-      salesRepresentative {
-        id
-        fullName
-        avatar
-        archived
+      orders {
+        salesRepresentative {
+          id
+          fullName
+          avatar
+          archived
+        }
+        source
       }
-      source
       dates: schedule_aggregate {
         aggregate {
           start: min {

@@ -27,19 +27,30 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { SourceDropdown } from '@app/components/CourseForm/components/SourceDropdown'
 import { CourseDuration } from '@app/components/CourseTitleAndDuration/components/CourseDuration'
 import {
   formSchema as invoiceDetailsFormSchema,
   InvoiceForm,
 } from '@app/components/InvoiceForm'
 import { OrgSelector } from '@app/components/OrgSelector'
-import { Profile, UserSelector } from '@app/components/UserSelector'
-import { PaymentMethod } from '@app/generated/graphql'
+import { ProfileSelector } from '@app/components/ProfileSelector'
+import {
+  Profile as UserSelectorProfile,
+  UserSelector,
+} from '@app/components/UserSelector'
+import { useAuth } from '@app/context/auth'
+import { Course_Source_Enum, PaymentMethod } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
-import { CourseLevel, CourseType, InvoiceDetails } from '@app/types'
+import { CourseLevel, CourseType, InvoiceDetails, Profile } from '@app/types'
 import { requiredMsg } from '@app/util'
 
-import { ParticipantInput, Sector, useBooking } from '../BookingContext'
+import {
+  BookingContact,
+  ParticipantInput,
+  Sector,
+  useBooking,
+} from '../BookingContext'
 import { PromoCode } from '../PromoCode'
 
 export type AttendeeValidCertificateProps = {
@@ -152,6 +163,9 @@ type FormInputs = {
   sector: Sector
   position: string
   otherPosition: string
+  source: Course_Source_Enum | ''
+  salesRepresentative: Profile | null
+  bookingContact: BookingContact
   paymentMethod: PaymentMethod
 
   invoiceDetails?: InvoiceDetails
@@ -165,6 +179,7 @@ export const CourseBookingDetails: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
   const navigate = useNavigate()
   const {
     course,
@@ -226,6 +241,19 @@ export const CourseBookingDetails: React.FC<
           ? schema.required(t('validation-errors.other-position-required'))
           : schema
       }),
+
+      source: yup.string().oneOf(Object.values(Course_Source_Enum)).required(),
+      salesRepresentative: yup.object().when('source', ([source]) => {
+        return source.startsWith('SALES_')
+          ? yup.object().required()
+          : yup.object()
+      }),
+      bookingContact: yup.object({
+        firstName: yup.string().required(requiredMsg(t, 'first-name')),
+        lastName: yup.string().required(requiredMsg(t, 'last-name')),
+        email: schemas.email(t).required(requiredMsg(t, 'email')),
+      }),
+
       paymentMethod: yup
         .string()
         .oneOf(Object.values(PaymentMethod))
@@ -262,6 +290,13 @@ export const CourseBookingDetails: React.FC<
       sector: booking.sector,
       position: booking.position,
       otherPosition: booking.otherPosition,
+      source: booking.source ?? '',
+      salesRepresentative: booking.salesRepresentative ?? null,
+      bookingContact: booking.bookingContact ?? {
+        firstName: '',
+        lastName: '',
+        email: '',
+      },
       paymentMethod: PaymentMethod.Invoice,
       invoiceDetails: booking.invoiceDetails,
       courseLevel: course.level,
@@ -298,8 +333,19 @@ export const CourseBookingDetails: React.FC<
     course.type
   )
 
-  const handleEmailSelector = async (profile: Profile, index: number) => {
+  const handleEmailSelector = async (
+    profile: UserSelectorProfile,
+    index: number
+  ) => {
     setValue(`participants.${index}`, {
+      email: profile.email || '',
+      firstName: profile.givenName || '',
+      lastName: profile.familyName || '',
+    })
+  }
+
+  const handleChangeBookingContact = async (profile: UserSelectorProfile) => {
+    setValue('bookingContact', {
       email: profile.email || '',
       firstName: profile.givenName || '',
       lastName: profile.familyName || '',
@@ -540,6 +586,115 @@ export const CourseBookingDetails: React.FC<
           </Box>
         </Box>
 
+        {acl.canInviteAttendees(CourseType.OPEN) && (
+          <>
+            <Typography variant="subtitle1" fontWeight="500">
+              {t('booking-details')}
+            </Typography>
+            <Box bgcolor="common.white" p={2} mb={4}>
+              <Box mb={3}>
+                <Typography fontWeight={600}>
+                  {t('components.course-form.source-title')}
+                </Typography>
+                <Controller
+                  name="source"
+                  control={control}
+                  render={({ field }) => (
+                    <SourceDropdown
+                      {...field}
+                      data-testid="source-dropdown"
+                      disabled={false}
+                    />
+                  )}
+                />
+              </Box>
+              {values.source.startsWith('SALES_') && (
+                <Box mb={3}>
+                  <Typography fontWeight={600}>
+                    {t('components.course-form.sales-rep-title')}
+                  </Typography>
+
+                  <ProfileSelector
+                    value={values.salesRepresentative ?? undefined}
+                    onChange={profile => {
+                      setValue('salesRepresentative', profile ?? null, {
+                        shouldValidate: true,
+                      })
+                    }}
+                    textFieldProps={{ variant: 'filled' }}
+                    placeholder={t(
+                      'components.course-form.sales-rep-placeholder'
+                    )}
+                    testId="profile-selector-sales-representative"
+                  />
+                </Box>
+              )}
+              <Box mb={3}>
+                <Typography fontWeight={600}>
+                  {t('components.course-form.booking-contact')}
+                </Typography>
+                <Grid container spacing={3} mb={3}>
+                  <Grid item md={12}>
+                    <UserSelector
+                      onChange={handleChangeBookingContact}
+                      onEmailChange={email => {
+                        setValue('bookingContact', {
+                          ...values.bookingContact,
+                          email,
+                        })
+                      }}
+                      textFieldProps={{ variant: 'filled' }}
+                      organisationId={values.orgId}
+                    />
+                  </Grid>
+                  <Grid item md={6}>
+                    <TextField
+                      label={t('first-name')}
+                      variant="filled"
+                      placeholder={t('first-name-placeholder')}
+                      {...register(`bookingContact.firstName`)}
+                      inputProps={{
+                        'data-testid': `bookingContact-input-first-name`,
+                      }}
+                      sx={{ bgcolor: 'grey.100' }}
+                      error={!!errors.bookingContact?.firstName}
+                      helperText={
+                        errors.bookingContact?.firstName?.message ?? ''
+                      }
+                      InputLabelProps={{
+                        shrink: Boolean(values.bookingContact.firstName),
+                      }}
+                      fullWidth
+                      required
+                    />
+                  </Grid>
+                  <Grid item md={6}>
+                    <TextField
+                      label={t('surname')}
+                      variant="filled"
+                      placeholder={t('surname-placeholder')}
+                      {...register(`bookingContact.lastName`)}
+                      inputProps={{
+                        'data-testid': `bookingContact-input-surname`,
+                      }}
+                      sx={{ bgcolor: 'grey.100' }}
+                      error={!!errors.bookingContact?.lastName}
+                      helperText={
+                        errors.bookingContact?.lastName?.message ?? ''
+                      }
+                      InputLabelProps={{
+                        shrink: Boolean(values.bookingContact.lastName),
+                      }}
+                      fullWidth
+                      required
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Box>
+          </>
+        )}
+
         <Typography variant="subtitle1" fontWeight="500">
           {t('registration')}
         </Typography>
@@ -650,20 +805,24 @@ export const CourseBookingDetails: React.FC<
               render={({ field }) => {
                 return (
                   <RadioGroup aria-labelledby="payment-method" {...field}>
-                    <FormControlLabel
-                      value={PaymentMethod.Cc}
-                      control={<Radio />}
-                      label={
-                        <Box>
-                          <Typography gutterBottom fontWeight="500">
-                            {t('pages.book-course.pay-by-cc')}
-                          </Typography>
-                          <Typography variant="body2" color="grey.700">
-                            {t('pages.book-course.pay-by-cc-info')}
-                          </Typography>
-                        </Box>
-                      }
-                    />
+                    {acl.canInviteAttendees(CourseType.OPEN) ? null : (
+                      <FormControlLabel
+                        // Internal TT users can create booking for open courses
+                        // without paying by cc
+                        value={PaymentMethod.Cc}
+                        control={<Radio />}
+                        label={
+                          <Box>
+                            <Typography gutterBottom fontWeight="500">
+                              {t('pages.book-course.pay-by-cc')}
+                            </Typography>
+                            <Typography variant="body2" color="grey.700">
+                              {t('pages.book-course.pay-by-cc-info')}
+                            </Typography>
+                          </Box>
+                        }
+                      />
+                    )}
                     <FormControlLabel
                       value={PaymentMethod.Invoice}
                       control={<Radio />}

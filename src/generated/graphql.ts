@@ -1448,6 +1448,7 @@ export type CreateOrderInput = {
   billingFamilyName: Scalars['String'];
   billingGivenName: Scalars['String'];
   billingPhone: Scalars['String'];
+  bookingContact?: InputMaybe<Scalars['jsonb']>;
   clientPurchaseOrder: Scalars['String'];
   courseId: Scalars['Int'];
   organizationId: Scalars['String'];
@@ -1455,6 +1456,8 @@ export type CreateOrderInput = {
   promoCodes: Array<Scalars['String']>;
   quantity: Scalars['Int'];
   registrants: Array<CreateOrderParticipantInput>;
+  salesRepresentativeId?: InputMaybe<Scalars['String']>;
+  source?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateOrderOutput = {
@@ -31786,6 +31789,7 @@ export type Order = {
   billingFamilyName: Scalars['String'];
   billingGivenName: Scalars['String'];
   billingPhone: Scalars['String'];
+  bookingContact?: Maybe<Scalars['jsonb']>;
   clientPurchaseOrder?: Maybe<Scalars['String']>;
   /** An object relationship */
   course: Course;
@@ -31806,10 +31810,20 @@ export type Order = {
   promoCodes?: Maybe<Scalars['jsonb']>;
   quantity: Scalars['Int'];
   registrants: Scalars['json'];
+  /** An object relationship */
+  salesRepresentative?: Maybe<Profile>;
+  salesRepresentativeId?: Maybe<Scalars['uuid']>;
+  source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
   user: Scalars['jsonb'];
   vat?: Maybe<Scalars['float8']>;
   xeroInvoiceNumber?: Maybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "order" */
+export type OrderBookingContactArgs = {
+  path?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -31877,6 +31891,7 @@ export type Order_Aggregate_Order_By = {
 
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Order_Append_Input = {
+  bookingContact?: InputMaybe<Scalars['jsonb']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   user?: InputMaybe<Scalars['jsonb']>;
 };
@@ -31919,6 +31934,7 @@ export type Order_Bool_Exp = {
   billingFamilyName?: InputMaybe<String_Comparison_Exp>;
   billingGivenName?: InputMaybe<String_Comparison_Exp>;
   billingPhone?: InputMaybe<String_Comparison_Exp>;
+  bookingContact?: InputMaybe<Jsonb_Comparison_Exp>;
   clientPurchaseOrder?: InputMaybe<String_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
   courseId?: InputMaybe<Int_Comparison_Exp>;
@@ -31936,6 +31952,9 @@ export type Order_Bool_Exp = {
   promoCodes?: InputMaybe<Jsonb_Comparison_Exp>;
   quantity?: InputMaybe<Int_Comparison_Exp>;
   registrants?: InputMaybe<Json_Comparison_Exp>;
+  salesRepresentative?: InputMaybe<Profile_Bool_Exp>;
+  salesRepresentativeId?: InputMaybe<Uuid_Comparison_Exp>;
+  source?: InputMaybe<String_Comparison_Exp>;
   stripePaymentId?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<Jsonb_Comparison_Exp>;
   vat?: InputMaybe<Float8_Comparison_Exp>;
@@ -31968,18 +31987,21 @@ export enum Order_Constraint {
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Order_Delete_At_Path_Input = {
+  bookingContact?: InputMaybe<Array<Scalars['String']>>;
   promoCodes?: InputMaybe<Array<Scalars['String']>>;
   user?: InputMaybe<Array<Scalars['String']>>;
 };
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Order_Delete_Elem_Input = {
+  bookingContact?: InputMaybe<Scalars['Int']>;
   promoCodes?: InputMaybe<Scalars['Int']>;
   user?: InputMaybe<Scalars['Int']>;
 };
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Order_Delete_Key_Input = {
+  bookingContact?: InputMaybe<Scalars['String']>;
   promoCodes?: InputMaybe<Scalars['String']>;
   user?: InputMaybe<Scalars['String']>;
 };
@@ -32001,6 +32023,7 @@ export type Order_Insert_Input = {
   billingFamilyName?: InputMaybe<Scalars['String']>;
   billingGivenName?: InputMaybe<Scalars['String']>;
   billingPhone?: InputMaybe<Scalars['String']>;
+  bookingContact?: InputMaybe<Scalars['jsonb']>;
   clientPurchaseOrder?: InputMaybe<Scalars['String']>;
   course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   courseId?: InputMaybe<Scalars['Int']>;
@@ -32018,6 +32041,9 @@ export type Order_Insert_Input = {
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   quantity?: InputMaybe<Scalars['Int']>;
   registrants?: InputMaybe<Scalars['json']>;
+  salesRepresentative?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
+  salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
+  source?: InputMaybe<Scalars['String']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
   user?: InputMaybe<Scalars['jsonb']>;
   vat?: InputMaybe<Scalars['float8']>;
@@ -32043,6 +32069,8 @@ export type Order_Max_Fields = {
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
   quantity?: Maybe<Scalars['Int']>;
+  salesRepresentativeId?: Maybe<Scalars['uuid']>;
+  source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
   xeroInvoiceNumber?: Maybe<Scalars['String']>;
@@ -32066,6 +32094,8 @@ export type Order_Max_Order_By = {
   price?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
   quantity?: InputMaybe<Order_By>;
+  salesRepresentativeId?: InputMaybe<Order_By>;
+  source?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
   xeroInvoiceNumber?: InputMaybe<Order_By>;
@@ -32090,6 +32120,8 @@ export type Order_Min_Fields = {
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
   quantity?: Maybe<Scalars['Int']>;
+  salesRepresentativeId?: Maybe<Scalars['uuid']>;
+  source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
   xeroInvoiceNumber?: Maybe<Scalars['String']>;
@@ -32113,6 +32145,8 @@ export type Order_Min_Order_By = {
   price?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
   quantity?: InputMaybe<Order_By>;
+  salesRepresentativeId?: InputMaybe<Order_By>;
+  source?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
   xeroInvoiceNumber?: InputMaybe<Order_By>;
@@ -32148,6 +32182,7 @@ export type Order_Order_By = {
   billingFamilyName?: InputMaybe<Order_By>;
   billingGivenName?: InputMaybe<Order_By>;
   billingPhone?: InputMaybe<Order_By>;
+  bookingContact?: InputMaybe<Order_By>;
   clientPurchaseOrder?: InputMaybe<Order_By>;
   course?: InputMaybe<Course_Order_By>;
   courseId?: InputMaybe<Order_By>;
@@ -32165,6 +32200,9 @@ export type Order_Order_By = {
   promoCodes?: InputMaybe<Order_By>;
   quantity?: InputMaybe<Order_By>;
   registrants?: InputMaybe<Order_By>;
+  salesRepresentative?: InputMaybe<Profile_Order_By>;
+  salesRepresentativeId?: InputMaybe<Order_By>;
+  source?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
   user?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
@@ -32178,6 +32216,7 @@ export type Order_Pk_Columns_Input = {
 
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Order_Prepend_Input = {
+  bookingContact?: InputMaybe<Scalars['jsonb']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   user?: InputMaybe<Scalars['jsonb']>;
 };
@@ -32194,6 +32233,8 @@ export enum Order_Select_Column {
   BillingGivenName = 'billingGivenName',
   /** column name */
   BillingPhone = 'billingPhone',
+  /** column name */
+  BookingContact = 'bookingContact',
   /** column name */
   ClientPurchaseOrder = 'clientPurchaseOrder',
   /** column name */
@@ -32223,6 +32264,10 @@ export enum Order_Select_Column {
   /** column name */
   Registrants = 'registrants',
   /** column name */
+  SalesRepresentativeId = 'salesRepresentativeId',
+  /** column name */
+  Source = 'source',
+  /** column name */
   StripePaymentId = 'stripePaymentId',
   /** column name */
   User = 'user',
@@ -32239,6 +32284,7 @@ export type Order_Set_Input = {
   billingFamilyName?: InputMaybe<Scalars['String']>;
   billingGivenName?: InputMaybe<Scalars['String']>;
   billingPhone?: InputMaybe<Scalars['String']>;
+  bookingContact?: InputMaybe<Scalars['jsonb']>;
   clientPurchaseOrder?: InputMaybe<Scalars['String']>;
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -32253,6 +32299,8 @@ export type Order_Set_Input = {
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   quantity?: InputMaybe<Scalars['Int']>;
   registrants?: InputMaybe<Scalars['json']>;
+  salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
+  source?: InputMaybe<Scalars['String']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
   user?: InputMaybe<Scalars['jsonb']>;
   vat?: InputMaybe<Scalars['float8']>;
@@ -32996,6 +33044,8 @@ export enum Order_Update_Column {
   /** column name */
   BillingPhone = 'billingPhone',
   /** column name */
+  BookingContact = 'bookingContact',
+  /** column name */
   ClientPurchaseOrder = 'clientPurchaseOrder',
   /** column name */
   CourseId = 'courseId',
@@ -33023,6 +33073,10 @@ export enum Order_Update_Column {
   Quantity = 'quantity',
   /** column name */
   Registrants = 'registrants',
+  /** column name */
+  SalesRepresentativeId = 'salesRepresentativeId',
+  /** column name */
+  Source = 'source',
   /** column name */
   StripePaymentId = 'stripePaymentId',
   /** column name */
@@ -44473,7 +44527,7 @@ export type GetCourseByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, source?: Course_Source_Enum | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, notes?: string | null, start?: any | null, end?: any | null, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
+export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, notes?: string | null, start?: any | null, end?: any | null, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, orders: Array<{ __typename?: 'order', source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
 
 export type GetCourseDraftQueryVariables = Exact<{
   profileId: Scalars['uuid'];
@@ -45043,7 +45097,7 @@ export type GetOrderQueryVariables = Exact<{
 }>;
 
 
-export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId?: any | null, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, start?: any | null, end?: any | null, freeSpaces?: number | null, salesRepresentative?: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null };
+export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId?: any | null, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, source?: string | null, bookingContact?: any | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, start?: any | null, end?: any | null, freeSpaces?: number | null, salesRepresentative?: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null };
 
 export type GetOrgWithKeyContactsQueryVariables = Exact<{
   id: Scalars['uuid'];

@@ -144,6 +144,7 @@
     "sales-rep-title": "Sales",
     "sales-rep-placeholder": "Sales representative",
     "source-title": "Source",
+    "booking-contact": "Booking contact",
     "account-code-title": "Account Code",
     "price-placeholder": "Price per attendee",
     "price-number-error": "Price per attendee must be a positive number",

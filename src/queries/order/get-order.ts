@@ -12,6 +12,14 @@ export const QUERY = gql`
       orderDue
       orderTotal
       currency
+      source
+      salesRepresentative {
+        id
+        fullName
+        avatar
+        archived
+      }
+      bookingContact
       stripePaymentId
       promoCodes
       xeroInvoiceNumber

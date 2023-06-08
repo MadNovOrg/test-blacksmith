@@ -16,6 +16,7 @@ import {
   Promo_Code,
   Promo_Code_Type_Enum,
   PromoCodeOutput,
+  Course_Source_Enum,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { stripeProcessingFeeRate } from '@app/lib/stripe'
@@ -34,6 +35,7 @@ import {
   CourseType,
   Currency,
   InvoiceDetails,
+  Profile,
   TransportMethod,
 } from '@app/types'
 import {
@@ -57,6 +59,8 @@ export type ParticipantInput = {
   email: string
 }
 
+export type BookingContact = ParticipantInput
+
 type CourseDetails = GetTempProfileResponseType['tempProfiles'][0]['course']
 
 type State = {
@@ -67,6 +71,9 @@ type State = {
   vat: number
   promoCodes: string[]
   discounts: Discounts
+  source: Course_Source_Enum | ''
+  bookingContact: BookingContact
+  salesRepresentative: Profile | null
   orgId: string
   orgName: string
   sector: Sector
@@ -204,6 +211,13 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       freeSpaces: profile.course.freeSpaces ?? 0,
       trainerExpenses,
       courseType: profile.course.type,
+      source: '',
+      salesRepresentative: null,
+      bookingContact: {
+        email: '',
+        firstName: '',
+        lastName: '',
+      },
     })
 
     setReady(true)
@@ -311,6 +325,9 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         registrants: booking.participants,
         organizationId: booking.orgId,
         promoCodes,
+        source: booking.source,
+        salesRepresentativeId: booking.salesRepresentative?.id,
+        bookingContact: booking.bookingContact,
       },
     })
 
