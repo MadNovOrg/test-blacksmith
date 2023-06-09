@@ -156,6 +156,7 @@ const isAttendeeValidCertificateMandatory = (
   ].includes(courseLevel)
 
 type FormInputs = {
+  isInternalUserBooking: boolean
   quantity: number
   participants: ParticipantInput[]
   orgId: string
@@ -203,6 +204,8 @@ export const CourseBookingDetails: React.FC<
     navigate('../review')
   }
 
+  const isInternalUserBooking = acl.canInviteAttendees(CourseType.OPEN)
+
   const schema = useMemo(() => {
     return yup.object({
       quantity: yup.number().required(),
@@ -242,16 +245,39 @@ export const CourseBookingDetails: React.FC<
           : schema
       }),
 
-      source: yup.string().oneOf(Object.values(Course_Source_Enum)).required(),
-      salesRepresentative: yup.object().when('source', ([source]) => {
-        return source.startsWith('SALES_')
-          ? yup.object().required()
-          : yup.object()
-      }),
+      source: yup
+        .string()
+        .oneOf(Object.values(Course_Source_Enum))
+        .when('isInternalUserBooking', {
+          is: true,
+          then: s => s.required(),
+          otherwise: s => s,
+        }),
+
+      salesRepresentative: yup
+        .object()
+        .when(['source', 'isInternalUserBooking'], ([source, condition]) => {
+          return condition && source.startsWith('SALES_')
+            ? yup.object().required()
+            : yup.object()
+        }),
+
       bookingContact: yup.object({
-        firstName: yup.string().required(requiredMsg(t, 'first-name')),
-        lastName: yup.string().required(requiredMsg(t, 'last-name')),
-        email: schemas.email(t).required(requiredMsg(t, 'email')),
+        firstName: yup.string().when('isInternalUserBooking', {
+          is: true,
+          then: s => s.required(requiredMsg(t, 'first-name')),
+          otherwise: s => s,
+        }),
+        lastName: yup.string().when('isInternalUserBooking', {
+          is: true,
+          then: s => s.required(requiredMsg(t, 'last-name')),
+          otherwise: s => s,
+        }),
+        email: schemas.email(t).when('isInternalUserBooking', {
+          is: true,
+          then: s => s.required(requiredMsg(t, 'email')),
+          otherwise: s => s,
+        }),
       }),
 
       paymentMethod: yup
@@ -283,6 +309,7 @@ export const CourseBookingDetails: React.FC<
   const methods = useForm<FormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
+      isInternalUserBooking,
       quantity: booking.quantity,
       participants: booking.participants,
       orgId: booking.orgId,
@@ -586,7 +613,7 @@ export const CourseBookingDetails: React.FC<
           </Box>
         </Box>
 
-        {acl.canInviteAttendees(CourseType.OPEN) && (
+        {isInternalUserBooking && (
           <>
             <Typography variant="subtitle1" fontWeight="500">
               {t('booking-details')}
@@ -621,7 +648,11 @@ export const CourseBookingDetails: React.FC<
                         shouldValidate: true,
                       })
                     }}
-                    textFieldProps={{ variant: 'filled' }}
+                    textFieldProps={{
+                      variant: 'filled',
+                      error: !!errors.salesRepresentative,
+                      helperText: errors.salesRepresentative?.message ?? '',
+                    }}
                     placeholder={t(
                       'components.course-form.sales-rep-placeholder'
                     )}
