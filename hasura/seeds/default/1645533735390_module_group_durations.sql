@@ -838,3 +838,19 @@ VALUES ((SELECT id FROM module_group WHERE name = 'Theory' and course_level = 'L
         false,
         60,
         false);
+
+INSERT INTO module_group_duration (module_group_id, course_delivery_type, reaccreditation, duration, go1_integration)
+VALUES
+    ((SELECT id FROM module_group WHERE name = 'Theory' AND course_level = 'LEVEL_1'), 'MIXED', false, 90, false),
+    ((SELECT id FROM module_group WHERE name = 'Personal Space & Body Language' AND course_level = 'LEVEL_1'), 'MIXED', false, 60, false),
+    ((SELECT id FROM module_group WHERE name = 'Elevated Risks' AND course_level = 'LEVEL_1'), 'MIXED', false, 15, false),
+    ((SELECT id FROM module_group WHERE name = 'Physical Warm Up' AND course_level = 'LEVEL_1'), 'MIXED', false, 15, false),
+    ((SELECT id FROM module_group WHERE name = 'Personal Safety' AND course_level = 'LEVEL_1'), 'MIXED', false, 20, false),
+    ((SELECT id FROM module_group WHERE name = 'Neck Disengagement' AND course_level = 'LEVEL_1'), 'MIXED', false, 20, false),
+    ((SELECT id FROM module_group WHERE name = 'Prompts and Guides' AND course_level = 'LEVEL_1'), 'MIXED', false, 15, false),
+    ((SELECT id FROM module_group WHERE name = 'Separations' AND course_level = 'LEVEL_1'), 'MIXED', false, 15, false),
+    ((SELECT id FROM module_group WHERE name = 'Clothing Responses' AND course_level = 'LEVEL_1'), 'MIXED', false, 15, false),
+    ((SELECT id FROM module_group WHERE name = 'Hair Responses' AND course_level = 'LEVEL_1'), 'MIXED', false, 15, false),
+    ((SELECT id FROM module_group WHERE name = 'Bite Responses' AND course_level = 'LEVEL_1'), 'MIXED', false, 15, false),
+    ((SELECT id FROM module_group WHERE name = 'Small Child and One Person Holds' AND course_level = 'LEVEL_1'), 'MIXED', false, 30, false);
+
