@@ -452,6 +452,13 @@ export const CourseBuilder: React.FC<
     }
   }
 
+  const hasEstimatedDuration =
+    courseData?.course?.level &&
+    ![
+      Course_Level_Enum.IntermediateTrainer,
+      Course_Level_Enum.AdvancedTrainer,
+    ].includes(courseData?.course?.level)
+
   if (courseLoadingStatus === LoadingStatus.SUCCESS && !courseData?.course) {
     return (
       <NotFound
@@ -584,6 +591,7 @@ export const CourseBuilder: React.FC<
                               <ModuleCard
                                 key={m.id}
                                 data={m}
+                                showDuration={hasEstimatedDuration}
                                 bgColor={
                                   getModuleCardColor(m, snapshot.isDragging) ??
                                   ''
@@ -636,6 +644,7 @@ export const CourseBuilder: React.FC<
                           <ModuleCard
                             key={m.id}
                             data={m}
+                            showDuration={hasEstimatedDuration}
                             bgColor={getModuleCardColor(m, false) ?? ''}
                           />
                         ))}
@@ -699,19 +708,22 @@ export const CourseBuilder: React.FC<
                     justifyContent: 'end',
                   }}
                 >
-                  <div>
-                    {t(
-                      'pages.trainer-base.create-course.new-course.estimated-duration'
-                    )}
-                    :{' '}
-                    <ProgressBar
-                      percentage={getPercentage(
-                        estimatedCourseDuration,
-                        maxDuration
+                  {hasEstimatedDuration ? (
+                    <Box>
+                      {t(
+                        'pages.trainer-base.create-course.new-course.estimated-duration'
                       )}
-                      label={formatDurationShort(estimatedCourseDuration)}
-                    />
-                  </div>
+                      :{' '}
+                      <ProgressBar
+                        percentage={getPercentage(
+                          estimatedCourseDuration,
+                          maxDuration
+                        )}
+                        label={formatDurationShort(estimatedCourseDuration)}
+                      />
+                    </Box>
+                  ) : null}
+
                   <Button
                     variant="outlined"
                     onClick={submitButtonHandler}

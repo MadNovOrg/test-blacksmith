@@ -10,12 +10,14 @@ type ModuleCardProps = {
   data: ModuleGroup
   bgColor: string
   hide?: boolean
+  showDuration?: boolean
 }
 
 export const ModuleCard: React.FC<React.PropsWithChildren<ModuleCardProps>> = ({
   data,
   bgColor,
   hide,
+  showDuration = true,
   ...props
 }) => (
   <Box
@@ -51,15 +53,18 @@ export const ModuleCard: React.FC<React.PropsWithChildren<ModuleCardProps>> = ({
     >
       {data.name}
     </Typography>
-    <Typography
-      variant="caption"
-      position="absolute"
-      bottom={3}
-      left={4}
-      data-testid="module-duration"
-    >
-      {formatDurationShort(data?.duration?.aggregate?.sum?.duration ?? 0)}
-    </Typography>
+    {showDuration ? (
+      <Typography
+        variant="caption"
+        position="absolute"
+        bottom={3}
+        left={4}
+        data-testid="module-duration"
+      >
+        {formatDurationShort(data?.duration?.aggregate?.sum?.duration ?? 0)}
+      </Typography>
+    ) : null}
+
     <Box position="absolute" bottom={0} right={0}>
       <IconDialog icon={<InfoIcon />}>
         <>
