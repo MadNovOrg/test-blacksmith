@@ -42,8 +42,8 @@ import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
-  CourseException,
   checkCourseDetailsForExceptions,
+  CourseException,
   isTrainersRatioNotMet,
   shouldGoIntoExceptionApproval,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
@@ -72,10 +72,10 @@ import {
   ValidCourseInput,
 } from '@app/types'
 import {
-  LoadingStatus,
   bildStrategiesToArray,
   courseToCourseInput,
   generateCourseName,
+  LoadingStatus,
   profileToInput,
 } from '@app/util'
 
@@ -285,12 +285,15 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               ...(courseData.organization
                 ? { organization_id: courseData.organization.id }
                 : null),
-              ...(courseData.bookingContact.profileId
+              ...(courseData.bookingContact?.profileId
                 ? {
                     bookingContactProfileId:
                       courseData.bookingContact.profileId,
                   }
-                : { bookingContactInviteData: courseData.bookingContact }),
+                : null),
+              ...(courseData.bookingContact?.email
+                ? { bookingContactInviteData: courseData.bookingContact }
+                : null),
               ...(courseData.salesRepresentative
                 ? { salesRepresentativeId: courseData.salesRepresentative.id }
                 : null),
