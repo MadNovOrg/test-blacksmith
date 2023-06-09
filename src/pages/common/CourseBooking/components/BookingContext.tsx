@@ -156,8 +156,6 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     const { pricing } = await GetCoursePricing(fetcher, profile.course.id)
     if (!pricing) {
       setError(t('error-no-pricing'))
-      setReady(true)
-      return
     }
 
     const trainerExpenses =
@@ -194,31 +192,34 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         profile.course.participants.aggregate.count
     )
     setCourse(profile.course)
-    setBooking({
-      quantity: profile.quantity,
-      participants: [],
-      price: pricing.priceAmount,
-      currency: pricing.priceCurrency,
-      vat: 20,
-      promoCodes: [],
-      discounts: {},
-      orgId: '',
-      orgName: '',
-      sector: '',
-      position: '',
-      otherPosition: '',
-      paymentMethod: PaymentMethod.Invoice,
-      freeSpaces: profile.course.freeSpaces ?? 0,
-      trainerExpenses,
-      courseType: profile.course.type,
-      source: '',
-      salesRepresentative: null,
-      bookingContact: {
-        email: '',
-        firstName: '',
-        lastName: '',
-      },
-    })
+
+    if (pricing) {
+      setBooking({
+        quantity: profile.quantity,
+        participants: [],
+        price: pricing.priceAmount,
+        currency: pricing.priceCurrency,
+        vat: 20,
+        promoCodes: [],
+        discounts: {},
+        orgId: '',
+        orgName: '',
+        sector: '',
+        position: '',
+        otherPosition: '',
+        paymentMethod: PaymentMethod.Invoice,
+        freeSpaces: profile.course.freeSpaces ?? 0,
+        trainerExpenses,
+        courseType: profile.course.type,
+        source: '',
+        salesRepresentative: null,
+        bookingContact: {
+          email: '',
+          firstName: '',
+          lastName: '',
+        },
+      })
+    }
 
     setReady(true)
   })

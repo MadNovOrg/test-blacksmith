@@ -1,7 +1,11 @@
-import { Box, Container, Typography } from '@mui/material'
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
+import { Accreditors_Enum } from '@app/generated/graphql'
+
+import { NotFound } from '../NotFound'
+
+import { BookingContainer } from './components/BookingContainer'
 import { BookingProvider, useBooking } from './components/BookingContext'
 import { CourseBookingDetails } from './components/CourseBookingDetails'
 import { CourseBookingLayout } from './components/CourseBookingLayout'
@@ -12,28 +16,34 @@ import { CourseFull } from './components/CourseFull'
 const BookingRoutes: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { booking, availableSeats, course, error, isBooked } = useBooking()
 
-  if (error) {
-    return <Typography>{error}</Typography>
+  if (course.accreditedBy === Accreditors_Enum.Bild || error) {
+    return <NotFound />
   }
 
   if (!isBooked && !availableSeats) {
-    return <CourseFull courseId={course.id} />
+    return (
+      <BookingContainer>
+        <CourseFull courseId={course.id} />
+      </BookingContainer>
+    )
   }
 
   return (
-    <Routes>
-      <Route element={<CourseBookingLayout />}>
-        <Route index element={<Navigate to="details" replace />} />
+    <BookingContainer>
+      <Routes>
+        <Route element={<CourseBookingLayout />}>
+          <Route index element={<Navigate to="details" replace />} />
 
-        <Route path="details" element={<CourseBookingDetails />} />
+          <Route path="details" element={<CourseBookingDetails />} />
 
-        {booking.participants?.length ? (
-          <Route path="review" element={<CourseBookingReview />} />
-        ) : null}
+          {booking.participants?.length ? (
+            <Route path="review" element={<CourseBookingReview />} />
+          ) : null}
 
-        <Route path="payment/:orderId" element={<CourseBookingPayment />} />
-      </Route>
-    </Routes>
+          <Route path="payment/:orderId" element={<CourseBookingPayment />} />
+        </Route>
+      </Routes>
+    </BookingContainer>
   )
 }
 
@@ -41,12 +51,8 @@ export const CourseBookingPage: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   return (
-    <Box bgcolor="grey.100">
-      <Container maxWidth="lg" sx={{ py: 3 }}>
-        <BookingProvider>
-          <BookingRoutes />
-        </BookingProvider>
-      </Container>
-    </Box>
+    <BookingProvider>
+      <BookingRoutes />
+    </BookingProvider>
   )
 }

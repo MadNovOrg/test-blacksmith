@@ -1,5 +1,6 @@
 import { gql } from 'graphql-request'
 
+import { Accreditors_Enum } from '@app/generated/graphql'
 import {
   Course,
   CourseDeliveryType,
@@ -16,6 +17,7 @@ export type ResponseType = {
     course: {
       id: number
       name: string
+      accreditedBy: Accreditors_Enum
       dates: Course['dates']
       deliveryType: CourseDeliveryType
       level: CourseLevel
@@ -52,6 +54,7 @@ export const QUERY = gql`
       course {
         id
         name
+        accreditedBy
         dates: schedule_aggregate {
           ...CourseDates
         }

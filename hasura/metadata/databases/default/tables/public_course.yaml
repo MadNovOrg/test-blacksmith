@@ -740,6 +740,7 @@ select_permissions:
   - role: unverified
     permission:
       columns:
+        - accredited_by
         - aol_cost_of_course
         - aol_country
         - aol_region
