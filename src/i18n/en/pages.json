@@ -1149,7 +1149,7 @@
           "added-by": "Added by {{fullName}}",
           "removed-by": "Removed by {{fullName}}",
           "released-licenses": "Unused licences during course",
-          "purchased": "Purchased at course creation",
+          "purchased": "Purchased at course creation by {{fullName}}",
           "revoked-by": "Revoked by {{fullName}}",
           "reserved-by": "Reserved by {{fullName}}",
           "licenses-cancelled": "Course cancelled",
