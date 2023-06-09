@@ -5,12 +5,15 @@ import {
   Box,
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
   FormGroup,
+  FormHelperText,
   Typography,
 } from '@mui/material'
 import omit from 'lodash-es/omit'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { FormState, UseFormTrigger } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -27,8 +30,8 @@ import {
 import useProfile from '@app/hooks/useProfile'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
-  checkCourseDetailsForExceptions,
   CourseException,
+  checkCourseDetailsForExceptions,
   isTrainersRatioNotMet,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
@@ -87,6 +90,11 @@ export const CreateCourseForm = () => {
     validID: false,
     needsAnalysis: false,
   })
+
+  const methods = useRef<{
+    trigger: UseFormTrigger<CourseInput>
+    formState: FormState<CourseInput>
+  }>(null)
 
   useEffect(() => {
     if (courseType === CourseType.INDIRECT && profile && certifications) {
@@ -157,8 +165,28 @@ export const CreateCourseForm = () => {
     }
   }, [completeStep, courseData, courseType, navigate, profile, saveCourse])
 
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false)
+
+  const checkboxError = useMemo(
+    () =>
+      formSubmitted &&
+      (!consentFlags.practiceProtocols ||
+        !consentFlags.validID ||
+        (isBild && !consentFlags.needsAnalysis)),
+    [
+      formSubmitted,
+      isBild,
+      consentFlags.practiceProtocols,
+      consentFlags.validID,
+      consentFlags.needsAnalysis,
+    ]
+  )
+
   const handleNextStepButtonClick = async () => {
-    if (!courseData || !profile) return
+    methods?.current?.trigger()
+    setFormSubmitted(true)
+
+    if (!courseData || !profile || !nextStepEnabled) return
     assertCourseDataValid(courseData, courseDataValid)
 
     if (courseType === CourseType.INDIRECT && !acl.isTTAdmin()) {
@@ -245,6 +273,7 @@ export const CreateCourseForm = () => {
         type={courseType}
         courseInput={courseData}
         isCreation={true}
+        methodsRef={methods}
       />
 
       {courseType === CourseType.INDIRECT ? (
@@ -283,65 +312,79 @@ export const CreateCourseForm = () => {
             </Alert>
           ) : null}
 
-          <FormGroup sx={{ marginTop: 3 }} data-testid="acknowledge-checks">
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={consentFlags.healthLeaflet}
-                  onChange={e =>
-                    handleConsentFlagChange('healthLeaflet', e.target.checked)
-                  }
-                />
-              }
-              label={
-                t('pages.create-course.form.health-leaflet-copy') as string
-              }
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={consentFlags.practiceProtocols}
-                  onChange={e =>
-                    handleConsentFlagChange(
-                      'practiceProtocols',
-                      e.target.checked
-                    )
-                  }
-                />
-              }
-              label={
-                t('pages.create-course.form.practice-protocol-copy') as string
-              }
-            />
-
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={consentFlags.validID}
-                  onChange={e =>
-                    handleConsentFlagChange('validID', e.target.checked)
-                  }
-                />
-              }
-              label={t('pages.create-course.form.valid-id-copy') as string}
-            />
-
-            {isBild && (
+          <FormControl required error={checkboxError}>
+            <FormGroup sx={{ marginTop: 3 }} data-testid="acknowledge-checks">
               <FormControlLabel
+                required
                 control={
                   <Checkbox
-                    checked={consentFlags.needsAnalysis}
+                    checked={consentFlags.healthLeaflet}
                     onChange={e =>
-                      handleConsentFlagChange('needsAnalysis', e.target.checked)
+                      handleConsentFlagChange('healthLeaflet', e.target.checked)
                     }
                   />
                 }
                 label={
-                  t('pages.create-course.form.needs-analysis-copy') as string
+                  t('pages.create-course.form.health-leaflet-copy') as string
                 }
               />
-            )}
-          </FormGroup>
+              <FormControlLabel
+                required
+                control={
+                  <Checkbox
+                    checked={consentFlags.practiceProtocols}
+                    onChange={e =>
+                      handleConsentFlagChange(
+                        'practiceProtocols',
+                        e.target.checked
+                      )
+                    }
+                  />
+                }
+                label={
+                  t('pages.create-course.form.practice-protocol-copy') as string
+                }
+              />
+
+              <FormControlLabel
+                required
+                control={
+                  <Checkbox
+                    checked={consentFlags.validID}
+                    onChange={e =>
+                      handleConsentFlagChange('validID', e.target.checked)
+                    }
+                  />
+                }
+                label={t('pages.create-course.form.valid-id-copy') as string}
+              />
+
+              {isBild && (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={consentFlags.needsAnalysis}
+                      onChange={e =>
+                        handleConsentFlagChange(
+                          'needsAnalysis',
+                          e.target.checked
+                        )
+                      }
+                    />
+                  }
+                  label={
+                    t('pages.create-course.form.needs-analysis-copy') as string
+                  }
+                />
+              )}
+
+              {checkboxError && (
+                <FormHelperText>
+                  {t('pages.create-course.form.checkboxes-missing')}
+                </FormHelperText>
+              )}
+            </FormGroup>
+          </FormControl>
         </>
       ) : null}
 
@@ -352,7 +395,6 @@ export const CreateCourseForm = () => {
 
         <LoadingButton
           variant="contained"
-          disabled={!nextStepEnabled}
           onClick={handleNextStepButtonClick}
           loading={savingStatus === LoadingStatus.FETCHING}
           endIcon={<ArrowForwardIcon />}

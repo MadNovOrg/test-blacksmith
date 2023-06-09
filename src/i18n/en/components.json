@@ -44,6 +44,7 @@
     "view-or-download-here": "View or download here"
   },
   "venue-selector": {
+    "title": "Venue",
     "placeholder": "Start typing venue name or address",
     "min-chars-label": "Please type at least 3 characters for suggestions.",
     "google-maps-api-error": "Unknown error while communicating with Google Maps API.",
@@ -101,6 +102,7 @@
     "mixed-option-label": "Both",
     "start-datepicker-section-title": "Starts",
     "start-date-placeholder": "Start date",
+    "organisation-required": "Organisation is a required field",
     "start-date-required": "Start date is required field",
     "start-time-required": "Start time is required field",
     "start-date-format": "Start date must be a valid date",
@@ -126,10 +128,13 @@
     "venue-required": "Venue is required field",
     "online-meeting-link-label": "Online meeting link",
     "online-meeting-link-required": "Online meeting link is a required field",
+    "contact-person-placeholder": "Contact name",
+    "contact-person-error": "Contact name is a required field",
     "aol-title": "Area Operating License (AOL)",
     "aol-label": "I will be using an AOL for this course",
     "course-cost-placeholder": "Cost of course",
     "course-cost": "How much are you charging for this course?",
+    "course-cost-title": "Course Cost",
     "course-cost-type-error": "Course cost must be a positive number",
     "course-cost-required-error": "Provide the price of the course",
     "course-cost-disclaimer": "TeamTeach is not responsible for collecting fees for this course",
@@ -142,10 +147,13 @@
     "finance-section-title": "Finance",
     "sales-rep-title": "Sales",
     "sales-rep-placeholder": "Sales representative",
+    "sales-rep-error": "Sales representative is a required field",
     "source-title": "Source",
     "booking-contact": "Booking contact",
     "account-code-title": "Account Code",
     "price-placeholder": "Price per attendee",
+    "price": "Price",
+    "price-error": "Price is a required field",
     "price-number-error": "Price per attendee must be a positive number",
     "price-required-error": "Price per attendee is a required field",
     "notes-title": "Notes",
@@ -215,8 +223,9 @@
     "no-results": "No results found."
   },
   "org-selector": {
-    "placeholder": "Organisation name",
-    "min-chars": "Start typing to get suggestions",
+    "title": "Organisation name",
+    "placeholder": "Start typing organisation name",
+    "min-chars": "Please type at least 3 characters for suggestions.",
     "no-results": "No organisations found",
     "modal": {
       "title": "Add Organisation"
@@ -374,7 +383,8 @@
     "parking-title": "Parking"
   },
   "course-source-dropdown": {
-    "placeholder": "Select source"
+    "placeholder": "Select source",
+    "error": "Source is a required field"
   },
   "request-a-quote": {
     "learn-more-about": "Learn more about our private courses",

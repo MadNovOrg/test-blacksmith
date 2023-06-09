@@ -1,5 +1,4 @@
 import { DatePicker } from '@mui/x-date-pickers'
-import React from 'react'
 import { noop } from 'ts-essentials'
 
 import { INPUT_DATE_FORMAT } from '@app/util'
@@ -14,6 +13,8 @@ export type CourseDatePickerProps = {
   label?: string
   onBlur?: () => void
   onChange: (value: Date | null) => void
+  required?: boolean
+  name?: string
 }
 
 export const CourseDatePicker = ({
@@ -24,9 +25,12 @@ export const CourseDatePicker = ({
   label,
   onBlur,
   onChange = noop,
+  required = false,
+  name,
 }: CourseDatePickerProps) => {
   return (
     <DatePicker
+      name={name}
       label={label}
       format={INPUT_DATE_FORMAT}
       value={value}
@@ -42,6 +46,8 @@ export const CourseDatePicker = ({
           helperText: error?.message,
           onBlur: onBlur,
           'data-testid': `${label}-datePicker-textField`,
+          required,
+          name,
         },
       }}
     />

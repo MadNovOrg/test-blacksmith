@@ -23,10 +23,25 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { isDate, isValid as isValidDate } from 'date-fns'
 import { TFunction } from 'i18next'
-import React, { memo, useCallback, useEffect, useMemo } from 'react'
-import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form'
+import React, {
+  memo,
+  RefObject,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+} from 'react'
+import {
+  Controller,
+  FormProvider,
+  FormState,
+  useForm,
+  UseFormTrigger,
+  useWatch,
+} from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
+import { SchemaDescription } from 'yup'
 
 import { FormPanel } from '@app/components/FormPanel'
 import { NumericTextField } from '@app/components/NumericTextField'
@@ -95,6 +110,10 @@ interface Props {
   disabledFields?: Set<DisabledFields>
   isCreation?: boolean
   onChange?: (input: { data?: CourseInput; isValid?: boolean }) => void
+  methodsRef?: RefObject<{
+    trigger: UseFormTrigger<CourseInput>
+    formState: FormState<CourseInput>
+  }>
 }
 
 const accountCodeValue = getAccountCode()
@@ -105,6 +124,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   courseInput,
   isCreation = true,
   disabledFields = new Set(),
+  methodsRef,
 }) => {
   const { t } = useTranslation()
   const { activeRole, acl } = useAuth()
@@ -119,7 +139,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         accreditedBy: yup
           .mixed()
           .oneOf([Accreditors_Enum.Bild, Accreditors_Enum.Icm]),
-        ...(hasOrg ? { organization: yup.object().required() } : null),
+        ...(hasOrg
+          ? {
+              organization: yup
+                .object()
+                .required(t('components.course-form.organisation-required')),
+            }
+          : null),
         ...(isClosedCourse
           ? {
               bookingContact: yup.object({
@@ -356,6 +382,16 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   } = methods
 
   const errors = formState.errors
+
+  useImperativeHandle(
+    methodsRef,
+    () => ({
+      trigger,
+      formState,
+    }),
+    [trigger, formState]
+  )
+
   const values = watch()
   const deliveryType = values.deliveryType
   const courseLevel = values.courseLevel
@@ -662,6 +698,22 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     }
   }, [autoLoadZoomMeetingUrl, generateZoomLink])
 
+  useEffect(() => {
+    const elements = Object.keys(errors)
+      .map(name => document.getElementsByName(name)[0])
+      .filter(el => !!el)
+
+    elements.sort(
+      (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top
+    )
+
+    if (elements.length > 0) {
+      const errorElement = elements[0]
+      if (!errorElement || !errorElement.scrollIntoView) return
+      errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  })
+
   return (
     <form>
       <FormProvider {...methods}>
@@ -709,6 +761,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 {t('components.course-form.organization-label')}
               </Typography>
               <OrgSelector
+                required
+                {...register('organization')}
+                error={errors.organization?.message}
                 allowAdding
                 value={values.organization ?? undefined}
                 onChange={org => {
@@ -808,6 +863,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               control={control}
               render={({ field }) => (
                 <CourseLevelDropdown
+                  {...register('courseLevel')}
                   value={field.value}
                   labelId="course-level-dropdown"
                   onChange={event => {
@@ -976,18 +1032,27 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
           {hasVenue ? (
             <VenueSelector
+              {...register('venue')}
               onChange={venue => {
                 return setValue('venue', venue ?? null, {
                   shouldValidate: true,
                 })
               }}
               value={values.venue ?? undefined}
-              textFieldProps={{ variant: 'filled' }}
+              textFieldProps={{
+                variant: 'filled',
+                error: Boolean(errors.venue),
+                required: Boolean(
+                  !(schema.describe().fields.venue as SchemaDescription)
+                    .optional
+                ),
+              }}
             />
           ) : null}
 
           {hasZoomMeetingUrl ? (
             <TextField
+              required
               data-testid="onlineMeetingLink-input"
               fullWidth
               variant="filled"
@@ -999,7 +1064,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   : null
               }
               error={Boolean(
-                errors.zoomMeetingUrl?.message &&
+                errors.zoomMeetingUrl?.message ||
                   zoomLinkStatus === LoadingStatus.ERROR
               )}
               sx={{ marginTop: 2 }}
@@ -1071,6 +1136,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   control={control}
                   render={({ field, fieldState }) => (
                     <CourseDatePicker
+                      required
+                      name={field.name}
                       label={t('components.course-form.start-date-placeholder')}
                       value={field.value}
                       minDate={new Date()}
@@ -1095,6 +1162,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   control={control}
                   render={({ field, fieldState }) => (
                     <CourseTimePicker
+                      required
+                      name={field.name}
                       id="start"
                       label={t('components.course-form.start-time-placeholder')}
                       value={field.value}
@@ -1122,6 +1191,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   control={control}
                   render={({ field, fieldState }) => (
                     <CourseDatePicker
+                      required
+                      name={field.name}
                       label={t('components.course-form.end-date-placeholder')}
                       value={field.value}
                       minDate={values.startDate ?? new Date()}
@@ -1145,6 +1216,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   control={control}
                   render={({ field, fieldState }) => (
                     <CourseTimePicker
+                      required
+                      name={field.name}
                       id="end"
                       label={t('components.course-form.end-time-placeholder')}
                       value={field.value}
@@ -1202,9 +1275,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                           control={control}
                           render={({ field }) => (
                             <CourseAOLCountryDropdown
+                              required
+                              {...register('aolCountry')}
                               value={field.value}
                               onChange={field.onChange}
                               usesAOL={usesAOL}
+                              error={Boolean(errors.aolCountry?.message)}
                             />
                           )}
                         />
@@ -1222,11 +1298,14 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                           control={control}
                           render={({ field }) => (
                             <CourseAOLRegionDropdown
+                              required
+                              {...register('aolRegion')}
                               value={field.value}
                               onChange={field.onChange}
                               usesAOL={usesAOL}
                               aolCountry={aolCountry}
                               disabled={disabledFields.has('aolRegion')}
+                              error={Boolean(errors.aolRegion?.message)}
                             />
                           )}
                         />
@@ -1241,6 +1320,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     {t('components.course-form.course-cost-disclaimer')}
                   </Typography>
                   <TextField
+                    required
+                    {...register('courseCost')}
                     variant="filled"
                     placeholder={t(
                       'components.course-form.course-cost-placeholder'
@@ -1251,10 +1332,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                         <InputAdornment position="start">£</InputAdornment>
                       ),
                     }}
+                    label={t('components.course-form.course-cost-title')}
                     error={Boolean(errors.courseCost)}
                     helperText={errors.courseCost?.message ?? ''}
                     disabled={disabledFields.has('courseCost')}
-                    {...register('courseCost')}
                   />
                 </>
               ) : null}
@@ -1276,10 +1357,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             {hasMinParticipants ? (
               <Grid item xs={6}>
                 <NumericTextField
+                  required
+                  {...register('minParticipants', { valueAsNumber: true })}
                   label={t('components.course-form.min-attendees-placeholder')}
                   variant="filled"
                   fullWidth
-                  {...register('minParticipants', { valueAsNumber: true })}
                   error={Boolean(errors.minParticipants)}
                   helperText={errors.minParticipants?.message}
                   inputProps={{ min: 1 }}
@@ -1291,6 +1373,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
             <Grid item xs={6}>
               <NumericTextField
+                required
+                {...register('maxParticipants', {
+                  deps: ['minParticipants'],
+                  valueAsNumber: true,
+                })}
                 id="filled-basic"
                 label={t(
                   courseType === CourseType.OPEN
@@ -1299,10 +1386,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 )}
                 variant="filled"
                 fullWidth
-                {...register('maxParticipants', {
-                  deps: ['minParticipants'],
-                  valueAsNumber: true,
-                })}
                 error={Boolean(errors.maxParticipants)}
                 helperText={errors.maxParticipants?.message}
                 inputProps={{ min: 1 }}
@@ -1352,12 +1435,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <NumericTextField
+                      required
+                      {...register('freeSpaces', { valueAsNumber: true })}
                       label={t(
                         'components.course-form.free-spaces-placeholder'
                       )}
                       variant="filled"
                       fullWidth
-                      {...register('freeSpaces', { valueAsNumber: true })}
                       error={Boolean(errors.freeSpaces)}
                       helperText={errors.freeSpaces?.message}
                       inputProps={{ min: 0 }}
@@ -1381,13 +1465,24 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     </Typography>
 
                     <ProfileSelector
+                      {...register('salesRepresentative')}
                       value={values.salesRepresentative ?? undefined}
                       onChange={profile => {
                         setValue('salesRepresentative', profile ?? null, {
                           shouldValidate: true,
                         })
                       }}
-                      textFieldProps={{ variant: 'filled' }}
+                      textFieldProps={{
+                        variant: 'filled',
+                        label: t(
+                          'components.course-form.sales-rep-placeholder'
+                        ),
+                        required: true,
+                        error: Boolean(errors.salesRepresentative?.message),
+                        helperText:
+                          Boolean(errors.salesRepresentative?.message) &&
+                          t('components.course-form.sales-rep-error'),
+                      }}
                       placeholder={t(
                         'components.course-form.sales-rep-placeholder'
                       )}
@@ -1405,6 +1500,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       render={({ field }) => (
                         <SourceDropdown
                           {...field}
+                          required
+                          {...register('source')}
+                          error={Boolean(errors.source?.message)}
                           data-testid="source-dropdown"
                           disabled={disabledFields.has('source')}
                         />
@@ -1417,6 +1515,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               <Box>
                 {needsManualPrice ? (
                   <TextField
+                    required
+                    {...register('price')}
+                    label={t('components.course-form.price')}
                     variant="filled"
                     placeholder={t('components.course-form.price-placeholder')}
                     fullWidth
@@ -1426,9 +1527,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       ),
                     }}
                     error={Boolean(errors.price)}
-                    helperText={errors.price?.message ?? ''}
+                    helperText={t('components.course-form.price-number-error')}
                     disabled={disabledFields.has('price')}
-                    {...register('price')}
                     sx={{ mt: 2 }}
                   />
                 ) : null}

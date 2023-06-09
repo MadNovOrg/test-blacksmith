@@ -23,7 +23,7 @@ describe('component: CourseAOLCountryDropdown', () => {
 
     await userEvent.click(screen.getByRole('button'))
 
-    expect(screen.queryAllByRole('option').length).toBe(4)
+    expect(screen.queryAllByRole('option').length).toBe(3)
 
     countries.forEach((country: string) =>
       expect(getOption(country)).toBeInTheDocument()

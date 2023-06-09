@@ -40,7 +40,9 @@ describe('component: OrgSelector', () => {
   it("doesn't display options initially", async () => {
     render(<OrgSelector onChange={noop} />, { auth: { profile } })
 
-    await userEvent.click(screen.getByPlaceholderText('Organisation name'))
+    await userEvent.click(
+      screen.getByPlaceholderText('Organisation name', { exact: false })
+    )
 
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
   })
@@ -63,7 +65,7 @@ describe('component: OrgSelector', () => {
     render(<OrgSelector onChange={noop} />, { auth: { profile } })
 
     await userEvent.type(
-      screen.getByPlaceholderText('Organisation name'),
+      screen.getByPlaceholderText('Organisation name', { exact: false }),
       ORG_SEARCH_NAME
     )
 
@@ -98,7 +100,7 @@ describe('component: OrgSelector', () => {
     render(<OrgSelector onChange={noop} />, { auth: { profile } })
 
     await userEvent.type(
-      screen.getByPlaceholderText('Organisation name'),
+      screen.getByPlaceholderText('Organisation name', { exact: false }),
       'Org'
     )
 
@@ -136,7 +138,7 @@ describe('component: OrgSelector', () => {
     render(<OrgSelector onChange={onChangeMock} />, { auth: { profile } })
 
     await userEvent.type(
-      screen.getByPlaceholderText('Organisation name'),
+      screen.getByPlaceholderText('Organisation name', { exact: false }),
       ORG_SEARCH_NAME
     )
 

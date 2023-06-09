@@ -1,4 +1,10 @@
-import { Select, SelectChangeEvent, MenuItem } from '@mui/material'
+import {
+  Select,
+  SelectChangeEvent,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from '@mui/material'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -10,16 +16,18 @@ interface Props {
   value: SelectValue
   onChange: (event: SelectChangeEvent<SelectValue>) => void
   usesAOL: boolean
+  error?: boolean
+  required?: boolean
 }
 
-const countries = ['placeholder', ...getAOLCountries()]
+const countries = [...getAOLCountries()]
 
 export const CourseAOLCountryDropdown: React.FC<
   React.PropsWithChildren<Props>
-> = ({ value, onChange, usesAOL }) => {
+> = ({ value, onChange, usesAOL, error, required = false }) => {
   const { t } = useTranslation()
 
-  const selected = value || countries[0]
+  const selected = value
 
   useEffect(() => {
     if (value !== selected) {
@@ -31,21 +39,28 @@ export const CourseAOLCountryDropdown: React.FC<
   }, [onChange, value, selected, usesAOL])
 
   return (
-    <Select
-      value={selected}
-      onChange={onChange}
-      data-testid="course-aol-country-select"
-      id="course-aol-country"
-    >
-      {countries.map(country => (
-        <MenuItem
-          key={country}
-          value={country}
-          data-testid={`course-aol-country-option-${country}`}
-        >
-          {t(`aol.countries.${country}`)}
-        </MenuItem>
-      ))}
-    </Select>
+    <FormControl variant="filled">
+      <InputLabel error={error} required={required}>
+        {t('country')}
+      </InputLabel>
+
+      <Select
+        error={error}
+        value={selected}
+        onChange={onChange}
+        data-testid="course-aol-country-select"
+        id="course-aol-country"
+      >
+        {countries.map(country => (
+          <MenuItem
+            key={country}
+            value={country}
+            data-testid={`course-aol-country-option-${country}`}
+          >
+            {t(`aol.countries.${country}`)}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   )
 }

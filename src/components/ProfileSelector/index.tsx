@@ -32,6 +32,7 @@ export type ProfileSelectorProps = {
   disabled?: boolean
   roleName?: RoleName
   testId?: string
+  required?: boolean
 }
 
 export const ProfileSelector: React.FC<
@@ -46,6 +47,7 @@ export const ProfileSelector: React.FC<
   disabled,
   roleName,
   testId,
+  required = false,
   ...props
 }) {
   const { t } = useTranslation()
@@ -155,6 +157,7 @@ export const ProfileSelector: React.FC<
           }
           InputProps={{
             ...params.InputProps,
+            required,
             startAdornment: renderStartAdornment(),
             endAdornment: (
               <React.Fragment>

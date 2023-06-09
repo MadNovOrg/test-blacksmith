@@ -4,6 +4,7 @@ import {
   FormControl,
   SelectProps,
   InputLabel,
+  FormHelperText,
 } from '@mui/material'
 import React from 'react'
 
@@ -17,8 +18,10 @@ export const SourceDropdown = React.forwardRef(function SourceDropdown(
   const { t, _t } = useScopedTranslation('components.course-source-dropdown')
   const options = Object.values(Course_Source_Enum)
 
+  const { required, error } = props
+
   return (
-    <FormControl fullWidth variant="filled">
+    <FormControl fullWidth variant="filled" required={required} error={error}>
       <InputLabel
         id="course-source-dropdown"
         data-testid="course-source-dropdown"
@@ -36,6 +39,7 @@ export const SourceDropdown = React.forwardRef(function SourceDropdown(
           </MenuItem>
         ))}
       </Select>
+      {error && <FormHelperText>{t('error')}</FormHelperText>}
     </FormControl>
   )
 })

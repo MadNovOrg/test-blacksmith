@@ -10,18 +10,25 @@ interface Props {
   usesAOL: boolean
   aolCountry: string | null
   disabled?: boolean
+  error?: boolean
+  required?: boolean
 }
 
 export const CourseAOLRegionDropdown: React.FC<
   React.PropsWithChildren<Props>
-> = ({ value, onChange, usesAOL, aolCountry, disabled }) => {
+> = ({
+  value,
+  onChange,
+  usesAOL,
+  aolCountry,
+  disabled,
+  error,
+  required = false,
+}) => {
   const { t } = useTranslation()
 
-  const regions = useMemo(
-    () => ['Region', ...getAOLRegions(aolCountry)],
-    [aolCountry]
-  )
-  const selected = value || regions[0]
+  const regions = useMemo(() => [...getAOLRegions(aolCountry)], [aolCountry])
+  const selected = value
 
   useEffect(() => {
     if (value !== selected) {
@@ -35,7 +42,7 @@ export const CourseAOLRegionDropdown: React.FC<
   return (
     <Autocomplete
       multiple={false}
-      value={selected}
+      value={selected || ''}
       options={regions}
       isOptionEqualToValue={(r, v) => r === v}
       getOptionLabel={region => region}
@@ -56,11 +63,14 @@ export const CourseAOLRegionDropdown: React.FC<
       renderInput={params => (
         <TextField
           {...params}
+          label={t('region')}
           data-testid={`course-aol-region-select-${aolCountry}`}
           fullWidth
           sx={{ bgcolor: 'grey.100' }}
           variant="filled"
           disabled={disabled}
+          error={error}
+          required={required}
         />
       )}
     />

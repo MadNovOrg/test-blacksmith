@@ -640,5 +640,7 @@
     "instagram": "Instagram",
     "twitter": "Twitter",
     "youtube": "YouTube"
-  }
+  },
+  "region": "Region",
+  "country": "Country"
 }

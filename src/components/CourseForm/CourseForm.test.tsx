@@ -51,7 +51,7 @@ describe('component: CourseForm', () => {
 
     expect(screen.getByText('Venue Selector')).toBeInTheDocument()
     expect(
-      screen.queryByLabelText('Online meeting link')
+      screen.queryByLabelText('Online meeting link', { exact: false })
     ).not.toBeInTheDocument()
   })
 
@@ -63,7 +63,9 @@ describe('component: CourseForm', () => {
     await userEvent.click(screen.getByLabelText('Virtual'))
 
     expect(screen.queryByText('Venue Selector')).not.toBeInTheDocument()
-    expect(screen.getByLabelText('Online meeting link')).toBeInTheDocument()
+    expect(
+      screen.getByLabelText('Online meeting link', { exact: false })
+    ).toBeInTheDocument()
   })
 
   it('displays venue selector and online meeting link field if MIXED delivery type', async () => {
@@ -74,7 +76,9 @@ describe('component: CourseForm', () => {
     await userEvent.click(screen.getByLabelText('Both'))
 
     expect(screen.getByText('Venue Selector')).toBeInTheDocument()
-    expect(screen.getByLabelText('Online meeting link')).toBeInTheDocument()
+    expect(
+      screen.getByLabelText('Online meeting link', { exact: false })
+    ).toBeInTheDocument()
   })
 
   it.each([
@@ -120,23 +124,23 @@ describe('component: CourseForm', () => {
     })
 
     act(() => {
-      screen.getByLabelText('Start date').focus()
+      screen.getByLabelText('Start date', { exact: false }).focus()
     })
 
     await userEvent.paste('12/05/2022')
 
     act(() => {
-      screen.getByLabelText('Start time').focus()
+      screen.getByLabelText('Start time', { exact: false }).focus()
     })
     await userEvent.paste('09:00 AM')
 
     act(() => {
-      screen.getByLabelText('End date').focus()
+      screen.getByLabelText('End date', { exact: false }).focus()
     })
     await userEvent.paste('12/04/2022')
 
     act(() => {
-      screen.getByLabelText('End time').focus()
+      screen.getByLabelText('End time', { exact: false }).focus()
     })
     await userEvent.paste('08:00 AM')
 
@@ -151,8 +155,14 @@ describe('component: CourseForm', () => {
     })
 
     await waitFor(async () => {
-      await userEvent.type(screen.getByLabelText('Minimum'), '6')
-      await userEvent.type(screen.getByLabelText('Maximum'), '5')
+      await userEvent.type(
+        screen.getByLabelText('Minimum', { exact: false }),
+        '6'
+      )
+      await userEvent.type(
+        screen.getByLabelText('Maximum', { exact: false }),
+        '5'
+      )
     })
 
     expect(
@@ -167,7 +177,10 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.OPEN} />)
     })
 
-    await userEvent.type(screen.getByLabelText('Minimum'), '0')
+    await userEvent.type(
+      screen.getByLabelText('Minimum', { exact: false }),
+      '0'
+    )
 
     await waitFor(() => {
       expect(
@@ -199,7 +212,9 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.CLOSED} />)
     })
 
-    expect(screen.queryByLabelText('Minimum')).not.toBeInTheDocument()
+    expect(
+      screen.queryByLabelText('Minimum', { exact: false })
+    ).not.toBeInTheDocument()
   })
 
   it('does not render minimum participants for indirect course type', async () => {
@@ -207,7 +222,9 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.INDIRECT} />)
     })
 
-    expect(screen.queryByLabelText('Minimum')).not.toBeInTheDocument()
+    expect(
+      screen.queryByLabelText('Minimum', { exact: false })
+    ).not.toBeInTheDocument()
   })
 
   it('displays course values if passed as prop', async () => {
@@ -229,10 +246,14 @@ describe('component: CourseForm', () => {
     expect(screen.getByLabelText('Face to face')).toBeChecked()
 
     const startDate = format(new Date(schedule.start), INPUT_DATE_FORMAT)
-    expect(screen.getByLabelText('Start date')).toHaveValue(startDate)
+    expect(screen.getByLabelText('Start date', { exact: false })).toHaveValue(
+      startDate
+    )
 
     const startTime = format(new Date(schedule.start), INPUT_TIME_FORMAT)
-    expect(screen.getByLabelText('Start time')).toHaveValue(startTime)
+    expect(screen.getByLabelText('Start time', { exact: false })).toHaveValue(
+      startTime
+    )
 
     const min = screen.getByTestId('min-attendees').querySelector('input')
     expect(min).toHaveValue(course.min_participants)
@@ -249,13 +270,13 @@ describe('component: CourseForm', () => {
     })
 
     act(() => {
-      screen.getByLabelText('Start date').focus()
+      screen.getByLabelText('Start date', { exact: false }).focus()
     })
 
     await userEvent.paste('12/05/2022')
 
     act(() => {
-      screen.getByLabelText('Start time').focus()
+      screen.getByLabelText('Start time', { exact: false }).focus()
     })
 
     await userEvent.paste('09:00 AM')

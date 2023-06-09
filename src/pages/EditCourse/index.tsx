@@ -10,7 +10,8 @@ import {
   Typography,
 } from '@mui/material'
 import { differenceInCalendarDays } from 'date-fns'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
+import { FormState, UseFormTrigger } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
@@ -41,8 +42,8 @@ import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
-  checkCourseDetailsForExceptions,
   CourseException,
+  checkCourseDetailsForExceptions,
   isTrainersRatioNotMet,
   shouldGoIntoExceptionApproval,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
@@ -71,10 +72,10 @@ import {
   ValidCourseInput,
 } from '@app/types'
 import {
+  LoadingStatus,
   bildStrategiesToArray,
   courseToCourseInput,
   generateCourseName,
-  LoadingStatus,
   profileToInput,
 } from '@app/util'
 
@@ -111,6 +112,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
     []
   )
+
+  const methods = useRef<{
+    trigger: UseFormTrigger<CourseInput>
+    formState: FormState<CourseInput>
+  }>(null)
 
   const { addSnackbarMessage } = useSnackbar()
 
@@ -437,8 +443,18 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     )
   }, [profile])
 
+  const editCourseValid = courseDataValid && trainersDataValid
+
   const submitButtonHandler = useCallback(async () => {
-    if (!courseData?.courseLevel || !profile || !trainersData) return
+    methods?.current?.trigger()
+
+    if (
+      !editCourseValid ||
+      !courseData?.courseLevel ||
+      !profile ||
+      !trainersData
+    )
+      return
 
     if (courseData.type !== CourseType.OPEN && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
@@ -471,6 +487,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     profile,
     seniorOrPrincipalLead,
     trainersData,
+    editCourseValid,
   ])
 
   const showTrainerRatioWarning = useMemo(() => {
@@ -519,8 +536,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   ) {
     return <NotFound />
   }
-
-  const editCourseValid = courseDataValid && trainersDataValid
 
   const alignedWithProtocol =
     (courseData?.startDateTime &&
@@ -616,6 +631,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     onChange={handleCourseFormChange}
                     disabledFields={disabledFields}
                     isCreation={false}
+                    methodsRef={methods}
                   />
                 </Box>
 
@@ -675,7 +691,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     <></>
                   )}
                   <LoadingButton
-                    disabled={!editCourseValid}
                     variant="contained"
                     onClick={submitButtonHandler}
                     loading={fetching}

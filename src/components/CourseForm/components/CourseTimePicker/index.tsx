@@ -9,6 +9,8 @@ interface Props {
   error?: {
     message?: string
   }
+  required?: boolean
+  name?: string
 }
 
 export const CourseTimePicker: React.FC<React.PropsWithChildren<Props>> = ({
@@ -17,6 +19,8 @@ export const CourseTimePicker: React.FC<React.PropsWithChildren<Props>> = ({
   value,
   onChange,
   error,
+  required = false,
+  name,
 }) => {
   return (
     <TextField
@@ -33,7 +37,9 @@ export const CourseTimePicker: React.FC<React.PropsWithChildren<Props>> = ({
       data-testid={`${id}-time`}
       variant="filled"
       value={value}
+      required={required}
       onChange={({ target: { value } }) => onChange(value)}
+      name={name}
     />
   )
 }

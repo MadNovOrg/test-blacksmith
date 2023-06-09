@@ -38,6 +38,7 @@ export type OrgSelectorProps = {
   error?: string
   value?: Pick<Organization, 'name' | 'id'>
   disabled?: boolean
+  required?: boolean
 }
 
 type OptionToAdd = Establishment | { name: string }
@@ -54,6 +55,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     allowAdding = false,
     error,
     disabled = false,
+    required = false,
     ...props
   }) {
     const { t } = useTranslation()
@@ -208,6 +210,11 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             <TextField
               {...textFieldProps}
               {...params}
+              label={t('components.org-selector.title')}
+              InputLabelProps={{
+                shrink: true,
+                required,
+              }}
               placeholder={
                 placeholder ?? t('components.org-selector.placeholder')
               }

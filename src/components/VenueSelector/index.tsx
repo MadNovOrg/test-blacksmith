@@ -218,9 +218,17 @@ export const VenueSelector: React.FC<
             <TextField
               {...textFieldProps}
               {...params}
+              label={t('components.venue-selector.title')}
+              InputLabelProps={{
+                shrink: true,
+              }}
               placeholder={t('components.venue-selector.placeholder')}
-              helperText={error}
-              error={Boolean(error)}
+              helperText={
+                error || textFieldProps?.error
+                  ? t('components.course-form.venue-required')
+                  : ''
+              }
+              error={Boolean(error || textFieldProps?.error)}
               onChange={event => setQuery(event.target.value)}
               InputProps={{
                 ...params.InputProps,

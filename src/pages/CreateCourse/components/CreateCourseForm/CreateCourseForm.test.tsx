@@ -87,7 +87,7 @@ describe('component: CreateCourseForm', () => {
 
     expect(screen.queryByTestId('SearchTrainers-input')).toBeInTheDocument()
 
-    await userEvent.type(screen.getByLabelText('Number of attendees'), '24')
+    await userEvent.type(screen.getByLabelText('Number of attendees *'), '24')
 
     await waitFor(() => {
       expect(screen.getByTestId('SearchTrainers-input')).toBeInTheDocument()
@@ -166,7 +166,7 @@ describe('component: CreateCourseForm', () => {
     )
 
     await waitFor(() => {
-      fireEvent.change(screen.getByLabelText('Number of attendees'), {
+      fireEvent.change(screen.getByLabelText('Number of attendees *'), {
         target: { value: '12' },
       })
     })
@@ -233,7 +233,7 @@ describe('component: CreateCourseForm', () => {
     ]
 
     for (const label of confirmations) {
-      await userEvent.click(screen.getByLabelText(label))
+      await userEvent.click(screen.getByLabelText(label, { exact: false }))
     }
 
     await userEvent.click(
