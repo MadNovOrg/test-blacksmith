@@ -9,6 +9,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:prettier/recommended',
+    'plugin:storybook/recommended',
   ],
   overrides: [
     {
@@ -50,12 +51,27 @@ module.exports = {
       'error',
       {
         'newlines-between': 'always',
-        alphabetize: { order: 'asc', caseInsensitive: true },
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
         pathGroupsExcludedImportTypes: ['builtin'],
         pathGroups: [
-          { pattern: '@app/**', group: 'external', position: 'after' },
-          { pattern: '@qa/**', group: 'external', position: 'after' },
-          { pattern: '@test/**', group: 'external', position: 'after' },
+          {
+            pattern: '@app/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@qa/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@test/**',
+            group: 'external',
+            position: 'after',
+          },
         ],
       },
     ],
@@ -66,7 +82,12 @@ module.exports = {
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error', 'nofunc'],
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+      },
+    ],
     'react-hooks/exhaustive-deps': 'error',
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
