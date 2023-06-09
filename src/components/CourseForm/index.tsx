@@ -22,6 +22,7 @@ import {
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { isDate, isValid as isValidDate } from 'date-fns'
+import { TFunction } from 'i18next'
 import React, { memo, useCallback, useEffect, useMemo } from 'react'
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -92,6 +93,7 @@ interface Props {
   type?: CourseType
   courseInput?: CourseInput
   disabledFields?: Set<DisabledFields>
+  isCreation?: boolean
   onChange?: (input: { data?: CourseInput; isValid?: boolean }) => void
 }
 
@@ -101,6 +103,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
   type: courseType = CourseType.OPEN,
   courseInput,
+  isCreation = true,
   disabledFields = new Set(),
 }) => {
   const { t } = useTranslation()
@@ -443,6 +446,29 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         })
       : false
 
+  const resetSpecialInstructionsToDefault = useCallback(
+    (
+      type: CourseType,
+      level: CourseLevel | '',
+      deliveryType: CourseDeliveryType,
+      reaccreditation: boolean,
+      t: TFunction
+    ) => {
+      isCreation &&
+        setValue(
+          'specialInstructions',
+          getDefaultSpecialInstructions(
+            type,
+            level,
+            deliveryType,
+            reaccreditation,
+            t
+          )
+        )
+    },
+    [isCreation, setValue]
+  )
+
   useEffect(() => {
     if (needsManualPrice && automaticPrice && !values.price) {
       setValue('price', automaticPrice)
@@ -455,10 +481,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     // I want to execute this check only at the first render.
-    // If courseInput does not exist, we are creating a new
-    // course. In this case, I want to set the special
+    // If we are creating a new course, I want to set the special
     // instructions to their default value.
-    if (!courseInput) {
+    if (isCreation) {
       const instructions = getDefaultSpecialInstructions(
         courseType,
         courseLevel,
@@ -511,39 +536,42 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     if (mustChange) {
       const newReaccreditationValue = false
       setValue('reaccreditation', newReaccreditationValue)
-      setValue(
-        'specialInstructions',
-        getDefaultSpecialInstructions(
-          courseType,
-          courseLevel,
-          CourseDeliveryType.F2F,
-          newReaccreditationValue,
-          t
-        )
+      resetSpecialInstructionsToDefault(
+        courseType,
+        courseLevel,
+        CourseDeliveryType.F2F,
+        newReaccreditationValue,
+        t
       )
     }
-  }, [canReacc, courseLevel, courseType, setValue, t, values.reaccreditation])
+  }, [
+    canReacc,
+    courseLevel,
+    courseType,
+    resetSpecialInstructionsToDefault,
+    setValue,
+    t,
+    values.reaccreditation,
+  ])
 
   useEffect(() => {
     const isVirtual = values.deliveryType === CourseDeliveryType.VIRTUAL
     const mustChange = !canVirtual && isVirtual
     if (mustChange) {
       setValue('deliveryType', CourseDeliveryType.F2F)
-      setValue(
-        'specialInstructions',
-        getDefaultSpecialInstructions(
-          courseType,
-          courseLevel,
-          CourseDeliveryType.F2F,
-          values.reaccreditation,
-          t
-        )
+      resetSpecialInstructionsToDefault(
+        courseType,
+        courseLevel,
+        CourseDeliveryType.F2F,
+        values.reaccreditation,
+        t
       )
     }
   }, [
     canVirtual,
     courseLevel,
     courseType,
+    resetSpecialInstructionsToDefault,
     setValue,
     t,
     values.deliveryType,
@@ -555,21 +583,19 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     const mustChange = !canMixed && isMixed
     if (mustChange) {
       setValue('deliveryType', CourseDeliveryType.F2F)
-      setValue(
-        'specialInstructions',
-        getDefaultSpecialInstructions(
-          courseType,
-          courseLevel,
-          CourseDeliveryType.F2F,
-          values.reaccreditation,
-          t
-        )
+      resetSpecialInstructionsToDefault(
+        courseType,
+        courseLevel,
+        CourseDeliveryType.F2F,
+        values.reaccreditation,
+        t
       )
     }
   }, [
     canMixed,
     courseLevel,
     courseType,
+    resetSpecialInstructionsToDefault,
     setValue,
     t,
     values.deliveryType,
@@ -786,15 +812,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   labelId="course-level-dropdown"
                   onChange={event => {
                     field.onChange(event)
-                    setValue(
-                      'specialInstructions',
-                      getDefaultSpecialInstructions(
-                        courseType,
-                        event.target.value as CourseLevel,
-                        deliveryType,
-                        values.reaccreditation,
-                        t
-                      )
+
+                    resetSpecialInstructionsToDefault(
+                      courseType,
+                      event.target.value as CourseLevel,
+                      deliveryType,
+                      values.reaccreditation,
+                      t
                     )
                   }}
                   courseType={courseType}
@@ -909,15 +933,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 }
                 trigger(['venue', 'zoomMeetingUrl'])
 
-                setValue(
-                  'specialInstructions',
-                  getDefaultSpecialInstructions(
-                    courseType,
-                    courseLevel,
-                    deliveryType,
-                    values.reaccreditation,
-                    t
-                  )
+                resetSpecialInstructionsToDefault(
+                  courseType,
+                  courseLevel,
+                  deliveryType,
+                  values.reaccreditation,
+                  t
                 )
               }}
             >

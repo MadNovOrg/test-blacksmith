@@ -615,6 +615,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     type={course?.type}
                     onChange={handleCourseFormChange}
                     disabledFields={disabledFields}
+                    isCreation={false}
                   />
                 </Box>
 

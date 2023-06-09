@@ -235,6 +235,7 @@ export const CreateCourseForm = () => {
         onChange={handleCourseFormChange}
         type={courseType}
         courseInput={courseData}
+        isCreation={true}
       />
 
       {courseType === CourseType.INDIRECT ? (
