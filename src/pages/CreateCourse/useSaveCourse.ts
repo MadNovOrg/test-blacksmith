@@ -203,7 +203,10 @@ export function useSaveCourse(): {
               ? {
                   bookingContactProfileId: courseData.bookingContact.profileId,
                 }
-              : { bookingContactInviteData: courseData.bookingContact }),
+              : null),
+            ...(courseData.bookingContact
+              ? { bookingContactInviteData: courseData.bookingContact }
+              : null),
             ...(courseData.usesAOL
               ? {
                   aolCostOfCourse: courseData.courseCost,
