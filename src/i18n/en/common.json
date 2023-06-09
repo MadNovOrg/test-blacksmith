@@ -284,7 +284,9 @@
     "sales-representative": "Sales representative",
     "sales-admin": "Sales administrator",
     "ld": "L&D",
-    "finance": "Finance"
+    "finance": "Finance",
+    "booking-contact": "Booking Contact",
+    "anonymous": "Anonymous"
   },
   "trainer-role-types": {
     "principal": "Principal",
