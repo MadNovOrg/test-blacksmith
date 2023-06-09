@@ -32,6 +32,7 @@ import {
   isTrainersRatioNotMet,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
+  CourseDeliveryType,
   CourseInput,
   CourseType,
   InviteStatus,
@@ -190,7 +191,15 @@ export const CreateCourseForm = () => {
       // Type casting to save the data in context
       // Validation still happens before moving to the next step
       if (data) {
-        setCourseData(data as unknown as ValidCourseInput)
+        // Do not save the venue if the course is virtual
+        const newData = {
+          ...data,
+          venue:
+            data.deliveryType === CourseDeliveryType.VIRTUAL
+              ? null
+              : data.venue,
+        }
+        setCourseData(newData as unknown as ValidCourseInput)
       }
 
       setCourseDataValid(Boolean(isValid))

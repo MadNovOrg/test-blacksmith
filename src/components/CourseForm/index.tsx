@@ -928,7 +928,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 setValue('deliveryType', deliveryType)
 
                 if (deliveryType === CourseDeliveryType.VIRTUAL) {
-                  setValue('venue', null)
                   setValue('parkingInstructions', '')
                 }
                 trigger(['venue', 'zoomMeetingUrl'])
