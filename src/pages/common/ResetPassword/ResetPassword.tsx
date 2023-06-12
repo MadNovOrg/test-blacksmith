@@ -234,8 +234,8 @@ export const ResetPasswordPage = () => {
                 data-testid="second-passsword-input"
                 type="password"
                 variant="filled"
-                label={t('pages.login.pass-label')}
-                placeholder={t('pages.login.pass-placeholder')}
+                label={t('pages.login.confirm-pass-label')}
+                placeholder={t('pages.login.confirm-pass-placeholder')}
                 title={t('pages.login.pass-title')}
                 error={!!errors.confirmPassword}
                 helperText={errors.confirmPassword?.message}
