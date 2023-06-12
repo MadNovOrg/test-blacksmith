@@ -297,7 +297,7 @@ export const EvaluationSummary = () => {
                         fontWeight="600"
                         sx={{ width: 30 }}
                       >
-                        {injuryQuestion.yes}
+                        {injuryQuestion.yes}%
                       </Typography>
                     </Box>
                   </Box>
@@ -318,7 +318,7 @@ export const EvaluationSummary = () => {
                         fontWeight="600"
                         sx={{ width: 30 }}
                       >
-                        {injuryQuestion.no}
+                        {injuryQuestion.no}%
                       </Typography>
                     </Box>
                   </Box>
@@ -380,7 +380,7 @@ export const EvaluationSummary = () => {
                         fontWeight="600"
                         sx={{ width: 30 }}
                       >
-                        {trainerInjuryQuestion.yes}
+                        {trainerInjuryQuestion.yes}%
                       </Typography>
                     </Box>
                   </Box>
@@ -401,7 +401,7 @@ export const EvaluationSummary = () => {
                         fontWeight="600"
                         sx={{ width: 30 }}
                       >
-                        {trainerInjuryQuestion.no}
+                        {trainerInjuryQuestion.no}%
                       </Typography>
                     </Box>
                   </Box>
