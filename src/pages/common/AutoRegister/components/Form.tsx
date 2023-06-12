@@ -249,15 +249,17 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                 <>
                   <Typography variant="body2">
                     <Trans i18nKey="pages.signup.tcs-label">
-                      I accept the{' '}
+                      I accept the
                       <a
                         href={`${origin}/terms-of-business/`}
+                        target="_blank"
+                        rel="noreferrer"
                         aria-label={`${t(
                           'terms-of-business'
                         )} (${'opens-new-window'})`}
                       >
                         Terms of Business
-                      </a>{' '}
+                      </a>
                       and agree to Team Teach processing my personal data in
                       accordance with our
                       <a
