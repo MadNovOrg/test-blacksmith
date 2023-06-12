@@ -110,7 +110,7 @@ export const AcceptDeclineCourse: React.FC<
         ])}
       >
         <Typography variant="body2">
-          {t([`modal_${action}.msg-assist`, `modal_${action}.msg`])}
+          {t([`modal_${action}.msg-${trainer.type}`, `modal_${action}.msg`])}
         </Typography>
         <Stack
           direction="row"

@@ -278,9 +278,9 @@
     "declined": "Declined",
     "modal_ACCEPT": {
       "title": "Ready to build the course?",
-      "title-ASSISTANT": "Ready to assist the course?",
+      "title-ASSISTANT": "Assist course",
       "msg": "After you have accepted a course, you must confirm the modules and techniques that will be covered.",
-      "msg-ASSISTANT": "After you have accepted a course, you will registered as an assistant trainer.",
+      "msg-ASSISTANT": "Upon accepting this invitation, you can see a full overview of the course.",
       "cancel": "Cancel",
       "submit": "Continue to course builder",
       "submit-ASSISTANT": "Accept"
