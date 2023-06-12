@@ -227,7 +227,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 )
                 .positive(t('components.course-form.min-participants-positive'))
                 .required(t('components.course-form.min-participants-required'))
-                .lessThan(
+                .max(
                   yup.ref('maxParticipants', {}),
                   t('components.course-form.min-participants-less-than')
                 ),
@@ -1278,7 +1278,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                               required
                               {...register('aolCountry')}
                               value={field.value}
-                              onChange={field.onChange}
+                              onChange={e => {
+                                setValue('aolRegion', '')
+                                field.onChange(e)
+                              }}
                               usesAOL={usesAOL}
                               error={Boolean(errors.aolCountry?.message)}
                             />
@@ -1304,7 +1307,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                               onChange={field.onChange}
                               usesAOL={usesAOL}
                               aolCountry={aolCountry}
-                              disabled={disabledFields.has('aolRegion')}
+                              disabled={
+                                !aolCountry || disabledFields.has('aolRegion')
+                              }
                               error={Boolean(errors.aolRegion?.message)}
                             />
                           )}

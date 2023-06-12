@@ -214,7 +214,7 @@
         "organization": "Organisation",
         "time-commitment-title": "Time commitment",
         "warning-dialog-title": "Course builder",
-        "warning-dialog": "Please be aware once you submit this course, this can not be changed",
+        "warning-dialog": "Please be aware once you submit this course, this cannot be changed",
         "time-commitment-message": "By submitting this course, you commit to at least {{hours}} hours of training.",
         "course-type-indirect-info": "Additional intermediate modules that are not listed would need to be delivered as part of Level Two course.\n\nIf these modules are required, you will need to resubmit the course as a Level Two.",
         "course-level-one-info": "Additional holds that are not listed above, will fall under the Level Two certification. If these are required, the course will need to be resubmitted as a Level Two.\n\nPlease contact Team Teach at ",
