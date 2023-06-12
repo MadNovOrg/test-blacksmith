@@ -61,6 +61,7 @@ export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
       disableClearable={true}
       renderInput={renderInput}
       data-testid="SelectLevels"
+      getOptionLabel={option => t(`course-levels.${option}`) || option}
     />
   )
 }

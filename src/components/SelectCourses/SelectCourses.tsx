@@ -111,23 +111,23 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
   return (
     <>
       <Box mb={2} data-testid="SelectCourses">
-        {selected.map(c => {
+        {selected.map(({ id, level, schedule, deliveryType }) => {
           return (
-            <Box key={c.id} sx={{ display: 'flex', p: 1 }}>
+            <Box key={id} sx={{ display: 'flex', p: 1 }}>
               <Box flex={1}>
                 <Typography variant="body1" fontWeight="bold">
-                  {c.level}
+                  {t(`course-levels.${level}`) || level}
                 </Typography>
                 <Typography variant="body2">
-                  {t('dates.long', { date: c.schedule[0].start })}
+                  {t('dates.long', { date: schedule[0].start })}
                   <Box component="span" ml={3}>
-                    {c.schedule[0].venue?.city ??
-                      t(`course-delivery-type.${c.deliveryType}`)}
+                    {schedule[0].venue?.city ??
+                      t(`course-delivery-type.${deliveryType}`)}
                   </Box>
                 </Typography>
               </Box>
               {disabled ? null : (
-                <IconButton onClick={() => unselectCourse(c.id)}>
+                <IconButton onClick={() => unselectCourse(id)}>
                   <Delete />
                 </IconButton>
               )}
