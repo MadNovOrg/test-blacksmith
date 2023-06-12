@@ -321,7 +321,7 @@
       "CAR": "Car",
       "PUBLIC": "Public (eg. bus/train)",
       "PRIVATE": "Private (eg. car hire/taxi)",
-      "FLIGHTS": "Flights (international)",
+      "FLIGHTS": "Flights",
       "NONE": "None",
       "accommodation": "Accommodation",
       "accommodation-nights": "Number of nights",
