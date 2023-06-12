@@ -886,36 +886,41 @@ export const MODULES_SETUP: ModuleSetup[] = [
       course.organization = { name: 'London First School' }
       return course
     })(),
-    mandatoryModules: [],
-    optionalModules: [
+    mandatoryModules: [
+      {
+        name: 'Dead Weight Response',
+        duration: '15mins',
+      },
       {
         name: 'Advanced Warm Up',
         duration: '15mins',
       },
       {
+        name: 'Legal & Health',
+        duration: '20mins',
+      },
+    ],
+    optionalModules: [
+      {
         name: 'Ground Recovery Techniques',
-        duration: '6hrs',
+        duration: '2hrs',
       },
       {
         name: 'Response to Ground Assaults',
-        duration: '3hrs',
+        duration: '30mins',
       },
       {
-        name: 'Dead Weight Response',
-        duration: '20mins',
-      },
-      {
-        name: 'Everyday Objects Used As Weapons',
-        duration: '6hrs',
+        name: 'Everyday Objects',
+        duration: '2hrs',
       },
       {
         name: 'Transport',
-        duration: '1hr',
+        duration: '40mins',
       },
     ],
     modulesToMove: ['Ground Recovery Techniques'],
-    durationBefore: '0mins',
-    durationAfter: '6hrs',
+    durationBefore: '50mins',
+    durationAfter: '2hrs 50mins',
   },
 ]
 

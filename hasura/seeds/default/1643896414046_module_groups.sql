@@ -24,10 +24,4 @@ INSERT INTO module_group (name, course_level, color) VALUES
 ('Small Child and One Person Holds', 'LEVEL_1', 'navy'),
 ('Small Child and One Person Holds', 'LEVEL_2', 'navy'),
 ('Two Person Escorts', 'LEVEL_2', 'purple'),
-('Seated Holds', 'LEVEL_2', 'purple'),
-('Advanced Warm Up ', 'ADVANCED', 'fuschia'),
-('Ground Recovery Techniques', 'ADVANCED', 'fuschia'),
-('Additional Ground Responses', 'ADVANCED', 'fuschia'),
-('Dead Weight Response', 'ADVANCED', 'fuschia'),
-('Everyday Objects Used As Weapons', 'ADVANCED', 'fuschia'),
-('Transport', 'ADVANCED', 'fuschia');
+('Seated Holds', 'LEVEL_2', 'purple');
