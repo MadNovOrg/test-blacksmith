@@ -1,35 +1,20 @@
-import { Box, styled, Typography, useMediaQuery } from '@mui/material'
+import { Box, Typography, useMediaQuery } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import BannerBox from '@app/components/BannerBox'
 import theme from '@app/theme'
 
 import appStoreImage from './assets/app-store.png'
 import googlePlayImage from './assets/google-play.png'
-import bgImage from './assets/gradient-bg.png'
 import phonesImage from './assets/phones.png'
-
-const BannerBox = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  paddingRight: theme.spacing(5),
-  background: `url('${bgImage}')`,
-  backgroundSize: 'cover',
-  borderRadius: 30,
-
-  [theme.breakpoints.down('lg')]: {
-    display: 'block',
-    padding: theme.spacing(5),
-    textAlign: 'center',
-  },
-}))
 
 export const AppBanner: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const hidden = useMediaQuery(theme.breakpoints.down('lg'))
 
   return (
-    <BannerBox>
+    <BannerBox roundedCorners>
       {!hidden ? (
         <Box flex="1" textAlign="center">
           <img src={phonesImage} />

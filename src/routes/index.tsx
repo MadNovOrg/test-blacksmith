@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
-import React, { ReactNode, Suspense, useEffect } from 'react'
+import React, { ReactNode, Suspense, useEffect, useState } from 'react'
 import {
   Navigate,
   Route,
@@ -11,6 +11,7 @@ import {
 
 import { AppLayout } from '@app/components/AppLayout'
 import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
+import { GettingStartedModal } from '@app/components/GettingStartedModal'
 import { useAuth } from '@app/context/auth'
 import { AutoLogin } from '@app/pages/common/AutoLogin'
 import { AutoRegisterPage } from '@app/pages/common/AutoRegister'
@@ -25,9 +26,11 @@ import { LoginPage } from '@app/pages/common/Login'
 import { RegistrationPage } from '@app/pages/common/Registration'
 import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
+import { GettingStarted } from '@app/pages/GettingStarted'
 import { InvitationPage } from '@app/pages/Invitation'
 import { OrgInvitationPage } from '@app/pages/Invitation/OrgInvitation'
 import { Onboarding } from '@app/pages/Onboarding'
+import { Welcome } from '@app/pages/Welcome'
 import { RoleName } from '@app/types'
 
 const ProfileRoutes = React.lazy(() => import('./profile'))
@@ -122,6 +125,8 @@ function LoggedInRoutes() {
   const { activeRole, profile } = useAuth()
   const navigate = useNavigate()
 
+  const [showGettingStartedModal, setShowGettingStartedModal] = useState(false) // initial state should be firstTimeLogin || longTimeSinceLastLogin
+
   useEffect(() => {
     if (!profile?.givenName || !profile.familyName) {
       navigate('onboarding')
@@ -133,63 +138,88 @@ function LoggedInRoutes() {
   const RouteComp = roleRoutesMap[activeRole]
 
   return (
-    <Routes>
-      <Route
-        path="profile/*"
-        element={
-          <AppShell>
-            <ProfileRoutes />
-          </AppShell>
-        }
-      />
-      <Route
-        path="booking/*"
-        element={
-          <AppShell>
-            <CourseBookingPage />
-          </AppShell>
-        }
-      />
-      <Route
-        path="booking/done"
-        element={
-          <AppShell>
-            <CourseBookingDone />
-          </AppShell>
-        }
-      />
-      <Route
-        path="onboarding"
-        element={
-          <AppLayoutMinimal width={628}>
-            <Suspense fallback={<AppLoading />}>
-              <Onboarding />
-            </Suspense>
-          </AppLayoutMinimal>
-        }
+    <>
+      <GettingStartedModal
+        open={showGettingStartedModal}
+        onClose={() => setShowGettingStartedModal(false)}
       />
 
-      {/* This is a dummy registration page to capture course/qty for course booking for logged in users */}
-      <Route
-        path="registration"
-        element={
-          <AppShell>
-            <RegistrationPage />
-          </AppShell>
-        }
-      />
+      <Routes>
+        <Route
+          index
+          element={
+            <AppShell>
+              <Welcome />
+            </AppShell>
+          }
+        />
 
-      <Route
-        path="*"
-        element={
-          <AppShell>
-            <RouteComp />
-          </AppShell>
-        }
-      />
+        <Route
+          path="getting-started/:id?"
+          element={
+            <AppShell>
+              <GettingStarted />
+            </AppShell>
+          }
+        />
 
-      <Route path="login/*" element={<Navigate replace to="/" />} />
-    </Routes>
+        <Route
+          path="profile/*"
+          element={
+            <AppShell>
+              <ProfileRoutes />
+            </AppShell>
+          }
+        />
+        <Route
+          path="booking/*"
+          element={
+            <AppShell>
+              <CourseBookingPage />
+            </AppShell>
+          }
+        />
+        <Route
+          path="booking/done"
+          element={
+            <AppShell>
+              <CourseBookingDone />
+            </AppShell>
+          }
+        />
+        <Route
+          path="onboarding"
+          element={
+            <AppLayoutMinimal width={628}>
+              <Suspense fallback={<AppLoading />}>
+                <Onboarding />
+              </Suspense>
+            </AppLayoutMinimal>
+          }
+        />
+
+        {/* This is a dummy registration page to capture course/qty for course booking for logged in users */}
+        <Route
+          path="registration"
+          element={
+            <AppShell>
+              <RegistrationPage />
+            </AppShell>
+          }
+        />
+
+        <Route
+          path="*"
+          element={
+            <AppShell>
+              <RouteComp />
+            </AppShell>
+          }
+        />
+
+        <Route path="login/*" element={<Navigate replace to="/" />} />
+      </Routes>
+    </>
   )
 }
 

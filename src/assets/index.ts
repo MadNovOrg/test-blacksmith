@@ -8,6 +8,7 @@ export { ReactComponent as WebinarIcon } from './webinar-icon.svg'
 export { ReactComponent as EbookIcon } from './ebook-icon.svg'
 export { ReactComponent as ResearchSummaryIcon } from './research-summary-icon.svg'
 export { ReactComponent as PodcastsIcon } from './podcasts-icon.svg'
+export { ReactComponent as PlayIcon } from './play-button.svg'
 
 import bildImage from './bild.jpg'
 import cpdImage from './cpd.png'

@@ -3,6 +3,7 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import AdminIcon from '@mui/icons-material/SupervisorAccount'
+import SupportIcon from '@mui/icons-material/Support'
 import { Button } from '@mui/material'
 import Divider from '@mui/material/Divider'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -94,6 +95,18 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
             </ListItemText>
           </MenuItem>
         )}
+
+        <MenuItem onClick={() => handleMenuClick('/getting-started')}>
+          <ListItemIcon>
+            <SupportIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText
+            data-testid="getting-started-link"
+            primaryTypographyProps={{ variant: 'body2' }}
+          >
+            {t('get-started')}
+          </ListItemText>
+        </MenuItem>
 
         <Divider />
 

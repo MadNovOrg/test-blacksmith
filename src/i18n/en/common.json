@@ -53,6 +53,7 @@
   "change": "Change",
   "remove": "Remove",
   "resend-course-information": "Resend course information",
+  "get-started": "Get Started",
   "admin": "Administrator",
   "moderator": "Moderator",
   "archived": "Archived",
@@ -644,5 +645,24 @@
     "youtube": "YouTube"
   },
   "region": "Region",
-  "country": "Country"
+  "country": "Country",
+  "getting-started-item": {
+    "create-new-course": {
+      "title": "How to create a new course",
+      "description": "Discover the essential steps to create a new course from scratch, including defining objectives, structuring content, and setting up assessments to help learners achieve their goals."
+    },
+    "edit-special-instructions": {
+      "title": "How to edit especial instructions",
+      "description": "Discover the essential steps to create a new course from scratch, including defining objectives, structuring content, and setting up assessments to help learners achieve their goals."
+    },
+    "invite-attendee": {
+      "title": "How to invite an attendee",
+      "description": "Discover the essential steps to create a new course from scratch, including defining objectives, structuring content, and setting up assessments to help learners achieve their goals."
+    },
+    "step-1": "Click on \"Apps\"",
+    "step-2": "Choose Google Drive",
+    "step-3": "Authenticate with Google Drive",
+    "step-4": "Choose folders to import",
+    "step-5": "Check the status of your import in the status popup"
+  }
 }
