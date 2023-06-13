@@ -38,7 +38,7 @@ export const AuditsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
     <FullHeightPage>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
-          <BackButton />
+          <BackButton label={t('pages.admin.back-to-settings')} />
 
           <Typography variant="h1" py={2} fontWeight={600}>
             {t(`pages.audits.title`)}
