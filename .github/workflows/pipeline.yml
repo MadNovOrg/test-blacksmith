@@ -55,7 +55,7 @@ jobs:
           node-version: '18.14.2'
           cache: 'npm'
 
-      - run: echo 'NODE_OPTIONS="--max-old-space-size=4096"' >> $GITHUB_ENV
+      - run: echo 'NODE_OPTIONS="--max-old-space-size=6656"' >> $GITHUB_ENV
 
       - name: Install dependencies
         run: npm pkg delete scripts.prepare && npm ci
