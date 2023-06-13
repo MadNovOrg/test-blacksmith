@@ -1,6 +1,13 @@
 import EditIcon from '@mui/icons-material/Edit'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Typography, Accordion, Button, Box } from '@mui/material'
+import {
+  Typography,
+  Accordion,
+  Button,
+  Box,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import React, { useState } from 'react'
@@ -8,7 +15,6 @@ import { useTranslation } from 'react-i18next'
 
 import { ConfirmDialog } from '@app/components/ConfirmDialog'
 import { RichTextEditor } from '@app/components/RichTextEditor'
-import theme from '@app/theme'
 import { noop } from '@app/util'
 
 type Props = {
@@ -38,6 +44,9 @@ export const InstructionAccordionField: React.FC<Props> = ({
   const [editorValue, setEditorValue] = useState(value)
   const [editable, setEditable] = useState(editMode)
   const [resetValueToDefault, setResetValueToDefault] = useState(false)
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const resetValueHandler = () => {
     setResetValueToDefault(true)
@@ -73,9 +82,11 @@ export const InstructionAccordionField: React.FC<Props> = ({
       <Box
         sx={{
           display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
           justifyContent: 'flex-end',
           marginTop: 1,
           columnGap: 2,
+          rowGap: 1,
         }}
       >
         {defaultValue ? (

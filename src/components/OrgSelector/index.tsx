@@ -9,6 +9,8 @@ import {
   TextField,
   TextFieldProps,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import { debounce } from 'lodash-es'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -60,6 +62,10 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
   }) {
     const { t } = useTranslation()
     const fetcher = useFetcher()
+
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
     const { profile } = useAuth()
     const [open, setOpen] = useState(false)
     const [adding, setAdding] = useState<OptionToAdd | null>()
@@ -198,12 +204,18 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
               key={params.key}
               data-testid={`org-selector-result-group-${params.group}`}
             >
-              <Grid container justifyContent="space-between" px={2} py={1}>
-                <Typography display="inline" variant="body2">
+              <Grid container justifyContent="space-between" p={2} py={1}>
+                <Typography
+                  display="inline"
+                  variant="body2"
+                  fontWeight={isMobile ? 700 : 300}
+                >
                   {params.group}
                 </Typography>
               </Grid>
-              <List sx={{ px: 2 }}>{params.children}</List>
+              <List sx={{ p: 0, justifyContent: 'space-between' }}>
+                {params.children}
+              </List>
             </li>
           )}
           renderInput={params => (
@@ -240,6 +252,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             return (
               <Box
                 display="flex"
+                flexDirection={isMobile ? 'column' : 'row'}
                 justifyContent="space-between"
                 px={2}
                 component="li"
@@ -257,11 +270,12 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
               >
                 <Typography
                   flex={1}
-                  pr={2}
+                  p={1}
                   fontStyle={isNew && !('urn' in option) ? 'italic' : undefined}
                   component="span"
                   display="flex"
-                  alignItems="center"
+                  flexDirection={isMobile ? 'column' : 'row'}
+                  alignItems={isMobile ? 'left' : 'center'}
                 >
                   {getOptionLabel(option)}
                   <Typography variant="body2" color="grey.700" ml={1}>
@@ -274,6 +288,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
                     variant="contained"
                     onClick={() => setAdding(option)}
                     size="small"
+                    fullWidth={isMobile}
                   >
                     {t('urn' in option ? 'add' : 'create')}
                   </Button>

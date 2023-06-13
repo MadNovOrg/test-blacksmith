@@ -1,4 +1,12 @@
-import { Alert, Box, Button, Container, Typography } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Button,
+  Container,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -26,6 +34,9 @@ export const CourseExceptionsConfirmation: React.FC<
   const { t } = useTranslation()
   const { acl } = useAuth()
 
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const approvalRequired =
     !courseType || shouldGoIntoExceptionApproval(acl, courseType)
 
@@ -46,7 +57,7 @@ export const CourseExceptionsConfirmation: React.FC<
       }
       maxWidth={600}
     >
-      <Container>
+      <Container sx={{ padding: isMobile ? 0 : 3 }}>
         <Alert severity="warning" variant="outlined">
           <Typography variant="body1" fontWeight={600}>
             {t(
@@ -64,7 +75,12 @@ export const CourseExceptionsConfirmation: React.FC<
           </ul>
         </Alert>
 
-        <Box display="flex" justifyContent="flex-end" mt={4}>
+        <Box
+          display="flex"
+          flexDirection={isMobile ? 'column' : 'row'}
+          justifyContent="flex-end"
+          my={4}
+        >
           <Button
             type="button"
             variant="text"

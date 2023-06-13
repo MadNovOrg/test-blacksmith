@@ -134,6 +134,7 @@ export const ToobarPlugin: React.FC = () => {
         borderBottom: `1px solid ${theme.palette.grey[400]}`,
         paddingY: 0.5,
         display: 'flex',
+        flexWrap: 'wrap',
       }}
     >
       <StyledToggleButtonGroup size="small">

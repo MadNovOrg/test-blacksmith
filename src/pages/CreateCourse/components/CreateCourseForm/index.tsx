@@ -10,6 +10,8 @@ import {
   FormGroup,
   FormHelperText,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import omit from 'lodash-es/omit'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -69,6 +71,9 @@ export const CreateCourseForm = () => {
     setCurrentStepKey,
     setTrainers,
   } = useCreateCourse()
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const { savingStatus, saveCourse } = useSaveCourse()
   const [assistants, setAssistants] = useState<SearchTrainer[]>([])
@@ -388,7 +393,12 @@ export const CreateCourseForm = () => {
         </>
       ) : null}
 
-      <Box display="flex" justifyContent="flex-end" sx={{ marginTop: 4 }}>
+      <Box
+        display="flex"
+        flexDirection={isMobile ? 'column' : 'row'}
+        justifyContent="flex-end"
+        sx={{ marginTop: 4 }}
+      >
         <Button variant="text" sx={{ marginRight: 4 }} onClick={saveDraft}>
           {t('pages.create-course.save-as-draft')}
         </Button>

@@ -1,7 +1,14 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
-import { Alert, Box, Button, Stack } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Button,
+  Stack,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -109,6 +116,10 @@ export const AssignTrainers = () => {
     setTrainers,
     trainers,
   } = useCreateCourse()
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const navigate = useNavigate()
   const [trainersDataValid, setTrainersDataValid] = useState(false)
   const [seniorOrPrincipalLead, setSeniorOrPrincipalLead] = useState(false)
@@ -256,18 +267,25 @@ export const AssignTrainers = () => {
 
         <Box
           display="flex"
+          flexDirection={isMobile ? 'column' : 'row'}
           justifyContent="space-between"
           sx={{ marginTop: 4 }}
         >
-          <Button
-            onClick={() => navigate(`../../new?type=${courseData.type}`)}
-            startIcon={<ArrowBackIcon />}
-          >
-            {t('pages.create-course.assign-trainers.back-btn')}
-          </Button>
-
-          <Box>
-            <Button variant="text" sx={{ marginRight: 4 }} onClick={saveDraft}>
+          <Box mb={2}>
+            <Button
+              onClick={() => navigate(`../../new?type=${courseData.type}`)}
+              startIcon={<ArrowBackIcon />}
+            >
+              {t('pages.create-course.assign-trainers.back-btn')}
+            </Button>
+          </Box>
+          <Box mb={2}>
+            <Button
+              variant="text"
+              sx={{ marginRight: 4 }}
+              onClick={saveDraft}
+              fullWidth={isMobile}
+            >
               {t('pages.create-course.save-as-draft')}
             </Button>
 
@@ -277,6 +295,7 @@ export const AssignTrainers = () => {
               disabled={!trainersDataValid}
               loading={savingStatus === LoadingStatus.FETCHING}
               endIcon={<ArrowForwardIcon />}
+              fullWidth={isMobile}
               data-testid="AssignTrainers-submit"
               onClick={handleSubmitButtonClick}
             >

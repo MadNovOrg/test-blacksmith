@@ -1130,7 +1130,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               {t('components.course-form.start-datepicker-section-title')}
             </Typography>
             <Grid container spacing={2}>
-              <Grid item xs={6}>
+              <Grid item md={6} sm={12}>
                 <Controller
                   name="startDate"
                   control={control}
@@ -1156,7 +1156,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   )}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item md={6} sm={12}>
                 <Controller
                   name="startTime"
                   control={control}
@@ -1185,7 +1185,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               {t('components.course-form.end-datepicker-section-title')}
             </Typography>
             <Grid container spacing={2}>
-              <Grid item xs={6}>
+              <Grid item md={6} sm={12}>
                 <Controller
                   name="endDate"
                   control={control}
@@ -1210,7 +1210,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   )}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item md={6} sm={12}>
                 <Controller
                   name="endTime"
                   control={control}
@@ -1263,7 +1263,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               {usesAOL ? (
                 <>
                   <Grid container spacing={2}>
-                    <Grid item xs={6}>
+                    <Grid item md={6} sm={12}>
                       <FormControl
                         variant="filled"
                         sx={{ mb: theme.spacing(2) }}
@@ -1290,7 +1290,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       </FormControl>
                     </Grid>
 
-                    <Grid item xs={6}>
+                    <Grid item md={6} sm={12}>
                       <FormControl
                         variant="filled"
                         sx={{ mb: theme.spacing(2) }}
@@ -1360,7 +1360,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
           <Grid container spacing={2}>
             {hasMinParticipants ? (
-              <Grid item xs={6}>
+              <Grid item md={6} sm={12}>
                 <NumericTextField
                   required
                   {...register('minParticipants', { valueAsNumber: true })}
@@ -1376,7 +1376,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               </Grid>
             ) : null}
 
-            <Grid item xs={6}>
+            <Grid item md={6} sm={12}>
               <NumericTextField
                 required
                 {...register('maxParticipants', {
@@ -1438,7 +1438,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 </Typography>
 
                 <Grid container spacing={2}>
-                  <Grid item xs={6}>
+                  <Grid item md={6} sm={12}>
                     <NumericTextField
                       required
                       {...register('freeSpaces', { valueAsNumber: true })}
@@ -1464,7 +1464,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             <FormPanel>
               {isClosedCourse ? (
                 <Grid container spacing={2}>
-                  <Grid item xs={6}>
+                  <Grid item md={6} sm={12}>
                     <Typography fontWeight={600}>
                       {t('components.course-form.sales-rep-title')}
                     </Typography>
@@ -1495,7 +1495,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       disabled={disabledFields.has('salesRepresentative')}
                     />
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item md={6} sm={12}>
                     <Typography fontWeight={600}>
                       {t('components.course-form.source-title')}
                     </Typography>

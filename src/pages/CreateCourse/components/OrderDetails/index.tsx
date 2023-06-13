@@ -2,7 +2,14 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
-import { Alert, Box, Button, Typography } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Button,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import { useEffect, useMemo } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -23,6 +30,9 @@ type Inputs = {
 export const OrderDetails: React.FC = () => {
   const { t, _t } = useScopedTranslation('pages.create-course.order-details')
   const navigate = useNavigate()
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const schema = useMemo(
     () =>
@@ -95,20 +105,23 @@ export const OrderDetails: React.FC = () => {
 
           <Box
             display="flex"
+            flexDirection={isMobile ? 'column' : 'row'}
             justifyContent="space-between"
             sx={{ mt: 4, mb: 4 }}
           >
-            <Button
-              onClick={() => navigate(`../trainer-expenses`)}
-              startIcon={<ArrowBackIcon />}
-            >
-              {_t('pages.create-course.order-details.back-btn')}
-            </Button>
-
-            <Box>
+            <Box mb={2}>
+              <Button
+                onClick={() => navigate(`../trainer-expenses`)}
+                startIcon={<ArrowBackIcon />}
+              >
+                {_t('pages.create-course.order-details.back-btn')}
+              </Button>
+            </Box>
+            <Box mb={2}>
               <Button
                 variant="text"
                 sx={{ marginRight: 4 }}
+                fullWidth={isMobile}
                 onClick={handleDraftClick}
               >
                 {_t('pages.create-course.save-as-draft')}
@@ -119,6 +132,7 @@ export const OrderDetails: React.FC = () => {
                 variant="contained"
                 disabled={!methods.formState.isValid}
                 endIcon={<ArrowForwardIcon />}
+                fullWidth={isMobile}
                 data-testid="AssignTrainers-submit"
               >
                 {_t('pages.create-course.step-navigation-review-and-confirm')}

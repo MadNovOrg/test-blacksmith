@@ -214,12 +214,11 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
   return (
     <Box p={2} sx={{ background: theme.palette.common.white }}>
       <Typography fontWeight="600">{trainer.fullName}</Typography>
-
       {transport?.map((entry, idx) =>
         entry ? (
           <Fragment key={idx}>
             <Grid container spacing={2} mt={0}>
-              <Grid item xs={6}>
+              <Grid item md={6} sm={12}>
                 <FormControl
                   variant="filled"
                   fullWidth
@@ -258,7 +257,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
               </Grid>
 
               {entry.method !== TransportMethod.NONE ? (
-                <Grid item xs={5}>
+                <Grid item md={5} sm={12}>
                   <NumericTextField
                     label={t(
                       `pages.create-course.trainer-expenses.value-label.${entry.method}`
@@ -283,7 +282,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                   </FormHelperText>
                 </Grid>
               ) : (
-                <Grid item xs={5} />
+                <Grid item md={5} sm={12} />
               )}
 
               {validTransport.length > 1 ? (
@@ -318,7 +317,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
 
             {entry.method === TransportMethod.FLIGHTS ? (
               <Grid container mt={2}>
-                <Grid item xs={2}>
+                <Grid item sm={4} md={2}>
                   <NumericTextField
                     label={t(
                       `pages.create-course.trainer-expenses.value-label.${entry.method}-days`
@@ -347,7 +346,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
 
             {entry.method !== TransportMethod.NONE ? (
               <Grid container mt={2}>
-                <Grid item xs={6}>
+                <Grid item md={6} sm={12}>
                   <FormControlLabel
                     control={
                       <Switch
@@ -386,7 +385,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
             {entry.method !== TransportMethod.NONE &&
             displayAccommodation[idx] ? (
               <Grid container spacing={2} mt={0}>
-                <Grid item xs={6}>
+                <Grid item md={6} sm={12}>
                   <NumericTextField
                     label={t(
                       'pages.create-course.trainer-expenses.accommodation-nights'
@@ -413,7 +412,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                   </FormHelperText>
                 </Grid>
 
-                <Grid item xs={5}>
+                <Grid item md={5} sm={12}>
                   <NumericTextField
                     label={t(
                       'pages.create-course.trainer-expenses.accommodation-cost'
@@ -469,8 +468,8 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
 
       {miscellaneous?.map((entry, idx) =>
         entry ? (
-          <Grid key={idx} container spacing={2} mt={2}>
-            <Grid item xs={6}>
+          <Grid key={idx} container mt={2} rowSpacing={2}>
+            <Grid item md={6} sm={12}>
               <TextField
                 label={t('pages.create-course.trainer-expenses.misc-item-name')}
                 {...register(`miscellaneous.${idx}.name`)}
@@ -484,7 +483,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
               </FormHelperText>
             </Grid>
 
-            <Grid item xs={5}>
+            <Grid item md={5} sm={12}>
               <NumericTextField
                 label={t('pages.create-course.trainer-expenses.misc-item-cost')}
                 {...register(`miscellaneous.${idx}.value`, {

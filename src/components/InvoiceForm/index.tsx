@@ -83,7 +83,7 @@ export const InvoiceForm: React.FC<React.PropsWithChildren<unknown>> = () => {
       </Box>
 
       <Grid container spacing={3} mb={3}>
-        <Grid item md={6}>
+        <Grid item md={6} sm={12}>
           <TextField
             id="firstName"
             label={t('first-name')}
@@ -98,7 +98,7 @@ export const InvoiceForm: React.FC<React.PropsWithChildren<unknown>> = () => {
             required
           />
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={6} sm={12}>
           <TextField
             id="surname"
             label={t('surname')}

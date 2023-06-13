@@ -1,7 +1,14 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
-import { Box, Button, Alert, Stack } from '@mui/material'
+import {
+  Box,
+  Button,
+  Alert,
+  Stack,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -24,6 +31,10 @@ export const TrainerExpenses = () => {
     setExpenses,
     trainers,
   } = useCreateCourse()
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const navigate = useNavigate()
   const [expensesValid, setExpensesValid] = useState<boolean>()
 
@@ -66,19 +77,26 @@ export const TrainerExpenses = () => {
 
       <Box
         display="flex"
+        flexDirection={isMobile ? 'column' : 'row'}
         paddingBottom={5}
         justifyContent="space-between"
         sx={{ marginTop: 4 }}
       >
-        <Button
-          onClick={() => navigate('../assign-trainers')}
-          startIcon={<ArrowBackIcon />}
-        >
-          {t('pages.create-course.trainer-expenses.back-btn')}
-        </Button>
-
-        <Box>
-          <Button variant="text" sx={{ marginRight: 4 }} onClick={saveDraft}>
+        <Box mb={2}>
+          <Button
+            onClick={() => navigate('../assign-trainers')}
+            startIcon={<ArrowBackIcon />}
+          >
+            {t('pages.create-course.trainer-expenses.back-btn')}
+          </Button>
+        </Box>
+        <Box mb={2}>
+          <Button
+            variant="text"
+            sx={{ marginRight: 4 }}
+            onClick={saveDraft}
+            fullWidth={isMobile}
+          >
             {t('pages.create-course.save-as-draft')}
           </Button>
 
@@ -87,6 +105,7 @@ export const TrainerExpenses = () => {
             variant="contained"
             disabled={!expensesValid}
             endIcon={<ArrowForwardIcon />}
+            fullWidth={isMobile}
             data-testid="TrainerExpenses-submit"
             onClick={handleSubmit}
           >

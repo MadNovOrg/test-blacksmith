@@ -1,4 +1,10 @@
-import { Box, Typography, Container } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Container,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import { t } from 'i18next'
 import React, { useMemo } from 'react'
 import { Outlet, useSearchParams } from 'react-router-dom'
@@ -7,7 +13,6 @@ import { BackButton } from '@app/components/BackButton'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
-import theme from '@app/theme'
 import { CourseType } from '@app/types'
 
 import { NotFound } from '../common/NotFound'
@@ -19,6 +24,9 @@ export const CreateCoursePage = () => {
   const [searchParams] = useSearchParams()
   const { acl } = useAuth()
   const { completedSteps, courseData, currentStepKey } = useCreateCourse()
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const courseType = useMemo(() => {
     const qsType = (searchParams.get('type') as CourseType) ?? CourseType.OPEN
@@ -32,7 +40,7 @@ export const CreateCoursePage = () => {
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
-        <Box display="flex">
+        <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
           <Box width={400} display="flex" flexDirection="column" pr={4}>
             <Sticky top={20}>
               <Box mb={2}>
@@ -41,7 +49,7 @@ export const CreateCoursePage = () => {
                   to="/courses"
                 />
               </Box>
-              <Box mb={7}>
+              <Box mb={isMobile ? 2 : 7}>
                 <Typography variant="h2" mb={2}>
                   {t(`pages.create-course.${courseType}-course-title`)}
                 </Typography>
@@ -57,7 +65,7 @@ export const CreateCoursePage = () => {
           </Box>
 
           <Box flex={1}>
-            <Box mt={8}>
+            <Box mt={isMobile ? 0 : 8}>
               <Outlet />
             </Box>
           </Box>
