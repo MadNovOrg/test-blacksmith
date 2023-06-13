@@ -76,7 +76,7 @@ jobs:
         run: npm pkg delete scripts.prepare && npm ci
 
       - name: Test
-        run: npm run test  -- --maxWorkers=2 --shard=${{ matrix.shard }}/${{ strategy.job-total }} --changedSince=${{ github.event.pull_request.base.sha }}
+        run: npm run test  -- --maxWorkers=2 --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
   dev-cd:
     name: DEV
