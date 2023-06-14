@@ -259,7 +259,7 @@ export const CourseBookingDetails: React.FC<
         .when(['source', 'isInternalUserBooking'], ([source, condition]) => {
           return condition && source.startsWith('SALES_')
             ? yup.object().required()
-            : yup.object()
+            : yup.object().nullable()
         }),
 
       bookingContact: yup.object({
@@ -744,9 +744,7 @@ export const CourseBookingDetails: React.FC<
                     <UserSelector
                       onChange={profile => handleEmailSelector(profile, index)}
                       onEmailChange={email => handleEmailChange(email, index)}
-                      textFieldProps={{
-                        variant: 'filled',
-                      }}
+                      textFieldProps={{ variant: 'filled' }}
                       error={
                         emailDuplicated
                           ? t('pages.book-course.duplicated-email-addresses')

@@ -433,6 +433,67 @@ select_permissions:
       filter:
         profile_id:
           _eq: X-Hasura-User-Id
+update_permissions:
+  - role: ld
+    permission:
+      columns:
+        - sales_representative_id
+        - source
+      filter:
+        course:
+          course_type:
+            _in:
+              - OPEN
+              - CLOSED
+      check: null
+  - role: sales-admin
+    permission:
+      columns:
+        - sales_representative_id
+        - source
+      filter:
+        course:
+          course_type:
+            _in:
+              - OPEN
+              - CLOSED
+      check: null
+  - role: sales-representative
+    permission:
+      columns:
+        - sales_representative_id
+        - source
+      filter:
+        course:
+          course_type:
+            _in:
+              - OPEN
+              - CLOSED
+      check: null
+  - role: tt-admin
+    permission:
+      columns:
+        - sales_representative_id
+        - source
+      filter:
+        course:
+          course_type:
+            _in:
+              - OPEN
+              - CLOSED
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - sales_representative_id
+        - source
+      filter:
+        course:
+          course_type:
+            _in:
+              - OPEN
+              - CLOSED
+      check: null
 event_triggers:
   - name: licenses_purchased
     definition:

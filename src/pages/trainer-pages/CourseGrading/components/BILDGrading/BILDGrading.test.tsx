@@ -143,7 +143,9 @@ describe('page: BILDGrading', () => {
       within(dialog).getByRole('button', { name: /confirm/i })
     )
 
-    expect(screen.getByText('Course details')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByText('Course details')).toBeInTheDocument()
+    })
   })
 
   test('displays alert if there is an error when saving grade', async () => {

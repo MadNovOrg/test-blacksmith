@@ -1,48 +1,46 @@
 insert into public.course (name, course_type, course_delivery_type, course_level, organization_id, reaccreditation,
                            course_status, min_participants, max_participants, grading_confirmed, go1_integration, id,
-                           booking_contact_profile_id, free_spaces, sales_representative_id, account_code, cancellation_reason,
-                           cancellation_fee_percent, grading_started, modules_duration, notes, accredited_by, source)
+                           booking_contact_profile_id, free_spaces, account_code, cancellation_reason,
+                           cancellation_fee_percent, grading_started, modules_duration, notes, accredited_by)
 values ('Positive Behaviour Training: Level One ', 'CLOSED', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
-        false, 'SCHEDULED', 6, 6, false, false, 10026, 'dccd780a-9745-4972-a43e-95ec3ef361df', 0,
-        'dccd780a-9745-4972-a43e-95ec3ef361df', '810A Jul23', null, null, false, 305, null, 'ICM', 'EXISTING_CLIENT'),
+        false, 'SCHEDULED', 6, 6, false, false, 10026, 'dccd780a-9745-4972-a43e-95ec3ef361df', 0, '810A Jul23', null, null, false, 305, null, 'ICM'),
        ('Positive Behaviour Training: Level One ', 'OPEN', 'F2F', 'LEVEL_1', null, false, 'SCHEDULED', 5, 8, false,
-        false, 10025, null, null, null, '810A Apr23', null, null, false, 315, null, 'ICM', null),
+        false, 10025, null, null, '810A Apr23', null, null, false, 315, null, 'ICM'),
        ('Positive Behaviour Training: Advanced Modules ', 'CLOSED', 'F2F', 'ADVANCED',
         'a24397aa-b059-46b9-a728-955580823ce4', false, 'CANCELLED', 6, 5, false, false, 10024,
-        'dccd780a-9745-4972-a43e-95ec3ef361df', 0, 'dccd780a-9745-4972-a43e-95ec3ef361df', '810A Feb23',
-        'Wrong course date.', 25, false, 540, null, 'ICM', 'EXISTING_CLIENT'),
+        'dccd780a-9745-4972-a43e-95ec3ef361df', 0, '810A Feb23',
+        'Wrong course date.', 25, false, 540, null, 'ICM'),
        ('Positive Behaviour Training: Level One ', 'INDIRECT', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
-        false, 'SCHEDULED', 6, 9, false, false, 10023, null, 0, null, '810A Dec23', null, null, false, 305, null, 'ICM', null),
+        false, 'SCHEDULED', 6, 9, false, false, 10023, null, 0, '810A Dec23', null, null, false, 305, null, 'ICM'),
        ('Positive Behaviour Training: Level One ', 'OPEN', 'F2F', 'LEVEL_1', null, false, 'SCHEDULED', 5, 10, false,
-        false, 10022, null, null, null, '810A Apr23', null, null, false, 305, null, 'ICM', null),
+        false, 10022, null, null, '810A Apr23', null, null, false, 305, null, 'ICM'),
        ('Positive Behaviour Training: Intermediate Trainer ', 'OPEN', 'F2F', 'INTERMEDIATE_TRAINER', null, false,
-        'CONFIRM_MODULES', 3, 10, false, false, 10021, null, null, null, '810A Jun23', null, null, false, 0, null, 'ICM', null),
+        'CONFIRM_MODULES', 3, 10, false, false, 10021, null, null, '810A Jun23', null, null, false, 0, null, 'ICM'),
        ('Positive Behaviour Training: Level One ', 'OPEN', 'F2F', 'LEVEL_1', null, false, 'TRAINER_MISSING', 5, 10,
-        false, false, 10020, null, null, null, '810A Jun23', null, null, false, 0, null, 'ICM', null),
+        false, false, 10020, null, null, '810A Jun23', null, null, false, 0, null, 'ICM'),
        ('Positive Behaviour Training: Level One ', 'INDIRECT', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
-        false, 'EVALUATION_MISSING', 6, 20, true, false, 10019, null, 0, null, '810A Nov22', null, null, true, 305,
-        null, 'ICM', null),
+        false, 'EVALUATION_MISSING', 6, 20, true, false, 10019, null, 0, '810A Nov22', null, null, true, 305,
+        null, 'ICM'),
        ('Positive Behaviour Training: Level One ', 'CLOSED', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
-        false, 'TRAINER_PENDING', 6, 5, false, false, 10018, '467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 0,
-        '467b4ac5-d86e-40ee-b25f-87e4ed2ce618', '810A Feb23', null, null, false, 0, null, 'ICM', 'EXISTING_CLIENT'),
+        false, 'TRAINER_PENDING', 6, 5, false, false, 10018, '467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 0, '810A Feb23', null, null, false, 0, null, 'ICM'),
        ('Positive Behaviour Training: Level One ', 'INDIRECT', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
-        false, 'DECLINED', 6, 5, false, false, 10017, null, 0, null, '810A Jan23', null, null, false, 315, null, 'ICM', null),
+        false, 'DECLINED', 6, 5, false, false, 10017, null, 0, '810A Jan23', null, null, false, 315, null, 'ICM'),
        ('Positive Behaviour Training: Level Two ', 'INDIRECT', 'F2F', 'LEVEL_2', 'a24397aa-b059-46b9-a728-955580823ce4',
-        false, 'CANCELLED', 6, 20, false, false, 10016, null, 0, null, '810A Jan23', 'Changed my mind.', null, false,
-        480, null, 'ICM', null),
+        false, 'CANCELLED', 6, 20, false, false, 10016, null, 0, '810A Jan23', 'Changed my mind.', null, false,
+        480, null, 'ICM'),
        ('Positive Behaviour Training: Advanced Modules ', 'INDIRECT', 'F2F', 'ADVANCED',
         'a24397aa-b059-46b9-a728-955580823ce4', false, 'EXCEPTIONS_APPROVAL_PENDING', 6, 5, false, false, 10015, null,
-        0, null, '810A May23', null, null, false, 455, null, 'ICM', null),
+        0, '810A May23', null, null, false, 455, null, 'ICM'),
        ('Positive Behaviour Training: Level One ', 'INDIRECT', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
-        false, 'SCHEDULED', 6, 6, false, false, 10014, null, 0, null, '810A Feb23', null, null, false, 305, '', 'ICM', null),
+        false, 'SCHEDULED', 6, 6, false, false, 10014, null, 0, '810A Feb23', null, null, false, 305, '', 'ICM'),
        ('Positive Behaviour Training: Level One ', 'OPEN', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
-        false, 'EVALUATION_MISSING', 6, 6, true, false, 10085, null, 0, null, '810A Feb23', null, null, false, 305, '', 'ICM', null),
+        false, 'EVALUATION_MISSING', 6, 6, true, false, 10085, null, 0, '810A Feb23', null, null, false, 305, '', 'ICM'),
        ('Positive Behaviour Training: Advanced Trainer ', 'CLOSED', 'F2F', 'ADVANCED_TRAINER', 'a24397aa-b059-46b9-a728-955580823ce4',
-        false, 'EVALUATION_MISSING', 6, 20, true, false, 10086, null, 0, null, '810A Nov22', null, null, true, 305,
-        null, 'ICM', null),
+        false, 'EVALUATION_MISSING', 6, 20, true, false, 10086, null, 0, '810A Nov22', null, null, true, 305,
+        null, 'ICM'),
         ('Positive Behaviour Training: Intermediate Trainer ', 'CLOSED', 'F2F', 'INTERMEDIATE_TRAINER', 'a24397aa-b059-46b9-a728-955580823ce4',
-        false, 'EVALUATION_MISSING', 6, 20, true, false, 10087, null, 0, null, '810A Nov22', null, null, true, 305,
-        null, 'ICM', null);
+        false, 'EVALUATION_MISSING', 6, 20, true, false, 10087, null, 0, '810A Nov22', null, null, true, 305,
+        null, 'ICM');
 
 SELECT setval('course_id_seq', 11000);
 
@@ -173,7 +171,6 @@ insert into public.course_module (module_id, course_id)
 select module.id as module_id, 10026 as course_id
 from public.module
 where module.course_level = 'LEVEL_1';
-
 
 insert into public.course_module (module_id, course_id)
 select module.id as module_id, 10085 as course_id

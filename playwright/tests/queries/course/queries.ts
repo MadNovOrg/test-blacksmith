@@ -31,7 +31,6 @@ export const ADMIN_COURSE_QUERY = gql`
       organization_id
       parking_instructions
       reaccreditation
-      salesRepresentativeId
       source
       special_instructions
       status
@@ -70,7 +69,6 @@ export const TRAINER_COURSE_QUERY = gql`
       organization_id
       parking_instructions
       reaccreditation
-      salesRepresentativeId
       source
       special_instructions
       status

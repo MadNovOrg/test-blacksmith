@@ -5,6 +5,7 @@ import { never } from 'wonka'
 
 import { VenueSelector } from '@app/components/VenueSelector'
 import { Accreditors_Enum } from '@app/generated/graphql'
+import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
 import { BildStrategies, CourseLevel, CourseType, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
@@ -18,12 +19,17 @@ jest.mock('@app/hooks/useCourse')
 jest.mock('@app/components/VenueSelector', () => ({
   VenueSelector: jest.fn(),
 }))
+jest.mock('@app/hooks/use-fetcher')
+const useFetcherMock = jest.mocked(useFetcher)
 
 const useCourseMocked = jest.mocked(useCourse)
 const VenueSelectorMocked = jest.mocked(VenueSelector)
 
 describe('page: EditCourse', () => {
   beforeAll(() => {
+    const fetcherMock = jest.fn()
+    useFetcherMock.mockReturnValue(fetcherMock)
+    fetcherMock.mockResolvedValue({ members: [] })
     VenueSelectorMocked.mockImplementation(() => <p>test</p>)
   })
 

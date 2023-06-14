@@ -459,19 +459,6 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </DetailsItemBox>
                   )}
 
-                  {order.salesRepresentative && (
-                    <DetailsItemBox>
-                      <Stack spacing={2}>
-                        <Typography fontWeight={600}>
-                          {_t('components.course-form.sales-rep-placeholder')}
-                        </Typography>
-                        <Typography color="grey.700">
-                          {order.salesRepresentative?.fullName}
-                        </Typography>
-                      </Stack>
-                    </DetailsItemBox>
-                  )}
-
                   {order.bookingContact && (
                     <DetailsItemBox>
                       <Stack spacing={2}>
@@ -553,14 +540,14 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                   ) : null}
 
                   {course?.type === Course_Type_Enum.Closed &&
-                  course?.salesRepresentative?.fullName ? (
+                  order.salesRepresentative?.fullName ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
                         <Typography fontWeight={600}>
                           {t('sales-person')}
                         </Typography>
                         <Typography color="grey.700">
-                          {course?.salesRepresentative?.fullName}
+                          {order.salesRepresentative?.fullName}
                         </Typography>
                       </Stack>
                     </DetailsItemBox>

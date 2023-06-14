@@ -57,20 +57,20 @@ values (10100, '95e897bf-6d61-43d5-9c5c-efc0d0a5aaed');
 
 insert into public.course (name, course_type, course_delivery_type, course_level, organization_id, reaccreditation,
                            course_status, min_participants, max_participants, grading_confirmed, go1_integration, id,
-                           booking_contact_profile_id, free_spaces, sales_representative_id, account_code, cancellation_reason,
-                           cancellation_fee_percent, grading_started, modules_duration, notes, accredited_by, source)
+                           booking_contact_profile_id, free_spaces, account_code, cancellation_reason,
+                           cancellation_fee_percent, grading_started, modules_duration, notes, accredited_by)
 values  ('Positive Behaviour Training: Level Two ', 'CLOSED', 'F2F', 'LEVEL_2', 'd787defd-481c-414b-95ff-ecbcc12ae500',
-        false, 'EVALUATION_MISSING', 6, 20, false, false, 10101, null, 0, null, '810A Jan23', 'Changed my mind.', null, false,
-        480, null, 'ICM', null),
+        false, 'EVALUATION_MISSING', 6, 20, false, false, 10101, null, 0, '810A Jan23', 'Changed my mind.', null, false,
+        480, null, 'ICM'),
        ('Positive Behaviour Training: Advanced Modules ', 'CLOSED', 'F2F', 'ADVANCED',
         'd787defd-481c-414b-95ff-ecbcc12ae500', false, 'EVALUATION_MISSING', 6, 5, false, false, 10102, null,
-        0, null, '810A May23', null, null, false, 455, null, 'ICM', null),
+        0, '810A May23', null, null, false, 455, null, 'ICM'),
         ('Positive Behaviour Training: Intermediate Trainer ', 'CLOSED', 'F2F', 'INTERMEDIATE_TRAINER', 'd787defd-481c-414b-95ff-ecbcc12ae500',
-        false, 'EVALUATION_MISSING', 6, 20, true, false, 10103, null, 0, null, '810A Nov22', null, null, true, 305,
-        null, 'ICM', null),
+        false, 'EVALUATION_MISSING', 6, 20, true, false, 10103, null, 0, '810A Nov22', null, null, true, 305,
+        null, 'ICM'),
         ('Positive Behaviour Training: Level One ', 'CLOSED', 'F2F', 'LEVEL_1', 'd787defd-481c-414b-95ff-ecbcc12ae500',
-        false, 'EVALUATION_MISSING', 6, 20, true, false, 10104, null, 0, null, '810A Nov22', null, null, true, 305,
-        null, 'ICM', null);
+        false, 'EVALUATION_MISSING', 6, 20, true, false, 10104, null, 0, '810A Nov22', null, null, true, 305,
+        null, 'ICM');
 
 insert into public.course_certificate (id, course_id, number, expiry_date, profile_id, course_name, course_level, certification_date, is_revoked)
 values ('1e345ec4-f99f-4ce7-b765-ee2d36d7f400', 10101, 'L2.F.CL.10101', NOW() + interval '12 months', '117c12fc-d7c6-4987-9841-a499765ade4b', 'Positive Behaviour Training: Level Two', 'LEVEL_2', NOW() - interval '12 months', false),

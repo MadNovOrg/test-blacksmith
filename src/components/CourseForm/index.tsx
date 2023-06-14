@@ -714,6 +714,15 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     }
   })
 
+  const handleBookingContactEmailChange = useCallback(
+    (email: string) => {
+      setValue('bookingContact.email', email, {
+        shouldValidate: true,
+      })
+    },
+    [setValue]
+  )
+
   return (
     <form>
       <FormProvider {...methods}>
@@ -787,6 +796,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               <Grid container spacing={3} mb={3}>
                 <Grid item md={12}>
                   <UserSelector
+                    value={values.bookingContact?.email ?? undefined}
                     onChange={p => {
                       setValue(
                         'bookingContact',
@@ -799,15 +809,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                         { shouldValidate: true }
                       )
                     }}
-                    onEmailChange={email =>
-                      setValue('bookingContact.email', email, {
-                        shouldValidate: true,
-                      })
-                    }
+                    onEmailChange={handleBookingContactEmailChange}
                     organisationId={getValues('organization')?.id ?? ''}
-                    textFieldProps={{
-                      variant: 'filled',
-                    }}
+                    textFieldProps={{ variant: 'filled' }}
                     error={errors.bookingContact?.email?.message}
                     disabled={
                       !getValues('organization') ||
@@ -828,6 +832,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       disabledFields.has('bookingContact') ||
                       !!getValues('bookingContact')?.profileId
                     }
+                    InputLabelProps={{
+                      shrink: !!values.bookingContact?.firstName,
+                    }}
                     fullWidth
                   />
                 </Grid>
@@ -844,6 +851,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       disabledFields.has('bookingContact') ||
                       !!getValues('bookingContact')?.profileId
                     }
+                    InputLabelProps={{
+                      shrink: !!values.bookingContact?.firstName,
+                    }}
                     fullWidth
                   />
                 </Grid>

@@ -34,6 +34,7 @@ export const buildOrder = build<NonNullish<GetOrderQuery['order']>>({
     xeroInvoiceNumber: 'INV-001',
     currency: 'GBP',
     organizationId: chance.guid(),
+    salesRepresentative: null,
     course: {
       id: chance.integer(),
       max_participants: chance.integer(),
@@ -42,7 +43,6 @@ export const buildOrder = build<NonNullish<GetOrderQuery['order']>>({
       level: Course_Level_Enum.Level_1,
       name: chance.name(),
       type: Course_Type_Enum.Open,
-      salesRepresentative: null,
       start: new Date().toISOString(),
       end: new Date().toISOString(),
     },

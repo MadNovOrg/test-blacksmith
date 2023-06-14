@@ -430,12 +430,13 @@ describe('page: OrderDetails', () => {
               order: {
                 ...order,
                 invoice,
+                salesRepresentative: {
+                  id: chance.guid(),
+                  fullName: salesPerson,
+                },
                 course: {
                   ...order.course,
                   type: Course_Type_Enum.Closed,
-                  salesRepresentative: {
-                    fullName: salesPerson,
-                  },
                 },
               },
             },
@@ -486,6 +487,10 @@ describe('page: OrderDetails', () => {
             data: {
               order: {
                 ...order,
+                salesRepresentative: {
+                  id: chance.guid(),
+                  fullName: salesPerson,
+                },
                 invoice: {
                   ...invoice,
                   contact: {
@@ -501,9 +506,6 @@ describe('page: OrderDetails', () => {
                 course: {
                   ...order.course,
                   type: Course_Type_Enum.Closed,
-                  salesRepresentative: {
-                    fullName: salesPerson,
-                  },
                 },
               },
             },

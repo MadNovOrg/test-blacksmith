@@ -69,6 +69,9 @@ export const QUERY = gql`
         fullName
         avatar
         archived
+        email
+        givenName
+        familyName
       }
       orders @include(if: $withOrders) {
         salesRepresentative {

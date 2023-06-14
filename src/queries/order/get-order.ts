@@ -34,11 +34,6 @@ export const QUERY = gql`
         source
         go1Integration
         max_participants
-        salesRepresentative {
-          fullName
-          avatar
-          archived
-        }
         start
         end
         freeSpaces

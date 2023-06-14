@@ -13,7 +13,6 @@ export type ParamsType = {
     level?: CourseLevel
     organization_id?: string
     bookingContactProfileId?: string
-    salesRepresentativeId?: string
     source?: Course_Source_Enum
     reaccreditation?: boolean
     go1Integration?: boolean
@@ -27,6 +26,10 @@ export type ParamsType = {
     notes?: string
     special_instructions?: string
     parking_instructions?: string
+  }
+  orderInput: {
+    salesRepresentativeId: string
+    source: Course_Source_Enum
   }
   scheduleInput: {
     start: Date
@@ -51,6 +54,7 @@ export const UPDATE_COURSE_MUTATION = gql`
   mutation UpdateCourse(
     $courseId: Int!
     $courseInput: course_set_input!
+    $orderInput: order_set_input!
     $scheduleId: uuid!
     $scheduleInput: course_schedule_set_input!
     $trainers: [course_trainer_insert_input!]!
@@ -61,6 +65,13 @@ export const UPDATE_COURSE_MUTATION = gql`
     ) {
       id
       level
+    }
+
+    updateOrder: update_order(
+      where: { courseId: { _eq: $courseId } }
+      _set: $orderInput
+    ) {
+      affectedRows: affected_rows
     }
 
     updateSchedule: update_course_schedule_by_pk(

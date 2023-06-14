@@ -260,6 +260,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               ? Course_Status_Enum.ExceptionsApprovalPending
               : null
 
+          const orderToUpdate = {
+            salesRepresentativeId: courseData.salesRepresentative?.id,
+            source: courseData.source,
+          }
+
           const editResponse = await updateCourse({
             courseId: course.id,
             courseInput: {
@@ -294,10 +299,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               ...(courseData.bookingContact?.email
                 ? { bookingContactInviteData: courseData.bookingContact }
                 : null),
-              ...(courseData.salesRepresentative
-                ? { salesRepresentativeId: courseData.salesRepresentative.id }
-                : null),
-              ...(courseData.source ? { source: courseData.source } : null),
               ...(courseData.usesAOL
                 ? {
                     aolCostOfCourse: courseData.courseCost,
@@ -306,6 +307,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                   }
                 : null),
             },
+            orderInput: orderToUpdate,
             trainers,
             scheduleId: course?.schedule[0].id,
             scheduleInput: {

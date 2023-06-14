@@ -107,18 +107,16 @@ describe('component: UserSelector', () => {
 
     jest.runAllTimers()
 
+    const optionLabel = `${USER_SEARCH_EMAIL}, ${USER_SEARCH_FULL_NAME}`
+
     await waitFor(() => {
       expect(
-        within(screen.getByRole('listbox')).getByText(
-          `${USER_SEARCH_EMAIL}, ${USER_SEARCH_FULL_NAME}`
-        )
+        within(screen.getByRole('listbox')).getByText(optionLabel)
       ).toBeInTheDocument()
     })
 
     await userEvent.click(
-      within(screen.getByRole('listbox')).getByText(
-        `${USER_SEARCH_EMAIL}, ${USER_SEARCH_FULL_NAME}`
-      )
+      within(screen.getByRole('listbox')).getByText(optionLabel)
     )
 
     await waitFor(() => {

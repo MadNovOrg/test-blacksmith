@@ -10,6 +10,7 @@ import {
 import { debounce } from 'lodash-es'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useMount } from 'react-use'
 
 import {
   GetOrgMembersQuery,
@@ -34,6 +35,7 @@ export type UserSelectorProps = {
   error?: string
   textFieldProps?: TextFieldProps
   sx?: SxProps
+  value?: string
 }
 
 export const UserSelector: React.FC<
@@ -46,6 +48,7 @@ export const UserSelector: React.FC<
   organisationId,
   textFieldProps,
   disabled = false,
+  value,
   ...props
 }) {
   const { t } = useTranslation()
@@ -63,7 +66,6 @@ export const UserSelector: React.FC<
       >(GET_ORG_MEMBERS, { id: organisationId, email: `%${query}%` })
       setLoading(false)
 
-      console.log('members', members)
       setOptions(members)
     },
     [fetcher, organisationId]
@@ -72,6 +74,13 @@ export const UserSelector: React.FC<
   const debouncedQuery = useMemo(() => {
     return debounce(async query => refreshOptions(query), 1000)
   }, [refreshOptions])
+
+  useMount(() => {
+    if (value) {
+      setQ(value)
+      refreshOptions(value)
+    }
+  })
 
   const onInputChange = useCallback(
     async (event: React.SyntheticEvent, value: string, reason: string) => {
@@ -108,6 +117,8 @@ export const UserSelector: React.FC<
       .join(', ')
   }
 
+  const selected = options.find(o => o.profile.email === value)
+
   return (
     <>
       <Autocomplete
@@ -121,6 +132,7 @@ export const UserSelector: React.FC<
         getOptionLabel={getOptionLabel}
         onInputChange={onInputChange}
         onChange={handleChange}
+        value={selected ?? null}
         options={options}
         noOptionsText={noOptionsText}
         isOptionEqualToValue={(o, v) => {
