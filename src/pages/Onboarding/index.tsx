@@ -199,9 +199,9 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                       I accept the
                       <a
                         href={`${origin}/terms-of-business/`}
-                        aria-label={`${t(
-                          'terms-of-business'
-                        )} (${'opens-new-window'})`}
+                        aria-label={`${t('terms-of-business')} (${t(
+                          'opens-new-window'
+                        )})`}
                       >
                         Terms of Business
                       </a>
@@ -209,7 +209,9 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                       accordance with our
                       <a
                         href={`${origin}/privacy-policy`}
-                        aria-label={`${'privacy-policy'} (${'opens-new-window'})`}
+                        aria-label={`${t('privacy-policy')} (${t(
+                          'opens-new-window'
+                        )})`}
                       >
                         Privacy Policy
                       </a>

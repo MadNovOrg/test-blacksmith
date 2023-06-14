@@ -254,9 +254,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                         href={`${origin}/terms-of-business/`}
                         target="_blank"
                         rel="noreferrer"
-                        aria-label={`${t(
-                          'terms-of-business'
-                        )} (${'opens-new-window'})`}
+                        aria-label={`${t('terms-of-business')} (${t(
+                          'opens-new-window'
+                        )})`}
                       >
                         Terms of Business
                       </a>
@@ -264,7 +264,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                       accordance with our
                       <a
                         href={`${origin}/privacy-policy`}
-                        aria-label={`${'privacy-policy'} (${'opens-new-window'})`}
+                        aria-label={`${t('privacy-policy')} (${t(
+                          'opens-new-window'
+                        )})`}
                       >
                         Privacy Policy
                       </a>
