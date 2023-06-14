@@ -944,7 +944,7 @@
     }
   },
   "my-profile": {
-    "verify-email-notice": "You must verify your email to have full access on the Team Team Hub.",
+    "verify-email-notice": "You must verify your email to have full access on the Team Teach Hub.",
     "missing-details-header": "Please complete your profile by providing the following details:",
     "add-certificate": "Add certificate",
     "user-is-not-assigned-to-org": "User is not assigned to any organisation.",
@@ -1217,7 +1217,7 @@
   "course-pricing": {
     "title": "Pricing",
     "bulk-edit-btn": "Bulk edit prices",
-    "change-blended-btn": "Change blended license fee",
+    "change-blended-btn": "Change blended licence fee",
     "cols-course": "Course level",
     "cols-type": "Course type",
     "cols-delivery": "Delivery",

@@ -368,7 +368,7 @@
     "pass-title": "Pass",
     "observe_only-title": "Non-Physical Pass",
     "assist_only-title": "Assist Only Pass",
-    "certificate-footer-ICM": "The certified individual has undertaken a course in the above subject and has been awarded a certificate from Team team ltd. in accordance with the ICM quality award. Team teach is an accredited, award-winning provider of positive behaviour training, equipping individuals and teams in a variety of settings to support individuals who are distressed and have challenging behaviours in ways that lead to desirable outcomes and positive relationships",
+    "certificate-footer-ICM": "The certified individual has undertaken a course in the above subject and has been awarded a certificate from Team Teach Ltd. in accordance with the ICM quality award. Team Teach is an accredited, award-winning provider of positive behaviour training, equipping individuals and teams in a variety of settings to support individuals who are distressed and have challenging behaviours in ways that lead to desirable outcomes and positive relationships",
     "certificate-footer-BILD": "The certified individual has undertaken a course in the above subject and has been awarded a certificate by Team Teach Ltd in accordance with the BILD ACT certification Restraint Reduction Network Standards accreditation scheme. Team Teach is an accredited, award-winning provider of positive behaviour training, equipping individuals and teams in a variety of settings to support individuals who are distressed and have challenging behaviours in ways that lead to desirable outcomes and positive relationships",
     "certification-number-message": "Your certification number is {{num}}",
     "certification-valid-until-message": "Your certification is valid until {{date, date_default}}",
@@ -381,7 +381,7 @@
     "revoked-on": "Revoked on",
     "cert-error": "Error generating certificate",
     "cert-loading": "Loading certificate...",
-    "completed-message": "Has successfully completed the following Team teach course:",
+    "completed-message": "Has successfully completed the following Team Teach course:",
     "modify-grade": "Modify grade",
     "manage-certificate": "Manage certificate",
     "revoke-certificate": "Revoke certificate",
@@ -652,7 +652,7 @@
       "description": "Discover the essential steps to create a new course from scratch, including defining objectives, structuring content, and setting up assessments to help learners achieve their goals."
     },
     "edit-special-instructions": {
-      "title": "How to edit especial instructions",
+      "title": "How to edit special instructions",
       "description": "Discover the essential steps to create a new course from scratch, including defining objectives, structuring content, and setting up assessments to help learners achieve their goals."
     },
     "invite-attendee": {
