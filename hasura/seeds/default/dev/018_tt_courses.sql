@@ -46,6 +46,8 @@ values ('Positive Behaviour Training: Level One ', 'CLOSED', 'F2F', 'LEVEL_1', '
 
 SELECT setval('course_id_seq', 11000);
 
+update public.course set booking_contact_profile_id = '6407ca25-d1d2-4a3d-863a-4b2a0a56c0e4' where id = 10026;
+
 insert into public.course_audit (course_id, authorized_by, type, payload)
 values (10016, '749791ef-e4c4-4a5f-881a-461e4724138d', 'CANCELLATION', '{"cancellation_reason": "Changed my mind.", "cancellation_fee_percent": ""}'),
        (10024, '22015a3e-8907-4333-8811-85f782265a63', 'CANCELLATION', '{"cancellation_reason": "Wrong course date.", "cancellation_fee_percent": "25"}');

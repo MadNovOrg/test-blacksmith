@@ -2,9 +2,16 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import useSWR from 'swr'
 
-import { Course } from '@app/types'
+import { Course, CourseParticipant } from '@app/types'
 
-import { chance, render, screen, userEvent, waitFor } from '@test/index'
+import {
+  chance,
+  render,
+  screen,
+  userEvent,
+  useSWRDefaultResponse,
+  waitFor,
+} from '@test/index'
 import {
   buildCourse,
   buildEndedCourse,
@@ -18,34 +25,29 @@ import { CourseDetails } from '.'
 jest.mock('swr')
 const useSWRMock = jest.mocked(useSWR)
 
-function registerMocks(course: Course) {
-  useSWRMock.mockReturnValueOnce({
-    data: { course: { ...course, organization: { members: [] } } },
-    mutate: jest.fn(),
-    isValidating: false,
-    error: null,
-    isLoading: false,
-  })
-  useSWRMock.mockReturnValueOnce({
-    data: { course_participant: [buildParticipant()] },
-    mutate: jest.fn(),
-    isValidating: false,
-    error: null,
-    isLoading: false,
-  })
-  useSWRMock.mockReturnValueOnce({
-    data: { users: [] },
-    mutate: jest.fn(),
-    isValidating: false,
-    isLoading: false,
-    error: null,
-  })
-  useSWRMock.mockReturnValueOnce({
-    data: { certificates: [], upcomingCourses: [] },
-    mutate: jest.fn(),
-    isValidating: false,
-    error: null,
-    isLoading: false,
+function registerMocks(
+  course: Course,
+  courseParticipants?: CourseParticipant[],
+  orgMembers?: { profile_id: string; isAdmin: boolean }[]
+) {
+  useSWRMock.mockImplementation(key => {
+    if (!key || typeof key !== 'object') return useSWRDefaultResponse
+    let data = null
+    if (key[0].includes('GetUserCourseById')) {
+      data = {
+        course: { ...course, organization: { members: orgMembers ?? [] } },
+      }
+    } else if (key[0].includes('GetCourseParticipantId')) {
+      data = { course_participant: courseParticipants ?? [buildParticipant()] }
+    } else if (key[0].includes('GetFeedbackUsers')) {
+      data = { users: [] }
+    } else if (key[0].includes('GetProfileDetails')) {
+      data = { certificates: [], upcomingCourses: [] }
+    }
+    return {
+      ...useSWRDefaultResponse,
+      data,
+    }
   })
 }
 
@@ -116,39 +118,9 @@ describe('page: CourseDetails', () => {
     expect(screen.getByTestId('evaluate-course-cta')).toBeDisabled()
   })
 
-  it('has course evaluation button enabled if course has started', () => {
+  it('has course evaluation button enabled if course has started', async () => {
     const course = buildStartedCourse()
-
-    useSWRMock.mockReturnValueOnce({
-      data: { course: { ...course, organization: { members: [] } } },
-      mutate: jest.fn(),
-      isValidating: false,
-      isLoading: false,
-      error: null,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: {
-        course_participant: [{ ...buildParticipant(), attended: true }],
-      },
-      mutate: jest.fn(),
-      isValidating: false,
-      isLoading: false,
-      error: null,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { users: [] },
-      mutate: jest.fn(),
-      isValidating: false,
-      error: null,
-      isLoading: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { certificates: [], upcomingCourses: [] },
-      mutate: jest.fn(),
-      isValidating: false,
-      isLoading: false,
-      error: null,
-    })
+    registerMocks(course, [{ ...buildParticipant(), attended: true }])
 
     render(
       <Routes>
@@ -158,42 +130,14 @@ describe('page: CourseDetails', () => {
       { initialEntries: [`/courses/${course.id}/details`] }
     )
 
-    expect(screen.getByTestId('evaluate-course-cta')).toBeEnabled()
+    await waitFor(() => {
+      expect(screen.getByTestId('evaluate-course-cta')).toBeEnabled()
+    })
   })
 
   it("disables evaluation button if course has ended but the participant didn't attend the course", () => {
     const course = buildEndedCourse()
-
-    useSWRMock.mockReturnValueOnce({
-      data: { course: { ...course, organization: { members: [] } } },
-      mutate: jest.fn(),
-      isValidating: false,
-      isLoading: false,
-      error: null,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: {
-        course_participant: [{ ...buildParticipant(), attended: false }],
-      },
-      mutate: jest.fn(),
-      isValidating: false,
-      error: null,
-      isLoading: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { users: [] },
-      mutate: jest.fn(),
-      isValidating: false,
-      error: null,
-      isLoading: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { certificates: [], upcomingCourses: [] },
-      mutate: jest.fn(),
-      isValidating: false,
-      error: null,
-      isLoading: false,
-    })
+    registerMocks(course, [{ ...buildParticipant(), attended: false }])
 
     render(
       <Routes>
@@ -209,44 +153,11 @@ describe('page: CourseDetails', () => {
   it('displays button to manage course if a participant is also an org admin', async () => {
     const PROFILE_ID = chance.guid()
     const course = buildCourse()
-
-    useSWRMock.mockReturnValueOnce({
-      data: {
-        course: {
-          ...course,
-          organization: {
-            members: [{ profile_id: PROFILE_ID, isAdmin: true }],
-          },
-        },
-      },
-      mutate: jest.fn(),
-      isValidating: false,
-      error: null,
-      isLoading: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: {
-        course_participant: [{ ...buildParticipant(), attended: false }],
-      },
-      mutate: jest.fn(),
-      isValidating: false,
-      error: null,
-      isLoading: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { users: [] },
-      mutate: jest.fn(),
-      isValidating: false,
-      error: null,
-      isLoading: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { certificates: [], upcomingCourses: [] },
-      mutate: jest.fn(),
-      isValidating: false,
-      error: null,
-      isLoading: false,
-    })
+    registerMocks(
+      course,
+      [{ ...buildParticipant(), attended: false }],
+      [{ profile_id: PROFILE_ID, isAdmin: true }]
+    )
 
     render(
       <Routes>

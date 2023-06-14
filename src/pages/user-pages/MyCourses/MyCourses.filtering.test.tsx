@@ -27,7 +27,8 @@ describe('user-pages/MyCourses', () => {
       }: {
         variables: UserCoursesQueryVariables
       }) => {
-        const conditions = variables.where?._or ?? []
+        const mainCondition = variables.where?._and
+        const conditions = mainCondition ? mainCondition[1]._or ?? [] : []
         const courses =
           conditions[0]?.name?._ilike === `%${KEYWORD}%`
             ? [filteredCourse]
@@ -77,9 +78,11 @@ describe('user-pages/MyCourses', () => {
       }: {
         variables: UserCoursesQueryVariables
       }) => {
+        const mainCondition = variables.where?._and
+        const conditions = mainCondition ? mainCondition[1] : {}
         const courses =
-          variables.where?.level?._in?.includes(Course_Level_Enum.Level_1) &&
-          variables.where.level._in.includes(Course_Level_Enum.Level_2)
+          conditions.level?._in?.includes(Course_Level_Enum.Level_1) &&
+          conditions.level._in.includes(Course_Level_Enum.Level_2)
             ? [filteredCourse]
             : [course]
 
@@ -172,7 +175,8 @@ describe('user-pages/MyCourses', () => {
       }: {
         variables: UserCoursesQueryVariables
       }) => {
-        const orCondition = variables.where?._or ?? [{}]
+        const mainCondition = variables.where?._and
+        const orCondition = mainCondition ? mainCondition[1]._or ?? [{}] : [{}]
 
         const courses =
           orCondition[0].participants?.attended?._eq === false
@@ -225,7 +229,8 @@ describe('user-pages/MyCourses', () => {
       }: {
         variables: UserCoursesQueryVariables
       }) => {
-        const orCondition = variables.where?._or ?? [{}]
+        const mainCondition = variables.where?._and
+        const orCondition = mainCondition ? mainCondition[1]._or ?? [{}] : [{}]
         const participantsWhere = orCondition[0].participants
 
         const courses =
@@ -303,7 +308,8 @@ describe('user-pages/MyCourses', () => {
       }: {
         variables: UserCoursesQueryVariables
       }) => {
-        const orCondition = variables.where?._or ?? [{}]
+        const mainCondition = variables.where?._and
+        const orCondition = mainCondition ? mainCondition[1]._or ?? [{}] : [{}]
 
         const courses = orCondition[0].id?._in?.includes(unevaluatedCourse.id)
           ? [unevaluatedCourse]
@@ -357,7 +363,8 @@ describe('user-pages/MyCourses', () => {
       }: {
         variables: UserCoursesQueryVariables
       }) => {
-        const orCondition = variables.where?._or ?? [{}]
+        const mainCondition = variables.where?._and
+        const orCondition = mainCondition ? mainCondition[1]._or ?? [{}] : [{}]
         const participantsWhere = orCondition[0].participants
 
         const courses =
@@ -413,7 +420,8 @@ describe('user-pages/MyCourses', () => {
       }: {
         variables: UserCoursesQueryVariables
       }) => {
-        const orCondition = variables.where?._or ?? [{}]
+        const mainCondition = variables.where?._and
+        const orCondition = mainCondition ? mainCondition[1]._or ?? [{}] : [{}]
         const participantsWhere = orCondition[0].participants
         const futureEndDateFilter =
           new Date().getDate() ===
@@ -471,7 +479,8 @@ describe('user-pages/MyCourses', () => {
       }: {
         variables: UserCoursesQueryVariables
       }) => {
-        const orCondition = variables.where?._or ?? [{}]
+        const mainCondition = variables.where?._and
+        const orCondition = mainCondition ? mainCondition[1]._or ?? [{}] : [{}]
 
         const pastEndDateFilter =
           new Date().getDate() ===
@@ -542,10 +551,9 @@ describe('user-pages/MyCourses', () => {
       }: {
         variables: UserCoursesQueryVariables
       }) => {
-        const [infoRequiredWhere, unattendedWhere] = variables.where?._or ?? [
-          {},
-          {},
-        ]
+        const mainCondition = variables.where?._and
+        const orCondition = mainCondition ? mainCondition[1]._or ?? [{}] : [{}]
+        const [infoRequiredWhere, unattendedWhere] = orCondition ?? [{}, {}]
 
         const infoRequiredApplied =
           infoRequiredWhere?.participants?.healthSafetyConsent?._eq === false &&
@@ -657,12 +665,14 @@ describe('user-pages/MyCourses', () => {
         }: {
           variables: UserCoursesQueryVariables
         }) => {
-          const conditions =
-            variables.where?.schedule?._and?.filter(obj =>
+          const mainCondition = variables.where?._and
+          const conditions = mainCondition ? mainCondition[1] : {}
+          const filtered =
+            conditions.schedule?._and?.filter(obj =>
               Object.keys(obj).includes('start')
             ).length === 1 ?? false
 
-          const courses = conditions
+          const courses = filtered
             ? [
                 course_from_13_03_23_to_25_07_23,
                 course_from_22_03_23_to_20_12_23,
@@ -740,12 +750,14 @@ describe('user-pages/MyCourses', () => {
         }: {
           variables: UserCoursesQueryVariables
         }) => {
-          const conditions =
-            variables.where?.schedule?._and?.filter(obj =>
+          const mainCondition = variables.where?._and
+          const conditions = mainCondition ? mainCondition[1] : {}
+          const filtered =
+            conditions.schedule?._and?.filter(obj =>
               Object.keys(obj).includes('end')
             ).length === 1 ?? false
 
-          const courses = conditions
+          const courses = filtered
             ? [
                 course_from_15_01_23_to_27_11_23,
                 course_from_13_03_23_to_25_07_23,
@@ -820,12 +832,14 @@ describe('user-pages/MyCourses', () => {
         }: {
           variables: UserCoursesQueryVariables
         }) => {
-          const conditions =
-            variables.where?.schedule?._and?.filter(obj => {
+          const mainCondition = variables.where?._and
+          const conditions = mainCondition ? mainCondition[1] : {}
+          const filtered =
+            conditions.schedule?._and?.filter(obj => {
               const keys = Object.keys(obj)
               return keys.includes('start') || keys.includes('end')
             }).length === 2 ?? false
-          const courses = conditions
+          const courses = filtered
             ? [course_from_13_03_23_to_25_07_23]
             : allCourses
 

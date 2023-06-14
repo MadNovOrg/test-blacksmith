@@ -22,6 +22,19 @@ function getRequestedRole() {
   return requestedRole
 }
 
+export function getQueryRole(
+  activeRole: RoleName,
+  allowedRoles: Set<RoleName>
+) {
+  if (
+    activeRole === RoleName.USER &&
+    allowedRoles.has(RoleName.BOOKING_CONTACT)
+  ) {
+    return RoleName.BOOKING_CONTACT
+  }
+  return activeRole
+}
+
 export async function fetchUserProfile(
   user: CognitoUser
 ): Promise<Required<AuthState> | void> {
@@ -35,6 +48,7 @@ export async function fetchUserProfile(
 
     const defaultRole = claims?.['x-hasura-default-role'] || RoleName.USER
     const claimsRoles = claims?.['x-hasura-allowed-roles'] ?? []
+    const claimsRolesSet = new Set(claimsRoles)
     const allowedRoles = new Set(claimsRoles.filter(r => ActiveRoles.has(r)))
     const lsActiveRole = lsActiveRoleClient(profile)
     const desiredRole = getRequestedRole() ?? lsActiveRole.get() ?? defaultRole
@@ -48,8 +62,10 @@ export async function fetchUserProfile(
       isOrgAdmin: isOrgAdmin ?? false,
       organizationIds: JSON.parse(`[${orgIdsPgLiteral.slice(1, -1)}]`),
       defaultRole,
+      claimsRoles: claimsRolesSet,
       allowedRoles,
       activeRole,
+      queryRole: getQueryRole(activeRole, claimsRolesSet),
       verified: emailVerified ?? false,
       loggedOut: false,
       trainerRoles: profile.trainerRoles?.map(

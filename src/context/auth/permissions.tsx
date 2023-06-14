@@ -12,6 +12,7 @@ import type { AuthContextType } from './types'
 
 export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
   const activeRole = auth.activeRole
+  const claimsRoles = auth.claimsRoles
   const activeCertificates = auth.activeCertificates ?? []
 
   const acl = Object.freeze({
@@ -34,6 +35,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     isLD: () => activeRole === RoleName.LD,
 
     isOrgAdmin: () => auth.isOrgAdmin,
+
+    isBookingContact: () => claimsRoles?.has(RoleName.BOOKING_CONTACT),
 
     canViewRevokedCert: () => {
       const roles = [
@@ -191,7 +194,11 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
             RoleName.SALES_ADMIN,
             RoleName.TT_OPS,
           ]
-          return roles.some(r => r === auth.activeRole) || acl.isOrgAdmin()
+          return (
+            roles.some(r => r === auth.activeRole) ||
+            acl.isOrgAdmin() ||
+            acl.isBookingContact()
+          )
         }
         case CourseType.INDIRECT: {
           const roles = [

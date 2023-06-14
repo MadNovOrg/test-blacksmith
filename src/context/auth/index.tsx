@@ -5,7 +5,7 @@ import { gqlRequest } from '@app/lib/gql-request'
 import { MUTATION as UPDATE_PROFILE_ACTIVITY_QUERY } from '@app/queries/profile/update-profile-activity'
 import { RoleName } from '@app/types'
 
-import { fetchUserProfile, lsActiveRoleClient } from './helpers'
+import { fetchUserProfile, getQueryRole, lsActiveRoleClient } from './helpers'
 import { injectACL } from './permissions'
 import type { AuthContextType, AuthState, CognitoUser, E } from './types'
 
@@ -79,9 +79,14 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     (activeRole: RoleName) => {
       if (!state.profile) return state.activeRole
       if (!state.allowedRoles?.has(activeRole)) return state.activeRole
+      if (!state.claimsRoles) return state.activeRole
 
       lsActiveRoleClient(state.profile).set(activeRole)
-      setState(prev => ({ ...prev, activeRole }))
+      setState(prev => ({
+        ...prev,
+        activeRole,
+        queryRole: getQueryRole(activeRole, state.claimsRoles ?? new Set()),
+      }))
       return activeRole
     },
     [state]

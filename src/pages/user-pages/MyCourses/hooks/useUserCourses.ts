@@ -129,75 +129,105 @@ export function useUserCourses(
     )
 
   const where = useMemo(() => {
-    let obj: Course_Bool_Exp = {
-      participants: { profile_id: { _eq: profile?.id } },
+    let userConditions: Course_Bool_Exp = {
+      _or: [
+        {
+          participants: { profile_id: { _eq: profile?.id } },
+        },
+        {
+          bookingContact: { id: { _eq: profile?.id } },
+        },
+      ],
     }
+    let filterConditions: Course_Bool_Exp = {}
     // if orgId is defined then provide all available courses within that org
     if (orgId) {
       const allAvailableOrgs = {}
       const onlyUserOrgs = { organization: { id: { _in: organizationIds } } }
       const specificOrg = { organization: { id: { _eq: orgId } } }
       if (orgId === ALL_ORGS) {
-        obj = acl.isTTAdmin() ? allAvailableOrgs : onlyUserOrgs
+        userConditions = acl.isTTAdmin() ? allAvailableOrgs : onlyUserOrgs
       } else {
-        obj = specificOrg
+        userConditions = specificOrg
       }
     }
 
     if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.InfoRequired)) {
-      obj = deepmerge(obj, courseStatusConditionsMap.INFO_REQUIRED)
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.INFO_REQUIRED
+      )
     }
 
     if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.NotAttended)) {
-      obj = deepmerge(obj, courseStatusConditionsMap.NOT_ATTENDED)
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.NOT_ATTENDED
+      )
     }
 
     if (filters?.statuses?.includes(Course_Status_Enum.EvaluationMissing)) {
-      obj = deepmerge(obj, courseStatusConditionsMap.EVALUATION_MISSING)
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.EVALUATION_MISSING
+      )
     }
 
     if (filters?.statuses?.includes(Course_Status_Enum.Scheduled)) {
-      obj = deepmerge(obj, courseStatusConditionsMap.SCHEDULED)
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.SCHEDULED
+      )
     }
 
     if (filters?.statuses?.includes(Course_Status_Enum.Completed)) {
-      obj = deepmerge(obj, courseStatusConditionsMap.COMPLETED)
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.COMPLETED
+      )
     }
 
     if (filters?.statuses?.includes(Course_Status_Enum.GradeMissing)) {
-      obj = deepmerge(obj, courseStatusConditionsMap.GRADE_MISSING)
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.GRADE_MISSING
+      )
     }
 
     if (filters?.levels?.length) {
-      obj.level = { _in: filters.levels }
+      filterConditions.level = { _in: filters.levels }
     }
 
     if (filters?.types?.length) {
-      obj.type = { _in: filters.types }
+      filterConditions.type = { _in: filters.types }
     }
 
     if (filters?.creation?.start) {
-      obj.createdAt = {
+      filterConditions.createdAt = {
         _gte: filters.creation.start,
       }
     }
 
     if (filters?.creation?.end) {
-      obj.createdAt = {
-        ...obj.createdAt,
+      filterConditions.createdAt = {
+        ...filterConditions.createdAt,
         _lte: filters.creation.end,
       }
     }
 
     if (filters?.schedule?.start || filters?.schedule?.end) {
-      obj.schedule = {
+      filterConditions.schedule = {
         _and: [],
       }
       if (filters?.schedule?.start) {
-        obj.schedule._and?.push({ start: { _gte: filters.schedule.start } })
+        filterConditions.schedule._and?.push({
+          start: { _gte: filters.schedule.start },
+        })
       }
       if (filters?.schedule?.end) {
-        obj.schedule._and?.push({ end: { _lte: filters.schedule.end } })
+        filterConditions.schedule._and?.push({
+          end: { _lte: filters.schedule.end },
+        })
       }
     }
 
@@ -215,10 +245,15 @@ export function useUserCourses(
         { course_code: { _ilike: `%${query}%` } },
       ]
 
-      obj._or = orClauses.filter(Boolean)
+      filterConditions._or = [
+        ...(filterConditions._or ?? []),
+        ...orClauses.filter(Boolean),
+      ]
     }
 
-    return obj
+    return {
+      _and: [userConditions, filterConditions],
+    }
   }, [
     orgId,
     filters,

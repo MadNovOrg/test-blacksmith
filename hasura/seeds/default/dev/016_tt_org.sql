@@ -10,7 +10,8 @@ INSERT INTO public.profile (id, _given_name, _family_name, _email) VALUES
 ('6ea4e91b-9856-4533-9544-949caba236fb', 'TeamTeach', 'Exp-Adv-Trainer', 'tt.expired.adv.trainer@teamteach.testinator.com'),
 ('30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', 'TeamTeach', 'Exp-Int-Trainer', 'tt.expired.int.trainer@teamteach.testinator.com'),
 ('88072bb2-10e0-4417-b9ce-ec05265b8b56', 'TeamTeach', 'Principal-Trainer', 'tt.principal.trainer@teamteach.testinator.com'),
-('dccd780a-9745-4972-a43e-95ec3ef361df', 'TeamTeach', 'Senior-Trainer', 'tt.senior.trainer@teamteach.testinator.com');
+('dccd780a-9745-4972-a43e-95ec3ef361df', 'TeamTeach', 'Senior-Trainer', 'tt.senior.trainer@teamteach.testinator.com'),
+('6407ca25-d1d2-4a3d-863a-4b2a0a56c0e4', 'TeamTeach', 'Booking-Contact', 'tt.booking@teamteach.testinator.com');
 
 INSERT INTO public.identity (profile_id, provider_id, type) VALUES
 ('467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 'c8768f2f-6c9b-40c6-973a-450ecc454162', 'cognito'),
@@ -32,7 +33,10 @@ INSERT INTO public.identity (profile_id, provider_id, type) VALUES
 ('88072bb2-10e0-4417-b9ce-ec05265b8b56', '4fcb85e0-86be-401d-96c2-6b75ee70ad1f', 'cognito'),
 
 ('dccd780a-9745-4972-a43e-95ec3ef361df', '07bcfa2d-7635-4b40-a568-da3c05e221d6', 'cognito'),
-('dccd780a-9745-4972-a43e-95ec3ef361df', '9482f354-1cfb-466c-8b3c-98ee8c7137af', 'cognito');
+('dccd780a-9745-4972-a43e-95ec3ef361df', '9482f354-1cfb-466c-8b3c-98ee8c7137af', 'cognito'),
+
+('6407ca25-d1d2-4a3d-863a-4b2a0a56c0e4', '1994bb6c-eec8-475d-a619-3f5241ab023e', 'cognito'),
+('6407ca25-d1d2-4a3d-863a-4b2a0a56c0e4', '2ee5a633-46cb-4d56-8eff-362f66ecab79', 'cognito');
 
 INSERT INTO public.organization_member (organization_id, profile_id, is_admin) VALUES
 ('a24397aa-b059-46b9-a728-955580823ce4', '467b4ac5-d86e-40ee-b25f-87e4ed2ce618', true),
@@ -41,7 +45,8 @@ INSERT INTO public.organization_member (organization_id, profile_id, is_admin) V
 ('a24397aa-b059-46b9-a728-955580823ce4', '6ea4e91b-9856-4533-9544-949caba236fb', false),
 ('a24397aa-b059-46b9-a728-955580823ce4', '30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', false),
 ('a24397aa-b059-46b9-a728-955580823ce4', '88072bb2-10e0-4417-b9ce-ec05265b8b56', false),
-('a24397aa-b059-46b9-a728-955580823ce4', 'dccd780a-9745-4972-a43e-95ec3ef361df', false);
+('a24397aa-b059-46b9-a728-955580823ce4', 'dccd780a-9745-4972-a43e-95ec3ef361df', false),
+('a24397aa-b059-46b9-a728-955580823ce4', '6407ca25-d1d2-4a3d-863a-4b2a0a56c0e4', false);
 
 INSERT INTO public.profile_role (profile_id, role_id) VALUES
 -- trainers
@@ -60,6 +65,9 @@ INSERT INTO public.profile_role (profile_id, role_id) VALUES
 ('30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', '151f0884-a8c8-48e2-a619-c4434864ea67'),
 ('88072bb2-10e0-4417-b9ce-ec05265b8b56', '151f0884-a8c8-48e2-a619-c4434864ea67'),
 ('dccd780a-9745-4972-a43e-95ec3ef361df', '151f0884-a8c8-48e2-a619-c4434864ea67');
+
+INSERT INTO public.profile_role (profile_id, role_id) VALUES
+('6407ca25-d1d2-4a3d-863a-4b2a0a56c0e4', (SELECT id from role WHERE name = 'booking-contact')); -- tt.booking@teamteach.testinator.com
 
 INSERT INTO public.profile_trainer_role_type (profile_id, trainer_role_type_id) VALUES
 ('88072bb2-10e0-4417-b9ce-ec05265b8b56', (SELECT id FROM public.trainer_role_type WHERE name = 'principal')),

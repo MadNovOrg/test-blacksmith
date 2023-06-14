@@ -7,7 +7,7 @@ import { gqlRequest } from '@app/lib/gql-request'
 export type Fetcher = ReturnType<typeof useFetcher>
 
 export const useFetcher = () => {
-  const { getJWT, activeRole } = useAuth()
+  const { getJWT, queryRole } = useAuth()
 
   return useCallback(
     async function <T, V = Variables>(
@@ -15,14 +15,14 @@ export const useFetcher = () => {
       variables?: V
     ): Promise<T> {
       const token = await getJWT()
-      return gqlRequest(query, variables, { token, role: activeRole })
+      return gqlRequest(query, variables, { token, role: queryRole })
     },
-    [getJWT, activeRole]
+    [getJWT, queryRole]
   )
 }
 
 export const useSWRFetcher = () => {
-  const { getJWT, activeRole } = useAuth()
+  const { getJWT, queryRole } = useAuth()
 
   return useCallback(
     async function <T, V = Variables>(
@@ -31,8 +31,8 @@ export const useSWRFetcher = () => {
       const [query, variables] = Array.isArray(params) ? params : [params, {}]
 
       const token = await getJWT()
-      return gqlRequest(query, variables, { token, role: activeRole })
+      return gqlRequest(query, variables, { token, role: queryRole })
     },
-    [getJWT, activeRole]
+    [getJWT, queryRole]
   )
 }

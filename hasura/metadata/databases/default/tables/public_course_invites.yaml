@@ -25,6 +25,25 @@ object_relationships:
         column_mapping:
           id: invite_id
 insert_permissions:
+  - role: booking-contact
+    permission:
+      check:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      columns:
+        - course_id
+        - email
+        - status
+      backend_only: false
   - role: ld
     permission:
       check: {}
@@ -99,6 +118,29 @@ insert_permissions:
         - status
       backend_only: false
 select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - id
+        - note
+        - status
+        - updated_at
+      filter:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
   - role: finance
     permission:
       columns:
@@ -281,6 +323,20 @@ update_permissions:
               _eq: PENDING
       check: null
 delete_permissions:
+  - role: booking-contact
+    permission:
+      filter:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
   - role: ld
     permission:
       filter: {}

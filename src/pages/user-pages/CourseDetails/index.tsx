@@ -28,6 +28,8 @@ import {
   GetFeedbackUsersQueryVariables,
   Organization,
 } from '@app/generated/graphql'
+import { CourseAttendees } from '@app/pages/trainer-pages/components/CourseAttendees'
+import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import { ModifyAttendanceModal } from '@app/pages/user-pages/CourseDetails/ModifyAttendanceModal'
 import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/queries/course-evaluation/get-feedback-users'
 import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
@@ -56,7 +58,7 @@ const successAlerts = {
 } as const
 
 export const CourseDetails = () => {
-  const { profile } = useAuth()
+  const { profile, acl } = useAuth()
   const navigate = useNavigate()
   const params = useParams()
   const { t } = useTranslation()
@@ -79,7 +81,7 @@ export const CourseDetails = () => {
   const course = courseData?.course
   const courseLoadingStatus = getSWRLoadingStatus(courseData, courseError)
 
-  const [activeTab, setActiveTab] = useState('checklist')
+  const [activeTab, setActiveTab] = useState('')
   const [showModifyAttendanceModal, setShowModifyAttendanceModal] =
     useState(false)
 
@@ -91,6 +93,22 @@ export const CourseDetails = () => {
   const { data, mutate } = useSWR([GetParticipant, { profileId, courseId }])
   const courseParticipant: CourseParticipant | null =
     data?.course_participant?.length > 0 ? data?.course_participant[0] : null
+
+  const isBookingContact =
+    acl.isBookingContact() && course?.bookingContact?.id === profileId
+  const isParticipant = !!courseParticipant
+  console.log('isParticipant', isParticipant)
+  console.log('activeTab', activeTab)
+
+  useEffect(() => {
+    if (course && !activeTab) {
+      setActiveTab(
+        isBookingContact && !isParticipant
+          ? CourseDetailsTabs.ATTENDEES
+          : 'checklist'
+      )
+    }
+  }, [course, isBookingContact, isParticipant, activeTab])
 
   const { data: usersData, error } = useSWR<
     GetFeedbackUsersQuery,
@@ -164,7 +182,7 @@ export const CourseDetails = () => {
         <Alert severity="error">There was an error loading a course.</Alert>
       ) : null}
 
-      {course && courseParticipant ? (
+      {course && (isParticipant || isBookingContact) ? (
         <>
           <CourseHeroSummary course={course}>
             <BackButton
@@ -186,175 +204,208 @@ export const CourseDetails = () => {
             </Box>
           ) : null}
 
-          <TabContext value={activeTab}>
-            <Box borderBottom={1} borderColor="divider">
-              <Container>
-                <Box display="flex" justifyContent="space-between">
+          {activeTab ? (
+            <TabContext value={activeTab}>
+              <Box borderBottom={1} borderColor="divider">
+                <Container>
                   <Box display="flex" justifyContent="space-between">
-                    <PillTabList
-                      onChange={handleActiveTabChange}
-                      aria-label="Course participant tabs"
-                    >
-                      <PillTab
-                        data-testid="participant-course-checklist"
-                        label={t(
-                          'pages.participant-course.checklist-tab-title'
-                        )}
-                        value="checklist"
-                      />
-                      {courseParticipant?.certificate ? (
-                        <PillTab
-                          data-testid="participant-course-certification"
-                          label={t(
-                            'pages.participant-course.certification-tab-title'
-                          )}
-                          value="certification"
-                        />
-                      ) : null}
-                    </PillTabList>
-                  </Box>
-                  <Box>
-                    {!courseHasStarted && course.type === CourseType.OPEN ? (
-                      <Button variant="text">
-                        <Typography
-                          variant="body2"
-                          fontWeight={600}
-                          color="primary"
-                          my={1}
-                          onClick={() => setShowModifyAttendanceModal(true)}
-                        >
-                          {t('pages.participant-course.change-my-attendance')}
-                        </Typography>
-                      </Button>
-                    ) : null}
-
-                    {canManageCourse ? (
-                      <Button
-                        variant="text"
-                        component={LinkBehavior}
-                        href={`/manage-courses/${course?.organization?.id}/${courseId}/details`}
+                    <Box display="flex" justifyContent="space-between">
+                      <PillTabList
+                        onChange={handleActiveTabChange}
+                        aria-label="Course participant tabs"
                       >
-                        <Typography
-                          variant="body2"
-                          fontWeight={600}
-                          color="primary"
-                          my={1}
-                        >
-                          {t('pages.participant-course.manage-course')}
-                        </Typography>
-                      </Button>
-                    ) : null}
-                  </Box>
-                </Box>
-              </Container>
-            </Box>
+                        {isParticipant ? (
+                          <PillTab
+                            data-testid="participant-course-checklist"
+                            label={t(
+                              'pages.participant-course.checklist-tab-title'
+                            )}
+                            value="checklist"
+                          />
+                        ) : null}
+                        {courseParticipant?.certificate ? (
+                          <PillTab
+                            data-testid="participant-course-certification"
+                            label={t(
+                              'pages.participant-course.certification-tab-title'
+                            )}
+                            value="certification"
+                          />
+                        ) : null}
+                        {isBookingContact ? (
+                          <PillTab
+                            label={t(
+                              'pages.course-details.tabs.attendees.title'
+                            )}
+                            value={CourseDetailsTabs.ATTENDEES}
+                            data-testid="attendees-tab"
+                          />
+                        ) : null}
+                      </PillTabList>
+                    </Box>
+                    <Box>
+                      {!courseHasStarted && course.type === CourseType.OPEN ? (
+                        <Button variant="text">
+                          <Typography
+                            variant="body2"
+                            fontWeight={600}
+                            color="primary"
+                            my={1}
+                            onClick={() => setShowModifyAttendanceModal(true)}
+                          >
+                            {t('pages.participant-course.change-my-attendance')}
+                          </Typography>
+                        </Button>
+                      ) : null}
 
-            <Container sx={{ pb: 2 }}>
-              <TabPanel sx={{ px: 0 }} value="checklist">
-                {showFeedbackRequiredAlert ? (
-                  <Alert variant="outlined" severity="error" sx={{ m: 2 }}>
-                    <Typography>
-                      {t('pages.participant-course.feedback-required-alert')}
-                    </Typography>
-                  </Alert>
+                      {canManageCourse ? (
+                        <Button
+                          variant="text"
+                          component={LinkBehavior}
+                          href={`/manage-courses/${course?.organization?.id}/${courseId}/details`}
+                        >
+                          <Typography
+                            variant="body2"
+                            fontWeight={600}
+                            color="primary"
+                            my={1}
+                          >
+                            {t('pages.participant-course.manage-course')}
+                          </Typography>
+                        </Button>
+                      ) : null}
+                    </Box>
+                  </Box>
+                </Container>
+              </Box>
+
+              <Container sx={{ pb: 2 }}>
+                <TabPanel sx={{ px: 0 }} value="checklist">
+                  {showFeedbackRequiredAlert ? (
+                    <Alert variant="outlined" severity="error" sx={{ m: 2 }}>
+                      <Typography>
+                        {t('pages.participant-course.feedback-required-alert')}
+                      </Typography>
+                    </Alert>
+                  ) : null}
+
+                  {isParticipant ? (
+                    <>
+                      <CoursePrerequisitesAlert
+                        courseId={courseId}
+                        sx={{ m: 2 }}
+                        showAction={true}
+                      />
+
+                      <ChecklistItem marginBottom={2} padding={2}>
+                        <CheckCircleOutlineIcon sx={{ marginRight: 1 }} />
+                        <Typography fontWeight={500} sx={{ flexGrow: 1 }}>
+                          {t(
+                            'pages.participant-course.personal-data-document-title'
+                          )}
+                        </Typography>
+                        {courseParticipant?.healthSafetyConsent ? (
+                          <Chip
+                            label={t('common.complete')}
+                            color="success"
+                            sx={{ marginRight: 2 }}
+                          />
+                        ) : (
+                          <>
+                            <Chip
+                              label={t('common.incomplete')}
+                              sx={{ marginRight: 2 }}
+                            />
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              onClick={() =>
+                                navigate(
+                                  `/courses/${courseId}/health-and-safety`
+                                )
+                              }
+                            >
+                              {t('pages.participant-course.review-and-submit')}
+                            </Button>
+                          </>
+                        )}
+                      </ChecklistItem>
+                      <ChecklistItem padding={2}>
+                        <CheckCircleOutlineIcon sx={{ marginRight: 1 }} />
+                        <Typography fontWeight={500} sx={{ flexGrow: 1 }}>
+                          {t(
+                            'pages.participant-course.course-summary-evaluation-title'
+                          )}
+                        </Typography>
+                        <Chip
+                          label={
+                            !didAttendeeSubmitFeedback || !courseHasEnded
+                              ? t('incomplete')
+                              : t('complete')
+                          }
+                          color={
+                            !didAttendeeSubmitFeedback || !courseHasEnded
+                              ? 'default'
+                              : 'success'
+                          }
+                          sx={{ marginRight: 2 }}
+                          data-testid="evaluate-course-complete-message"
+                        />
+                        <Button
+                          data-testid="evaluate-course-cta"
+                          onClick={() =>
+                            navigate(`/courses/${courseId}/evaluation`)
+                          }
+                          variant="contained"
+                          color="secondary"
+                          disabled={!canSubmitFeedback}
+                        >
+                          {!courseHasEnded
+                            ? t(
+                                'pages.participant-course.course-summary-button-after-completion'
+                              )
+                            : t('pages.participant-course.evaluate-course')}
+                        </Button>
+                      </ChecklistItem>
+                    </>
+                  ) : null}
+                </TabPanel>
+
+                {courseParticipant?.certificate ? (
+                  <TabPanel sx={{ px: 0 }} value="certification">
+                    {!courseHasEnded ? (
+                      <Box
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        mb={5}
+                      >
+                        <Alert
+                          variant="outlined"
+                          color="warning"
+                          sx={{ mb: 3 }}
+                        >
+                          {t(
+                            'pages.participant-course.certification-course-not-ended'
+                          )}
+                        </Alert>
+                      </Box>
+                    ) : (
+                      <CourseCertification
+                        certificateId={courseParticipant.certificate.id}
+                      />
+                    )}
+                  </TabPanel>
                 ) : null}
 
-                <CoursePrerequisitesAlert
-                  courseId={courseId}
-                  sx={{ m: 2 }}
-                  showAction={true}
-                />
-
-                <ChecklistItem marginBottom={2} padding={2}>
-                  <CheckCircleOutlineIcon sx={{ marginRight: 1 }} />
-                  <Typography fontWeight={500} sx={{ flexGrow: 1 }}>
-                    {t('pages.participant-course.personal-data-document-title')}
-                  </Typography>
-                  {courseParticipant?.healthSafetyConsent ? (
-                    <Chip
-                      label={t('common.complete')}
-                      color="success"
-                      sx={{ marginRight: 2 }}
-                    />
-                  ) : (
-                    <>
-                      <Chip
-                        label={t('common.incomplete')}
-                        sx={{ marginRight: 2 }}
-                      />
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() =>
-                          navigate(`/courses/${courseId}/health-and-safety`)
-                        }
-                      >
-                        {t('pages.participant-course.review-and-submit')}
-                      </Button>
-                    </>
-                  )}
-                </ChecklistItem>
-                <ChecklistItem padding={2}>
-                  <CheckCircleOutlineIcon sx={{ marginRight: 1 }} />
-                  <Typography fontWeight={500} sx={{ flexGrow: 1 }}>
-                    {t(
-                      'pages.participant-course.course-summary-evaluation-title'
-                    )}
-                  </Typography>
-                  <Chip
-                    label={
-                      !didAttendeeSubmitFeedback || !courseHasEnded
-                        ? t('incomplete')
-                        : t('complete')
-                    }
-                    color={
-                      !didAttendeeSubmitFeedback || !courseHasEnded
-                        ? 'default'
-                        : 'success'
-                    }
-                    sx={{ marginRight: 2 }}
-                    data-testid="evaluate-course-complete-message"
-                  />
-                  <Button
-                    data-testid="evaluate-course-cta"
-                    onClick={() => navigate(`/courses/${courseId}/evaluation`)}
-                    variant="contained"
-                    color="secondary"
-                    disabled={!canSubmitFeedback}
-                  >
-                    {!courseHasEnded
-                      ? t(
-                          'pages.participant-course.course-summary-button-after-completion'
-                        )
-                      : t('pages.participant-course.evaluate-course')}
-                  </Button>
-                </ChecklistItem>
-              </TabPanel>
-
-              {courseParticipant?.certificate ? (
-                <TabPanel sx={{ px: 0 }} value="certification">
-                  {!courseHasEnded ? (
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      alignItems="center"
-                      mb={5}
-                    >
-                      <Alert variant="outlined" color="warning" sx={{ mb: 3 }}>
-                        {t(
-                          'pages.participant-course.certification-course-not-ended'
-                        )}
-                      </Alert>
-                    </Box>
-                  ) : (
-                    <CourseCertification
-                      certificateId={courseParticipant.certificate.id}
-                    />
-                  )}
-                </TabPanel>
-              ) : null}
-            </Container>
-          </TabContext>
+                {isBookingContact ? (
+                  <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.ATTENDEES}>
+                    <CourseAttendees course={course} />
+                  </TabPanel>
+                ) : null}
+              </Container>
+            </TabContext>
+          ) : null}
 
           {course.type === CourseType.OPEN && showModifyAttendanceModal ? (
             <ModifyAttendanceModal

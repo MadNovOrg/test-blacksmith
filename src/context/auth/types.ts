@@ -16,8 +16,10 @@ export type AuthState = {
   isOrgAdmin?: boolean
   organizationIds?: string[]
   defaultRole?: RoleName
+  claimsRoles?: Set<RoleName>
   allowedRoles?: Set<RoleName> // roles allowed e.g. assigned + inherited
   activeRole?: RoleName
+  queryRole?: RoleName
   verified?: boolean
   loggedOut?: boolean
   trainerRoles?: string[]

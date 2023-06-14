@@ -64,6 +64,9 @@ export const QUERY = gql`
           }
         }
       }
+      bookingContact {
+        id
+      }
     }
   }
 `

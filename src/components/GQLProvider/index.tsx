@@ -3,9 +3,9 @@ import { devtoolsExchange } from '@urql/devtools'
 import { authExchange } from '@urql/exchange-auth'
 import React, { useMemo } from 'react'
 import {
+  cacheExchange,
   createClient,
   dedupExchange,
-  cacheExchange,
   fetchExchange,
   Provider,
 } from 'urql'
@@ -15,14 +15,14 @@ import { useAuth } from '@app/context/auth'
 export const GQLProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
-  const { getJWT, activeRole } = useAuth()
+  const { getJWT, queryRole } = useAuth()
 
   const client = useMemo(() => {
     return createClient({
       url: import.meta.env.VITE_HASURA_GRAPHQL_API,
       fetchOptions: {
         headers: {
-          ...(activeRole ? { 'X-Hasura-Role': activeRole } : undefined),
+          ...(queryRole ? { 'X-Hasura-Role': queryRole } : undefined),
         },
       },
       exchanges: [
@@ -61,7 +61,7 @@ export const GQLProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         fetchExchange,
       ],
     })
-  }, [activeRole, getJWT])
+  }, [queryRole, getJWT])
 
   return <Provider value={client}>{children}</Provider>
 }
