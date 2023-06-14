@@ -115,6 +115,7 @@
     "end-time-required": "End time is required field",
     "attendees-section-title": "Attendees",
     "attendees-number-title": "How many attendees?",
+    "attendees-edit-label":"You are unable to amend the amount of attendees for this course, please contact Team Teach to request this change.",
     "attendees-description": "Assist trainer(s) may be required based on the number of attendees.",
     "min-attendees-placeholder": "Minimum",
     "max-attendees-placeholder": "Maximum",

@@ -34,6 +34,7 @@ type Props = {
   onChange?: (data: FormValues, isValid: boolean) => void
   autoFocus?: boolean
   disabled?: boolean
+  showAssistHint?: boolean
   isReAccreditation: boolean
   requiredLeaders?: RequiredTrainers
 }
@@ -69,6 +70,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
   autoFocus = true,
   disabled = false,
   isReAccreditation = false,
+  showAssistHint = true,
   requiredLeaders = { min: 0, max: 1 },
 }) => {
   const { t } = useTranslation()
@@ -217,11 +219,12 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
           <FormHelperText error data-testid="AssignTrainers-assist-error">
             {form.formState.errors.assist.message}
           </FormHelperText>
-        ) : (
+        ) : null}
+        {showAssistHint ? (
           <FormHelperText data-testid="AssignTrainers-assist-hint">
             {t('pages.create-course.assign-trainers.assist-hint')}
           </FormHelperText>
-        )}
+        ) : null}
       </Box>
       {needsModerator ? (
         <Box data-testid="AssignTrainers-moderator">

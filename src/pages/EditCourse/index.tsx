@@ -660,6 +660,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                           ) as unknown as BildStrategy[])
                         : undefined
                     }
+                    showAssistHint={false}
                   />
                 ) : null}
 
