@@ -83,7 +83,18 @@ export const Contacts: React.FC<
     [t]
   )
   const roleOptions = useMemo<FilterOption[]>(() => {
-    return Object.values(RoleName).map<FilterOption>(role => ({
+    return Object.values([
+      RoleName.USER,
+      RoleName.TRAINER,
+      RoleName.TT_OPS,
+      RoleName.SALES_REPRESENTATIVE,
+      RoleName.SALES_ADMIN,
+      RoleName.LD,
+      RoleName.FINANCE,
+      RoleName.TT_ADMIN,
+      RoleName.BOOKING_CONTACT,
+      RoleName.UNVERIFIED,
+    ]).map<FilterOption>(role => ({
       id: role,
       title: t(`role-names.${role}`),
       selected: false,

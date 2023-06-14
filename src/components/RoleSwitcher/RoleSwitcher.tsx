@@ -23,7 +23,22 @@ export const RoleSwitcher = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
   const roles = useMemo(() => {
-    const all = [...(auth.allowedRoles ?? new Set())]
+    const availableRoles = [
+      RoleName.USER,
+      RoleName.TRAINER,
+      RoleName.TT_OPS,
+      RoleName.SALES_REPRESENTATIVE,
+      RoleName.SALES_ADMIN,
+      RoleName.LD,
+      RoleName.FINANCE,
+      RoleName.TT_ADMIN,
+    ]
+
+    const all = [
+      ...availableRoles.filter(role =>
+        [...(auth?.allowedRoles ?? new Set())].includes(role)
+      ),
+    ]
     return all.filter(r => r !== auth.activeRole)
   }, [auth])
 

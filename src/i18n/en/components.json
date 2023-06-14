@@ -77,14 +77,14 @@
   },
   "role-switcher": {
     "subtitle": "Switch Role",
-    "user": "Attendee",
+    "user": "Individual",
     "trainer": "Trainer",
-    "tt-ops": "Ops",
-    "tt-admin": "Admin",
+    "tt-ops": "Operations",
+    "tt-admin": "Administrator",
+    "sales-representative": "Sales representative",
     "sales-admin": "Sales administrator",
-    "sales-representative": "Sale Representative",
-    "finance": "Finance",
-    "ld": "L&D"
+    "ld": "L&D",
+    "finance": "Finance"
   },
   "course-form": {
     "general-details-title": "General details",

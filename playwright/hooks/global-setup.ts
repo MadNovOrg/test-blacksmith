@@ -36,12 +36,12 @@ async function globalSetup() {
   await fs.mkdir(TEMP_DIR, { recursive: true })
   const browser = await chromium.launch()
   const credentials = [
-    { name: 'admin', role: 'Admin' },
-    { name: 'ops', role: 'Ops' },
+    { name: 'admin', role: 'Administrator' },
+    { name: 'ops', role: 'Operations' },
     { name: 'trainer', role: 'Trainer' },
     { name: 'trainerWithOrg', role: 'Trainer' },
-    { name: 'user1', role: 'User' },
-    { name: 'userOrgAdmin', role: 'User' },
+    { name: 'user1', role: 'Individual' },
+    { name: 'userOrgAdmin', role: 'Individual' },
     { name: 'salesAdmin', role: 'Sales administrator' },
   ]
   await Promise.all(
