@@ -1,11 +1,10 @@
-import { TabContext, TabList, TabPanel } from '@mui/lab'
+import { TabContext, TabPanel } from '@mui/lab'
 import {
   Alert,
   CircularProgress,
   Container,
   Grid,
   Stack,
-  Tab,
   Typography,
 } from '@mui/material'
 import React, { useState } from 'react'
@@ -23,6 +22,8 @@ import { Course, CourseType, InviteStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { CourseInvites } from '../CourseInvites'
+
+import { TabMenu } from './TabMenu'
 
 type CourseAttendeesProps = {
   course: Course
@@ -83,6 +84,7 @@ export const CourseAttendees: React.FC<
           <Grid
             container
             justifyContent="space-between"
+            rowSpacing={3}
             alignItems="center"
             sx={{ my: 2 }}
           >
@@ -118,49 +120,15 @@ export const CourseAttendees: React.FC<
             />
           </Grid>
           <TabContext value={selectedTab}>
-            <TabList
-              onChange={(_, selectedTab: React.SetStateAction<string>) =>
-                setSelectedTab(selectedTab)
-              }
-            >
-              <Tab
-                label={t('pages.course-participants.tabs.attending', {
-                  number: courseParticipantsTotal,
-                })}
-                value="0"
-                data-testid="tabParticipants"
-              />
-              {!isOpenCourse
-                ? [
-                    <Tab
-                      label={t('pages.course-participants.tabs.pending', {
-                        number: pendingTotal,
-                      })}
-                      value="1"
-                      data-testid="tabPending"
-                      key="1"
-                    />,
-                    <Tab
-                      label={t('pages.course-participants.tabs.declined', {
-                        number: declinedTotal,
-                      })}
-                      value="2"
-                      data-testid="tabDeclined"
-                      key="2"
-                    />,
-                  ]
-                : null}
-
-              {isOpenCourse && acl.canSeeWaitingLists() ? (
-                <Tab
-                  label={t('pages.course-participants.tabs.waitlist', {
-                    number: waitlistTotal,
-                  })}
-                  value="3"
-                  data-testid="tabWaitlist"
-                />
-              ) : null}
-            </TabList>
+            <TabMenu
+              courseParticipantsTotal={courseParticipantsTotal}
+              pendingTotal={pendingTotal}
+              declinedTotal={declinedTotal}
+              waitListTotal={waitlistTotal}
+              isOpenCourse={isOpenCourse}
+              selectedTab={selectedTab}
+              setSelectedTab={setSelectedTab}
+            />
 
             <TabPanel value="0" sx={{ px: 0 }}>
               <AttendingTab

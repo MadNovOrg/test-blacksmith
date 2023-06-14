@@ -5,6 +5,8 @@ import {
   Container,
   Stack,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,7 +17,6 @@ import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import useCourse from '@app/hooks/useCourse'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
-import theme from '@app/theme'
 import { LoadingStatus } from '@app/util'
 
 import { CourseGradingSteps } from './CourseGradingSteps'
@@ -26,6 +27,8 @@ export const CourseGradingDetails = () => {
   const { t } = useTranslation('pages', { keyPrefix: 'course-grading-details' })
 
   const { data: course, status } = useCourse(courseId ?? '')
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
@@ -45,7 +48,7 @@ export const CourseGradingDetails = () => {
         ) : null}
         {course ? (
           <GradingDetailsProvider accreditedBy={course.accreditedBy}>
-            <Box display="flex">
+            <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
               <Box width={400} display="flex" flexDirection="column" pr={4}>
                 <Sticky top={20}>
                   <Box mb={2}>
@@ -65,7 +68,7 @@ export const CourseGradingDetails = () => {
               </Box>
 
               <Box flex={1}>
-                <Box mt={'6px'}>
+                <Box mt={isMobile ? 0 : 8}>
                   <Outlet />
                 </Box>
               </Box>

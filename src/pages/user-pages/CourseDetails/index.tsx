@@ -5,10 +5,13 @@ import {
   Box,
   Button,
   Chip,
+  Grid,
   CircularProgress,
   Container,
   Stack,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import { styled } from '@mui/system'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -59,6 +62,9 @@ const successAlerts = {
 
 export const CourseDetails = () => {
   const { profile, acl } = useAuth()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const navigate = useNavigate()
   const params = useParams()
   const { t } = useTranslation()
@@ -298,74 +304,88 @@ export const CourseDetails = () => {
                       />
 
                       <ChecklistItem marginBottom={2} padding={2}>
-                        <CheckCircleOutlineIcon sx={{ marginRight: 1 }} />
-                        <Typography fontWeight={500} sx={{ flexGrow: 1 }}>
-                          {t(
-                            'pages.participant-course.personal-data-document-title'
-                          )}
-                        </Typography>
-                        {courseParticipant?.healthSafetyConsent ? (
-                          <Chip
-                            label={t('common.complete')}
-                            color="success"
-                            sx={{ marginRight: 2 }}
-                          />
-                        ) : (
-                          <>
+                        <Grid container alignItems={'center'}>
+                          <CheckCircleOutlineIcon sx={{ marginRight: 1 }} />
+                          <Typography fontWeight={500} sx={{ flexGrow: 1 }}>
+                            {t(
+                              'pages.participant-course.personal-data-document-title'
+                            )}
+                          </Typography>
+                          {courseParticipant?.healthSafetyConsent ? (
                             <Chip
-                              label={t('common.incomplete')}
-                              sx={{ marginRight: 2 }}
+                              label={t('common.complete')}
+                              color="success"
+                              sx={{ marginRight: 2, my: 1 }}
                             />
-                            <Button
-                              variant="contained"
-                              color="secondary"
-                              onClick={() =>
-                                navigate(
-                                  `/courses/${courseId}/health-and-safety`
-                                )
-                              }
-                            >
-                              {t('pages.participant-course.review-and-submit')}
-                            </Button>
-                          </>
-                        )}
+                          ) : (
+                            <>
+                              <Chip
+                                label={t('common.incomplete')}
+                                sx={{ marginRight: 2 }}
+                              />
+                              <Button
+                                variant="contained"
+                                color="secondary"
+                                fullWidth={isMobile}
+                                sx={{ mt: isMobile ? 2 : 0 }}
+                                onClick={() =>
+                                  navigate(
+                                    `/courses/${courseId}/health-and-safety`
+                                  )
+                                }
+                              >
+                                {t(
+                                  'pages.participant-course.review-and-submit'
+                                )}
+                              </Button>
+                            </>
+                          )}
+                        </Grid>
                       </ChecklistItem>
                       <ChecklistItem padding={2}>
-                        <CheckCircleOutlineIcon sx={{ marginRight: 1 }} />
-                        <Typography fontWeight={500} sx={{ flexGrow: 1 }}>
-                          {t(
-                            'pages.participant-course.course-summary-evaluation-title'
-                          )}
-                        </Typography>
-                        <Chip
-                          label={
-                            !didAttendeeSubmitFeedback || !courseHasEnded
-                              ? t('incomplete')
-                              : t('complete')
-                          }
-                          color={
-                            !didAttendeeSubmitFeedback || !courseHasEnded
-                              ? 'default'
-                              : 'success'
-                          }
-                          sx={{ marginRight: 2 }}
-                          data-testid="evaluate-course-complete-message"
-                        />
-                        <Button
-                          data-testid="evaluate-course-cta"
-                          onClick={() =>
-                            navigate(`/courses/${courseId}/evaluation`)
-                          }
-                          variant="contained"
-                          color="secondary"
-                          disabled={!canSubmitFeedback}
-                        >
-                          {!courseHasEnded
-                            ? t(
-                                'pages.participant-course.course-summary-button-after-completion'
-                              )
-                            : t('pages.participant-course.evaluate-course')}
-                        </Button>
+                        <Grid container alignItems={'center'}>
+                          <CheckCircleOutlineIcon sx={{ marginRight: 1 }} />
+                          <Typography
+                            fontWeight={500}
+                            sx={{ flexGrow: 1, my: 1 }}
+                          >
+                            {' '}
+                            {t(
+                              'pages.participant-course.course-summary-evaluation-title'
+                            )}
+                          </Typography>
+                          <Chip
+                            label={
+                              !didAttendeeSubmitFeedback || !courseHasEnded
+                                ? t('incomplete')
+                                : t('complete')
+                            }
+                            color={
+                              !didAttendeeSubmitFeedback || !courseHasEnded
+                                ? 'default'
+                                : 'success'
+                            }
+                            sx={{ marginRight: 2 }}
+                            data-testid="evaluate-course-complete-message"
+                          />
+                          <Button
+                            data-testid="evaluate-course-cta"
+                            onClick={() =>
+                              navigate(`/courses/${courseId}/evaluation`)
+                            }
+                            variant="contained"
+                            color="secondary"
+                            fullWidth={isMobile}
+                            sx={{ mt: isMobile ? 2 : 0 }}
+                            disabled={!canSubmitFeedback}
+                          >
+                            {!courseHasEnded
+                              ? t(
+                                  'pages.participant-course.course-summary-button-after-completion'
+                                )
+                              : t('pages.participant-course.evaluate-course')}
+                          </Button>
+                        </Grid>
                       </ChecklistItem>
                     </>
                   ) : null}
@@ -397,7 +417,6 @@ export const CourseDetails = () => {
                     )}
                   </TabPanel>
                 ) : null}
-
                 {isBookingContact ? (
                   <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.ATTENDEES}>
                     <CourseAttendees course={course} />
@@ -406,7 +425,6 @@ export const CourseDetails = () => {
               </Container>
             </TabContext>
           ) : null}
-
           {course.type === CourseType.OPEN && showModifyAttendanceModal ? (
             <ModifyAttendanceModal
               course={course}

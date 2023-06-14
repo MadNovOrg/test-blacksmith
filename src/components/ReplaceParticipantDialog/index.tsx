@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
+import { useMediaQuery, useTheme } from '@mui/material'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -64,6 +65,8 @@ export const ReplaceParticipantDialog: React.FC<
   course,
 }) => {
   const { t, _t } = useScopedTranslation(TRANSLATION_SCOPE)
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const schema = yup.object({
     email: schemas.email(_t).required(),
@@ -188,7 +191,7 @@ export const ReplaceParticipantDialog: React.FC<
           </Typography>
 
           <Grid container spacing={2} mb={4}>
-            <Grid item xs={6}>
+            <Grid item md={6} xs={12}>
               <TextField
                 variant="filled"
                 placeholder={t('first-name-placeholder')}
@@ -198,7 +201,7 @@ export const ReplaceParticipantDialog: React.FC<
                 {...register('firstName')}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item md={6} xs={12}>
               <TextField
                 variant="filled"
                 placeholder={t('surname-placeholder')}
@@ -237,8 +240,16 @@ export const ReplaceParticipantDialog: React.FC<
             />
           ) : null}
         </Box>
-        <Box display="flex" justifyContent="space-between">
-          <Button onClick={onClose} data-testId="replace-cancel">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          flexDirection={isMobile ? 'column' : 'row'}
+        >
+          <Button
+            onClick={onClose}
+            data-testId="replace-cancel"
+            fullWidth={isMobile}
+          >
             {t('cancel-btn-text')}
           </Button>
           <LoadingButton
@@ -247,6 +258,7 @@ export const ReplaceParticipantDialog: React.FC<
             disabled={!formState.isValid}
             loading={fetching}
             data-testId="replace-submit"
+            fullWidth={isMobile}
           >
             {t('submit-btn-text')}
           </LoadingButton>

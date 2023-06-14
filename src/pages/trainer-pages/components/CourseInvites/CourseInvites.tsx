@@ -7,6 +7,8 @@ import {
   TextField,
   TextFieldProps,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -31,6 +33,9 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { acl } = useAuth()
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const [showModal, setShowModal] = useState(false)
   const [error, setError] = useState('')
@@ -162,7 +167,14 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
 
   return (
     <>
-      <Grid container item xs="auto" alignItems="center">
+      <Grid
+        item
+        container
+        md={6}
+        sm={12}
+        alignItems="center"
+        justifyContent="flex-end"
+      >
         {!courseHasStarted &&
           !courseCancelled &&
           acl.canInviteAttendees(course.type) &&
@@ -189,22 +201,31 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
             </>
           ) : (
             <>
-              <Typography variant="subtitle2" data-testid="invites-left">
-                {t('pages.course-participants.invites-left', {
-                  count: invitesLeft - emails.length,
-                })}
-              </Typography>
-
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{ ml: 2 }}
-                onClick={() => setShowModal(true)}
-                disabled={invitesLeft === 0}
-                data-testid="course-invite-btn"
+              <Grid
+                item
+                md={3}
+                sm={12}
+                display="flex"
+                justifyContent="space-around"
               >
-                {t('pages.course-participants.invite-btn')}
-              </Button>
+                <Typography variant="subtitle2" data-testid="invites-left">
+                  {t('pages.course-participants.invites-left', {
+                    count: invitesLeft - emails.length,
+                  })}
+                </Typography>
+              </Grid>
+              <Grid item md={6} sm={12}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setShowModal(true)}
+                  disabled={invitesLeft === 0}
+                  fullWidth
+                  data-testid="course-invite-btn"
+                >
+                  {t('pages.course-participants.invite-btn')}
+                </Button>
+              </Grid>
             </>
           ))}
       </Grid>
@@ -229,13 +250,8 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
           })}
         </Typography>
 
-        <Grid
-          container
-          alignItems="flex-end"
-          spacing={2}
-          sx={{ my: 1, flexWrap: 'nowrap' }}
-        >
-          <Grid item xs sx={{ minWidth: 0 }}>
+        <Grid container alignItems="flex-end" spacing={2} sx={{ my: 1 }}>
+          <Grid item md={6} sm={12} sx={{ minWidth: 0 }}>
             <Autocomplete
               multiple
               options={[]}
@@ -251,7 +267,7 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
               data-testid="modal-invites-emails"
             />
           </Grid>
-          <Grid item>
+          <Grid item md={6} sm={12}>
             <LoadingButton
               variant="contained"
               color="primary"
@@ -259,6 +275,7 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
               onClick={onSubmit}
               loading={saving}
               disabled={emails.length > invitesLeft}
+              fullWidth={isMobile}
               data-testid="modal-invites-send"
             >
               {t('pages.course-participants.invite-send-btn')}

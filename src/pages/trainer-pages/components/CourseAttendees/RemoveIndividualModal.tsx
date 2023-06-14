@@ -12,6 +12,8 @@ import {
   RadioGroup,
   TextField,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import { isNumber } from 'lodash-es'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -59,6 +61,9 @@ export const RemoveIndividualModal = ({
   onSave,
 }: RemoveIndividualModalProps) => {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const fetcher = useFetcher()
   const { acl } = useAuth()
   const [feeType, setFeeType] = useState<FeesRadioValue>(
@@ -287,13 +292,19 @@ export const RemoveIndividualModal = ({
 
           {error && <Alert severity="error">{error}</Alert>}
 
-          <Box display="flex" justifyContent="space-between" mt={4}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            mt={4}
+            flexDirection={isMobile ? 'column' : 'row'}
+          >
             <Button
               data-testid="close-button"
               type="button"
               variant="text"
               color="primary"
               onClick={onClose}
+              fullWidth={isMobile}
             >
               {t('pages.edit-course.cancellation-modal.close-modal')}
             </Button>
@@ -305,6 +316,7 @@ export const RemoveIndividualModal = ({
               type="button"
               variant="contained"
               color="error"
+              fullWidth={isMobile}
               sx={{ ml: 1 }}
             >
               {t('pages.individual-cancellation.remove-attendee')}

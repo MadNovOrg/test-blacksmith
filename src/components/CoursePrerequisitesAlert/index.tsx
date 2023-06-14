@@ -7,6 +7,8 @@ import {
   ListItem,
   SxProps,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -25,6 +27,9 @@ export const CoursePrerequisitesAlert: React.FC<
   React.PropsWithChildren<CoursePrerequisitesAlertProps>
 > = ({ courseId, sx, showAction }) => {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const { profile } = useAuth()
   const navigate = useNavigate()
   const { missingCertifications } = useProfile(profile?.id, courseId)
@@ -54,7 +59,7 @@ export const CoursePrerequisitesAlert: React.FC<
           severity="error"
           sx={sx}
           action={
-            showAction ? (
+            showAction && !isMobile ? (
               <Button
                 variant="contained"
                 color="primary"
@@ -131,6 +136,18 @@ export const CoursePrerequisitesAlert: React.FC<
               </ListItem>
             ) : null}
           </List>
+          {showAction && isMobile ? (
+            <Button
+              variant="contained"
+              color="primary"
+              data-testid="go-to-profile-preferences-button"
+              size="small"
+              fullWidth={isMobile}
+              onClick={() => navigate('/profile')}
+            >
+              {t('go-to-profile')}
+            </Button>
+          ) : null}
         </Alert>
       ) : null}
     </>

@@ -1,3 +1,4 @@
+import { useMediaQuery, useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import List from '@mui/material/List'
@@ -13,7 +14,6 @@ import { BackButton } from '@app/components/BackButton'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import theme from '@app/theme'
 
 import {
   TransferModeEnum,
@@ -25,6 +25,8 @@ export const TransferParticipant: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { t } = useScopedTranslation('pages.transfer-participant')
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const { participant, completedSteps, currentStepKey, mode } =
     useTransferParticipantContext()
@@ -34,7 +36,7 @@ export const TransferParticipant: React.FC<
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
-        <Box display="flex">
+        <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
           <Box width={400} display="flex" flexDirection="column" pr={4}>
             <Sticky top={20}>
               {!attendeeTranfserring ? (

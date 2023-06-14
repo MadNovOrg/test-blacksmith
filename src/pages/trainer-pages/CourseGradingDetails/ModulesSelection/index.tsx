@@ -1,5 +1,13 @@
 import { LoadingButton } from '@mui/lab'
-import { Box, CircularProgress, Stack, styled, Typography } from '@mui/material'
+import {
+  Box,
+  CircularProgress,
+  Stack,
+  styled,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -24,6 +32,9 @@ const StyledText = styled(Typography)(({ theme }) => ({
 
 export const ModulesSelection = () => {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const { id: courseId } = useParams()
   const fetcher = useFetcher()
   const navigate = useNavigate()
@@ -175,7 +186,12 @@ export const ModulesSelection = () => {
             onChange={handleSelectionChange}
           />
 
-          <Box display="flex" justifyContent="space-between" mt={3}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            flexDirection={isMobile ? 'column' : 'row'}
+            mt={3}
+          >
             <LoadingButton
               loading={savingSelectionStatus === LoadingStatus.FETCHING}
               onClick={() => backToStep('grading-clearance')}
@@ -189,7 +205,7 @@ export const ModulesSelection = () => {
               loading={savingSelectionStatus === LoadingStatus.FETCHING}
               variant="contained"
               onClick={saveModulesSelection}
-              sx={{ py: 1 }}
+              sx={{ py: 1, mt: isMobile ? 2 : 0 }}
             >
               <Typography variant="body1" fontWeight={600}>
                 {t('pages.modules-selection.save-button-text')}

@@ -1,3 +1,4 @@
+import { useTheme, useMediaQuery } from '@mui/material'
 import MuiAppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
@@ -15,6 +16,9 @@ import { UserMenu } from '../UserMenu'
 export const AppBar = () => {
   const { verified } = useAuth()
 
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   return (
     <>
       <MuiAppBar>
@@ -22,9 +26,9 @@ export const AppBar = () => {
           <Box display="flex" alignItems="center" gap={3}>
             <Link underline="none" href="/" variant="h5">
               <Logo
-                width={230}
+                width={isMobile ? undefined : 230}
                 height={48}
-                variant="full"
+                variant={isMobile ? 'partial' : 'full'}
                 data-testid="app-logo"
               />
             </Link>
@@ -44,7 +48,7 @@ export const AppBar = () => {
             >
               <NavLinks />
             </Box>
-          )}{' '}
+          )}
           <Box
             sx={{
               flexGrow: 0,

@@ -4,7 +4,6 @@ import {
   Button,
   Checkbox,
   CircularProgress,
-  Container,
   Grid,
   Link,
   Stack,
@@ -14,6 +13,7 @@ import {
   TableRow,
   Typography,
   useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -40,8 +40,10 @@ type CourseGradingProps = {
 export const CourseGrading: React.FC<
   React.PropsWithChildren<CourseGradingProps>
 > = ({ course, refreshCourse = noop }) => {
-  const { t } = useTranslation()
   const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { acl } = useAuth()
 
@@ -154,66 +156,78 @@ export const CourseGrading: React.FC<
   })
 
   return (
-    <>
-      <Container sx={{ paddingTop: 2, paddingBottom: 2 }}>
-        {course.gradingConfirmed ? (
-          <>
-            {status === LoadingStatus.FETCHING ? (
-              <Stack
-                alignItems="center"
-                justifyContent="center"
-                data-testid="course-fetching"
+    <Box sx={{ paddingX: 0 }}>
+      {course.gradingConfirmed ? (
+        <>
+          {status === LoadingStatus.FETCHING ? (
+            <Stack
+              alignItems="center"
+              justifyContent="center"
+              data-testid="course-fetching"
+            >
+              <CircularProgress />
+            </Stack>
+          ) : (
+            <>
+              <Grid
+                container
+                display="flex"
+                justifyContent="space-between"
+                flexDirection={isMobile ? 'column' : 'row'}
               >
-                <CircularProgress />
-              </Stack>
-            ) : (
-              <>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Typography variant="subtitle1" color="grey.800" mr={3}>
-                    {t('pages.course-details.tabs.grading.title')}
-                  </Typography>
-                  {canGradeParticipants ? (
-                    <Button
-                      disabled={!canEditGradingDetails}
-                      onClick={() => {
-                        navigate(`/courses/${course.id}/grading-details`)
-                      }}
-                      startIcon={<Edit fontSize="small" />}
-                    >
-                      {t(
-                        'pages.course-details.tabs.grading.modify-grading-details'
-                      )}
-                    </Button>
-                  ) : null}
-                </Box>
-
-                <Typography variant="body1" color="grey.800" sx={{ my: 2 }}>
-                  {t('pages.course-details.tabs.grading.description')}
+                <Typography variant="subtitle1" color="grey.800">
+                  {t('pages.course-details.tabs.grading.title')}
                 </Typography>
+                {canGradeParticipants ? (
+                  <Button
+                    disabled={!canEditGradingDetails}
+                    onClick={() => {
+                      navigate(`/courses/${course.id}/grading-details`)
+                    }}
+                    fullWidth={isMobile}
+                    startIcon={<Edit fontSize="small" />}
+                  >
+                    {t(
+                      'pages.course-details.tabs.grading.modify-grading-details'
+                    )}
+                  </Button>
+                ) : null}
+              </Grid>
 
-                <Grid
-                  container
-                  justifyContent="space-between"
-                  alignItems="center"
-                  sx={{ mb: 2 }}
-                >
+              <Typography variant="body1" color="grey.800" sx={{ my: 2 }}>
+                {t('pages.course-details.tabs.grading.description')}
+              </Typography>
+
+              <Grid
+                container
+                justifyContent="space-between"
+                alignItems="center"
+                sx={{ mb: 2, p: 0 }}
+              >
+                <Grid item>
                   <Typography variant="body1" color="grey.500">
                     {t('pages.course-details.tabs.grading.attendees', {
                       number: total,
                     })}
                   </Typography>
-
-                  {canGradeParticipants ? (
-                    <Box>
+                </Grid>
+                {canGradeParticipants ? (
+                  <Grid
+                    item
+                    container
+                    md={6}
+                    sm={12}
+                    display="flex"
+                    justifyContent="flex-end"
+                    flexDirection={isMobile ? 'column' : 'row'}
+                    spacing={2}
+                  >
+                    <Grid item>
                       <Button
                         variant="outlined"
                         color="primary"
                         disabled={selectedParticipants.length === 0}
+                        fullWidth={isMobile}
                         onClick={() =>
                           navigate(
                             `/courses/${
@@ -228,11 +242,13 @@ export const CourseGrading: React.FC<
                           number: selectedParticipants.length,
                         })}
                       </Button>
+                    </Grid>
+                    <Grid item>
                       <Button
                         variant="contained"
                         color="primary"
                         disabled={disableGradeAll}
-                        sx={{ ml: 2 }}
+                        fullWidth={isMobile}
                         onClick={() =>
                           navigate(`/courses/${course.id}/grading`)
                         }
@@ -242,10 +258,11 @@ export const CourseGrading: React.FC<
                           'pages.course-details.tabs.grading.grade-all-attendees'
                         )}
                       </Button>
-                    </Box>
-                  ) : null}
-                </Grid>
-
+                    </Grid>
+                  </Grid>
+                ) : null}
+              </Grid>
+              <Grid sx={{ overflowX: 'auto' }}>
                 <Table>
                   <TableHead
                     cols={cols}
@@ -309,7 +326,11 @@ export const CourseGrading: React.FC<
                         </TableCell>
                         <TableCell data-testid="grade-cell">
                           {courseParticipant.grade ? (
-                            <Box display="flex" alignItems="center">
+                            <Box
+                              display="flex"
+                              alignItems="center"
+                              justifyContent="space-between"
+                            >
                               <Grade grade={courseParticipant.grade} />
                               <Link
                                 variant="body2"
@@ -340,34 +361,34 @@ export const CourseGrading: React.FC<
                     ))}
                   </TableBody>
                 </Table>
-              </>
-            )}
-          </>
-        ) : (
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <GradingDetailsAlert course={course}>
-              {canGradeParticipants ? (
-                <Box display="flex" justifyContent={'flex-end'}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="medium"
-                    sx={{ py: 1 }}
-                    href={`/courses/${course.id}/grading-details`}
-                    LinkComponent={LinkBehavior}
-                  >
-                    <Typography variant="body1" fontWeight={600}>
-                      {t(
-                        'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grading-details'
-                      )}
-                    </Typography>
-                  </Button>
-                </Box>
-              ) : null}
-            </GradingDetailsAlert>
-          </Box>
-        )}
-      </Container>
-    </>
+              </Grid>
+            </>
+          )}
+        </>
+      ) : (
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <GradingDetailsAlert course={course}>
+            {canGradeParticipants ? (
+              <Box display="flex" justifyContent={'flex-end'}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="medium"
+                  sx={{ py: 1 }}
+                  href={`/courses/${course.id}/grading-details`}
+                  LinkComponent={LinkBehavior}
+                >
+                  <Typography variant="body1" fontWeight={600}>
+                    {t(
+                      'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grading-details'
+                    )}
+                  </Typography>
+                </Button>
+              </Box>
+            ) : null}
+          </GradingDetailsAlert>
+        </Box>
+      )}
+    </Box>
   )
 }

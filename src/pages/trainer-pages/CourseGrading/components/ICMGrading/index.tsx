@@ -1,5 +1,5 @@
 import { LoadingButton } from '@mui/lab'
-import { Box, Typography, Button } from '@mui/material'
+import { Box, Typography, Button, useTheme, useMediaQuery } from '@mui/material'
 import { t } from 'i18next'
 import React, {
   FC,
@@ -27,7 +27,6 @@ import {
   ParamsType,
   ResponseType,
 } from '@app/queries/grading/save-course-grading'
-import theme from '@app/theme'
 import { LoadingStatus } from '@app/util'
 
 import {
@@ -47,6 +46,9 @@ type Props = {
 
 export const ICMGrading: FC<Props> = ({ course }) => {
   const navigate = useNavigate()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const [modalOpened, setModalOpened] = useState(false)
   const [savingGradesStatus, setSavingGradesStatus] = useState(
     LoadingStatus.IDLE
@@ -186,7 +188,7 @@ export const ICMGrading: FC<Props> = ({ course }) => {
 
   return (
     <>
-      <Box display="flex">
+      <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
         <Box width={400} display="flex" flexDirection="column" pr={4}>
           <Sticky>
             <Box mb={2}>

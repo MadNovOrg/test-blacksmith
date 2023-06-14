@@ -190,109 +190,112 @@ export const AttendingTab = ({
       {courseParticipantsLoadingStatus === LoadingStatus.SUCCESS &&
       courseParticipants?.length ? (
         <>
-          <Table data-testid="attending-table">
-            <TableHead
-              cols={cols}
-              order={order}
-              orderBy={sortColumn}
-              onRequestSort={handleSortChange}
-            />
-            <TableBody>
-              {courseParticipants?.map(courseParticipant => (
-                <TableRow
-                  key={courseParticipant.id}
-                  data-testid={`course-participant-row-${courseParticipant.id}`}
-                >
-                  <TableCell>
-                    <LinkToProfile
-                      profileId={courseParticipant.profile.id}
-                      isProfileArchived={courseParticipant.profile.archived}
-                    >
-                      {courseParticipant.profile.archived
-                        ? t('common.archived-profile')
-                        : courseParticipant.profile.fullName}
-                    </LinkToProfile>
-                  </TableCell>
-                  <TableCell>
-                    <LinkToProfile
-                      profileId={courseParticipant.profile.id}
-                      isProfileArchived={courseParticipant.profile.archived}
-                    >
-                      {courseParticipant.profile.email}
-                      {courseParticipant.profile.contactDetails.map(
-                        contact => contact.value
-                      )}
-                    </LinkToProfile>
-                  </TableCell>
-                  <TableCell>
-                    {courseParticipant.profile.organizations.map(org => (
-                      <Typography key={org.organization.id}>
-                        {org.organization.name}
-                      </Typography>
-                    ))}
-                  </TableCell>
-                  {isBlendedCourse && (
+          <Box sx={{ overflowX: 'auto' }}>
+            <Table data-testid="attending-table">
+              <TableHead
+                cols={cols}
+                order={order}
+                orderBy={sortColumn}
+                onRequestSort={handleSortChange}
+              />
+              <TableBody>
+                {courseParticipants?.map(courseParticipant => (
+                  <TableRow
+                    key={courseParticipant.id}
+                    data-testid={`course-participant-row-${courseParticipant.id}`}
+                  >
                     <TableCell>
-                      {courseParticipant.go1EnrolmentStatus && (
-                        <Chip
-                          label={t(
-                            `blended-learning-status.${courseParticipant.go1EnrolmentStatus}`
-                          )}
-                          color={
-                            courseParticipant.go1EnrolmentStatus ===
-                            BlendedLearningStatus.COMPLETED
-                              ? 'success'
-                              : 'warning'
-                          }
-                        />
-                      )}
+                      <LinkToProfile
+                        profileId={courseParticipant.profile.id}
+                        isProfileArchived={courseParticipant.profile.archived}
+                      >
+                        {courseParticipant.profile.archived
+                          ? t('common.archived-profile')
+                          : courseParticipant.profile.fullName}
+                      </LinkToProfile>
                     </TableCell>
-                  )}
-                  <TableCell>
-                    {courseParticipant.healthSafetyConsent
-                      ? t('common.yes')
-                      : t('common.no')}
-                  </TableCell>
-                  {!isCourseEnded &&
-                  acl.canManageParticipantAttendance(course.accreditedBy) ? (
                     <TableCell>
-                      {!isOpenCourse ||
-                      acl.canOnlySendCourseInformation(course.accreditedBy) ? (
-                        <Button
-                          startIcon={
-                            <SendIcon color="primary" titleAccess="Send" />
-                          }
-                          onClick={() =>
-                            setIndividualToResendInfo(courseParticipant)
-                          }
-                        >
-                          {t('common.resend-course-information')}
-                        </Button>
-                      ) : (
-                        <CourseActionsMenu
-                          item={courseParticipant}
-                          data-testid="manage-attendance"
-                          onReplaceClick={participant => {
-                            setParticipantToReplace(participant)
-                          }}
-                          onRemoveClick={participant => {
-                            setIndividualToRemove(participant)
-                          }}
-                          onTransferClick={participant => {
-                            handleTransfer(participant.id)
-                          }}
-                          onResendCourseInformationClick={participant =>
-                            setIndividualToResendInfo(participant)
-                          }
-                        />
-                      )}
+                      <LinkToProfile
+                        profileId={courseParticipant.profile.id}
+                        isProfileArchived={courseParticipant.profile.archived}
+                      >
+                        {courseParticipant.profile.email}
+                        {courseParticipant.profile.contactDetails.map(
+                          contact => contact.value
+                        )}
+                      </LinkToProfile>
                     </TableCell>
-                  ) : null}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-
+                    <TableCell>
+                      {courseParticipant.profile.organizations.map(org => (
+                        <Typography key={org.organization.id}>
+                          {org.organization.name}
+                        </Typography>
+                      ))}
+                    </TableCell>
+                    {isBlendedCourse && (
+                      <TableCell>
+                        {courseParticipant.go1EnrolmentStatus && (
+                          <Chip
+                            label={t(
+                              `blended-learning-status.${courseParticipant.go1EnrolmentStatus}`
+                            )}
+                            color={
+                              courseParticipant.go1EnrolmentStatus ===
+                              BlendedLearningStatus.COMPLETED
+                                ? 'success'
+                                : 'warning'
+                            }
+                          />
+                        )}
+                      </TableCell>
+                    )}
+                    <TableCell>
+                      {courseParticipant.healthSafetyConsent
+                        ? t('common.yes')
+                        : t('common.no')}
+                    </TableCell>
+                    {!isCourseEnded &&
+                    acl.canManageParticipantAttendance(course.accreditedBy) ? (
+                      <TableCell>
+                        {!isOpenCourse ||
+                        acl.canOnlySendCourseInformation(
+                          course.accreditedBy
+                        ) ? (
+                          <Button
+                            startIcon={
+                              <SendIcon color="primary" titleAccess="Send" />
+                            }
+                            onClick={() =>
+                              setIndividualToResendInfo(courseParticipant)
+                            }
+                          >
+                            {t('common.resend-course-information')}
+                          </Button>
+                        ) : (
+                          <CourseActionsMenu
+                            item={courseParticipant}
+                            data-testid="manage-attendance"
+                            onReplaceClick={participant => {
+                              setParticipantToReplace(participant)
+                            }}
+                            onRemoveClick={participant => {
+                              setIndividualToRemove(participant)
+                            }}
+                            onTransferClick={participant => {
+                              handleTransfer(participant.id)
+                            }}
+                            onResendCourseInformationClick={participant =>
+                              setIndividualToResendInfo(participant)
+                            }
+                          />
+                        )}
+                      </TableCell>
+                    ) : null}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Box>
           {courseParticipantsTotal ? (
             <TablePagination
               component="div"

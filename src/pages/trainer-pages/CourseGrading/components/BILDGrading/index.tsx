@@ -1,5 +1,12 @@
 import { LoadingButton } from '@mui/lab'
-import { Box, Typography, Button, Alert } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Button,
+  Alert,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -16,7 +23,6 @@ import {
   SaveBildGradeMutationVariables,
 } from '@app/generated/graphql'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
-import theme from '@app/theme'
 
 import { useGradingParticipants } from '../../hooks'
 import useCourseGradingData from '../../useCourseGradingData'
@@ -35,6 +41,9 @@ type Props = {
 
 export const BILDGrading: FC<Props> = ({ course }) => {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const filteredCourseParticipants = useGradingParticipants(course.participants)
   const [grade, setGrade] = useState<Grade_Enum | undefined>()
   const [modalOpened, setModalOpened] = useState(false)
@@ -79,7 +88,7 @@ export const BILDGrading: FC<Props> = ({ course }) => {
 
   return (
     <>
-      <Box display="flex">
+      <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
         <Box width={400} display="flex" flexDirection="column" pr={4}>
           <Sticky>
             <Box mb={2}>

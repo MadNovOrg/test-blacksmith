@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Grid } from '@mui/material'
 import { groupBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -74,23 +74,23 @@ export const RatingSummary: React.FC<React.PropsWithChildren<Props>> = ({
       </Box>
       <Box>
         {labels.map((label, index) => (
-          <Box key={label} display="flex" alignItems="center">
-            <Box flex={3}>
+          <Grid container key={label} display="flex" alignItems="center">
+            <Grid item flex={3} xs={7} lg={8} xl={9.5}>
               <RatingProgress
                 variant="determinate"
                 value={values[index]}
                 color={colors[index]}
               />
-            </Box>
-            <Box flex={1} display="flex" alignItems="center">
+            </Grid>
+            <Grid flex={1} display="flex" alignItems="center">
               <Typography sx={{ textAlign: 'right', mr: 2, flex: 1 }}>
                 {t(label)}
               </Typography>
               <Typography variant="body2" fontWeight="600" sx={{ width: 30 }}>
                 {values[index]}%
               </Typography>
-            </Box>
-          </Box>
+            </Grid>
+          </Grid>
         ))}
       </Box>
     </Box>

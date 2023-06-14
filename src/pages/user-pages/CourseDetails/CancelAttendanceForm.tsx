@@ -1,5 +1,13 @@
 import { LoadingButton } from '@mui/lab'
-import { Alert, Box, Button, Checkbox, FormControlLabel } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -23,7 +31,8 @@ export const CancelAttendanceForm: React.FC<
 > = ({ course, onClose, onSubmit }) => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
-
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const startDate = course.schedule[0].start
 
   const [confirmed, setConfirmed] = useState(false)
@@ -73,8 +82,19 @@ export const CancelAttendanceForm: React.FC<
 
       {error && <Alert severity="error">{error}</Alert>}
 
-      <Box display="flex" justifyContent="space-between" mt={4}>
-        <Button type="button" variant="text" color="primary" onClick={onClose}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        mt={4}
+        flexDirection={isMobile ? 'column' : 'row'}
+      >
+        <Button
+          type="button"
+          variant="text"
+          color="primary"
+          fullWidth={isMobile}
+          onClick={onClose}
+        >
           {t('pages.edit-course.cancellation-modal.close-modal')}
         </Button>
         <LoadingButton
@@ -85,6 +105,7 @@ export const CancelAttendanceForm: React.FC<
           variant="contained"
           color="primary"
           sx={{ ml: 1 }}
+          fullWidth={isMobile}
         >
           {t('pages.edit-course.cancellation-modal.cancel-entire-course')}
         </LoadingButton>

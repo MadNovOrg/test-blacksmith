@@ -4,6 +4,7 @@ import {
   Button,
   CircularProgress,
   Container,
+  Grid,
   Link,
   Paper,
   Table,
@@ -12,6 +13,8 @@ import {
   TableContainer,
   TableRow,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -37,6 +40,9 @@ type Evaluation = GetEvaluationsQuery['evaluations'][number]
 export const EvaluationSummaryTab: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const navigate = useNavigate()
   const params = useParams()
   const { profile } = useAuth()
@@ -173,12 +179,8 @@ export const EvaluationSummaryTab: React.FC<
       )}
 
       <Box>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="flex-end"
-        >
-          <Box>
+        <Grid container alignItems="center" spacing={2}>
+          <Grid item md={6} sm={12}>
             <Typography
               variant="subtitle1"
               data-testid="trainer-evaluation-title"
@@ -188,31 +190,44 @@ export const EvaluationSummaryTab: React.FC<
             <Typography variant="body1" color="grey.500">
               {t('pages.course-details.tabs.evaluation.desc')}
             </Typography>
-          </Box>
-          <Box>
-            <Button
-              variant="outlined"
-              color="primary"
-              disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
-              data-testid="export-summary"
-              onClick={() => setIsPDFExporting(true)}
-            >
-              {PDFExportButtonContent}
-            </Button>
-
-            <Button
-              component={LinkBehavior}
-              variant="contained"
-              color="primary"
-              href="../evaluation/summary"
-              disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
-              data-testid="view-summary-evaluation"
-              sx={{ ml: 1 }}
-            >
-              {t('pages.course-details.tabs.evaluation.button')}
-            </Button>
-          </Box>
-        </Box>
+          </Grid>
+          <Grid
+            item
+            container
+            md={6}
+            sm={12}
+            display="flex"
+            justifyContent="flex-end"
+            flexDirection={isMobile ? 'column' : 'row'}
+            spacing={2}
+          >
+            <Grid item>
+              <Button
+                variant="outlined"
+                color="primary"
+                disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
+                data-testid="export-summary"
+                fullWidth={isMobile}
+                onClick={() => setIsPDFExporting(true)}
+              >
+                {PDFExportButtonContent}
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                component={LinkBehavior}
+                variant="contained"
+                color="primary"
+                href="../evaluation/summary"
+                disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
+                data-testid="view-summary-evaluation"
+                fullWidth={isMobile}
+              >
+                {t('pages.course-details.tabs.evaluation.button')}
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
 
         <TableContainer component={Paper} elevation={0} sx={{ mt: 2 }}>
           <Table sx={{ minWidth: 650 }} data-testid="courses-table">

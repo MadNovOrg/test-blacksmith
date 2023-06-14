@@ -1,6 +1,14 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
-import { Alert, Box, CircularProgress, Stack, Typography } from '@mui/material'
+import {
+  Alert,
+  Box,
+  CircularProgress,
+  Stack,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import { styled } from '@mui/system'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -39,6 +47,8 @@ export const CourseAttendance = () => {
     LoadingStatus.IDLE
   )
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const { completeStep, steps } = useGradingDetails()
 
@@ -203,6 +213,7 @@ export const CourseAttendance = () => {
               variant="contained"
               onClick={saveAttendance}
               sx={{ py: 1 }}
+              fullWidth={isMobile}
               endIcon={<ArrowForwardIcon />}
             >
               <Typography variant="body1" fontWeight={600}>

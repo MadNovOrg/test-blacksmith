@@ -1,3 +1,4 @@
+import { useTheme, useMediaQuery } from '@mui/material'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -20,7 +21,8 @@ export const ParticipantTransferInfo: React.FC<
   const { t } = useScopedTranslation(
     'pages.course-details.modify-my-attendance.transfer-info'
   )
-
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [termsUnderstood, setTermsUnderstood] = useState(false)
 
   return (
@@ -41,12 +43,20 @@ export const ParticipantTransferInfo: React.FC<
         />
       </Box>
 
-      <Box display="flex" justifyContent="space-between" mt={4}>
-        <Button onClick={onCancel}>{t('cancel-btn-text')}</Button>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        mt={4}
+        flexDirection={isMobile ? 'column' : 'row'}
+      >
+        <Button fullWidth={isMobile} onClick={onCancel}>
+          {t('cancel-btn-text')}
+        </Button>
         <Button
           disabled={!termsUnderstood}
           variant="contained"
           component={LinkBehavior}
+          fullWidth={isMobile}
           href="../transfer"
         >
           {t('transfer-btn-text')}

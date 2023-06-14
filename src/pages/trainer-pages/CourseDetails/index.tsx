@@ -8,6 +8,8 @@ import {
   Container,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -54,6 +56,8 @@ export enum CourseDetailsTabs {
 
 export const CourseDetails = () => {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const navigate = useNavigate()
   const { id: courseId } = useParams()
   const { acl, isOrgAdmin, profile } = useAuth()
@@ -230,6 +234,7 @@ export const CourseDetails = () => {
                       justifyContent="space-between"
                       alignItems="stretch"
                       gap={1}
+                      flexDirection={isMobile ? 'column' : 'row'}
                     >
                       <Box>
                         <Typography variant="body1" fontWeight={600}>
@@ -251,11 +256,22 @@ export const CourseDetails = () => {
                         ) : null}
                       </Box>
                       {acl.canApproveCourseExceptions() ? (
-                        <Box>
-                          <Button variant="text" onClick={onExceptionsReject}>
+                        <Box
+                          display="flex"
+                          flexDirection={isMobile ? 'column' : 'row'}
+                        >
+                          <Button
+                            variant="text"
+                            fullWidth={isMobile}
+                            onClick={onExceptionsReject}
+                          >
                             {t('common.reject')}
                           </Button>
-                          <Button variant="text" onClick={onExceptionsApprove}>
+                          <Button
+                            variant="contained"
+                            fullWidth={isMobile}
+                            onClick={onExceptionsApprove}
+                          >
                             {t('common.approve')}
                           </Button>
                         </Box>
@@ -276,6 +292,8 @@ export const CourseDetails = () => {
                     }}
                   >
                     <PillTabList
+                      variant="scrollable"
+                      scrollButtons="auto"
                       onChange={(_, tab) =>
                         navigate(`.?tab=${tab}`, { replace: true })
                       }
