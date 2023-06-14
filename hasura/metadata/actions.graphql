@@ -349,6 +349,7 @@ enum TransferFeeTypeEnum {
 enum Go1ChangeError {
   GENERIC_ERROR
   INVOICE_NOT_AUTHORIZED
+  INVOICE_PAID
 }
 
 enum ConfirmCreditCardPaymentError {

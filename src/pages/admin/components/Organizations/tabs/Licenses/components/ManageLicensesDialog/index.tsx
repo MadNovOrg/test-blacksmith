@@ -68,13 +68,21 @@ export const ManageLicensesDialog: React.FC<React.PropsWithChildren<Props>> = ({
     if (response.go1LicensesChange?.success) {
       onSave()
     } else {
-      if (
-        response.go1LicensesChange?.error ===
-        Go1ChangeError.InvoiceNotAuthorized
-      ) {
-        setErrorMessageLabel(`error-invoice-not-authorized`)
-      } else {
-        setErrorMessageLabel(`error-${mutationInput.type}-licenses`)
+      switch (response.go1LicensesChange?.error) {
+        case Go1ChangeError.InvoiceNotAuthorized: {
+          setErrorMessageLabel(`error-invoice-not-authorized`)
+          break
+        }
+
+        case Go1ChangeError.InvoicePaid: {
+          setErrorMessageLabel(`error-invoice-paid`)
+          break
+        }
+
+        default: {
+          setErrorMessageLabel(`error-${mutationInput.type}-licenses`)
+          break
+        }
       }
     }
   }

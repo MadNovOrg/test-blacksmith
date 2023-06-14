@@ -283,4 +283,77 @@ describe('ManageLicensesDialog', () => {
       )
     })
   })
+
+  it('handles invoice paid error', async () => {
+    const orgId = chance.guid()
+    const balance = 20
+    const amount = 5
+    const profileId = chance.guid()
+    const fullName = chance.name({ full: true })
+    const invoiceId = 'inv-001'
+    const licensePrice = 15
+    const onSaveMock = jest.fn()
+
+    const fetcherMock = jest.fn()
+
+    fetcherMock.mockResolvedValue({
+      go1LicensesChange: {
+        success: false,
+        error: Go1ChangeError.InvoicePaid,
+      },
+    })
+
+    useFetcherMock.mockReturnValue(fetcherMock)
+
+    render(
+      <ManageLicensesDialog
+        orgId={orgId}
+        opened
+        onSave={onSaveMock}
+        onClose={jest.fn()}
+        currentBalance={balance}
+      />,
+      {
+        auth: {
+          profile: {
+            id: profileId,
+            fullName,
+          },
+        },
+      }
+    )
+
+    await fillForm({
+      amount,
+      type: Type.REMOVE,
+      invoiceId,
+      licensePrice,
+      issueRefund: true,
+    })
+
+    await userEvent.click(screen.getByText('Save details'))
+
+    await waitFor(() => {
+      expect(fetcherMock).toHaveBeenCalledTimes(1)
+      expect(onSaveMock).not.toHaveBeenCalled()
+      expect(fetcherMock).toHaveBeenCalledWith(go1LicensesHistoryChange, {
+        input: {
+          type: Go1ChangeType.LicensesRemoved,
+          amount,
+          orgId,
+          payload: {
+            invoiceId,
+            invokedBy: fullName,
+            invokedById: profileId,
+            note: expect.any(String),
+            licensePrice,
+          },
+        },
+      })
+
+      expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
+        `"Unable to issue a credit note, the invoice has already been paid."`
+      )
+    })
+  })
 })

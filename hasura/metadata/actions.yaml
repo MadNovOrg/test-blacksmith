@@ -531,6 +531,9 @@ custom_types:
         - value: INVOICE_NOT_AUTHORIZED
           is_deprecated: null
           description: null
+        - value: INVOICE_PAID
+          is_deprecated: null
+          description: null
     - name: ConfirmCreditCardPaymentError
       values:
         - value: GENERIC_ERROR

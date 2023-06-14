@@ -2950,7 +2950,8 @@ export type GetCoursePricingOutput = {
 
 export enum Go1ChangeError {
   GenericError = 'GENERIC_ERROR',
-  InvoiceNotAuthorized = 'INVOICE_NOT_AUTHORIZED'
+  InvoiceNotAuthorized = 'INVOICE_NOT_AUTHORIZED',
+  InvoicePaid = 'INVOICE_PAID'
 }
 
 export enum Go1ChangeType {
