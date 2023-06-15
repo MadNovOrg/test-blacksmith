@@ -290,10 +290,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               ...(courseData.organization
                 ? { organization_id: courseData.organization.id }
                 : null),
-              ...(courseData.bookingContact?.profileId
+              ...(courseData.bookingContact?.profileId ||
+              courseData.bookingContact?.email
                 ? {
                     bookingContactProfileId:
-                      courseData.bookingContact.profileId,
+                      courseData.bookingContact?.profileId ?? null,
                   }
                 : null),
               ...(courseData.bookingContact?.email

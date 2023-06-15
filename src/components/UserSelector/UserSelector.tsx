@@ -90,7 +90,9 @@ export const UserSelector: React.FC<
         setLoading(true)
         debouncedQuery(value)
       }
-      onEmailChange(value)
+      if (reason !== 'reset') {
+        onEmailChange(value)
+      }
     },
     [debouncedQuery, onEmailChange, organisationId]
   )

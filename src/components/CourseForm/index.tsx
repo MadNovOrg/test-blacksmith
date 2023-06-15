@@ -716,9 +716,17 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const handleBookingContactEmailChange = useCallback(
     (email: string) => {
-      setValue('bookingContact.email', email, {
-        shouldValidate: true,
-      })
+      setValue(
+        'bookingContact',
+        {
+          firstName: '',
+          lastName: '',
+          email,
+        },
+        {
+          shouldValidate: true,
+        }
+      )
     },
     [setValue]
   )

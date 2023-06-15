@@ -12,7 +12,7 @@ export type ParamsType = {
     deliveryType: CourseDeliveryType
     level?: CourseLevel
     organization_id?: string
-    bookingContactProfileId?: string
+    bookingContactProfileId?: string | null
     source?: Course_Source_Enum
     reaccreditation?: boolean
     go1Integration?: boolean
