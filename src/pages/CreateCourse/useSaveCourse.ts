@@ -273,9 +273,15 @@ export function useSaveCourse(): {
                           email: profile?.email,
                           phone: profile?.phone,
                         },
-                        source: courseData.source,
-                        salesRepresentativeId:
-                          courseData.salesRepresentative?.id,
+                        ...(courseData.source
+                          ? { source: courseData.source }
+                          : null),
+                        ...(courseData.salesRepresentative?.id
+                          ? {
+                              salesRepresentativeId:
+                                courseData.salesRepresentative?.id,
+                            }
+                          : null),
                       },
                     ],
                   },
