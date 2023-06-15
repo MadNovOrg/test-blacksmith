@@ -907,33 +907,39 @@ export const EditProfilePage: React.FC<
                 </Grid>
               </Box>
 
-              <Typography variant="subtitle2" mb={1} mt={3}>
-                {t('pages.view-profile.hub-access')}
-              </Typography>
+              {acl.canSeeProfileRoles() && (
+                <>
+                  <Typography variant="subtitle2" mb={1} mt={3}>
+                    {t('pages.view-profile.hub-access')}
+                  </Typography>
 
-              {canEditRoles ? (
-                <EditRoles />
-              ) : (
-                <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
-                  <DetailsRow label={t('pages.view-profile.user-roles')}>
-                    <Box flex={1}>
-                      {profile.roles.length > 0 ? (
-                        profile.roles.map(({ role }) => (
-                          <Chip
-                            key={role.name}
-                            label={t(`pages.view-profile.roles.${role?.name}`)}
-                            color={getRoleColor(role.name)}
-                          />
-                        ))
-                      ) : (
-                        <Chip
-                          label={t(`pages.view-profile.roles.user`)}
-                          color="success"
-                        />
-                      )}
+                  {canEditRoles ? (
+                    <EditRoles />
+                  ) : (
+                    <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
+                      <DetailsRow label={t('pages.view-profile.user-roles')}>
+                        <Box flex={1}>
+                          {profile.roles.length > 0 ? (
+                            profile.roles.map(({ role }) => (
+                              <Chip
+                                key={role.name}
+                                label={t(
+                                  `pages.view-profile.roles.${role?.name}`
+                                )}
+                                color={getRoleColor(role.name)}
+                              />
+                            ))
+                          ) : (
+                            <Chip
+                              label={t(`pages.view-profile.roles.user`)}
+                              color="success"
+                            />
+                          )}
+                        </Box>
+                      </DetailsRow>
                     </Box>
-                  </DetailsRow>
-                </Box>
+                  )}
+                </>
               )}
 
               {profile.organizations.length > 0 ? (
