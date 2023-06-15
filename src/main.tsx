@@ -5,6 +5,7 @@ import { BrowserTracing } from '@sentry/tracing'
 import { Amplify } from 'aws-amplify'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+import TagManager from 'react-gtm-module'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryParamProvider } from 'use-query-params'
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6'
@@ -36,6 +37,8 @@ Amplify.configure({
     userPoolWebClientId: import.meta.env.VITE_COGNITO_USER_POOL_CLIENT_ID,
   },
 })
+
+TagManager.initialize({ gtmId: import.meta.env.VITE_GTM_ID })
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(document.getElementById('app')!)

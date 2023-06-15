@@ -16,4 +16,5 @@ interface ImportMetaEnv {
   VITE_REQUEST_QUOTE_URL: string
   VITE_MANAGE_ACCOUNT_URL: string
   VITE_UNSUBSCRIBE_URL: string
+  VITE_GTM_ID: string
 }
