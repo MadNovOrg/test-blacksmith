@@ -1,12 +1,14 @@
 import { startOfDay } from 'date-fns'
 import { setMedia } from 'mock-match-media'
 import React from 'react'
+import { Route, Routes } from 'react-router-dom'
 import useSWR from 'swr'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
 import { Promo_Code_Type_Enum } from '@app/generated/graphql'
 import { buildPromo } from '@app/pages/tt-pages/OrderDetails/mock-utils'
+import { RoleName } from '@app/types'
 
 import {
   chance,
@@ -23,11 +25,9 @@ import { DiscountForm } from './DiscountForm'
 import { APPLIES_TO } from './helpers'
 
 const mockNavigate = jest.fn()
-const mockUseParams = jest.fn()
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
-  useParams: () => mockUseParams,
 }))
 
 const mockFetcher = jest.fn()
@@ -46,20 +46,21 @@ const client = {
 describe('page: DiscountForm', () => {
   beforeAll(() => {
     setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
-    mockUseParams.mockReturnValue({})
     useSWRMock.mockReturnValue(useSWRDefaultResponse)
   })
 
   it('defaults createdBy to current user', async () => {
-    _render(<DiscountForm />)
+    _render()
 
-    const profileSelector = screen.getByTestId('profile-selector')
-    const createdBy = within(profileSelector).getByRole('combobox')
-    expect(createdBy).toHaveValue(profile?.fullName)
+    await waitFor(() => {
+      const profileSelector = screen.getByTestId('profile-selector')
+      const createdBy = within(profileSelector).getByRole('combobox')
+      expect(createdBy).toHaveValue(profile?.fullName)
+    })
   })
 
   it('defaults Type to Percent', async () => {
-    _render(<DiscountForm />)
+    _render()
 
     const { Percent, FreePlaces } = Promo_Code_Type_Enum
     const typePercent = screen.getByTestId(`discount-type-${Percent}`)
@@ -72,7 +73,7 @@ describe('page: DiscountForm', () => {
   })
 
   it('defaults Amount to 5%', async () => {
-    _render(<DiscountForm />)
+    _render()
 
     const amount = screen.getByTestId('fld-amount-percent')
     expect(amount).toHaveValue('5')
@@ -81,7 +82,7 @@ describe('page: DiscountForm', () => {
   })
 
   it('defaults free places to 1', async () => {
-    _render(<DiscountForm />)
+    _render()
 
     expect(screen.queryByTestId('fld-amount-freeplaces')).toBeNull()
 
@@ -95,7 +96,7 @@ describe('page: DiscountForm', () => {
   })
 
   it('defaults AppliesTo to ALL', async () => {
-    _render(<DiscountForm />)
+    _render()
 
     const appliesToAll = screen.getByTestId(`appliesTo-${APPLIES_TO.ALL}`)
     expect(within(appliesToAll).getByRole('radio')).toBeChecked()
@@ -104,7 +105,7 @@ describe('page: DiscountForm', () => {
   it('shows SelectLevels when appliesTo is LEVELS', async () => {
     const appliesTo = `appliesTo-${APPLIES_TO.LEVELS}`
 
-    _render(<DiscountForm />)
+    _render()
 
     expect(screen.queryByTestId('SelectLevels')).toBeNull()
 
@@ -120,7 +121,7 @@ describe('page: DiscountForm', () => {
       fromValue({ data: { courses: [] } })
     )
 
-    _render(<DiscountForm />)
+    _render()
 
     expect(screen.queryByTestId('SelectCourses')).toBeNull()
 
@@ -130,7 +131,7 @@ describe('page: DiscountForm', () => {
   })
 
   it('validates code is filled', async () => {
-    _render(<DiscountForm />)
+    _render()
 
     const btnSubmit = screen.getByTestId('btn-submit')
     await userEvent.click(btnSubmit)
@@ -149,7 +150,7 @@ describe('page: DiscountForm', () => {
     const appliesTo = `appliesTo-${APPLIES_TO.LEVELS}`
     const levelsRequiredText = 'Please select at least one level'
 
-    _render(<DiscountForm />)
+    _render()
 
     const btnSubmit = screen.getByTestId('btn-submit')
     await userEvent.click(btnSubmit)
@@ -173,7 +174,7 @@ describe('page: DiscountForm', () => {
     const appliesTo = `appliesTo-${APPLIES_TO.COURSES}`
     const coursesRequiredText = 'Please select at least one course'
 
-    _render(<DiscountForm />)
+    _render()
 
     const btnSubmit = screen.getByTestId('btn-submit')
     await userEvent.click(btnSubmit)
@@ -194,7 +195,7 @@ describe('page: DiscountForm', () => {
   })
 
   it('validates validFrom is required', async () => {
-    _render(<DiscountForm />)
+    _render()
 
     const startDate = screen.getByLabelText(/start date/i) as HTMLInputElement
 
@@ -216,7 +217,7 @@ describe('page: DiscountForm', () => {
   })
 
   it('validates validTo is >= to validFrom', async () => {
-    _render(<DiscountForm />)
+    _render()
 
     const startDate = screen.getByLabelText(/start date/i) as HTMLInputElement
     const endDate = screen.getByLabelText(/end date/i) as HTMLInputElement
@@ -245,7 +246,7 @@ describe('page: DiscountForm', () => {
   })
 
   it('validates usesMax is greater than 0 if filled', async () => {
-    _render(<DiscountForm />)
+    _render()
 
     await userEvent.click(screen.getByLabelText(/limit number of bookings/i))
 
@@ -263,7 +264,7 @@ describe('page: DiscountForm', () => {
   })
 
   it('navigates to Discounts list when cancel is clicked', async () => {
-    _render(<DiscountForm />)
+    _render()
 
     const btnCancel = screen.getByTestId('btn-cancel')
     await userEvent.click(btnCancel)
@@ -277,7 +278,7 @@ describe('page: DiscountForm', () => {
   it('submits as expected when all data is valid', async () => {
     const code = chance.word({ length: 10 }).toUpperCase()
 
-    _render(<DiscountForm />)
+    _render()
 
     const fldCode = screen.getByTestId('fld-code')
     await userEvent.type(fldCode, code)
@@ -316,7 +317,7 @@ describe('page: DiscountForm', () => {
   })
 
   it('shows Approval Needed if PERCENT exceeds 15', async () => {
-    _render(<DiscountForm />)
+    _render(undefined, RoleName.TT_OPS)
 
     await userEvent.type(screen.getByPlaceholderText(/discount code/i), 'code')
     await userEvent.click(screen.getByLabelText(/percent/i))
@@ -348,7 +349,7 @@ describe('page: DiscountForm', () => {
   })
 
   it('shows Approval Needed if FREE_PLACES exceeds 3', async () => {
-    _render(<DiscountForm />)
+    _render(undefined, RoleName.TT_OPS)
 
     await userEvent.type(screen.getByPlaceholderText(/discount code/i), 'code')
     await userEvent.click(screen.getByLabelText(/free spaces/i))
@@ -380,11 +381,6 @@ describe('page: DiscountForm', () => {
       },
     })
 
-    beforeAll(() => {
-      mockUseParams.mockReset()
-      mockUseParams.mockReturnValue({ id: '123' })
-    })
-
     it('renders alert', async () => {
       useSWRMock.mockReturnValue({
         ...useSWRDefaultResponse,
@@ -393,7 +389,7 @@ describe('page: DiscountForm', () => {
         },
       })
 
-      _render(<DiscountForm />)
+      _render('123')
 
       await waitFor(() => {
         expect(
@@ -412,7 +408,7 @@ describe('page: DiscountForm', () => {
         },
       })
 
-      _render(<DiscountForm />)
+      _render('123')
 
       await waitFor(() => {
         expect(
@@ -427,12 +423,72 @@ describe('page: DiscountForm', () => {
       })
     })
   })
+
+  describe('disable discount feature', () => {
+    const mockPromo = buildPromo({
+      overrides: {
+        id: '123',
+        type: Promo_Code_Type_Enum.Percent,
+      },
+    })
+
+    it('renders disable button', async () => {
+      useSWRMock.mockReturnValue({
+        ...useSWRDefaultResponse,
+        data: {
+          promoCodes: [mockPromo],
+        },
+      })
+
+      _render('123')
+
+      screen.debug(undefined, 1000000)
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('btn-disable')).toBeInTheDocument()
+      })
+    })
+
+    it('do not render disable button for new discount form', async () => {
+      useSWRMock.mockReturnValue({
+        ...useSWRDefaultResponse,
+        data: {
+          promoCodes: [mockPromo],
+        },
+      })
+
+      _render()
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('btn-disable')).not.toBeInTheDocument()
+      })
+    })
+  })
 })
 
 /**
  * Helpers
  */
 
-function _render(ui: React.ReactElement) {
-  return render(<Provider value={client as unknown as Client}>{ui}</Provider>)
+function _render(id?: string, role?: RoleName) {
+  return render(
+    <Provider value={client as unknown as Client}>
+      <Routes>
+        <Route
+          path={id ? '/admin/discounts/edit/:id' : '/admin/discounts/new'}
+          element={<DiscountForm />}
+        />
+      </Routes>
+    </Provider>,
+    {
+      auth: {
+        activeRole: role ? role : RoleName.TT_ADMIN,
+      },
+    },
+    {
+      initialEntries: [
+        id ? `/admin/discounts/edit/${id}` : '/admin/discounts/new',
+      ],
+    }
+  )
 }

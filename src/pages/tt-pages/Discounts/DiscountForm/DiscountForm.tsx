@@ -74,12 +74,11 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   const fetcher = useFetcher()
   const { id } = useParams()
   const isEdit = !!id
-  const { activeRole, acl } = useAuth()
+  const { activeRole, acl, profile } = useAuth()
   const { addSnackbarMessage } = useSnackbar()
 
   const [saving, setSaving] = useState(false)
 
-  const { profile } = useAuth()
   const [createdBy, setCreatedBy] = useState<Profile>()
 
   const amountInputRef = useRef<HTMLInputElement>()
@@ -686,7 +685,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
             </Box>
           </Stack>
 
-          {acl.canDisableDiscounts() ? (
+          {isEdit && acl.canDisableDiscounts() ? (
             <>
               <Typography variant="body1" fontWeight="bold" mt={4}>
                 {t('pages.promoCodes.disable-this-discount')}
