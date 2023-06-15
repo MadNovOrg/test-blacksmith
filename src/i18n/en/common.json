@@ -173,7 +173,7 @@
   "confirm": "Confirm",
   "apply": "Apply",
   "save-changes": "Save Changes",
-  "goto-tt": "Go to TeamTeach.co.uk",
+  "goto-tt": "Go to teamteach.co.uk",
   "need-help": "Need help",
   "contact-us": "Contact us",
   "clear": "Clear",
@@ -542,7 +542,7 @@
     "wont-attend": "I will not attend",
     "will-attend": "I will attend",
     "can-attend-q": "Are you able to attend?",
-    "goto-tt": "Go to TeamTeach.co.uk",
+    "goto-tt": "Go to teamteach.co.uk",
     "response-sent": "Your response has been sent"
   },
   "trust-type": {

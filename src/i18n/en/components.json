@@ -279,12 +279,15 @@
     "declined": "Declined",
     "modal_ACCEPT": {
       "title": "Ready to build the course?",
+      "title-LEADER": "Moderate course",
       "title-ASSISTANT": "Assist course",
       "msg": "After you have accepted a course, you must confirm the modules and techniques that will be covered.",
       "msg-ASSISTANT": "Upon accepting this invitation, you can see a full overview of the course.",
+      "msg-LEADER": "Upon accepting this invitation, you can see a full overview of the course.",
       "cancel": "Cancel",
       "submit": "Continue to course builder",
-      "submit-ASSISTANT": "Accept"
+      "submit-ASSISTANT": "Accept",
+      "submit-LEADER": "Accept"
     },
     "modal_DECLINE": {
       "title": "Are you sure you want to decline this course?",
