@@ -25,12 +25,7 @@ import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import theme from '@app/theme'
 import { Course, CourseDeliveryType } from '@app/types'
-import {
-  getCourseBeginsForMessage,
-  getCourseDurationMessage,
-  getTimeDifferenceAndContext,
-  formatCourseVenue,
-} from '@app/util'
+import { getCourseBeginsForMessage, formatCourseVenue } from '@app/util'
 
 import { CourseHostInfo } from '../CourseHostInfo'
 import { CourseTrainersInfo } from '../CourseTrainersInfo'
@@ -54,17 +49,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   const [isInstructionsDialogOpen, setIsInstructionsDialogOpen] =
     useState(false)
 
-  const courseStartDate = new Date(course.schedule[0].start)
-  const courseEndDate = new Date(course.schedule[0].end)
-
   const courseBeginsForMessage = getCourseBeginsForMessage(course, t)
-
-  const courseDuration = getTimeDifferenceAndContext(
-    courseEndDate,
-    courseStartDate
-  )
-
-  const courseDurationMessage = getCourseDurationMessage(courseDuration, t)
 
   const showStatus =
     course.status === Course_Status_Enum.Cancelled ||
@@ -144,13 +129,6 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                     color="secondary"
                   >
                     {t('dates.withTime', { date: course.schedule[0].end })}
-                  </Typography>
-                </ListItemText>
-              </ListItem>
-              <ListItem disableGutters disablePadding>
-                <ListItemText sx={{ paddingLeft: 4 }}>
-                  <Typography variant="body2">
-                    {courseDurationMessage}
                   </Typography>
                 </ListItemText>
               </ListItem>

@@ -213,6 +213,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                       {course && (
                         <CourseTitleAndDuration
                           showCourseLink
+                          showCourseDuration={false}
                           course={{
                             id: course.id,
                             course_code: course.course_code,

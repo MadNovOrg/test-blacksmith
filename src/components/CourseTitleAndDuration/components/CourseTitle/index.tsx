@@ -15,11 +15,17 @@ export type CourseSubset = Pick<
 type CourseTitleProps = {
   course: CourseSubset
   showCourseLink?: boolean
+  showCourseDuration?: boolean
 } & TypographyProps
 
 export const CourseTitle: React.FC<
   React.PropsWithChildren<CourseTitleProps>
-> = ({ course, showCourseLink = false, ...props }) => {
+> = ({
+  course,
+  showCourseLink = false,
+  showCourseDuration = true,
+  ...props
+}) => {
   const { t } = useTranslation()
 
   const difference = getTimeDifferenceAndContext(
@@ -35,9 +41,11 @@ export const CourseTitle: React.FC<
       data-testid="order-course-title"
     >
       {t(`course-levels.${course?.level}`)}{' '}
-      {difference.context === 'hours'
-        ? ` - ${difference.count} ${t('hours')} `
-        : ''}
+      {showCourseDuration
+        ? difference.context === 'hours'
+          ? ` - ${difference.count} ${t('hours')} `
+          : ''
+        : null}
       {course?.course_code ? (
         showCourseLink ? (
           <Link href={`/courses/${course.id}/details`} color="primary">

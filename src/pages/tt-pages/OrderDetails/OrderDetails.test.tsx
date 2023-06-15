@@ -115,10 +115,9 @@ describe('page: OrderDetails', () => {
         <OrderDetails />
       </Provider>
     )
-
     expect(
       screen.getByTestId('order-course-title').textContent
-    ).toMatchInlineSnapshot(`"Level One  - 8 hours (course-code)"`)
+    ).toMatchInlineSnapshot(`"Level One (course-code)"`)
 
     expect(
       screen.getByTestId('order-course-duration').textContent
