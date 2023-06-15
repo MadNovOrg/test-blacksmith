@@ -92,13 +92,11 @@ export const Certifications: React.FC<
       conditions.push({ certificate: { status: { _in: certificateStatus } } })
     }
 
-    if (!archived) {
-      conditions.push({
-        profile: {
-          archived: { _eq: false },
-        },
-      })
-    }
+    conditions.push({
+      profile: {
+        archived: { _eq: archived },
+      },
+    })
 
     if (filterLevel.length) {
       conditions.push({
