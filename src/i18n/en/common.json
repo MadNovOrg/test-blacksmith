@@ -470,7 +470,7 @@
     "VOIDED": "Void",
     "OVERDUE": "Overdue",
     "GBP": "GBP",
-    "archived": "Show certificates of archived users"
+    "archived": "Archived"
   },
   "pagination": {
     "rows-per-page": "Rows per page"
