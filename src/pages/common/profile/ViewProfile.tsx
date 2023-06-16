@@ -2,6 +2,7 @@ import ArchiveIcon from '@mui/icons-material/Archive'
 import CloseIcon from '@mui/icons-material/Close'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import {
   Alert,
   Box,
@@ -9,6 +10,7 @@ import {
   Chip,
   CircularProgress,
   Container,
+  Dialog,
   Grid,
   Link,
   Stack,
@@ -38,6 +40,7 @@ import { CertificateStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { CourseAsTrainer } from './components/CourseAsTrainer'
+import { InviteUserToOrganisation } from './components/InviteUserToOrganisation'
 import { ProfileDeleteDialog } from './components/ProfileDeleteDialog'
 import { UserGo1License } from './components/UserGo1License'
 import { getRoleColor } from './utils'
@@ -55,6 +58,7 @@ export const ViewProfilePage: React.FC<
 
   const [showArchiveDialog, setShowArchiveDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showInviteOrgModal, setShowInviteOrgModal] = useState(false)
 
   const orgId = searchParams.get('orgId')
 
@@ -188,6 +192,20 @@ export const ViewProfilePage: React.FC<
                 {t('delete-profile')}
               </Button>
             ) : null}
+
+            {acl.canInviteToOrganizations() ? (
+              <Button
+                variant="contained"
+                startIcon={<PersonAddIcon />}
+                onClick={() => setShowInviteOrgModal(true)}
+                data-testid="edit-invite-user-to-org"
+                sx={{ mt: 2 }}
+              >
+                {t(
+                  'pages.org-details.tabs.users.invite-individual-to-organization'
+                )}
+              </Button>
+            ) : undefined}
           </Grid>
           <Grid item md={8}>
             {isMyProfile ? (
@@ -615,6 +633,18 @@ export const ViewProfilePage: React.FC<
           </Grid>
         </Grid>
       </Container>
+
+      <Dialog
+        open={showInviteOrgModal}
+        onClose={() => setShowInviteOrgModal(false)}
+        title={t('pages.invite-to-org.title')}
+        maxWidth={'md'}
+      >
+        <InviteUserToOrganisation
+          email={profile.email || ''}
+          onClose={() => setShowInviteOrgModal(false)}
+        />
+      </Dialog>
 
       {showArchiveDialog && id ? (
         <ProfileArchiveDialog

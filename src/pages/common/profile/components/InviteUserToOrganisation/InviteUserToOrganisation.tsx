@@ -116,6 +116,7 @@ export const InviteUserToOrganisation: React.FC<
       display="flex"
       component="form"
       onSubmit={handleSubmit(submit)}
+      p={3}
       noValidate
       autoComplete="off"
       aria-autocomplete="none"
