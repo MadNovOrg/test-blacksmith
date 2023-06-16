@@ -1415,6 +1415,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 data-testid="max-attendees"
                 disabled={disabledFields.has('maxParticipants')}
               />
+            </Grid>
+            <Grid item>
               {!isCreation ? (
                 <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
                   {t('components.course-form.attendees-edit-label')}
