@@ -20,13 +20,10 @@ const allowedRoles: HasuraRole[] = [
   RoleName.TT_OPS,
   RoleName.TT_ADMIN,
   RoleName.LD,
-]
-
-const forbiddenRoles: HasuraRole[] = [
-  RoleName.ANONYMOUS,
-  RoleName.USER,
   RoleName.TRAINER,
 ]
+
+const forbiddenRoles: HasuraRole[] = [RoleName.ANONYMOUS, RoleName.USER]
 
 function buildMutationInput(): InsertOrgMutationVariables {
   const org = buildOrganization()
