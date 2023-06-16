@@ -255,7 +255,8 @@ export const AttendingTab = ({
                         : t('common.no')}
                     </TableCell>
                     {!isCourseEnded &&
-                    acl.canManageParticipantAttendance(course.accreditedBy) ? (
+                    acl.canManageParticipantAttendance(course.accreditedBy) &&
+                    !courseParticipant.profile.archived ? (
                       <TableCell>
                         {!isOpenCourse ||
                         acl.canOnlySendCourseInformation(

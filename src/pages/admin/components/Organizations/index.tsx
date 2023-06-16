@@ -106,18 +106,18 @@ export const Organizations: React.FC<
       isFiltered = true
     }
 
-    obj.members = acl.canViewAllOrganizations()
-      ? {}
-      : {
-          _and: [
-            {
-              profile_id: {
-                _eq: profile?.id,
-              },
+    if (!acl.canViewAllOrganizations()) {
+      obj.members = {
+        _and: [
+          {
+            profile_id: {
+              _eq: profile?.id,
             },
-            { isAdmin: { _eq: true } },
-          ],
-        }
+          },
+          { isAdmin: { _eq: true } },
+        ],
+      }
+    }
 
     return [obj, isFiltered]
   }, [acl, filterSector, profile, query])
