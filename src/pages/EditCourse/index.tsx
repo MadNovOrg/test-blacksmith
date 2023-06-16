@@ -408,6 +408,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     if (course) {
       if (!acl.canEditWithoutRestrictions(course.type)) {
         return new Set<DisabledFields>([
+          'accreditedBy',
           'organization',
           'bookingContact',
           'courseLevel',
@@ -424,6 +425,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
         ])
       }
       return new Set<DisabledFields>([
+        'accreditedBy',
         'courseLevel',
         'bildStrategies',
         'blendedLearning',

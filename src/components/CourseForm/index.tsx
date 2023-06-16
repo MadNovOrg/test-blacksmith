@@ -764,6 +764,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       field.onChange(e)
                     }}
                     labelId="course-category-label"
+                    disabled={disabledFields.has('accreditedBy')}
                   >
                     <MenuItem value={`${Accreditors_Enum.Icm}`}>ICM</MenuItem>
                     <MenuItem value={`${Accreditors_Enum.Bild}`}>BILD</MenuItem>
