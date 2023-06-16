@@ -188,6 +188,8 @@ export function useSaveCourse(): {
               ? { price: courseData.price, conversion: courseData.conversion }
               : null),
             status,
+            exceptionsPending:
+              status === Course_Status_Enum.ExceptionsApprovalPending,
             ...(courseData.minParticipants
               ? { min_participants: courseData.minParticipants }
               : null),

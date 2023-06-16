@@ -4,6 +4,8 @@ table:
 configuration:
   custom_root_fields: {}
   column_config:
+    exceptions_pending:
+      custom_name: exceptionsPending
     free_spaces:
       custom_name: freeSpaces
     cancellation_reason:
@@ -51,6 +53,7 @@ configuration:
     course_delivery_type:
       custom_name: deliveryType
   custom_column_names:
+    exceptions_pending: exceptionsPending
     free_spaces: freeSpaces
     cancellation_reason: cancellationReason
     cancellation_fee_percent: cancellationFeePercent
@@ -224,6 +227,7 @@ insert_permissions:
         - course_type
         - created_at
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -261,6 +265,7 @@ insert_permissions:
         - course_type
         - created_at
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -299,6 +304,7 @@ insert_permissions:
         - course_type
         - created_at
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -338,6 +344,7 @@ insert_permissions:
         - course_type
         - created_at
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -407,6 +414,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -486,6 +494,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -531,6 +540,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -577,6 +587,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -622,6 +633,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -665,6 +677,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -743,6 +756,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -788,6 +802,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -872,6 +887,7 @@ select_permissions:
         - created_at
         - created_at
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -949,6 +965,7 @@ update_permissions:
         - course_type
         - created_at
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -991,6 +1008,7 @@ update_permissions:
         - course_type
         - created_at
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -1032,6 +1050,7 @@ update_permissions:
         - course_type
         - created_at
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -1068,6 +1087,7 @@ update_permissions:
         - course_status
         - created_at
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -1115,6 +1135,7 @@ update_permissions:
         - course_type
         - created_at
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -1152,6 +1173,7 @@ update_permissions:
         - course_type
         - created_at
         - description
+        - exceptions_pending
         - free_spaces
         - go1_integration
         - grading_confirmed

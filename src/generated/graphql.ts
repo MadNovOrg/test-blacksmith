@@ -14254,6 +14254,7 @@ export type Course = {
   evaluation_answers: Array<Course_Evaluation_Answers>;
   /** An aggregate relationship */
   evaluation_answers_aggregate: Course_Evaluation_Answers_Aggregate;
+  exceptionsPending: Scalars['Boolean'];
   /** An array relationship */
   expenses: Array<Course_Expenses>;
   /** An aggregate relationship */
@@ -15599,6 +15600,7 @@ export type Course_Bool_Exp = {
   description?: InputMaybe<String_Comparison_Exp>;
   end?: InputMaybe<Timestamptz_Comparison_Exp>;
   evaluation_answers?: InputMaybe<Course_Evaluation_Answers_Bool_Exp>;
+  exceptionsPending?: InputMaybe<Boolean_Comparison_Exp>;
   expenses?: InputMaybe<Course_Expenses_Bool_Exp>;
   freeSlots?: InputMaybe<String_Comparison_Exp>;
   freeSpaces?: InputMaybe<Int_Comparison_Exp>;
@@ -18851,6 +18853,7 @@ export type Course_Insert_Input = {
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
   evaluation_answers?: InputMaybe<Course_Evaluation_Answers_Arr_Rel_Insert_Input>;
+  exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   expenses?: InputMaybe<Course_Expenses_Arr_Rel_Insert_Input>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
   go1Integration?: InputMaybe<Scalars['Boolean']>;
@@ -19961,6 +19964,7 @@ export type Course_Order_By = {
   description?: InputMaybe<Order_By>;
   end?: InputMaybe<Order_By>;
   evaluation_answers_aggregate?: InputMaybe<Course_Evaluation_Answers_Aggregate_Order_By>;
+  exceptionsPending?: InputMaybe<Order_By>;
   expenses_aggregate?: InputMaybe<Course_Expenses_Aggregate_Order_By>;
   freeSlots?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
@@ -22822,6 +22826,8 @@ export enum Course_Select_Column {
   /** column name */
   Description = 'description',
   /** column name */
+  ExceptionsPending = 'exceptionsPending',
+  /** column name */
   FreeSpaces = 'freeSpaces',
   /** column name */
   Go1Integration = 'go1Integration',
@@ -22883,6 +22889,7 @@ export type Course_Set_Input = {
   createdById?: InputMaybe<Scalars['uuid']>;
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
+  exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
   go1Integration?: InputMaybe<Scalars['Boolean']>;
   gradingConfirmed?: InputMaybe<Scalars['Boolean']>;
@@ -23944,6 +23951,8 @@ export enum Course_Update_Column {
   DeliveryType = 'deliveryType',
   /** column name */
   Description = 'description',
+  /** column name */
+  ExceptionsPending = 'exceptionsPending',
   /** column name */
   FreeSpaces = 'freeSpaces',
   /** column name */

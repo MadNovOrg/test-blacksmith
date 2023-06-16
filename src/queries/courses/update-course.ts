@@ -8,6 +8,7 @@ export type ParamsType = {
   scheduleId: string
   courseInput: {
     status: Course_Status_Enum | null
+    exceptionsPending?: boolean
     name: string
     deliveryType: CourseDeliveryType
     level?: CourseLevel

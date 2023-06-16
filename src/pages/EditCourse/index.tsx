@@ -269,6 +269,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             courseId: course.id,
             courseInput: {
               status,
+              exceptionsPending:
+                status === Course_Status_Enum.ExceptionsApprovalPending,
               name: generateCourseName(
                 {
                   level: courseData.courseLevel,

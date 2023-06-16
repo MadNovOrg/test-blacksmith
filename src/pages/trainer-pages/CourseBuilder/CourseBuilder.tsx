@@ -373,11 +373,7 @@ export const CourseBuilder: React.FC<
         >(FINALIZE_COURSE_BUILDER_MUTATION, {
           id: courseData.course.id,
           duration: estimatedCourseDuration,
-          status:
-            courseData.course.status ===
-            Course_Status_Enum.ExceptionsApprovalPending
-              ? courseData.course.status
-              : null,
+          status: null,
         })
 
         if (!courseCreated) {
