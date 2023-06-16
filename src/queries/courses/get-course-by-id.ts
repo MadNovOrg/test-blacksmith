@@ -16,6 +16,7 @@ export const QUERY = gql`
   query GetCourseById($id: Int!, $withOrders: Boolean = false) {
     course: course_by_pk(id: $id) {
       ...Course
+      isDraft
       bildStrategies {
         strategyName
       }

@@ -22,6 +22,8 @@ configuration:
       custom_name: aolCountry
     modules_duration:
       custom_name: modulesDuration
+    is_draft:
+      custom_name: isDraft
     course_status:
       custom_name: status
     created_by_id:
@@ -58,6 +60,7 @@ configuration:
     price_currency: priceCurrency
     aol_country: aolCountry
     modules_duration: modulesDuration
+    is_draft: isDraft
     course_status: status
     created_by_id: createdById
     grading_started: gradingStarted
@@ -226,6 +229,7 @@ insert_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -261,6 +265,7 @@ insert_permissions:
         - go1_integration
         - grading_confirmed
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -299,6 +304,7 @@ insert_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -336,6 +342,7 @@ insert_permissions:
         - go1_integration
         - grading_confirmed
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -468,9 +475,9 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
-        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -484,6 +491,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -512,9 +520,9 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
-        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -528,6 +536,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -573,6 +582,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -601,9 +611,9 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
-        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -617,6 +627,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -659,6 +670,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -720,9 +732,9 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
-        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -736,6 +748,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -764,9 +777,9 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
-        - booking_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -780,6 +793,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -940,6 +954,7 @@ update_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -981,6 +996,7 @@ update_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -1021,6 +1037,7 @@ update_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -1056,6 +1073,7 @@ update_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -1102,6 +1120,7 @@ update_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -1138,6 +1157,7 @@ update_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration
@@ -1158,6 +1178,7 @@ update_permissions:
         - course_status
         - grading_confirmed
         - grading_started
+        - is_draft
       filter:
         trainers:
           profile_id:

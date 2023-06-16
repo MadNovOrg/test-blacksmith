@@ -35,6 +35,8 @@ import {
   GetCourseByIdQueryVariables,
   ModuleGroupsQuery,
   ModuleGroupsQueryVariables,
+  SetCourseAsDraftMutation,
+  SetCourseAsDraftMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { NotFound } from '@app/pages/common/NotFound'
@@ -42,7 +44,6 @@ import { getMinimumTimeCommitment } from '@app/pages/trainer-pages/CourseBuilder
 import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/queries/courses/finalize-course-builder'
 import { QUERY as GetCourseById } from '@app/queries/courses/get-course-by-id'
 import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-modules'
-import { MUTATION as SetCourseStatus } from '@app/queries/courses/set-course-status'
 import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups'
 import { CourseLevel } from '@app/types'
 import {
@@ -56,6 +57,7 @@ import {
 import { CourseHero } from './components/CourseHero'
 import { ModuleCard } from './components/ModuleCard'
 import { ModuleSlot } from './components/ModuleSlot'
+import { SET_COURSE_AS_DRAFT } from './queries'
 import { AvailableModule, ModuleGroup, ModuleGroupSlot } from './types'
 
 type CourseBuilderProps = unknown
@@ -269,10 +271,13 @@ export const CourseBuilder: React.FC<
               }))
             ),
           })
-          await fetcher(SetCourseStatus, {
+          await fetcher<
+            SetCourseAsDraftMutation,
+            SetCourseAsDraftMutationVariables
+          >(SET_COURSE_AS_DRAFT, {
             id: courseData.course.id,
-            status: Course_Status_Enum.Draft,
           })
+
           await mutateCourse()
         }
       }
@@ -449,9 +454,11 @@ export const CourseBuilder: React.FC<
           }))
         ),
       })
-      await fetcher(SetCourseStatus, {
+      await fetcher<
+        SetCourseAsDraftMutation,
+        SetCourseAsDraftMutationVariables
+      >(SET_COURSE_AS_DRAFT, {
         id: courseData.course.id,
-        status: Course_Status_Enum.Draft,
       })
       await mutateCourse()
     }
@@ -524,14 +531,18 @@ export const CourseBuilder: React.FC<
               }}
             >
               <Box gridColumn="1 / 4">
-                {courseData?.course?.status === Course_Status_Enum.Draft && (
+                {courseData?.course?.isDraft && (
                   <Box
                     sx={{ display: 'flex', alignItems: 'center' }}
                     mb={{ xs: 2, md: 3 }}
                   >
-                    <CourseStatusChip status={courseData.course.status} />
+                    <CourseStatusChip status={Course_Status_Enum.Draft} />
 
-                    <Typography variant="body2" data-testid="draft-text">
+                    <Typography
+                      variant="body2"
+                      data-testid="draft-text"
+                      sx={{ ml: 1 }}
+                    >
                       {t('common.last-modified', {
                         date: formatDateForDraft(
                           courseData.course.updatedAt || new Date(),

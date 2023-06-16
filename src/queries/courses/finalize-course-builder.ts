@@ -8,7 +8,7 @@ export const FINALIZE_COURSE_BUILDER_MUTATION = gql`
   ) {
     update_course_by_pk(
       pk_columns: { id: $id }
-      _set: { modulesDuration: $duration, status: $status }
+      _set: { modulesDuration: $duration, status: $status, isDraft: false }
     ) {
       id
     }
