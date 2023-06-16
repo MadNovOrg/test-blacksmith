@@ -673,22 +673,7 @@ export const EditProfilePage: React.FC<
               <Typography variant="body1" color="grey.700">
                 {profile.email}
               </Typography>
-              <Box m={2}>
-                {acl.canInviteToOrganizations() ? (
-                  <Button
-                    variant="contained"
-                    startIcon={<PersonAddIcon />}
-                    onClick={() => setShowInviteOrgModal(true)}
-                    data-testid="edit-invite-user-to-org"
-                  >
-                    {t(
-                      'pages.org-details.tabs.users.invite-individual-to-organization'
-                    )}
-                  </Button>
-                ) : undefined}
-              </Box>
-
-              <Box mt={3}>
+              <Box mt={2}>
                 <Button
                   variant="outlined"
                   color="primary"
@@ -707,6 +692,20 @@ export const EditProfilePage: React.FC<
                 >
                   {t('save-changes')}
                 </LoadingButton>
+              </Box>
+              <Box m={2}>
+                {acl.canInviteToOrganizations() && !profile.archived ? (
+                  <Button
+                    variant="contained"
+                    startIcon={<PersonAddIcon />}
+                    onClick={() => setShowInviteOrgModal(true)}
+                    data-testid="edit-invite-user-to-org"
+                  >
+                    {t(
+                      'pages.org-details.tabs.users.invite-individual-to-organization'
+                    )}
+                  </Button>
+                ) : undefined}
               </Box>
             </Grid>
 

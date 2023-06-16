@@ -193,7 +193,7 @@ export const ViewProfilePage: React.FC<
               </Button>
             ) : null}
 
-            {acl.canInviteToOrganizations() ? (
+            {acl.canInviteToOrganizations() && !profile.archived ? (
               <Button
                 variant="contained"
                 startIcon={<PersonAddIcon />}
