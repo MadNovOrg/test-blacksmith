@@ -1084,6 +1084,7 @@
         "total-individuals": "Total individuals",
         "currently-enrolled": "{{count}} currently enrolled",
         "active": "Active",
+        "expired-recently": "Expired recently",
         "expiring-soon": "Expiring soon",
         "on-hold": "On hold",
         "expired": "Expired",
