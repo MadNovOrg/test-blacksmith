@@ -153,11 +153,11 @@ describe('CourseForm - closed BILD', () => {
 
     await selectBildCategory()
 
-    const conversionToggle = screen.getByLabelText(/conversion course/i)
-
-    expect(conversionToggle).toBeDisabled()
+    expect(screen.queryByLabelText(/conversion/i)).not.toBeInTheDocument()
 
     await selectLevel(CourseLevel.BildIntermediateTrainer)
+
+    const conversionToggle = screen.getByLabelText(/conversion course/i)
     expect(conversionToggle).toBeEnabled()
 
     await selectLevel(CourseLevel.BildAdvancedTrainer)
@@ -266,5 +266,21 @@ describe('CourseForm - closed BILD', () => {
     await selectBildCategory()
 
     expect(screen.getByPlaceholderText(/price/i)).toBeInTheDocument()
+  })
+
+  it("doesn't display a conversion toggle if a Bild Certified level is selected", async () => {
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.CLOSED} />, {
+        auth: { activeRole: RoleName.TT_ADMIN },
+      })
+    })
+
+    await selectBildCategory()
+
+    expect(screen.queryByLabelText(/conversion/i)).not.toBeInTheDocument()
+
+    await selectLevel(CourseLevel.BildIntermediateTrainer)
+
+    expect(screen.getByLabelText(/conversion/i)).toBeInTheDocument()
   })
 })

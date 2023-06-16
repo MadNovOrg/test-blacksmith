@@ -714,6 +714,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     }
   })
 
+  useEffect(() => {
+    if (values.courseLevel === CourseLevel.BildRegular) {
+      setValue('conversion', false)
+    }
+  }, [values.courseLevel, setValue])
+
   const handleBookingContactEmailChange = useCallback(
     (email: string) => {
       setValue(
@@ -961,7 +967,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           />
 
           {isBild &&
-          [CourseType.CLOSED, CourseType.OPEN].includes(courseType) ? (
+          [CourseType.CLOSED, CourseType.OPEN].includes(courseType) &&
+          values.courseLevel !== CourseLevel.BildRegular ? (
             <Controller
               name="conversion"
               control={control}
