@@ -1,5 +1,4 @@
 import Link from '@mui/material/Link'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
@@ -28,9 +27,9 @@ export const NavLinks = () => {
 
   return (
     <>
-      {acl.canParticipateInCourses() ? (
-        <Link component={StyledNavLink} to="/courses">
-          {t('my-courses')}
+      {acl.canViewResources(showResources) ? (
+        <Link component={StyledNavLink} to="/resources">
+          {t('resources')}
         </Link>
       ) : null}
 
@@ -40,21 +39,21 @@ export const NavLinks = () => {
         </Link>
       ) : null}
 
-      {acl.canViewResources(showResources) ? (
-        <Link component={StyledNavLink} to="/resources">
-          {t('resources')}
-        </Link>
-      ) : null}
-
-      {acl.canViewUsers() ? (
-        <Link component={StyledNavLink} to="/admin/users">
-          {t('users')}
+      {acl.canParticipateInCourses() ? (
+        <Link component={StyledNavLink} to="/courses">
+          {t('my-courses')}
         </Link>
       ) : null}
 
       {acl.canViewOrganizations() ? (
         <Link component={StyledNavLink} to="/organisations">
           {t('organizations')}
+        </Link>
+      ) : null}
+
+      {acl.canViewUsers() ? (
+        <Link component={StyledNavLink} to="/admin/users">
+          {t('users')}
         </Link>
       ) : null}
 
