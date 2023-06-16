@@ -49,9 +49,9 @@ const FeesPanel: React.FC<React.PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     if (typeof onChange === 'function') {
-      onChange(formValues, Object.keys(formState.errors).length === 0)
+      onChange(formValues, formState.isValid)
     }
-  }, [formValues, formState.errors, onChange])
+  }, [formValues, formState.isValid, onChange])
 
   return (
     <Box>
