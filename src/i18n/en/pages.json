@@ -565,7 +565,7 @@
     "course-begins-today": "Course begins today.",
     "course-ended": "Course has ended.",
     "trainer": "You are the trainer",
-    "assistant": "You are the assistant",
+    "assistant": "You are the assist trainer",
     "moderator": "You are the moderator",
     "hosted-by": "Hosted by {{trainer}}",
     "company-host": "Hosted by {{companyName}}",

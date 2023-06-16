@@ -116,7 +116,7 @@ describe('component: CourseTrainersInfo', () => {
     expect(screen.getByText('You are the trainer')).toBeInTheDocument()
   })
 
-  it('display you are assistant text if id match', () => {
+  it('display you are assist trainer text if id match', () => {
     const profile = buildProfile()
 
     const logInId = providers.auth.profile?.id || 'logInId'
@@ -134,6 +134,6 @@ describe('component: CourseTrainersInfo', () => {
     ]
 
     render(<CourseTrainersInfo trainers={trainers} />)
-    expect(screen.getByText('You are the assistant')).toBeInTheDocument()
+    expect(screen.getByText('You are the assist trainer')).toBeInTheDocument()
   })
 })
