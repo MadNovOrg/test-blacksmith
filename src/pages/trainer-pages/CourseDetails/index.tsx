@@ -259,11 +259,13 @@ export const CourseDetails = () => {
                         <Box
                           display="flex"
                           flexDirection={isMobile ? 'column' : 'row'}
+                          alignItems="center"
                         >
                           <Button
                             variant="text"
                             fullWidth={isMobile}
                             onClick={onExceptionsReject}
+                            sx={{ px: 2 }}
                           >
                             {t('common.reject')}
                           </Button>
@@ -271,6 +273,7 @@ export const CourseDetails = () => {
                             variant="contained"
                             fullWidth={isMobile}
                             onClick={onExceptionsApprove}
+                            sx={{ px: 7 }}
                           >
                             {t('common.approve')}
                           </Button>

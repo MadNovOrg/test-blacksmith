@@ -1,6 +1,14 @@
 import Cancel from '@mui/icons-material/Cancel'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { Alert, Box, Button, Container, Typography } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Button,
+  Container,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -27,6 +35,8 @@ export const CourseCancellationRequestFeature: React.FC<
   React.PropsWithChildren<CourseCancellationRequestFeatureProps>
 > = ({ course, open, onClose, onChange }) => {
   const fetcher = useFetcher()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { acl } = useAuth()
   const { t } = useTranslation()
 
@@ -67,7 +77,8 @@ export const CourseCancellationRequestFeature: React.FC<
           <Box
             display="flex"
             justifyContent="space-between"
-            alignItems="center"
+            alignItems="stretch"
+            flexDirection={isMobile ? 'column' : 'row'}
           >
             <Typography
               variant="body2"
@@ -76,7 +87,12 @@ export const CourseCancellationRequestFeature: React.FC<
             >
               {t('pages.course-details.cancellation-request-alert')}
             </Typography>
-            <Box display="flex" gap={2}>
+            <Box
+              display="flex"
+              flexDirection={isMobile ? 'column' : 'row'}
+              alignItems="center"
+              gap={2}
+            >
               <Button
                 variant="text"
                 startIcon={<Cancel />}
@@ -84,6 +100,7 @@ export const CourseCancellationRequestFeature: React.FC<
               >
                 {t('pages.course-details.delete-request')}
               </Button>
+
               {acl.canCancelCourses() ? (
                 <Button
                   variant="contained"
