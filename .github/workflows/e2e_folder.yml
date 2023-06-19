@@ -47,7 +47,7 @@ on:
 
 jobs:
   tests:
-    name: E2E regression tests
+    name: E2E Tests by Folder
     runs-on: ubuntu-latest
     env:
       CI: 'true'
