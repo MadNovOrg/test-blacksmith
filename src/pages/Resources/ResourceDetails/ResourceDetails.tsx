@@ -1,4 +1,10 @@
-import { Box, Container, Typography } from '@mui/material'
+import {
+  Box,
+  Container,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
@@ -12,7 +18,6 @@ import {
   ResourceDetailsQueryVariables,
 } from '@app/generated/graphql'
 import { RESOURCE_DETAILS_QUERY } from '@app/pages/Resources/queries/get-resource-details'
-import theme from '@app/theme'
 
 import {
   ResourceItemsSkeleton,
@@ -22,6 +27,8 @@ import { ResourcesList } from './components/ResourcesList'
 
 export const ResourceDetails = () => {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [searchTerm, setSearchTerm] = useState('')
   const { id } = useParams()
 
@@ -41,8 +48,8 @@ export const ResourceDetails = () => {
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]} pb={3}>
       <Container maxWidth="lg" sx={{ py: 5 }}>
-        <Box display="flex">
-          <Box width={300}>
+        <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
+          <Box maxWidth={400}>
             <BackButton
               label={t('pages.resources.resource-details.back-to-resources')}
               to="/resources"
@@ -60,7 +67,7 @@ export const ResourceDetails = () => {
               </>
             )}
           </Box>
-          <Box width={630} sx={{ ml: 1, maxHeight: '85vh', overflow: 'auto' }}>
+          <Box sx={{ ml: 1, maxHeight: '85vh', overflow: 'auto' }}>
             <Box sx={{ pt: 2 }}>
               <FilterSearch
                 onChange={value => {

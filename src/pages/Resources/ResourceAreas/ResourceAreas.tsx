@@ -1,10 +1,15 @@
-import { Container, Grid, Typography } from '@mui/material'
+import {
+  Container,
+  Grid,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink } from 'react-router-dom'
 
 import { FullHeightPage } from '@app/components/FullHeightPage'
-import theme from '@app/theme'
 
 import { ResourceAreaIcon } from './components/resourceAreaIcon'
 import { ResourceListSkeleton } from './components/ResourceAreasSkeleton'
@@ -13,7 +18,8 @@ import { useResourceAreas } from './use-resource-areas'
 
 export const ResourceAreas = () => {
   const { t } = useTranslation()
-
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { allResourcesByArea, fetching } = useResourceAreas()
 
   return (
@@ -23,10 +29,12 @@ export const ResourceAreas = () => {
           <ResourceListSkeleton />
         ) : (
           <>
-            <Typography variant="h1">{t('pages.resources.title')}</Typography>
+            <Typography textAlign={isMobile ? 'center' : 'left'} variant="h1">
+              {t('pages.resources.title')}
+            </Typography>
             <Grid container spacing={2} sx={{ mb: 12, mt: 1 }}>
               {allResourcesByArea?.basic?.map(resourceArea => (
-                <Grid item xs={4} key={resourceArea.id}>
+                <Grid item md={5} xs={12} key={resourceArea.id}>
                   <RouterLink to={`/resources/${resourceArea.id}`}>
                     <ResourceCard
                       icon={
@@ -41,12 +49,12 @@ export const ResourceAreas = () => {
                 </Grid>
               ))}
             </Grid>
-            <Typography variant="h1">
+            <Typography textAlign={isMobile ? 'center' : 'left'} variant="h1">
               {t('pages.resources.additional-resources.title')}
             </Typography>
             <Grid container spacing={2} sx={{ mt: 1 }}>
               {allResourcesByArea?.additional?.map(resourceArea => (
-                <Grid item xs={6} key={resourceArea.id}>
+                <Grid item md={5} xs={12} key={resourceArea.id}>
                   <RouterLink to={`/resources/${resourceArea.id}`}>
                     <ResourceCard
                       icon={
