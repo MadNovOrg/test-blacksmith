@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  Grid,
   Link,
   Typography,
   useTheme,
@@ -626,51 +627,43 @@ export const CourseBuilder: React.FC<
                   {t('pages.trainer-base.create-course.new-course.my-course')}
                 </Typography>
 
-                <Box
-                  display="flex"
-                  flexDirection="row-reverse"
-                  flexWrap="wrap"
-                  my={{ xs: 4, md: 2 }}
-                  mx={-1}
-                  data-testid="course-modules"
-                >
+                <Box data-testid="course-modules" my={{ xs: 4, md: 2 }} mx={-1}>
                   {mandatoryModules.length ? (
-                    <Box>
+                    <Box mt={2}>
                       <Typography fontSize="10px" mx={1}>
                         {t(
                           'pages.trainer-base.create-course.new-course.mandatory-modules'
                         )}
                       </Typography>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          flexDirection: 'row-reverse',
-                          border: 1,
-                          borderStyle: 'dashed',
-                          borderRadius: '0.5rem',
-                          borderColor: theme.colors.navy[500],
-                        }}
+                      <Grid
+                        container
+                        border={`1px dashed ${theme.colors.navy[500]}`}
+                        borderRadius="0.5rem"
                       >
                         {mandatoryModules.map(m => (
-                          <ModuleCard
-                            key={m.id}
-                            data={m}
-                            showDuration={hasEstimatedDuration}
-                            bgColor={getModuleCardColor(m, false) ?? ''}
-                          />
+                          <Grid key={m.id} item xs={3}>
+                            <ModuleCard
+                              data={m}
+                              showDuration={hasEstimatedDuration}
+                              bgColor={getModuleCardColor(m, false) ?? ''}
+                            />
+                          </Grid>
                         ))}
-                      </Box>
+                      </Grid>
                     </Box>
                   ) : null}
-                  {courseModuleSlots.map(slot => (
-                    <ModuleSlot
-                      key={slot.droppableId}
-                      module={slot.module}
-                      droppableId={slot.droppableId}
-                      draggableId={slot.draggableId}
-                    />
-                  ))}
+
+                  <Grid container>
+                    {courseModuleSlots.map(slot => (
+                      <Grid key={slot.droppableId} item xs={6} md={3}>
+                        <ModuleSlot
+                          module={slot.module}
+                          droppableId={slot.droppableId}
+                          draggableId={slot.draggableId}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
                 </Box>
                 {courseData?.course?.level === Course_Level_Enum.Level_1 && (
                   <Box mb={{ xs: 4, md: 2 }}>
