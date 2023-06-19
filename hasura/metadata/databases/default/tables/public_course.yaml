@@ -893,6 +893,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - is_draft
         - max_participants
         - min_participants
         - modules_duration

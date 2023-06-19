@@ -426,6 +426,7 @@ select_permissions:
         - promo_codes
         - quantity
         - registrants
+        - source
         - stripePaymentId
         - user
         - vat
