@@ -191,9 +191,6 @@ export const OrgOverviewTab: React.FC<
         <Typography variant="h4">
           {t('pages.org-details.tabs.overview.available-courses-for-booking')}
         </Typography>
-        {coursesForBooking?.map(course => (
-          <CourseForBookingTile course={course} key={course.id} />
-        ))}
         <Button
           variant="outlined"
           onClick={() => navigate('courses')}
@@ -201,6 +198,9 @@ export const OrgOverviewTab: React.FC<
         >
           {t('pages.org-details.tabs.overview.see-all-courses')}
         </Button>
+        {coursesForBooking?.map(course => (
+          <CourseForBookingTile course={course} key={course.id} />
+        ))}
         <RequestAQuoteBanner sx={{ mt: 2 }} />
       </Grid>
     </Grid>
