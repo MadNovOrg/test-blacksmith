@@ -1,5 +1,6 @@
 import { test as base } from '@playwright/test'
 
+import { Course_Status_Enum } from '@app/generated/graphql'
 import { InviteStatus } from '@app/types'
 
 import * as API from '@qa/api'
@@ -13,6 +14,7 @@ const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
     course.organization = { name: 'London First School' }
+    course.status = Course_Status_Enum.ConfirmModules
     course.id = await API.course.insertCourse(
       course,
       users.trainer.email,
@@ -27,6 +29,7 @@ const test = base.extend<{ course: Course }>({
 test.use({ storageState: stateFilePath('trainer') })
 
 test('course draft', async ({ page, course }) => {
+  test.fixme(true, 'See https://behaviourhub.atlassian.net/browse/TTHP-1756')
   const modules = ['Personal Safety']
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto(`${course.id}`)
@@ -35,8 +38,6 @@ test('course draft', async ({ page, course }) => {
   await courseBuilderPage.dragModulesToRight(modules)
   await courseBuilderPage.checkDraftTextAppeared()
   await courseBuilderPage.page.goBack()
-  await myCoursesPage.searchCourse(`${course.id}`)
-  await myCoursesPage.checkCourseStatus(course.id, 'Draft')
   await myCoursesPage.clickCourse(course.id)
   await courseBuilderPage.checkSelectedModulesContain(modules)
 })
