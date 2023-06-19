@@ -27,8 +27,8 @@ const TEMP_DIR = './tmp'
 
 const PER_PAGE = 12
 
-const TEST_SETTINGS: { role: '' | 'tt-admin' } = {
-  role: '',
+const TEST_SETTINGS: { role: undefined | 'tt-admin' } = {
+  role: undefined,
 }
 
 export {

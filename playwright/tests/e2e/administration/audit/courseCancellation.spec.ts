@@ -22,15 +22,15 @@ const test = base.extend<{ course: Course; role: string }>({
   },
 })
 
-test.use({ storageState: stateFilePath('admin') })
-
 test.beforeEach(async ({}) => {
   TEST_SETTINGS.role = 'tt-admin'
 })
 
 test.afterEach(async ({}) => {
-  TEST_SETTINGS.role = ''
+  TEST_SETTINGS.role = undefined
 })
+
+test.use({ storageState: stateFilePath('admin') })
 
 test('displays the audit trail for a cancelled course', async ({
   course,

@@ -42,7 +42,7 @@ test.beforeEach(async ({}) => {
 })
 
 test.afterEach(async ({}) => {
-  TEST_SETTINGS.role = ''
+  TEST_SETTINGS.role = undefined
 })
 
 test.use({ storageState: stateFilePath('admin') })

@@ -97,7 +97,7 @@ export const UNIQUE_COURSE: () => Course = () => ({
       }),
     },
   ],
-  min_participants: 6,
+  min_participants: 1,
   max_participants: 11,
   gradingConfirmed: false,
 })
