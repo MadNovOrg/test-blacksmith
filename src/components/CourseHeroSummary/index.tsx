@@ -16,14 +16,16 @@ import {
   styled,
   Tooltip,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
-import React, { useState } from 'react'
+import GoogleMapReact from 'google-map-react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CourseInstructionsDialog } from '@app/components/CourseInstructionsDialog'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { Course_Status_Enum } from '@app/generated/graphql'
-import theme from '@app/theme'
 import { Course, CourseDeliveryType } from '@app/types'
 import { getCourseBeginsForMessage, formatCourseVenue } from '@app/util'
 
@@ -48,12 +50,28 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
   const [isInstructionsDialogOpen, setIsInstructionsDialogOpen] =
     useState(false)
-
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const courseBeginsForMessage = getCourseBeginsForMessage(course, t)
 
   const showStatus =
     course.status === Course_Status_Enum.Cancelled ||
     course.status === Course_Status_Enum.Declined
+
+  const backgroundList = isMobile
+    ? { backgroundColor: 'white', borderRadius: 3, p: 2 }
+    : {}
+
+  const geoCoordinates = useMemo(() => {
+    const coordinates = course.schedule[0].venue?.geoCoordinates
+      .replace(/[()]/g, '')
+      .split(',')
+
+    return {
+      lat: parseFloat(coordinates?.at(0) ?? '0'),
+      lng: parseFloat(coordinates?.at(1) ?? '0'),
+    }
+  }, [course.schedule])
 
   return (
     <Box
@@ -65,7 +83,23 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
     >
       <Container>
         <Grid container spacing={3}>
-          <Grid item xs={6} md={4}>
+          {isMobile && course.schedule[0].venue?.geoCoordinates ? (
+            <Grid>
+              <Box sx={{ height: '50vh', width: '100%' }}>
+                <GoogleMapReact
+                  bootstrapURLKeys={{
+                    key: `${import.meta.env.VITE_GMAPS_KEY}`,
+                  }}
+                  defaultCenter={{
+                    lat: geoCoordinates.lat ?? 0,
+                    lng: geoCoordinates.lng ?? 0,
+                  }}
+                  defaultZoom={11}
+                />
+              </Box>
+            </Grid>
+          ) : undefined}
+          <Grid item xs={12} md={4}>
             {children}
             <Typography
               variant="h3"
@@ -86,7 +120,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             ) : null}
             {typeof renderButton === 'function' && renderButton()}
           </Grid>
-          <Grid item xs={6} md={4}>
+          <Grid item xs={12} md={4}>
             <Typography
               fontWeight={500}
               fontSize="0.9rem"
@@ -95,14 +129,14 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 borderRadius: 1,
                 paddingLeft: 1,
                 paddingRight: 1,
-                marginBottom: 1,
+                marginBottom: 2,
                 display: 'inline-block',
               }}
             >
               {courseBeginsForMessage}
             </Typography>
 
-            <List dense disablePadding>
+            <List dense disablePadding sx={backgroundList}>
               <ListItem disableGutters disablePadding>
                 <StyledListIcon>
                   <TodayIcon />
@@ -134,9 +168,13 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
               </ListItem>
             </List>
           </Grid>
-          <Grid item xs={6} md={4}>
+          <Grid item xs={12} md={4}>
             <List dense disablePadding>
-              <ListItem alignItems={'flex-start'}>
+              <ListItem
+                alignItems={'flex-start'}
+                disableGutters
+                sx={backgroundList}
+              >
                 <StyledListIcon>
                   <PersonOutlineIcon />
                 </StyledListIcon>
@@ -150,7 +188,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   )}
                 </List>
               </ListItem>
-              <ListItem>
+              <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
                 <StyledListIcon>
                   <PinDropIcon />
                 </StyledListIcon>
@@ -162,7 +200,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 </ListItemText>
               </ListItem>
               {course.schedule[0].virtualLink ? (
-                <ListItem>
+                <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
                   <StyledListIcon>
                     <VideocamIcon />
                   </StyledListIcon>
@@ -178,7 +216,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 </ListItem>
               ) : null}
               {course.notes ? (
-                <ListItem>
+                <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
                   <StyledListIcon>
                     <Info />
                   </StyledListIcon>
@@ -197,7 +235,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
               ) : null}
 
               {course.special_instructions || course.parking_instructions ? (
-                <ListItem>
+                <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
                   <StyledListIcon>
                     <VisibilityIcon />
                   </StyledListIcon>

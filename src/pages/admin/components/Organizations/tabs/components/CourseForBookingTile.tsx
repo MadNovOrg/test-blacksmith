@@ -1,4 +1,10 @@
-import { Button, Grid, Typography } from '@mui/material'
+import {
+  Button,
+  Grid,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import { Box } from '@mui/system'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 import React, { useMemo } from 'react'
@@ -20,6 +26,9 @@ export const CourseForBookingTile: React.FC<
   React.PropsWithChildren<CourseForBookingTileParams>
 > = ({ course, variant = 'default', showDistance, distance }) => {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const navigate = useNavigate()
   const isRow = variant === 'row'
 
@@ -79,7 +88,7 @@ export const CourseForBookingTile: React.FC<
   return (
     <Box bgcolor="common.white" p={2} mt={2}>
       <Grid container spacing={1}>
-        <Grid item xs={isRow ? 4 : 12}>
+        <Grid item md={isRow ? 4 : 12}>
           {isRow ? (
             <Typography
               variant="body1"
@@ -98,7 +107,7 @@ export const CourseForBookingTile: React.FC<
           </Typography>
         </Grid>
 
-        <Grid item xs={isRow ? (showDistance ? 4 : 6) : 12}>
+        <Grid item md={isRow ? (showDistance ? 4 : 6) : 12}>
           <Typography variant={isRow ? 'body1' : 'h4'} fontWeight={600}>
             {t(`common.certificates.${course.level?.toLowerCase()}`)}
           </Typography>
@@ -111,7 +120,7 @@ export const CourseForBookingTile: React.FC<
         </Grid>
 
         {showDistance ? (
-          <Grid item xs={2} container alignItems="center">
+          <Grid item md={2} container alignItems="center">
             <Typography variant="body2" color="grey.600">
               {distance
                 ? t('common.km-distance', { number: distance.toFixed(1) })
@@ -120,10 +129,11 @@ export const CourseForBookingTile: React.FC<
           </Grid>
         ) : null}
 
-        <Grid item xs={isRow ? 2 : 12} container alignItems="center">
+        <Grid item md={isRow ? 2 : 12} xs={12} container alignItems="center">
           <Box
             display="flex"
             flexDirection={isRow ? 'column' : 'row'}
+            justifyContent={isRow ? 'center' : undefined}
             alignItems="center"
             mt={isRow ? 0 : 2}
             gap={1}
@@ -131,6 +141,7 @@ export const CourseForBookingTile: React.FC<
             <Button
               variant="contained"
               color="primary"
+              fullWidth={isMobile}
               onClick={() =>
                 navigate(`/registration?course_id=${course.id}&quantity=1`)
               }

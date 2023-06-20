@@ -107,7 +107,7 @@ export const TabMenu: React.FC<TabMenuProps> = ({
   const dimensions = window.innerWidth * 0.8
 
   return isMobile ? (
-    <Container>
+    <Container disableGutters>
       <Button
         onClick={onActionsClick}
         variant="outlined"

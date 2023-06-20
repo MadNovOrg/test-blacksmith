@@ -8,6 +8,8 @@ import {
   Container,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import { differenceInCalendarDays } from 'date-fns'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
@@ -60,7 +62,6 @@ import {
   ResponseType,
   UPDATE_COURSE_MUTATION,
 } from '@app/queries/courses/update-course'
-import theme from '@app/theme'
 import {
   CourseDeliveryType,
   CourseInput,
@@ -95,6 +96,9 @@ function assertCourseDataValid(
 
 export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const { profile, acl } = useAuth()
@@ -588,7 +592,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
         ) : null}
 
         {course && LoadingStatus.SUCCESS ? (
-          <Box display="flex" paddingBottom={5}>
+          <Box
+            display="flex"
+            paddingBottom={5}
+            flexDirection={isMobile ? 'column' : 'row'}
+          >
             <Box width={400} display="flex" flexDirection="column" pr={4}>
               <Sticky top={20}>
                 <Box mb={2}>
@@ -628,7 +636,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             </Box>
 
             <Box flex={1}>
-              <Box mt={8}>
+              <Box mt={isMobile ? 4 : 8}>
                 {hasError ? (
                   <Alert severity="error" variant="outlined" sx={{ mb: 2 }}>
                     {t('pages.edit-course.updating-error')}
@@ -679,7 +687,12 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                   </Alert>
                 ) : null}
 
-                <Box display="flex" justifyContent="space-between" mt={4}>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  mt={4}
+                  flexDirection={isMobile ? 'column' : 'row'}
+                >
                   {cancellableCourse && canCancelCourse ? (
                     <Button
                       data-testid="cancel-course-button"
@@ -706,6 +719,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     onClick={submitButtonHandler}
                     loading={fetching}
                     data-testid="save-button"
+                    sx={{ mt: isMobile ? 2 : 0 }}
                   >
                     {t('pages.edit-course.save-button-text')}
                   </LoadingButton>

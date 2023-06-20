@@ -211,7 +211,7 @@ export const CourseDetails = () => {
                 <BackButton label={t('back')} />
               </CourseHeroSummary>
 
-              <Container>
+              <Container disableGutters={isMobile}>
                 <CourseCancellationRequestFeature
                   course={course}
                   open={showCancellationRequestModal}

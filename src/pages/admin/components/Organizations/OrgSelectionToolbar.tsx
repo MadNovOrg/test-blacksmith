@@ -1,6 +1,14 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import SearchIcon from '@mui/icons-material/Search'
-import { Box, Button, Menu, MenuItem, TextField } from '@mui/material'
+import {
+  Box,
+  Button,
+  Menu,
+  MenuItem,
+  TextField,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import Link from '@mui/material/Link'
 import Toolbar from '@mui/material/Toolbar'
 import { sortBy } from 'lodash-es'
@@ -48,6 +56,9 @@ export const OrgSelectionToolbar: React.FC<
   const { profile, acl } = useAuth()
   const { data } = useOrg(ALL_ORGS, profile?.id, acl.canViewAllOrganizations())
 
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const [query, setQuery] = useState('')
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -82,7 +93,7 @@ export const OrgSelectionToolbar: React.FC<
           lineHeight={2}
           display="flex"
           justifyContent="left"
-          px={3}
+          px={isMobile ? 0 : 3}
           color="secondary.dark"
           overflow="hidden"
         >

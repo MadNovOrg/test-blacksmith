@@ -5,6 +5,7 @@ import {
   Stack,
   TextField,
   useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -41,6 +42,8 @@ export const AvailableCourses: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const { t } = useTranslation()
   const { id } = useParams()
   const { profile, acl } = useAuth()
@@ -204,9 +207,13 @@ export const AvailableCourses: React.FC<
           <OrgSelectionToolbar prefix="/organisations" postfix="/courses" />
         ) : null}
 
-        <Container maxWidth="lg" sx={{ py: 5 }}>
-          <Box display="flex" gap={4}>
-            <Box width={250}>
+        <Container maxWidth="lg" sx={{ py: 5 }} disableGutters={isMobile}>
+          <Box
+            display="flex"
+            flexDirection={isMobile ? 'column' : 'row'}
+            gap={4}
+          >
+            <Box width={isMobile ? undefined : 250}>
               <Typography variant="h1">
                 {t('pages.available-courses.title')}
               </Typography>

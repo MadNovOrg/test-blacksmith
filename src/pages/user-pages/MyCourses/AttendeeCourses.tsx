@@ -1,4 +1,10 @@
-import { CircularProgress, Container, Stack } from '@mui/material'
+import {
+  CircularProgress,
+  Container,
+  Stack,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Table from '@mui/material/Table'
@@ -41,6 +47,8 @@ export const AttendeeCourses: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const sorting = useTableSort('start', 'desc')
   const cols = useMemo(
@@ -179,9 +187,9 @@ export const AttendeeCourses: React.FC<
   )
 
   return (
-    <Container maxWidth="lg" sx={{ py: 5 }}>
-      <Box display="flex" gap={4}>
-        <Box width={250}>
+    <Container maxWidth="lg" sx={{ py: 5, px: isMobile ? 2 : 0 }}>
+      <Box flexDirection={isMobile ? 'column' : 'row'} display="flex" gap={4}>
+        <Box width={isMobile ? undefined : 250}>
           <Typography variant="h1">{t('my-courses')}</Typography>
           <Typography variant="body2" color="grey.500" mt={1}>
             {loading ? <>&nbsp;</> : t('x-items', { count: courses.length })}
@@ -224,7 +232,7 @@ export const AttendeeCourses: React.FC<
           </Stack>
         </Box>
 
-        <Box flex={1}>
+        <Box flex={1} sx={{ overflowX: 'auto' }}>
           <Table data-testid="courses-table">
             <TableHead
               cols={cols}

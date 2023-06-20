@@ -1,4 +1,11 @@
-import { Button, CircularProgress, Container, Stack } from '@mui/material'
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Stack,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -36,6 +43,8 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const { activeRole, acl } = useAuth()
   const isTrainer = activeRole === RoleName.TRAINER
@@ -129,8 +138,8 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
         messageKey="course-created"
         sx={{ position: 'absolute' }}
       />
-      <Box display="flex" gap={4}>
-        <Box width={250}>
+      <Box display="flex" flexDirection={isMobile ? 'column' : 'row'} gap={4}>
+        <Box width={isMobile ? undefined : 250}>
           <Typography variant="h1">
             {title ?? t(isTrainer ? 'courses' : 'pages.my-courses.h1')}
           </Typography>
@@ -175,7 +184,13 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
               <Typography variant="h6" mb={1}>
                 {t('pages.my-courses.actionable-courses-title')}
               </Typography>
-              <Box px={1} pb={1} bgcolor="grey.100" borderRadius={1}>
+              <Box
+                px={1}
+                pb={1}
+                bgcolor="grey.100"
+                borderRadius={1}
+                sx={{ overflowX: 'auto' }}
+              >
                 <ActionableCoursesTable
                   actionableCourses={actionableCourses}
                   fetchingActionableCourses={fetchingActionableCourses}
@@ -200,18 +215,20 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
               {t('pages.my-courses.courses-title')}
             </Typography>
           ) : null}
-          <CoursesTable
-            courses={courses}
-            isFiltered={filtered}
-            sorting={sorting}
-            loading={loading}
-            data-testid="courses-table"
-            hiddenColumns={new Set(['actions'])}
-          />
+          <Box sx={{ overflowX: 'auto' }}>
+            <CoursesTable
+              courses={courses}
+              isFiltered={filtered}
+              sorting={sorting}
+              loading={loading}
+              data-testid="courses-table"
+              hiddenColumns={new Set(['actions'])}
+            />
 
-          {total ? (
-            <Pagination testId="courses-pagination" total={total} />
-          ) : null}
+            {total ? (
+              <Pagination testId="courses-pagination" total={total} />
+            ) : null}
+          </Box>
         </Box>
       </Box>
     </Container>
