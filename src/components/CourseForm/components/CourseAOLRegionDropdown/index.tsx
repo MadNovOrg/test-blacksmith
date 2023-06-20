@@ -41,6 +41,7 @@ export const CourseAOLRegionDropdown: React.FC<
 
   return (
     <Autocomplete
+      disabled={disabled}
       multiple={false}
       value={selected || ''}
       options={regions}

@@ -145,6 +145,7 @@ export const UserSelector: React.FC<
         renderInput={params => (
           <TextField
             {...params}
+            label={t('components.user-selector.placeholder')}
             placeholder={t('components.user-selector.placeholder')}
             InputProps={{
               ...params.InputProps,
