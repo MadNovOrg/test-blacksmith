@@ -83,22 +83,6 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
     >
       <Container>
         <Grid container spacing={3}>
-          {isMobile && course.schedule[0].venue?.geoCoordinates ? (
-            <Grid>
-              <Box sx={{ height: '50vh', width: '100%' }}>
-                <GoogleMapReact
-                  bootstrapURLKeys={{
-                    key: `${import.meta.env.VITE_GMAPS_KEY}`,
-                  }}
-                  defaultCenter={{
-                    lat: geoCoordinates.lat ?? 0,
-                    lng: geoCoordinates.lng ?? 0,
-                  }}
-                  defaultZoom={11}
-                />
-              </Box>
-            </Grid>
-          ) : undefined}
           <Grid item xs={12} md={4}>
             {children}
             <Typography
@@ -113,6 +97,22 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             <Typography variant="body2" color="secondary">
               {course.course_code}
             </Typography>
+            {isMobile && course.schedule[0].venue?.geoCoordinates ? (
+              <Grid>
+                <Box sx={{ height: '20vh', width: '100%', mt: 2 }}>
+                  <GoogleMapReact
+                    bootstrapURLKeys={{
+                      key: `${import.meta.env.VITE_GMAPS_KEY}`,
+                    }}
+                    defaultCenter={{
+                      lat: geoCoordinates.lat ?? 0,
+                      lng: geoCoordinates.lng ?? 0,
+                    }}
+                    defaultZoom={11}
+                  />
+                </Box>
+              </Grid>
+            ) : undefined}
             {showStatus ? (
               <Box mt={1}>
                 <CourseStatusChip status={course.status} />
