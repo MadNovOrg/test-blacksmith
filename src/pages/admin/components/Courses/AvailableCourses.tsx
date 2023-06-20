@@ -17,12 +17,16 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams, useSearchParams } from 'react-router-dom'
 
+import { FilterCourseDeliveryType } from '@app/components/FilterCourseDeliveryType'
+import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { RequestAQuoteBanner } from '@app/components/RequestAQuoteBanner'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Bool_Exp,
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
   Course_Status_Enum,
   Course_Type_Enum,
   GetUpcomingCoursesQuery,
@@ -52,6 +56,12 @@ export const AvailableCourses: React.FC<
   const [keyword, setKeyword] = useState(searchParams.get('q') ?? '')
   const [dateFrom, setDateFrom] = useState<Date | null>(null)
   const [dateTo, setDateTo] = useState<Date | null>(null)
+  const [filterDeliveryType, setFilterDeliveryType] = useState<
+    Course_Delivery_Type_Enum[]
+  >([])
+  const [filterByCertificateLevel, setFilteredByCertificateLevel] = useState<
+    Course_Level_Enum[]
+  >([])
   const [sortMode, setSortMode] = useState(
     id !== ALL_ORGS ? 'distance-to-org' : 'date-ascending'
   )
@@ -88,6 +98,12 @@ export const AvailableCourses: React.FC<
     if (dateTo) {
       conditions.push({ start: { _lte: dateTo } })
     }
+    if (filterByCertificateLevel.length) {
+      conditions.push({ level: { _in: filterByCertificateLevel } })
+    }
+    if (filterDeliveryType.length) {
+      conditions.push({ deliveryType: { _in: filterDeliveryType } })
+    }
     if (keyword) {
       conditions.push({
         _or: [
@@ -109,9 +125,8 @@ export const AvailableCourses: React.FC<
         ],
       })
     }
-
     return { _and: conditions }
-  }, [dateFrom, dateTo, keyword])
+  }, [dateFrom, dateTo, keyword, filterDeliveryType, filterByCertificateLevel])
 
   const { courses: coursesForBooking, loading: coursesLoading } =
     useUpcomingCourses(profile?.id, filters)
@@ -232,9 +247,7 @@ export const AvailableCourses: React.FC<
                       onChange={setDateFrom}
                       slotProps={{
                         textField: {
-                          'data-testid': 'DateFrom',
                           label: t('common.from'),
-                          // @ts-expect-error no arbitrary props are allowed by types, which is wrong
                           variant: 'standard',
                           fullWidth: true,
                         },
@@ -254,7 +267,21 @@ export const AvailableCourses: React.FC<
                     />
                   </Stack>
                 </Box>
+                <Box>
+                  <Typography variant="body2" fontWeight="bold">
+                    {t('filter-by')}
+                  </Typography>
 
+                  <Stack gap={1}>
+                    <FilterCourseLevel
+                      title={t('course-level')}
+                      onChange={setFilteredByCertificateLevel}
+                    />
+                    <FilterCourseDeliveryType
+                      onChange={setFilterDeliveryType}
+                    />
+                  </Stack>
+                </Box>
                 <RequestAQuoteBanner />
               </Stack>
             </Box>
