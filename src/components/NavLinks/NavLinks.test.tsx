@@ -44,7 +44,7 @@ describe('component: NavLinks', () => {
     expect(usersLink).not.toBeInTheDocument()
   })
 
-  it('do not render resource if user do not have 0 course and 0 certificates', async () => {
+  it('do not render resource and membership if user do not have 0 course and 0 certificates', async () => {
     registerMocks(0, 0)
 
     render(<NavLinks />, {
@@ -56,8 +56,8 @@ describe('component: NavLinks', () => {
 
     const coursesLink = screen.getByRole('link', { name: 'My Courses' })
     expect(coursesLink).toBeInTheDocument()
-    const membershipLink = screen.getByRole('link', { name: 'Membership' })
-    expect(membershipLink).toBeInTheDocument()
+    const membershipLink = screen.queryByRole('link', { name: 'Membership' })
+    expect(membershipLink).not.toBeInTheDocument()
     const resourcesLink = screen.queryByRole('link', { name: 'Resources' })
     expect(resourcesLink).not.toBeInTheDocument()
     const usersLink = screen.queryByRole('link', { name: 'Users' })

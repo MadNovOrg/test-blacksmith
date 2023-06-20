@@ -33,15 +33,15 @@ export const NavLinks = () => {
         </Link>
       ) : null}
 
-      {acl.canManageOrgCourses() ? (
-        <Link component={StyledNavLink} to="/manage-courses">
-          {t('manage-courses')}
-        </Link>
-      ) : null}
-
       {acl.canParticipateInCourses() ? (
         <Link component={StyledNavLink} to="/courses">
           {t('my-courses')}
+        </Link>
+      ) : null}
+
+      {acl.canManageOrgCourses() ? (
+        <Link component={StyledNavLink} to="/manage-courses">
+          {t('manage-courses')}
         </Link>
       ) : null}
 
@@ -68,7 +68,7 @@ export const NavLinks = () => {
         </Link>
       )}
 
-      {acl.canViewMembership() && (
+      {acl.canViewMembership() && !!data?.certificates.aggregate?.count && (
         <Link component={StyledNavLink} to="/membership">
           {t('common.membership')}
         </Link>

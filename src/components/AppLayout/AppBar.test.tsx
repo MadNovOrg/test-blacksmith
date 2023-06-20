@@ -1,11 +1,27 @@
-import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import useSWR from 'swr'
 
 import { RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent } from '@test/index'
 
 import { AppBar } from './AppBar'
+
+jest.mock('swr')
+const useSWRMock = jest.mocked(useSWR)
+
+function registerMocks(certificateCount: number, courseCount: number) {
+  useSWRMock.mockReturnValueOnce({
+    data: {
+      certificates: { aggregate: { count: certificateCount } },
+      participant: { aggregate: { count: courseCount } },
+    },
+    mutate: jest.fn(),
+    isValidating: false,
+    error: null,
+    isLoading: false,
+  })
+}
 
 describe('component: AppBar', () => {
   it('renders logo as expected', async () => {
@@ -18,6 +34,7 @@ describe('component: AppBar', () => {
   })
 
   it('renders user name in profile button', async () => {
+    registerMocks(2, 1)
     const profile = { fullName: `${chance.first()} ${chance.last()}` }
 
     render(<AppBar />, { auth: { profile } })

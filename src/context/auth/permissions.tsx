@@ -64,7 +64,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canViewMembership: () => {
-      const roles = [RoleName.USER, RoleName.TRAINER, RoleName.SALES_ADMIN]
+      const roles = [
+        RoleName.USER,
+        RoleName.TRAINER,
+        RoleName.SALES_ADMIN,
+        RoleName.SALES_REPRESENTATIVE,
+        RoleName.FINANCE,
+      ]
       return roles.some(r => r === auth.activeRole) || acl.isAdmin()
     },
 
