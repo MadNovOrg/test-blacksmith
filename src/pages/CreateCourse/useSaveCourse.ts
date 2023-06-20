@@ -312,7 +312,9 @@ export function useSaveCourse(): {
             id: insertedCourse.id,
             courseCode: insertedCourse.course_code,
             hasExceptions: exceptions.length > 0,
-            orderId: insertedCourse.orders && insertedCourse.orders[0].id,
+            orderId: insertedCourse.orders?.length
+              ? insertedCourse.orders[0].id
+              : undefined,
           }
         }
       } else {
