@@ -56,7 +56,7 @@ const ImportCertificateModal: React.FC<
         sx={{ my: 3 }}
         onChange={event => setCode(event.target.value)}
         variant="filled"
-        label={t('common.course-certificate.enter-valid-certification-code')}
+        label={t('common.course-certificate.enter-certificate-number')}
         error={Boolean(error)}
         helperText={error}
         fullWidth
@@ -81,7 +81,7 @@ const ImportCertificateModal: React.FC<
           onClick={submitHandler}
           disabled={!code}
         >
-          {t('common.course-certificate.update-certification')}
+          {t('common.course-certificate.add-certificate')}
         </Button>
       </Box>
     </Box>
