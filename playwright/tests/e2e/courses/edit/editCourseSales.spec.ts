@@ -14,7 +14,7 @@ const test = base.extend<{ course: Course }>({
     const course = UNIQUE_COURSE()
     course.type = CourseType.CLOSED
     course.organization = { name: 'London First School' }
-    course.contactProfile = users.user1WithOrg
+    course.bookingContactProfile = users.user1WithOrg
     course.salesRepresentative = users.user2WithOrg
     course.id = await API.course.insertCourse(course, users.trainer.email)
     await use(course)

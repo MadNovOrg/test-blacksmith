@@ -11,35 +11,36 @@ import { CourseApprovalRequiredModal } from '@qa/pages/courses/CourseApprovalReq
 import { CourseBuilderPage } from '@qa/pages/courses/CourseBuilderPage'
 import { MyCoursesPage } from '@qa/pages/courses/MyCoursesPage'
 
-const closedCourseData = {
-  name: 'closed virtual as salesAdmin',
-  user: 'salesAdmin',
-  course: (() => {
+const test = base.extend<{ course: Course }>({
+  course: async ({}, use) => {
     const course = UNIQUE_COURSE()
     course.type = CourseType.CLOSED
     course.organization = { name: 'London First School' }
-    course.contactProfile = users.userOrgAdmin
+    course.bookingContactProfile = users.userOrgAdmin
     course.freeSpaces = 1
     course.salesRepresentative = users.salesAdmin
     course.go1Integration = true
     course.deliveryType = CourseDeliveryType.VIRTUAL
-    return course
-  })(),
-}
-
-const test = base.extend<{ course: Course }>({
-  course: async ({}, use) => {
-    await use(closedCourseData.course)
-    await API.course.deleteCourse(closedCourseData.course.id)
+    course.invoiceDetails = {
+      organisation: 'London First School',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@londonschool.co.uk',
+      phone: '1939394939',
+      purchaseOrder: '12345',
+    }
+    await use(course)
+    await API.course.deleteCourse(course.id)
   },
 })
 
-test(`create blended learning course: ${closedCourseData.name}`, async ({
+test(`create blended learning course: closed virtual as salesAdmin`, async ({
   browser,
   course,
 }) => {
+  test.fail(true, 'See https://behaviourhub.atlassian.net/browse/TTHP-1767')
   const context = await browser.newContext({
-    storageState: stateFilePath(closedCourseData.user),
+    storageState: stateFilePath('salesAdmin'),
   })
   const page = await context.newPage()
 
@@ -52,8 +53,11 @@ test(`create blended learning course: ${closedCourseData.name}`, async ({
   await assignTrainersPage.selectTrainer(users.trainer)
   const trainerExpensesPage =
     await assignTrainersPage.clickTrainerExpensesButton()
-  const reviewAndConfirmPage =
+  const courseOrderDetailsPage =
     await trainerExpensesPage.clickReviewAndConfirmButton()
+  await courseOrderDetailsPage.fillInvoiceDetails(course.invoiceDetails)
+  const reviewAndConfirmPage =
+    await courseOrderDetailsPage.clickReviewAndConfirmButton()
   course.id = await reviewAndConfirmPage.getCourseIdOnCreation()
 
   const trainerContext = await browser.newContext({

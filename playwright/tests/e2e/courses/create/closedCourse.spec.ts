@@ -17,9 +17,17 @@ const dataSet = [
       const course = UNIQUE_COURSE()
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
-      course.contactProfile = users.userOrgAdmin
+      course.bookingContactProfile = users.userOrgAdmin
       course.freeSpaces = 1
       course.salesRepresentative = users.salesAdmin
+      course.invoiceDetails = {
+        organisation: 'London First School',
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@londonschool.co.uk',
+        phone: '1939394939',
+        purchaseOrder: '12345',
+      }
       return course
     })(),
   },
@@ -30,11 +38,19 @@ const dataSet = [
       const course = UNIQUE_COURSE()
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
-      course.contactProfile = users.userOrgAdmin
+      course.bookingContactProfile = users.userOrgAdmin
       course.reaccreditation = true
       course.freeSpaces = 1
       course.deliveryType = CourseDeliveryType.MIXED
       course.salesRepresentative = users.salesAdmin
+      course.invoiceDetails = {
+        organisation: 'London First School',
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@londonschool.co.uk',
+        phone: '1939394939',
+        purchaseOrder: '12345',
+      }
       return course
     })(),
   },
@@ -65,15 +81,21 @@ for (const data of dataSet) {
     await assignTrainersPage.selectTrainer(users.trainer)
     const trainerExpensesPage =
       await assignTrainersPage.clickTrainerExpensesButton()
-    const reviewAndConfirmPage =
+    const courseOrderDetailsPage =
       await trainerExpensesPage.clickReviewAndConfirmButton()
+    await courseOrderDetailsPage.fillInvoiceDetails(course.invoiceDetails)
+    const reviewAndConfirmPage =
+      await courseOrderDetailsPage.clickReviewAndConfirmButton()
     course.id = await reviewAndConfirmPage.getCourseIdOnCreation()
+    await reviewAndConfirmPage.confirmApproval()
+
     const trainerContext = await browser.newContext({
       storageState: stateFilePath('trainer'),
     })
     const otherPage = await trainerContext.newPage()
     const trainerCoursesListPage = new MyCoursesPage(otherPage)
-    await trainerCoursesListPage.goto(`${course.id}`)
+    await trainerCoursesListPage.goto()
+    await trainerCoursesListPage.searchCourse(`${course.id}`)
     await trainerCoursesListPage.checkCourseWaitingApproval(course.id)
   })
 }

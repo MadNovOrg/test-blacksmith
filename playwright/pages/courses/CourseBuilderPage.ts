@@ -105,6 +105,7 @@ export class CourseBuilderPage extends BasePage {
     await this.submitButton.click()
     await this.confirmTimeCommitmentDialog()
     await this.confirmCourseBuilderDialog()
+    await expect(this.submitButton).toBeHidden()
     return new CourseDetailsPage(this.page)
   }
 
@@ -114,6 +115,7 @@ export class CourseBuilderPage extends BasePage {
         .locator(this.confirmDialogSubmitButton)
         .click()
     }
+    await expect(this.timeCommitmentDialog).toBeHidden()
   }
 
   async confirmCourseBuilderDialog() {
@@ -122,16 +124,17 @@ export class CourseBuilderPage extends BasePage {
         .locator(this.confirmDialogSubmitButton)
         .click()
     }
+    await expect(this.confirmWarningDialog).toBeHidden()
   }
 
   async clickConfirmWarningSubmitButton(): Promise<CourseDetailsPage> {
     await this.submitButton.click()
-    const confirmModalVisible = await this.confirmWarningDialog.isVisible()
-    if (confirmModalVisible) {
+    if (await this.confirmWarningDialog.isVisible()) {
       await this.confirmWarningDialog
         .locator('button:has-text("Confirm")')
         .click()
     }
+    await expect(this.confirmWarningDialog).toBeHidden()
     return new CourseDetailsPage(this.page)
   }
 

@@ -138,9 +138,9 @@ export const insertCourse = async (
       course.organization.name
     )
   }
-  if (course.contactProfile) {
-    courseInput.contactProfileId = await getProfileId(
-      course.contactProfile.email
+  if (course.bookingContactProfile) {
+    courseInput.bookingContactProfileId = await getProfileId(
+      course.bookingContactProfile.email
     )
   }
   if (course.salesRepresentative) {

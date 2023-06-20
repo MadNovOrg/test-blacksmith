@@ -2,7 +2,7 @@ import { Locator, Page } from '@playwright/test'
 
 import { BasePage } from '../BasePage'
 
-import { ReviewAndConfirmPage } from './ReviewAndConfirmPage'
+import { CourseOrderDetailsPage } from './CourseOrderDetailsPage'
 
 export class TrainerExpensesPage extends BasePage {
   readonly reviewAndConfirmButton: Locator
@@ -16,6 +16,6 @@ export class TrainerExpensesPage extends BasePage {
 
   async clickReviewAndConfirmButton() {
     await this.reviewAndConfirmButton.click()
-    return new ReviewAndConfirmPage(this.page)
+    return new CourseOrderDetailsPage(this.page)
   }
 }

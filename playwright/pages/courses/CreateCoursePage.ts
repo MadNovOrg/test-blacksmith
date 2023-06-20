@@ -1,10 +1,11 @@
-import { Locator, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 import { format } from 'date-fns'
 
 import { Course_Source_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
+import { User } from '@qa/data/types'
 import { Course } from '@qa/data/types'
 import { toUiTime } from '@qa/util'
 
@@ -43,6 +44,8 @@ export class CreateCoursePage extends BasePage {
   readonly specialInstructionsDetails: Locator
   readonly parkingInstructions: Locator
   readonly parkingInstructionsDetails: Locator
+  readonly bookingFirstName: Locator
+  readonly bookingLastName: Locator
 
   constructor(page: Page) {
     super(page)
@@ -62,9 +65,7 @@ export class CreateCoursePage extends BasePage {
     this.organisationInput = this.page.locator(
       '[data-testid="org-selector"] input'
     )
-    this.contactInput = this.page.locator(
-      '[data-testid="profile-selector"] input'
-    )
+    this.contactInput = this.page.locator('[data-testid="user-selector"] input')
     this.autocompleteOption = this.page.locator(
       '.MuiAutocomplete-popper .MuiAutocomplete-option'
     )
@@ -112,6 +113,12 @@ export class CreateCoursePage extends BasePage {
     this.parkingInstructionsDetails = this.page.locator(
       '[data-testid=course-form-parking-instructions-details]'
     )
+    this.bookingFirstName = this.page.locator(
+      'input[name="bookingContact.firstName"]'
+    )
+    this.bookingLastName = this.page.locator(
+      'input[name="bookingContact.lastName"]'
+    )
   }
 
   async goto(courseType: string) {
@@ -145,9 +152,11 @@ export class CreateCoursePage extends BasePage {
     await this.autocompleteOption.locator(`text=${name}`).first().click()
   }
 
-  async selectContact(name: string) {
-    await this.contactInput.type(name)
+  async selectContact(user: User) {
+    await this.contactInput.type(user.email)
     await this.autocompleteOption.first().click()
+    await this.bookingFirstName.type(user.givenName)
+    await this.bookingLastName.type(user.familyName)
   }
 
   async selectSalesPerson(name: string) {
@@ -183,6 +192,7 @@ export class CreateCoursePage extends BasePage {
   }
 
   async clickAssignTrainersButton(): Promise<AssignTrainersPage> {
+    await expect(this.nextPageButton).toBeEnabled()
     await this.nextPageButton.click()
     return new AssignTrainersPage(this.page)
   }
@@ -242,9 +252,8 @@ export class CreateCoursePage extends BasePage {
     if (course.type !== CourseType.OPEN && course.organization) {
       await this.selectOrganisation(course.organization.name)
     }
-    if (course.type === CourseType.CLOSED && course.contactProfile) {
-      const name = `${course.contactProfile.givenName} ${course.contactProfile.familyName}`
-      await this.selectContact(name)
+    if (course.type === CourseType.CLOSED && course.bookingContactProfile) {
+      await this.selectContact(course.bookingContactProfile)
     }
     await this.selectCourseLevel(course.level)
     if (course.go1Integration) await this.selectGo1()

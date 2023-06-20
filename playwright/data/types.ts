@@ -50,7 +50,7 @@ export type Course = {
   min_participants: number
   max_participants: number
   freeSpaces?: number
-  contactProfile?: User
+  bookingContactProfile?: User
   gradingConfirmed: boolean
   salesRepresentative?: User
   source?: Course_Source_Enum

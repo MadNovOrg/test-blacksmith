@@ -9,14 +9,12 @@ import { users } from '@qa/data/users'
 import { stateFilePath } from '@qa/hooks/global-setup'
 import { MyCoursesPage } from '@qa/pages/courses/MyCoursesPage'
 
-const indirectCourseData = {
-  name: 'indirect f2f as trainer',
-  user: 'trainer',
-  course: (() => {
+const test = base.extend<{ course: Course }>({
+  course: async ({}, use) => {
     const course = UNIQUE_COURSE()
     course.type = CourseType.INDIRECT
     course.organization = { name: 'London First School' }
-    course.contactProfile = users.userOrgAdmin
+    course.bookingContactProfile = users.userOrgAdmin
     course.freeSpaces = 1
     course.salesRepresentative = users.salesAdmin
     course.go1Integration = true
@@ -28,23 +26,17 @@ const indirectCourseData = {
       phone: '1939394939',
       purchaseOrder: '12345',
     }
-    return course
-  })(),
-}
-
-const test = base.extend<{ course: Course }>({
-  course: async ({}, use) => {
-    await use(indirectCourseData.course)
-    await API.course.deleteCourse(indirectCourseData.course.id)
+    await use(course)
+    await API.course.deleteCourse(course.id)
   },
 })
 
-test(`create blended learning course: ${indirectCourseData.name}`, async ({
+test(`create blended learning course: indirect f2f as trainer`, async ({
   browser,
   course,
 }) => {
   const context = await browser.newContext({
-    storageState: stateFilePath(indirectCourseData.user),
+    storageState: stateFilePath('trainer'),
   })
   const page = await context.newPage()
   const coursesListPage = new MyCoursesPage(page)
@@ -60,6 +52,7 @@ test(`create blended learning course: ${indirectCourseData.name}`, async ({
   const courseBuilderPage = courseBuilder.courseBuilderPage
   course.id = courseBuilder.id
   await courseBuilderPage.clickSubmitButton()
+  await coursesListPage.goto()
   await coursesListPage.searchCourse(`${course.id}`)
   await coursesListPage.checkCourseStatus(
     course.id,
