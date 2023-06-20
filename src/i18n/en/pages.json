@@ -317,6 +317,7 @@
       "nights-error": "Accommodation nights is required",
       "accommodation-cost-error": "Accommodation cost is required",
       "num-error": "Please enter a number greater than or equal to {{min}}",
+      "negative-error": "Please enter a number greater than 0",
       "method-of-transport": "Method of transport",
       "CAR": "Car",
       "PUBLIC": "Public (eg. bus/train)",

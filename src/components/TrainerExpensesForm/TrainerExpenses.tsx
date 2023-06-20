@@ -59,10 +59,8 @@ export const makeSchema = (t: TFunction) =>
               return s
                 .required(t('pages.create-course.trainer-expenses.value-error'))
                 .min(
-                  0,
-                  t('pages.create-course.trainer-expenses.num-error', {
-                    min: 0,
-                  })
+                  1,
+                  t('pages.create-course.trainer-expenses.negative-error')
                 )
             }),
           flightDays: yup
