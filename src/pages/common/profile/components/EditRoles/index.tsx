@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Grid,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -13,6 +14,8 @@ import {
   MenuItem,
   Select,
   Switch,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import React from 'react'
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
@@ -75,6 +78,9 @@ export type RolesFields = InferType<ReturnType<typeof rolesFormSchema>>
 
 export const EditRoles = () => {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const { formState, control, watch } = useFormContext<{
     roles: RolesFields
   }>()
@@ -166,126 +172,147 @@ export const EditRoles = () => {
                 )}
               </FormControl>
               {selectedUserRole === RoleName.TRAINER && (
-                <>
-                  <Box display="flex" mt={2}>
-                    <FormControl
-                      fullWidth
-                      variant="filled"
-                      sx={{ marginRight: 2 }}
-                    >
-                      <InputLabel>
-                        {t('pages.view-profile.trainer-role')}
-                      </InputLabel>
-                      <Controller
-                        name={
-                          `roles.${index}.trainerRoles.trainerRole` as 'roles.0.trainerRoles.trainerRole'
-                        }
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            data-testid="trainer-role-select"
-                            label={t('pages.view-profile.trainer-role')}
-                            sx={{ flexGrow: 1, marginRight: 1 }}
-                            {...field}
-                            value={field.value}
-                          >
-                            {trainerRolesNames.map(roleName => (
-                              <MenuItem value={roleName} key={roleName}>
-                                {roleName == TrainerRoleTypeName.AOL_ETA ||
-                                roleName == TrainerRoleTypeName.TRAINER_ETA
-                                  ? t(`trainer-role-types.eta`)
-                                  : t(`trainer-role-types.${roleName}`)}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        )}
-                      />
-                    </FormControl>
-                    <FormControl fullWidth variant="filled">
-                      <InputLabel>
-                        {t('pages.view-profile.aol-role')}
-                      </InputLabel>
-                      <Controller
-                        name={
-                          `roles.${index}.trainerRoles.AOLRole` as 'roles.0.trainerRoles.AOLRole'
-                        }
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            data-testid="aol-role-select"
-                            label={t('pages.view-profile.aol-role')}
-                            sx={{ flexGrow: 1, marginRight: 1 }}
-                            {...field}
-                            value={field.value}
-                          >
-                            {AOLRolesNames.map(roleName => (
-                              <MenuItem value={roleName} key={roleName}>
-                                {roleName == TrainerRoleTypeName.AOL_ETA ||
-                                roleName == TrainerRoleTypeName.TRAINER_ETA
-                                  ? t(`trainer-role-types.eta`)
-                                  : t(`trainer-role-types.${roleName}`)}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        )}
-                      />
-                    </FormControl>
-                  </Box>
-                  <Box mt={2} display="flex">
-                    <FormControl
-                      fullWidth
-                      variant="filled"
-                      sx={{ marginRight: 2 }}
-                    >
-                      <InputLabel>
-                        {t('pages.view-profile.bild-role')}
-                      </InputLabel>
-                      <Controller
-                        name={
-                          `roles.${index}.trainerRoles.BILDRole` as 'roles.0.trainerRoles.BILDRole'
-                        }
-                        control={control}
-                        render={({ field }) => (
-                          <Select
-                            data-testid="bild-role-select"
-                            label={t('pages.view-profile.bild-role')}
-                            sx={{ flexGrow: 1, marginRight: 1 }}
-                            {...field}
-                            value={field.value}
-                          >
-                            {BILDRolesNames.map(roleName => (
-                              <MenuItem value={roleName} key={roleName}>
-                                {t(`trainer-role-types.${roleName}`)}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        )}
-                      />
-                    </FormControl>
-                    <FormControl fullWidth variant="filled">
-                      <Controller
-                        name={
-                          `roles.${index}.trainerRoles.moderatorRole` as 'roles.0.trainerRoles.moderatorRole'
-                        }
-                        control={control}
-                        render={({ field }) => (
-                          <FormControlLabel
-                            key={field.name}
-                            value={field.value}
-                            control={
-                              <Switch
-                                {...field}
-                                checked={Boolean(field.value)}
-                              />
-                            }
-                            label={t(`common.moderator`)}
-                            sx={{ alignItems: 'center' }}
-                          />
-                        )}
-                      />
-                    </FormControl>
-                  </Box>
-                </>
+                <Grid
+                  container
+                  display="flex"
+                  alignContent="center"
+                  mt={2}
+                  rowSpacing={2}
+                >
+                  <Grid item xs={12} md={6}>
+                    <Box>
+                      <FormControl
+                        fullWidth
+                        variant="filled"
+                        sx={{ marginRight: 2 }}
+                      >
+                        <InputLabel>
+                          {t('pages.view-profile.trainer-role')}
+                        </InputLabel>
+                        <Controller
+                          name={
+                            `roles.${index}.trainerRoles.trainerRole` as 'roles.0.trainerRoles.trainerRole'
+                          }
+                          control={control}
+                          render={({ field }) => (
+                            <Select
+                              data-testid="trainer-role-select"
+                              label={t('pages.view-profile.trainer-role')}
+                              sx={{ flexGrow: 1, marginRight: 1 }}
+                              {...field}
+                              value={field.value}
+                              fullWidth={isMobile}
+                            >
+                              {trainerRolesNames.map(roleName => (
+                                <MenuItem value={roleName} key={roleName}>
+                                  {roleName == TrainerRoleTypeName.AOL_ETA ||
+                                  roleName == TrainerRoleTypeName.TRAINER_ETA
+                                    ? t(`trainer-role-types.eta`)
+                                    : t(`trainer-role-types.${roleName}`)}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          )}
+                        />
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Box>
+                      <FormControl fullWidth variant="filled">
+                        <InputLabel>
+                          {t('pages.view-profile.aol-role')}
+                        </InputLabel>
+                        <Controller
+                          name={
+                            `roles.${index}.trainerRoles.AOLRole` as 'roles.0.trainerRoles.AOLRole'
+                          }
+                          control={control}
+                          render={({ field }) => (
+                            <Select
+                              data-testid="aol-role-select"
+                              label={t('pages.view-profile.aol-role')}
+                              sx={{ flexGrow: 1, marginRight: 1 }}
+                              {...field}
+                              value={field.value}
+                              fullWidth={isMobile}
+                            >
+                              {AOLRolesNames.map(roleName => (
+                                <MenuItem value={roleName} key={roleName}>
+                                  {roleName == TrainerRoleTypeName.AOL_ETA ||
+                                  roleName == TrainerRoleTypeName.TRAINER_ETA
+                                    ? t(`trainer-role-types.eta`)
+                                    : t(`trainer-role-types.${roleName}`)}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          )}
+                        />
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Box>
+                      <FormControl
+                        fullWidth
+                        variant="filled"
+                        sx={{ marginRight: 2 }}
+                      >
+                        <InputLabel>
+                          {t('pages.view-profile.bild-role')}
+                        </InputLabel>
+                        <Controller
+                          name={
+                            `roles.${index}.trainerRoles.BILDRole` as 'roles.0.trainerRoles.BILDRole'
+                          }
+                          control={control}
+                          render={({ field }) => (
+                            <Select
+                              data-testid="bild-role-select"
+                              label={t('pages.view-profile.bild-role')}
+                              sx={{ flexGrow: 1, marginRight: 1 }}
+                              {...field}
+                              value={field.value}
+                              fullWidth={isMobile}
+                            >
+                              {BILDRolesNames.map(roleName => (
+                                <MenuItem value={roleName} key={roleName}>
+                                  {t(`trainer-role-types.${roleName}`)}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          )}
+                        />
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Box mt={2}>
+                      <FormControl fullWidth variant="filled">
+                        <Controller
+                          name={
+                            `roles.${index}.trainerRoles.moderatorRole` as 'roles.0.trainerRoles.moderatorRole'
+                          }
+                          control={control}
+                          render={({ field }) => (
+                            <FormControlLabel
+                              key={field.name}
+                              value={field.value}
+                              control={
+                                <Switch
+                                  {...field}
+                                  checked={Boolean(field.value)}
+                                />
+                              }
+                              label={t(`common.moderator`)}
+                              sx={{ alignItems: 'center' }}
+                            />
+                          )}
+                        />
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                </Grid>
               )}
               {selectedUserRole === employeeRole.name && (
                 <FormGroup>

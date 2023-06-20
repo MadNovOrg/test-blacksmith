@@ -12,6 +12,8 @@ import {
   Switch,
   TextField as MuiTextField,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -73,7 +75,6 @@ import {
 import { MUTATION as UPDATE_PROFILE_MUTATION } from '@app/queries/profile/update-profile'
 import { MUTATION as UPDATE_PROFILE_ROLES_MUTATION } from '@app/queries/profile/update-profile-roles'
 import { MUTATION as UPDATE_PROFILE_TRAINER_ROLE_TYPES } from '@app/queries/trainer/update-trainer-role-types'
-import theme from '@app/theme'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 import { EditRoles, RolesFields, rolesFormSchema } from './components/EditRoles'
@@ -174,6 +175,9 @@ export const EditProfilePage: React.FC<
   React.PropsWithChildren<EditProfilePageProps>
 > = () => {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const fetcher = useFetcher()
   const [loading, setLoading] = useState(false)
   const [avatarError, setAvatarError] = useState('')
@@ -621,6 +625,7 @@ export const EditProfilePage: React.FC<
             data-testid="EditProfileForm"
             noValidate
             autoComplete="off"
+            flexDirection={isMobile ? 'column' : 'row'}
           >
             <Grid
               item
@@ -677,15 +682,16 @@ export const EditProfilePage: React.FC<
                 <Button
                   variant="outlined"
                   color="primary"
+                  fullWidth={isMobile}
                   onClick={() => navigate(navigateBackPath, { replace: true })}
                 >
                   {t('cancel')}
                 </Button>
-
                 <LoadingButton
                   variant="contained"
+                  fullWidth={isMobile}
                   color="primary"
-                  sx={{ ml: 1 }}
+                  sx={{ ml: isMobile ? 0 : 1, mt: isMobile ? 2 : 0 }}
                   type="submit"
                   loading={loading}
                   data-testid="save-changes-button"
@@ -716,7 +722,7 @@ export const EditProfilePage: React.FC<
 
               <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
                 <Grid container spacing={3} mb={3}>
-                  <Grid item md={6}>
+                  <Grid item md={6} xs={12}>
                     <TextField
                       id="firstName"
                       label={t('first-name')}
@@ -730,7 +736,7 @@ export const EditProfilePage: React.FC<
                       fullWidth
                     />
                   </Grid>
-                  <Grid item md={6}>
+                  <Grid item md={6} xs={12}>
                     <TextField
                       id="surname"
                       label={t('surname')}
@@ -758,7 +764,7 @@ export const EditProfilePage: React.FC<
                 </Box>
 
                 <Grid container spacing={3} mb={3}>
-                  <Grid item md={9}>
+                  <Grid item md={6} xs={12}>
                     <TextField
                       id="phone"
                       label={t('phone')}
@@ -774,7 +780,7 @@ export const EditProfilePage: React.FC<
                 </Grid>
 
                 <Grid container spacing={3} mb={3}>
-                  <Grid item md={6}>
+                  <Grid item md={6} xs={12}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DatePicker
                         format="dd/MM/yyyy"
@@ -790,7 +796,7 @@ export const EditProfilePage: React.FC<
                       />
                     </LocalizationProvider>
                   </Grid>
-                  <Grid item md={6}>
+                  <Grid item md={6} xs={12}>
                     <TextField
                       id="job-title"
                       label={t('job-title')}
@@ -816,7 +822,7 @@ export const EditProfilePage: React.FC<
                         )
                         setValue('dietaryRestrictions', '')
                       }}
-                      row
+                      row={!isMobile}
                       value={dietaryRestrictionsRadioValue}
                     >
                       <FormControlLabel
@@ -867,7 +873,7 @@ export const EditProfilePage: React.FC<
                           newValue as DisabilitiesRadioValues
                         )
                       }}
-                      row
+                      row={!isMobile}
                       value={disabilitiesRadioValue}
                     >
                       <FormControlLabel
@@ -1117,11 +1123,13 @@ export const EditProfilePage: React.FC<
                 display="flex"
                 alignItems="center"
                 justifyContent="flex-end"
+                flexDirection={isMobile ? 'column' : 'row'}
               >
                 <Button
                   variant="outlined"
                   color="primary"
                   onClick={() => navigate(navigateBackPath, { replace: true })}
+                  fullWidth={isMobile}
                 >
                   {t('cancel')}
                 </Button>
@@ -1129,10 +1137,11 @@ export const EditProfilePage: React.FC<
                 <LoadingButton
                   variant="contained"
                   color="primary"
-                  sx={{ ml: 1 }}
+                  sx={{ ml: isMobile ? 0 : 1, mt: isMobile ? 2 : 0 }}
                   type="submit"
                   loading={loading}
                   data-testid="profile-save-changes"
+                  fullWidth={isMobile}
                 >
                   {t('save-changes')}
                 </LoadingButton>
