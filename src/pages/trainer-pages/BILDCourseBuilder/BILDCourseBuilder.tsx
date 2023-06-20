@@ -5,6 +5,8 @@ import {
   CircularProgress,
   Divider,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -90,6 +92,9 @@ export const BILDCourseBuilder: React.FC<
 > = () => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const fetcher = useFetcher()
   const navigate = useNavigate()
   const [expanded, setExpanded] = useState<string | false>(false)
@@ -321,7 +326,7 @@ export const BILDCourseBuilder: React.FC<
 
       {bildStrategies.length && courseData?.course && (
         <Box
-          pt={{ xs: 6, md: 10 }}
+          pt={{ xs: 2, md: 10 }}
           pb={12}
           margin="auto"
           maxWidth={{ xs: '340px', md: '1040px' }}
@@ -343,11 +348,14 @@ export const BILDCourseBuilder: React.FC<
             mt={{ xs: 2, md: 3 }}
             sx={{
               display: 'flex',
-              flexDirection: 'column',
               height: '100%',
             }}
+            flexDirection="column"
           >
-            <Box sx={{ display: 'flex' }}>
+            <Box
+              sx={{ display: 'flex' }}
+              flexDirection={isMobile ? 'column' : 'row'}
+            >
               <Box>
                 <Typography variant="body2">
                   {t(
@@ -358,15 +366,18 @@ export const BILDCourseBuilder: React.FC<
                   )}
                 </Typography>
               </Box>
-              <Box data-testid="course-info">
+              <Box data-testid="course-info" mt={isMobile ? 2 : 0}>
                 <CourseHero data={courseData.course} />
               </Box>
             </Box>
 
             <Divider sx={{ width: '100%', my: 3 }} />
 
-            <Box sx={{ display: 'flex', flex: 1 }}>
-              <Box flex={1} pr={8}>
+            <Box
+              flexDirection={isMobile ? 'column' : 'row'}
+              sx={{ display: 'flex', flex: isMobile ? undefined : 1 }}
+            >
+              <Box flex={1} pr={isMobile ? 0 : 8}>
                 <Typography variant="h3">
                   {t(
                     'pages.trainer-base.create-course.new-course.modules-available'
@@ -396,23 +407,31 @@ export const BILDCourseBuilder: React.FC<
               </Box>
 
               <Box
-                sx={{
-                  flex: 1,
-                  pl: 8,
-                  pb: 4,
-                  boxShadow: '-10px 0px 10px -3px #EEE',
-                  mt: -4,
-                  pt: 4,
-                }}
+                sx={
+                  isMobile
+                    ? {}
+                    : {
+                        flex: 1,
+                        pl: 8,
+                        pb: 4,
+                        boxShadow: '-10px 0px 10px -3px #EEE',
+                        mt: -4,
+                        pt: 4,
+                      }
+                }
               >
                 <Box
-                  sx={{
-                    position: 'sticky',
-                    minHeight: 'calc(100vh - 50px)',
-                    top: '20px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}
+                  sx={
+                    isMobile
+                      ? {}
+                      : {
+                          position: 'sticky',
+                          minHeight: 'calc(100vh - 50px)',
+                          top: '20px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }
+                  }
                 >
                   <Box
                     sx={{
