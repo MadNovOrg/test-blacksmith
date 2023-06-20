@@ -14,7 +14,6 @@ describe('page: CreateOrganization', () => {
       expect(
         screen.getByText('Organisation name is required')
       ).toBeInTheDocument()
-      expect(screen.getByText('Trust name is required')).toBeInTheDocument()
       expect(screen.getByText('Line 1 is required')).toBeInTheDocument()
       expect(screen.getByText('City is required')).toBeInTheDocument()
       expect(screen.getByText('Country is required')).toBeInTheDocument()

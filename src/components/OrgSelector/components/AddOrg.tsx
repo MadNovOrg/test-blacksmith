@@ -63,11 +63,7 @@ export const AddOrg: React.FC<React.PropsWithChildren<Props>> = function ({
           name: t(t('pages.edit-org-details.trust-type')),
         })
       ),
-      trustName: yup.string().required(
-        t('validation-errors.required-field', {
-          name: t(t('pages.edit-org-details.trust-name')),
-        })
-      ),
+      trustName: yup.string(),
       addressLine1: yup.string().required(requiredMsg(t, 'addr.line1')),
       addressLine2: yup.string(),
       city: yup.string().required(requiredMsg(t, 'addr.city')),
@@ -220,7 +216,6 @@ export const AddOrg: React.FC<React.PropsWithChildren<Props>> = function ({
         <Box mb={3}>
           <TextField
             id="trustName"
-            required
             label={t('pages.edit-org-details.trust-name')}
             variant="filled"
             error={!!errors.trustName}

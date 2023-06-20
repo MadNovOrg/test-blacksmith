@@ -80,11 +80,7 @@ export const CreateOrganization = () => {
         .required(
           t('validation-errors.required-field', { name: t('trust-type') })
         ),
-      trustName: yup
-        .string()
-        .required(
-          t('validation-errors.required-field', { name: t('trust-name') })
-        ),
+      trustName: yup.string(),
       workEmail: yup
         .string()
         .email(t('validation-errors.email-invalid'))
@@ -275,7 +271,6 @@ export const CreateOrganization = () => {
                 <Box mb={3}>
                   <TextField
                     id="trustName"
-                    required
                     label={t('pages.edit-org-details.trust-name')}
                     variant="filled"
                     error={!!errors.trustName}
