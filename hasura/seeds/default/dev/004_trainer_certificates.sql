@@ -34,8 +34,8 @@ INSERT INTO public.course_certificate (id, course_id, number, expiry_date, profi
 ('d74938e6-0b80-4207-a6fa-b9f4a5366d97', 10010, 'ADV.F.CL.10010', '2025-05-05', 'e05cef9b-6b13-4c4c-b7b0-31181b6ad0a9', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', '2022-03-03', false),
 ('e968acbe-e311-4ed0-aa48-faebbdc496ae', 10010, 'ADV.F.CL.10010', '2025-05-05', 'd54f86ca-0181-4264-8c73-7b73ff395405', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', '2022-03-03', false),
 ('8a2ca261-0630-4ad2-a211-6069af87bf4a', 10010, 'ADV.F.CL.10010', '2025-05-05', '62946c00-1da3-44f7-97a6-4b1c8da4f2ef', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', '2022-03-03', false),
-('ad8c91ab-17ae-45f6-ac6f-91223bd8d494', 10010, 'ADV.F.CL.10010', '2025-05-05', '8ba2c43e-a7e5-47c5-8d03-0383719d77df', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', '2022-03-03', false),
-('b43215ed-ec9d-42cb-b274-a04b1b0b2f50', 10010, 'ADV.F.CL.10010', '2025-05-05', '2a451ef2-99fe-4350-9f0e-2081b6f3f87f', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', '2022-03-03', false),
+('ad8c91ab-17ae-45f6-ac6f-91223bd8d494', 10010, 'ADV.F.CL.10010', NOW() - interval '40 days', '8ba2c43e-a7e5-47c5-8d03-0383719d77df', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', '2022-03-03', false),
+('b43215ed-ec9d-42cb-b274-a04b1b0b2f50', 10010, 'ADV.F.CL.10010', NOW() - interval '20 days', '2a451ef2-99fe-4350-9f0e-2081b6f3f87f', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', '2022-03-03', false),
 ('b43215ed-ec9d-42cb-b274-a04b1b0b2f51', 10010, 'ADV.F.CL.10010', '2025-05-05', '720fce28-3c62-4ca9-ac28-10012bc07663', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', '2022-03-03', false);
 
 INSERT INTO public.course_participant (id, course_id, profile_id, invite_id, certificate_id, date_graded, grade) VALUES
