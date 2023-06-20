@@ -375,6 +375,9 @@
     },
     "save-as-draft": "Save as draft",
     "submitted-course": "{{code}} has been created.",
+    "submitted-closed": "Your course has been created {{code}} and an order has been approved ",
+    "link-to-order": "click here to view it",
+    "submitted-closed-exceptions": "Your course has been created {{code}} pending approval due to course exceptions outside of standard Team Teach protocols.",
     "order-your-workbooks": "Please click <0>here</0> if you have not ordered your workbooks for this course",
     "exceptions": {
       "course-contain-exceptions": "Course contains exceptions",

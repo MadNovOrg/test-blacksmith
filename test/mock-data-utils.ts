@@ -236,7 +236,13 @@ export const buildCourse = build<Course>({
     freeSpaces: 0,
     accreditedBy: Accreditors_Enum.Icm,
     bildStrategies: [],
-    orders: [{ salesRepresentative: perBuild(() => buildProfile()) }],
+    orders: [
+      {
+        salesRepresentative: perBuild(() => buildProfile()),
+        id: chance.guid(),
+        xeroInvoiceNumber: chance.string(),
+      },
+    ],
   },
 })
 

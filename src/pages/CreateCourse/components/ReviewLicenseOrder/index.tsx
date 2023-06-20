@@ -32,10 +32,10 @@ export const ReviewLicenseOrder: React.FC<
   }, [setCurrentStepKey])
 
   const handleSubmitButtonClick = async () => {
-    const courseId = await saveCourse()
+    const savedCourse = await saveCourse()
 
-    if (courseId) {
-      navigate(`/courses/${courseId}/modules`)
+    if (savedCourse?.id) {
+      navigate(`/courses/${savedCourse.id}/modules`)
     }
   }
 

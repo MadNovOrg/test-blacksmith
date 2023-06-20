@@ -15,7 +15,7 @@ export type SnackbarMessageKey =
   | 'user-invited'
   | 'course-submitted'
   | 'discount-disabled'
-export type SnackbarMessage = { label: string }
+export type SnackbarMessage = { label: React.ReactNode }
 
 export type SnackbarState = {
   messages: Map<SnackbarMessageKey, SnackbarMessage>

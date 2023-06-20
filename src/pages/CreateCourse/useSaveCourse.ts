@@ -1,8 +1,6 @@
 import { useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
-import { useSnackbar } from '@app/context/snackbar'
 import {
   Accreditors_Enum,
   Course_Expenses_Insert_Input,
@@ -106,7 +104,15 @@ const prepareExpensesData = (
   return courseExpenses
 }
 
-export type SaveCourse = () => Promise<string | undefined>
+export type SaveCourse = () => Promise<
+  | {
+      id: string
+      hasExceptions?: boolean
+      courseCode?: string
+      orderId?: string
+    }
+  | undefined
+>
 
 export function useSaveCourse(): {
   savingStatus: LoadingStatus
@@ -123,14 +129,11 @@ export function useSaveCourse(): {
   } = useCreateCourse()
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const fetcher = useFetcher()
-  const { t } = useTranslation()
   const { profile, acl } = useAuth()
   const { removeDraft } = useCourseDraft(
     profile?.id ?? '',
     courseData?.type ?? CourseType.OPEN
   )
-
-  const { addSnackbarMessage } = useSnackbar()
 
   const saveCourse = useCallback<SaveCourse>(async () => {
     const isBild = courseData?.accreditedBy === Accreditors_Enum.Bild
@@ -305,14 +308,12 @@ export function useSaveCourse(): {
           }
 
           const insertedCourse = response.insertCourse.inserted[0]
-
-          addSnackbarMessage('course-created', {
-            label: t('pages.create-course.submitted-course', {
-              code: insertedCourse.course_code,
-            }),
-          })
-
-          return insertedCourse.id
+          return {
+            id: insertedCourse.id,
+            courseCode: insertedCourse.course_code,
+            hasExceptions: exceptions.length > 0,
+            orderId: insertedCourse.orders && insertedCourse.orders[0].id,
+          }
         }
       } else {
         setSavingStatus(LoadingStatus.ERROR)
@@ -333,8 +334,6 @@ export function useSaveCourse(): {
     profile?.fullName,
     profile?.email,
     profile?.phone,
-    addSnackbarMessage,
-    t,
     removeDraft,
   ])
 

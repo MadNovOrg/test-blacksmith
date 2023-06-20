@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom'
 
 import ChooseTrainers, { FormValues } from '@app/components/ChooseTrainers'
 import { useAuth } from '@app/context/auth'
+import { useSnackbar } from '@app/context/snackbar'
 import { Accreditors_Enum, BildStrategy } from '@app/generated/graphql'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
@@ -116,6 +117,7 @@ export const AssignTrainers = () => {
     setTrainers,
     trainers,
   } = useCreateCourse()
+  const { addSnackbarMessage } = useSnackbar()
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -157,13 +159,20 @@ export const AssignTrainers = () => {
       if (isClosedCourse) {
         nextPage = '../trainer-expenses'
       } else {
-        const id = await saveCourse()
+        const savedCourse = await saveCourse()
+
+        addSnackbarMessage('course-created', {
+          label: t('pages.create-course.submitted-course', {
+            code: savedCourse?.courseCode,
+          }),
+        })
+
         nextPage =
           acl.isTTAdmin() || acl.isSalesAdmin()
-            ? `/courses/${id}/details`
+            ? `/courses/${savedCourse?.id}/details`
             : '/courses'
 
-        if (!id) {
+        if (!savedCourse?.id) {
           return
         }
       }
@@ -171,7 +180,16 @@ export const AssignTrainers = () => {
       completeStep(StepsEnum.ASSIGN_TRAINER)
       navigate(nextPage)
     }
-  }, [completeStep, courseData, navigate, saveCourse, trainers, acl])
+  }, [
+    courseData,
+    trainers,
+    completeStep,
+    navigate,
+    saveCourse,
+    addSnackbarMessage,
+    t,
+    acl,
+  ])
 
   const handleSubmitButtonClick = useCallback(async () => {
     if (courseData) {

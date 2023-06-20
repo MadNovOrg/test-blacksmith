@@ -159,10 +159,10 @@ export const CreateCourseForm = () => {
       completeStep(StepsEnum.COURSE_DETAILS)
       navigate('./license-order-details')
     } else if (courseType === CourseType.INDIRECT) {
-      const id = await saveCourse()
+      const savedCourse = await saveCourse()
 
-      if (id) {
-        navigate(`/courses/${id}/modules`)
+      if (savedCourse?.id) {
+        navigate(`/courses/${savedCourse.id}/modules`)
       }
     } else {
       completeStep(StepsEnum.COURSE_DETAILS)

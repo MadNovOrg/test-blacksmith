@@ -65,6 +65,7 @@ export const CourseDetails = () => {
   const fetcher = useFetcher()
 
   const initialTab = searchParams.get('tab') as CourseDetailsTabs | null
+
   const [selectedTab, setSelectedTab] = useState(
     initialTab || CourseDetailsTabs.ATTENDEES
   )

@@ -78,6 +78,8 @@ export type Course = {
     salesRepresentativeId?: string
     salesRepresentative?: Profile
     source?: Course_Source_Enum
+    id: string
+    xeroInvoiceNumber: string
   }>
 } & Omit<Base, 'id'>
 

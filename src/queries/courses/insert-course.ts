@@ -89,6 +89,9 @@ export const MUTATION = gql`
       inserted: returning {
         id
         course_code
+        orders {
+          id
+        }
         expenses {
           id
         }

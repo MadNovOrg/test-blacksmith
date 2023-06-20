@@ -8,11 +8,14 @@ import {
   Stack,
   useTheme,
   useMediaQuery,
+  Link,
 } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { useAuth } from '@app/context/auth'
+import { useSnackbar } from '@app/context/snackbar'
 import { LoadingStatus } from '@app/util'
 
 import { StepsEnum } from '../../types'
@@ -31,9 +34,11 @@ export const ReviewAndConfirm = () => {
     setCurrentStepKey,
     trainers,
   } = useCreateCourse()
+  const { acl } = useAuth()
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const { addSnackbarMessage } = useSnackbar()
 
   const { saveCourse, savingStatus } = useSaveCourse()
   const navigate = useNavigate()
@@ -50,20 +55,45 @@ export const ReviewAndConfirm = () => {
     }
 
     try {
-      const courseId = await saveCourse()
+      const savedCourse = await saveCourse()
       completeStep(StepsEnum.REVIEW_AND_CONFIRM)
-      navigate(`/manage-courses/all/${courseId}/details`)
+
+      if (savedCourse?.hasExceptions) {
+        addSnackbarMessage('course-created', {
+          label: t('pages.create-course.submitted-closed-exceptions', {
+            code: savedCourse?.courseCode,
+          }),
+        })
+      } else {
+        addSnackbarMessage('course-created', {
+          label: (
+            <React.Fragment>
+              {t('pages.create-course.submitted-closed', {
+                code: savedCourse?.courseCode,
+              })}
+              {acl.canViewOrders() ? (
+                <Link href={`/orders/${savedCourse?.orderId}`}>
+                  {t('pages.create-course.link-to-order')}
+                </Link>
+              ) : undefined}
+            </React.Fragment>
+          ),
+        })
+      }
+
+      navigate(`/manage-courses/all/${savedCourse?.id}/details`)
     } catch (err) {
       console.error(err)
       setError(t('pages.create-course.review-and-confirm.unknown-error'))
     }
   }, [
+    addSnackbarMessage,
     completeStep,
     courseData,
     expenses,
     navigate,
     saveCourse,
-    setError,
+    acl,
     t,
     trainers,
   ])

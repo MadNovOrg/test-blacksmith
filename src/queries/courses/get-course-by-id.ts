@@ -76,6 +76,8 @@ export const QUERY = gql`
         familyName
       }
       orders @include(if: $withOrders) {
+        id
+        xeroInvoiceNumber
         salesRepresentative {
           id
           fullName
