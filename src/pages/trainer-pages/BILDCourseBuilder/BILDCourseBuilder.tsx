@@ -4,12 +4,13 @@ import {
   Button,
   CircularProgress,
   Divider,
+  Link,
   Typography,
   useTheme,
   useMediaQuery,
 } from '@mui/material'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 
@@ -27,9 +28,9 @@ import { NotFound } from '@app/pages/common/NotFound'
 import { QUERY as GET_COURSE_BY_ID_QUERY } from '@app/queries/courses/get-course-by-id'
 import { MUTATION as SAVE_COURSE_MODULES_BILD_MUTATION } from '@app/queries/courses/save-course-modules-bild'
 import {
+  LoadingStatus,
   formatDurationShort,
   getSWRLoadingStatus,
-  LoadingStatus,
 } from '@app/util'
 
 import { CourseHero } from '../CourseBuilder/components/CourseHero'
@@ -289,9 +290,18 @@ export const BILDCourseBuilder: React.FC<
 
       if (!courseCreated) {
         addSnackbarMessage('course-submitted', {
-          label: t(
-            'pages.trainer-base.create-course.new-course.submitted-course',
-            { code: course.course_code }
+          label: (
+            <Trans
+              i18nKey="pages.trainer-base.create-course.new-course.submitted-course"
+              values={{ code: course.course_code }}
+            >
+              <Link
+                underline="always"
+                href={`/manage-courses/all/${course.id}/details`}
+              >
+                {course.course_code}
+              </Link>
+            </Trans>
           ),
         })
       }

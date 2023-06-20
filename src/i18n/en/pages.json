@@ -210,7 +210,7 @@
         "mandatory-modules": "Mandatory modules",
         "estimated-duration": "Estimated duration",
         "submit-course": "Submit Course",
-        "submitted-course": "You have successfully submitted course {{code}}",
+        "submitted-course": "You have successfully submitted course <0><1>{{code}}</1></0>",
         "organization": "Organisation",
         "time-commitment-title": "Time commitment",
         "warning-dialog-title": "Course builder",
@@ -374,7 +374,7 @@
       "checkboxes-missing": "Read and confirm the statements above"
     },
     "save-as-draft": "Save as draft",
-    "submitted-course": "{{code}} has been created.",
+    "submitted-course": "<0><1>{{code}}</1></0> has been created.",
     "submitted-closed": "Your course has been created {{code}} and an order has been approved ",
     "link-to-order": "click here to view it",
     "submitted-closed-exceptions": "Your course has been created {{code}} pending approval due to course exceptions outside of standard Team Teach protocols.",

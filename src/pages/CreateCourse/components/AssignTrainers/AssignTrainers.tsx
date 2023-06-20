@@ -5,12 +5,13 @@ import {
   Alert,
   Box,
   Button,
+  Link,
   Stack,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import ChooseTrainers, { FormValues } from '@app/components/ChooseTrainers'
@@ -19,8 +20,8 @@ import { useSnackbar } from '@app/context/snackbar'
 import { Accreditors_Enum, BildStrategy } from '@app/generated/graphql'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
-  checkCourseDetailsForExceptions,
   CourseException,
+  checkCourseDetailsForExceptions,
   isTrainersRatioNotMet,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
@@ -162,9 +163,19 @@ export const AssignTrainers = () => {
         const savedCourse = await saveCourse()
 
         addSnackbarMessage('course-created', {
-          label: t('pages.create-course.submitted-course', {
-            code: savedCourse?.courseCode,
-          }),
+          label: (
+            <Trans
+              i18nKey="pages.create-course.submitted-course"
+              values={{ code: savedCourse?.courseCode }}
+            >
+              <Link
+                underline="always"
+                href={`/manage-courses/all/${savedCourse?.id}/details`}
+              >
+                {savedCourse?.courseCode}
+              </Link>
+            </Trans>
+          ),
         })
 
         nextPage =
@@ -187,7 +198,6 @@ export const AssignTrainers = () => {
     navigate,
     saveCourse,
     addSnackbarMessage,
-    t,
     acl,
   ])
 

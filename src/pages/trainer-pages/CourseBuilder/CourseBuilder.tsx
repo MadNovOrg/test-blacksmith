@@ -16,7 +16,7 @@ import {
   Draggable,
   Droppable,
 } from 'react-beautiful-dnd'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 
@@ -48,11 +48,11 @@ import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-
 import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups'
 import { CourseLevel } from '@app/types'
 import {
+  LoadingStatus,
   formatDateForDraft,
   formatDurationShort,
   getPercentage,
   getSWRLoadingStatus,
-  LoadingStatus,
 } from '@app/util'
 
 import { CourseHero } from './components/CourseHero'
@@ -379,9 +379,18 @@ export const CourseBuilder: React.FC<
 
         if (!courseCreated) {
           addSnackbarMessage('course-submitted', {
-            label: t(
-              'pages.trainer-base.create-course.new-course.submitted-course',
-              { code: courseData.course.course_code }
+            label: (
+              <Trans
+                i18nKey="pages.trainer-base.create-course.new-course.submitted-course"
+                values={{ code: courseData.course.course_code }}
+              >
+                <Link
+                  underline="always"
+                  href={`/manage-courses/all/${courseData.course.id}/details`}
+                >
+                  {courseData.course.course_code}
+                </Link>
+              </Trans>
             ),
           })
         }
@@ -400,7 +409,6 @@ export const CourseBuilder: React.FC<
     modulesData,
     navigate,
     saveModules,
-    t,
   ])
 
   const onCourseSubmit = useCallback(async () => {
