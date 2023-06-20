@@ -9,8 +9,8 @@ import {
   TextField,
   TextFieldProps,
   Typography,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import { debounce } from 'lodash-es'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -77,14 +77,18 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
 
     const refreshOptions = useCallback(
       async (query: string) => {
+        const keywords = (query ?? '').split(' ')
+        const condition = {
+          _and: keywords.map(k => ({ name: { _ilike: `%${k}%` } })),
+        }
         const dfeData = await fetcher<
           FindEstablishmentQuery,
           FindEstablishmentQueryVariables
-        >(FindEstablishment, { where: { name: { _ilike: `%${query}%` } } })
+        >(FindEstablishment, { where: condition })
         const hubData = await fetcher<
           GetOrganizationsQuery,
           GetOrganizationsQueryVariables
-        >(GetOrganizations, { where: { name: { _ilike: `%${query}%` } } })
+        >(GetOrganizations, { where: condition })
         setLoading(false)
         const orgs = hubData.orgs ?? []
         const establishments = dfeData.establishments ?? []
@@ -179,6 +183,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           onInputChange={onInputChange}
           onChange={handleChange}
           options={options}
+          filterOptions={options => options}
           getOptionLabel={getOptionLabel}
           noOptionsText={noOptionsText}
           isOptionEqualToValue={(o, v) => {
