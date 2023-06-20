@@ -25,7 +25,7 @@ import { LinkToProfile } from '@app/components/LinkToProfile'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
-import { Course_Delivery_Type_Enum, Grade_Enum } from '@app/generated/graphql'
+import { Grade_Enum } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
 import { CertificateStatus, CourseLevel, CourseParticipant } from '@app/types'
@@ -109,15 +109,14 @@ export const CertificationList: React.FC<
         <CertificateDocument
           key={p.id}
           participantName={p.profile?.fullName}
-          courseName={p.certificate?.courseName ?? ''}
           courseLevel={p.certificate?.courseLevel ?? CourseLevel.Level_1}
           grade={p.grade ?? Grade_Enum.Pass}
-          courseDeliveryType={
-            p.course.deliveryType as unknown as Course_Delivery_Type_Enum
-          }
           certificationNumber={p.certificate?.number ?? ''}
           expiryDate={p.certificate?.expiryDate ?? ''}
           accreditedBy={p.course.accreditedBy}
+          blendedLearning={p.course.go1Integration}
+          bildStrategies={p.course.bildStrategies}
+          reaccreditation={p.course.reaccreditation}
         />,
       ])
       if (tuples.length > 1) {

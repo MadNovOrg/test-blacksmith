@@ -51,6 +51,12 @@ export const QUERY = gql`
           level
           deliveryType
           accreditedBy
+          go1Integration
+          reaccreditation
+          bildStrategies {
+            id
+            strategyName
+          }
         }
         certificateChanges(order_by: { createdAt: desc }) {
           ...CertificateChangelog

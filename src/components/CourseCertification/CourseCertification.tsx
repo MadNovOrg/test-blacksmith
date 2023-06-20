@@ -42,7 +42,6 @@ import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   Course_Certificate_Changelog_Type_Enum,
-  Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Participant_Module,
   GetCertificateQuery,
@@ -556,8 +555,6 @@ export const CourseCertification: React.FC<
     )
   }
 
-  const courseDeliveryType = courseParticipant?.course?.deliveryType
-
   const isRevoked = certificate.status === CertificateStatus.REVOKED
   const isOnHold = certificate.status === CertificateStatus.ON_HOLD
 
@@ -606,15 +603,18 @@ export const CourseCertification: React.FC<
                     document={
                       <CertificateDocument
                         participantName={certificate.profile.fullName ?? ''}
-                        courseName={certificate.courseName}
                         courseLevel={certificate.courseLevel as CourseLevel}
                         grade={grade as Grade_Enum}
-                        courseDeliveryType={
-                          courseDeliveryType ?? Course_Delivery_Type_Enum.F2F
-                        }
                         certificationNumber={certificationNumber}
                         expiryDate={certificate.expiryDate}
                         accreditedBy={courseParticipant.course.accreditedBy}
+                        blendedLearning={
+                          courseParticipant.course.go1Integration
+                        }
+                        bildStrategies={courseParticipant.course.bildStrategies}
+                        reaccreditation={
+                          courseParticipant.course.reaccreditation ?? false
+                        }
                       />
                     }
                     fileName="certificate.pdf"

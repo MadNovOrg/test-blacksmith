@@ -67,6 +67,10 @@ export const QUERY = gql`
       course {
         ...Course
         accreditedBy
+        bildStrategies {
+          id
+          strategyName
+        }
         organization {
           name
           id
