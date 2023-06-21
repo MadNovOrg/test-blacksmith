@@ -69,14 +69,14 @@ export const CreateCourseProvider: React.FC<
   const pricing = useCoursePrice(courseData)
 
   const seniorOrPrincipalLead = useMemo(() => {
-    return (
-      profile?.trainer_role_types.some(
+    return trainers.some(t =>
+      t.trainer_role_types.some(
         ({ trainer_role_type: role }) =>
-          role.name === TrainerRoleTypeName.SENIOR ||
-          role.name === TrainerRoleTypeName.PRINCIPAL
-      ) ?? false
+          role?.name === TrainerRoleTypeName.SENIOR ||
+          role?.name === TrainerRoleTypeName.PRINCIPAL
+      )
     )
-  }, [profile])
+  }, [trainers])
 
   const exceptions = useMemo(() => {
     if (!courseData) return []

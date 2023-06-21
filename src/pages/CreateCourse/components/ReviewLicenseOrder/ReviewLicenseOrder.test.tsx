@@ -21,6 +21,7 @@ import {
   Draft,
   Organization,
   TrainerInput,
+  TrainerRoleTypeName,
 } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
@@ -145,7 +146,9 @@ describe('component: ReviewLicenseOrder', () => {
     const endDate = addHours(startDate, 8)
     const trainer: TrainerInput = {
       profile_id: chance.guid(),
-      trainer_role_types: [],
+      trainer_role_types: [
+        { trainer_role_type: { name: TrainerRoleTypeName.PRINCIPAL } },
+      ],
       type: CourseTrainerType.Leader,
       levels: [
         {
