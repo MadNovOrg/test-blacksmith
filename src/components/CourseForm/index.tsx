@@ -449,7 +449,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const priceArgs = useMemo(
     () =>
-      values.courseLevel === '' || !values.accreditedBy
+      values.courseLevel === '' || values.accreditedBy !== Accreditors_Enum.Icm
         ? undefined
         : {
             type: courseType,
@@ -506,14 +506,26 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   )
 
   useEffect(() => {
-    if (needsManualPrice && automaticPrice && !values.price) {
+    if (
+      needsManualPrice &&
+      automaticPrice &&
+      !values.price &&
+      values.accreditedBy === Accreditors_Enum.Icm
+    ) {
       setValue('price', automaticPrice)
     }
 
     if (!needsManualPrice) {
       resetField('price')
     }
-  }, [needsManualPrice, automaticPrice, values.price, setValue, resetField])
+  }, [
+    needsManualPrice,
+    automaticPrice,
+    values.price,
+    setValue,
+    resetField,
+    values.accreditedBy,
+  ])
 
   useEffect(() => {
     // I want to execute this check only at the first render.
