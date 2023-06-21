@@ -65,19 +65,21 @@ export const ModuleCard: React.FC<React.PropsWithChildren<ModuleCardProps>> = ({
       </Typography>
     ) : null}
 
-    <Box position="absolute" bottom={0} right={0}>
-      <IconDialog icon={<InfoIcon />}>
-        <>
-          <Typography variant="body2" fontWeight="600">
-            {data.name}:
-          </Typography>
-          {data.modules.map(module => (
-            <Typography variant="body2" key={module.id}>
-              {module.name}
+    {data.modules.length ? (
+      <Box position="absolute" bottom={0} right={0}>
+        <IconDialog icon={<InfoIcon />}>
+          <>
+            <Typography variant="body2" fontWeight="600">
+              {data.name}:
             </Typography>
-          ))}
-        </>
-      </IconDialog>
-    </Box>
+            {data.modules.map(module => (
+              <Typography variant="body2" key={module.id}>
+                {module.name}
+              </Typography>
+            ))}
+          </>
+        </IconDialog>
+      </Box>
+    ) : null}
   </Box>
 )
