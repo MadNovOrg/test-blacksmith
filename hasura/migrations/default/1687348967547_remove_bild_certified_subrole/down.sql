@@ -1,0 +1,1 @@
+INSERT INTO public.trainer_role_type(name) VALUES ('bild-certified');

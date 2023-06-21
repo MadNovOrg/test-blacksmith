@@ -168,7 +168,6 @@ export const AOLRolesNames: TrainerRoleTypeName[] = [
 
 export const BILDRolesNames: TrainerRoleTypeName[] = [
   TrainerRoleTypeName.BILD_SENIOR,
-  TrainerRoleTypeName.BILD_CERTIFIED,
 ]
 
 export const EditProfilePage: React.FC<

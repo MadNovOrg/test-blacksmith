@@ -298,7 +298,6 @@
     "trainer-eta": "Trainer ETA",
     "aol-eta": "AOL ETA",
     "bild-senior": "BILD senior",
-    "bild-certified": "BILD certified",
     "employer-aol": "Employer AOL",
     "special-agreement-aol": "Special agreement AOL",
     "moderator": "Moderator"
@@ -441,7 +440,7 @@
     "import-certificate-description": "Please enter your Team Teach certificate number below. This will only add a certificate that is not currently displayed on your profile and is active with a future expiration date.",
     "enter-certificate-number": "Enter certificate number",
     "update-certification": "Update certification",
-    "add-certificate":"Add certificate",
+    "add-certificate": "Add certificate",
     "certification-code-incorrect": "We could not locate this certificate, please contact Team Teach.",
     "completed-modules-unavailable": "Information on completed modules is unavailable."
   },

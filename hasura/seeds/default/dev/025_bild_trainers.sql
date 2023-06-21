@@ -74,9 +74,6 @@ INSERT INTO public.profile_trainer_role_type (profile_id, trainer_role_type_id) 
 ('d1c5fa19-30da-4512-88f6-dc9ef6a26958', (SELECT id FROM public.trainer_role_type WHERE name = 'senior')),
 ('4c6194ad-6dd3-461e-b4da-d3562b1007d1', (SELECT id FROM public.trainer_role_type WHERE name = 'bild-senior')),
 ('4c6194ad-6dd3-461e-b4da-d3562b1007d1', (SELECT id FROM public.trainer_role_type WHERE name = 'trainer-eta')),
-('2c4b16db-bfba-4a21-a092-55ef9010ca2f', (SELECT id FROM public.trainer_role_type WHERE name = 'bild-certified')),
-('c15a4b34-bb98-4096-ae2e-ea280fb14e05', (SELECT id FROM public.trainer_role_type WHERE name = 'bild-certified')),
-('729e3ed4-f86e-41a7-9e29-c6387b9fbaa6', (SELECT id FROM public.trainer_role_type WHERE name = 'bild-certified')),
 ('5bc30260-04fb-41a4-bd29-07c5f433d904', (SELECT id FROM public.trainer_role_type WHERE name = 'senior-assist'));
 
 INSERT INTO public.course_invites (id, email, status, course_id) VALUES

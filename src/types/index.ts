@@ -226,7 +226,6 @@ export enum TrainerRoleTypeName {
   TRAINER_ETA = 'trainer-eta',
   AOL_ETA = 'aol-eta',
   BILD_SENIOR = 'bild-senior',
-  BILD_CERTIFIED = 'bild-certified',
   EMPLOYER_AOL = 'employer-aol',
   SPECIAL_AGREEMENT_AOL = 'special-agreement-aol',
   MODERATOR = 'moderator',
