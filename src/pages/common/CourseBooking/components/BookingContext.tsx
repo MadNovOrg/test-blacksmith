@@ -5,6 +5,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -112,6 +113,7 @@ export type ContextType = {
   addPromo: (_: PromoCodeOutput) => void
   removePromo: (_: string) => void
   placeOrder: () => Promise<CreateOrderResponseType['order']>
+  internalBooking: boolean
 }
 
 const initialContext = {}
@@ -142,6 +144,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
   const [promoCodes, setPromoCodes] = useState<PromoCodeOutput[]>([])
 
   const isBooked = location.pathname.startsWith('/booking/payment/')
+  const internalBooking = useRef(location.state?.internalBooking)
 
   useMount(async () => {
     const data = await fetcher<GetTempProfileResponseType>(GET_TEMP_PROFILE)
@@ -352,6 +355,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       addPromo,
       removePromo,
       placeOrder,
+      internalBooking: internalBooking.current ?? false,
     }),
     [
       error,
@@ -365,6 +369,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       amounts,
       availableSeats,
       placeOrder,
+      internalBooking,
     ]
   )
 

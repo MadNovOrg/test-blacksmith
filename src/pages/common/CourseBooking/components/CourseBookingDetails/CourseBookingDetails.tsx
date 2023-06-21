@@ -192,6 +192,7 @@ export const CourseBookingDetails: React.FC<
     addPromo,
     removePromo,
     setBooking,
+    internalBooking,
   } = useBooking()
 
   const qtyOptions = useMemo(
@@ -834,7 +835,8 @@ export const CourseBookingDetails: React.FC<
               render={({ field }) => {
                 return (
                   <RadioGroup aria-labelledby="payment-method" {...field}>
-                    {acl.canInviteAttendees(CourseType.OPEN) ? null : (
+                    {acl.canInviteAttendees(CourseType.OPEN) &&
+                    internalBooking ? null : (
                       <FormControlLabel
                         // Internal TT users can create booking for open courses
                         // without paying by cc

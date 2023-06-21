@@ -103,8 +103,6 @@ export const CourseDetails = () => {
   const isBookingContact =
     acl.isBookingContact() && course?.bookingContact?.id === profileId
   const isParticipant = !!courseParticipant
-  console.log('isParticipant', isParticipant)
-  console.log('activeTab', activeTab)
 
   useEffect(() => {
     if (course && !activeTab) {

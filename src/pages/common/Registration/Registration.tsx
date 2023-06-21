@@ -34,6 +34,7 @@ export const RegistrationPage: React.FC<
   const courseId = searchParams.get('course_id')
   const quantity = searchParams.get('quantity')
   const success = searchParams.get('success') === 'true'
+  const internalBooking = searchParams.get('internal') === 'true'
   const locationState = (location.state || {}) as LocationState
   const from = courseId ? bookingState : locationState.from
 
@@ -77,7 +78,10 @@ export const RegistrationPage: React.FC<
 
     await fetcher<ResponseType, ParamsType>(MUTATION, { input })
 
-    navigate('/booking', { replace: true })
+    navigate(`/booking`, {
+      replace: true,
+      state: { internalBooking },
+    })
   })
 
   if (profile) return <SuspenseLoading />

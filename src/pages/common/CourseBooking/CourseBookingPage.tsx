@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import { Accreditors_Enum } from '@app/generated/graphql'
 
@@ -32,9 +32,7 @@ const BookingRoutes: React.FC<React.PropsWithChildren<unknown>> = () => {
     <BookingContainer>
       <Routes>
         <Route element={<CourseBookingLayout />}>
-          <Route index element={<Navigate to="details" replace />} />
-
-          <Route path="details" element={<CourseBookingDetails />} />
+          <Route index element={<CourseBookingDetails />} />
 
           {booking.participants?.length ? (
             <Route path="review" element={<CourseBookingReview />} />

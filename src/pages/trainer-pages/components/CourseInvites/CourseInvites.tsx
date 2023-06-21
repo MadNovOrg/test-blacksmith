@@ -194,7 +194,9 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
                 color="secondary"
                 sx={{ ml: 2 }}
                 onClick={() => {
-                  navigate(`/registration?course_id=${course.id}&quantity=1`)
+                  navigate(
+                    `/registration?course_id=${course.id}&quantity=1&internal=true`
+                  )
                 }}
                 disabled={invitesLeft === 0}
                 data-testid="add-registrants-btn"
