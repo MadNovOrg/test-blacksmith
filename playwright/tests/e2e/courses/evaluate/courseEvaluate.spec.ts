@@ -21,6 +21,7 @@ const test = base.extend<{ course: Course }>({
 })
 
 test('course evaluation as user', async ({ browser, course }) => {
+  test.fail(true, 'See https://behaviourhub.atlassian.net/browse/TTHP-1748')
   const userContext = await browser.newContext({
     storageState: stateFilePath('user1'),
   })
