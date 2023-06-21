@@ -32,7 +32,7 @@ const BookingRoutes: React.FC<React.PropsWithChildren<unknown>> = () => {
     <BookingContainer>
       <Routes>
         <Route element={<CourseBookingLayout />}>
-          <Route index element={<CourseBookingDetails />} />
+          <Route path="details" element={<CourseBookingDetails />} />
 
           {booking.participants?.length ? (
             <Route path="review" element={<CourseBookingReview />} />

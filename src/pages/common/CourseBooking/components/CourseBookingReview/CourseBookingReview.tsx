@@ -75,7 +75,6 @@ export const CourseBookingReview: React.FC<
         setError(t('pages.book-course.promo-codes-not-applicable', { codes }))
       }
 
-      console.error(err)
       setCreatingOrder(false)
       setError(t('pages.book-course.error-creating-order'))
     }

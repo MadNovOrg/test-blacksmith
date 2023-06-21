@@ -78,7 +78,7 @@ export const RegistrationPage: React.FC<
 
     await fetcher<ResponseType, ParamsType>(MUTATION, { input })
 
-    navigate(`/booking`, {
+    navigate(`/booking/details`, {
       replace: true,
       state: { internalBooking },
     })
