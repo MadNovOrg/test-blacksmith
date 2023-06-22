@@ -9,8 +9,9 @@ import {
   TableRow,
   Typography,
   Button,
+  Link,
 } from '@mui/material'
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -141,6 +142,13 @@ export const AttendingTab = ({
           label: t('pages.course-participants.hs-consent'),
           sorting: false,
         },
+        isOpenCourse && acl.canViewOrders()
+          ? {
+              id: 'orders',
+              label: t('pages.course-participants.orders'),
+              sorting: false,
+            }
+          : null,
         !isCourseEnded &&
         acl.canManageParticipantAttendance(course.accreditedBy)
           ? {
@@ -150,7 +158,7 @@ export const AttendingTab = ({
             }
           : null,
       ].filter(Boolean),
-    [t, isBlendedCourse, isCourseEnded, acl, course.accreditedBy]
+    [t, isOpenCourse, isBlendedCourse, isCourseEnded, acl, course.accreditedBy]
   )
 
   const handleTransfer = useCallback(
@@ -253,6 +261,26 @@ export const AttendingTab = ({
                       {courseParticipant.healthSafetyConsent
                         ? t('common.yes')
                         : t('common.no')}
+                    </TableCell>
+                    <TableCell>
+                      {courseParticipant.order ? (
+                        <Link
+                          href={`/orders/${courseParticipant.order.id}`}
+                          data-testid="order-item-link"
+                          key="order-item-link"
+                          color="Highlight"
+                          fontWeight="600"
+                        >
+                          {courseParticipant.order.xeroInvoiceNumber}
+                        </Link>
+                      ) : (
+                        <Typography
+                          color="InactiveCaption"
+                          style={{ userSelect: 'none' }}
+                        >
+                          -
+                        </Typography>
+                      )}
                     </TableCell>
                     {!isCourseEnded &&
                     acl.canManageParticipantAttendance(course.accreditedBy) &&

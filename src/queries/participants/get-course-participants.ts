@@ -4,6 +4,7 @@ import {
   CERTIFICATE,
   CERTIFICATE_CHANGELOG,
   COURSE,
+  ORDER,
 } from '@app/queries/fragments'
 import { CourseParticipant, SortOrder } from '@app/types'
 
@@ -22,10 +23,12 @@ export type ParamsType = {
     | { profile: { email: SortOrder } }
     | { go1EnrolmentStatus: SortOrder }
   where?: object
+  withOrder?: boolean
 }
 
 export const QUERY = gql`
   ${COURSE}
+  ${ORDER}
   ${CERTIFICATE}
   ${CERTIFICATE_CHANGELOG}
   query CourseParticipants(
@@ -33,6 +36,7 @@ export const QUERY = gql`
     $offset: Int
     $orderBy: [course_participant_order_by!] = { profile: { fullName: asc } }
     $where: course_participant_bool_exp = {}
+    $withOrder: Boolean = false
   ) {
     courseParticipants: course_participant(
       where: $where
@@ -63,6 +67,9 @@ export const QUERY = gql`
       healthSafetyConsent
       certificate {
         ...Certificate
+      }
+      order @include(if: $withOrder) {
+        ...Order
       }
       course {
         ...Course

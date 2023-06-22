@@ -190,6 +190,13 @@ export const LEGACY_CERTIFICATE = gql`
   }
 `
 
+export const ORDER = gql`
+  fragment Order on order {
+    id
+    xeroInvoiceNumber
+  }
+`
+
 export const VideoItemSummary = gql`
   fragment VideoItemSummary on VideoSeriesItem {
     id

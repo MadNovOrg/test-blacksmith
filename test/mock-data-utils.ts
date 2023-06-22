@@ -38,6 +38,7 @@ import {
   InviteStatus,
   Module,
   ModuleGroup,
+  Order,
   Organization,
   Profile,
   Role,
@@ -200,7 +201,7 @@ export const buildCourseAssistant = (overrides?: Partial<CourseTrainer>) => {
 export const buildCourse = build<Course>({
   fields: {
     id: perBuild(() => chance.integer({ min: 10000 })),
-    name: perBuild(() => chance.word({ length: 3 })),
+    name: perBuild(() => chance.sentence({ words: 5 })),
     status: Course_Status_Enum.Scheduled,
     createdAt: new Date().toISOString(),
     type: CourseType.CLOSED,
@@ -415,6 +416,7 @@ export const buildParticipant = build<CourseParticipant>({
     grade: perBuild(() => undefined),
     gradingFeedback: perBuild(() => chance.word()),
     dateGraded: new Date().toISOString(),
+    order: {} as Order,
   },
 })
 

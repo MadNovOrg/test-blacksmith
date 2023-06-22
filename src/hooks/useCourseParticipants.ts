@@ -60,6 +60,7 @@ export default function useCourseParticipants(
       limit: options?.pagination?.limit,
       offset: options?.pagination?.offset,
       where: { _and: queryConditions },
+      withOrder: acl.canViewOrders(),
       orderBy,
     },
   ])

@@ -75,11 +75,11 @@ export type Course = {
     strategyName: string
   }>
   orders?: Array<{
+    id?: string
+    xeroInvoiceNumber?: string
     salesRepresentativeId?: string
     salesRepresentative?: Profile
     source?: Course_Source_Enum
-    id: string
-    xeroInvoiceNumber: string
   }>
 } & Omit<Base, 'id'>
 
@@ -232,8 +232,29 @@ export enum TrainerRoleTypeName {
 }
 
 export enum CourseType {
+  /**
+   * @summary Organised by `Team Teach` (incl. venue, refreshments, and lunch) and delivered by `Team Teach`
+   * self-employed trainer. It is available to book via `Team Teach` website.
+   * @description #### Relation: Orders
+   * An open course does not have orders related to the whole course.
+   * Orders are created when people are booked onto it.
+   */
   OPEN = 'OPEN',
+  /**
+   * @summary Organised by `Team Teach` (excl. venue, refreshments, and lunch) for a specific organisation
+   * and delivered by Team Teach self-employed trainer. It is booked by contacting a salesperson
+   * @description #### Relation: Orders
+   * A closed course does have orders related to the whole course itself.
+   */
   CLOSED = 'CLOSED',
+  /**
+   * @summary Organised by `external organisations` and delivered by qualified trainer.
+   * It is available for members of this external organisation.
+   * Team Teach needs to be notified so it can validate the quality of the course curriculum.
+   * @description #### Relation: Orders
+   * An indirect course does have orders related to the whole course itself.
+   * Applied only for (blended learning indirect courses)
+   */
   INDIRECT = 'INDIRECT',
 }
 
@@ -389,6 +410,7 @@ export type CourseParticipant = {
   invoiceID?: string
   registrationId?: string
   course: Course
+  order?: Order | null
   profile: Profile
   attended?: boolean
   go1EnrolmentStatus: BlendedLearningStatus

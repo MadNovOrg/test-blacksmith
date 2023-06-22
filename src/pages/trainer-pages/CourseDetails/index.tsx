@@ -6,13 +6,14 @@ import {
   Button,
   CircularProgress,
   Container,
+  Link,
   Stack,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
@@ -84,6 +85,10 @@ export const CourseDetails = () => {
     mutate,
   } = useCourse(courseId ?? '')
 
+  const isCourseClosed = course?.type === CourseType.CLOSED
+  const isCourseIndirectBlended =
+    course?.type === CourseType.INDIRECT && course?.go1Integration
+
   const courseHasEnded = course && courseEnded(course)
   const courseCancelled =
     course &&
@@ -95,6 +100,21 @@ export const CourseDetails = () => {
 
   const leader = course?.trainers?.find(
     c => c.type === CourseTrainerType.Leader
+  )
+
+  const canEditCourse = useMemo(
+    () =>
+      course &&
+      acl.canEditCourses(course.type, leader?.profile.id === profile?.id) &&
+      !courseEnded(course) &&
+      !courseCancelled,
+    [acl, course, courseCancelled, leader?.profile.id, profile?.id]
+  )
+
+  const linkedOrderItem = useMemo(() => course?.orders?.[0], [course])
+  const canViewOrderItem = useMemo(
+    () => linkedOrderItem && (isCourseClosed || isCourseIndirectBlended),
+    [linkedOrderItem, isCourseClosed, isCourseIndirectBlended]
   )
 
   const courseExceptions = useMemo(() => {
@@ -188,28 +208,44 @@ export const CourseDetails = () => {
             <>
               <CourseHeroSummary
                 course={course}
-                renderButton={() =>
-                  acl.canEditCourses(
-                    course.type,
-                    leader?.profile.id === profile?.id
-                  ) &&
-                  !courseEnded(course) &&
-                  !courseCancelled ? (
-                    <Button
-                      variant="contained"
-                      data-testid="edit-course-button"
-                      color="secondary"
-                      size="large"
-                      sx={{ mt: 3 }}
-                      onClick={() => navigate(`/courses/edit/${courseId}`)}
-                    >
-                      {t('pages.course-participants.edit-course-button')}
-                    </Button>
-                  ) : null
-                }
-              >
-                <BackButton label={t('back')} />
-              </CourseHeroSummary>
+                slots={{
+                  BackButton: () => <BackButton label={t('back')} />,
+                  EditButton: canEditCourse
+                    ? () => (
+                        <Button
+                          variant="contained"
+                          data-testid="edit-course-button"
+                          color="secondary"
+                          size="large"
+                          sx={{ mt: 3 }}
+                          onClick={() => navigate(`/courses/edit/${courseId}`)}
+                        >
+                          {t('pages.course-participants.edit-course-button')}
+                        </Button>
+                      )
+                    : undefined,
+                  OrderItem: canViewOrderItem
+                    ? () => (
+                        <Trans
+                          i18nKey="common.order-item"
+                          defaults="Order: <0>{{invoiceNumber}}</0>"
+                          components={[
+                            <Link
+                              href={`/orders/${linkedOrderItem?.id}`}
+                              data-testid="order-item-link"
+                              key="order-item-link"
+                              color="Highlight"
+                              fontWeight="600"
+                            />,
+                          ]}
+                          values={{
+                            invoiceNumber: linkedOrderItem?.xeroInvoiceNumber,
+                          }}
+                        />
+                      )
+                    : undefined,
+                }}
+              />
 
               <Container disableGutters={isMobile}>
                 <CourseCancellationRequestFeature

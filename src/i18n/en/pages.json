@@ -605,6 +605,7 @@
     "invite-error-UNKNOWN": "Unknown error",
     "status": "Status",
     "hs-consent": "H&S submitted",
+    "orders": "Orders",
     "tabs": {
       "attending": "Attending ({{number}})",
       "pending": "Pending ({{number}})",

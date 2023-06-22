@@ -1,4 +1,5 @@
 import { Info } from '@mui/icons-material'
+import DescriptionOutlined from '@mui/icons-material/DescriptionOutlined'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import PinDropIcon from '@mui/icons-material/PinDrop'
 import TodayIcon from '@mui/icons-material/Today'
@@ -39,13 +40,16 @@ const StyledListIcon = styled(ListItemIcon)(({ theme }) => ({
 
 interface Props {
   course: Course
-  renderButton?: () => React.ReactNode
+  slots?: Partial<{
+    BackButton: React.Factory<unknown>
+    EditButton: React.Factory<unknown>
+    OrderItem: React.Factory<unknown>
+  }>
 }
 
 export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   course,
-  children,
-  renderButton,
+  slots,
 }) => {
   const { t } = useTranslation()
   const [isInstructionsDialogOpen, setIsInstructionsDialogOpen] =
@@ -75,6 +79,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <Box
+      data-testid="course-hero-summary"
       sx={{
         backgroundColor: theme.palette.grey[100],
         paddingTop: 4,
@@ -84,7 +89,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
       <Container>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
-            {children}
+            {slots?.BackButton?.()}
             <Typography
               variant="h3"
               marginBottom={3}
@@ -118,7 +123,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 <CourseStatusChip status={course.status} />
               </Box>
             ) : null}
-            {typeof renderButton === 'function' && renderButton()}
+            {slots?.EditButton?.()}
           </Grid>
           <Grid item xs={12} md={4}>
             <Typography
@@ -249,6 +254,18 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                       {t('components.course-hero-summary.instructions-label')}
                     </Button>
                   </ListItemText>
+                </ListItem>
+              ) : null}
+              {slots?.OrderItem ? (
+                <ListItem
+                  data-testid="order-item"
+                  disableGutters
+                  sx={{ ...backgroundList, mt: 3 }}
+                >
+                  <StyledListIcon>
+                    <DescriptionOutlined />
+                  </StyledListIcon>
+                  <ListItemText>{slots?.OrderItem?.()}</ListItemText>
                 </ListItem>
               ) : null}
             </List>

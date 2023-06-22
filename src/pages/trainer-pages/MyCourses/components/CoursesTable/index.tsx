@@ -275,6 +275,7 @@ export type Cols =
   | 'trainers'
   | 'registrants'
   | 'status'
+  | 'orders'
   | 'actions'
 
 export type ColHead = {

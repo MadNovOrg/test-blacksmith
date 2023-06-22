@@ -6,6 +6,7 @@ import useCourse from '@app/hooks/useCourse'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useWaitlist } from '@app/hooks/useWaitlist'
+import { buildOrder } from '@app/pages/tt-pages/OrderDetails/mock-utils'
 import {
   Course,
   CourseInvite,
@@ -87,54 +88,134 @@ describe('component: CourseAttendees', () => {
     ).toBeInTheDocument()
   })
 
-  it('displays a table if a course has participants', () => {
-    const participants = [
-      buildParticipant(),
-      buildParticipant(),
-      buildParticipant(),
-    ]
+  describe('Table', () => {
+    const testData = {
+      participants: [
+        buildParticipant({
+          overrides: {
+            // @ts-expect-error Ignore missing fields
+            order: buildOrder({
+              overrides: {
+                id: 'c2715e60-752c-41f5-b38e-b2984f8f02a3',
+                xeroInvoiceNumber: 'TT-123456',
+              },
+            }),
+          },
+        }),
+        buildParticipant(),
+        buildParticipant(),
+      ],
+    }
 
-    useCourseParticipantsMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: participants,
-      total: participants.length,
-      mutate: jest.fn(),
+    const setup = () => {
+      // Arrange
+      useCourseParticipantsMock.mockReturnValue({
+        status: LoadingStatus.SUCCESS,
+        data: testData.participants,
+        total: testData.participants.length,
+        mutate: jest.fn(),
+      })
+
+      useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
+      useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
+
+      useCourseMock.mockReturnValue({
+        mutate: jest.fn(),
+        status: LoadingStatus.SUCCESS,
+        data: buildCourse({
+          overrides: {
+            type: CourseType.OPEN,
+          },
+        }),
+      })
+
+      // Act
+      render(<CourseAttendees course={course} />)
+    }
+    it('should display a table if a course has participants', () => {
+      setup()
+
+      // Assert
+      expect(screen.getByTestId('attending-table')).toBeInTheDocument()
     })
 
-    useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
-    useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
+    it('should display rows equal with the amount of participants', async () => {
+      setup()
+      const { participants } = testData
 
-    useCourseMock.mockReturnValue({
-      mutate: jest.fn(),
-      status: LoadingStatus.SUCCESS,
-      data: course,
-    })
-
-    render(<CourseAttendees course={course} />)
-
-    participants.forEach(participant => {
+      // Assert
       expect(
-        screen.getByTestId(`course-participant-row-${participant.id}`)
+        (
+          await screen.findAllByTestId('course-participant-row-', {
+            exact: false,
+            suggest: true,
+          })
+        )?.length
+      ).toEqual(participants.length)
+
+      participants.forEach(participant => {
+        expect(
+          screen.getByTestId(`course-participant-row-${participant.id}`)
+        ).toBeInTheDocument()
+      })
+    })
+
+    it('should display "Full Name" column in a row', () => {
+      setup()
+      const { participants } = testData
+      const participantRow = screen.getByTestId(
+        `course-participant-row-${participants[0].id}`
+      )
+
+      // Assert
+
+      expect(
+        within(participantRow).getByText(`${participants[0].profile.fullName}`)
       ).toBeInTheDocument()
     })
 
-    const participantRow = screen.getByTestId(
-      `course-participant-row-${participants[0].id}`
-    )
-
-    expect(
-      within(participantRow).getByText(`${participants[0].profile.fullName}`)
-    ).toBeInTheDocument()
-
-    expect(
-      within(participantRow).getByText(participants[0].profile.email)
-    ).toBeInTheDocument()
-
-    expect(
-      within(participantRow).getByText(
-        participants[0].profile.organizations[0].organization?.name ?? ''
+    it('should display "Email" column', () => {
+      setup()
+      const { participants } = testData
+      const participantRow = screen.getByTestId(
+        `course-participant-row-${participants[0].id}`
       )
-    ).toBeInTheDocument()
+
+      // Assert
+      expect(
+        within(participantRow).getByText(participants[0].profile.email)
+      ).toBeInTheDocument()
+    })
+
+    it('should display "Organization" column', () => {
+      setup()
+      const { participants } = testData
+      const participantRow = screen.getByTestId(
+        `course-participant-row-${participants[0].id}`
+      )
+
+      // Assert
+      expect(
+        within(participantRow).getByText(
+          participants[0].profile.organizations[0].organization?.name ?? ''
+        )
+      ).toBeInTheDocument()
+    })
+
+    it('should display "Orders" column only when the course type is OPEN', () => {
+      setup()
+      const { participants } = testData
+      const participantRow = screen.getByTestId(
+        `course-participant-row-${participants[0].id}`
+      )
+
+      // Assert
+      expect(
+        within(participantRow).getByText(
+          participants[0].order?.xeroInvoiceNumber ?? ''
+        )
+      ).toBeInTheDocument()
+    })
   })
 
   it('displays a message if no one has registered yet', () => {

@@ -12,9 +12,13 @@ import {
   buildOrganization,
 } from '@test/mock-data-utils'
 
-import { CourseHeroSummary } from '.'
+import { CourseHeroSummary } from './CourseHeroSummary'
 
 describe('component: CourseHeroSummary', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   it('displays basic course information', () => {
     const course = buildCourse()
 
@@ -223,5 +227,62 @@ describe('component: CourseHeroSummary', () => {
     render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('Virtual')).toBeInTheDocument()
+  })
+
+  describe('Slots', () => {
+    it('should render BackButton slot', () => {
+      const course = buildCourse({
+        overrides: {},
+      })
+
+      render(
+        <CourseHeroSummary
+          course={course}
+          slots={{
+            BackButton: () => (
+              <button data-testid="back-button">Back Button</button>
+            ),
+          }}
+        />
+      )
+
+      expect(screen.getByTestId('back-button')).toBeInTheDocument()
+    })
+
+    it('should render EditButton slot', () => {
+      const course = buildCourse({
+        overrides: {},
+      })
+
+      render(
+        <CourseHeroSummary
+          course={course}
+          slots={{
+            EditButton: () => (
+              <button data-testid="edit-button">Edit Button</button>
+            ),
+          }}
+        />
+      )
+
+      expect(screen.getByTestId('edit-button')).toBeInTheDocument()
+    })
+
+    it('should render OrderItem slot', () => {
+      const course = buildCourse({
+        overrides: {},
+      })
+
+      render(
+        <CourseHeroSummary
+          course={course}
+          slots={{
+            OrderItem: () => <div>Order: TT-123</div>,
+          }}
+        />
+      )
+
+      expect(screen.getByTestId('order-item')).toBeInTheDocument()
+    })
   })
 })

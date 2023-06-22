@@ -188,12 +188,17 @@ export const CourseDetails = () => {
 
       {course && (isParticipant || isBookingContact) ? (
         <>
-          <CourseHeroSummary course={course}>
-            <BackButton
-              to="/courses"
-              label={t('pages.course-participants.back-button')}
-            />
-          </CourseHeroSummary>
+          <CourseHeroSummary
+            course={course}
+            slots={{
+              BackButton: () => (
+                <BackButton
+                  to="/courses"
+                  label={t('pages.course-participants.back-button')}
+                />
+              ),
+            }}
+          />
 
           {alertMessage ? (
             <Box display="flex" flexDirection="column" alignItems="center">

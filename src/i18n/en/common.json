@@ -50,6 +50,7 @@
   "community": "Community",
   "resources": "Resources",
   "orders": "Orders",
+  "order-item": "Order: <0>{{invoiceNumber}}</0>",
   "change": "Change",
   "remove": "Remove",
   "resend-course-information": "Resend course information",
