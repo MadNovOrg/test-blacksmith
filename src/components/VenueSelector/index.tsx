@@ -166,10 +166,7 @@ export const VenueSelector: React.FC<
 
   return (
     <>
-      <Wrapper
-        apiKey={`${import.meta.env.VITE_GMAPS_KEY}`}
-        libraries={['places']}
-      >
+      <Wrapper apiKey={`${import.meta.env.VITE_GMAPS_KEY}`}>
         <Autocomplete
           sx={sx}
           open={open}

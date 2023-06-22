@@ -1,3 +1,4 @@
+import { Wrapper } from '@googlemaps/react-wrapper'
 import { Info } from '@mui/icons-material'
 import DescriptionOutlined from '@mui/icons-material/DescriptionOutlined'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
@@ -20,8 +21,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-import GoogleMapReact from 'google-map-react'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CourseInstructionsDialog } from '@app/components/CourseInstructionsDialog'
@@ -54,6 +54,8 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
   const [isInstructionsDialogOpen, setIsInstructionsDialogOpen] =
     useState(false)
+  const ref = useRef()
+
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const courseBeginsForMessage = getCourseBeginsForMessage(course, t)
@@ -76,6 +78,18 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
       lng: parseFloat(coordinates?.at(1) ?? '0'),
     }
   }, [course.schedule])
+
+  useEffect(() => {
+    if (ref.current) {
+      new window.google.maps.Map(ref.current, {
+        center: {
+          lat: geoCoordinates.lat,
+          lng: geoCoordinates.lng,
+        },
+        zoom: 16,
+      })
+    }
+  })
 
   return (
     <Box
@@ -104,18 +118,13 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             </Typography>
             {isMobile && course.schedule[0].venue?.geoCoordinates ? (
               <Grid>
-                <Box sx={{ height: '20vh', width: '100%', mt: 2 }}>
-                  <GoogleMapReact
-                    bootstrapURLKeys={{
-                      key: `${import.meta.env.VITE_GMAPS_KEY}`,
-                    }}
-                    defaultCenter={{
-                      lat: geoCoordinates.lat ?? 0,
-                      lng: geoCoordinates.lng ?? 0,
-                    }}
-                    defaultZoom={11}
+                <Wrapper apiKey={`${import.meta.env.VITE_GMAPS_KEY}`}>
+                  <Box
+                    ref={ref}
+                    id="map"
+                    sx={{ height: '20vh', width: '100%', mt: 2 }}
                   />
-                </Box>
+                </Wrapper>
               </Grid>
             ) : undefined}
             {showStatus ? (
