@@ -409,6 +409,9 @@ export const CourseBookingDetails: React.FC<
     [errors.participants]
   )
 
+  const courseVenue = course.schedule[0].venue
+  const courseLocation = [courseVenue?.name, courseVenue?.city].join(', ')
+
   return (
     <FormProvider {...methods}>
       <Box
@@ -423,7 +426,7 @@ export const CourseBookingDetails: React.FC<
         </Typography>
 
         <Box bgcolor="common.white" p={2} mb={4}>
-          <Box display="flex" justifyContent="space-between" mb={3}>
+          <Box display="flex" justifyContent="space-between" mb={1}>
             <Box>
               <Typography gutterBottom fontWeight="600">
                 {course.name}
@@ -451,6 +454,11 @@ export const CourseBookingDetails: React.FC<
                 </NativeSelect>
               </FormControl>
             </Box>
+          </Box>
+
+          <Box display="flex" justifyContent="space-between" mb={3}>
+            <Typography color="grey.700">{t('location')}</Typography>
+            <Typography color="grey.700">{courseLocation}</Typography>
           </Box>
 
           <Box display="flex" justifyContent="space-between" mb={1}>

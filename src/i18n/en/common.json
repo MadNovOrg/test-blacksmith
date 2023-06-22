@@ -115,6 +115,7 @@
   "important": "Important",
   "subtotal": "Subtotal",
   "course-cost": "Course Cost",
+  "location": "Location",
   "custom-vat": "VAT ({{amount}}%)",
   "vat": "VAT (20%)",
   "enter-promo-code": "Enter promo code",
