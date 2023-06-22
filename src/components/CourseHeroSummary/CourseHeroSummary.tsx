@@ -118,7 +118,10 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             </Typography>
             {isMobile && course.schedule[0].venue?.geoCoordinates ? (
               <Grid>
-                <Wrapper apiKey={`${import.meta.env.VITE_GMAPS_KEY}`}>
+                <Wrapper
+                  apiKey={`${import.meta.env.VITE_GMAPS_KEY}`}
+                  libraries={['places', 'visualization']}
+                >
                   <Box
                     ref={ref}
                     id="map"
