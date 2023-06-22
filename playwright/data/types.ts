@@ -96,7 +96,7 @@ export type AttendeesTableRow = {
   Name: string
   Email: string
   Organisation: string
-  HsSubmitted: boolean
+  'H&S submitted': 'Yes' | 'No'
   [key: string]: string | boolean
 }
 

@@ -55,7 +55,7 @@ export function toAttendeesTableRow({
     Name: `${givenName} ${familyName}`,
     Email: email,
     Organisation: organization?.name || '',
-    HsSubmitted: healthSafetyConsent ?? false,
+    'H&S submitted': healthSafetyConsent ? 'Yes' : 'No',
     '': 'SendResend course information',
   }
 }
