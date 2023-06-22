@@ -56,6 +56,10 @@ export const ReviewAndConfirm = () => {
 
     try {
       const savedCourse = await saveCourse()
+
+      if (!savedCourse?.id) {
+        throw new Error()
+      }
       completeStep(StepsEnum.REVIEW_AND_CONFIRM)
 
       if (savedCourse?.hasExceptions) {
@@ -81,7 +85,7 @@ export const ReviewAndConfirm = () => {
         })
       }
 
-      navigate(`/manage-courses/all/${savedCourse?.id}/details`)
+      navigate(`/manage-courses/all/${savedCourse.id}/details`)
     } catch (err) {
       console.error(err)
       setError(t('pages.create-course.review-and-confirm.unknown-error'))
@@ -98,7 +102,7 @@ export const ReviewAndConfirm = () => {
     trainers,
   ])
 
-  if (error || !courseData || !trainers || !expenses) {
+  if (!courseData || !trainers || !expenses) {
     return (
       <Alert
         severity="error"
@@ -112,6 +116,16 @@ export const ReviewAndConfirm = () => {
 
   return courseData ? (
     <Stack spacing={5}>
+      {error ? (
+        <Alert
+          severity="error"
+          variant="outlined"
+          data-testid="ReviewAndConfirm-alert"
+        >
+          {error}
+        </Alert>
+      ) : null}
+
       <PageContent />
 
       <Box

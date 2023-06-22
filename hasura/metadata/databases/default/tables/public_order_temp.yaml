@@ -51,6 +51,37 @@ configuration:
     order_total: orderTotal
     profile_id: profileId
 insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - order_due
+        - order_total
+        - price
+        - vat
+        - course_id
+        - quantity
+        - registrants
+        - booking_contact
+        - promo_codes
+        - user
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - client_purchase_order
+        - currency
+        - payment_method
+        - source
+        - stripePaymentId
+        - xero_invoice_number
+        - created_at
+        - id
+        - organization_id
+        - profile_id
+        - sales_representative_id
+      backend_only: false
   - role: trainer
     permission:
       check: {}
