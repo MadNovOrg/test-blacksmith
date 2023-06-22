@@ -9,7 +9,7 @@ describe('component: FilterCertificateValidity', () => {
     const onChange = jest.fn()
     render(<FilterCertificateValidity onChange={onChange} />)
 
-    await userEvent.click(screen.getByText('Certifications status'))
+    await userEvent.click(screen.getByText('Certification Status'))
     await userEvent.click(screen.getByText('Expired'))
 
     expect(onChange).toHaveBeenCalledWith(['EXPIRED'])

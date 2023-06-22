@@ -109,7 +109,7 @@ describe('page: Users', () => {
     ).toBeInTheDocument()
     expect(within(columnHeaders[4]).getByText('Role')).toBeInTheDocument()
     expect(
-      within(columnHeaders[5]).getByText('Trainer type')
+      within(columnHeaders[5]).getByText('Trainer Type')
     ).toBeInTheDocument()
     const tableBody = within(table).getByTestId('table-body')
     expect(tableBody.children).toHaveLength(1)

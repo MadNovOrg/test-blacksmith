@@ -9,7 +9,7 @@ describe('component: FilterCourseType', () => {
     const onChange = jest.fn()
     render(<FilterCourseType onChange={onChange} />)
 
-    await userEvent.click(screen.getByText('Course type'))
+    await userEvent.click(screen.getByText('Course Type'))
     await userEvent.click(screen.getByText('Closed'))
 
     expect(onChange).toHaveBeenCalledWith(['CLOSED'])
