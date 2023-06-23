@@ -158,6 +158,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 .number()
                 .typeError(t('components.course-form.free-spaces-required'))
                 .min(0, t('components.course-form.free-spaces-required'))
+                .max(
+                  yup.ref('maxParticipants', {}),
+                  t('components.course-form.free-spaces-less-equal')
+                )
                 .required(t('components.course-form.free-spaces-required')),
               salesRepresentative: yup.object().required(),
               source: yup

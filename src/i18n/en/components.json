@@ -145,6 +145,7 @@
     "free-spaces-description": "This will add free spaces onto the order and invoice for the given organisation selected",
     "free-spaces-placeholder": "Number of free spaces",
     "free-spaces-required": "Free spaces is a required field",
+    "free-spaces-less-equal": "Free spaces must be less or equal to the maximum number of attendees",
     "finance-section-title": "Finance",
     "sales-rep-title": "Sales",
     "sales-rep-placeholder": "Sales representative",
