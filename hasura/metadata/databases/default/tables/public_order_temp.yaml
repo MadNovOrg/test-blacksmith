@@ -18,6 +18,8 @@ configuration:
       custom_name: billingAddress
     order_due:
       custom_name: orderDue
+    sales_representative_id:
+      custom_name: salesRepresentativeId
     promo_codes:
       custom_name: promoCodes
     organization_id:
@@ -42,6 +44,7 @@ configuration:
     payment_method: paymentMethod
     billing_address: billingAddress
     order_due: orderDue
+    sales_representative_id: salesRepresentativeId
     promo_codes: promoCodes
     organization_id: organizationId
     billing_given_name: billingGivenName

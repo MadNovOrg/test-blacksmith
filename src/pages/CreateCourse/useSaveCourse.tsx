@@ -283,7 +283,7 @@ export function useSaveCourse(): {
                           : null),
                         ...(courseData.salesRepresentative?.id
                           ? {
-                              sales_representative_id:
+                              salesRepresentativeId:
                                 courseData.salesRepresentative?.id,
                             }
                           : null),
