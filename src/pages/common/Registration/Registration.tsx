@@ -19,7 +19,7 @@ import { Form } from './components/Form'
 
 type LocationState = { from: { pathname: string; search: string } }
 
-const bookingState = { pathname: '/booking' }
+const bookingState = { pathname: '/booking/details' }
 
 export const RegistrationPage: React.FC<
   React.PropsWithChildren<unknown>
