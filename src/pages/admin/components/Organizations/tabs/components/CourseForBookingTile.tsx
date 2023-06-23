@@ -9,7 +9,7 @@ import { Box } from '@mui/system'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import { GetUpcomingCoursesQuery } from '@app/generated/graphql'
 
@@ -26,6 +26,7 @@ export const CourseForBookingTile: React.FC<
   React.PropsWithChildren<CourseForBookingTileParams>
 > = ({ course, variant = 'default', showDistance, distance }) => {
   const { t } = useTranslation()
+  const { pathname } = useLocation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -109,7 +110,10 @@ export const CourseForBookingTile: React.FC<
 
         <Grid item md={isRow ? (showDistance ? 4 : 6) : 12}>
           <Typography variant={isRow ? 'body1' : 'h4'} fontWeight={600}>
-            {t(`common.certificates.${course.level?.toLowerCase()}`)}
+            {t(`common.certificates.${course.level?.toLowerCase()}`)}{' '}
+            {pathname.includes('/organisations')
+              ? `(${course.course_code})`
+              : null}
           </Typography>
           {isRow ? (
             <Typography variant="body1">{course.name}</Typography>
