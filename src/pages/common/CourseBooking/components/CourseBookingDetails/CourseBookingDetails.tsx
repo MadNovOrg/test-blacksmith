@@ -180,7 +180,7 @@ export const CourseBookingDetails: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { t } = useTranslation()
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
   const navigate = useNavigate()
   const {
     course,
@@ -246,14 +246,11 @@ export const CourseBookingDetails: React.FC<
           : schema
       }),
 
-      source: yup
-        .string()
-        .oneOf(Object.values(Course_Source_Enum))
-        .when('isInternalUserBooking', {
-          is: true,
-          then: s => s.required(),
-          otherwise: s => s,
-        }),
+      source: yup.string().when('isInternalUserBooking', {
+        is: true,
+        then: s => s.oneOf(Object.values(Course_Source_Enum)).required(),
+        otherwise: s => s.nullable(),
+      }),
 
       salesRepresentative: yup
         .object()
@@ -343,6 +340,16 @@ export const CourseBookingDetails: React.FC<
   } = methods
 
   const values = watch()
+
+  useEffect(() => {
+    if (profile && !isInternalUserBooking) {
+      setValue('bookingContact', {
+        firstName: profile.givenName,
+        lastName: profile.familyName,
+        email: profile.email,
+      })
+    }
+  }, [profile, isInternalUserBooking, setValue])
 
   useEffect(() => {
     if (booking.quantity !== values.quantity) {
@@ -622,118 +629,113 @@ export const CourseBookingDetails: React.FC<
           </Box>
         </Box>
 
-        {isInternalUserBooking && (
-          <>
-            <Typography variant="subtitle1" fontWeight="500">
-              {t('booking-details')}
+        <Typography variant="subtitle1" fontWeight="500">
+          {isInternalUserBooking
+            ? t('booking-details')
+            : t('components.course-form.source-label')}
+        </Typography>
+        <Box bgcolor="common.white" p={2} mb={4}>
+          <Box mb={3}>
+            <Typography fontWeight={600}>
+              {t('components.course-form.source-title')}
             </Typography>
-            <Box bgcolor="common.white" p={2} mb={4}>
-              <Box mb={3}>
-                <Typography fontWeight={600}>
-                  {t('components.course-form.source-title')}
-                </Typography>
-                <Controller
-                  name="source"
-                  control={control}
-                  render={({ field }) => (
-                    <SourceDropdown
-                      {...field}
-                      data-testid="source-dropdown"
-                      disabled={false}
-                    />
-                  )}
+            <Controller
+              name="source"
+              control={control}
+              render={({ field }) => (
+                <SourceDropdown
+                  {...field}
+                  data-testid="source-dropdown"
+                  disabled={false}
                 />
-              </Box>
-              {values.source.startsWith('SALES_') && (
-                <Box mb={3}>
-                  <Typography fontWeight={600}>
-                    {t('components.course-form.sales-rep-title')}
-                  </Typography>
+              )}
+            />
+          </Box>
+          {values.source.startsWith('SALES_') && (
+            <Box mb={3}>
+              <Typography fontWeight={600}>
+                {t('components.course-form.sales-rep-title')}
+              </Typography>
 
-                  <ProfileSelector
-                    value={values.salesRepresentative ?? undefined}
-                    onChange={profile => {
-                      setValue('salesRepresentative', profile ?? null, {
-                        shouldValidate: true,
+              <ProfileSelector
+                value={values.salesRepresentative ?? undefined}
+                onChange={profile => {
+                  setValue('salesRepresentative', profile ?? null, {
+                    shouldValidate: true,
+                  })
+                }}
+                textFieldProps={{
+                  variant: 'filled',
+                  error: !!errors.salesRepresentative,
+                  helperText: errors.salesRepresentative?.message ?? '',
+                }}
+                placeholder={t('components.course-form.sales-rep-placeholder')}
+                testId="profile-selector-sales-representative"
+              />
+            </Box>
+          )}
+
+          {isInternalUserBooking ? (
+            <Box mb={3}>
+              <Typography fontWeight={600}>
+                {t('components.course-form.booking-contact')}
+              </Typography>
+              <Grid container spacing={3} mb={3}>
+                <Grid item md={12}>
+                  <UserSelector
+                    onChange={handleChangeBookingContact}
+                    onEmailChange={email => {
+                      setValue('bookingContact', {
+                        ...values.bookingContact,
+                        email,
                       })
                     }}
-                    textFieldProps={{
-                      variant: 'filled',
-                      error: !!errors.salesRepresentative,
-                      helperText: errors.salesRepresentative?.message ?? '',
-                    }}
-                    placeholder={t(
-                      'components.course-form.sales-rep-placeholder'
-                    )}
-                    testId="profile-selector-sales-representative"
+                    textFieldProps={{ variant: 'filled' }}
+                    organisationId={values.orgId}
                   />
-                </Box>
-              )}
-              <Box mb={3}>
-                <Typography fontWeight={600}>
-                  {t('components.course-form.booking-contact')}
-                </Typography>
-                <Grid container spacing={3} mb={3}>
-                  <Grid item md={12}>
-                    <UserSelector
-                      onChange={handleChangeBookingContact}
-                      onEmailChange={email => {
-                        setValue('bookingContact', {
-                          ...values.bookingContact,
-                          email,
-                        })
-                      }}
-                      textFieldProps={{ variant: 'filled' }}
-                      organisationId={values.orgId}
-                    />
-                  </Grid>
-                  <Grid item md={6}>
-                    <TextField
-                      label={t('first-name')}
-                      variant="filled"
-                      placeholder={t('first-name-placeholder')}
-                      {...register(`bookingContact.firstName`)}
-                      inputProps={{
-                        'data-testid': `bookingContact-input-first-name`,
-                      }}
-                      sx={{ bgcolor: 'grey.100' }}
-                      error={!!errors.bookingContact?.firstName}
-                      helperText={
-                        errors.bookingContact?.firstName?.message ?? ''
-                      }
-                      InputLabelProps={{
-                        shrink: Boolean(values.bookingContact.firstName),
-                      }}
-                      fullWidth
-                      required
-                    />
-                  </Grid>
-                  <Grid item md={6}>
-                    <TextField
-                      label={t('surname')}
-                      variant="filled"
-                      placeholder={t('surname-placeholder')}
-                      {...register(`bookingContact.lastName`)}
-                      inputProps={{
-                        'data-testid': `bookingContact-input-surname`,
-                      }}
-                      sx={{ bgcolor: 'grey.100' }}
-                      error={!!errors.bookingContact?.lastName}
-                      helperText={
-                        errors.bookingContact?.lastName?.message ?? ''
-                      }
-                      InputLabelProps={{
-                        shrink: Boolean(values.bookingContact.lastName),
-                      }}
-                      fullWidth
-                      required
-                    />
-                  </Grid>
                 </Grid>
-              </Box>
+                <Grid item md={6}>
+                  <TextField
+                    label={t('first-name')}
+                    variant="filled"
+                    placeholder={t('first-name-placeholder')}
+                    {...register(`bookingContact.firstName`)}
+                    inputProps={{
+                      'data-testid': `bookingContact-input-first-name`,
+                    }}
+                    sx={{ bgcolor: 'grey.100' }}
+                    error={!!errors.bookingContact?.firstName}
+                    helperText={errors.bookingContact?.firstName?.message ?? ''}
+                    InputLabelProps={{
+                      shrink: Boolean(values.bookingContact.firstName),
+                    }}
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item md={6}>
+                  <TextField
+                    label={t('surname')}
+                    variant="filled"
+                    placeholder={t('surname-placeholder')}
+                    {...register(`bookingContact.lastName`)}
+                    inputProps={{
+                      'data-testid': `bookingContact-input-surname`,
+                    }}
+                    sx={{ bgcolor: 'grey.100' }}
+                    error={!!errors.bookingContact?.lastName}
+                    helperText={errors.bookingContact?.lastName?.message ?? ''}
+                    InputLabelProps={{
+                      shrink: Boolean(values.bookingContact.lastName),
+                    }}
+                    fullWidth
+                    required
+                  />
+                </Grid>
+              </Grid>
             </Box>
-          </>
-        )}
+          ) : null}
+        </Box>
 
         <Typography variant="subtitle1" fontWeight="500">
           {t('registration')}
