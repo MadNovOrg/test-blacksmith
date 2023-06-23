@@ -413,6 +413,7 @@ select_permissions:
         - billing_family_name
         - billing_given_name
         - billing_phone
+        - booking_contact
         - course_id
         - created_at
         - currency
