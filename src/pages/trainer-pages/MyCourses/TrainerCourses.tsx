@@ -26,7 +26,9 @@ import { RoleName } from '@app/types'
 
 import { ActionableCoursesTable } from './components/ActionableCoursesTable'
 import { CoursesTable } from './components/CoursesTable'
+import { FilterDrawer } from './components/FilterDrawer'
 import { Filters } from './components/Filters'
+import { TableMenu, Tables } from './components/TableMenu'
 import useActionableCourses from './hooks/useActionableCourses'
 import { getActionableStatuses } from './utils'
 
@@ -45,6 +47,8 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+  const [selectedTab, setSelectedTab] = useState(0)
 
   const { activeRole, acl } = useAuth()
   const isTrainer = activeRole === RoleName.TRAINER
@@ -147,9 +151,20 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
             {fetchingCourses ? <>&nbsp;</> : t('x-items', { count })}
           </Typography>
 
-          <Stack gap={4} mt={4}>
-            <Filters onChange={setFilters} />
-          </Stack>
+          {isMobile ? (
+            <Box sx={{ mt: 2 }}>
+              {acl.canCreateCourses() ? <CreateCourseMenu /> : null}
+              <FilterDrawer setFilters={setFilters} />
+              <TableMenu
+                setSelectedTab={setSelectedTab}
+                selectedTab={selectedTab}
+              />
+            </Box>
+          ) : (
+            <Stack gap={4} mt={4}>
+              <Filters onChange={setFilters} />
+            </Stack>
+          )}
         </Box>
 
         <Box flex={1}>
@@ -161,7 +176,9 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
             mb={2}
           >
             <Box display="flex" gap={1}>
-              {acl.canCreateCourses() ? <CreateCourseMenu /> : null}
+              {acl.canCreateCourses() && !isMobile ? (
+                <CreateCourseMenu />
+              ) : null}
               {showAvailableCoursesButton ? (
                 <Button
                   variant="contained"
@@ -179,7 +196,9 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
             </Stack>
           ) : null}
 
-          {actionableCourses?.courses.length ? (
+          {actionableCourses?.courses.length ||
+          (actionableCourses?.courses.length &&
+            selectedTab === Tables.ACTIONABLE) ? (
             <Box mb={3}>
               <Typography variant="h6" mb={1}>
                 {t('pages.my-courses.actionable-courses-title')}
@@ -210,25 +229,29 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
             </Box>
           ) : null}
 
-          {actionableCourses?.courses.length ? (
-            <Typography variant="h6" mb={1}>
-              {t('pages.my-courses.courses-title')}
-            </Typography>
-          ) : null}
-          <Box sx={{ overflowX: 'auto' }}>
-            <CoursesTable
-              courses={courses}
-              isFiltered={filtered}
-              sorting={sorting}
-              loading={loading}
-              data-testid="courses-table"
-              hiddenColumns={new Set(['actions'])}
-            />
+          {!isMobile || selectedTab === Tables.COURSES ? (
+            <>
+              {actionableCourses?.courses.length ? (
+                <Typography variant="h6" mb={1}>
+                  {t('pages.my-courses.courses-title')}
+                </Typography>
+              ) : null}
+              <Box sx={{ overflowX: 'auto' }}>
+                <CoursesTable
+                  courses={courses}
+                  isFiltered={filtered}
+                  sorting={sorting}
+                  loading={loading}
+                  data-testid="courses-table"
+                  hiddenColumns={new Set(['actions'])}
+                />
 
-            {total ? (
-              <Pagination testId="courses-pagination" total={total} />
-            ) : null}
-          </Box>
+                {total ? (
+                  <Pagination testId="courses-pagination" total={total} />
+                ) : null}
+              </Box>
+            </>
+          ) : undefined}
         </Box>
       </Box>
     </Container>

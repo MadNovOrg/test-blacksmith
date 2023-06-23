@@ -13,18 +13,14 @@ import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
 import { isPast } from 'date-fns'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
-import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
-import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
-import { FilterDates } from '@app/components/FilterDates'
-import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
-import { Course_Level_Enum, Course_Status_Enum } from '@app/generated/graphql'
+import { Course_Status_Enum } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import {
@@ -34,14 +30,9 @@ import {
 } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { UserCourseStatus, useUserCourses } from './hooks/useUserCourses'
-
-type DateFilters = {
-  filterStartDate?: Date | undefined
-  filterEndDate?: Date | undefined
-  filterCreateStartDate?: Date | undefined
-  filterCreateEndDate?: Date | undefined
-}
+import { FilterDrawer } from './Components/FilterDrawer'
+import { Filters } from './Components/Filters'
+import { useUserCourses, CoursesFilters } from './hooks/useUserCourses'
 
 export const AttendeeCourses: React.FC<
   React.PropsWithChildren<unknown>
@@ -49,6 +40,8 @@ export const AttendeeCourses: React.FC<
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+  const [filters, setFilters] = useState<CoursesFilters | undefined>()
 
   const sorting = useTableSort('start', 'desc')
   const cols = useMemo(
@@ -72,84 +65,7 @@ export const AttendeeCourses: React.FC<
     [t]
   )
 
-  const [keyword, setKeyword] = useState('')
-  const [dateFilters, setDateFilters] = useState<DateFilters>()
-  const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
-
-  const [statusOptions, setStatusOptions] = useState<
-    FilterOption<UserCourseStatus>[]
-  >(() => {
-    return [
-      {
-        id: AttendeeOnlyCourseStatus.InfoRequired,
-        title: t(`course-statuses.${AttendeeOnlyCourseStatus.InfoRequired}`),
-        selected: false,
-      },
-      {
-        id: Course_Status_Enum.EvaluationMissing,
-        title: t(`course-statuses.${Course_Status_Enum.EvaluationMissing}`),
-        selected: false,
-      },
-      {
-        id: Course_Status_Enum.Completed,
-        title: t(`course-statuses.${Course_Status_Enum.Completed}`),
-        selected: false,
-      },
-      {
-        id: AttendeeOnlyCourseStatus.NotAttended,
-        title: t(`course-statuses.${AttendeeOnlyCourseStatus.NotAttended}`),
-        selected: false,
-      },
-      {
-        id: Course_Status_Enum.GradeMissing,
-        title: t(`course-statuses.${Course_Status_Enum.GradeMissing}`),
-        selected: false,
-      },
-      {
-        id: Course_Status_Enum.Scheduled,
-        title: t(`course-statuses.${Course_Status_Enum.Scheduled}`),
-        selected: false,
-      },
-    ]
-  })
-
-  const filterStatus = statusOptions.flatMap(o =>
-    o.selected ? o.id : []
-  ) as UserCourseStatus[]
-
   const { Pagination, perPage, currentPage } = useTablePagination()
-
-  const filters = useMemo(() => {
-    let startDate = undefined
-    let endDate = undefined
-    let createStartDate = undefined
-    let createEndDate = undefined
-
-    if (dateFilters?.filterStartDate) {
-      startDate = new Date(dateFilters.filterStartDate)
-      startDate.setHours(0, 0, 0)
-    }
-    if (dateFilters?.filterEndDate) {
-      endDate = new Date(dateFilters.filterEndDate)
-      endDate.setHours(23, 59, 59)
-    }
-    if (dateFilters?.filterCreateStartDate) {
-      createStartDate = new Date(dateFilters.filterCreateStartDate)
-      createStartDate.setHours(0, 0, 0)
-    }
-    if (dateFilters?.filterCreateEndDate) {
-      createEndDate = new Date(dateFilters.filterCreateEndDate)
-      createEndDate.setHours(23, 59, 59)
-    }
-
-    return {
-      statuses: filterStatus,
-      levels: filterLevel,
-      keyword,
-      creation: { start: createStartDate, end: createEndDate },
-      schedule: { start: startDate, end: endDate },
-    }
-  }, [dateFilters, filterLevel, filterStatus, keyword])
 
   const {
     courses = [],
@@ -166,24 +82,15 @@ export const AttendeeCourses: React.FC<
 
   const loading = status === LoadingStatus.FETCHING
 
-  const onDatesChange = useCallback((from?: Date, to?: Date) => {
-    setDateFilters(prev => {
-      return { ...prev, filterStartDate: from, filterEndDate: to }
-    })
-  }, [])
-
-  const onCreateDatesChange = useCallback((from?: Date, to?: Date) => {
-    setDateFilters(prev => {
-      return { ...prev, filterCreateStartDate: from, filterCreateEndDate: to }
-    })
-  }, [])
-
-  const isDateEmpty = Object.values(dateFilters || {}).every(
+  const isDateEmpty = Object.values(filters?.creation || {}).every(
     x => x === undefined || x === null
   )
 
   const filtered = Boolean(
-    keyword || filterStatus.length || filterLevel.length || !isDateEmpty
+    filters?.keyword ||
+      filters?.statuses?.length ||
+      filters?.levels?.length ||
+      !isDateEmpty
   )
 
   return (
@@ -195,41 +102,15 @@ export const AttendeeCourses: React.FC<
             {loading ? <>&nbsp;</> : t('x-items', { count: courses.length })}
           </Typography>
 
-          <Stack gap={4} mt={4}>
-            <FilterSearch value={keyword} onChange={setKeyword} />
-            <FilterDates
-              onChange={onDatesChange}
-              title={t('filters.course-date-range')}
-              data-testid={'date-range'}
-              queryParam={'date-range'}
-            />
-            <FilterDates
-              onChange={onCreateDatesChange}
-              title={t('filters.created-range')}
-              data-testid={'date-created'}
-              queryParam={'Created'}
-            />
-            <Box>
-              <Typography variant="body2" fontWeight="bold">
-                {t('filter-by')}
-              </Typography>
-
-              <Stack gap={1}>
-                <FilterCourseLevel
-                  title={t('course-level')}
-                  onChange={setFilterLevel}
-                />
-                <FilterAccordion
-                  options={statusOptions}
-                  onChange={opts => {
-                    setStatusOptions(opts)
-                  }}
-                  title={t('course-status')}
-                  data-testid="FilterCourseStatus"
-                />
-              </Stack>
+          {isMobile ? (
+            <Box sx={{ mt: 2 }}>
+              <FilterDrawer setFilters={setFilters} />
             </Box>
-          </Stack>
+          ) : (
+            <Stack gap={4} mt={4}>
+              <Filters onChange={setFilters} />
+            </Stack>
+          )}
         </Box>
 
         <Box flex={1} sx={{ overflowX: 'auto' }}>

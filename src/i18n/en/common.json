@@ -456,6 +456,7 @@
   "this-course": "this course",
   "join-zoom": "Join via Zoom",
   "filters": {
+    "button": "Filters",
     "date-range": "Filter by Date",
     "course-date-range": "Filter by Course Date",
     "created-range": "Filter by Creation Date",

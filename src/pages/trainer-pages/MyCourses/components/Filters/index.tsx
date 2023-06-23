@@ -155,7 +155,6 @@ export function Filters({ onChange }: Props) {
       accreditedBy,
       deliveryTypes: filterDeliveryType,
     }
-
     onChange(filters)
   }, [
     actionableStatuses,

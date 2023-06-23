@@ -28,7 +28,7 @@ export type UserCourseStatus =
   | Course_Status_Enum.Completed
   | Course_Status_Enum.GradeMissing
 
-type CoursesFilters = {
+export type CoursesFilters = {
   keyword?: string
   levels?: Course_Level_Enum[]
   types?: Course_Type_Enum[]
@@ -283,12 +283,15 @@ export function useUserCourses(
     },
   })
 
-  return {
-    courses: data?.courses,
-    error,
-    status: getSWRLoadingStatus(data, error),
-    total: data?.course_aggregate.aggregate?.count,
-  }
+  return useMemo(
+    () => ({
+      courses: data?.courses,
+      error,
+      status: getSWRLoadingStatus(data, error),
+      total: data?.course_aggregate.aggregate?.count,
+    }),
+    [data, error]
+  )
 }
 
 function getOrderBy(sorting?: Sorting): Course_Order_By {
