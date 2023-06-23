@@ -32,30 +32,29 @@ test('invite user to join organisation by admin', async ({
   page,
   org,
 }) => {
-  //create a new org
+  // create a new org
   const orgPage = new AllOrganisations(page)
   await orgPage.goto(org.id)
-  //go to newly created org
+  // go to newly created org
   await orgPage.clickIndividualsTab()
   await orgPage.clickInviteUserToOrg()
-  //invite user2 to org
-  await orgPage.enterWorkEmail(users.user2WithOrg.email)
+  // invite user2 to org
+  await orgPage.enterWorkEmail(users.user1WithOrg.email)
   await orgPage.clickButtonToInviteUser()
-  //go to email
+  // go to email
   const inviteePage = await browser.newPage()
   const email = await API.email.getLatestEmail(
-    users.user2WithOrg.email,
+    users.user1WithOrg.email,
     `Join ${org.name} on Team Teach Hub`
   )
   const emailPage = new EmailPage(inviteePage)
   await emailPage.renderContent(email.html)
   const invitationPage = await emailPage.clickJoinOrganisationButton()
   await invitationPage.acceptInvitation()
-  //verify user2 is added to the org
-  new AllOrganisations(page)
+  // verify user2 is added to the org
   await orgPage.goto(org.id)
   await orgPage.clickIndividualsTab()
   await orgPage.checkUserHasJoinedOrg(
-    `${users.user2WithOrg.givenName} ${users.user2WithOrg.familyName}`
+    `${users.user1WithOrg.givenName} ${users.user1WithOrg.familyName}`
   )
 })

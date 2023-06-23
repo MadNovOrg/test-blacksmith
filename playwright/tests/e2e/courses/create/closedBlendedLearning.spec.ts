@@ -38,7 +38,6 @@ test(`create blended learning course: closed virtual as salesAdmin`, async ({
   browser,
   course,
 }) => {
-  test.fail(true, 'See https://behaviourhub.atlassian.net/browse/TTHP-1767')
   const context = await browser.newContext({
     storageState: stateFilePath('salesAdmin'),
   })
