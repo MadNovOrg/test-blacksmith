@@ -41,12 +41,15 @@ export class UiTable {
     const headers = await this.getHeaders({
       ignoreEmpty: options.ignoreEmptyHeaders,
     })
+    // Remove blank headings
+    const filteredHeaders = headers.filter(header => header.trim() !== '')
+
     const rowsCount = await this.getRowsCount()
     if (!(await this.emptyTable.isVisible())) {
       for (let i = 0; i < rowsCount; i++) {
         const resultRow: { [k: string]: string } = {}
-        for (let j = 0; j < headers.length; j++) {
-          resultRow[headers[j]] = (await this.rows
+        for (let j = 0; j < filteredHeaders.length; j++) {
+          resultRow[filteredHeaders[j]] = (await this.rows
             .nth(i)
             .locator('td')
             .nth(j)

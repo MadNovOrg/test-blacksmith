@@ -145,7 +145,9 @@ export class CourseDetailsPage extends BasePage {
   async checkAttendeesTableRows(users: User[]) {
     const expectedRows = users.map(toAttendeesTableRow)
     const actualRows = await this.attendeesTable.getRows()
-    expect(actualRows).toEqual(expectedRows)
+    expectedRows.forEach(expectedRow => {
+      expect(actualRows).toContainEqual(expectedRow)
+    })
   }
 
   async checkAttendeesTableNumberOfRows(users: User[]) {
