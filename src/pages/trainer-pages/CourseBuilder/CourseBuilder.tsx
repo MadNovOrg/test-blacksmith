@@ -7,6 +7,7 @@ import {
   Link,
   Typography,
   useTheme,
+  Container,
 } from '@mui/material'
 import parsePhoneNumber from 'libphonenumber-js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -91,9 +92,10 @@ export const CourseBuilder: React.FC<
 > = () => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
+  const theme = useTheme()
+
   const fetcher = useFetcher()
   const navigate = useNavigate()
-  const theme = useTheme()
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false)
   const [isTimeCommitmentModalOpen, setIsTimeCommitmentModalOpen] =
     useState(false)
@@ -486,7 +488,7 @@ export const CourseBuilder: React.FC<
   }
 
   return (
-    <>
+    <Container>
       <DragDropContext onDragEnd={handleDrop}>
         {(courseLoadingStatus === LoadingStatus.ERROR ||
           modulesLoadingStatus === LoadingStatus.ERROR) && (
@@ -503,7 +505,7 @@ export const CourseBuilder: React.FC<
 
         {modulesData && courseData?.course && (
           <Box
-            pt={{ xs: 6, md: 10 }}
+            pt={{ xs: 3, md: 10 }}
             pb={6}
             margin="auto"
             maxWidth={{
@@ -576,14 +578,18 @@ export const CourseBuilder: React.FC<
                 <CourseHero data={courseData.course} />
               </Box>
 
-              <Box gridColumn={{ xs: 'span 1', md: '1 / 4' }}>
+              <Box gridColumn={{ xs: '1 / 4', md: '1 / 4' }}>
                 <Typography variant="h3">
                   {t(
                     'pages.trainer-base.create-course.new-course.modules-available'
                   )}
                 </Typography>
 
-                <Droppable droppableId="all-modules" direction="horizontal">
+                <Droppable
+                  droppableId="all-modules"
+                  direction="horizontal"
+                  isDropDisabled={true} // we don't need to drop item from the available modules
+                >
                   {(provided, snapshot) => (
                     <Box
                       data-testid="all-modules"
@@ -630,7 +636,7 @@ export const CourseBuilder: React.FC<
                   )}
                 </Droppable>
               </Box>
-              <Box gridColumn={{ xs: '2 / 4', md: '5 / 9' }}>
+              <Box gridColumn={{ xs: '1 / 4', md: '5 / 9' }}>
                 <Typography variant="h3" px={1}>
                   {t('pages.trainer-base.create-course.new-course.my-course')}
                 </Typography>
@@ -647,15 +653,17 @@ export const CourseBuilder: React.FC<
                         container
                         border={`1px dashed ${theme.colors.navy[500]}`}
                         borderRadius="0.5rem"
+                        display="flex"
+                        flexWrap="wrap"
                       >
                         {mandatoryModules.map(m => (
-                          <Grid key={m.id} item xs={3}>
+                          <Box key={m.id}>
                             <ModuleCard
                               data={m}
                               showDuration={hasEstimatedDuration}
                               bgColor={getModuleCardColor(m, false) ?? ''}
                             />
-                          </Grid>
+                          </Box>
                         ))}
                       </Grid>
                     </Box>
@@ -663,7 +671,7 @@ export const CourseBuilder: React.FC<
 
                   <Grid container>
                     {courseModuleSlots.map(slot => (
-                      <Grid key={slot.droppableId} item xs={6} md={3}>
+                      <Grid key={slot.droppableId} item xs={4} md={3}>
                         <ModuleSlot
                           module={slot.module}
                           droppableId={slot.droppableId}
@@ -800,6 +808,6 @@ export const CourseBuilder: React.FC<
         cancelLabel={t('common.cancel')}
         data-testid="confirm-warning-dialog"
       />
-    </>
+    </Container>
   )
 }
