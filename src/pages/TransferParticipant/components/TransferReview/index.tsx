@@ -124,7 +124,8 @@ export const TransferReview: React.FC<
 
           {error || networkError ? (
             <Alert severity="error" sx={{ mb: 2 }}>
-              {t('review-transfer.transferring-error')}
+              {t(`review-transfer.${error}`) ||
+                t(`review-transfer.transferring-error`)}
             </Alert>
           ) : null}
 

@@ -1420,6 +1420,7 @@
       "back-btn-text_ATTENDEE_TRANSFERS": "Select courses",
       "submit-btn-text": "Confirm transfer",
       "transferring-error": "There was an error transferring the participant",
+      "NOT_ENOUGH_SPACES": "There isn't enough free space on this course",
       "success-message": "You have successfully transferred onto another course.",
       "success-info": "You will receive a confirmation email with details of the course.",
       "success-btn-text": "Go to my courses"
