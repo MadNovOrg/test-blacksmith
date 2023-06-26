@@ -69,6 +69,7 @@ describe('component: ReviewLicenseOrder', () => {
       courseLevel: CourseLevel.Level_1,
       startDateTime: startDate,
       endDateTime: endDate,
+      maxParticipants: 2,
     }
 
     const go1Licensing: Draft['go1Licensing'] = {

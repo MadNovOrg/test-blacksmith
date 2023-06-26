@@ -92,6 +92,12 @@ export const ReviewLicenseOrder: React.FC<
             <InfoPanel>
               <InvoiceDetails details={go1Licensing.invoiceDetails} />
             </InfoPanel>
+            <InfoPanel>
+              <InfoRow
+                label={_t('pages.order-details.licenses-redeemed')}
+                value={courseData?.maxParticipants.toString()}
+              />
+            </InfoPanel>
           </>
         ) : null}
 
