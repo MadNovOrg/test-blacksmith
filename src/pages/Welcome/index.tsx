@@ -38,7 +38,7 @@ export const Welcome: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Box>
           <Grid container spacing={5}>
             <Grid item md={5} xs={12}>
-              <img src={jnImage} width="100%" />
+              <img src={jnImage} width="100%" alt={t('photo-alt')} />
             </Grid>
 
             <Grid item md={7} xs={12}>
@@ -48,7 +48,12 @@ export const Welcome: React.FC<React.PropsWithChildren<unknown>> = () => {
               <Typography textAlign="left" sx={{ my: 4 }}>
                 {t('body')}
               </Typography>
-              <img style={{ display: 'block' }} src={signature} height={80} />
+              <img
+                style={{ display: 'block' }}
+                src={signature}
+                height={80}
+                alt={t('signature-alt')}
+              />
               <Typography textAlign="left">{t('signature')}</Typography>
               <Typography textAlign="left" sx={{ mt: 1 }}>
                 {t('signature-title')}
@@ -71,7 +76,7 @@ export const Welcome: React.FC<React.PropsWithChildren<unknown>> = () => {
           <Typography>{t('get-started-description')}</Typography>
           <Link href="/getting-started">
             <Button variant="contained" sx={{ mt: 4 }}>
-              {t('learn-more')}
+              {t('getting-started')}
             </Button>
           </Link>
         </Box>

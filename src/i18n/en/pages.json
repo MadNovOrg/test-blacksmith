@@ -1468,12 +1468,15 @@
   "welcome": {
     "title": "Welcome to the Team Teach Hub",
     "get-started": "Let's Get Started",
+    "getting-started": "Getting Started",
     "get-started-description": "Our handy getting started guides explain how to use every part of the Team Teach Hub with simple step-by-step guides and videos. You’ll find all our getting started resources in your profile area. Just click on your profile picture to find them.",
     "learn-more": "Learn More",
     "message": "A message from our Global Director",
     "body": "Welcome to the Team Teach family! At the centre of everything we do is the belief that all behaviour is communication. It’s wonderful to have you here with us so we can work together to best support the individuals in our care.",
     "signature": "Jonathan Newport",
-    "signature-title": "Team Teach Global Director"
+    "signature-title": "Team Teach Global Director",
+    "signature-alt": "Jonathan Newport Signature",
+    "photo-alt": "Jonathan Newport Photo"
   },
   "getting-started": {
     "back-to-homepage": "Back to Welcome Page",
