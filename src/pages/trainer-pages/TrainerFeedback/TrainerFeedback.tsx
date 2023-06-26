@@ -1,23 +1,18 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
+  Box,
   Container,
   FormHelperText,
   Grid,
   TextField,
   Typography,
 } from '@mui/material'
-import { Box } from '@mui/material'
 import { groupBy, map } from 'lodash-es'
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import {
-  Navigate,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
 import * as yup from 'yup'
 
@@ -26,6 +21,7 @@ import { BooleanQuestion } from '@app/components/BooleanQuestion'
 import { QuestionGroup } from '@app/components/QuestionGroup'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
+import { useSnackbar } from '@app/context/snackbar'
 import { SaveTrainerCourseEvaluationMutation } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
@@ -57,6 +53,7 @@ export const TrainerFeedback = () => {
   const [error, setError] = useState<string | null>(null)
   const { id: courseId = '' } = useParams()
   const { profile } = useAuth()
+  const { addSnackbarMessage } = useSnackbar()
 
   const { data: course } = useCourse(courseId)
   const [loading, setLoading] = useState(false)
@@ -78,6 +75,8 @@ export const TrainerFeedback = () => {
       ? [GET_ANSWERS_QUERY, { courseId: courseId as string, profileId }]
       : null
   )
+
+  const dataLoaded = !!questions && (readOnly ? !!evaluation : true)
 
   const hasSubmitted = useMemo(() => {
     return Boolean(evaluation?.answers.length)
@@ -163,16 +162,21 @@ export const TrainerFeedback = () => {
         return setError(t('course-evaluation.error-submitting'))
       }
 
-      navigate('../../details?success=course_evaluated')
+      addSnackbarMessage('course-evaluated', {
+        label: t('course-evaluation.saved'),
+      })
+      navigate('../../details?tab=EVALUATION')
     } catch (err: unknown) {
       setError(t('course-evaluation.error-submitting'))
       setLoading(false)
     }
   }
 
-  if (!(hasSubmitted || readOnly)) {
-    return <Navigate to="../details" />
-  }
+  useEffect(() => {
+    if (dataLoaded && !hasSubmitted && readOnly) {
+      navigate('../../details?tab=EVALUATION')
+    }
+  }, [dataLoaded, hasSubmitted, readOnly, navigate])
 
   return (
     <Box bgcolor="grey.100" sx={{ pb: 6 }}>

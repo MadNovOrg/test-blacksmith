@@ -398,6 +398,10 @@ export const CourseDetails = () => {
                     sx={{ position: 'absolute' }}
                   />
                   <SnackbarMessage
+                    messageKey="course-evaluated"
+                    sx={{ position: 'absolute' }}
+                  />
+                  <SnackbarMessage
                     messageKey="participant-transferred"
                     sx={{ position: 'absolute' }}
                   />
