@@ -52,6 +52,7 @@ jobs:
     env:
       CI: 'true'
       DEFAULT_TARGET: 'DEV'
+      E2E: 'true'
     strategy:
       matrix:
         browsers: ['chromium']

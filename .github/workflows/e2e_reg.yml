@@ -61,6 +61,7 @@ jobs:
     env:
       CI: true
       DEFAULT_TARGET: 'DEV'
+      E2E: 'true'
     strategy:
       fail-fast: false
       matrix:
