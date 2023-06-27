@@ -30,6 +30,7 @@ import {
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
+import usePollQuery from '@app/hooks/usePollQuery'
 import { checkCourseDetailsForExceptions } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import { CourseAttendees } from '@app/pages/trainer-pages/components/CourseAttendees'
 import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
@@ -188,6 +189,17 @@ export const CourseDetails = () => {
   const onRefreshCourse = useCallback(async () => {
     await mutate()
   }, [mutate])
+
+  const [startPolling, polling] = usePollQuery(
+    () => mutate(),
+    () => !!course?.status
+  )
+
+  useEffect(() => {
+    if (course && !course.status && !polling) {
+      startPolling()
+    }
+  }, [course, startPolling, polling])
 
   return (
     <>
