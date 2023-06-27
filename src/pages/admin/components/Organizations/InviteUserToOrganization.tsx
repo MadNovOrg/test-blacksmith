@@ -38,7 +38,7 @@ import { getFieldError, requiredMsg } from '@app/util'
 
 export const InviteUserToOrganization = () => {
   const theme = useTheme()
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const fetcher = useFetcher()
@@ -48,7 +48,23 @@ export const InviteUserToOrganization = () => {
   const { id } = useParams()
   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
 
-  const { orgs, loading: loadingOrgs } = useOrganizations()
+  const { orgs, loading: loadingOrgs } = useOrganizations(
+    undefined,
+    profile && acl.isOrgAdmin() && !acl.canViewAllOrganizations()
+      ? {
+          members: {
+            _and: [
+              {
+                profile_id: { _eq: profile.id },
+              },
+              {
+                isAdmin: { _eq: true },
+              },
+            ],
+          },
+        }
+      : undefined
+  )
 
   const emailsSchema = useMemo(() => {
     return yup.object({
