@@ -13,11 +13,11 @@ import { useLocation } from 'react-router-dom'
 import { useMount } from 'react-use'
 
 import {
+  Course_Source_Enum,
   PaymentMethod,
   Promo_Code,
   Promo_Code_Type_Enum,
   PromoCodeOutput,
-  Course_Source_Enum,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { stripeProcessingFeeRate } from '@app/lib/stripe'
@@ -236,18 +236,20 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         continue
       }
 
+      const courseCost = booking.price * booking.quantity
+
       discounts[code] = {
         amount: promoCode.amount,
         type: promoCode.type as Promo_Code_Type_Enum,
         amountCurrency:
           promoCode.type === Promo_Code_Type_Enum.FreePlaces
-            ? booking.price * promoCode.amount
-            : (booking.price * promoCode.amount) / 100,
+            ? courseCost * promoCode.amount
+            : (courseCost * promoCode.amount) / 100,
       }
     }
 
     setBooking(b => ({ ...b, discounts }))
-  }, [booking.price, booking.promoCodes, promoCodes])
+  }, [booking.price, booking.quantity, booking.promoCodes, promoCodes])
 
   const addPromo = useCallback<ContextType['addPromo']>(
     (code: PromoCodeOutput) => {
