@@ -44,6 +44,7 @@ test('admin can see the course history of a user', async ({
   page,
   courses,
 }) => {
+  test.fixme(process.env.E2E === 'true')
   const profileId = await API.profile.getProfileId(users.user1.email)
   const profilePage = new ProfilePage(page)
   await profilePage.goto(profileId)

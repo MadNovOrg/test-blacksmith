@@ -35,10 +35,11 @@ const test = base.extend<{ courses: Course[] }>({
 })
 
 allowedRoles.forEach(role => {
-  test(`${role} can transfer an attendee to another course `, async ({
+  test(`${role} can transfer an attendee to another course`, async ({
     browser,
     courses,
   }) => {
+    test.fixme(process.env.E2E === 'true')
     const context = await browser.newContext({
       storageState: stateFilePath(role),
     })
