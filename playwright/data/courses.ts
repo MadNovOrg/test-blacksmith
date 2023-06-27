@@ -100,6 +100,14 @@ export const UNIQUE_COURSE: () => Course = () => ({
   min_participants: 1,
   max_participants: 11,
   gradingConfirmed: false,
+  invoiceDetails: {
+    organisation: 'London First School',
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@londonschool.co.uk',
+    phone: '1939394939',
+    purchaseOrder: '12345',
+  },
 })
 
 export const FINISHED_COURSE: () => Course = () => ({

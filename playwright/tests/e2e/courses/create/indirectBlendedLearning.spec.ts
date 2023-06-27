@@ -18,14 +18,6 @@ const test = base.extend<{ course: Course }>({
     course.freeSpaces = 1
     course.salesRepresentative = users.salesAdmin
     course.go1Integration = true
-    course.invoiceDetails = {
-      organisation: 'London First School',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@londonschool.co.uk',
-      phone: '1939394939',
-      purchaseOrder: '12345',
-    }
     await use(course)
     await API.course.deleteCourse(course.id)
   },

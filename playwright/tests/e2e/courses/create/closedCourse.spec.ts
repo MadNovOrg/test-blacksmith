@@ -20,14 +20,6 @@ const dataSet = [
       course.bookingContactProfile = users.userOrgAdmin
       course.freeSpaces = 1
       course.salesRepresentative = users.salesAdmin
-      course.invoiceDetails = {
-        organisation: 'London First School',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@londonschool.co.uk',
-        phone: '1939394939',
-        purchaseOrder: '12345',
-      }
       return course
     })(),
   },
@@ -43,14 +35,6 @@ const dataSet = [
       course.freeSpaces = 1
       course.deliveryType = CourseDeliveryType.MIXED
       course.salesRepresentative = users.salesAdmin
-      course.invoiceDetails = {
-        organisation: 'London First School',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@londonschool.co.uk',
-        phone: '1939394939',
-        purchaseOrder: '12345',
-      }
       return course
     })(),
   },
@@ -87,7 +71,10 @@ for (const data of dataSet) {
     const reviewAndConfirmPage =
       await courseOrderDetailsPage.clickReviewAndConfirmButton()
     course.id = await reviewAndConfirmPage.getCourseIdOnCreation()
-    await reviewAndConfirmPage.confirmApproval()
+    // eslint-disable-next-line playwright/no-conditional-in-test
+    if (data.user === 'admin') {
+      await reviewAndConfirmPage.confirmApproval()
+    }
 
     const trainerContext = await browser.newContext({
       storageState: stateFilePath('trainer'),

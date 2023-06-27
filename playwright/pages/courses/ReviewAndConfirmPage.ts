@@ -10,6 +10,7 @@ export class ReviewAndConfirmPage extends BasePage {
   readonly createCourseButton: Locator
   readonly courseBuilderButton: Locator
   readonly approveButton: Locator
+  readonly courseName: Locator
 
   constructor(page: Page) {
     super(page)
@@ -20,6 +21,7 @@ export class ReviewAndConfirmPage extends BasePage {
       '[data-testid="courseBuilder-button"]'
     )
     this.approveButton = this.page.locator('button:text("Approve")')
+    this.courseName = this.page.locator('[data-testid=course-name]')
   }
 
   async getCourseIdOnCreation(): Promise<number> {
@@ -41,8 +43,6 @@ export class ReviewAndConfirmPage extends BasePage {
   }
 
   async confirmApproval() {
-    if (await this.approveButton.isEnabled()) {
-      await this.approveButton.click()
-    }
+    await this.approveButton.click()
   }
 }
