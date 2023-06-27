@@ -43,7 +43,7 @@ async function fillForm() {
   )
   await userEvent.type(screen.getByLabelText('Phone *'), data.phone)
 
-  await userEvent.click(screen.getByLabelText('Sector'))
+  await userEvent.click(screen.getByLabelText('Sector *'))
   await userEvent.click(screen.getByText(data.sector))
 
   await userEvent.click(

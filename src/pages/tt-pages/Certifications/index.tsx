@@ -149,7 +149,7 @@ export const Certifications: React.FC<
       <Box display="flex" gap={4}>
         <Box width={250}>
           <Typography variant="h1">{t('common.certifications')}</Typography>
-          <Typography variant="body2" color="grey.500" mt={1}>
+          <Typography variant="body2" color="grey.600" mt={1}>
             {loading ? <>&nbsp;</> : t('x-items', { count })}
           </Typography>
 

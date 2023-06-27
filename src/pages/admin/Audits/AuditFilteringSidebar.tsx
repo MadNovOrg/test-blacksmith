@@ -31,7 +31,7 @@ export const AuditFilteringSidebar: React.FC<
   return (
     <Box display="flex" gap={4}>
       <Box width={250}>
-        <Typography variant="body2" color="grey.500" mt={1}>
+        <Typography variant="body2" color="grey.600" mt={1}>
           {t('common.x-items', { count })}
         </Typography>
 

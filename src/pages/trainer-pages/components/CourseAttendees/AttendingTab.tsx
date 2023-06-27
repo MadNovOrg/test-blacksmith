@@ -235,9 +235,12 @@ export const AttendingTab = ({
                     </TableCell>
                     <TableCell>
                       {courseParticipant.profile.organizations.map(org => (
-                        <Typography key={org.organization.id}>
-                          {org.organization.name}
-                        </Typography>
+                        <Link
+                          href={`/organisations/${org.organization.id}}`}
+                          key={org.organization.id}
+                        >
+                          <Typography>{org.organization.name}</Typography>
+                        </Link>
                       ))}
                     </TableCell>
                     {isBlendedCourse && (
@@ -386,7 +389,7 @@ export const AttendingTab = ({
           mt={4}
           data-testid="course-participants-zero-message"
         >
-          <Typography variant="body1" color="grey.500">
+          <Typography variant="body1" color="grey.600">
             {course?.type === CourseType.OPEN
               ? t('pages.course-participants.no-attendees')
               : t('pages.course-participants.none-registered-message')}

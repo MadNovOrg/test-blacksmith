@@ -90,14 +90,14 @@ const UncompletedList: React.FC<
   const { t } = useTranslation()
   return (
     <Box>
-      <Typography variant="body2" color="grey.500" gutterBottom>
+      <Typography variant="body2" color="grey.600" gutterBottom>
         {t('incomplete')}
       </Typography>
       {uncompletedModules.map(module => {
         return (
           <Typography
             key={module.name}
-            color="grey.500"
+            color="grey.600"
             variant="body1"
             gutterBottom
           >
@@ -283,7 +283,7 @@ const CertificateInfo: React.FC<
                 data-testid="certificate-issue-date"
                 variant="body2"
                 sx={{ mb: 1 }}
-                color="grey.500"
+                color="grey.600"
               >
                 {t('issue-date')}
               </Typography>
@@ -293,7 +293,7 @@ const CertificateInfo: React.FC<
             </Grid>
 
             <Grid item xs={3}>
-              <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
+              <Typography variant="body2" sx={{ mb: 1 }} color="grey.600">
                 {t('number')}
               </Typography>
               <Typography data-testid="certificate-number" variant="body1">
@@ -303,7 +303,7 @@ const CertificateInfo: React.FC<
 
             {isRevoked ? (
               <Grid item xs={3}>
-                <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
+                <Typography variant="body2" sx={{ mb: 1 }} color="grey.600">
                   {t('revoked-on')}
                 </Typography>
                 <Typography variant="body1">
@@ -316,7 +316,7 @@ const CertificateInfo: React.FC<
                   data-testid="certificate-valid-until"
                   variant="body2"
                   sx={{ mb: 1 }}
-                  color="grey.500"
+                  color="grey.600"
                 >
                   {t('valid-until')}
                 </Typography>
@@ -326,7 +326,7 @@ const CertificateInfo: React.FC<
               </Grid>
             )}
             <Grid item xs={3}>
-              <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
+              <Typography variant="body2" sx={{ mb: 1 }} color="grey.600">
                 {_t('status')}
               </Typography>
               <Box display="flex" alignItems="center">

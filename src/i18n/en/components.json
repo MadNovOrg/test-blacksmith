@@ -395,7 +395,7 @@
   "request-a-quote": {
     "learn-more-about": "Learn more about our private courses",
     "request-a-quote": "Request a quote",
-    "more-info": "If you require further information or support regarding your course needs, please feel free to call us on <0>020 3746 0938</0> or send an email to <1>{{email}}</1>"
+    "more-info": "If you require further information or support regarding your course needs, please feel free to call us on <0>{{phone}}</0> or send an email to <1>{{email}}</1>"
   },
   "get-started-modal": {
     "title": "Get started Guide"

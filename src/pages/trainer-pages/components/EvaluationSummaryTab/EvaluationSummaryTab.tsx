@@ -187,7 +187,7 @@ export const EvaluationSummaryTab: React.FC<
             >
               {t('pages.course-details.tabs.evaluation.title')}
             </Typography>
-            <Typography variant="body1" color="grey.500">
+            <Typography variant="body1" color="grey.600">
               {t('pages.course-details.tabs.evaluation.desc')}
             </Typography>
           </Grid>

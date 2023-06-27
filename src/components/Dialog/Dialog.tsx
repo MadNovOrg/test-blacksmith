@@ -61,7 +61,7 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
               mt: -0.5,
               ml: 1,
               mr: -1.5,
-              color: 'grey.500',
+              color: 'grey.600',
               alignSelf: 'flex-start',
             }}
           >

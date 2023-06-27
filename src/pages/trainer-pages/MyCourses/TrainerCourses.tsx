@@ -137,7 +137,11 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
   const fetchingCourses = loading || fetchingActionableCourses
 
   return (
-    <Container maxWidth="lg" sx={{ py: 5, position: 'relative' }}>
+    <Container
+      maxWidth="lg"
+      sx={{ py: 5, position: 'relative' }}
+      disableGutters
+    >
       <SnackbarMessage
         messageKey="course-created"
         sx={{ position: 'absolute' }}
@@ -147,7 +151,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
           <Typography variant="h1">
             {title ?? t(isTrainer ? 'courses' : 'pages.my-courses.h1')}
           </Typography>
-          <Typography variant="body2" color="grey.500" mt={1}>
+          <Typography variant="body2" color="grey.600" mt={1}>
             {fetchingCourses ? <>&nbsp;</> : t('x-items', { count })}
           </Typography>
 

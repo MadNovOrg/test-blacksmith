@@ -205,7 +205,7 @@ export const CourseGrading: React.FC<
                 sx={{ mb: 2, p: 0 }}
               >
                 <Grid item>
-                  <Typography variant="body1" color="grey.500">
+                  <Typography variant="body1" color="grey.600">
                     {t('pages.course-details.tabs.grading.attendees', {
                       number: total,
                     })}

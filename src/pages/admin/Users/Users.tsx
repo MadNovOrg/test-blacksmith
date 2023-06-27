@@ -288,7 +288,7 @@ export const Users = () => {
       <Container maxWidth="lg" sx={{ py: 3 }}>
         <Box display="flex" gap={4}>
           <Box width={250}>
-            <Typography variant="body2" color="grey.500" mt={1}>
+            <Typography variant="body2" color="grey.600" mt={1}>
               {isLoading ? <>&nbsp;</> : t('x-items', { count: users?.length })}
             </Typography>
 

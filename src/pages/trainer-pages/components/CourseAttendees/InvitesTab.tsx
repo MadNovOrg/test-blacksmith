@@ -174,7 +174,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
               mt={4}
               data-testid="no-invites-message"
             >
-              <Typography variant="body1" color="grey.500">
+              <Typography variant="body1" color="grey.600">
                 {t(
                   `pages.course-participants.none-${inviteStatus.toLocaleLowerCase()}-message`
                 )}

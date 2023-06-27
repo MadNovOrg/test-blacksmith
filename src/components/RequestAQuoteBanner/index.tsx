@@ -1,4 +1,5 @@
 import { Button, Box, Typography, useTheme, SxProps, Link } from '@mui/material'
+import parsePhoneNumber from 'libphonenumber-js'
 import React from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 
@@ -9,6 +10,7 @@ type Props = {
 export const RequestAQuoteBanner: React.FC<Props> = ({ sx = {} }) => {
   const theme = useTheme()
   const { t } = useTranslation()
+  const phoneNumber = parsePhoneNumber(`${import.meta.env.VITE_TT_INFO_PHONE}`)
 
   return (
     <Box
@@ -29,6 +31,7 @@ export const RequestAQuoteBanner: React.FC<Props> = ({ sx = {} }) => {
           i18nKey="components.request-a-quote.more-info"
           t={t}
           values={{
+            phone: phoneNumber?.formatInternational(),
             email: import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS,
           }}
         >

@@ -367,9 +367,9 @@
       }
     },
     "form": {
-      "health-leaflet-copy": "I confirm that I will ensure all course registrants have read the Health Guidance & Training Information.",
-      "practice-protocol-copy": "I confirm that I will follow Team Teach protocols and have the correct first aid protocols in place.",
-      "valid-id-copy": "I confirm that I will check that all course attendees have a valid form of ID before commencing the training through either passport, driving licence or organisation verification.",
+      "health-leaflet-copy": "I confirm that I will ensure all course registrants have read the Health Guidance & Training Information. *",
+      "practice-protocol-copy": "I confirm that I will follow Team Teach protocols and have the correct first aid protocols in place. *",
+      "valid-id-copy": "I confirm that I will check that all course attendees have a valid form of ID before commencing the training through either passport, driving licence or organisation verification. *",
       "needs-analysis-copy": "My training needs analysis form has been submitted and approved.",
       "checkboxes-missing": "Read and confirm the statements above"
     },
@@ -1263,6 +1263,7 @@
     "cols-start": "Start",
     "cols-end": "End",
     "cols-createdBy": "Created by",
+    "cols-actions": "Actions",
     "cols-status": "Status",
     "status-ACTIVE": "Active",
     "status-EXPIRED": "Expired",

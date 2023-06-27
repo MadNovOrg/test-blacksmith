@@ -320,7 +320,6 @@ export const CreateCourseForm = () => {
           <FormControl required error={checkboxError}>
             <FormGroup sx={{ marginTop: 3 }} data-testid="acknowledge-checks">
               <FormControlLabel
-                required
                 control={
                   <Checkbox
                     checked={consentFlags.healthLeaflet}
@@ -334,7 +333,6 @@ export const CreateCourseForm = () => {
                 }
               />
               <FormControlLabel
-                required
                 control={
                   <Checkbox
                     checked={consentFlags.practiceProtocols}
@@ -352,7 +350,6 @@ export const CreateCourseForm = () => {
               />
 
               <FormControlLabel
-                required
                 control={
                   <Checkbox
                     checked={consentFlags.validID}

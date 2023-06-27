@@ -438,7 +438,7 @@ export const CourseEvaluation = () => {
 
             <Typography
               maxWidth={600}
-              color="grey.500"
+              color="grey.600"
               sx={{ mt: 4 }}
               gutterBottom={true}
               align="center"

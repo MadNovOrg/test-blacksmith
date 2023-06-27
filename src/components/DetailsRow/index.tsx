@@ -1,4 +1,11 @@
-import { Box, Grid, Typography, useTheme, useMediaQuery } from '@mui/material'
+import {
+  Box,
+  Grid,
+  Typography,
+  useTheme,
+  useMediaQuery,
+  Tooltip,
+} from '@mui/material'
 import React, { ReactNode } from 'react'
 
 import { ElementProps } from '@app/types'
@@ -26,18 +33,6 @@ export const DetailsRow = ({
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
-  const mobileBorder = isMobile
-    ? {
-        border: 2,
-        width: '100%',
-        borderColor: 'grey.200',
-        borderRadius: 2,
-        height: '3rem',
-        paddingX: 1,
-        verticalAlign: 'center',
-      }
-    : {}
-
   return (
     <Grid
       container
@@ -52,22 +47,22 @@ export const DetailsRow = ({
         </Typography>
       </Grid>
       {value ? (
-        <Grid
-          item
-          xs={12}
-          md={4}
-          sx={{
-            ...mobileBorder,
-          }}
-        >
-          <Typography
-            data-testid={dataTestId}
-            flex={2}
-            {...(valueProps ?? {})}
-            lineHeight={'3rem'}
-          >
-            {value}
-          </Typography>
+        <Grid item xs={12} md={8}>
+          <Tooltip title={value}>
+            <Typography
+              data-testid={dataTestId}
+              flex={2}
+              {...(valueProps ?? {})}
+              lineHeight={'3rem'}
+              sx={{
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {value}
+            </Typography>
+          </Tooltip>
         </Grid>
       ) : null}
       {children}

@@ -94,11 +94,11 @@ export const AttendeeCourses: React.FC<
   )
 
   return (
-    <Container maxWidth="lg" sx={{ py: 5, px: isMobile ? 2 : 0 }}>
+    <Container maxWidth="lg" sx={{ py: 5, px: 0 }} disableGutters>
       <Box flexDirection={isMobile ? 'column' : 'row'} display="flex" gap={4}>
         <Box width={isMobile ? undefined : 250}>
           <Typography variant="h1">{t('my-courses')}</Typography>
-          <Typography variant="body2" color="grey.500" mt={1}>
+          <Typography variant="body2" color="grey.600" mt={1}>
             {loading ? <>&nbsp;</> : t('x-items', { count: courses.length })}
           </Typography>
 
@@ -211,7 +211,7 @@ export const AttendeeCourses: React.FC<
                           </Typography>
                           <Typography
                             variant="body2"
-                            color="grey.500"
+                            color="grey.600"
                             whiteSpace="nowrap"
                           >
                             {t('dates.time', {
@@ -231,7 +231,7 @@ export const AttendeeCourses: React.FC<
                           </Typography>
                           <Typography
                             variant="body2"
-                            color="grey.500"
+                            color="grey.600"
                             whiteSpace="nowrap"
                           >
                             {t('dates.time', {
@@ -251,7 +251,7 @@ export const AttendeeCourses: React.FC<
                           </Typography>
                           <Typography
                             variant="body2"
-                            color="grey.500"
+                            color="grey.600"
                             whiteSpace="nowrap"
                           >
                             {t('dates.time', {

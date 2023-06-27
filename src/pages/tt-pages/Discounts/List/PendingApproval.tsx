@@ -31,7 +31,7 @@ export const PendingApproval: React.FC<React.PropsWithChildren<Props>> = ({
       { id: 'start', label: _t('start') },
       { id: 'end', label: _t('end') },
       { id: 'createdBy', label: _t('createdBy') },
-      { id: 'status', label: '' },
+      { id: 'status', label: _t('actions') },
     ] as Col[]
   }, [t])
 

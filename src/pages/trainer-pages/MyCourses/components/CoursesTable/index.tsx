@@ -216,7 +216,7 @@ function TypeCell({ course }: { course: TableCourse }) {
         {t(`course-types.${course.type}`)}
       </Typography>
       {course.go1Integration ? (
-        <Typography variant="body2" color="grey.500">
+        <Typography variant="body2" color="grey.600">
           {t('common.blended-learning')}
         </Typography>
       ) : (

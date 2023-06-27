@@ -44,7 +44,6 @@ export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
   return (
     <CoursesTable
       courses={actionableCourses?.courses}
-      hiddenColumns={new Set(['status'])}
       data-testid="actionable-courses-table"
       loading={fetchingActionableCourses}
       sorting={sorting}

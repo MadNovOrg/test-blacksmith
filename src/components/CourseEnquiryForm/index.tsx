@@ -208,6 +208,7 @@ export const CourseEnquiryForm: React.FC<React.PropsWithChildren<Props>> = ({
       <Box mb={3}>
         <TextField
           select
+          required
           value={values.sector}
           {...register('sector')}
           variant="filled"

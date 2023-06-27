@@ -331,6 +331,7 @@ export const CourseDetails = () => {
                                 color="secondary"
                                 fullWidth={isMobile}
                                 sx={{ mt: isMobile ? 2 : 0 }}
+                                disabled={courseHasStarted}
                                 onClick={() =>
                                   navigate(
                                     `/courses/${courseId}/health-and-safety`
