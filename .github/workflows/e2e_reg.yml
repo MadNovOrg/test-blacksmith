@@ -61,7 +61,7 @@ jobs:
     env:
       CI: true
       DEFAULT_TARGET: 'DEV'
-      E2E: 'true'
+      E2E: true
     strategy:
       fail-fast: false
       matrix:
@@ -69,10 +69,12 @@ jobs:
         shardIndex: [1, 2, 3]
         shardTotal: [3]
     steps:
-      - name: Set Target and Hasura Secret
+      - name: Set Environment Variables
         run: |
           echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
           echo "HASURA_SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment || env.DEFAULT_TARGET)] }}" >> $GITHUB_ENV
+          echo "CI=${{ env.CI }}" >> $GITHUB_ENV
+          echo "E2E=${{ env.E2E }}" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3

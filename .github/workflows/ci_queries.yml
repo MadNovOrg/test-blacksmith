@@ -39,6 +39,10 @@ jobs:
           HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_JYEuK9iJg/.well-known/jwks.json","claims_format":"stringified_json"}'
 
     steps:
+      - name: Set Environment Variables
+        run: |
+          echo "CI=${{ env.CI }}" >> $GITHUB_ENV
+
       - name: Checkout
         uses: actions/checkout@v3
 
