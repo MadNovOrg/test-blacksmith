@@ -58,7 +58,7 @@
     "@urql/exchange-auth": "^1.0.0",
     "amazon-cognito-identity-js": "^6.2.0",
     "autosuggest-highlight": "^3.3.4",
-    "aws-amplify": "^5.2.1",
+    "aws-amplify": "^5.3.1",
     "chance": "1.1.11",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
