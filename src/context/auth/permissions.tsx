@@ -374,6 +374,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const roles = [RoleName.TT_ADMIN]
       return roles.some(r => r === auth.activeRole)
     },
+    canViewArloConnect: () => {
+      const roles = [RoleName.TT_ADMIN]
+      return roles.some(r => r === auth.activeRole)
+    },
     canCreateOrgs: () => {
       const roles = [
         RoleName.TT_ADMIN,

@@ -41,6 +41,7 @@ import { AdminTransferParticipantPage } from '@app/pages/TransferParticipant/Adm
 import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
 import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
 import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
+import { ArloConnect } from '@app/pages/tt-pages/Arlo'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
@@ -192,6 +193,13 @@ const TTAdminRoutes = () => {
               <Route path="xero">
                 <Route index element={<Navigate replace to="connect" />} />
                 <Route path="connect" element={<XeroConnect />} />
+              </Route>
+            ) : null}
+
+            {acl.canViewArloConnect() ? (
+              <Route path="arlo">
+                <Route index element={<Navigate replace to="connect" />} />
+                <Route path="connect" element={<ArloConnect />} />
               </Route>
             ) : null}
 

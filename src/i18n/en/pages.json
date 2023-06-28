@@ -1003,6 +1003,13 @@
     "connect-done": "HUB is connected to Xero.",
     "connect-error": "Failed to determine Xero connection status. \nPlease try again later."
   },
+  "arlo": {
+    "connect-h1": "Arlo Connection",
+    "connect-hint": "A user with access to a privileged account must setup the Hub connection with Arlo by clicking the button below.",
+    "connect-btn": "Connect to Arlo",
+    "connect-done": "HUB is connected to Arlo.",
+    "connect-error": "Failed to determine Arlo connection status. \nPlease try again later."
+  },
   "create-organization": {
     "title": "Create Organisation",
     "fields": {
