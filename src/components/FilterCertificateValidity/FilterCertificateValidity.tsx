@@ -14,13 +14,14 @@ import { FilterAccordion, FilterOption } from '../FilterAccordion'
 
 type Props = {
   onChange: (selected: CertificateStatus[]) => void
+  excludedStatuses?: Set<CertificateStatus>
 }
 
 const statuses = Object.values(CertificateStatus) as CertificateStatus[]
 
 export const FilterCertificateValidity: React.FC<
   React.PropsWithChildren<Props>
-> = ({ onChange = noop }) => {
+> = ({ excludedStatuses = new Set(), onChange = noop }) => {
   const { t } = useTranslation()
 
   const [selected, setSelected] = useQueryParam(
@@ -32,12 +33,18 @@ export const FilterCertificateValidity: React.FC<
   )
 
   const options = useMemo(() => {
-    return statuses.map(o => ({
-      id: o,
-      title: t(`certification-status.${o.toLocaleLowerCase()}`),
-      selected: selected.includes(o),
-    }))
-  }, [selected, t])
+    return statuses
+      .map(o =>
+        excludedStatuses.has(o)
+          ? null
+          : {
+              id: o,
+              title: t(`certification-status.${o.toLocaleLowerCase()}`),
+              selected: selected.includes(o),
+            }
+      )
+      .filter(Boolean)
+  }, [selected, excludedStatuses, t])
 
   const _onChange = useCallback(
     (opts: FilterOption<CertificateStatus>[]) => {

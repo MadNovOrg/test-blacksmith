@@ -14,6 +14,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { FilterCertificateValidity } from '@app/components/FilterCertificateValidity'
 import { RequestAQuoteBanner } from '@app/components/RequestAQuoteBanner'
 import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum, Course_Type_Enum } from '@app/generated/graphql'
@@ -23,7 +24,7 @@ import { CourseForBookingTile } from '@app/pages/admin/components/Organizations/
 import { IndividualsByLevelList } from '@app/pages/admin/components/Organizations/tabs/components/IndividualsByLevelList'
 import { OrgStatsTiles } from '@app/pages/admin/components/Organizations/tabs/components/OrgStatsTiles'
 import { OrgSummaryList } from '@app/pages/admin/components/Organizations/tabs/components/OrgSummaryList'
-import { CourseLevel } from '@app/types'
+import { CertificateStatus, CourseLevel } from '@app/types'
 
 type OrgOverviewTabParams = {
   orgId: string
@@ -46,11 +47,20 @@ export const OrgOverviewTab: React.FC<
   const { profile, acl } = useAuth()
   const [userByLevelSelectedTab, setUserByLevelSelectedTab] = useState<string>()
 
+  const [certificateStatus, setCertificateStatus] = useState<
+    CertificateStatus[]
+  >([])
+
   const {
     stats,
     profilesByLevel,
     loading: orgLoading,
-  } = useOrg(orgId, profile?.id, acl.canViewAllOrganizations())
+  } = useOrg(
+    orgId,
+    profile?.id,
+    acl.canViewAllOrganizations(),
+    certificateStatus
+  )
   const { courses: coursesForBooking, loading: coursesLoading } =
     useUpcomingCourses(
       profile?.id,
@@ -114,7 +124,18 @@ export const OrgOverviewTab: React.FC<
       </Grid>
 
       <Grid item xs={12} md={9} p={1} mt={2}>
-        <Typography variant="h4">
+        <FilterCertificateValidity
+          onChange={setCertificateStatus}
+          excludedStatuses={
+            new Set([
+              CertificateStatus.REVOKED,
+              CertificateStatus.EXPIRING_SOON,
+              CertificateStatus.ON_HOLD,
+            ])
+          }
+        />
+
+        <Typography variant="h4" mt={3}>
           {t('pages.org-details.tabs.overview.individuals-by-training-level')}
         </Typography>
 
@@ -160,6 +181,7 @@ export const OrgOverviewTab: React.FC<
                   <IndividualsByLevelList
                     orgId={orgId}
                     courseLevel={courseLevel}
+                    certificateStatus={certificateStatus}
                   />
                 </TabPanel>
               )

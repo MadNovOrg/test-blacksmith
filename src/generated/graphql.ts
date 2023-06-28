@@ -45178,6 +45178,7 @@ export type GetOrgMembersQuery = { __typename?: 'query_root', members: Array<{ _
 
 export type GetOrgDetailsQueryVariables = Exact<{
   where?: InputMaybe<Organization_Bool_Exp>;
+  certificateStatus?: InputMaybe<String_Comparison_Exp>;
 }>;
 
 

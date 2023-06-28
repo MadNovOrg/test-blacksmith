@@ -7,7 +7,10 @@ export const Matcher = /(query GetOrgDetails)/i
 export const QUERY = gql`
   ${ORGANIZATION}
   ${CERTIFICATE_CHANGELOG}
-  query GetOrgDetails($where: organization_bool_exp = {}) {
+  query GetOrgDetails(
+    $where: organization_bool_exp = {}
+    $certificateStatus: String_comparison_exp = { _in: "" }
+  ) {
     orgs: organization(where: $where) {
       ...Organization
     }
@@ -23,7 +26,7 @@ export const QUERY = gql`
       archived
       lastActivity
       createdAt
-      certificates(where: { status: { _neq: "EXPIRED" } }) {
+      certificates(where: { status: $certificateStatus }) {
         id
         courseLevel
         expiryDate

@@ -27,6 +27,7 @@ import { CertificateStatus, CourseLevel } from '@app/types'
 type IndividualsByLevelListParams = {
   orgId: string
   courseLevel: CourseLevel | null
+  certificateStatus: CertificateStatus[]
 }
 
 const PER_PAGE = 5
@@ -34,7 +35,7 @@ const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 20]
 
 export const IndividualsByLevelList: React.FC<
   React.PropsWithChildren<IndividualsByLevelListParams>
-> = ({ orgId, courseLevel }) => {
+> = ({ orgId, courseLevel, certificateStatus }) => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
 
@@ -45,7 +46,8 @@ export const IndividualsByLevelList: React.FC<
   const { profilesByLevel, loading } = useOrg(
     orgId,
     profile?.id,
-    acl.canViewAllOrganizations()
+    acl.canViewAllOrganizations(),
+    certificateStatus
   )
 
   const currentPageUsers = useMemo(() => {

@@ -93,14 +93,36 @@ function getCountByStatus(
 export default function useOrg(
   orgId: string,
   profileId?: string,
-  showAll?: boolean
+  showAll?: boolean,
+  certificateFilter?: CertificateStatus[]
 ) {
+  const certificateStatus = certificateFilter?.length
+    ? { _in: certificateFilter }
+    : { _neq: CertificateStatus.EXPIRED }
+
   let conditions
   if (orgId !== ALL_ORGS) {
-    conditions = { id: { _eq: orgId } }
+    conditions = {
+      _and: [
+        { id: { _eq: orgId } },
+        {
+          members: {
+            profile: {
+              certificates: { status: certificateStatus },
+            },
+          },
+        },
+      ],
+    }
   } else {
     conditions = showAll
-      ? {}
+      ? {
+          members: {
+            profile: {
+              certificates: { status: certificateStatus },
+            },
+          },
+        }
       : {
           members: {
             _and: [
@@ -110,6 +132,11 @@ export default function useOrg(
                 },
               },
               { isAdmin: { _eq: true } },
+              {
+                profile: {
+                  certificates: { status: certificateStatus },
+                },
+              },
             ],
           },
         }
@@ -119,7 +146,7 @@ export default function useOrg(
     GetOrgDetailsQuery,
     Error,
     [string, GetOrgDetailsQueryVariables] | null
-  >(profileId ? [QUERY, { where: conditions }] : null)
+  >(profileId ? [QUERY, { where: conditions, certificateStatus }] : null)
 
   const status = getSWRLoadingStatus(data, error)
 
