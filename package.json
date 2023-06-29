@@ -70,7 +70,7 @@
     "jszip": "^3.10.1",
     "jwt-decode": "^3.1.2",
     "lexical": "^0.9.0",
-    "libphonenumber-js": "^1.10.34",
+    "libphonenumber-js": "^1.10.36",
     "lodash-es": "^4.17.21",
     "mui-image": "^1.0.7",
     "mui-tel-input": "^3.1.3",
