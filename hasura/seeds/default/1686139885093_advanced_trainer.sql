@@ -44,7 +44,30 @@ INSERT into module_group_duration (module_group_id, course_delivery_type, reaccr
 ((SELECT id FROM module_group WHERE name = 'Bite Responses' and course_level = 'ADVANCED_TRAINER'), 'F2F', false, false, 20),
 ((SELECT id FROM module_group WHERE name = 'Small Child and One Person Holds' and course_level = 'ADVANCED_TRAINER'), 'F2F', false, false, 60),
 ((SELECT id FROM module_group WHERE name = 'Two Person Escorts' and course_level = 'ADVANCED_TRAINER'), 'F2F', false, false, 90),
-((SELECT id FROM module_group WHERE name = 'Seated Holds' and course_level = 'ADVANCED_TRAINER'), 'F2F', false, false, 90);
+((SELECT id FROM module_group WHERE name = 'Seated Holds' and course_level = 'ADVANCED_TRAINER'), 'F2F', false, false, 90),
+
+((SELECT id FROM module_group WHERE name = 'Advanced Warm Up' AND course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 15),
+((SELECT id FROM module_group WHERE name = 'Legal & Health' AND course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 20),
+((SELECT id FROM module_group WHERE name = 'Ground Recovery Techniques' AND course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 120),
+((SELECT id FROM module_group WHERE name = 'Response to Ground Assaults' AND course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 30),
+((SELECT id FROM module_group WHERE name = 'Dead Weight Response' AND course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 15),
+((SELECT id FROM module_group WHERE name = 'Everyday Objects' AND course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 120),
+((SELECT id FROM module_group WHERE name = 'Transport' AND course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 40),
+
+((SELECT id FROM module_group WHERE name = 'Theory' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 30),
+((SELECT id FROM module_group WHERE name = 'Personal Space & Body Language' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 30),
+((SELECT id FROM module_group WHERE name = 'Elevated Risks' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 30),
+((SELECT id FROM module_group WHERE name = 'Physical Warm Up' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 15),
+((SELECT id FROM module_group WHERE name = 'Personal Safety' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 30),
+((SELECT id FROM module_group WHERE name = 'Neck Disengagement' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 30),
+((SELECT id FROM module_group WHERE name = 'Prompts and Guides' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 20),
+((SELECT id FROM module_group WHERE name = 'Separations' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 20),
+((SELECT id FROM module_group WHERE name = 'Clothing Responses' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 20),
+((SELECT id FROM module_group WHERE name = 'Hair Responses' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 20),
+((SELECT id FROM module_group WHERE name = 'Bite Responses' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 20),
+((SELECT id FROM module_group WHERE name = 'Small Child and One Person Holds' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 60),
+((SELECT id FROM module_group WHERE name = 'Two Person Escorts' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 90),
+((SELECT id FROM module_group WHERE name = 'Seated Holds' and course_level = 'ADVANCED_TRAINER'), 'F2F', true, false, 90);
 
 INSERT INTO module (name, module_group_id, module_category, course_level) VALUES
 ('Stretch kneeling to the ground', (SELECT id FROM module_group WHERE name = 'Advanced Warm Up' AND course_level = 'ADVANCED_TRAINER'), 'THEORY', 'ADVANCED_TRAINER'),
