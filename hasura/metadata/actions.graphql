@@ -10,6 +10,12 @@ type Mutation {
   ): ApproveCourseOutput!
 }
 
+type Mutation {
+  arloCallback(
+    input: ArloCallbackInput!
+  ): ArloCallbackOutput
+}
+
 type Query {
   canApplyPromoCode(
     input: CanApplyPromoCodeInput!
@@ -584,6 +590,10 @@ input NotifyCourseTrainerInput {
   type: CourseTrainerType!
 }
 
+input ArloCallbackInput {
+  url: String!
+}
+
 type LinkProfileResult {
   status: Boolean!
 }
@@ -951,4 +961,9 @@ type SendCourseInformationOutput {
   error: SendCourseInformationError
 }
 
+type ArloCallbackOutput {
+  status: Boolean!
+}
+
 scalar Date
+

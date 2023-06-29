@@ -46,6 +46,15 @@ export type ApproveCourseOutput = {
   success: Scalars['Boolean'];
 };
 
+export type ArloCallbackInput = {
+  url: Scalars['String'];
+};
+
+export type ArloCallbackOutput = {
+  __typename?: 'ArloCallbackOutput';
+  status: Scalars['Boolean'];
+};
+
 /** Avatars are profile images for users. WordPress by default uses the Gravatar service to host and fetch avatars from. */
 export type Avatar = {
   __typename?: 'Avatar';
@@ -26920,6 +26929,7 @@ export type Mutation_Root = {
   __typename?: 'mutation_root';
   acceptOrgInvite?: Maybe<AcceptOrgInviteOutput>;
   approveCourse: ApproveCourseOutput;
+  arloCallback?: Maybe<ArloCallbackOutput>;
   cancelIndividualFromCourse: Scalars['Boolean'];
   cancelMyselfFromCourse: Scalars['Boolean'];
   /** confirmCreditCardPayment */
@@ -27990,6 +28000,12 @@ export type Mutation_RootAcceptOrgInviteArgs = {
 /** mutation root */
 export type Mutation_RootApproveCourseArgs = {
   courseId: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootArloCallbackArgs = {
+  input: ArloCallbackInput;
 };
 
 
@@ -32445,7 +32461,7 @@ export type Order_Temp = {
   promoCodes?: Maybe<Scalars['jsonb']>;
   quantity: Scalars['Int'];
   registrants: Scalars['json'];
-  sales_representative_id?: Maybe<Scalars['uuid']>;
+  salesRepresentativeId?: Maybe<Scalars['uuid']>;
   source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
   user: Scalars['jsonb'];
@@ -32582,7 +32598,7 @@ export type Order_Temp_Bool_Exp = {
   promoCodes?: InputMaybe<Jsonb_Comparison_Exp>;
   quantity?: InputMaybe<Int_Comparison_Exp>;
   registrants?: InputMaybe<Json_Comparison_Exp>;
-  sales_representative_id?: InputMaybe<Uuid_Comparison_Exp>;
+  salesRepresentativeId?: InputMaybe<Uuid_Comparison_Exp>;
   source?: InputMaybe<String_Comparison_Exp>;
   stripePaymentId?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<Jsonb_Comparison_Exp>;
@@ -32651,7 +32667,7 @@ export type Order_Temp_Insert_Input = {
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   quantity?: InputMaybe<Scalars['Int']>;
   registrants?: InputMaybe<Scalars['json']>;
-  sales_representative_id?: InputMaybe<Scalars['uuid']>;
+  salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Scalars['String']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
   user?: InputMaybe<Scalars['jsonb']>;
@@ -32678,7 +32694,7 @@ export type Order_Temp_Max_Fields = {
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
   quantity?: Maybe<Scalars['Int']>;
-  sales_representative_id?: Maybe<Scalars['uuid']>;
+  salesRepresentativeId?: Maybe<Scalars['uuid']>;
   source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
@@ -32703,7 +32719,7 @@ export type Order_Temp_Max_Order_By = {
   price?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
   quantity?: InputMaybe<Order_By>;
-  sales_representative_id?: InputMaybe<Order_By>;
+  salesRepresentativeId?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
@@ -32729,7 +32745,7 @@ export type Order_Temp_Min_Fields = {
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
   quantity?: Maybe<Scalars['Int']>;
-  sales_representative_id?: Maybe<Scalars['uuid']>;
+  salesRepresentativeId?: Maybe<Scalars['uuid']>;
   source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
@@ -32754,7 +32770,7 @@ export type Order_Temp_Min_Order_By = {
   price?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
   quantity?: InputMaybe<Order_By>;
-  sales_representative_id?: InputMaybe<Order_By>;
+  salesRepresentativeId?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
@@ -32799,7 +32815,7 @@ export type Order_Temp_Order_By = {
   promoCodes?: InputMaybe<Order_By>;
   quantity?: InputMaybe<Order_By>;
   registrants?: InputMaybe<Order_By>;
-  sales_representative_id?: InputMaybe<Order_By>;
+  salesRepresentativeId?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
   user?: InputMaybe<Order_By>;
@@ -32862,7 +32878,7 @@ export enum Order_Temp_Select_Column {
   /** column name */
   Registrants = 'registrants',
   /** column name */
-  SalesRepresentativeId = 'sales_representative_id',
+  SalesRepresentativeId = 'salesRepresentativeId',
   /** column name */
   Source = 'source',
   /** column name */
@@ -32897,7 +32913,7 @@ export type Order_Temp_Set_Input = {
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   quantity?: InputMaybe<Scalars['Int']>;
   registrants?: InputMaybe<Scalars['json']>;
-  sales_representative_id?: InputMaybe<Scalars['uuid']>;
+  salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Scalars['String']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
   user?: InputMaybe<Scalars['jsonb']>;
@@ -33032,7 +33048,7 @@ export enum Order_Temp_Update_Column {
   /** column name */
   Registrants = 'registrants',
   /** column name */
-  SalesRepresentativeId = 'sales_representative_id',
+  SalesRepresentativeId = 'salesRepresentativeId',
   /** column name */
   Source = 'source',
   /** column name */
@@ -44318,6 +44334,13 @@ export type SaveGradingDetailsMutationVariables = Exact<{
 
 export type SaveGradingDetailsMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number, gradingConfirmed: boolean } | null };
 
+export type ArloCallbackMutationVariables = Exact<{
+  input: ArloCallbackInput;
+}>;
+
+
+export type ArloCallbackMutation = { __typename?: 'mutation_root', arloCallback?: { __typename?: 'ArloCallbackOutput', status: boolean } | null };
+
 export type ContactInfoFragment = { __typename?: 'xero_contact', firstName: string };
 
 export type InvoiceInfoFragment = { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, amountDue?: any | null, total: any, contact: { __typename?: 'xero_contact', firstName: string } };
@@ -45287,6 +45310,7 @@ export type CourseParticipantsQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<Course_Participant_Order_By> | Course_Participant_Order_By>;
   where?: InputMaybe<Course_Participant_Bool_Exp>;
+  withOrder?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
