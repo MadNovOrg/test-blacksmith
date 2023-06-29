@@ -153,7 +153,7 @@ export const AttendingTab = ({
         acl.canManageParticipantAttendance(course.accreditedBy)
           ? {
               id: 'actions',
-              label: '',
+              label: t('pages.course-participants.actions'),
               sorting: false,
             }
           : null,
@@ -236,7 +236,7 @@ export const AttendingTab = ({
                     <TableCell>
                       {courseParticipant.profile.organizations.map(org => (
                         <Link
-                          href={`/organisations/${org.organization.id}}`}
+                          href={`/organisations/${org.organization.id}`}
                           key={org.organization.id}
                         >
                           <Typography>{org.organization.name}</Typography>
@@ -338,6 +338,14 @@ export const AttendingTab = ({
               rowsPerPage={perPage}
               rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
               data-testid="course-participants-pagination"
+              sx={{
+                '.MuiTablePagination-toolbar': { pl: 0 },
+                '.MuiTablePagination-spacer': { flex: 0 },
+                '.MuiTablePagination-displayedRows': {
+                  flex: 1,
+                  textAlign: 'center',
+                },
+              }}
             />
           ) : null}
 

@@ -825,7 +825,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               </Typography>
 
               <Grid container spacing={3} mb={3}>
-                <Grid item md={12}>
+                <Grid item md={12} xs={12}>
                   <UserSelector
                     value={values.bookingContact?.email ?? undefined}
                     onChange={p => {
@@ -850,7 +850,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     }
                   />
                 </Grid>
-                <Grid item md={6}>
+                <Grid item md={6} xs={12}>
                   <TextField
                     label={t('first-name')}
                     variant="filled"
@@ -869,7 +869,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     fullWidth
                   />
                 </Grid>
-                <Grid item md={6}>
+                <Grid item md={6} xs={12}>
                   <TextField
                     label={t('surname')}
                     variant="filled"

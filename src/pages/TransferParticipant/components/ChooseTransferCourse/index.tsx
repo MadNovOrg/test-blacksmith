@@ -126,7 +126,7 @@ export const ChooseTransferCourse: React.FC<
               ))}
             </TableBody>
           </Table>
-          <Box display="flex" justifyContent="flex-end" mt={3}>
+          <Box display="flex" justifyContent="flex-end" my={3}>
             <Box>
               {mode !== TransferModeEnum.ADMIN_TRANSFERS ? (
                 <Button onClick={cancel} sx={{ mr: 2 }}>

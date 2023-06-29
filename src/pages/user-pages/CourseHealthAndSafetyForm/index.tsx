@@ -9,6 +9,8 @@ import {
   Grid,
   TextField,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -24,7 +26,6 @@ import {
   MUTATION,
   ParamsType,
 } from '@app/queries/user-queries/save-health-safety-consent'
-import theme from '@app/theme'
 
 export const CourseHealthAndSafetyForm = () => {
   const { t } = useTranslation()
@@ -32,6 +33,9 @@ export const CourseHealthAndSafetyForm = () => {
   const navigate = useNavigate()
   const params = useParams()
   const { profile } = useAuth()
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const courseId = params.id as string
   const { data: course } = useCourse(courseId ?? '')
@@ -87,7 +91,7 @@ export const CourseHealthAndSafetyForm = () => {
             </Sticky>
           </Grid>
 
-          <Grid item md={7} pt={10} px={2} container gap={3}>
+          <Grid item md={7} pt={isMobile ? 2 : 10} px={2} container gap={3}>
             <Typography variant="subtitle1" mt={2}>
               {t('pages.hs-form.information.h1')}
             </Typography>

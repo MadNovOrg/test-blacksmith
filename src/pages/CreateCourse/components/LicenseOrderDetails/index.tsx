@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import LoadingButton from '@mui/lab/LoadingButton'
+import { useMediaQuery, useTheme } from '@mui/material'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -35,6 +36,9 @@ type Inputs = {
 
 export const LicenseOrderDetails = () => {
   const navigate = useNavigate()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const {
     setCurrentStepKey,
     courseData,
@@ -155,16 +159,23 @@ export const LicenseOrderDetails = () => {
           <Box
             display="flex"
             justifyContent="space-between"
+            flexDirection={isMobile ? 'column' : 'row'}
+            alignContent={isMobile ? 'left' : 'center'}
             sx={{ mt: 4, mb: 4 }}
           >
-            <Button
-              onClick={() => navigate(`../../new?type=${courseData.type}`)}
-              startIcon={<ArrowBackIcon />}
-            >
-              {_t('pages.create-course.assign-trainers.back-btn')}
-            </Button>
-
             <Box>
+              <Button
+                onClick={() => navigate(`../../new?type=${courseData.type}`)}
+                startIcon={<ArrowBackIcon />}
+              >
+                {_t('pages.create-course.assign-trainers.back-btn')}
+              </Button>
+            </Box>
+            <Box
+              display="flex"
+              flexDirection={isMobile ? 'column' : 'row'}
+              sx={{ mt: isMobile ? 2 : 0 }}
+            >
               <Button
                 variant="text"
                 sx={{ marginRight: 4 }}

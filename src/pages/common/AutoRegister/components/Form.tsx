@@ -118,7 +118,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           {t('personal-details')}
         </Typography>
         <Grid container spacing={3} mb={3}>
-          <Grid item md={6}>
+          <Grid item md={6} xs={12}>
             <TextField
               id="firstName"
               label={t('first-name')}
@@ -134,7 +134,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               required
             />
           </Grid>
-          <Grid item md={6}>
+          <Grid item md={6} xs={12}>
             <TextField
               id="surname"
               label={t('surname')}

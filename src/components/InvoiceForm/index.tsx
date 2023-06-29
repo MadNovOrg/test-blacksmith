@@ -113,60 +113,59 @@ export const InvoiceForm: React.FC<React.PropsWithChildren<unknown>> = () => {
             required
           />
         </Grid>
+        <Grid item md={12} sm={12}>
+          <TextField
+            id="email"
+            label={t('email')}
+            variant="filled"
+            placeholder={t('email-placeholder')}
+            error={!!errors.invoiceDetails?.email}
+            helperText={errors.invoiceDetails?.email?.message}
+            {...register('invoiceDetails.email')}
+            inputProps={{ 'data-testid': 'input-email' }}
+            sx={{ bgcolor: 'grey.100' }}
+            fullWidth
+            required
+          />
+        </Grid>
+
+        <Grid item md={12} sm={12}>
+          <PhoneNumberInput
+            label={t('phone')}
+            variant="filled"
+            sx={{ bgcolor: 'grey.100' }}
+            inputProps={{
+              sx: { height: 40 },
+              'data-testid': 'input-phone',
+            }}
+            error={!!errors.invoiceDetails?.phone}
+            helperText={errors.invoiceDetails?.phone?.message}
+            value={values.invoiceDetails?.phone || ''}
+            onChange={p =>
+              setValue('invoiceDetails.phone', p as string, {
+                shouldValidate: true,
+              })
+            }
+            fullWidth
+            required
+          />
+        </Grid>
+
+        <Grid item md={6} sm={12}>
+          <TextField
+            id="purchaseOrder"
+            label={t('po')}
+            variant="filled"
+            placeholder={t('po-placeholder')}
+            error={!!errors.invoiceDetails?.purchaseOrder}
+            helperText={errors.invoiceDetails?.purchaseOrder?.message}
+            {...register('invoiceDetails.purchaseOrder')}
+            inputProps={{ 'data-testid': 'input-po' }}
+            sx={{ bgcolor: 'grey.100' }}
+            fullWidth
+          />
+        </Grid>
       </Grid>
-
-      <Box mb={3}>
-        <TextField
-          id="email"
-          label={t('email')}
-          variant="filled"
-          placeholder={t('email-placeholder')}
-          error={!!errors.invoiceDetails?.email}
-          helperText={errors.invoiceDetails?.email?.message}
-          {...register('invoiceDetails.email')}
-          inputProps={{ 'data-testid': 'input-email' }}
-          sx={{ bgcolor: 'grey.100' }}
-          fullWidth
-          required
-        />
-      </Box>
-
-      <Box mb={3}>
-        <PhoneNumberInput
-          label={t('phone')}
-          variant="filled"
-          sx={{ bgcolor: 'grey.100' }}
-          inputProps={{
-            sx: { height: 40 },
-            'data-testid': 'input-phone',
-          }}
-          error={!!errors.invoiceDetails?.phone}
-          helperText={errors.invoiceDetails?.phone?.message}
-          value={values.invoiceDetails?.phone || ''}
-          onChange={p =>
-            setValue('invoiceDetails.phone', p as string, {
-              shouldValidate: true,
-            })
-          }
-          fullWidth
-          required
-        />
-      </Box>
-
-      <Box mb={3} maxWidth={300}>
-        <TextField
-          id="purchaseOrder"
-          label={t('po')}
-          variant="filled"
-          placeholder={t('po-placeholder')}
-          error={!!errors.invoiceDetails?.purchaseOrder}
-          helperText={errors.invoiceDetails?.purchaseOrder?.message}
-          {...register('invoiceDetails.purchaseOrder')}
-          inputProps={{ 'data-testid': 'input-po' }}
-          sx={{ bgcolor: 'grey.100' }}
-          fullWidth
-        />
-      </Box>
     </>
   )
 }

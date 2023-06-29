@@ -71,10 +71,6 @@ export const TableMenu: React.FC<TableMenuProps> = ({
         value: TableMenuSelections.COURSE_ATTENDEE,
       },
       {
-        label: t('course-as-trainer'),
-        value: TableMenuSelections.COURSE_TRAINER,
-      },
-      {
         label: t('certifications'),
         value: TableMenuSelections.CERTIFICATIONS,
       },

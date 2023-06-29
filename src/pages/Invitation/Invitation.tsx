@@ -16,6 +16,8 @@ import {
   Alert,
   Link,
   TextField,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import jwtDecode from 'jwt-decode'
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
@@ -51,6 +53,9 @@ import {
 export const InvitationPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const { profile, logout } = useAuth()
   const [searchParams] = useSearchParams()
   const [response, setResponse] = useState('yes')
@@ -176,7 +181,7 @@ export const InvitationPage = () => {
         py={3}
         px={3}
         borderRadius={2}
-        width={500}
+        width={isMobile ? undefined : 500}
       >
         <Typography variant="h3" fontWeight="600" color="grey.800" mb={3}>
           {t('course-registration')}

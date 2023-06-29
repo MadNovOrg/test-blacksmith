@@ -140,7 +140,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
     <Container
       maxWidth="lg"
       sx={{ py: 5, position: 'relative' }}
-      disableGutters
+      disableGutters={!isMobile}
     >
       <SnackbarMessage
         messageKey="course-created"
@@ -200,7 +200,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
             </Stack>
           ) : null}
 
-          {actionableCourses?.courses.length ||
+          {(actionableCourses?.courses.length && !isMobile) ||
           (actionableCourses?.courses.length &&
             selectedTab === Tables.ACTIONABLE) ? (
             <Box mb={3}>

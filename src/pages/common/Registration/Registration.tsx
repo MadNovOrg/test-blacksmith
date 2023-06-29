@@ -1,4 +1,4 @@
-import { Typography, Box, Button } from '@mui/material'
+import { Typography, Box, Button, useTheme, useMediaQuery } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
@@ -30,6 +30,9 @@ export const RegistrationPage: React.FC<
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const location = useLocation()
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const courseId = searchParams.get('course_id')
   const quantity = searchParams.get('quantity')
@@ -89,7 +92,13 @@ export const RegistrationPage: React.FC<
   return (
     <AppLayoutMinimal width={628}>
       <Box display="flex" flexDirection="column" alignItems="center">
-        <Typography variant="h3" fontWeight="600" color="secondary" mb={1}>
+        <Typography
+          variant="h3"
+          fontWeight="600"
+          color="secondary"
+          mb={1}
+          align={isMobile ? 'center' : 'left'}
+        >
           {t('create-free-account')}
         </Typography>
         <Typography

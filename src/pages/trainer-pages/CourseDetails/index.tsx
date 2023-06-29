@@ -409,27 +409,31 @@ export const CourseDetails = () => {
                 </Box>
 
                 <Container sx={{ pb: 2, position: 'relative' }}>
-                  <SnackbarMessage
-                    messageKey="course-created"
-                    sx={{ position: 'absolute' }}
-                  />
-                  <SnackbarMessage
-                    messageKey="course-canceled"
-                    severity="info"
-                    sx={{ position: 'absolute' }}
-                  />
-                  <SnackbarMessage
-                    messageKey="course-submitted"
-                    sx={{ position: 'absolute' }}
-                  />
-                  <SnackbarMessage
-                    messageKey="course-evaluated"
-                    sx={{ position: 'absolute' }}
-                  />
-                  <SnackbarMessage
-                    messageKey="participant-transferred"
-                    sx={{ position: 'absolute' }}
-                  />
+                  {isMobile ? undefined : (
+                    <>
+                      <SnackbarMessage
+                        messageKey="course-created"
+                        sx={{ position: 'absolute' }}
+                      />
+                      <SnackbarMessage
+                        messageKey="course-canceled"
+                        severity="info"
+                        sx={{ position: 'absolute' }}
+                      />
+                      <SnackbarMessage
+                        messageKey="course-submitted"
+                        sx={{ position: 'absolute' }}
+                      />
+                      <SnackbarMessage
+                        messageKey="course-evaluated"
+                        sx={{ position: 'absolute' }}
+                      />
+                      <SnackbarMessage
+                        messageKey="participant-transferred"
+                        sx={{ position: 'absolute' }}
+                      />
+                    </>
+                  )}
 
                   <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.ATTENDEES}>
                     <CourseAttendees course={course} />

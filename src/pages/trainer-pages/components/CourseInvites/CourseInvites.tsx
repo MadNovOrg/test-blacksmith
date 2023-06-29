@@ -222,7 +222,7 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
                   color="primary"
                   onClick={() => setShowModal(true)}
                   disabled={invitesLeft === 0}
-                  fullWidth
+                  fullWidth={isMobile}
                   data-testid="course-invite-btn"
                 >
                   {t('pages.course-participants.invite-btn')}
@@ -253,7 +253,7 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
         </Typography>
 
         <Grid container alignItems="flex-end" spacing={2} sx={{ my: 1 }}>
-          <Grid item md={6} sm={12} sx={{ minWidth: 0 }}>
+          <Grid item md={8} sm={12} sx={{ minWidth: 0 }}>
             <Autocomplete
               multiple
               options={[]}
@@ -269,7 +269,7 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
               data-testid="modal-invites-emails"
             />
           </Grid>
-          <Grid item md={6} sm={12}>
+          <Grid item md={4} sm={12}>
             <LoadingButton
               variant="contained"
               color="primary"

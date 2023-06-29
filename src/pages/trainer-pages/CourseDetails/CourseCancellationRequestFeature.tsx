@@ -1,5 +1,6 @@
 import Cancel from '@mui/icons-material/Cancel'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 import {
   Alert,
   Box,
@@ -66,6 +67,7 @@ export const CourseCancellationRequestFeature: React.FC<
         <Alert
           severity="warning"
           variant="outlined"
+          icon={isMobile ? false : <WarningAmberIcon fontSize="inherit" />}
           sx={{
             my: 2,
             alignItems: 'center',
@@ -77,7 +79,8 @@ export const CourseCancellationRequestFeature: React.FC<
           <Box
             display="flex"
             justifyContent="space-between"
-            alignItems="stretch"
+            alignItems="center"
+            rowGap={2}
             flexDirection={isMobile ? 'column' : 'row'}
           >
             <Typography

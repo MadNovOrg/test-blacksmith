@@ -39,10 +39,16 @@ export const DetailsRow = ({
       display="flex"
       alignItems={isMobile ? 'start' : 'center'}
       flexDirection={isMobile ? 'column' : 'row'}
+      height="1.5rem"
       {...(containerProps ?? {})}
     >
       <Grid item xs={12} md={4}>
-        <Typography flex={1} color="grey.700" {...(labelProps ?? {})}>
+        <Typography
+          flex={1}
+          color="grey.700"
+          {...(labelProps ?? {})}
+          alignContent="center"
+        >
           {label}
         </Typography>
       </Grid>
@@ -53,7 +59,7 @@ export const DetailsRow = ({
               data-testid={dataTestId}
               flex={2}
               {...(valueProps ?? {})}
-              lineHeight={'3rem'}
+              lineHeight={'1.5rem'}
               sx={{
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',

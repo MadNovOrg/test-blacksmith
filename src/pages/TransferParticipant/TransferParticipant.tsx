@@ -89,7 +89,7 @@ export const TransferParticipant: React.FC<
           </Box>
 
           <Box flex={1}>
-            <Box mt={8}>
+            <Box mt={isMobile ? 2 : 8}>
               <Outlet />
             </Box>
           </Box>

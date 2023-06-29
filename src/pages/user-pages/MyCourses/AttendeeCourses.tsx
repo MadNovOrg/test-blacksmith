@@ -94,7 +94,7 @@ export const AttendeeCourses: React.FC<
   )
 
   return (
-    <Container maxWidth="lg" sx={{ py: 5, px: 0 }} disableGutters>
+    <Container maxWidth="lg" sx={{ py: 5, px: 0 }} disableGutters={!isMobile}>
       <Box flexDirection={isMobile ? 'column' : 'row'} display="flex" gap={4}>
         <Box width={isMobile ? undefined : 250}>
           <Typography variant="h1">{t('my-courses')}</Typography>

@@ -589,6 +589,7 @@
     "contact": "Contact",
     "invite-date": "Invite Date",
     "organisation": "Organisation",
+    "actions": "Actions",
     "prerequisites": "Prerequisites",
     "attending": "{{attending}} of {{max}} attending",
     "invites-left_one": "{{count}} invite left",

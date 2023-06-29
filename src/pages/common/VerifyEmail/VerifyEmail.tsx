@@ -68,7 +68,7 @@ export const VerifyEmailPage: React.FC<React.PropsWithChildren<Props>> = () => {
         </Typography>
 
         {success ? (
-          <Box>
+          <Box alignItems={'center'} alignContent={'center'}>
             <Typography sx={{ my: 6 }}>
               {t('pages.signup.success-hint')}
             </Typography>

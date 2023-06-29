@@ -8,6 +8,8 @@ import {
   Radio,
   RadioGroup,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import jwtDecode from 'jwt-decode'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -35,6 +37,8 @@ export const OrgInvitationPage = () => {
   const { profile, logout } = useAuth()
   const [searchParams] = useSearchParams()
   const [response, setResponse] = useState('yes')
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const { token, inviteId, email } = useMemo(() => {
     const token = searchParams.get('token') as string
@@ -127,7 +131,7 @@ export const OrgInvitationPage = () => {
         py={3}
         px={3}
         borderRadius={2}
-        width={500}
+        width={isMobile ? undefined : 500}
       >
         <Typography variant="h3" fontWeight="600" mb={3}>
           {t('pages.org-invite.title', { orgName: invite.orgName })}

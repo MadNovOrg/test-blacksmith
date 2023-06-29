@@ -27,11 +27,12 @@ import { useTranslation } from 'react-i18next'
 import { CourseInstructionsDialog } from '@app/components/CourseInstructionsDialog'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { Course_Status_Enum } from '@app/generated/graphql'
-import { Course, CourseDeliveryType } from '@app/types'
+import { AdminOnlyCourseStatus, Course, CourseDeliveryType } from '@app/types'
 import { getCourseBeginsForMessage, formatCourseVenue } from '@app/util'
 
 import { CourseHostInfo } from '../CourseHostInfo'
 import { CourseTrainersInfo } from '../CourseTrainersInfo'
+import { SnackbarMessage } from '../SnackbarMessage'
 
 const StyledListIcon = styled(ListItemIcon)(({ theme }) => ({
   minWidth: '32px',
@@ -101,6 +102,32 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
       }}
     >
       <Container>
+        {isMobile ? (
+          <>
+            <SnackbarMessage
+              messageKey="course-created"
+              sx={{ position: 'absolute' }}
+            />
+            <SnackbarMessage
+              messageKey="course-canceled"
+              severity="info"
+              sx={{ position: 'absolute' }}
+            />
+            <SnackbarMessage
+              messageKey="course-submitted"
+              sx={{ position: 'absolute' }}
+            />
+            <SnackbarMessage
+              messageKey="course-evaluated"
+              sx={{ position: 'absolute' }}
+            />
+            <SnackbarMessage
+              messageKey="participant-transferred"
+              sx={{ position: 'absolute' }}
+            />
+          </>
+        ) : undefined}
+
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             {slots?.BackButton?.()}
@@ -116,6 +143,17 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             <Typography variant="body2" color="secondary">
               {course.course_code}
             </Typography>
+            {course.status && isMobile ? (
+              <Box mt={2}>
+                <CourseStatusChip
+                  status={
+                    course.cancellationRequest
+                      ? AdminOnlyCourseStatus.CancellationRequested
+                      : course.status
+                  }
+                />
+              </Box>
+            ) : null}
             {isMobile && course.schedule[0].venue?.geoCoordinates ? (
               <Grid>
                 <Wrapper
