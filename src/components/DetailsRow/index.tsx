@@ -1,11 +1,4 @@
-import {
-  Box,
-  Grid,
-  Typography,
-  useTheme,
-  useMediaQuery,
-  Tooltip,
-} from '@mui/material'
+import { Box, Grid, Typography, Tooltip } from '@mui/material'
 import React, { ReactNode } from 'react'
 
 import { ElementProps } from '@app/types'
@@ -30,45 +23,43 @@ export const DetailsRow = ({
   children?: React.ReactNode
   'data-testid'?: string
 }) => {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-
   return (
     <Grid
       container
-      display="flex"
-      alignItems={isMobile ? 'start' : 'center'}
-      flexDirection={isMobile ? 'column' : 'row'}
-      height="1.5rem"
       {...(containerProps ?? {})}
+      maxWidth={window.innerWidth / 2}
     >
-      <Grid item xs={12} md={4}>
-        <Typography
-          flex={1}
-          color="grey.700"
-          {...(labelProps ?? {})}
-          alignContent="center"
-        >
-          {label}
-        </Typography>
+      <Grid item xs={12} md={5}>
+        <Box>
+          <Typography
+            flex={1}
+            color="grey.900"
+            {...(labelProps ?? {})}
+            alignContent="center"
+          >
+            {label}
+          </Typography>
+        </Box>
       </Grid>
       {value ? (
-        <Grid item xs={12} md={8}>
-          <Tooltip title={value}>
-            <Typography
-              data-testid={dataTestId}
-              flex={2}
-              {...(valueProps ?? {})}
-              lineHeight={'1.5rem'}
-              sx={{
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
-            >
-              {value}
-            </Typography>
-          </Tooltip>
+        <Grid item xs={12} md={7}>
+          <Box>
+            <Tooltip title={value}>
+              <Typography
+                data-testid={dataTestId}
+                color="grey.600"
+                flex={2}
+                {...(valueProps ?? {})}
+                sx={{
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {value}
+              </Typography>
+            </Tooltip>
+          </Box>
         </Grid>
       ) : null}
       {children}
