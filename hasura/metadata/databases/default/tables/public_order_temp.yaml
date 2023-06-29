@@ -115,3 +115,22 @@ insert_permissions:
         - organization_id
         - profile_id
       backend_only: false
+update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - sales_representative_id
+        - source
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      check: null
+  - role: trainer
+    permission:
+      columns:
+        - sales_representative_id
+        - source
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      check: null

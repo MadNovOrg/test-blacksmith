@@ -472,6 +472,15 @@ update_permissions:
               - OPEN
               - CLOSED
       check: null
+  - role: trainer
+    permission:
+      columns:
+        - sales_representative_id
+        - source
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      check: null
   - role: tt-admin
     permission:
       columns:
