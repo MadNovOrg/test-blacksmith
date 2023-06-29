@@ -211,6 +211,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
             RoleName.TT_ADMIN,
             RoleName.SALES_ADMIN,
             RoleName.TT_OPS,
+            RoleName.TRAINER,
           ]
           return roles.some(r => r === auth.activeRole) || acl.isOrgAdmin()
         }

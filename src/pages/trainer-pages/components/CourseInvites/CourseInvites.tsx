@@ -20,7 +20,7 @@ import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import { Course, CourseType, InviteStatus } from '@app/types'
-import { courseStarted, getCourseLeadTrainer } from '@app/util'
+import { courseStarted } from '@app/util'
 
 type Props = {
   course: Course
@@ -32,10 +32,7 @@ const emailSchema = yup.string().email().required()
 export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { acl, profile } = useAuth()
-
-  const isLeadTrainer =
-    getCourseLeadTrainer(course.trainers || [])?.profile.id === profile?.id
+  const { acl } = useAuth()
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -180,7 +177,7 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
       >
         {!courseHasStarted &&
           !courseCancelled &&
-          (acl.canInviteAttendees(course.type) || isLeadTrainer) &&
+          acl.canInviteAttendees(course.type) &&
           (isOpenCourse ? (
             <>
               <Typography variant="subtitle2" data-testid="seats-left">
