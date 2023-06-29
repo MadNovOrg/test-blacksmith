@@ -1581,7 +1581,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       ),
                     }}
                     error={Boolean(errors.price)}
-                    helperText={t('components.course-form.price-number-error')}
+                    helperText={errors.price?.message ?? ''}
                     disabled={disabledFields.has('price')}
                     sx={{ mt: 2 }}
                   />
