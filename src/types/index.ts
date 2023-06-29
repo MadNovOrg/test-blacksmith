@@ -2,6 +2,7 @@ import { DeepNonNullable } from 'ts-essentials'
 
 import {
   Accreditors_Enum,
+  Course_Bild_Module,
   Course_Source_Enum,
   Course_Status_Enum,
   Grade_Enum,
@@ -29,6 +30,7 @@ export type Course = {
   status: Course_Status_Enum
   reaccreditation: boolean
   organization?: Organization
+  bildModules?: Array<Course_Bild_Module>
   bookingContact?: Profile
   bookingContactProfileId?: string
   schedule: CourseSchedule[]

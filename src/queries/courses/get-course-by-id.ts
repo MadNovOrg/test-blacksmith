@@ -17,6 +17,10 @@ export const QUERY = gql`
     course: course_by_pk(id: $id) {
       ...Course
       isDraft
+      bildModules {
+        id
+        modules
+      }
       bildStrategies {
         strategyName
       }

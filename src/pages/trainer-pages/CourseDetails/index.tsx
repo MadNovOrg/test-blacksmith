@@ -18,6 +18,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
+import { CourseOverview } from '@app/components/CourseOverview'
 import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
@@ -54,6 +55,7 @@ export enum CourseDetailsTabs {
   GRADING = 'GRADING',
   EVALUATION = 'EVALUATION',
   CERTIFICATIONS = 'CERTIFICATIONS',
+  COURSE_OVERVIEW = 'COURSE_OVERVIEW',
 }
 
 export const CourseDetails = () => {
@@ -200,6 +202,8 @@ export const CourseDetails = () => {
       startPolling()
     }
   }, [course, startPolling, polling])
+
+  const showCourseOverview = course?.status === Course_Status_Enum.Scheduled
 
   return (
     <>
@@ -376,6 +380,15 @@ export const CourseDetails = () => {
                           data-testid="certifications-tab"
                         />
                       ) : null}
+                      {showCourseOverview && (
+                        <PillTab
+                          label={t(
+                            'pages.course-details.tabs.course-overview.title'
+                          )}
+                          value={CourseDetailsTabs.COURSE_OVERVIEW}
+                          data-testid="course-overview-tab"
+                        />
+                      )}
                     </PillTabList>
                     <Box>
                       {!course.cancellationRequest &&
@@ -443,6 +456,15 @@ export const CourseDetails = () => {
                       <CourseCertifications course={course} />
                     </TabPanel>
                   ) : null}
+
+                  {showCourseOverview && (
+                    <TabPanel
+                      sx={{ px: 0 }}
+                      value={CourseDetailsTabs.COURSE_OVERVIEW}
+                    >
+                      <CourseOverview course={course} />
+                    </TabPanel>
+                  )}
                 </Container>
               </TabContext>
             </>

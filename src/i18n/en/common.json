@@ -122,6 +122,7 @@
   "promo-code": "Promo code",
   "promo-codes": "Promo codes",
   "invalid-promo-code": "Invalid promo code",
+  "areas": "{{count}} areas",
   "code": "Code",
   "type": "Type",
   "amount-due": "Amount due",

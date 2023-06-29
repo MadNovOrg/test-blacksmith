@@ -1,0 +1,113 @@
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import {
+  Accordion,
+  AccordionSummary,
+  Alert,
+  Box,
+  Checkbox,
+  CircularProgress,
+  Container,
+  Typography,
+} from '@mui/material'
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import useSWR from 'swr'
+
+import {
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+  ModuleGroupsQuery,
+  ModuleGroupsQueryVariables,
+} from '@app/generated/graphql'
+import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups'
+import { Course } from '@app/types'
+import { LoadingStatus, getSWRLoadingStatus } from '@app/util'
+
+type Props = {
+  course: Course
+}
+
+export const ICMOverview: React.FC<React.PropsWithChildren<Props>> = ({
+  course,
+}: Props) => {
+  const { t } = useTranslation()
+  const { data: modulesDataResponse, error: moduleDataError } = useSWR<
+    ModuleGroupsQuery,
+    Error,
+    [string, ModuleGroupsQueryVariables] | null
+  >([
+    GetModuleGroups,
+    {
+      level: course.level as unknown as Course_Level_Enum,
+      courseDeliveryType:
+        course.deliveryType as unknown as Course_Delivery_Type_Enum,
+      reaccreditation: course.reaccreditation,
+      go1Integration: course.go1Integration,
+    },
+  ])
+
+  const modulesData = useMemo(
+    () =>
+      modulesDataResponse?.groups.filter(
+        group => (group?.duration?.aggregate?.sum?.duration ?? 0) > 0
+      ),
+    [modulesDataResponse]
+  )
+
+  const modulesLoadingStatus = getSWRLoadingStatus(modulesData, moduleDataError)
+
+  const [usedModules, setUsedModules] = useState<string[]>([])
+
+  useEffect(() => {
+    const modulesInCourse = course.moduleGroupIds.map(
+      ({ module }) => module.moduleGroup.id
+    )
+
+    setUsedModules(modulesInCourse)
+  }, [course.moduleGroupIds])
+
+  return (
+    <>
+      {modulesLoadingStatus === LoadingStatus.ERROR && (
+        <Alert severity="error" variant="filled">
+          {t('internal-error')}
+        </Alert>
+      )}
+      {modulesLoadingStatus === LoadingStatus.FETCHING && (
+        <Box display="flex" margin="auto">
+          <CircularProgress sx={{ m: 'auto' }} size={64} />
+        </Box>
+      )}
+
+      {modulesData?.map(item => (
+        <Accordion key={item.id}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1bh-content"
+            id="panel1bh-header"
+          >
+            <Box display="flex" alignItems="center">
+              <Checkbox checked={!!usedModules.includes(item.id)} disabled />
+              <Typography variant="body1" ml={1}>
+                {item.name}
+              </Typography>
+              <Typography variant="body2" ml={4}>
+                {t('areas', { count: item.modules.length })}
+              </Typography>
+            </Box>
+          </AccordionSummary>
+
+          <Container>
+            {item.modules.map(module => (
+              <Box key={module.id} ml={4} my={2}>
+                <Typography variant="body1" color="grey.700">
+                  {module.name}
+                </Typography>
+              </Box>
+            ))}
+          </Container>
+        </Accordion>
+      ))}
+    </>
+  )
+}
