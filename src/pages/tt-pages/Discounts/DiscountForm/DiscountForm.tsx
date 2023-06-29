@@ -601,9 +601,9 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
                 maxDate={values.validTo}
                 slotProps={{
                   textField: {
+                    // @ts-expect-error no arbitrary props are allowed by types, which is wrong
                     'data-testid': 'valid-from',
                     label: t('pages.promoCodes.fld-validFrom-label'),
-                    // @ts-expect-error bla
                     variant: 'filled',
                     fullWidth: true,
                     inputProps: {

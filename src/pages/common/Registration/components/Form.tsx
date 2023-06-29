@@ -251,8 +251,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                   onChange={(d: Date | null) => setValue('dob', d)}
                   slotProps={{
                     textField: {
-                      // @ts-expect-error no arbitrary props are allowed by types, which is wrong
                       variant: 'filled',
+                      // @ts-expect-error no arbitrary props are allowed by types, which is wrong
                       'data-testid': 'dob-input',
                       fullWidth: true,
                       sx: { bgcolor: 'grey.100' },

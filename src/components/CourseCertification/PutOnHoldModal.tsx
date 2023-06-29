@@ -320,9 +320,9 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                           disabled={edit}
                           slotProps={{
                             textField: {
+                              // @ts-expect-error no arbitrary props are allowed by types, which is wrong
                               'data-testid': 'DateFrom',
                               label: t('common.from'),
-                              // @ts-expect-error no arbitrary props are allowed by types, which is wrong
                               variant: 'standard',
                               error: !!errors.dateFrom,
                               helperText: errors.dateFrom?.message,
@@ -346,9 +346,9 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                           minDate={values.dateFrom || undefined}
                           slotProps={{
                             textField: {
+                              // @ts-expect-error no arbitrary props are allowed by types, which is wrong
                               'data-testid': 'DateTo',
                               label: t('common.to'),
-                              // @ts-expect-error no arbitrary props are allowed by types, which is wrong
                               variant: 'standard',
                               error: !!errors.dateTo,
                               id: 'DateTo',

@@ -39,12 +39,12 @@ export const CourseDatePicker = ({
       maxDate={maxDate}
       slotProps={{
         textField: {
-          // @ts-expect-error no arbitrary props are allowed by types, which is wrong
           variant: 'filled',
           fullWidth: true,
           error: Boolean(error),
           helperText: error?.message,
           onBlur: onBlur,
+          // @ts-expect-error no arbitrary props are allowed by types, which is wrong
           'data-testid': `${label}-datePicker-textField`,
           required,
           name,

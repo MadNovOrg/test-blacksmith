@@ -68,9 +68,9 @@ export const FilterDates: React.FC<React.PropsWithChildren<Props>> = ({
           onError={reason => setFromError(reason?.toString() || '')}
           slotProps={{
             textField: {
+              // @ts-expect-error no arbitrary props are allowed by types, which is wrong
               'data-testid': 'DateFrom',
               label: t('common.from'),
-              // @ts-expect-error no arbitrary props are allowed by types, which is wrong
               variant: 'standard',
               fullWidth: true,
               error: fromError !== '',
@@ -89,9 +89,9 @@ export const FilterDates: React.FC<React.PropsWithChildren<Props>> = ({
           onError={reason => setToError(reason?.toString() || '')}
           slotProps={{
             textField: {
+              // @ts-expect-error no arbitrary props are allowed by types, which is wrong
               'data-testid': 'DateTo',
               label: t('common.to'),
-              // @ts-expect-error no arbitrary props are allowed by types, which is wrong
               variant: 'standard',
               fullWidth: true,
               error: toError !== '',
