@@ -129,7 +129,7 @@ export const OrgOverviewTab: React.FC<
           excludedStatuses={
             new Set([
               CertificateStatus.REVOKED,
-              CertificateStatus.EXPIRING_SOON,
+              CertificateStatus.EXPIRED,
               CertificateStatus.ON_HOLD,
             ])
           }
