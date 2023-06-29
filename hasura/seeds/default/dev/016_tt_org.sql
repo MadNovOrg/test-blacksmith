@@ -35,7 +35,7 @@ INSERT INTO public.identity (profile_id, provider_id, type) VALUES
 ('dccd780a-9745-4972-a43e-95ec3ef361df', '07bcfa2d-7635-4b40-a568-da3c05e221d6', 'cognito'),
 ('dccd780a-9745-4972-a43e-95ec3ef361df', '9482f354-1cfb-466c-8b3c-98ee8c7137af', 'cognito'),
 
-('6407ca25-d1d2-4a3d-863a-4b2a0a56c0e4', '1994bb6c-eec8-475d-a619-3f5241ab023e', 'cognito'),
+('6407ca25-d1d2-4a3d-863a-4b2a0a56c0e4', '43e3debb-908a-4e1f-857e-ac659bc29f55', 'cognito'),
 ('6407ca25-d1d2-4a3d-863a-4b2a0a56c0e4', '2ee5a633-46cb-4d56-8eff-362f66ecab79', 'cognito');
 
 INSERT INTO public.organization_member (organization_id, profile_id, is_admin) VALUES

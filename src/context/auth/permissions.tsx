@@ -12,7 +12,7 @@ import type { AuthContextType } from './types'
 
 export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
   const activeRole = auth.activeRole
-  const claimsRoles = auth.claimsRoles
+  const allowedRoles = auth.allowedRoles
   const activeCertificates = auth.activeCertificates ?? []
 
   const acl = Object.freeze({
@@ -36,7 +36,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     isOrgAdmin: () => auth.isOrgAdmin,
 
-    isBookingContact: () => claimsRoles?.has(RoleName.BOOKING_CONTACT),
+    isBookingContact: () => allowedRoles?.has(RoleName.BOOKING_CONTACT),
 
     canViewRevokedCert: () => {
       const roles = [

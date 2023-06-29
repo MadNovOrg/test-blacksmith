@@ -13,6 +13,7 @@ export const ActiveRoles = new Set([
   RoleName.SALES_ADMIN,
   RoleName.SALES_REPRESENTATIVE,
   RoleName.FINANCE,
+  RoleName.BOOKING_CONTACT,
 ])
 
 function getRequestedRole() {
