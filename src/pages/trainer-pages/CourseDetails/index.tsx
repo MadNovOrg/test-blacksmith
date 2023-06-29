@@ -203,9 +203,9 @@ export const CourseDetails = () => {
 
   return (
     <>
-      {courseError && (
+      {courseError || !course ? (
         <Alert severity="error">{t('errors.loading-course')}</Alert>
-      )}
+      ) : null}
       {course ? (
         <>
           {courseLoadingStatus === LoadingStatus.FETCHING ? (

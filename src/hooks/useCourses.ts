@@ -213,7 +213,7 @@ export const useCourses = (
 
     if (role === RoleName.TRAINER) {
       obj.trainers = {
-        status: { _neq: Course_Invite_Status_Enum.Pending },
+        status: { _eq: Course_Invite_Status_Enum.Accepted },
         profile_id: { _eq: profile?.id },
       }
     }
