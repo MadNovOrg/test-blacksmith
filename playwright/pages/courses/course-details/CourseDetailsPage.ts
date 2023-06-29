@@ -108,8 +108,7 @@ export class CourseDetailsPage extends BasePage {
   }
 
   async checkSuccessMessage(text: string) {
-    const successMessageVisible = await this.successMessage.isVisible()
-    if (successMessageVisible) {
+    if (await this.successMessage.isVisible()) {
       await expect(this.successMessage).toHaveText(text)
     }
   }
@@ -217,10 +216,11 @@ export class CourseDetailsPage extends BasePage {
 
   async checkAttendeeExists(user: User) {
     await this.page.reload()
-    const attendee = await this.page.locator(
-      `[data-testid*="course-participant-row"]:has-text("${user.givenName} ${user.familyName}")`
-    )
-    await expect(attendee).toBeVisible()
+    await expect(
+      this.page.locator(
+        `[data-testid*="course-participant-row"]:has-text("${user.givenName} ${user.familyName}")`
+      )
+    ).toBeVisible()
   }
 
   async clickGradingTab() {

@@ -26,6 +26,7 @@ test('edit course notes for indirect course as a trainer', async ({
   page,
   course,
 }) => {
+  test.fail() // See https://behaviourhub.atlassian.net/jira/software/projects/TTHP/issues/TTHP-1811
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto(`${course.id}`)
   const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(

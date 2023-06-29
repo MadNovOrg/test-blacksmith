@@ -64,6 +64,12 @@ export class AssignTrainersPage extends BasePage {
     await this.autocompleteOptions.first().click()
   }
 
+  async selectAssistantTrainer(trainer: User) {
+    await this.assistantInput.type(`${trainer.givenName}`)
+    await expect(this.autocompleteLoading).toHaveCount(0)
+    await this.autocompleteOptions.first().click()
+  }
+
   async clickTrainerExpensesButton() {
     await this.trainerExpensesButton.click()
     const approvalExceptionModal = new CourseApprovalRequiredModal(this.page)

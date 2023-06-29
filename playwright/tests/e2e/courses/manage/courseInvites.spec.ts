@@ -97,7 +97,9 @@ for (const data of testData) {
     const emailPage = new EmailPage(attendeePage)
     await emailPage.renderContent(email.html)
     const invitationPage = await emailPage.clickRegisterNowButton()
-    const attendeeCourseDetailsPage = await invitationPage.acceptInvitation()
+    const attendeeCourseDetailsPage = await invitationPage.acceptInvitation(
+      course
+    )
     await attendeeCourseDetailsPage.checkSuccessMessage(
       'You are now attending this course. Please complete the checklist.'
     )

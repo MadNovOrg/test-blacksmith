@@ -42,6 +42,7 @@ test(`create blended learning course: closed virtual as salesAdmin`, async ({
   await createCoursePage.fillCourseDetails(course)
   const assignTrainersPage = await createCoursePage.clickAssignTrainersButton()
   await assignTrainersPage.selectTrainer(users.trainer)
+  await assignTrainersPage.selectAssistantTrainer(users.trainer2)
   const trainerExpensesPage =
     await assignTrainersPage.clickTrainerExpensesButton()
   const courseOrderDetailsPage =
@@ -67,8 +68,5 @@ test(`create blended learning course: closed virtual as salesAdmin`, async ({
   await courseBuilderPage.clickSubmitButton()
   await trainerApprovalExceptionModal.confirmCourseException()
   await trainerCoursesListPage.goto(`${course.id}`)
-  await trainerCoursesListPage.checkCourseStatus(
-    course.id,
-    'Exceptions approval pending'
-  )
+  await trainerCoursesListPage.checkCourseStatus(course.id, 'Trainer pending')
 })

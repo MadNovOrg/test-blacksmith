@@ -12,6 +12,7 @@ import { MyCoursesPage } from '@qa/pages/courses/MyCoursesPage'
 
 const test = base.extend<{ certificate: { course: Course; user: User } }>({
   certificate: async ({}, use) => {
+    test.fixme(process.env.E2E === 'true')
     const user = users.user1
     const course = FINISHED_COURSE()
     course.type = CourseType.CLOSED

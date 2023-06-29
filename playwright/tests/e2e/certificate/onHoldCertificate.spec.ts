@@ -12,6 +12,7 @@ import { CertificationPage } from '@qa/pages/certificate/CertificationPage'
 
 const test = base.extend<{ certificate: { course: Course; user: User } }>({
   certificate: async ({}, use) => {
+    test.fixme(process.env.E2E === 'true')
     const user = users.user1
     const course = FINISHED_COURSE()
     course.type = CourseType.CLOSED
@@ -32,7 +33,6 @@ const test = base.extend<{ certificate: { course: Course; user: User } }>({
 test.use({ storageState: stateFilePath('admin') })
 
 test('admin can put a certificate on hold', async ({ page, certificate }) => {
-  test.fixme(process.env.E2E === 'true')
   const certificationPage = new CertificationPage(page)
   await certificationPage.goto(
     `${certificate.user.givenName} ${certificate.user.familyName}`

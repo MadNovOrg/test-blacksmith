@@ -1,6 +1,9 @@
-import { Locator, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
+
+import { CourseType } from '@app/types'
 
 import { waitForGraphQLResponse } from '@qa/commands'
+import { Course } from '@qa/data/types'
 
 import { BasePage } from '../BasePage'
 
@@ -20,13 +23,27 @@ export class CourseInvitationPage extends BasePage {
     this.continueButton = this.page.locator('data-testid=login-submit')
   }
 
-  async acceptInvitation(): Promise<CourseDetailsPage> {
-    await Promise.all([
-      waitForGraphQLResponse(this.page, 'acceptInvite', '"status": "ACCEPTED"'),
-      this.willAttendOption.click(),
-      this.continueButton.click(),
-      this.waitForPageLoad(),
-    ])
+  async acceptInvitation(course: Course): Promise<CourseDetailsPage> {
+    if (course.type === CourseType.OPEN) {
+      await Promise.all([
+        waitForGraphQLResponse(this.page, 'invite', '"status": "ACCEPTED"'),
+        expect(this.page.locator('.MuiAlert-message')).toContainText(
+          'Your response has been sent',
+          { timeout: 120000 }
+        ),
+      ])
+    } else {
+      await Promise.all([
+        waitForGraphQLResponse(
+          this.page,
+          'acceptInvite',
+          '"status": "ACCEPTED"'
+        ),
+        this.willAttendOption.click(),
+        this.continueButton.click(),
+        this.waitForPageLoad(),
+      ])
+    }
     return new CourseDetailsPage(this.page)
   }
 

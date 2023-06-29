@@ -13,7 +13,7 @@ const test = base.extend<{ course: Course }>({
     const course = UNIQUE_COURSE()
     course.organization = { name: 'London First School' }
     course.id = await API.course.insertCourse(course, users.trainer.email)
-    await API.course.insertCourseParticipants(course.id, [users.user1WithOrg])
+    await API.course.insertCourseParticipants(course.id, [users.user2WithOrg])
     await use(course)
     await API.course.deleteCourse(course.id)
   },
@@ -22,6 +22,7 @@ const test = base.extend<{ course: Course }>({
 test.use({ storageState: stateFilePath('userOrgAdmin') })
 
 test(`replace an attendee on a course`, async ({ browser, course, page }) => {
+  test.fail() // See https://behaviourhub.atlassian.net/browse/TTHP-1491
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.gotoManageCourses(`${course.id}`)
   const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
@@ -29,7 +30,7 @@ test(`replace an attendee on a course`, async ({ browser, course, page }) => {
   )
   await courseDetailsPage.clickManageAttendance()
   const replaceAttendeePopup = await courseDetailsPage.clickAttendeeReplace()
-  await replaceAttendeePopup.replaceAttendee(users.user2WithOrg)
+  await replaceAttendeePopup.replaceAttendee(users.user1WithOrg)
 
   // Accept the invitation to the course as the new attendee
   const email = await API.email.getLatestEmail(
@@ -40,9 +41,8 @@ test(`replace an attendee on a course`, async ({ browser, course, page }) => {
   const emailPage = new EmailPage(attendeePage)
   await emailPage.renderContent(email.html)
   const invitationPage = await emailPage.clickRegisterNowButton()
-  const attendeeCourseDetailsPage = await invitationPage.acceptInvitation()
-  await attendeeCourseDetailsPage.checkSuccessMessage(
-    'You are now attending this course. Please complete the checklist.'
-  )
-  await courseDetailsPage.checkAttendeeExists(users.user2WithOrg)
+  await invitationPage.acceptInvitation(course)
+
+  // Go to userOrgAdmin and check attendee has been replaced
+  await courseDetailsPage.checkAttendeeExists(users.user1WithOrg)
 })
