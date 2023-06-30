@@ -200,11 +200,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
             RoleName.SALES_ADMIN,
             RoleName.TT_OPS,
           ]
-          return (
-            roles.some(r => r === auth.activeRole) ||
-            acl.isOrgAdmin() ||
-            acl.isBookingContact()
-          )
+          return roles.some(r => r === auth.activeRole) || acl.isOrgAdmin()
         }
         case CourseType.INDIRECT: {
           const roles = [

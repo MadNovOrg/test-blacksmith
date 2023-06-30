@@ -7,8 +7,8 @@ import {
   TextField,
   TextFieldProps,
   Typography,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -32,7 +32,7 @@ const emailSchema = yup.string().email().required()
 export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -165,6 +165,12 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
     [t]
   )
 
+  const allowInvites =
+    acl.canInviteAttendees(course.type) ||
+    (course.type === CourseType.CLOSED &&
+      acl.isBookingContact() &&
+      course.bookingContact?.id === profile?.id)
+
   return (
     <>
       <Grid
@@ -177,7 +183,7 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
       >
         {!courseHasStarted &&
           !courseCancelled &&
-          acl.canInviteAttendees(course.type) &&
+          allowInvites &&
           (isOpenCourse ? (
             <>
               <Typography variant="subtitle2" data-testid="seats-left">

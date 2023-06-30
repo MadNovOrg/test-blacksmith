@@ -1,4 +1,4 @@
-import { add, sub } from 'date-fns'
+import { add, addWeeks, sub } from 'date-fns'
 import React from 'react'
 
 import useCourseInvites from '@app/hooks/useCourseInvites'
@@ -10,7 +10,9 @@ import {
   buildCourse,
   buildCourseSchedule,
   buildInvite,
+  buildProfile,
 } from '@test/mock-data-utils'
+import { profile } from '@test/providers'
 
 import { CourseInvites } from './CourseInvites'
 
@@ -332,6 +334,14 @@ describe('CourseInvites', () => {
     const course = buildCourse({
       overrides: {
         type: CourseType.CLOSED,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: addWeeks(new Date(), 5).toISOString(),
+              end: addWeeks(new Date(), 6).toISOString(),
+            },
+          }),
+        ],
       },
     })
 
@@ -341,8 +351,65 @@ describe('CourseInvites', () => {
       auth: { activeRole: RoleName.TRAINER },
     })
 
-    expect(
-      screen.queryByRole('button', { name: /invite attendees/i })
-    ).not.toBeInTheDocument()
+    expect(screen.queryByTestId('course-invite-btn')).not.toBeInTheDocument()
+  })
+
+  it("doesn't display the invite attendees button for booking contact from different course", () => {
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.CLOSED,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: addWeeks(new Date(), 5).toISOString(),
+              end: addWeeks(new Date(), 6).toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
+
+    render(<CourseInvites course={course} />, {
+      auth: {
+        activeRole: RoleName.TRAINER,
+        allowedRoles: new Set([RoleName.TRAINER, RoleName.BOOKING_CONTACT]),
+      },
+    })
+
+    expect(screen.queryByTestId('course-invite-btn')).not.toBeInTheDocument()
+  })
+
+  it('display the invite attendees button for booking contact of the course', () => {
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.CLOSED,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: addWeeks(new Date(), 5).toISOString(),
+              end: addWeeks(new Date(), 6).toISOString(),
+            },
+          }),
+        ],
+        bookingContact: buildProfile({
+          overrides: {
+            id: profile?.id,
+          },
+        }),
+      },
+    })
+
+    useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
+
+    render(<CourseInvites course={course} />, {
+      auth: {
+        activeRole: RoleName.TRAINER,
+        allowedRoles: new Set([RoleName.TRAINER, RoleName.BOOKING_CONTACT]),
+      },
+    })
+
+    expect(screen.queryByTestId('course-invite-btn')).toBeInTheDocument()
   })
 })
