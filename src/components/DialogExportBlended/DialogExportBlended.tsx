@@ -70,7 +70,7 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
           t('pages.org-details.tabs.licenses.export.col-course-start'),
           t('pages.org-details.tabs.licenses.export.col-note'),
           t('pages.org-details.tabs.licenses.export.col-invoked-by'),
-          t('pages.org-details.tabs.licenses.export.col-action'),
+          t('pages.org-details.tabs.licenses.export.col-amount'),
           t('pages.org-details.tabs.licenses.export.col-balance'),
           t('pages.org-details.tabs.licenses.export.col-reserved-balance'),
           t('pages.org-details.tabs.licenses.export.col-license-price'),

@@ -1164,7 +1164,7 @@
         "table": {
           "col-date": "Date",
           "col-event": "Event",
-          "col-action": "Action",
+          "col-amount": "Amount",
           "col-balance": "Balance",
           "col-reserved-balance": "Reserved balance",
           "added-by": "Added by {{fullName}}",
@@ -1182,7 +1182,7 @@
           "col-date": "Date",
           "col-event": "Event",
           "col-organisation": "Organisation",
-          "col-action": "Action",
+          "col-amount": "Amount",
           "col-balance": "Balance",
           "col-reserved-balance": "Reserved balance",
           "col-license-price": "Cost per licence",

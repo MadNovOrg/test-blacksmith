@@ -46,7 +46,7 @@ export const ExportHistoryButton: React.FC<React.PropsWithChildren<Props>> = ({
           t('col-course-start'),
           t('col-note'),
           t('col-invoked-by'),
-          t('col-action'),
+          t('col-amount'),
           t('col-balance'),
           t('col-reserved-balance'),
           t('col-license-price'),

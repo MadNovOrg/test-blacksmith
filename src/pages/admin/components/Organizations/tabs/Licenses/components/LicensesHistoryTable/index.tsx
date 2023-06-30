@@ -31,7 +31,7 @@ export const LicensesHistoryTable: React.FC<React.PropsWithChildren<Props>> = ({
     () => [
       { id: 'date', label: t('col-date'), sorting: false },
       { id: 'event', label: t('col-event'), sorting: false },
-      { id: 'change', label: t('col-action'), sorting: false },
+      { id: 'change', label: t('col-amount'), sorting: false },
       { id: 'balance', label: t('col-balance'), sorting: false },
       {
         id: 'reserved-balance',
