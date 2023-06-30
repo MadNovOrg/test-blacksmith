@@ -3,6 +3,7 @@ import { setTimeout } from 'timers/promises'
 import { test as base } from '@playwright/test'
 
 import * as API from '@qa/api'
+import { UNIQUE_ORGANIZATION } from '@qa/data/organization'
 import { stateFilePath } from '@qa/hooks/global-setup'
 import { AllOrganisations } from '@qa/pages/org/AllOrganisations'
 
@@ -10,10 +11,7 @@ const test = base.extend<{
   orgId: string
 }>({
   orgId: async ({}, use) => {
-    const id = await API.organization.insertOrganization({
-      name: 'Test organization',
-      go1Licenses: 10,
-    })
+    const id = await API.organization.insertOrganization(UNIQUE_ORGANIZATION())
     await use(id)
     // setting small timeout as there is some race condition
     // between finishing the test and cleaning up the data

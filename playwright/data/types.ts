@@ -71,8 +71,15 @@ export type CourseSchedule = {
 }
 
 export type Organization = {
-  id?: string
   name: string
+  address?: {
+    line1: string
+    line2: string
+    city: string
+    state: string
+    postCode: string
+    country: string
+  }
 }
 
 export type CourseTableRow = {

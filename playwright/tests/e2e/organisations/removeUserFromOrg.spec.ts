@@ -3,6 +3,7 @@ import { setTimeout } from 'timers/promises'
 import { test as base } from '@playwright/test'
 
 import * as API from '@qa/api'
+import { UNIQUE_ORGANIZATION } from '@qa/data/organization'
 import { User } from '@qa/data/types'
 import { users } from '@qa/data/users'
 import { stateFilePath } from '@qa/hooks/global-setup'
@@ -12,24 +13,21 @@ const test = base.extend<{
   organisation: { id: string; name: string; user: User }
 }>({
   organisation: async ({}, use) => {
-    const orgName = Date.now() + ' org'
-    const id = await API.organization.insertOrganization({
-      name: orgName,
-    })
+    const org = UNIQUE_ORGANIZATION()
     const [orgId, profileId] = await Promise.all([
-      API.organization.insertOrganization({ name: orgName }),
+      API.organization.insertOrganization(org),
       API.profile.getProfileId(users.user1.email),
     ])
     await API.organization.insertOrganizationMember({
       profile_id: profileId,
       organization_id: orgId,
     })
-    await use({ id: orgId, name: orgName, user: users.user1 })
+    await use({ id: orgId, name: org.name, user: users.user1 })
     // setting small timeout as there is some race condition
     // between finishing the test and cleaning up the data
     // don't know the reason for it
     await setTimeout(100)
-    await API.organization.deleteOrganization(id)
+    await API.organization.deleteOrganization(orgId)
   },
 })
 

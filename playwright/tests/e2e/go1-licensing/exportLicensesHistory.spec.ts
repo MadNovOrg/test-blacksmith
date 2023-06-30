@@ -6,6 +6,7 @@ import {
 } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
+import { UNIQUE_ORGANIZATION } from '@qa/data/organization'
 import { stateFilePath } from '@qa/hooks/global-setup'
 import { AllOrganisations } from '@qa/pages/org/AllOrganisations'
 
@@ -21,9 +22,7 @@ const invoiceData: Go1_Licenses_History_Set_Input = {
 
 const test = base.extend<{ orgId: string }>({
   orgId: async ({}, use) => {
-    const id = await API.organization.insertOrganization({
-      name: 'Test organization',
-    })
+    const id = await API.organization.insertOrganization(UNIQUE_ORGANIZATION())
     invoiceData.org_id = id
     await API.go1_licensing.insertGo1HistoryEvent(invoiceData)
     await use(id)

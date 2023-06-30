@@ -2,6 +2,7 @@ import { test as base } from '@playwright/test'
 import { addYears } from 'date-fns'
 
 import * as API from '@qa/api'
+import { UNIQUE_ORGANIZATION } from '@qa/data/organization'
 import { users } from '@qa/data/users'
 import { stateFilePath } from '@qa/hooks/global-setup'
 import { ProfilePage } from '@qa/pages/profile/ProfilePage'
@@ -15,7 +16,7 @@ type Go1LicenseContext = {
 const test = base.extend<{ licenseContext: Go1LicenseContext }>({
   licenseContext: async ({}, use) => {
     const [orgId, profileId] = await Promise.all([
-      API.organization.insertOrganization({ name: 'Test organization' }),
+      API.organization.insertOrganization(UNIQUE_ORGANIZATION()),
       API.profile.getProfileId(users.user1.email),
     ])
     const [memberId, licenseId] = await Promise.all([
