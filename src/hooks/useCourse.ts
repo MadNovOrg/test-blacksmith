@@ -34,7 +34,7 @@ export default function useCourse(courseId: string): {
 
   const course = useMemo(() => {
     if (activeRole === RoleName.TRAINER) {
-      const hasAcceptedInvite = data?.course.trainers?.find(
+      const hasAcceptedInvite = data?.course?.trainers?.find(
         t => t.profile.id === profile?.id && t.status === InviteStatus.ACCEPTED
       )
 

@@ -1,10 +1,11 @@
 import { gql } from 'graphql-request'
 
+import { Maybe } from '@app/generated/graphql'
 import { Course } from '@app/types'
 
 import { COURSE, COURSE_SCHEDULE, ORGANIZATION, VENUE } from '../fragments'
 
-export type ResponseType = { course: Course }
+export type ResponseType = { course: Maybe<Course> }
 
 export type ParamsType = { id: string; withOrders?: boolean }
 
