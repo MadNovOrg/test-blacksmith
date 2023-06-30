@@ -108,6 +108,7 @@ export const CourseBuilder: React.FC<
   )
 
   const phoneNumber = parsePhoneNumber(`${import.meta.env.VITE_TT_INFO_PHONE}`)
+  const countryCode = phoneNumber?.countryCallingCode || ''
 
   const { addSnackbarMessage, getSnackbarMessage } = useSnackbar()
 
@@ -706,7 +707,9 @@ export const CourseBuilder: React.FC<
                           'pages.trainer-base.create-course.new-course.course-level-one-or'
                         )}
                         <Link href={phoneNumber?.getURI()} component="a">
-                          {phoneNumber?.formatInternational()}
+                          {phoneNumber
+                            ?.formatInternational()
+                            .replace(countryCode, `${countryCode} (0)`)}
                         </Link>
                         {t(
                           'pages.trainer-base.create-course.new-course.course-level-one-note'

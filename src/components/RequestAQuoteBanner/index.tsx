@@ -12,6 +12,8 @@ export const RequestAQuoteBanner: React.FC<Props> = ({ sx = {} }) => {
   const { t } = useTranslation()
   const phoneNumber = parsePhoneNumber(`${import.meta.env.VITE_TT_INFO_PHONE}`)
 
+  const countryCode = phoneNumber?.countryCallingCode || ''
+
   return (
     <Box
       sx={{
@@ -31,7 +33,9 @@ export const RequestAQuoteBanner: React.FC<Props> = ({ sx = {} }) => {
           i18nKey="components.request-a-quote.more-info"
           t={t}
           values={{
-            phone: phoneNumber?.formatInternational(),
+            phone: phoneNumber
+              ?.formatInternational()
+              .replace(countryCode, `${countryCode} (0)`),
             email: import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS,
           }}
         >
