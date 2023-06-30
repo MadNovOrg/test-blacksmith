@@ -17,7 +17,12 @@ export const parsePoint = (str: string): Point | null => {
   return null
 }
 
-// source for formula: https://en.wikipedia.org/wiki/Haversine_formula
+/**
+ * geoDistance
+ *
+ * @see https://en.wikipedia.org/wiki/Haversine_formula
+ * @returns {number} Number in Kilometers
+ */
 export const geoDistance = (
   coordsA: string,
   coordsB: string
@@ -37,6 +42,7 @@ export const geoDistance = (
   if (dist > 1) {
     dist = 1
   }
+
   dist = Math.acos(dist)
   dist = (dist * 180) / Math.PI
   dist = dist * 60 * 1.1515 * 1.609344

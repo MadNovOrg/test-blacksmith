@@ -1,3 +1,4 @@
+import convertUnits from 'convert-units'
 import { format as F } from 'date-fns'
 import {} from 'date-fns/locale'
 import i18n from 'i18next'
@@ -8,9 +9,11 @@ import common from './en/common.json'
 import components from './en/components.json'
 import dates from './en/dates.json'
 import pages from './en/pages.json'
+import units from './en/units.json'
 
 const dateLocales: Record<string, Locale> = {}
 
+export const defaultLocale = 'en'
 export const supportedLocales = {
   en: {
     name: 'English',
@@ -19,14 +22,15 @@ export const supportedLocales = {
     common,
     components,
     dates,
+    units,
     aol,
   },
 } as const
 
 i18n.use(initReactI18next).init({
-  lng: 'en',
+  lng: defaultLocale,
   resources: supportedLocales,
-  ns: ['common', 'components', 'dates', 'pages', 'aol'],
+  ns: ['common', 'components', 'pages', 'dates', 'units', 'aol'],
   defaultNS: 'common',
   nsSeparator: '.',
   parseMissingKeyHandler: () => '',
@@ -54,5 +58,42 @@ function formatDates(format: string) {
     const d = new Date(value)
     const dateLocale = lng ? dateLocales[lng] : undefined
     return F(d, format, { locale: dateLocale })
+  }
+}
+
+export const unitLocalesMap: Record<string, convertUnits.Distance> = {
+  en: 'mi',
+}
+
+export const shortUnitToLongMap: Record<string, string> = {
+  mi: 'mile',
+  km: 'kilometer',
+}
+
+i18n.services.formatter?.add('unit', formatUnits())
+
+function formatUnits() {
+  return (
+    value: string,
+    lng?: string,
+    options?: {
+      fromUnit: convertUnits.Unit
+    }
+  ) => {
+    const toUnit = unitLocalesMap[lng || defaultLocale]
+    const convertedValue = convertUnits(+value)
+      .from(options?.fromUnit || 'km')
+      .to(toUnit)
+
+    try {
+      return new Intl.NumberFormat(lng, {
+        style: 'unit',
+        unit: shortUnitToLongMap[toUnit],
+        unitDisplay: 'long',
+      }).format(convertedValue)
+    } catch (err) {
+      console.debug(err)
+      return value
+    }
   }
 }

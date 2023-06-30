@@ -525,7 +525,6 @@
   "today": "Today",
   "in-n-days": "In {{ num }}",
   "all-organizations": "All organisations",
-  "km-distance": "{{ number }} kilometers",
   "payment-method": "Payment Method",
   "pay-by-inv": "Pay by invoice",
   "avatar-too-large": "The avatar submitted is too large. Maximum size is {{maxSize}} MB.",

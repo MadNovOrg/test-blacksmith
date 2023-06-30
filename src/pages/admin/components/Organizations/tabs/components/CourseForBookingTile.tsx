@@ -127,7 +127,10 @@ export const CourseForBookingTile: React.FC<
           <Grid item md={2} container alignItems="center">
             <Typography variant="body2" color="grey.600">
               {distance
-                ? t('common.km-distance', { number: distance.toFixed(1) })
+                ? t('units.distance', {
+                    number: distance.toFixed(1),
+                    fromUnit: 'km',
+                  })
                 : ''}
             </Typography>
           </Grid>
