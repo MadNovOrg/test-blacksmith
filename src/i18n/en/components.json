@@ -230,6 +230,7 @@
     "placeholder": "Start typing organisation name",
     "min-chars": "Please type at least 3 characters for suggestions.",
     "no-results": "No organisations found",
+    "no-individuals": "No individuals found",
     "modal": {
       "title": "Add Organisation"
     },

@@ -140,12 +140,25 @@ export const OrgOverviewTab: React.FC<
         </Typography>
 
         {!stats[orgId]?.profiles.count ? (
-          <Alert sx={{ mt: 2 }} severity="info">
-            {t('pages.org-details.tabs.overview.no-org-users') + ' '}
-            <Link href={'./invite'}>
-              {t('pages.org-details.tabs.overview.click-here-to-invite')}
-            </Link>
-          </Alert>
+          <>
+            {certificateStatus.length ? (
+              <>
+                <Typography variant="body1" sx={{ margin: '1em 1em' }}>
+                  {t('components.org-selector.no-individuals')}
+                </Typography>
+                <Typography variant="body2" sx={{ margin: '0em 1em' }}>
+                  {t('components.table-no-rows.noMatches-second')}
+                </Typography>
+              </>
+            ) : (
+              <Alert sx={{ mt: 2 }} severity="info">
+                {t('pages.org-details.tabs.overview.no-org-users') + ' '}
+                <Link href={'./invite'}>
+                  {t('pages.org-details.tabs.overview.click-here-to-invite')}
+                </Link>
+              </Alert>
+            )}
+          </>
         ) : (
           <TabContext value={selectedTab}>
             <TabList

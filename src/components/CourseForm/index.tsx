@@ -133,6 +133,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const isClosedCourse = courseType === CourseType.CLOSED
   const hasMinParticipants = courseType === CourseType.OPEN
 
+  const minCourseStartDate = new Date()
+  minCourseStartDate.setDate(minCourseStartDate.getDate() + 1)
+
   const schema = useMemo(
     () =>
       yup.object({
@@ -1018,8 +1021,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           <FormControl>
             <RadioGroup
               row
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
+              aria-labelledby="delivery-type-radio"
+              name="delivery-type-radio"
               value={deliveryType}
               onChange={e => {
                 const deliveryType = e.target.value as CourseDeliveryType
@@ -1182,7 +1185,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       name={field.name}
                       label={t('components.course-form.start-date-placeholder')}
                       value={field.value}
-                      minDate={new Date()}
+                      minDate={minCourseStartDate}
                       maxDate={values.endDate || undefined}
                       onChange={newStartDate => {
                         field.onChange(newStartDate)
