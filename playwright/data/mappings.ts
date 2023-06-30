@@ -56,6 +56,7 @@ export function toAttendeesTableRow({
     Email: email,
     Organisation: organization?.name || '',
     'H&S submitted': healthSafetyConsent ? 'Yes' : 'No',
+    Actions: '-',
   }
 }
 
