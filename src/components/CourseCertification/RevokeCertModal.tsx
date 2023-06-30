@@ -1,11 +1,7 @@
 import {
-  Select,
   Box,
   TextField,
   Typography,
-  MenuItem,
-  FormControl,
-  InputLabel,
   FormControlLabel,
   Checkbox,
   Button,
@@ -34,14 +30,12 @@ const RevokeCertModal: React.FC<
     'common.course-certificate.revoke-cert-modal'
   )
   const [reason, setReason] = useState('')
-  const [otherReason, setOtherReason] = useState('')
   const [confirmed, setConfirmed] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const fetcher = useFetcher()
 
-  const allowRevoke =
-    reason && confirmed && (reason !== 'OTHER' || otherReason.trim())
+  const allowRevoke = confirmed && reason.trim().length > 0
 
   const handleRevoke = async () => {
     if (!allowRevoke) return
@@ -56,7 +50,7 @@ const RevokeCertModal: React.FC<
           id: certificateId,
           participantId,
           payload: {
-            note: `${reason}${reason === 'OTHER' ? ` - ${otherReason}` : ''}`,
+            note: reason,
           },
         }
       )
@@ -75,46 +69,17 @@ const RevokeCertModal: React.FC<
       </Typography>
 
       <Box mt={2}>
-        <FormControl variant="standard" fullWidth>
-          <InputLabel data-testid="revoke-reason-input" id="reason-label">
-            {t('reason-for-revoke')}
-          </InputLabel>
-          <Select
-            labelId="reason-label"
-            onChange={e => {
-              setReason(e.target.value)
-              if (e.target.value !== 'OTHER') {
-                setOtherReason('')
-              }
-            }}
-            data-testid="revoke-reason-select"
-            id="revoke-reason"
-            label={t('reason-for-revoke')}
-            value={reason}
-          >
-            <MenuItem value="BAD_BEHAVIOUR">{t('bad-behaviour')}</MenuItem>
-            <MenuItem value="LEGAL_REASON">{t('legal-reason')}</MenuItem>
-            <MenuItem value="OTHER" data-testid="other-dropdown-option">
-              {t('other')}
-            </MenuItem>
-          </Select>
-        </FormControl>
+        <TextField
+          variant="standard"
+          required
+          data-testid="specify-reason"
+          label={t('specify-reason')}
+          placeholder={t('specify-reason')}
+          fullWidth
+          value={reason}
+          onChange={event => setReason(event.target.value)}
+        />
       </Box>
-
-      {reason === 'OTHER' && (
-        <Box mt={2}>
-          <TextField
-            variant="standard"
-            required
-            data-testid="specify-reason"
-            label={t('specify-reason')}
-            placeholder={t('specify-reason')}
-            fullWidth
-            value={otherReason}
-            onChange={event => setOtherReason(event.target.value)}
-          />
-        </Box>
-      )}
 
       <Box mt={2}>
         <FormControlLabel
