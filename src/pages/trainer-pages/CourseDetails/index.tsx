@@ -394,6 +394,7 @@ export const CourseDetails = () => {
                       {!course.cancellationRequest &&
                       course.type === CourseType.CLOSED &&
                       isOrgAdmin &&
+                      course.status !== Course_Status_Enum.Cancelled &&
                       !acl.canCancelCourses() ? (
                         <Button
                           data-testid="request-cancellation-button"
