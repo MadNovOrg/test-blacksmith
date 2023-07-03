@@ -19,7 +19,6 @@ describe('component: FilterByBlendedLearning', () => {
 
     expect(onChange).toHaveBeenCalledTimes(2)
     expect(onChange).toHaveBeenCalledWith([
-      Course_Status_Enum.ApprovalPending,
       Course_Status_Enum.ConfirmModules,
       Course_Status_Enum.EvaluationMissing,
       Course_Status_Enum.ExceptionsApprovalPending,

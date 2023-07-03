@@ -88,7 +88,7 @@ select_permissions:
                     - SCHEDULED
                     - TRAINER_MISSING
                     - TRAINER_PENDING
-                    - TRAINER_UNAVAILABLE
+                    - TRAINER_DECLINED
   - role: sales-admin
     permission:
       columns:

@@ -120,7 +120,7 @@ const test = base.extend<{
         {
           ...UNIQUE_COURSE(),
           type: CourseType.OPEN,
-          status: Course_Status_Enum.TrainerUnavailable,
+          status: Course_Status_Enum.TrainerDeclined,
         },
         users.trainer.email
       ),

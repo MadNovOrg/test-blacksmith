@@ -88,10 +88,9 @@ export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
             ) : (
               <>
                 {course.status &&
-                [
-                  Course_Status_Enum.ApprovalPending,
-                  Course_Status_Enum.ExceptionsApprovalPending,
-                ].indexOf(course.status) !== -1 ? (
+                [Course_Status_Enum.ExceptionsApprovalPending].indexOf(
+                  course.status
+                ) !== -1 ? (
                   <CourseStatusChip status={course.status} hideIcon={true} />
                 ) : null}
                 {course.status === Course_Status_Enum.TrainerMissing ? (

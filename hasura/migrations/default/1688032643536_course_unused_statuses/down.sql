@@ -1,0 +1,5 @@
+INSERT INTO course_status (name) VALUES ('APPROVAL_PENDING');
+
+UPDATE course_status
+SET name = 'TRAINER_UNAVAILABLE'
+WHERE name = 'TRAINER_DECLINED';

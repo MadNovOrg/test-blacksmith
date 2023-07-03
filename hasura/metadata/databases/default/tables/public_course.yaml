@@ -395,7 +395,7 @@ select_permissions:
                 - SCHEDULED
                 - TRAINER_MISSING
                 - TRAINER_PENDING
-                - TRAINER_UNAVAILABLE
+                - TRAINER_DECLINED
   - role: booking-contact
     permission:
       columns:
@@ -472,7 +472,7 @@ select_permissions:
                     - SCHEDULED
                     - TRAINER_MISSING
                     - TRAINER_PENDING
-                    - TRAINER_UNAVAILABLE
+                    - TRAINER_DECLINED
           - booking_contact_profile_id:
               _eq: X-Hasura-User-Id
       allow_aggregations: true
@@ -736,7 +736,7 @@ select_permissions:
                     - SCHEDULED
                     - TRAINER_MISSING
                     - TRAINER_PENDING
-                    - TRAINER_UNAVAILABLE
+                    - TRAINER_DECLINED
       allow_aggregations: true
   - role: tt-admin
     permission:
@@ -870,7 +870,7 @@ select_permissions:
                 - SCHEDULED
                 - TRAINER_MISSING
                 - TRAINER_PENDING
-                - TRAINER_UNAVAILABLE
+                - TRAINER_DECLINED
   - role: user
     permission:
       columns:
@@ -946,7 +946,7 @@ select_permissions:
                     - SCHEDULED
                     - TRAINER_MISSING
                     - TRAINER_PENDING
-                    - TRAINER_UNAVAILABLE
+                    - TRAINER_DECLINED
       allow_aggregations: true
 update_permissions:
   - role: ld

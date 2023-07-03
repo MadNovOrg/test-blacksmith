@@ -27,7 +27,6 @@ export const FilterByCourseStatusWarnings: React.FC<
 
   const warningValues = useMemo(
     () => [
-      Course_Status_Enum.ApprovalPending,
       Course_Status_Enum.ConfirmModules,
       Course_Status_Enum.EvaluationMissing,
       Course_Status_Enum.ExceptionsApprovalPending,

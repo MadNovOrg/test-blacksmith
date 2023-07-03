@@ -14899,7 +14899,9 @@ export enum Course_Audit_Type_Constraint {
 }
 
 export enum Course_Audit_Type_Enum {
+  Approved = 'APPROVED',
   Cancellation = 'CANCELLATION',
+  Rejected = 'REJECTED',
   Reschedule = 'RESCHEDULE'
 }
 
@@ -23090,7 +23092,6 @@ export enum Course_Status_Constraint {
 }
 
 export enum Course_Status_Enum {
-  ApprovalPending = 'APPROVAL_PENDING',
   Cancelled = 'CANCELLED',
   Completed = 'COMPLETED',
   ConfirmModules = 'CONFIRM_MODULES',
@@ -23100,9 +23101,9 @@ export enum Course_Status_Enum {
   ExceptionsApprovalPending = 'EXCEPTIONS_APPROVAL_PENDING',
   GradeMissing = 'GRADE_MISSING',
   Scheduled = 'SCHEDULED',
+  TrainerDeclined = 'TRAINER_DECLINED',
   TrainerMissing = 'TRAINER_MISSING',
   TrainerPending = 'TRAINER_PENDING',
-  TrainerUnavailable = 'TRAINER_UNAVAILABLE',
   VenueMissing = 'VENUE_MISSING'
 }
 

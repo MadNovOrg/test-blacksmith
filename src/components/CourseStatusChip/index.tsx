@@ -11,7 +11,6 @@ import {
 } from '@app/types'
 
 const colorsMap: Record<AllCourseStatuses, ChipProps['color']> = {
-  [Course_Status_Enum.ApprovalPending]: 'warning',
   [Course_Status_Enum.Cancelled]: 'default',
   [Course_Status_Enum.Completed]: 'success',
   [Course_Status_Enum.ConfirmModules]: 'warning',
@@ -21,7 +20,7 @@ const colorsMap: Record<AllCourseStatuses, ChipProps['color']> = {
   [Course_Status_Enum.GradeMissing]: 'warning',
   [Course_Status_Enum.Scheduled]: 'info',
   [Course_Status_Enum.TrainerPending]: 'warning',
-  [Course_Status_Enum.TrainerUnavailable]: 'warning',
+  [Course_Status_Enum.TrainerDeclined]: 'warning',
   [Course_Status_Enum.TrainerMissing]: 'info',
   [Course_Status_Enum.ExceptionsApprovalPending]: 'warning',
   [Course_Status_Enum.VenueMissing]: 'warning',

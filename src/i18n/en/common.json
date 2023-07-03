@@ -242,7 +242,7 @@
     "GRADE_MISSING": "Missing grade",
     "SCHEDULED": "Scheduled",
     "TRAINER_PENDING": "Trainer pending",
-    "TRAINER_UNAVAILABLE": "Trainer unavailable",
+    "TRAINER_DECLINED": "Trainer declined",
     "INFO_REQUIRED": "Info required",
     "NOT_ATTENDED": "Unattended",
     "CANCELLATION_REQUESTED": "Cancellation requested",

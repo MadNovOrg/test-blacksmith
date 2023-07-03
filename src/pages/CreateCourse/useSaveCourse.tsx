@@ -151,8 +151,6 @@ export function useSaveCourse(): {
 
         const status = approveExceptions
           ? Course_Status_Enum.ExceptionsApprovalPending
-          : courseData.type === CourseType.INDIRECT
-          ? Course_Status_Enum.ApprovalPending
           : leadTrainerMissing
           ? Course_Status_Enum.TrainerMissing
           : Course_Status_Enum.TrainerPending

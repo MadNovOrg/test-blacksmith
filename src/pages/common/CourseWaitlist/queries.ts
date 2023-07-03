@@ -13,7 +13,7 @@ export const WAITLIST_COURSE = gql`
             SCHEDULED
             TRAINER_MISSING
             TRAINER_PENDING
-            TRAINER_UNAVAILABLE
+            TRAINER_DECLINED
           ]
         }
       }

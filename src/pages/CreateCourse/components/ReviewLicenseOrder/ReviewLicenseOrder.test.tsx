@@ -236,12 +236,12 @@ describe('component: ReviewLicenseOrder', () => {
           level: 'LEVEL_1',
           reaccreditation: courseData.reaccreditation,
           go1Integration: courseData.blendedLearning,
-          status: Course_Status_Enum.ApprovalPending,
           exceptionsPending: false,
           max_participants: courseData.maxParticipants,
           type: courseData.type,
           organization_id: courseData.organization?.id,
           parking_instructions: undefined,
+          status: Course_Status_Enum.TrainerPending,
           trainers: {
             data: [{ type: trainer.type, profile_id: trainer.profile_id }],
           },

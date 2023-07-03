@@ -561,7 +561,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const cancellableCourse =
     course &&
     [
-      Course_Status_Enum.TrainerUnavailable,
+      Course_Status_Enum.TrainerDeclined,
       Course_Status_Enum.TrainerPending,
       Course_Status_Enum.Scheduled,
       Course_Status_Enum.ConfirmModules,

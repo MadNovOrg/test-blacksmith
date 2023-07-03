@@ -23,10 +23,6 @@ const ChipContainer: React.FC<React.PropsWithChildren<unknown>> = ({
 export const AllStatuses = () => (
   <>
     <ChipContainer>
-      <CourseStatusChip status={Course_Status_Enum.ApprovalPending} />
-    </ChipContainer>
-
-    <ChipContainer>
       <CourseStatusChip status={Course_Status_Enum.ConfirmModules} />
     </ChipContainer>
 
@@ -43,7 +39,7 @@ export const AllStatuses = () => (
     </ChipContainer>
 
     <ChipContainer>
-      <CourseStatusChip status={Course_Status_Enum.TrainerUnavailable} />
+      <CourseStatusChip status={Course_Status_Enum.TrainerDeclined} />
     </ChipContainer>
 
     <ChipContainer>

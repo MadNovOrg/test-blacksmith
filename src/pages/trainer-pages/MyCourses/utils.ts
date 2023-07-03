@@ -13,7 +13,6 @@ export function getActionableStatuses(
     case RoleName.TT_OPS:
     case RoleName.LD: {
       return new Set([
-        Course_Status_Enum.ApprovalPending,
         Course_Status_Enum.TrainerMissing,
         Course_Status_Enum.ExceptionsApprovalPending,
       ])
