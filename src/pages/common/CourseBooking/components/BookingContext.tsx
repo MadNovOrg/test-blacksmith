@@ -156,9 +156,23 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       return
     }
 
-    const { pricing } = await GetCoursePricing(fetcher, profile.course.id)
-    if (!pricing) {
-      setError(t('error-no-pricing'))
+    let pricing: Awaited<ReturnType<typeof GetCoursePricing>>['pricing']
+
+    // course has custom pricing (e.g BILD)
+    if (profile.course.price && profile.course.priceCurrency) {
+      pricing = {
+        priceAmount: profile.course.price,
+        priceCurrency: profile.course.priceCurrency as Currency,
+        xeroCode: '',
+      }
+    } else {
+      const pricingResponse = await GetCoursePricing(fetcher, profile.course.id)
+
+      if (!pricingResponse) {
+        setError(t('error-no-pricing'))
+      } else {
+        pricing = pricingResponse.pricing
+      }
     }
 
     const trainerExpenses =

@@ -41,6 +41,7 @@ import {
   InsertCourseAuditMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import useCourse from '@app/hooks/useCourse'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
@@ -75,6 +76,7 @@ import {
 import {
   bildStrategiesToArray,
   courseToCourseInput,
+  generateBildCourseName,
   generateCourseName,
   LoadingStatus,
   profileToInput,
@@ -200,6 +202,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     return [diffs, approved]
   }, [course, courseData])
 
+  const { strategies } = useBildStrategies(
+    Boolean(courseData?.accreditedBy === Accreditors_Enum.Bild)
+  )
+
   const handleTrainersDataChange = useCallback(
     (data: TrainersFormValues, isValid: boolean) => {
       setTrainersData(data)
@@ -269,19 +275,24 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             source: courseData.source,
           }
 
+          const courseName =
+            courseData.accreditedBy === Accreditors_Enum.Bild
+              ? generateBildCourseName(courseData.bildStrategies, strategies)
+              : generateCourseName(
+                  {
+                    level: courseData.courseLevel,
+                    reaccreditation: courseData.reaccreditation,
+                  },
+                  t
+                )
+
           const editResponse = await updateCourse({
             courseId: course.id,
             courseInput: {
               status,
               exceptionsPending:
                 status === Course_Status_Enum.ExceptionsApprovalPending,
-              name: generateCourseName(
-                {
-                  level: courseData.courseLevel,
-                  reaccreditation: courseData.reaccreditation,
-                },
-                t
-              ),
+              name: courseName,
               deliveryType: courseData.deliveryType,
               reaccreditation: courseData.reaccreditation,
               go1Integration: courseData.blendedLearning,
@@ -313,6 +324,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     aolRegion: courseData.aolRegion,
                   }
                 : null),
+              ...(courseData.price ? { price: courseData.price } : null),
             },
             orderInput: orderToUpdate,
             trainers,
@@ -396,6 +408,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       navigate,
       notifyCourseEdit,
       profile,
+      strategies,
       t,
       trainersData,
       updateCourse,

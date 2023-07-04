@@ -429,6 +429,7 @@ select_permissions:
         - organization_id
         - parking_instructions
         - price
+        - price_currency
         - reaccreditation
         - source
         - special_instructions
@@ -693,6 +694,7 @@ select_permissions:
         - organization_id
         - parking_instructions
         - price
+        - price_currency
         - reaccreditation
         - source
         - special_instructions
@@ -854,6 +856,7 @@ select_permissions:
         - name
         - organization_id
         - price
+        - price_currency
         - reaccreditation
         - updated_at
       computed_fields:
@@ -903,6 +906,7 @@ select_permissions:
         - organization_id
         - parking_instructions
         - price
+        - price_currency
         - reaccreditation
         - source
         - special_instructions

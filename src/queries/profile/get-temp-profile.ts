@@ -23,6 +23,8 @@ export type ResponseType = {
       level: CourseLevel
       reaccreditation: boolean
       maxParticipants: number
+      price?: number
+      priceCurrency?: string
       participants: {
         aggregate: {
           count: number
@@ -55,6 +57,8 @@ export const QUERY = gql`
         id
         name
         accreditedBy
+        price
+        priceCurrency
         dates: schedule_aggregate {
           ...CourseDates
         }
