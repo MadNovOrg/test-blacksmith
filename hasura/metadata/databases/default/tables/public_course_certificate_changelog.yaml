@@ -119,6 +119,19 @@ select_permissions:
         - type
         - updated_at
       filter: {}
+  - role: unverified
+    permission:
+      columns:
+        - author_id
+        - created_at
+        - id
+        - participant_id
+        - payload
+        - type
+        - updated_at
+      filter:
+        author_id:
+          _eq: X-Hasura-User-Id
   - role: user
     permission:
       columns:
