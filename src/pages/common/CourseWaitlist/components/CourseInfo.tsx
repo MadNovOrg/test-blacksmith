@@ -12,10 +12,6 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { WaitlistCourseQuery } from '@app/generated/graphql'
-import {
-  getCourseDurationMessage,
-  getTimeDifferenceAndContext,
-} from '@app/util'
 
 const StyledListIcon = styled(ListItemIcon)(({ theme }) => ({
   minWidth: '32px',
@@ -46,16 +42,6 @@ export const CourseInfo: React.FC<React.PropsWithChildren<Props>> = ({
     return null
   }
 
-  const courseDurationMessage = course
-    ? getCourseDurationMessage(
-        getTimeDifferenceAndContext(
-          new Date(course.schedule[0].end),
-          new Date(course.schedule[0].start)
-        ),
-        t
-      )
-    : ''
-
   return (
     <>
       <Typography variant="body1" fontWeight={600} pb={2}>
@@ -85,11 +71,6 @@ export const CourseInfo: React.FC<React.PropsWithChildren<Props>> = ({
                     date: course.schedule[0].end,
                   })}
                 </Typography>
-              </ListItemText>
-            </ListItem>
-            <ListItem disableGutters disablePadding>
-              <ListItemText sx={{ paddingLeft: 4 }}>
-                <Typography variant="body2">{courseDurationMessage}</Typography>
               </ListItemText>
             </ListItem>
           </List>
