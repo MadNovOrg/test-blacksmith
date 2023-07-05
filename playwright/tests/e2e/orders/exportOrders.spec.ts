@@ -24,9 +24,11 @@ const test = base.extend<{
         users.trainer.email
       )
       newCourse.id = courseId
-      const newOrder = await UNIQUE_ORDER(newCourse, users.userOrgAdmin, [
-        users.user1,
-      ])
+      const newOrder = await UNIQUE_ORDER(
+        users.userOrgAdmin,
+        [users.user1],
+        newCourse
+      )
       await API.order.insertOrder(newOrder)
       orders = await API.order.getOrders()
     }

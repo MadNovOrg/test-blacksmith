@@ -46,6 +46,7 @@ export class CreateCoursePage extends BasePage {
   readonly parkingInstructionsDetails: Locator
   readonly bookingFirstName: Locator
   readonly bookingLastName: Locator
+  readonly saveChangesButton: Locator
 
   constructor(page: Page) {
     super(page)
@@ -119,6 +120,7 @@ export class CreateCoursePage extends BasePage {
     this.bookingLastName = this.page.locator(
       'input[name="bookingContact.lastName"]'
     )
+    this.saveChangesButton = this.page.locator('[data-testid="save-button"]')
   }
 
   async goto(courseType: string) {
@@ -170,14 +172,14 @@ export class CreateCoursePage extends BasePage {
   }
 
   async setStartDateTime(dateTime: Date) {
-    await this.startDateInput.click()
+    await this.startDateInput.clear()
     await this.startDateInput.type(format(dateTime, INPUT_DATE_FORMAT))
     const time = toUiTime(dateTime)
     time !== '08:00' && (await this.startTimeInput.fill(time))
   }
 
   async setEndDateTime(dateTime: Date) {
-    await this.endDateInput.click()
+    await this.endDateInput.clear()
     await this.endDateInput.type(format(dateTime, INPUT_DATE_FORMAT))
     const time = toUiTime(dateTime)
     time !== '17:00' && (await this.endTimeInput.fill(time))
@@ -189,6 +191,10 @@ export class CreateCoursePage extends BasePage {
 
   async setMaxAttendees(value: number) {
     await this.maxAttendeesInput.fill(value.toString())
+  }
+
+  async clickSaveChangesButton() {
+    await this.saveChangesButton.click()
   }
 
   async clickAssignTrainersButton(): Promise<AssignTrainersPage> {

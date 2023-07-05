@@ -53,6 +53,8 @@ export type Course = {
   bookingContactProfile?: User
   gradingConfirmed: boolean
   salesRepresentative?: User
+  moderator?: User
+  assistTrainer?: User
   source?: Course_Source_Enum
   trainers?: CourseTrainer[]
   invoiceDetails?: InvoiceDetails
@@ -123,7 +125,7 @@ export type OrderCreation = {
   billingGivenName: string
   billingPhone: string
   clientPurchaseOrder?: string
-  courseId: number
+  courseId?: number
   organizationId: string
   paymentMethod: PaymentMethod
   promoCodes?: string[]

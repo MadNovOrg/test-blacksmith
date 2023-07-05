@@ -203,6 +203,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                     variant="body2"
                     fontWeight={600}
                     color="secondary"
+                    data-testid="startDate-label"
                   >
                     {t('dates.withTime', { date: course.schedule[0].start })}
                   </Typography>
@@ -216,6 +217,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                     variant="body2"
                     fontWeight={600}
                     color="secondary"
+                    data-testid="endDate-label"
                   >
                     {t('dates.withTime', { date: course.schedule[0].end })}
                   </Typography>

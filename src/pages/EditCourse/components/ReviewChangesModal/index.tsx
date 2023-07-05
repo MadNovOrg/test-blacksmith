@@ -123,6 +123,7 @@ export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
               error={Boolean(formState.errors.reason?.message)}
               helperText={formState.errors.reason?.message}
               {...register('reason')}
+              data-testid="reasonForChange-input"
             />
 
             <Box display="flex" justifyContent="space-between" mt={5}>
@@ -131,6 +132,7 @@ export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
                 type="submit"
                 variant="contained"
                 disabled={!formState.isValid}
+                data-testid="confirmChanges-button"
               >
                 {t('confirm-btn-text')}
               </Button>

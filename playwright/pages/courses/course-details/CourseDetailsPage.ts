@@ -43,6 +43,9 @@ export class CourseDetailsPage extends BasePage {
   readonly searchTrainerInput: Locator
   readonly searchTrainerOption: Locator
   readonly successMessage: Locator
+  readonly startDateLabel: Locator
+  readonly endDateLabel: Locator
+  readonly dateFormat: string
 
   constructor(page: Page) {
     super(page)
@@ -100,6 +103,9 @@ export class CourseDetailsPage extends BasePage {
       '[data-testid=grade-all-attendees]'
     )
     this.noteInput = this.page.locator('[data-testid="notes-input"] >> input')
+    this.startDateLabel = this.page.locator('[data-testid="startDate-label"]')
+    this.endDateLabel = this.page.locator('[data-testid="endDate-label"]')
+    this.dateFormat = 'd MMMM yyyy'
   }
 
   async goto(courseId: string) {

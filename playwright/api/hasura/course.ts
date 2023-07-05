@@ -16,7 +16,7 @@ import {
 } from '@app/types'
 
 import { getModulesByLevel } from '@qa/data/modules'
-import { Course, User } from '@qa/data/types'
+import { Course, OrderCreation, User } from '@qa/data/types'
 
 import { getClient } from './client'
 import { getOrganizationId } from './organization'
@@ -117,7 +117,8 @@ export const insertCourse = async (
   course: Course,
   email: string,
   trainerStatus = InviteStatus.ACCEPTED,
-  modules = true
+  modules = true,
+  order?: OrderCreation
 ): Promise<number> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const courseInput: any = {
@@ -139,15 +140,32 @@ export const insertCourse = async (
     )
   }
   if (course.bookingContactProfile) {
-    courseInput.bookingContactProfileId = await getProfileId(
+    const bookingContactProfileId = await getProfileId(
       course.bookingContactProfile.email
     )
+    courseInput.bookingContactProfileId = bookingContactProfileId
+    courseInput.bookingContactInviteData = {
+      email: course.bookingContactProfile.email,
+      firstName: course.bookingContactProfile.givenName,
+      lastName: course.bookingContactProfile.familyName,
+      profileId: bookingContactProfileId,
+    }
   }
-  if (course.salesRepresentative) {
-    courseInput.salesRepresentativeId = await getProfileId(
-      course.salesRepresentative.email
-    )
+  if (course.salesRepresentative && course.source && order) {
+    courseInput.orders = {
+      data: [
+        {
+          ...order,
+          salesRepresentativeId: await getProfileId(
+            course.salesRepresentative.email
+          ),
+          source: course.source,
+          user: course.salesRepresentative,
+        },
+      ],
+    }
   }
+
   if (course.schedule[0].venue) {
     courseInput.schedule = {
       data: {
@@ -164,6 +182,7 @@ export const insertCourse = async (
       },
     }
   }
+
   const trainers = {
     data: [
       {
@@ -171,11 +190,28 @@ export const insertCourse = async (
         type: CourseTrainerType.Leader,
         status: trainerStatus,
       },
+      ...(course.assistTrainer
+        ? [
+            {
+              profile_id: await getProfileId(course.assistTrainer.email),
+              type: CourseTrainerType.Assistant,
+            },
+          ]
+        : []),
+      ...(course.moderator
+        ? [
+            {
+              profile_id: await getProfileId(course.moderator.email),
+              type: CourseTrainerType.Moderator,
+            },
+          ]
+        : []),
     ],
   }
   const moduleIds = modules
     ? await getModuleIds(getModulesByLevel(course.level), course.level)
     : []
+
   const modulesInput = {
     data: moduleIds.map((moduleId: string) => ({ moduleId: moduleId })),
   }
