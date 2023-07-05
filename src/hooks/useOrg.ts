@@ -102,27 +102,10 @@ export default function useOrg(
 
   let conditions
   if (orgId !== ALL_ORGS) {
-    conditions = {
-      _and: [
-        { id: { _eq: orgId } },
-        {
-          members: {
-            profile: {
-              certificates: { status: certificateStatus },
-            },
-          },
-        },
-      ],
-    }
+    conditions = { id: { _eq: orgId } }
   } else {
     conditions = showAll
-      ? {
-          members: {
-            profile: {
-              certificates: { status: certificateStatus },
-            },
-          },
-        }
+      ? {}
       : {
           members: {
             _and: [
@@ -132,11 +115,6 @@ export default function useOrg(
                 },
               },
               { isAdmin: { _eq: true } },
-              {
-                profile: {
-                  certificates: { status: certificateStatus },
-                },
-              },
             ],
           },
         }
