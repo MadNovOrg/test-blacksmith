@@ -41,7 +41,7 @@ const CertificateHoldHistoryModal: React.FC<
               backgroundColor: 'grey.300',
             },
             '&& .MuiTableCell-root': {
-              px: 2,
+              px: 1,
               py: 1,
               color: 'grey.700',
               fontWeight: '600',

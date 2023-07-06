@@ -20,7 +20,6 @@ import * as yup from 'yup'
 
 import {
   Course_Certificate_Changelog_Type_Enum,
-  Course_Level_Enum,
   GetCertificateQuery,
   InsertCourseCertificateChangelogMutation,
   InsertCourseCertificateChangelogMutationVariables,
@@ -47,7 +46,6 @@ type CertificateChangelog = Pick<
 >
 
 type PutOnHoldModalProps = {
-  courseLevel: Course_Level_Enum
   participantId: string
   certificateId: string
   certificateExpiryDate: string
@@ -73,7 +71,6 @@ const type = [
 const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
   function ({
     onClose,
-    courseLevel,
     participantId,
     certificateId,
     edit,
@@ -221,7 +218,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
         dateAdapter={AdapterDateFns}
         adapterLocale={enLocale}
       >
-        <Box p={2}>
+        <Box px={2}>
           <form onSubmit={handleSubmit(submitHandler)}>
             {showHoldModal ? (
               <Grid container spacing={4}>
@@ -361,9 +358,9 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                     />
                   </Grid>
                 </Grid>
-                {courseLevel === Course_Level_Enum.AdvancedTrainer ||
-                courseLevel === Course_Level_Enum.IntermediateTrainer ? (
-                  <Grid item xs={12}>
+
+                <Grid item xs={12}>
+                  {!edit ? (
                     <Alert
                       variant="outlined"
                       color="warning"
@@ -371,8 +368,8 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                     >
                       {t('common.course-certificate.put-on-hold-modal.warning')}{' '}
                     </Alert>
-                  </Grid>
-                ) : null}
+                  ) : null}
+                </Grid>
                 {error && (
                   <Grid item xs={12}>
                     <Alert severity="error">{error}</Alert>

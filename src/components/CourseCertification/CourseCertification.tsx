@@ -42,7 +42,6 @@ import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   Course_Certificate_Changelog_Type_Enum,
-  Course_Level_Enum,
   Course_Participant_Module,
   GetCertificateQuery,
   GetCertificateQueryVariables,
@@ -681,7 +680,11 @@ export const CourseCertification: React.FC<
           <Dialog
             open={showPutOnHoldModal.open}
             onClose={() => setShowPutOnHoldModal({ edit: false, open: false })}
-            title={t('hold-certificate')}
+            title={
+              showPutOnHoldModal.edit
+                ? t('this-certificate-hold')
+                : t('hold-certificate')
+            }
             maxWidth={800}
           >
             <PutOnHoldModal
@@ -692,9 +695,6 @@ export const CourseCertification: React.FC<
               participantId={courseParticipant.id}
               certificateId={certificateId}
               certificateExpiryDate={certificate.expiryDate}
-              courseLevel={
-                certificate.courseLevel as unknown as Course_Level_Enum
-              }
               edit={showPutOnHoldModal.edit}
               changelogs={holdChangelogs}
             />

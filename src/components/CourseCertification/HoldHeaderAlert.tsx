@@ -56,6 +56,12 @@ const HoldHeaderAlert: React.FC<React.PropsWithChildren<HoldHeaderAlertProps>> =
                     expireDate: holdRequestEndDate,
                   }
                 )}
+                <Link
+                  href={`mailto:${import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}`}
+                  component="a"
+                >
+                  {import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}
+                </Link>
               </Typography>
               {!acl.canHoldCert() && (
                 <Typography variant="body2" color="grey.900">
