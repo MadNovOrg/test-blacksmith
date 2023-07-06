@@ -11,5 +11,9 @@ export const RESOURCE_SUMMARY = gql`
         mediaItemUrl
       }
     }
+    resourcePermissions {
+      certificateLevels
+      principalTrainer
+    }
   }
 `

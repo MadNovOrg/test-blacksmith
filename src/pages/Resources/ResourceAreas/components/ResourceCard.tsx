@@ -25,7 +25,7 @@ export const ResourceCard = ({
     >
       <CardContent>
         {icon}
-        <Typography variant="h3" mb={1} fontWeight={600}>
+        <Typography variant="h3" mb={1} fontWeight={600} color="primary">
           {title}
         </Typography>
         <Typography color="secondary" lineHeight="28px">

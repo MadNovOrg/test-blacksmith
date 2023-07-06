@@ -1,46 +1,34 @@
-import {
-  Box,
-  Container,
-  Skeleton,
-  useTheme,
-  useMediaQuery,
-} from '@mui/material'
+import { Skeleton, Grid, Typography, BoxProps, Box } from '@mui/material'
 import React from 'react'
 
-import { FullHeightPage } from '@app/components/FullHeightPage'
+type Props = {
+  num: number
+  perRow?: number
+  withTitle?: boolean
+} & BoxProps
 
-export const ResourceListSkeleton = () => {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-
+export const ResourceListSkeleton: React.FC<Props> = ({
+  num,
+  perRow = 4,
+  withTitle = false,
+  ...rest
+}) => {
   return (
-    <FullHeightPage
-      bgcolor={theme.palette.grey[100]}
-      pb={3}
-      data-testid="resources-list-skeleton"
-    >
-      <Container maxWidth="lg" sx={{ py: 5 }} disableGutters>
-        <Box display="flex" flexDirection={isMobile ? 'column' : 'row'} gap={4}>
-          <Skeleton
-            variant="rectangular"
-            width={isMobile ? undefined : 410}
-            height={190}
-            sx={{ marginBottom: 2 }}
-          />
-          <Skeleton
-            variant="rectangular"
-            width={isMobile ? undefined : 410}
-            height={190}
-            sx={{ marginBottom: 2 }}
-          />
-          <Skeleton
-            variant="rectangular"
-            width={isMobile ? undefined : 410}
-            height={190}
-            sx={{ marginBottom: 2 }}
-          />
-        </Box>
-      </Container>
-    </FullHeightPage>
+    <Box {...rest}>
+      {withTitle ? (
+        <Typography variant="h1">
+          <Skeleton width={200} sx={{ mb: 3 }} />
+        </Typography>
+      ) : null}
+      <Grid container rowSpacing={5} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        {Array(num)
+          .fill(0, 0)
+          .map((_, index) => (
+            <Grid key={index} item md={12 / perRow} sm={12}>
+              <Skeleton variant="rectangular" height={190} />
+            </Grid>
+          ))}
+      </Grid>
+    </Box>
   )
 }

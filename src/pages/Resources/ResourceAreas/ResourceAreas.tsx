@@ -4,6 +4,7 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  Box,
 } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -26,7 +27,14 @@ export const ResourceAreas = () => {
     <FullHeightPage bgcolor={theme.palette.grey[100]} pb={3}>
       <Container maxWidth="lg" sx={{ py: 5 }}>
         {fetching ? (
-          <ResourceListSkeleton />
+          <Box data-testid="resources-list-skeleton">
+            <Box mb={12}>
+              <ResourceListSkeleton num={3} perRow={3} withTitle />
+            </Box>
+            <Box>
+              <ResourceListSkeleton num={2} perRow={2} withTitle />
+            </Box>
+          </Box>
         ) : (
           <>
             <Typography textAlign={isMobile ? 'center' : 'left'} variant="h1">
@@ -34,7 +42,7 @@ export const ResourceAreas = () => {
             </Typography>
             <Grid container spacing={2} sx={{ mb: 12, mt: 1 }}>
               {allResourcesByArea?.basic?.map(resourceArea => (
-                <Grid item md={5} xs={12} key={resourceArea.id}>
+                <Grid item md={4} xs={12} key={resourceArea.id}>
                   <RouterLink to={`/resources/${resourceArea.id}`}>
                     <ResourceCard
                       icon={
@@ -54,7 +62,7 @@ export const ResourceAreas = () => {
             </Typography>
             <Grid container spacing={2} sx={{ mt: 1 }}>
               {allResourcesByArea?.additional?.map(resourceArea => (
-                <Grid item md={5} xs={12} key={resourceArea.id}>
+                <Grid item md={6} xs={12} key={resourceArea.id}>
                   <RouterLink to={`/resources/${resourceArea.id}`}>
                     <ResourceCard
                       icon={

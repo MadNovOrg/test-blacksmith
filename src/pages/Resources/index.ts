@@ -1,2 +1,2 @@
 export { ResourceAreas as ResourcesList } from './ResourceAreas/ResourceAreas'
-export { ResourceDetails } from './ResourceDetails/ResourceDetails'
+export { ResourceCategoryDetails as ResourceDetails } from './ResourceCategoryDetails/ResourceCategoryDetails'

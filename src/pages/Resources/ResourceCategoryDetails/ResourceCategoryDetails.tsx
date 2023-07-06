@@ -8,16 +8,12 @@ import {
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
-import { useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { FullHeightPage } from '@app/components/FullHeightPage'
-import {
-  ResourceDetailsQuery,
-  ResourceDetailsQueryVariables,
-} from '@app/generated/graphql'
-import { RESOURCE_DETAILS_QUERY } from '@app/pages/Resources/queries/get-resource-details'
+
+import { useResourceCategory } from '../hooks/useResourceCategory'
 
 import {
   ResourceItemsSkeleton,
@@ -25,23 +21,14 @@ import {
 } from './components/ResourceItemSkeleton'
 import { ResourcesList } from './components/ResourcesList'
 
-export const ResourceDetails = () => {
+export const ResourceCategoryDetails = () => {
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [searchTerm, setSearchTerm] = useState('')
   const { id } = useParams()
 
-  const [{ data, fetching }] = useQuery<
-    ResourceDetailsQuery,
-    ResourceDetailsQueryVariables
-  >({
-    query: RESOURCE_DETAILS_QUERY,
-    variables: {
-      id: String(id),
-      term: searchTerm,
-    },
-  })
+  const [{ data, fetching }] = useResourceCategory(id, searchTerm)
 
   const resourceCategory = data?.content?.resourceCategory
 
@@ -49,25 +36,27 @@ export const ResourceDetails = () => {
     <FullHeightPage bgcolor={theme.palette.grey[100]} pb={3}>
       <Container maxWidth="lg" sx={{ py: 5 }}>
         <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
-          <Box maxWidth={400}>
+          <Box width={400}>
             <BackButton
               label={t('pages.resources.resource-details.back-to-resources')}
               to="/resources"
             />
-            {!data ? (
-              <ResourceTitleSkeleton />
-            ) : (
-              <>
-                <Typography variant="h1" sx={{ mb: 1, mt: 2 }}>
-                  {resourceCategory?.name}
-                </Typography>
-                <Typography lineHeight="28px">
-                  {resourceCategory?.description}
-                </Typography>
-              </>
-            )}
+            <Box mt={2}>
+              {!data && fetching ? (
+                <ResourceTitleSkeleton />
+              ) : (
+                <>
+                  <Typography variant="h1" sx={{ mb: 1 }}>
+                    {resourceCategory?.name}
+                  </Typography>
+                  <Typography lineHeight="28px">
+                    {resourceCategory?.description}
+                  </Typography>
+                </>
+              )}
+            </Box>
           </Box>
-          <Box sx={{ ml: 1, maxHeight: '85vh', overflow: 'auto' }}>
+          <Box sx={{ ml: 4, maxHeight: '85vh', overflow: 'auto', flex: 1 }}>
             <Box sx={{ pt: 2 }}>
               <FilterSearch
                 onChange={value => {
@@ -88,7 +77,7 @@ export const ResourceDetails = () => {
                       />
                     </Box>
                   ) : (
-                    <Typography sx={{ mb: 1 }}>
+                    <Typography sx={{ mt: 4 }}>
                       {t('pages.resources.resource-details.empty')}
                     </Typography>
                   )}

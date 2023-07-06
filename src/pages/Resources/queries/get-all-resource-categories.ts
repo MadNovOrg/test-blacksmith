@@ -3,7 +3,7 @@ import { gql } from 'graphql-request'
 export const ALL_RESOURCE_CATEGORIES_QUERY = gql`
   query AllResourceCategories {
     content {
-      resourceCategories {
+      resourceCategories(first: 100) {
         nodes {
           id
           name

@@ -1,9 +1,12 @@
-import { Box, Skeleton } from '@mui/material'
+import { Box, Skeleton, Typography } from '@mui/material'
 import React from 'react'
 
 export const ResourceTitleSkeleton = () => (
-  <Box width={300}>
-    <Skeleton variant="rectangular" height={50} sx={{ marginBottom: 2 }} />
+  <Box data-testid="resource-category-skeleton">
+    <Typography variant="h1">
+      <Skeleton variant="rectangular" height={50} sx={{ marginBottom: 2 }} />
+    </Typography>
+
     <Skeleton />
     <Skeleton />
     <Skeleton />
@@ -11,7 +14,7 @@ export const ResourceTitleSkeleton = () => (
 )
 
 export const ResourceItemsSkeleton = () => (
-  <Box>
+  <Box data-testid="resources-skeleton">
     <Skeleton height={70} />
     <Skeleton height={70} />
     <Skeleton height={70} />
