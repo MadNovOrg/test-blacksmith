@@ -427,6 +427,7 @@ export const CourseBookingDetails: React.FC<
         noValidate
         autoComplete="off"
         aria-autocomplete="none"
+        data-testid="booking-form"
       >
         <Typography variant="subtitle1" fontWeight="500">
           {t('pages.book-course.order-details')}
