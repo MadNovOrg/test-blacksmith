@@ -219,7 +219,7 @@ describe('component: LicenseOrderDetails', () => {
       'john.doe@example.com'
     )
     await userEvent.type(screen.getByLabelText('Phone *'), '1234567890', {
-      delay: 100,
+      delay: 400,
     })
 
     await waitFor(
@@ -229,7 +229,7 @@ describe('component: LicenseOrderDetails', () => {
       },
       {
         timeout: 2000,
-        interval: 100,
+        interval: 300,
       }
     )
 

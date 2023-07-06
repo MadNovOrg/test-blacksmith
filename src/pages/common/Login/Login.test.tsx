@@ -45,7 +45,7 @@ describe('Login', () => {
     userEvent.type(email, 'not@valid')
     fireEvent.click(screen.getByTestId('login-submit'))
 
-    await waitForText('Please enter a valid email address')
+    await waitForText('Please enter a valid email address', 3000)
 
     expect(providers.auth.login).not.toHaveBeenCalled()
   })

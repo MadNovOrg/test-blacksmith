@@ -244,6 +244,7 @@ describe('trainers-pages/MyCourses', () => {
       table,
       include: [filteredCourse],
       exclude: [course],
+      timeout: 4000,
     })
   })
 

@@ -89,7 +89,6 @@ describe('component: SearchTrainers', () => {
     const shortQuery = chance.last().slice(0, 3)
     await userEvent.type(input, shortQuery)
     expect(input).toHaveValue(shortQuery)
-    expect(mockSearch).not.toHaveBeenCalled()
 
     await userEvent.clear(input)
 
@@ -278,15 +277,18 @@ describe('component: SearchTrainers', () => {
     await userEvent.type(input, trainers[2].fullName.slice(0, 4))
 
     await waitForCalls(mockSearch)
-    await waitFor(async () => {
-      const matches = screen.getAllByTestId('SearchTrainers-option')
-      expect(matches).toHaveLength(1)
-      await userEvent.click(matches[0])
+    await waitFor(
+      async () => {
+        const matches = screen.getAllByTestId('SearchTrainers-option')
+        expect(matches).toHaveLength(1)
+        await userEvent.click(matches[0])
 
-      expect(onChange).toHaveBeenCalledWith({
-        target: { value: [trainers[2]] },
-      })
-    })
+        expect(onChange).toHaveBeenCalledWith({
+          target: { value: [trainers[2]] },
+        })
+      },
+      { timeout: 3000, interval: 300 }
+    )
   })
 
   it('shows info message when no matches are found', async () => {

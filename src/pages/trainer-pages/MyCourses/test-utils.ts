@@ -139,6 +139,7 @@ type ExpectTableToContainArgs = {
   rowIdPrefix: string
   include?: TrainerCourseFragment[]
   exclude?: TrainerCourseFragment[]
+  timeout?: number
 }
 
 const expectTableTo = async ({
@@ -146,44 +147,54 @@ const expectTableTo = async ({
   rowIdPrefix,
   include = [],
   exclude = [],
+  timeout = 2000,
 }: ExpectTableToContainArgs) => {
-  await waitFor(() => {
-    expect(table.querySelectorAll('.MyCoursesRow')).toHaveLength(include.length)
+  await waitFor(
+    () => {
+      expect(table.querySelectorAll('.MyCoursesRow')).toHaveLength(
+        include.length
+      )
 
-    include.forEach(course => {
-      expect(
-        within(table).getByTestId(`${rowIdPrefix}${course.id}`)
-      ).toBeInTheDocument()
-    })
+      include.forEach(course => {
+        expect(
+          within(table).getByTestId(`${rowIdPrefix}${course.id}`)
+        ).toBeInTheDocument()
+      })
 
-    exclude.forEach(course => {
-      expect(
-        within(table).queryByTestId(`${rowIdPrefix}${course.id}`)
-      ).not.toBeInTheDocument()
-    })
-  })
+      exclude.forEach(course => {
+        expect(
+          within(table).queryByTestId(`${rowIdPrefix}${course.id}`)
+        ).not.toBeInTheDocument()
+      })
+    },
+    { timeout }
+  )
 }
 
 export const expectCourseTableTo = async ({
   table,
   include,
   exclude,
+  timeout,
 }: Omit<ExpectTableToContainArgs, 'rowIdPrefix'>) =>
   expectTableTo({
     table,
     rowIdPrefix: 'course-row-',
     include,
     exclude,
+    timeout,
   })
 
 export const expectActionableTableTo = async ({
   table,
   include,
   exclude,
+  timeout,
 }: Omit<ExpectTableToContainArgs, 'rowIdPrefix'>) =>
   expectTableTo({
     table,
     rowIdPrefix: 'actionable-course-',
     include,
     exclude,
+    timeout,
   })

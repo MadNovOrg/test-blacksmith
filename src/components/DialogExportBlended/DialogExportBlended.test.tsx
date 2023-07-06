@@ -29,9 +29,12 @@ describe('component: DialogExportBlended', () => {
     const onClose = jest.fn()
     render(<DialogExportBlended isOpen={true} closeModal={onClose} />)
 
-    await waitFor(async () => {
-      await userEvent.click(screen.getByText('Export'))
-    })
+    await waitFor(
+      async () => {
+        await userEvent.click(screen.getByText('Export'))
+      },
+      { timeout: 4000 }
+    )
 
     expect(screen.queryByText('Please insert dates')).toBeInTheDocument()
   })

@@ -239,7 +239,7 @@ describe('component: OrderDetails', () => {
       'john.doe@example.com'
     )
     await userEvent.type(screen.getByLabelText('Phone *'), '1234567890', {
-      delay: 100,
+      delay: 500,
     })
 
     await userEvent.click(screen.getByText('Review & confirm'))

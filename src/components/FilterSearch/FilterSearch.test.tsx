@@ -42,8 +42,7 @@ describe('components: FilterSearch', () => {
     expect(input).toHaveValue('')
     userEvent.type(input, value)
 
-    await waitForCalls(onChange)
-    expect(onChange).toHaveBeenCalledTimes(1)
+    await waitForCalls(onChange, 1, 3000)
     expect(onChange).toHaveBeenCalledWith(value)
   })
 

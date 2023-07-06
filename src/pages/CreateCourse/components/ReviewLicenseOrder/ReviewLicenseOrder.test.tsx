@@ -240,10 +240,18 @@ describe('component: ReviewLicenseOrder', () => {
           max_participants: courseData.maxParticipants,
           type: courseData.type,
           organization_id: courseData.organization?.id,
+          notes: undefined,
           parking_instructions: undefined,
+          special_instruction: undefined,
           status: Course_Status_Enum.TrainerPending,
           trainers: {
-            data: [{ type: trainer.type, profile_id: trainer.profile_id }],
+            data: [
+              {
+                type: trainer.type,
+                profile_id: trainer.profile_id,
+                status: undefined,
+              },
+            ],
           },
           schedule: {
             data: [
