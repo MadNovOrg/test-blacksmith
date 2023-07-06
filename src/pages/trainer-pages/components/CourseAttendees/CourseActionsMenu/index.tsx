@@ -19,7 +19,16 @@ type Props<T> = {
 }
 
 export const CourseActionsMenu = <
-  T extends { course: { accreditedBy: Accreditors_Enum } }
+  T extends {
+    course: { accreditedBy: Accreditors_Enum }
+    profile: {
+      organizations: {
+        organization: {
+          id: string
+        }
+      }[]
+    }
+  }
 >({
   onRemoveClick,
   onReplaceClick,
@@ -31,8 +40,11 @@ export const CourseActionsMenu = <
   const { t } = useTranslation()
 
   const actions = useMemo(() => {
+    const participantOrgIds = item.profile.organizations.map(
+      o => o.organization.id
+    )
     return [
-      acl.canReplaceParticipant(item.course.accreditedBy)
+      acl.canReplaceParticipant(participantOrgIds, item.course.accreditedBy)
         ? {
             label: t('common.replace'),
             icon: <MoveDownIcon color="primary" />,
@@ -40,7 +52,7 @@ export const CourseActionsMenu = <
             testId: 'attendee-replace',
           }
         : null,
-      acl.canTransferParticipant()
+      acl.canTransferParticipant(participantOrgIds)
         ? {
             label: t('common.transfer'),
             icon: <SwapHorizIcon color="primary" />,
@@ -48,7 +60,7 @@ export const CourseActionsMenu = <
             testId: 'attendee-transfer',
           }
         : null,
-      acl.canRemoveParticipant()
+      acl.canRemoveParticipant(participantOrgIds)
         ? {
             label: t('common.remove'),
             icon: <PersonRemoveIcon color="primary" />,
@@ -66,8 +78,9 @@ export const CourseActionsMenu = <
         : null,
     ].filter(isNotNullish)
   }, [
-    acl,
+    item.profile.organizations,
     item.course.accreditedBy,
+    acl,
     t,
     onReplaceClick,
     onTransferClick,

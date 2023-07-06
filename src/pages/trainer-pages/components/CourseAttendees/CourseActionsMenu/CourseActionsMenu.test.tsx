@@ -3,17 +3,28 @@ import React from 'react'
 import { Accreditors_Enum } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { render, chance, screen, userEvent } from '@test/index'
+import { chance, render, screen, userEvent } from '@test/index'
 
 import { CourseActionsMenu } from '.'
 
 describe('component: CourseActionsMenu', () => {
+  const defaultOrganizations = [
+    {
+      organization: {
+        id: chance.guid(),
+      },
+    },
+  ]
+
   it('displays correct options for an admin user', async () => {
     render(
       <CourseActionsMenu
         item={{
           id: chance.guid(),
           course: { accreditedBy: Accreditors_Enum.Icm },
+          profile: {
+            organizations: defaultOrganizations,
+          },
         }}
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
@@ -41,6 +52,9 @@ describe('component: CourseActionsMenu', () => {
         item={{
           id: chance.guid(),
           course: { accreditedBy: Accreditors_Enum.Icm },
+          profile: {
+            organizations: defaultOrganizations,
+          },
         }}
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
@@ -68,6 +82,9 @@ describe('component: CourseActionsMenu', () => {
         item={{
           id: chance.guid(),
           course: { accreditedBy: Accreditors_Enum.Icm },
+          profile: {
+            organizations: defaultOrganizations,
+          },
         }}
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
@@ -95,6 +112,9 @@ describe('component: CourseActionsMenu', () => {
         item={{
           id: chance.guid(),
           course: { accreditedBy: Accreditors_Enum.Icm },
+          profile: {
+            organizations: defaultOrganizations,
+          },
         }}
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
@@ -124,6 +144,9 @@ describe('component: CourseActionsMenu', () => {
         item={{
           id: chance.guid(),
           course: { accreditedBy: Accreditors_Enum.Icm },
+          profile: {
+            organizations: defaultOrganizations,
+          },
         }}
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
@@ -147,6 +170,9 @@ describe('component: CourseActionsMenu', () => {
         item={{
           id: chance.guid(),
           course: { accreditedBy: Accreditors_Enum.Icm },
+          profile: {
+            organizations: defaultOrganizations,
+          },
         }}
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
@@ -157,6 +183,7 @@ describe('component: CourseActionsMenu', () => {
         auth: {
           activeRole: RoleName.USER,
           isOrgAdmin: true,
+          managedOrgIds: [defaultOrganizations[0].organization.id],
         },
       }
     )
@@ -171,12 +198,15 @@ describe('component: CourseActionsMenu', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('renders correct options for an org admin user for BILD course', async () => {
+  it('does not render correct options for an org admin of another org', async () => {
     render(
       <CourseActionsMenu
         item={{
           id: chance.guid(),
-          course: { accreditedBy: Accreditors_Enum.Bild },
+          course: { accreditedBy: Accreditors_Enum.Icm },
+          profile: {
+            organizations: defaultOrganizations,
+          },
         }}
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
@@ -187,6 +217,34 @@ describe('component: CourseActionsMenu', () => {
         auth: {
           activeRole: RoleName.USER,
           isOrgAdmin: true,
+          managedOrgIds: [chance.guid()],
+        },
+      }
+    )
+
+    expect(screen.queryByText(/manage attendance/i)).not.toBeInTheDocument()
+  })
+
+  it('renders correct options for an org admin user for BILD course', async () => {
+    render(
+      <CourseActionsMenu
+        item={{
+          id: chance.guid(),
+          course: { accreditedBy: Accreditors_Enum.Bild },
+          profile: {
+            organizations: defaultOrganizations,
+          },
+        }}
+        onRemoveClick={jest.fn()}
+        onReplaceClick={jest.fn()}
+        onTransferClick={jest.fn()}
+        onResendCourseInformationClick={jest.fn()}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.USER,
+          isOrgAdmin: true,
+          managedOrgIds: [defaultOrganizations[0].organization.id],
         },
       }
     )
@@ -205,6 +263,9 @@ describe('component: CourseActionsMenu', () => {
     const actionableItem = {
       id: chance.guid(),
       course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
     }
     const onRemoveMock = jest.fn()
     const onReplaceMock = jest.fn()
@@ -255,6 +316,9 @@ describe('component: CourseActionsMenu', () => {
     const actionableItem = {
       id: chance.guid(),
       course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
     }
     const onRemoveMock = jest.fn()
     const onReplaceMock = jest.fn()

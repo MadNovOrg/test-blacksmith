@@ -1,15 +1,15 @@
 import SendIcon from '@mui/icons-material/Send'
 import {
   Box,
+  Button,
   Chip,
+  Link,
   Table,
   TableBody,
   TableCell,
   TablePagination,
   TableRow,
   Typography,
-  Button,
-  Link,
 } from '@mui/material'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -40,7 +40,7 @@ import {
   CourseType,
   SortOrder,
 } from '@app/types'
-import { LoadingStatus, courseEnded } from '@app/util'
+import { courseEnded, LoadingStatus } from '@app/util'
 
 import { CourseActionsMenu } from './CourseActionsMenu'
 
@@ -150,7 +150,18 @@ export const AttendingTab = ({
             }
           : null,
         !isCourseEnded &&
-        acl.canManageParticipantAttendance(course.accreditedBy)
+        acl.canManageParticipantAttendance(
+          courseParticipants?.reduce(
+            (acc, courseParticipant) => [
+              ...acc,
+              ...courseParticipant.profile.organizations.map(
+                org => org.organization.id
+              ),
+            ],
+            [] as string[]
+          ) ?? [],
+          course.accreditedBy
+        )
           ? {
               id: 'actions',
               label: t('pages.course-participants.actions'),
@@ -158,7 +169,15 @@ export const AttendingTab = ({
             }
           : null,
       ].filter(Boolean),
-    [t, isOpenCourse, isBlendedCourse, isCourseEnded, acl, course.accreditedBy]
+    [
+      t,
+      isBlendedCourse,
+      isOpenCourse,
+      acl,
+      isCourseEnded,
+      courseParticipants,
+      course.accreditedBy,
+    ]
   )
 
   const handleTransfer = useCallback(
@@ -207,124 +226,136 @@ export const AttendingTab = ({
                 onRequestSort={handleSortChange}
               />
               <TableBody>
-                {courseParticipants?.map(courseParticipant => (
-                  <TableRow
-                    key={courseParticipant.id}
-                    data-testid={`course-participant-row-${courseParticipant.id}`}
-                  >
-                    <TableCell>
-                      <LinkToProfile
-                        profileId={courseParticipant.profile.id}
-                        isProfileArchived={courseParticipant.profile.archived}
-                      >
-                        {courseParticipant.profile.archived
-                          ? t('common.archived-profile')
-                          : courseParticipant.profile.fullName}
-                      </LinkToProfile>
-                    </TableCell>
-                    <TableCell>
-                      <LinkToProfile
-                        profileId={courseParticipant.profile.id}
-                        isProfileArchived={courseParticipant.profile.archived}
-                      >
-                        {courseParticipant.profile.email}
-                        {courseParticipant.profile.contactDetails.map(
-                          contact => contact.value
-                        )}
-                      </LinkToProfile>
-                    </TableCell>
-                    <TableCell>
-                      {courseParticipant.profile.organizations.map(org => (
-                        <Link
-                          href={`/organisations/${org.organization.id}`}
-                          key={org.organization.id}
-                        >
-                          <Typography>{org.organization.name}</Typography>
-                        </Link>
-                      ))}
-                    </TableCell>
-                    {isBlendedCourse && (
+                {courseParticipants?.map(courseParticipant => {
+                  const participantOrgIds =
+                    courseParticipant.profile.organizations.map(
+                      org => org.organization.id
+                    )
+                  return (
+                    <TableRow
+                      key={courseParticipant.id}
+                      data-testid={`course-participant-row-${courseParticipant.id}`}
+                    >
                       <TableCell>
-                        {courseParticipant.go1EnrolmentStatus && (
-                          <Chip
-                            label={t(
-                              `blended-learning-status.${courseParticipant.go1EnrolmentStatus}`
-                            )}
-                            color={
-                              courseParticipant.go1EnrolmentStatus ===
-                              BlendedLearningStatus.COMPLETED
-                                ? 'success'
-                                : 'warning'
-                            }
-                          />
-                        )}
+                        <LinkToProfile
+                          profileId={courseParticipant.profile.id}
+                          isProfileArchived={courseParticipant.profile.archived}
+                        >
+                          {courseParticipant.profile.archived
+                            ? t('common.archived-profile')
+                            : courseParticipant.profile.fullName}
+                        </LinkToProfile>
                       </TableCell>
-                    )}
-                    <TableCell>
-                      {courseParticipant.healthSafetyConsent
-                        ? t('common.yes')
-                        : t('common.no')}
-                    </TableCell>
-                    <TableCell>
-                      {courseParticipant.order ? (
-                        <Link
-                          href={`/orders/${courseParticipant.order.id}`}
-                          data-testid="order-item-link"
-                          key="order-item-link"
-                          color="Highlight"
-                          fontWeight="600"
-                        >
-                          {courseParticipant.order.xeroInvoiceNumber}
-                        </Link>
-                      ) : (
-                        <Typography
-                          color="InactiveCaption"
-                          style={{ userSelect: 'none' }}
-                        >
-                          -
-                        </Typography>
-                      )}
-                    </TableCell>
-                    {!isCourseEnded &&
-                    acl.canManageParticipantAttendance(course.accreditedBy) &&
-                    !courseParticipant.profile.archived ? (
                       <TableCell>
-                        {!isOpenCourse ||
-                        acl.canOnlySendCourseInformation(
-                          course.accreditedBy
-                        ) ? (
-                          <Button
-                            startIcon={
-                              <SendIcon color="primary" titleAccess="Send" />
-                            }
-                            onClick={() =>
-                              setIndividualToResendInfo(courseParticipant)
-                            }
+                        <LinkToProfile
+                          profileId={courseParticipant.profile.id}
+                          isProfileArchived={courseParticipant.profile.archived}
+                        >
+                          {courseParticipant.profile.email}
+                          {courseParticipant.profile.contactDetails.map(
+                            contact => contact.value
+                          )}
+                        </LinkToProfile>
+                      </TableCell>
+                      <TableCell>
+                        {courseParticipant.profile.organizations.map(org => (
+                          <Link
+                            href={`/organisations/${org.organization.id}`}
+                            key={org.organization.id}
                           >
-                            {t('common.resend-course-information')}
-                          </Button>
-                        ) : (
-                          <CourseActionsMenu
-                            item={courseParticipant}
-                            data-testid="manage-attendance"
-                            onReplaceClick={participant => {
-                              setParticipantToReplace(participant)
-                            }}
-                            onRemoveClick={participant => {
-                              setIndividualToRemove(participant)
-                            }}
-                            onTransferClick={participant => {
-                              handleTransfer(participant.id)
-                            }}
-                            onResendCourseInformationClick={participant =>
-                              setIndividualToResendInfo(participant)
-                            }
-                          />
-                        )}
+                            <Typography>{org.organization.name}</Typography>
+                          </Link>
+                        ))}
                       </TableCell>
-                    ) : null}
-                  </TableRow>
-                ))}
+                      {isBlendedCourse && (
+                        <TableCell>
+                          {courseParticipant.go1EnrolmentStatus && (
+                            <Chip
+                              label={t(
+                                `blended-learning-status.${courseParticipant.go1EnrolmentStatus}`
+                              )}
+                              color={
+                                courseParticipant.go1EnrolmentStatus ===
+                                BlendedLearningStatus.COMPLETED
+                                  ? 'success'
+                                  : 'warning'
+                              }
+                            />
+                          )}
+                        </TableCell>
+                      )}
+                      <TableCell>
+                        {courseParticipant.healthSafetyConsent
+                          ? t('common.yes')
+                          : t('common.no')}
+                      </TableCell>
+                      {isOpenCourse && acl.canViewOrders() ? (
+                        <TableCell>
+                          {courseParticipant.order ? (
+                            <Link
+                              href={`/orders/${courseParticipant.order.id}`}
+                              data-testid="order-item-link"
+                              key="order-item-link"
+                              color="Highlight"
+                              fontWeight="600"
+                            >
+                              {courseParticipant.order.xeroInvoiceNumber}
+                            </Link>
+                          ) : (
+                            <Typography
+                              color="InactiveCaption"
+                              style={{ userSelect: 'none' }}
+                            >
+                              -
+                            </Typography>
+                          )}
+                        </TableCell>
+                      ) : null}
+                      {!isCourseEnded &&
+                      acl.canManageParticipantAttendance(
+                        participantOrgIds,
+                        course.accreditedBy
+                      ) &&
+                      !courseParticipant.profile.archived ? (
+                        <TableCell>
+                          {!isOpenCourse ||
+                          acl.canOnlySendCourseInformation(
+                            participantOrgIds,
+                            course.accreditedBy
+                          ) ? (
+                            <Button
+                              startIcon={
+                                <SendIcon color="primary" titleAccess="Send" />
+                              }
+                              onClick={() =>
+                                setIndividualToResendInfo(courseParticipant)
+                              }
+                            >
+                              {t('common.resend-course-information')}
+                            </Button>
+                          ) : (
+                            <CourseActionsMenu
+                              item={courseParticipant}
+                              data-testid="manage-attendance"
+                              onReplaceClick={participant => {
+                                setParticipantToReplace(participant)
+                              }}
+                              onRemoveClick={participant => {
+                                setIndividualToRemove(participant)
+                              }}
+                              onTransferClick={participant => {
+                                handleTransfer(participant.id)
+                              }}
+                              onResendCourseInformationClick={participant =>
+                                setIndividualToResendInfo(participant)
+                              }
+                            />
+                          )}
+                        </TableCell>
+                      ) : null}
+                    </TableRow>
+                  )
+                })}
               </TableBody>
             </Table>
           </Box>

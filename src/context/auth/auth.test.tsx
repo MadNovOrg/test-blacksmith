@@ -42,6 +42,7 @@ describe('context: Auth', () => {
       expect(Object.keys(result.current)).toStrictEqual([
         'profile',
         'isOrgAdmin',
+        'managedOrgIds',
         'organizationIds',
         'defaultRole',
         'claimsRoles',

@@ -14,6 +14,7 @@ export type LoginResult = { error?: E; user?: CognitoUser }
 export type AuthState = {
   profile?: Profile
   isOrgAdmin?: boolean
+  managedOrgIds?: string[]
   organizationIds?: string[]
   defaultRole?: RoleName
   claimsRoles?: Set<RoleName>

@@ -1,4 +1,4 @@
-import { RoleName } from '@app/types'
+import { CourseLevel, RoleName } from '@app/types'
 
 import cognitoToProfile from './cognitoToProfile'
 import type { AuthState, CognitoUser } from './types'
@@ -40,7 +40,7 @@ export async function fetchUserProfile(
   user: CognitoUser
 ): Promise<Required<AuthState> | void> {
   try {
-    const { profile, isOrgAdmin, claims, emailVerified } =
+    const { profile, isOrgAdmin, managedOrgIds, claims, emailVerified } =
       await cognitoToProfile(user)
 
     if (!profile) {
@@ -61,6 +61,7 @@ export async function fetchUserProfile(
     return {
       profile,
       isOrgAdmin: isOrgAdmin ?? false,
+      managedOrgIds: managedOrgIds ?? [],
       organizationIds: JSON.parse(`[${orgIdsPgLiteral.slice(1, -1)}]`),
       defaultRole,
       claimsRoles: claimsRolesSet,
@@ -72,8 +73,9 @@ export async function fetchUserProfile(
       trainerRoles: profile.trainerRoles?.map(
         role => role.trainer_role_type.name
       ),
-      activeCertificates:
-        profile.certificates?.map(certificate => certificate.courseLevel) ?? [],
+      activeCertificates: (profile.certificates?.map(
+        certificate => certificate.courseLevel
+      ) ?? []) as CourseLevel[],
     }
   } catch (err) {
     console.error(err)

@@ -14,6 +14,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
   const activeRole = auth.activeRole
   const allowedRoles = auth.allowedRoles
   const activeCertificates = auth.activeCertificates ?? []
+  const managedOrgIds = auth.managedOrgIds ?? []
 
   const acl = Object.freeze({
     isAdmin: () => acl.isTTOps() || acl.isTTAdmin() || acl.isLD(),
@@ -477,39 +478,45 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canViewCourseHistory: () => {
       return RoleName.TT_ADMIN === auth.activeRole
     },
-
+    isOrgAdminOf: (participantOrgIds: string[]) => {
+      return (
+        auth.isOrgAdmin &&
+        participantOrgIds.some(participantOrgId =>
+          managedOrgIds.some(managedOrgId => managedOrgId === participantOrgId)
+        )
+      )
+    },
     canParticipateInCourses: () => {
       const roles = [RoleName.USER, RoleName.TRAINER]
       return roles.some(r => r === auth.activeRole)
     },
-    canTransferParticipant: () => {
-      if (auth.isOrgAdmin) {
-        return true
-      }
-
-      return [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].some(
-        r => r === auth.activeRole
+    canTransferParticipant: (participantOrgIds: string[]) => {
+      return (
+        [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].some(
+          r => r === auth.activeRole
+        ) || acl.isOrgAdminOf(participantOrgIds)
       )
     },
-    canReplaceParticipant: (accreditedBy: Accreditors_Enum) => {
-      if (auth.isOrgAdmin) {
-        return accreditedBy === Accreditors_Enum.Icm
-      }
-
-      return [
-        RoleName.TT_ADMIN,
-        RoleName.TT_OPS,
-        RoleName.SALES_ADMIN,
-        RoleName.SALES_REPRESENTATIVE,
-      ].some(r => r === auth.activeRole)
+    canReplaceParticipant: (
+      participantOrgIds: string[],
+      accreditedBy: Accreditors_Enum
+    ) => {
+      return (
+        [
+          RoleName.TT_ADMIN,
+          RoleName.TT_OPS,
+          RoleName.SALES_ADMIN,
+          RoleName.SALES_REPRESENTATIVE,
+        ].some(r => r === auth.activeRole) ||
+        (accreditedBy === Accreditors_Enum.Icm &&
+          acl.isOrgAdminOf(participantOrgIds))
+      )
     },
-    canRemoveParticipant: () => {
-      if (auth.isOrgAdmin) {
-        return true
-      }
-
-      return [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].some(
-        r => r === auth.activeRole
+    canRemoveParticipant: (participantOrgIds: string[]) => {
+      return (
+        [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].some(
+          r => r === auth.activeRole
+        ) || acl.isOrgAdminOf(participantOrgIds)
       )
     },
     canSendCourseInformation: () => {
@@ -521,19 +528,25 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ]
       return roles.some(r => r === auth.activeRole)
     },
-    canManageParticipantAttendance: (accreditedBy: Accreditors_Enum) => {
+    canManageParticipantAttendance: (
+      participantOrgIds: string[],
+      accreditedBy: Accreditors_Enum
+    ) => {
       return (
-        acl.canTransferParticipant() ||
-        acl.canReplaceParticipant(accreditedBy) ||
-        acl.canRemoveParticipant() ||
+        acl.canTransferParticipant(participantOrgIds) ||
+        acl.canReplaceParticipant(participantOrgIds, accreditedBy) ||
+        acl.canRemoveParticipant(participantOrgIds) ||
         acl.canSendCourseInformation()
       )
     },
-    canOnlySendCourseInformation: (accreditedBy: Accreditors_Enum) => {
+    canOnlySendCourseInformation: (
+      participantOrgIds: string[],
+      accreditedBy: Accreditors_Enum
+    ) => {
       return (
-        !acl.canTransferParticipant() &&
-        !acl.canReplaceParticipant(accreditedBy) &&
-        !acl.canRemoveParticipant() &&
+        !acl.canTransferParticipant(participantOrgIds) &&
+        !acl.canReplaceParticipant(participantOrgIds, accreditedBy) &&
+        !acl.canRemoveParticipant(participantOrgIds) &&
         acl.canSendCourseInformation()
       )
     },

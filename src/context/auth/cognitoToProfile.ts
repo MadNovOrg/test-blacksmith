@@ -1,20 +1,23 @@
+import {
+  GetProfileByIdQuery,
+  GetProfileByIdQueryVariables,
+} from '@app/generated/graphql'
 import { gqlRequest } from '@app/lib/gql-request'
 import { getUserProfile } from '@app/queries/users'
 
 import type { Claims, CognitoUser, Profile } from './types'
 
-type QueryResponseType = {
-  profile:
-    | (Profile & {
-        adminRights: { aggregate: { count: number } }
-        trainerRoles: { trainer_role_type: { name: string } }[]
-      })
-    | null
-}
+type ProfileType =
+  | (Profile & {
+      adminRights: { aggregate: { count: number } }
+      trainerRoles: { trainer_role_type: { name: string } }[]
+    })
+  | null
 
 export type CognitoProfileDetails = {
-  profile?: QueryResponseType['profile']
+  profile?: ProfileType
   isOrgAdmin?: boolean
+  managedOrgIds?: string[]
   claims?: Claims
   emailVerified?: boolean
 }
@@ -34,15 +37,15 @@ export default async function (
     idToken.payload['https://hasura.io/jwt/claims']
   ) as Claims
 
-  const { profile } = await gqlRequest<QueryResponseType>(
-    getUserProfile,
-    { id: claims['x-hasura-user-id'] },
-    { token }
-  )
+  const { profile } = await gqlRequest<
+    GetProfileByIdQuery,
+    GetProfileByIdQueryVariables
+  >(getUserProfile, { id: claims['x-hasura-user-id'] }, { token })
 
   return {
-    profile: profile ?? undefined,
-    isOrgAdmin: Boolean(profile?.adminRights.aggregate.count),
+    profile: profile as ProfileType,
+    isOrgAdmin: Boolean(profile?.managedOrgIds?.length),
+    managedOrgIds: profile?.managedOrgIds.map(o => o.organization_id),
     claims,
     emailVerified: idToken.payload.email_verified,
   }

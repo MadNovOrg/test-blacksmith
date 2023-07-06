@@ -61,7 +61,7 @@ const emptyPendingInvitesResponse = {
 describe('component: CourseAttendees', () => {
   let course: Course
 
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks()
     course = buildCourse()
   })
@@ -107,7 +107,7 @@ describe('component: CourseAttendees', () => {
       ],
     }
 
-    const setup = () => {
+    const setup = (role?: RoleName, courseType?: CourseType) => {
       // Arrange
       useCourseParticipantsMock.mockReturnValue({
         status: LoadingStatus.SUCCESS,
@@ -119,18 +119,24 @@ describe('component: CourseAttendees', () => {
       useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
       useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
 
+      const tableCourse = buildCourse({
+        overrides: {
+          type: courseType ?? CourseType.OPEN,
+        },
+      })
+
       useCourseMock.mockReturnValue({
         mutate: jest.fn(),
         status: LoadingStatus.SUCCESS,
-        data: buildCourse({
-          overrides: {
-            type: CourseType.OPEN,
-          },
-        }),
+        data: tableCourse,
       })
 
       // Act
-      render(<CourseAttendees course={course} />)
+      render(<CourseAttendees course={tableCourse} />, {
+        auth: {
+          activeRole: role ?? RoleName.USER,
+        },
+      })
     }
     it('should display a table if a course has participants', () => {
       setup()
@@ -203,7 +209,7 @@ describe('component: CourseAttendees', () => {
     })
 
     it('should display "Orders" column only when the course type is OPEN', () => {
-      setup()
+      setup(RoleName.TT_ADMIN)
       const { participants } = testData
       const participantRow = screen.getByTestId(
         `course-participant-row-${participants[0].id}`
@@ -215,6 +221,36 @@ describe('component: CourseAttendees', () => {
           participants[0].order?.xeroInvoiceNumber ?? ''
         )
       ).toBeInTheDocument()
+    })
+
+    it('should not display "Orders" column only when the course type is not OPEN', () => {
+      setup(RoleName.TT_OPS, CourseType.CLOSED)
+      const { participants } = testData
+      const participantRow = screen.getByTestId(
+        `course-participant-row-${participants[0].id}`
+      )
+
+      // Assert
+      expect(
+        within(participantRow).queryByText(
+          participants[0].order?.xeroInvoiceNumber ?? ''
+        )
+      ).not.toBeInTheDocument()
+    })
+
+    it('should not display "Orders" column only when active role does not allow', () => {
+      setup()
+      const { participants } = testData
+      const participantRow = screen.getByTestId(
+        `course-participant-row-${participants[0].id}`
+      )
+
+      // Assert
+      expect(
+        within(participantRow).queryByText(
+          participants[0].order?.xeroInvoiceNumber ?? ''
+        )
+      ).not.toBeInTheDocument()
     })
   })
 
