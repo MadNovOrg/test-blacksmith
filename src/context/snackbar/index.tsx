@@ -15,6 +15,8 @@ export type SnackbarMessageKey =
   | 'user-invited'
   | 'course-submitted'
   | 'discount-disabled'
+  | 'course-approval-message'
+  | 'course-approval-error'
 export type SnackbarMessage = { label: React.ReactNode }
 
 export type SnackbarState = {

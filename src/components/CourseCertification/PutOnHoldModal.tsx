@@ -231,7 +231,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                       color={theme.palette.grey[700]}
                       fontWeight={600}
                     >
-                      {t('common.course-certificate.put-on-hold-modal.reason')}
+                      {t('common.reason')}
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>

@@ -52,7 +52,7 @@ const CertificateHoldHistoryModal: React.FC<
           <TableCell>
             {t('components.changelog-modal.date-of-action')}
           </TableCell>
-          <TableCell>{t('components.changelog-modal.reason')}</TableCell>
+          <TableCell>{t('common.reason')}</TableCell>
           <TableCell>{t('components.changelog-modal.dates')}</TableCell>
           <TableCell>{t('components.changelog-modal.notes')}</TableCell>
         </TableRow>

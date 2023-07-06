@@ -93,7 +93,7 @@ export const AttendeeCancellationTable: React.FC<
       },
       {
         id: 'payload.cancellation_reason',
-        label: t('pages.audits.reason'),
+        label: t('common.reason'),
         sorting: false,
         exportRender: (log: AttendeeLogType) =>
           log.payload.cancellation_reason ?? '',

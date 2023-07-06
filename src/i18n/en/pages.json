@@ -386,6 +386,9 @@
       "send-for-approval": "Send for approval",
       "no-approval-header": "This course does not require approval from a Team Teach administrator. This is a warning to highlight this course does not meet protocol for reasons:",
       "approval-header": "This course requires approval from a Team Teach Administrator due to some or all of the following reasons:",
+      "modal-subtitle-approve":"Please add your comments to the trainer below",
+      "modal-subtitle-reject":"Please add your comments to the trainer below. Once a course is rejected this can not be actioned further",
+      "course-rejection-warning":"Please note: once this course is submitted this course will no longer be visible within all course views.",
       "type_ADVISED_TIME_EXCEEDED": "Advised time exceeded",
       "type_OUTSIDE_NOTICE_PERIOD": "Start date is less than 4 weeks away",
       "type_LEAD_TRAINER_IN_GRACE_PERIOD": "Lead trainer certification is expired (within grace period) or expiring soon",
@@ -535,6 +538,7 @@
     "cancellation-request-alert": "This course has a pending cancellation request.",
     "delete-request": "Delete request",
     "approve-cancellation": "Approve cancellation",
+    "course-approval-message": "This course has been {{ action }}.",
     "modify-my-attendance": {
       "title": "Modify my attendance",
       "description": "Please select one of the following options.",
@@ -1468,7 +1472,6 @@
     "old-end-date": "Original end date",
     "new-start-date": "New start date",
     "new-end-date": "New end date",
-    "reason": "Reason",
     "filter-by-event-date": "Filter by Event Date"
   },
   "change-password": {

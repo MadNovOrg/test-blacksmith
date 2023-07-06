@@ -8,7 +8,6 @@ import {
   Container,
   Link,
   Stack,
-  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material'
@@ -22,32 +21,18 @@ import { CourseOverview } from '@app/components/CourseOverview'
 import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
-import {
-  ApproveCourseMutation,
-  ApproveCourseMutationVariables,
-  Course_Status_Enum,
-  SetCourseStatusMutation,
-  SetCourseStatusMutationVariables,
-} from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
+import { Course_Status_Enum } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import usePollQuery from '@app/hooks/usePollQuery'
-import { checkCourseDetailsForExceptions } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import { CourseAttendees } from '@app/pages/trainer-pages/components/CourseAttendees'
 import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
 import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading'
 import { EvaluationSummaryTab } from '@app/pages/trainer-pages/components/EvaluationSummaryTab'
 import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
-import { MUTATION as APPROVE_COURSE_MUTATION } from '@app/queries/courses/approve-course'
-import { MUTATION as SET_COURSE_STATUS_MUTATION } from '@app/queries/courses/set-course-status'
-import {
-  CourseLevel,
-  CourseTrainerType,
-  CourseType,
-  TrainerRoleTypeName,
-} from '@app/types'
-import { bildStrategiesToRecord, courseEnded, LoadingStatus } from '@app/util'
+import { CourseTrainerType, CourseType } from '@app/types'
+import { courseEnded, LoadingStatus } from '@app/util'
 
+import { ExceptionsApprovalAlert } from './components/ExceptionsApprovalAlert'
 import { OrderYourWorkbookAlert } from './components/OrderYourWorkbookAlert'
 
 export enum CourseDetailsTabs {
@@ -66,7 +51,6 @@ export const CourseDetails = () => {
   const { id: courseId } = useParams()
   const { acl, isOrgAdmin, profile } = useAuth()
   const [searchParams] = useSearchParams()
-  const fetcher = useFetcher()
 
   const initialTab = searchParams.get('tab') as CourseDetailsTabs | null
 
@@ -75,7 +59,6 @@ export const CourseDetails = () => {
   )
   const [showCancellationRequestModal, setShowCancellationRequestModal] =
     useState(false)
-  const [approvalError, setApprovalError] = useState<string>()
 
   useEffect(() => {
     if (initialTab) setSelectedTab(initialTab)
@@ -120,74 +103,6 @@ export const CourseDetails = () => {
     [linkedOrderItem, isCourseClosed, isCourseIndirectBlended]
   )
 
-  const courseExceptions = useMemo(() => {
-    if (!course || !course.trainers || !exceptionsApprovalPending) return []
-
-    return checkCourseDetailsForExceptions(
-      {
-        startDateTime: new Date(course.dates?.aggregate?.start?.date),
-        courseLevel: course.level,
-        maxParticipants: course.max_participants,
-        modulesDuration: course.modulesDuration,
-        type: course.type,
-        deliveryType: course.deliveryType,
-        reaccreditation: course.reaccreditation ?? false,
-        conversion: course.conversion,
-        accreditedBy: course.accreditedBy,
-        bildStrategies: bildStrategiesToRecord(course.bildStrategies),
-        hasSeniorOrPrincipalLeader:
-          (leader &&
-            leader.profile.trainer_role_types.some(
-              ({ trainer_role_type: role }) =>
-                role.name === TrainerRoleTypeName.SENIOR ||
-                role.name === TrainerRoleTypeName.PRINCIPAL
-            )) ??
-          false,
-      },
-      course.trainers.map(t => ({
-        type: t.type,
-        trainer_role_types: t.profile.trainer_role_types,
-        levels: (t.profile.certificates ?? []).map(c => ({
-          courseLevel: c.courseLevel as CourseLevel,
-          expiryDate: c.expiryDate,
-        })),
-      }))
-    )
-  }, [course, exceptionsApprovalPending, leader])
-
-  const onExceptionsReject = useCallback(async () => {
-    if (!course) return
-    setApprovalError(undefined)
-    try {
-      await fetcher<SetCourseStatusMutation, SetCourseStatusMutationVariables>(
-        SET_COURSE_STATUS_MUTATION,
-        {
-          id: course.id,
-          status: Course_Status_Enum.Declined,
-        }
-      )
-      navigate('/')
-    } catch (e: unknown) {
-      console.error(e)
-      setApprovalError((e as Error).message)
-    }
-  }, [course, fetcher, navigate])
-
-  const onExceptionsApprove = useCallback(async () => {
-    if (!course) return
-    setApprovalError(undefined)
-    try {
-      await fetcher<ApproveCourseMutation, ApproveCourseMutationVariables>(
-        APPROVE_COURSE_MUTATION,
-        { courseId: course.id }
-      )
-      await mutate()
-    } catch (e: unknown) {
-      console.error(e)
-      setApprovalError((e as Error).message)
-    }
-  }, [course, fetcher, mutate])
-
   const onRefreshCourse = useCallback(async () => {
     await mutate()
   }, [mutate])
@@ -207,6 +122,15 @@ export const CourseDetails = () => {
 
   return (
     <>
+      <SnackbarMessage
+        messageKey="course-approval-message"
+        sx={{ position: 'absolute' }}
+      />
+      <SnackbarMessage
+        severity="error"
+        messageKey="course-approval-error"
+        sx={{ position: 'absolute' }}
+      />
       {courseError || !course ? (
         <Alert severity="error">{t('errors.loading-course')}</Alert>
       ) : null}
@@ -270,71 +194,7 @@ export const CourseDetails = () => {
                   onClose={() => setShowCancellationRequestModal(false)}
                   onChange={mutate}
                 />
-
-                {exceptionsApprovalPending ? (
-                  <Alert
-                    severity="warning"
-                    variant="outlined"
-                    sx={{
-                      my: 2,
-                      '&& .MuiAlert-message': {
-                        width: '100%',
-                      },
-                    }}
-                  >
-                    <Box
-                      display="flex"
-                      justifyContent="space-between"
-                      alignItems="stretch"
-                      gap={1}
-                      flexDirection={isMobile ? 'column' : 'row'}
-                    >
-                      <Box>
-                        <Typography variant="body1" fontWeight={600}>
-                          {t('pages.create-course.exceptions.approval-header')}
-                        </Typography>
-                        <ul>
-                          {courseExceptions.map(exception => (
-                            <li key={exception}>
-                              {t(
-                                `pages.create-course.exceptions.type_${exception}`
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                        {approvalError ? (
-                          <Typography variant="caption" color="error">
-                            {approvalError}
-                          </Typography>
-                        ) : null}
-                      </Box>
-                      {acl.canApproveCourseExceptions() ? (
-                        <Box
-                          display="flex"
-                          flexDirection={isMobile ? 'column' : 'row'}
-                          alignItems="center"
-                        >
-                          <Button
-                            variant="text"
-                            fullWidth={isMobile}
-                            onClick={onExceptionsReject}
-                            sx={{ px: 2 }}
-                          >
-                            {t('common.reject')}
-                          </Button>
-                          <Button
-                            variant="contained"
-                            fullWidth={isMobile}
-                            onClick={onExceptionsApprove}
-                            sx={{ px: 7 }}
-                          >
-                            {t('common.approve')}
-                          </Button>
-                        </Box>
-                      ) : null}
-                    </Box>
-                  </Alert>
-                ) : null}
+                {exceptionsApprovalPending ? <ExceptionsApprovalAlert /> : null}
                 <OrderYourWorkbookAlert course={course} />
               </Container>
 

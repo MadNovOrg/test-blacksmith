@@ -430,6 +430,14 @@ enum BildStrategy {
   RESTRICTIVE_TERTIARY_ADVANCED
 }
 
+enum CourseApprovalError {
+  COURSE_NOT_FOUND
+  TRAINER_NOT_FOUND
+  INVALID_COURSE_ID
+  INVALID_STATUS
+  NO_AUDIT_FOUND
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -992,6 +1000,7 @@ type NotifyCourseEditOutput {
 
 type ApproveCourseOutput {
   success: Boolean!
+  error: CourseApprovalError
 }
 
 type SendCourseInformationOutput {

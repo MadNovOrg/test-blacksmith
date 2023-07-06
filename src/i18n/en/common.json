@@ -67,6 +67,7 @@
   "registration": "Registration",
   "action": "Action",
   "org-address": "Organisation address",
+  "reason": "Reason",
   "addr": {
     "line1": "Line 1",
     "line1-placeholder": "Address Line 1",
@@ -401,7 +402,6 @@
     "put-on-hold-modal": {
       "warning": "Once you put on hold, attendee will no longer have access to the certificate.",
       "notes": "Notes",
-      "reason": "Reason",
       "please-add-a-note": "Please add a note",
       "to-date-greater-error": "To date must be greater than from",
       "select-reason": "Select a reason",

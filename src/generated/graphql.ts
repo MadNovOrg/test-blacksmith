@@ -43,6 +43,7 @@ export type Address = {
 
 export type ApproveCourseOutput = {
   __typename?: 'ApproveCourseOutput';
+  error?: Maybe<CourseApprovalError>;
   success: Scalars['Boolean'];
 };
 
@@ -1231,6 +1232,14 @@ export enum ContentTypesOfVideoSeriesCategoryEnum {
 export enum ContentTypesOfWebinarsCategoryEnum {
   /** The Type of Content object */
   Webinar = 'WEBINAR'
+}
+
+export enum CourseApprovalError {
+  CourseNotFound = 'COURSE_NOT_FOUND',
+  InvalidCourseId = 'INVALID_COURSE_ID',
+  InvalidStatus = 'INVALID_STATUS',
+  NoAuditFound = 'NO_AUDIT_FOUND',
+  TrainerNotFound = 'TRAINER_NOT_FOUND'
 }
 
 export type CourseCertificateLevel = {
@@ -45457,7 +45466,7 @@ export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __
 export type GetTempProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, accreditedBy: Accreditors_Enum, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, reaccreditation?: boolean | null, freeSpaces?: number | null, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, expenses: Array<{ __typename?: 'course_expenses', id: any, data: any, trainer: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }> } | null }> };
+export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, accreditedBy: Accreditors_Enum, price?: any | null, priceCurrency?: string | null, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, reaccreditation?: boolean | null, freeSpaces?: number | null, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, expenses: Array<{ __typename?: 'course_expenses', id: any, data: any, trainer: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }> } | null }> };
 
 export type InsertProfileTempMutationVariables = Exact<{
   input: Profile_Temp_Insert_Input;

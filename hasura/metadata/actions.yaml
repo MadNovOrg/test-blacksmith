@@ -679,6 +679,23 @@ custom_types:
         - value: RESTRICTIVE_TERTIARY_ADVANCED
           is_deprecated: null
           description: null
+    - name: CourseApprovalError
+      values:
+        - value: COURSE_NOT_FOUND
+          is_deprecated: null
+          description: null
+        - value: TRAINER_NOT_FOUND
+          is_deprecated: null
+          description: null
+        - value: INVALID_COURSE_ID
+          is_deprecated: null
+          description: null
+        - value: INVALID_STATUS
+          is_deprecated: null
+          description: null
+        - value: NO_AUDIT_FOUND
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
