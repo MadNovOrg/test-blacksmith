@@ -367,6 +367,8 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
+        - accredited_by
+        - conversion
         - course_delivery_type
         - course_level
         - course_status
