@@ -27,6 +27,10 @@ export const NavLinks = () => {
 
   return (
     <>
+      <Link component={StyledNavLink} to="/">
+        {t('home')}
+      </Link>
+
       {acl.canViewResources(showResources) ? (
         <Link component={StyledNavLink} to="/resources">
           {t('resources')}
