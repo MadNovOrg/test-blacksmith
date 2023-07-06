@@ -165,7 +165,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
               />
             </Box>
           ) : (
-            <Stack gap={4} mt={4}>
+            <Stack gap={4} mt={4} width={'200px'}>
               <Filters onChange={setFilters} />
             </Stack>
           )}
