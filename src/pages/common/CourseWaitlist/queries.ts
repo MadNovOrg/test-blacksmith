@@ -36,9 +36,9 @@ export const WAITLIST_COURSE = gql`
 `
 
 export const JOIN_WAITLIST = gql`
-  mutation JoinWaitlist($input: waitlist_insert_input!) {
-    waitlist: insert_waitlist(objects: [$input]) {
-      affected_rows
+  mutation JoinWaitlist($input: JoinWaitlistInput!) {
+    joinWaitlist(input: $input) {
+      success
     }
   }
 `

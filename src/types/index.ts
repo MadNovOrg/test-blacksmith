@@ -841,3 +841,23 @@ export type AllCourseStatuses =
   | AdminOnlyCourseStatus
 
 export type NonNullish<T> = Exclude<T, undefined | null>
+
+declare global {
+  interface Window {
+    grecaptcha: {
+      enterprise: {
+        ready: <T>(callback: () => Promise<T>) => void
+        render: (
+          id: string,
+          options: {
+            sitekey: string
+            callback: (token: string) => unknown
+            'expired-callback'?: () => void
+            'error-callback'?: () => void
+            action: string
+          }
+        ) => number
+      }
+    }
+  }
+}

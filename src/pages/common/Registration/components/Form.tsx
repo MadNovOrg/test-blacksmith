@@ -24,13 +24,12 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useToggle } from 'react-use'
 
 import PhoneNumberInput from '@app/components/PhoneNumberInput'
+import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
+import { SignUpMutation, SignUpMutationVariables } from '@app/generated/graphql'
 import { gqlRequest } from '@app/lib/gql-request'
-import {
-  MUTATION,
-  ParamsType,
-  ResponseType,
-} from '@app/queries/profile/insert-profile-temp'
 import { INPUT_DATE_FORMAT } from '@app/util'
+
+import { SIGN_UP_MUTATION } from '../queries'
 
 import { FormInputs, getFormSchema } from './types'
 
@@ -72,7 +71,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     resolver: yupResolver(schema),
     defaultValues: {
       phone: '',
-      dob: null,
+      dob: undefined,
     },
   })
 
@@ -82,7 +81,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     setLoading(true)
     setError('')
     try {
-      const input = {
+      const input: SignUpMutationVariables['input'] = {
         email: data.email,
         givenName: data.firstName,
         familyName: data.surname,
@@ -92,9 +91,13 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         acceptTnc: data.tcs,
         courseId,
         quantity,
+        recaptchaToken: data.recaptchaToken,
       }
 
-      await gqlRequest<ResponseType, ParamsType>(MUTATION, { input })
+      await gqlRequest<SignUpMutation, SignUpMutationVariables>(
+        SIGN_UP_MUTATION,
+        { input }
+      )
 
       await Auth.signUp({
         username: data.email,
@@ -313,6 +316,24 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               }
             />
           </Box>
+        </Box>
+
+        <Box mb={5}>
+          <Recaptcha
+            action={RecaptchaActions.REGISTRATION}
+            onSuccess={token =>
+              setValue('recaptchaToken', token, { shouldValidate: true })
+            }
+            onExpired={() =>
+              setValue('recaptchaToken', '', { shouldValidate: true })
+            }
+          />
+
+          {errors.recaptchaToken?.message ? (
+            <FormHelperText error>
+              {errors.recaptchaToken.message}
+            </FormHelperText>
+          ) : null}
         </Box>
 
         <Box display="flex" flexDirection="column" alignItems="center">

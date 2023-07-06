@@ -12,6 +12,7 @@ export type FormInputs = {
   password: string
   dob: Date | null
   tcs: boolean
+  recaptchaToken: string
 }
 
 export const getFormSchema = (t: TFunction) => {
@@ -32,5 +33,8 @@ export const getFormSchema = (t: TFunction) => {
       .required(t('validation-errors.date-required')),
 
     tcs: yup.boolean().oneOf([true], t('pages.signup.tcs-required')),
+    recaptchaToken: yup
+      .string()
+      .required(t('validation-errors.recaptcha-required')),
   })
 }

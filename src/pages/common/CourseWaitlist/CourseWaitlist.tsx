@@ -42,8 +42,13 @@ export const CourseWaitlist: React.FC<
     query: WAITLIST_COURSE,
     variables: { id: Number(courseId) ?? 0 },
   })
+
   const [
-    { data: joinedWaitlist, fetching: joiningWaitlist },
+    {
+      data: joinedWaitlistData,
+      fetching: joiningWaitlist,
+      error: errorJoinWaitlist,
+    },
     joinWaitlistMutation,
   ] = useMutation<JoinWaitlistMutation, JoinWaitlistMutationVariables>(
     JOIN_WAITLIST
@@ -61,11 +66,12 @@ export const CourseWaitlist: React.FC<
         phone: data.phone,
         email: data.email,
         orgName: data.orgName,
+        recaptchaToken: data.recaptchaToken,
       },
     })
   }
 
-  if (joinedWaitlist?.waitlist?.affected_rows && emailRef.current) {
+  if (joinedWaitlistData?.joinWaitlist.success && emailRef.current) {
     return <JoinedWaitlist email={emailRef.current} />
   }
 
@@ -115,6 +121,12 @@ export const CourseWaitlist: React.FC<
       {!course && !fetching ? (
         <Alert variant="outlined" severity="error" sx={{ mt: 2 }}>
           {t('waitlist-not-found')}
+        </Alert>
+      ) : null}
+
+      {errorJoinWaitlist ? (
+        <Alert variant="outlined" severity="error" sx={{ mt: 2 }}>
+          {t('waitlist.join-error')}
         </Alert>
       ) : null}
 

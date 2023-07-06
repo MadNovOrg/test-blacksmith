@@ -17,5 +17,8 @@ export const getFormSchema = (t: TFunction) => {
       .min(10, t('validation-errors.phone-invalid')),
 
     orgName: yup.string().required(requiredMsg(t, 'org-name')),
+    recaptchaToken: yup
+      .string()
+      .required(t('validation-errors.recaptcha-required')),
   })
 }

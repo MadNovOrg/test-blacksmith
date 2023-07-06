@@ -24,14 +24,16 @@ insertWaitlistTests.forEach(role => {
       'givenName',
       'orgName',
       'phone',
+      'recaptchaToken',
     ]
+
     const forbiddenFields = ['confirmed', 'created_at', 'id']
 
     const waitlistMutation = schema.__schema.mutationType.fields.find(
-      m => m.name === 'insert_waitlist'
+      m => m.name === 'joinWaitlist'
     )
     const insertWaitlistInput = schema.__schema.types.find(
-      o => o.name === 'waitlist_insert_input'
+      o => o.name === 'JoinWaitlistInput'
     )
     const mutationFields = insertWaitlistInput?.inputFields.map(i => i.name)
     const hasAllowedFields = allowedFields.every(f =>

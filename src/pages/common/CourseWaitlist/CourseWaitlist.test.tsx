@@ -4,6 +4,8 @@ import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
+import { Recaptcha } from '@app/components/Recaptcha'
+import { createRecaptchaComp } from '@app/components/Recaptcha/test-utils'
 import {
   JoinWaitlistMutation,
   JoinWaitlistMutationVariables,
@@ -15,6 +17,16 @@ import { render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { CourseWaitlist } from './CourseWaitlist'
+
+const RecaptchaMock = createRecaptchaComp()
+
+jest.mock('@app/components/Recaptcha', () => ({
+  __esModule: true,
+  ...jest.requireActual('@app/components/Recaptcha'),
+  Recaptcha: jest.fn(),
+}))
+
+const MockedRecaptcha = jest.mocked(Recaptcha)
 
 describe('page: Waitlist', () => {
   it('displays a skeleton while loading course details', () => {
@@ -106,6 +118,8 @@ describe('page: Waitlist', () => {
   it('adds a user to the waitlist', async () => {
     const courseId = 10000
 
+    MockedRecaptcha.mockImplementation(RecaptchaMock)
+
     const client = {
       executeQuery: () =>
         fromValue<{ data: WaitlistCourseQuery }>({
@@ -124,8 +138,8 @@ describe('page: Waitlist', () => {
 
         return fromValue<{ data: JoinWaitlistMutation }>({
           data: {
-            waitlist: {
-              affected_rows: success ? 1 : 0,
+            joinWaitlist: {
+              success,
             },
           },
         })
@@ -152,6 +166,8 @@ describe('page: Waitlist', () => {
     await userEvent.type(screen.getByLabelText(/organisation name/i), 'Org')
 
     await userEvent.click(screen.getByText(/join waiting list/i))
+
+    await userEvent.click(screen.getByTestId('recaptcha-success'))
 
     await waitFor(() => {
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(

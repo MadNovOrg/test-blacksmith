@@ -17,4 +17,5 @@ interface ImportMetaEnv {
   VITE_MANAGE_ACCOUNT_URL: string
   VITE_UNSUBSCRIBE_URL: string
   VITE_GTM_ID: string
+  VITE_RECAPTCHA_KEY: string
 }

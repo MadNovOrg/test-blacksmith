@@ -1,6 +1,8 @@
 import { Auth } from 'aws-amplify'
 import React from 'react'
 
+import { Recaptcha } from '@app/components/Recaptcha'
+import { createRecaptchaComp } from '@app/components/Recaptcha/test-utils'
 import { gqlRequest } from '@app/lib/gql-request'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
@@ -19,7 +21,21 @@ const defaultProps = {
   quantity: 2,
 }
 
+const RecaptchaMock = createRecaptchaComp()
+
+jest.mock('@app/components/Recaptcha', () => ({
+  __esModule: true,
+  ...jest.requireActual('@app/components/Recaptcha'),
+  Recaptcha: jest.fn(),
+}))
+
+const MockedRecaptcha = jest.mocked(Recaptcha)
+
 describe('Form', () => {
+  beforeEach(() => {
+    MockedRecaptcha.mockImplementation(RecaptchaMock)
+  })
+
   it('displays error message if first name not provided', async () => {
     const props = { ...defaultProps }
     render(<Form {...props} />)
@@ -147,6 +163,16 @@ describe('Form', () => {
     })
   })
 
+  it('displays error message if recaptcha is not verified', async () => {
+    render(<Form {...defaultProps} />)
+
+    await userEvent.click(
+      screen.getByRole('button', { name: /create account/i })
+    )
+
+    expect(screen.getByText(/recaptcha is required/i)).toBeInTheDocument()
+  })
+
   it('displays error message if unknown error occurs on signup', async () => {
     gqlRequestMocked.mockImplementation(() => {
       throw new Error()
@@ -162,6 +188,8 @@ describe('Form', () => {
     await userEvent.type(screen.getByTestId('input-email'), 'test@email.com')
     await userEvent.type(screen.getByTestId('input-password'), 'Test1234!')
     await userEvent.type(screen.getByTestId('input-phone'), '1234567890')
+
+    await userEvent.click(screen.getByTestId('recaptcha-success'))
 
     // Selects your default value of the date field
     await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
@@ -204,6 +232,7 @@ describe('Form', () => {
     await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
 
     await userEvent.click(screen.getByLabelText('T&Cs'))
+    await userEvent.click(screen.getByTestId('recaptcha-success'))
 
     await waitFor(async () => {
       await userEvent.click(screen.getByTestId('signup-form-btn'))

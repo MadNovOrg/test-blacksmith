@@ -1,10 +1,27 @@
 import React from 'react'
 
+import { Recaptcha } from '@app/components/Recaptcha'
+import { createRecaptchaComp } from '@app/components/Recaptcha/test-utils'
+
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
 
 import { Form, FormInputs } from './Form'
 
+const RecaptchaMock = createRecaptchaComp()
+
+jest.mock('@app/components/Recaptcha', () => ({
+  __esModule: true,
+  ...jest.requireActual('@app/components/Recaptcha'),
+  Recaptcha: jest.fn(),
+}))
+
+const MockedRecaptcha = jest.mocked(Recaptcha)
+
 describe('component: Waitlist/Form', () => {
+  beforeEach(() => {
+    MockedRecaptcha.mockImplementation(RecaptchaMock)
+  })
+
   it('validates form', async () => {
     render(<Form onSuccess={jest.fn} saving={false} />)
 
@@ -18,6 +35,7 @@ describe('component: Waitlist/Form', () => {
       expect(
         screen.getByText(/organisation name is required/i)
       ).toBeInTheDocument()
+      expect(screen.getByText(/recaptcha is required/i)).toBeInTheDocument()
     })
 
     await userEvent.type(screen.getByLabelText(/work email/i), 'invalid-email')
@@ -36,6 +54,7 @@ describe('component: Waitlist/Form', () => {
       email: chance.email(),
       orgName: chance.name(),
       phone: '1111111',
+      recaptchaToken: 'token',
     }
     const onSuccessMock = jest.fn()
 
@@ -60,6 +79,7 @@ describe('component: Waitlist/Form', () => {
     )
 
     await userEvent.click(screen.getByText(/join waiting list/i))
+    await userEvent.click(screen.getByTestId('recaptcha-success'))
 
     await waitFor(() => {
       expect(onSuccessMock).toHaveBeenCalledTimes(1)
@@ -67,6 +87,48 @@ describe('component: Waitlist/Form', () => {
         ...submittedData,
         phone: '+44 111 111 1',
       })
+    })
+  })
+
+  it('invalidates form when recaptcha expires', async () => {
+    const submittedData: FormInputs = {
+      firstName: chance.first(),
+      surname: chance.last(),
+      email: chance.email(),
+      orgName: chance.name(),
+      phone: '1111111',
+      recaptchaToken: 'token',
+    }
+
+    render(<Form onSuccess={jest.fn()} saving={false} />)
+
+    await userEvent.type(
+      screen.getByLabelText(/first name/i),
+      submittedData.firstName
+    )
+    await userEvent.type(
+      screen.getByLabelText(/last name/i),
+      submittedData.surname
+    )
+    await userEvent.type(
+      screen.getByLabelText(/email/i),
+      submittedData.email ?? ''
+    )
+    await userEvent.type(screen.getByLabelText(/phone/i), submittedData.phone)
+    await userEvent.type(
+      screen.getByLabelText(/organisation name/i),
+      submittedData.orgName
+    )
+
+    await userEvent.click(screen.getByText(/join waiting list/i))
+    await userEvent.click(screen.getByTestId('recaptcha-success'))
+
+    await userEvent.click(screen.getByTestId('recaptcha-expired'))
+
+    await userEvent.click(screen.getByText(/join waiting list/i))
+
+    await waitFor(() => {
+      expect(screen.getByText(/recaptcha is required/i)).toBeInTheDocument()
     })
   })
 })

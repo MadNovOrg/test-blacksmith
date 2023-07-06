@@ -8,6 +8,7 @@
   },
   "waitlist": {
     "course-full": "Course fully booked",
+    "join-error": "There was an error. Please try again later.",
     "form-errors": {
       "constraint-violation": "You've already been added to the waiting list."
     }

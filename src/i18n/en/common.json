@@ -338,7 +338,8 @@
     "confirm-password-invalid": "Confirm password must be same as password",
     "otp-required": "Please enter 6 digit passcode received in email",
     "other-position-required": "Please enter your job position",
-    "maximum-chars-limit": "Maximum {{ number }} characters exceeded"
+    "maximum-chars-limit": "Maximum {{ number }} characters exceeded",
+    "recaptcha-required": "Recaptcha is required"
   },
   "validation-notice": "All fields are mandatory.",
   "create-free-account": "Create your free Team Teach Hub account",

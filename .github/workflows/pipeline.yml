@@ -28,6 +28,8 @@ on:
         required: true
       gmaps_key:
         required: true
+      recaptcha_key:
+        required: true
       stripe_key:
         required: true
       request_quote_url:
@@ -69,6 +71,7 @@ jobs:
           VITE_HASURA_GRAPHQL_API: '${{ secrets.hasura_endpoint }}/v1/graphql'
           VITE_BASE_WORDPRESS_URL: '${{ secrets.wp_host }}/wp-json/wp/v2'
           VITE_GMAPS_KEY: ${{ secrets.gmaps_key }}
+          VITE_RECAPTCHA_KEY: ${{secrets.recaptcha_key}}
           VITE_STRIPE_KEY: ${{ secrets.stripe_key }}
           VITE_APP_VERSION: ${{ inputs.version }}
           REQUEST_QUOTE_URL: ${{ secrets.request_quote_url }}

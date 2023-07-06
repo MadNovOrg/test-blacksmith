@@ -1,12 +1,19 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { Box, Grid, styled, TextField as MuiTextField } from '@mui/material'
+import {
+  Box,
+  Grid,
+  styled,
+  TextField as MuiTextField,
+  FormHelperText,
+} from '@mui/material'
 import React, { useMemo } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { InferType } from 'yup'
 
 import PhoneNumberInput from '@app/components/PhoneNumberInput'
+import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 
 import { getFormSchema } from './types'
 
@@ -45,6 +52,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       email: '',
       phone: '',
       orgName: '',
+      recaptchaToken: '',
     },
   })
 
@@ -147,7 +155,21 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           />
         </Box>
 
-        <Box display="flex" flexDirection="column" alignItems="center">
+        <Recaptcha
+          action={RecaptchaActions.JOIN_WAITLIST}
+          onSuccess={token =>
+            setValue('recaptchaToken', token, { shouldValidate: true })
+          }
+          onExpired={() =>
+            setValue('recaptchaToken', '', { shouldValidate: true })
+          }
+        />
+
+        {errors.recaptchaToken?.message ? (
+          <FormHelperText error>{errors.recaptchaToken.message}</FormHelperText>
+        ) : null}
+
+        <Box display="flex" flexDirection="column" alignItems="center" mt={3}>
           <LoadingButton
             type="submit"
             variant="contained"
