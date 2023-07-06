@@ -776,7 +776,8 @@
       "401": "New password required",
       "UnknownError": "Email address or password was incorrect, please try again"
     },
-    "password-resent": "Your temporary password has been resent."
+    "password-resent": "Your temporary password has been resent.",
+    "invitation-declined": "You declined your organisation invitation."
   },
   "forgot-password": {
     "generic-error": "If there is an account registered to {{email}}, an email was sent to allow you to reset your password.",

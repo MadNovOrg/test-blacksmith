@@ -8,8 +8,8 @@ import {
   Radio,
   RadioGroup,
   Typography,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import jwtDecode from 'jwt-decode'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -58,7 +58,7 @@ export const OrgInvitationPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
-  const { data, error, mutate } = useSWR<GetOrgInviteResponseType, GqlError>(
+  const { data, error } = useSWR<GetOrgInviteResponseType, GqlError>(
     token ? GET_ORG_INVITE_QUERY : null,
     (query, variables) =>
       gqlRequest(query, variables, { headers: { 'x-auth': `Bearer ${token}` } })
@@ -87,10 +87,12 @@ export const OrgInvitationPage = () => {
     try {
       await gqlRequest<DeclineOrgInviteResponseType>(
         DECLINE_ORG_INVITE_MUTATION,
-        {},
+        {
+          inviteId: data?.invite.id,
+        },
         { headers: { 'x-auth': `Bearer ${token}` } }
       )
-      mutate()
+      return navigate('/login?invitationDeclined=true')
     } catch (e) {
       const err = e as Error
       console.log(err)

@@ -51,7 +51,7 @@ type Mutation {
 }
 
 type Mutation {
-  declineOrgInvite: DeclineOrgInviteOutput
+  declineOrgInvite(inviteId: uuid!): Boolean
 }
 
 type Mutation {

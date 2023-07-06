@@ -5,9 +5,7 @@ export type ResponseType = {
 }
 
 export const MUTATION = gql`
-  mutation DeclineOrgInvite {
-    invite: declineOrgInvite {
-      id
-    }
+  mutation DeclineOrgInvite($inviteId: uuid!) {
+    invite: declineOrgInvite(inviteId: $inviteId)
   }
 `

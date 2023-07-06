@@ -2,10 +2,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { LoadingButton } from '@mui/lab'
 import {
   Alert,
-  Typography,
-  TextField,
   FormHelperText,
   Link,
+  TextField,
+  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material'
@@ -50,6 +50,7 @@ export const LoginPage = () => {
     searchParams.get('justResetPassword') === 'true'
 
   const passwordResent = searchParams.get('passwordResent')
+  const invitationDeclined = searchParams.get('invitationDeclined')
 
   const from = (location.state as LocationState)?.from || {}
 
@@ -122,6 +123,12 @@ export const LoginPage = () => {
       {passwordResent ? (
         <Alert variant="outlined" severity="success" sx={{ mb: 2 }}>
           {t('pages.login.password-resent')}
+        </Alert>
+      ) : null}
+
+      {invitationDeclined ? (
+        <Alert variant="outlined" severity="success" sx={{ mb: 2 }}>
+          {t('pages.login.invitation-declined')}
         </Alert>
       ) : null}
 
