@@ -277,7 +277,6 @@ export default createTheme({
       fontWeight: '500',
       color: theme.palette.grey[900],
     },
-
     subtitle1: {
       fontSize: '1.25rem',
       fontWeight: '600',
