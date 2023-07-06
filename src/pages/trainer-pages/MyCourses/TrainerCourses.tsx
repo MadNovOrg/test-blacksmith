@@ -225,7 +225,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
                     total={
                       actionableCourses?.course_aggregate?.aggregate?.count
                     }
-                    rowsPerPage={[5, 10, 15]}
+                    rowsPerPage={[5, 10, 15, 20]}
                     testId="actionable-courses-pagination"
                   />
                 ) : null}

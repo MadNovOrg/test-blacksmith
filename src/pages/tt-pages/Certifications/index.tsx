@@ -207,7 +207,12 @@ export const Certifications: React.FC<
                 filtered={filtered}
               />
 
-              {total ? <Pagination total={total} /> : null}
+              {total ? (
+                <Pagination
+                  total={total}
+                  rowsPerPage={[20, 30, 40, 50, 100, 200]}
+                />
+              ) : null}
             </>
           )}
         </Box>

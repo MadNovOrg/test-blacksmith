@@ -463,7 +463,10 @@ export const Users = () => {
                   </TableBody>
                 </Table>
                 {usersTotalCount ? (
-                  <Pagination total={usersTotalCount} />
+                  <Pagination
+                    total={usersTotalCount}
+                    rowsPerPage={[20, 30, 40, 50, 100, 200]}
+                  />
                 ) : null}
               </TableContainer>
             )}
