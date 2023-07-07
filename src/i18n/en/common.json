@@ -422,7 +422,6 @@
       }
     },
     "revoked-warning": "This certificate has been revoked on {{date, date_default}}.",
-    "revoked-generic-warning": "This certificate has been revoked due to a policy violation.",
     "revoked-warning-user": "If you wish reinstate this certificate, please contact us at info@teamteach.co.uk",
     "modify-grade-modal": {
       "warning": "Modifications to attendee’s grade will be visible to the trainer, attendee, and\nwill be reflected on their granted certificate.",

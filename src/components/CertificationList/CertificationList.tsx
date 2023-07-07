@@ -7,7 +7,6 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Tooltip,
   Typography,
   useTheme,
   useMediaQuery,
@@ -331,39 +330,27 @@ export const CertificationList: React.FC<
                   ) : null}
 
                   <TableCell sx={{ width: 0 }}>
-                    <Tooltip
-                      title={
-                        isRevoked
-                          ? t(
-                              'common.course-certificate.revoked-generic-warning'
-                            )
-                          : undefined
-                      }
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
                     >
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        sx={{ whiteSpace: 'nowrap' }}
+                        onClick={() =>
+                          navigate(`/certification/${p.certificate?.id}`)
+                        }
+                        data-testid={`view-certificate-${p.course?.id}`}
+                        disabled={isRevoked}
                       >
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="small"
-                          sx={{ whiteSpace: 'nowrap' }}
-                          onClick={() =>
-                            navigate(`/certification/${p.certificate?.id}`)
-                          }
-                          data-testid={`view-certificate-${p.course?.id}`}
-                          disabled={isRevoked}
-                        >
-                          {isRevoked
-                            ? t('common.certification-status.revoked')
-                            : t(
-                                'components.certification-list.view-certificate'
-                              )}
-                        </Button>
-                      </Box>
-                    </Tooltip>
+                        {isRevoked
+                          ? t('common.certification-status.revoked')
+                          : t('components.certification-list.view-certificate')}
+                      </Button>
+                    </Box>
                   </TableCell>
                 </TableRow>
               )

@@ -1,4 +1,3 @@
-import WarningIcon from '@mui/icons-material/Warning'
 import { Box, Chip, ChipProps, Tooltip } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -25,8 +24,6 @@ export const CertificateStatusChip: React.FC<
   const { t } = useTranslation()
 
   const chipColor = colorsMap[status]
-  const isRevoked = status === CertificateStatus.REVOKED
-  const isOnHold = status === CertificateStatus.ON_HOLD
 
   return (
     <Box display="flex" alignItems="center">
@@ -38,12 +35,6 @@ export const CertificateStatusChip: React.FC<
             size="small"
             {...rest}
           />
-          {(isRevoked || isOnHold) && (
-            <WarningIcon
-              color={isRevoked ? 'error' : 'warning'}
-              sx={{ marginLeft: '0.2em' }}
-            />
-          )}
         </Box>
       </Tooltip>
     </Box>
