@@ -102,9 +102,9 @@ export const OrgUsersTable: React.FC<
 
     return [
       ...mandatoryCols,
-      ...(acl.canEditOrgUser() ? optionalCols : []),
+      ...(acl.canEditOrgUser([orgId]) ? optionalCols : []),
     ] as Col[]
-  }, [acl, t])
+  }, [acl, t, orgId])
 
   const currentPageProfiles = useMemo(() => {
     const profiles = orgProfiles || []
@@ -262,7 +262,9 @@ export const OrgUsersTable: React.FC<
                       size="small"
                     />
                   </TableCell>
-                  {acl.canEditOrgUser() ? (
+                  {orgMember &&
+                  acl.canEditOrgUser([orgId]) &&
+                  (acl.canSetOrgAdminRole() || !orgMember.isAdmin) ? (
                     <TableCell>
                       <Button
                         data-testid="edit-user-button"
