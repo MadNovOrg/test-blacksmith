@@ -11,11 +11,16 @@ import {
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import useSWR from 'swr'
 
 import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import { Course_Participant_Audit_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Participant_Audit_Type_Enum,
+  GetUserByMailQuery,
+  GetUserByMailQueryVariables,
+} from '@app/generated/graphql'
 import useAttendeeAuditLogs from '@app/hooks/useAttendeeAuditLogs'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -29,6 +34,7 @@ import {
   getAttendeeInvoice,
   getExportDataRenderFunction,
 } from '@app/pages/admin/Audits/util'
+import { GET_USER_BY_EMAIL } from '@app/queries/user-queries/get-user-by-email'
 
 export const AttendeeReplacementTable: React.FC<
   React.PropsWithChildren<unknown>
@@ -51,6 +57,14 @@ export const AttendeeReplacementTable: React.FC<
     offset,
     limit,
   })
+
+  const emails = logs.map(log => log.newAttendeeEmail ?? '').filter(e => e)
+
+  const { data: profiles } = useSWR<
+    GetUserByMailQuery,
+    Error,
+    [string, GetUserByMailQueryVariables]
+  >([GET_USER_BY_EMAIL, { email: emails }])
 
   const cols = useMemo(
     () => [
@@ -185,6 +199,9 @@ export const AttendeeReplacementTable: React.FC<
                   />
 
                   {logs.map(log => {
+                    const participant = profiles?.profile.find(
+                      el => el.email === log.newAttendeeEmail
+                    )
                     const invoice = getAttendeeInvoice(log)
                     return (
                       <TableRow
@@ -233,7 +250,16 @@ export const AttendeeReplacementTable: React.FC<
                                 : 'body1'
                             }
                           >
-                            {log.newAttendeeEmail}
+                            {participant?.id ? (
+                              <Link
+                                key={participant?.id}
+                                href={`/profile/${participant?.id}`}
+                              >
+                                {log.newAttendeeEmail}
+                              </Link>
+                            ) : (
+                              log.newAttendeeEmail
+                            )}
                           </Typography>
                         </TableCell>
                         <TableCell>
