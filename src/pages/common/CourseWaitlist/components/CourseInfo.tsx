@@ -12,6 +12,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { WaitlistCourseQuery } from '@app/generated/graphql'
+import { CourseDeliveryType } from '@app/types'
+import { formatCourseVenue } from '@app/util'
 
 const StyledListIcon = styled(ListItemIcon)(({ theme }) => ({
   minWidth: '32px',
@@ -85,7 +87,10 @@ export const CourseInfo: React.FC<React.PropsWithChildren<Props>> = ({
                 <ListItemText>
                   {' '}
                   <Typography component="span" variant="body2" fontWeight={600}>
-                    {course.schedule[0].venue?.name}
+                    {formatCourseVenue(
+                      course.deliveryType as unknown as CourseDeliveryType,
+                      course.schedule[0].venue
+                    )}
                   </Typography>
                 </ListItemText>
               )}
@@ -102,11 +107,7 @@ export const CourseInfo: React.FC<React.PropsWithChildren<Props>> = ({
             )}
             {course.schedule[0].venue?.city && (
               <VenueAddressField
-                field={`${course.schedule[0].venue?.city}${
-                  course.schedule[0].venue?.postCode
-                    ? ', ' + course.schedule[0].venue.postCode
-                    : ''
-                }`}
+                field={`${course.schedule[0].venue?.postCode}`}
               />
             )}
           </List>

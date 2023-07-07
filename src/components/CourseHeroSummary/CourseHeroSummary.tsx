@@ -21,7 +21,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CourseInstructionsDialog } from '@app/components/CourseInstructionsDialog'
@@ -55,7 +55,6 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
   const [isInstructionsDialogOpen, setIsInstructionsDialogOpen] =
     useState(false)
-  const ref = useRef()
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -80,17 +79,20 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
     }
   }, [course.schedule])
 
-  useEffect(() => {
-    if (ref.current) {
-      new window.google.maps.Map(ref.current, {
-        center: {
-          lat: geoCoordinates.lat,
-          lng: geoCoordinates.lng,
-        },
-        zoom: 16,
-      })
-    }
-  })
+  const ref = useCallback(
+    (node: HTMLElement | null) => {
+      if (node !== null) {
+        new window.google.maps.Map(node, {
+          center: {
+            lat: geoCoordinates.lat,
+            lng: geoCoordinates.lng,
+          },
+          zoom: 16,
+        })
+      }
+    },
+    [geoCoordinates]
+  )
 
   return (
     <Box
@@ -168,7 +170,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 </Wrapper>
               </Grid>
             ) : undefined}
-            {showStatus ? (
+            {showStatus && !isMobile ? (
               <Box mt={1}>
                 <CourseStatusChip status={course.status} />
               </Box>

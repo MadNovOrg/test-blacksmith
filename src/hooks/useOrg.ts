@@ -96,9 +96,9 @@ export default function useOrg(
   showAll?: boolean,
   certificateFilter?: CertificateStatus[]
 ) {
-  const certificateStatus = certificateFilter?.length
-    ? { _in: certificateFilter }
-    : { _neq: CertificateStatus.EXPIRED }
+  const whereProfileCertificates = certificateFilter?.length
+    ? { _and: [{ status: { _in: certificateFilter } }] }
+    : { status: { _neq: CertificateStatus.EXPIRED } }
 
   let conditions
   if (orgId !== ALL_ORGS) {
@@ -124,7 +124,18 @@ export default function useOrg(
     GetOrgDetailsQuery,
     Error,
     [string, GetOrgDetailsQueryVariables] | null
-  >(profileId ? [QUERY, { where: conditions, certificateStatus }] : null)
+  >(
+    profileId
+      ? [
+          QUERY,
+          {
+            where: conditions,
+            whereProfileCertificates,
+            certificates: whereProfileCertificates,
+          },
+        ]
+      : null
+  )
 
   const status = getSWRLoadingStatus(data, error)
 

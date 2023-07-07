@@ -245,16 +245,7 @@ export const RemoveIndividualModal = ({
                 t('common.validation-errors.this-field-is-required')
               }
               sx={{ mt: 2 }}
-              inputProps={{ min: 0, max: 100 }}
-              InputProps={{
-                endAdornment: (
-                  <React.Fragment>
-                    <Typography variant="body1" color="grey.600">
-                      %
-                    </Typography>
-                  </React.Fragment>
-                ),
-              }}
+              inputProps={{ min: 0 }}
             />
           ) : null}
 

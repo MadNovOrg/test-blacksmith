@@ -20,6 +20,7 @@ export const WAITLIST_COURSE = gql`
     ) {
       id
       name
+      deliveryType
       schedule {
         end
         start

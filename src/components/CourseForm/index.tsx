@@ -535,9 +535,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   ])
 
   useEffect(() => {
-    // I want to execute this check only at the first render.
-    // If we are creating a new course, I want to set the special
-    // instructions to their default value.
+    // we need to update to default values if something change in the input
     if (isCreation) {
       const instructions = getDefaultSpecialInstructions(
         courseType,
@@ -549,9 +547,15 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
       setValue('specialInstructions', instructions)
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [
+    courseLevel,
+    courseType,
+    deliveryType,
+    isCreation,
+    setValue,
+    t,
+    values.reaccreditation,
+  ])
 
   useEffect(() => {
     if (
@@ -1240,7 +1244,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       name={field.name}
                       label={t('components.course-form.end-date-placeholder')}
                       value={field.value}
-                      minDate={values.startDate ?? new Date()}
+                      minDate={values.startDate ?? minCourseStartDate}
                       onChange={newEndDate => {
                         field.onChange(newEndDate)
                         setValue('endDateTime', makeDate(newEndDate, endTime))

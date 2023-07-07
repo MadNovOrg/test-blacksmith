@@ -7,6 +7,7 @@ import { never, fromValue } from 'wonka'
 import { Recaptcha } from '@app/components/Recaptcha'
 import { createRecaptchaComp } from '@app/components/Recaptcha/test-utils'
 import {
+  Course,
   JoinWaitlistMutation,
   JoinWaitlistMutationVariables,
   WaitlistCourseQuery,
@@ -76,7 +77,10 @@ describe('page: Waitlist', () => {
       }) => {
         return fromValue<{ data: WaitlistCourseQuery }>({
           data: {
-            courses: variables.id === courseId ? [course] : [],
+            courses:
+              variables.id === courseId
+                ? ([course] as unknown as Course[])
+                : [],
           },
         })
       },
@@ -110,9 +114,9 @@ describe('page: Waitlist', () => {
       date: start,
     })}`
     expect(screen.getAllByText(startEndTimes)).toHaveLength(2)
-    expect(screen.getByText(name)).toBeInTheDocument()
+    expect(screen.getByText(`${name}, ${city}`)).toBeInTheDocument()
     expect(screen.getByText(addressLineOne)).toBeInTheDocument()
-    expect(screen.getByText(`${city}, ${postCode}`)).toBeInTheDocument()
+    expect(screen.getByText(`${postCode}`)).toBeInTheDocument()
   })
 
   it('adds a user to the waitlist', async () => {
@@ -124,7 +128,7 @@ describe('page: Waitlist', () => {
       executeQuery: () =>
         fromValue<{ data: WaitlistCourseQuery }>({
           data: {
-            courses: [buildCourse()],
+            courses: [buildCourse()] as unknown as Course[],
           },
         }),
       executeMutation: ({

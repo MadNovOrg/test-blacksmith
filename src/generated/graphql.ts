@@ -49256,7 +49256,7 @@ export type WaitlistCourseQueryVariables = Exact<{
 }>;
 
 
-export type WaitlistCourseQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, schedule: Array<{ __typename?: 'course_schedule', end: any, start: any, venue?: { __typename?: 'venue', name: string, addressLineOne: string, addressLineTwo?: string | null, city: string, postCode: string } | null }> }> };
+export type WaitlistCourseQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', end: any, start: any, venue?: { __typename?: 'venue', name: string, addressLineOne: string, addressLineTwo?: string | null, city: string, postCode: string } | null }> }> };
 
 export type JoinWaitlistMutationVariables = Exact<{
   input: JoinWaitlistInput;
@@ -50173,7 +50173,8 @@ export type GetOrgMembersQuery = { __typename?: 'query_root', members: Array<{ _
 
 export type GetOrgDetailsQueryVariables = Exact<{
   where?: InputMaybe<Organization_Bool_Exp>;
-  certificateStatus?: InputMaybe<String_Comparison_Exp>;
+  whereProfileCertificates?: InputMaybe<Course_Certificate_Bool_Exp>;
+  certificates?: InputMaybe<Course_Certificate_Bool_Exp>;
 }>;
 
 
