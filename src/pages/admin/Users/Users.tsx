@@ -186,7 +186,9 @@ export const Users = () => {
     certificateStatus,
   ])
 
-  const { Pagination, perPage, currentPage } = useTablePagination()
+  const { Pagination, perPage, currentPage } = useTablePagination({
+    initialPerPage: 20,
+  })
 
   const {
     profiles: users,

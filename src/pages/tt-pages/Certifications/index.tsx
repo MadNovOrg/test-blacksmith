@@ -117,7 +117,9 @@ export const Certifications: React.FC<
     filterLevel,
   ])
 
-  const { Pagination, limit, offset } = useTablePagination()
+  const { Pagination, limit, offset } = useTablePagination({
+    initialPerPage: 20,
+  })
 
   const {
     data: participants,

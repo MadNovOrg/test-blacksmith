@@ -65,6 +65,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
   }, [activeRole])
 
   const { Pagination, perPage, currentPage } = useTablePagination({
+    initialPerPage: 5,
     id: 'my-courses',
   })
   const {
