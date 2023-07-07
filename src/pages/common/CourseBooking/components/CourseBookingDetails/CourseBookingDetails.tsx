@@ -16,6 +16,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+import Big from 'big.js'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import {
   Control,
@@ -43,7 +44,7 @@ import { useAuth } from '@app/context/auth'
 import { Course_Source_Enum, PaymentMethod } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
 import { CourseLevel, CourseType, InvoiceDetails, Profile } from '@app/types'
-import { requiredMsg } from '@app/util'
+import { formatCurrency, requiredMsg } from '@app/util'
 
 import {
   BookingContact,
@@ -357,10 +358,6 @@ export const CourseBookingDetails: React.FC<
     }
   }, [booking, setBooking, values.quantity])
 
-  const formatCurrency = (amount: number) => {
-    return t('currency', { amount, currency: booking.currency })
-  }
-
   const positionOptions = values.sector ? positions[values.sector] : []
 
   const showAttendeeValidCertificate = isAttendeeValidCertificateMandatory(
@@ -472,7 +469,10 @@ export const CourseBookingDetails: React.FC<
           <Box display="flex" justifyContent="space-between" mb={1}>
             <Typography color="grey.700">{t('course-cost')}</Typography>
             <Typography color="grey.700">
-              {formatCurrency(amounts.courseCost)}
+              {formatCurrency(
+                { amount: new Big(amounts.courseCost).round().toNumber() },
+                t
+              )}
             </Typography>
           </Box>
 
@@ -482,7 +482,12 @@ export const CourseBookingDetails: React.FC<
                 {t('pages.book-course.trainer-expenses')}
               </Typography>
               <Typography color="grey.700">
-                {formatCurrency(amounts.trainerExpenses)}
+                {formatCurrency(
+                  {
+                    amount: new Big(amounts.trainerExpenses).round().toNumber(),
+                  },
+                  t
+                )}
               </Typography>
             </Box>
           ) : null}
@@ -505,7 +510,15 @@ export const CourseBookingDetails: React.FC<
                 {t('pages.book-course.free-spaces')}
               </Typography>
               <Typography color="grey.700">
-                {formatCurrency(-amounts.freeSpacesDiscount)}
+                {formatCurrency(
+                  {
+                    amount: new Big(amounts.freeSpacesDiscount)
+                      .neg()
+                      .round()
+                      .toNumber(),
+                  },
+                  t
+                )}
               </Typography>
             </Box>
           ) : null}
@@ -513,7 +526,14 @@ export const CourseBookingDetails: React.FC<
           <Box mt={2} display="flex" justifyContent="space-between" mb={1}>
             <Typography color="grey.700">{t('subtotal')}</Typography>
             <Typography color="grey.700">
-              {formatCurrency(amounts.subtotalDiscounted)}
+              {formatCurrency(
+                {
+                  amount: new Big(amounts.subtotalDiscounted)
+                    .round()
+                    .toNumber(),
+                },
+                t
+              )}
             </Typography>
           </Box>
 
@@ -522,7 +542,10 @@ export const CourseBookingDetails: React.FC<
               {t('custom-vat', { amount: booking.vat })}
             </Typography>
             <Typography color="grey.700">
-              {formatCurrency(amounts.vat)}
+              {formatCurrency(
+                { amount: new Big(amounts.vat).round().toNumber() },
+                t
+              )}
             </Typography>
           </Box>
 
@@ -531,7 +554,10 @@ export const CourseBookingDetails: React.FC<
               {t('amount-due')} ({booking.currency})
             </Typography>
             <Typography fontWeight="500" color="primary">
-              {formatCurrency(amounts.total)}
+              {formatCurrency(
+                { amount: new Big(amounts.total).round().toNumber() },
+                t
+              )}
             </Typography>
           </Box>
         </Box>

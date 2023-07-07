@@ -8,6 +8,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
+import Big from 'big.js'
 import { isPast } from 'date-fns'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -19,6 +20,7 @@ import { PaymentMethod } from '@app/generated/graphql'
 import { CourseType } from '@app/types'
 import {
   formatCourseVenue,
+  formatCurrency,
   getOrderDueDate,
   isOrderDueDateImmediate,
 } from '@app/util'
@@ -88,10 +90,6 @@ export const CourseBookingReview: React.FC<
       : t('pages.book-course.due-on', {
           date: getOrderDueDate(today, date, booking.paymentMethod),
         })
-  }
-
-  const formatCurrency = (amount: number) => {
-    return t('currency', { amount, currency: booking.currency })
   }
 
   return (
@@ -244,7 +242,10 @@ export const CourseBookingReview: React.FC<
               {t('pages.book-course.trainer-expenses')}
             </Typography>
             <Typography color="grey.700">
-              {formatCurrency(amounts.trainerExpenses)}
+              {formatCurrency(
+                { amount: new Big(amounts.trainerExpenses).round().toNumber() },
+                t
+              )}
             </Typography>
           </Box>
         ) : null}
@@ -268,14 +269,27 @@ export const CourseBookingReview: React.FC<
               {t('pages.book-course.free-spaces')}
             </Typography>
             <Typography color="grey.700">
-              {formatCurrency(-amounts.freeSpacesDiscount)}
+              {formatCurrency(
+                {
+                  amount: new Big(amounts.freeSpacesDiscount)
+                    .neg()
+                    .round()
+                    .toNumber(),
+                },
+                t
+              )}
             </Typography>
           </Box>
         ) : null}
         <Box display="flex" justifyContent="space-between" mb={1}>
           <Typography color="grey.700">{t('subtotal')}</Typography>
           <Typography color="grey.700">
-            {formatCurrency(amounts.subtotalDiscounted)}
+            {formatCurrency(
+              {
+                amount: new Big(amounts.subtotalDiscounted).round().toNumber(),
+              },
+              t
+            )}
           </Typography>
         </Box>
         <Divider sx={{ my: 2 }} />
@@ -284,7 +298,10 @@ export const CourseBookingReview: React.FC<
             {t('custom-vat', { amount: booking.vat })}
           </Typography>
           <Typography color="grey.700">
-            {formatCurrency(amounts.vat)}
+            {formatCurrency(
+              { amount: new Big(amounts.vat).round().toNumber() },
+              t
+            )}
           </Typography>
         </Box>
         {amounts.paymentProcessingFee > 0 ? (
@@ -293,7 +310,14 @@ export const CourseBookingReview: React.FC<
               {t('pages.book-course.payment-processing-fee')}
             </Typography>
             <Typography color="grey.700">
-              {formatCurrency(amounts.paymentProcessingFee)}
+              {formatCurrency(
+                {
+                  amount: new Big(amounts.paymentProcessingFee)
+                    .round()
+                    .toNumber(),
+                },
+                t
+              )}
             </Typography>
           </Box>
         ) : null}
@@ -303,7 +327,10 @@ export const CourseBookingReview: React.FC<
             {t('amount-due')} ({booking.currency})
           </Typography>
           <Typography fontWeight="500">
-            {formatCurrency(amounts.total)}
+            {formatCurrency(
+              { amount: new Big(amounts.total).round().toNumber() },
+              t
+            )}
           </Typography>
         </Box>
         <Typography color="grey.700">

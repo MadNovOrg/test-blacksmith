@@ -15,6 +15,7 @@ import { FieldError, Merge } from 'react-hook-form'
 import {
   Course_Participant_Module,
   Course_Status_Enum,
+  Currency,
   Grade_Enum,
   Profile,
   Xero_Invoice_Status_Enum,
@@ -543,8 +544,6 @@ export const getTrainerSubsistenceCost = (nights = 0) => nights * 30
 
 export const getVatAmount = (amount = 0) => amount * 0.2
 
-export const roundToTwoDecimals = (value = 0) => Math.round(value * 100) / 100
-
 export const max = (...values: number[] | number[][]) => {
   const data = values.flat()
   return data.reduce((acc, n) => (n > acc ? n : acc), data[0])
@@ -620,4 +619,17 @@ export const getCourseStatus = (courseData: {
 
 export function isNotNullish<T>(arg: T): arg is Exclude<T, null | undefined> {
   return arg !== null && arg !== undefined
+}
+
+export function formatCurrency(
+  {
+    amount,
+    currency = Currency.Gbp,
+  }: {
+    amount: number
+    currency?: Currency | string
+  },
+  t: TFunction
+) {
+  return t('currency', { amount, currency: currency })
 }

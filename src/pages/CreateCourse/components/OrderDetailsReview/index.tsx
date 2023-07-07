@@ -1,4 +1,5 @@
 import { Box, Grid, Stack, Typography } from '@mui/material'
+import Big from 'big.js'
 import { parseISO } from 'date-fns'
 import React from 'react'
 import { useCallback, useMemo } from 'react'
@@ -12,7 +13,6 @@ import {
   getTimeDifferenceAndContext,
   getTrainerCarCostPerMile,
   getTrainerSubsistenceCost,
-  roundToTwoDecimals,
   getVatAmount,
 } from '@app/util'
 
@@ -105,7 +105,9 @@ const ExpensesDetails: React.FC<ExpensesDetailsProps> = ({
       }
 
       const label = t(`pages.create-course.trainer-expenses.${method}`)
-      const formattedAmount = t('common.currency', { amount })
+      const formattedAmount = t('common.currency', {
+        amount: new Big(amount).round().toNumber(),
+      })
 
       return (
         <PageRow
@@ -269,16 +271,16 @@ export const OrderDetailsReview: React.FC = () => {
               ? getTrainerSubsistenceCost(accommodationNights)
               : 0
 
-          return (
-            roundToTwoDecimals(acc) +
-            roundToTwoDecimals(cost) +
-            roundToTwoDecimals(
+          return new Big(acc)
+            .add(cost)
+            .add(
               accommodationCost && accommodationNights
                 ? accommodationCost * accommodationNights
                 : 0
-            ) +
-            roundToTwoDecimals(subsistenceCost)
-          )
+            )
+            .add(subsistenceCost)
+            .round()
+            .toNumber()
         },
         0
       )
@@ -286,7 +288,10 @@ export const OrderDetailsReview: React.FC = () => {
       const miscellaneousCost =
         expense.miscellaneous?.reduce(
           (acc, { value }) =>
-            roundToTwoDecimals(acc) + roundToTwoDecimals(value ?? 0),
+            new Big(acc)
+              .add(value ?? 0)
+              .round()
+              .toNumber(),
           0
         ) ?? 0
 
@@ -302,18 +307,28 @@ export const OrderDetailsReview: React.FC = () => {
         return []
       }
 
-      const courseBasePrice = roundToTwoDecimals(
-        pricing.amount * courseData.maxParticipants
+      const courseBasePrice = new Big(pricing.amount).times(
+        courseData.maxParticipants
       )
-      const freeSpacesDiscount = roundToTwoDecimals(
-        -pricing.amount * courseData.freeSpaces
-      )
-      const subtotal =
-        courseBasePrice + freeSpacesDiscount + trainerExpensesTotal
-      const vat = roundToTwoDecimals(getVatAmount(subtotal))
-      const amountDue = subtotal + vat
 
-      return [courseBasePrice, subtotal, freeSpacesDiscount, vat, amountDue]
+      const freeSpacesDiscount = new Big(pricing.amount)
+        .times(courseData.freeSpaces ?? 0)
+        .neg()
+
+      const subtotal = courseBasePrice
+        .add(freeSpacesDiscount)
+        .add(trainerExpensesTotal)
+
+      const vat = new Big(getVatAmount(subtotal.toNumber()))
+      const amountDue = subtotal.add(vat)
+
+      return [
+        courseBasePrice.round().toNumber(),
+        subtotal.round().toNumber(),
+        freeSpacesDiscount.round().toNumber(),
+        vat.round().toNumber(),
+        amountDue.round().toNumber(),
+      ]
     }, [courseData, trainerExpensesTotal, pricing])
 
   const { t } = useTranslation()
