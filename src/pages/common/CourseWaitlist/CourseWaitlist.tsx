@@ -1,4 +1,4 @@
-import { Box, Typography, styled, Alert } from '@mui/material'
+import { Box, Typography, Link, Alert } from '@mui/material'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
@@ -16,16 +16,6 @@ import { CourseInfo, CourseInfoSkeleton } from './components/CourseInfo'
 import { Form, FormInputs } from './components/Form'
 import { JoinedWaitlist } from './components/JoinedWaitlist'
 import { JOIN_WAITLIST, WAITLIST_COURSE } from './queries'
-
-const StyledMailToLink = styled('a')(({ theme }) => ({
-  fontSize: '1rem',
-  fontWeight: 600,
-  fontFamily: theme.typography.fontFamily,
-  color: theme.palette.primary.main,
-  '&:hover': {
-    textDecoration: 'underline',
-  },
-}))
 
 export const CourseWaitlist: React.FC<
   React.PropsWithChildren<unknown>
@@ -83,13 +73,15 @@ export const CourseWaitlist: React.FC<
       contentBoxStyles={{ p: 3 }}
       footer={
         <Box mt={4}>
-          <StyledMailToLink
+          <Link
             href={`mailto:${import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}`}
             target="_blank"
             rel="noopener"
+            fontWeight={600}
+            color="primary"
           >
             {t('need-help')}? {t('contact-us')}
-          </StyledMailToLink>
+          </Link>
         </Box>
       }
     >

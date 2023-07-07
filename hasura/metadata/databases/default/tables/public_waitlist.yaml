@@ -12,6 +12,8 @@ configuration:
       custom_name: givenName
     family_name:
       custom_name: familyName
+    cancellation_secret:
+      custom_name: cancellationSecret
     created_at:
       custom_name: createdAt
   custom_column_names:
@@ -19,11 +21,97 @@ configuration:
     org_name: orgName
     given_name: givenName
     family_name: familyName
+    cancellation_secret: cancellationSecret
     created_at: createdAt
 object_relationships:
   - name: course
     using:
       foreign_key_constraint_on: course_id
+insert_permissions:
+  - role: anonymous
+    permission:
+      check: {}
+      set:
+        confirmed: "true"
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+        - cancellation_secret
+      backend_only: false
+  - role: trainer
+    permission:
+      check: {}
+      set:
+        confirmed: "true"
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+        - cancellation_secret
+      backend_only: false
+  - role: tt-admin
+    permission:
+      check: {}
+      set:
+        confirmed: "true"
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+        - cancellation_secret
+      backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      set:
+        confirmed: "true"
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+        - cancellation_secret
+      backend_only: false
+  - role: unverified
+    permission:
+      check: {}
+      set:
+        confirmed: "true"
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+        - cancellation_secret
+      backend_only: false
+  - role: user
+    permission:
+      check: {}
+      set:
+        confirmed: "true"
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+        - cancellation_secret
+      backend_only: false
 select_permissions:
   - role: sales-admin
     permission:
@@ -35,6 +123,7 @@ select_permissions:
         - given_name
         - org_name
         - phone
+        - cancellation_secret
         - created_at
         - id
       filter: {}
@@ -49,6 +138,7 @@ select_permissions:
         - given_name
         - org_name
         - phone
+        - cancellation_secret
         - created_at
         - id
       filter: {}
@@ -63,6 +153,7 @@ select_permissions:
         - given_name
         - org_name
         - phone
+        - cancellation_secret
         - created_at
         - id
       filter: {}
@@ -77,6 +168,7 @@ select_permissions:
         - given_name
         - org_name
         - phone
+        - cancellation_secret
         - created_at
         - id
       filter: {}
@@ -93,6 +185,7 @@ select_permissions:
         - phone
         - org_name
         - confirmed
+        - cancellation_secret
       filter:
         course:
           organization:

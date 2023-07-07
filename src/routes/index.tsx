@@ -21,6 +21,7 @@ import { CourseBookingPage } from '@app/pages/common/CourseBooking'
 import { CourseBookingDone } from '@app/pages/common/CourseBooking/components/CourseBookingDone'
 import { CourseEnquiry } from '@app/pages/common/CourseEnquiry'
 import { CourseWaitlist } from '@app/pages/common/CourseWaitlist'
+import { CourseWaitlistCancellation } from '@app/pages/common/CourseWaitlistCancellation'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
 import { LoginPage } from '@app/pages/common/Login'
 import { RegistrationPage } from '@app/pages/common/Registration'
@@ -44,7 +45,18 @@ const SalesRepresentativeRoute = React.lazy(
 )
 const FinanceRoute = React.lazy(() => import('./finance-routes'))
 
-const roleRoutesMap = {
+const publicRoutesMap: Record<string, React.ElementType> = {
+  '/invitation': InvitationPage,
+  '/org-invitation': OrgInvitationPage,
+  '/auto-login': AutoLogin,
+  '/waitlist': CourseWaitlist,
+  '/waitlist-cancellation': CourseWaitlistCancellation,
+  '/enquiry': CourseEnquiry,
+  '/book-private-course': BookPrivateCourse,
+  '/change-password': ChangePasswordPage,
+} as const
+
+const roleRoutesMap: Record<RoleName, React.ElementType> = {
   [RoleName.SALES_REPRESENTATIVE]: SalesRepresentativeRoute,
   [RoleName.SALES_ADMIN]: SalesAdminRoutes,
   [RoleName.FINANCE]: FinanceRoute,
@@ -60,34 +72,11 @@ const roleRoutesMap = {
 
 export const AppRoutes = () => {
   const auth = useAuth()
-  const location = useLocation()
+  const { pathname } = useLocation()
+  const PublicRoute = publicRoutesMap[pathname]
 
-  if (location.pathname === '/invitation') {
-    return <InvitationPage />
-  }
-
-  if (location.pathname === '/org-invitation') {
-    return <OrgInvitationPage />
-  }
-
-  if (location.pathname === '/auto-login') {
-    return <AutoLogin />
-  }
-
-  if (location.pathname === '/waitlist') {
-    return <CourseWaitlist />
-  }
-
-  if (location.pathname === '/enquiry') {
-    return <CourseEnquiry />
-  }
-
-  if (location.pathname === '/book-private-course') {
-    return <BookPrivateCourse />
-  }
-
-  if (location.pathname === '/change-password') {
-    return <ChangePasswordPage />
+  if (PublicRoute) {
+    return <PublicRoute />
   }
 
   if (auth.loading) {

@@ -133,6 +133,22 @@ export type CanApplyPromoCodeOutput = {
   result?: Maybe<PromoCodeOutput>;
 };
 
+export enum CancelMyselfFromCourseWaitlistError {
+  CancellationSecretInvalid = 'CANCELLATION_SECRET_INVALID',
+  CourseNotFound = 'COURSE_NOT_FOUND'
+}
+
+export type CancelMyselfFromCourseWaitlistInput = {
+  cancellationSecret: Scalars['uuid'];
+  courseId: Scalars['Int'];
+};
+
+export type CancelMyselfFromCourseWaitlistOutput = {
+  __typename?: 'CancelMyselfFromCourseWaitlistOutput';
+  error?: Maybe<CancelMyselfFromCourseWaitlistError>;
+  success: Scalars['Boolean'];
+};
+
 /** The category type */
 export type Category = DatabaseIdentifier & HierarchicalTermNode & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
   __typename?: 'Category';
@@ -1942,11 +1958,6 @@ export type DateQueryInput = {
 export type DeclineInviteOutput = {
   __typename?: 'DeclineInviteOutput';
   status: Scalars['Boolean'];
-};
-
-export type DeclineOrgInviteOutput = {
-  __typename?: 'DeclineOrgInviteOutput';
-  id: Scalars['uuid'];
 };
 
 /** The template assigned to the node */
@@ -26989,6 +27000,8 @@ export type Mutation_Root = {
   arloCallback?: Maybe<ArloCallbackOutput>;
   cancelIndividualFromCourse: Scalars['Boolean'];
   cancelMyselfFromCourse: Scalars['Boolean'];
+  /** Removes current anonymous user from course waitlist */
+  cancelMyselfFromCourseWaitlist?: Maybe<CancelMyselfFromCourseWaitlistOutput>;
   /** confirmCreditCardPayment */
   confirmCreditCardPayment?: Maybe<ConfirmCreditCardPaymentOutput>;
   content?: Maybe<RootMutation>;
@@ -26998,7 +27011,7 @@ export type Mutation_Root = {
   createStripeSubscription?: Maybe<CreateSubscriptionOutput>;
   createUser: CreateUserOutput;
   declineInvite?: Maybe<DeclineInviteOutput>;
-  declineOrgInvite?: Maybe<DeclineOrgInviteOutput>;
+  declineOrgInvite: Scalars['Boolean'];
   /** Delete users */
   deleteUser: DeleteUserOutput;
   /** delete data from the table: "accreditors" */
@@ -28086,6 +28099,12 @@ export type Mutation_RootCancelMyselfFromCourseArgs = {
 
 
 /** mutation root */
+export type Mutation_RootCancelMyselfFromCourseWaitlistArgs = {
+  input: CancelMyselfFromCourseWaitlistInput;
+};
+
+
+/** mutation root */
 export type Mutation_RootConfirmCreditCardPaymentArgs = {
   orderId: Scalars['uuid'];
 };
@@ -28113,6 +28132,12 @@ export type Mutation_RootCreateUserArgs = {
 /** mutation root */
 export type Mutation_RootDeclineInviteArgs = {
   note?: InputMaybe<Scalars['String']>;
+};
+
+
+/** mutation root */
+export type Mutation_RootDeclineOrgInviteArgs = {
+  inviteId: Scalars['uuid'];
 };
 
 
@@ -43048,6 +43073,7 @@ export enum Venue_Update_Column {
 /** columns and relationships of "waitlist" */
 export type Waitlist = {
   __typename?: 'waitlist';
+  cancellationSecret: Scalars['uuid'];
   confirmed: Scalars['Boolean'];
   /** An object relationship */
   course: Course;
@@ -43129,6 +43155,7 @@ export type Waitlist_Bool_Exp = {
   _and?: InputMaybe<Array<Waitlist_Bool_Exp>>;
   _not?: InputMaybe<Waitlist_Bool_Exp>;
   _or?: InputMaybe<Array<Waitlist_Bool_Exp>>;
+  cancellationSecret?: InputMaybe<Uuid_Comparison_Exp>;
   confirmed?: InputMaybe<Boolean_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
   courseId?: InputMaybe<Int_Comparison_Exp>;
@@ -43144,6 +43171,8 @@ export type Waitlist_Bool_Exp = {
 /** unique or primary key constraints on table "waitlist" */
 export enum Waitlist_Constraint {
   /** unique or primary key constraint */
+  WaitlistCancellationSecretKey = 'waitlist_cancellation_secret_key',
+  /** unique or primary key constraint */
   WaitlistCourseIdEmailKey = 'waitlist_course_id_email_key',
   /** unique or primary key constraint */
   WaitlistPkey = 'waitlist_pkey'
@@ -43156,6 +43185,7 @@ export type Waitlist_Inc_Input = {
 
 /** input type for inserting data into table "waitlist" */
 export type Waitlist_Insert_Input = {
+  cancellationSecret?: InputMaybe<Scalars['uuid']>;
   confirmed?: InputMaybe<Scalars['Boolean']>;
   course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   courseId?: InputMaybe<Scalars['Int']>;
@@ -43171,6 +43201,7 @@ export type Waitlist_Insert_Input = {
 /** aggregate max on columns */
 export type Waitlist_Max_Fields = {
   __typename?: 'waitlist_max_fields';
+  cancellationSecret?: Maybe<Scalars['uuid']>;
   courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
@@ -43183,6 +43214,7 @@ export type Waitlist_Max_Fields = {
 
 /** order by max() on columns of table "waitlist" */
 export type Waitlist_Max_Order_By = {
+  cancellationSecret?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   email?: InputMaybe<Order_By>;
@@ -43196,6 +43228,7 @@ export type Waitlist_Max_Order_By = {
 /** aggregate min on columns */
 export type Waitlist_Min_Fields = {
   __typename?: 'waitlist_min_fields';
+  cancellationSecret?: Maybe<Scalars['uuid']>;
   courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
@@ -43208,6 +43241,7 @@ export type Waitlist_Min_Fields = {
 
 /** order by min() on columns of table "waitlist" */
 export type Waitlist_Min_Order_By = {
+  cancellationSecret?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   email?: InputMaybe<Order_By>;
@@ -43236,6 +43270,7 @@ export type Waitlist_On_Conflict = {
 
 /** Ordering options when selecting data from "waitlist". */
 export type Waitlist_Order_By = {
+  cancellationSecret?: InputMaybe<Order_By>;
   confirmed?: InputMaybe<Order_By>;
   course?: InputMaybe<Course_Order_By>;
   courseId?: InputMaybe<Order_By>;
@@ -43255,6 +43290,8 @@ export type Waitlist_Pk_Columns_Input = {
 
 /** select columns of table "waitlist" */
 export enum Waitlist_Select_Column {
+  /** column name */
+  CancellationSecret = 'cancellationSecret',
   /** column name */
   Confirmed = 'confirmed',
   /** column name */
@@ -43277,6 +43314,7 @@ export enum Waitlist_Select_Column {
 
 /** input type for updating data in table "waitlist" */
 export type Waitlist_Set_Input = {
+  cancellationSecret?: InputMaybe<Scalars['uuid']>;
   confirmed?: InputMaybe<Scalars['Boolean']>;
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -43334,6 +43372,8 @@ export type Waitlist_Sum_Order_By = {
 
 /** update columns of table "waitlist" */
 export enum Waitlist_Update_Column {
+  /** column name */
+  CancellationSecret = 'cancellationSecret',
   /** column name */
   Confirmed = 'confirmed',
   /** column name */
@@ -45007,10 +45047,12 @@ export type DeclineInviteMutationVariables = Exact<{
 
 export type DeclineInviteMutation = { __typename?: 'mutation_root', invite?: { __typename?: 'DeclineInviteOutput', status: boolean } | null };
 
-export type DeclineOrgInviteMutationVariables = Exact<{ [key: string]: never; }>;
+export type DeclineOrgInviteMutationVariables = Exact<{
+  inviteId: Scalars['uuid'];
+}>;
 
 
-export type DeclineOrgInviteMutation = { __typename?: 'mutation_root', invite?: { __typename?: 'DeclineOrgInviteOutput', id: any } | null };
+export type DeclineOrgInviteMutation = { __typename?: 'mutation_root', invite: boolean };
 
 export type DeleteOrgInviteMutationVariables = Exact<{
   inviteId: Scalars['uuid'];
@@ -45655,6 +45697,14 @@ export type InsertVenueMutationVariables = Exact<{
 
 
 export type InsertVenueMutation = { __typename?: 'mutation_root', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null };
+
+export type CancelMyselfFromCourseWaitlistMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+  cancellationSecret: Scalars['uuid'];
+}>;
+
+
+export type CancelMyselfFromCourseWaitlistMutation = { __typename?: 'mutation_root', cancelMyselfFromCourseWaitlist?: { __typename?: 'CancelMyselfFromCourseWaitlistOutput', success: boolean, error?: CancelMyselfFromCourseWaitlistError | null } | null };
 
 export type GetXeroInvoicesForOrdersQueryVariables = Exact<{
   invoiceNumbers: Array<Scalars['String']> | Scalars['String'];

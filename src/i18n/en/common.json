@@ -26,7 +26,8 @@
       "record-not-found": "Record not found.",
       "loading-error": "There was an error loading data.",
       "invite-accept-error": "Unable to accept invitation",
-      "unknown-error-please-retry": "An error occurred. Please try again."
+      "unknown-error-please-retry": "An error occurred. Please try again.",
+      "malformed-query-params": "The required query parameters are missing or malformed. \n Did you copy the URL correctly?"
     }
   },
   "home": "Home",
@@ -43,6 +44,10 @@
   "waitlist-added": "You’ve been added to the course waitlist.",
   "waitlist-not-found": "It seems like a course you're trying to join the waitlist for doesn't exist anymore.",
   "confirmation-email-sent": "A confirmation email has been sent to {{email}}.",
+  "waitlist-cancellation-title": "Removal from waiting list",
+  "waitlist-cancellation-success": "You’ve been removed from the course waiting list.",
+  "waitlist-cancellation-error-COURSE_NOT_FOUND": "This course is no longer available. You were removed from the waiting list.",
+  "waitlist-cancellation-error-CANCELLATION_SECRET_INVALID": "You are not part of this course’s waiting list.",
   "users": "Users",
   "courses": "Courses",
   "manage-courses": "Manage Courses",

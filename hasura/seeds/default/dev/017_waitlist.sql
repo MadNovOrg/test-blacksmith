@@ -21,4 +21,5 @@ INSERT INTO public.course_participant (course_id, profile_id) VALUES
 
 INSERT INTO public.waitlist (course_id, given_name, family_name, email, phone, org_name) VALUES
 (10013, 'Peter', 'Snyder', 'peter.snyder@example.com', '+44 1632 960255', 'Example org'),
-(10013, 'Stacey', 'Humphrey', 'stacey.humphrey@example.com', '+44 1632 960255', 'Example org 2');
+(10013, 'Stacey', 'Humphrey', 'stacey.humphrey@example.com', '+44 1632 960255', 'Example org 2'),
+(10013, 'Benjamin', 'Button', 'adm@teamteach.testinator.com', '+44 1632 960223', 'Example org 2');

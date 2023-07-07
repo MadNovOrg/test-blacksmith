@@ -45,6 +45,14 @@ actions:
       handler: '{{ACTIONS_HOST}}/participant/cancel/self'
     permissions:
       - role: user
+  - name: cancelMyselfFromCourseWaitlist
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/waitlist/cancel/self'
+    comment: Removes current anonymous user from course waitlist
+    permissions:
+      - role: anonymous
+      - role: user
   - name: confirmCreditCardPayment
     definition:
       kind: synchronous
@@ -696,6 +704,14 @@ custom_types:
         - value: NO_AUDIT_FOUND
           is_deprecated: null
           description: null
+    - name: CancelMyselfFromCourseWaitlistError
+      values: 
+        - value: COURSE_NOT_FOUND
+          is_deprecated: null
+          description: null
+        - value: CANCELLATION_SECRET_INVALID
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -724,6 +740,7 @@ custom_types:
     - name: JoinWaitlistInput
     - name: SignUpInput
     - name: ArloCallbackInput
+    - name: CancelMyselfFromCourseWaitlistInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -784,6 +801,7 @@ custom_types:
     - name: ApproveCourseOutput
     - name: SendCourseInformationOutput
     - name: JoinWaitlistOutput
+    - name: CancelMyselfFromCourseWaitlistOutput
     - name: SignUpOutput
     - name: ArloCallbackOutput
   scalars:
