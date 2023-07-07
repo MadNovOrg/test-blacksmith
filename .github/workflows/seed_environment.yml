@@ -38,7 +38,7 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
-     
+
       - name: Setup node
         uses: actions/setup-node@v3
         with:
@@ -50,7 +50,7 @@ jobs:
 
       - name: Install Hasura CLI
         run: |
-          curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=v2.6.1 bash
+          curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=v2.28.2 bash
 
       - name: Seed environment
         working-directory: ./hasura
