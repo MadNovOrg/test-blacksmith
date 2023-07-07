@@ -9,13 +9,21 @@ import {
   useTheme,
   useMediaQuery,
   Link,
+  CircularProgress,
 } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import useSWR from 'swr'
 
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
+import {
+  GetOrderReducedQuery,
+  GetOrderReducedQueryVariables,
+} from '@app/generated/graphql'
+import usePollQuery from '@app/hooks/usePollQuery'
+import { GET_ORDER_REDUCED } from '@app/queries/order/get-order-reduced'
 import { LoadingStatus } from '@app/util'
 
 import { StepsEnum } from '../../types'
@@ -23,6 +31,13 @@ import { useSaveCourse } from '../../useSaveCourse'
 import { useCreateCourse } from '../CreateCourseProvider'
 
 import { PageContent } from './PageContent'
+
+type SavedCourse = {
+  id: string
+  hasExceptions?: boolean | undefined
+  courseCode?: string | undefined
+  orderId?: string | undefined
+}
 
 export const ReviewAndConfirm = () => {
   const { t } = useTranslation()
@@ -44,10 +59,68 @@ export const ReviewAndConfirm = () => {
   const navigate = useNavigate()
 
   const [error, setError] = useState('')
+  const [savedCourse, setSavedCourseId] = useState<SavedCourse>({
+    id: '',
+    hasExceptions: false,
+    courseCode: '',
+    orderId: '',
+  })
+
+  const { data: orderCompleted, mutate } = useSWR<
+    GetOrderReducedQuery,
+    [string, GetOrderReducedQueryVariables]
+  >([GET_ORDER_REDUCED, { orderId: savedCourse.orderId }])
 
   useEffect(() => {
     setCurrentStepKey(StepsEnum.REVIEW_AND_CONFIRM)
   }, [setCurrentStepKey])
+
+  const [startPolling, polling] = usePollQuery(
+    () => mutate(),
+    () => !!orderCompleted?.order?.xeroInvoiceNumber
+  )
+
+  useEffect(() => {
+    if (
+      savedCourse.id &&
+      !polling &&
+      !orderCompleted?.order?.xeroInvoiceNumber
+    ) {
+      startPolling()
+    }
+  }, [startPolling, polling, savedCourse, orderCompleted])
+
+  useEffect(() => {
+    if (orderCompleted?.order?.xeroInvoiceNumber && savedCourse.id) {
+      completeStep(StepsEnum.REVIEW_AND_CONFIRM)
+      addSnackbarMessage('course-created', {
+        label: (
+          <React.Fragment>
+            {t('pages.create-course.submitted-closed', {
+              code: savedCourse?.courseCode,
+            })}
+            {acl.canViewOrders() ? (
+              <Link href={`/orders/${savedCourse?.orderId}`}>
+                {orderCompleted?.order?.xeroInvoiceNumber ??
+                  t('pages.create-course.link-to-order')}
+              </Link>
+            ) : undefined}
+          </React.Fragment>
+        ),
+      })
+      navigate(`/manage-courses/all/${savedCourse.id}/details`)
+    }
+  }, [
+    startPolling,
+    polling,
+    savedCourse,
+    orderCompleted,
+    addSnackbarMessage,
+    t,
+    acl,
+    navigate,
+    completeStep,
+  ])
 
   const handleSubmit = useCallback(async () => {
     if (!courseData || !trainers || !expenses) {
@@ -55,52 +128,49 @@ export const ReviewAndConfirm = () => {
     }
 
     try {
-      const savedCourse = await saveCourse()
+      const currentCourse = await saveCourse()
 
-      if (!savedCourse?.id) {
+      if (!currentCourse?.id) {
         throw new Error()
       }
-      completeStep(StepsEnum.REVIEW_AND_CONFIRM)
 
-      if (savedCourse?.hasExceptions) {
+      if (currentCourse?.hasExceptions) {
+        completeStep(StepsEnum.REVIEW_AND_CONFIRM)
         addSnackbarMessage('course-created', {
           label: t('pages.create-course.submitted-closed-exceptions', {
-            code: savedCourse?.courseCode,
+            code: currentCourse?.courseCode,
           }),
         })
+        navigate(`/manage-courses/all/${currentCourse.id}/details`)
       } else {
-        addSnackbarMessage('course-created', {
-          label: (
-            <React.Fragment>
-              {t('pages.create-course.submitted-closed', {
-                code: savedCourse?.courseCode,
-              })}
-              {acl.canViewOrders() ? (
-                <Link href={`/orders/${savedCourse?.orderId}`}>
-                  {t('pages.create-course.link-to-order')}
-                </Link>
-              ) : undefined}
-            </React.Fragment>
-          ),
-        })
+        setSavedCourseId(currentCourse)
       }
-
-      navigate(`/manage-courses/all/${savedCourse.id}/details`)
     } catch (err) {
       console.error(err)
       setError(t('pages.create-course.review-and-confirm.unknown-error'))
     }
   }, [
-    addSnackbarMessage,
-    completeStep,
     courseData,
-    expenses,
-    navigate,
-    saveCourse,
-    acl,
-    t,
     trainers,
+    expenses,
+    saveCourse,
+    completeStep,
+    navigate,
+    addSnackbarMessage,
+    t,
   ])
+
+  if (polling) {
+    return (
+      <Stack
+        alignItems="center"
+        paddingTop={2}
+        data-testid="xero-order-fetching"
+      >
+        <CircularProgress />
+      </Stack>
+    )
+  }
 
   if (!courseData || !trainers || !expenses) {
     return (

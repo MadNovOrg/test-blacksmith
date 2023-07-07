@@ -45292,6 +45292,13 @@ export type CreateOrderMutationVariables = Exact<{
 
 export type CreateOrderMutation = { __typename?: 'mutation_root', order?: { __typename?: 'CreateOrderOutput', id: any } | null };
 
+export type GetOrderReducedQueryVariables = Exact<{
+  orderId: Scalars['uuid'];
+}>;
+
+
+export type GetOrderReducedQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null };
+
 export type GetOrderQueryVariables = Exact<{
   orderId: Scalars['uuid'];
 }>;
