@@ -219,7 +219,7 @@ export const CourseDetails = () => {
                         value={CourseDetailsTabs.ATTENDEES}
                         data-testid="attendees-tab"
                       />
-                      {courseHasEnded ? (
+                      {courseHasEnded && !acl.isOrgAdmin() ? (
                         <PillTab
                           label={t('pages.course-details.tabs.grading.title')}
                           value={CourseDetailsTabs.GRADING}
@@ -300,7 +300,7 @@ export const CourseDetails = () => {
                     <CourseAttendees course={course} />
                   </TabPanel>
 
-                  {courseHasEnded ? (
+                  {courseHasEnded && !acl.isOrgAdmin() ? (
                     <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.GRADING}>
                       <CourseGrading
                         course={course}
