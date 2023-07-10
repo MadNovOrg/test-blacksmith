@@ -242,9 +242,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           : null),
         maxParticipants: yup
           .number()
-          .typeError(t('components.course-form.min-participants-required'))
-          .positive()
-          .required(t('components.course-form.min-participants-required')),
+          .typeError(t('components.course-form.max-participants-required'))
+          .positive(t('components.course-form.max-participants-positive'))
+          .required(t('components.course-form.max-participants-required')),
         usesAOL: yup.boolean(),
         aolCountry: yup
           .string()
@@ -834,6 +834,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               <Grid container spacing={3} mb={3}>
                 <Grid item md={12} xs={12}>
                   <UserSelector
+                    {...register(`bookingContact`)}
+                    required
                     value={values.bookingContact?.email ?? undefined}
                     onChange={p => {
                       setValue(
@@ -859,6 +861,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
+                    required
                     label={t('first-name')}
                     variant="filled"
                     placeholder={t('first-name-placeholder')}
@@ -878,6 +881,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
+                    required
                     label={t('surname')}
                     variant="filled"
                     placeholder={t('surname-placeholder')}
@@ -890,7 +894,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       !!getValues('bookingContact')?.profileId
                     }
                     InputLabelProps={{
-                      shrink: !!values.bookingContact?.firstName,
+                      shrink: !!values.bookingContact?.lastName,
                     }}
                     fullWidth
                   />
@@ -944,10 +948,19 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           </FormControl>
 
           {isBild ? (
-            <StrategyToggles
-              courseLevel={values.courseLevel}
-              disabled={disabledFields.has('bildStrategies')}
-            />
+            <>
+              <FormHelperText>
+                {t('components.course-form.course-level-one-info')}
+              </FormHelperText>
+              <StrategyToggles
+                courseLevel={values.courseLevel}
+                disabled={disabledFields.has('bildStrategies')}
+              />
+
+              <FormHelperText error={Boolean(errors.bildStrategies?.message)}>
+                {t('components.course-form.select-one-option')}
+              </FormHelperText>
+            </>
           ) : null}
 
           <Divider sx={{ my: 2 }} />

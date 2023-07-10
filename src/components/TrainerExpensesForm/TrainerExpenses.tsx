@@ -47,11 +47,7 @@ export const makeSchema = (t: TFunction) =>
             .required(t('pages.create-course.trainer-expenses.method-error')),
           value: yup
             .number()
-            .typeError(
-              t('pages.create-course.trainer-expenses.num-error', {
-                min: 0,
-              })
-            )
+            .typeError(t('pages.create-course.trainer-expenses.negative-error'))
             .when('method', ([method], s) => {
               if (method === TransportMethod.NONE) {
                 return s
@@ -90,20 +86,14 @@ export const makeSchema = (t: TFunction) =>
           accommodationNights: yup
             .number()
             .integer()
-            .typeError(
-              t('pages.create-course.trainer-expenses.num-error', {
-                min: 0,
-              })
-            )
+            .typeError(t('pages.create-course.trainer-expenses.negative-error'))
             .when(
               ['accommodationRequired', 'method'],
               ([accommodationRequired, method], s) => {
                 if (accommodationRequired && method !== TransportMethod.NONE) {
                   return s.min(
                     1,
-                    t('pages.create-course.trainer-expenses.num-error', {
-                      min: 1,
-                    })
+                    t('pages.create-course.trainer-expenses.negative-error')
                   )
                 }
                 return s
@@ -111,9 +101,7 @@ export const makeSchema = (t: TFunction) =>
             ),
           accommodationCost: yup
             .number()
-            .typeError(
-              t('pages.create-course.trainer-expenses.num-error', { min: 0 })
-            )
+            .typeError(t('pages.create-course.trainer-expenses.negative-error'))
             .when(
               ['accommodationNights', 'method'],
               ([accommodationNights, method], s) => {
@@ -126,9 +114,7 @@ export const makeSchema = (t: TFunction) =>
                     )
                     .min(
                       0,
-                      t('pages.create-course.trainer-expenses.num-error', {
-                        min: 1,
-                      })
+                      t('pages.create-course.trainer-expenses.negative-error')
                     )
                 }
                 return s

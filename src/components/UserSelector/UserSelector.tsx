@@ -36,6 +36,7 @@ export type UserSelectorProps = {
   textFieldProps?: TextFieldProps
   sx?: SxProps
   value?: string
+  required?: boolean
 }
 
 export const UserSelector: React.FC<
@@ -49,6 +50,7 @@ export const UserSelector: React.FC<
   textFieldProps,
   disabled = false,
   value,
+  required,
   ...props
 }) {
   const { t } = useTranslation()
@@ -145,6 +147,8 @@ export const UserSelector: React.FC<
         renderInput={params => (
           <TextField
             {...params}
+            disabled={disabled}
+            required={required}
             label={t('components.user-selector.placeholder')}
             placeholder={t('components.user-selector.placeholder')}
             InputProps={{

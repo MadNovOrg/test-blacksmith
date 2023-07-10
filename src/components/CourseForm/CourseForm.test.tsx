@@ -184,7 +184,9 @@ describe('component: CourseForm', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Minimum participants must be positive number')
+        screen.getByText(
+          'Minimum number of attendees must be a positive number'
+        )
       ).toBeInTheDocument()
     })
   })

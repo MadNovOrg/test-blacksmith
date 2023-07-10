@@ -568,6 +568,7 @@ export const CourseBookingDetails: React.FC<
         <Box bgcolor="common.white" p={2} mb={4}>
           <Box mb={3}>
             <OrgSelector
+              required
               value={
                 values.orgId && values.orgName
                   ? { name: values.orgName, id: values.orgId }

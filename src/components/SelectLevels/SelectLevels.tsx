@@ -56,7 +56,7 @@ export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
     <Autocomplete
       multiple={true}
       value={value}
-      options={levels}
+      options={levels.sort((a, b) => a.localeCompare(b))}
       onChange={onSelected}
       disableClearable={true}
       renderInput={renderInput}

@@ -363,6 +363,7 @@ export const CreateCourseForm = () => {
 
               {isBild && (
                 <FormControlLabel
+                  required
                   control={
                     <Checkbox
                       checked={consentFlags.needsAnalysis}

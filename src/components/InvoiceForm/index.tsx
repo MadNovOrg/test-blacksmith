@@ -52,6 +52,7 @@ export const InvoiceForm: React.FC<React.PropsWithChildren<unknown>> = () => {
     <>
       <Box mb={3}>
         <OrgSelector
+          required
           value={
             values.invoiceDetails?.orgId && values.invoiceDetails?.orgName
               ? {
