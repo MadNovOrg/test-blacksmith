@@ -20,6 +20,12 @@ import { AcceptDeclineCourse } from '.'
 const mockFetcher = jest.fn()
 jest.mock('@app/hooks/use-fetcher', () => ({ useFetcher: () => mockFetcher }))
 
+const mockNavigate = jest.fn()
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}))
+
 const tid = (s: string) => `AcceptDeclineCourse-${s}`
 
 describe('AcceptDeclineCourse', () => {
@@ -59,7 +65,12 @@ describe('AcceptDeclineCourse', () => {
 
   it('calls onUpdate as expected when user ACCEPTS', async () => {
     const onUpdate = jest.fn()
-    const { trainer } = _render(Course_Invite_Status_Enum.Pending, onUpdate)
+    const courseId = 10000
+    const { trainer } = _render(
+      Course_Invite_Status_Enum.Pending,
+      onUpdate,
+      courseId
+    )
 
     await userEvent.click(screen.getByTestId(tid('acceptBtn')))
     await userEvent.click(screen.getByTestId(tid('modalSubmit')))
@@ -76,6 +87,10 @@ describe('AcceptDeclineCourse', () => {
         id: trainer.id,
         status: Course_Invite_Status_Enum.Accepted,
       }
+    )
+
+    expect(mockNavigate).toHaveBeenCalledWith(
+      expect.stringContaining(`/courses/${courseId}/details`)
     )
   })
 
@@ -140,7 +155,8 @@ describe('AcceptDeclineCourse', () => {
 
 function _render(
   status = Course_Invite_Status_Enum.Accepted,
-  onUpdate = jest.fn()
+  onUpdate = jest.fn(),
+  courseId?: number
 ) {
   const trainer = {
     id: chance.guid(),
@@ -150,7 +166,11 @@ function _render(
   const profile = buildProfile()
 
   render(
-    <AcceptDeclineCourse trainer={trainer} onUpdate={onUpdate}>
+    <AcceptDeclineCourse
+      courseId={courseId}
+      trainer={trainer}
+      onUpdate={onUpdate}
+    >
       <div>FALLBACK_CONTENT</div>
     </AcceptDeclineCourse>,
     { auth: { profile } }

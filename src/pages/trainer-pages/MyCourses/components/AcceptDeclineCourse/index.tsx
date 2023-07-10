@@ -2,6 +2,7 @@ import { LoadingButton } from '@mui/lab'
 import { Button, Chip, Stack, Typography } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { Dialog } from '@app/components/Dialog'
 import {
@@ -24,18 +25,20 @@ const actionToStatus = {
 }
 
 export type AcceptDeclineProps = {
+  courseId?: number
   trainer?: Trainer
   onUpdate: (trainer: Trainer, status: Course_Invite_Status_Enum) => void
 }
 
 export const AcceptDeclineCourse: React.FC<
   React.PropsWithChildren<AcceptDeclineProps>
-> = ({ trainer, onUpdate }) => {
+> = ({ courseId, trainer, onUpdate }) => {
   const { t } = useTranslation('components', {
     keyPrefix: 'accept-decline-course',
   })
 
   const fetcher = useFetcher()
+  const navigate = useNavigate()
 
   const [action, setAction] = useState<Action>()
   const [saving, setSaving] = useState(false)
@@ -56,14 +59,19 @@ export const AcceptDeclineCourse: React.FC<
     const status = actionToStatus[action]
     try {
       await fetcher(SetCourseTrainerStatus, { id: trainer.id, status })
+
       setSaving(false)
       closeModal()
       onUpdate(trainer, status)
+
+      if (courseId) {
+        navigate(`/courses/${courseId}/details`)
+      }
     } catch (err) {
       console.error(err)
       setSaving(false)
     }
-  }, [closeModal, trainer, action, fetcher, onUpdate])
+  }, [trainer, action, fetcher, closeModal, onUpdate, navigate, courseId])
 
   if (!trainer || trainer?.status === Course_Invite_Status_Enum.Accepted) {
     return null

@@ -137,6 +137,14 @@ export class MyCoursesPage extends BasePage {
     await expect(courseStatusChip).toHaveText(status)
   }
 
+  async checkCourseStartDatePresence() {
+    const startDateLocator = this.page.locator(
+      '[data-testid="courseBegins-label"]'
+    )
+
+    await expect(startDateLocator).toContainText('days until course begins')
+  }
+
   async checkCourseWaitingApproval(courseId: number) {
     await expect(
       this.page.locator(

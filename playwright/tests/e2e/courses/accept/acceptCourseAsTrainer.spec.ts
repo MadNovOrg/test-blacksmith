@@ -63,12 +63,10 @@ for (const data of testData) {
 
   test(data.name, async ({ page, course }) => {
     const myCoursesPage = new MyCoursesPage(page)
+
     await myCoursesPage.goto(`${course.id}`)
     await myCoursesPage.acceptCourse(course.id)
     await myCoursesPage.goToCourseBuilder()
-    await myCoursesPage.submitDefaultModules()
-    await myCoursesPage.confirmModules()
-    await myCoursesPage.goto(`${course.id}`)
-    await myCoursesPage.checkCourseStatus(course.id, 'Scheduled')
+    await myCoursesPage.checkCourseStartDatePresence()
   })
 }

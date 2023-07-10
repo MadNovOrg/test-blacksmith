@@ -181,6 +181,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             <Typography
               fontWeight={500}
               fontSize="0.9rem"
+              data-testid="courseBegins-label"
               sx={{
                 backgroundColor: theme.palette.grey[300],
                 borderRadius: 1,

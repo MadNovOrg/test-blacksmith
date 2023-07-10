@@ -76,6 +76,7 @@ export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
           <TableCell>
             {activeRole === RoleName.TRAINER ? (
               <AcceptDeclineCourse
+                courseId={course.id}
                 trainer={
                   profile
                     ? findCourseTrainer(course.trainers, profile.id)
