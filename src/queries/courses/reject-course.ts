@@ -1,8 +1,8 @@
 import { gql } from 'graphql-request'
 
 export const MUTATION = gql`
-  mutation ApproveCourse($input: ApproveCourseInput!) {
-    approveCourse(input: $input) {
+  mutation RejectCourse($input: RejectCourseInput!) {
+    rejectCourse(input: $input) {
       success
     }
   }

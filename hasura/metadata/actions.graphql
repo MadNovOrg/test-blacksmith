@@ -3,7 +3,7 @@ type Mutation {
 }
 
 type Mutation {
-  approveCourse(courseId: Int!): ApproveCourseOutput!
+  approveCourse(input: ApproveCourseInput!): ApproveCourseOutput!
 }
 
 type Mutation {
@@ -140,6 +140,10 @@ type Query {
 
 type Query {
   podcasts(input: PodcastsInput): PodcastsPayload
+}
+
+type Mutation {
+  rejectCourse(input: RejectCourseInput!): RejectCourseOutput
 }
 
 type Mutation {
@@ -615,6 +619,14 @@ input CancelMyselfFromCourseWaitlistInput {
   cancellationSecret: uuid!
 }
 
+input RejectCourseInput {
+  courseId: Int!
+}
+
+input ApproveCourseInput {
+  courseId: Int!
+}
+
 type LinkProfileResult {
   status: Boolean!
 }
@@ -1003,6 +1015,11 @@ type SignUpOutput {
 
 type ArloCallbackOutput {
   status: Boolean!
+}
+
+type RejectCourseOutput {
+  success: Boolean!
+  error: CourseApprovalError
 }
 
 scalar Date

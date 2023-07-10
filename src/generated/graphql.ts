@@ -41,6 +41,10 @@ export type Address = {
   postCode?: Maybe<Scalars['String']>;
 };
 
+export type ApproveCourseInput = {
+  courseId: Scalars['Int'];
+};
+
 export type ApproveCourseOutput = {
   __typename?: 'ApproveCourseOutput';
   error?: Maybe<CourseApprovalError>;
@@ -5877,6 +5881,16 @@ export type RegisterUserPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** The User object mutation type. */
   user?: Maybe<User>;
+};
+
+export type RejectCourseInput = {
+  courseId: Scalars['Int'];
+};
+
+export type RejectCourseOutput = {
+  __typename?: 'RejectCourseOutput';
+  error?: Maybe<CourseApprovalError>;
+  success: Scalars['Boolean'];
 };
 
 /** The logical relation between each item in the array when there are more than one. */
@@ -29787,6 +29801,8 @@ export type Mutation_Root = {
   notifyCourseEdit: NotifyCourseEditOutput;
   /** Creates a membership plan */
   plansCreate?: Maybe<PlansCreateResult>;
+  /** This action is called when a Admin / LD role Rejects a course in status Exceptions Approval Pending */
+  rejectCourse?: Maybe<RejectCourseOutput>;
   /** replaceParticipant */
   replaceParticipant?: Maybe<ReplaceParticipantOutput>;
   resendPassword: Scalars['Boolean'];
@@ -30325,7 +30341,7 @@ export type Mutation_RootAcceptOrgInviteArgs = {
 
 /** mutation root */
 export type Mutation_RootApproveCourseArgs = {
-  courseId: Scalars['Int'];
+  input: ApproveCourseInput;
 };
 
 
@@ -32650,6 +32666,12 @@ export type Mutation_RootNotifyCourseEditArgs = {
 /** mutation root */
 export type Mutation_RootPlansCreateArgs = {
   data: PlansCreateInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootRejectCourseArgs = {
+  input: RejectCourseInput;
 };
 
 
@@ -49544,7 +49566,7 @@ export type SaveTrainerCourseEvaluationMutationVariables = Exact<{
 export type SaveTrainerCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null };
 
 export type ApproveCourseMutationVariables = Exact<{
-  courseId: Scalars['Int'];
+  input: ApproveCourseInput;
 }>;
 
 
@@ -49662,6 +49684,13 @@ export type NotifyCourseEditMutationVariables = Exact<{
 
 export type NotifyCourseEditMutation = { __typename?: 'mutation_root', notifyCourseEdit: { __typename?: 'NotifyCourseEditOutput', status: number } };
 
+export type RejectCourseMutationVariables = Exact<{
+  input: RejectCourseInput;
+}>;
+
+
+export type RejectCourseMutation = { __typename?: 'mutation_root', rejectCourse?: { __typename?: 'RejectCourseOutput', success: boolean } | null };
+
 export type RemoveCourseDraftMutationVariables = Exact<{
   courseType: Scalars['String'];
   profileId: Scalars['uuid'];
@@ -49730,14 +49759,6 @@ export type SetCourseDraftMutationVariables = Exact<{
 
 
 export type SetCourseDraftMutation = { __typename?: 'mutation_root', insert_course_draft_one?: { __typename?: 'course_draft', id: any } | null };
-
-export type SetCourseStatusMutationVariables = Exact<{
-  id: Scalars['Int'];
-  status?: InputMaybe<Course_Status_Enum>;
-}>;
-
-
-export type SetCourseStatusMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number } | null };
 
 export type SetCourseTrainerStatusMutationVariables = Exact<{
   id: Scalars['uuid'];

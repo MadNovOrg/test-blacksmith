@@ -1,10 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Client, Provider } from 'urql'
 
-import {
-  Course_Audit_Type_Enum,
-  Course_Status_Enum,
-} from '@app/generated/graphql'
+import { Course_Audit_Type_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
 import { LoadingStatus } from '@app/util'
@@ -20,8 +17,8 @@ jest.mock('@app/hooks/useCourse')
 jest.mock('@app/queries/courses/approve-course', () => ({
   MUTATION: 'approve-course-mutation',
 }))
-jest.mock('@app/queries/courses/set-course-status', () => ({
-  MUTATION: 'set-course-status-mutation',
+jest.mock('@app/queries/courses/reject-course', () => ({
+  MUTATION: 'reject-course-mutation',
 }))
 
 const fetcherMock = jest.fn()
@@ -98,7 +95,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
     expect(input.value).toBe(testValue)
     await userEvent.click(screen.getByText(t('common.submit')))
     expect(fetcherMock).toHaveBeenCalledWith('approve-course-mutation', {
-      courseId: course.id,
+      input: { courseId: course.id },
     })
   })
   it('should click the submit button and handle the Reject action', async () => {
@@ -108,9 +105,8 @@ describe('component: ExceptionsApprovalModalContent', () => {
     fireEvent.change(input, { target: { value: testValue } })
     expect(input.value).toBe(testValue)
     await userEvent.click(screen.getByText(t('common.submit')))
-    expect(fetcherMock).toHaveBeenCalledWith('set-course-status-mutation', {
-      id: course.id,
-      status: Course_Status_Enum.Declined,
+    expect(fetcherMock).toHaveBeenCalledWith('reject-course-mutation', {
+      input: { courseId: course.id },
     })
   })
   it('should fail if no reason is provided', async () => {

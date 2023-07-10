@@ -238,6 +238,15 @@ actions:
     permissions:
       - role: user
     comment: Podcasts list
+  - name: rejectCourse
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/course/reject'
+      forward_client_headers: true
+    permissions:
+      - role: tt-admin
+      - role: ld
+    comment: This action is called when a Admin / LD role Rejects a course in status Exceptions Approval Pending
   - name: replaceParticipant
     definition:
       kind: synchronous
@@ -757,6 +766,9 @@ custom_types:
     - name: CancelMyselfFromCourseWaitlistInput
     - name: SignUpInput
     - name: ArloCallbackInput
+    - name: CancelMyselfFromCourseWaitlistInput
+    - name: RejectCourseInput
+    - name: ApproveCourseInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -819,7 +831,9 @@ custom_types:
     - name: JoinWaitlistOutput
     - name: CancelIndividualFromCourseWaitlistOutput
     - name: CancelMyselfFromCourseWaitlistOutput
+    - name: JoinWaitlistOutput
     - name: SignUpOutput
     - name: ArloCallbackOutput
+    - name: RejectCourseOutput
   scalars:
     - name: Date

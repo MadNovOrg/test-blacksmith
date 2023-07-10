@@ -13,17 +13,16 @@ import {
   ApproveCourseMutationVariables,
   Course_Audit_Insert_Input,
   Course_Audit_Type_Enum,
-  Course_Status_Enum,
   InsertCourseAuditMutation,
   InsertCourseAuditMutationVariables,
-  SetCourseStatusMutation,
-  SetCourseStatusMutationVariables,
+  RejectCourseMutation,
+  RejectCourseMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
 import { MUTATION as APPROVE_COURSE_MUTATION } from '@app/queries/courses/approve-course'
 import { INSERT_COURSE_AUDIT } from '@app/queries/courses/insert-course-audit'
-import { MUTATION as SET_COURSE_STATUS_MUTATION } from '@app/queries/courses/set-course-status'
+import { MUTATION as REJECT_COURSE_MUTATION } from '@app/queries/courses/reject-course'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 
@@ -88,7 +87,7 @@ export const ExceptionsApprovalModalContent: FC<
             await fetcher<
               ApproveCourseMutation,
               ApproveCourseMutationVariables
-            >(APPROVE_COURSE_MUTATION, { courseId: course.id })
+            >(APPROVE_COURSE_MUTATION, { input: { courseId: course.id } })
             await mutate()
             addSnackbarMessage('course-approval-message', {
               label: t('pages.course-details.course-approval-message', {
@@ -97,13 +96,12 @@ export const ExceptionsApprovalModalContent: FC<
             })
           } else if (action === Course_Audit_Type_Enum.Rejected) {
             addNewCourseAudit(auditObject)
-            await fetcher<
-              SetCourseStatusMutation,
-              SetCourseStatusMutationVariables
-            >(SET_COURSE_STATUS_MUTATION, {
-              id: course.id,
-              status: Course_Status_Enum.Declined,
-            })
+            await fetcher<RejectCourseMutation, RejectCourseMutationVariables>(
+              REJECT_COURSE_MUTATION,
+              {
+                input: { courseId: course.id },
+              }
+            )
             navigate('/')
           } else
             console.error(
@@ -118,16 +116,16 @@ export const ExceptionsApprovalModalContent: FC<
         }
       },
       [
-        action,
-        addNewCourseAudit,
-        addSnackbarMessage,
-        closeModal,
         course,
+        action,
+        profile?.id,
+        addNewCourseAudit,
         fetcher,
         mutate,
-        navigate,
-        profile?.id,
+        addSnackbarMessage,
         t,
+        navigate,
+        closeModal,
       ]
     )
 
