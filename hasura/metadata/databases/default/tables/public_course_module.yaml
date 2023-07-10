@@ -79,13 +79,13 @@ select_permissions:
   - role: finance
     permission:
       columns:
+        - covered
+        - course_id
+        - created_at
+        - updated_at
         - id
         - module_id
-      filter:
-        course:
-          participants:
-            profile_id:
-              _eq: X-Hasura-User-Id
+      filter: {}
       allow_aggregations: true
   - role: sales-admin
     permission:
@@ -96,21 +96,18 @@ select_permissions:
         - updated_at
         - id
         - module_id
-      filter:
-        course:
-          course_type:
-            _eq: CLOSED
+      filter: {}
       allow_aggregations: true
   - role: sales-representative
     permission:
       columns:
+        - covered
+        - course_id
+        - created_at
+        - updated_at
         - id
         - module_id
-      filter:
-        course:
-          participants:
-            profile_id:
-              _eq: X-Hasura-User-Id
+      filter: {}
       allow_aggregations: true
   - role: trainer
     permission:
