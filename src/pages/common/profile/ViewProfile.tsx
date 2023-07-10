@@ -225,7 +225,7 @@ export const ViewProfilePage: React.FC<
               </Box>
             ) : undefined}
           </Grid>
-          <Grid item md={8}>
+          <Grid item md={8} xs={12}>
             {isMyProfile ? (
               <>
                 {verified ? (

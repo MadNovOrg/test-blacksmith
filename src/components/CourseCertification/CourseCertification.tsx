@@ -11,6 +11,8 @@ import {
   Grid,
   Stack,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
@@ -50,7 +52,6 @@ import {
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { Strategy } from '@app/pages/trainer-pages/CourseGrading/components/BILDGrading/types'
 import { QUERY } from '@app/queries/certificate/get-certificate'
-import theme from '@app/theme'
 import { CertificateStatus, CourseLevel, NonNullish } from '@app/types'
 import {
   getSWRLoadingStatus,
@@ -213,6 +214,9 @@ const CertificateInfo: React.FC<
   const strategyModules: Record<string, Strategy> =
     courseParticipant?.bildGradingModules?.modules
 
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   if (!courseParticipant) {
     return (
       <Typography variant="body2">
@@ -222,7 +226,7 @@ const CertificateInfo: React.FC<
   }
 
   return (
-    <Box>
+    <Box mt={isMobile ? 8 : 0}>
       {isRevoked ? (
         <Alert
           severity="warning"
@@ -277,7 +281,7 @@ const CertificateInfo: React.FC<
       {grade !== Grade_Enum.Fail ? (
         <>
           <Grid container spacing={2} mt={4}>
-            <Grid item xs={3}>
+            <Grid item md={3} xs={12}>
               <Typography
                 data-testid="certificate-issue-date"
                 variant="body2"
@@ -291,7 +295,7 @@ const CertificateInfo: React.FC<
               </Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item md={3} xs={12}>
               <Typography variant="body2" sx={{ mb: 1 }} color="grey.600">
                 {t('number')}
               </Typography>
@@ -301,7 +305,7 @@ const CertificateInfo: React.FC<
             </Grid>
 
             {isRevoked ? (
-              <Grid item xs={3}>
+              <Grid item md={3} xs={12}>
                 <Typography variant="body2" sx={{ mb: 1 }} color="grey.600">
                   {t('revoked-on')}
                 </Typography>
@@ -310,7 +314,7 @@ const CertificateInfo: React.FC<
                 </Typography>
               </Grid>
             ) : (
-              <Grid item xs={3}>
+              <Grid item md={3} xs={12}>
                 <Typography
                   data-testid="certificate-valid-until"
                   variant="body2"
@@ -474,6 +478,9 @@ export const CourseCertification: React.FC<
   const { t, _t } = useScopedTranslation('common.course-certificate')
   const { acl } = useAuth()
 
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const [showModifyGradeModal, setShowModifyGradeModal] = useState(false)
   const [showChangelogModal, setShowChangelogModal] = useState(false)
   const [showPutOnHoldModal, setShowPutOnHoldModal] = useState({
@@ -568,7 +575,7 @@ export const CourseCertification: React.FC<
 
   return (
     <Box mb={6}>
-      <Container>
+      <Container disableGutters={isMobile}>
         <Grid container>
           <Grid item md={3} px={4}>
             <Grid container gap={2}>
@@ -648,7 +655,7 @@ export const CourseCertification: React.FC<
               )}
             </Grid>
           </Grid>
-          <Grid item md={8}>
+          <Grid item md={8} xs={12}>
             {holdRequest ? (
               <HoldHeaderAlert
                 status={certificate.status as CertificateStatus}

@@ -51,8 +51,13 @@ export const ActionsMenu = <T,>({
   )
 
   return (
-    <Container>
-      <Button onClick={onActionsClick} variant="text" data-testid={testId}>
+    <Container disableGutters>
+      <Button
+        onClick={onActionsClick}
+        variant="text"
+        data-testid={testId}
+        sx={{ padding: 0, textAlign: 'left' }}
+      >
         {label}
       </Button>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={onClose}>

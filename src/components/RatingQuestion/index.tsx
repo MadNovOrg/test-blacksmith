@@ -1,4 +1,10 @@
-import { Box, FormHelperText, Typography } from '@mui/material'
+import {
+  Box,
+  FormHelperText,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material'
 import React from 'react'
 
 import {
@@ -16,6 +22,9 @@ export const RatingQuestion: React.FC<React.PropsWithChildren<Props>> = ({
   error,
   ...rest
 }) => {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   return (
     <Box
       display="flex"
@@ -23,7 +32,8 @@ export const RatingQuestion: React.FC<React.PropsWithChildren<Props>> = ({
       px={2}
       py={1}
       mb={0.5}
-      alignItems="center"
+      alignItems={isMobile ? 'left' : 'center'}
+      flexDirection={isMobile ? 'column' : 'row'}
     >
       <Box flex={1}>
         <Typography>{title}</Typography>
@@ -33,7 +43,7 @@ export const RatingQuestion: React.FC<React.PropsWithChildren<Props>> = ({
       <Box
         display="flex"
         flex={1}
-        justifyContent="flex-end"
+        justifyContent={isMobile ? 'flex-start' : 'flex-end'}
         data-testid="course-evaluation-rating-question"
       >
         <SmileyFaceRating {...rest} />

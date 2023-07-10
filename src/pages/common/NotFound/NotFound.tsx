@@ -18,7 +18,7 @@ export const NotFound: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
 
   return (
-    <Stack flex={1} alignItems="center">
+    <Stack flex={1} alignItems="center" px={2}>
       {showTitle ? (
         <Typography variant="h2" mt={10}>
           {title ? title : t('components.not-found.title')}

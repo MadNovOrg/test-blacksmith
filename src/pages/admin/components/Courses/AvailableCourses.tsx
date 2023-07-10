@@ -228,7 +228,7 @@ export const AvailableCourses: React.FC<
             flexDirection={isMobile ? 'column' : 'row'}
             gap={4}
           >
-            <Box width={isMobile ? undefined : 250}>
+            <Box width={isMobile ? undefined : 250} px={isMobile ? 2 : 0}>
               <Typography variant="h1">
                 {t('pages.available-courses.title')}
               </Typography>
@@ -286,7 +286,7 @@ export const AvailableCourses: React.FC<
               </Stack>
             </Box>
 
-            <Box flex={1}>
+            <Box flex={1} px={isMobile ? 2 : 0}>
               <Box
                 display="flex"
                 alignItems="center"
