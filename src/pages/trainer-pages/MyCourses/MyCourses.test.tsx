@@ -823,8 +823,8 @@ describe('trainers-pages/MyCourses', () => {
   })
 
   it('paginates courses', async () => {
-    const firstBatch = buildEntities(5, buildTrainerCourse)
-    const secondBatch = buildEntities(5, buildTrainerCourse)
+    const firstBatch = buildEntities(12, buildTrainerCourse)
+    const secondBatch = buildEntities(12, buildTrainerCourse)
 
     const client = {
       executeQuery: ({
@@ -837,7 +837,7 @@ describe('trainers-pages/MyCourses', () => {
 
         return fromValue<{ data: TrainerCoursesQuery }>({
           data: {
-            courses: offset === 0 && limit === 5 ? firstBatch : secondBatch,
+            courses: offset === 0 && limit === 12 ? firstBatch : secondBatch,
             course_aggregate: {
               aggregate: {
                 count: firstBatch.length + secondBatch.length,

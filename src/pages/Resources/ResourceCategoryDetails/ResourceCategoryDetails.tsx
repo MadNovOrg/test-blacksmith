@@ -36,7 +36,7 @@ export const ResourceCategoryDetails = () => {
     <FullHeightPage bgcolor={theme.palette.grey[100]} pb={3}>
       <Container maxWidth="lg" sx={{ py: 5 }}>
         <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
-          <Box width={400}>
+          <Box width={isMobile ? undefined : 400}>
             <BackButton
               label={t('pages.resources.resource-details.back-to-resources')}
               to="/resources"
@@ -56,7 +56,14 @@ export const ResourceCategoryDetails = () => {
               )}
             </Box>
           </Box>
-          <Box sx={{ ml: 4, maxHeight: '85vh', overflow: 'auto', flex: 1 }}>
+          <Box
+            sx={{
+              ml: isMobile ? 0 : 4,
+              maxHeight: '85vh',
+              overflow: 'auto',
+              flex: 1,
+            }}
+          >
             <Box sx={{ pt: 2 }}>
               <FilterSearch
                 onChange={value => {
