@@ -107,6 +107,12 @@ actions:
       forward_client_headers: true
     permissions:
       - role: anonymous
+  - name: deleteMeeting
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/zoom/delete-meeting'
+    permissions:
+      - role: user
   - name: deleteUser
     definition:
       kind: synchronous
@@ -374,6 +380,13 @@ actions:
     permissions:
       - role: sales-admin
       - role: tt-admin
+  - name: zoomUsers
+    definition:
+      kind: ''
+      handler: '{{ACTIONS_HOST}}/zoom/get-users'
+    permissions:
+      - role: user
+    comment: Zoom Users list
 custom_types:
   enums:
     - name: BillingInterval
@@ -834,6 +847,10 @@ custom_types:
     - name: JoinWaitlistOutput
     - name: SignUpOutput
     - name: ArloCallbackOutput
+    - name: ZoomUser
+    - name: ZoomUsersResponse
+    - name: ZoomUsersResponseData
+    - name: DeleteMeetingOutput
     - name: RejectCourseOutput
   scalars:
     - name: Date

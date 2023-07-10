@@ -1,6 +1,5 @@
 import { format } from 'date-fns'
 import { setMedia } from 'mock-match-media'
-import React from 'react'
 import { getI18n } from 'react-i18next'
 
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
@@ -14,7 +13,7 @@ import {
 import { act, render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
-import { selectLevel, ZOOM_MOCKED_URL } from './test-utils'
+import { selectLevel } from './test-utils'
 
 import CourseForm from '.'
 
@@ -97,11 +96,7 @@ describe('component: CourseForm', () => {
 
       let input
       try {
-        input = await screen.findByDisplayValue<HTMLInputElement>(
-          ZOOM_MOCKED_URL,
-          {},
-          { timeout: 3000 }
-        )
+        input = await screen.findByTestId('zoomMeeting-user-selector')
       } catch (_) {
         input = null
       }

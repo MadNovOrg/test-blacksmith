@@ -67,6 +67,10 @@ type Mutation {
 }
 
 type Mutation {
+  deleteMeeting(meetingId: String!): DeleteMeetingOutput!
+}
+
+type Mutation {
   deleteUser(profileId: uuid!): DeleteUserOutput!
 }
 
@@ -213,6 +217,10 @@ type Mutation {
 
 type Query {
   xeroInvoicesStatus(input: XeroInvoicesStatusInput!): XeroInvoicesStatusOutput
+}
+
+type Query {
+  zoomUsers: ZoomUsersResponse
 }
 
 enum BillingInterval {
@@ -421,6 +429,10 @@ input UpsertZoomMeetingInput {
   Timezone string, e.g. Europe/London
   """
   timezone: String
+  """
+  Optional user id to create the meeting for
+  """
+  userId: String
 }
 
 input GetTrainersLevelsInput {
@@ -1006,6 +1018,28 @@ type CancelMyselfFromCourseWaitlistOutput {
 }
 
 type JoinWaitlistOutput {
+  success: Boolean!
+}
+
+type ZoomUser {
+  id: String!
+  firstName: String!
+  lastName: String!
+  displayName: String!
+  email: String!
+}
+
+type ZoomUsersResponse {
+  success: Boolean
+  data: ZoomUsersResponseData
+}
+
+type ZoomUsersResponseData {
+  current: String!
+  users: [ZoomUser!]
+}
+
+type DeleteMeetingOutput {
   success: Boolean!
 }
 

@@ -3,7 +3,6 @@ import {
   Alert,
   Box,
   Checkbox,
-  CircularProgress,
   Divider,
   FormControl,
   FormControlLabel,
@@ -49,7 +48,6 @@ import { UserSelector } from '@app/components/UserSelector'
 import { useAuth } from '@app/context/auth'
 import { Accreditors_Enum, Course_Source_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
-import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { schemas, yup } from '@app/schemas'
 import theme from '@app/theme'
 import {
@@ -59,12 +57,7 @@ import {
   CourseType,
   RoleName,
 } from '@app/types'
-import {
-  bildStrategiesToArray,
-  extractTime,
-  LoadingStatus,
-  requiredMsg,
-} from '@app/util'
+import { bildStrategiesToArray, extractTime, requiredMsg } from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
 import { ProfileSelector } from '../ProfileSelector'
@@ -83,6 +76,7 @@ import {
   StrategyToggles,
   validateStrategies,
 } from './components/StrategyToggles'
+import { ZoomMeetingSelector } from './components/ZoomMeetingSelector'
 import {
   canBeBlended,
   canBeBlendedBild,
@@ -689,37 +683,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   ].includes(deliveryType)
 
   const autoLoadZoomMeetingUrl = useMemo(
-    () =>
-      hasZoomMeetingUrl &&
-      courseType !== CourseType.INDIRECT &&
-      !courseInput?.zoomMeetingUrl,
-    [hasZoomMeetingUrl, courseType, courseInput]
+    () => hasZoomMeetingUrl && courseType !== CourseType.INDIRECT,
+    [hasZoomMeetingUrl, courseType]
   )
-
-  const {
-    meetingUrl: zoomMeetingUrl,
-    generateLink: generateZoomLink,
-    status: zoomLinkStatus,
-  } = useZoomMeetingLink(values.startDateTime ?? undefined)
-
-  useEffect(() => {
-    if (zoomMeetingUrl && hasZoomMeetingUrl && !courseInput?.zoomMeetingUrl) {
-      setValue('zoomMeetingUrl', zoomMeetingUrl)
-      trigger('zoomMeetingUrl')
-    }
-  }, [hasZoomMeetingUrl, zoomMeetingUrl, setValue, trigger, courseInput])
-
-  useEffect(() => {
-    if (deliveryType === CourseDeliveryType.VIRTUAL) {
-      trigger('zoomMeetingUrl')
-    }
-  }, [deliveryType, trigger])
-
-  useEffect(() => {
-    if (autoLoadZoomMeetingUrl) {
-      generateZoomLink()
-    }
-  }, [autoLoadZoomMeetingUrl, generateZoomLink])
 
   useEffect(() => {
     const elements = Object.keys(errors)
@@ -756,6 +722,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           shouldValidate: true,
         }
       )
+    },
+    [setValue]
+  )
+
+  const setZoomMeetingUrl = useCallback(
+    (meetingUrl: string | null) => {
+      setValue('zoomMeetingUrl', meetingUrl)
     },
     [setValue]
   )
@@ -1113,34 +1086,29 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           ) : null}
 
           {hasZoomMeetingUrl ? (
-            <TextField
-              required
-              data-testid="onlineMeetingLink-input"
-              fullWidth
-              variant="filled"
-              {...register('zoomMeetingUrl')}
-              InputLabelProps={{ shrink: values.zoomMeetingUrl !== '' }}
-              helperText={
-                zoomLinkStatus === LoadingStatus.ERROR
-                  ? errors.zoomMeetingUrl?.message
-                  : null
-              }
-              error={Boolean(
-                errors.zoomMeetingUrl?.message ||
-                  zoomLinkStatus === LoadingStatus.ERROR
-              )}
-              sx={{ marginTop: 2 }}
-              label={t('components.course-form.online-meeting-link-label')}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="start">
-                    {zoomLinkStatus === LoadingStatus.FETCHING ? (
-                      <CircularProgress size={20} />
-                    ) : null}
-                  </InputAdornment>
-                ),
-              }}
-            />
+            autoLoadZoomMeetingUrl ? (
+              <ZoomMeetingSelector
+                {...register('zoomMeetingUrl')}
+                data-testid="zoomMeeting-user-selector"
+                error={errors.zoomMeetingUrl}
+                startDateTime={values.startDateTime}
+                value={values.zoomMeetingUrl}
+                onChange={setZoomMeetingUrl}
+              />
+            ) : (
+              <TextField
+                {...register('zoomMeetingUrl')}
+                required
+                data-testid="onlineMeetingLink-input"
+                fullWidth
+                variant="filled"
+                InputLabelProps={{ shrink: values.zoomMeetingUrl !== '' }}
+                helperText={errors.zoomMeetingUrl?.message}
+                error={Boolean(errors.zoomMeetingUrl?.message)}
+                sx={{ marginTop: 2 }}
+                label={t('components.course-form.online-meeting-link-label')}
+              />
+            )
           ) : null}
 
           <Controller

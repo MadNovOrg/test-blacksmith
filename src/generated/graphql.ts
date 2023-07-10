@@ -2088,6 +2088,11 @@ export type DeleteMediaItemPayload = {
   mediaItem?: Maybe<MediaItem>;
 };
 
+export type DeleteMeetingOutput = {
+  __typename?: 'DeleteMeetingOutput';
+  success: Scalars['Boolean'];
+};
+
 /** Input for the deletePage mutation */
 export type DeletePageInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -10173,6 +10178,8 @@ export type UpsertZoomMeetingInput = {
   startTime?: InputMaybe<Scalars['String']>;
   /** Timezone string, e.g. Europe/London */
   timezone?: InputMaybe<Scalars['String']>;
+  /** Optional user id to create the meeting for */
+  userId?: InputMaybe<Scalars['String']>;
 };
 
 export type UpsertZoomMeetingPayload = {
@@ -12104,6 +12111,27 @@ export type ZoomMeeting = {
 export type ZoomMeetingNotFoundError = {
   __typename?: 'ZoomMeetingNotFoundError';
   id: Scalars['String'];
+};
+
+export type ZoomUser = {
+  __typename?: 'ZoomUser';
+  displayName: Scalars['String'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  id: Scalars['String'];
+  lastName: Scalars['String'];
+};
+
+export type ZoomUsersResponse = {
+  __typename?: 'ZoomUsersResponse';
+  data?: Maybe<ZoomUsersResponseData>;
+  success?: Maybe<Scalars['Boolean']>;
+};
+
+export type ZoomUsersResponseData = {
+  __typename?: 'ZoomUsersResponseData';
+  current: Scalars['String'];
+  users?: Maybe<Array<ZoomUser>>;
 };
 
 /** columns and relationships of "accreditors" */
@@ -29108,6 +29136,7 @@ export type Mutation_Root = {
   createUser: CreateUserOutput;
   declineInvite?: Maybe<DeclineInviteOutput>;
   declineOrgInvite: Scalars['Boolean'];
+  deleteMeeting: DeleteMeetingOutput;
   /** Delete users */
   deleteUser: DeleteUserOutput;
   /** delete data from the table: "accreditors" */
@@ -30412,6 +30441,12 @@ export type Mutation_RootDeclineInviteArgs = {
 /** mutation root */
 export type Mutation_RootDeclineOrgInviteArgs = {
   inviteId: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteMeetingArgs = {
+  meetingId: Scalars['String'];
 };
 
 
@@ -41083,6 +41118,8 @@ export type Query_Root = {
   xero_invoice_status_aggregate: Xero_Invoice_Status_Aggregate;
   /** fetch data from the table: "xero_invoice_status" using primary key columns */
   xero_invoice_status_by_pk?: Maybe<Xero_Invoice_Status>;
+  /** Zoom Users list */
+  zoomUsers?: Maybe<ZoomUsersResponse>;
 };
 
 
@@ -49229,12 +49266,24 @@ export type CoursePriceQueryVariables = Exact<{
 
 export type CoursePriceQuery = { __typename?: 'query_root', coursePrice: Array<{ __typename?: 'course_pricing', priceAmount: any, priceCurrency: string }> };
 
+export type DeleteMeetingMutationVariables = Exact<{
+  meetingId: Scalars['String'];
+}>;
+
+
+export type DeleteMeetingMutation = { __typename?: 'mutation_root', deleteMeeting: { __typename?: 'DeleteMeetingOutput', success: boolean } };
+
 export type UpsertZoomMeetingMutationVariables = Exact<{
   input?: InputMaybe<UpsertZoomMeetingInput>;
 }>;
 
 
 export type UpsertZoomMeetingMutation = { __typename?: 'mutation_root', upsertZoomMeeting?: { __typename?: 'UpsertZoomMeetingPayload', success: boolean, meeting?: { __typename?: 'ZoomMeeting', id: number, joinUrl: string } | null } | null };
+
+export type ZoomUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ZoomUsersQuery = { __typename?: 'query_root', zoomUsers?: { __typename?: 'ZoomUsersResponse', success?: boolean | null, data?: { __typename?: 'ZoomUsersResponseData', current: string, users?: Array<{ __typename?: 'ZoomUser', id: string, displayName: string, firstName: string, lastName: string, email: string }> | null } | null } | null };
 
 export type StripeCreatePaymentMutationVariables = Exact<{
   input: StripeCreatePaymentIntentInput;

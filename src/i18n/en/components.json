@@ -87,6 +87,7 @@
     "finance": "Finance"
   },
   "course-form": {
+    "zoom-user": "Zoom User",
     "general-details-title": "General details",
     "organization-label": "Organisation",
     "contact-person-label": "Booking contact",

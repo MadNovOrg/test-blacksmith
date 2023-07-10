@@ -1,10 +1,9 @@
 import { formatISO, isValid } from 'date-fns'
 import { gql } from 'graphql-request'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useMutation } from 'urql'
 
 import { LoadingStatus } from '@app/util'
-
-import { useFetcher } from '../use-fetcher'
 
 type ResponseType = {
   upsertZoomMeeting: {
@@ -18,6 +17,7 @@ type Params = {
     id?: string
     startTime?: string
     timezone?: string
+    userId?: string
   }
 }
 
@@ -33,61 +33,60 @@ export const QUERY = gql`
   }
 `
 
-export default function useZoomMeetingLink(startTime?: Date): {
+export default function useZoomMeetingLink(): {
   meetingUrl: string
-  generateLink: () => void
+  meetingId?: string
+  generateLink: (variables: {
+    userId?: string
+    meetingId?: string
+    startTime?: Date
+  }) => void
   status: LoadingStatus
 } {
-  const fetcher = useFetcher()
+  const [{ data, error, fetching }, runMutation] = useMutation<
+    ResponseType,
+    Params
+  >(QUERY)
 
-  const [meetingUrl, setMeetingUrl] = useState('')
-  const meetingIdRef = useRef('')
-  const [status, setStatus] = useState(LoadingStatus.IDLE)
-  const meetingUrlRef = useRef(meetingUrl)
+  const [meeting, setMeeting] = useState<{ id: string; url: string } | null>()
 
-  const generateLink = useCallback(
-    async (force = false) => {
-      if (meetingUrlRef.current && !force) {
-        return meetingUrlRef.current
-      }
+  const generateLink = (variables: {
+    userId?: string
+    meetingId?: string
+    startTime?: Date
+  }) => {
+    const { userId, meetingId, startTime } = variables
 
-      setStatus(LoadingStatus.FETCHING)
+    runMutation({
+      input: {
+        id: meetingId,
+        startTime:
+          isValid(startTime) && startTime ? formatISO(startTime) : undefined,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        userId,
+      },
+    })
+  }
 
-      const data = await fetcher<ResponseType, Params>(QUERY, {
-        ...(meetingIdRef.current
-          ? {
-              input: {
-                id: meetingIdRef.current,
-                startTime:
-                  isValid(startTime) && startTime
-                    ? formatISO(startTime)
-                    : undefined,
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-              },
-            }
-          : { input: {} }),
+  useEffect(() => {
+    if (data?.upsertZoomMeeting?.meeting?.joinUrl) {
+      setMeeting({
+        id: data.upsertZoomMeeting.meeting.id,
+        url: data.upsertZoomMeeting.meeting.joinUrl,
       })
-
-      setStatus(LoadingStatus.SUCCESS)
-
-      if (data?.upsertZoomMeeting?.meeting?.joinUrl) {
-        meetingIdRef.current = data.upsertZoomMeeting.meeting.id
-        setMeetingUrl(data.upsertZoomMeeting.meeting.joinUrl)
-      }
-    },
-    [fetcher, startTime]
-  )
-
-  useEffect(() => {
-    meetingUrlRef.current = meetingUrl
-  }, [meetingUrl])
-
-  useEffect(() => {
-    // Only update if there already is a meeting url
-    if (meetingUrl && startTime) {
-      generateLink(true)
     }
-  }, [startTime, generateLink, meetingUrl])
+  }, [data])
 
-  return { meetingUrl, generateLink, status }
+  const status = fetching
+    ? LoadingStatus.FETCHING
+    : error
+    ? LoadingStatus.ERROR
+    : LoadingStatus.SUCCESS
+
+  return {
+    meetingUrl: meeting?.url || '',
+    meetingId: meeting?.id,
+    generateLink,
+    status,
+  }
 }
