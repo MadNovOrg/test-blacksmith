@@ -133,6 +133,22 @@ export type CanApplyPromoCodeOutput = {
   result?: Maybe<PromoCodeOutput>;
 };
 
+export enum CancelIndividualFromCourseWaitlistError {
+  CourseNotFound = 'COURSE_NOT_FOUND',
+  WaitlistNotFound = 'WAITLIST_NOT_FOUND'
+}
+
+export type CancelIndividualFromCourseWaitlistInput = {
+  courseId: Scalars['Int'];
+  waitlistId: Scalars['uuid'];
+};
+
+export type CancelIndividualFromCourseWaitlistOutput = {
+  __typename?: 'CancelIndividualFromCourseWaitlistOutput';
+  error?: Maybe<CancelIndividualFromCourseWaitlistError>;
+  success: Scalars['Boolean'];
+};
+
 export enum CancelMyselfFromCourseWaitlistError {
   CancellationSecretInvalid = 'CANCELLATION_SECRET_INVALID',
   CourseNotFound = 'COURSE_NOT_FOUND'
@@ -29063,6 +29079,8 @@ export type Mutation_Root = {
   approveCourse: ApproveCourseOutput;
   arloCallback?: Maybe<ArloCallbackOutput>;
   cancelIndividualFromCourse: Scalars['Boolean'];
+  /** Removes another user from course waitlist */
+  cancelIndividualFromCourseWaitlist?: Maybe<CancelIndividualFromCourseWaitlistOutput>;
   cancelMyselfFromCourse: Scalars['Boolean'];
   /** Removes current anonymous user from course waitlist */
   cancelMyselfFromCourseWaitlist?: Maybe<CancelMyselfFromCourseWaitlistOutput>;
@@ -30323,6 +30341,12 @@ export type Mutation_RootCancelIndividualFromCourseArgs = {
   fee: Scalars['Int'];
   profileId: Scalars['uuid'];
   reason: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootCancelIndividualFromCourseWaitlistArgs = {
+  input: CancelIndividualFromCourseWaitlistInput;
 };
 
 
@@ -50562,6 +50586,14 @@ export type InsertVenueMutationVariables = Exact<{
 
 
 export type InsertVenueMutation = { __typename?: 'mutation_root', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null };
+
+export type CancelIndividualFromCourseWaitlistMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+  waitlistId: Scalars['uuid'];
+}>;
+
+
+export type CancelIndividualFromCourseWaitlistMutation = { __typename?: 'mutation_root', cancelIndividualFromCourseWaitlist?: { __typename?: 'CancelIndividualFromCourseWaitlistOutput', success: boolean, error?: CancelIndividualFromCourseWaitlistError | null } | null };
 
 export type CancelMyselfFromCourseWaitlistMutationVariables = Exact<{
   courseId: Scalars['Int'];

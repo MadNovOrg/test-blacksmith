@@ -20,7 +20,7 @@ actions:
       handler: '{{ACTIONS_HOST}}/arlo/callback'
   - name: canApplyPromoCode
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/promocode/can-apply'
     permissions:
       - role: unverified
@@ -45,6 +45,15 @@ actions:
       handler: '{{ACTIONS_HOST}}/participant/cancel/self'
     permissions:
       - role: user
+  - name: cancelIndividualFromCourseWaitlist
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/waitlist/cancel/individual'
+    comment: Removes another user from course waitlist
+    permissions:
+      - role: sales-admin
+      - role: tt-admin
+      - role: tt-ops
   - name: cancelMyselfFromCourseWaitlist
     definition:
       kind: synchronous
@@ -107,19 +116,19 @@ actions:
     comment: Delete users
   - name: eligibleTransferCourses
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/transfer/eligible-courses'
     permissions:
       - role: user
     comment: eligibleTransferCourses
   - name: fetchPlans
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/stripe/prices/list'
     comment: Fetches membership plans
   - name: getCoursePricing
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/course/price'
     permissions:
       - role: user
@@ -127,21 +136,21 @@ actions:
     comment: getCoursePricing
   - name: getInvite
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/invite/get'
       forward_client_headers: true
     permissions:
       - role: anonymous
   - name: getOrgInvite
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/organization/invite/get'
       forward_client_headers: true
     permissions:
       - role: anonymous
   - name: getXeroInvoicesForOrders
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/xero/invoices'
     permissions:
       - role: sales-admin
@@ -164,14 +173,14 @@ actions:
       - role: user
   - name: initAuth
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/user/auth'
       forward_client_headers: true
     permissions:
       - role: anonymous
   - name: isUserSubscribedToMembership
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/stripe/subscriptions/check'
     comment: Checks whether user is subscribed to membership
   - name: joinWaitlist
@@ -217,14 +226,14 @@ actions:
     comment: Creates a membership plan
   - name: podcast
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/podcasts/single'
     permissions:
       - role: user
     comment: Podcast
   - name: podcasts
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/podcasts'
     permissions:
       - role: user
@@ -247,7 +256,7 @@ actions:
       - role: anonymous
   - name: searchTrainers
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/trainers/search'
     permissions:
       - role: sales-admin
@@ -330,13 +339,13 @@ actions:
       - role: tt-admin
   - name: xeroConnect
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/xero/setup'
     permissions:
       - role: tt-admin
   - name: xeroContactSearch
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/xero/contacts/search'
     permissions:
       - role: sales-representative
@@ -351,7 +360,7 @@ actions:
       handler: '{{ACTIONS_HOST}}/xero/disconnect'
   - name: xeroInvoicesStatus
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/xero/invoices/status'
     permissions:
       - role: sales-admin
@@ -704,8 +713,14 @@ custom_types:
         - value: NO_AUDIT_FOUND
           is_deprecated: null
           description: null
+    - name: CancelIndividualFromCourseWaitlistError
+      values:
+        - value: COURSE_NOT_FOUND
+          is_deprecated: null
+          description: null
+        - value: WAITLIST_NOT_FOUND
     - name: CancelMyselfFromCourseWaitlistError
-      values: 
+      values:
         - value: COURSE_NOT_FOUND
           is_deprecated: null
           description: null
@@ -738,9 +753,10 @@ custom_types:
     - name: NotifyCourseInput
     - name: NotifyCourseTrainerInput
     - name: JoinWaitlistInput
+    - name: CancelIndividualFromCourseWaitlistInput
+    - name: CancelMyselfFromCourseWaitlistInput
     - name: SignUpInput
     - name: ArloCallbackInput
-    - name: CancelMyselfFromCourseWaitlistInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -801,6 +817,7 @@ custom_types:
     - name: ApproveCourseOutput
     - name: SendCourseInformationOutput
     - name: JoinWaitlistOutput
+    - name: CancelIndividualFromCourseWaitlistOutput
     - name: CancelMyselfFromCourseWaitlistOutput
     - name: SignUpOutput
     - name: ArloCallbackOutput

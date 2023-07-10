@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import useSWR from 'swr'
+import useSWR, { KeyedMutator } from 'swr'
 
 import {
   GetWaitlistQuery,
@@ -14,6 +14,7 @@ export type UseWaitlistProps = {
   sort: { by: string; dir: SortOrder }
   limit?: number
   offset?: number
+  mutate?: KeyedMutator<unknown>
 }
 
 export const useWaitlist = ({
@@ -34,7 +35,7 @@ export const useWaitlist = ({
     [courseId]
   )
 
-  const { data, error } = useSWR<
+  const { data, error, mutate } = useSWR<
     GetWaitlistQuery,
     Error,
     [string, GetWaitlistQueryVariables]
@@ -46,7 +47,8 @@ export const useWaitlist = ({
       total: data?.waitlistAggregate?.aggregate?.count ?? 0,
       isLoading: getSWRLoadingStatus(data, error) === LoadingStatus.FETCHING,
       error,
+      mutate,
     }),
-    [data, error]
+    [data, error, mutate]
   )
 }

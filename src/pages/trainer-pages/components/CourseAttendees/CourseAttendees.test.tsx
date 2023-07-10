@@ -1,7 +1,7 @@
 import { getByTestId } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
-import React from 'react'
 
+import { GetWaitlistQuery } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
@@ -45,6 +45,9 @@ const emptyWaitlistResponse = {
   total: 0,
   error: undefined,
   isLoading: false,
+  mutate: function (): Promise<GetWaitlistQuery | undefined> {
+    throw new Error('Function not implemented.')
+  },
 }
 
 const emptyPendingInvitesResponse = {
@@ -395,6 +398,9 @@ describe('component: CourseAttendees', () => {
       isLoading: false,
       total: waitlist.length,
       error: undefined,
+      mutate: function (): Promise<GetWaitlistQuery | undefined> {
+        throw new Error('Function not implemented.')
+      },
     })
 
     const openCourse = buildCourse()
@@ -467,6 +473,9 @@ describe('component: CourseAttendees', () => {
       isLoading: false,
       total: 0,
       error: undefined,
+      mutate: function (): Promise<GetWaitlistQuery | undefined> {
+        throw new Error('Function not implemented.')
+      },
     })
 
     const openCourse = buildCourse()

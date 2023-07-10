@@ -28,6 +28,12 @@ type Mutation {
 }
 
 type Mutation {
+  cancelIndividualFromCourseWaitlist(
+    input: CancelIndividualFromCourseWaitlistInput!
+  ): CancelIndividualFromCourseWaitlistOutput
+}
+
+type Mutation {
   cancelMyselfFromCourseWaitlist(
     input: CancelMyselfFromCourseWaitlistInput!
   ): CancelMyselfFromCourseWaitlistOutput
@@ -370,6 +376,11 @@ enum CancelMyselfFromCourseWaitlistError {
   CANCELLATION_SECRET_INVALID
 }
 
+enum CancelIndividualFromCourseWaitlistError {
+  COURSE_NOT_FOUND
+  WAITLIST_NOT_FOUND
+}
+
 enum BildStrategy {
   PRIMARY
   SECONDARY
@@ -592,6 +603,11 @@ input SignUpInput {
 
 input ArloCallbackInput {
   url: String!
+}
+
+input CancelIndividualFromCourseWaitlistInput {
+  courseId: Int!
+  waitlistId: uuid!
 }
 
 input CancelMyselfFromCourseWaitlistInput {
@@ -965,6 +981,11 @@ type ApproveCourseOutput {
 type SendCourseInformationOutput {
   success: Boolean!
   error: SendCourseInformationError
+}
+
+type CancelIndividualFromCourseWaitlistOutput {
+  success: Boolean!
+  error: CancelIndividualFromCourseWaitlistError
 }
 
 type CancelMyselfFromCourseWaitlistOutput {

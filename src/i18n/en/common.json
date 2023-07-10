@@ -43,6 +43,8 @@
   "join-waitlist-notice": "The course you are interested in is currently full. We will notify you via email if a space becomes available.",
   "waitlist-added": "You’ve been added to the course waitlist.",
   "waitlist-not-found": "It seems like a course you're trying to join the waitlist for doesn't exist anymore.",
+  "waitlist-participant-removed": "This waitlist participant was removed.",
+  "waitlist-participant-remove-failed": "Something went wrong when removing this participant from waiting list.",
   "confirmation-email-sent": "A confirmation email has been sent to {{email}}.",
   "waitlist-cancellation-title": "Removal from waiting list",
   "waitlist-cancellation-success": "You’ve been removed from the course waiting list.",
