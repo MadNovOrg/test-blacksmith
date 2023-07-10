@@ -389,6 +389,7 @@
       "modal-subtitle-approve":"Please add your comments to the trainer below",
       "modal-subtitle-reject":"Please add your comments to the trainer below. Once a course is rejected this can not be actioned further",
       "course-rejection-warning":"Please note: once this course is submitted this course will no longer be visible within all course views.",
+      "reason-required": "Reason is required",
       "type_ADVISED_TIME_EXCEEDED": "Advised time exceeded",
       "type_OUTSIDE_NOTICE_PERIOD": "Start date is less than 4 weeks away",
       "type_LEAD_TRAINER_IN_GRACE_PERIOD": "Lead trainer certification is expired (within grace period) or expiring soon",

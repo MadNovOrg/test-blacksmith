@@ -18,6 +18,10 @@ import { bildStrategiesToRecord } from '@app/util'
 
 import { ExceptionsApprovalModalContent } from './ExceptionsApprovalModalContent'
 
+export type ExceptionsApprovalModalAction =
+  | Course_Audit_Type_Enum.Approved
+  | Course_Audit_Type_Enum.Rejected
+
 export const ExceptionsApprovalAlert: FC = () => {
   const { t } = useTranslation()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -25,11 +29,9 @@ export const ExceptionsApprovalAlert: FC = () => {
   const { acl } = useAuth()
   const { data: course } = useCourse(courseId ?? '')
   const [commentsModalOpen, setCommentsModalOpen] = useState<boolean>(false)
-  const [modalAction, setModalAction] = useState<
-    | Course_Audit_Type_Enum.Approved
-    | Course_Audit_Type_Enum.Rejected
-    | undefined
-  >(undefined)
+  const [modalAction, setModalAction] = useState<ExceptionsApprovalModalAction>(
+    Course_Audit_Type_Enum.Approved
+  )
   const [modalSubtitle, setModalSubtitle] = useState<string>('')
 
   const exceptionsApprovalPending =

@@ -1,5 +1,7 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Alert, Box, Button, TextField, useMediaQuery } from '@mui/material'
-import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'urql'
@@ -22,13 +24,13 @@ import useCourse from '@app/hooks/useCourse'
 import { MUTATION as APPROVE_COURSE_MUTATION } from '@app/queries/courses/approve-course'
 import { INSERT_COURSE_AUDIT } from '@app/queries/courses/insert-course-audit'
 import { MUTATION as SET_COURSE_STATUS_MUTATION } from '@app/queries/courses/set-course-status'
+import { yup } from '@app/schemas'
 import theme from '@app/theme'
 
+import { ExceptionsApprovalModalAction } from '..'
+
 type ExceptionsApprovalModalContentProps = {
-  action:
-    | Course_Audit_Type_Enum.Approved
-    | Course_Audit_Type_Enum.Rejected
-    | undefined
+  action: ExceptionsApprovalModalAction
   courseId: string | undefined
   closeModal: () => void
 }
@@ -41,12 +43,25 @@ export const ExceptionsApprovalModalContent: FC<
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { profile } = useAuth()
   const navigate = useNavigate()
-  const [comment, setComment] = useState<string>('')
   const { data: course, mutate } = useCourse(courseId ?? '')
   const [{ error: auditError }, insertAudit] = useMutation<
     InsertCourseAuditMutation,
     InsertCourseAuditMutationVariables
   >(INSERT_COURSE_AUDIT)
+
+  const schema = useMemo(() => {
+    return yup.object({
+      reason: yup
+        .string()
+        .required(t('pages.create-course.exceptions.reason-required')),
+    })
+  }, [t])
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ reason: string }>({ resolver: yupResolver(schema) })
 
   const addNewCourseAudit: (object: Course_Audit_Insert_Input) => void =
     useCallback(
@@ -56,62 +71,65 @@ export const ExceptionsApprovalModalContent: FC<
       [insertAudit]
     )
 
-  const handleModalAction = useCallback(async () => {
-    if (!course) return
-    const auditObject = {
-      type: action,
-      course_id: course?.id,
-      payload: { reason: comment },
-      authorized_by: profile?.id,
-    }
+  const submitHandler: SubmitHandler<yup.InferType<typeof schema>> =
+    useCallback(
+      async data => {
+        if (!course) return
+        const auditObject = {
+          type: action,
+          course_id: course?.id,
+          payload: { reason: data.reason },
+          authorized_by: profile?.id,
+        }
 
-    try {
-      if (action === Course_Audit_Type_Enum.Approved) {
-        addNewCourseAudit(auditObject)
-        await fetcher<ApproveCourseMutation, ApproveCourseMutationVariables>(
-          APPROVE_COURSE_MUTATION,
-          { courseId: course.id }
-        )
-        await mutate()
-        addSnackbarMessage('course-approval-message', {
-          label: t('pages.course-details.course-approval-message', {
-            action: action.toLocaleLowerCase() ?? 'approved',
-          }),
-        })
-      } else if (action === Course_Audit_Type_Enum.Rejected) {
-        addNewCourseAudit(auditObject)
-        await fetcher<
-          SetCourseStatusMutation,
-          SetCourseStatusMutationVariables
-        >(SET_COURSE_STATUS_MUTATION, {
-          id: course.id,
-          status: Course_Status_Enum.Declined,
-        })
-        navigate('/')
-      } else
-        console.error(
-          'Provided "action" prop is not of Course_Audit_Type_Enum type'
-        )
-    } catch (e: unknown) {
-      console.error(e)
-      closeModal()
-      addSnackbarMessage('course-approval-error', {
-        label: t('errors.generic.unknown-error-please-retry'),
-      })
-    }
-  }, [
-    course,
-    action,
-    comment,
-    profile?.id,
-    addNewCourseAudit,
-    fetcher,
-    mutate,
-    addSnackbarMessage,
-    t,
-    navigate,
-    closeModal,
-  ])
+        try {
+          if (action === Course_Audit_Type_Enum.Approved) {
+            addNewCourseAudit(auditObject)
+            await fetcher<
+              ApproveCourseMutation,
+              ApproveCourseMutationVariables
+            >(APPROVE_COURSE_MUTATION, { courseId: course.id })
+            await mutate()
+            addSnackbarMessage('course-approval-message', {
+              label: t('pages.course-details.course-approval-message', {
+                action: action.toLocaleLowerCase() ?? 'approved',
+              }),
+            })
+          } else if (action === Course_Audit_Type_Enum.Rejected) {
+            addNewCourseAudit(auditObject)
+            await fetcher<
+              SetCourseStatusMutation,
+              SetCourseStatusMutationVariables
+            >(SET_COURSE_STATUS_MUTATION, {
+              id: course.id,
+              status: Course_Status_Enum.Declined,
+            })
+            navigate('/')
+          } else
+            console.error(
+              'Provided "action" prop is not of Course_Audit_Type_Enum type'
+            )
+        } catch (e: unknown) {
+          console.error(e)
+          closeModal()
+          addSnackbarMessage('course-approval-error', {
+            label: t('errors.generic.unknown-error-please-retry'),
+          })
+        }
+      },
+      [
+        action,
+        addNewCourseAudit,
+        addSnackbarMessage,
+        closeModal,
+        course,
+        fetcher,
+        mutate,
+        navigate,
+        profile?.id,
+        t,
+      ]
+    )
 
   useEffect(() => {
     if (auditError) {
@@ -124,46 +142,51 @@ export const ExceptionsApprovalModalContent: FC<
   return (
     <>
       <Box data-testid="exceptions-approval-modal-content">
-        <Box>
+        <form noValidate onSubmit={handleSubmit(submitHandler)}>
           <TextField
+            error={!!errors.reason?.message}
             fullWidth
             variant="filled"
             label={t('common.reason')}
             required
-            value={comment}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setComment(e.target.value)
-            }
+            helperText={errors.reason?.message ?? ''}
+            {...register('reason', {
+              required: {
+                value: true,
+                message: t('pages.create-course.exceptions.reason-required'),
+              },
+            })}
           />
           {action === Course_Audit_Type_Enum.Rejected ? (
             <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
               {t('pages.create-course.exceptions.course-rejection-warning')}
             </Alert>
           ) : null}
-        </Box>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          flexDirection={isMobile ? 'column' : 'row'}
-          sx={{ mt: 4 }}
-        >
-          <Button
-            variant="text"
-            fullWidth={isMobile}
-            onClick={closeModal}
-            sx={{ px: 4 }}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            flexDirection={isMobile ? 'column' : 'row'}
+            sx={{ mt: 4 }}
           >
-            {t('common.cancel')}
-          </Button>
-          <Button
-            variant="contained"
-            fullWidth={isMobile}
-            onClick={handleModalAction}
-            sx={{ px: 4 }}
-          >
-            {t('common.submit')}
-          </Button>
-        </Box>
+            <Button
+              variant="text"
+              fullWidth={isMobile}
+              type="button"
+              onClick={closeModal}
+              sx={{ px: 4 }}
+            >
+              {t('common.cancel')}
+            </Button>
+            <Button
+              variant="contained"
+              fullWidth={isMobile}
+              type="submit"
+              sx={{ px: 4 }}
+            >
+              {t('common.submit')}
+            </Button>
+          </Box>
+        </form>
       </Box>
     </>
   )

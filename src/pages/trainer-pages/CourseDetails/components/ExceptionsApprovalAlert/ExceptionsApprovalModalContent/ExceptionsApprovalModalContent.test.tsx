@@ -92,6 +92,10 @@ describe('component: ExceptionsApprovalModalContent', () => {
   })
   it('should click the submit button and handle the Approve action', async () => {
     setup()
+    const input = screen.getByDisplayValue('') as HTMLInputElement
+    const testValue = 'TEST'
+    fireEvent.change(input, { target: { value: testValue } })
+    expect(input.value).toBe(testValue)
     await userEvent.click(screen.getByText(t('common.submit')))
     expect(fetcherMock).toHaveBeenCalledWith('approve-course-mutation', {
       courseId: course.id,
@@ -99,10 +103,21 @@ describe('component: ExceptionsApprovalModalContent', () => {
   })
   it('should click the submit button and handle the Reject action', async () => {
     setup(Course_Audit_Type_Enum.Rejected)
+    const input = screen.getByDisplayValue('') as HTMLInputElement
+    const testValue = 'TEST'
+    fireEvent.change(input, { target: { value: testValue } })
+    expect(input.value).toBe(testValue)
     await userEvent.click(screen.getByText(t('common.submit')))
     expect(fetcherMock).toHaveBeenCalledWith('set-course-status-mutation', {
       id: course.id,
       status: Course_Status_Enum.Declined,
     })
+  })
+  it('should fail if no reason is provided', async () => {
+    setup()
+    await userEvent.click(screen.getByText(t('common.submit')))
+    expect(
+      screen.getByText(t('pages.create-course.exceptions.reason-required'))
+    ).toBeInTheDocument()
   })
 })
