@@ -320,8 +320,11 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       }
 
       if (
-        activeCertificates.includes(CourseLevel.AdvancedTrainer) ||
-        activeCertificates.includes(CourseLevel.BildAdvancedTrainer)
+        activeCertificates.some(
+          c =>
+            c === CourseLevel.AdvancedTrainer ||
+            c === CourseLevel.BildAdvancedTrainer
+        )
       ) {
         return levels
       }

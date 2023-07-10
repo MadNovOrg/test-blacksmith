@@ -1,4 +1,7 @@
-import { CourseLevel, RoleName } from '@app/types'
+import { isPast } from 'date-fns'
+
+import { RoleName } from '@app/types'
+import { expiryDateWithGracePeriod } from '@app/util'
 
 import cognitoToProfile from './cognitoToProfile'
 import type { AuthState, CognitoUser } from './types'
@@ -58,6 +61,8 @@ export async function fetchUserProfile(
 
     const orgIdsPgLiteral = claims?.['x-hasura-tt-organizations'] ?? '{}'
 
+    const certificates = profile.certificates ?? []
+
     return {
       profile,
       isOrgAdmin: isOrgAdmin ?? false,
@@ -73,9 +78,15 @@ export async function fetchUserProfile(
       trainerRoles: profile.trainerRoles?.map(
         role => role.trainer_role_type.name
       ),
-      activeCertificates: (profile.certificates?.map(
-        certificate => certificate.courseLevel
-      ) ?? []) as CourseLevel[],
+      certificates,
+      activeCertificates: certificates
+        .filter(
+          c =>
+            !isPast(
+              expiryDateWithGracePeriod(c.courseLevel, new Date(c.expiryDate))
+            )
+        )
+        .map(certificate => certificate.courseLevel),
     }
   } catch (err) {
     console.error(err)

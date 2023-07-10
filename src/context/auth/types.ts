@@ -24,6 +24,10 @@ export type AuthState = {
   verified?: boolean
   loggedOut?: boolean
   trainerRoles?: string[]
+  certificates?: {
+    courseLevel: CourseLevel
+    expiryDate: string
+  }[]
   activeCertificates?: CourseLevel[]
 }
 

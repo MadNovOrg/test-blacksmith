@@ -1,5 +1,6 @@
 import { Auth } from 'aws-amplify'
 import {
+  addMonths,
   differenceInCalendarDays,
   differenceInDays,
   differenceInHours,
@@ -632,4 +633,22 @@ export function formatCurrency(
   t: TFunction
 ) {
   return t('currency', { amount, currency: currency })
+}
+
+export const GRACE_PERIOD_PER_LEVEL = {
+  [CourseLevel.Level_1]: 0,
+  [CourseLevel.Level_2]: 0,
+  [CourseLevel.Advanced]: 0,
+  [CourseLevel.BildRegular]: 0,
+  [CourseLevel.IntermediateTrainer]: 3,
+  [CourseLevel.AdvancedTrainer]: 1,
+  [CourseLevel.BildIntermediateTrainer]: 0,
+  [CourseLevel.BildAdvancedTrainer]: 0,
+}
+
+export function expiryDateWithGracePeriod(
+  level: CourseLevel,
+  expiryDate: Date
+) {
+  return addMonths(expiryDate, GRACE_PERIOD_PER_LEVEL[level])
 }

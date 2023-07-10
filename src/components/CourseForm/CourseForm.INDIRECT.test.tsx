@@ -51,7 +51,9 @@ describe('component: CourseForm - INDIRECT', () => {
   it('restricts INDIRECT+ADVANCED to be F2F', async () => {
     await waitFor(() =>
       render(<CourseForm type={type} />, {
-        auth: { activeCertificates: [CourseLevel.AdvancedTrainer] },
+        auth: {
+          activeCertificates: [CourseLevel.AdvancedTrainer],
+        },
       })
     )
 
@@ -130,7 +132,9 @@ describe('component: CourseForm - INDIRECT', () => {
   it('restricts INDIRECT+ADVANCED+F2F to Non-blended', async () => {
     await waitFor(() =>
       render(<CourseForm type={type} />, {
-        auth: { activeCertificates: [CourseLevel.AdvancedTrainer] },
+        auth: {
+          activeCertificates: [CourseLevel.AdvancedTrainer],
+        },
       })
     )
 

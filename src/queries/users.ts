@@ -24,7 +24,10 @@ export const getUserProfile = gql`
           name
         }
       }
-      certificates(where: { status: { _eq: "ACTIVE" } }) {
+      certificates(
+        where: { status: { _nin: ["ON_HOLD", "REVOKED", "EXPIRED"] } }
+      ) {
+        expiryDate
         courseLevel
       }
     }

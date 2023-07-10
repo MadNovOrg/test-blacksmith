@@ -93,7 +93,12 @@ describe('component: CourseLevelDropdown', () => {
       {
         auth: {
           activeRole: RoleName.TRAINER,
-          activeCertificates: [CourseLevel.IntermediateTrainer],
+          certificates: [
+            {
+              expiryDate: new Date().toISOString(),
+              courseLevel: CourseLevel.IntermediateTrainer,
+            },
+          ],
         },
       }
     )
