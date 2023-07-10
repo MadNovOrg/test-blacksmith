@@ -6,7 +6,6 @@ import { users } from '@qa/data/users'
 import { ForgotPasswordPage } from '@qa/pages/auth/ForgotPasswordPage'
 import { LoginPage } from '@qa/pages/auth/LoginPage'
 import { ResetPasswordPage } from '@qa/pages/auth/ResetPasswordPage'
-import { contactYouText } from '@qa/pages/contact/texts'
 import { EmailPage } from '@qa/pages/EmailPage'
 
 const test = base.extend<{ resetPasswordPage: ResetPasswordPage }>({
@@ -46,10 +45,4 @@ test('reset password @smoke', async ({ page }) => {
   )
   const homePage = await loginPage.logIn(users.resetPassword.email, newPassword)
   await homePage.userMenu.checkIsVisible()
-})
-
-test('resend otp and contact us link @smoke', async ({ resetPasswordPage }) => {
-  await resetPasswordPage.clickResendCodeLink()
-  const contactUsPage = await resetPasswordPage.clickContactUsLink()
-  await contactUsPage.checkText(contactYouText('abc@def.ghi'))
 })

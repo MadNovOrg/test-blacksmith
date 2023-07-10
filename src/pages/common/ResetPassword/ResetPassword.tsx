@@ -2,21 +2,20 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Box,
-  TextField,
-  Typography,
+  Button,
   FormHelperText,
   InputLabel,
-  Link,
-  Button,
+  TextField,
+  Typography,
 } from '@mui/material'
 import { Auth } from 'aws-amplify'
-import React, { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import {
   createSearchParams,
-  useSearchParams,
   useNavigate,
+  useSearchParams,
 } from 'react-router-dom'
 import CodeInput from 'react18-input-otp'
 import * as yup from 'yup'
@@ -47,11 +46,9 @@ export const ResetPasswordPage = () => {
 
   const [resetError, setResetError] = useState<string>()
   const [isLoading, setIsLoading] = useState(false)
-  const [resent, setResent] = useState(false)
   const [showPasswordReqs, setShowPasswordReqs] = useState(false)
 
   const handleResend = async () => {
-    setResent(true)
     await Auth.forgotPassword(email)
   }
 
@@ -136,39 +133,23 @@ export const ResetPasswordPage = () => {
 
       <Box mt={2} width={400} textAlign="center">
         <Typography variant="body2" gutterBottom>
-          {t('pages.reset-password.title')}
+          {t('pages.reset-password.title', { email })}
         </Typography>
 
-        {!resent ? (
-          <Typography
-            variant="body2"
+        <Typography variant="body2">
+          {t('pages.reset-password.not-recieved-email')}
+          <Button
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: 'inline',
             }}
+            variant="text"
+            size="small"
+            onClick={handleResend}
+            data-testid="resend-code"
           >
-            {t('pages.reset-password.not-recieved-email')}
-            <Button
-              variant="text"
-              size="small"
-              onClick={handleResend}
-              data-testid="resend-code"
-            >
-              {t('pages.reset-password.resend-code')}
-            </Button>
-          </Typography>
-        ) : (
-          <Typography variant="body2">
-            {t('pages.reset-password.not-recieved-email')}&nbsp;
-            <Link
-              href={`/contacted-confirmation?${createSearchParams({ email })}`}
-              data-testid="contact-us-link"
-            >
-              {t('pages.reset-password.please-contact')}
-            </Link>
-          </Typography>
-        )}
+            {t('pages.reset-password.resend-code')}
+          </Button>
+        </Typography>
       </Box>
 
       <Box

@@ -20,7 +20,10 @@ yup.addMethod(yup.string, 'phoneNumber', function (t: TFunction) {
 
 const schemas = {
   email: (t: TFunction) => {
-    const email = yup.string().email(t('validation-errors.email-invalid'))
+    const email = yup
+      .string()
+      .transform(currentValue => currentValue.trim())
+      .email(t('validation-errors.email-invalid'))
     return email
   },
 

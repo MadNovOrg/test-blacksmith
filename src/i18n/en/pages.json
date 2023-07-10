@@ -828,8 +828,8 @@
     "GBP": "GBP - Pound sterling"
   },
   "reset-password": {
-    "not-recieved-email": "If you still haven’t received it, you can",
-    "resend-code": "resend the code here",
+    "not-recieved-email": "If you did not receive an email with the code, please",
+    "resend-code": "click here to resend",
     "changing-password-text": "Changing password for",
     "new-password-label": "New Password",
     "confirm-new-password-label": "Confirm New Password",
@@ -844,7 +844,7 @@
     "verification-code-six-digits": "Verification code must be six digits",
     "password-placeholder": "Please enter your password",
     "enter-passcode": "Enter Passcode",
-    "title": "A six-digit verification code has been sent to your chosen method of 2fa, please enter it below, along with your new password",
+    "title": "A six-digit verification code has been sent to {{email}}. Please enter the code below, along with your new password.",
     "auth-errors": {
       "NotAuthorizedException": "Incorrect username or password",
       "InvalidPasswordException": "Password does not conform to policy",
