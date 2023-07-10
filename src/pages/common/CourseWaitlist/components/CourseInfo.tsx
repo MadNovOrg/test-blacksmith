@@ -44,6 +44,11 @@ export const CourseInfo: React.FC<React.PropsWithChildren<Props>> = ({
     return null
   }
 
+  const courseVenue = formatCourseVenue(
+    course.deliveryType as unknown as CourseDeliveryType,
+    course.schedule.at(0)?.venue || undefined
+  )
+
   return (
     <>
       <Typography variant="body1" fontWeight={600} pb={2}>
@@ -83,14 +88,10 @@ export const CourseInfo: React.FC<React.PropsWithChildren<Props>> = ({
               <StyledListIcon>
                 <PinDropIcon />
               </StyledListIcon>
-              {course.schedule[0].venue?.name && (
+              {course.schedule.at(0) && (
                 <ListItemText>
-                  {' '}
                   <Typography component="span" variant="body2" fontWeight={600}>
-                    {formatCourseVenue(
-                      course.deliveryType as unknown as CourseDeliveryType,
-                      course.schedule[0].venue
-                    )}
+                    {courseVenue}
                   </Typography>
                 </ListItemText>
               )}
