@@ -235,10 +235,24 @@ export const AttendeeReplacementTable: React.FC<
                         <TableCell>
                           {log.payload?.inviteeFirstName &&
                           log.payload?.inviteeLastName ? (
-                            <Typography>
-                              {log.payload?.inviteeFirstName}{' '}
-                              {log.payload?.inviteeLastName}
-                            </Typography>
+                            <>
+                              {participant?.id ? (
+                                <Link
+                                  key={participant?.id}
+                                  href={`/profile/${participant?.id}`}
+                                >
+                                  <Typography>
+                                    {log.payload?.inviteeFirstName}{' '}
+                                    {log.payload?.inviteeLastName}
+                                  </Typography>
+                                </Link>
+                              ) : (
+                                <Typography>
+                                  {log.payload?.inviteeFirstName}{' '}
+                                  {log.payload?.inviteeLastName}
+                                </Typography>
+                              )}
+                            </>
                           ) : null}
                         </TableCell>
                         <TableCell>
@@ -250,16 +264,7 @@ export const AttendeeReplacementTable: React.FC<
                                 : 'body1'
                             }
                           >
-                            {participant?.id ? (
-                              <Link
-                                key={participant?.id}
-                                href={`/profile/${participant?.id}`}
-                              >
-                                {log.newAttendeeEmail}
-                              </Link>
-                            ) : (
-                              log.newAttendeeEmail
-                            )}
+                            {log.newAttendeeEmail}
                           </Typography>
                         </TableCell>
                         <TableCell>
