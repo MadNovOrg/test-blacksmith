@@ -28,7 +28,7 @@ export default function useCourse(courseId: string): {
     {
       id: courseId,
       withOrders:
-        acl.canInviteAttendees(CourseType.OPEN) || acl.canViewOrders(),
+        acl.canInviteAttendees(CourseType.OPEN) || acl.canViewCourseOrder(),
     },
   ])
 

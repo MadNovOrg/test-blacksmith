@@ -408,6 +408,16 @@ select_permissions:
       filter:
         profile_id:
           _eq: X-Hasura-User-Id
+  - role: trainer
+    permission:
+      columns:
+        - id
+        - course_id
+        - xero_invoice_number
+        - source
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
   - role: user
     permission:
       columns:
@@ -436,8 +446,39 @@ select_permissions:
         - vat
         - xero_invoice_number
       filter:
-        profile_id:
-          _eq: X-Hasura-User-Id
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - organization:
+              members:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - is_admin:
+                      _eq: true
+          - course:
+              booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+  - role: booking-contact
+    permission:
+      columns:
+        - id
+        - course_id
+        - xero_invoice_number
+        - source
+      filter:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
 update_permissions:
   - role: ld
     permission:

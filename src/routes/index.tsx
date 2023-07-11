@@ -37,7 +37,7 @@ import { RoleName } from '@app/types'
 const ProfileRoutes = React.lazy(() => import('./profile'))
 const TrainerRoutes = React.lazy(() => import('./trainer-routes'))
 const UserRoutes = React.lazy(() => import('./user-routes'))
-const TTRoutes = React.lazy(() => import('./tt-routes'))
+const TTAdminRoutes = React.lazy(() => import('./tt-admin-routes'))
 const UnverifiedRoutes = React.lazy(() => import('./unverified-routes'))
 const SalesAdminRoutes = React.lazy(() => import('./sales-admin-routes'))
 const SalesRepresentativeRoute = React.lazy(
@@ -63,9 +63,9 @@ const roleRoutesMap: Record<RoleName, React.ElementType> = {
   [RoleName.TRAINER]: TrainerRoutes,
   [RoleName.BOOKING_CONTACT]: UserRoutes,
   [RoleName.USER]: UserRoutes,
-  [RoleName.LD]: TTRoutes,
-  [RoleName.TT_OPS]: TTRoutes,
-  [RoleName.TT_ADMIN]: TTRoutes,
+  [RoleName.LD]: TTAdminRoutes,
+  [RoleName.TT_OPS]: TTAdminRoutes,
+  [RoleName.TT_ADMIN]: TTAdminRoutes,
   [RoleName.UNVERIFIED]: UnverifiedRoutes,
   [RoleName.ANONYMOUS]: UnverifiedRoutes,
 } as const

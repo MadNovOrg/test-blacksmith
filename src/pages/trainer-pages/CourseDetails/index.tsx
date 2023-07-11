@@ -8,6 +8,7 @@ import {
   Container,
   Link,
   Stack,
+  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material'
@@ -71,8 +72,8 @@ export const CourseDetails = () => {
     mutate,
   } = useCourse(courseId ?? '')
 
-  const isCourseClosed = course?.type === CourseType.CLOSED
-  const isCourseIndirectBlended =
+  const isCourseTypeClosed = course?.type === CourseType.CLOSED
+  const isCourseTypeIndirectBlended =
     course?.type === CourseType.INDIRECT && course?.go1Integration
 
   const courseHasEnded = course && courseEnded(course)
@@ -99,9 +100,27 @@ export const CourseDetails = () => {
 
   const linkedOrderItem = useMemo(() => course?.orders?.[0], [course])
   const canViewOrderItem = useMemo(
-    () => linkedOrderItem && (isCourseClosed || isCourseIndirectBlended),
-    [linkedOrderItem, isCourseClosed, isCourseIndirectBlended]
+    () =>
+      linkedOrderItem && (isCourseTypeClosed || isCourseTypeIndirectBlended),
+    [linkedOrderItem, isCourseTypeClosed, isCourseTypeIndirectBlended]
   )
+
+  /**
+   * TTHP-1410
+   *
+   * @description Ugly, nasty solution, but there is no other way without
+   * completely refactoring every piece of routing work starting with `routes/index.ts`
+   */
+  const canOnlyViewOrderItemAsText = useMemo(() => {
+    if (acl.isInternalUser()) {
+      return false
+    }
+
+    return (
+      (isCourseTypeClosed && (acl.isOrgAdmin() || acl.isBookingContact())) ||
+      (isCourseTypeIndirectBlended && (acl.isOrgAdmin() || acl.isTrainer()))
+    )
+  }, [acl, isCourseTypeClosed, isCourseTypeIndirectBlended])
 
   const onRefreshCourse = useCallback(async () => {
     await mutate()
@@ -170,13 +189,23 @@ export const CourseDetails = () => {
                           i18nKey="common.order-item"
                           defaults="Order: <0>{{invoiceNumber}}</0>"
                           components={[
-                            <Link
-                              href={`/orders/${linkedOrderItem?.id}`}
-                              data-testid="order-item-link"
-                              key="order-item-link"
-                              color="Highlight"
-                              fontWeight="600"
-                            />,
+                            canOnlyViewOrderItemAsText ? (
+                              <Typography
+                                data-testid="order-item-text"
+                                key="order-item-text"
+                                display="inline-flex"
+                                fontWeight="600"
+                                fontSize="1rem"
+                              />
+                            ) : (
+                              <Link
+                                href={`/orders/${linkedOrderItem?.id}`}
+                                data-testid="order-item-link"
+                                key="order-item-link"
+                                color="Highlight"
+                                fontWeight="600"
+                              />
+                            ),
                           ]}
                           values={{
                             invoiceNumber: linkedOrderItem?.xeroInvoiceNumber,

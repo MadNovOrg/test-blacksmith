@@ -25,10 +25,7 @@ import { TrainerExpenses } from '@app/pages/CreateCourse/components/TrainerExpen
 import { EditCourse } from '@app/pages/EditCourse'
 import { CourseBuilderCommon } from '@app/pages/trainer-pages/CourseBuilderCommon'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
-import {
-  CourseDetails as TrainerCourseDetails,
-  CourseDetails,
-} from '@app/pages/trainer-pages/CourseDetails'
+import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
 import { CourseGradingDetails } from '@app/pages/trainer-pages/CourseGradingDetails'
@@ -85,7 +82,7 @@ const TTAdminRoutes = () => {
 
         <Route path=":id">
           <Route path="modules" element={<CourseBuilderCommon />} />
-          <Route path="details" element={<CourseDetails />} />
+          <Route path="details" element={<TrainerCourseDetails />} />
           <Route path="grading" element={<CourseGrading />} />
           <Route
             path="grading/:participantId"

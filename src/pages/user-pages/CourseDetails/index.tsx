@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/system'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
 
@@ -72,6 +72,7 @@ export const CourseDetails = () => {
   const alertType = searchParams.get('success') as keyof typeof successAlerts
   const alertMessage = alertType ? successAlerts[alertType] : null
   const courseId = params.id as string
+  const canViewOrderItem = acl.isBookingContact() || acl.isOrgAdmin()
 
   const [pollCertificateCounter, setPollCertificateCounter] = useState(10)
 
@@ -83,7 +84,7 @@ export const CourseDetails = () => {
     },
     Error,
     [string, GetCourseParamsType]
-  >([GET_COURSE_QUERY, { id: courseId }])
+  >([GET_COURSE_QUERY, { id: courseId, withOrders: canViewOrderItem }])
   const course = courseData?.course
   const courseLoadingStatus = getSWRLoadingStatus(courseData, courseError)
 
@@ -197,6 +198,26 @@ export const CourseDetails = () => {
                   label={t('pages.course-participants.back-button')}
                 />
               ),
+              OrderItem: canViewOrderItem
+                ? () => (
+                    <Trans
+                      i18nKey="common.order-item"
+                      defaults="Order: <0>{{invoiceNumber}}</0>"
+                      components={[
+                        <Typography
+                          data-testid="order-item-text"
+                          key="order-item-text"
+                          display="inline-flex"
+                          fontWeight="600"
+                          fontSize="1rem"
+                        />,
+                      ]}
+                      values={{
+                        invoiceNumber: course?.orders?.[0].xeroInvoiceNumber,
+                      }}
+                    />
+                  )
+                : undefined,
             }}
           />
 

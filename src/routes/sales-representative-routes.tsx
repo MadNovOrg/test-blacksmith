@@ -72,12 +72,6 @@ const EditCourse = React.lazy(() =>
   }))
 )
 
-const CourseDetails = React.lazy(() =>
-  import('@app/pages/trainer-pages/CourseDetails').then(module => ({
-    default: module.CourseDetails,
-  }))
-)
-
 const MyCourses = React.lazy(() =>
   import('@app/pages/trainer-pages/MyCourses').then(module => ({
     default: module.TrainerCourses,
@@ -123,7 +117,7 @@ const SalesRepresentativeRoute = () => {
 
         <Route path=":id">
           <Route index element={<Navigate replace to="details" />} />
-          <Route path="details" element={<CourseDetails />} />
+          <Route path="details" element={<TrainerCourseDetails />} />
           <Route
             path="grading/:participantId"
             element={<ParticipantGrading />}

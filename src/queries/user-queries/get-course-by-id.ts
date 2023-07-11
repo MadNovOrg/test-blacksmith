@@ -7,13 +7,13 @@ import { COURSE_SCHEDULE, ORGANIZATION, VENUE } from '../fragments'
 // TODO: can't share types as user queries select different columns
 export type ResponseType = { course: Course }
 
-export type ParamsType = { id: string }
+export type ParamsType = { id: string; withOrders?: boolean }
 
 export const QUERY = gql`
   ${COURSE_SCHEDULE}
   ${VENUE}
   ${ORGANIZATION}
-  query GetUserCourseById($id: Int!) {
+  query GetUserCourseById($id: Int!, $withOrders: Boolean = false) {
     course: course_by_pk(id: $id) {
       id
       name
@@ -66,6 +66,11 @@ export const QUERY = gql`
       }
       bookingContact {
         id
+      }
+      orders @include(if: $withOrders) {
+        id
+        xeroInvoiceNumber
+        source
       }
     }
   }
