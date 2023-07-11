@@ -416,6 +416,9 @@ export const CourseBookingDetails: React.FC<
   const courseVenue = course.schedule[0].venue
   const courseLocation = [courseVenue?.name, courseVenue?.city].join(', ')
 
+  const showRegistrantSuggestions =
+    values.orgId && (acl.isAdmin() || acl.isOrgAdmin(values.orgId))
+
   return (
     <FormProvider {...methods}>
       <Box
@@ -783,6 +786,7 @@ export const CourseBookingDetails: React.FC<
                     <UserSelector
                       onChange={profile => handleEmailSelector(profile, index)}
                       onEmailChange={email => handleEmailChange(email, index)}
+                      disableSuggestions={!showRegistrantSuggestions}
                       textFieldProps={{ variant: 'filled' }}
                       error={
                         emailDuplicated

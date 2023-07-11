@@ -37,6 +37,7 @@ export type UserSelectorProps = {
   sx?: SxProps
   value?: string
   required?: boolean
+  disableSuggestions?: boolean
 }
 
 export const UserSelector: React.FC<
@@ -51,6 +52,7 @@ export const UserSelector: React.FC<
   disabled = false,
   value,
   required,
+  disableSuggestions,
   ...props
 }) {
   const { t } = useTranslation()
@@ -88,7 +90,13 @@ export const UserSelector: React.FC<
     async (event: React.SyntheticEvent, value: string, reason: string) => {
       setQ(value)
       setOptions([])
-      if (reason === 'input' && value && value.length > 2 && organisationId) {
+      if (
+        reason === 'input' &&
+        value &&
+        value.length > 2 &&
+        organisationId &&
+        !disableSuggestions
+      ) {
         setLoading(true)
         debouncedQuery(value)
       }
@@ -96,7 +104,7 @@ export const UserSelector: React.FC<
         onEmailChange(value)
       }
     },
-    [debouncedQuery, onEmailChange, organisationId]
+    [debouncedQuery, disableSuggestions, onEmailChange, organisationId]
   )
 
   const getOptionLabel = (option: Member) => option.profile.email ?? ''
@@ -126,7 +134,7 @@ export const UserSelector: React.FC<
   return (
     <>
       <Autocomplete
-        open={open}
+        open={open && !disableSuggestions}
         onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
         data-testid="user-selector"
@@ -158,7 +166,7 @@ export const UserSelector: React.FC<
                   {loading ? (
                     <CircularProgress color="inherit" size={20} />
                   ) : null}
-                  {params.InputProps.endAdornment}
+                  {disableSuggestions ? null : params.InputProps.endAdornment}
                 </React.Fragment>
               ),
             }}

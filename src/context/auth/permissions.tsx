@@ -35,7 +35,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     isLD: () => activeRole === RoleName.LD,
 
-    isOrgAdmin: () => auth.isOrgAdmin,
+    isOrgAdmin: (orgId?: string) =>
+      auth.isOrgAdmin && (orgId ? managedOrgIds.includes(orgId) : true),
 
     isBookingContact: () => allowedRoles?.has(RoleName.BOOKING_CONTACT),
 
