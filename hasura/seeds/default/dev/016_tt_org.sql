@@ -3,15 +3,15 @@ VALUES ('a24397aa-b059-46b9-a728-955580823ce4', 'Team Teach',
         '{"city": "London", "line1": "Second Floor, Longbow House", "line2": "20 Chiswell Street", "country": "United Kingdom", "postCode": "EC1Y 4TW"}',
         'NOT_APPLICABLE', '-');
 
-INSERT INTO public.profile (id, _given_name, _family_name, _email) VALUES
-('467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 'TeamTeach', 'Org-Admin', 'tt.org.adm@teamteach.testinator.com'),
-('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'TeamTeach', 'Advanced-Trainer', 'tt.adv.trainer@teamteach.testinator.com'),
-('749791ef-e4c4-4a5f-881a-461e4724138d', 'TeamTeach', 'Intermediate-Trainer', 'tt.int.trainer@teamteach.testinator.com'),
-('6ea4e91b-9856-4533-9544-949caba236fb', 'TeamTeach', 'Exp-Adv-Trainer', 'tt.expired.adv.trainer@teamteach.testinator.com'),
-('30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', 'TeamTeach', 'Exp-Int-Trainer', 'tt.expired.int.trainer@teamteach.testinator.com'),
-('88072bb2-10e0-4417-b9ce-ec05265b8b56', 'TeamTeach', 'Principal-Trainer', 'tt.principal.trainer@teamteach.testinator.com'),
-('dccd780a-9745-4972-a43e-95ec3ef361df', 'TeamTeach', 'Senior-Trainer', 'tt.senior.trainer@teamteach.testinator.com'),
-('6407ca25-d1d2-4a3d-863a-4b2a0a56c0e4', 'TeamTeach', 'Booking-Contact', 'tt.booking@teamteach.testinator.com');
+INSERT INTO public.profile (id, _given_name, _family_name, _email, _phone) VALUES
+('467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 'TeamTeach', 'Org-Admin', 'tt.org.adm@teamteach.testinator.com', '+44 55 5555 5555'),
+('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'TeamTeach', 'Advanced-Trainer', 'tt.adv.trainer@teamteach.testinator.com', '+44 55 5555 5555'),
+('749791ef-e4c4-4a5f-881a-461e4724138d', 'TeamTeach', 'Intermediate-Trainer', 'tt.int.trainer@teamteach.testinator.com', '+44 55 5555 5555'),
+('6ea4e91b-9856-4533-9544-949caba236fb', 'TeamTeach', 'Exp-Adv-Trainer', 'tt.expired.adv.trainer@teamteach.testinator.com', '+44 55 5555 5555'),
+('30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', 'TeamTeach', 'Exp-Int-Trainer', 'tt.expired.int.trainer@teamteach.testinator.com', '+44 55 5555 5555'),
+('88072bb2-10e0-4417-b9ce-ec05265b8b56', 'TeamTeach', 'Principal-Trainer', 'tt.principal.trainer@teamteach.testinator.com', '+44 55 5555 5555'),
+('dccd780a-9745-4972-a43e-95ec3ef361df', 'TeamTeach', 'Senior-Trainer', 'tt.senior.trainer@teamteach.testinator.com', '+44 55 5555 5555'),
+('6407ca25-d1d2-4a3d-863a-4b2a0a56c0e4', 'TeamTeach', 'Booking-Contact', 'tt.booking@teamteach.testinator.com', '+44 55 5555 5555');
 
 INSERT INTO public.identity (profile_id, provider_id, type) VALUES
 ('467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 'c8768f2f-6c9b-40c6-973a-450ecc454162', 'cognito'),

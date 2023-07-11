@@ -1,19 +1,19 @@
-INSERT INTO profile (id, _given_name, _family_name, _email) VALUES
-('5bc30260-04fb-41a4-bd29-07c5f433d904', 'Bild', 'Intermediate', 'bild.intermediate@teamteach.testinator.com'),
-('9b236919-918d-45ad-84e4-fb063c1938f0', 'Bild 2', 'Intermediate', 'bild.intermediate2@teamteach.testinator.com'),
-('082d778c-7b78-4cd8-ac24-ec78c0e8b4ed', 'Bild 3', 'Intermediate', 'bild.intermediate3@teamteach.testinator.com'),
+INSERT INTO profile (id, _given_name, _family_name, _email, _phone) VALUES
+('5bc30260-04fb-41a4-bd29-07c5f433d904', 'Bild', 'Intermediate', 'bild.intermediate@teamteach.testinator.com', '+44 55 5555 5555'),
+('9b236919-918d-45ad-84e4-fb063c1938f0', 'Bild 2', 'Intermediate', 'bild.intermediate2@teamteach.testinator.com', '+44 55 5555 5555'),
+('082d778c-7b78-4cd8-ac24-ec78c0e8b4ed', 'Bild 3', 'Intermediate', 'bild.intermediate3@teamteach.testinator.com', '+44 55 5555 5555'),
 
-('1b37b4d3-0dcc-4f17-96d5-bc27c029010f', 'Bild', 'Advanced', 'bild.advanced@teamteach.testinator.com'),
-('00d14fc3-7fa6-4d52-9ae4-f3bcb26baade', 'Bild 2', 'Advanced', 'bild.advanced2@teamteach.testinator.com'),
-('98920ae3-ab16-424f-a0cd-302136c7b413', 'Bild 3', 'Advanced', 'bild.advanced3@teamteach.testinator.com'),
+('1b37b4d3-0dcc-4f17-96d5-bc27c029010f', 'Bild', 'Advanced', 'bild.advanced@teamteach.testinator.com', '+44 55 5555 5555'),
+('00d14fc3-7fa6-4d52-9ae4-f3bcb26baade', 'Bild 2', 'Advanced', 'bild.advanced2@teamteach.testinator.com', '+44 55 5555 5555'),
+('98920ae3-ab16-424f-a0cd-302136c7b413', 'Bild 3', 'Advanced', 'bild.advanced3@teamteach.testinator.com', '+44 55 5555 5555'),
 
-('2be41d95-40ee-49d5-810c-fae16135cccc', 'Bild', 'Senior', 'bild.senior@teamteach.testinator.com'),
-('d1c5fa19-30da-4512-88f6-dc9ef6a26958', 'Bild 2', 'Senior', 'bild.senior2@teamteach.testinator.com'),
-('4c6194ad-6dd3-461e-b4da-d3562b1007d1', 'Bild 3', 'Senior', 'bild.senior3@teamteach.testinator.com'),
+('2be41d95-40ee-49d5-810c-fae16135cccc', 'Bild', 'Senior', 'bild.senior@teamteach.testinator.com', '+44 55 5555 5555'),
+('d1c5fa19-30da-4512-88f6-dc9ef6a26958', 'Bild 2', 'Senior', 'bild.senior2@teamteach.testinator.com', '+44 55 5555 5555'),
+('4c6194ad-6dd3-461e-b4da-d3562b1007d1', 'Bild 3', 'Senior', 'bild.senior3@teamteach.testinator.com', '+44 55 5555 5555'),
 
-('2c4b16db-bfba-4a21-a092-55ef9010ca2f', 'Bild', 'Certified', 'bild.certified@teamteach.testinator.com'),
-('c15a4b34-bb98-4096-ae2e-ea280fb14e05', 'Bild 2', 'Certified', 'bild.certified2@teamteach.testinator.com'),
-('729e3ed4-f86e-41a7-9e29-c6387b9fbaa6', 'Bild 3', 'Certified', 'bild.certified3@teamteach.testinator.com');
+('2c4b16db-bfba-4a21-a092-55ef9010ca2f', 'Bild', 'Certified', 'bild.certified@teamteach.testinator.com', '+44 55 5555 5555'),
+('c15a4b34-bb98-4096-ae2e-ea280fb14e05', 'Bild 2', 'Certified', 'bild.certified2@teamteach.testinator.com', '+44 55 5555 5555'),
+('729e3ed4-f86e-41a7-9e29-c6387b9fbaa6', 'Bild 3', 'Certified', 'bild.certified3@teamteach.testinator.com', '+44 55 5555 5555');
 
 INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('f877d001-d2ff-49d5-99c9-5be70d8cea6f', '5bc30260-04fb-41a4-bd29-07c5f433d904', 'cognito'), -- bild.intermediate@teamteach.testinator.com
