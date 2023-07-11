@@ -117,7 +117,12 @@ function LoggedInRoutes() {
   const [showGettingStartedModal, setShowGettingStartedModal] = useState(false) // initial state should be firstTimeLogin || longTimeSinceLastLogin
 
   useEffect(() => {
-    if (!profile?.givenName || !profile.familyName) {
+    if (
+      !profile?.givenName ||
+      !profile.familyName ||
+      !profile.phone ||
+      !profile.dob
+    ) {
       navigate('onboarding')
     }
   }, [profile, navigate])

@@ -20,8 +20,8 @@ import {
   TableHead,
   TableRow,
   Typography,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import { formatDistanceToNow, isPast } from 'date-fns'
 import React, { useState } from 'react'
@@ -309,7 +309,11 @@ export const ViewProfilePage: React.FC<
                       <DetailsRow
                         data-testid="profile-dob"
                         label={t('dob')}
-                        value={t('dates.default', { date: profile.dob })}
+                        value={
+                          profile.dob
+                            ? t('dates.default', { date: profile.dob })
+                            : ''
+                        }
                       />
                       <DetailsRow
                         data-testid="profile-job-title"

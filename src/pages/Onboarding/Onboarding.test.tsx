@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import { Client, CombinedError, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
+import { AuthContextType } from '@app/context/auth/types'
 import {
   UpdateProfileMutation,
   UpdateProfileMutationVariables,
@@ -16,8 +17,11 @@ import {
   VALID_PHONE_NUMBER,
   waitFor,
 } from '@test/index'
+import { profile } from '@test/providers'
 
 import { Onboarding } from '.'
+
+const defaultProfile = profile as NonNullable<AuthContextType['profile']>
 
 describe('page: Onboarding', () => {
   it('validates form data', async () => {
@@ -32,6 +36,11 @@ describe('page: Onboarding', () => {
       {},
       { initialEntries: ['/'] }
     )
+
+    await userEvent.clear(screen.getByLabelText(/first name/i))
+    await userEvent.clear(screen.getByLabelText(/surname/i))
+    await userEvent.clear(screen.getByLabelText(/phone/i))
+    await userEvent.clear(screen.getByLabelText(/date of birth/i))
 
     await userEvent.click(screen.getByText(/update/i))
 
@@ -83,9 +92,29 @@ describe('page: Onboarding', () => {
     })
   })
 
+  it('prefills first and last name from profile', async () => {
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Onboarding />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
+    )
+    await waitFor(() => {
+      expect(screen.getByLabelText(/first name/i)).toHaveValue(
+        defaultProfile.givenName
+      )
+      expect(screen.getByLabelText(/surname/i)).toHaveValue(
+        defaultProfile.familyName
+      )
+    })
+  })
+
   it('updates profile and redirects on success', async () => {
-    const firstName = 'John'
-    const lastName = 'Doe'
     const phone = VALID_PHONE_NUMBER
     const profileId = chance.guid()
 
@@ -99,8 +128,8 @@ describe('page: Onboarding', () => {
       }) => {
         const success = Boolean(
           variables.input.profileId === profileId &&
-            variables.input.givenName === firstName &&
-            variables.input.familyName === lastName &&
+            variables.input.givenName === defaultProfile.givenName &&
+            variables.input.familyName === defaultProfile.familyName &&
             variables.input.phone
         )
 
@@ -128,8 +157,15 @@ describe('page: Onboarding', () => {
       { initialEntries: ['/onboarding'] }
     )
 
-    await userEvent.type(screen.getByLabelText(/first name/i), firstName)
-    await userEvent.type(screen.getByLabelText(/surname/i), lastName)
+    await waitFor(() => {
+      expect(screen.getByLabelText(/first name/i)).toHaveValue(
+        defaultProfile.givenName
+      )
+      expect(screen.getByLabelText(/surname/i)).toHaveValue(
+        defaultProfile.familyName
+      )
+    })
+
     await userEvent.type(screen.getByLabelText(/phone/i), phone)
     await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
     await userEvent.click(screen.getByLabelText(/i accept/i))

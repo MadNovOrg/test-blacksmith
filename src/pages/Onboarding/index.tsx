@@ -51,6 +51,10 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { register, handleSubmit, formState, watch, setValue, control } =
     useForm<InferType<typeof schema>>({
       resolver: yupResolver(schema),
+      defaultValues: {
+        givenName: profile?.givenName,
+        familyName: profile?.familyName,
+      },
     })
 
   const [{ data: updateResult, fetching, error }, updateProfile] = useMutation<
@@ -116,7 +120,6 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               helperText={errors.givenName?.message}
               {...register('givenName')}
               inputProps={{ 'data-testid': 'input-first-name' }}
-              autoFocus
               fullWidth
               required
             />
@@ -148,6 +151,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
             onChange={p =>
               setValue('phone', p as string, { shouldValidate: true })
             }
+            autoFocus
             fullWidth
             required
           />
