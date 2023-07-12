@@ -61,6 +61,7 @@ export const ZoomMeetingSelector = ({
   useEffect(() => {
     if (shouldBeEmpty) return
     if (selected) return
+    if (editMode && !startingProfileId) return
 
     const user =
       users?.find(
@@ -82,7 +83,7 @@ export const ZoomMeetingSelector = ({
     Also I need to check shouldBeEmpty otherwise on the clear of Autocomplete previouslySelected is null and selecting 
     a value will not generate a link when it should
     */
-    if (editMode && previouslySelected === null && !shouldBeEmpty) return
+    if (editMode && previouslySelected === null && shouldBeEmpty) return
     if (
       (previouslySelected?.id !== selected?.id ||
         (previousStartDate && previousStartDate !== startDateTime)) &&
@@ -148,6 +149,8 @@ export const ZoomMeetingSelector = ({
           if (!current) {
             clearZoomLink()
             setShouldBeEmpty(true)
+          } else {
+            setShouldBeEmpty(false)
           }
           setSelected(current)
         }}

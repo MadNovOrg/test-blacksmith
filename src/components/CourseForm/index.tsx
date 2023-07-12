@@ -1098,10 +1098,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 startDateTime={values.startDateTime}
                 value={zoomMeetingUrl}
                 onChange={setZoomMeetingUrl}
-                editMode={
-                  Boolean(courseInput?.zoomMeetingUrl) &&
-                  Boolean(courseInput?.zoomProfileId)
-                }
+                editMode={Boolean(courseInput?.zoomMeetingUrl)}
                 startingProfileId={courseInput?.zoomProfileId ?? null}
               />
             ) : (
