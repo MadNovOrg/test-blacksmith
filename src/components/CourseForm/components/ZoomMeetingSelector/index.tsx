@@ -77,9 +77,16 @@ export const ZoomMeetingSelector = ({
   }, [deleteMeeting, zoomMeetingId, previousMeetingId])
 
   useEffect(() => {
+    /*This is to avoid the hook invoking generateZoomLink on mount while waiting for selected to be automatically
+    filled. 
+    Also I need to check shouldBeEmpty otherwise on the clear of Autocomplete previouslySelected is null and selecting 
+    a value will not generate a link when it should
+    */
+    if (editMode && previouslySelected === null && !shouldBeEmpty) return
     if (
-      previouslySelected?.id !== selected?.id ||
-      (previousStartDate && previousStartDate !== startDateTime)
+      (previouslySelected?.id !== selected?.id ||
+        (previousStartDate && previousStartDate !== startDateTime)) &&
+      selected
     ) {
       generateZoomLink({
         userId: selected?.id,
@@ -94,14 +101,16 @@ export const ZoomMeetingSelector = ({
     zoomMeetingId,
     previouslySelected,
     previousStartDate,
-    selected?.id,
+    editMode,
+    selected,
+    shouldBeEmpty,
   ])
 
   useEffect(() => {
-    if (zoomMeetingUrl) {
+    if (zoomMeetingUrl || shouldBeEmpty) {
       onChange(zoomMeetingUrl, selected?.id ?? '')
     }
-  }, [onChange, zoomMeetingUrl, zoomLinkStatus, selected?.id])
+  }, [onChange, zoomMeetingUrl, zoomLinkStatus, selected?.id, shouldBeEmpty])
 
   return (
     <>
