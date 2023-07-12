@@ -1,19 +1,22 @@
 table:
-  schema: public
   name: course_schedule
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    updated_at:
-      custom_name: updatedAt
     created_at:
       custom_name: createdAt
+    updated_at:
+      custom_name: updatedAt
+    virtual_account_id:
+      custom_name: virtualAccountId
     virtual_link:
       custom_name: virtualLink
   custom_column_names:
-    updated_at: updatedAt
     created_at: createdAt
+    updated_at: updatedAt
+    virtual_account_id: virtualAccountId
     virtual_link: virtualLink
+  custom_root_fields: {}
 object_relationships:
   - name: course
     using:
@@ -32,14 +35,14 @@ insert_permissions:
               - OPEN
       columns:
         - course_id
-        - virtual_link
         - created_at
         - end
+        - id
         - start
         - updated_at
-        - id
         - venue_id
-      backend_only: false
+        - virtual_account_id
+        - virtual_link
   - role: trainer
     permission:
       check: {}
@@ -51,8 +54,8 @@ insert_permissions:
         - start
         - updated_at
         - venue_id
+        - virtual_account_id
         - virtual_link
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -64,8 +67,8 @@ insert_permissions:
         - start
         - updated_at
         - venue_id
+        - virtual_account_id
         - virtual_link
-      backend_only: false
 select_permissions:
   - role: anonymous
     permission:
@@ -77,6 +80,7 @@ select_permissions:
         - start
         - updated_at
         - venue_id
+        - virtual_account_id
         - virtual_link
       filter:
         course:
@@ -101,6 +105,7 @@ select_permissions:
         - start
         - updated_at
         - venue_id
+        - virtual_account_id
         - virtual_link
       filter: {}
       allow_aggregations: true
@@ -108,13 +113,14 @@ select_permissions:
     permission:
       columns:
         - course_id
-        - virtual_link
         - created_at
         - end
+        - id
         - start
         - updated_at
-        - id
         - venue_id
+        - virtual_account_id
+        - virtual_link
       filter: {}
       allow_aggregations: true
   - role: sales-representative
@@ -127,6 +133,7 @@ select_permissions:
         - start
         - updated_at
         - venue_id
+        - virtual_account_id
         - virtual_link
       filter: {}
       allow_aggregations: true
@@ -140,6 +147,7 @@ select_permissions:
         - start
         - updated_at
         - venue_id
+        - virtual_account_id
         - virtual_link
       filter: {}
       allow_aggregations: true
@@ -153,6 +161,7 @@ select_permissions:
         - start
         - updated_at
         - venue_id
+        - virtual_account_id
         - virtual_link
       filter: {}
       allow_aggregations: true
@@ -160,13 +169,14 @@ select_permissions:
     permission:
       columns:
         - course_id
-        - virtual_link
         - created_at
         - end
+        - id
         - start
         - updated_at
-        - id
         - venue_id
+        - virtual_account_id
+        - virtual_link
       filter:
         course:
           course_type:
@@ -182,6 +192,7 @@ select_permissions:
         - start
         - updated_at
         - venue_id
+        - virtual_account_id
         - virtual_link
       filter: {}
       allow_aggregations: true
@@ -190,13 +201,14 @@ update_permissions:
     permission:
       columns:
         - course_id
-        - virtual_link
         - created_at
         - end
+        - id
         - start
         - updated_at
-        - id
         - venue_id
+        - virtual_account_id
+        - virtual_link
       filter:
         course:
           course_type:
@@ -207,27 +219,29 @@ update_permissions:
   - role: trainer
     permission:
       columns:
-        - id
-        - created_at
-        - updated_at
-        - start
-        - end
-        - venue_id
-        - virtual_link
         - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
       filter: {}
       check: null
   - role: tt-ops
     permission:
       columns:
         - course_id
-        - virtual_link
         - created_at
         - end
+        - id
         - start
         - updated_at
-        - id
         - venue_id
+        - virtual_account_id
+        - virtual_link
       filter: {}
       check: null
 delete_permissions:
@@ -244,8 +258,8 @@ event_triggers:
         columns:
           - end
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/schedule-end'
   - name: course_start_date_changed
@@ -257,7 +271,7 @@ event_triggers:
         columns:
           - start
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/start-date/changed'

@@ -35,12 +35,13 @@ export const QUERY = gql`
 
 export default function useZoomMeetingLink(): {
   meetingUrl: string
-  meetingId?: string
+  meetingId?: number
   generateLink: (variables: {
     userId?: string
-    meetingId?: string
+    meetingId?: number
     startTime?: Date
   }) => void
+  clearLink: () => void
   status: LoadingStatus
 } {
   const [{ data, error, fetching }, runMutation] = useMutation<
@@ -48,18 +49,21 @@ export default function useZoomMeetingLink(): {
     Params
   >(QUERY)
 
-  const [meeting, setMeeting] = useState<{ id: string; url: string } | null>()
+  const [meeting, setMeeting] = useState<{
+    id: number | undefined
+    url: string | undefined
+  } | null>()
 
   const generateLink = (variables: {
     userId?: string
-    meetingId?: string
+    meetingId?: number
     startTime?: Date
   }) => {
     const { userId, meetingId, startTime } = variables
 
     runMutation({
       input: {
-        id: meetingId,
+        id: meetingId?.toString(),
         startTime:
           isValid(startTime) && startTime ? formatISO(startTime) : undefined,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -68,10 +72,17 @@ export default function useZoomMeetingLink(): {
     })
   }
 
+  const clearLink = () => {
+    setMeeting({
+      id: undefined,
+      url: undefined,
+    })
+  }
+
   useEffect(() => {
     if (data?.upsertZoomMeeting?.meeting?.joinUrl) {
       setMeeting({
-        id: data.upsertZoomMeeting.meeting.id,
+        id: parseInt(data.upsertZoomMeeting.meeting.id),
         url: data.upsertZoomMeeting.meeting.joinUrl,
       })
     }
@@ -87,6 +98,7 @@ export default function useZoomMeetingLink(): {
     meetingUrl: meeting?.url || '',
     meetingId: meeting?.id,
     generateLink,
+    clearLink,
     status,
   }
 }

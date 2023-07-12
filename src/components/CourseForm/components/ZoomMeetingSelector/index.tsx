@@ -18,13 +18,15 @@ import { LoadingStatus } from '@app/util'
 export type Props = {
   value: string | null
   startDateTime: Date | null
+  startingProfileId?: string | null
   error?: {
     message?: string
   }
   label?: string
-  onChange: (value: string | null) => void
+  onChange: (virtualLink: string | null, virtualId: string | null) => void
   required?: boolean
   name?: string
+  editMode?: boolean
 }
 
 export const ZoomMeetingSelector = ({
@@ -32,10 +34,13 @@ export const ZoomMeetingSelector = ({
   onChange,
   startDateTime,
   error,
+  startingProfileId,
+  editMode = false,
   ...props
 }: Props) => {
   const { t } = useTranslation()
   const [selected, setSelected] = useState<ZoomUser | null>(null)
+  const [shouldBeEmpty, setShouldBeEmpty] = useState(false)
   const previouslySelected = usePrevious(selected)
   const previousStartDate = usePrevious(startDateTime)
 
@@ -45,6 +50,7 @@ export const ZoomMeetingSelector = ({
     meetingUrl: zoomMeetingUrl,
     meetingId: zoomMeetingId,
     generateLink: generateZoomLink,
+    clearLink: clearZoomLink,
     status: zoomLinkStatus,
   } = useZoomMeetingLink()
 
@@ -53,15 +59,20 @@ export const ZoomMeetingSelector = ({
   const { deleteMeeting } = useDeleteZoomMeeting()
 
   useEffect(() => {
+    if (shouldBeEmpty) return
     if (selected) return
 
-    const user = users?.find(({ id }) => id === current)
-    setSelected(user || null)
-  }, [current, users, fetching, selected])
+    const user =
+      users?.find(
+        ({ id }) => id === (editMode ? startingProfileId : current)
+      ) ?? null
+
+    setSelected(user)
+  }, [current, editMode, selected, shouldBeEmpty, startingProfileId, users])
 
   useEffect(() => {
     if (previousMeetingId && zoomMeetingId !== previousMeetingId) {
-      deleteMeeting({ meetingId: previousMeetingId })
+      deleteMeeting({ meetingId: previousMeetingId.toString() })
     }
   }, [deleteMeeting, zoomMeetingId, previousMeetingId])
 
@@ -79,16 +90,18 @@ export const ZoomMeetingSelector = ({
     }
   }, [
     generateZoomLink,
-    selected?.id,
     startDateTime,
     zoomMeetingId,
     previouslySelected,
     previousStartDate,
+    selected?.id,
   ])
 
   useEffect(() => {
-    onChange(zoomMeetingUrl)
-  }, [onChange, zoomMeetingUrl, zoomLinkStatus])
+    if (zoomMeetingUrl) {
+      onChange(zoomMeetingUrl, selected?.id ?? '')
+    }
+  }, [onChange, zoomMeetingUrl, zoomLinkStatus, selected?.id])
 
   return (
     <>
@@ -122,7 +135,13 @@ export const ZoomMeetingSelector = ({
         options={users || []}
         getOptionLabel={user => user.displayName}
         isOptionEqualToValue={(o, v) => o.id === v.id}
-        onChange={(_, value) => setSelected(value)}
+        onChange={(_, current) => {
+          if (!current) {
+            clearZoomLink()
+            setShouldBeEmpty(true)
+          }
+          setSelected(current)
+        }}
       />
 
       <TextField
@@ -148,7 +167,7 @@ export const ZoomMeetingSelector = ({
         }}
         {...props}
         value={value}
-        onChange={e => onChange(e.target.value)}
+        onChange={e => onChange(e.target.value, selected?.id ?? '')}
       />
     </>
   )

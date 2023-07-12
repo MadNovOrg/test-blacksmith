@@ -64,6 +64,7 @@ export const QUERY = gql`
       }
       schedule {
         ...CourseSchedule
+        virtualAccountId
         venue {
           ...Venue
         }

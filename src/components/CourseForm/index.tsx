@@ -203,6 +203,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 t('components.course-form.online-meeting-link-required')
               ),
           }),
+        zoomProfileId: yup.string().nullable(),
         startDate: yup
           .date()
           .nullable()
@@ -325,6 +326,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       deliveryType: courseInput?.deliveryType ?? CourseDeliveryType.F2F,
       venue: courseInput?.venue ?? null,
       zoomMeetingUrl: courseInput?.zoomMeetingUrl ?? null,
+      zoomProfileId: courseInput?.zoomProfileId ?? null, // need to be schedule [0]
       startDateTime: courseInput?.startDateTime
         ? new Date(courseInput.startDateTime)
         : null,
@@ -447,6 +449,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const startTime = useWatch({ control, name: 'startTime' })
   const endDate = useWatch({ control, name: 'endDate' })
   const endTime = useWatch({ control, name: 'endTime' })
+  const zoomMeetingUrl = useWatch({ control, name: 'zoomMeetingUrl' })
 
   const priceArgs = useMemo(
     () =>
@@ -727,8 +730,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   )
 
   const setZoomMeetingUrl = useCallback(
-    (meetingUrl: string | null) => {
+    (meetingUrl: string | null, zoomProfileId: string | null) => {
       setValue('zoomMeetingUrl', meetingUrl)
+      setValue('zoomProfileId', zoomProfileId)
     },
     [setValue]
   )
@@ -1092,8 +1096,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 data-testid="zoomMeeting-user-selector"
                 error={errors.zoomMeetingUrl}
                 startDateTime={values.startDateTime}
-                value={values.zoomMeetingUrl}
+                value={zoomMeetingUrl}
                 onChange={setZoomMeetingUrl}
+                editMode={
+                  Boolean(courseInput?.zoomMeetingUrl) &&
+                  Boolean(courseInput?.zoomProfileId)
+                }
+                startingProfileId={courseInput?.zoomProfileId ?? null}
               />
             ) : (
               <TextField

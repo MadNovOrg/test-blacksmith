@@ -332,6 +332,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             scheduleInput: {
               venue_id: newVenueId,
               virtualLink: newVirtualLink,
+              virtualAccountId: courseData.zoomProfileId,
               start: courseData.startDateTime,
               end: courseData.endDateTime,
             },

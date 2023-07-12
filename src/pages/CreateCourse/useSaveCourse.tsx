@@ -236,6 +236,7 @@ export function useSaveCourse(): {
                     ? courseData.zoomMeetingUrl
                     : undefined,
                   venue_id: courseData.venue?.id,
+                  virtualAccountId: courseData.zoomProfileId,
                 },
               ],
             },

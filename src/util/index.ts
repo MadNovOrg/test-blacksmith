@@ -279,6 +279,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     reaccreditation: course.reaccreditation,
     courseLevel: course.level,
     zoomMeetingUrl: course.schedule[0].virtualLink ?? null,
+    zoomProfileId: course.schedule[0].virtualAccountId ?? null,
     venue: course.schedule[0].venue ?? null,
     minParticipants: course.min_participants,
     maxParticipants: course.max_participants,

@@ -399,6 +399,7 @@ export type CourseSchedule = {
   course?: Course
   venue?: Venue
   virtualLink?: string
+  virtualAccountId?: string
 } & Base
 
 export type CourseParticipantModule = {
@@ -586,6 +587,7 @@ export type CourseInput = {
   maxParticipants: number | null
   venue: Venue | null
   zoomMeetingUrl: string | null
+  zoomProfileId: string | null
   freeSpaces: number | null
   accountCode: string | null
   usesAOL: boolean

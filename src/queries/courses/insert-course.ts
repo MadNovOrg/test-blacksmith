@@ -55,6 +55,7 @@ export type ParamsType = {
           end: Date
           venue_id?: string
           virtualLink?: string
+          virtualAccountId?: string
         }
       ]
     }

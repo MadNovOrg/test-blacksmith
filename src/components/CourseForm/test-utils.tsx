@@ -20,18 +20,20 @@ const useZoomMeetingUrlMocked = jest.mocked(useZoomMeetingUrl)
 const zoomGenerateLink = jest.mocked(() => {
   useZoomMeetingUrlMocked.mockReturnValue({
     meetingUrl: ZOOM_MOCKED_URL,
-    meetingId: ZOOM_MOCKED_URL,
+    meetingId: 123,
     status: LoadingStatus.SUCCESS,
     generateLink: zoomGenerateLink,
+    clearLink: jest.fn(),
   })
 })
 
 beforeEach(() => {
   useZoomMeetingUrlMocked.mockReturnValue({
     meetingUrl: '',
-    meetingId: '',
+    meetingId: 123,
     status: LoadingStatus.IDLE,
     generateLink: zoomGenerateLink,
+    clearLink: jest.fn(),
   })
 })
 

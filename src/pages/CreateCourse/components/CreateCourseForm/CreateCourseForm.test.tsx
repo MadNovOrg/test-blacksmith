@@ -53,8 +53,9 @@ describe('component: CreateCourseForm', () => {
     VenueSelectorMocked.mockImplementation(() => <p>test</p>)
     useZoomMeetingUrlMocked.mockReturnValue({
       meetingUrl: '',
-      meetingId: '',
+      meetingId: 123,
       generateLink: jest.fn(),
+      clearLink: jest.fn(),
       status: LoadingStatus.SUCCESS,
     })
     useCourseDraftMocked.mockReturnValue({
