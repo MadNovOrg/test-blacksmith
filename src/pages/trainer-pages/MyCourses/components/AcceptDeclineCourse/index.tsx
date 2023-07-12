@@ -8,6 +8,7 @@ import { Dialog } from '@app/components/Dialog'
 import {
   CourseTrainerInfoFragment,
   Course_Invite_Status_Enum,
+  Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { SetCourseTrainerStatus } from '@app/queries/courses/set-course-trainer-status'
@@ -64,8 +65,17 @@ export const AcceptDeclineCourse: React.FC<
       closeModal()
       onUpdate(trainer, status)
 
-      if (courseId) {
-        navigate(`/courses/${courseId}/details`)
+      if (!courseId) {
+        return
+      }
+
+      switch (trainer.type) {
+        case Course_Trainer_Type_Enum.Leader:
+          return navigate(`./${courseId}/modules`)
+        case Course_Trainer_Type_Enum.Assistant:
+        case Course_Trainer_Type_Enum.Moderator:
+          return navigate(`./${courseId}/details`)
+        default: /** Unsupported trainer, do nothing */
       }
     } catch (err) {
       console.error(err)

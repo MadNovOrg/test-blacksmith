@@ -88,10 +88,6 @@ describe('AcceptDeclineCourse', () => {
         status: Course_Invite_Status_Enum.Accepted,
       }
     )
-
-    expect(mockNavigate).toHaveBeenCalledWith(
-      expect.stringContaining(`/courses/${courseId}/details`)
-    )
   })
 
   it('calls onUpdate as expected when user DECLINES', async () => {
@@ -149,6 +145,67 @@ describe('AcceptDeclineCourse', () => {
   })
 })
 
+it(`should navigate to '/courses/{courseId}/modules' when the trainer is lead`, async () => {
+  // Arrange
+  const onUpdate = jest.fn()
+  const courseId = 10000
+
+  _render(Course_Invite_Status_Enum.Pending, onUpdate, courseId)
+
+  // Act
+  await userEvent.click(screen.getByTestId(tid('acceptBtn')))
+  await userEvent.click(screen.getByTestId(tid('modalSubmit')))
+
+  // Assert
+  expect(mockNavigate).toHaveBeenCalledWith(
+    expect.stringContaining(`./${courseId}/modules`)
+  )
+})
+
+it(`should navigate to '/courses/{courseId}/details' when the trainer is moderator`, async () => {
+  // Arrange
+  const onUpdate = jest.fn()
+  const courseId = 10000
+
+  _render(
+    Course_Invite_Status_Enum.Pending,
+    onUpdate,
+    courseId,
+    Course_Trainer_Type_Enum.Moderator
+  )
+
+  // Act
+  await userEvent.click(screen.getByTestId(tid('acceptBtn')))
+  await userEvent.click(screen.getByTestId(tid('modalSubmit')))
+
+  // Assert
+  expect(mockNavigate).toHaveBeenCalledWith(
+    expect.stringContaining(`./${courseId}/details`)
+  )
+})
+
+it(`should navigate to '/courses/{courseId}/details' when the trainer is assistant`, async () => {
+  // Arrange
+  const onUpdate = jest.fn()
+  const courseId = 10000
+
+  _render(
+    Course_Invite_Status_Enum.Pending,
+    onUpdate,
+    courseId,
+    Course_Trainer_Type_Enum.Assistant
+  )
+
+  // Act
+  await userEvent.click(screen.getByTestId(tid('acceptBtn')))
+  await userEvent.click(screen.getByTestId(tid('modalSubmit')))
+
+  // Assert
+  expect(mockNavigate).toHaveBeenCalledWith(
+    expect.stringContaining(`./${courseId}/details`)
+  )
+})
+
 /**
  * Helpers
  */
@@ -156,11 +213,12 @@ describe('AcceptDeclineCourse', () => {
 function _render(
   status = Course_Invite_Status_Enum.Accepted,
   onUpdate = jest.fn(),
-  courseId?: number
+  courseId?: number,
+  trainerType?: Course_Trainer_Type_Enum
 ) {
   const trainer = {
     id: chance.guid(),
-    type: Course_Trainer_Type_Enum.Leader,
+    type: trainerType || Course_Trainer_Type_Enum.Leader,
     status,
   }
   const profile = buildProfile()
