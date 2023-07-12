@@ -654,7 +654,6 @@ export const ViewProfilePage: React.FC<
                                   <Button
                                     variant="contained"
                                     color="primary"
-                                    sx={{ ml: 2 }}
                                     onClick={() =>
                                       navigate(
                                         `/certification/${certificate.id}`
