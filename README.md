@@ -28,6 +28,27 @@ Schema and metadata should be managed via database migrations. Hasura provides a
 
 The `hasura` folder contains all the configuration.
 
+## Managing hasura metadata
+
+Oftentimes after syncing the `main` branch the schema may go inconsistent, to fix this, the ordering of the applied commands do matter.
+
+1. Apply the database migrations if any
+```bash
+npm run hasura:migrate:apply
+```
+
+2. Apply hasura metadata
+```bash
+npm run hasura:metadata:apply
+```
+
+If there were problems in applying metadata try
+
+```bash
+npm run hasura:metadata:reload
+```
+
+
 ### Creating migrations
 
 - run your local instance of Hasura as described in [setup](#setup)
