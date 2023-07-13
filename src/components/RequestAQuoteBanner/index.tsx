@@ -1,5 +1,4 @@
 import { Button, Box, Typography, useTheme, SxProps, Link } from '@mui/material'
-import parsePhoneNumber from 'libphonenumber-js'
 import React from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 
@@ -10,9 +9,6 @@ type Props = {
 export const RequestAQuoteBanner: React.FC<Props> = ({ sx = {} }) => {
   const theme = useTheme()
   const { t } = useTranslation()
-  const phoneNumber = parsePhoneNumber(`${import.meta.env.VITE_TT_INFO_PHONE}`)
-
-  const countryCode = phoneNumber?.countryCallingCode || ''
 
   return (
     <Box
@@ -25,7 +21,7 @@ export const RequestAQuoteBanner: React.FC<Props> = ({ sx = {} }) => {
       }}
     >
       <Typography variant="h4">
-        {t('components.request-a-quote.learn-more-about')}
+        {t('components.request-a-quote.looking-for-private-course')}
       </Typography>
 
       <Typography sx={{ mt: 1, fontSize: theme.typography.body2.fontSize }}>
@@ -33,9 +29,6 @@ export const RequestAQuoteBanner: React.FC<Props> = ({ sx = {} }) => {
           i18nKey="components.request-a-quote.more-info"
           t={t}
           values={{
-            phone: phoneNumber
-              ?.formatInternational()
-              .replace(countryCode, `${countryCode} (0)`),
             email: import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS,
           }}
         >
@@ -54,7 +47,7 @@ export const RequestAQuoteBanner: React.FC<Props> = ({ sx = {} }) => {
         target="_blank"
         href={import.meta.env.VITE_REQUEST_QUOTE_URL}
       >
-        {t('components.request-a-quote.request-a-quote')}
+        {t('components.request-a-quote.enquire-now')}
       </Button>
     </Box>
   )
