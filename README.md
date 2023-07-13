@@ -22,6 +22,19 @@ For first time setup:
 Designs can be found [here](https://www.figma.com/file/WAkwbNIrsbvOJlqTKfuvdh/TTH-V1.1-Hi-Fi).
 Design System can be found [here](https://www.figma.com/file/5cnwhggjiOTy1523YJveX3/Team-Teach-Design-System).
 
+## Technology
+
+This application is built using:
+
+- `React` and `Vite` in the frontend
+- `Hasura` as a `GraphQL API` on top of a `Postgres` database
+- Authentication using `AWS Cognito`
+- ...
+
+## Architecture
+
+A draft variant of the current architecture can be found [here](https://github.com/TeamTeach/application/wiki/Architecture).
+
 ## Managing database schema
 
 Schema and metadata should be managed via database migrations. Hasura provides a way to manage migrations via the Hasura CLI, which is automatically installed via npm.
@@ -47,7 +60,6 @@ If there were problems in applying metadata try
 ```bash
 npm run hasura:metadata:reload
 ```
-
 
 ### Creating migrations
 
@@ -83,19 +95,6 @@ npm run hasura:metadata:reload
 - Expects:
     - The branch to perform the run from. Default is `main` 
     - The environment to perform the rollback action to
-
-## Technology
-
-This application is built using:
-
-- React and Vite in the frontend
-- Hasura as a GraphQL API on top of a Postgres database
-- Authentication using AWS Cognito
-- ...
-
-## Architecture
-
-TBD
 
 ## E2E tests
 
