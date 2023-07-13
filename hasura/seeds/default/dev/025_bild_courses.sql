@@ -369,10 +369,50 @@ VALUES (10034, '{
          }
       ]
    },
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -436,10 +476,50 @@ VALUES (10034, '{
    }
 }'::jsonb),
 (10035, '{
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    }
@@ -581,10 +661,50 @@ VALUES (10034, '{
          }
       ]
    },
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -702,10 +822,50 @@ VALUES (10034, '{
    }
 }'::jsonb),
 (10040, '{
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    }
@@ -847,10 +1007,50 @@ VALUES (10034, '{
          }
       ]
    },
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -1018,10 +1218,50 @@ VALUES (10034, '{
          }
       ]
    },
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -1189,10 +1429,50 @@ VALUES (10034, '{
          }
       ]
    },
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -1278,10 +1558,50 @@ VALUES (10034, '{
          }
       ]
    },
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -1587,10 +1907,50 @@ VALUES (10034, '{
    }      
 }'::jsonb),
 (10049, '{
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -1678,10 +2038,50 @@ VALUES (10034, '{
    }         
 }'::jsonb),
 (10050, '{
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -1745,10 +2145,50 @@ VALUES (10034, '{
    }         
 }'::jsonb),
 (10051, '{
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -2080,10 +2520,50 @@ VALUES (10034, '{
    }       
 }'::jsonb),
 (10054, '{
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -2117,10 +2597,50 @@ VALUES (10034, '{
    }   
 }'::jsonb),
 (10055, '{
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -2178,10 +2698,50 @@ VALUES (10034, '{
    }          
 }'::jsonb),
 (10056, '{
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -2685,13 +3245,53 @@ VALUES (10034, '{
          }
       ]
    },
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
-   }   
+   }
 }'::jsonb),
 (10063, '{
    "PRIMARY":{
@@ -2746,10 +3346,50 @@ VALUES (10034, '{
          }
       ]
    },
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -3009,10 +3649,50 @@ VALUES (10034, '{
    }  
 }'::jsonb),
 (10066, '{
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -3152,10 +3832,50 @@ VALUES (10034, '{
          }
       ]
    },   
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
@@ -3323,10 +4043,50 @@ VALUES (10034, '{
          }
       ]
    },
-   "SECONDARY":{
-      "modules":[
+   "SECONDARY": {
+      "groups": [
          {
-            "name":"Six stages of crisis"
+            "name": "Elevated Risks Module",
+            "modules": [
+               {
+                  "name": "Seclusion"
+               },
+               {
+                  "name": "Rapid tranquilisation"
+               },
+               {
+                  "name": "Chemical restraint"
+               },
+               {
+                  "name": "Mechanical restraint"
+               },
+               {
+                  "name": "Clinical holding"
+               },
+               {
+                  "name": "Physical restraint"
+               },
+               {
+                  "name": "Psychological Restraint"
+               }
+            ]
+         }
+      ],
+      "modules": [
+         {
+            "name": "Six stages of crisis"
+         },
+         {
+            "name": "Conflict Spiral"
+         },
+         {
+            "name": "Fizzy pop challenge"
+         },
+         {
+            "name": "Behaviours that challenge"
+         },
+         {
+            "name": "De-escalation scenario"
          }
       ]
    },
