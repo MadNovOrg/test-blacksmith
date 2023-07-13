@@ -22,11 +22,13 @@ import useSWR from 'swr'
 import { BackButton } from '@app/components/BackButton'
 import { CourseCertification } from '@app/components/CourseCertification'
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
+import { CourseOverview } from '@app/components/CourseOverview'
 import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAlert'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { useAuth } from '@app/context/auth'
 import {
+  Course_Status_Enum,
   GetFeedbackUsersQuery,
   GetFeedbackUsersQueryVariables,
   Organization,
@@ -190,6 +192,8 @@ export const CourseDetails = () => {
       </Stack>
     )
   }
+
+  const showCourseOverview = course?.status === Course_Status_Enum.Scheduled
 
   return (
     <>
@@ -457,6 +461,15 @@ export const CourseDetails = () => {
                     <CourseAttendees course={course} />
                   </TabPanel>
                 ) : null}
+
+                {showCourseOverview && (
+                  <TabPanel
+                    sx={{ px: 0 }}
+                    value={CourseDetailsTabs.COURSE_OVERVIEW}
+                  >
+                    <CourseOverview course={course} />
+                  </TabPanel>
+                )}
               </Container>
             </TabContext>
           ) : null}
