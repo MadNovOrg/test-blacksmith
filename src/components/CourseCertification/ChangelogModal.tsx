@@ -107,7 +107,10 @@ const ChangelogModal: React.FC<React.PropsWithChildren<ChangelogModalProps>> =
                     display="block"
                     mt={2}
                     p={2}
-                    sx={{ backgroundColor: 'grey.100' }}
+                    sx={{
+                      backgroundColor: 'grey.100',
+                      overflowWrap: 'anywhere',
+                    }}
                   >
                     <Typography variant="caption">
                       {changelog.payload?.note}
