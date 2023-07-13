@@ -14,7 +14,7 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import { styled } from '@mui/system'
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
@@ -87,6 +87,16 @@ export const CourseDetails = () => {
   >([GET_COURSE_QUERY, { id: courseId, withOrders: canViewOrderItem }])
   const course = courseData?.course
   const courseLoadingStatus = getSWRLoadingStatus(courseData, courseError)
+
+  const linkedOrderItem = useMemo(() => course?.orders?.[0], [course])
+  const isCourseTypeClosed = course?.type === CourseType.CLOSED
+  const isCourseTypeIndirectBlended =
+    course?.type === CourseType.INDIRECT && course?.go1Integration
+  const canViewLinkedOrderItem = useMemo(
+    () =>
+      linkedOrderItem && (isCourseTypeClosed || isCourseTypeIndirectBlended),
+    [linkedOrderItem, isCourseTypeClosed, isCourseTypeIndirectBlended]
+  )
 
   const [activeTab, setActiveTab] = useState('')
   const [showModifyAttendanceModal, setShowModifyAttendanceModal] =
@@ -198,7 +208,7 @@ export const CourseDetails = () => {
                   label={t('pages.course-participants.back-button')}
                 />
               ),
-              OrderItem: canViewOrderItem
+              OrderItem: canViewLinkedOrderItem
                 ? () => (
                     <Trans
                       i18nKey="common.order-item"
@@ -213,7 +223,7 @@ export const CourseDetails = () => {
                         />,
                       ]}
                       values={{
-                        invoiceNumber: course?.orders?.[0].xeroInvoiceNumber,
+                        invoiceNumber: linkedOrderItem?.xeroInvoiceNumber,
                       }}
                     />
                   )

@@ -99,7 +99,7 @@ export const CourseDetails = () => {
   )
 
   const linkedOrderItem = useMemo(() => course?.orders?.[0], [course])
-  const canViewOrderItem = useMemo(
+  const canViewLinkedOrderItem = useMemo(
     () =>
       linkedOrderItem && (isCourseTypeClosed || isCourseTypeIndirectBlended),
     [linkedOrderItem, isCourseTypeClosed, isCourseTypeIndirectBlended]
@@ -183,7 +183,7 @@ export const CourseDetails = () => {
                         </Button>
                       )
                     : undefined,
-                  OrderItem: canViewOrderItem
+                  OrderItem: canViewLinkedOrderItem
                     ? () => (
                         <Trans
                           i18nKey="common.order-item"
