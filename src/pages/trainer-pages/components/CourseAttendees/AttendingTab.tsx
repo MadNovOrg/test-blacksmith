@@ -40,7 +40,12 @@ import {
   CourseType,
   SortOrder,
 } from '@app/types'
-import { courseEnded, LoadingStatus } from '@app/util'
+import {
+  courseEnded,
+  DEFAULT_PAGINATION_LIMIT,
+  DEFAULT_PAGINATION_ROW_OPTIONS,
+  LoadingStatus,
+} from '@app/util'
 
 import { CourseActionsMenu } from './CourseActionsMenu'
 
@@ -49,9 +54,6 @@ type TabProperties = {
   onSendingCourseInformation: (success: boolean) => void
 }
 
-const PER_PAGE = 12
-const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
-
 export const AttendingTab = ({
   course,
   onSendingCourseInformation,
@@ -59,7 +61,7 @@ export const AttendingTab = ({
   const { isOrgAdmin, acl } = useAuth()
   const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState(0)
-  const [perPage, setPerPage] = useState(PER_PAGE)
+  const [perPage, setPerPage] = useState(DEFAULT_PAGINATION_LIMIT)
   const [sortColumn, setSortColumn] = useState<string>('name')
   const [order, setOrder] = useState<SortOrder>('asc')
   const [individualToRemove, setIndividualToRemove] =
@@ -367,7 +369,7 @@ export const AttendingTab = ({
               onPageChange={(_, page) => setCurrentPage(page)}
               onRowsPerPageChange={handleRowsPerPageChange}
               rowsPerPage={perPage}
-              rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+              rowsPerPageOptions={DEFAULT_PAGINATION_ROW_OPTIONS}
               data-testid="course-participants-pagination"
               sx={{
                 '.MuiTablePagination-toolbar': { pl: 0 },

@@ -14,14 +14,13 @@ import {
 } from '@app/generated/graphql'
 import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import term from '@app/queries/membership/term'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ContentItemGrid } from '../../components/ContentItemGrid'
 import { DownloadButton } from '../../components/DownloadButton'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
-
-export const PER_PAGE = 12
 
 const Pagination: React.FC<
   React.PropsWithChildren<{
@@ -64,7 +63,7 @@ const Pagination: React.FC<
 const initialPagination = {
   after: null,
   before: null,
-  first: PER_PAGE,
+  first: DEFAULT_PAGINATION_LIMIT,
   last: null,
 }
 
@@ -150,7 +149,7 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
               setPagination({
                 after: null,
                 before: null,
-                first: PER_PAGE,
+                first: DEFAULT_PAGINATION_LIMIT,
                 last: null,
               })
               setSearchTerm(value)
@@ -173,7 +172,7 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
                 after: null,
                 before: null,
                 last: null,
-                first: PER_PAGE,
+                first: DEFAULT_PAGINATION_LIMIT,
               })
               setOrderDirection(direction as unknown as OrderEnum)
             }}
@@ -182,7 +181,10 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
       </Box>
 
       {fetching ? (
-        <ItemsGridSkeleton data-testid="items-grid-skeleton" num={PER_PAGE} />
+        <ItemsGridSkeleton
+          data-testid="items-grid-skeleton"
+          num={DEFAULT_PAGINATION_LIMIT}
+        />
       ) : null}
 
       {!fetching &&
@@ -244,14 +246,14 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
                   data.content?.termNode?.__typename === 'Tag'
                     ? data.content.termNode.posts?.pageInfo?.startCursor
                     : '',
-                last: PER_PAGE,
+                last: DEFAULT_PAGINATION_LIMIT,
               })
             }}
             onNextClick={() => {
               scrollTo()
               setPagination({
                 ...pagination,
-                first: PER_PAGE,
+                first: DEFAULT_PAGINATION_LIMIT,
                 after:
                   data.content?.termNode?.__typename === 'Category' ||
                   data.content?.termNode?.__typename === 'Tag'
@@ -324,13 +326,13 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
                   data.content?.termNode?.__typename === 'EbooksCategory'
                     ? data.content.termNode.ebooks?.pageInfo?.startCursor
                     : '',
-                last: PER_PAGE,
+                last: DEFAULT_PAGINATION_LIMIT,
               })
             }
             onNextClick={() =>
               setPagination({
                 ...pagination,
-                first: PER_PAGE,
+                first: DEFAULT_PAGINATION_LIMIT,
                 after:
                   data.content?.termNode?.__typename === 'EbooksCategory'
                     ? data.content.termNode.ebooks?.pageInfo?.endCursor
@@ -394,13 +396,13 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
                   data.content?.termNode?.__typename === 'WebinarsCategory'
                     ? data.content.termNode.webinars?.pageInfo?.startCursor
                     : '',
-                last: PER_PAGE,
+                last: DEFAULT_PAGINATION_LIMIT,
               })
             }
             onNextClick={() =>
               setPagination({
                 ...pagination,
-                first: PER_PAGE,
+                first: DEFAULT_PAGINATION_LIMIT,
                 after:
                   data.content?.termNode?.__typename === 'WebinarsCategory'
                     ? data.content.termNode.webinars?.pageInfo?.endCursor
@@ -477,13 +479,13 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
                     ? data.content.termNode.researchSummaries?.pageInfo
                         ?.startCursor
                     : '',
-                last: PER_PAGE,
+                last: DEFAULT_PAGINATION_LIMIT,
               })
             }
             onNextClick={() =>
               setPagination({
                 ...pagination,
-                first: PER_PAGE,
+                first: DEFAULT_PAGINATION_LIMIT,
                 after:
                   data.content?.termNode?.__typename ===
                   'ResearchSummariesCategory'
@@ -550,13 +552,13 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
                     ? data.content.termNode.videoSeriesItems?.pageInfo
                         ?.startCursor
                     : '',
-                last: PER_PAGE,
+                last: DEFAULT_PAGINATION_LIMIT,
               })
             }
             onNextClick={() =>
               setPagination({
                 ...pagination,
-                first: PER_PAGE,
+                first: DEFAULT_PAGINATION_LIMIT,
                 after:
                   data.content?.termNode?.__typename === 'VideoSeriesCategory'
                     ? data.content.termNode.videoSeriesItems?.pageInfo

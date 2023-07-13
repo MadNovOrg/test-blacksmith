@@ -20,13 +20,14 @@ import { useTranslation } from 'react-i18next'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useOrgInvites } from '@app/hooks/useOrgInvites'
 import { InviteStatus } from '@app/types'
+import {
+  DEFAULT_PAGINATION_LIMIT,
+  DEFAULT_PAGINATION_ROW_OPTIONS,
+} from '@app/util'
 
 type OrgInvitesTableParams = {
   orgId: string
 }
-
-const PER_PAGE = 12
-const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const OrgInvitesTable: React.FC<
   React.PropsWithChildren<OrgInvitesTableParams>
@@ -34,7 +35,7 @@ export const OrgInvitesTable: React.FC<
   const { t } = useTranslation()
 
   const [currentPage, setCurrentPage] = useState(0)
-  const [perPage, setPerPage] = useState(PER_PAGE)
+  const [perPage, setPerPage] = useState(DEFAULT_PAGINATION_LIMIT)
 
   const { invites, loading, totalCount, resend, cancel } = useOrgInvites(
     orgId,
@@ -178,7 +179,7 @@ export const OrgInvitesTable: React.FC<
           onPageChange={(_, page) => setCurrentPage(page)}
           onRowsPerPageChange={handleRowsPerPageChange}
           rowsPerPage={perPage}
-          rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+          rowsPerPageOptions={DEFAULT_PAGINATION_ROW_OPTIONS}
         />
       ) : null}
     </>

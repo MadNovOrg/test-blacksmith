@@ -14,6 +14,7 @@ import {
 } from '@app/generated/graphql'
 import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import RESEARCH_SUMMARIES_QUERY from '@app/queries/membership/research-summaries'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { DownloadButton } from '../../components/DownloadButton'
@@ -21,8 +22,6 @@ import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
 import { PageTitle } from '../../components/PageTitle'
 import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
-
-export const PER_PAGE = 12
 
 const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
@@ -35,7 +34,7 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
   >({
     after: null,
     before: null,
-    first: PER_PAGE,
+    first: DEFAULT_PAGINATION_LIMIT,
     last: null,
   })
 
@@ -120,7 +119,7 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
             setPagination({
               after: null,
               before: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
               last: null,
             })
             setSearchTerm(value)
@@ -138,7 +137,7 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
               after: null,
               before: null,
               last: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
             })
             setOrderDirection(direction as unknown as OrderEnum)
           }}
@@ -223,7 +222,7 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
                     after: null,
                     before:
                       data?.content?.researchSummaries?.pageInfo?.startCursor,
-                    last: PER_PAGE,
+                    last: DEFAULT_PAGINATION_LIMIT,
                   })
                 }}
               >
@@ -237,7 +236,7 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
                   scrollTo()
                   setPagination({
                     ...pagination,
-                    first: PER_PAGE,
+                    first: DEFAULT_PAGINATION_LIMIT,
                     after:
                       data?.content?.researchSummaries?.pageInfo?.endCursor,
                     before: null,
@@ -252,7 +251,7 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
         </>
       ) : (
         <Box data-testid="research-summaries-grid-skeleton">
-          <ItemsGridSkeleton num={PER_PAGE} />
+          <ItemsGridSkeleton num={DEFAULT_PAGINATION_LIMIT} />
         </Box>
       )}
     </Container>

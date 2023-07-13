@@ -29,7 +29,11 @@ import useOrg, { ProfileType } from '@app/hooks/useOrg'
 import { useTableSort } from '@app/hooks/useTableSort'
 import theme from '@app/theme'
 import { CertificateStatus, CourseLevel } from '@app/types'
-import { getProfileCertificationLevels } from '@app/util'
+import {
+  DEFAULT_PAGINATION_LIMIT,
+  DEFAULT_PAGINATION_ROW_OPTIONS,
+  getProfileCertificationLevels,
+} from '@app/util'
 
 import { CertificateStatusChip } from '../CertificateStatusChip'
 
@@ -37,9 +41,6 @@ type OrgUsersTableParams = {
   orgId: string
   onChange?: () => void
 }
-
-const PER_PAGE = 12
-const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const OrgUsersTable: React.FC<
   React.PropsWithChildren<OrgUsersTableParams>
@@ -49,7 +50,7 @@ export const OrgUsersTable: React.FC<
 
   const sorting = useTableSort('fullName', 'asc')
   const [currentPage, setCurrentPage] = useState(0)
-  const [perPage, setPerPage] = useState(PER_PAGE)
+  const [perPage, setPerPage] = useState(DEFAULT_PAGINATION_LIMIT)
 
   const [showEditUserModal, setShowEditUserModal] = useState(false)
   const [editedUser, setEditedUser] =
@@ -294,7 +295,7 @@ export const OrgUsersTable: React.FC<
           onPageChange={(_, page) => setCurrentPage(page)}
           onRowsPerPageChange={handleRowsPerPageChange}
           rowsPerPage={perPage}
-          rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+          rowsPerPageOptions={DEFAULT_PAGINATION_ROW_OPTIONS}
         />
       ) : null}
       {editedUser ? (

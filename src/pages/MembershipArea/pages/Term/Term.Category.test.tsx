@@ -10,11 +10,12 @@ import {
   TermQueryVariables,
   WpPageInfo,
 } from '@app/generated/graphql'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildCategory, buildEntities, buildPost } from '@test/mock-data-utils'
 
-import Term, { PER_PAGE } from '.'
+import Term from '.'
 
 describe('page: Term - Category', () => {
   it('displays skeleton loading while fetching category', () => {
@@ -186,8 +187,8 @@ describe('page: Term - Category', () => {
                 posts: {
                   nodes:
                     variables.orderDirection === OrderEnum.Asc
-                      ? reversedPosts.slice(0, PER_PAGE)
-                      : posts.slice(0, PER_PAGE),
+                      ? reversedPosts.slice(0, DEFAULT_PAGINATION_LIMIT)
+                      : posts.slice(0, DEFAULT_PAGINATION_LIMIT),
                 },
               },
             },

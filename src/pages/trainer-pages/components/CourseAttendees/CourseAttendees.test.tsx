@@ -14,7 +14,7 @@ import {
   CourseType,
   RoleName,
 } from '@app/types'
-import { LoadingStatus } from '@app/util'
+import { DEFAULT_PAGINATION_LIMIT, LoadingStatus } from '@app/util'
 
 import { render, screen, within } from '@test/index'
 import {
@@ -288,9 +288,9 @@ describe('component: CourseAttendees', () => {
   })
 
   it('paginates course participants', async () => {
-    const PER_PAGE = 12
-
-    const participants = new Array(PER_PAGE).map(() => buildParticipant())
+    const participants = new Array(DEFAULT_PAGINATION_LIMIT).map(() =>
+      buildParticipant()
+    )
 
     useCourseParticipantsMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
@@ -321,8 +321,8 @@ describe('component: CourseAttendees', () => {
         alwaysShowArchived: true,
         order: 'asc',
         pagination: {
-          limit: PER_PAGE,
-          offset: PER_PAGE,
+          limit: DEFAULT_PAGINATION_LIMIT,
+          offset: DEFAULT_PAGINATION_LIMIT,
         },
         sortBy: 'name',
       },
@@ -330,9 +330,9 @@ describe('component: CourseAttendees', () => {
   })
 
   it('sorts descending by participants name', async () => {
-    const PER_PAGE = 12
-
-    const participants = new Array(PER_PAGE).map(() => buildParticipant())
+    const participants = new Array(DEFAULT_PAGINATION_LIMIT).map(() =>
+      buildParticipant()
+    )
 
     useCourseParticipantsMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
@@ -363,7 +363,7 @@ describe('component: CourseAttendees', () => {
         alwaysShowArchived: true,
         order: 'desc',
         pagination: {
-          limit: PER_PAGE,
+          limit: DEFAULT_PAGINATION_LIMIT,
           offset: 0,
         },
         sortBy: 'name',

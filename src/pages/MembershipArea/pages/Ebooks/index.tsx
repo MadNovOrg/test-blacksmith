@@ -14,6 +14,7 @@ import {
 } from '@app/generated/graphql'
 import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import EBOOKS_QUERY from '@app/queries/membership/ebooks'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { DownloadButton } from '../../components/DownloadButton'
@@ -21,8 +22,6 @@ import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
 import { PageTitle } from '../../components/PageTitle'
 import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
-
-export const PER_PAGE = 12
 
 const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
@@ -36,7 +35,7 @@ const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
   >({
     after: null,
     before: null,
-    first: PER_PAGE,
+    first: DEFAULT_PAGINATION_LIMIT,
     last: null,
   })
 
@@ -113,7 +112,7 @@ const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
             setPagination({
               after: null,
               before: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
               last: null,
             })
             setSearchTerm(value)
@@ -129,7 +128,7 @@ const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
               after: null,
               before: null,
               last: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
             })
             setOrderDirection(direction as unknown as OrderEnum)
           }}
@@ -206,7 +205,7 @@ const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
                     first: null,
                     after: null,
                     before: data?.content?.ebooks?.pageInfo?.startCursor,
-                    last: PER_PAGE,
+                    last: DEFAULT_PAGINATION_LIMIT,
                   })
                 }}
               >
@@ -220,7 +219,7 @@ const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
                   scrollTo()
                   setPagination({
                     ...pagination,
-                    first: PER_PAGE,
+                    first: DEFAULT_PAGINATION_LIMIT,
                     after: data?.content?.ebooks?.pageInfo?.endCursor,
                     before: null,
                     last: null,
@@ -234,7 +233,7 @@ const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
         </>
       ) : (
         <Box data-testid="ebooks-grid-skeleton">
-          <ItemsGridSkeleton num={PER_PAGE} />
+          <ItemsGridSkeleton num={DEFAULT_PAGINATION_LIMIT} />
         </Box>
       )}
     </Container>

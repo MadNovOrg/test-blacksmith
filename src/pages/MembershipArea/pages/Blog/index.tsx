@@ -14,14 +14,13 @@ import {
 } from '@app/generated/graphql'
 import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import BLOG_QUERY from '@app/queries/membership/blog'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
 import { PageTitle } from '../../components/PageTitle'
 import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
-
-export const PER_PAGE = 12
 
 const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
@@ -35,7 +34,7 @@ const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
   >({
     after: null,
     before: null,
-    first: PER_PAGE,
+    first: DEFAULT_PAGINATION_LIMIT,
     last: null,
   })
 
@@ -100,7 +99,7 @@ const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
             setPagination({
               after: null,
               before: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
               last: null,
             })
             setSearchTerm(value)
@@ -116,7 +115,7 @@ const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
               after: null,
               before: null,
               last: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
             })
             setOrderDirection(direction as unknown as OrderEnum)
           }}
@@ -190,7 +189,7 @@ const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
                     first: null,
                     after: null,
                     before: data?.content?.posts?.pageInfo?.startCursor,
-                    last: PER_PAGE,
+                    last: DEFAULT_PAGINATION_LIMIT,
                   })
                 }}
               >
@@ -204,7 +203,7 @@ const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
                   scrollTo()
                   setPagination({
                     ...pagination,
-                    first: PER_PAGE,
+                    first: DEFAULT_PAGINATION_LIMIT,
                     after: data?.content?.posts?.pageInfo?.endCursor,
                     before: null,
                     last: null,
@@ -218,7 +217,7 @@ const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
         </>
       ) : fetching ? (
         <Box data-testid="posts-items-grid-skeleton">
-          <ItemsGridSkeleton num={PER_PAGE} />
+          <ItemsGridSkeleton num={DEFAULT_PAGINATION_LIMIT} />
         </Box>
       ) : (
         <Typography variant="body2">

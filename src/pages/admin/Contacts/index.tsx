@@ -29,6 +29,10 @@ import {
   ResponseType as GetContactsResponseType,
 } from '@app/queries/admin/get-contacts'
 import { RoleName, SortOrder } from '@app/types'
+import {
+  DEFAULT_PAGINATION_LIMIT,
+  DEFAULT_PAGINATION_ROW_OPTIONS,
+} from '@app/util'
 
 type ContactsProps = unknown
 
@@ -38,8 +42,6 @@ const sorts: Record<string, object> = {
   'familyName-asc': { familyName: 'asc' },
   'familyName-desc': { familyName: 'desc' },
 }
-const PER_PAGE = 12
-const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const Contacts: React.FC<
   React.PropsWithChildren<ContactsProps>
@@ -104,7 +106,7 @@ export const Contacts: React.FC<
   const [keyword, setKeyword] = useState('')
   const [keywordDebounced] = useDebounce(keyword, 300)
   const [currentPage, setCurrentPage] = useState(0)
-  const [perPage, setPerPage] = useState(PER_PAGE)
+  const [perPage, setPerPage] = useState(DEFAULT_PAGINATION_LIMIT)
   const [order, setOrder] = useState<SortOrder>('asc')
   const [orderBy, setOrderBy] = useState(cols[0].id)
   const [roleFilter, setRoleFilter] = useState<FilterOption[]>(roleOptions)
@@ -255,7 +257,7 @@ export const Contacts: React.FC<
                   onPageChange={(_, page) => setCurrentPage(page)}
                   onRowsPerPageChange={handleRowsPerPageChange}
                   rowsPerPage={perPage}
-                  rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+                  rowsPerPageOptions={DEFAULT_PAGINATION_ROW_OPTIONS}
                 />
               ) : null}
             </TableContainer>

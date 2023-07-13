@@ -17,12 +17,11 @@ import { FilterSearch } from '@app/components/FilterSearch'
 import { OrderEnum, TagQuery, TagQueryVariables } from '@app/generated/graphql'
 import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import TAG_QUERY from '@app/queries/membership/tag'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
-
-export const PER_PAGE = 12
 
 const Tag: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
@@ -35,7 +34,7 @@ const Tag: React.FC<React.PropsWithChildren<unknown>> = () => {
   >({
     after: null,
     before: null,
-    first: PER_PAGE,
+    first: DEFAULT_PAGINATION_LIMIT,
     last: null,
   })
 
@@ -78,7 +77,7 @@ const Tag: React.FC<React.PropsWithChildren<unknown>> = () => {
             setPagination({
               after: null,
               before: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
               last: null,
             })
             setSearchTerm(value)
@@ -94,7 +93,7 @@ const Tag: React.FC<React.PropsWithChildren<unknown>> = () => {
               after: null,
               before: null,
               last: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
             })
             setOrderDirection(direction as unknown as OrderEnum)
           }}
@@ -168,7 +167,7 @@ const Tag: React.FC<React.PropsWithChildren<unknown>> = () => {
                     first: null,
                     after: null,
                     before: data?.content?.tag?.posts?.pageInfo?.startCursor,
-                    last: PER_PAGE,
+                    last: DEFAULT_PAGINATION_LIMIT,
                   })
                 }}
               >
@@ -182,7 +181,7 @@ const Tag: React.FC<React.PropsWithChildren<unknown>> = () => {
                   scrollTo()
                   setPagination({
                     ...pagination,
-                    first: PER_PAGE,
+                    first: DEFAULT_PAGINATION_LIMIT,
                     after: data?.content?.tag?.posts?.pageInfo?.endCursor,
                     before: null,
                     last: null,

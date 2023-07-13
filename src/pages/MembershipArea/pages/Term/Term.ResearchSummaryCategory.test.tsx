@@ -10,11 +10,12 @@ import {
   TermQueryVariables,
   WpPageInfo,
 } from '@app/generated/graphql'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildResearchSummary } from '@test/mock-data-utils'
 
-import Term, { PER_PAGE } from '.'
+import Term from '.'
 
 describe('page: Term - ResearchSummaryCategory', () => {
   it('displays skeleton loading while fetching research summaries category', () => {
@@ -160,8 +161,11 @@ describe('page: Term - ResearchSummaryCategory', () => {
                 researchSummaries: {
                   nodes:
                     variables.orderDirection === OrderEnum.Asc
-                      ? reversedResearchSummaries.slice(0, PER_PAGE)
-                      : researchSummaries.slice(0, PER_PAGE),
+                      ? reversedResearchSummaries.slice(
+                          0,
+                          DEFAULT_PAGINATION_LIMIT
+                        )
+                      : researchSummaries.slice(0, DEFAULT_PAGINATION_LIMIT),
                 },
               },
             },

@@ -14,14 +14,13 @@ import {
 } from '@app/generated/graphql'
 import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
 import { PageTitle } from '../../components/PageTitle'
 import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
-
-export const PER_PAGE = 12
 
 const VideoSeries = () => {
   const { t } = useTranslation()
@@ -34,7 +33,7 @@ const VideoSeries = () => {
   >({
     after: null,
     before: null,
-    first: PER_PAGE,
+    first: DEFAULT_PAGINATION_LIMIT,
     last: null,
   })
 
@@ -110,7 +109,7 @@ const VideoSeries = () => {
             setPagination({
               after: null,
               before: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
               last: null,
             })
             setSearchTerm(value)
@@ -126,7 +125,7 @@ const VideoSeries = () => {
               after: null,
               before: null,
               last: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
             })
             setOrderDirection(direction as unknown as OrderEnum)
           }}
@@ -200,7 +199,7 @@ const VideoSeries = () => {
                     after: null,
                     before:
                       data?.content?.videoSeriesItems?.pageInfo?.startCursor,
-                    last: PER_PAGE,
+                    last: DEFAULT_PAGINATION_LIMIT,
                   })
                 }}
               >
@@ -214,7 +213,7 @@ const VideoSeries = () => {
                   scrollTo()
                   setPagination({
                     ...pagination,
-                    first: PER_PAGE,
+                    first: DEFAULT_PAGINATION_LIMIT,
                     after: data?.content?.videoSeriesItems?.pageInfo?.endCursor,
                     before: null,
                     last: null,
@@ -228,7 +227,7 @@ const VideoSeries = () => {
         </>
       ) : (
         <Box data-testid="video-items-grid-skeleton">
-          <ItemsGridSkeleton num={PER_PAGE} />
+          <ItemsGridSkeleton num={DEFAULT_PAGINATION_LIMIT} />
         </Box>
       )}
     </Container>

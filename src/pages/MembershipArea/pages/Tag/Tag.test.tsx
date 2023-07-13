@@ -10,11 +10,12 @@ import {
   TagQueryVariables,
   WpPageInfo,
 } from '@app/generated/graphql'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildPost, buildTag } from '@test/mock-data-utils'
 
-import Tag, { PER_PAGE } from '.'
+import Tag from '.'
 
 describe('page: Tag', () => {
   it('displays skeleton loading while fetching tag', () => {
@@ -182,8 +183,8 @@ describe('page: Tag', () => {
                 posts: {
                   nodes:
                     variables.orderDirection === OrderEnum.Asc
-                      ? reversedPosts.slice(0, PER_PAGE)
-                      : posts.slice(0, PER_PAGE),
+                      ? reversedPosts.slice(0, DEFAULT_PAGINATION_LIMIT)
+                      : posts.slice(0, DEFAULT_PAGINATION_LIMIT),
                 },
               },
             },

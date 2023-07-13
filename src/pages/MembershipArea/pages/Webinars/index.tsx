@@ -14,14 +14,13 @@ import {
 } from '@app/generated/graphql'
 import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import WEBINARS_QUERY from '@app/queries/membership/webinars'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
 import { PageTitle } from '../../components/PageTitle'
 import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
-
-export const PER_PAGE = 12
 
 const Webinars = () => {
   const { t } = useTranslation()
@@ -34,7 +33,7 @@ const Webinars = () => {
   >({
     after: null,
     before: null,
-    first: PER_PAGE,
+    first: DEFAULT_PAGINATION_LIMIT,
     last: null,
   })
 
@@ -105,7 +104,7 @@ const Webinars = () => {
             setPagination({
               after: null,
               before: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
               last: null,
             })
             setSearchTerm(value)
@@ -121,7 +120,7 @@ const Webinars = () => {
               after: null,
               before: null,
               last: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
             })
             setOrderDirection(direction as unknown as OrderEnum)
           }}
@@ -193,7 +192,7 @@ const Webinars = () => {
                     first: null,
                     after: null,
                     before: data?.content?.webinars?.pageInfo?.startCursor,
-                    last: PER_PAGE,
+                    last: DEFAULT_PAGINATION_LIMIT,
                   })
                 }}
               >
@@ -207,7 +206,7 @@ const Webinars = () => {
                   scrollTo()
                   setPagination({
                     ...pagination,
-                    first: PER_PAGE,
+                    first: DEFAULT_PAGINATION_LIMIT,
                     after: data?.content?.webinars?.pageInfo?.endCursor,
                     before: null,
                     last: null,

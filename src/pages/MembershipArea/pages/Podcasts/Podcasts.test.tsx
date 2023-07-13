@@ -9,11 +9,12 @@ import {
   PodcastsQuery,
   PodcastsQueryVariables,
 } from '@app/generated/graphql'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { render, screen, within, userEvent, waitFor } from '@test/index'
 import { buildEntities, buildPodcast } from '@test/mock-data-utils'
 
-import Podcasts, { PER_PAGE } from '.'
+import Podcasts from '.'
 
 describe('page: Podcasts', () => {
   it('displays skeleton while loading podcasts', () => {
@@ -155,7 +156,7 @@ describe('page: Podcasts', () => {
       screen.queryByTestId(`podcast-grid-item-${podcasts[0].id}`)
     ).not.toBeInTheDocument()
 
-    const paginatedPodcasts = podcasts.slice(1, PER_PAGE)
+    const paginatedPodcasts = podcasts.slice(1, DEFAULT_PAGINATION_LIMIT)
 
     paginatedPodcasts.forEach(podcast => {
       const podcastElement = screen.getByTestId(
@@ -208,8 +209,14 @@ describe('page: Podcasts', () => {
   })
 
   it('paginates podcasts', async () => {
-    const firstPodcastBatch = buildEntities(PER_PAGE + 1, buildPodcast)
-    const secondPodcastBatch = buildEntities(PER_PAGE, buildPodcast)
+    const firstPodcastBatch = buildEntities(
+      DEFAULT_PAGINATION_LIMIT + 1,
+      buildPodcast
+    )
+    const secondPodcastBatch = buildEntities(
+      DEFAULT_PAGINATION_LIMIT,
+      buildPodcast
+    )
 
     const client = {
       executeQuery: ({ variables }: { variables: PodcastsQueryVariables }) => {
@@ -269,8 +276,8 @@ describe('page: Podcasts', () => {
             podcasts: {
               records:
                 variables.input.order?.direction === OrderDirection.Asc
-                  ? reversedPodcasts.slice(0, PER_PAGE)
-                  : podcasts.slice(0, PER_PAGE),
+                  ? reversedPodcasts.slice(0, DEFAULT_PAGINATION_LIMIT)
+                  : podcasts.slice(0, DEFAULT_PAGINATION_LIMIT),
               total: 20,
             },
           },
@@ -323,7 +330,7 @@ describe('page: Podcasts', () => {
         const records =
           variables.input.term === SEARCH_TERM
             ? [filteredPodcast]
-            : podcasts.slice(0, PER_PAGE)
+            : podcasts.slice(0, DEFAULT_PAGINATION_LIMIT)
         return fromValue<{ data: PodcastsQuery }>({
           data: {
             podcasts: {

@@ -21,12 +21,11 @@ import {
 } from '@app/generated/graphql'
 import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import CATEGORY_QUERY from '@app/queries/membership/category'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
-
-export const PER_PAGE = 12
 
 const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
@@ -42,7 +41,7 @@ const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
   >({
     after: null,
     before: null,
-    first: PER_PAGE,
+    first: DEFAULT_PAGINATION_LIMIT,
     last: null,
   })
 
@@ -83,7 +82,7 @@ const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
             setPagination({
               after: null,
               before: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
               last: null,
             })
             setSearchTerm(value)
@@ -99,7 +98,7 @@ const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
               after: null,
               before: null,
               last: null,
-              first: PER_PAGE,
+              first: DEFAULT_PAGINATION_LIMIT,
             })
             setOrderDirection(direction as unknown as OrderEnum)
           }}
@@ -174,7 +173,7 @@ const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
                     after: null,
                     before:
                       data?.content?.category?.posts?.pageInfo?.startCursor,
-                    last: PER_PAGE,
+                    last: DEFAULT_PAGINATION_LIMIT,
                   })
                 }}
               >
@@ -188,7 +187,7 @@ const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
                   scrollTo()
                   setPagination({
                     ...pagination,
-                    first: PER_PAGE,
+                    first: DEFAULT_PAGINATION_LIMIT,
                     after: data?.content?.category?.posts?.pageInfo?.endCursor,
                     before: null,
                     last: null,
@@ -202,7 +201,7 @@ const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
         </>
       ) : (
         <Box data-testid="posts-items-grid-skeleton">
-          <ItemsGridSkeleton num={PER_PAGE} />
+          <ItemsGridSkeleton num={DEFAULT_PAGINATION_LIMIT} />
         </Box>
       )}
     </Container>

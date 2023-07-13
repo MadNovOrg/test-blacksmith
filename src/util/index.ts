@@ -653,3 +653,6 @@ export function expiryDateWithGracePeriod(
 ) {
   return addMonths(expiryDate, GRACE_PERIOD_PER_LEVEL[level])
 }
+
+export const DEFAULT_PAGINATION_LIMIT = 12
+export const DEFAULT_PAGINATION_ROW_OPTIONS = [12, 24, 50, 100]

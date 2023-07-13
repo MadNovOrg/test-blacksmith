@@ -10,11 +10,12 @@ import {
   TermQueryVariables,
   WpPageInfo,
 } from '@app/generated/graphql'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildVideoItem } from '@test/mock-data-utils'
 
-import Term, { PER_PAGE } from '.'
+import Term from '.'
 
 describe('page: Term - WebinarsCategory', () => {
   it('displays skeleton loading while fetching video series category', () => {
@@ -205,8 +206,8 @@ describe('page: Term - WebinarsCategory', () => {
                 videoSeriesItems: {
                   nodes:
                     variables.orderDirection === OrderEnum.Asc
-                      ? reversedVideoItems.slice(0, PER_PAGE)
-                      : videoItems.slice(0, PER_PAGE),
+                      ? reversedVideoItems.slice(0, DEFAULT_PAGINATION_LIMIT)
+                      : videoItems.slice(0, DEFAULT_PAGINATION_LIMIT),
                 },
               },
             },

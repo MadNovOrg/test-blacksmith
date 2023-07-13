@@ -10,11 +10,12 @@ import {
   TermQueryVariables,
   WpPageInfo,
 } from '@app/generated/graphql'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildWebinar } from '@test/mock-data-utils'
 
-import Term, { PER_PAGE } from '.'
+import Term from '.'
 
 describe('page: Term - WebinarsCategory', () => {
   it('displays skeleton loading while fetching webinars category', () => {
@@ -200,8 +201,8 @@ describe('page: Term - WebinarsCategory', () => {
                 webinars: {
                   nodes:
                     variables.orderDirection === OrderEnum.Asc
-                      ? reversedWebinars.slice(0, PER_PAGE)
-                      : webinars.slice(0, PER_PAGE),
+                      ? reversedWebinars.slice(0, DEFAULT_PAGINATION_LIMIT)
+                      : webinars.slice(0, DEFAULT_PAGINATION_LIMIT),
                 },
               },
             },

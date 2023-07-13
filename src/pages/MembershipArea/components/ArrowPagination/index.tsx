@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
 import theme from '@app/theme'
-
-export const PER_PAGE = 12
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 type Props = {
   total: number
@@ -23,7 +22,7 @@ export const ArrowPagination: React.FC<React.PropsWithChildren<Props>> = ({
 
   const hasPreviousPage = currentPage > 1
 
-  const hasNextPage = currentPage * PER_PAGE < total
+  const hasNextPage = currentPage * DEFAULT_PAGINATION_LIMIT < total
 
   useEffect(() => {
     onPageChange(currentPage)
@@ -33,8 +32,11 @@ export const ArrowPagination: React.FC<React.PropsWithChildren<Props>> = ({
     <Box display="flex" mt={5} justifyContent="space-between" {...rest}>
       <Typography variant="body2">
         {t('pages.membership.components.arrow-pagination.pagination-count', {
-          start: (currentPage - 1) * PER_PAGE + 1,
-          end: currentPage * PER_PAGE > 20 ? 20 : currentPage * PER_PAGE,
+          start: (currentPage - 1) * DEFAULT_PAGINATION_LIMIT + 1,
+          end:
+            currentPage * DEFAULT_PAGINATION_LIMIT > 20
+              ? 20
+              : currentPage * DEFAULT_PAGINATION_LIMIT,
           total,
         })}
       </Typography>

@@ -19,15 +19,16 @@ import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import { Course, CourseInvite, InviteStatus, SortOrder } from '@app/types'
-import { LoadingStatus } from '@app/util'
+import {
+  DEFAULT_PAGINATION_LIMIT,
+  DEFAULT_PAGINATION_ROW_OPTIONS,
+  LoadingStatus,
+} from '@app/util'
 
 type TabProperties = {
   course: Course
   inviteStatus: InviteStatus
 }
-
-const PER_PAGE = 12
-const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
   const { t } = useTranslation()
@@ -37,7 +38,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const [currentPage, setCurrentPage] = useState(0)
-  const [perPage, setPerPage] = useState(PER_PAGE)
+  const [perPage, setPerPage] = useState(DEFAULT_PAGINATION_LIMIT)
   const [order, setOrder] = useState<SortOrder>('asc')
   const [messageSnackbarOpen, setMessageSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
@@ -163,7 +164,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
               onPageChange={(_, page) => setCurrentPage(page)}
               onRowsPerPageChange={handleRowsPerPageChange}
               rowsPerPage={perPage}
-              rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+              rowsPerPageOptions={DEFAULT_PAGINATION_ROW_OPTIONS}
               data-testid="course-invites-pagination"
             />
           ) : (

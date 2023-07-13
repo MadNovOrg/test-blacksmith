@@ -2,12 +2,14 @@ import { Box, TablePagination } from '@mui/material'
 import React, { useCallback, useEffect } from 'react'
 import { NumberParam, useQueryParam, withDefault } from 'use-query-params'
 
-const PER_PAGE = 12
-const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
+import {
+  DEFAULT_PAGINATION_LIMIT,
+  DEFAULT_PAGINATION_ROW_OPTIONS,
+} from '@app/util'
 
 const PaginationComponent = ({
   total,
-  rowsPerPage = ROWS_PER_PAGE_OPTIONS,
+  rowsPerPage = DEFAULT_PAGINATION_ROW_OPTIONS,
   testId,
   currentPage,
   perPage,
@@ -65,7 +67,7 @@ type Props = {
 }
 
 export const useTablePagination = ({
-  initialPerPage = PER_PAGE,
+  initialPerPage = DEFAULT_PAGINATION_LIMIT,
   id = 'tbl',
 }: Props = {}) => {
   const [currentPage, setCurrentPage] = useQueryParam(
@@ -88,7 +90,7 @@ export const useTablePagination = ({
   const Pagination = useCallback(
     ({
       total,
-      rowsPerPage = ROWS_PER_PAGE_OPTIONS,
+      rowsPerPage = DEFAULT_PAGINATION_ROW_OPTIONS,
       testId,
     }: {
       total: number

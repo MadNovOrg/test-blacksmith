@@ -12,6 +12,7 @@ import {
 } from '@app/generated/graphql'
 import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import PODCASTS_QUERY from '@app/queries/membership/podcasts'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { ArrowPagination } from '../../components/ArrowPagination'
 import { BlogPostItem } from '../../components/BlogPostItem'
@@ -19,8 +20,6 @@ import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
 import { PageTitle } from '../../components/PageTitle'
 import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
-
-export const PER_PAGE = 12
 
 const Podcasts: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
@@ -40,7 +39,7 @@ const Podcasts: React.FC<React.PropsWithChildren<unknown>> = () => {
     variables: {
       input: {
         paging: {
-          perPage: PER_PAGE + (currentPage === 1 ? 1 : 0),
+          perPage: DEFAULT_PAGINATION_LIMIT + (currentPage === 1 ? 1 : 0),
           page: currentPage,
         },
         order: {
@@ -81,7 +80,9 @@ const Podcasts: React.FC<React.PropsWithChildren<unknown>> = () => {
     setOrderDirection(direction)
   }
 
-  const hasPagination = data?.podcasts ? PER_PAGE < data.podcasts.total : false
+  const hasPagination = data?.podcasts
+    ? DEFAULT_PAGINATION_LIMIT < data.podcasts.total
+    : false
 
   return (
     <Container maxWidth="lg" sx={{ paddingBottom: 5 }}>
@@ -169,7 +170,7 @@ const Podcasts: React.FC<React.PropsWithChildren<unknown>> = () => {
         </>
       ) : (
         <Box data-testid="podcasts-grid-skeleton">
-          <ItemsGridSkeleton num={PER_PAGE} />
+          <ItemsGridSkeleton num={DEFAULT_PAGINATION_LIMIT} />
         </Box>
       )}
     </Container>

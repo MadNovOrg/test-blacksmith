@@ -10,11 +10,12 @@ import {
   TermQueryVariables,
   WpPageInfo,
 } from '@app/generated/graphql'
+import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEbook, buildEntities } from '@test/mock-data-utils'
 
-import Term, { PER_PAGE } from '.'
+import Term from '.'
 
 describe('page: Term - EbookCategory', () => {
   it('displays skeleton loading while fetching ebook category', () => {
@@ -157,8 +158,8 @@ describe('page: Term - EbookCategory', () => {
                 ebooks: {
                   nodes:
                     variables.orderDirection === OrderEnum.Asc
-                      ? ebooksPosts.slice(0, PER_PAGE)
-                      : ebooks.slice(0, PER_PAGE),
+                      ? ebooksPosts.slice(0, DEFAULT_PAGINATION_LIMIT)
+                      : ebooks.slice(0, DEFAULT_PAGINATION_LIMIT),
                 },
               },
             },
