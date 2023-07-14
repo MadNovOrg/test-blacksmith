@@ -67,6 +67,9 @@ for (const data of testData) {
     await myCoursesPage.goto(`${course.id}`)
     await myCoursesPage.acceptCourse(course.id)
     await myCoursesPage.goToCourseBuilder()
-    await myCoursesPage.checkCourseStartDatePresence()
+    await myCoursesPage.submitDefaultModules()
+    await myCoursesPage.confirmModules()
+    await myCoursesPage.goto(`${course.id}`)
+    await myCoursesPage.checkCourseStatus(course.id, 'Scheduled')
   })
 }

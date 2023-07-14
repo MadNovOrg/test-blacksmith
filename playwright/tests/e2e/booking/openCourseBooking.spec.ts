@@ -29,5 +29,5 @@ test('@smoke renders booking page', async ({ page, courseId }) => {
   const bookingDetailsPage = new BookingDetailsPage(page)
   await bookingDetailsPage.goto(String(courseId))
 
-  test.expect(page.getByTestId('booking-form')).toBeVisible()
+  await test.expect(page.getByTestId('booking-form')).toBeVisible()
 })
