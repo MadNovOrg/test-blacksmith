@@ -26,8 +26,6 @@ export const CourseInfoPanel: React.FC<
         id: course.id,
         course_code: course.courseCode,
         level: course.level,
-        start: course.startDate,
-        end: course.endDate,
       }}
     />
 

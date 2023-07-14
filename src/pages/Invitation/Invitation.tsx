@@ -91,15 +91,10 @@ export const InvitationPage = () => {
   const isSubmitted = invite.status !== InviteStatus.PENDING
 
   const startDate = new Date(invite.startDate)
-  const endDate = new Date(invite.endDate)
 
   const startsIn: TimeDifferenceAndContext = getTimeDifferenceAndContext(
     startDate,
     now()
-  )
-  const courseDuration: TimeDifferenceAndContext = getTimeDifferenceAndContext(
-    endDate,
-    startDate
   )
 
   const address = invite.venueAddress
@@ -212,9 +207,6 @@ export const InvitationPage = () => {
               </Typography>
               <Typography variant="body2" gutterBottom>
                 {t('dates.withTime', { date: invite.endDate })}
-              </Typography>
-              <Typography variant="body2" color="grey.600" gutterBottom>
-                {t('pages.course-participants.course-duration', courseDuration)}
               </Typography>
             </Box>
           </Box>
