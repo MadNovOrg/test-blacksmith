@@ -67,23 +67,27 @@ export const QUERY = gql`
       bookingContact {
         id
       }
-      id
-      modules
-    }
-    bildStrategies {
-      strategyName
-    }
-    moduleGroupIds: modules {
-      module {
-        moduleGroup {
-          id
+      status
+      accreditedBy
+      bildModules {
+        id
+        modules
+      }
+      bildStrategies {
+        strategyName
+      }
+      moduleGroupIds: modules {
+        module {
+          moduleGroup {
+            id
+          }
         }
       }
-    }
-    orders @include(if: $withOrders) {
-      id
-      xeroInvoiceNumber
-      source
+      orders @include(if: $withOrders) {
+        id
+        xeroInvoiceNumber
+        source
+      }
     }
   }
 `
