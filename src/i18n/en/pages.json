@@ -602,7 +602,7 @@
     "invite-btn": "Invite attendees",
     "add-registrants-btn": "Add registrant(s)",
     "invite-modal-title": "Invite attendees",
-    "invite-modal-intro": "Attendees must upload their forms and documents to fully register to the course.",
+    "invite-modal-intro": "Attendees must hold the relevant certification to complete the course. <br/> <br/> Please ensure email addresses are entered correctly. Course instructions will be sent to the attendee details provided once the invitation has been accepted. <br/> <br/>",
     "invite-send-btn": "Send invites",
     "invite-input-placeholder": "Email address...",
     "invite-input-hint": "Press ENTER to add multiple emails",

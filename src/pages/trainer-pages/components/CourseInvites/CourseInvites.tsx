@@ -11,7 +11,7 @@ import {
   useTheme,
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 
@@ -244,15 +244,11 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
         title={t('pages.course-participants.invite-modal-title')}
         maxWidth={600}
       >
-        <Typography variant="body2" sx={{ marginBottom: 1 }}>
-          {t('pages.course-participants.invite-modal-intro')}
+        <Typography variant="body2">
+          <Trans i18nKey="pages.course-participants.invite-modal-intro" />
         </Typography>
 
-        <Typography
-          variant="body2"
-          fontWeight="bold"
-          data-testid="modal-invites-left"
-        >
+        <Typography fontWeight="bold" data-testid="modal-invites-left">
           {t('pages.course-participants.invites-left', {
             count: invitesLeft - emails.length,
           })}
