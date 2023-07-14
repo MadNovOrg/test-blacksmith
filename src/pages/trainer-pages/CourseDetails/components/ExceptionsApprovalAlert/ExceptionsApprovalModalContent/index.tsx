@@ -145,8 +145,7 @@ export const ExceptionsApprovalModalContent: FC<
             error={!!errors.reason?.message}
             fullWidth
             variant="filled"
-            label={t('common.reason')}
-            required
+            label={`${t('common.reason')}* X`}
             helperText={errors.reason?.message ?? ''}
             {...register('reason', {
               required: {
@@ -158,6 +157,10 @@ export const ExceptionsApprovalModalContent: FC<
           {action === Course_Audit_Type_Enum.Rejected ? (
             <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
               {t('pages.create-course.exceptions.course-rejection-warning')}
+            </Alert>
+          ) : action === Course_Audit_Type_Enum.Approved ? (
+            <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
+              {t('pages.create-course.exceptions.course-approve-warning')}
             </Alert>
           ) : null}
           <Box
