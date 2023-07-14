@@ -41,11 +41,11 @@ Schema and metadata should be managed via database migrations. Hasura provides a
 
 The `hasura` folder contains all the configuration.
 
-## Managing hasura metadata
+## Managing hasura metadata & GraphQL types
 
 Oftentimes after syncing the `main` branch the schema may go inconsistent, to fix this, the ordering of the applied commands do matter.
 
-1. Apply the database migrations if any
+1. Apply the database migrations first, if any
 ```bash
 npm run hasura:migrate:apply
 ```
@@ -55,7 +55,13 @@ npm run hasura:migrate:apply
 npm run hasura:metadata:apply
 ```
 
-If there were problems in applying metadata try
+3. Regenerate graphql types
+```bash
+npm run graphql-codegen
+npm run graphql-codegen:watch
+```
+
+> ⚠ If there were problems in applying metadata try
 
 ```bash
 npm run hasura:metadata:reload
