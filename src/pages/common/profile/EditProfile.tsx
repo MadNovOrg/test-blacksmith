@@ -1057,10 +1057,6 @@ export const EditProfilePage: React.FC<
                 </Button>
               </Grid>
 
-              <Typography variant="body2" mt={1}>
-                {t('certification-warning')}
-              </Typography>
-
               {(certifications ?? []).map((certificate, index) => (
                 <Box
                   mt={2}
