@@ -67,11 +67,23 @@ export const QUERY = gql`
       bookingContact {
         id
       }
-      orders @include(if: $withOrders) {
-        id
-        xeroInvoiceNumber
-        source
+      id
+      modules
+    }
+    bildStrategies {
+      strategyName
+    }
+    moduleGroupIds: modules {
+      module {
+        moduleGroup {
+          id
+        }
       }
+    }
+    orders @include(if: $withOrders) {
+      id
+      xeroInvoiceNumber
+      source
     }
   }
 `

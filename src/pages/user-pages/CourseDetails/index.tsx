@@ -285,6 +285,16 @@ export const CourseDetails = () => {
                             data-testid="attendees-tab"
                           />
                         ) : null}
+
+                        {showCourseOverview && (
+                          <PillTab
+                            label={t(
+                              'pages.course-details.tabs.course-overview.title'
+                            )}
+                            value={CourseDetailsTabs.COURSE_OVERVIEW}
+                            data-testid="course-overview-tab"
+                          />
+                        )}
                       </PillTabList>
                     </Box>
                     <Box>

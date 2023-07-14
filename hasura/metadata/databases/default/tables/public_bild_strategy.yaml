@@ -54,3 +54,12 @@ select_permissions:
         - short_name
         - id
       filter: {}
+  - role: user
+    permission:
+      columns:
+        - duration
+        - modules
+        - name
+        - short_name
+        - id
+      filter: {}
