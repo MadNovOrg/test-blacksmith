@@ -145,7 +145,8 @@ export const ExceptionsApprovalModalContent: FC<
             error={!!errors.reason?.message}
             fullWidth
             variant="filled"
-            label={`${t('common.reason')}* X`}
+            label={t('common.reason')}
+            required
             helperText={errors.reason?.message ?? ''}
             {...register('reason', {
               required: {
