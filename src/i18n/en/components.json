@@ -138,7 +138,7 @@
     "course-cost-placeholder": "Cost of course",
     "course-cost": "How much are you charging for this course?",
     "course-cost-title": "Course Cost",
-    "course-cost-type-error": "Course cost must be a positive number",
+    "course-cost-positive-number-error": "Course cost must be a positive number",
     "course-cost-required-error": "Provide the price of the course",
     "course-cost-disclaimer": "Team Teach is not responsible for collecting fees for this course",
     "country": "Country",

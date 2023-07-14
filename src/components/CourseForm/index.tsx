@@ -257,16 +257,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           }),
         courseCost: yup
           .number()
-          .typeError(t('components.course-form.course-cost-type-error'))
-          .nullable()
-          .positive(t('components.course-form.course-cost-type-error'))
-          .when('usesAOL', {
-            is: true,
-            then: schema =>
-              schema.required(
-                t('components.course-form.course-cost-required-error')
-              ),
-          }),
+          .transform(value => (isNaN(value) ? undefined : value))
+          .optional()
+          .positive(
+            t('components.course-form.course-cost-positive-number-error')
+          )
+          .nullable(),
         notes: yup.string().nullable(),
         specialInstructions: yup.string().nullable().default(''),
         parkingInstructions: yup.string().nullable().default(''),
@@ -1361,7 +1357,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     {t('components.course-form.course-cost-disclaimer')}
                   </Typography>
                   <TextField
-                    required
                     {...register('courseCost')}
                     variant="filled"
                     placeholder={t(
