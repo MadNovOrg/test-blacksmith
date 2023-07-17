@@ -1018,7 +1018,10 @@
     "connect-hint": "A user with access to a privileged account must setup the Hub connection with Arlo by clicking the button below.",
     "connect-btn": "Connect to Arlo",
     "connect-done": "HUB is connected to Arlo.",
-    "connect-error": "Failed to determine Arlo connection status. \nPlease try again later."
+    "connect-error": "Failed to determine Arlo connection status. \nPlease try again later.",
+    "import-certificate-report": "Upload Arlo's bulk certificates report",
+    "choose-file": "Choose file",
+    "import-certificate-success": "Certificate import finished. Found {{ processed }} valid certificates; {{ added }} new certificates imported."
   },
   "create-organization": {
     "title": "Create Organisation",

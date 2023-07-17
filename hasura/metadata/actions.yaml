@@ -171,6 +171,13 @@ actions:
       - role: sales-admin
       - role: tt-admin
     comment: go1LicensesChange
+  - name: importArloCertificates
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/certificate/upload/bulk'
+      forward_client_headers: true
+    permissions:
+      - role: tt-admin
   - name: importLegacyCertificate
     definition:
       kind: synchronous

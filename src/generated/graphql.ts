@@ -3199,6 +3199,12 @@ export type HierarchicalTermNode = {
   parentId?: Maybe<Scalars['ID']>;
 };
 
+export type ImportArloCertificatesOutput = {
+  __typename?: 'ImportArloCertificatesOutput';
+  added: Scalars['Int'];
+  processed: Scalars['Int'];
+};
+
 export type InitAuthOutput = {
   __typename?: 'InitAuthOutput';
   authChallenge: Scalars['String'];
@@ -27790,8 +27796,6 @@ export type Legacy_Certificate_Bool_Exp = {
 
 /** unique or primary key constraints on table "legacy_certificate" */
 export enum Legacy_Certificate_Constraint {
-  /** unique or primary key constraint on columns "legacy_id" */
-  LegacyCertificateLegacyIdKey = 'legacy_certificate_legacy_id_key',
   /** unique or primary key constraint on columns "number" */
   LegacyCertificateNumberKey = 'legacy_certificate_number_key',
   /** unique or primary key constraint on columns "id" */
@@ -29481,6 +29485,7 @@ export type Mutation_Root = {
   delete_xero_invoice_status_by_pk?: Maybe<Xero_Invoice_Status>;
   /** go1LicensesChange */
   go1LicensesChange?: Maybe<Go1LicensesChangeOutput>;
+  importArloCertificates?: Maybe<ImportArloCertificatesOutput>;
   importLegacyCertificate: Scalars['Boolean'];
   /** insert data into the table: "accreditors" */
   insert_accreditors?: Maybe<Accreditors_Mutation_Response>;
@@ -31479,6 +31484,12 @@ export type Mutation_RootDelete_Xero_Invoice_Status_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootGo1LicensesChangeArgs = {
   input: Go1LicensesChangeInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootImportArloCertificatesArgs = {
+  report: Scalars['String'];
 };
 
 
@@ -49454,6 +49465,13 @@ export type OrganizationsQueryVariables = Exact<{
 
 
 export type OrganizationsQuery = { __typename?: 'query_root', organizations: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null, members_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } }>, organizationsAggregation: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
+
+export type ImportArloCertificatesMutationVariables = Exact<{
+  report: Scalars['String'];
+}>;
+
+
+export type ImportArloCertificatesMutation = { __typename?: 'mutation_root', importArloCertificates?: { __typename?: 'ImportArloCertificatesOutput', processed: number, added: number } | null };
 
 export type GetAttendeeAuditLogsQueryVariables = Exact<{
   where: Course_Participant_Audit_Bool_Exp;

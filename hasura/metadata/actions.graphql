@@ -106,6 +106,12 @@ type Mutation {
 }
 
 type Mutation {
+  importArloCertificates(
+    report: String!
+  ): ImportArloCertificatesOutput
+}
+
+type Mutation {
   importLegacyCertificate(code: String!): Boolean
 }
 
@@ -1054,6 +1060,11 @@ type ArloCallbackOutput {
 type RejectCourseOutput {
   success: Boolean!
   error: CourseApprovalError
+}
+
+type ImportArloCertificatesOutput {
+  processed: Int!
+  added: Int!
 }
 
 scalar Date
