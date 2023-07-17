@@ -137,7 +137,7 @@ export const ResetPasswordPage = () => {
         </Typography>
 
         <Typography variant="body2">
-          {t('pages.reset-password.not-recieved-email')}
+          {t('pages.reset-password.not-received-email')}
           <Button
             sx={{
               display: 'inline',
@@ -149,6 +149,7 @@ export const ResetPasswordPage = () => {
           >
             {t('pages.reset-password.resend-code')}
           </Button>
+          {t('pages.reset-password.resend-label')}
         </Typography>
       </Box>
 

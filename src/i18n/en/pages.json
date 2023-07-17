@@ -153,7 +153,6 @@
       "empty": "There are no podcasts yet.",
       "search-placeholder": "Search podcasts",
       "error-loading-podcast": "There was an error loading the podcast",
-
       "recent": "Recent podcast episodes",
       "not-found": "Podcast not found",
       "episode-number": "Episode #{{number}}"
@@ -826,8 +825,9 @@
     "GBP": "GBP - Pound sterling"
   },
   "reset-password": {
-    "not-recieved-email": "If you did not receive an email with the code, please",
-    "resend-code": "click here to resend",
+    "not-received-email": "If you did not receive an email with the code, please",
+    "resend-code": "click here",
+    "resend-label": "to resend.",
     "changing-password-text": "Changing password for",
     "new-password-label": "New Password",
     "confirm-new-password-label": "Confirm New Password",
