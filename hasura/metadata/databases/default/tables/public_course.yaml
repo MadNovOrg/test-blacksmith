@@ -1229,6 +1229,17 @@ event_triggers:
       interval_sec: 10
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/go1-licensing/cancel-licenses'
+  - name: course_attendees_changed
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - max_participants
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/course-attendees-changed'
   - name: course_booking_contact_changed
     definition:
       enable_manual: false
