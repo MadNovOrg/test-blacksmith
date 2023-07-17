@@ -42,7 +42,7 @@ export const ICMOverview: React.FC<React.PropsWithChildren<Props>> = ({
       courseDeliveryType:
         course.deliveryType as unknown as Course_Delivery_Type_Enum,
       reaccreditation: course.reaccreditation,
-      go1Integration: course.go1Integration,
+      go1Integration: Boolean(course.go1Integration),
     },
   ])
 
