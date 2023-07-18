@@ -109,6 +109,18 @@ describe('component: ExceptionsApprovalModalContent', () => {
       input: { courseId: course.id },
     })
   })
+  it('should fail if only SPACES were entered', async () => {
+    setup()
+    const input = screen.getByDisplayValue('') as HTMLInputElement
+    const testValue = '      '
+    fireEvent.change(input, { target: { value: testValue } })
+    expect(input.value).toBe(testValue)
+    await userEvent.click(screen.getByText(t('common.submit')))
+    expect(input).toHaveAttribute('aria-invalid', 'true')
+    expect(
+      screen.getByText(t('pages.create-course.exceptions.reason-required'))
+    ).toBeInTheDocument()
+  })
   it('should fail if no reason is provided', async () => {
     setup()
     await userEvent.click(screen.getByText(t('common.submit')))

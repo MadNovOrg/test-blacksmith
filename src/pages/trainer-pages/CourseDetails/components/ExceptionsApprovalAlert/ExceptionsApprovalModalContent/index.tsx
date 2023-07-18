@@ -52,6 +52,7 @@ export const ExceptionsApprovalModalContent: FC<
     return yup.object({
       reason: yup
         .string()
+        .trim()
         .required(t('pages.create-course.exceptions.reason-required')),
     })
   }, [t])
