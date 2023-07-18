@@ -22,10 +22,13 @@ export const CourseInfoPanel: React.FC<
 > = ({ course }) => (
   <InfoPanel>
     <CourseTitleAndDuration
+      showCourseDuration={false}
       course={{
         id: course.id,
         course_code: course.courseCode,
         level: course.level,
+        start: course.startDate,
+        end: course.endDate,
       }}
     />
 
