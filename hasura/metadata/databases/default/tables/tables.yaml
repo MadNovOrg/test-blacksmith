@@ -2,6 +2,7 @@
 - "!include public_availability.yaml"
 - "!include public_bild_strategy.yaml"
 - "!include public_blended_learning_status.yaml"
+- "!include public_certificate_expired_notification_jobs.yaml"
 - "!include public_certificate_expiry_notification_jobs.yaml"
 - "!include public_certificate_expiry_notification_timeframe.yaml"
 - "!include public_certificate_status.yaml"
