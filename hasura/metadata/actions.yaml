@@ -173,7 +173,7 @@ actions:
     comment: go1LicensesChange
   - name: importArloCertificates
     definition:
-      kind: synchronous
+      kind: asynchronous
       handler: '{{ACTIONS_HOST}}/certificate/upload/bulk'
       forward_client_headers: true
     permissions:

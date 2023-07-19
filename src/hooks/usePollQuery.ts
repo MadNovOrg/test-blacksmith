@@ -4,27 +4,37 @@ import { useInterval } from 'react-use'
 type PollFnType = () => Promise<unknown>
 type UntilFnType = () => boolean
 
+const DEFAULT_INTERVAL = 1000
+const DEFAULT_MAX_POLLS = 10
+
 export default function usePollQuery(
   pollFn: PollFnType,
   untilFn: UntilFnType,
-  options: {
-    interval: number
-    maxPolls: number
-  } = { interval: 1000, maxPolls: 10 }
+  options?: {
+    interval?: number
+    maxPolls?: number
+    onTimeout?: () => void
+  }
 ): [() => void, boolean] {
-  const [pollCounter, setPollCounter] = useState(options.maxPolls)
+  const maxPolls = options?.maxPolls ?? DEFAULT_MAX_POLLS
+  const interval = options?.interval ?? DEFAULT_INTERVAL
+
+  const [pollCounter, setPollCounter] = useState(maxPolls)
   const [running, setRunning] = useState(false)
 
   useInterval(
     async () => {
       if (pollCounter === 0 || untilFn()) {
         setRunning(false)
+        if (pollCounter === 0 && options?.onTimeout) {
+          options.onTimeout()
+        }
       } else {
         setPollCounter(count => count - 1)
         await pollFn()
       }
     },
-    running ? options.interval : null
+    running ? interval : null
   )
 
   return [

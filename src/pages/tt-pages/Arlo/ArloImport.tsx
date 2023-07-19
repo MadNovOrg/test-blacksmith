@@ -12,17 +12,51 @@ import { useTranslation } from 'react-i18next'
 import {
   ImportArloCertificatesMutation,
   ImportArloCertificatesMutationVariables,
+  ImportArloCertificatesResultQuery,
+  ImportArloCertificatesResultQueryVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { IMPORT_ARLO_CERTIFICATE_MUTATION } from '@app/queries/admin/import-arlo-certificates'
+import usePollQuery from '@app/hooks/usePollQuery'
+import {
+  IMPORT_ARLO_CERTIFICATES_ACTION,
+  IMPORT_ARLO_CERTIFICATES_ACTION_RESULT,
+} from '@app/queries/admin/import-arlo-certificates'
 
 export const ArloImport: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>()
-  const [result, setResult] =
-    useState<ImportArloCertificatesMutation['importArloCertificates']>()
+  const [actionId, setActionId] = useState<string>()
+  const [result, setResult] = useState<{ processed: number; added: number }>()
+
+  const [startPolling] = usePollQuery(
+    async () => {
+      if (actionId) {
+        const { importArloCertificates } = await fetcher<
+          ImportArloCertificatesResultQuery,
+          ImportArloCertificatesResultQueryVariables
+        >(IMPORT_ARLO_CERTIFICATES_ACTION_RESULT, {
+          id: actionId ?? '',
+        })
+        if (importArloCertificates?.output) {
+          setResult(importArloCertificates.output)
+          setLoading(false)
+        } else if (importArloCertificates?.errors) {
+          setError(importArloCertificates.errors)
+        }
+      }
+    },
+    () => !!result || !!error,
+    {
+      interval: 5000,
+      maxPolls: 30,
+      onTimeout: () => {
+        setLoading(false)
+        setError(t('pages.arlo.timeout'))
+      },
+    }
+  )
 
   const handleFileChange = useCallback(
     async (e: ChangeEvent<HTMLInputElement>) => {
@@ -56,18 +90,16 @@ export const ArloImport: React.FC<React.PropsWithChildren<unknown>> = () => {
         const response = await fetcher<
           ImportArloCertificatesMutation,
           ImportArloCertificatesMutationVariables
-        >(IMPORT_ARLO_CERTIFICATE_MUTATION, { report: encoded })
-        if (response.importArloCertificates) {
-          setResult(response.importArloCertificates)
-        }
+        >(IMPORT_ARLO_CERTIFICATES_ACTION, { report: encoded })
+        setActionId(response.importArloCertificates)
+        startPolling()
       } catch (err) {
         console.error(err)
         setError((err as Error).message)
-      } finally {
         setLoading(false)
       }
     },
-    [fetcher]
+    [fetcher, startPolling]
   )
 
   return (

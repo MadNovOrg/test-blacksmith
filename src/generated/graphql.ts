@@ -27674,6 +27674,19 @@ export type Identity_Updates = {
   where: Identity_Bool_Exp;
 };
 
+/** fields of action: "importArloCertificates" */
+export type ImportArloCertificates = {
+  __typename?: 'importArloCertificates';
+  /** the time at which this action was created */
+  created_at: Scalars['timestamptz'];
+  /** errors related to the invocation */
+  errors?: Maybe<Scalars['json']>;
+  /** the unique id of an action */
+  id: Scalars['uuid'];
+  /** the output fields of this action */
+  output?: Maybe<ImportArloCertificatesOutput>;
+};
+
 export type IsUserSubscribedToMembershipResponse = {
   __typename?: 'isUserSubscribedToMembershipResponse';
   isSubscribed: Scalars['Boolean'];
@@ -29499,7 +29512,7 @@ export type Mutation_Root = {
   delete_xero_invoice_status_by_pk?: Maybe<Xero_Invoice_Status>;
   /** go1LicensesChange */
   go1LicensesChange?: Maybe<Go1LicensesChangeOutput>;
-  importArloCertificates?: Maybe<ImportArloCertificatesOutput>;
+  importArloCertificates: Scalars['uuid'];
   importLegacyCertificate: Scalars['Boolean'];
   /** insert data into the table: "accreditors" */
   insert_accreditors?: Maybe<Accreditors_Mutation_Response>;
@@ -40960,6 +40973,7 @@ export type Query_Root = {
   identity_type_aggregate: Identity_Type_Aggregate;
   /** fetch data from the table: "identity_type" using primary key columns */
   identity_type_by_pk?: Maybe<Identity_Type>;
+  importArloCertificates?: Maybe<ImportArloCertificates>;
   initAuth: InitAuthOutput;
   /** Checks whether user is subscribed to membership */
   isUserSubscribedToMembership?: Maybe<IsUserSubscribedToMembershipResponse>;
@@ -43926,6 +43940,7 @@ export type Subscription_Root = {
   identity_type_by_pk?: Maybe<Identity_Type>;
   /** fetch data from the table in a streaming manner: "identity_type" */
   identity_type_stream: Array<Identity_Type>;
+  importArloCertificates?: Maybe<ImportArloCertificates>;
   /** fetch data from the table: "legacy_certificate" */
   legacy_certificate: Array<Legacy_Certificate>;
   /** fetch aggregated fields from the table: "legacy_certificate" */
@@ -45866,6 +45881,11 @@ export type Subscription_RootIdentity_Type_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Identity_Type_Stream_Cursor_Input>>;
   where?: InputMaybe<Identity_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootImportArloCertificatesArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -49485,7 +49505,14 @@ export type ImportArloCertificatesMutationVariables = Exact<{
 }>;
 
 
-export type ImportArloCertificatesMutation = { __typename?: 'mutation_root', importArloCertificates?: { __typename?: 'ImportArloCertificatesOutput', processed: number, added: number } | null };
+export type ImportArloCertificatesMutation = { __typename?: 'mutation_root', importArloCertificates: any };
+
+export type ImportArloCertificatesResultQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type ImportArloCertificatesResultQuery = { __typename?: 'query_root', importArloCertificates?: { __typename?: 'importArloCertificates', errors?: any | null, output?: { __typename?: 'ImportArloCertificatesOutput', processed: number, added: number } | null } | null };
 
 export type GetAttendeeAuditLogsQueryVariables = Exact<{
   where: Course_Participant_Audit_Bool_Exp;

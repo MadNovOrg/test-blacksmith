@@ -1033,7 +1033,8 @@
     "connect-error": "Failed to determine Arlo connection status. \nPlease try again later.",
     "import-certificate-report": "Upload Arlo's bulk certificates report",
     "choose-file": "Choose file",
-    "import-certificate-success": "Certificate import finished. Found {{ processed }} valid certificates; {{ added }} new certificates imported."
+    "import-certificate-success": "Certificate import finished. Found {{ processed }} valid certificates; {{ added }} new certificates imported.",
+    "timeout": "Operation timed out. Check server logs."
   },
   "create-organization": {
     "title": "Create Organisation",
