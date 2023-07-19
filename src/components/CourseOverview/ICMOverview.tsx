@@ -4,7 +4,6 @@ import {
   AccordionSummary,
   Alert,
   Box,
-  Checkbox,
   CircularProgress,
   Container,
   Typography,
@@ -79,35 +78,30 @@ export const ICMOverview: React.FC<React.PropsWithChildren<Props>> = ({
         </Box>
       )}
 
-      {modulesData?.map(item => (
-        <Accordion key={item.id}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <Box display="flex" alignItems="center">
-              <Checkbox checked={!!usedModules.includes(item.id)} disabled />
-              <Typography variant="body1" ml={1}>
-                {item.name}
-              </Typography>
-              <Typography variant="body2" ml={4}>
-                {t('areas', { count: item.modules.length })}
-              </Typography>
-            </Box>
-          </AccordionSummary>
-
-          <Container>
-            {item.modules.map(module => (
-              <Box key={module.id} ml={4} my={2}>
-                <Typography variant="body1" color="grey.700">
-                  {module.name}
+      {modulesData?.map(item =>
+        usedModules.includes(item.id) ? (
+          <Accordion key={item.id}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Box display="flex" alignItems="center">
+                <Typography variant="body1">{item.name}</Typography>
+                <Typography variant="body2" ml={1}>
+                  {t('areas', { count: item.modules.length })}
                 </Typography>
               </Box>
-            ))}
-          </Container>
-        </Accordion>
-      ))}
+            </AccordionSummary>
+
+            <Container>
+              {item.modules.map(module => (
+                <Box key={module.id} ml={4} my={2}>
+                  <Typography variant="body1" color="grey.700">
+                    {module.name}
+                  </Typography>
+                </Box>
+              ))}
+            </Container>
+          </Accordion>
+        ) : null
+      )}
     </>
   )
 }
