@@ -6,6 +6,7 @@ export const GET_COURSE_AUDIT_LOGS_QUERY = gql`
     $limit: Int = 20
     $offset: Int = 0
     $orderBy: [course_audit_order_by!]
+    $fromExceptionsLog: Boolean = false
   ) {
     logs: course_audit(
       where: $where
@@ -20,12 +21,25 @@ export const GET_COURSE_AUDIT_LOGS_QUERY = gql`
         id
         avatar
         fullName
-        archived
       }
       course {
         id
         course_code
         type
+        start @include(if: $fromExceptionsLog)
+        organization @include(if: $fromExceptionsLog) {
+          name
+          id
+        }
+        trainers @include(if: $fromExceptionsLog) {
+          type
+          id
+          profile {
+            fullName
+            avatar
+            id
+          }
+        }
         orders {
           id
           xeroInvoiceNumber

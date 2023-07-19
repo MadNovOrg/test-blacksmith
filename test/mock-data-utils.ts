@@ -7,7 +7,10 @@ import {
   Accreditors_Enum,
   CategorySummaryFragment,
   Course_Status_Enum,
+  Course_Trainer_Type_Enum,
+  Course_Type_Enum,
   EbookSummaryFragment,
+  GetCourseAuditLogsQuery,
   Podcast,
   PostSummaryFragment,
   ResearchSummaryDetailsFragment,
@@ -669,3 +672,45 @@ export const buildResourceCategory = (resourceArea: string) =>
       },
     },
   })
+export const buildLogs = build<GetCourseAuditLogsQuery['logs'][0]>({
+  fields: {
+    id: perBuild(() => chance.guid()),
+    authorizedBy: {
+      avatar: perBuild(() => chance.avatar()),
+      fullName: perBuild(() => chance.name()),
+      id: perBuild(() => chance.guid()),
+    },
+    course: {
+      id: perBuild(() => chance.integer()),
+      course_code: 'OP-L1-10000',
+      start: sub(new Date(), { days: 2 }).toISOString(),
+      type: Course_Type_Enum.Closed,
+      orders: [
+        {
+          id: perBuild(() => chance.guid()),
+          xeroInvoiceNumber: perBuild(() => chance.string()),
+        },
+      ],
+      organization: {
+        id: perBuild(() => chance.guid()),
+        name: perBuild(() => chance.name()),
+      },
+      trainers: [
+        {
+          type: Course_Trainer_Type_Enum.Leader,
+          id: perBuild(() => chance.guid()),
+          profile: {
+            avatar: perBuild(() => chance.avatar()),
+            fullName: perBuild(() => chance.name()),
+            id: perBuild(() => chance.guid()),
+          },
+        },
+      ],
+    },
+    payload: {
+      reason: perBuild(() => chance.string()),
+    },
+    created_at: sub(new Date(), { days: 2 }).toISOString(),
+    updated_at: sub(new Date(), { days: 2 }).toISOString(),
+  },
+})

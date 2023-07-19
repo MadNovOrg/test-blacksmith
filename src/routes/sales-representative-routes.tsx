@@ -78,6 +78,12 @@ const MyCourses = React.lazy(() =>
   }))
 )
 
+const CourseExceptionsLog = React.lazy(() =>
+  import('@app/pages/admin/CourseExceptionsLog').then(module => ({
+    default: module.CourseExceptionsLog,
+  }))
+)
+
 const MembershipRoutes = React.lazy(() => import('./membership'))
 
 const SalesRepresentativeRoute = () => {
@@ -165,6 +171,10 @@ const SalesRepresentativeRoute = () => {
           <Route path="admin">
             <Route index element={<AdminPage />} />
             <Route path="contacts" element={<Contacts />} />
+            <Route
+              path="course-exceptions-log"
+              element={<CourseExceptionsLog />}
+            />
             <Route path="users" element={<Users />} />
 
             <Route path="audit" element={<AuditsPage />} />

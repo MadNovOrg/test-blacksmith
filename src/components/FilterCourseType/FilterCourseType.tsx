@@ -16,6 +16,7 @@ import { FilterAccordion, FilterOption } from '../FilterAccordion'
 type Props = {
   onChange: (selected: Course_Type_Enum[]) => void
   sx?: SxProps
+  courseTypeBlacklist?: Course_Type_Enum
 }
 
 const types = Object.values(Course_Type_Enum)
@@ -28,6 +29,7 @@ const CourseTypeParam = withDefault(
 export const FilterCourseType: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
   sx,
+  courseTypeBlacklist,
 }) => {
   const { t } = useTranslation()
 
@@ -41,11 +43,20 @@ export const FilterCourseType: React.FC<React.PropsWithChildren<Props>> = ({
   const [selected, setSelected] = useQueryParam('type', CourseTypeParam)
 
   const options = useMemo(() => {
-    return typeOptions.map(o => ({
-      ...o,
-      selected: selected.includes(o.id),
-    }))
-  }, [selected, typeOptions])
+    if (courseTypeBlacklist) {
+      return typeOptions
+        .filter(o => o.id !== courseTypeBlacklist)
+        .map(o => ({
+          ...o,
+          selected: selected.includes(o.id),
+        }))
+    } else {
+      return typeOptions.map(o => ({
+        ...o,
+        selected: selected.includes(o.id),
+      }))
+    }
+  }, [selected, typeOptions, courseTypeBlacklist])
 
   const _onChange = useCallback(
     (opts: FilterOption<Course_Type_Enum>[]) => {

@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: course_audit
+  schema: public
 object_relationships:
   - name: authorizedBy
     using:
@@ -20,7 +20,6 @@ insert_permissions:
         - updated_at
         - authorized_by
         - id
-      backend_only: false
   - role: sales-admin
     permission:
       check:
@@ -37,7 +36,6 @@ insert_permissions:
         - updated_at
         - authorized_by
         - id
-      backend_only: false
   - role: trainer
     permission:
       check:
@@ -53,7 +51,6 @@ insert_permissions:
         - updated_at
         - authorized_by
         - id
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -65,7 +62,6 @@ insert_permissions:
         - authorized_by
         - type
         - payload
-      backend_only: false
   - role: tt-ops
     permission:
       check:
@@ -82,9 +78,68 @@ insert_permissions:
         - updated_at
         - authorized_by
         - id
-      backend_only: false
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - course_id
+        - authorized_by
+        - type
+        - payload
+      filter: {}
+      allow_aggregations: true
+  - role: ld
+    permission:
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - course_id
+        - authorized_by
+        - type
+        - payload
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - course_id
+        - authorized_by
+        - type
+        - payload
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - course_id
+        - authorized_by
+        - type
+        - payload
+      filter: {}
+      allow_aggregations: true
   - role: tt-admin
+    permission:
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - course_id
+        - authorized_by
+        - type
+        - payload
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
     permission:
       columns:
         - id
@@ -103,7 +158,7 @@ event_triggers:
       insert:
         columns: '*'
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/course-audit-added'

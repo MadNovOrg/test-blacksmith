@@ -78,6 +78,11 @@ const MyCourses = React.lazy(() =>
   }))
 )
 
+const CourseExceptionsLog = React.lazy(() =>
+  import('@app/pages/admin/CourseExceptionsLog').then(module => ({
+    default: module.CourseExceptionsLog,
+  }))
+)
 const MembershipRoutes = React.lazy(() => import('./membership'))
 
 const FinanceRoute = () => {
@@ -164,6 +169,10 @@ const FinanceRoute = () => {
           <Route path="admin">
             <Route index element={<AdminPage />} />
             <Route path="contacts" element={<Contacts />} />
+            <Route
+              path="course-exceptions-log"
+              element={<CourseExceptionsLog />}
+            />
             <Route path="users" element={<Users />} />
             {acl.canViewAdminPricing() ? (
               <Route path="pricing">

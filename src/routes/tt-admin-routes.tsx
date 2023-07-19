@@ -12,6 +12,7 @@ import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOr
 import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { Contacts } from '@app/pages/admin/Contacts'
+import { CourseExceptionsLog } from '@app/pages/admin/CourseExceptionsLog'
 import { Users } from '@app/pages/admin/Users'
 import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
@@ -201,6 +202,10 @@ const TTAdminRoutes = () => {
               </Route>
             ) : null}
 
+            <Route
+              path="course-exceptions-log"
+              element={<CourseExceptionsLog />}
+            />
             <Route path="audit" element={<AuditsPage />} />
           </Route>
         </>
