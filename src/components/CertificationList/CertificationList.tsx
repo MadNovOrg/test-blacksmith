@@ -344,11 +344,9 @@ export const CertificationList: React.FC<
                           navigate(`/certification/${p.certificate?.id}`)
                         }
                         data-testid={`view-certificate-${p.course?.id}`}
-                        disabled={isRevoked}
+                        disabled={isRevoked && !acl.canViewRevokedCert()}
                       >
-                        {isRevoked
-                          ? t('common.certification-status.revoked')
-                          : t('components.certification-list.view-certificate')}
+                        {t('components.certification-list.view-certificate')}
                       </Button>
                     </Box>
                   </TableCell>
