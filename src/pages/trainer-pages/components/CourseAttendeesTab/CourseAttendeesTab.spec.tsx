@@ -24,7 +24,7 @@ import {
   buildWaitlistEntry,
 } from '@test/mock-data-utils'
 
-import { CourseAttendees } from '.'
+import { CourseAttendeesTab } from './CourseAttendeesTab'
 
 jest.mock('@app/hooks/useCourse')
 jest.mock('@app/hooks/useWaitlist')
@@ -61,7 +61,7 @@ const emptyPendingInvitesResponse = {
   invalidateCache: jest.fn(),
 }
 
-describe('component: CourseAttendees', () => {
+describe(CourseAttendeesTab.name, () => {
   let course: Course
 
   beforeEach(() => {
@@ -84,7 +84,7 @@ describe('component: CourseAttendees', () => {
       mutate: jest.fn(),
     })
 
-    render(<CourseAttendees course={course} />)
+    render(<CourseAttendeesTab course={course} />)
 
     expect(
       screen.getByTestId('course-participants-fetching')
@@ -135,7 +135,7 @@ describe('component: CourseAttendees', () => {
       })
 
       // Act
-      render(<CourseAttendees course={tableCourse} />, {
+      render(<CourseAttendeesTab course={tableCourse} />, {
         auth: {
           activeRole: role ?? RoleName.USER,
         },
@@ -276,7 +276,7 @@ describe('component: CourseAttendees', () => {
       data: course,
     })
 
-    render(<CourseAttendees course={course} />)
+    render(<CourseAttendeesTab course={course} />)
 
     const noAttendeesMesage = screen.getByTestId(
       'course-participants-zero-message'
@@ -308,7 +308,7 @@ describe('component: CourseAttendees', () => {
       data: course,
     })
 
-    render(<CourseAttendees course={course} />)
+    render(<CourseAttendeesTab course={course} />)
 
     useCourseParticipantsMock.mockClear()
 
@@ -350,7 +350,7 @@ describe('component: CourseAttendees', () => {
       data: course,
     })
 
-    render(<CourseAttendees course={course} />)
+    render(<CourseAttendeesTab course={course} />)
 
     useCourseParticipantsMock.mockClear()
 
@@ -412,7 +412,7 @@ describe('component: CourseAttendees', () => {
       data: openCourse,
     })
 
-    render(<CourseAttendees course={openCourse} />, {
+    render(<CourseAttendeesTab course={openCourse} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -487,7 +487,7 @@ describe('component: CourseAttendees', () => {
       data: openCourse,
     })
 
-    render(<CourseAttendees course={openCourse} />, {
+    render(<CourseAttendeesTab course={openCourse} />, {
       auth: { activeRole: RoleName.SALES_ADMIN },
     })
 
@@ -516,7 +516,7 @@ describe('component: CourseAttendees', () => {
     })
 
     it('shows no invites pending message if list is empty', async () => {
-      render(<CourseAttendees course={course} />)
+      render(<CourseAttendeesTab course={course} />)
 
       await userEvent.click(screen.getByText('Pending (0)', { exact: false }))
 
@@ -544,7 +544,7 @@ describe('component: CourseAttendees', () => {
         total: 3,
       })
 
-      render(<CourseAttendees course={course} />, {
+      render(<CourseAttendeesTab course={course} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
 

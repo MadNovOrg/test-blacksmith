@@ -33,7 +33,7 @@ import {
   GetFeedbackUsersQueryVariables,
   Organization,
 } from '@app/generated/graphql'
-import { CourseAttendees } from '@app/pages/trainer-pages/components/CourseAttendees'
+import { CourseAttendeesTab } from '@app/pages/trainer-pages/components/CourseAttendeesTab'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import { ModifyAttendanceModal } from '@app/pages/user-pages/CourseDetails/ModifyAttendanceModal'
 import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/queries/course-evaluation/get-feedback-users'
@@ -468,7 +468,7 @@ export const CourseDetails = () => {
                 ) : null}
                 {isBookingContact ? (
                   <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.ATTENDEES}>
-                    <CourseAttendees course={course} />
+                    <CourseAttendeesTab course={course} />
                   </TabPanel>
                 ) : null}
 

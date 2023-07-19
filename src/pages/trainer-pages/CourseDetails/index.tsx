@@ -25,7 +25,7 @@ import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import usePollQuery from '@app/hooks/usePollQuery'
-import { CourseAttendees } from '@app/pages/trainer-pages/components/CourseAttendees'
+import { CourseAttendeesTab } from '@app/pages/trainer-pages/components/CourseAttendeesTab'
 import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
 import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading'
 import { EvaluationSummaryTab } from '@app/pages/trainer-pages/components/EvaluationSummaryTab'
@@ -326,7 +326,7 @@ export const CourseDetails = () => {
                   )}
 
                   <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.ATTENDEES}>
-                    <CourseAttendees course={course} />
+                    <CourseAttendeesTab course={course} />
                   </TabPanel>
 
                   {courseHasEnded && !acl.isOrgAdmin() ? (

@@ -16,7 +16,9 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { ConfirmDialog } from '@app/components/ConfirmDialog'
+import { CourseActionsMenu } from '@app/components/CourseActionsMenu'
 import { LinkToProfile } from '@app/components/LinkToProfile'
+import { RemoveIndividualDialog } from '@app/components/RemoveIndividualDialog'
 import {
   Mode,
   ReplaceParticipantDialog,
@@ -26,7 +28,6 @@ import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useMatchMutate } from '@app/hooks/useMatchMutate'
-import { RemoveIndividualModal } from '@app/pages/trainer-pages/components/CourseAttendees/RemoveIndividualModal'
 import {
   MUTATION as SEND_COURSE_INFO,
   ParamsType as SendCourseInfoParamType,
@@ -46,8 +47,6 @@ import {
   DEFAULT_PAGINATION_ROW_OPTIONS,
   LoadingStatus,
 } from '@app/util'
-
-import { CourseActionsMenu } from './CourseActionsMenu'
 
 type TabProperties = {
   course: Course
@@ -383,7 +382,7 @@ export const AttendingTab = ({
           ) : null}
 
           {individualToRemove ? (
-            <RemoveIndividualModal
+            <RemoveIndividualDialog
               participant={individualToRemove}
               course={course}
               onClose={() => setIndividualToRemove(undefined)}

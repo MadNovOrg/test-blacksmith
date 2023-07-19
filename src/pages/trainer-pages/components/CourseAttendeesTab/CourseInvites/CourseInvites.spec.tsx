@@ -1,5 +1,4 @@
 import { add, addWeeks, sub } from 'date-fns'
-import React from 'react'
 
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import { Course, CourseType, InviteStatus, RoleName } from '@app/types'
@@ -29,7 +28,7 @@ const useCourseInvitesDefaults = {
   invalidateCache: jest.fn(),
 }
 
-describe('CourseInvites', () => {
+describe(CourseInvites.name, () => {
   let course: Course
   beforeEach(() => {
     const courseSchedule = buildCourseSchedule({

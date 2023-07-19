@@ -47,19 +47,19 @@ enum FeesRadioValue {
   NO_FEES = 'no-fees',
 }
 
-export type RemoveIndividualModalProps = {
+export type RemoveIndividualDialogProps = {
   participant: CourseParticipant
   course: Course
   onClose: () => void
   onSave: () => void
 }
 
-export const RemoveIndividualModal = ({
+export const RemoveIndividualDialog = ({
   participant,
   course,
   onClose,
   onSave,
-}: RemoveIndividualModalProps) => {
+}: RemoveIndividualDialogProps) => {
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))

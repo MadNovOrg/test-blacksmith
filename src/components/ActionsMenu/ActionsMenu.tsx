@@ -9,14 +9,14 @@ import {
 } from '@mui/material'
 import React, { useCallback } from 'react'
 
-type Action<T> = {
+export type Action<T> = {
   icon: React.ReactNode
   label: string
   onClick: (item: T) => void
   testId?: string
 }
 
-type ActionsMenuProperties<T> = {
+export type ActionsMenuProperties<T> = {
   item: T
   label: string
   actions: Action<T>[]

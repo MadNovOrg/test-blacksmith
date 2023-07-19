@@ -1,13 +1,11 @@
-import React from 'react'
-
 import { Accreditors_Enum } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent } from '@test/index'
 
-import { CourseActionsMenu } from '.'
+import { CourseActionsMenu } from './CourseActionsMenu'
 
-describe('component: CourseActionsMenu', () => {
+describe(CourseActionsMenu.name, () => {
   const defaultOrganizations = [
     {
       organization: {

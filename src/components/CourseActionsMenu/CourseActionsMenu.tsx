@@ -2,7 +2,7 @@ import MoveDownIcon from '@mui/icons-material/MoveDown'
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
 import SendIcon from '@mui/icons-material/Send'
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ActionsMenu } from '@app/components/ActionsMenu'
@@ -40,7 +40,7 @@ export const CourseActionsMenu = <
   const { t } = useTranslation()
 
   const actions = useMemo(() => {
-    const participantOrgIds = item.profile.organizations.map(
+    const participantOrgIds: string[] = item.profile.organizations.map(
       o => o.organization.id
     )
     return [

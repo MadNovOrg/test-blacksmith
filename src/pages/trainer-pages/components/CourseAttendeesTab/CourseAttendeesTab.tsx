@@ -15,22 +15,21 @@ import { useAuth } from '@app/context/auth'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useWaitlist } from '@app/hooks/useWaitlist'
-import { AttendingTab } from '@app/pages/trainer-pages/components/CourseAttendees/AttendingTab'
-import { InvitesTab } from '@app/pages/trainer-pages/components/CourseAttendees/InvitesTab'
-import { WaitlistTab } from '@app/pages/trainer-pages/components/CourseAttendees/WaitlistTab'
 import { Course, CourseType, InviteStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { CourseInvites } from '../CourseInvites'
+import { CourseInvites } from './CourseInvites'
+import { AttendingTab } from './Tabs/AttendingTab'
+import { InvitesTab } from './Tabs/InvitesTab'
+import { WaitlistTab } from './Tabs/WaitlistTab'
+import { TabMenu } from './TabsMenu'
 
-import { TabMenu } from './TabMenu'
-
-type CourseAttendeesProps = {
+type CourseAttendeesTabProps = {
   course: Course
 }
 
-export const CourseAttendees: React.FC<
-  React.PropsWithChildren<CourseAttendeesProps>
+export const CourseAttendeesTab: React.FC<
+  React.PropsWithChildren<CourseAttendeesTabProps>
 > = ({ course }) => {
   const { id } = useParams()
   const [selectedTab, setSelectedTab] = useState('0')
