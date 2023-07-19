@@ -1,12 +1,18 @@
 import userEvent from '@testing-library/user-event'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { render, screen, chance, within } from '@test/index'
+import { render, screen, chance, within, renderHook } from '@test/index'
 
 import { CourseAttendanceList } from './index'
 
 describe('component: CourseAttendanceList', () => {
-  it('selects single participant as attended and mark them as clear for grading', async () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+  it('selects single participant as attended and mark them as Confirmed', async () => {
     const participants = [
       { id: chance.guid(), attending: false, name: chance.name() },
     ]
@@ -30,11 +36,11 @@ describe('component: CourseAttendanceList', () => {
     expect(
       within(
         screen.getByTestId(`participant-attendance-${participants[0].id}`)
-      ).getByText('Clear for grading')
+      ).getByText(t('pages.course-attendance.participant-attended-chip-label'))
     ).toBeInTheDocument()
   })
 
-  it('selects single participant as did not attend and mark them as automatic fail', async () => {
+  it('selects single participant as did not attend and mark them as Fail', async () => {
     const participants = [
       { id: chance.guid(), attending: true, name: chance.name() },
     ]
@@ -58,7 +64,9 @@ describe('component: CourseAttendanceList', () => {
     expect(
       within(
         screen.getByTestId(`participant-attendance-${participants[0].id}`)
-      ).getByText('Automatic fail')
+      ).getByText(
+        t('pages.course-attendance.participant-not-attended-chip-label')
+      )
     ).toBeInTheDocument()
   })
 

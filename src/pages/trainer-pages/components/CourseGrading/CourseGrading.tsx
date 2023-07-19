@@ -380,7 +380,7 @@ export const CourseGrading: React.FC<
                 >
                   <Typography variant="body1" fontWeight={600}>
                     {t(
-                      'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grading-details'
+                      'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grade'
                     )}
                   </Typography>
                 </Button>

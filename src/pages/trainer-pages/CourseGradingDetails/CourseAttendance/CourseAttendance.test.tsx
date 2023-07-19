@@ -1,5 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Route, Routes, useSearchParams } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
@@ -14,7 +15,7 @@ import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { MUTATION } from '@app/queries/courses/save-course-attendance'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen, waitForText, within } from '@test/index'
+import { render, renderHook, screen, waitForText, within } from '@test/index'
 import { buildParticipant } from '@test/mock-data-utils'
 
 import { CourseDetailsTabs } from '../../CourseDetails'
@@ -31,6 +32,11 @@ const useCourseParticipantsMocked = jest.mocked(useCourseParticipants)
 const useFetcherMock = jest.mocked(useFetcher)
 
 describe('component: CourseAttendance', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
   afterEach(() => {
     localStorage.clear()
   })
@@ -151,19 +157,21 @@ describe('component: CourseAttendance', () => {
     expect(
       within(
         screen.getByTestId(`participant-attendance-${participants[0].id}`)
-      ).getByText('Automatic fail')
+      ).getByText(
+        t('pages.course-attendance.participant-not-attended-chip-label')
+      )
     ).toBeInTheDocument()
 
     expect(
       within(
         screen.getByTestId(`participant-attendance-${participants[1].id}`)
-      ).getByText('Clear for grading')
+      ).getByText(t('pages.course-attendance.participant-attended-chip-label'))
     ).toBeInTheDocument()
 
     expect(
       within(
         screen.getByTestId(`participant-attendance-${participants[2].id}`)
-      ).getByText('Clear for grading')
+      ).getByText(t('pages.course-attendance.participant-attended-chip-label'))
     ).toBeInTheDocument()
   })
 
@@ -318,7 +326,7 @@ describe('component: CourseAttendance', () => {
     )
 
     await userEvent.click(
-      screen.getByText('Confirm modules and physical techniques')
+      screen.getByText(t('pages.course-attendance.confirm-grading'))
     )
 
     expect(fetcherMock).toHaveBeenCalledTimes(1)

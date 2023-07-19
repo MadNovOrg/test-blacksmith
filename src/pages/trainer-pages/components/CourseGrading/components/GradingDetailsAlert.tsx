@@ -35,68 +35,32 @@ export const GradingDetailsAlert: React.FC<PropsWithChildren<Props>> = ({
     >
       <StyledText variant="body1" fontWeight="600">
         {t(
-          'pages.course-details.tabs.grading.grading-details-confirmation.line1'
-        ) + ' '}
-      </StyledText>
-      <StyledText variant="body1">
-        {t(
-          'pages.course-details.tabs.grading.grading-details-confirmation.line2'
+          'pages.course-details.tabs.grading.grading-details-confirmation.description'
         )}
       </StyledText>
       <StyledList>
-        <Box sx={{ my: 2 }}>
-          <li>
-            <StyledText variant="body1" fontWeight="600">
-              {t(
-                'pages.course-details.tabs.grading.grading-details-confirmation.line3'
-              ) + ' '}
-            </StyledText>
-            <StyledText variant="body1">
-              {t(
-                'pages.course-details.tabs.grading.grading-details-confirmation.line4'
-              ) + ' '}
-            </StyledText>
-            <StyledList type="a">
-              <li>
-                <StyledText variant="body1">
-                  {t(
-                    'pages.course-details.tabs.grading.grading-details-confirmation.line5'
-                  )}
-                </StyledText>
-              </li>
-              <li>
-                <StyledText variant="body1">
-                  {t(
-                    'pages.course-details.tabs.grading.grading-details-confirmation.line6'
-                  )}
-                </StyledText>
-              </li>
-              <li>
-                <StyledText variant="body1">
-                  {t(
-                    'pages.course-details.tabs.grading.grading-details-confirmation.line7'
-                  )}
-                </StyledText>
-              </li>
-            </StyledList>
-          </li>
-        </Box>
+        <li>
+          <StyledText variant="body1" fontWeight="500">
+            {t(
+              'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grading-criteria'
+            )}
+          </StyledText>
+        </li>
         {course.accreditedBy === Accreditors_Enum.Icm ? (
           <li>
-            <StyledText variant="body1" fontWeight="600">
+            <StyledText variant="body1" fontWeight="500">
               {t(
-                'pages.course-details.tabs.grading.grading-details-confirmation.line8'
-              ) + ' '}
-            </StyledText>
-            <StyledText variant="body1">
-              {t(
-                'pages.course-details.tabs.grading.grading-details-confirmation.line9'
-              ) + ' '}
+                'pages.course-details.tabs.grading.grading-details-confirmation.confirm-modules-and-techniques'
+              )}
             </StyledText>
           </li>
         ) : null}
       </StyledList>
-
+      <StyledText variant="body1" fontWeight="500">
+        {t(
+          'pages.course-details.tabs.grading.grading-details-confirmation.please-note-warning'
+        )}
+      </StyledText>
       {children}
     </Box>
   )

@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/system'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import {
@@ -172,34 +172,33 @@ export const CourseAttendance = () => {
             <Typography variant="h5" fontWeight="500" mb={2}>
               {t('pages.course-attendance.title')}
             </Typography>
-            <StyledText variant="body1">
-              {t('pages.course-attendance.page-description-line1') + ' '}
-            </StyledText>
-            <StyledText variant="body1" fontWeight="600">
-              {t('pages.course-attendance.page-description-line2') + ' '}
-            </StyledText>
-            <StyledText variant="body1">
-              {t('pages.course-attendance.page-description-line3')}
+            <StyledText>
+              <Trans i18nKey="pages.course-attendance.description" />
             </StyledText>
             <StyledList>
               <li>
                 <StyledText variant="body1">
-                  {t('pages.course-attendance.page-description-line4')}
+                  {t('pages.course-attendance.completed-the-course')}
                 </StyledText>
               </li>
               <li>
                 <StyledText variant="body1">
-                  {t('pages.course-attendance.page-description-line5')}
+                  {t('pages.course-attendance.valid-identification')}
                 </StyledText>
               </li>
               <li>
                 <StyledText variant="body1">
-                  {t('pages.course-attendance.page-description-line6')}
+                  {t('pages.course-attendance.passed-the-quiz')}
+                </StyledText>
+              </li>
+              <li>
+                <StyledText variant="body1">
+                  {t('pages.course-attendance.valid-pre-requisite')}
                 </StyledText>
               </li>
             </StyledList>
-            <StyledText variant="body1" fontWeight="600">
-              {t('pages.course-attendance.page-description-line7')}
+            <StyledText variant="body1">
+              {t('pages.course-attendance.automatic-fail-warning')}
             </StyledText>
           </Box>
 
@@ -218,7 +217,7 @@ export const CourseAttendance = () => {
             >
               <Typography variant="body1" fontWeight={600}>
                 {steps.length > 1
-                  ? t('pages.course-attendance.next-page-button-text')
+                  ? t('pages.course-attendance.confirm-grading')
                   : t('pages.modules-selection.save-button-text')}
               </Typography>
             </LoadingButton>

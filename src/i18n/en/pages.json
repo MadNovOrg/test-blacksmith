@@ -481,16 +481,11 @@
       "grading": {
         "title": "Grading",
         "grading-details-confirmation": {
-          "line1": "You are now at the end of your course and need to prepare for grading.",
-          "line2": "The following details need to be confirmed before grading each attendee:",
-          "line3": "Confirm criteria for grading.",
-          "line4": "It is an automatic fail if an individual does not meet the following:",
-          "line5": "Completed the course",
-          "line6": "Identification was checked",
-          "line7": "Passed the course quiz",
-          "line8": "Confirm modules and physical techniques",
-          "line9": "covered or not covered in the course. This informs the modules and techniques the attendee will be graded on at an individual level.",
-          "confirm-grading-details": "Confirm grading details"
+          "description": "As the course is now complete, grading must be submitted in order for the attendees to receive a certificate.",
+          "confirm-grading-criteria": "Confirm grading criteria",
+          "confirm-modules-and-techniques": "Confirm the modules and techniques covered in the course",
+          "please-note-warning":"Please note, the attendees will only receive a certificate if awarded a pass grade.",
+          "confirm-grade": "Confirm Grade"
         },
         "grade": "Grade",
         "attendees": "{{ number }} attendees",
@@ -635,7 +630,7 @@
     "course-information-sent": "Course information sent."
   },
   "course-grading-details": {
-    "title": "Grading details",
+    "title": "Grading Criteria",
     "back-button-text": "Back to course details",
     "course-error-alert-text": "There was an error loading the course",
     "grading-clearance-step": "Grading clearance",
@@ -672,19 +667,18 @@
     "incomplete-list-subtitle": "Incomplete"
   },
   "course-attendance": {
-    "title": "Grading clearance",
-    "page-description-line1": "Please confirm that the individual has met",
-    "page-description-line2": "ALL",
-    "page-description-line3": "the following criteria:",
-    "page-description-line4": "Completed the course",
-    "page-description-line5": "Identification was checked",
-    "page-description-line6": "Passed the course quiz",
-    "page-description-line7": "Please note it is an automatic fail if the individual does not meet ALL the criteria.",
-    "next-page-button-text": "Confirm modules and physical techniques",
+    "title": "Grading Criteria",
+    "description": "You must select to confirm that <strong>ALL</strong> of the below criteria has been met before grading each course member. It is an automatic fail if the following have not been completed.",
+    "completed-the-course": "Completed the course",
+    "valid-identification": "Valid identification was checked",
+    "passed-the-quiz": "Passed the course quiz",
+    "valid-pre-requisite":"Valid pre-requisite certificate was checked",
+    "automatic-fail-warning": "Please note, if a course member is deselected when you proceed (automatic fail), this cannot be undone.",
+    "confirm-grading": "Confirm Grading",
     "master-checkbox-label-checked": "Deselect all",
     "master-checkbox-label-unchecked": "Select all",
-    "participant-attended-chip-label": "Clear for grading",
-    "participant-not-attended-chip-label": "Automatic fail",
+    "participant-attended-chip-label": "Confirmed",
+    "participant-not-attended-chip-label": "Fail",
     "attending-count": "{{count}} selected",
     "no-participants-warning": "There are no participants for this course"
   },
