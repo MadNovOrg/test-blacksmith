@@ -48,3 +48,20 @@ export async function waitForGraphQLResponse(
   }
   return {}
 }
+
+/**
+ * ! TODO Remove this after proper tests would be created.
+ * Declines the cookie consent.
+ *
+ * @deprecated
+ */
+export async function bypassHSCookieConsent(page: Page): Promise<void> {
+  const cookieDialogElements = {
+    declineBtn: '#hs-eu-decline-button',
+  }
+  const locator = page.locator(cookieDialogElements.declineBtn)
+  await locator.click({
+    noWaitAfter: true,
+    timeout: 1000,
+  })
+}

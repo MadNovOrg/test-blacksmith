@@ -2,6 +2,7 @@ import fs from 'fs/promises'
 
 import { Browser, chromium } from '@playwright/test'
 
+import { bypassHSCookieConsent } from '@qa/commands'
 import { TARGET_ENV, TEMP_DIR } from '@qa/constants'
 import { users } from '@qa/data/users'
 import { LoginPage } from '@qa/pages/auth/LoginPage'
@@ -17,6 +18,9 @@ const login = async (browser: Browser, userKey: string, role: string) => {
     users[userKey].email,
     users[userKey].password
   )
+
+  await bypassHSCookieConsent(page)
+
   await myCoursesPage.userMenu.checkIsVisible()
   if (role.toLowerCase() !== 'user') {
     await myCoursesPage.roleSwitcher.selectRole(role)
