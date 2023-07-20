@@ -2,14 +2,24 @@ node_modules
 .DS_Store
 dist
 dist-ssr
-*.local
-.vscode
-.idea
 
+# Env variables
+.env
+*.local
 hasura/.env
 
-playwright-report
-test-results
-tmp
-coverage
-.env
+# Test artifacts
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/playwright/tmp/
+/tmp/
+/coverage/
+
+# IDE Files
+## VScode
+.vscode/*
+!.vscode/extensions.json
+
+## IntelliJ
+.idea
