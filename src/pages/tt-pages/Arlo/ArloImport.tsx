@@ -43,7 +43,8 @@ export const ArloImport: React.FC<React.PropsWithChildren<unknown>> = () => {
           setResult(importArloCertificates.output)
           setLoading(false)
         } else if (importArloCertificates?.errors) {
-          setError(importArloCertificates.errors)
+          console.log(importArloCertificates.errors)
+          setError(t('internal-error'))
         }
       }
     },

@@ -176,6 +176,7 @@ actions:
       kind: asynchronous
       handler: '{{ACTIONS_HOST}}/certificate/upload/bulk'
       forward_client_headers: true
+      timeout: 300
     permissions:
       - role: tt-admin
   - name: importLegacyCertificate
