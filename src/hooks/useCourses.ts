@@ -261,12 +261,11 @@ export function getOrderBy({
   switch (by) {
     case 'name':
     case 'type':
+    case 'start':
+    case 'end':
     case 'createdAt':
       return { [by]: dir }
 
-    case 'start':
-    case 'end':
-      return { schedule_aggregate: { min: { [by]: dir } } }
     default: {
       return { name: Order_By.Asc }
     }

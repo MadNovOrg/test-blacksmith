@@ -1,82 +1,82 @@
 table:
-  schema: public
   name: course
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
+    account_code:
+      custom_name: accountCode
+    accredited_by:
+      custom_name: accreditedBy
+    aol_cost_of_course:
+      custom_name: aolCostOfCourse
+    aol_country:
+      custom_name: aolCountry
+    aol_region:
+      custom_name: aolRegion
+    booking_contact_invite_data:
+      custom_name: bookingContactInviteData
+    booking_contact_profile_id:
+      custom_name: bookingContactProfileId
+    cancellation_fee_percent:
+      custom_name: cancellationFeePercent
+    cancellation_reason:
+      custom_name: cancellationReason
+    course_delivery_type:
+      custom_name: deliveryType
+    course_level:
+      custom_name: level
+    course_status:
+      custom_name: status
+    course_type:
+      custom_name: type
+    created_at:
+      custom_name: createdAt
+    created_by_id:
+      custom_name: createdById
     exceptions_pending:
       custom_name: exceptionsPending
     free_spaces:
       custom_name: freeSpaces
-    cancellation_reason:
-      custom_name: cancellationReason
-    cancellation_fee_percent:
-      custom_name: cancellationFeePercent
-    aol_cost_of_course:
-      custom_name: aolCostOfCourse
-    course_type:
-      custom_name: type
-    aol_region:
-      custom_name: aolRegion
-    price_currency:
-      custom_name: priceCurrency
-    aol_country:
-      custom_name: aolCountry
-    modules_duration:
-      custom_name: modulesDuration
-    is_draft:
-      custom_name: isDraft
-    course_status:
-      custom_name: status
-    created_by_id:
-      custom_name: createdById
-    grading_started:
-      custom_name: gradingStarted
-    grading_confirmed:
-      custom_name: gradingConfirmed
-    course_level:
-      custom_name: level
-    updated_at:
-      custom_name: updatedAt
-    booking_contact_invite_data:
-      custom_name: bookingContactInviteData
-    accredited_by:
-      custom_name: accreditedBy
-    created_at:
-      custom_name: createdAt
-    booking_contact_profile_id:
-      custom_name: bookingContactProfileId
     go1_integration:
       custom_name: go1Integration
-    account_code:
-      custom_name: accountCode
-    course_delivery_type:
-      custom_name: deliveryType
+    grading_confirmed:
+      custom_name: gradingConfirmed
+    grading_started:
+      custom_name: gradingStarted
+    is_draft:
+      custom_name: isDraft
+    modules_duration:
+      custom_name: modulesDuration
+    price_currency:
+      custom_name: priceCurrency
+    updated_at:
+      custom_name: updatedAt
   custom_column_names:
+    account_code: accountCode
+    accredited_by: accreditedBy
+    aol_cost_of_course: aolCostOfCourse
+    aol_country: aolCountry
+    aol_region: aolRegion
+    booking_contact_invite_data: bookingContactInviteData
+    booking_contact_profile_id: bookingContactProfileId
+    cancellation_fee_percent: cancellationFeePercent
+    cancellation_reason: cancellationReason
+    course_delivery_type: deliveryType
+    course_level: level
+    course_status: status
+    course_type: type
+    created_at: createdAt
+    created_by_id: createdById
     exceptions_pending: exceptionsPending
     free_spaces: freeSpaces
-    cancellation_reason: cancellationReason
-    cancellation_fee_percent: cancellationFeePercent
-    aol_cost_of_course: aolCostOfCourse
-    course_type: type
-    aol_region: aolRegion
-    price_currency: priceCurrency
-    aol_country: aolCountry
-    modules_duration: modulesDuration
-    is_draft: isDraft
-    course_status: status
-    created_by_id: createdById
-    grading_started: gradingStarted
-    grading_confirmed: gradingConfirmed
-    course_level: level
-    updated_at: updatedAt
-    booking_contact_invite_data: bookingContactInviteData
-    accredited_by: accreditedBy
-    created_at: createdAt
-    booking_contact_profile_id: bookingContactProfileId
     go1_integration: go1Integration
-    account_code: accountCode
-    course_delivery_type: deliveryType
+    grading_confirmed: gradingConfirmed
+    grading_started: gradingStarted
+    is_draft: isDraft
+    modules_duration: modulesDuration
+    price_currency: priceCurrency
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
   - name: bookingContact
     using:
@@ -86,8 +86,8 @@ object_relationships:
       foreign_key_constraint_on:
         column: course_id
         table:
-          schema: public
           name: course_cancellation_request
+          schema: public
   - name: createdBy
     using:
       foreign_key_constraint_on: created_by_id
@@ -100,106 +100,96 @@ array_relationships:
       foreign_key_constraint_on:
         column: course_id
         table:
-          schema: public
           name: course_bild_module
+          schema: public
   - name: bildStrategies
     using:
       foreign_key_constraint_on:
         column: course_id
         table:
-          schema: public
           name: course_bild_strategy
+          schema: public
   - name: evaluation_answers
     using:
       foreign_key_constraint_on:
         column: course_id
         table:
-          schema: public
           name: course_evaluation_answers
+          schema: public
   - name: expenses
     using:
       foreign_key_constraint_on:
         column: course_id
         table:
-          schema: public
           name: course_expenses
+          schema: public
   - name: modules
     using:
       foreign_key_constraint_on:
         column: course_id
         table:
-          schema: public
           name: course_module
+          schema: public
   - name: orders
     using:
       foreign_key_constraint_on:
         column: course_id
         table:
-          schema: public
           name: order
+          schema: public
   - name: participants
     using:
       foreign_key_constraint_on:
         column: course_id
         table:
-          schema: public
           name: course_participant
+          schema: public
   - name: promo_codes
     using:
       foreign_key_constraint_on:
         column: course_id
         table:
-          schema: public
           name: course_promo_code
+          schema: public
   - name: schedule
     using:
       foreign_key_constraint_on:
         column: course_id
         table:
-          schema: public
           name: course_schedule
+          schema: public
   - name: tempOrders
     using:
       foreign_key_constraint_on:
         column: course_id
         table:
-          schema: public
           name: order_temp
+          schema: public
   - name: trainers
     using:
       foreign_key_constraint_on:
         column: course_id
         table:
-          schema: public
           name: course_trainer
+          schema: public
   - name: waitlists
     using:
       foreign_key_constraint_on:
         column: course_id
         table:
-          schema: public
           name: waitlist
+          schema: public
 computed_fields:
   - name: course_code
     definition:
       function:
-        schema: public
         name: course_code
-  - name: end
-    definition:
-      function:
         schema: public
-        name: course_end_date
   - name: freeSlots
     definition:
       function:
-        schema: public
         name: course_free_slots
-  - name: start
-    definition:
-      function:
         schema: public
-        name: course_start_date
 insert_permissions:
   - role: sales-admin
     permission:
@@ -246,7 +236,6 @@ insert_permissions:
         - source
         - special_instructions
         - updated_at
-      backend_only: false
   - role: trainer
     permission:
       check: {}
@@ -281,7 +270,6 @@ insert_permissions:
         - reaccreditation
         - special_instructions
         - updated_at
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -323,7 +311,6 @@ insert_permissions:
         - source
         - special_instructions
         - updated_at
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -362,7 +349,6 @@ insert_permissions:
         - source
         - special_instructions
         - updated_at
-      backend_only: false
 select_permissions:
   - role: anonymous
     permission:
@@ -383,10 +369,10 @@ select_permissions:
         - price_currency
         - reaccreditation
         - updated_at
+        - start
+        - end
       computed_fields:
         - course_code
-        - end
-        - start
       filter:
         _and:
           - course_type:
@@ -436,11 +422,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
+        - start
+        - end
       computed_fields:
         - course_code
-        - end
         - freeSlots
-        - start
       filter:
         _or:
           - participants:
@@ -518,11 +504,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
+        - start
+        - end
       computed_fields:
         - course_code
-        - end
         - freeSlots
-        - start
       filter: {}
       allow_aggregations: true
   - role: ld
@@ -564,11 +550,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
+        - start
+        - end
       computed_fields:
         - course_code
-        - end
         - freeSlots
-        - start
       filter: {}
       allow_aggregations: true
   - role: sales-admin
@@ -611,11 +597,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
+        - start
+        - end
       computed_fields:
         - course_code
-        - end
         - freeSlots
-        - start
       filter: {}
       allow_aggregations: true
   - role: sales-representative
@@ -657,11 +643,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
+        - start
+        - end
       computed_fields:
         - course_code
-        - end
         - freeSlots
-        - start
       filter: {}
       allow_aggregations: true
   - role: trainer
@@ -701,11 +687,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
+        - start
+        - end
       computed_fields:
         - course_code
-        - end
         - freeSlots
-        - start
       filter:
         _or:
           - trainers:
@@ -781,11 +767,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
+        - start
+        - end
       computed_fields:
         - course_code
-        - end
         - freeSlots
-        - start
       filter: {}
       allow_aggregations: true
   - role: tt-ops
@@ -827,11 +813,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
+        - start
+        - end
       computed_fields:
         - course_code
-        - end
         - freeSlots
-        - start
       filter: {}
       allow_aggregations: true
   - role: unverified
@@ -861,10 +847,10 @@ select_permissions:
         - price_currency
         - reaccreditation
         - updated_at
+        - start
+        - end
       computed_fields:
         - course_code
-        - end
-        - start
       filter:
         _and:
           - course_type:
@@ -913,11 +899,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
+        - start
+        - end
       computed_fields:
         - course_code
-        - end
         - freeSlots
-        - start
       filter:
         _or:
           - participants:
@@ -1225,8 +1211,8 @@ event_triggers:
       update:
         columns: '*'
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/go1-licensing/cancel-licenses'
   - name: course_attendees_changed
@@ -1247,8 +1233,8 @@ event_triggers:
         columns:
           - booking_contact_profile_id
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/booking-contact'
   - name: course_created
@@ -1257,8 +1243,8 @@ event_triggers:
       insert:
         columns: '*'
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/course-created'
   - name: course_status_changed
@@ -1270,8 +1256,8 @@ event_triggers:
           - course_status
           - course_type
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/course-status-changed'
   - name: course_status_recalculation
@@ -1281,7 +1267,7 @@ event_triggers:
         columns:
           - course_status
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/status/clear'

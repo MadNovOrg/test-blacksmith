@@ -306,14 +306,10 @@ function getOrderBy(sorting?: Sorting): Course_Order_By {
   switch (sorting.by) {
     case 'name':
     case 'type':
-    case 'createdAt': {
-      return { [sorting.by]: dir }
-    }
-
+    case 'createdAt':
     case 'start':
-    case 'end': {
-      return { schedule_aggregate: { min: { [sorting.by]: dir } } }
-    }
+    case 'end':
+      return { [sorting.by]: dir }
 
     default: {
       return defaultOrderBy

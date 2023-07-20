@@ -33,11 +33,7 @@ const COURSE = gql`
 export const SEARCH_COURSES = gql`
   ${COURSE}
   query SearchCourses($where: course_bool_exp) {
-    courses: course(
-      where: $where
-      limit: 200
-      order_by: { schedule_aggregate: { min: { start: asc } } }
-    ) {
+    courses: course(where: $where, limit: 200, order_by: { start: asc }) {
       ...SearchCourse
     }
   }
