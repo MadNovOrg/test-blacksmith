@@ -78,7 +78,7 @@ export const TableBody: FC<PropsWithChildren<Props>> = ({
             </Tooltip>
           </TableCell>
           <TableCell sx={{ maxWidth: 150 }}>
-            <ProfileWithAvatar profile={log.authorizedBy} />
+            <ProfileWithAvatar useLink={true} profile={log.authorizedBy} />
           </TableCell>
           <TableCell>
             {t('dates.withTime', {
