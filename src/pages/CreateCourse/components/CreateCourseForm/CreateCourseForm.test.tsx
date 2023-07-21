@@ -246,7 +246,7 @@ describe('component: CreateCourseForm', () => {
 
     expect(dialog).toBeInTheDocument()
     expect(dialog.textContent).toMatchInlineSnapshot(
-      `"No exceptions allowedThis course does not meet training protocols. Please contact a Team Teach Administrator if you wish to discuss further."`
+      `"No exceptions allowedThis course does not follow Team Teach training protocols, please review and amend the course date and/or trainer ratios before resubmitting."`
     )
   })
 })

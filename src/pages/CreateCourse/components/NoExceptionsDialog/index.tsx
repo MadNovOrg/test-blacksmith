@@ -1,3 +1,4 @@
+import Alert from '@mui/material/Alert'
 import React, { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -12,7 +13,9 @@ export const NoExceptionsDialog: React.FC<
 
   return (
     <Dialog title={t('no-exceptions-title')} {...props}>
-      {t('no-exceptions-message')}
+      <Alert sx={{ px: 0 }} severity="warning">
+        {t('no-exceptions-message')}
+      </Alert>
     </Dialog>
   )
 }

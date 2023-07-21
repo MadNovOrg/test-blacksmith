@@ -392,7 +392,7 @@
       "type_LEAD_TRAINER_IN_GRACE_PERIOD": "Lead trainer certificate has expired and is within grace period",
       "type_TRAINER_RATIO_NOT_MET": "Insufficient amount of trainers per participants",
       "proceed": "Proceed",
-      "no-exceptions-message": "This course does not meet training protocols. Please contact a Team Teach Administrator if you wish to discuss further.",
+      "no-exceptions-message": "This course does not follow Team Teach training protocols, please review and amend the course date and/or trainer ratios before resubmitting.",
       "no-exceptions-title": "No exceptions allowed"
     }
   },
