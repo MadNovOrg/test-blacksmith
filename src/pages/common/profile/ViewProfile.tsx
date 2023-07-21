@@ -298,7 +298,7 @@ export const ViewProfilePage: React.FC<
                       />
                       <DetailsRow
                         data-testid="profile-email"
-                        label={t('email')}
+                        label={t('work-email')}
                         value={profile.email}
                       />
                       <DetailsRow

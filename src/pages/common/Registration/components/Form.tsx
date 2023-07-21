@@ -170,7 +170,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         <Box mb={3}>
           <TextField
             id="email"
-            label={t('email')}
+            label={t('work-email')}
             variant="filled"
             placeholder={t('email-placeholder')}
             error={!!errors.email}
