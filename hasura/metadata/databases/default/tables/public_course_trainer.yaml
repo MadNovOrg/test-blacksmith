@@ -172,6 +172,16 @@ event_triggers:
       interval_sec: 10
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/course-trainer-status'
+  - name: course_trainer_unassigned
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/course-trainer-unassigned'
   - name: trainer_status_changed
     definition:
       enable_manual: true
