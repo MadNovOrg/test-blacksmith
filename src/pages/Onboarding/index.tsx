@@ -33,7 +33,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { profile, reloadCurrentProfile } = useAuth()
   const navigate = useNavigate()
 
-  const url = import.meta.env.VITE_BASE_WORDPRESS_URL
+  const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
   const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
 
   const schema = yup.object({

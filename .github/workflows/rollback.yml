@@ -66,7 +66,7 @@ jobs:
           VITE_COGNITO_USER_POOL_ID: ${{ secrets[format('COGNITO_POOL_ID_{0}', env.ENV_NAME)] }}
           VITE_COGNITO_USER_POOL_CLIENT_ID: ${{ secrets[format('COGNITO_CLIENT_ID_{0}', env.ENV_NAME)] }}
           VITE_HASURA_GRAPHQL_API: "${{ secrets[format('HASURA_ENDPOINT_{0}', env.ENV_NAME)] }}/v1/graphql"
-          VITE_BASE_WORDPRESS_URL: "${{ secrets[format('WP_HOST_{0}', env.ENV_NAME)] }}/wp-json/wp/v2"
+          VITE_BASE_WORDPRESS_URL: "${{ secrets[format('WP_HOST_{0}', env.ENV_NAME)] }}"
           VITE_GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
           REQUEST_QUOTE_URL: ${{ secrets.request_quote_url }}
 

@@ -12,8 +12,9 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material'
+import Link from '@mui/material/Link'
 import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
@@ -107,13 +108,23 @@ export const CourseHealthAndSafetyForm = () => {
                     sx={{ px: 2 }}
                   />
                 }
-                label={t('pages.hs-form.information.health-check-label')}
+                label={
+                  <Trans
+                    i18nKey="pages.hs-form.information.health-check-label"
+                    components={{
+                      formLink: (
+                        <Link
+                          href={
+                            import.meta.env.VITE_HEALTH_AND_SAFETY_CONTENT_PATH
+                          }
+                          target="_blank"
+                        />
+                      ),
+                    }}
+                  />
+                }
               />
             </FormGroup>
-
-            <Typography variant="body2">
-              {t('pages.hs-form.information.p2')}
-            </Typography>
 
             <Typography variant="subtitle1" mt={2}>
               {t('pages.hs-form.information.h2')}

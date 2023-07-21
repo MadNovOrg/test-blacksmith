@@ -57,7 +57,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
   const schema = useMemo(() => getFormSchema(t), [t])
 
-  const url = import.meta.env.VITE_BASE_WORDPRESS_URL
+  const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
   const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
 
   const {
