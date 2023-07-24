@@ -1,21 +1,19 @@
 import { useMemo } from 'react'
 import { useQuery } from 'urql'
 
-import { useAuth } from '@app/context/auth'
 import {
   ResourceDetailsQuery,
   ResourceDetailsQueryVariables,
 } from '@app/generated/graphql'
-import { CourseLevel, TrainerRoleTypeName } from '@app/types'
 
 import { RESOURCE_DETAILS_QUERY } from '../queries/get-resource-details'
+
+import { useResourcePermission } from './useResourcePermission'
 
 export function useResourceCategory(
   id: string | undefined,
   searchTerm?: string
 ) {
-  const { activeCertificates, trainerRoles } = useAuth()
-
   const [{ data, error, fetching }] = useQuery<
     ResourceDetailsQuery,
     ResourceDetailsQueryVariables
@@ -27,40 +25,40 @@ export function useResourceCategory(
     },
   })
 
+  const canAccessResource = useResourcePermission()
+
+  const canAcceessCategory = data?.content?.resourceCategory
+    ?.resourcePermissions
+    ? canAccessResource(data?.content?.resourceCategory?.resourcePermissions)
+    : false
+
   const filteredResources = useMemo(() => {
     if (data?.content?.resourceCategory) {
       return data.content.resourceCategory.resources?.nodes?.filter(
         resource => {
-          const filteredPermissions =
-            resource?.resourcePermissions?.certificateLevels?.filter(
-              certificateLevel =>
-                activeCertificates?.includes(certificateLevel as CourseLevel)
-            )
+          const permissions = resource?.resourcePermissions
 
-          return (
-            (filteredPermissions && filteredPermissions?.length > 0) ||
-            (resource?.resourcePermissions?.principalTrainer &&
-              trainerRoles?.includes(TrainerRoleTypeName.PRINCIPAL))
-          )
+          return permissions ? canAccessResource(permissions) : false
         }
       )
     }
 
     return []
-  }, [activeCertificates, data?.content?.resourceCategory, trainerRoles])
+  }, [canAccessResource, data?.content?.resourceCategory])
 
   return [
     {
-      data: data?.content?.resourceCategory
-        ? {
-            content: {
-              resourceCategory: {
-                ...data?.content?.resourceCategory,
-                resources: { nodes: filteredResources },
+      data:
+        data?.content?.resourceCategory && canAcceessCategory
+          ? {
+              content: {
+                resourceCategory: {
+                  ...data?.content?.resourceCategory,
+                  resources: { nodes: filteredResources },
+                },
               },
-            },
-          }
-        : null,
+            }
+          : null,
       error,
       fetching,
     },

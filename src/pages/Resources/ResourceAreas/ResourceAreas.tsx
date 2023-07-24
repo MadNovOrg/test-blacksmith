@@ -37,47 +37,62 @@ export const ResourceAreas = () => {
           </Box>
         ) : (
           <>
-            <Typography textAlign={isMobile ? 'center' : 'left'} variant="h1">
-              {t('pages.resources.title')}
-            </Typography>
-            <Grid container spacing={2} sx={{ mb: 12, mt: 1 }}>
-              {allResourcesByArea?.basic?.map(resourceArea => (
-                <Grid item md={4} xs={12} key={resourceArea.id}>
-                  <RouterLink to={`/resources/${resourceArea.id}`}>
-                    <ResourceCard
-                      icon={
-                        <ResourceAreaIcon
-                          icon={resourceArea.resouceIcon?.resourceicon}
+            {allResourcesByArea?.basic?.length ? (
+              <Box>
+                <Typography
+                  textAlign={isMobile ? 'center' : 'left'}
+                  variant="h1"
+                >
+                  {t('pages.resources.title')}
+                </Typography>
+                <Grid container spacing={2} sx={{ mb: 12, mt: 1 }}>
+                  {allResourcesByArea?.basic?.map(resourceArea => (
+                    <Grid item md={4} xs={12} key={resourceArea.id}>
+                      <RouterLink to={`/resources/${resourceArea.id}`}>
+                        <ResourceCard
+                          icon={
+                            <ResourceAreaIcon
+                              icon={resourceArea.resouceIcon?.resourceicon}
+                            />
+                          }
+                          title={resourceArea.name ?? ''}
+                          description={resourceArea.description ?? ''}
                         />
-                      }
-                      title={resourceArea.name ?? ''}
-                      description={resourceArea.description ?? ''}
-                    />
-                  </RouterLink>
+                      </RouterLink>
+                    </Grid>
+                  ))}
                 </Grid>
-              ))}
-            </Grid>
-            <Typography textAlign={isMobile ? 'center' : 'left'} variant="h1">
-              {t('pages.resources.additional-resources.title')}
-            </Typography>
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              {allResourcesByArea?.additional?.map(resourceArea => (
-                <Grid item md={6} xs={12} key={resourceArea.id}>
-                  <RouterLink to={`/resources/${resourceArea.id}`}>
-                    <ResourceCard
-                      icon={
-                        <ResourceAreaIcon
-                          icon={resourceArea.resouceIcon?.resourceicon}
+              </Box>
+            ) : null}
+
+            {allResourcesByArea?.additional?.map ? (
+              <Box>
+                <Typography
+                  textAlign={isMobile ? 'center' : 'left'}
+                  variant="h1"
+                >
+                  {t('pages.resources.additional-resources.title')}
+                </Typography>
+                <Grid container spacing={2} sx={{ mt: 1 }}>
+                  {allResourcesByArea?.additional?.map(resourceArea => (
+                    <Grid item md={6} xs={12} key={resourceArea.id}>
+                      <RouterLink to={`/resources/${resourceArea.id}`}>
+                        <ResourceCard
+                          icon={
+                            <ResourceAreaIcon
+                              icon={resourceArea.resouceIcon?.resourceicon}
+                            />
+                          }
+                          title={resourceArea.name ?? ''}
+                          description={resourceArea.description ?? ''}
+                          align="left"
                         />
-                      }
-                      title={resourceArea.name ?? ''}
-                      description={resourceArea.description ?? ''}
-                      align="left"
-                    />
-                  </RouterLink>
+                      </RouterLink>
+                    </Grid>
+                  ))}
                 </Grid>
-              ))}
-            </Grid>
+              </Box>
+            ) : null}
           </>
         )}
       </Container>

@@ -6647,6 +6647,8 @@ export type ResourceCategory = DatabaseIdentifier & HierarchicalTermNode & MenuI
   resourceArea?: Maybe<ResourceCategory_Resourcearea>;
   /** The id field matches the WP_Post-&gt;ID field. */
   resourceCategoryId?: Maybe<Scalars['Int']>;
+  /** Added to the GraphQL Schema because the ACF Field Group &quot;Resource permissions&quot; was set to Show in GraphQL. */
+  resourcePermissions?: Maybe<ResourceCategory_Resourcepermissions>;
   /** Connection between the ResourceCategory type and the Resource type */
   resources?: Maybe<ResourceCategoryToResourceConnection>;
   /** An alphanumeric identifier for the object unique to its type. */
@@ -6967,6 +6969,15 @@ export type ResourceCategory_Resourcearea = AcfFieldGroup & {
   fieldGroupName?: Maybe<Scalars['String']>;
   /** Whether it will appear on Resources main page as a basic Resource or an Additional Resource */
   resourcearea?: Maybe<Scalars['String']>;
+};
+
+/** Field Group */
+export type ResourceCategory_Resourcepermissions = AcfFieldGroup & {
+  __typename?: 'ResourceCategory_Resourcepermissions';
+  certificateLevels?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** The name of the ACF Field Group */
+  fieldGroupName?: Maybe<Scalars['String']>;
+  principalTrainer?: Maybe<Scalars['Boolean']>;
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
@@ -12901,6 +12912,154 @@ export type Blended_Learning_Status_Updates = {
   where: Blended_Learning_Status_Bool_Exp;
 };
 
+/** columns and relationships of "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs = {
+  __typename?: 'certificate_expired_notification_jobs';
+  course_certificate_id: Scalars['uuid'];
+  id: Scalars['uuid'];
+  job_id: Scalars['uuid'];
+};
+
+/** aggregated selection of "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Aggregate = {
+  __typename?: 'certificate_expired_notification_jobs_aggregate';
+  aggregate?: Maybe<Certificate_Expired_Notification_Jobs_Aggregate_Fields>;
+  nodes: Array<Certificate_Expired_Notification_Jobs>;
+};
+
+/** aggregate fields of "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Aggregate_Fields = {
+  __typename?: 'certificate_expired_notification_jobs_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Certificate_Expired_Notification_Jobs_Max_Fields>;
+  min?: Maybe<Certificate_Expired_Notification_Jobs_Min_Fields>;
+};
+
+
+/** aggregate fields of "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "certificate_expired_notification_jobs". All fields are combined with a logical 'AND'. */
+export type Certificate_Expired_Notification_Jobs_Bool_Exp = {
+  _and?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Bool_Exp>>;
+  _not?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
+  _or?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Bool_Exp>>;
+  course_certificate_id?: InputMaybe<Uuid_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  job_id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "certificate_expired_notification_jobs" */
+export enum Certificate_Expired_Notification_Jobs_Constraint {
+  /** unique or primary key constraint on columns "course_certificate_id", "job_id" */
+  CertificateExpiredNotificatiCourseCertificateIdJobIdKey = 'certificate_expired_notificati_course_certificate_id_job_id_key',
+  /** unique or primary key constraint on columns "id" */
+  CertificateExpiredNotificationJobsPkey = 'certificate_expired_notification_jobs_pkey'
+}
+
+/** input type for inserting data into table "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Insert_Input = {
+  course_certificate_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  job_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Certificate_Expired_Notification_Jobs_Max_Fields = {
+  __typename?: 'certificate_expired_notification_jobs_max_fields';
+  course_certificate_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  job_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate min on columns */
+export type Certificate_Expired_Notification_Jobs_Min_Fields = {
+  __typename?: 'certificate_expired_notification_jobs_min_fields';
+  course_certificate_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  job_id?: Maybe<Scalars['uuid']>;
+};
+
+/** response of any mutation on the table "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Mutation_Response = {
+  __typename?: 'certificate_expired_notification_jobs_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Certificate_Expired_Notification_Jobs>;
+};
+
+/** on_conflict condition type for table "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_On_Conflict = {
+  constraint: Certificate_Expired_Notification_Jobs_Constraint;
+  update_columns?: Array<Certificate_Expired_Notification_Jobs_Update_Column>;
+  where?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "certificate_expired_notification_jobs". */
+export type Certificate_Expired_Notification_Jobs_Order_By = {
+  course_certificate_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  job_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: certificate_expired_notification_jobs */
+export type Certificate_Expired_Notification_Jobs_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "certificate_expired_notification_jobs" */
+export enum Certificate_Expired_Notification_Jobs_Select_Column {
+  /** column name */
+  CourseCertificateId = 'course_certificate_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  JobId = 'job_id'
+}
+
+/** input type for updating data in table "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Set_Input = {
+  course_certificate_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  job_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** Streaming cursor of the table "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Certificate_Expired_Notification_Jobs_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Certificate_Expired_Notification_Jobs_Stream_Cursor_Value_Input = {
+  course_certificate_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  job_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** update columns of table "certificate_expired_notification_jobs" */
+export enum Certificate_Expired_Notification_Jobs_Update_Column {
+  /** column name */
+  CourseCertificateId = 'course_certificate_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  JobId = 'job_id'
+}
+
+export type Certificate_Expired_Notification_Jobs_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Certificate_Expired_Notification_Jobs_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Certificate_Expired_Notification_Jobs_Bool_Exp;
+};
+
 /** Stores scheduled jobs ids for the certificate expiry notification */
 export type Certificate_Expiry_Notification_Jobs = {
   __typename?: 'certificate_expiry_notification_jobs';
@@ -14574,7 +14733,6 @@ export type Course = {
   createdById?: Maybe<Scalars['uuid']>;
   deliveryType: Course_Delivery_Type_Enum;
   description?: Maybe<Scalars['String']>;
-  /** A computed field, executes function "course_end_date" */
   end?: Maybe<Scalars['timestamptz']>;
   /** An array relationship */
   evaluation_answers: Array<Course_Evaluation_Answers>;
@@ -14628,7 +14786,6 @@ export type Course = {
   schedule_aggregate: Course_Schedule_Aggregate;
   source?: Maybe<Course_Source_Enum>;
   special_instructions?: Maybe<Scalars['String']>;
-  /** A computed field, executes function "course_start_date" */
   start?: Maybe<Scalars['timestamptz']>;
   status?: Maybe<Course_Status_Enum>;
   /** An array relationship */
@@ -19810,6 +19967,7 @@ export type Course_Insert_Input = {
   createdById?: InputMaybe<Scalars['uuid']>;
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
+  end?: InputMaybe<Scalars['timestamptz']>;
   evaluation_answers?: InputMaybe<Course_Evaluation_Answers_Arr_Rel_Insert_Input>;
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   expenses?: InputMaybe<Course_Expenses_Arr_Rel_Insert_Input>;
@@ -19838,6 +19996,7 @@ export type Course_Insert_Input = {
   schedule?: InputMaybe<Course_Schedule_Arr_Rel_Insert_Input>;
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
+  start?: InputMaybe<Scalars['timestamptz']>;
   status?: InputMaybe<Course_Status_Enum>;
   tempOrders?: InputMaybe<Order_Temp_Arr_Rel_Insert_Input>;
   trainers?: InputMaybe<Course_Trainer_Arr_Rel_Insert_Input>;
@@ -20564,7 +20723,6 @@ export type Course_Max_Fields = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   createdById?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
-  /** A computed field, executes function "course_end_date" */
   end?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['String']>;
@@ -20580,7 +20738,6 @@ export type Course_Max_Fields = {
   price?: Maybe<Scalars['numeric']>;
   priceCurrency?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
-  /** A computed field, executes function "course_start_date" */
   start?: Maybe<Scalars['timestamptz']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
@@ -20597,6 +20754,7 @@ export type Course_Max_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   createdById?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
+  end?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
@@ -20609,6 +20767,7 @@ export type Course_Max_Order_By = {
   price?: InputMaybe<Order_By>;
   priceCurrency?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
+  start?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
@@ -20627,7 +20786,6 @@ export type Course_Min_Fields = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   createdById?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
-  /** A computed field, executes function "course_end_date" */
   end?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['String']>;
@@ -20643,7 +20801,6 @@ export type Course_Min_Fields = {
   price?: Maybe<Scalars['numeric']>;
   priceCurrency?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
-  /** A computed field, executes function "course_start_date" */
   start?: Maybe<Scalars['timestamptz']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
@@ -20660,6 +20817,7 @@ export type Course_Min_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   createdById?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
+  end?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
@@ -20672,6 +20830,7 @@ export type Course_Min_Order_By = {
   price?: InputMaybe<Order_By>;
   priceCurrency?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
+  start?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
@@ -24390,6 +24549,8 @@ export enum Course_Select_Column {
   /** column name */
   Description = 'description',
   /** column name */
+  End = 'end',
+  /** column name */
   ExceptionsPending = 'exceptionsPending',
   /** column name */
   FreeSpaces = 'freeSpaces',
@@ -24430,6 +24591,8 @@ export enum Course_Select_Column {
   /** column name */
   SpecialInstructions = 'special_instructions',
   /** column name */
+  Start = 'start',
+  /** column name */
   Status = 'status',
   /** column name */
   Type = 'type',
@@ -24453,6 +24616,7 @@ export type Course_Set_Input = {
   createdById?: InputMaybe<Scalars['uuid']>;
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
+  end?: InputMaybe<Scalars['timestamptz']>;
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
   go1Integration?: InputMaybe<Scalars['Boolean']>;
@@ -24473,6 +24637,7 @@ export type Course_Set_Input = {
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
+  start?: InputMaybe<Scalars['timestamptz']>;
   status?: InputMaybe<Course_Status_Enum>;
   type?: InputMaybe<Course_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -24868,6 +25033,7 @@ export type Course_Stream_Cursor_Value_Input = {
   createdById?: InputMaybe<Scalars['uuid']>;
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
+  end?: InputMaybe<Scalars['timestamptz']>;
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
   go1Integration?: InputMaybe<Scalars['Boolean']>;
@@ -24888,6 +25054,7 @@ export type Course_Stream_Cursor_Value_Input = {
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
+  start?: InputMaybe<Scalars['timestamptz']>;
   status?: InputMaybe<Course_Status_Enum>;
   type?: InputMaybe<Course_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -25703,6 +25870,8 @@ export enum Course_Update_Column {
   /** column name */
   Description = 'description',
   /** column name */
+  End = 'end',
+  /** column name */
   ExceptionsPending = 'exceptionsPending',
   /** column name */
   FreeSpaces = 'freeSpaces',
@@ -25742,6 +25911,8 @@ export enum Course_Update_Column {
   Source = 'source',
   /** column name */
   SpecialInstructions = 'special_instructions',
+  /** column name */
+  Start = 'start',
   /** column name */
   Status = 'status',
   /** column name */
@@ -29186,6 +29357,10 @@ export type Mutation_Root = {
   delete_blended_learning_status?: Maybe<Blended_Learning_Status_Mutation_Response>;
   /** delete single row from the table: "blended_learning_status" */
   delete_blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
+  /** delete data from the table: "certificate_expired_notification_jobs" */
+  delete_certificate_expired_notification_jobs?: Maybe<Certificate_Expired_Notification_Jobs_Mutation_Response>;
+  /** delete single row from the table: "certificate_expired_notification_jobs" */
+  delete_certificate_expired_notification_jobs_by_pk?: Maybe<Certificate_Expired_Notification_Jobs>;
   /** delete data from the table: "certificate_expiry_notification_jobs" */
   delete_certificate_expiry_notification_jobs?: Maybe<Certificate_Expiry_Notification_Jobs_Mutation_Response>;
   /** delete single row from the table: "certificate_expiry_notification_jobs" */
@@ -29530,6 +29705,10 @@ export type Mutation_Root = {
   insert_blended_learning_status?: Maybe<Blended_Learning_Status_Mutation_Response>;
   /** insert a single row into the table: "blended_learning_status" */
   insert_blended_learning_status_one?: Maybe<Blended_Learning_Status>;
+  /** insert data into the table: "certificate_expired_notification_jobs" */
+  insert_certificate_expired_notification_jobs?: Maybe<Certificate_Expired_Notification_Jobs_Mutation_Response>;
+  /** insert a single row into the table: "certificate_expired_notification_jobs" */
+  insert_certificate_expired_notification_jobs_one?: Maybe<Certificate_Expired_Notification_Jobs>;
   /** insert data into the table: "certificate_expiry_notification_jobs" */
   insert_certificate_expiry_notification_jobs?: Maybe<Certificate_Expiry_Notification_Jobs_Mutation_Response>;
   /** insert a single row into the table: "certificate_expiry_notification_jobs" */
@@ -29900,6 +30079,12 @@ export type Mutation_Root = {
   update_blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
   /** update multiples rows of table: "blended_learning_status" */
   update_blended_learning_status_many?: Maybe<Array<Maybe<Blended_Learning_Status_Mutation_Response>>>;
+  /** update data of the table: "certificate_expired_notification_jobs" */
+  update_certificate_expired_notification_jobs?: Maybe<Certificate_Expired_Notification_Jobs_Mutation_Response>;
+  /** update single row of the table: "certificate_expired_notification_jobs" */
+  update_certificate_expired_notification_jobs_by_pk?: Maybe<Certificate_Expired_Notification_Jobs>;
+  /** update multiples rows of table: "certificate_expired_notification_jobs" */
+  update_certificate_expired_notification_jobs_many?: Maybe<Array<Maybe<Certificate_Expired_Notification_Jobs_Mutation_Response>>>;
   /** update data of the table: "certificate_expiry_notification_jobs" */
   update_certificate_expiry_notification_jobs?: Maybe<Certificate_Expiry_Notification_Jobs_Mutation_Response>;
   /** update single row of the table: "certificate_expiry_notification_jobs" */
@@ -30533,6 +30718,18 @@ export type Mutation_RootDelete_Blended_Learning_StatusArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Blended_Learning_Status_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Certificate_Expired_Notification_JobsArgs = {
+  where: Certificate_Expired_Notification_Jobs_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Certificate_Expired_Notification_Jobs_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -31579,6 +31776,20 @@ export type Mutation_RootInsert_Blended_Learning_StatusArgs = {
 export type Mutation_RootInsert_Blended_Learning_Status_OneArgs = {
   object: Blended_Learning_Status_Insert_Input;
   on_conflict?: InputMaybe<Blended_Learning_Status_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Certificate_Expired_Notification_JobsArgs = {
+  objects: Array<Certificate_Expired_Notification_Jobs_Insert_Input>;
+  on_conflict?: InputMaybe<Certificate_Expired_Notification_Jobs_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Certificate_Expired_Notification_Jobs_OneArgs = {
+  object: Certificate_Expired_Notification_Jobs_Insert_Input;
+  on_conflict?: InputMaybe<Certificate_Expired_Notification_Jobs_On_Conflict>;
 };
 
 
@@ -32886,6 +33097,26 @@ export type Mutation_RootUpdate_Blended_Learning_Status_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Blended_Learning_Status_ManyArgs = {
   updates: Array<Blended_Learning_Status_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Certificate_Expired_Notification_JobsArgs = {
+  _set?: InputMaybe<Certificate_Expired_Notification_Jobs_Set_Input>;
+  where: Certificate_Expired_Notification_Jobs_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Certificate_Expired_Notification_Jobs_By_PkArgs = {
+  _set?: InputMaybe<Certificate_Expired_Notification_Jobs_Set_Input>;
+  pk_columns: Certificate_Expired_Notification_Jobs_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Certificate_Expired_Notification_Jobs_ManyArgs = {
+  updates: Array<Certificate_Expired_Notification_Jobs_Updates>;
 };
 
 
@@ -40645,6 +40876,12 @@ export type Query_Root = {
   blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
   /** Checks whether a promo code can be applied to a given course by the current user */
   canApplyPromoCode: CanApplyPromoCodeOutput;
+  /** fetch data from the table: "certificate_expired_notification_jobs" */
+  certificate_expired_notification_jobs: Array<Certificate_Expired_Notification_Jobs>;
+  /** fetch aggregated fields from the table: "certificate_expired_notification_jobs" */
+  certificate_expired_notification_jobs_aggregate: Certificate_Expired_Notification_Jobs_Aggregate;
+  /** fetch data from the table: "certificate_expired_notification_jobs" using primary key columns */
+  certificate_expired_notification_jobs_by_pk?: Maybe<Certificate_Expired_Notification_Jobs>;
   /** fetch data from the table: "certificate_expiry_notification_jobs" */
   certificate_expiry_notification_jobs: Array<Certificate_Expiry_Notification_Jobs>;
   /** fetch aggregated fields from the table: "certificate_expiry_notification_jobs" */
@@ -41256,6 +41493,29 @@ export type Query_RootBlended_Learning_Status_By_PkArgs = {
 
 export type Query_RootCanApplyPromoCodeArgs = {
   input: CanApplyPromoCodeInput;
+};
+
+
+export type Query_RootCertificate_Expired_Notification_JobsArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Order_By>>;
+  where?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
+};
+
+
+export type Query_RootCertificate_Expired_Notification_Jobs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Order_By>>;
+  where?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
+};
+
+
+export type Query_RootCertificate_Expired_Notification_Jobs_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -42494,6 +42754,11 @@ export type Query_RootIdentity_Type_By_PkArgs = {
 };
 
 
+export type Query_RootImportArloCertificatesArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootIsUserSubscribedToMembershipArgs = {
   customerId: Scalars['String'];
 };
@@ -43516,6 +43781,14 @@ export type Subscription_Root = {
   blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
   /** fetch data from the table in a streaming manner: "blended_learning_status" */
   blended_learning_status_stream: Array<Blended_Learning_Status>;
+  /** fetch data from the table: "certificate_expired_notification_jobs" */
+  certificate_expired_notification_jobs: Array<Certificate_Expired_Notification_Jobs>;
+  /** fetch aggregated fields from the table: "certificate_expired_notification_jobs" */
+  certificate_expired_notification_jobs_aggregate: Certificate_Expired_Notification_Jobs_Aggregate;
+  /** fetch data from the table: "certificate_expired_notification_jobs" using primary key columns */
+  certificate_expired_notification_jobs_by_pk?: Maybe<Certificate_Expired_Notification_Jobs>;
+  /** fetch data from the table in a streaming manner: "certificate_expired_notification_jobs" */
+  certificate_expired_notification_jobs_stream: Array<Certificate_Expired_Notification_Jobs>;
   /** fetch data from the table: "certificate_expiry_notification_jobs" */
   certificate_expiry_notification_jobs: Array<Certificate_Expiry_Notification_Jobs>;
   /** fetch aggregated fields from the table: "certificate_expiry_notification_jobs" */
@@ -44291,6 +44564,36 @@ export type Subscription_RootBlended_Learning_Status_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Blended_Learning_Status_Stream_Cursor_Input>>;
   where?: InputMaybe<Blended_Learning_Status_Bool_Exp>;
+};
+
+
+export type Subscription_RootCertificate_Expired_Notification_JobsArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Order_By>>;
+  where?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
+};
+
+
+export type Subscription_RootCertificate_Expired_Notification_Jobs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Order_By>>;
+  where?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
+};
+
+
+export type Subscription_RootCertificate_Expired_Notification_Jobs_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCertificate_Expired_Notification_Jobs_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Certificate_Expired_Notification_Jobs_Stream_Cursor_Input>>;
+  where?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
 };
 
 
@@ -49347,7 +49650,7 @@ export type ConfirmCcPaymentMutation = { __typename?: 'mutation_root', confirmCr
 export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllResourceCategoriesQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategories?: { __typename?: 'RootQueryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resouceIcon?: { __typename?: 'ResourceCategory_Resouceicon', resourceicon?: string | null } | null, resourceArea?: { __typename?: 'ResourceCategory_Resourcearea', resourcearea?: string | null } | null } | null> | null } | null } | null };
+export type AllResourceCategoriesQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategories?: { __typename?: 'RootQueryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resouceIcon?: { __typename?: 'ResourceCategory_Resouceicon', resourceicon?: string | null } | null, resourceArea?: { __typename?: 'ResourceCategory_Resourcearea', resourcearea?: string | null } | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null };
 
 export type ResourceDetailsQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -49355,9 +49658,9 @@ export type ResourceDetailsQueryVariables = Exact<{
 }>;
 
 
-export type ResourceDetailsQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategory?: { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null } | null };
+export type ResourceDetailsQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategory?: { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null } | null };
 
-export type ResourceCategorySummaryFragment = { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null };
+export type ResourceCategorySummaryFragment = { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null };
 
 export type ResourceSummaryFragment = { __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null };
 

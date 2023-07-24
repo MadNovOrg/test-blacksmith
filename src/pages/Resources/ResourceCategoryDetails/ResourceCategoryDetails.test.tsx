@@ -29,7 +29,11 @@ describe('page: ResourceCategoryDetails', () => {
   })
 
   it('displays resource category title and description', () => {
-    const resourceCategory = buildResourceCategory()
+    const resourceCategory = buildResourceCategory({
+      resourcePermissions: {
+        certificateLevels: [CourseLevel.Level_1],
+      },
+    })
 
     const client = {
       executeQuery: () =>
@@ -45,7 +49,8 @@ describe('page: ResourceCategoryDetails', () => {
     render(
       <Provider value={client}>
         <ResourceCategoryDetails />
-      </Provider>
+      </Provider>,
+      { auth: { activeCertificates: [CourseLevel.Level_1] } }
     )
 
     expect(
@@ -83,6 +88,9 @@ describe('page: ResourceCategoryDetails', () => {
     })
 
     const resourceCategory = buildResourceCategory({
+      resourcePermissions: {
+        certificateLevels: [CourseLevel.Advanced],
+      },
       resources: {
         nodes: [
           level1Resource,
@@ -141,10 +149,14 @@ describe('page: ResourceCategoryDetails', () => {
     })
 
     const resourceCategory = buildResourceCategory({
+      resourcePermissions: {
+        principalTrainer: true,
+      },
       resources: {
         nodes: [level1Resource, principalTrainerResource],
       },
     })
+
     const client = {
       executeQuery: () =>
         fromValue<{ data: ResourceDetailsQuery }>({
@@ -173,6 +185,43 @@ describe('page: ResourceCategoryDetails', () => {
     expect(
       screen.getByText(principalTrainerResource.title ?? '')
     ).toBeInTheDocument()
+  })
+
+  it("displays not found page if a user doesn't have an appropriate certificate level", () => {
+    const level2Resource = buildResource({
+      resourcePermissions: {
+        certificateLevels: [CourseLevel.Level_2],
+      },
+    })
+
+    const resourceCategory = buildResourceCategory({
+      resources: {
+        nodes: [level2Resource],
+      },
+    })
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: ResourceDetailsQuery }>({
+          data: {
+            content: {
+              resourceCategory,
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <ResourceCategoryDetails />
+      </Provider>,
+      {
+        auth: {
+          activeCertificates: [CourseLevel.Level_1],
+        },
+      }
+    )
+
+    expect(screen.getByText(/not found/i)).toBeInTheDocument()
   })
 })
 

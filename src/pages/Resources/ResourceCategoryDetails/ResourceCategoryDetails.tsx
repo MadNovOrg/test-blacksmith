@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom'
 import { BackButton } from '@app/components/BackButton'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
+import { NotFound } from '@app/pages/common/NotFound'
 
 import { useResourceCategory } from '../hooks/useResourceCategory'
 
@@ -31,6 +32,10 @@ export const ResourceCategoryDetails = () => {
   const [{ data, fetching }] = useResourceCategory(id, searchTerm)
 
   const resourceCategory = data?.content?.resourceCategory
+
+  if (!fetching && !resourceCategory) {
+    return <NotFound />
+  }
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]} pb={3}>

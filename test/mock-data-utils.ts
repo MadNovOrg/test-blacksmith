@@ -661,17 +661,23 @@ export const buildTrainerInputModerator = (
   })
 }
 
-export const buildResourceCategory = (resourceArea: string) =>
-  build<Omit<ResourceCategory, 'databaseId' | 'isContentNode' | 'isTermNode'>>({
-    fields: {
-      id: perBuild(() => chance.guid()),
-      name: perBuild(() => chance.word()),
-      description: perBuild(() => chance.word()),
-      resourceArea: {
-        resourcearea: resourceArea,
-      },
+export const buildResourceCategory = build<
+  Omit<ResourceCategory, 'databaseId' | 'isContentNode' | 'isTermNode'>
+>({
+  fields: {
+    id: perBuild(() => chance.guid()),
+    name: perBuild(() => chance.word()),
+    description: perBuild(() => chance.word()),
+    resourceArea: {
+      resourcearea: 'basic',
     },
-  })
+    resourcePermissions: {
+      certificateLevels: [],
+      principalTrainer: false,
+    },
+  },
+})
+
 export const buildLogs = build<GetCourseAuditLogsQuery['logs'][0]>({
   fields: {
     id: perBuild(() => chance.guid()),

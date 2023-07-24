@@ -7,12 +7,17 @@ import {
 } from '@app/generated/graphql'
 import { ALL_RESOURCE_CATEGORIES_QUERY } from '@app/pages/Resources/queries/get-all-resource-categories'
 
+import { useResourcePermission } from '../hooks/useResourcePermission'
+
 type ResourceArea = 'basic' | 'additional'
 
 export const useResourceAreas = () => {
   const [{ data, fetching }] = useQuery<AllResourceCategoriesQuery>({
     query: ALL_RESOURCE_CATEGORIES_QUERY,
+    requestPolicy: 'cache-and-network',
   })
+
+  const canAccessResource = useResourcePermission()
 
   const allResources = data?.content?.resourceCategories?.nodes
 
@@ -21,7 +26,11 @@ export const useResourceAreas = () => {
       (acc, current) => {
         const areaType = current?.resourceArea?.resourcearea as ResourceArea
 
-        if (areaType) {
+        const hasAccess = current?.resourcePermissions
+          ? canAccessResource(current.resourcePermissions)
+          : false
+
+        if (areaType && hasAccess) {
           acc[areaType] = acc[areaType] ?? []
           acc[areaType]?.push(current as ResourceCategory)
         }
@@ -29,7 +38,7 @@ export const useResourceAreas = () => {
       },
       {}
     )
-  }, [allResources])
+  }, [allResources, canAccessResource])
 
   return {
     allResourcesByArea,

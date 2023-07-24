@@ -14,6 +14,10 @@ export const ALL_RESOURCE_CATEGORIES_QUERY = gql`
           resourceArea {
             resourcearea
           }
+          resourcePermissions {
+            certificateLevels
+            principalTrainer
+          }
         }
       }
     }
