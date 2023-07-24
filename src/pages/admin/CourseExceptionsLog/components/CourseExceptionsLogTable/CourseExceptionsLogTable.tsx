@@ -3,8 +3,13 @@ import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
-import { GetCourseAuditLogsQuery } from '@app/generated/graphql'
+import {
+  Course_Audit_Type_Enum,
+  GetCourseAuditLogsQuery,
+} from '@app/generated/graphql'
 import { Sorting } from '@app/hooks/useTableSort'
+
+import type { TabsValues } from '../CourseExceptionsLogTabs'
 
 import { TableBody } from './TableBody'
 
@@ -12,12 +17,14 @@ type Props = {
   loading: boolean
   logs: GetCourseAuditLogsQuery['logs']
   sorting: Sorting
+  activeTab: TabsValues
 }
 
 export const CourseExceptionsLogTable: FC<Props> = ({
   loading,
   logs,
   sorting,
+  activeTab,
 }) => {
   const { t } = useTranslation()
 
@@ -44,8 +51,11 @@ export const CourseExceptionsLogTable: FC<Props> = ({
         sorting: true,
       },
       {
-        id: 'notes',
-        label: t('pages.admin.course-exceptions-log.table-cols.notes'),
+        id: 'reason-or-notes-col',
+        label:
+          activeTab === Course_Audit_Type_Enum.Approved
+            ? t('pages.admin.course-exceptions-log.table-cols.notes')
+            : t('pages.admin.course-exceptions-log.table-cols.reason'),
         sorting: false,
       },
       {
@@ -59,7 +69,7 @@ export const CourseExceptionsLogTable: FC<Props> = ({
         sorting: true,
       },
     ],
-    [t]
+    [activeTab, t]
   )
 
   return (

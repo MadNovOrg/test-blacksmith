@@ -18,7 +18,7 @@ import {
 } from '../CourseExceptionsLogFilters'
 import { CourseExceptionsLogTable } from '../CourseExceptionsLogTable'
 
-type TabsValues = Extract<
+export type TabsValues = Extract<
   Course_Audit_Type_Enum,
   Course_Audit_Type_Enum.Approved | Course_Audit_Type_Enum.Rejected
 >
@@ -149,6 +149,7 @@ export const CourseExceptionsLogTabs: FC<PropsWithChildren<unknown>> = () => {
                     sorting={sorting}
                     logs={logs}
                     loading={loading}
+                    activeTab={activeTab}
                   />
                 </TabPanel>
               ))}
