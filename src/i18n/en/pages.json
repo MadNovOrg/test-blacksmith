@@ -198,6 +198,8 @@
     "create-course": {
       "new-course": {
         "description": "To submit a course, choose from the modules available to create a course {{duration}} hours in duration. Times indicated on the modules are the minimum recommended duration for each.",
+        "BILD-description": "To submit your course, choose from the modules available to create a course to be delivered over the approved minimum duration of hours confirmed for your Training Needs Analysis. Please be aware, the times indicated are the minimum recommended duration for each module. ",
+        "BILD-generic-description": "To submit this course, please accept that you will deliver all modules and techniques highlighted below within a {{ days }} day duration.",
         "description-INTERMEDIATE_TRAINER": "To submit this course, please accept that you will deliver all modules and techniques highlighted below within a 5 day duration.",
         "description-INTERMEDIATE_TRAINER-reaccreditation": "To submit this course, please accept that you will deliver all modules and techniques highlighted below within a 2 day duration.",
         "location": "Location",

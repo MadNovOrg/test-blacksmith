@@ -9,6 +9,7 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material'
+import { cond, constant, matches, stubTrue } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -27,6 +28,7 @@ import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import { NotFound } from '@app/pages/common/NotFound'
 import { QUERY as GET_COURSE_BY_ID_QUERY } from '@app/queries/courses/get-course-by-id'
 import { MUTATION as SAVE_COURSE_MODULES_BILD_MUTATION } from '@app/queries/courses/save-course-modules-bild'
+import { CourseLevel } from '@app/types'
 import {
   LoadingStatus,
   formatDurationShort,
@@ -88,6 +90,50 @@ function transformSelection(selectedModules: Record<string, boolean>) {
 
 type BILDCourseBuilderProps = unknown
 
+const mapCourseLevelToDescriptionDays = cond([
+  [
+    matches({
+      level: CourseLevel.BildAdvancedTrainer,
+      reaccreditation: true,
+    }),
+    constant(3),
+  ],
+  [
+    matches({
+      level: CourseLevel.BildAdvancedTrainer,
+      conversion: true,
+    }),
+    constant(2),
+  ],
+  [
+    matches({
+      level: CourseLevel.BildAdvancedTrainer,
+    }),
+    constant(4),
+  ],
+  [
+    matches({
+      level: CourseLevel.BildIntermediateTrainer,
+      reaccreditation: true,
+    }),
+    constant(2),
+  ],
+  [
+    matches({
+      level: CourseLevel.BildIntermediateTrainer,
+      conversion: true,
+    }),
+    constant(2),
+  ],
+  [
+    matches({
+      level: CourseLevel.BildIntermediateTrainer,
+    }),
+    constant(5),
+  ],
+  [stubTrue, constant(0)],
+])
+
 export const BILDCourseBuilder: React.FC<
   React.PropsWithChildren<BILDCourseBuilderProps>
 > = () => {
@@ -122,6 +168,22 @@ export const BILDCourseBuilder: React.FC<
     Error,
     [string, GetCourseByIdQueryVariables] | null
   >(courseId ? [GET_COURSE_BY_ID_QUERY, { id: Number(courseId) }] : null)
+
+  const courseDescription = useMemo<string>(() => {
+    if (!courseData?.course) return ''
+
+    const days = mapCourseLevelToDescriptionDays(
+      (courseData as GetCourseByIdQuery).course
+    )
+
+    if (days === 0)
+      return t('pages.trainer-base.create-course.new-course.BILD-description')
+
+    return t(
+      'pages.trainer-base.create-course.new-course.BILD-generic-description',
+      { days }
+    )
+  }, [courseData, t])
 
   const courseLoadingStatus = getSWRLoadingStatus(courseData, courseDataError)
 
@@ -367,14 +429,7 @@ export const BILDCourseBuilder: React.FC<
               flexDirection={isMobile ? 'column' : 'row'}
             >
               <Box>
-                <Typography variant="body2">
-                  {t(
-                    'pages.trainer-base.create-course.new-course.description',
-                    {
-                      duration: 10,
-                    }
-                  )}
-                </Typography>
+                <Typography variant="body2">{courseDescription}</Typography>
               </Box>
               <Box data-testid="course-info" mt={isMobile ? 2 : 0}>
                 <CourseHero data={courseData.course} />
