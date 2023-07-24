@@ -2,8 +2,8 @@ import { Alert, CircularProgress, Container, Stack } from '@mui/material'
 import { t } from 'i18next'
 import { useParams } from 'react-router-dom'
 
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Accreditors_Enum } from '@app/generated/graphql'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import theme from '@app/theme'
 import { LoadingStatus } from '@app/util'
 
@@ -17,7 +17,7 @@ export const CourseGrading = () => {
   const { data: course, status } = useCourseGradingData(Number(courseId) ?? '')
 
   return (
-    <FullHeightPage bgcolor={theme.palette.grey[100]}>
+    <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ padding: theme.spacing(2, 0, 4, 0) }}>
         {status === LoadingStatus.FETCHING ? (
           <Stack
@@ -43,6 +43,6 @@ export const CourseGrading = () => {
           <BILDGrading course={course} />
         ) : null}
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

@@ -18,11 +18,11 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import {
   MUTATION,
   ParamsType,
@@ -70,7 +70,7 @@ export const CourseHealthAndSafetyForm = () => {
   }
 
   return (
-    <FullHeightPage bgcolor={theme.palette.grey[100]}>
+    <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ padding: theme.spacing(2, 0, 4, 0) }}>
         <Grid container>
           <Grid item md={3}>
@@ -192,6 +192,6 @@ export const CourseHealthAndSafetyForm = () => {
           </Grid>
         </Grid>
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

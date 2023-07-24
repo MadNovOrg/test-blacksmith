@@ -2,9 +2,9 @@ import { Box, Link, List, ListItem, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Tile } from '@app/components/Tile'
 import { useAuth } from '@app/context/auth'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import theme from '@app/theme'
 
 type AdminPageProps = unknown
@@ -40,7 +40,7 @@ export const AdminPage: React.FC<
   }, [acl])
 
   return (
-    <FullHeightPage
+    <FullHeightPageLayout
       bgcolor={theme.palette.grey[100]}
       pb={3}
       sx={{ display: 'flex', justifyContent: 'center' }}
@@ -66,6 +66,6 @@ export const AdminPage: React.FC<
           ))}
         </List>
       </Box>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

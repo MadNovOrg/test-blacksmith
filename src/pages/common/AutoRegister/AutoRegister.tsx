@@ -3,9 +3,9 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
+import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 
 import { Form } from './components/Form'
 

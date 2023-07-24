@@ -25,7 +25,6 @@ import ChooseTrainers, {
 import CourseForm, { DisabledFields } from '@app/components/CourseForm'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { Dialog } from '@app/components/Dialog'
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
@@ -43,6 +42,7 @@ import {
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import useCourse from '@app/hooks/useCourse'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
   checkCourseDetailsForExceptions,
@@ -587,7 +587,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     )
 
   return (
-    <FullHeightPage bgcolor={theme.palette.grey[100]}>
+    <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
         {courseStatus === LoadingStatus.FETCHING ? (
           <Stack
@@ -813,6 +813,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           />
         </>
       ) : null}
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

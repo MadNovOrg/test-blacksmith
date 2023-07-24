@@ -20,7 +20,6 @@ import { useParams, useSearchParams } from 'react-router-dom'
 import { FilterCourseDeliveryType } from '@app/components/FilterCourseDeliveryType'
 import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterSearch } from '@app/components/FilterSearch'
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { RequestAQuoteBanner } from '@app/components/RequestAQuoteBanner'
 import { useAuth } from '@app/context/auth'
 import {
@@ -34,6 +33,7 @@ import {
 import useOrg from '@app/hooks/useOrg'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/OrgSelectionToolbar'
 import { CourseForBookingTile } from '@app/pages/admin/components/Organizations/tabs/components/CourseForBookingTile'
 import { geoDistance } from '@app/util/geo'
@@ -217,7 +217,7 @@ export const AvailableCourses: React.FC<
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enLocale}>
-      <FullHeightPage bgcolor={theme.palette.grey[100]} pb={3}>
+      <FullHeightPageLayout bgcolor={theme.palette.grey[100]} pb={3}>
         {orgs && orgs.length > 1 ? (
           <OrgSelectionToolbar prefix="/organisations" postfix="/courses" />
         ) : null}
@@ -329,7 +329,7 @@ export const AvailableCourses: React.FC<
             </Box>
           </Box>
         </Container>
-      </FullHeightPage>
+      </FullHeightPageLayout>
     </LocalizationProvider>
   )
 }

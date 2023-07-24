@@ -32,10 +32,9 @@ import { useAuth } from '@app/context/auth'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import useProfiles from '@app/hooks/useProfiles'
 import { useTablePagination } from '@app/hooks/useTablePagination'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
+import theme from '@app/theme'
 import { CertificateStatus, RoleName, TrainerRoleTypeName } from '@app/types'
-
-import { FullHeightPage } from '../../../components/FullHeightPage'
-import theme from '../../../theme'
 
 import { MergeUsersDialog } from './components/MergeUsersDialog'
 
@@ -248,7 +247,7 @@ export const Users = () => {
   }
 
   return (
-    <FullHeightPage>
+    <FullHeightPageLayout>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
           <Box justifyContent="space-between" display="flex">
@@ -483,6 +482,6 @@ export const Users = () => {
           />
         )}
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

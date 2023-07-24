@@ -14,7 +14,6 @@ import { useParams } from 'react-router-dom'
 import { BackButton } from '@app/components/BackButton'
 import { CourseTitleAndDuration } from '@app/components/CourseTitleAndDuration'
 import { DetailsItemBox, ItemRow } from '@app/components/DetailsItemRow'
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
@@ -32,6 +31,7 @@ import {
 import { useOrder } from '@app/hooks/useOrder'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { NotFound } from '@app/pages/common/NotFound'
 import theme from '@app/theme'
 import { INVOICE_STATUS_COLOR, isNotNullish } from '@app/util'
@@ -158,7 +158,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     : go1LicensesLineItem?.accountCode
 
   return (
-    <FullHeightPage bgcolor={theme.palette.grey[100]}>
+    <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
         {fetching ? (
           <Stack
@@ -586,6 +586,6 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Box>
         ) : null}
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

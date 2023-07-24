@@ -9,10 +9,10 @@ import {
   useNavigate,
 } from 'react-router-dom'
 
-import { AppLayout } from '@app/components/AppLayout'
-import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
 import { GettingStartedModal } from '@app/components/GettingStartedModal'
 import { useAuth } from '@app/context/auth'
+import { AppLayout } from '@app/layouts/AppLayout'
+import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 import { AutoLogin } from '@app/pages/common/AutoLogin'
 import { AutoRegisterPage } from '@app/pages/common/AutoRegister'
 import { BookPrivateCourse } from '@app/pages/common/BookPrivateCourse'

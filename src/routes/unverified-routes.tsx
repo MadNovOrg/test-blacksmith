@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
-import { UnverifiedLayout } from '@app/components/UnverifiedLayout'
+import { UnverifiedLayout } from '@app/layouts/UnverifiedLayout'
 import { NotFound } from '@app/pages/common/NotFound'
 import { VerifyEmailPage } from '@app/pages/common/VerifyEmail'
 import { AutoVerify } from '@app/pages/unverified-pages/AutoVerify'

@@ -15,13 +15,13 @@ import useSWR from 'swr'
 
 import { AttendeeMenu } from '@app/components/AttendeeMenu'
 import { BackButton } from '@app/components/BackButton'
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { RatingProgress } from '@app/components/RatingProgress'
 import { RatingSummary } from '@app/components/RatingSummary'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import useCourse from '@app/hooks/useCourse'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import {
   ParamsType as GetEvaluationsSummaryParamsType,
   QUERY as GET_EVALUATIONS_SUMMARY_QUERY,
@@ -180,7 +180,7 @@ export const EvaluationSummary = () => {
   }
 
   return (
-    <FullHeightPage>
+    <FullHeightPageLayout>
       <Box bgcolor="grey.100" sx={{ pb: 6 }}>
         <Container>
           <Grid container>
@@ -442,6 +442,6 @@ export const EvaluationSummary = () => {
           </Grid>
         </Container>
       </Box>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

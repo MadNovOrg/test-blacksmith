@@ -5,8 +5,8 @@ import Typography from '@mui/material/Typography'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
 import { LinkBehavior } from '@app/components/LinkBehavior'
+import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 
 export const JoinedWaitlist: React.FC<
   React.PropsWithChildren<{ email: string }>

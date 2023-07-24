@@ -13,9 +13,9 @@ import { useTranslation } from 'react-i18next'
 import { Outlet, useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import useCourse from '@app/hooks/useCourse'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import { LoadingStatus } from '@app/util'
 
@@ -31,7 +31,7 @@ export const CourseGradingDetails = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   return (
-    <FullHeightPage bgcolor={theme.palette.grey[100]}>
+    <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
         {status === LoadingStatus.FETCHING ? (
           <Stack
@@ -76,6 +76,6 @@ export const CourseGradingDetails = () => {
           </GradingDetailsProvider>
         ) : null}
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

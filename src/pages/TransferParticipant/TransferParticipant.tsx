@@ -11,9 +11,9 @@ import { Outlet } from 'react-router-dom'
 
 import { Avatar } from '@app/components/Avatar'
 import { BackButton } from '@app/components/BackButton'
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 
 import {
   TransferModeEnum,
@@ -34,7 +34,7 @@ export const TransferParticipant: React.FC<
   const attendeeTranfserring = mode === TransferModeEnum.ATTENDEE_TRANSFERS
 
   return (
-    <FullHeightPage bgcolor={theme.palette.grey[100]}>
+    <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
         <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
           <Box width={400} display="flex" flexDirection="column" pr={4}>
@@ -95,6 +95,6 @@ export const TransferParticipant: React.FC<
           </Box>
         </Box>
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

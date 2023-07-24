@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 import { useMutation } from 'urql'
 
-import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
 import {
   CancelMyselfFromCourseWaitlistMutation,
   CancelMyselfFromCourseWaitlistMutationVariables,
   CancelMyselfFromCourseWaitlistError,
 } from '@app/generated/graphql'
+import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 import { CANCEL_MYSELF_FROM_COURSE_WAITLIST_MUTATION } from '@app/queries/waitlist/cancel-myself-from-course-waitlist'
 
 const Wrapper: React.FC<React.PropsWithChildren> = ({ children }) => {

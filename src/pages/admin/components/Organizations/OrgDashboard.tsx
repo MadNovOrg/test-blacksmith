@@ -12,10 +12,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/OrgSelectionToolbar'
 import { OrgDetailsTab } from '@app/pages/admin/components/Organizations/tabs/OrgDetailsTab'
 import { OrgIndividualsTab } from '@app/pages/admin/components/Organizations/tabs/OrgIndividualsTab'
@@ -69,7 +69,7 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
   )
 
   return (
-    <FullHeightPage bgcolor={theme.palette.grey[100]} pb={3}>
+    <FullHeightPageLayout bgcolor={theme.palette.grey[100]} pb={3}>
       {status === LoadingStatus.FETCHING ? (
         <Stack
           alignItems="center"
@@ -164,6 +164,6 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Container>
         </>
       )}
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

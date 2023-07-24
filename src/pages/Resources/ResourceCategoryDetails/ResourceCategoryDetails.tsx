@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { FilterSearch } from '@app/components/FilterSearch'
-import { FullHeightPage } from '@app/components/FullHeightPage'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 
 import { useResourceCategory } from '../hooks/useResourceCategory'
 
@@ -33,7 +33,7 @@ export const ResourceCategoryDetails = () => {
   const resourceCategory = data?.content?.resourceCategory
 
   return (
-    <FullHeightPage bgcolor={theme.palette.grey[100]} pb={3}>
+    <FullHeightPageLayout bgcolor={theme.palette.grey[100]} pb={3}>
       <Container maxWidth="lg" sx={{ py: 5 }}>
         <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
           <Box width={isMobile ? undefined : 400}>
@@ -122,6 +122,6 @@ export const ResourceCategoryDetails = () => {
           </Box>
         </Box>
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

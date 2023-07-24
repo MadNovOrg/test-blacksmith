@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
-import { FullHeightPage } from '@app/components/FullHeightPage'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { AttendeeCancellationTable } from '@app/pages/admin/Audits/AttendeeCancellationTable'
 import { AttendeeReplacementTable } from '@app/pages/admin/Audits/AttendeeReplacementTable'
 import { AttendeeTransferTable } from '@app/pages/admin/Audits/AttendeeTransferTable'
@@ -35,7 +35,7 @@ export const AuditsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [initialTab])
 
   return (
-    <FullHeightPage>
+    <FullHeightPageLayout>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
           <BackButton label={t('pages.admin.back-to-settings')} />
@@ -108,6 +108,6 @@ export const AuditsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Box>
         </TabContext>
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

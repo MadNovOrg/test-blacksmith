@@ -10,9 +10,9 @@ import React, { useMemo } from 'react'
 import { Outlet, useSearchParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { CourseType } from '@app/types'
 
 import { NotFound } from '../common/NotFound'
@@ -38,7 +38,7 @@ export const CreateCoursePage = () => {
   }
 
   return (
-    <FullHeightPage bgcolor={theme.palette.grey[100]}>
+    <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
         <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
           <Box width={400} display="flex" flexDirection="column" pr={4}>
@@ -71,6 +71,6 @@ export const CreateCoursePage = () => {
           </Box>
         </Box>
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

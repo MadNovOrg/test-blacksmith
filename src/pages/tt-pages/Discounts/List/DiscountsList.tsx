@@ -9,9 +9,8 @@ import { useAuth } from '@app/context/auth'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
-
-import { FullHeightPage } from '../../../../components/FullHeightPage'
-import theme from '../../../../theme'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
+import theme from '@app/theme'
 
 import { Filters } from './Filters'
 import { PendingApproval } from './PendingApproval'
@@ -55,7 +54,7 @@ export const DiscountsList: React.FC<React.PropsWithChildren<unknown>> = () => {
   const count = promoCodes.length ?? 0
 
   return (
-    <FullHeightPage>
+    <FullHeightPageLayout>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
           <BackButton label={t('pages.admin.back-to-settings')} />
@@ -118,6 +117,6 @@ export const DiscountsList: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Box>
         </Box>
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

@@ -31,9 +31,8 @@ import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
 import { useOrganizations } from '@app/hooks/useOrganizations'
 import { useTableSort } from '@app/hooks/useTableSort'
-
-import { FullHeightPage } from '../../../../components/FullHeightPage'
-import theme from '../../../../theme'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout/FullHeightPageLayout'
+import theme from '@app/theme'
 
 type OrganizationsProps = unknown
 
@@ -141,7 +140,7 @@ export const Organizations: React.FC<
   }, [orgs])
 
   return (
-    <FullHeightPage>
+    <FullHeightPageLayout>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
           <BackButton label={t('pages.admin.back-to-settings')} />
@@ -260,7 +259,7 @@ export const Organizations: React.FC<
           </Box>
         </Box>
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }
 

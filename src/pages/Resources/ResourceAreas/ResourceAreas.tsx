@@ -10,7 +10,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink } from 'react-router-dom'
 
-import { FullHeightPage } from '@app/components/FullHeightPage'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 
 import { ResourceAreaIcon } from './components/resourceAreaIcon'
 import { ResourceListSkeleton } from './components/ResourceAreasSkeleton'
@@ -24,7 +24,7 @@ export const ResourceAreas = () => {
   const { allResourcesByArea, fetching } = useResourceAreas()
 
   return (
-    <FullHeightPage bgcolor={theme.palette.grey[100]} pb={3}>
+    <FullHeightPageLayout bgcolor={theme.palette.grey[100]} pb={3}>
       <Container maxWidth="lg" sx={{ py: 5 }}>
         {fetching ? (
           <Box data-testid="resources-list-skeleton">
@@ -81,6 +81,6 @@ export const ResourceAreas = () => {
           </>
         )}
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

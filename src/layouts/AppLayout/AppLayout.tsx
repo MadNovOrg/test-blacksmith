@@ -1,9 +1,8 @@
 import { Box } from '@mui/material'
 import React from 'react'
 
-import { Footer } from '../Footer'
-
-import { AppBar } from './AppBar'
+import { AppBar } from '@app/components/AppBar'
+import { Footer } from '@app/components/Footer'
 
 type LayoutProps = {
   children: React.ReactNode

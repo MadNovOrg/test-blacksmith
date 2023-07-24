@@ -23,7 +23,7 @@ function registerMocks(certificateCount: number, courseCount: number) {
   })
 }
 
-describe('component: AppBar', () => {
+describe(AppBar.name, () => {
   it('renders logo as expected', async () => {
     render(<AppBar />)
 

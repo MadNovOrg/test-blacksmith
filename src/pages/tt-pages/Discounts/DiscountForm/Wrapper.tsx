@@ -1,7 +1,7 @@
 import { Box, Container, Typography } from '@mui/material'
 import React from 'react'
 
-import { FullHeightPage } from '@app/components/FullHeightPage'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 
 type Props = {
   title: string
@@ -14,7 +14,7 @@ export const Wrapper: React.FC<React.PropsWithChildren<Props>> = ({
   onSubmit,
 }) => {
   return (
-    <FullHeightPage bgcolor="grey.100">
+    <FullHeightPageLayout bgcolor="grey.100">
       <Container maxWidth="lg" sx={{ py: 5 }}>
         <Box display="flex" gap={4}>
           <Box width={300}>
@@ -34,6 +34,6 @@ export const Wrapper: React.FC<React.PropsWithChildren<Props>> = ({
           </Box>
         </Box>
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

@@ -16,7 +16,6 @@ import React, { useState, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { BackButton } from '@app/components/BackButton'
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { TableHead, Col } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import {
@@ -27,6 +26,7 @@ import {
 import { useCoursePricing } from '@app/hooks/useCoursePricing'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import { useTablePagination } from '@app/hooks/useTablePagination'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import theme from '@app/theme'
 
 import { getCourseAttributes } from '../utils'
@@ -112,7 +112,7 @@ export const PricingList: React.FC = () => {
   }, [coursePricing, t, checkbox, showCol])
 
   return (
-    <FullHeightPage>
+    <FullHeightPageLayout>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
           <BackButton label={t('pages.admin.back-to-settings')} to="/admin" />
@@ -261,6 +261,6 @@ export const PricingList: React.FC = () => {
           </Box>
         </Box>
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

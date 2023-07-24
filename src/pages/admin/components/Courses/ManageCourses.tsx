@@ -3,9 +3,9 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { useAuth } from '@app/context/auth'
 import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/OrgSelectionToolbar'
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { LoadingStatus } from '@app/util'
@@ -36,7 +36,7 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [allOrgs, navigate])
 
   return (
-    <FullHeightPage pb={3}>
+    <FullHeightPageLayout pb={3}>
       {status === LoadingStatus.FETCHING ? (
         <Stack
           alignItems="center"
@@ -68,6 +68,6 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Container>
         </>
       )}
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

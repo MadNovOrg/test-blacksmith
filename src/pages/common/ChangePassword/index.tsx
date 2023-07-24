@@ -11,7 +11,7 @@ import {
   useSearchParams,
 } from 'react-router-dom'
 
-import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
+import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 import { schemas, yup } from '@app/schemas'
 import { requiredMsg } from '@app/util'
 

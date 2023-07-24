@@ -10,7 +10,6 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 
-import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
 import {
   CourseEnquiryForm,
   FormInputs,
@@ -21,6 +20,7 @@ import {
   InsertCourseEnquiryMutation,
   InsertCourseEnquiryMutationVariables,
 } from '@app/generated/graphql'
+import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 import { gqlRequest } from '@app/lib/gql-request'
 import insertEnquiry from '@app/queries/booking/insert-enquiry'
 import { LoadingStatus } from '@app/util'

@@ -17,13 +17,13 @@ import { useParams } from 'react-router-dom'
 import { useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Grade } from '@app/components/Grade'
 import {
   CourseParticipantQuery,
   CourseParticipantQueryVariables,
 } from '@app/generated/graphql'
 import { Accreditors_Enum } from '@app/generated/graphql'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import { QUERY as PARTICIPANT_QUERY } from '@app/queries/participants/get-course-participant-by-id'
 import theme from '@app/theme'
@@ -42,7 +42,7 @@ export const ParticipantGrading = () => {
   const participant = data?.participant
 
   return (
-    <FullHeightPage bgcolor={theme.palette.grey[100]}>
+    <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ padding: theme.spacing(2, 0, 4, 0) }}>
         {fetching ? (
           <Stack
@@ -126,6 +126,6 @@ export const ParticipantGrading = () => {
           </>
         ) : null}
       </Container>
-    </FullHeightPage>
+    </FullHeightPageLayout>
   )
 }

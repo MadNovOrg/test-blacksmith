@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMount } from 'react-use'
 
-import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 import {
   MUTATION,
   ResponseType,

@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 import { useMutation, useQuery } from 'urql'
 
-import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
 import {
   JoinWaitlistMutation,
   JoinWaitlistMutationVariables,
   WaitlistCourseQuery,
   WaitlistCourseQueryVariables,
 } from '@app/generated/graphql'
+import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 
 import { CourseInfo, CourseInfoSkeleton } from './components/CourseInfo'
 import { Form, FormInputs } from './components/Form'

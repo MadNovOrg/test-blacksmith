@@ -21,9 +21,9 @@ import {
 } from 'react-router-dom'
 import * as yup from 'yup'
 
-import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
+import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 
 type LocationState = { from: { pathname: string; search: string } }
 
