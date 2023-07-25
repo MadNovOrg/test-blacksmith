@@ -11,7 +11,7 @@ import { useFetcher } from '@app/hooks/use-fetcher'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import { shouldGoIntoExceptionApproval } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
-  MUTATION,
+  MUTATION as INSERT_COURSE_MUTATION,
   ParamsType,
   ResponseType,
 } from '@app/queries/courses/insert-course'
@@ -165,134 +165,138 @@ export function useSaveCourse(): {
             ? go1Licensing?.invoiceDetails
             : invoiceDetails
 
-        const response = await fetcher<ResponseType, ParamsType>(MUTATION, {
-          course: {
-            name: courseName,
-            deliveryType: courseData.deliveryType,
-            accreditedBy: courseData.accreditedBy,
-            bildStrategies: isBild
-              ? {
-                  data: Object.keys(courseData.bildStrategies).flatMap(s => {
-                    const strategy = s as BildStrategies
-                    if (courseData.bildStrategies[strategy]) {
-                      return [{ strategyName: strategy }]
-                    }
-                    return []
-                  }),
-                }
-              : undefined,
-            level: courseData.courseLevel,
-            reaccreditation: courseData.reaccreditation,
-            go1Integration: courseData.blendedLearning,
-            ...(isBild &&
-            [CourseType.CLOSED, CourseType.OPEN].includes(courseData.type)
-              ? { price: courseData.price, conversion: courseData.conversion }
-              : null),
-            status,
-            exceptionsPending:
-              status === Course_Status_Enum.ExceptionsApprovalPending,
-            ...(courseData.minParticipants
-              ? { min_participants: courseData.minParticipants }
-              : null),
-            max_participants: courseData.maxParticipants,
-            type: courseData.type,
-            notes: courseData.notes,
-            special_instructions: courseData.specialInstructions,
-            parking_instructions: courseData.parkingInstructions,
-            ...(courseData.organization
-              ? { organization_id: courseData.organization.id }
-              : null),
-            ...(courseData.bookingContact?.profileId
-              ? {
-                  bookingContactProfileId: courseData.bookingContact.profileId,
-                }
-              : null),
-            ...(courseData.bookingContact?.email
-              ? { bookingContactInviteData: courseData.bookingContact }
-              : null),
-            ...(courseData.usesAOL
-              ? {
-                  aolCostOfCourse: courseData.courseCost,
-                  aolCountry: courseData.aolCountry,
-                  aolRegion: courseData.aolRegion,
-                }
-              : null),
-            trainers: {
-              data: trainers.map((t: TrainerInput) => ({
-                profile_id: t.profile_id,
-                type: t.type,
-                status: t.status,
-              })),
-            },
-            schedule: {
-              data: [
-                {
-                  start: courseData.startDateTime,
-                  end: courseData.endDateTime,
-                  virtualLink: [
-                    CourseDeliveryType.VIRTUAL,
-                    CourseDeliveryType.MIXED,
-                  ].includes(courseData.deliveryType)
-                    ? courseData.zoomMeetingUrl
-                    : undefined,
-                  venue_id: courseData.venue?.id,
-                  virtualAccountId: courseData.zoomProfileId,
-                },
-              ],
-            },
-            ...(courseData.type !== CourseType.INDIRECT
-              ? {
-                  accountCode: courseData.accountCode,
-                  freeSpaces: courseData.freeSpaces,
-                }
-              : null),
-            ...(courseData.type === CourseType.CLOSED
-              ? {
-                  expenses: { data: prepareExpensesData(expenses) },
-                }
-              : null),
-            ...(shouldInsertOrder && invoiceData
-              ? {
-                  [exceptions?.length && !acl.isAdmin()
-                    ? 'tempOrders'
-                    : 'orders']: {
-                    data: [
-                      {
-                        registrants: [],
-                        billingEmail: invoiceData.email,
-                        billingGivenName: invoiceData.firstName,
-                        billingFamilyName: invoiceData.surname,
-                        billingPhone: invoiceData.phone,
-                        organizationId: invoiceData.orgId,
-                        billingAddress: invoiceData.billingAddress,
-                        clientPurchaseOrder: invoiceData.purchaseOrder,
-                        paymentMethod: Payment_Methods_Enum.Invoice,
-                        quantity:
-                          courseData.type === CourseType.CLOSED
-                            ? courseData.maxParticipants
-                            : 0,
-                        currency: Currency.GBP,
-                        user: {
-                          fullName: profile?.fullName,
-                          email: profile?.email,
-                          phone: profile?.phone,
-                        },
-                        ...(courseData.source
-                          ? { source: courseData.source }
-                          : null),
-                        ...(courseData.salesRepresentative?.id
-                          ? {
-                              salesRepresentativeId:
-                                courseData.salesRepresentative?.id,
-                            }
-                          : null),
-                      },
-                    ],
+        const response = await fetcher<ResponseType, ParamsType>(
+          INSERT_COURSE_MUTATION,
+          {
+            course: {
+              name: courseName,
+              deliveryType: courseData.deliveryType,
+              accreditedBy: courseData.accreditedBy,
+              bildStrategies: isBild
+                ? {
+                    data: Object.keys(courseData.bildStrategies).flatMap(s => {
+                      const strategy = s as BildStrategies
+                      if (courseData.bildStrategies[strategy]) {
+                        return [{ strategyName: strategy }]
+                      }
+                      return []
+                    }),
+                  }
+                : undefined,
+              level: courseData.courseLevel,
+              reaccreditation: courseData.reaccreditation,
+              go1Integration: courseData.blendedLearning,
+              ...(isBild &&
+              [CourseType.CLOSED, CourseType.OPEN].includes(courseData.type)
+                ? { price: courseData.price, conversion: courseData.conversion }
+                : null),
+              status,
+              exceptionsPending:
+                status === Course_Status_Enum.ExceptionsApprovalPending,
+              ...(courseData.minParticipants
+                ? { min_participants: courseData.minParticipants }
+                : null),
+              max_participants: courseData.maxParticipants,
+              type: courseData.type,
+              notes: courseData.notes,
+              special_instructions: courseData.specialInstructions,
+              parking_instructions: courseData.parkingInstructions,
+              ...(courseData.organization
+                ? { organization_id: courseData.organization.id }
+                : null),
+              ...(courseData.bookingContact?.profileId
+                ? {
+                    bookingContactProfileId:
+                      courseData.bookingContact.profileId,
+                  }
+                : null),
+              ...(courseData.bookingContact?.email
+                ? { bookingContactInviteData: courseData.bookingContact }
+                : null),
+              ...(courseData.usesAOL
+                ? {
+                    aolCostOfCourse: courseData.courseCost,
+                    aolCountry: courseData.aolCountry,
+                    aolRegion: courseData.aolRegion,
+                  }
+                : null),
+              trainers: {
+                data: trainers.map((t: TrainerInput) => ({
+                  profile_id: t.profile_id,
+                  type: t.type,
+                  status: t.status,
+                })),
+              },
+              schedule: {
+                data: [
+                  {
+                    start: courseData.startDateTime,
+                    end: courseData.endDateTime,
+                    virtualLink: [
+                      CourseDeliveryType.VIRTUAL,
+                      CourseDeliveryType.MIXED,
+                    ].includes(courseData.deliveryType)
+                      ? courseData.zoomMeetingUrl
+                      : undefined,
+                    venue_id: courseData.venue?.id,
+                    virtualAccountId: courseData.zoomProfileId,
                   },
-                }
-              : null),
-          },
-        })
+                ],
+              },
+              ...(courseData.type !== CourseType.INDIRECT
+                ? {
+                    accountCode: courseData.accountCode,
+                    freeSpaces: courseData.freeSpaces,
+                  }
+                : null),
+              ...(courseData.type === CourseType.CLOSED
+                ? {
+                    expenses: { data: prepareExpensesData(expenses) },
+                  }
+                : null),
+              ...(shouldInsertOrder && invoiceData
+                ? {
+                    [exceptions?.length && !acl.isAdmin()
+                      ? 'tempOrders'
+                      : 'orders']: {
+                      data: [
+                        {
+                          registrants: [],
+                          billingEmail: invoiceData.email,
+                          billingGivenName: invoiceData.firstName,
+                          billingFamilyName: invoiceData.surname,
+                          billingPhone: invoiceData.phone,
+                          organizationId: invoiceData.orgId,
+                          billingAddress: invoiceData.billingAddress,
+                          clientPurchaseOrder: invoiceData.purchaseOrder,
+                          paymentMethod: Payment_Methods_Enum.Invoice,
+                          quantity:
+                            courseData.type === CourseType.CLOSED
+                              ? courseData.maxParticipants
+                              : 0,
+                          currency: Currency.GBP,
+                          user: {
+                            fullName: profile?.fullName,
+                            email: profile?.email,
+                            phone: profile?.phone,
+                          },
+                          ...(courseData.source
+                            ? { source: courseData.source }
+                            : null),
+                          ...(courseData.salesRepresentative?.id
+                            ? {
+                                salesRepresentativeId:
+                                  courseData.salesRepresentative?.id,
+                              }
+                            : null),
+                        },
+                      ],
+                    },
+                  }
+                : null),
+            },
+          }
+        )
 
         if (response.insertCourse.inserted.length === 1) {
           setSavingStatus(LoadingStatus.SUCCESS)

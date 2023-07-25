@@ -18,6 +18,16 @@ yup.addMethod(yup.string, 'phoneNumber', function (t: TFunction) {
   )
 })
 
+yup.addMethod(yup.number, 'allowEmptyNumberField', function () {
+  return this.transform(function (value, originalValue) {
+    if (this.isType(value)) return value
+    if (!originalValue || !originalValue.trim()) {
+      return null
+    }
+    return originalValue
+  })
+})
+
 const schemas = {
   email: (t: TFunction) => {
     const email = yup

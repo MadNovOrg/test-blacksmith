@@ -257,12 +257,14 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           }),
         courseCost: yup
           .number()
-          .transform(value => (isNaN(value) ? undefined : value))
-          .optional()
-          .positive(
+          .allowEmptyNumberField()
+          .nullable()
+          .typeError(
             t('components.course-form.course-cost-positive-number-error')
           )
-          .nullable(),
+          .positive(
+            t('components.course-form.course-cost-positive-number-error')
+          ),
         notes: yup.string().nullable(),
         specialInstructions: yup.string().nullable().default(''),
         parkingInstructions: yup.string().nullable().default(''),
@@ -565,7 +567,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     const s = watch(data => {
       onChange({
-        data: data as CourseInput,
+        data: {
+          ...data,
+          courseCost:
+            typeof data.courseCost !== 'number' ? null : data.courseCost,
+        } as CourseInput,
         isValid: formState.isValid,
       })
     })
