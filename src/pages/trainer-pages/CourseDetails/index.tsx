@@ -137,7 +137,9 @@ export const CourseDetails = () => {
     }
   }, [course, startPolling, polling])
 
-  const showCourseOverview = course?.status === Course_Status_Enum.Scheduled
+  const showCourseOverview =
+    (course?.moduleGroupIds?.length || course?.bildModules?.length) &&
+    course.status !== Course_Status_Enum.Draft
 
   return (
     <>

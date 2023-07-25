@@ -1,4 +1,4 @@
-import { Container, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { Accreditors_Enum } from '@app/generated/graphql'
@@ -17,13 +17,8 @@ export const CourseOverview: React.FC<
   const { t } = useTranslation()
 
   return (
-    <Container
-      maxWidth="md"
-      sx={{
-        ml: 0,
-      }}
-    >
-      <Typography variant="h1" fontWeight={600}>
+    <Box>
+      <Typography variant="h4" fontWeight={600}>
         {t('pages.course-details.tabs.course-overview.title')}
       </Typography>
 
@@ -38,6 +33,6 @@ export const CourseOverview: React.FC<
       {course.accreditedBy === Accreditors_Enum.Bild && (
         <BILDOverview course={course} />
       )}
-    </Container>
+    </Box>
   )
 }

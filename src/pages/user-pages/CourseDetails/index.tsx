@@ -193,7 +193,9 @@ export const CourseDetails = () => {
     )
   }
 
-  const showCourseOverview = course?.status === Course_Status_Enum.Scheduled
+  const showCourseOverview =
+    (course?.moduleGroupIds?.length || course?.bildModules?.length) &&
+    course.status !== Course_Status_Enum.Draft
 
   return (
     <>

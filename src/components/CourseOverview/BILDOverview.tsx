@@ -25,15 +25,35 @@ export const BILDOverview: React.FC<React.PropsWithChildren<Props>> = ({
 
   const { modules } = course.bildModules[0]
 
-  console.log(modules)
-
   return (
     <>
       {Object.keys(modules).map(strategyName => {
+        const numberOfModules: number =
+          modules[strategyName].modules?.length ?? 0
+
+        const numberOfGroupModules: number = modules[strategyName].groups
+          ?.length
+          ? modules[strategyName].groups.reduce(
+              (acc: number, group: { modules: [{ name: string }] }) => {
+                return acc + group.modules.length
+              },
+              0
+            )
+          : 0
+
+        const modulesCount = numberOfGroupModules + numberOfModules
+
         return (
           <Accordion key={strategyName} disableGutters>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              {t(`bild-strategies.${strategyName}`)}
+              <Box display="flex" alignItems="center">
+                <Typography variant="body1">
+                  {t(`bild-strategies.${strategyName}`)}
+                </Typography>
+                <Typography variant="body2" ml={1}>
+                  {t('areas', { count: modulesCount })}
+                </Typography>
+              </Box>
             </AccordionSummary>
 
             <AccordionDetails sx={{ ml: 1 }}>
