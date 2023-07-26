@@ -149,7 +149,6 @@ export const CourseExceptionsLogTabs: FC<PropsWithChildren<unknown>> = () => {
                     sorting={sorting}
                     logs={logs}
                     loading={loading}
-                    activeTab={activeTab}
                   />
                 </TabPanel>
               ))}
