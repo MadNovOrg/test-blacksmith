@@ -197,26 +197,6 @@ describe('component: CourseHeroSummary', () => {
     ).toBeInTheDocument()
   })
 
-  it('displays zoom link if a course has virtual element', () => {
-    const ZOOM_MEETING = 'https://zoom.us/j/123456789'
-
-    const course = buildCourse({
-      overrides: {
-        schedule: [
-          buildCourseSchedule({
-            overrides: {
-              virtualLink: ZOOM_MEETING,
-            },
-          }),
-        ],
-      },
-    })
-
-    render(<CourseHeroSummary course={course} />)
-
-    expect(screen.getByText('Join via Zoom')).toBeInTheDocument()
-  })
-
   it('displays Virtual if course is online', () => {
     const course = buildCourse({
       overrides: {

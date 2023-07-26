@@ -4,7 +4,6 @@ import DescriptionOutlined from '@mui/icons-material/DescriptionOutlined'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import PinDropIcon from '@mui/icons-material/PinDrop'
 import TodayIcon from '@mui/icons-material/Today'
-import VideocamIcon from '@mui/icons-material/Videocam'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import {
   Box,
@@ -259,22 +258,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   )}
                 </ListItemText>
               </ListItem>
-              {course.schedule[0].virtualLink ? (
-                <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
-                  <StyledListIcon>
-                    <VideocamIcon />
-                  </StyledListIcon>
-                  <ListItemText>
-                    <Button
-                      href={course.schedule[0].virtualLink}
-                      component="a"
-                      target="_blank"
-                    >
-                      {t('common.join-zoom')}
-                    </Button>
-                  </ListItemText>
-                </ListItem>
-              ) : null}
+
               {course.notes ? (
                 <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
                   <StyledListIcon>

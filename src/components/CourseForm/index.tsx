@@ -76,7 +76,6 @@ import {
   StrategyToggles,
   validateStrategies,
 } from './components/StrategyToggles'
-import { ZoomMeetingSelector } from './components/ZoomMeetingSelector'
 import {
   canBeBlended,
   canBeBlendedBild,
@@ -191,19 +190,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             then: schema =>
               schema.required(t('components.course-form.venue-required')),
           }),
-        zoomMeetingUrl: yup
-          .string()
-          .nullable()
-          .when('deliveryType', {
-            is: (val: CourseDeliveryType) =>
-              val === CourseDeliveryType.VIRTUAL ||
-              val === CourseDeliveryType.MIXED,
-            then: schema =>
-              schema.required(
-                t('components.course-form.online-meeting-link-required')
-              ),
-          }),
-        zoomProfileId: yup.string().nullable(),
         startDate: yup
           .date()
           .nullable()
@@ -447,7 +433,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const startTime = useWatch({ control, name: 'startTime' })
   const endDate = useWatch({ control, name: 'endDate' })
   const endTime = useWatch({ control, name: 'endTime' })
-  const zoomMeetingUrl = useWatch({ control, name: 'zoomMeetingUrl' })
 
   const priceArgs = useMemo(
     () =>
@@ -682,16 +667,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     [courseLevel, courseType, deliveryType, t, values.reaccreditation]
   )
 
-  const hasZoomMeetingUrl = [
-    CourseDeliveryType.VIRTUAL,
-    CourseDeliveryType.MIXED,
-  ].includes(deliveryType)
-
-  const autoLoadZoomMeetingUrl = useMemo(
-    () => hasZoomMeetingUrl && courseType !== CourseType.INDIRECT,
-    [hasZoomMeetingUrl, courseType]
-  )
-
   useEffect(() => {
     const elements = Object.keys(errors)
       .map(name => document.getElementsByName(name)[0])
@@ -727,14 +702,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           shouldValidate: true,
         }
       )
-    },
-    [setValue]
-  )
-
-  const setZoomMeetingUrl = useCallback(
-    (meetingUrl: string | null, zoomProfileId: string | null) => {
-      setValue('zoomMeetingUrl', meetingUrl)
-      setValue('zoomProfileId', zoomProfileId)
     },
     [setValue]
   )
@@ -1027,7 +994,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 if (deliveryType === CourseDeliveryType.VIRTUAL) {
                   setValue('parkingInstructions', '')
                 }
-                trigger(['venue', 'zoomMeetingUrl'])
+                trigger(['venue'])
 
                 resetSpecialInstructionsToDefault(
                   courseType,
@@ -1089,34 +1056,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 ),
               }}
             />
-          ) : null}
-
-          {hasZoomMeetingUrl ? (
-            autoLoadZoomMeetingUrl ? (
-              <ZoomMeetingSelector
-                {...register('zoomMeetingUrl')}
-                data-testid="zoomMeeting-user-selector"
-                error={errors.zoomMeetingUrl}
-                startDateTime={values.startDateTime}
-                value={zoomMeetingUrl}
-                onChange={setZoomMeetingUrl}
-                editMode={Boolean(courseInput?.zoomMeetingUrl)}
-                startingProfileId={courseInput?.zoomProfileId ?? null}
-              />
-            ) : (
-              <TextField
-                {...register('zoomMeetingUrl')}
-                required
-                data-testid="onlineMeetingLink-input"
-                fullWidth
-                variant="filled"
-                InputLabelProps={{ shrink: values.zoomMeetingUrl !== '' }}
-                helperText={errors.zoomMeetingUrl?.message}
-                error={Boolean(errors.zoomMeetingUrl?.message)}
-                sx={{ marginTop: 2 }}
-                label={t('components.course-form.online-meeting-link-label')}
-              />
-            )
           ) : null}
 
           <Controller

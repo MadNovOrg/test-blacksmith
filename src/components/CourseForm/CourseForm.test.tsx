@@ -49,12 +49,9 @@ describe('component: CourseForm', () => {
     await userEvent.click(screen.getByLabelText('Face to face'))
 
     expect(screen.getByText('Venue Selector')).toBeInTheDocument()
-    expect(
-      screen.queryByLabelText('Online meeting link', { exact: false })
-    ).not.toBeInTheDocument()
   })
 
-  it('displays online meeting link field if VIRTUAL delivery type', async () => {
+  it('displays venue selector if VIRTUAL delivery type', async () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.CLOSED} />)
     })
@@ -62,12 +59,9 @@ describe('component: CourseForm', () => {
     await userEvent.click(screen.getByLabelText('Virtual'))
 
     expect(screen.queryByText('Venue Selector')).not.toBeInTheDocument()
-    expect(
-      screen.getByLabelText('Online meeting link', { exact: false })
-    ).toBeInTheDocument()
   })
 
-  it('displays venue selector and online meeting link field if MIXED delivery type', async () => {
+  it('displays venue selector if MIXED delivery type', async () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.CLOSED} />)
     })
@@ -75,41 +69,7 @@ describe('component: CourseForm', () => {
     await userEvent.click(screen.getByLabelText('Both'))
 
     expect(screen.getByText('Venue Selector')).toBeInTheDocument()
-    expect(
-      screen.getByLabelText('Online meeting link', { exact: false })
-    ).toBeInTheDocument()
   })
-
-  it.each([
-    // Format: [<CourseType>, <ShouldGenerateLink?>]
-    [CourseType.OPEN, true],
-    [CourseType.CLOSED, true],
-    [CourseType.INDIRECT, false],
-  ])(
-    'ONLY auto fills online meeting link field for OPEN and CLOSED course types',
-    async (type, result) => {
-      await waitFor(() => {
-        render(<CourseForm type={type} />)
-      })
-
-      await userEvent.click(screen.getByLabelText('Virtual'))
-
-      let input
-      try {
-        input = await screen.findByTestId('zoomMeeting-user-selector')
-      } catch (_) {
-        input = null
-      }
-
-      if (result) {
-        // eslint-disable-next-line jest/no-conditional-expect
-        expect(input).toBeInTheDocument()
-      } else {
-        // eslint-disable-next-line jest/no-conditional-expect
-        expect(input).toBe(null)
-      }
-    }
-  )
 
   it('validates that end date must be after start date', async () => {
     setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
