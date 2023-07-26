@@ -173,6 +173,7 @@ export const RemoveIndividualDialog = ({
           </Typography>
           {course && (
             <CourseTitleAndDuration
+              showCourseDuration={false}
               course={{
                 id: course.id,
                 course_code: course.course_code,
