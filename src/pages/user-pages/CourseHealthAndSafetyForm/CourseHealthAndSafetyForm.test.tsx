@@ -13,7 +13,9 @@ jest.mock('react-router-dom', () => ({
 describe('page: CourseHealthAndSafetyForm', () => {
   it('renders form', async () => {
     render(<CourseHealthAndSafetyForm />)
-    expect(screen.getByText('Health & Safety Consent Form')).toBeInTheDocument()
+    expect(
+      screen.getByText('Health Guidance & Training Information')
+    ).toBeInTheDocument()
     expect(screen.getByTestId('submit-button')).toBeDisabled()
   })
 })

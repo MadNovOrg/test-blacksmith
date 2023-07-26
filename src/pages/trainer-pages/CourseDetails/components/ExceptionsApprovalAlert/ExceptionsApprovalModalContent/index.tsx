@@ -90,10 +90,15 @@ export const ExceptionsApprovalModalContent: FC<
               ApproveCourseMutationVariables
             >(APPROVE_COURSE_MUTATION, { input: { courseId: course.id } })
             await mutate()
-            addSnackbarMessage('course-approval-message', {
-              label: t('pages.course-details.course-approval-message', {
-                action: action.toLocaleLowerCase() ?? 'approved',
-              }),
+
+            navigate('/manage-courses/all', {
+              state: {
+                action: 'approved',
+                course: {
+                  id: course.id,
+                  code: course.course_code,
+                },
+              },
             })
           } else if (action === Course_Audit_Type_Enum.Rejected) {
             addNewCourseAudit(auditObject)
@@ -103,7 +108,16 @@ export const ExceptionsApprovalModalContent: FC<
                 input: { courseId: course.id },
               }
             )
-            navigate('/')
+
+            navigate('/manage-courses/all', {
+              state: {
+                action: 'rejected',
+                course: {
+                  id: course.id,
+                  code: course.course_code,
+                },
+              },
+            })
           } else
             console.error(
               'Provided "action" prop is not of Course_Audit_Type_Enum type'

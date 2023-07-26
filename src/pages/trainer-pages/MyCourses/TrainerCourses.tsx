@@ -7,14 +7,16 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import Box from '@mui/material/Box'
+import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { Trans, useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { CreateCourseMenu } from '@app/components/CreateCourseMenu'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
+import { useSnackbar } from '@app/context/snackbar'
 import {
   Course_Invite_Status_Enum,
   Course_Trainer_Type_Enum,
@@ -38,15 +40,25 @@ export type Props = {
   showAvailableCoursesButton?: boolean
 }
 
+type LocationStateType = {
+  action: 'approved' | 'rejected'
+  course: {
+    id: number
+    code: string
+  }
+}
+
 export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
   title,
   orgId,
   showAvailableCoursesButton,
 }) => {
   const navigate = useNavigate()
+  const { state: locationState } = useLocation()
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const { addSnackbarMessage } = useSnackbar()
 
   const [selectedTab, setSelectedTab] = useState(0)
 
@@ -110,6 +122,30 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
   )
 
   useEffect(() => {
+    if (locationState as LocationStateType) {
+      const {
+        action,
+        course: { id, code },
+      } = locationState
+
+      addSnackbarMessage('course-approval-message', {
+        label: (
+          <Trans
+            i18nKey="pages.course-details.course-approval-message"
+            components={{
+              courseLink: <Link href={`/manage-courses/all/${id}/details`} />,
+            }}
+            values={{
+              action,
+              code,
+            }}
+          />
+        ),
+      })
+    }
+  })
+
+  useEffect(() => {
     window.scrollTo(0, 0)
   }, [currentPage])
 
@@ -147,6 +183,12 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
         messageKey="course-created"
         sx={{ position: 'absolute' }}
       />
+
+      <SnackbarMessage
+        messageKey="course-approval-message"
+        sx={{ position: 'absolute' }}
+      />
+
       <Box display="flex" flexDirection={isMobile ? 'column' : 'row'} gap={4}>
         <Box width={isMobile ? undefined : 250}>
           <Typography variant="h1">
