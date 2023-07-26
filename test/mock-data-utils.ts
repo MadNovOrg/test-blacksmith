@@ -667,7 +667,7 @@ export const buildResourceCategory = build<
   fields: {
     id: perBuild(() => chance.guid()),
     name: perBuild(() => chance.word()),
-    description: perBuild(() => chance.word()),
+    description: perBuild(() => chance.sentence()),
     resourceArea: {
       resourcearea: 'basic',
     },

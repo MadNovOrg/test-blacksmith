@@ -3,7 +3,7 @@ import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
 import { AllResourceCategoriesQuery } from '@app/generated/graphql'
-import { CourseLevel } from '@app/types'
+import { CourseLevel, RoleName } from '@app/types'
 
 import { render, screen } from '@test/index'
 import { buildResourceCategory } from '@test/mock-data-utils'
@@ -18,7 +18,12 @@ describe('page: ResourcesList', () => {
     render(
       <Provider value={client as unknown as Client}>
         <ResourceAreas />
-      </Provider>
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.USER,
+        },
+      }
     )
 
     expect(screen.getByTestId('resources-list-skeleton')).toBeInTheDocument()
@@ -74,7 +79,12 @@ describe('page: ResourcesList', () => {
       <Provider value={client as unknown as Client}>
         <ResourceAreas />
       </Provider>,
-      { auth: { activeCertificates: [CourseLevel.Level_1] } }
+      {
+        auth: {
+          activeCertificates: [CourseLevel.Level_1],
+          activeRole: RoleName.USER,
+        },
+      }
     )
 
     for (const item of resourceList) {
@@ -120,7 +130,12 @@ describe('page: ResourcesList', () => {
       <Provider value={client as unknown as Client}>
         <ResourceAreas />
       </Provider>,
-      { auth: { activeCertificates: [CourseLevel.Level_1] } }
+      {
+        auth: {
+          activeCertificates: [CourseLevel.Level_1],
+          activeRole: RoleName.USER,
+        },
+      }
     )
 
     expect(
@@ -130,5 +145,82 @@ describe('page: ResourcesList', () => {
     expect(
       screen.queryByText(level2Category.name ?? 'should not pass')
     ).not.toBeInTheDocument()
+  })
+  ;[
+    RoleName.TT_ADMIN,
+    RoleName.SALES_ADMIN,
+    RoleName.FINANCE,
+    RoleName.LD,
+    RoleName.SALES_REPRESENTATIVE,
+    RoleName.TT_OPS,
+  ].forEach(roleName => {
+    it(`displays resources for ${roleName} role`, () => {
+      const resourceListBasic = [
+        buildResourceCategory({
+          overrides: {
+            resourceArea: { resourcearea: 'basic' },
+            resourcePermissions: { certificateLevels: [CourseLevel.Level_1] },
+          },
+        }),
+        buildResourceCategory({
+          overrides: {
+            resourceArea: { resourcearea: 'basic' },
+            resourcePermissions: { certificateLevels: [CourseLevel.Level_1] },
+          },
+        }),
+      ]
+
+      const resourceListAdditional = [
+        buildResourceCategory({
+          overrides: {
+            resourceArea: { resourcearea: 'additional' },
+            resourcePermissions: { certificateLevels: [CourseLevel.Level_1] },
+          },
+        }),
+        buildResourceCategory({
+          overrides: {
+            resourceArea: { resourcearea: 'additional' },
+            resourcePermissions: { certificateLevels: [CourseLevel.Level_1] },
+          },
+        }),
+      ]
+
+      const resourceList = [...resourceListBasic, ...resourceListAdditional]
+
+      const client = {
+        executeQuery: () =>
+          fromValue<{ data: AllResourceCategoriesQuery }>({
+            data: {
+              content: {
+                resourceCategories: {
+                  nodes: resourceList,
+                },
+              },
+            },
+          }),
+      }
+
+      render(
+        <Provider value={client as unknown as Client}>
+          <ResourceAreas />
+        </Provider>,
+        {
+          auth: {
+            activeCertificates: [],
+            activeRole: roleName,
+          },
+        }
+      )
+
+      for (const item of resourceList) {
+        expect(
+          screen.getByText(item.name ?? 'should not pass')
+        ).toBeInTheDocument()
+
+        expect(
+          screen.getByText(item.description ?? 'should not pass')
+        ).toBeInTheDocument()
+      }
+    })
   })
 })

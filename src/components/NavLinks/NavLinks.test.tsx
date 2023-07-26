@@ -1,36 +1,18 @@
 import React from 'react'
-import useSWR from 'swr'
 
-import { RoleName } from '@app/types'
+import { CourseLevel, RoleName } from '@app/types'
 
 import { render, screen } from '@test/index'
 
 import { NavLinks } from './NavLinks'
 
-jest.mock('swr')
-const useSWRMock = jest.mocked(useSWR)
-
-function registerMocks(certificateCount: number, courseCount: number) {
-  useSWRMock.mockReturnValueOnce({
-    data: {
-      certificates: { aggregate: { count: certificateCount } },
-      participant: { aggregate: { count: courseCount } },
-    },
-    mutate: jest.fn(),
-    isValidating: false,
-    error: null,
-    isLoading: false,
-  })
-}
-
 describe('component: NavLinks', () => {
   it('renders USER role links', async () => {
-    registerMocks(2, 1)
-
     render(<NavLinks />, {
       auth: {
         activeRole: RoleName.USER,
         allowedRoles: new Set([RoleName.USER]),
+        activeCertificates: [CourseLevel.Level_1],
       },
     })
 
@@ -44,9 +26,7 @@ describe('component: NavLinks', () => {
     expect(usersLink).not.toBeInTheDocument()
   })
 
-  it('do not render resource and membership if user do not have 0 course and 0 certificates', async () => {
-    registerMocks(0, 0)
-
+  it("does not render resource and membership if user doesn't have a valid certificate", async () => {
     render(<NavLinks />, {
       auth: {
         activeRole: RoleName.USER,
@@ -64,9 +44,31 @@ describe('component: NavLinks', () => {
     expect(usersLink).not.toBeInTheDocument()
   })
 
-  it('renders SALES ADMIN role links', async () => {
-    registerMocks(2, 1)
+  it("doesn't render resources link if a trainer doesn't have a valid certificate", () => {
+    render(<NavLinks />, {
+      auth: {
+        activeRole: RoleName.TRAINER,
+        activeCertificates: [],
+      },
+    })
 
+    expect(
+      screen.queryByRole('link', { name: /resources/i })
+    ).not.toBeInTheDocument()
+  })
+
+  it('renders resources link if a trainer has a valid certificate', () => {
+    render(<NavLinks />, {
+      auth: {
+        activeRole: RoleName.TRAINER,
+        activeCertificates: [CourseLevel.AdvancedTrainer],
+      },
+    })
+
+    expect(screen.getByRole('link', { name: /resources/i })).toBeInTheDocument()
+  })
+
+  it('renders SALES ADMIN role links', async () => {
     render(<NavLinks />, {
       auth: {
         activeRole: RoleName.SALES_ADMIN,
@@ -93,8 +95,6 @@ describe('component: NavLinks', () => {
   })
 
   it('renders TT ADMIN role links', async () => {
-    registerMocks(2, 1)
-
     render(<NavLinks />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
@@ -123,8 +123,6 @@ describe('component: NavLinks', () => {
   })
 
   it('renders TT OPS role links', async () => {
-    registerMocks(2, 1)
-
     render(<NavLinks />, {
       auth: {
         activeRole: RoleName.TT_OPS,
@@ -151,8 +149,6 @@ describe('component: NavLinks', () => {
   })
 
   it('renders TRAINER role links', async () => {
-    registerMocks(2, 1)
-
     render(<NavLinks />, {
       auth: {
         activeRole: RoleName.TRAINER,
@@ -166,8 +162,6 @@ describe('component: NavLinks', () => {
       name: 'Membership',
     })
     expect(membershipLink).toBeInTheDocument()
-    const resourcesLink = screen.getByRole('link', { name: 'Resources' })
-    expect(resourcesLink).toBeInTheDocument()
     const usersLink = screen.queryByRole('link', { name: 'Users' })
     expect(usersLink).not.toBeInTheDocument()
   })

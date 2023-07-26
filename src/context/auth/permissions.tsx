@@ -83,6 +83,11 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.SALES_REPRESENTATIVE,
         RoleName.FINANCE,
       ]
+
+      if (auth.activeRole === RoleName.USER) {
+        return Boolean(auth.activeCertificates?.length)
+      }
+
       return roles.some(r => r === auth.activeRole) || acl.isAdmin()
     },
 
@@ -400,25 +405,19 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
       return false
     },
-    canViewResources: (showResources: boolean) => {
+    canViewResources: () => {
       if (acl.isOrgAdmin()) {
         return true
       }
 
-      if (auth.activeRole === RoleName.USER) {
-        return showResources
+      if (
+        auth.activeRole &&
+        [RoleName.USER, RoleName.TRAINER].includes(auth.activeRole)
+      ) {
+        return Boolean(auth.activeCertificates?.length)
       }
 
-      const roles = [
-        RoleName.TT_ADMIN,
-        RoleName.TRAINER,
-        RoleName.SALES_ADMIN,
-        RoleName.FINANCE,
-        RoleName.LD,
-        RoleName.SALES_REPRESENTATIVE,
-        RoleName.TT_OPS,
-      ]
-      return roles.some(r => r === auth.activeRole)
+      return acl.isInternalUser()
     },
     canViewCourseHistory: () => {
       return RoleName.TT_ADMIN === auth.activeRole

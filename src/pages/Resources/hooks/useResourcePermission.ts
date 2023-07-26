@@ -8,7 +8,7 @@ import {
 import { TrainerRoleTypeName } from '@app/types'
 
 export function useResourcePermission() {
-  const { activeCertificates, trainerRoles } = useAuth()
+  const { activeCertificates, trainerRoles, acl } = useAuth()
 
   const canAccessResource = useCallback(
     (
@@ -17,6 +17,10 @@ export function useResourcePermission() {
         'certificateLevels' | 'principalTrainer'
       >
     ) => {
+      if (acl.isInternalUser()) {
+        return true
+      }
+
       const filteredPermissions = resourcePermissions.certificateLevels?.filter(
         certificateLevel =>
           activeCertificates?.includes(certificateLevel as CourseLevel)
@@ -28,7 +32,7 @@ export function useResourcePermission() {
           trainerRoles?.includes(TrainerRoleTypeName.PRINCIPAL))
       )
     },
-    [activeCertificates, trainerRoles]
+    [acl, activeCertificates, trainerRoles]
   )
 
   return canAccessResource

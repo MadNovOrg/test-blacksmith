@@ -6,7 +6,7 @@ import {
   ResourceDetailsQuery,
   ResourceSummaryFragment,
 } from '@app/generated/graphql'
-import { CourseLevel, TrainerRoleTypeName } from '@app/types'
+import { CourseLevel, RoleName, TrainerRoleTypeName } from '@app/types'
 
 import { chance, render, screen } from '@test/index'
 
@@ -222,6 +222,66 @@ describe('page: ResourceCategoryDetails', () => {
     )
 
     expect(screen.getByText(/not found/i)).toBeInTheDocument()
+  })
+  ;[
+    RoleName.TT_ADMIN,
+    RoleName.SALES_ADMIN,
+    RoleName.FINANCE,
+    RoleName.LD,
+    RoleName.SALES_REPRESENTATIVE,
+    RoleName.TT_OPS,
+  ].forEach(roleName => {
+    it(`displays all resources to internal users`, () => {
+      const level1Resource = buildResource({
+        resourcePermissions: {
+          certificateLevels: [CourseLevel.Level_1],
+        },
+      })
+
+      const principalTrainerResource = buildResource({
+        resourcePermissions: {
+          principalTrainer: true,
+        },
+      })
+
+      const resourceCategory = buildResourceCategory({
+        resourcePermissions: {
+          principalTrainer: true,
+        },
+        resources: {
+          nodes: [level1Resource, principalTrainerResource],
+        },
+      })
+
+      const client = {
+        executeQuery: () =>
+          fromValue<{ data: ResourceDetailsQuery }>({
+            data: {
+              content: {
+                resourceCategory,
+              },
+            },
+          }),
+      } as unknown as Client
+
+      render(
+        <Provider value={client}>
+          <ResourceCategoryDetails />
+        </Provider>,
+        {
+          auth: {
+            activeRole: roleName,
+          },
+        }
+      )
+
+      expect(
+        screen.getByText(level1Resource.title ?? 'should fail')
+      ).toBeInTheDocument()
+      expect(
+        screen.getByText(principalTrainerResource.title ?? 'should fail')
+      ).toBeInTheDocument()
+    })
   })
 })
 
