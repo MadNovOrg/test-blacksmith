@@ -7,6 +7,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { OrgInvitesTable } from '@app/components/OrgInvitesTable'
 import { OrgUsersTable } from '@app/components/OrgUsersTable'
+import { useOrgMembers } from '@app/components/OrgUsersTable/useOrgMembers'
 import { useAuth } from '@app/context/auth'
 import useOrg from '@app/hooks/useOrg'
 import { OrgStatsTiles } from '@app/pages/admin/components/Organizations/tabs/components/OrgStatsTiles'
@@ -44,6 +45,10 @@ export const OrgIndividualsTab: React.FC<
     acl.canViewAllOrganizations()
   )
 
+  const { total: totalMembers, refetch: refetchOrgMembers } = useOrgMembers({
+    orgId,
+  })
+
   const org = data?.length ? data[0] : null
 
   return (
@@ -70,7 +75,7 @@ export const OrgIndividualsTab: React.FC<
                 <TabList onChange={(_, value) => setSelectedTab(value)}>
                   <Tab
                     label={t('pages.org-details.tabs.users.tabs.individuals', {
-                      number: stats[orgId]?.profiles.count,
+                      number: totalMembers,
                     })}
                     value={OrgIndividualsSubtabs.USERS}
                     data-testid="tabUsers"
@@ -104,6 +109,7 @@ export const OrgIndividualsTab: React.FC<
                 <OrgUsersTable
                   orgId={orgId}
                   onChange={async () => {
+                    refetchOrgMembers()
                     await mutate()
                   }}
                 />

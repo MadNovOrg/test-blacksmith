@@ -49579,6 +49579,16 @@ export type Xero_Invoice_Variance_Fields = {
   totalTax?: Maybe<Scalars['Float']>;
 };
 
+export type OrgMembersQueryVariables = Exact<{
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+  orgId: Scalars['uuid'];
+  orderBy?: InputMaybe<Array<Organization_Member_Order_By> | Organization_Member_Order_By>;
+}>;
+
+
+export type OrgMembersQuery = { __typename?: 'query_root', members: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, lastActivity: any, createdAt: any, go1Licenses: Array<{ __typename?: 'go1_licenses', expireDate: any }>, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', payload?: any | null }> } | null }> } }>, organization_member_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
+
 export type ReplaceParticipantMutationVariables = Exact<{
   input: ReplaceParticipantInput;
 }>;

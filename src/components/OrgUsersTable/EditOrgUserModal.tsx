@@ -15,8 +15,8 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
+import { OrgMembersQuery } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { ProfileType } from '@app/hooks/useOrg'
 import { positions } from '@app/pages/common/CourseBooking/components/org-data'
 import {
   MUTATION as RemoveOrgMemberQuery,
@@ -29,7 +29,7 @@ import {
 import theme from '@app/theme'
 
 export type EditOrgUserModalProps = {
-  orgMember: ProfileType['organizations'][0]
+  orgMember: OrgMembersQuery['members'][0]
   onClose: () => void
   onChange?: () => void
 }

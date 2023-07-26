@@ -3,6 +3,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CountPanel } from '@app/components/CountPanel'
+import { useOrgMembers } from '@app/components/OrgUsersTable/useOrgMembers'
 import { useAuth } from '@app/context/auth'
 import useOrg from '@app/hooks/useOrg'
 
@@ -17,12 +18,13 @@ export const OrgStatsTiles: React.FC<
   const { profile, acl } = useAuth()
 
   const { stats } = useOrg(orgId, profile?.id, acl.canViewAllOrganizations())
+  const { total } = useOrgMembers({ orgId })
 
   return (
     <Grid container>
       <Grid item xs={12} md={12} p={1} borderRadius={1}>
         <CountPanel
-          count={stats[orgId]?.profiles.count}
+          count={total ?? 0}
           label={t('pages.org-details.tabs.overview.total-individuals')}
           tooltip={t(
             'pages.org-details.tabs.overview.all-organisation-members'

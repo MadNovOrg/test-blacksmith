@@ -9,14 +9,12 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TablePagination,
   TableRow,
   Typography,
 } from '@mui/material'
 import Link from '@mui/material/Link'
 import { Box } from '@mui/system'
-import { sortBy } from 'lodash-es'
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/Dialog'
@@ -25,17 +23,16 @@ import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
-import useOrg, { ProfileType } from '@app/hooks/useOrg'
+import { OrgMembersQuery } from '@app/generated/graphql'
+import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import theme from '@app/theme'
 import { CertificateStatus, CourseLevel } from '@app/types'
-import {
-  DEFAULT_PAGINATION_LIMIT,
-  DEFAULT_PAGINATION_ROW_OPTIONS,
-  getProfileCertificationLevels,
-} from '@app/util'
+import { getProfileCertificationLevels } from '@app/util'
 
 import { CertificateStatusChip } from '../CertificateStatusChip'
+
+import { useOrgMembers } from './useOrgMembers'
 
 type OrgUsersTableParams = {
   orgId: string
@@ -46,21 +43,21 @@ export const OrgUsersTable: React.FC<
   React.PropsWithChildren<OrgUsersTableParams>
 > = ({ orgId, onChange }) => {
   const { t } = useTranslation()
-  const { profile, acl } = useAuth()
+  const { acl } = useAuth()
 
   const sorting = useTableSort('fullName', 'asc')
-  const [currentPage, setCurrentPage] = useState(0)
-  const [perPage, setPerPage] = useState(DEFAULT_PAGINATION_LIMIT)
 
   const [showEditUserModal, setShowEditUserModal] = useState(false)
-  const [editedUser, setEditedUser] =
-    useState<ProfileType['organizations'][0]>()
+  const [editedUser, setEditedUser] = useState<OrgMembersQuery['members'][0]>()
 
-  const { profiles: orgProfiles, loading } = useOrg(
+  const { offset, perPage, Pagination } = useTablePagination()
+
+  const { members, fetching, total, refetch } = useOrgMembers({
+    perPage,
+    offset,
     orgId,
-    profile?.id,
-    acl.canViewAllOrganizations()
-  )
+    sort: { by: sorting.by, dir: sorting.dir },
+  })
 
   const cols = useMemo(() => {
     const _t = (col: string) => t(`pages.org-details.tabs.users.cols-${col}`)
@@ -107,28 +104,6 @@ export const OrgUsersTable: React.FC<
     ] as Col[]
   }, [acl, t, orgId])
 
-  const currentPageProfiles = useMemo(() => {
-    const profiles = orgProfiles || []
-    let sorted
-    if (sorting.by === 'fullName') {
-      sorted = sortBy(profiles, p => p.fullName)
-    } else if (sorting.by === 'lastActivity') {
-      sorted = sortBy(profiles, p => p.lastActivity)
-    } else {
-      sorted = sortBy(profiles, p => p.createdAt)
-    }
-    if (sorting.dir === 'desc') sorted = sorted.reverse()
-    return sorted.slice(currentPage * perPage, currentPage * perPage + perPage)
-  }, [currentPage, orgProfiles, perPage, sorting])
-
-  const handleRowsPerPageChange = useCallback(
-    (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-      setPerPage(parseInt(event.target.value, 10))
-      setCurrentPage(0)
-    },
-    []
-  )
-
   return (
     <>
       <TableContainer component={Paper} elevation={0}>
@@ -140,7 +115,7 @@ export const OrgUsersTable: React.FC<
             onRequestSort={sorting.onSort}
           />
           <TableBody>
-            {loading ? (
+            {fetching ? (
               <TableRow
                 sx={{
                   '&&.MuiTableRow-root': {
@@ -163,50 +138,47 @@ export const OrgUsersTable: React.FC<
             ) : null}
 
             <TableNoRows
-              noRecords={!loading && !currentPageProfiles?.length}
+              noRecords={!fetching && !members?.length}
               itemsName={t('common.users').toLowerCase()}
               colSpan={cols.length}
             />
 
-            {currentPageProfiles?.map(profile => {
-              const orgMember = profile.organizations.find(
-                org => org.organization.id === orgId
-              )
+            {members?.map(member => {
               const certificateLevelsToDisplay = getProfileCertificationLevels(
-                profile.certificates as {
+                member.profile.certificates as {
                   courseLevel: string
                   status: CertificateStatus
                 }[]
               )
-              const filteredCerts = profile.certificates.filter(
+              const filteredCerts = member.profile.certificates.filter(
                 cert =>
                   certificateLevelsToDisplay.indexOf(
                     cert.courseLevel as CourseLevel
                   ) >= 0
               )
               return (
-                <TableRow key={profile.id}>
+                <TableRow key={member.profile.id}>
                   <TableCell>
                     <Box display="flex" alignItems="center">
                       <ProfileAvatar
-                        profile={profile}
+                        profile={member.profile}
                         renderLabel={name => (
                           <Box display="flex" flexDirection="column">
                             <Link
                               variant="body2"
                               color={theme.palette.grey[900]}
                               ml={1}
-                              href={`/profile/${profile.id}?orgId=${orgId}`}
+                              href={`/profile/${member.profile.id}?orgId=${orgId}`}
                             >
                               {name}
                             </Link>
-                            {orgMember?.position ? (
+                            {member?.position ? (
                               <Typography
                                 variant="body2"
                                 color="grey.600"
                                 ml={1}
                               >
-                                {orgMember?.position}
+                                {member?.position}
                               </Typography>
                             ) : null}
                           </Box>
@@ -242,30 +214,30 @@ export const OrgUsersTable: React.FC<
                     })}
                   </TableCell>
                   <TableCell>
-                    {profile.go1Licenses.length === 1 ? (
+                    {member.profile.go1Licenses.length === 1 ? (
                       <CheckCircle color="success" />
                     ) : null}
                   </TableCell>
                   <TableCell>
-                    {t('dates.default', { date: profile.lastActivity })}
+                    {t('dates.default', { date: member.profile.lastActivity })}
                   </TableCell>
                   <TableCell>
-                    {t('dates.default', { date: profile.createdAt })}
+                    {t('dates.default', { date: member.profile.createdAt })}
                   </TableCell>
                   <TableCell>
                     <Chip
                       label={
-                        orgMember?.isAdmin
+                        member?.isAdmin
                           ? t('pages.org-details.tabs.users.organization-admin')
                           : t('pages.org-details.tabs.users.no-permissions')
                       }
-                      color={orgMember?.isAdmin ? 'success' : 'gray'}
+                      color={member?.isAdmin ? 'success' : 'gray'}
                       size="small"
                     />
                   </TableCell>
-                  {orgMember &&
+                  {member &&
                   acl.canEditOrgUser([orgId]) &&
-                  (acl.canSetOrgAdminRole() || !orgMember.isAdmin) ? (
+                  (acl.canSetOrgAdminRole() || !member.isAdmin) ? (
                     <TableCell>
                       <Button
                         data-testid="edit-user-button"
@@ -273,7 +245,7 @@ export const OrgUsersTable: React.FC<
                         variant="text"
                         color="primary"
                         onClick={() => {
-                          setEditedUser(orgMember)
+                          setEditedUser(member)
                           setShowEditUserModal(true)
                         }}
                       >
@@ -287,17 +259,7 @@ export const OrgUsersTable: React.FC<
           </TableBody>
         </Table>
       </TableContainer>
-      {orgProfiles ? (
-        <TablePagination
-          component="div"
-          count={orgProfiles.length}
-          page={currentPage}
-          onPageChange={(_, page) => setCurrentPage(page)}
-          onRowsPerPageChange={handleRowsPerPageChange}
-          rowsPerPage={perPage}
-          rowsPerPageOptions={DEFAULT_PAGINATION_ROW_OPTIONS}
-        />
-      ) : null}
+      {members?.length ? <Pagination total={total ?? 0} /> : null}
       {editedUser ? (
         <Dialog
           maxWidth={800}
@@ -318,6 +280,7 @@ export const OrgUsersTable: React.FC<
             orgMember={editedUser}
             onClose={() => setShowEditUserModal(false)}
             onChange={async () => {
+              refetch()
               if (onChange) onChange()
             }}
           />
