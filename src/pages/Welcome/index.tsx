@@ -6,7 +6,7 @@ import React from 'react'
 import BannerBox from '@app/components/BannerBox'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
-import jnImage from './assets/jn-image.png'
+import jnImage from './assets/jn-image.jpg'
 import signature from './assets/signature.png'
 
 export const Welcome: React.FC<React.PropsWithChildren<unknown>> = () => {
