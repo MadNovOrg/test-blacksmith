@@ -141,6 +141,18 @@ export const CourseDetails = () => {
     (course?.moduleGroupIds?.length || course?.bildModules?.length) &&
     course.status !== Course_Status_Enum.Draft
 
+  if (courseLoadingStatus === LoadingStatus.FETCHING) {
+    return (
+      <Stack
+        alignItems="center"
+        justifyContent="center"
+        data-testid="course-fetching"
+      >
+        <CircularProgress />
+      </Stack>
+    )
+  }
+
   return (
     <>
       <SnackbarMessage
@@ -157,214 +169,200 @@ export const CourseDetails = () => {
       ) : null}
       {course ? (
         <>
-          {courseLoadingStatus === LoadingStatus.FETCHING ? (
-            <Stack
-              alignItems="center"
-              justifyContent="center"
-              data-testid="course-fetching"
-            >
-              <CircularProgress />
-            </Stack>
-          ) : (
-            <>
-              <CourseHeroSummary
-                course={course}
-                slots={{
-                  BackButton: () => <BackButton label={t('back')} />,
-                  EditButton: canEditCourse
-                    ? () => (
-                        <Button
-                          variant="contained"
-                          data-testid="edit-course-button"
-                          color="secondary"
-                          size="large"
-                          sx={{ mt: 3 }}
-                          onClick={() => navigate(`/courses/edit/${courseId}`)}
-                        >
-                          {t('pages.course-participants.edit-course-button')}
-                        </Button>
-                      )
-                    : undefined,
-                  OrderItem: canViewLinkedOrderItem
-                    ? () => (
-                        <Trans
-                          i18nKey="common.order-item"
-                          defaults="Order: <0>{{invoiceNumber}}</0>"
-                          components={[
-                            canOnlyViewOrderItemAsText ? (
-                              <Typography
-                                data-testid="order-item-text"
-                                key="order-item-text"
-                                display="inline-flex"
-                                fontWeight="600"
-                                fontSize="1rem"
-                              />
-                            ) : (
-                              <Link
-                                href={`/orders/${linkedOrderItem?.id}`}
-                                data-testid="order-item-link"
-                                key="order-item-link"
-                                color="Highlight"
-                                fontWeight="600"
-                              />
-                            ),
-                          ]}
-                          values={{
-                            invoiceNumber: linkedOrderItem?.xeroInvoiceNumber,
-                          }}
-                        />
-                      )
-                    : undefined,
+          <CourseHeroSummary
+            course={course}
+            slots={{
+              BackButton: () => <BackButton label={t('back')} />,
+              EditButton: canEditCourse
+                ? () => (
+                    <Button
+                      variant="contained"
+                      data-testid="edit-course-button"
+                      color="secondary"
+                      size="large"
+                      sx={{ mt: 3 }}
+                      onClick={() => navigate(`/courses/edit/${courseId}`)}
+                    >
+                      {t('pages.course-participants.edit-course-button')}
+                    </Button>
+                  )
+                : undefined,
+              OrderItem: canViewLinkedOrderItem
+                ? () => (
+                    <Trans
+                      i18nKey="common.order-item"
+                      defaults="Order: <0>{{invoiceNumber}}</0>"
+                      components={[
+                        canOnlyViewOrderItemAsText ? (
+                          <Typography
+                            data-testid="order-item-text"
+                            key="order-item-text"
+                            display="inline-flex"
+                            fontWeight="600"
+                            fontSize="1rem"
+                          />
+                        ) : (
+                          <Link
+                            href={`/orders/${linkedOrderItem?.id}`}
+                            data-testid="order-item-link"
+                            key="order-item-link"
+                            color="Highlight"
+                            fontWeight="600"
+                          />
+                        ),
+                      ]}
+                      values={{
+                        invoiceNumber: linkedOrderItem?.xeroInvoiceNumber,
+                      }}
+                    />
+                  )
+                : undefined,
+            }}
+          />
+          <Container disableGutters={isMobile}>
+            <CourseCancellationRequestFeature
+              course={course}
+              open={showCancellationRequestModal}
+              onClose={() => setShowCancellationRequestModal(false)}
+              onChange={mutate}
+            />
+            {exceptionsApprovalPending ? <ExceptionsApprovalAlert /> : null}
+            <OrderYourWorkbookAlert course={course} />
+          </Container>
+          <TabContext value={selectedTab}>
+            <Box borderBottom={1} borderColor="divider">
+              <Container
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}
-              />
-
-              <Container disableGutters={isMobile}>
-                <CourseCancellationRequestFeature
-                  course={course}
-                  open={showCancellationRequestModal}
-                  onClose={() => setShowCancellationRequestModal(false)}
-                  onChange={mutate}
-                />
-                {exceptionsApprovalPending ? <ExceptionsApprovalAlert /> : null}
-                <OrderYourWorkbookAlert course={course} />
-              </Container>
-
-              <TabContext value={selectedTab}>
-                <Box borderBottom={1} borderColor="divider">
-                  <Container
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <PillTabList
-                      variant="scrollable"
-                      scrollButtons="auto"
-                      onChange={(_, tab) =>
-                        navigate(`.?tab=${tab}`, { replace: true })
-                      }
-                    >
-                      <PillTab
-                        label={t('pages.course-details.tabs.attendees.title')}
-                        value={CourseDetailsTabs.ATTENDEES}
-                        data-testid="attendees-tab"
-                      />
-                      {courseHasEnded && !acl.isOrgAdmin() ? (
-                        <PillTab
-                          label={t('pages.course-details.tabs.grading.title')}
-                          value={CourseDetailsTabs.GRADING}
-                          data-testid="grading-tab"
-                        />
-                      ) : null}
-                      <PillTab
-                        label={t('pages.course-details.tabs.evaluation.title')}
-                        value={CourseDetailsTabs.EVALUATION}
-                        data-testid="evaluation-tab"
-                      />
-                      {course.certificateCount?.aggregate.count ? (
-                        <PillTab
-                          label={t(
-                            'pages.course-details.tabs.certifications.title'
-                          )}
-                          value={CourseDetailsTabs.CERTIFICATIONS}
-                          data-testid="certifications-tab"
-                        />
-                      ) : null}
-                      {showCourseOverview && (
-                        <PillTab
-                          label={t(
-                            'pages.course-details.tabs.course-overview.title'
-                          )}
-                          value={CourseDetailsTabs.COURSE_OVERVIEW}
-                          data-testid="course-overview-tab"
-                        />
-                      )}
-                    </PillTabList>
-                    <Box>
-                      {!course.cancellationRequest &&
-                      course.type === CourseType.CLOSED &&
-                      isOrgAdmin &&
-                      course.status !== Course_Status_Enum.Cancelled &&
-                      !acl.canCancelCourses() ? (
-                        <Button
-                          data-testid="request-cancellation-button"
-                          variant="text"
-                          startIcon={<Cancel />}
-                          onClick={() => setShowCancellationRequestModal(true)}
-                        >
-                          {t('pages.edit-course.request-cancellation')}
-                        </Button>
-                      ) : null}
-                    </Box>
-                  </Container>
-                </Box>
-
-                <Container sx={{ pb: 2, position: 'relative' }}>
-                  {isMobile ? undefined : (
-                    <>
-                      <SnackbarMessage
-                        messageKey="course-created"
-                        sx={{ position: 'absolute' }}
-                      />
-                      <SnackbarMessage
-                        messageKey="course-canceled"
-                        severity="info"
-                        sx={{ position: 'absolute' }}
-                      />
-                      <SnackbarMessage
-                        messageKey="course-submitted"
-                        sx={{ position: 'absolute' }}
-                      />
-                      <SnackbarMessage
-                        messageKey="course-evaluated"
-                        sx={{ position: 'absolute' }}
-                      />
-                      <SnackbarMessage
-                        messageKey="participant-transferred"
-                        sx={{ position: 'absolute' }}
-                      />
-                    </>
-                  )}
-
-                  <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.ATTENDEES}>
-                    <CourseAttendeesTab course={course} />
-                  </TabPanel>
-
+              >
+                <PillTabList
+                  variant="scrollable"
+                  scrollButtons="auto"
+                  onChange={(_, tab) =>
+                    navigate(`.?tab=${tab}`, { replace: true })
+                  }
+                >
+                  <PillTab
+                    label={t('pages.course-details.tabs.attendees.title')}
+                    value={CourseDetailsTabs.ATTENDEES}
+                    data-testid="attendees-tab"
+                  />
                   {courseHasEnded && !acl.isOrgAdmin() ? (
-                    <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.GRADING}>
-                      <CourseGrading
-                        course={course}
-                        refreshCourse={onRefreshCourse}
-                      />
-                    </TabPanel>
+                    <PillTab
+                      label={t('pages.course-details.tabs.grading.title')}
+                      value={CourseDetailsTabs.GRADING}
+                      data-testid="grading-tab"
+                    />
                   ) : null}
-
-                  <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.EVALUATION}>
-                    <EvaluationSummaryTab />
-                  </TabPanel>
-
+                  <PillTab
+                    label={t('pages.course-details.tabs.evaluation.title')}
+                    value={CourseDetailsTabs.EVALUATION}
+                    data-testid="evaluation-tab"
+                  />
                   {course.certificateCount?.aggregate.count ? (
-                    <TabPanel
-                      sx={{ px: 0 }}
+                    <PillTab
+                      label={t(
+                        'pages.course-details.tabs.certifications.title'
+                      )}
                       value={CourseDetailsTabs.CERTIFICATIONS}
-                    >
-                      <CourseCertifications course={course} />
-                    </TabPanel>
+                      data-testid="certifications-tab"
+                    />
                   ) : null}
-
                   {showCourseOverview && (
-                    <TabPanel
-                      sx={{ px: 0 }}
+                    <PillTab
+                      label={t(
+                        'pages.course-details.tabs.course-overview.title'
+                      )}
                       value={CourseDetailsTabs.COURSE_OVERVIEW}
-                    >
-                      <CourseOverview course={course} />
-                    </TabPanel>
+                      data-testid="course-overview-tab"
+                    />
                   )}
-                </Container>
-              </TabContext>
-            </>
-          )}
+                </PillTabList>
+                <Box>
+                  {!course.cancellationRequest &&
+                  course.type === CourseType.CLOSED &&
+                  isOrgAdmin &&
+                  course.status !== Course_Status_Enum.Cancelled &&
+                  !acl.canCancelCourses() ? (
+                    <Button
+                      data-testid="request-cancellation-button"
+                      variant="text"
+                      startIcon={<Cancel />}
+                      onClick={() => setShowCancellationRequestModal(true)}
+                    >
+                      {t('pages.edit-course.request-cancellation')}
+                    </Button>
+                  ) : null}
+                </Box>
+              </Container>
+            </Box>
+
+            <Container sx={{ pb: 2, position: 'relative' }}>
+              {isMobile ? undefined : (
+                <>
+                  <SnackbarMessage
+                    messageKey="course-created"
+                    sx={{ position: 'absolute' }}
+                  />
+                  <SnackbarMessage
+                    messageKey="course-canceled"
+                    severity="info"
+                    sx={{ position: 'absolute' }}
+                  />
+                  <SnackbarMessage
+                    messageKey="course-submitted"
+                    sx={{ position: 'absolute' }}
+                  />
+                  <SnackbarMessage
+                    messageKey="course-evaluated"
+                    sx={{ position: 'absolute' }}
+                  />
+                  <SnackbarMessage
+                    messageKey="participant-transferred"
+                    sx={{ position: 'absolute' }}
+                  />
+                </>
+              )}
+
+              <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.ATTENDEES}>
+                <CourseAttendeesTab course={course} />
+              </TabPanel>
+
+              {courseHasEnded && !acl.isOrgAdmin() ? (
+                <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.GRADING}>
+                  <CourseGrading
+                    course={course}
+                    refreshCourse={onRefreshCourse}
+                  />
+                </TabPanel>
+              ) : null}
+
+              <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.EVALUATION}>
+                <EvaluationSummaryTab />
+              </TabPanel>
+
+              {course.certificateCount?.aggregate.count ? (
+                <TabPanel
+                  sx={{ px: 0 }}
+                  value={CourseDetailsTabs.CERTIFICATIONS}
+                >
+                  <CourseCertifications course={course} />
+                </TabPanel>
+              ) : null}
+
+              {showCourseOverview && (
+                <TabPanel
+                  sx={{ px: 0 }}
+                  value={CourseDetailsTabs.COURSE_OVERVIEW}
+                >
+                  <CourseOverview course={course} />
+                </TabPanel>
+              )}
+            </Container>
+          </TabContext>
         </>
       ) : (
         <Container sx={{ py: 2, display: 'flex', justifyContent: 'center' }}>
