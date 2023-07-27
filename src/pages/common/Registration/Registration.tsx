@@ -72,7 +72,6 @@ export const RegistrationPage: React.FC<
     const input = {
       givenName: profile.givenName,
       familyName: profile.familyName,
-      acceptMarketing: true,
       acceptTnc: true,
       courseId: +courseId,
       quantity: +quantity,

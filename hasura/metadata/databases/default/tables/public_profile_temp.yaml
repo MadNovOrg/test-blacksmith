@@ -1,34 +1,31 @@
 table:
-  schema: public
   name: profile_temp
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    course_id:
-      custom_name: courseId
-    job_title:
-      custom_name: jobTitle
-    given_name:
-      custom_name: givenName
     accept_tcs:
       custom_name: acceptTnc
-    family_name:
-      custom_name: familyName
-    organization_id:
-      custom_name: organizationId
+    course_id:
+      custom_name: courseId
     created_at:
       custom_name: createdAt
-    accept_marketing:
-      custom_name: acceptMarketing
+    family_name:
+      custom_name: familyName
+    given_name:
+      custom_name: givenName
+    job_title:
+      custom_name: jobTitle
+    organization_id:
+      custom_name: organizationId
   custom_column_names:
-    course_id: courseId
-    job_title: jobTitle
-    given_name: givenName
     accept_tcs: acceptTnc
-    family_name: familyName
-    organization_id: organizationId
+    course_id: courseId
     created_at: createdAt
-    accept_marketing: acceptMarketing
+    family_name: familyName
+    given_name: givenName
+    job_title: jobTitle
+    organization_id: organizationId
+  custom_root_fields: {}
 object_relationships:
   - name: course
     using:
@@ -40,7 +37,6 @@ insert_permissions:
       set:
         email: x-hasura-User-Email
       columns:
-        - accept_marketing
         - accept_tcs
         - dob
         - course_id
@@ -61,7 +57,6 @@ insert_permissions:
       set:
         email: x-hasura-User-Email
       columns:
-        - accept_marketing
         - accept_tcs
         - dob
         - course_id
@@ -82,7 +77,6 @@ insert_permissions:
       set:
         email: x-hasura-User-Email
       columns:
-        - accept_marketing
         - accept_tcs
         - dob
         - course_id
@@ -103,7 +97,6 @@ insert_permissions:
       set:
         email: x-hasura-User-Email
       columns:
-        - accept_marketing
         - accept_tcs
         - dob
         - course_id
@@ -124,7 +117,6 @@ insert_permissions:
       set:
         email: x-hasura-User-Email
       columns:
-        - accept_marketing
         - accept_tcs
         - dob
         - course_id
@@ -145,7 +137,6 @@ insert_permissions:
       set:
         email: x-hasura-User-Email
       columns:
-        - accept_marketing
         - accept_tcs
         - dob
         - course_id
@@ -166,7 +157,6 @@ insert_permissions:
       set:
         email: x-hasura-User-Email
       columns:
-        - accept_marketing
         - accept_tcs
         - dob
         - course_id
@@ -187,7 +177,6 @@ insert_permissions:
       set:
         email: x-hasura-User-Email
       columns:
-        - accept_marketing
         - accept_tcs
         - dob
         - course_id
@@ -208,7 +197,6 @@ insert_permissions:
       set:
         email: x-hasura-User-Email
       columns:
-        - accept_marketing
         - accept_tcs
         - dob
         - course_id
@@ -229,7 +217,6 @@ insert_permissions:
       set:
         email: x-hasura-User-Email
       columns:
-        - accept_marketing
         - accept_tcs
         - dob
         - course_id
@@ -248,7 +235,6 @@ select_permissions:
   - role: unverified
     permission:
       columns:
-        - accept_marketing
         - accept_tcs
         - dob
         - course_id
@@ -268,7 +254,6 @@ select_permissions:
   - role: user
     permission:
       columns:
-        - accept_marketing
         - accept_tcs
         - dob
         - course_id

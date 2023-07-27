@@ -7,7 +7,6 @@ export type ParamsType = {
     email?: string
     givenName: string
     familyName: string
-    acceptMarketing: boolean
     acceptTnc: boolean
     phone?: string
     dob: Date | null

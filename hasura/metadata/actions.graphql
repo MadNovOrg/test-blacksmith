@@ -492,7 +492,6 @@ input CreateAppUserInput {
   password: String!
   phone: String
   dob: String
-  acceptMarketing: Boolean!
   acceptTnc: Boolean!
 }
 
@@ -618,7 +617,6 @@ input SignUpInput {
   jobTitle: String
   sector: String
   orgId: uuid
-  acceptMarketing: Boolean!
   acceptTnc: Boolean!
   recaptchaToken: String!
 }
@@ -1068,3 +1066,4 @@ type ImportArloCertificatesOutput {
 }
 
 scalar Date
+

@@ -7,7 +7,6 @@ export type FormInputs = {
   firstName: string
   surname: string
   email: string
-  marketing: boolean
   phone: string
   password: string
   dob: Date | null
@@ -22,7 +21,6 @@ export const getFormSchema = (t: TFunction) => {
     surname: yup.string().required(requiredMsg(t, 'surname')),
 
     email: schemas.email(t),
-    marketing: yup.boolean(),
 
     phone: schemas.phone(t),
     password: schemas.password(t),

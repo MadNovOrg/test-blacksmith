@@ -6,7 +6,6 @@ import { requiredMsg } from '@app/util'
 export type FormInputs = {
   firstName: string
   surname: string
-  marketing: boolean
   phone: string
   password: string
   dob: Date | null
@@ -25,7 +24,6 @@ export const getFormSchema = (t: TFunction) => {
       .typeError(t('validation-errors.invalid-date'))
       .required(t('validation-errors.date-required')),
 
-    marketing: yup.boolean(),
     tcs: yup.boolean().oneOf([true], t('pages.signup.tcs-required')),
   })
 }

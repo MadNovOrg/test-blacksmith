@@ -41,9 +41,23 @@ export type Address = {
   postCode?: Maybe<Scalars['String']>;
 };
 
+export type ApproveCourseInput = {
+  courseId: Scalars['Int'];
+};
+
 export type ApproveCourseOutput = {
   __typename?: 'ApproveCourseOutput';
+  error?: Maybe<CourseApprovalError>;
   success: Scalars['Boolean'];
+};
+
+export type ArloCallbackInput = {
+  url: Scalars['String'];
+};
+
+export type ArloCallbackOutput = {
+  __typename?: 'ArloCallbackOutput';
+  status: Scalars['Boolean'];
 };
 
 /** Avatars are profile images for users. WordPress by default uses the Gravatar service to host and fetch avatars from. */
@@ -121,6 +135,38 @@ export type CanApplyPromoCodeInput = {
 export type CanApplyPromoCodeOutput = {
   __typename?: 'CanApplyPromoCodeOutput';
   result?: Maybe<PromoCodeOutput>;
+};
+
+export enum CancelIndividualFromCourseWaitlistError {
+  CourseNotFound = 'COURSE_NOT_FOUND',
+  WaitlistNotFound = 'WAITLIST_NOT_FOUND'
+}
+
+export type CancelIndividualFromCourseWaitlistInput = {
+  courseId: Scalars['Int'];
+  waitlistId: Scalars['uuid'];
+};
+
+export type CancelIndividualFromCourseWaitlistOutput = {
+  __typename?: 'CancelIndividualFromCourseWaitlistOutput';
+  error?: Maybe<CancelIndividualFromCourseWaitlistError>;
+  success: Scalars['Boolean'];
+};
+
+export enum CancelMyselfFromCourseWaitlistError {
+  CancellationSecretInvalid = 'CANCELLATION_SECRET_INVALID',
+  CourseNotFound = 'COURSE_NOT_FOUND'
+}
+
+export type CancelMyselfFromCourseWaitlistInput = {
+  cancellationSecret: Scalars['uuid'];
+  courseId: Scalars['Int'];
+};
+
+export type CancelMyselfFromCourseWaitlistOutput = {
+  __typename?: 'CancelMyselfFromCourseWaitlistOutput';
+  error?: Maybe<CancelMyselfFromCourseWaitlistError>;
+  success: Scalars['Boolean'];
 };
 
 /** The category type */
@@ -1224,6 +1270,14 @@ export enum ContentTypesOfWebinarsCategoryEnum {
   Webinar = 'WEBINAR'
 }
 
+export enum CourseApprovalError {
+  CourseNotFound = 'COURSE_NOT_FOUND',
+  InvalidCourseId = 'INVALID_COURSE_ID',
+  InvalidStatus = 'INVALID_STATUS',
+  NoAuditFound = 'NO_AUDIT_FOUND',
+  TrainerNotFound = 'TRAINER_NOT_FOUND'
+}
+
 export type CourseCertificateLevel = {
   __typename?: 'CourseCertificateLevel';
   courseLevel: CourseLevel;
@@ -1276,7 +1330,6 @@ export enum CourseType {
 }
 
 export type CreateAppUserInput = {
-  acceptMarketing: Scalars['Boolean'];
   acceptTnc: Scalars['Boolean'];
   dob?: InputMaybe<Scalars['String']>;
   firstName: Scalars['String'];
@@ -1926,11 +1979,6 @@ export type DeclineInviteOutput = {
   status: Scalars['Boolean'];
 };
 
-export type DeclineOrgInviteOutput = {
-  __typename?: 'DeclineOrgInviteOutput';
-  id: Scalars['uuid'];
-};
-
 /** The template assigned to the node */
 export type DefaultTemplate = ContentTemplate & {
   __typename?: 'DefaultTemplate';
@@ -2037,6 +2085,11 @@ export type DeleteMediaItemPayload = {
   deletedId?: Maybe<Scalars['ID']>;
   /** The mediaItem before it was deleted */
   mediaItem?: Maybe<MediaItem>;
+};
+
+export type DeleteMeetingOutput = {
+  __typename?: 'DeleteMeetingOutput';
+  success: Scalars['Boolean'];
 };
 
 /** Input for the deletePage mutation */
@@ -3145,6 +3198,12 @@ export type HierarchicalTermNode = {
   parentId?: Maybe<Scalars['ID']>;
 };
 
+export type ImportArloCertificatesOutput = {
+  __typename?: 'ImportArloCertificatesOutput';
+  added: Scalars['Int'];
+  processed: Scalars['Int'];
+};
+
 export type InitAuthOutput = {
   __typename?: 'InitAuthOutput';
   authChallenge: Scalars['String'];
@@ -3169,6 +3228,21 @@ export enum InviteStatus {
   Declined = 'DECLINED',
   Pending = 'PENDING'
 }
+
+export type JoinWaitlistInput = {
+  courseId: Scalars['Int'];
+  email: Scalars['String'];
+  familyName: Scalars['String'];
+  givenName: Scalars['String'];
+  orgName: Scalars['String'];
+  phone: Scalars['String'];
+  recaptchaToken: Scalars['String'];
+};
+
+export type JoinWaitlistOutput = {
+  __typename?: 'JoinWaitlistOutput';
+  success: Scalars['Boolean'];
+};
 
 /** File details for a Media Item */
 export type MediaDetails = {
@@ -5819,6 +5893,16 @@ export type RegisterUserPayload = {
   user?: Maybe<User>;
 };
 
+export type RejectCourseInput = {
+  courseId: Scalars['Int'];
+};
+
+export type RejectCourseOutput = {
+  __typename?: 'RejectCourseOutput';
+  error?: Maybe<CourseApprovalError>;
+  success: Scalars['Boolean'];
+};
+
 /** The logical relation between each item in the array when there are more than one. */
 export enum RelationEnum {
   /** The logical AND condition returns true if both operands are true, otherwise, it returns false. */
@@ -6459,6 +6543,8 @@ export type Resource = ContentNode & DatabaseIdentifier & MenuItemLinkable & Nod
   resourceCategories?: Maybe<ResourceToResourceCategoryConnection>;
   /** The id field matches the WP_Post-&gt;ID field. */
   resourceId: Scalars['Int'];
+  /** Added to the GraphQL Schema because the ACF Field Group &quot;Resource permissions&quot; was set to Show in GraphQL. */
+  resourcePermissions?: Maybe<Resource_Resourcepermissions>;
   /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
   slug?: Maybe<Scalars['String']>;
   /** The current status of the object */
@@ -6554,7 +6640,7 @@ export type ResourceCategory = DatabaseIdentifier & HierarchicalTermNode & MenuI
   parentDatabaseId?: Maybe<Scalars['Int']>;
   /** The globally unique identifier of the parent node. */
   parentId?: Maybe<Scalars['ID']>;
-  /** Added to the GraphQL Schema because the ACF Field Group &quot;Resouce icon&quot; was set to Show in GraphQL. */
+  /** Added to the GraphQL Schema because the ACF Field Group &quot;Resource icon&quot; was set to Show in GraphQL. */
   resouceIcon?: Maybe<ResourceCategory_Resouceicon>;
   /** Added to the GraphQL Schema because the ACF Field Group &quot;Resource area&quot; was set to Show in GraphQL. */
   resourceArea?: Maybe<ResourceCategory_Resourcearea>;
@@ -7065,6 +7151,15 @@ export type Resource_Resourceattachment = AcfFieldGroup & {
   videourl?: Maybe<Scalars['String']>;
 };
 
+/** Field Group */
+export type Resource_Resourcepermissions = AcfFieldGroup & {
+  __typename?: 'Resource_Resourcepermissions';
+  certificateLevels?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** The name of the ACF Field Group */
+  fieldGroupName?: Maybe<Scalars['String']>;
+  principalTrainer?: Maybe<Scalars['Boolean']>;
+};
+
 /** Input for the restoreComment mutation */
 export type RestoreCommentInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -7082,1087 +7177,6 @@ export type RestoreCommentPayload = {
   comment?: Maybe<Comment>;
   /** The ID of the restored comment */
   restoredId?: Maybe<Scalars['ID']>;
-};
-
-export type RootMutation = {
-  __typename?: 'RootMutation';
-  /** The payload for the createCategory mutation */
-  createCategory?: Maybe<CreateCategoryPayload>;
-  /** The payload for the createComment mutation */
-  createComment?: Maybe<CreateCommentPayload>;
-  /** The payload for the createEbook mutation */
-  createEbook?: Maybe<CreateEbookPayload>;
-  /** The payload for the createEbooksCategory mutation */
-  createEbooksCategory?: Maybe<CreateEbooksCategoryPayload>;
-  /** The payload for the createMediaItem mutation */
-  createMediaItem?: Maybe<CreateMediaItemPayload>;
-  /** The payload for the createPage mutation */
-  createPage?: Maybe<CreatePagePayload>;
-  /** The payload for the createPost mutation */
-  createPost?: Maybe<CreatePostPayload>;
-  /** The payload for the createPostFormat mutation */
-  createPostFormat?: Maybe<CreatePostFormatPayload>;
-  /** The payload for the createResearchSummariesCategory mutation */
-  createResearchSummariesCategory?: Maybe<CreateResearchSummariesCategoryPayload>;
-  /** The payload for the createResearchSummary mutation */
-  createResearchSummary?: Maybe<CreateResearchSummaryPayload>;
-  /** The payload for the createResource mutation */
-  createResource?: Maybe<CreateResourcePayload>;
-  /** The payload for the createResourceCategory mutation */
-  createResourceCategory?: Maybe<CreateResourceCategoryPayload>;
-  /** The payload for the createTag mutation */
-  createTag?: Maybe<CreateTagPayload>;
-  /** The payload for the createUser mutation */
-  createUser?: Maybe<CreateUserPayload>;
-  /** The payload for the createVideoSeriesCategory mutation */
-  createVideoSeriesCategory?: Maybe<CreateVideoSeriesCategoryPayload>;
-  /** The payload for the createVideoSeriesItem mutation */
-  createVideoSeriesItem?: Maybe<CreateVideoSeriesItemPayload>;
-  /** The payload for the createWebinar mutation */
-  createWebinar?: Maybe<CreateWebinarPayload>;
-  /** The payload for the createWebinarsCategory mutation */
-  createWebinarsCategory?: Maybe<CreateWebinarsCategoryPayload>;
-  /** The payload for the deleteCategory mutation */
-  deleteCategory?: Maybe<DeleteCategoryPayload>;
-  /** The payload for the deleteComment mutation */
-  deleteComment?: Maybe<DeleteCommentPayload>;
-  /** The payload for the deleteEbook mutation */
-  deleteEbook?: Maybe<DeleteEbookPayload>;
-  /** The payload for the deleteEbooksCategory mutation */
-  deleteEbooksCategory?: Maybe<DeleteEbooksCategoryPayload>;
-  /** The payload for the deleteMediaItem mutation */
-  deleteMediaItem?: Maybe<DeleteMediaItemPayload>;
-  /** The payload for the deletePage mutation */
-  deletePage?: Maybe<DeletePagePayload>;
-  /** The payload for the deletePost mutation */
-  deletePost?: Maybe<DeletePostPayload>;
-  /** The payload for the deletePostFormat mutation */
-  deletePostFormat?: Maybe<DeletePostFormatPayload>;
-  /** The payload for the deleteResearchSummariesCategory mutation */
-  deleteResearchSummariesCategory?: Maybe<DeleteResearchSummariesCategoryPayload>;
-  /** The payload for the deleteResearchSummary mutation */
-  deleteResearchSummary?: Maybe<DeleteResearchSummaryPayload>;
-  /** The payload for the deleteResource mutation */
-  deleteResource?: Maybe<DeleteResourcePayload>;
-  /** The payload for the deleteResourceCategory mutation */
-  deleteResourceCategory?: Maybe<DeleteResourceCategoryPayload>;
-  /** The payload for the deleteTag mutation */
-  deleteTag?: Maybe<DeleteTagPayload>;
-  /** The payload for the deleteUser mutation */
-  deleteUser?: Maybe<DeleteUserPayload>;
-  /** The payload for the deleteVideoSeriesCategory mutation */
-  deleteVideoSeriesCategory?: Maybe<DeleteVideoSeriesCategoryPayload>;
-  /** The payload for the deleteVideoSeriesItem mutation */
-  deleteVideoSeriesItem?: Maybe<DeleteVideoSeriesItemPayload>;
-  /** The payload for the deleteWebinar mutation */
-  deleteWebinar?: Maybe<DeleteWebinarPayload>;
-  /** The payload for the deleteWebinarsCategory mutation */
-  deleteWebinarsCategory?: Maybe<DeleteWebinarsCategoryPayload>;
-  /** Increase the count. */
-  increaseCount?: Maybe<Scalars['Int']>;
-  /** The payload for the registerUser mutation */
-  registerUser?: Maybe<RegisterUserPayload>;
-  /** The payload for the resetUserPassword mutation */
-  resetUserPassword?: Maybe<ResetUserPasswordPayload>;
-  /** The payload for the restoreComment mutation */
-  restoreComment?: Maybe<RestoreCommentPayload>;
-  /** The payload for the sendPasswordResetEmail mutation */
-  sendPasswordResetEmail?: Maybe<SendPasswordResetEmailPayload>;
-  /** The payload for the UpdateCategory mutation */
-  updateCategory?: Maybe<UpdateCategoryPayload>;
-  /** The payload for the updateComment mutation */
-  updateComment?: Maybe<UpdateCommentPayload>;
-  /** The payload for the updateEbook mutation */
-  updateEbook?: Maybe<UpdateEbookPayload>;
-  /** The payload for the UpdateEbooksCategory mutation */
-  updateEbooksCategory?: Maybe<UpdateEbooksCategoryPayload>;
-  /** The payload for the updateMediaItem mutation */
-  updateMediaItem?: Maybe<UpdateMediaItemPayload>;
-  /** The payload for the updatePage mutation */
-  updatePage?: Maybe<UpdatePagePayload>;
-  /** The payload for the updatePost mutation */
-  updatePost?: Maybe<UpdatePostPayload>;
-  /** The payload for the UpdatePostFormat mutation */
-  updatePostFormat?: Maybe<UpdatePostFormatPayload>;
-  /** The payload for the UpdateResearchSummariesCategory mutation */
-  updateResearchSummariesCategory?: Maybe<UpdateResearchSummariesCategoryPayload>;
-  /** The payload for the updateResearchSummary mutation */
-  updateResearchSummary?: Maybe<UpdateResearchSummaryPayload>;
-  /** The payload for the updateResource mutation */
-  updateResource?: Maybe<UpdateResourcePayload>;
-  /** The payload for the UpdateResourceCategory mutation */
-  updateResourceCategory?: Maybe<UpdateResourceCategoryPayload>;
-  /** The payload for the updateSettings mutation */
-  updateSettings?: Maybe<UpdateSettingsPayload>;
-  /** The payload for the UpdateTag mutation */
-  updateTag?: Maybe<UpdateTagPayload>;
-  /** The payload for the updateUser mutation */
-  updateUser?: Maybe<UpdateUserPayload>;
-  /** The payload for the UpdateVideoSeriesCategory mutation */
-  updateVideoSeriesCategory?: Maybe<UpdateVideoSeriesCategoryPayload>;
-  /** The payload for the updateVideoSeriesItem mutation */
-  updateVideoSeriesItem?: Maybe<UpdateVideoSeriesItemPayload>;
-  /** The payload for the updateWebinar mutation */
-  updateWebinar?: Maybe<UpdateWebinarPayload>;
-  /** The payload for the UpdateWebinarsCategory mutation */
-  updateWebinarsCategory?: Maybe<UpdateWebinarsCategoryPayload>;
-};
-
-
-export type RootMutationCreateCategoryArgs = {
-  input: CreateCategoryInput;
-};
-
-
-export type RootMutationCreateCommentArgs = {
-  input: CreateCommentInput;
-};
-
-
-export type RootMutationCreateEbookArgs = {
-  input: CreateEbookInput;
-};
-
-
-export type RootMutationCreateEbooksCategoryArgs = {
-  input: CreateEbooksCategoryInput;
-};
-
-
-export type RootMutationCreateMediaItemArgs = {
-  input: CreateMediaItemInput;
-};
-
-
-export type RootMutationCreatePageArgs = {
-  input: CreatePageInput;
-};
-
-
-export type RootMutationCreatePostArgs = {
-  input: CreatePostInput;
-};
-
-
-export type RootMutationCreatePostFormatArgs = {
-  input: CreatePostFormatInput;
-};
-
-
-export type RootMutationCreateResearchSummariesCategoryArgs = {
-  input: CreateResearchSummariesCategoryInput;
-};
-
-
-export type RootMutationCreateResearchSummaryArgs = {
-  input: CreateResearchSummaryInput;
-};
-
-
-export type RootMutationCreateResourceArgs = {
-  input: CreateResourceInput;
-};
-
-
-export type RootMutationCreateResourceCategoryArgs = {
-  input: CreateResourceCategoryInput;
-};
-
-
-export type RootMutationCreateTagArgs = {
-  input: CreateTagInput;
-};
-
-
-export type RootMutationCreateUserArgs = {
-  input: CreateUserInput;
-};
-
-
-export type RootMutationCreateVideoSeriesCategoryArgs = {
-  input: CreateVideoSeriesCategoryInput;
-};
-
-
-export type RootMutationCreateVideoSeriesItemArgs = {
-  input: CreateVideoSeriesItemInput;
-};
-
-
-export type RootMutationCreateWebinarArgs = {
-  input: CreateWebinarInput;
-};
-
-
-export type RootMutationCreateWebinarsCategoryArgs = {
-  input: CreateWebinarsCategoryInput;
-};
-
-
-export type RootMutationDeleteCategoryArgs = {
-  input: DeleteCategoryInput;
-};
-
-
-export type RootMutationDeleteCommentArgs = {
-  input: DeleteCommentInput;
-};
-
-
-export type RootMutationDeleteEbookArgs = {
-  input: DeleteEbookInput;
-};
-
-
-export type RootMutationDeleteEbooksCategoryArgs = {
-  input: DeleteEbooksCategoryInput;
-};
-
-
-export type RootMutationDeleteMediaItemArgs = {
-  input: DeleteMediaItemInput;
-};
-
-
-export type RootMutationDeletePageArgs = {
-  input: DeletePageInput;
-};
-
-
-export type RootMutationDeletePostArgs = {
-  input: DeletePostInput;
-};
-
-
-export type RootMutationDeletePostFormatArgs = {
-  input: DeletePostFormatInput;
-};
-
-
-export type RootMutationDeleteResearchSummariesCategoryArgs = {
-  input: DeleteResearchSummariesCategoryInput;
-};
-
-
-export type RootMutationDeleteResearchSummaryArgs = {
-  input: DeleteResearchSummaryInput;
-};
-
-
-export type RootMutationDeleteResourceArgs = {
-  input: DeleteResourceInput;
-};
-
-
-export type RootMutationDeleteResourceCategoryArgs = {
-  input: DeleteResourceCategoryInput;
-};
-
-
-export type RootMutationDeleteTagArgs = {
-  input: DeleteTagInput;
-};
-
-
-export type RootMutationDeleteUserArgs = {
-  input: DeleteUserInput;
-};
-
-
-export type RootMutationDeleteVideoSeriesCategoryArgs = {
-  input: DeleteVideoSeriesCategoryInput;
-};
-
-
-export type RootMutationDeleteVideoSeriesItemArgs = {
-  input: DeleteVideoSeriesItemInput;
-};
-
-
-export type RootMutationDeleteWebinarArgs = {
-  input: DeleteWebinarInput;
-};
-
-
-export type RootMutationDeleteWebinarsCategoryArgs = {
-  input: DeleteWebinarsCategoryInput;
-};
-
-
-export type RootMutationIncreaseCountArgs = {
-  count?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type RootMutationRegisterUserArgs = {
-  input: RegisterUserInput;
-};
-
-
-export type RootMutationResetUserPasswordArgs = {
-  input: ResetUserPasswordInput;
-};
-
-
-export type RootMutationRestoreCommentArgs = {
-  input: RestoreCommentInput;
-};
-
-
-export type RootMutationSendPasswordResetEmailArgs = {
-  input: SendPasswordResetEmailInput;
-};
-
-
-export type RootMutationUpdateCategoryArgs = {
-  input: UpdateCategoryInput;
-};
-
-
-export type RootMutationUpdateCommentArgs = {
-  input: UpdateCommentInput;
-};
-
-
-export type RootMutationUpdateEbookArgs = {
-  input: UpdateEbookInput;
-};
-
-
-export type RootMutationUpdateEbooksCategoryArgs = {
-  input: UpdateEbooksCategoryInput;
-};
-
-
-export type RootMutationUpdateMediaItemArgs = {
-  input: UpdateMediaItemInput;
-};
-
-
-export type RootMutationUpdatePageArgs = {
-  input: UpdatePageInput;
-};
-
-
-export type RootMutationUpdatePostArgs = {
-  input: UpdatePostInput;
-};
-
-
-export type RootMutationUpdatePostFormatArgs = {
-  input: UpdatePostFormatInput;
-};
-
-
-export type RootMutationUpdateResearchSummariesCategoryArgs = {
-  input: UpdateResearchSummariesCategoryInput;
-};
-
-
-export type RootMutationUpdateResearchSummaryArgs = {
-  input: UpdateResearchSummaryInput;
-};
-
-
-export type RootMutationUpdateResourceArgs = {
-  input: UpdateResourceInput;
-};
-
-
-export type RootMutationUpdateResourceCategoryArgs = {
-  input: UpdateResourceCategoryInput;
-};
-
-
-export type RootMutationUpdateSettingsArgs = {
-  input: UpdateSettingsInput;
-};
-
-
-export type RootMutationUpdateTagArgs = {
-  input: UpdateTagInput;
-};
-
-
-export type RootMutationUpdateUserArgs = {
-  input: UpdateUserInput;
-};
-
-
-export type RootMutationUpdateVideoSeriesCategoryArgs = {
-  input: UpdateVideoSeriesCategoryInput;
-};
-
-
-export type RootMutationUpdateVideoSeriesItemArgs = {
-  input: UpdateVideoSeriesItemInput;
-};
-
-
-export type RootMutationUpdateWebinarArgs = {
-  input: UpdateWebinarInput;
-};
-
-
-export type RootMutationUpdateWebinarsCategoryArgs = {
-  input: UpdateWebinarsCategoryInput;
-};
-
-export type RootQuery = {
-  __typename?: 'RootQuery';
-  /** Entry point to get all settings for the site */
-  allSettings?: Maybe<Settings>;
-  /** Connection between the RootQuery type and the category type */
-  categories?: Maybe<RootQueryToCategoryConnection>;
-  /** A 0bject */
-  category?: Maybe<Category>;
-  /** Returns a Comment */
-  comment?: Maybe<Comment>;
-  /** Connection between the RootQuery type and the Comment type */
-  comments?: Maybe<RootQueryToCommentConnection>;
-  /** A node used to manage content */
-  contentNode?: Maybe<ContentNode>;
-  /** Connection between the RootQuery type and the ContentNode type */
-  contentNodes?: Maybe<RootQueryToContentNodeConnection>;
-  /** Fetch a Content Type node by unique Identifier */
-  contentType?: Maybe<ContentType>;
-  /** Connection between the RootQuery type and the ContentType type */
-  contentTypes?: Maybe<RootQueryToContentTypeConnection>;
-  /** Fields of the &#039;DiscussionSettings&#039; settings group */
-  discussionSettings?: Maybe<DiscussionSettings>;
-  /** An object of the Ebook Type.  */
-  ebook?: Maybe<Ebook>;
-  /** A Ebook object */
-  ebookBy?: Maybe<Ebook>;
-  /** Connection between the RootQuery type and the Ebook type */
-  ebooks?: Maybe<RootQueryToEbookConnection>;
-  /** Connection between the RootQuery type and the EbooksCategory type */
-  ebooksCategories?: Maybe<RootQueryToEbooksCategoryConnection>;
-  /** A 0bject */
-  ebooksCategory?: Maybe<EbooksCategory>;
-  /** Fields of the &#039;GeneralSettings&#039; settings group */
-  generalSettings?: Maybe<GeneralSettings>;
-  /** An object of the mediaItem Type.  */
-  mediaItem?: Maybe<MediaItem>;
-  /** A mediaItem object */
-  mediaItemBy?: Maybe<MediaItem>;
-  /** Connection between the RootQuery type and the mediaItem type */
-  mediaItems?: Maybe<RootQueryToMediaItemConnection>;
-  /** A WordPress navigation menu */
-  menu?: Maybe<Menu>;
-  /** A WordPress navigation menu item */
-  menuItem?: Maybe<MenuItem>;
-  /** Connection between the RootQuery type and the MenuItem type */
-  menuItems?: Maybe<RootQueryToMenuItemConnection>;
-  /** Connection between the RootQuery type and the Menu type */
-  menus?: Maybe<RootQueryToMenuConnection>;
-  /** Fetches an object given its ID */
-  node?: Maybe<Node>;
-  /** Fetches an object given its Unique Resource Identifier */
-  nodeByUri?: Maybe<UniformResourceIdentifiable>;
-  /** An object of the page Type.  */
-  page?: Maybe<Page>;
-  /** A page object */
-  pageBy?: Maybe<Page>;
-  /** Connection between the RootQuery type and the page type */
-  pages?: Maybe<RootQueryToPageConnection>;
-  /** A WordPress plugin */
-  plugin?: Maybe<Plugin>;
-  /** Connection between the RootQuery type and the Plugin type */
-  plugins?: Maybe<RootQueryToPluginConnection>;
-  /** An object of the post Type.  */
-  post?: Maybe<Post>;
-  /** A post object */
-  postBy?: Maybe<Post>;
-  /** A 0bject */
-  postFormat?: Maybe<PostFormat>;
-  /** Connection between the RootQuery type and the postFormat type */
-  postFormats?: Maybe<RootQueryToPostFormatConnection>;
-  /** Connection between the RootQuery type and the post type */
-  posts?: Maybe<RootQueryToPostConnection>;
-  /** Fields of the &#039;ReadingSettings&#039; settings group */
-  readingSettings?: Maybe<ReadingSettings>;
-  /** Connection between the RootQuery type and the EnqueuedScript type */
-  registeredScripts?: Maybe<RootQueryToEnqueuedScriptConnection>;
-  /** Connection between the RootQuery type and the EnqueuedStylesheet type */
-  registeredStylesheets?: Maybe<RootQueryToEnqueuedStylesheetConnection>;
-  /** Connection between the RootQuery type and the ResearchSummary type */
-  researchSummaries?: Maybe<RootQueryToResearchSummaryConnection>;
-  /** Connection between the RootQuery type and the ResearchSummariesCategory type */
-  researchSummariesCategories?: Maybe<RootQueryToResearchSummariesCategoryConnection>;
-  /** A 0bject */
-  researchSummariesCategory?: Maybe<ResearchSummariesCategory>;
-  /** An object of the ResearchSummary Type.  */
-  researchSummary?: Maybe<ResearchSummary>;
-  /** A ResearchSummary object */
-  researchSummaryBy?: Maybe<ResearchSummary>;
-  /** An object of the Resource Type.  */
-  resource?: Maybe<Resource>;
-  /** A Resource object */
-  resourceBy?: Maybe<Resource>;
-  /** Connection between the RootQuery type and the ResourceCategory type */
-  resourceCategories?: Maybe<RootQueryToResourceCategoryConnection>;
-  /** A 0bject */
-  resourceCategory?: Maybe<ResourceCategory>;
-  /** Connection between the RootQuery type and the Resource type */
-  resources?: Maybe<RootQueryToResourceConnection>;
-  /** Connection between the RootQuery type and the ContentRevisionUnion type */
-  revisions?: Maybe<RootQueryToContentRevisionUnionConnection>;
-  /** A 0bject */
-  tag?: Maybe<Tag>;
-  /** Connection between the RootQuery type and the tag type */
-  tags?: Maybe<RootQueryToTagConnection>;
-  /** Connection between the RootQuery type and the Taxonomy type */
-  taxonomies?: Maybe<RootQueryToTaxonomyConnection>;
-  /** Fetch a Taxonomy node by unique Identifier */
-  taxonomy?: Maybe<Taxonomy>;
-  /** A node in a taxonomy used to group and relate content nodes */
-  termNode?: Maybe<TermNode>;
-  /** Connection between the RootQuery type and the TermNode type */
-  terms?: Maybe<RootQueryToTermNodeConnection>;
-  /** A Theme object */
-  theme?: Maybe<Theme>;
-  /** Connection between the RootQuery type and the Theme type */
-  themes?: Maybe<RootQueryToThemeConnection>;
-  /** Returns a user */
-  user?: Maybe<User>;
-  /** Returns a user role */
-  userRole?: Maybe<UserRole>;
-  /** Connection between the RootQuery type and the UserRole type */
-  userRoles?: Maybe<RootQueryToUserRoleConnection>;
-  /** Connection between the RootQuery type and the User type */
-  users?: Maybe<RootQueryToUserConnection>;
-  /** Connection between the RootQuery type and the VideoSeriesCategory type */
-  videoSeriesCategories?: Maybe<RootQueryToVideoSeriesCategoryConnection>;
-  /** A 0bject */
-  videoSeriesCategory?: Maybe<VideoSeriesCategory>;
-  /** An object of the VideoSeriesItem Type.  */
-  videoSeriesItem?: Maybe<VideoSeriesItem>;
-  /** A VideoSeriesItem object */
-  videoSeriesItemBy?: Maybe<VideoSeriesItem>;
-  /** Connection between the RootQuery type and the VideoSeriesItem type */
-  videoSeriesItems?: Maybe<RootQueryToVideoSeriesItemConnection>;
-  /** Returns the current user */
-  viewer?: Maybe<User>;
-  /** An object of the Webinar Type.  */
-  webinar?: Maybe<Webinar>;
-  /** A Webinar object */
-  webinarBy?: Maybe<Webinar>;
-  /** Connection between the RootQuery type and the Webinar type */
-  webinars?: Maybe<RootQueryToWebinarConnection>;
-  /** Connection between the RootQuery type and the WebinarsCategory type */
-  webinarsCategories?: Maybe<RootQueryToWebinarsCategoryConnection>;
-  /** A 0bject */
-  webinarsCategory?: Maybe<WebinarsCategory>;
-  /** Fields of the &#039;WritingSettings&#039; settings group */
-  writingSettings?: Maybe<WritingSettings>;
-};
-
-
-export type RootQueryCategoriesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToCategoryConnectionWhereArgs>;
-};
-
-
-export type RootQueryCategoryArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<CategoryIdType>;
-};
-
-
-export type RootQueryCommentArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<CommentNodeIdTypeEnum>;
-};
-
-
-export type RootQueryCommentsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToCommentConnectionWhereArgs>;
-};
-
-
-export type RootQueryContentNodeArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
-  contentType?: InputMaybe<ContentTypeEnum>;
-  id: Scalars['ID'];
-  idType?: InputMaybe<ContentNodeIdTypeEnum>;
-};
-
-
-export type RootQueryContentNodesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToContentNodeConnectionWhereArgs>;
-};
-
-
-export type RootQueryContentTypeArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<ContentTypeIdTypeEnum>;
-};
-
-
-export type RootQueryContentTypesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type RootQueryEbookArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  idType?: InputMaybe<EbookIdType>;
-};
-
-
-export type RootQueryEbookByArgs = {
-  ebookId?: InputMaybe<Scalars['Int']>;
-  id?: InputMaybe<Scalars['ID']>;
-  slug?: InputMaybe<Scalars['String']>;
-  uri?: InputMaybe<Scalars['String']>;
-};
-
-
-export type RootQueryEbooksArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToEbookConnectionWhereArgs>;
-};
-
-
-export type RootQueryEbooksCategoriesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToEbooksCategoryConnectionWhereArgs>;
-};
-
-
-export type RootQueryEbooksCategoryArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<EbooksCategoryIdType>;
-};
-
-
-export type RootQueryMediaItemArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  idType?: InputMaybe<MediaItemIdType>;
-};
-
-
-export type RootQueryMediaItemByArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  mediaItemId?: InputMaybe<Scalars['Int']>;
-  slug?: InputMaybe<Scalars['String']>;
-  uri?: InputMaybe<Scalars['String']>;
-};
-
-
-export type RootQueryMediaItemsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToMediaItemConnectionWhereArgs>;
-};
-
-
-export type RootQueryMenuArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<MenuNodeIdTypeEnum>;
-};
-
-
-export type RootQueryMenuItemArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<MenuItemNodeIdTypeEnum>;
-};
-
-
-export type RootQueryMenuItemsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToMenuItemConnectionWhereArgs>;
-};
-
-
-export type RootQueryMenusArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToMenuConnectionWhereArgs>;
-};
-
-
-export type RootQueryNodeArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-};
-
-
-export type RootQueryNodeByUriArgs = {
-  uri: Scalars['String'];
-};
-
-
-export type RootQueryPageArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  idType?: InputMaybe<PageIdType>;
-};
-
-
-export type RootQueryPageByArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  pageId?: InputMaybe<Scalars['Int']>;
-  uri?: InputMaybe<Scalars['String']>;
-};
-
-
-export type RootQueryPagesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToPageConnectionWhereArgs>;
-};
-
-
-export type RootQueryPluginArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type RootQueryPluginsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToPluginConnectionWhereArgs>;
-};
-
-
-export type RootQueryPostArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  idType?: InputMaybe<PostIdType>;
-};
-
-
-export type RootQueryPostByArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  postId?: InputMaybe<Scalars['Int']>;
-  slug?: InputMaybe<Scalars['String']>;
-  uri?: InputMaybe<Scalars['String']>;
-};
-
-
-export type RootQueryPostFormatArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<PostFormatIdType>;
-};
-
-
-export type RootQueryPostFormatsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToPostFormatConnectionWhereArgs>;
-};
-
-
-export type RootQueryPostsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToPostConnectionWhereArgs>;
-};
-
-
-export type RootQueryRegisteredScriptsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type RootQueryRegisteredStylesheetsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type RootQueryResearchSummariesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToResearchSummaryConnectionWhereArgs>;
-};
-
-
-export type RootQueryResearchSummariesCategoriesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToResearchSummariesCategoryConnectionWhereArgs>;
-};
-
-
-export type RootQueryResearchSummariesCategoryArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<ResearchSummariesCategoryIdType>;
-};
-
-
-export type RootQueryResearchSummaryArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  idType?: InputMaybe<ResearchSummaryIdType>;
-};
-
-
-export type RootQueryResearchSummaryByArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  researchSummaryId?: InputMaybe<Scalars['Int']>;
-  slug?: InputMaybe<Scalars['String']>;
-  uri?: InputMaybe<Scalars['String']>;
-};
-
-
-export type RootQueryResourceArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  idType?: InputMaybe<ResourceIdType>;
-};
-
-
-export type RootQueryResourceByArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  resourceId?: InputMaybe<Scalars['Int']>;
-  slug?: InputMaybe<Scalars['String']>;
-  uri?: InputMaybe<Scalars['String']>;
-};
-
-
-export type RootQueryResourceCategoriesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToResourceCategoryConnectionWhereArgs>;
-};
-
-
-export type RootQueryResourceCategoryArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<ResourceCategoryIdType>;
-};
-
-
-export type RootQueryResourcesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToResourceConnectionWhereArgs>;
-};
-
-
-export type RootQueryRevisionsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToContentRevisionUnionConnectionWhereArgs>;
-};
-
-
-export type RootQueryTagArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<TagIdType>;
-};
-
-
-export type RootQueryTagsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToTagConnectionWhereArgs>;
-};
-
-
-export type RootQueryTaxonomiesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type RootQueryTaxonomyArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<TaxonomyIdTypeEnum>;
-};
-
-
-export type RootQueryTermNodeArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<TermNodeIdTypeEnum>;
-  taxonomy?: InputMaybe<TaxonomyEnum>;
-};
-
-
-export type RootQueryTermsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToTermNodeConnectionWhereArgs>;
-};
-
-
-export type RootQueryThemeArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type RootQueryThemesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type RootQueryUserArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<UserNodeIdTypeEnum>;
-};
-
-
-export type RootQueryUserRoleArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type RootQueryUserRolesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type RootQueryUsersArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToUserConnectionWhereArgs>;
-};
-
-
-export type RootQueryVideoSeriesCategoriesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToVideoSeriesCategoryConnectionWhereArgs>;
-};
-
-
-export type RootQueryVideoSeriesCategoryArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<VideoSeriesCategoryIdType>;
-};
-
-
-export type RootQueryVideoSeriesItemArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  idType?: InputMaybe<VideoSeriesItemIdType>;
-};
-
-
-export type RootQueryVideoSeriesItemByArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  slug?: InputMaybe<Scalars['String']>;
-  uri?: InputMaybe<Scalars['String']>;
-  videoSeriesItemId?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type RootQueryVideoSeriesItemsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToVideoSeriesItemConnectionWhereArgs>;
-};
-
-
-export type RootQueryWebinarArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  idType?: InputMaybe<WebinarIdType>;
-};
-
-
-export type RootQueryWebinarByArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  slug?: InputMaybe<Scalars['String']>;
-  uri?: InputMaybe<Scalars['String']>;
-  webinarId?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type RootQueryWebinarsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToWebinarConnectionWhereArgs>;
-};
-
-
-export type RootQueryWebinarsCategoriesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToWebinarsCategoryConnectionWhereArgs>;
-};
-
-
-export type RootQueryWebinarsCategoryArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<WebinarsCategoryIdType>;
 };
 
 /** Connection between the RootQuery type and the category type */
@@ -9836,6 +8850,26 @@ export type Settings = {
   writingSettingsUseSmilies?: Maybe<Scalars['Boolean']>;
 };
 
+export type SignUpInput = {
+  acceptTnc: Scalars['Boolean'];
+  courseId?: InputMaybe<Scalars['Int']>;
+  dob?: InputMaybe<Scalars['date']>;
+  email: Scalars['String'];
+  familyName: Scalars['String'];
+  givenName: Scalars['String'];
+  jobTitle?: InputMaybe<Scalars['String']>;
+  orgId?: InputMaybe<Scalars['uuid']>;
+  phone?: InputMaybe<Scalars['String']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+  recaptchaToken: Scalars['String'];
+  sector?: InputMaybe<Scalars['String']>;
+};
+
+export type SignUpOutput = {
+  __typename?: 'SignUpOutput';
+  success: Scalars['Boolean'];
+};
+
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type String_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['String']>;
@@ -11148,6 +10182,8 @@ export type UpsertZoomMeetingInput = {
   startTime?: InputMaybe<Scalars['String']>;
   /** Timezone string, e.g. Europe/London */
   timezone?: InputMaybe<Scalars['String']>;
+  /** Optional user id to create the meeting for */
+  userId?: InputMaybe<Scalars['String']>;
 };
 
 export type UpsertZoomMeetingPayload = {
@@ -13081,6 +12117,27 @@ export type ZoomMeetingNotFoundError = {
   id: Scalars['String'];
 };
 
+export type ZoomUser = {
+  __typename?: 'ZoomUser';
+  displayName: Scalars['String'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  id: Scalars['String'];
+  lastName: Scalars['String'];
+};
+
+export type ZoomUsersResponse = {
+  __typename?: 'ZoomUsersResponse';
+  data?: Maybe<ZoomUsersResponseData>;
+  success?: Maybe<Scalars['Boolean']>;
+};
+
+export type ZoomUsersResponseData = {
+  __typename?: 'ZoomUsersResponseData';
+  current: Scalars['String'];
+  users?: Maybe<Array<ZoomUser>>;
+};
+
 /** columns and relationships of "accreditors" */
 export type Accreditors = {
   __typename?: 'accreditors';
@@ -13119,9 +12176,9 @@ export type Accreditors_Bool_Exp = {
 
 /** unique or primary key constraints on table "accreditors" */
 export enum Accreditors_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   AccreditorsNameKey = 'accreditors_name_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   AccreditorsPkey = 'accreditors_pkey'
 }
 
@@ -13193,11 +12250,31 @@ export type Accreditors_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "accreditors" */
+export type Accreditors_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Accreditors_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Accreditors_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "accreditors" */
 export enum Accreditors_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Accreditors_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Accreditors_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Accreditors_Bool_Exp;
+};
 
 /** columns and relationships of "availability" */
 export type Availability = {
@@ -13254,7 +12331,7 @@ export type Availability_Bool_Exp = {
 
 /** unique or primary key constraints on table "availability" */
 export enum Availability_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   AvailabilityPkey = 'availability_pkey'
 }
 
@@ -13363,6 +12440,26 @@ export type Availability_Set_Input = {
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
+/** Streaming cursor of the table "availability" */
+export type Availability_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Availability_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Availability_Stream_Cursor_Value_Input = {
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  description?: InputMaybe<Scalars['String']>;
+  end?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+  start?: InputMaybe<Scalars['timestamptz']>;
+  type?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** update columns of table "availability" */
 export enum Availability_Update_Column {
   /** column name */
@@ -13382,6 +12479,13 @@ export enum Availability_Update_Column {
   /** column name */
   UpdatedAt = 'updatedAt'
 }
+
+export type Availability_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Availability_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Availability_Bool_Exp;
+};
 
 /** columns and relationships of "bild_strategy" */
 export type Bild_Strategy = {
@@ -13454,9 +12558,9 @@ export type Bild_Strategy_Bool_Exp = {
 
 /** unique or primary key constraints on table "bild_strategy" */
 export enum Bild_Strategy_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   BildStrategyNameKey = 'bild_strategy_name_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   BildStrategyPkey = 'bild_strategy_pkey'
 }
 
@@ -13583,6 +12687,23 @@ export type Bild_Strategy_Stddev_Samp_Fields = {
   duration?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "bild_strategy" */
+export type Bild_Strategy_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Bild_Strategy_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Bild_Strategy_Stream_Cursor_Value_Input = {
+  duration?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  modules?: InputMaybe<Scalars['jsonb']>;
+  name?: InputMaybe<Scalars['String']>;
+  shortName?: InputMaybe<Scalars['String']>;
+};
+
 /** aggregate sum on columns */
 export type Bild_Strategy_Sum_Fields = {
   __typename?: 'bild_strategy_sum_fields';
@@ -13602,6 +12723,25 @@ export enum Bild_Strategy_Update_Column {
   /** column name */
   ShortName = 'shortName'
 }
+
+export type Bild_Strategy_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Bild_Strategy_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Bild_Strategy_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Bild_Strategy_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Bild_Strategy_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Bild_Strategy_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Bild_Strategy_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Bild_Strategy_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Bild_Strategy_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Bild_Strategy_Var_Pop_Fields = {
@@ -13659,7 +12799,7 @@ export type Blended_Learning_Status_Bool_Exp = {
 
 /** unique or primary key constraints on table "blended_learning_status" */
 export enum Blended_Learning_Status_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   BlendedLearningStatusPkey = 'blended_learning_status_pkey'
 }
 
@@ -13733,11 +12873,179 @@ export type Blended_Learning_Status_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "blended_learning_status" */
+export type Blended_Learning_Status_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Blended_Learning_Status_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Blended_Learning_Status_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "blended_learning_status" */
 export enum Blended_Learning_Status_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Blended_Learning_Status_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Blended_Learning_Status_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Blended_Learning_Status_Bool_Exp;
+};
+
+/** columns and relationships of "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs = {
+  __typename?: 'certificate_expired_notification_jobs';
+  course_certificate_id: Scalars['uuid'];
+  id: Scalars['uuid'];
+  job_id: Scalars['uuid'];
+};
+
+/** aggregated selection of "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Aggregate = {
+  __typename?: 'certificate_expired_notification_jobs_aggregate';
+  aggregate?: Maybe<Certificate_Expired_Notification_Jobs_Aggregate_Fields>;
+  nodes: Array<Certificate_Expired_Notification_Jobs>;
+};
+
+/** aggregate fields of "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Aggregate_Fields = {
+  __typename?: 'certificate_expired_notification_jobs_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Certificate_Expired_Notification_Jobs_Max_Fields>;
+  min?: Maybe<Certificate_Expired_Notification_Jobs_Min_Fields>;
+};
+
+
+/** aggregate fields of "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "certificate_expired_notification_jobs". All fields are combined with a logical 'AND'. */
+export type Certificate_Expired_Notification_Jobs_Bool_Exp = {
+  _and?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Bool_Exp>>;
+  _not?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
+  _or?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Bool_Exp>>;
+  course_certificate_id?: InputMaybe<Uuid_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  job_id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "certificate_expired_notification_jobs" */
+export enum Certificate_Expired_Notification_Jobs_Constraint {
+  /** unique or primary key constraint on columns "course_certificate_id", "job_id" */
+  CertificateExpiredNotificatiCourseCertificateIdJobIdKey = 'certificate_expired_notificati_course_certificate_id_job_id_key',
+  /** unique or primary key constraint on columns "id" */
+  CertificateExpiredNotificationJobsPkey = 'certificate_expired_notification_jobs_pkey'
+}
+
+/** input type for inserting data into table "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Insert_Input = {
+  course_certificate_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  job_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Certificate_Expired_Notification_Jobs_Max_Fields = {
+  __typename?: 'certificate_expired_notification_jobs_max_fields';
+  course_certificate_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  job_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate min on columns */
+export type Certificate_Expired_Notification_Jobs_Min_Fields = {
+  __typename?: 'certificate_expired_notification_jobs_min_fields';
+  course_certificate_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  job_id?: Maybe<Scalars['uuid']>;
+};
+
+/** response of any mutation on the table "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Mutation_Response = {
+  __typename?: 'certificate_expired_notification_jobs_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Certificate_Expired_Notification_Jobs>;
+};
+
+/** on_conflict condition type for table "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_On_Conflict = {
+  constraint: Certificate_Expired_Notification_Jobs_Constraint;
+  update_columns?: Array<Certificate_Expired_Notification_Jobs_Update_Column>;
+  where?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "certificate_expired_notification_jobs". */
+export type Certificate_Expired_Notification_Jobs_Order_By = {
+  course_certificate_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  job_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: certificate_expired_notification_jobs */
+export type Certificate_Expired_Notification_Jobs_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "certificate_expired_notification_jobs" */
+export enum Certificate_Expired_Notification_Jobs_Select_Column {
+  /** column name */
+  CourseCertificateId = 'course_certificate_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  JobId = 'job_id'
+}
+
+/** input type for updating data in table "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Set_Input = {
+  course_certificate_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  job_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** Streaming cursor of the table "certificate_expired_notification_jobs" */
+export type Certificate_Expired_Notification_Jobs_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Certificate_Expired_Notification_Jobs_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Certificate_Expired_Notification_Jobs_Stream_Cursor_Value_Input = {
+  course_certificate_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  job_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** update columns of table "certificate_expired_notification_jobs" */
+export enum Certificate_Expired_Notification_Jobs_Update_Column {
+  /** column name */
+  CourseCertificateId = 'course_certificate_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  JobId = 'job_id'
+}
+
+export type Certificate_Expired_Notification_Jobs_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Certificate_Expired_Notification_Jobs_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Certificate_Expired_Notification_Jobs_Bool_Exp;
+};
 
 /** Stores scheduled jobs ids for the certificate expiry notification */
 export type Certificate_Expiry_Notification_Jobs = {
@@ -13783,9 +13091,9 @@ export type Certificate_Expiry_Notification_Jobs_Bool_Exp = {
 
 /** unique or primary key constraints on table "certificate_expiry_notification_jobs" */
 export enum Certificate_Expiry_Notification_Jobs_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "timeframe", "course_certificate_id", "job_id" */
   CertificateExpiryNotificatiCourseCertificateIdJobIdKey = 'certificate_expiry_notificati_course_certificate_id_job_id__key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CertificateExpiryNotificationJobsPkey = 'certificate_expiry_notification_jobs_pkey'
 }
 
@@ -13862,6 +13170,22 @@ export type Certificate_Expiry_Notification_Jobs_Set_Input = {
   timeframe?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Enum>;
 };
 
+/** Streaming cursor of the table "certificate_expiry_notification_jobs" */
+export type Certificate_Expiry_Notification_Jobs_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Certificate_Expiry_Notification_Jobs_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Certificate_Expiry_Notification_Jobs_Stream_Cursor_Value_Input = {
+  course_certificate_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  job_id?: InputMaybe<Scalars['uuid']>;
+  timeframe?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Enum>;
+};
+
 /** update columns of table "certificate_expiry_notification_jobs" */
 export enum Certificate_Expiry_Notification_Jobs_Update_Column {
   /** column name */
@@ -13873,6 +13197,13 @@ export enum Certificate_Expiry_Notification_Jobs_Update_Column {
   /** column name */
   Timeframe = 'timeframe'
 }
+
+export type Certificate_Expiry_Notification_Jobs_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Certificate_Expiry_Notification_Jobs_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Certificate_Expiry_Notification_Jobs_Bool_Exp;
+};
 
 /** Timeframe of the notification sent to the user about an expiring certificate */
 export type Certificate_Expiry_Notification_Timeframe = {
@@ -13912,7 +13243,7 @@ export type Certificate_Expiry_Notification_Timeframe_Bool_Exp = {
 
 /** unique or primary key constraints on table "certificate_expiry_notification_timeframe" */
 export enum Certificate_Expiry_Notification_Timeframe_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CertificateExpiryNotificationTimeframePkey = 'certificate_expiry_notification_timeframe_pkey'
 }
 
@@ -13986,11 +13317,31 @@ export type Certificate_Expiry_Notification_Timeframe_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "certificate_expiry_notification_timeframe" */
+export type Certificate_Expiry_Notification_Timeframe_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Certificate_Expiry_Notification_Timeframe_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Certificate_Expiry_Notification_Timeframe_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "certificate_expiry_notification_timeframe" */
 export enum Certificate_Expiry_Notification_Timeframe_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Certificate_Expiry_Notification_Timeframe_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Certificate_Expiry_Notification_Timeframe_Bool_Exp;
+};
 
 /** columns and relationships of "certificate_status" */
 export type Certificate_Status = {
@@ -14030,7 +13381,7 @@ export type Certificate_Status_Bool_Exp = {
 
 /** unique or primary key constraints on table "certificate_status" */
 export enum Certificate_Status_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CertificateStatusPkey = 'certificate_status_pkey'
 }
 
@@ -14088,11 +13439,31 @@ export type Certificate_Status_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "certificate_status" */
+export type Certificate_Status_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Certificate_Status_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Certificate_Status_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "certificate_status" */
 export enum Certificate_Status_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Certificate_Status_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Certificate_Status_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Certificate_Status_Bool_Exp;
+};
 
 /** columns and relationships of "color" */
 export type Color = {
@@ -14132,7 +13503,7 @@ export type Color_Bool_Exp = {
 
 /** unique or primary key constraints on table "color" */
 export enum Color_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   ColorPkey = 'color_pkey'
 }
 
@@ -14209,11 +13580,1112 @@ export type Color_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "color" */
+export type Color_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Color_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Color_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "color" */
 export enum Color_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Color_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Color_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Color_Bool_Exp;
+};
+
+export type ContentRootMutation = {
+  __typename?: 'contentRootMutation';
+  /** The payload for the createCategory mutation */
+  createCategory?: Maybe<CreateCategoryPayload>;
+  /** The payload for the createComment mutation */
+  createComment?: Maybe<CreateCommentPayload>;
+  /** The payload for the createEbook mutation */
+  createEbook?: Maybe<CreateEbookPayload>;
+  /** The payload for the createEbooksCategory mutation */
+  createEbooksCategory?: Maybe<CreateEbooksCategoryPayload>;
+  /** The payload for the createMediaItem mutation */
+  createMediaItem?: Maybe<CreateMediaItemPayload>;
+  /** The payload for the createPage mutation */
+  createPage?: Maybe<CreatePagePayload>;
+  /** The payload for the createPost mutation */
+  createPost?: Maybe<CreatePostPayload>;
+  /** The payload for the createPostFormat mutation */
+  createPostFormat?: Maybe<CreatePostFormatPayload>;
+  /** The payload for the createResearchSummariesCategory mutation */
+  createResearchSummariesCategory?: Maybe<CreateResearchSummariesCategoryPayload>;
+  /** The payload for the createResearchSummary mutation */
+  createResearchSummary?: Maybe<CreateResearchSummaryPayload>;
+  /** The payload for the createResource mutation */
+  createResource?: Maybe<CreateResourcePayload>;
+  /** The payload for the createResourceCategory mutation */
+  createResourceCategory?: Maybe<CreateResourceCategoryPayload>;
+  /** The payload for the createTag mutation */
+  createTag?: Maybe<CreateTagPayload>;
+  /** The payload for the createUser mutation */
+  createUser?: Maybe<CreateUserPayload>;
+  /** The payload for the createVideoSeriesCategory mutation */
+  createVideoSeriesCategory?: Maybe<CreateVideoSeriesCategoryPayload>;
+  /** The payload for the createVideoSeriesItem mutation */
+  createVideoSeriesItem?: Maybe<CreateVideoSeriesItemPayload>;
+  /** The payload for the createWebinar mutation */
+  createWebinar?: Maybe<CreateWebinarPayload>;
+  /** The payload for the createWebinarsCategory mutation */
+  createWebinarsCategory?: Maybe<CreateWebinarsCategoryPayload>;
+  /** The payload for the deleteCategory mutation */
+  deleteCategory?: Maybe<DeleteCategoryPayload>;
+  /** The payload for the deleteComment mutation */
+  deleteComment?: Maybe<DeleteCommentPayload>;
+  /** The payload for the deleteEbook mutation */
+  deleteEbook?: Maybe<DeleteEbookPayload>;
+  /** The payload for the deleteEbooksCategory mutation */
+  deleteEbooksCategory?: Maybe<DeleteEbooksCategoryPayload>;
+  /** The payload for the deleteMediaItem mutation */
+  deleteMediaItem?: Maybe<DeleteMediaItemPayload>;
+  /** The payload for the deletePage mutation */
+  deletePage?: Maybe<DeletePagePayload>;
+  /** The payload for the deletePost mutation */
+  deletePost?: Maybe<DeletePostPayload>;
+  /** The payload for the deletePostFormat mutation */
+  deletePostFormat?: Maybe<DeletePostFormatPayload>;
+  /** The payload for the deleteResearchSummariesCategory mutation */
+  deleteResearchSummariesCategory?: Maybe<DeleteResearchSummariesCategoryPayload>;
+  /** The payload for the deleteResearchSummary mutation */
+  deleteResearchSummary?: Maybe<DeleteResearchSummaryPayload>;
+  /** The payload for the deleteResource mutation */
+  deleteResource?: Maybe<DeleteResourcePayload>;
+  /** The payload for the deleteResourceCategory mutation */
+  deleteResourceCategory?: Maybe<DeleteResourceCategoryPayload>;
+  /** The payload for the deleteTag mutation */
+  deleteTag?: Maybe<DeleteTagPayload>;
+  /** The payload for the deleteUser mutation */
+  deleteUser?: Maybe<DeleteUserPayload>;
+  /** The payload for the deleteVideoSeriesCategory mutation */
+  deleteVideoSeriesCategory?: Maybe<DeleteVideoSeriesCategoryPayload>;
+  /** The payload for the deleteVideoSeriesItem mutation */
+  deleteVideoSeriesItem?: Maybe<DeleteVideoSeriesItemPayload>;
+  /** The payload for the deleteWebinar mutation */
+  deleteWebinar?: Maybe<DeleteWebinarPayload>;
+  /** The payload for the deleteWebinarsCategory mutation */
+  deleteWebinarsCategory?: Maybe<DeleteWebinarsCategoryPayload>;
+  /** Increase the count. */
+  increaseCount?: Maybe<Scalars['Int']>;
+  /** The payload for the registerUser mutation */
+  registerUser?: Maybe<RegisterUserPayload>;
+  /** The payload for the resetUserPassword mutation */
+  resetUserPassword?: Maybe<ResetUserPasswordPayload>;
+  /** The payload for the restoreComment mutation */
+  restoreComment?: Maybe<RestoreCommentPayload>;
+  /** The payload for the sendPasswordResetEmail mutation */
+  sendPasswordResetEmail?: Maybe<SendPasswordResetEmailPayload>;
+  /** The payload for the UpdateCategory mutation */
+  updateCategory?: Maybe<UpdateCategoryPayload>;
+  /** The payload for the updateComment mutation */
+  updateComment?: Maybe<UpdateCommentPayload>;
+  /** The payload for the updateEbook mutation */
+  updateEbook?: Maybe<UpdateEbookPayload>;
+  /** The payload for the UpdateEbooksCategory mutation */
+  updateEbooksCategory?: Maybe<UpdateEbooksCategoryPayload>;
+  /** The payload for the updateMediaItem mutation */
+  updateMediaItem?: Maybe<UpdateMediaItemPayload>;
+  /** The payload for the updatePage mutation */
+  updatePage?: Maybe<UpdatePagePayload>;
+  /** The payload for the updatePost mutation */
+  updatePost?: Maybe<UpdatePostPayload>;
+  /** The payload for the UpdatePostFormat mutation */
+  updatePostFormat?: Maybe<UpdatePostFormatPayload>;
+  /** The payload for the UpdateResearchSummariesCategory mutation */
+  updateResearchSummariesCategory?: Maybe<UpdateResearchSummariesCategoryPayload>;
+  /** The payload for the updateResearchSummary mutation */
+  updateResearchSummary?: Maybe<UpdateResearchSummaryPayload>;
+  /** The payload for the updateResource mutation */
+  updateResource?: Maybe<UpdateResourcePayload>;
+  /** The payload for the UpdateResourceCategory mutation */
+  updateResourceCategory?: Maybe<UpdateResourceCategoryPayload>;
+  /** The payload for the updateSettings mutation */
+  updateSettings?: Maybe<UpdateSettingsPayload>;
+  /** The payload for the UpdateTag mutation */
+  updateTag?: Maybe<UpdateTagPayload>;
+  /** The payload for the updateUser mutation */
+  updateUser?: Maybe<UpdateUserPayload>;
+  /** The payload for the UpdateVideoSeriesCategory mutation */
+  updateVideoSeriesCategory?: Maybe<UpdateVideoSeriesCategoryPayload>;
+  /** The payload for the updateVideoSeriesItem mutation */
+  updateVideoSeriesItem?: Maybe<UpdateVideoSeriesItemPayload>;
+  /** The payload for the updateWebinar mutation */
+  updateWebinar?: Maybe<UpdateWebinarPayload>;
+  /** The payload for the UpdateWebinarsCategory mutation */
+  updateWebinarsCategory?: Maybe<UpdateWebinarsCategoryPayload>;
+};
+
+
+export type ContentRootMutationCreateCategoryArgs = {
+  input: CreateCategoryInput;
+};
+
+
+export type ContentRootMutationCreateCommentArgs = {
+  input: CreateCommentInput;
+};
+
+
+export type ContentRootMutationCreateEbookArgs = {
+  input: CreateEbookInput;
+};
+
+
+export type ContentRootMutationCreateEbooksCategoryArgs = {
+  input: CreateEbooksCategoryInput;
+};
+
+
+export type ContentRootMutationCreateMediaItemArgs = {
+  input: CreateMediaItemInput;
+};
+
+
+export type ContentRootMutationCreatePageArgs = {
+  input: CreatePageInput;
+};
+
+
+export type ContentRootMutationCreatePostArgs = {
+  input: CreatePostInput;
+};
+
+
+export type ContentRootMutationCreatePostFormatArgs = {
+  input: CreatePostFormatInput;
+};
+
+
+export type ContentRootMutationCreateResearchSummariesCategoryArgs = {
+  input: CreateResearchSummariesCategoryInput;
+};
+
+
+export type ContentRootMutationCreateResearchSummaryArgs = {
+  input: CreateResearchSummaryInput;
+};
+
+
+export type ContentRootMutationCreateResourceArgs = {
+  input: CreateResourceInput;
+};
+
+
+export type ContentRootMutationCreateResourceCategoryArgs = {
+  input: CreateResourceCategoryInput;
+};
+
+
+export type ContentRootMutationCreateTagArgs = {
+  input: CreateTagInput;
+};
+
+
+export type ContentRootMutationCreateUserArgs = {
+  input: CreateUserInput;
+};
+
+
+export type ContentRootMutationCreateVideoSeriesCategoryArgs = {
+  input: CreateVideoSeriesCategoryInput;
+};
+
+
+export type ContentRootMutationCreateVideoSeriesItemArgs = {
+  input: CreateVideoSeriesItemInput;
+};
+
+
+export type ContentRootMutationCreateWebinarArgs = {
+  input: CreateWebinarInput;
+};
+
+
+export type ContentRootMutationCreateWebinarsCategoryArgs = {
+  input: CreateWebinarsCategoryInput;
+};
+
+
+export type ContentRootMutationDeleteCategoryArgs = {
+  input: DeleteCategoryInput;
+};
+
+
+export type ContentRootMutationDeleteCommentArgs = {
+  input: DeleteCommentInput;
+};
+
+
+export type ContentRootMutationDeleteEbookArgs = {
+  input: DeleteEbookInput;
+};
+
+
+export type ContentRootMutationDeleteEbooksCategoryArgs = {
+  input: DeleteEbooksCategoryInput;
+};
+
+
+export type ContentRootMutationDeleteMediaItemArgs = {
+  input: DeleteMediaItemInput;
+};
+
+
+export type ContentRootMutationDeletePageArgs = {
+  input: DeletePageInput;
+};
+
+
+export type ContentRootMutationDeletePostArgs = {
+  input: DeletePostInput;
+};
+
+
+export type ContentRootMutationDeletePostFormatArgs = {
+  input: DeletePostFormatInput;
+};
+
+
+export type ContentRootMutationDeleteResearchSummariesCategoryArgs = {
+  input: DeleteResearchSummariesCategoryInput;
+};
+
+
+export type ContentRootMutationDeleteResearchSummaryArgs = {
+  input: DeleteResearchSummaryInput;
+};
+
+
+export type ContentRootMutationDeleteResourceArgs = {
+  input: DeleteResourceInput;
+};
+
+
+export type ContentRootMutationDeleteResourceCategoryArgs = {
+  input: DeleteResourceCategoryInput;
+};
+
+
+export type ContentRootMutationDeleteTagArgs = {
+  input: DeleteTagInput;
+};
+
+
+export type ContentRootMutationDeleteUserArgs = {
+  input: DeleteUserInput;
+};
+
+
+export type ContentRootMutationDeleteVideoSeriesCategoryArgs = {
+  input: DeleteVideoSeriesCategoryInput;
+};
+
+
+export type ContentRootMutationDeleteVideoSeriesItemArgs = {
+  input: DeleteVideoSeriesItemInput;
+};
+
+
+export type ContentRootMutationDeleteWebinarArgs = {
+  input: DeleteWebinarInput;
+};
+
+
+export type ContentRootMutationDeleteWebinarsCategoryArgs = {
+  input: DeleteWebinarsCategoryInput;
+};
+
+
+export type ContentRootMutationIncreaseCountArgs = {
+  count?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type ContentRootMutationRegisterUserArgs = {
+  input: RegisterUserInput;
+};
+
+
+export type ContentRootMutationResetUserPasswordArgs = {
+  input: ResetUserPasswordInput;
+};
+
+
+export type ContentRootMutationRestoreCommentArgs = {
+  input: RestoreCommentInput;
+};
+
+
+export type ContentRootMutationSendPasswordResetEmailArgs = {
+  input: SendPasswordResetEmailInput;
+};
+
+
+export type ContentRootMutationUpdateCategoryArgs = {
+  input: UpdateCategoryInput;
+};
+
+
+export type ContentRootMutationUpdateCommentArgs = {
+  input: UpdateCommentInput;
+};
+
+
+export type ContentRootMutationUpdateEbookArgs = {
+  input: UpdateEbookInput;
+};
+
+
+export type ContentRootMutationUpdateEbooksCategoryArgs = {
+  input: UpdateEbooksCategoryInput;
+};
+
+
+export type ContentRootMutationUpdateMediaItemArgs = {
+  input: UpdateMediaItemInput;
+};
+
+
+export type ContentRootMutationUpdatePageArgs = {
+  input: UpdatePageInput;
+};
+
+
+export type ContentRootMutationUpdatePostArgs = {
+  input: UpdatePostInput;
+};
+
+
+export type ContentRootMutationUpdatePostFormatArgs = {
+  input: UpdatePostFormatInput;
+};
+
+
+export type ContentRootMutationUpdateResearchSummariesCategoryArgs = {
+  input: UpdateResearchSummariesCategoryInput;
+};
+
+
+export type ContentRootMutationUpdateResearchSummaryArgs = {
+  input: UpdateResearchSummaryInput;
+};
+
+
+export type ContentRootMutationUpdateResourceArgs = {
+  input: UpdateResourceInput;
+};
+
+
+export type ContentRootMutationUpdateResourceCategoryArgs = {
+  input: UpdateResourceCategoryInput;
+};
+
+
+export type ContentRootMutationUpdateSettingsArgs = {
+  input: UpdateSettingsInput;
+};
+
+
+export type ContentRootMutationUpdateTagArgs = {
+  input: UpdateTagInput;
+};
+
+
+export type ContentRootMutationUpdateUserArgs = {
+  input: UpdateUserInput;
+};
+
+
+export type ContentRootMutationUpdateVideoSeriesCategoryArgs = {
+  input: UpdateVideoSeriesCategoryInput;
+};
+
+
+export type ContentRootMutationUpdateVideoSeriesItemArgs = {
+  input: UpdateVideoSeriesItemInput;
+};
+
+
+export type ContentRootMutationUpdateWebinarArgs = {
+  input: UpdateWebinarInput;
+};
+
+
+export type ContentRootMutationUpdateWebinarsCategoryArgs = {
+  input: UpdateWebinarsCategoryInput;
+};
+
+export type ContentRootQuery = {
+  __typename?: 'contentRootQuery';
+  /** Entry point to get all settings for the site */
+  allSettings?: Maybe<Settings>;
+  /** Connection between the RootQuery type and the category type */
+  categories?: Maybe<RootQueryToCategoryConnection>;
+  /** A 0bject */
+  category?: Maybe<Category>;
+  /** Returns a Comment */
+  comment?: Maybe<Comment>;
+  /** Connection between the RootQuery type and the Comment type */
+  comments?: Maybe<RootQueryToCommentConnection>;
+  /** A node used to manage content */
+  contentNode?: Maybe<ContentNode>;
+  /** Connection between the RootQuery type and the ContentNode type */
+  contentNodes?: Maybe<RootQueryToContentNodeConnection>;
+  /** Fetch a Content Type node by unique Identifier */
+  contentType?: Maybe<ContentType>;
+  /** Connection between the RootQuery type and the ContentType type */
+  contentTypes?: Maybe<RootQueryToContentTypeConnection>;
+  /** Fields of the &#039;DiscussionSettings&#039; settings group */
+  discussionSettings?: Maybe<DiscussionSettings>;
+  /** An object of the Ebook Type.  */
+  ebook?: Maybe<Ebook>;
+  /** A Ebook object */
+  ebookBy?: Maybe<Ebook>;
+  /** Connection between the RootQuery type and the Ebook type */
+  ebooks?: Maybe<RootQueryToEbookConnection>;
+  /** Connection between the RootQuery type and the EbooksCategory type */
+  ebooksCategories?: Maybe<RootQueryToEbooksCategoryConnection>;
+  /** A 0bject */
+  ebooksCategory?: Maybe<EbooksCategory>;
+  /** Fields of the &#039;GeneralSettings&#039; settings group */
+  generalSettings?: Maybe<GeneralSettings>;
+  /** An object of the mediaItem Type.  */
+  mediaItem?: Maybe<MediaItem>;
+  /** A mediaItem object */
+  mediaItemBy?: Maybe<MediaItem>;
+  /** Connection between the RootQuery type and the mediaItem type */
+  mediaItems?: Maybe<RootQueryToMediaItemConnection>;
+  /** A WordPress navigation menu */
+  menu?: Maybe<Menu>;
+  /** A WordPress navigation menu item */
+  menuItem?: Maybe<MenuItem>;
+  /** Connection between the RootQuery type and the MenuItem type */
+  menuItems?: Maybe<RootQueryToMenuItemConnection>;
+  /** Connection between the RootQuery type and the Menu type */
+  menus?: Maybe<RootQueryToMenuConnection>;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Fetches an object given its Unique Resource Identifier */
+  nodeByUri?: Maybe<UniformResourceIdentifiable>;
+  /** An object of the page Type.  */
+  page?: Maybe<Page>;
+  /** A page object */
+  pageBy?: Maybe<Page>;
+  /** Connection between the RootQuery type and the page type */
+  pages?: Maybe<RootQueryToPageConnection>;
+  /** A WordPress plugin */
+  plugin?: Maybe<Plugin>;
+  /** Connection between the RootQuery type and the Plugin type */
+  plugins?: Maybe<RootQueryToPluginConnection>;
+  /** An object of the post Type.  */
+  post?: Maybe<Post>;
+  /** A post object */
+  postBy?: Maybe<Post>;
+  /** A 0bject */
+  postFormat?: Maybe<PostFormat>;
+  /** Connection between the RootQuery type and the postFormat type */
+  postFormats?: Maybe<RootQueryToPostFormatConnection>;
+  /** Connection between the RootQuery type and the post type */
+  posts?: Maybe<RootQueryToPostConnection>;
+  /** Fields of the &#039;ReadingSettings&#039; settings group */
+  readingSettings?: Maybe<ReadingSettings>;
+  /** Connection between the RootQuery type and the EnqueuedScript type */
+  registeredScripts?: Maybe<RootQueryToEnqueuedScriptConnection>;
+  /** Connection between the RootQuery type and the EnqueuedStylesheet type */
+  registeredStylesheets?: Maybe<RootQueryToEnqueuedStylesheetConnection>;
+  /** Connection between the RootQuery type and the ResearchSummary type */
+  researchSummaries?: Maybe<RootQueryToResearchSummaryConnection>;
+  /** Connection between the RootQuery type and the ResearchSummariesCategory type */
+  researchSummariesCategories?: Maybe<RootQueryToResearchSummariesCategoryConnection>;
+  /** A 0bject */
+  researchSummariesCategory?: Maybe<ResearchSummariesCategory>;
+  /** An object of the ResearchSummary Type.  */
+  researchSummary?: Maybe<ResearchSummary>;
+  /** A ResearchSummary object */
+  researchSummaryBy?: Maybe<ResearchSummary>;
+  /** An object of the Resource Type.  */
+  resource?: Maybe<Resource>;
+  /** A Resource object */
+  resourceBy?: Maybe<Resource>;
+  /** Connection between the RootQuery type and the ResourceCategory type */
+  resourceCategories?: Maybe<RootQueryToResourceCategoryConnection>;
+  /** A 0bject */
+  resourceCategory?: Maybe<ResourceCategory>;
+  /** Connection between the RootQuery type and the Resource type */
+  resources?: Maybe<RootQueryToResourceConnection>;
+  /** Connection between the RootQuery type and the ContentRevisionUnion type */
+  revisions?: Maybe<RootQueryToContentRevisionUnionConnection>;
+  /** A 0bject */
+  tag?: Maybe<Tag>;
+  /** Connection between the RootQuery type and the tag type */
+  tags?: Maybe<RootQueryToTagConnection>;
+  /** Connection between the RootQuery type and the Taxonomy type */
+  taxonomies?: Maybe<RootQueryToTaxonomyConnection>;
+  /** Fetch a Taxonomy node by unique Identifier */
+  taxonomy?: Maybe<Taxonomy>;
+  /** A node in a taxonomy used to group and relate content nodes */
+  termNode?: Maybe<TermNode>;
+  /** Connection between the RootQuery type and the TermNode type */
+  terms?: Maybe<RootQueryToTermNodeConnection>;
+  /** A Theme object */
+  theme?: Maybe<Theme>;
+  /** Connection between the RootQuery type and the Theme type */
+  themes?: Maybe<RootQueryToThemeConnection>;
+  /** Returns a user */
+  user?: Maybe<User>;
+  /** Returns a user role */
+  userRole?: Maybe<UserRole>;
+  /** Connection between the RootQuery type and the UserRole type */
+  userRoles?: Maybe<RootQueryToUserRoleConnection>;
+  /** Connection between the RootQuery type and the User type */
+  users?: Maybe<RootQueryToUserConnection>;
+  /** Connection between the RootQuery type and the VideoSeriesCategory type */
+  videoSeriesCategories?: Maybe<RootQueryToVideoSeriesCategoryConnection>;
+  /** A 0bject */
+  videoSeriesCategory?: Maybe<VideoSeriesCategory>;
+  /** An object of the VideoSeriesItem Type.  */
+  videoSeriesItem?: Maybe<VideoSeriesItem>;
+  /** A VideoSeriesItem object */
+  videoSeriesItemBy?: Maybe<VideoSeriesItem>;
+  /** Connection between the RootQuery type and the VideoSeriesItem type */
+  videoSeriesItems?: Maybe<RootQueryToVideoSeriesItemConnection>;
+  /** Returns the current user */
+  viewer?: Maybe<User>;
+  /** An object of the Webinar Type.  */
+  webinar?: Maybe<Webinar>;
+  /** A Webinar object */
+  webinarBy?: Maybe<Webinar>;
+  /** Connection between the RootQuery type and the Webinar type */
+  webinars?: Maybe<RootQueryToWebinarConnection>;
+  /** Connection between the RootQuery type and the WebinarsCategory type */
+  webinarsCategories?: Maybe<RootQueryToWebinarsCategoryConnection>;
+  /** A 0bject */
+  webinarsCategory?: Maybe<WebinarsCategory>;
+  /** Fields of the &#039;WritingSettings&#039; settings group */
+  writingSettings?: Maybe<WritingSettings>;
+};
+
+
+export type ContentRootQueryCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToCategoryConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryCategoryArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<CategoryIdType>;
+};
+
+
+export type ContentRootQueryCommentArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<CommentNodeIdTypeEnum>;
+};
+
+
+export type ContentRootQueryCommentsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToCommentConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryContentNodeArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  contentType?: InputMaybe<ContentTypeEnum>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<ContentNodeIdTypeEnum>;
+};
+
+
+export type ContentRootQueryContentNodesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToContentNodeConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryContentTypeArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<ContentTypeIdTypeEnum>;
+};
+
+
+export type ContentRootQueryContentTypesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type ContentRootQueryEbookArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<EbookIdType>;
+};
+
+
+export type ContentRootQueryEbookByArgs = {
+  ebookId?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['ID']>;
+  slug?: InputMaybe<Scalars['String']>;
+  uri?: InputMaybe<Scalars['String']>;
+};
+
+
+export type ContentRootQueryEbooksArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToEbookConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryEbooksCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToEbooksCategoryConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryEbooksCategoryArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<EbooksCategoryIdType>;
+};
+
+
+export type ContentRootQueryMediaItemArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<MediaItemIdType>;
+};
+
+
+export type ContentRootQueryMediaItemByArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  mediaItemId?: InputMaybe<Scalars['Int']>;
+  slug?: InputMaybe<Scalars['String']>;
+  uri?: InputMaybe<Scalars['String']>;
+};
+
+
+export type ContentRootQueryMediaItemsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToMediaItemConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryMenuArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<MenuNodeIdTypeEnum>;
+};
+
+
+export type ContentRootQueryMenuItemArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<MenuItemNodeIdTypeEnum>;
+};
+
+
+export type ContentRootQueryMenuItemsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToMenuItemConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryMenusArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToMenuConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryNodeArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type ContentRootQueryNodeByUriArgs = {
+  uri: Scalars['String'];
+};
+
+
+export type ContentRootQueryPageArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<PageIdType>;
+};
+
+
+export type ContentRootQueryPageByArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  pageId?: InputMaybe<Scalars['Int']>;
+  uri?: InputMaybe<Scalars['String']>;
+};
+
+
+export type ContentRootQueryPagesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToPageConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryPluginArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type ContentRootQueryPluginsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToPluginConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryPostArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<PostIdType>;
+};
+
+
+export type ContentRootQueryPostByArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  postId?: InputMaybe<Scalars['Int']>;
+  slug?: InputMaybe<Scalars['String']>;
+  uri?: InputMaybe<Scalars['String']>;
+};
+
+
+export type ContentRootQueryPostFormatArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<PostFormatIdType>;
+};
+
+
+export type ContentRootQueryPostFormatsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToPostFormatConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryPostsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToPostConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryRegisteredScriptsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type ContentRootQueryRegisteredStylesheetsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type ContentRootQueryResearchSummariesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToResearchSummaryConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryResearchSummariesCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToResearchSummariesCategoryConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryResearchSummariesCategoryArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<ResearchSummariesCategoryIdType>;
+};
+
+
+export type ContentRootQueryResearchSummaryArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<ResearchSummaryIdType>;
+};
+
+
+export type ContentRootQueryResearchSummaryByArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  researchSummaryId?: InputMaybe<Scalars['Int']>;
+  slug?: InputMaybe<Scalars['String']>;
+  uri?: InputMaybe<Scalars['String']>;
+};
+
+
+export type ContentRootQueryResourceArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<ResourceIdType>;
+};
+
+
+export type ContentRootQueryResourceByArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  resourceId?: InputMaybe<Scalars['Int']>;
+  slug?: InputMaybe<Scalars['String']>;
+  uri?: InputMaybe<Scalars['String']>;
+};
+
+
+export type ContentRootQueryResourceCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToResourceCategoryConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryResourceCategoryArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<ResourceCategoryIdType>;
+};
+
+
+export type ContentRootQueryResourcesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToResourceConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryRevisionsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToContentRevisionUnionConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryTagArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<TagIdType>;
+};
+
+
+export type ContentRootQueryTagsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToTagConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryTaxonomiesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type ContentRootQueryTaxonomyArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<TaxonomyIdTypeEnum>;
+};
+
+
+export type ContentRootQueryTermNodeArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<TermNodeIdTypeEnum>;
+  taxonomy?: InputMaybe<TaxonomyEnum>;
+};
+
+
+export type ContentRootQueryTermsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToTermNodeConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryThemeArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type ContentRootQueryThemesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type ContentRootQueryUserArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<UserNodeIdTypeEnum>;
+};
+
+
+export type ContentRootQueryUserRoleArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type ContentRootQueryUserRolesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type ContentRootQueryUsersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToUserConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryVideoSeriesCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToVideoSeriesCategoryConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryVideoSeriesCategoryArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<VideoSeriesCategoryIdType>;
+};
+
+
+export type ContentRootQueryVideoSeriesItemArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<VideoSeriesItemIdType>;
+};
+
+
+export type ContentRootQueryVideoSeriesItemByArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  slug?: InputMaybe<Scalars['String']>;
+  uri?: InputMaybe<Scalars['String']>;
+  videoSeriesItemId?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type ContentRootQueryVideoSeriesItemsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToVideoSeriesItemConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryWebinarArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<WebinarIdType>;
+};
+
+
+export type ContentRootQueryWebinarByArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  slug?: InputMaybe<Scalars['String']>;
+  uri?: InputMaybe<Scalars['String']>;
+  webinarId?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type ContentRootQueryWebinarsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToWebinarConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryWebinarsCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToWebinarsCategoryConnectionWhereArgs>;
+};
+
+
+export type ContentRootQueryWebinarsCategoryArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<WebinarsCategoryIdType>;
+};
 
 /** columns and relationships of "course" */
 export type Course = {
@@ -14248,7 +14720,6 @@ export type Course = {
   createdById?: Maybe<Scalars['uuid']>;
   deliveryType: Course_Delivery_Type_Enum;
   description?: Maybe<Scalars['String']>;
-  /** A computed field, executes function "course_end_date" */
   end?: Maybe<Scalars['timestamptz']>;
   /** An array relationship */
   evaluation_answers: Array<Course_Evaluation_Answers>;
@@ -14302,7 +14773,6 @@ export type Course = {
   schedule_aggregate: Course_Schedule_Aggregate;
   source?: Maybe<Course_Source_Enum>;
   special_instructions?: Maybe<Scalars['String']>;
-  /** A computed field, executes function "course_start_date" */
   start?: Maybe<Scalars['timestamptz']>;
   status?: Maybe<Course_Status_Enum>;
   /** An array relationship */
@@ -14698,7 +15168,7 @@ export type Course_Audit_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_audit" */
 export enum Course_Audit_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseAuditPkey = 'course_audit_pkey'
 }
 
@@ -14841,6 +15311,25 @@ export type Course_Audit_Stddev_Samp_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "course_audit" */
+export type Course_Audit_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Audit_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Audit_Stream_Cursor_Value_Input = {
+  authorized_by?: InputMaybe<Scalars['uuid']>;
+  course_id?: InputMaybe<Scalars['Int']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  payload?: InputMaybe<Scalars['jsonb']>;
+  type?: InputMaybe<Course_Audit_Type_Enum>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Audit_Sum_Fields = {
   __typename?: 'course_audit_sum_fields';
@@ -14885,7 +15374,7 @@ export type Course_Audit_Type_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_audit_type" */
 export enum Course_Audit_Type_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseAuditTypePkey = 'course_audit_type_pkey'
 }
 
@@ -14959,11 +15448,31 @@ export type Course_Audit_Type_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_audit_type" */
+export type Course_Audit_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Audit_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Audit_Type_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_audit_type" */
 export enum Course_Audit_Type_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Course_Audit_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Audit_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Audit_Type_Bool_Exp;
+};
 
 /** update columns of table "course_audit" */
 export enum Course_Audit_Update_Column {
@@ -14982,6 +15491,25 @@ export enum Course_Audit_Update_Column {
   /** column name */
   UpdatedAt = 'updated_at'
 }
+
+export type Course_Audit_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Course_Audit_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Course_Audit_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Course_Audit_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Course_Audit_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Audit_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Course_Audit_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Audit_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Audit_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Audit_Var_Pop_Fields = {
@@ -15045,6 +15573,17 @@ export type Course_Bild_Module_Aggregate = {
   __typename?: 'course_bild_module_aggregate';
   aggregate?: Maybe<Course_Bild_Module_Aggregate_Fields>;
   nodes: Array<Course_Bild_Module>;
+};
+
+export type Course_Bild_Module_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Course_Bild_Module_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Bild_Module_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Bild_Module_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Bild_Module_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "course_bild_module" */
@@ -15120,7 +15659,7 @@ export type Course_Bild_Module_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_bild_module" */
 export enum Course_Bild_Module_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseBildModulePkey = 'course_bild_module_pkey'
 }
 
@@ -15260,6 +15799,21 @@ export type Course_Bild_Module_Stddev_Samp_Order_By = {
   course_id?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "course_bild_module" */
+export type Course_Bild_Module_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Bild_Module_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Bild_Module_Stream_Cursor_Value_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  modules?: InputMaybe<Scalars['jsonb']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Bild_Module_Sum_Fields = {
   __typename?: 'course_bild_module_sum_fields';
@@ -15280,6 +15834,25 @@ export enum Course_Bild_Module_Update_Column {
   /** column name */
   Modules = 'modules'
 }
+
+export type Course_Bild_Module_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Course_Bild_Module_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Course_Bild_Module_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Course_Bild_Module_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Course_Bild_Module_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Bild_Module_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Course_Bild_Module_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Bild_Module_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Bild_Module_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Bild_Module_Var_Pop_Fields = {
@@ -15327,6 +15900,17 @@ export type Course_Bild_Strategy_Aggregate = {
   __typename?: 'course_bild_strategy_aggregate';
   aggregate?: Maybe<Course_Bild_Strategy_Aggregate_Fields>;
   nodes: Array<Course_Bild_Strategy>;
+};
+
+export type Course_Bild_Strategy_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Course_Bild_Strategy_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Bild_Strategy_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Bild_Strategy_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Bild_Strategy_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "course_bild_strategy" */
@@ -15397,7 +15981,7 @@ export type Course_Bild_Strategy_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_bild_strategy" */
 export enum Course_Bild_Strategy_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseBildStrategyPkey = 'course_bild_strategy_pkey'
 }
 
@@ -15521,6 +16105,21 @@ export type Course_Bild_Strategy_Stddev_Samp_Order_By = {
   course_id?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "course_bild_strategy" */
+export type Course_Bild_Strategy_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Bild_Strategy_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Bild_Strategy_Stream_Cursor_Value_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  strategyName?: InputMaybe<Scalars['String']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Bild_Strategy_Sum_Fields = {
   __typename?: 'course_bild_strategy_sum_fields';
@@ -15541,6 +16140,15 @@ export enum Course_Bild_Strategy_Update_Column {
   /** column name */
   StrategyName = 'strategyName'
 }
+
+export type Course_Bild_Strategy_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Bild_Strategy_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Bild_Strategy_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Bild_Strategy_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Bild_Strategy_Var_Pop_Fields = {
@@ -15586,7 +16194,9 @@ export type Course_Bool_Exp = {
   aolCountry?: InputMaybe<String_Comparison_Exp>;
   aolRegion?: InputMaybe<String_Comparison_Exp>;
   bildModules?: InputMaybe<Course_Bild_Module_Bool_Exp>;
+  bildModules_aggregate?: InputMaybe<Course_Bild_Module_Aggregate_Bool_Exp>;
   bildStrategies?: InputMaybe<Course_Bild_Strategy_Bool_Exp>;
+  bildStrategies_aggregate?: InputMaybe<Course_Bild_Strategy_Aggregate_Bool_Exp>;
   bookingContact?: InputMaybe<Profile_Bool_Exp>;
   bookingContactInviteData?: InputMaybe<Jsonb_Comparison_Exp>;
   bookingContactProfileId?: InputMaybe<Uuid_Comparison_Exp>;
@@ -15602,8 +16212,10 @@ export type Course_Bool_Exp = {
   description?: InputMaybe<String_Comparison_Exp>;
   end?: InputMaybe<Timestamptz_Comparison_Exp>;
   evaluation_answers?: InputMaybe<Course_Evaluation_Answers_Bool_Exp>;
+  evaluation_answers_aggregate?: InputMaybe<Course_Evaluation_Answers_Aggregate_Bool_Exp>;
   exceptionsPending?: InputMaybe<Boolean_Comparison_Exp>;
   expenses?: InputMaybe<Course_Expenses_Bool_Exp>;
+  expenses_aggregate?: InputMaybe<Course_Expenses_Aggregate_Bool_Exp>;
   freeSlots?: InputMaybe<String_Comparison_Exp>;
   freeSpaces?: InputMaybe<Int_Comparison_Exp>;
   go1Integration?: InputMaybe<Boolean_Comparison_Exp>;
@@ -15616,27 +16228,35 @@ export type Course_Bool_Exp = {
   min_participants?: InputMaybe<Int_Comparison_Exp>;
   modules?: InputMaybe<Course_Module_Bool_Exp>;
   modulesDuration?: InputMaybe<Int_Comparison_Exp>;
+  modules_aggregate?: InputMaybe<Course_Module_Aggregate_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   notes?: InputMaybe<String_Comparison_Exp>;
   orders?: InputMaybe<Order_Bool_Exp>;
+  orders_aggregate?: InputMaybe<Order_Aggregate_Bool_Exp>;
   organization?: InputMaybe<Organization_Bool_Exp>;
   organization_id?: InputMaybe<Uuid_Comparison_Exp>;
   parking_instructions?: InputMaybe<String_Comparison_Exp>;
   participants?: InputMaybe<Course_Participant_Bool_Exp>;
+  participants_aggregate?: InputMaybe<Course_Participant_Aggregate_Bool_Exp>;
   price?: InputMaybe<Numeric_Comparison_Exp>;
   priceCurrency?: InputMaybe<String_Comparison_Exp>;
   promo_codes?: InputMaybe<Course_Promo_Code_Bool_Exp>;
+  promo_codes_aggregate?: InputMaybe<Course_Promo_Code_Aggregate_Bool_Exp>;
   reaccreditation?: InputMaybe<Boolean_Comparison_Exp>;
   schedule?: InputMaybe<Course_Schedule_Bool_Exp>;
+  schedule_aggregate?: InputMaybe<Course_Schedule_Aggregate_Bool_Exp>;
   source?: InputMaybe<Course_Source_Enum_Comparison_Exp>;
   special_instructions?: InputMaybe<String_Comparison_Exp>;
   start?: InputMaybe<Timestamptz_Comparison_Exp>;
   status?: InputMaybe<Course_Status_Enum_Comparison_Exp>;
   tempOrders?: InputMaybe<Order_Temp_Bool_Exp>;
+  tempOrders_aggregate?: InputMaybe<Order_Temp_Aggregate_Bool_Exp>;
   trainers?: InputMaybe<Course_Trainer_Bool_Exp>;
+  trainers_aggregate?: InputMaybe<Course_Trainer_Aggregate_Bool_Exp>;
   type?: InputMaybe<Course_Type_Enum_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   waitlists?: InputMaybe<Waitlist_Bool_Exp>;
+  waitlists_aggregate?: InputMaybe<Waitlist_Aggregate_Bool_Exp>;
 };
 
 /** columns and relationships of "course_cancellation_request" */
@@ -15707,9 +16327,9 @@ export type Course_Cancellation_Request_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_cancellation_request" */
 export enum Course_Cancellation_Request_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "course_id" */
   CourseCancellationRequestCourseIdKey = 'course_cancellation_request_course_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseCancellationRequestPkey = 'course_cancellation_request_pkey'
 }
 
@@ -15836,6 +16456,24 @@ export type Course_Cancellation_Request_Stddev_Samp_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "course_cancellation_request" */
+export type Course_Cancellation_Request_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Cancellation_Request_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Cancellation_Request_Stream_Cursor_Value_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  reason?: InputMaybe<Scalars['String']>;
+  requested_by?: InputMaybe<Scalars['uuid']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Cancellation_Request_Sum_Fields = {
   __typename?: 'course_cancellation_request_sum_fields';
@@ -15857,6 +16495,15 @@ export enum Course_Cancellation_Request_Update_Column {
   /** column name */
   UpdatedAt = 'updated_at'
 }
+
+export type Course_Cancellation_Request_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Cancellation_Request_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Cancellation_Request_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Cancellation_Request_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Cancellation_Request_Var_Pop_Fields = {
@@ -15905,6 +16552,33 @@ export type Course_Certificate_Aggregate = {
   __typename?: 'course_certificate_aggregate';
   aggregate?: Maybe<Course_Certificate_Aggregate_Fields>;
   nodes: Array<Course_Certificate>;
+};
+
+export type Course_Certificate_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Course_Certificate_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Course_Certificate_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Course_Certificate_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Certificate_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Course_Certificate_Select_Column_Course_Certificate_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Certificate_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Course_Certificate_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Course_Certificate_Select_Column_Course_Certificate_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Certificate_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Course_Certificate_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Certificate_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Certificate_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "course_certificate" */
@@ -16014,6 +16688,17 @@ export type Course_Certificate_Changelog_Aggregate = {
   nodes: Array<Course_Certificate_Changelog>;
 };
 
+export type Course_Certificate_Changelog_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Course_Certificate_Changelog_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Certificate_Changelog_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Certificate_Changelog_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Certificate_Changelog_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
 /** aggregate fields of "course_certificate_changelog" */
 export type Course_Certificate_Changelog_Aggregate_Fields = {
   __typename?: 'course_certificate_changelog_aggregate_fields';
@@ -16066,7 +16751,7 @@ export type Course_Certificate_Changelog_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_certificate_changelog" */
 export enum Course_Certificate_Changelog_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseCertificateChangelogPkey = 'course_certificate_changelog_pkey'
 }
 
@@ -16204,6 +16889,25 @@ export type Course_Certificate_Changelog_Set_Input = {
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
+/** Streaming cursor of the table "course_certificate_changelog" */
+export type Course_Certificate_Changelog_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Certificate_Changelog_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Certificate_Changelog_Stream_Cursor_Value_Input = {
+  authorId?: InputMaybe<Scalars['uuid']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  participantId?: InputMaybe<Scalars['uuid']>;
+  payload?: InputMaybe<Scalars['jsonb']>;
+  type?: InputMaybe<Course_Certificate_Changelog_Type_Enum>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** columns and relationships of "course_certificate_changelog_type" */
 export type Course_Certificate_Changelog_Type = {
   __typename?: 'course_certificate_changelog_type';
@@ -16242,7 +16946,7 @@ export type Course_Certificate_Changelog_Type_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_certificate_changelog_type" */
 export enum Course_Certificate_Changelog_Type_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseCertificateChangelogTypePkey = 'course_certificate_changelog_type_pkey'
 }
 
@@ -16316,11 +17020,31 @@ export type Course_Certificate_Changelog_Type_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_certificate_changelog_type" */
+export type Course_Certificate_Changelog_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Certificate_Changelog_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Certificate_Changelog_Type_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_certificate_changelog_type" */
 export enum Course_Certificate_Changelog_Type_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Course_Certificate_Changelog_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Certificate_Changelog_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Certificate_Changelog_Type_Bool_Exp;
+};
 
 /** update columns of table "course_certificate_changelog" */
 export enum Course_Certificate_Changelog_Update_Column {
@@ -16340,11 +17064,28 @@ export enum Course_Certificate_Changelog_Update_Column {
   UpdatedAt = 'updatedAt'
 }
 
+export type Course_Certificate_Changelog_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Course_Certificate_Changelog_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Course_Certificate_Changelog_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Course_Certificate_Changelog_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Course_Certificate_Changelog_Delete_Key_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Course_Certificate_Changelog_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Certificate_Changelog_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Certificate_Changelog_Bool_Exp;
+};
+
 /** unique or primary key constraints on table "course_certificate" */
 export enum Course_Certificate_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "number" */
   CourseCertificateNumberKey = 'course_certificate_number_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseCertificatePkey = 'course_certificate_pkey'
 }
 
@@ -16397,11 +17138,11 @@ export type Course_Certificate_Hold_Request_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_certificate_hold_request" */
 export enum Course_Certificate_Hold_Request_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "certificate_id" */
   CourseCertificateHoldRequestCertificateIdKey = 'course_certificate_hold_request_certificate_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "changelog_id" */
   CourseCertificateHoldRequestChangelogIdKey = 'course_certificate_hold_request_changelog_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseCertificateHoldRequestPkey = 'course_certificate_hold_request_pkey'
 }
 
@@ -16489,6 +17230,23 @@ export type Course_Certificate_Hold_Request_Set_Input = {
   start_date?: InputMaybe<Scalars['date']>;
 };
 
+/** Streaming cursor of the table "course_certificate_hold_request" */
+export type Course_Certificate_Hold_Request_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Certificate_Hold_Request_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Certificate_Hold_Request_Stream_Cursor_Value_Input = {
+  certificate_id?: InputMaybe<Scalars['uuid']>;
+  changelog_id?: InputMaybe<Scalars['uuid']>;
+  expiry_date?: InputMaybe<Scalars['timestamp']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  start_date?: InputMaybe<Scalars['date']>;
+};
+
 /** update columns of table "course_certificate_hold_request" */
 export enum Course_Certificate_Hold_Request_Update_Column {
   /** column name */
@@ -16502,6 +17260,13 @@ export enum Course_Certificate_Hold_Request_Update_Column {
   /** column name */
   StartDate = 'start_date'
 }
+
+export type Course_Certificate_Hold_Request_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Certificate_Hold_Request_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Certificate_Hold_Request_Bool_Exp;
+};
 
 /** input type for incrementing numeric columns in table "course_certificate" */
 export type Course_Certificate_Inc_Input = {
@@ -16538,6 +17303,8 @@ export type Course_Certificate_Max_Fields = {
   id?: Maybe<Scalars['uuid']>;
   number?: Maybe<Scalars['String']>;
   profileId?: Maybe<Scalars['uuid']>;
+  /** A computed field, executes function "course_certificate_status" */
+  status?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -16567,6 +17334,8 @@ export type Course_Certificate_Min_Fields = {
   id?: Maybe<Scalars['uuid']>;
   number?: Maybe<Scalars['String']>;
   profileId?: Maybe<Scalars['uuid']>;
+  /** A computed field, executes function "course_certificate_status" */
+  status?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -16657,6 +17426,18 @@ export enum Course_Certificate_Select_Column {
   UpdatedAt = 'updatedAt'
 }
 
+/** select "course_certificate_aggregate_bool_exp_bool_and_arguments_columns" columns of table "course_certificate" */
+export enum Course_Certificate_Select_Column_Course_Certificate_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  IsRevoked = 'isRevoked'
+}
+
+/** select "course_certificate_aggregate_bool_exp_bool_or_arguments_columns" columns of table "course_certificate" */
+export enum Course_Certificate_Select_Column_Course_Certificate_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  IsRevoked = 'isRevoked'
+}
+
 /** input type for updating data in table "course_certificate" */
 export type Course_Certificate_Set_Input = {
   certificationDate?: InputMaybe<Scalars['date']>;
@@ -16705,6 +17486,29 @@ export type Course_Certificate_Stddev_Samp_Order_By = {
   courseId?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "course_certificate" */
+export type Course_Certificate_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Certificate_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Certificate_Stream_Cursor_Value_Input = {
+  certificationDate?: InputMaybe<Scalars['date']>;
+  courseId?: InputMaybe<Scalars['Int']>;
+  courseLevel?: InputMaybe<Scalars['String']>;
+  courseName?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  expiryDate?: InputMaybe<Scalars['date']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  isRevoked?: InputMaybe<Scalars['Boolean']>;
+  number?: InputMaybe<Scalars['String']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Certificate_Sum_Fields = {
   __typename?: 'course_certificate_sum_fields';
@@ -16742,6 +17546,15 @@ export enum Course_Certificate_Update_Column {
   UpdatedAt = 'updatedAt'
 }
 
+export type Course_Certificate_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Certificate_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Certificate_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Certificate_Bool_Exp;
+};
+
 /** aggregate var_pop on columns */
 export type Course_Certificate_Var_Pop_Fields = {
   __typename?: 'course_certificate_var_pop_fields';
@@ -16777,9 +17590,9 @@ export type Course_Certificate_Variance_Order_By = {
 
 /** unique or primary key constraints on table "course" */
 export enum Course_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseAutoincrementalIdKey = 'course_autoincremental_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CoursePkey = 'course_pkey'
 }
 
@@ -16836,7 +17649,7 @@ export type Course_Delivery_Type_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_delivery_type" */
 export enum Course_Delivery_Type_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseDeliveryTypePkey = 'course_delivery_type_pkey'
 }
 
@@ -16940,11 +17753,11 @@ export type Course_Delivery_Type_Prefix_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_delivery_type_prefix" */
 export enum Course_Delivery_Type_Prefix_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseDeliveryTypePrefixNameKey = 'course_delivery_type_prefix_name_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseDeliveryTypePrefixPkey = 'course_delivery_type_prefix_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "prefix" */
   CourseDeliveryTypePrefixPrefixKey = 'course_delivery_type_prefix_prefix_key'
 }
 
@@ -17014,6 +17827,21 @@ export type Course_Delivery_Type_Prefix_Set_Input = {
   prefix?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_delivery_type_prefix" */
+export type Course_Delivery_Type_Prefix_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Delivery_Type_Prefix_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Delivery_Type_Prefix_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Course_Delivery_Type_Enum>;
+  prefix?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_delivery_type_prefix" */
 export enum Course_Delivery_Type_Prefix_Update_Column {
   /** column name */
@@ -17023,6 +17851,13 @@ export enum Course_Delivery_Type_Prefix_Update_Column {
   /** column name */
   Prefix = 'prefix'
 }
+
+export type Course_Delivery_Type_Prefix_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Delivery_Type_Prefix_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Delivery_Type_Prefix_Bool_Exp;
+};
 
 /** select columns of table "course_delivery_type" */
 export enum Course_Delivery_Type_Select_Column {
@@ -17035,11 +17870,31 @@ export type Course_Delivery_Type_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_delivery_type" */
+export type Course_Delivery_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Delivery_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Delivery_Type_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_delivery_type" */
 export enum Course_Delivery_Type_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Course_Delivery_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Delivery_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Delivery_Type_Bool_Exp;
+};
 
 /** Stores course drafts */
 export type Course_Draft = {
@@ -17100,9 +17955,9 @@ export type Course_Draft_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_draft" */
 export enum Course_Draft_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseDraftPkey = 'course_draft_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "course_type", "profile_id" */
   CourseDraftProfileIdCourseTypeKey = 'course_draft_profile_id_course_type_key'
 }
 
@@ -17213,6 +18068,24 @@ export type Course_Draft_Set_Input = {
   updated_at?: InputMaybe<Scalars['timestamp']>;
 };
 
+/** Streaming cursor of the table "course_draft" */
+export type Course_Draft_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Draft_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Draft_Stream_Cursor_Value_Input = {
+  courseType?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamp']>;
+  data?: InputMaybe<Scalars['jsonb']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+  updated_at?: InputMaybe<Scalars['timestamp']>;
+};
+
 /** update columns of table "course_draft" */
 export enum Course_Draft_Update_Column {
   /** column name */
@@ -17228,6 +18101,23 @@ export enum Course_Draft_Update_Column {
   /** column name */
   UpdatedAt = 'updated_at'
 }
+
+export type Course_Draft_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Course_Draft_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Course_Draft_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Course_Draft_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Course_Draft_Delete_Key_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Course_Draft_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Draft_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Draft_Bool_Exp;
+};
 
 /** Stores scheduled jobs ids for courses */
 export type Course_End_Jobs = {
@@ -17285,9 +18175,9 @@ export type Course_End_Jobs_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_end_jobs" */
 export enum Course_End_Jobs_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "course_id", "job_id" */
   CourseEndJobsCourseIdJobIdKey = 'course_end_jobs_course_id_job_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseEndJobsPkey = 'course_end_jobs_pkey'
 }
 
@@ -17382,6 +18272,21 @@ export type Course_End_Jobs_Stddev_Samp_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "course_end_jobs" */
+export type Course_End_Jobs_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_End_Jobs_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_End_Jobs_Stream_Cursor_Value_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  job_id?: InputMaybe<Scalars['uuid']>;
+};
+
 /** aggregate sum on columns */
 export type Course_End_Jobs_Sum_Fields = {
   __typename?: 'course_end_jobs_sum_fields';
@@ -17397,6 +18302,15 @@ export enum Course_End_Jobs_Update_Column {
   /** column name */
   JobId = 'job_id'
 }
+
+export type Course_End_Jobs_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_End_Jobs_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_End_Jobs_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_End_Jobs_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_End_Jobs_Var_Pop_Fields = {
@@ -17493,9 +18407,9 @@ export type Course_Enquiry_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_enquiry" */
 export enum Course_Enquiry_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "course_id", "email" */
   CourseEnquiryEmailCourseIdKey = 'course_enquiry_email_course_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseEnquiryPkey = 'course_enquiry_pkey'
 }
 
@@ -17655,6 +18569,30 @@ export type Course_Enquiry_Stddev_Samp_Fields = {
   courseId?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "course_enquiry" */
+export type Course_Enquiry_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Enquiry_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Enquiry_Stream_Cursor_Value_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  email?: InputMaybe<Scalars['String']>;
+  familyName?: InputMaybe<Scalars['String']>;
+  givenName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  interest?: InputMaybe<Scalars['String']>;
+  message?: InputMaybe<Scalars['String']>;
+  orgName?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  sector?: InputMaybe<Scalars['String']>;
+  source?: InputMaybe<Scalars['String']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Enquiry_Sum_Fields = {
   __typename?: 'course_enquiry_sum_fields';
@@ -17688,6 +18626,15 @@ export enum Course_Enquiry_Update_Column {
   /** column name */
   Source = 'source'
 }
+
+export type Course_Enquiry_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Enquiry_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Enquiry_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Enquiry_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Enquiry_Var_Pop_Fields = {
@@ -17730,6 +18677,17 @@ export type Course_Evaluation_Answers_Aggregate = {
   __typename?: 'course_evaluation_answers_aggregate';
   aggregate?: Maybe<Course_Evaluation_Answers_Aggregate_Fields>;
   nodes: Array<Course_Evaluation_Answers>;
+};
+
+export type Course_Evaluation_Answers_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Course_Evaluation_Answers_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Evaluation_Answers_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Evaluation_Answers_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Evaluation_Answers_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "course_evaluation_answers" */
@@ -17806,7 +18764,7 @@ export type Course_Evaluation_Answers_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_evaluation_answers" */
 export enum Course_Evaluation_Answers_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseEvaluationAnswersPkey = 'course_evaluation_answers_pkey'
 }
 
@@ -17956,6 +18914,23 @@ export type Course_Evaluation_Answers_Stddev_Samp_Order_By = {
   courseId?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "course_evaluation_answers" */
+export type Course_Evaluation_Answers_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Evaluation_Answers_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Evaluation_Answers_Stream_Cursor_Value_Input = {
+  answer?: InputMaybe<Scalars['String']>;
+  courseId?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+  questionId?: InputMaybe<Scalars['uuid']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Evaluation_Answers_Sum_Fields = {
   __typename?: 'course_evaluation_answers_sum_fields';
@@ -17980,6 +18955,15 @@ export enum Course_Evaluation_Answers_Update_Column {
   /** column name */
   QuestionId = 'questionId'
 }
+
+export type Course_Evaluation_Answers_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Evaluation_Answers_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Evaluation_Answers_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Evaluation_Answers_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Evaluation_Answers_Var_Pop_Fields = {
@@ -18052,7 +19036,7 @@ export type Course_Evaluation_Question_Group_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_evaluation_question_group" */
 export enum Course_Evaluation_Question_Group_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseEvaluationQuestionGroupPkey = 'course_evaluation_question_group_pkey'
 }
 
@@ -18127,11 +19111,31 @@ export type Course_Evaluation_Question_Group_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_evaluation_question_group" */
+export type Course_Evaluation_Question_Group_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Evaluation_Question_Group_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Evaluation_Question_Group_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_evaluation_question_group" */
 export enum Course_Evaluation_Question_Group_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Course_Evaluation_Question_Group_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Evaluation_Question_Group_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Evaluation_Question_Group_Bool_Exp;
+};
 
 /** columns and relationships of "course_evaluation_question_type" */
 export type Course_Evaluation_Question_Type = {
@@ -18171,7 +19175,7 @@ export type Course_Evaluation_Question_Type_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_evaluation_question_type" */
 export enum Course_Evaluation_Question_Type_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseEvaluationQuestionTypePkey = 'course_evaluation_question_type_pkey'
 }
 
@@ -18246,11 +19250,31 @@ export type Course_Evaluation_Question_Type_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_evaluation_question_type" */
+export type Course_Evaluation_Question_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Evaluation_Question_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Evaluation_Question_Type_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_evaluation_question_type" */
 export enum Course_Evaluation_Question_Type_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Course_Evaluation_Question_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Evaluation_Question_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Evaluation_Question_Type_Bool_Exp;
+};
 
 /** Table for storing text and references of course evaluation questions */
 export type Course_Evaluation_Questions = {
@@ -18316,9 +19340,9 @@ export type Course_Evaluation_Questions_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_evaluation_questions" */
 export enum Course_Evaluation_Questions_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseEvaluationQuestionsPkey = 'course_evaluation_questions_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "question_key" */
   CourseEvaluationQuestionsQuestionKeyKey = 'course_evaluation_questions_question_key_key'
 }
 
@@ -18442,6 +19466,25 @@ export type Course_Evaluation_Questions_Stddev_Samp_Fields = {
   displayOrder?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "course_evaluation_questions" */
+export type Course_Evaluation_Questions_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Evaluation_Questions_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Evaluation_Questions_Stream_Cursor_Value_Input = {
+  displayOrder?: InputMaybe<Scalars['Int']>;
+  group?: InputMaybe<Course_Evaluation_Question_Group_Enum>;
+  id?: InputMaybe<Scalars['uuid']>;
+  question?: InputMaybe<Scalars['String']>;
+  questionKey?: InputMaybe<Scalars['String']>;
+  required?: InputMaybe<Scalars['Boolean']>;
+  type?: InputMaybe<Course_Evaluation_Question_Type_Enum>;
+};
+
 /** aggregate sum on columns */
 export type Course_Evaluation_Questions_Sum_Fields = {
   __typename?: 'course_evaluation_questions_sum_fields';
@@ -18465,6 +19508,15 @@ export enum Course_Evaluation_Questions_Update_Column {
   /** column name */
   Type = 'type'
 }
+
+export type Course_Evaluation_Questions_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Evaluation_Questions_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Evaluation_Questions_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Evaluation_Questions_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Evaluation_Questions_Var_Pop_Fields = {
@@ -18510,6 +19562,17 @@ export type Course_Expenses_Aggregate = {
   __typename?: 'course_expenses_aggregate';
   aggregate?: Maybe<Course_Expenses_Aggregate_Fields>;
   nodes: Array<Course_Expenses>;
+};
+
+export type Course_Expenses_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Course_Expenses_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Expenses_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Expenses_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Expenses_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "course_expenses" */
@@ -18590,7 +19653,7 @@ export type Course_Expenses_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_expenses" */
 export enum Course_Expenses_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseExpensesPkey = 'course_expenses_pkey'
 }
 
@@ -18761,6 +19824,24 @@ export type Course_Expenses_Stddev_Samp_Order_By = {
   courseId?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "course_expenses" */
+export type Course_Expenses_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Expenses_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Expenses_Stream_Cursor_Value_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  data?: InputMaybe<Scalars['jsonb']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  trainerId?: InputMaybe<Scalars['uuid']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Expenses_Sum_Fields = {
   __typename?: 'course_expenses_sum_fields';
@@ -18787,6 +19868,25 @@ export enum Course_Expenses_Update_Column {
   /** column name */
   UpdatedAt = 'updatedAt'
 }
+
+export type Course_Expenses_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Course_Expenses_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Course_Expenses_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Course_Expenses_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Course_Expenses_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Expenses_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Course_Expenses_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Expenses_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Expenses_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Expenses_Var_Pop_Fields = {
@@ -18854,6 +19954,7 @@ export type Course_Insert_Input = {
   createdById?: InputMaybe<Scalars['uuid']>;
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
+  end?: InputMaybe<Scalars['timestamptz']>;
   evaluation_answers?: InputMaybe<Course_Evaluation_Answers_Arr_Rel_Insert_Input>;
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   expenses?: InputMaybe<Course_Expenses_Arr_Rel_Insert_Input>;
@@ -18882,6 +19983,7 @@ export type Course_Insert_Input = {
   schedule?: InputMaybe<Course_Schedule_Arr_Rel_Insert_Input>;
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
+  start?: InputMaybe<Scalars['timestamptz']>;
   status?: InputMaybe<Course_Status_Enum>;
   tempOrders?: InputMaybe<Order_Temp_Arr_Rel_Insert_Input>;
   trainers?: InputMaybe<Course_Trainer_Arr_Rel_Insert_Input>;
@@ -18928,7 +20030,7 @@ export type Course_Invite_Status_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_invite_status" */
 export enum Course_Invite_Status_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseInviteStatusPkey = 'course_invite_status_pkey'
 }
 
@@ -19001,11 +20103,31 @@ export type Course_Invite_Status_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_invite_status" */
+export type Course_Invite_Status_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Invite_Status_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Invite_Status_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_invite_status" */
 export enum Course_Invite_Status_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Course_Invite_Status_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Invite_Status_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Invite_Status_Bool_Exp;
+};
 
 /** Represents course registration invitations */
 export type Course_Invites = {
@@ -19077,9 +20199,9 @@ export type Course_Invites_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_invites" */
 export enum Course_Invites_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "course_id", "email" */
   CourseInvitesEmailCourseIdKey = 'course_invites_email_course_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseInvitesPkey = 'course_invites_pkey'
 }
 
@@ -19211,6 +20333,25 @@ export type Course_Invites_Stddev_Samp_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "course_invites" */
+export type Course_Invites_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Invites_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Invites_Stream_Cursor_Value_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  email?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  note?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Course_Invite_Status_Enum>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Invites_Sum_Fields = {
   __typename?: 'course_invites_sum_fields';
@@ -19234,6 +20375,15 @@ export enum Course_Invites_Update_Column {
   /** column name */
   UpdatedAt = 'updatedAt'
 }
+
+export type Course_Invites_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Invites_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Invites_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Invites_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Invites_Var_Pop_Fields = {
@@ -19291,7 +20441,7 @@ export type Course_Level_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_level" */
 export enum Course_Level_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseLevelPkey = 'course_level_pkey'
 }
 
@@ -19400,11 +20550,11 @@ export type Course_Level_Prefix_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_level_prefix" */
 export enum Course_Level_Prefix_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseLevelPrefixNameKey = 'course_level_prefix_name_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseLevelPrefixPkey = 'course_level_prefix_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "prefix" */
   CourseLevelPrefixPrefixKey = 'course_level_prefix_prefix_key'
 }
 
@@ -19476,6 +20626,21 @@ export type Course_Level_Prefix_Set_Input = {
   prefix?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_level_prefix" */
+export type Course_Level_Prefix_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Level_Prefix_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Level_Prefix_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  prefix?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_level_prefix" */
 export enum Course_Level_Prefix_Update_Column {
   /** column name */
@@ -19485,6 +20650,13 @@ export enum Course_Level_Prefix_Update_Column {
   /** column name */
   Prefix = 'prefix'
 }
+
+export type Course_Level_Prefix_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Level_Prefix_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Level_Prefix_Bool_Exp;
+};
 
 /** select columns of table "course_level" */
 export enum Course_Level_Select_Column {
@@ -19497,11 +20669,31 @@ export type Course_Level_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_level" */
+export type Course_Level_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Level_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Level_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_level" */
 export enum Course_Level_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Course_Level_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Level_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Level_Bool_Exp;
+};
 
 /** aggregate max on columns */
 export type Course_Max_Fields = {
@@ -19513,9 +20705,14 @@ export type Course_Max_Fields = {
   bookingContactProfileId?: Maybe<Scalars['uuid']>;
   cancellationFeePercent?: Maybe<Scalars['Int']>;
   cancellationReason?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "course_code" */
+  course_code?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   createdById?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
+  end?: Maybe<Scalars['timestamptz']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['String']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
@@ -19528,6 +20725,7 @@ export type Course_Max_Fields = {
   price?: Maybe<Scalars['numeric']>;
   priceCurrency?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
+  start?: Maybe<Scalars['timestamptz']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -19543,6 +20741,7 @@ export type Course_Max_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   createdById?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
+  end?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
@@ -19555,6 +20754,7 @@ export type Course_Max_Order_By = {
   price?: InputMaybe<Order_By>;
   priceCurrency?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
+  start?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
@@ -19568,9 +20768,14 @@ export type Course_Min_Fields = {
   bookingContactProfileId?: Maybe<Scalars['uuid']>;
   cancellationFeePercent?: Maybe<Scalars['Int']>;
   cancellationReason?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "course_code" */
+  course_code?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   createdById?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
+  end?: Maybe<Scalars['timestamptz']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['String']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
@@ -19583,6 +20788,7 @@ export type Course_Min_Fields = {
   price?: Maybe<Scalars['numeric']>;
   priceCurrency?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
+  start?: Maybe<Scalars['timestamptz']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -19598,6 +20804,7 @@ export type Course_Min_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   createdById?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
+  end?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
@@ -19610,6 +20817,7 @@ export type Course_Min_Order_By = {
   price?: InputMaybe<Order_By>;
   priceCurrency?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
+  start?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
@@ -19633,6 +20841,33 @@ export type Course_Module_Aggregate = {
   __typename?: 'course_module_aggregate';
   aggregate?: Maybe<Course_Module_Aggregate_Fields>;
   nodes: Array<Course_Module>;
+};
+
+export type Course_Module_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Course_Module_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Course_Module_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Course_Module_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Module_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Course_Module_Select_Column_Course_Module_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Module_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Course_Module_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Course_Module_Select_Column_Course_Module_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Module_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Course_Module_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Module_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Module_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "course_module" */
@@ -19708,7 +20943,7 @@ export type Course_Module_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_module" */
 export enum Course_Module_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseModulePkey = 'course_module_pkey'
 }
 
@@ -19816,6 +21051,18 @@ export enum Course_Module_Select_Column {
   UpdatedAt = 'updated_at'
 }
 
+/** select "course_module_aggregate_bool_exp_bool_and_arguments_columns" columns of table "course_module" */
+export enum Course_Module_Select_Column_Course_Module_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  Covered = 'covered'
+}
+
+/** select "course_module_aggregate_bool_exp_bool_or_arguments_columns" columns of table "course_module" */
+export enum Course_Module_Select_Column_Course_Module_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  Covered = 'covered'
+}
+
 /** input type for updating data in table "course_module" */
 export type Course_Module_Set_Input = {
   courseId?: InputMaybe<Scalars['Int']>;
@@ -19859,6 +21106,24 @@ export type Course_Module_Stddev_Samp_Order_By = {
   courseId?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "course_module" */
+export type Course_Module_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Module_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Module_Stream_Cursor_Value_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+  covered?: InputMaybe<Scalars['Boolean']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  moduleId?: InputMaybe<Scalars['uuid']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Module_Sum_Fields = {
   __typename?: 'course_module_sum_fields';
@@ -19885,6 +21150,15 @@ export enum Course_Module_Update_Column {
   /** column name */
   UpdatedAt = 'updated_at'
 }
+
+export type Course_Module_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Module_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Module_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Module_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Module_Var_Pop_Fields = {
@@ -20094,6 +21368,33 @@ export type Course_Participant_Aggregate = {
   nodes: Array<Course_Participant>;
 };
 
+export type Course_Participant_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Course_Participant_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Course_Participant_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Course_Participant_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Participant_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Course_Participant_Select_Column_Course_Participant_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Participant_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Course_Participant_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Course_Participant_Select_Column_Course_Participant_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Participant_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Course_Participant_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Participant_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Participant_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
 /** aggregate fields of "course_participant" */
 export type Course_Participant_Aggregate_Fields = {
   __typename?: 'course_participant_aggregate_fields';
@@ -20197,6 +21498,17 @@ export type Course_Participant_Audit_Aggregate = {
   nodes: Array<Course_Participant_Audit>;
 };
 
+export type Course_Participant_Audit_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Course_Participant_Audit_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Participant_Audit_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Participant_Audit_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Participant_Audit_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
 /** aggregate fields of "course_participant_audit" */
 export type Course_Participant_Audit_Aggregate_Fields = {
   __typename?: 'course_participant_audit_aggregate_fields';
@@ -20281,7 +21593,7 @@ export type Course_Participant_Audit_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_participant_audit" */
 export enum Course_Participant_Audit_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseParticipantAuditPkey = 'course_participant_audit_pkey'
 }
 
@@ -20327,6 +21639,8 @@ export type Course_Participant_Audit_Max_Fields = {
   course_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
+  /** A computed field, executes function "course_participant_audit_new_attendee" */
+  newAttendeeEmail?: Maybe<Scalars['String']>;
   profile_id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
@@ -20348,6 +21662,8 @@ export type Course_Participant_Audit_Min_Fields = {
   course_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
+  /** A computed field, executes function "course_participant_audit_new_attendee" */
+  newAttendeeEmail?: Maybe<Scalars['String']>;
   profile_id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
@@ -20471,6 +21787,26 @@ export type Course_Participant_Audit_Stddev_Samp_Order_By = {
   course_id?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "course_participant_audit" */
+export type Course_Participant_Audit_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Participant_Audit_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Participant_Audit_Stream_Cursor_Value_Input = {
+  authorized_by?: InputMaybe<Scalars['uuid']>;
+  course_id?: InputMaybe<Scalars['Int']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  payload?: InputMaybe<Scalars['jsonb']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  type?: InputMaybe<Course_Participant_Audit_Type_Enum>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Participant_Audit_Sum_Fields = {
   __typename?: 'course_participant_audit_sum_fields';
@@ -20520,7 +21856,7 @@ export type Course_Participant_Audit_Type_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_participant_audit_type" */
 export enum Course_Participant_Audit_Type_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseParticipantAuditTypePkey = 'course_participant_audit_type_pkey'
 }
 
@@ -20595,11 +21931,31 @@ export type Course_Participant_Audit_Type_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_participant_audit_type" */
+export type Course_Participant_Audit_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Participant_Audit_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Participant_Audit_Type_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_participant_audit_type" */
 export enum Course_Participant_Audit_Type_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Course_Participant_Audit_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Participant_Audit_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Participant_Audit_Type_Bool_Exp;
+};
 
 /** update columns of table "course_participant_audit" */
 export enum Course_Participant_Audit_Update_Column {
@@ -20620,6 +21976,25 @@ export enum Course_Participant_Audit_Update_Column {
   /** column name */
   UpdatedAt = 'updated_at'
 }
+
+export type Course_Participant_Audit_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Course_Participant_Audit_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Course_Participant_Audit_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Course_Participant_Audit_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Course_Participant_Audit_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Participant_Audit_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Course_Participant_Audit_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Participant_Audit_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Participant_Audit_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Participant_Audit_Var_Pop_Fields = {
@@ -20723,9 +22098,9 @@ export type Course_Participant_Bild_Module_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_participant_bild_module" */
 export enum Course_Participant_Bild_Module_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "participant_id" */
   CourseParticipantBildModuleParticipantIdKey = 'course_participant_bild_module_participant_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseParticipantBildModulePkey = 'course_participant_bild_module_pkey'
 }
 
@@ -20824,6 +22199,21 @@ export type Course_Participant_Bild_Module_Set_Input = {
   participant_id?: InputMaybe<Scalars['uuid']>;
 };
 
+/** Streaming cursor of the table "course_participant_bild_module" */
+export type Course_Participant_Bild_Module_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Participant_Bild_Module_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Participant_Bild_Module_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  modules?: InputMaybe<Scalars['jsonb']>;
+  participant_id?: InputMaybe<Scalars['uuid']>;
+};
+
 /** update columns of table "course_participant_bild_module" */
 export enum Course_Participant_Bild_Module_Update_Column {
   /** column name */
@@ -20833,6 +22223,23 @@ export enum Course_Participant_Bild_Module_Update_Column {
   /** column name */
   ParticipantId = 'participant_id'
 }
+
+export type Course_Participant_Bild_Module_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Course_Participant_Bild_Module_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Course_Participant_Bild_Module_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Course_Participant_Bild_Module_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Course_Participant_Bild_Module_Delete_Key_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Course_Participant_Bild_Module_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Participant_Bild_Module_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Participant_Bild_Module_Bool_Exp;
+};
 
 /** Boolean expression to filter rows from the table "course_participant". All fields are combined with a logical 'AND'. */
 export type Course_Participant_Bool_Exp = {
@@ -20844,6 +22251,7 @@ export type Course_Participant_Bool_Exp = {
   bookingDate?: InputMaybe<Timestamptz_Comparison_Exp>;
   certificate?: InputMaybe<Course_Certificate_Bool_Exp>;
   certificateChanges?: InputMaybe<Course_Certificate_Changelog_Bool_Exp>;
+  certificateChanges_aggregate?: InputMaybe<Course_Certificate_Changelog_Aggregate_Bool_Exp>;
   certificate_id?: InputMaybe<Uuid_Comparison_Exp>;
   completed_evaluation?: InputMaybe<Boolean_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
@@ -20854,6 +22262,7 @@ export type Course_Participant_Bool_Exp = {
   go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum_Comparison_Exp>;
   grade?: InputMaybe<Grade_Enum_Comparison_Exp>;
   gradingModules?: InputMaybe<Course_Participant_Module_Bool_Exp>;
+  gradingModules_aggregate?: InputMaybe<Course_Participant_Module_Aggregate_Bool_Exp>;
   grading_feedback?: InputMaybe<String_Comparison_Exp>;
   healthSafetyConsent?: InputMaybe<Boolean_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -20933,7 +22342,7 @@ export type Course_Participant_Cancellation_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_participant_cancellation" */
 export enum Course_Participant_Cancellation_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseParticipantCancellationPkey = 'course_participant_cancellation_pkey'
 }
 
@@ -21060,6 +22469,25 @@ export type Course_Participant_Cancellation_Stddev_Samp_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "course_participant_cancellation" */
+export type Course_Participant_Cancellation_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Participant_Cancellation_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Participant_Cancellation_Stream_Cursor_Value_Input = {
+  cancellation_fee_percent?: InputMaybe<Scalars['Int']>;
+  cancellation_reason?: InputMaybe<Scalars['String']>;
+  course_id?: InputMaybe<Scalars['Int']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Participant_Cancellation_Sum_Fields = {
   __typename?: 'course_participant_cancellation_sum_fields';
@@ -21085,6 +22513,15 @@ export enum Course_Participant_Cancellation_Update_Column {
   UpdatedAt = 'updated_at'
 }
 
+export type Course_Participant_Cancellation_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Participant_Cancellation_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Participant_Cancellation_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Participant_Cancellation_Bool_Exp;
+};
+
 /** aggregate var_pop on columns */
 export type Course_Participant_Cancellation_Var_Pop_Fields = {
   __typename?: 'course_participant_cancellation_var_pop_fields';
@@ -21108,9 +22545,9 @@ export type Course_Participant_Cancellation_Variance_Fields = {
 
 /** unique or primary key constraints on table "course_participant" */
 export enum Course_Participant_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseParticipantPkey = 'course_participant_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "profile_id", "course_id" */
   CourseParticipantProfileIdCourseIdKey = 'course_participant_profile_id_course_id_key'
 }
 
@@ -21245,6 +22682,33 @@ export type Course_Participant_Module_Aggregate = {
   nodes: Array<Course_Participant_Module>;
 };
 
+export type Course_Participant_Module_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Course_Participant_Module_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Course_Participant_Module_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Course_Participant_Module_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Participant_Module_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Course_Participant_Module_Select_Column_Course_Participant_Module_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Participant_Module_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Course_Participant_Module_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Course_Participant_Module_Select_Column_Course_Participant_Module_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Participant_Module_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Course_Participant_Module_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Participant_Module_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Participant_Module_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
 /** aggregate fields of "course_participant_module" */
 export type Course_Participant_Module_Aggregate_Fields = {
   __typename?: 'course_participant_module_aggregate_fields';
@@ -21289,9 +22753,9 @@ export type Course_Participant_Module_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_participant_module" */
 export enum Course_Participant_Module_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "module_id", "course_participant_id" */
   CourseParticipantModuleCourseParticipantIdModuleIdKey = 'course_participant_module_course_participant_id_module_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseParticipantModulePkey = 'course_participant_module_pkey'
 }
 
@@ -21378,8 +22842,36 @@ export enum Course_Participant_Module_Select_Column {
   ModuleId = 'module_id'
 }
 
+/** select "course_participant_module_aggregate_bool_exp_bool_and_arguments_columns" columns of table "course_participant_module" */
+export enum Course_Participant_Module_Select_Column_Course_Participant_Module_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  Completed = 'completed'
+}
+
+/** select "course_participant_module_aggregate_bool_exp_bool_or_arguments_columns" columns of table "course_participant_module" */
+export enum Course_Participant_Module_Select_Column_Course_Participant_Module_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  Completed = 'completed'
+}
+
 /** input type for updating data in table "course_participant_module" */
 export type Course_Participant_Module_Set_Input = {
+  completed?: InputMaybe<Scalars['Boolean']>;
+  course_participant_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  module_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** Streaming cursor of the table "course_participant_module" */
+export type Course_Participant_Module_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Participant_Module_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Participant_Module_Stream_Cursor_Value_Input = {
   completed?: InputMaybe<Scalars['Boolean']>;
   course_participant_id?: InputMaybe<Scalars['uuid']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -21397,6 +22889,13 @@ export enum Course_Participant_Module_Update_Column {
   /** column name */
   ModuleId = 'module_id'
 }
+
+export type Course_Participant_Module_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Participant_Module_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Participant_Module_Bool_Exp;
+};
 
 /** response of any mutation on the table "course_participant" */
 export type Course_Participant_Mutation_Response = {
@@ -21499,6 +22998,26 @@ export enum Course_Participant_Select_Column {
   UpdatedAt = 'updated_at'
 }
 
+/** select "course_participant_aggregate_bool_exp_bool_and_arguments_columns" columns of table "course_participant" */
+export enum Course_Participant_Select_Column_Course_Participant_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  Attended = 'attended',
+  /** column name */
+  CompletedEvaluation = 'completed_evaluation',
+  /** column name */
+  HealthSafetyConsent = 'healthSafetyConsent'
+}
+
+/** select "course_participant_aggregate_bool_exp_bool_or_arguments_columns" columns of table "course_participant" */
+export enum Course_Participant_Select_Column_Course_Participant_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  Attended = 'attended',
+  /** column name */
+  CompletedEvaluation = 'completed_evaluation',
+  /** column name */
+  HealthSafetyConsent = 'healthSafetyConsent'
+}
+
 /** input type for updating data in table "course_participant" */
 export type Course_Participant_Set_Input = {
   attended?: InputMaybe<Scalars['Boolean']>;
@@ -21561,6 +23080,37 @@ export type Course_Participant_Stddev_Samp_Order_By = {
   go1EnrolmentId?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "course_participant" */
+export type Course_Participant_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Participant_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Participant_Stream_Cursor_Value_Input = {
+  attended?: InputMaybe<Scalars['Boolean']>;
+  bookingDate?: InputMaybe<Scalars['timestamptz']>;
+  certificate_id?: InputMaybe<Scalars['uuid']>;
+  completed_evaluation?: InputMaybe<Scalars['Boolean']>;
+  course_id?: InputMaybe<Scalars['Int']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  dateGraded?: InputMaybe<Scalars['timestamptz']>;
+  go1EnrolmentId?: InputMaybe<Scalars['Int']>;
+  go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum>;
+  grade?: InputMaybe<Grade_Enum>;
+  grading_feedback?: InputMaybe<Scalars['String']>;
+  healthSafetyConsent?: InputMaybe<Scalars['Boolean']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  invite_id?: InputMaybe<Scalars['uuid']>;
+  invoiceID?: InputMaybe<Scalars['uuid']>;
+  orderId?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  registration_id?: InputMaybe<Scalars['uuid']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Participant_Sum_Fields = {
   __typename?: 'course_participant_sum_fields';
@@ -21615,6 +23165,15 @@ export enum Course_Participant_Update_Column {
   /** column name */
   UpdatedAt = 'updated_at'
 }
+
+export type Course_Participant_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Participant_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Participant_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Participant_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Participant_Var_Pop_Fields = {
@@ -21806,7 +23365,7 @@ export type Course_Pricing_Changelog_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_pricing_changelog" */
 export enum Course_Pricing_Changelog_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CoursePricingChangelogPkey = 'course_pricing_changelog_pkey'
 }
 
@@ -21937,6 +23496,25 @@ export type Course_Pricing_Changelog_Stddev_Samp_Fields = {
   oldPrice?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "course_pricing_changelog" */
+export type Course_Pricing_Changelog_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Pricing_Changelog_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Pricing_Changelog_Stream_Cursor_Value_Input = {
+  authorId?: InputMaybe<Scalars['uuid']>;
+  coursePricingId?: InputMaybe<Scalars['uuid']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  newPrice?: InputMaybe<Scalars['numeric']>;
+  oldPrice?: InputMaybe<Scalars['numeric']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Pricing_Changelog_Sum_Fields = {
   __typename?: 'course_pricing_changelog_sum_fields';
@@ -21962,6 +23540,15 @@ export enum Course_Pricing_Changelog_Update_Column {
   UpdatedAt = 'updatedAt'
 }
 
+export type Course_Pricing_Changelog_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Pricing_Changelog_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Pricing_Changelog_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Pricing_Changelog_Bool_Exp;
+};
+
 /** aggregate var_pop on columns */
 export type Course_Pricing_Changelog_Var_Pop_Fields = {
   __typename?: 'course_pricing_changelog_var_pop_fields';
@@ -21985,9 +23572,9 @@ export type Course_Pricing_Changelog_Variance_Fields = {
 
 /** unique or primary key constraints on table "course_pricing" */
 export enum Course_Pricing_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CoursePricingPkey = 'course_pricing_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "level", "blended", "reaccreditation", "type" */
   CoursePricingTypeLevelBlendedReaccreditationKey = 'course_pricing_type_level_blended_reaccreditation_key'
 }
 
@@ -22138,6 +23725,29 @@ export type Course_Pricing_Stddev_Samp_Fields = {
   priceAmount?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "course_pricing" */
+export type Course_Pricing_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Pricing_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Pricing_Stream_Cursor_Value_Input = {
+  blended?: InputMaybe<Scalars['Boolean']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  level?: InputMaybe<Course_Level_Enum>;
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Scalars['numeric']>;
+  priceCurrency?: InputMaybe<Scalars['String']>;
+  reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  type?: InputMaybe<Course_Type_Enum>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+  xeroCode?: InputMaybe<Scalars['String']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Pricing_Sum_Fields = {
   __typename?: 'course_pricing_sum_fields';
@@ -22168,6 +23778,15 @@ export enum Course_Pricing_Update_Column {
   /** column name */
   XeroCode = 'xeroCode'
 }
+
+export type Course_Pricing_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Pricing_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Pricing_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Pricing_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Pricing_Var_Pop_Fields = {
@@ -22207,6 +23826,17 @@ export type Course_Promo_Code_Aggregate = {
   __typename?: 'course_promo_code_aggregate';
   aggregate?: Maybe<Course_Promo_Code_Aggregate_Fields>;
   nodes: Array<Course_Promo_Code>;
+};
+
+export type Course_Promo_Code_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Course_Promo_Code_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Promo_Code_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Promo_Code_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Promo_Code_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "course_promo_code" */
@@ -22279,7 +23909,7 @@ export type Course_Promo_Code_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_promo_code" */
 export enum Course_Promo_Code_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CoursePromoCodePkey = 'course_promo_code_pkey'
 }
 
@@ -22407,6 +24037,21 @@ export type Course_Promo_Code_Stddev_Samp_Order_By = {
   course_id?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "course_promo_code" */
+export type Course_Promo_Code_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Promo_Code_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Promo_Code_Stream_Cursor_Value_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  promo_id?: InputMaybe<Scalars['uuid']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Promo_Code_Sum_Fields = {
   __typename?: 'course_promo_code_sum_fields';
@@ -22427,6 +24072,15 @@ export enum Course_Promo_Code_Update_Column {
   /** column name */
   PromoId = 'promo_id'
 }
+
+export type Course_Promo_Code_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Promo_Code_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Promo_Code_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Promo_Code_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Promo_Code_Var_Pop_Fields = {
@@ -22475,6 +24129,7 @@ export type Course_Schedule = {
   /** An object relationship */
   venue?: Maybe<Venue>;
   venue_id?: Maybe<Scalars['uuid']>;
+  virtualAccountId?: Maybe<Scalars['String']>;
   virtualLink?: Maybe<Scalars['String']>;
 };
 
@@ -22483,6 +24138,17 @@ export type Course_Schedule_Aggregate = {
   __typename?: 'course_schedule_aggregate';
   aggregate?: Maybe<Course_Schedule_Aggregate_Fields>;
   nodes: Array<Course_Schedule>;
+};
+
+export type Course_Schedule_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Course_Schedule_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Schedule_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Schedule_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Schedule_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "course_schedule" */
@@ -22555,12 +24221,13 @@ export type Course_Schedule_Bool_Exp = {
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   venue?: InputMaybe<Venue_Bool_Exp>;
   venue_id?: InputMaybe<Uuid_Comparison_Exp>;
+  virtualAccountId?: InputMaybe<String_Comparison_Exp>;
   virtualLink?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "course_schedule" */
 export enum Course_Schedule_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseSchedulePkey = 'course_schedule_pkey'
 }
 
@@ -22580,6 +24247,7 @@ export type Course_Schedule_Insert_Input = {
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
   venue?: InputMaybe<Venue_Obj_Rel_Insert_Input>;
   venue_id?: InputMaybe<Scalars['uuid']>;
+  virtualAccountId?: InputMaybe<Scalars['String']>;
   virtualLink?: InputMaybe<Scalars['String']>;
 };
 
@@ -22593,6 +24261,7 @@ export type Course_Schedule_Max_Fields = {
   start?: Maybe<Scalars['timestamptz']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   venue_id?: Maybe<Scalars['uuid']>;
+  virtualAccountId?: Maybe<Scalars['String']>;
   virtualLink?: Maybe<Scalars['String']>;
 };
 
@@ -22605,6 +24274,7 @@ export type Course_Schedule_Max_Order_By = {
   start?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   venue_id?: InputMaybe<Order_By>;
+  virtualAccountId?: InputMaybe<Order_By>;
   virtualLink?: InputMaybe<Order_By>;
 };
 
@@ -22618,6 +24288,7 @@ export type Course_Schedule_Min_Fields = {
   start?: Maybe<Scalars['timestamptz']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   venue_id?: Maybe<Scalars['uuid']>;
+  virtualAccountId?: Maybe<Scalars['String']>;
   virtualLink?: Maybe<Scalars['String']>;
 };
 
@@ -22630,6 +24301,7 @@ export type Course_Schedule_Min_Order_By = {
   start?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   venue_id?: InputMaybe<Order_By>;
+  virtualAccountId?: InputMaybe<Order_By>;
   virtualLink?: InputMaybe<Order_By>;
 };
 
@@ -22660,6 +24332,7 @@ export type Course_Schedule_Order_By = {
   updatedAt?: InputMaybe<Order_By>;
   venue?: InputMaybe<Venue_Order_By>;
   venue_id?: InputMaybe<Order_By>;
+  virtualAccountId?: InputMaybe<Order_By>;
   virtualLink?: InputMaybe<Order_By>;
 };
 
@@ -22685,6 +24358,8 @@ export enum Course_Schedule_Select_Column {
   /** column name */
   VenueId = 'venue_id',
   /** column name */
+  VirtualAccountId = 'virtualAccountId',
+  /** column name */
   VirtualLink = 'virtualLink'
 }
 
@@ -22697,6 +24372,7 @@ export type Course_Schedule_Set_Input = {
   start?: InputMaybe<Scalars['timestamptz']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
   venue_id?: InputMaybe<Scalars['uuid']>;
+  virtualAccountId?: InputMaybe<Scalars['String']>;
   virtualLink?: InputMaybe<Scalars['String']>;
 };
 
@@ -22733,6 +24409,27 @@ export type Course_Schedule_Stddev_Samp_Order_By = {
   course_id?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "course_schedule" */
+export type Course_Schedule_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Schedule_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Schedule_Stream_Cursor_Value_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  end?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  start?: InputMaybe<Scalars['timestamptz']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+  venue_id?: InputMaybe<Scalars['uuid']>;
+  virtualAccountId?: InputMaybe<Scalars['String']>;
+  virtualLink?: InputMaybe<Scalars['String']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Schedule_Sum_Fields = {
   __typename?: 'course_schedule_sum_fields';
@@ -22761,8 +24458,19 @@ export enum Course_Schedule_Update_Column {
   /** column name */
   VenueId = 'venue_id',
   /** column name */
+  VirtualAccountId = 'virtualAccountId',
+  /** column name */
   VirtualLink = 'virtualLink'
 }
+
+export type Course_Schedule_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Schedule_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Schedule_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Schedule_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Schedule_Var_Pop_Fields = {
@@ -22828,6 +24536,8 @@ export enum Course_Select_Column {
   /** column name */
   Description = 'description',
   /** column name */
+  End = 'end',
+  /** column name */
   ExceptionsPending = 'exceptionsPending',
   /** column name */
   FreeSpaces = 'freeSpaces',
@@ -22868,6 +24578,8 @@ export enum Course_Select_Column {
   /** column name */
   SpecialInstructions = 'special_instructions',
   /** column name */
+  Start = 'start',
+  /** column name */
   Status = 'status',
   /** column name */
   Type = 'type',
@@ -22891,6 +24603,7 @@ export type Course_Set_Input = {
   createdById?: InputMaybe<Scalars['uuid']>;
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
+  end?: InputMaybe<Scalars['timestamptz']>;
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
   go1Integration?: InputMaybe<Scalars['Boolean']>;
@@ -22911,6 +24624,7 @@ export type Course_Set_Input = {
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
+  start?: InputMaybe<Scalars['timestamptz']>;
   status?: InputMaybe<Course_Status_Enum>;
   type?: InputMaybe<Course_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -22954,7 +24668,7 @@ export type Course_Source_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_source" */
 export enum Course_Source_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseSourcePkey = 'course_source_pkey'
 }
 
@@ -23034,11 +24748,31 @@ export type Course_Source_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_source" */
+export type Course_Source_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Source_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Source_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_source" */
 export enum Course_Source_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Course_Source_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Source_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Source_Bool_Exp;
+};
 
 /** columns and relationships of "course_status" */
 export type Course_Status = {
@@ -23078,7 +24812,7 @@ export type Course_Status_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_status" */
 export enum Course_Status_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseStatusPkey = 'course_status_pkey'
 }
 
@@ -23161,11 +24895,31 @@ export type Course_Status_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_status" */
+export type Course_Status_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Status_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Status_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_status" */
 export enum Course_Status_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Course_Status_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Status_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Status_Bool_Exp;
+};
 
 /** aggregate stddev on columns */
 export type Course_Stddev_Fields = {
@@ -23242,6 +24996,57 @@ export type Course_Stddev_Samp_Order_By = {
   price?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "course" */
+export type Course_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Stream_Cursor_Value_Input = {
+  accountCode?: InputMaybe<Scalars['String']>;
+  accreditedBy?: InputMaybe<Accreditors_Enum>;
+  aolCostOfCourse?: InputMaybe<Scalars['numeric']>;
+  aolCountry?: InputMaybe<Scalars['String']>;
+  aolRegion?: InputMaybe<Scalars['String']>;
+  bookingContactInviteData?: InputMaybe<Scalars['jsonb']>;
+  bookingContactProfileId?: InputMaybe<Scalars['uuid']>;
+  cancellationFeePercent?: InputMaybe<Scalars['Int']>;
+  cancellationReason?: InputMaybe<Scalars['String']>;
+  conversion?: InputMaybe<Scalars['Boolean']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  createdById?: InputMaybe<Scalars['uuid']>;
+  deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
+  description?: InputMaybe<Scalars['String']>;
+  end?: InputMaybe<Scalars['timestamptz']>;
+  exceptionsPending?: InputMaybe<Scalars['Boolean']>;
+  freeSpaces?: InputMaybe<Scalars['Int']>;
+  go1Integration?: InputMaybe<Scalars['Boolean']>;
+  gradingConfirmed?: InputMaybe<Scalars['Boolean']>;
+  gradingStarted?: InputMaybe<Scalars['Boolean']>;
+  id?: InputMaybe<Scalars['Int']>;
+  isDraft?: InputMaybe<Scalars['Boolean']>;
+  level?: InputMaybe<Course_Level_Enum>;
+  max_participants?: InputMaybe<Scalars['Int']>;
+  min_participants?: InputMaybe<Scalars['Int']>;
+  modulesDuration?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
+  notes?: InputMaybe<Scalars['String']>;
+  organization_id?: InputMaybe<Scalars['uuid']>;
+  parking_instructions?: InputMaybe<Scalars['String']>;
+  price?: InputMaybe<Scalars['numeric']>;
+  priceCurrency?: InputMaybe<Scalars['String']>;
+  reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  source?: InputMaybe<Course_Source_Enum>;
+  special_instructions?: InputMaybe<Scalars['String']>;
+  start?: InputMaybe<Scalars['timestamptz']>;
+  status?: InputMaybe<Course_Status_Enum>;
+  type?: InputMaybe<Course_Type_Enum>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Course_Sum_Fields = {
   __typename?: 'course_sum_fields';
@@ -23286,6 +25091,17 @@ export type Course_Trainer_Aggregate = {
   __typename?: 'course_trainer_aggregate';
   aggregate?: Maybe<Course_Trainer_Aggregate_Fields>;
   nodes: Array<Course_Trainer>;
+};
+
+export type Course_Trainer_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Course_Trainer_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Trainer_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Trainer_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Trainer_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "course_trainer" */
@@ -23360,11 +25176,11 @@ export type Course_Trainer_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_trainer" */
 export enum Course_Trainer_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseLeaderPkey = 'course_leader_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "profile_id", "course_id" */
   CourseTrainerCourseIdProfileIdKey = 'course_trainer_course_id_profile_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "course_id" */
   CourseTrainerUniqueLeader = 'course_trainer_unique_leader'
 }
 
@@ -23502,6 +25318,23 @@ export type Course_Trainer_Stddev_Samp_Order_By = {
   course_id?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "course_trainer" */
+export type Course_Trainer_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Trainer_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Trainer_Stream_Cursor_Value_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  status?: InputMaybe<Course_Invite_Status_Enum>;
+  type?: InputMaybe<Course_Trainer_Type_Enum>;
+};
+
 /** aggregate sum on columns */
 export type Course_Trainer_Sum_Fields = {
   __typename?: 'course_trainer_sum_fields';
@@ -23551,7 +25384,7 @@ export type Course_Trainer_Type_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_trainer_type" */
 export enum Course_Trainer_Type_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseTrainerTypePkey = 'course_trainer_type_pkey'
 }
 
@@ -23624,11 +25457,31 @@ export type Course_Trainer_Type_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_trainer_type" */
+export type Course_Trainer_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Trainer_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Trainer_Type_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_trainer_type" */
 export enum Course_Trainer_Type_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Course_Trainer_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Trainer_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Trainer_Type_Bool_Exp;
+};
 
 /** update columns of table "course_trainer" */
 export enum Course_Trainer_Update_Column {
@@ -23643,6 +25496,15 @@ export enum Course_Trainer_Update_Column {
   /** column name */
   Type = 'type'
 }
+
+export type Course_Trainer_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Trainer_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Trainer_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Trainer_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Trainer_Var_Pop_Fields = {
@@ -23715,7 +25577,7 @@ export type Course_Type_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_type" */
 export enum Course_Type_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseTypePkey = 'course_type_pkey'
 }
 
@@ -23819,11 +25681,11 @@ export type Course_Type_Prefix_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_type_prefix" */
 export enum Course_Type_Prefix_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   CourseTypePrefixNameKey = 'course_type_prefix_name_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   CourseTypePrefixPkey = 'course_type_prefix_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "prefix" */
   CourseTypePrefixPrefixKey = 'course_type_prefix_prefix_key'
 }
 
@@ -23895,6 +25757,21 @@ export type Course_Type_Prefix_Set_Input = {
   prefix?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_type_prefix" */
+export type Course_Type_Prefix_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Type_Prefix_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Type_Prefix_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  prefix?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_type_prefix" */
 export enum Course_Type_Prefix_Update_Column {
   /** column name */
@@ -23904,6 +25781,13 @@ export enum Course_Type_Prefix_Update_Column {
   /** column name */
   Prefix = 'prefix'
 }
+
+export type Course_Type_Prefix_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Type_Prefix_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Type_Prefix_Bool_Exp;
+};
 
 /** select columns of table "course_type" */
 export enum Course_Type_Select_Column {
@@ -23916,11 +25800,31 @@ export type Course_Type_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "course_type" */
+export type Course_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Type_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "course_type" */
 export enum Course_Type_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Course_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Type_Bool_Exp;
+};
 
 /** update columns of table "course" */
 export enum Course_Update_Column {
@@ -23952,6 +25856,8 @@ export enum Course_Update_Column {
   DeliveryType = 'deliveryType',
   /** column name */
   Description = 'description',
+  /** column name */
+  End = 'end',
   /** column name */
   ExceptionsPending = 'exceptionsPending',
   /** column name */
@@ -23993,12 +25899,33 @@ export enum Course_Update_Column {
   /** column name */
   SpecialInstructions = 'special_instructions',
   /** column name */
+  Start = 'start',
+  /** column name */
   Status = 'status',
   /** column name */
   Type = 'type',
   /** column name */
   UpdatedAt = 'updatedAt'
 }
+
+export type Course_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Course_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Course_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Course_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Course_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Course_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Course_Var_Pop_Fields = {
@@ -24080,6 +26007,14 @@ export type CreateSubscriptionOutput = {
   clientSecret: Scalars['String'];
   subscriptionId: Scalars['String'];
 };
+
+/** ordering argument of a cursor */
+export enum Cursor_Ordering {
+  /** ascending ordering of the cursor */
+  Asc = 'ASC',
+  /** descending ordering of the cursor */
+  Desc = 'DESC'
+}
 
 /** Boolean expression to compare columns of type "date". All fields are combined with logical 'AND'. */
 export type Date_Comparison_Exp = {
@@ -24166,7 +26101,7 @@ export type Dfe_Establishment_Bool_Exp = {
 
 /** unique or primary key constraints on table "dfe_establishment" */
 export enum Dfe_Establishment_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   DfeEstablishmentPkey = 'dfe_establishment_pkey'
 }
 
@@ -24343,6 +26278,36 @@ export type Dfe_Establishment_Set_Input = {
   urn?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "dfe_establishment" */
+export type Dfe_Establishment_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Dfe_Establishment_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Dfe_Establishment_Stream_Cursor_Value_Input = {
+  addressLineOne?: InputMaybe<Scalars['String']>;
+  addressLineThree?: InputMaybe<Scalars['String']>;
+  addressLineTwo?: InputMaybe<Scalars['String']>;
+  county?: InputMaybe<Scalars['String']>;
+  headFirstName?: InputMaybe<Scalars['String']>;
+  headJobTitle?: InputMaybe<Scalars['String']>;
+  headLastName?: InputMaybe<Scalars['String']>;
+  headTitle?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  localAuthority?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  ofstedLastInspection?: InputMaybe<Scalars['String']>;
+  ofstedRating?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  town?: InputMaybe<Scalars['String']>;
+  trustName?: InputMaybe<Scalars['String']>;
+  trustType?: InputMaybe<Scalars['String']>;
+  urn?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "dfe_establishment" */
 export enum Dfe_Establishment_Update_Column {
   /** column name */
@@ -24382,6 +26347,13 @@ export enum Dfe_Establishment_Update_Column {
   /** column name */
   Urn = 'urn'
 }
+
+export type Dfe_Establishment_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Dfe_Establishment_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Dfe_Establishment_Bool_Exp;
+};
 
 /** Stores scheduled jobs ids for expiring Go1 licenses */
 export type Expire_Go1_License_Jobs = {
@@ -24425,9 +26397,9 @@ export type Expire_Go1_License_Jobs_Bool_Exp = {
 
 /** unique or primary key constraints on table "expire_go1_license_jobs" */
 export enum Expire_Go1_License_Jobs_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "license_id", "job_id" */
   ExpireGo1LicenseJobsJobIdLicenseIdKey = 'expire_go1_license_jobs_job_id_license_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   ExpireGo1LicenseJobsPkey = 'expire_go1_license_jobs_pkey'
 }
 
@@ -24499,6 +26471,21 @@ export type Expire_Go1_License_Jobs_Set_Input = {
   licenseId?: InputMaybe<Scalars['uuid']>;
 };
 
+/** Streaming cursor of the table "expire_go1_license_jobs" */
+export type Expire_Go1_License_Jobs_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Expire_Go1_License_Jobs_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Expire_Go1_License_Jobs_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  jobId?: InputMaybe<Scalars['uuid']>;
+  licenseId?: InputMaybe<Scalars['uuid']>;
+};
+
 /** update columns of table "expire_go1_license_jobs" */
 export enum Expire_Go1_License_Jobs_Update_Column {
   /** column name */
@@ -24508,6 +26495,13 @@ export enum Expire_Go1_License_Jobs_Update_Column {
   /** column name */
   LicenseId = 'licenseId'
 }
+
+export type Expire_Go1_License_Jobs_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Expire_Go1_License_Jobs_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Expire_Go1_License_Jobs_Bool_Exp;
+};
 
 /** Boolean expression to compare columns of type "float8". All fields are combined with logical 'AND'. */
 export type Float8_Comparison_Exp = {
@@ -24560,7 +26554,7 @@ export type Go1_History_Events_Bool_Exp = {
 
 /** unique or primary key constraints on table "go1_history_events" */
 export enum Go1_History_Events_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   Go1HistoryEventsPkey = 'go1_history_events_pkey'
 }
 
@@ -24639,11 +26633,31 @@ export type Go1_History_Events_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "go1_history_events" */
+export type Go1_History_Events_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Go1_History_Events_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Go1_History_Events_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "go1_history_events" */
 export enum Go1_History_Events_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Go1_History_Events_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Go1_History_Events_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Go1_History_Events_Bool_Exp;
+};
 
 /** Organization's users Go1 licenses */
 export type Go1_Licenses = {
@@ -24662,6 +26676,17 @@ export type Go1_Licenses_Aggregate = {
   __typename?: 'go1_licenses_aggregate';
   aggregate?: Maybe<Go1_Licenses_Aggregate_Fields>;
   nodes: Array<Go1_Licenses>;
+};
+
+export type Go1_Licenses_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Go1_Licenses_Aggregate_Bool_Exp_Count>;
+};
+
+export type Go1_Licenses_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Go1_Licenses_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Go1_Licenses_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "go1_licenses" */
@@ -24708,9 +26733,9 @@ export type Go1_Licenses_Bool_Exp = {
 
 /** unique or primary key constraints on table "go1_licenses" */
 export enum Go1_Licenses_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   Go1LicensesPkey = 'go1_licenses_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "org_id", "profile_id" */
   Go1LicensesProfileIdOrgIdKey = 'go1_licenses_profile_id_org_id_key'
 }
 
@@ -24740,6 +26765,17 @@ export type Go1_Licenses_History_Aggregate = {
   __typename?: 'go1_licenses_history_aggregate';
   aggregate?: Maybe<Go1_Licenses_History_Aggregate_Fields>;
   nodes: Array<Go1_Licenses_History>;
+};
+
+export type Go1_Licenses_History_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Go1_Licenses_History_Aggregate_Bool_Exp_Count>;
+};
+
+export type Go1_Licenses_History_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Go1_Licenses_History_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Go1_Licenses_History_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "go1_licenses_history" */
@@ -24825,7 +26861,7 @@ export type Go1_Licenses_History_Bool_Exp = {
 
 /** unique or primary key constraints on table "go1_licenses_history" */
 export enum Go1_Licenses_History_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   Go1LicensesHistoryPkey = 'go1_licenses_history_pkey'
 }
 
@@ -25022,6 +27058,26 @@ export type Go1_Licenses_History_Stddev_Samp_Order_By = {
   reservedBalance?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "go1_licenses_history" */
+export type Go1_Licenses_History_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Go1_Licenses_History_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Go1_Licenses_History_Stream_Cursor_Value_Input = {
+  balance?: InputMaybe<Scalars['Int']>;
+  captured_at?: InputMaybe<Scalars['timestamptz']>;
+  change?: InputMaybe<Scalars['Int']>;
+  event?: InputMaybe<Go1_History_Events_Enum>;
+  id?: InputMaybe<Scalars['uuid']>;
+  org_id?: InputMaybe<Scalars['uuid']>;
+  payload?: InputMaybe<Scalars['jsonb']>;
+  reservedBalance?: InputMaybe<Scalars['Int']>;
+};
+
 /** aggregate sum on columns */
 export type Go1_Licenses_History_Sum_Fields = {
   __typename?: 'go1_licenses_history_sum_fields';
@@ -25056,6 +27112,25 @@ export enum Go1_Licenses_History_Update_Column {
   /** column name */
   ReservedBalance = 'reservedBalance'
 }
+
+export type Go1_Licenses_History_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Go1_Licenses_History_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Go1_Licenses_History_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Go1_Licenses_History_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Go1_Licenses_History_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Go1_Licenses_History_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Go1_Licenses_History_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Go1_Licenses_History_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Go1_Licenses_History_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Go1_Licenses_History_Var_Pop_Fields = {
@@ -25204,6 +27279,23 @@ export type Go1_Licenses_Set_Input = {
   profileId?: InputMaybe<Scalars['uuid']>;
 };
 
+/** Streaming cursor of the table "go1_licenses" */
+export type Go1_Licenses_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Go1_Licenses_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Go1_Licenses_Stream_Cursor_Value_Input = {
+  enrolledOn?: InputMaybe<Scalars['timestamptz']>;
+  expireDate?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  orgId?: InputMaybe<Scalars['uuid']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+};
+
 /** update columns of table "go1_licenses" */
 export enum Go1_Licenses_Update_Column {
   /** column name */
@@ -25217,6 +27309,13 @@ export enum Go1_Licenses_Update_Column {
   /** column name */
   ProfileId = 'profileId'
 }
+
+export type Go1_Licenses_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Go1_Licenses_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Go1_Licenses_Bool_Exp;
+};
 
 /** Enum table for possible course grades */
 export type Grade = {
@@ -25256,7 +27355,7 @@ export type Grade_Bool_Exp = {
 
 /** unique or primary key constraints on table "grade" */
 export enum Grade_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   GradePkey = 'grade_pkey'
 }
 
@@ -25330,11 +27429,31 @@ export type Grade_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "grade" */
+export type Grade_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Grade_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Grade_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "grade" */
 export enum Grade_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Grade_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Grade_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Grade_Bool_Exp;
+};
 
 /** columns and relationships of "identity" */
 export type Identity = {
@@ -25354,6 +27473,17 @@ export type Identity_Aggregate = {
   __typename?: 'identity_aggregate';
   aggregate?: Maybe<Identity_Aggregate_Fields>;
   nodes: Array<Identity>;
+};
+
+export type Identity_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Identity_Aggregate_Bool_Exp_Count>;
+};
+
+export type Identity_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Identity_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Identity_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "identity" */
@@ -25400,9 +27530,9 @@ export type Identity_Bool_Exp = {
 
 /** unique or primary key constraints on table "identity" */
 export enum Identity_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   IdentityPkey = 'identity_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "provider_id" */
   IdentityProviderIdKey = 'identity_provider_id_key'
 }
 
@@ -25497,6 +27627,22 @@ export type Identity_Set_Input = {
   type?: InputMaybe<Identity_Type_Enum>;
 };
 
+/** Streaming cursor of the table "identity" */
+export type Identity_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Identity_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Identity_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  provider_id?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Identity_Type_Enum>;
+};
+
 /** columns and relationships of "identity_type" */
 export type Identity_Type = {
   __typename?: 'identity_type';
@@ -25555,12 +27701,13 @@ export type Identity_Type_Bool_Exp = {
   _not?: InputMaybe<Identity_Type_Bool_Exp>;
   _or?: InputMaybe<Array<Identity_Type_Bool_Exp>>;
   identities?: InputMaybe<Identity_Bool_Exp>;
+  identities_aggregate?: InputMaybe<Identity_Aggregate_Bool_Exp>;
   value?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "identity_type" */
 export enum Identity_Type_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "value" */
   IdentityTypePkey = 'identity_type_pkey'
 }
 
@@ -25640,11 +27787,31 @@ export type Identity_Type_Set_Input = {
   value?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "identity_type" */
+export type Identity_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Identity_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Identity_Type_Stream_Cursor_Value_Input = {
+  value?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "identity_type" */
 export enum Identity_Type_Update_Column {
   /** column name */
   Value = 'value'
 }
+
+export type Identity_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Identity_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Identity_Type_Bool_Exp;
+};
 
 /** update columns of table "identity" */
 export enum Identity_Update_Column {
@@ -25657,6 +27824,26 @@ export enum Identity_Update_Column {
   /** column name */
   Type = 'type'
 }
+
+export type Identity_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Identity_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Identity_Bool_Exp;
+};
+
+/** fields of action: "importArloCertificates" */
+export type ImportArloCertificates = {
+  __typename?: 'importArloCertificates';
+  /** the time at which this action was created */
+  created_at: Scalars['timestamptz'];
+  /** errors related to the invocation */
+  errors?: Maybe<Scalars['json']>;
+  /** the unique id of an action */
+  id: Scalars['uuid'];
+  /** the output fields of this action */
+  output?: Maybe<ImportArloCertificatesOutput>;
+};
 
 export type IsUserSubscribedToMembershipResponse = {
   __typename?: 'isUserSubscribedToMembershipResponse';
@@ -25794,11 +27981,9 @@ export type Legacy_Certificate_Bool_Exp = {
 
 /** unique or primary key constraints on table "legacy_certificate" */
 export enum Legacy_Certificate_Constraint {
-  /** unique or primary key constraint */
-  LegacyCertificateLegacyIdKey = 'legacy_certificate_legacy_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "number" */
   LegacyCertificateNumberKey = 'legacy_certificate_number_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   LegacyCertificatePkey = 'legacy_certificate_pkey'
 }
 
@@ -25983,6 +28168,31 @@ export type Legacy_Certificate_Stddev_Samp_Fields = {
   legacyId?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "legacy_certificate" */
+export type Legacy_Certificate_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Legacy_Certificate_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Legacy_Certificate_Stream_Cursor_Value_Input = {
+  certificationDate?: InputMaybe<Scalars['date']>;
+  courseCertificateId?: InputMaybe<Scalars['uuid']>;
+  courseName?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  email?: InputMaybe<Scalars['String']>;
+  expiryDate?: InputMaybe<Scalars['date']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  legacyId?: InputMaybe<Scalars['Int']>;
+  number?: InputMaybe<Scalars['String']>;
+  originalRecord?: InputMaybe<Scalars['jsonb']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Legacy_Certificate_Sum_Fields = {
   __typename?: 'legacy_certificate_sum_fields';
@@ -26018,6 +28228,25 @@ export enum Legacy_Certificate_Update_Column {
   /** column name */
   UpdatedAt = 'updatedAt'
 }
+
+export type Legacy_Certificate_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Legacy_Certificate_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Legacy_Certificate_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Legacy_Certificate_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Legacy_Certificate_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Legacy_Certificate_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Legacy_Certificate_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Legacy_Certificate_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Legacy_Certificate_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Legacy_Certificate_Var_Pop_Fields = {
@@ -26057,6 +28286,17 @@ export type Module_Aggregate = {
   __typename?: 'module_aggregate';
   aggregate?: Maybe<Module_Aggregate_Fields>;
   nodes: Array<Module>;
+};
+
+export type Module_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Module_Aggregate_Bool_Exp_Count>;
+};
+
+export type Module_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Module_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Module_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "module" */
@@ -26142,7 +28382,7 @@ export type Module_Category_Bool_Exp = {
 
 /** unique or primary key constraints on table "module_category" */
 export enum Module_Category_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   ModuleCategoryPkey = 'module_category_pkey'
 }
 
@@ -26214,15 +28454,35 @@ export type Module_Category_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "module_category" */
+export type Module_Category_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Module_Category_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Module_Category_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "module_category" */
 export enum Module_Category_Update_Column {
   /** column name */
   Name = 'name'
 }
 
+export type Module_Category_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Module_Category_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Module_Category_Bool_Exp;
+};
+
 /** unique or primary key constraints on table "module" */
 export enum Module_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   ModulePkey = 'module_pkey'
 }
 
@@ -26316,17 +28576,19 @@ export type Module_Group_Bool_Exp = {
   color?: InputMaybe<Color_Enum_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   durations?: InputMaybe<Module_Group_Duration_Bool_Exp>;
+  durations_aggregate?: InputMaybe<Module_Group_Duration_Aggregate_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   level?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
   mandatory?: InputMaybe<Boolean_Comparison_Exp>;
   modules?: InputMaybe<Module_Bool_Exp>;
+  modules_aggregate?: InputMaybe<Module_Aggregate_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "module_group" */
 export enum Module_Group_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   ModuleGroupPkey = 'module_group_pkey'
 }
 
@@ -26350,6 +28612,33 @@ export type Module_Group_Duration_Aggregate = {
   __typename?: 'module_group_duration_aggregate';
   aggregate?: Maybe<Module_Group_Duration_Aggregate_Fields>;
   nodes: Array<Module_Group_Duration>;
+};
+
+export type Module_Group_Duration_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Module_Group_Duration_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Module_Group_Duration_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Module_Group_Duration_Aggregate_Bool_Exp_Count>;
+};
+
+export type Module_Group_Duration_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Module_Group_Duration_Select_Column_Module_Group_Duration_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Module_Group_Duration_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Module_Group_Duration_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Module_Group_Duration_Select_Column_Module_Group_Duration_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Module_Group_Duration_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Module_Group_Duration_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Module_Group_Duration_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Module_Group_Duration_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "module_group_duration" */
@@ -26426,7 +28715,7 @@ export type Module_Group_Duration_Bool_Exp = {
 
 /** unique or primary key constraints on table "module_group_duration" */
 export enum Module_Group_Duration_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   ModuleGroupDurationPkey = 'module_group_duration_pkey'
 }
 
@@ -26540,6 +28829,22 @@ export enum Module_Group_Duration_Select_Column {
   UpdatedAt = 'updatedAt'
 }
 
+/** select "module_group_duration_aggregate_bool_exp_bool_and_arguments_columns" columns of table "module_group_duration" */
+export enum Module_Group_Duration_Select_Column_Module_Group_Duration_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  Go1Integration = 'go1Integration',
+  /** column name */
+  Reaccreditation = 'reaccreditation'
+}
+
+/** select "module_group_duration_aggregate_bool_exp_bool_or_arguments_columns" columns of table "module_group_duration" */
+export enum Module_Group_Duration_Select_Column_Module_Group_Duration_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  Go1Integration = 'go1Integration',
+  /** column name */
+  Reaccreditation = 'reaccreditation'
+}
+
 /** input type for updating data in table "module_group_duration" */
 export type Module_Group_Duration_Set_Input = {
   courseDeliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
@@ -26585,6 +28890,26 @@ export type Module_Group_Duration_Stddev_Samp_Order_By = {
   duration?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "module_group_duration" */
+export type Module_Group_Duration_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Module_Group_Duration_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Module_Group_Duration_Stream_Cursor_Value_Input = {
+  courseDeliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  duration?: InputMaybe<Scalars['Int']>;
+  go1Integration?: InputMaybe<Scalars['Boolean']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  module_group_id?: InputMaybe<Scalars['uuid']>;
+  reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Module_Group_Duration_Sum_Fields = {
   __typename?: 'module_group_duration_sum_fields';
@@ -26615,6 +28940,15 @@ export enum Module_Group_Duration_Update_Column {
   /** column name */
   UpdatedAt = 'updatedAt'
 }
+
+export type Module_Group_Duration_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Module_Group_Duration_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Module_Group_Duration_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Module_Group_Duration_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Module_Group_Duration_Var_Pop_Fields = {
@@ -26750,6 +29084,25 @@ export type Module_Group_Set_Input = {
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
+/** Streaming cursor of the table "module_group" */
+export type Module_Group_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Module_Group_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Module_Group_Stream_Cursor_Value_Input = {
+  color?: InputMaybe<Color_Enum>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  level?: InputMaybe<Course_Level_Enum>;
+  mandatory?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** update columns of table "module_group" */
 export enum Module_Group_Update_Column {
   /** column name */
@@ -26767,6 +29120,13 @@ export enum Module_Group_Update_Column {
   /** column name */
   UpdatedAt = 'updatedAt'
 }
+
+export type Module_Group_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Module_Group_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Module_Group_Bool_Exp;
+};
 
 /** input type for inserting data into table "module" */
 export type Module_Insert_Input = {
@@ -26896,6 +29256,26 @@ export type Module_Set_Input = {
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
+/** Streaming cursor of the table "module" */
+export type Module_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Module_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Module_Stream_Cursor_Value_Input = {
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  description?: InputMaybe<Scalars['String']>;
+  group?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  level?: InputMaybe<Course_Level_Enum>;
+  name?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Module_Category_Enum>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** update columns of table "module" */
 export enum Module_Update_Column {
   /** column name */
@@ -26916,23 +29296,36 @@ export enum Module_Update_Column {
   UpdatedAt = 'updatedAt'
 }
 
+export type Module_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Module_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Module_Bool_Exp;
+};
+
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
   acceptOrgInvite?: Maybe<AcceptOrgInviteOutput>;
   approveCourse: ApproveCourseOutput;
+  arloCallback?: Maybe<ArloCallbackOutput>;
   cancelIndividualFromCourse: Scalars['Boolean'];
+  /** Removes another user from course waitlist */
+  cancelIndividualFromCourseWaitlist?: Maybe<CancelIndividualFromCourseWaitlistOutput>;
   cancelMyselfFromCourse: Scalars['Boolean'];
+  /** Removes current anonymous user from course waitlist */
+  cancelMyselfFromCourseWaitlist?: Maybe<CancelMyselfFromCourseWaitlistOutput>;
   /** confirmCreditCardPayment */
   confirmCreditCardPayment?: Maybe<ConfirmCreditCardPaymentOutput>;
-  content?: Maybe<RootMutation>;
+  content?: Maybe<ContentRootMutation>;
   /** Attempts to create a new Order */
   createOrder?: Maybe<CreateOrderOutput>;
   /** Creates a membership subscription */
   createStripeSubscription?: Maybe<CreateSubscriptionOutput>;
   createUser: CreateUserOutput;
   declineInvite?: Maybe<DeclineInviteOutput>;
-  declineOrgInvite?: Maybe<DeclineOrgInviteOutput>;
+  declineOrgInvite: Scalars['Boolean'];
+  deleteMeeting: DeleteMeetingOutput;
   /** Delete users */
   deleteUser: DeleteUserOutput;
   /** delete data from the table: "accreditors" */
@@ -26951,6 +29344,10 @@ export type Mutation_Root = {
   delete_blended_learning_status?: Maybe<Blended_Learning_Status_Mutation_Response>;
   /** delete single row from the table: "blended_learning_status" */
   delete_blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
+  /** delete data from the table: "certificate_expired_notification_jobs" */
+  delete_certificate_expired_notification_jobs?: Maybe<Certificate_Expired_Notification_Jobs_Mutation_Response>;
+  /** delete single row from the table: "certificate_expired_notification_jobs" */
+  delete_certificate_expired_notification_jobs_by_pk?: Maybe<Certificate_Expired_Notification_Jobs>;
   /** delete data from the table: "certificate_expiry_notification_jobs" */
   delete_certificate_expiry_notification_jobs?: Maybe<Certificate_Expiry_Notification_Jobs_Mutation_Response>;
   /** delete single row from the table: "certificate_expiry_notification_jobs" */
@@ -27277,6 +29674,7 @@ export type Mutation_Root = {
   delete_xero_invoice_status_by_pk?: Maybe<Xero_Invoice_Status>;
   /** go1LicensesChange */
   go1LicensesChange?: Maybe<Go1LicensesChangeOutput>;
+  importArloCertificates: Scalars['uuid'];
   importLegacyCertificate: Scalars['Boolean'];
   /** insert data into the table: "accreditors" */
   insert_accreditors?: Maybe<Accreditors_Mutation_Response>;
@@ -27294,6 +29692,10 @@ export type Mutation_Root = {
   insert_blended_learning_status?: Maybe<Blended_Learning_Status_Mutation_Response>;
   /** insert a single row into the table: "blended_learning_status" */
   insert_blended_learning_status_one?: Maybe<Blended_Learning_Status>;
+  /** insert data into the table: "certificate_expired_notification_jobs" */
+  insert_certificate_expired_notification_jobs?: Maybe<Certificate_Expired_Notification_Jobs_Mutation_Response>;
+  /** insert a single row into the table: "certificate_expired_notification_jobs" */
+  insert_certificate_expired_notification_jobs_one?: Maybe<Certificate_Expired_Notification_Jobs>;
   /** insert data into the table: "certificate_expiry_notification_jobs" */
   insert_certificate_expiry_notification_jobs?: Maybe<Certificate_Expiry_Notification_Jobs_Mutation_Response>;
   /** insert a single row into the table: "certificate_expiry_notification_jobs" */
@@ -27618,17 +30020,23 @@ export type Mutation_Root = {
   insert_xero_invoice_status?: Maybe<Xero_Invoice_Status_Mutation_Response>;
   /** insert a single row into the table: "xero_invoice_status" */
   insert_xero_invoice_status_one?: Maybe<Xero_Invoice_Status>;
+  /** joinWaitlist */
+  joinWaitlist: JoinWaitlistOutput;
   /** Merge users */
   mergeUser: MergeUserOutput;
   /** Notify course's trainer(s) and attendees about course editing */
   notifyCourseEdit: NotifyCourseEditOutput;
   /** Creates a membership plan */
   plansCreate?: Maybe<PlansCreateResult>;
+  /** This action is called when a Admin / LD role Rejects a course in status Exceptions Approval Pending */
+  rejectCourse?: Maybe<RejectCourseOutput>;
   /** replaceParticipant */
   replaceParticipant?: Maybe<ReplaceParticipantOutput>;
   resendPassword: Scalars['Boolean'];
   /** Send course information to the specified course attendees */
   sendCourseInformation: SendCourseInformationOutput;
+  /** Creates a temporary profile */
+  signUp?: Maybe<SignUpOutput>;
   stripeCreatePaymentIntent?: Maybe<StripeCreatePaymentIntentOutput>;
   /** transferParticipant */
   transferParticipant?: Maybe<TransferParticipantOutput>;
@@ -27638,58 +30046,90 @@ export type Mutation_Root = {
   update_accreditors?: Maybe<Accreditors_Mutation_Response>;
   /** update single row of the table: "accreditors" */
   update_accreditors_by_pk?: Maybe<Accreditors>;
+  /** update multiples rows of table: "accreditors" */
+  update_accreditors_many?: Maybe<Array<Maybe<Accreditors_Mutation_Response>>>;
   /** update data of the table: "availability" */
   update_availability?: Maybe<Availability_Mutation_Response>;
   /** update single row of the table: "availability" */
   update_availability_by_pk?: Maybe<Availability>;
+  /** update multiples rows of table: "availability" */
+  update_availability_many?: Maybe<Array<Maybe<Availability_Mutation_Response>>>;
   /** update data of the table: "bild_strategy" */
   update_bild_strategy?: Maybe<Bild_Strategy_Mutation_Response>;
   /** update single row of the table: "bild_strategy" */
   update_bild_strategy_by_pk?: Maybe<Bild_Strategy>;
+  /** update multiples rows of table: "bild_strategy" */
+  update_bild_strategy_many?: Maybe<Array<Maybe<Bild_Strategy_Mutation_Response>>>;
   /** update data of the table: "blended_learning_status" */
   update_blended_learning_status?: Maybe<Blended_Learning_Status_Mutation_Response>;
   /** update single row of the table: "blended_learning_status" */
   update_blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
+  /** update multiples rows of table: "blended_learning_status" */
+  update_blended_learning_status_many?: Maybe<Array<Maybe<Blended_Learning_Status_Mutation_Response>>>;
+  /** update data of the table: "certificate_expired_notification_jobs" */
+  update_certificate_expired_notification_jobs?: Maybe<Certificate_Expired_Notification_Jobs_Mutation_Response>;
+  /** update single row of the table: "certificate_expired_notification_jobs" */
+  update_certificate_expired_notification_jobs_by_pk?: Maybe<Certificate_Expired_Notification_Jobs>;
+  /** update multiples rows of table: "certificate_expired_notification_jobs" */
+  update_certificate_expired_notification_jobs_many?: Maybe<Array<Maybe<Certificate_Expired_Notification_Jobs_Mutation_Response>>>;
   /** update data of the table: "certificate_expiry_notification_jobs" */
   update_certificate_expiry_notification_jobs?: Maybe<Certificate_Expiry_Notification_Jobs_Mutation_Response>;
   /** update single row of the table: "certificate_expiry_notification_jobs" */
   update_certificate_expiry_notification_jobs_by_pk?: Maybe<Certificate_Expiry_Notification_Jobs>;
+  /** update multiples rows of table: "certificate_expiry_notification_jobs" */
+  update_certificate_expiry_notification_jobs_many?: Maybe<Array<Maybe<Certificate_Expiry_Notification_Jobs_Mutation_Response>>>;
   /** update data of the table: "certificate_expiry_notification_timeframe" */
   update_certificate_expiry_notification_timeframe?: Maybe<Certificate_Expiry_Notification_Timeframe_Mutation_Response>;
   /** update single row of the table: "certificate_expiry_notification_timeframe" */
   update_certificate_expiry_notification_timeframe_by_pk?: Maybe<Certificate_Expiry_Notification_Timeframe>;
+  /** update multiples rows of table: "certificate_expiry_notification_timeframe" */
+  update_certificate_expiry_notification_timeframe_many?: Maybe<Array<Maybe<Certificate_Expiry_Notification_Timeframe_Mutation_Response>>>;
   /** update data of the table: "certificate_status" */
   update_certificate_status?: Maybe<Certificate_Status_Mutation_Response>;
   /** update single row of the table: "certificate_status" */
   update_certificate_status_by_pk?: Maybe<Certificate_Status>;
+  /** update multiples rows of table: "certificate_status" */
+  update_certificate_status_many?: Maybe<Array<Maybe<Certificate_Status_Mutation_Response>>>;
   /** update data of the table: "color" */
   update_color?: Maybe<Color_Mutation_Response>;
   /** update single row of the table: "color" */
   update_color_by_pk?: Maybe<Color>;
+  /** update multiples rows of table: "color" */
+  update_color_many?: Maybe<Array<Maybe<Color_Mutation_Response>>>;
   /** update data of the table: "course" */
   update_course?: Maybe<Course_Mutation_Response>;
   /** update data of the table: "course_audit" */
   update_course_audit?: Maybe<Course_Audit_Mutation_Response>;
   /** update single row of the table: "course_audit" */
   update_course_audit_by_pk?: Maybe<Course_Audit>;
+  /** update multiples rows of table: "course_audit" */
+  update_course_audit_many?: Maybe<Array<Maybe<Course_Audit_Mutation_Response>>>;
   /** update data of the table: "course_audit_type" */
   update_course_audit_type?: Maybe<Course_Audit_Type_Mutation_Response>;
   /** update single row of the table: "course_audit_type" */
   update_course_audit_type_by_pk?: Maybe<Course_Audit_Type>;
+  /** update multiples rows of table: "course_audit_type" */
+  update_course_audit_type_many?: Maybe<Array<Maybe<Course_Audit_Type_Mutation_Response>>>;
   /** update data of the table: "course_bild_module" */
   update_course_bild_module?: Maybe<Course_Bild_Module_Mutation_Response>;
   /** update single row of the table: "course_bild_module" */
   update_course_bild_module_by_pk?: Maybe<Course_Bild_Module>;
+  /** update multiples rows of table: "course_bild_module" */
+  update_course_bild_module_many?: Maybe<Array<Maybe<Course_Bild_Module_Mutation_Response>>>;
   /** update data of the table: "course_bild_strategy" */
   update_course_bild_strategy?: Maybe<Course_Bild_Strategy_Mutation_Response>;
   /** update single row of the table: "course_bild_strategy" */
   update_course_bild_strategy_by_pk?: Maybe<Course_Bild_Strategy>;
+  /** update multiples rows of table: "course_bild_strategy" */
+  update_course_bild_strategy_many?: Maybe<Array<Maybe<Course_Bild_Strategy_Mutation_Response>>>;
   /** update single row of the table: "course" */
   update_course_by_pk?: Maybe<Course>;
   /** update data of the table: "course_cancellation_request" */
   update_course_cancellation_request?: Maybe<Course_Cancellation_Request_Mutation_Response>;
   /** update single row of the table: "course_cancellation_request" */
   update_course_cancellation_request_by_pk?: Maybe<Course_Cancellation_Request>;
+  /** update multiples rows of table: "course_cancellation_request" */
+  update_course_cancellation_request_many?: Maybe<Array<Maybe<Course_Cancellation_Request_Mutation_Response>>>;
   /** update data of the table: "course_certificate" */
   update_course_certificate?: Maybe<Course_Certificate_Mutation_Response>;
   /** update single row of the table: "course_certificate" */
@@ -27698,98 +30138,150 @@ export type Mutation_Root = {
   update_course_certificate_changelog?: Maybe<Course_Certificate_Changelog_Mutation_Response>;
   /** update single row of the table: "course_certificate_changelog" */
   update_course_certificate_changelog_by_pk?: Maybe<Course_Certificate_Changelog>;
+  /** update multiples rows of table: "course_certificate_changelog" */
+  update_course_certificate_changelog_many?: Maybe<Array<Maybe<Course_Certificate_Changelog_Mutation_Response>>>;
   /** update data of the table: "course_certificate_changelog_type" */
   update_course_certificate_changelog_type?: Maybe<Course_Certificate_Changelog_Type_Mutation_Response>;
   /** update single row of the table: "course_certificate_changelog_type" */
   update_course_certificate_changelog_type_by_pk?: Maybe<Course_Certificate_Changelog_Type>;
+  /** update multiples rows of table: "course_certificate_changelog_type" */
+  update_course_certificate_changelog_type_many?: Maybe<Array<Maybe<Course_Certificate_Changelog_Type_Mutation_Response>>>;
   /** update data of the table: "course_certificate_hold_request" */
   update_course_certificate_hold_request?: Maybe<Course_Certificate_Hold_Request_Mutation_Response>;
   /** update single row of the table: "course_certificate_hold_request" */
   update_course_certificate_hold_request_by_pk?: Maybe<Course_Certificate_Hold_Request>;
+  /** update multiples rows of table: "course_certificate_hold_request" */
+  update_course_certificate_hold_request_many?: Maybe<Array<Maybe<Course_Certificate_Hold_Request_Mutation_Response>>>;
+  /** update multiples rows of table: "course_certificate" */
+  update_course_certificate_many?: Maybe<Array<Maybe<Course_Certificate_Mutation_Response>>>;
   /** update data of the table: "course_delivery_type" */
   update_course_delivery_type?: Maybe<Course_Delivery_Type_Mutation_Response>;
   /** update single row of the table: "course_delivery_type" */
   update_course_delivery_type_by_pk?: Maybe<Course_Delivery_Type>;
+  /** update multiples rows of table: "course_delivery_type" */
+  update_course_delivery_type_many?: Maybe<Array<Maybe<Course_Delivery_Type_Mutation_Response>>>;
   /** update data of the table: "course_delivery_type_prefix" */
   update_course_delivery_type_prefix?: Maybe<Course_Delivery_Type_Prefix_Mutation_Response>;
   /** update single row of the table: "course_delivery_type_prefix" */
   update_course_delivery_type_prefix_by_pk?: Maybe<Course_Delivery_Type_Prefix>;
+  /** update multiples rows of table: "course_delivery_type_prefix" */
+  update_course_delivery_type_prefix_many?: Maybe<Array<Maybe<Course_Delivery_Type_Prefix_Mutation_Response>>>;
   /** update data of the table: "course_draft" */
   update_course_draft?: Maybe<Course_Draft_Mutation_Response>;
   /** update single row of the table: "course_draft" */
   update_course_draft_by_pk?: Maybe<Course_Draft>;
+  /** update multiples rows of table: "course_draft" */
+  update_course_draft_many?: Maybe<Array<Maybe<Course_Draft_Mutation_Response>>>;
   /** update data of the table: "course_end_jobs" */
   update_course_end_jobs?: Maybe<Course_End_Jobs_Mutation_Response>;
   /** update single row of the table: "course_end_jobs" */
   update_course_end_jobs_by_pk?: Maybe<Course_End_Jobs>;
+  /** update multiples rows of table: "course_end_jobs" */
+  update_course_end_jobs_many?: Maybe<Array<Maybe<Course_End_Jobs_Mutation_Response>>>;
   /** update data of the table: "course_enquiry" */
   update_course_enquiry?: Maybe<Course_Enquiry_Mutation_Response>;
   /** update single row of the table: "course_enquiry" */
   update_course_enquiry_by_pk?: Maybe<Course_Enquiry>;
+  /** update multiples rows of table: "course_enquiry" */
+  update_course_enquiry_many?: Maybe<Array<Maybe<Course_Enquiry_Mutation_Response>>>;
   /** update data of the table: "course_evaluation_answers" */
   update_course_evaluation_answers?: Maybe<Course_Evaluation_Answers_Mutation_Response>;
   /** update single row of the table: "course_evaluation_answers" */
   update_course_evaluation_answers_by_pk?: Maybe<Course_Evaluation_Answers>;
+  /** update multiples rows of table: "course_evaluation_answers" */
+  update_course_evaluation_answers_many?: Maybe<Array<Maybe<Course_Evaluation_Answers_Mutation_Response>>>;
   /** update data of the table: "course_evaluation_question_group" */
   update_course_evaluation_question_group?: Maybe<Course_Evaluation_Question_Group_Mutation_Response>;
   /** update single row of the table: "course_evaluation_question_group" */
   update_course_evaluation_question_group_by_pk?: Maybe<Course_Evaluation_Question_Group>;
+  /** update multiples rows of table: "course_evaluation_question_group" */
+  update_course_evaluation_question_group_many?: Maybe<Array<Maybe<Course_Evaluation_Question_Group_Mutation_Response>>>;
   /** update data of the table: "course_evaluation_question_type" */
   update_course_evaluation_question_type?: Maybe<Course_Evaluation_Question_Type_Mutation_Response>;
   /** update single row of the table: "course_evaluation_question_type" */
   update_course_evaluation_question_type_by_pk?: Maybe<Course_Evaluation_Question_Type>;
+  /** update multiples rows of table: "course_evaluation_question_type" */
+  update_course_evaluation_question_type_many?: Maybe<Array<Maybe<Course_Evaluation_Question_Type_Mutation_Response>>>;
   /** update data of the table: "course_evaluation_questions" */
   update_course_evaluation_questions?: Maybe<Course_Evaluation_Questions_Mutation_Response>;
   /** update single row of the table: "course_evaluation_questions" */
   update_course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
+  /** update multiples rows of table: "course_evaluation_questions" */
+  update_course_evaluation_questions_many?: Maybe<Array<Maybe<Course_Evaluation_Questions_Mutation_Response>>>;
   /** update data of the table: "course_expenses" */
   update_course_expenses?: Maybe<Course_Expenses_Mutation_Response>;
   /** update single row of the table: "course_expenses" */
   update_course_expenses_by_pk?: Maybe<Course_Expenses>;
+  /** update multiples rows of table: "course_expenses" */
+  update_course_expenses_many?: Maybe<Array<Maybe<Course_Expenses_Mutation_Response>>>;
   /** update data of the table: "course_invite_status" */
   update_course_invite_status?: Maybe<Course_Invite_Status_Mutation_Response>;
   /** update single row of the table: "course_invite_status" */
   update_course_invite_status_by_pk?: Maybe<Course_Invite_Status>;
+  /** update multiples rows of table: "course_invite_status" */
+  update_course_invite_status_many?: Maybe<Array<Maybe<Course_Invite_Status_Mutation_Response>>>;
   /** update data of the table: "course_invites" */
   update_course_invites?: Maybe<Course_Invites_Mutation_Response>;
   /** update single row of the table: "course_invites" */
   update_course_invites_by_pk?: Maybe<Course_Invites>;
+  /** update multiples rows of table: "course_invites" */
+  update_course_invites_many?: Maybe<Array<Maybe<Course_Invites_Mutation_Response>>>;
   /** update data of the table: "course_level" */
   update_course_level?: Maybe<Course_Level_Mutation_Response>;
   /** update single row of the table: "course_level" */
   update_course_level_by_pk?: Maybe<Course_Level>;
+  /** update multiples rows of table: "course_level" */
+  update_course_level_many?: Maybe<Array<Maybe<Course_Level_Mutation_Response>>>;
   /** update data of the table: "course_level_prefix" */
   update_course_level_prefix?: Maybe<Course_Level_Prefix_Mutation_Response>;
   /** update single row of the table: "course_level_prefix" */
   update_course_level_prefix_by_pk?: Maybe<Course_Level_Prefix>;
+  /** update multiples rows of table: "course_level_prefix" */
+  update_course_level_prefix_many?: Maybe<Array<Maybe<Course_Level_Prefix_Mutation_Response>>>;
+  /** update multiples rows of table: "course" */
+  update_course_many?: Maybe<Array<Maybe<Course_Mutation_Response>>>;
   /** update data of the table: "course_module" */
   update_course_module?: Maybe<Course_Module_Mutation_Response>;
   /** update single row of the table: "course_module" */
   update_course_module_by_pk?: Maybe<Course_Module>;
+  /** update multiples rows of table: "course_module" */
+  update_course_module_many?: Maybe<Array<Maybe<Course_Module_Mutation_Response>>>;
   /** update data of the table: "course_participant" */
   update_course_participant?: Maybe<Course_Participant_Mutation_Response>;
   /** update data of the table: "course_participant_audit" */
   update_course_participant_audit?: Maybe<Course_Participant_Audit_Mutation_Response>;
   /** update single row of the table: "course_participant_audit" */
   update_course_participant_audit_by_pk?: Maybe<Course_Participant_Audit>;
+  /** update multiples rows of table: "course_participant_audit" */
+  update_course_participant_audit_many?: Maybe<Array<Maybe<Course_Participant_Audit_Mutation_Response>>>;
   /** update data of the table: "course_participant_audit_type" */
   update_course_participant_audit_type?: Maybe<Course_Participant_Audit_Type_Mutation_Response>;
   /** update single row of the table: "course_participant_audit_type" */
   update_course_participant_audit_type_by_pk?: Maybe<Course_Participant_Audit_Type>;
+  /** update multiples rows of table: "course_participant_audit_type" */
+  update_course_participant_audit_type_many?: Maybe<Array<Maybe<Course_Participant_Audit_Type_Mutation_Response>>>;
   /** update data of the table: "course_participant_bild_module" */
   update_course_participant_bild_module?: Maybe<Course_Participant_Bild_Module_Mutation_Response>;
   /** update single row of the table: "course_participant_bild_module" */
   update_course_participant_bild_module_by_pk?: Maybe<Course_Participant_Bild_Module>;
+  /** update multiples rows of table: "course_participant_bild_module" */
+  update_course_participant_bild_module_many?: Maybe<Array<Maybe<Course_Participant_Bild_Module_Mutation_Response>>>;
   /** update single row of the table: "course_participant" */
   update_course_participant_by_pk?: Maybe<Course_Participant>;
   /** update data of the table: "course_participant_cancellation" */
   update_course_participant_cancellation?: Maybe<Course_Participant_Cancellation_Mutation_Response>;
   /** update single row of the table: "course_participant_cancellation" */
   update_course_participant_cancellation_by_pk?: Maybe<Course_Participant_Cancellation>;
+  /** update multiples rows of table: "course_participant_cancellation" */
+  update_course_participant_cancellation_many?: Maybe<Array<Maybe<Course_Participant_Cancellation_Mutation_Response>>>;
+  /** update multiples rows of table: "course_participant" */
+  update_course_participant_many?: Maybe<Array<Maybe<Course_Participant_Mutation_Response>>>;
   /** update data of the table: "course_participant_module" */
   update_course_participant_module?: Maybe<Course_Participant_Module_Mutation_Response>;
   /** update single row of the table: "course_participant_module" */
   update_course_participant_module_by_pk?: Maybe<Course_Participant_Module>;
+  /** update multiples rows of table: "course_participant_module" */
+  update_course_participant_module_many?: Maybe<Array<Maybe<Course_Participant_Module_Mutation_Response>>>;
   /** update data of the table: "course_pricing" */
   update_course_pricing?: Maybe<Course_Pricing_Mutation_Response>;
   /** update single row of the table: "course_pricing" */
@@ -27798,50 +30290,76 @@ export type Mutation_Root = {
   update_course_pricing_changelog?: Maybe<Course_Pricing_Changelog_Mutation_Response>;
   /** update single row of the table: "course_pricing_changelog" */
   update_course_pricing_changelog_by_pk?: Maybe<Course_Pricing_Changelog>;
+  /** update multiples rows of table: "course_pricing_changelog" */
+  update_course_pricing_changelog_many?: Maybe<Array<Maybe<Course_Pricing_Changelog_Mutation_Response>>>;
+  /** update multiples rows of table: "course_pricing" */
+  update_course_pricing_many?: Maybe<Array<Maybe<Course_Pricing_Mutation_Response>>>;
   /** update data of the table: "course_promo_code" */
   update_course_promo_code?: Maybe<Course_Promo_Code_Mutation_Response>;
   /** update single row of the table: "course_promo_code" */
   update_course_promo_code_by_pk?: Maybe<Course_Promo_Code>;
+  /** update multiples rows of table: "course_promo_code" */
+  update_course_promo_code_many?: Maybe<Array<Maybe<Course_Promo_Code_Mutation_Response>>>;
   /** update data of the table: "course_schedule" */
   update_course_schedule?: Maybe<Course_Schedule_Mutation_Response>;
   /** update single row of the table: "course_schedule" */
   update_course_schedule_by_pk?: Maybe<Course_Schedule>;
+  /** update multiples rows of table: "course_schedule" */
+  update_course_schedule_many?: Maybe<Array<Maybe<Course_Schedule_Mutation_Response>>>;
   /** update data of the table: "course_source" */
   update_course_source?: Maybe<Course_Source_Mutation_Response>;
   /** update single row of the table: "course_source" */
   update_course_source_by_pk?: Maybe<Course_Source>;
+  /** update multiples rows of table: "course_source" */
+  update_course_source_many?: Maybe<Array<Maybe<Course_Source_Mutation_Response>>>;
   /** update data of the table: "course_status" */
   update_course_status?: Maybe<Course_Status_Mutation_Response>;
   /** update single row of the table: "course_status" */
   update_course_status_by_pk?: Maybe<Course_Status>;
+  /** update multiples rows of table: "course_status" */
+  update_course_status_many?: Maybe<Array<Maybe<Course_Status_Mutation_Response>>>;
   /** update data of the table: "course_trainer" */
   update_course_trainer?: Maybe<Course_Trainer_Mutation_Response>;
   /** update single row of the table: "course_trainer" */
   update_course_trainer_by_pk?: Maybe<Course_Trainer>;
+  /** update multiples rows of table: "course_trainer" */
+  update_course_trainer_many?: Maybe<Array<Maybe<Course_Trainer_Mutation_Response>>>;
   /** update data of the table: "course_trainer_type" */
   update_course_trainer_type?: Maybe<Course_Trainer_Type_Mutation_Response>;
   /** update single row of the table: "course_trainer_type" */
   update_course_trainer_type_by_pk?: Maybe<Course_Trainer_Type>;
+  /** update multiples rows of table: "course_trainer_type" */
+  update_course_trainer_type_many?: Maybe<Array<Maybe<Course_Trainer_Type_Mutation_Response>>>;
   /** update data of the table: "course_type" */
   update_course_type?: Maybe<Course_Type_Mutation_Response>;
   /** update single row of the table: "course_type" */
   update_course_type_by_pk?: Maybe<Course_Type>;
+  /** update multiples rows of table: "course_type" */
+  update_course_type_many?: Maybe<Array<Maybe<Course_Type_Mutation_Response>>>;
   /** update data of the table: "course_type_prefix" */
   update_course_type_prefix?: Maybe<Course_Type_Prefix_Mutation_Response>;
   /** update single row of the table: "course_type_prefix" */
   update_course_type_prefix_by_pk?: Maybe<Course_Type_Prefix>;
+  /** update multiples rows of table: "course_type_prefix" */
+  update_course_type_prefix_many?: Maybe<Array<Maybe<Course_Type_Prefix_Mutation_Response>>>;
   /** update data of the table: "dfe_establishment" */
   update_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** update single row of the table: "dfe_establishment" */
   update_dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
+  /** update multiples rows of table: "dfe_establishment" */
+  update_dfe_establishment_many?: Maybe<Array<Maybe<Dfe_Establishment_Mutation_Response>>>;
   /** update data of the table: "expire_go1_license_jobs" */
   update_expire_go1_license_jobs?: Maybe<Expire_Go1_License_Jobs_Mutation_Response>;
   /** update single row of the table: "expire_go1_license_jobs" */
   update_expire_go1_license_jobs_by_pk?: Maybe<Expire_Go1_License_Jobs>;
+  /** update multiples rows of table: "expire_go1_license_jobs" */
+  update_expire_go1_license_jobs_many?: Maybe<Array<Maybe<Expire_Go1_License_Jobs_Mutation_Response>>>;
   /** update data of the table: "go1_history_events" */
   update_go1_history_events?: Maybe<Go1_History_Events_Mutation_Response>;
   /** update single row of the table: "go1_history_events" */
   update_go1_history_events_by_pk?: Maybe<Go1_History_Events>;
+  /** update multiples rows of table: "go1_history_events" */
+  update_go1_history_events_many?: Maybe<Array<Maybe<Go1_History_Events_Mutation_Response>>>;
   /** update data of the table: "go1_licenses" */
   update_go1_licenses?: Maybe<Go1_Licenses_Mutation_Response>;
   /** update single row of the table: "go1_licenses" */
@@ -27850,22 +30368,34 @@ export type Mutation_Root = {
   update_go1_licenses_history?: Maybe<Go1_Licenses_History_Mutation_Response>;
   /** update single row of the table: "go1_licenses_history" */
   update_go1_licenses_history_by_pk?: Maybe<Go1_Licenses_History>;
+  /** update multiples rows of table: "go1_licenses_history" */
+  update_go1_licenses_history_many?: Maybe<Array<Maybe<Go1_Licenses_History_Mutation_Response>>>;
+  /** update multiples rows of table: "go1_licenses" */
+  update_go1_licenses_many?: Maybe<Array<Maybe<Go1_Licenses_Mutation_Response>>>;
   /** update data of the table: "grade" */
   update_grade?: Maybe<Grade_Mutation_Response>;
   /** update single row of the table: "grade" */
   update_grade_by_pk?: Maybe<Grade>;
+  /** update multiples rows of table: "grade" */
+  update_grade_many?: Maybe<Array<Maybe<Grade_Mutation_Response>>>;
   /** update data of the table: "identity" */
   update_identity?: Maybe<Identity_Mutation_Response>;
   /** update single row of the table: "identity" */
   update_identity_by_pk?: Maybe<Identity>;
+  /** update multiples rows of table: "identity" */
+  update_identity_many?: Maybe<Array<Maybe<Identity_Mutation_Response>>>;
   /** update data of the table: "identity_type" */
   update_identity_type?: Maybe<Identity_Type_Mutation_Response>;
   /** update single row of the table: "identity_type" */
   update_identity_type_by_pk?: Maybe<Identity_Type>;
+  /** update multiples rows of table: "identity_type" */
+  update_identity_type_many?: Maybe<Array<Maybe<Identity_Type_Mutation_Response>>>;
   /** update data of the table: "legacy_certificate" */
   update_legacy_certificate?: Maybe<Legacy_Certificate_Mutation_Response>;
   /** update single row of the table: "legacy_certificate" */
   update_legacy_certificate_by_pk?: Maybe<Legacy_Certificate>;
+  /** update multiples rows of table: "legacy_certificate" */
+  update_legacy_certificate_many?: Maybe<Array<Maybe<Legacy_Certificate_Mutation_Response>>>;
   /** update data of the table: "module" */
   update_module?: Maybe<Module_Mutation_Response>;
   /** update single row of the table: "module" */
@@ -27874,6 +30404,8 @@ export type Mutation_Root = {
   update_module_category?: Maybe<Module_Category_Mutation_Response>;
   /** update single row of the table: "module_category" */
   update_module_category_by_pk?: Maybe<Module_Category>;
+  /** update multiples rows of table: "module_category" */
+  update_module_category_many?: Maybe<Array<Maybe<Module_Category_Mutation_Response>>>;
   /** update data of the table: "module_group" */
   update_module_group?: Maybe<Module_Group_Mutation_Response>;
   /** update single row of the table: "module_group" */
@@ -27882,14 +30414,24 @@ export type Mutation_Root = {
   update_module_group_duration?: Maybe<Module_Group_Duration_Mutation_Response>;
   /** update single row of the table: "module_group_duration" */
   update_module_group_duration_by_pk?: Maybe<Module_Group_Duration>;
+  /** update multiples rows of table: "module_group_duration" */
+  update_module_group_duration_many?: Maybe<Array<Maybe<Module_Group_Duration_Mutation_Response>>>;
+  /** update multiples rows of table: "module_group" */
+  update_module_group_many?: Maybe<Array<Maybe<Module_Group_Mutation_Response>>>;
+  /** update multiples rows of table: "module" */
+  update_module_many?: Maybe<Array<Maybe<Module_Mutation_Response>>>;
   /** update data of the table: "order" */
   update_order?: Maybe<Order_Mutation_Response>;
   /** update single row of the table: "order" */
   update_order_by_pk?: Maybe<Order>;
+  /** update multiples rows of table: "order" */
+  update_order_many?: Maybe<Array<Maybe<Order_Mutation_Response>>>;
   /** update data of the table: "order_temp" */
   update_order_temp?: Maybe<Order_Temp_Mutation_Response>;
   /** update single row of the table: "order_temp" */
   update_order_temp_by_pk?: Maybe<Order_Temp>;
+  /** update multiples rows of table: "order_temp" */
+  update_order_temp_many?: Maybe<Array<Maybe<Order_Temp_Mutation_Response>>>;
   /** update data of the table: "organization" */
   update_organization?: Maybe<Organization_Mutation_Response>;
   /** update single row of the table: "organization" */
@@ -27898,54 +30440,82 @@ export type Mutation_Root = {
   update_organization_invites?: Maybe<Organization_Invites_Mutation_Response>;
   /** update single row of the table: "organization_invites" */
   update_organization_invites_by_pk?: Maybe<Organization_Invites>;
+  /** update multiples rows of table: "organization_invites" */
+  update_organization_invites_many?: Maybe<Array<Maybe<Organization_Invites_Mutation_Response>>>;
+  /** update multiples rows of table: "organization" */
+  update_organization_many?: Maybe<Array<Maybe<Organization_Mutation_Response>>>;
   /** update data of the table: "organization_member" */
   update_organization_member?: Maybe<Organization_Member_Mutation_Response>;
   /** update single row of the table: "organization_member" */
   update_organization_member_by_pk?: Maybe<Organization_Member>;
+  /** update multiples rows of table: "organization_member" */
+  update_organization_member_many?: Maybe<Array<Maybe<Organization_Member_Mutation_Response>>>;
   /** update data of the table: "payment_methods" */
   update_payment_methods?: Maybe<Payment_Methods_Mutation_Response>;
   /** update single row of the table: "payment_methods" */
   update_payment_methods_by_pk?: Maybe<Payment_Methods>;
+  /** update multiples rows of table: "payment_methods" */
+  update_payment_methods_many?: Maybe<Array<Maybe<Payment_Methods_Mutation_Response>>>;
   /** update data of the table: "private_course_booking" */
   update_private_course_booking?: Maybe<Private_Course_Booking_Mutation_Response>;
   /** update single row of the table: "private_course_booking" */
   update_private_course_booking_by_pk?: Maybe<Private_Course_Booking>;
+  /** update multiples rows of table: "private_course_booking" */
+  update_private_course_booking_many?: Maybe<Array<Maybe<Private_Course_Booking_Mutation_Response>>>;
   /** update data of the table: "profile" */
   update_profile?: Maybe<Profile_Mutation_Response>;
   /** update single row of the table: "profile" */
   update_profile_by_pk?: Maybe<Profile>;
+  /** update multiples rows of table: "profile" */
+  update_profile_many?: Maybe<Array<Maybe<Profile_Mutation_Response>>>;
   /** update data of the table: "profile_role" */
   update_profile_role?: Maybe<Profile_Role_Mutation_Response>;
   /** update single row of the table: "profile_role" */
   update_profile_role_by_pk?: Maybe<Profile_Role>;
+  /** update multiples rows of table: "profile_role" */
+  update_profile_role_many?: Maybe<Array<Maybe<Profile_Role_Mutation_Response>>>;
   /** update data of the table: "profile_temp" */
   update_profile_temp?: Maybe<Profile_Temp_Mutation_Response>;
   /** update single row of the table: "profile_temp" */
   update_profile_temp_by_pk?: Maybe<Profile_Temp>;
+  /** update multiples rows of table: "profile_temp" */
+  update_profile_temp_many?: Maybe<Array<Maybe<Profile_Temp_Mutation_Response>>>;
   /** update data of the table: "profile_trainer_role_type" */
   update_profile_trainer_role_type?: Maybe<Profile_Trainer_Role_Type_Mutation_Response>;
   /** update single row of the table: "profile_trainer_role_type" */
   update_profile_trainer_role_type_by_pk?: Maybe<Profile_Trainer_Role_Type>;
+  /** update multiples rows of table: "profile_trainer_role_type" */
+  update_profile_trainer_role_type_many?: Maybe<Array<Maybe<Profile_Trainer_Role_Type_Mutation_Response>>>;
   /** update data of the table: "promo_code" */
   update_promo_code?: Maybe<Promo_Code_Mutation_Response>;
   /** update single row of the table: "promo_code" */
   update_promo_code_by_pk?: Maybe<Promo_Code>;
+  /** update multiples rows of table: "promo_code" */
+  update_promo_code_many?: Maybe<Array<Maybe<Promo_Code_Mutation_Response>>>;
   /** update data of the table: "promo_code_type" */
   update_promo_code_type?: Maybe<Promo_Code_Type_Mutation_Response>;
   /** update single row of the table: "promo_code_type" */
   update_promo_code_type_by_pk?: Maybe<Promo_Code_Type>;
+  /** update multiples rows of table: "promo_code_type" */
+  update_promo_code_type_many?: Maybe<Array<Maybe<Promo_Code_Type_Mutation_Response>>>;
   /** update data of the table: "role" */
   update_role?: Maybe<Role_Mutation_Response>;
   /** update single row of the table: "role" */
   update_role_by_pk?: Maybe<Role>;
+  /** update multiples rows of table: "role" */
+  update_role_many?: Maybe<Array<Maybe<Role_Mutation_Response>>>;
   /** update data of the table: "trainer_role_type" */
   update_trainer_role_type?: Maybe<Trainer_Role_Type_Mutation_Response>;
   /** update single row of the table: "trainer_role_type" */
   update_trainer_role_type_by_pk?: Maybe<Trainer_Role_Type>;
+  /** update multiples rows of table: "trainer_role_type" */
+  update_trainer_role_type_many?: Maybe<Array<Maybe<Trainer_Role_Type_Mutation_Response>>>;
   /** update data of the table: "trust_type" */
   update_trust_type?: Maybe<Trust_Type_Mutation_Response>;
   /** update single row of the table: "trust_type" */
   update_trust_type_by_pk?: Maybe<Trust_Type>;
+  /** update multiples rows of table: "trust_type" */
+  update_trust_type_many?: Maybe<Array<Maybe<Trust_Type_Mutation_Response>>>;
   /** update data of the table: "venue" */
   update_venue?: Maybe<Venue_Mutation_Response>;
   /** update single row of the table: "venue" */
@@ -27954,26 +30524,40 @@ export type Mutation_Root = {
   update_venue_check_jobs?: Maybe<Venue_Check_Jobs_Mutation_Response>;
   /** update single row of the table: "venue_check_jobs" */
   update_venue_check_jobs_by_pk?: Maybe<Venue_Check_Jobs>;
+  /** update multiples rows of table: "venue_check_jobs" */
+  update_venue_check_jobs_many?: Maybe<Array<Maybe<Venue_Check_Jobs_Mutation_Response>>>;
+  /** update multiples rows of table: "venue" */
+  update_venue_many?: Maybe<Array<Maybe<Venue_Mutation_Response>>>;
   /** update data of the table: "waitlist" */
   update_waitlist?: Maybe<Waitlist_Mutation_Response>;
   /** update single row of the table: "waitlist" */
   update_waitlist_by_pk?: Maybe<Waitlist>;
+  /** update multiples rows of table: "waitlist" */
+  update_waitlist_many?: Maybe<Array<Maybe<Waitlist_Mutation_Response>>>;
   /** update data of the table: "xero_contact" */
   update_xero_contact?: Maybe<Xero_Contact_Mutation_Response>;
   /** update single row of the table: "xero_contact" */
   update_xero_contact_by_pk?: Maybe<Xero_Contact>;
+  /** update multiples rows of table: "xero_contact" */
+  update_xero_contact_many?: Maybe<Array<Maybe<Xero_Contact_Mutation_Response>>>;
   /** update data of the table: "xero_credential" */
   update_xero_credential?: Maybe<Xero_Credential_Mutation_Response>;
   /** update single row of the table: "xero_credential" */
   update_xero_credential_by_pk?: Maybe<Xero_Credential>;
+  /** update multiples rows of table: "xero_credential" */
+  update_xero_credential_many?: Maybe<Array<Maybe<Xero_Credential_Mutation_Response>>>;
   /** update data of the table: "xero_invoice" */
   update_xero_invoice?: Maybe<Xero_Invoice_Mutation_Response>;
   /** update single row of the table: "xero_invoice" */
   update_xero_invoice_by_pk?: Maybe<Xero_Invoice>;
+  /** update multiples rows of table: "xero_invoice" */
+  update_xero_invoice_many?: Maybe<Array<Maybe<Xero_Invoice_Mutation_Response>>>;
   /** update data of the table: "xero_invoice_status" */
   update_xero_invoice_status?: Maybe<Xero_Invoice_Status_Mutation_Response>;
   /** update single row of the table: "xero_invoice_status" */
   update_xero_invoice_status_by_pk?: Maybe<Xero_Invoice_Status>;
+  /** update multiples rows of table: "xero_invoice_status" */
+  update_xero_invoice_status_many?: Maybe<Array<Maybe<Xero_Invoice_Status_Mutation_Response>>>;
   /** Creates or updates Zoom meeting with start date */
   upsertZoomMeeting?: Maybe<UpsertZoomMeetingPayload>;
   verifyUser: Scalars['Boolean'];
@@ -27990,7 +30574,13 @@ export type Mutation_RootAcceptOrgInviteArgs = {
 
 /** mutation root */
 export type Mutation_RootApproveCourseArgs = {
-  courseId: Scalars['Int'];
+  input: ApproveCourseInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootArloCallbackArgs = {
+  input: ArloCallbackInput;
 };
 
 
@@ -28004,8 +30594,20 @@ export type Mutation_RootCancelIndividualFromCourseArgs = {
 
 
 /** mutation root */
+export type Mutation_RootCancelIndividualFromCourseWaitlistArgs = {
+  input: CancelIndividualFromCourseWaitlistInput;
+};
+
+
+/** mutation root */
 export type Mutation_RootCancelMyselfFromCourseArgs = {
   courseId: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootCancelMyselfFromCourseWaitlistArgs = {
+  input: CancelMyselfFromCourseWaitlistInput;
 };
 
 
@@ -28037,6 +30639,18 @@ export type Mutation_RootCreateUserArgs = {
 /** mutation root */
 export type Mutation_RootDeclineInviteArgs = {
   note?: InputMaybe<Scalars['String']>;
+};
+
+
+/** mutation root */
+export type Mutation_RootDeclineOrgInviteArgs = {
+  inviteId: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteMeetingArgs = {
+  meetingId: Scalars['String'];
 };
 
 
@@ -28091,6 +30705,18 @@ export type Mutation_RootDelete_Blended_Learning_StatusArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Blended_Learning_Status_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Certificate_Expired_Notification_JobsArgs = {
+  where: Certificate_Expired_Notification_Jobs_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Certificate_Expired_Notification_Jobs_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -29073,6 +31699,12 @@ export type Mutation_RootGo1LicensesChangeArgs = {
 
 
 /** mutation root */
+export type Mutation_RootImportArloCertificatesArgs = {
+  report: Scalars['String'];
+};
+
+
+/** mutation root */
 export type Mutation_RootImportLegacyCertificateArgs = {
   code: Scalars['String'];
 };
@@ -29131,6 +31763,20 @@ export type Mutation_RootInsert_Blended_Learning_StatusArgs = {
 export type Mutation_RootInsert_Blended_Learning_Status_OneArgs = {
   object: Blended_Learning_Status_Insert_Input;
   on_conflict?: InputMaybe<Blended_Learning_Status_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Certificate_Expired_Notification_JobsArgs = {
+  objects: Array<Certificate_Expired_Notification_Jobs_Insert_Input>;
+  on_conflict?: InputMaybe<Certificate_Expired_Notification_Jobs_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Certificate_Expired_Notification_Jobs_OneArgs = {
+  object: Certificate_Expired_Notification_Jobs_Insert_Input;
+  on_conflict?: InputMaybe<Certificate_Expired_Notification_Jobs_On_Conflict>;
 };
 
 
@@ -30269,6 +32915,12 @@ export type Mutation_RootInsert_Xero_Invoice_Status_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootJoinWaitlistArgs = {
+  input: JoinWaitlistInput;
+};
+
+
+/** mutation root */
 export type Mutation_RootMergeUserArgs = {
   mergeWith: Scalars['uuid'];
   primaryUser: Scalars['uuid'];
@@ -30289,6 +32941,12 @@ export type Mutation_RootPlansCreateArgs = {
 
 
 /** mutation root */
+export type Mutation_RootRejectCourseArgs = {
+  input: RejectCourseInput;
+};
+
+
+/** mutation root */
 export type Mutation_RootReplaceParticipantArgs = {
   input: ReplaceParticipantInput;
 };
@@ -30304,6 +32962,12 @@ export type Mutation_RootResendPasswordArgs = {
 export type Mutation_RootSendCourseInformationArgs = {
   attendeeIds: Array<Scalars['uuid']>;
   courseId: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootSignUpArgs = {
+  input: SignUpInput;
 };
 
 
@@ -30346,6 +33010,12 @@ export type Mutation_RootUpdate_Accreditors_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Accreditors_ManyArgs = {
+  updates: Array<Accreditors_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_AvailabilityArgs = {
   _set?: InputMaybe<Availability_Set_Input>;
   where: Availability_Bool_Exp;
@@ -30356,6 +33026,12 @@ export type Mutation_RootUpdate_AvailabilityArgs = {
 export type Mutation_RootUpdate_Availability_By_PkArgs = {
   _set?: InputMaybe<Availability_Set_Input>;
   pk_columns: Availability_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Availability_ManyArgs = {
+  updates: Array<Availability_Updates>;
 };
 
 
@@ -30386,6 +33062,12 @@ export type Mutation_RootUpdate_Bild_Strategy_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Bild_Strategy_ManyArgs = {
+  updates: Array<Bild_Strategy_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Blended_Learning_StatusArgs = {
   _set?: InputMaybe<Blended_Learning_Status_Set_Input>;
   where: Blended_Learning_Status_Bool_Exp;
@@ -30396,6 +33078,32 @@ export type Mutation_RootUpdate_Blended_Learning_StatusArgs = {
 export type Mutation_RootUpdate_Blended_Learning_Status_By_PkArgs = {
   _set?: InputMaybe<Blended_Learning_Status_Set_Input>;
   pk_columns: Blended_Learning_Status_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Blended_Learning_Status_ManyArgs = {
+  updates: Array<Blended_Learning_Status_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Certificate_Expired_Notification_JobsArgs = {
+  _set?: InputMaybe<Certificate_Expired_Notification_Jobs_Set_Input>;
+  where: Certificate_Expired_Notification_Jobs_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Certificate_Expired_Notification_Jobs_By_PkArgs = {
+  _set?: InputMaybe<Certificate_Expired_Notification_Jobs_Set_Input>;
+  pk_columns: Certificate_Expired_Notification_Jobs_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Certificate_Expired_Notification_Jobs_ManyArgs = {
+  updates: Array<Certificate_Expired_Notification_Jobs_Updates>;
 };
 
 
@@ -30414,6 +33122,12 @@ export type Mutation_RootUpdate_Certificate_Expiry_Notification_Jobs_By_PkArgs =
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Certificate_Expiry_Notification_Jobs_ManyArgs = {
+  updates: Array<Certificate_Expiry_Notification_Jobs_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Certificate_Expiry_Notification_TimeframeArgs = {
   _set?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Set_Input>;
   where: Certificate_Expiry_Notification_Timeframe_Bool_Exp;
@@ -30424,6 +33138,12 @@ export type Mutation_RootUpdate_Certificate_Expiry_Notification_TimeframeArgs = 
 export type Mutation_RootUpdate_Certificate_Expiry_Notification_Timeframe_By_PkArgs = {
   _set?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Set_Input>;
   pk_columns: Certificate_Expiry_Notification_Timeframe_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Certificate_Expiry_Notification_Timeframe_ManyArgs = {
+  updates: Array<Certificate_Expiry_Notification_Timeframe_Updates>;
 };
 
 
@@ -30442,6 +33162,12 @@ export type Mutation_RootUpdate_Certificate_Status_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Certificate_Status_ManyArgs = {
+  updates: Array<Certificate_Status_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_ColorArgs = {
   _set?: InputMaybe<Color_Set_Input>;
   where: Color_Bool_Exp;
@@ -30452,6 +33178,12 @@ export type Mutation_RootUpdate_ColorArgs = {
 export type Mutation_RootUpdate_Color_By_PkArgs = {
   _set?: InputMaybe<Color_Set_Input>;
   pk_columns: Color_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Color_ManyArgs = {
+  updates: Array<Color_Updates>;
 };
 
 
@@ -30495,6 +33227,12 @@ export type Mutation_RootUpdate_Course_Audit_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Audit_ManyArgs = {
+  updates: Array<Course_Audit_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Audit_TypeArgs = {
   _set?: InputMaybe<Course_Audit_Type_Set_Input>;
   where: Course_Audit_Type_Bool_Exp;
@@ -30505,6 +33243,12 @@ export type Mutation_RootUpdate_Course_Audit_TypeArgs = {
 export type Mutation_RootUpdate_Course_Audit_Type_By_PkArgs = {
   _set?: InputMaybe<Course_Audit_Type_Set_Input>;
   pk_columns: Course_Audit_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Audit_Type_ManyArgs = {
+  updates: Array<Course_Audit_Type_Updates>;
 };
 
 
@@ -30535,6 +33279,12 @@ export type Mutation_RootUpdate_Course_Bild_Module_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Bild_Module_ManyArgs = {
+  updates: Array<Course_Bild_Module_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Bild_StrategyArgs = {
   _inc?: InputMaybe<Course_Bild_Strategy_Inc_Input>;
   _set?: InputMaybe<Course_Bild_Strategy_Set_Input>;
@@ -30547,6 +33297,12 @@ export type Mutation_RootUpdate_Course_Bild_Strategy_By_PkArgs = {
   _inc?: InputMaybe<Course_Bild_Strategy_Inc_Input>;
   _set?: InputMaybe<Course_Bild_Strategy_Set_Input>;
   pk_columns: Course_Bild_Strategy_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Bild_Strategy_ManyArgs = {
+  updates: Array<Course_Bild_Strategy_Updates>;
 };
 
 
@@ -30576,6 +33332,12 @@ export type Mutation_RootUpdate_Course_Cancellation_Request_By_PkArgs = {
   _inc?: InputMaybe<Course_Cancellation_Request_Inc_Input>;
   _set?: InputMaybe<Course_Cancellation_Request_Set_Input>;
   pk_columns: Course_Cancellation_Request_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Cancellation_Request_ManyArgs = {
+  updates: Array<Course_Cancellation_Request_Updates>;
 };
 
 
@@ -30620,6 +33382,12 @@ export type Mutation_RootUpdate_Course_Certificate_Changelog_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Certificate_Changelog_ManyArgs = {
+  updates: Array<Course_Certificate_Changelog_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Certificate_Changelog_TypeArgs = {
   _set?: InputMaybe<Course_Certificate_Changelog_Type_Set_Input>;
   where: Course_Certificate_Changelog_Type_Bool_Exp;
@@ -30630,6 +33398,12 @@ export type Mutation_RootUpdate_Course_Certificate_Changelog_TypeArgs = {
 export type Mutation_RootUpdate_Course_Certificate_Changelog_Type_By_PkArgs = {
   _set?: InputMaybe<Course_Certificate_Changelog_Type_Set_Input>;
   pk_columns: Course_Certificate_Changelog_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Certificate_Changelog_Type_ManyArgs = {
+  updates: Array<Course_Certificate_Changelog_Type_Updates>;
 };
 
 
@@ -30648,6 +33422,18 @@ export type Mutation_RootUpdate_Course_Certificate_Hold_Request_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Certificate_Hold_Request_ManyArgs = {
+  updates: Array<Course_Certificate_Hold_Request_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Certificate_ManyArgs = {
+  updates: Array<Course_Certificate_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Delivery_TypeArgs = {
   _set?: InputMaybe<Course_Delivery_Type_Set_Input>;
   where: Course_Delivery_Type_Bool_Exp;
@@ -30662,6 +33448,12 @@ export type Mutation_RootUpdate_Course_Delivery_Type_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Delivery_Type_ManyArgs = {
+  updates: Array<Course_Delivery_Type_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Delivery_Type_PrefixArgs = {
   _set?: InputMaybe<Course_Delivery_Type_Prefix_Set_Input>;
   where: Course_Delivery_Type_Prefix_Bool_Exp;
@@ -30672,6 +33464,12 @@ export type Mutation_RootUpdate_Course_Delivery_Type_PrefixArgs = {
 export type Mutation_RootUpdate_Course_Delivery_Type_Prefix_By_PkArgs = {
   _set?: InputMaybe<Course_Delivery_Type_Prefix_Set_Input>;
   pk_columns: Course_Delivery_Type_Prefix_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Delivery_Type_Prefix_ManyArgs = {
+  updates: Array<Course_Delivery_Type_Prefix_Updates>;
 };
 
 
@@ -30700,6 +33498,12 @@ export type Mutation_RootUpdate_Course_Draft_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Draft_ManyArgs = {
+  updates: Array<Course_Draft_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_End_JobsArgs = {
   _inc?: InputMaybe<Course_End_Jobs_Inc_Input>;
   _set?: InputMaybe<Course_End_Jobs_Set_Input>;
@@ -30712,6 +33516,12 @@ export type Mutation_RootUpdate_Course_End_Jobs_By_PkArgs = {
   _inc?: InputMaybe<Course_End_Jobs_Inc_Input>;
   _set?: InputMaybe<Course_End_Jobs_Set_Input>;
   pk_columns: Course_End_Jobs_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_End_Jobs_ManyArgs = {
+  updates: Array<Course_End_Jobs_Updates>;
 };
 
 
@@ -30732,6 +33542,12 @@ export type Mutation_RootUpdate_Course_Enquiry_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Enquiry_ManyArgs = {
+  updates: Array<Course_Enquiry_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Evaluation_AnswersArgs = {
   _inc?: InputMaybe<Course_Evaluation_Answers_Inc_Input>;
   _set?: InputMaybe<Course_Evaluation_Answers_Set_Input>;
@@ -30744,6 +33560,12 @@ export type Mutation_RootUpdate_Course_Evaluation_Answers_By_PkArgs = {
   _inc?: InputMaybe<Course_Evaluation_Answers_Inc_Input>;
   _set?: InputMaybe<Course_Evaluation_Answers_Set_Input>;
   pk_columns: Course_Evaluation_Answers_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Evaluation_Answers_ManyArgs = {
+  updates: Array<Course_Evaluation_Answers_Updates>;
 };
 
 
@@ -30762,6 +33584,12 @@ export type Mutation_RootUpdate_Course_Evaluation_Question_Group_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Evaluation_Question_Group_ManyArgs = {
+  updates: Array<Course_Evaluation_Question_Group_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Evaluation_Question_TypeArgs = {
   _set?: InputMaybe<Course_Evaluation_Question_Type_Set_Input>;
   where: Course_Evaluation_Question_Type_Bool_Exp;
@@ -30772,6 +33600,12 @@ export type Mutation_RootUpdate_Course_Evaluation_Question_TypeArgs = {
 export type Mutation_RootUpdate_Course_Evaluation_Question_Type_By_PkArgs = {
   _set?: InputMaybe<Course_Evaluation_Question_Type_Set_Input>;
   pk_columns: Course_Evaluation_Question_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Evaluation_Question_Type_ManyArgs = {
+  updates: Array<Course_Evaluation_Question_Type_Updates>;
 };
 
 
@@ -30788,6 +33622,12 @@ export type Mutation_RootUpdate_Course_Evaluation_Questions_By_PkArgs = {
   _inc?: InputMaybe<Course_Evaluation_Questions_Inc_Input>;
   _set?: InputMaybe<Course_Evaluation_Questions_Set_Input>;
   pk_columns: Course_Evaluation_Questions_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Evaluation_Questions_ManyArgs = {
+  updates: Array<Course_Evaluation_Questions_Updates>;
 };
 
 
@@ -30818,6 +33658,12 @@ export type Mutation_RootUpdate_Course_Expenses_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Expenses_ManyArgs = {
+  updates: Array<Course_Expenses_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Invite_StatusArgs = {
   _set?: InputMaybe<Course_Invite_Status_Set_Input>;
   where: Course_Invite_Status_Bool_Exp;
@@ -30828,6 +33674,12 @@ export type Mutation_RootUpdate_Course_Invite_StatusArgs = {
 export type Mutation_RootUpdate_Course_Invite_Status_By_PkArgs = {
   _set?: InputMaybe<Course_Invite_Status_Set_Input>;
   pk_columns: Course_Invite_Status_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Invite_Status_ManyArgs = {
+  updates: Array<Course_Invite_Status_Updates>;
 };
 
 
@@ -30848,6 +33700,12 @@ export type Mutation_RootUpdate_Course_Invites_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Invites_ManyArgs = {
+  updates: Array<Course_Invites_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_LevelArgs = {
   _set?: InputMaybe<Course_Level_Set_Input>;
   where: Course_Level_Bool_Exp;
@@ -30858,6 +33716,12 @@ export type Mutation_RootUpdate_Course_LevelArgs = {
 export type Mutation_RootUpdate_Course_Level_By_PkArgs = {
   _set?: InputMaybe<Course_Level_Set_Input>;
   pk_columns: Course_Level_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Level_ManyArgs = {
+  updates: Array<Course_Level_Updates>;
 };
 
 
@@ -30876,6 +33740,18 @@ export type Mutation_RootUpdate_Course_Level_Prefix_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Level_Prefix_ManyArgs = {
+  updates: Array<Course_Level_Prefix_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_ManyArgs = {
+  updates: Array<Course_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_ModuleArgs = {
   _inc?: InputMaybe<Course_Module_Inc_Input>;
   _set?: InputMaybe<Course_Module_Set_Input>;
@@ -30888,6 +33764,12 @@ export type Mutation_RootUpdate_Course_Module_By_PkArgs = {
   _inc?: InputMaybe<Course_Module_Inc_Input>;
   _set?: InputMaybe<Course_Module_Set_Input>;
   pk_columns: Course_Module_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Module_ManyArgs = {
+  updates: Array<Course_Module_Updates>;
 };
 
 
@@ -30926,6 +33808,12 @@ export type Mutation_RootUpdate_Course_Participant_Audit_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Participant_Audit_ManyArgs = {
+  updates: Array<Course_Participant_Audit_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Participant_Audit_TypeArgs = {
   _set?: InputMaybe<Course_Participant_Audit_Type_Set_Input>;
   where: Course_Participant_Audit_Type_Bool_Exp;
@@ -30936,6 +33824,12 @@ export type Mutation_RootUpdate_Course_Participant_Audit_TypeArgs = {
 export type Mutation_RootUpdate_Course_Participant_Audit_Type_By_PkArgs = {
   _set?: InputMaybe<Course_Participant_Audit_Type_Set_Input>;
   pk_columns: Course_Participant_Audit_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Participant_Audit_Type_ManyArgs = {
+  updates: Array<Course_Participant_Audit_Type_Updates>;
 };
 
 
@@ -30964,6 +33858,12 @@ export type Mutation_RootUpdate_Course_Participant_Bild_Module_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Participant_Bild_Module_ManyArgs = {
+  updates: Array<Course_Participant_Bild_Module_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Participant_By_PkArgs = {
   _inc?: InputMaybe<Course_Participant_Inc_Input>;
   _set?: InputMaybe<Course_Participant_Set_Input>;
@@ -30988,6 +33888,18 @@ export type Mutation_RootUpdate_Course_Participant_Cancellation_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Participant_Cancellation_ManyArgs = {
+  updates: Array<Course_Participant_Cancellation_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Participant_ManyArgs = {
+  updates: Array<Course_Participant_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Participant_ModuleArgs = {
   _set?: InputMaybe<Course_Participant_Module_Set_Input>;
   where: Course_Participant_Module_Bool_Exp;
@@ -30998,6 +33910,12 @@ export type Mutation_RootUpdate_Course_Participant_ModuleArgs = {
 export type Mutation_RootUpdate_Course_Participant_Module_By_PkArgs = {
   _set?: InputMaybe<Course_Participant_Module_Set_Input>;
   pk_columns: Course_Participant_Module_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Participant_Module_ManyArgs = {
+  updates: Array<Course_Participant_Module_Updates>;
 };
 
 
@@ -31034,6 +33952,18 @@ export type Mutation_RootUpdate_Course_Pricing_Changelog_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Pricing_Changelog_ManyArgs = {
+  updates: Array<Course_Pricing_Changelog_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Pricing_ManyArgs = {
+  updates: Array<Course_Pricing_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Promo_CodeArgs = {
   _inc?: InputMaybe<Course_Promo_Code_Inc_Input>;
   _set?: InputMaybe<Course_Promo_Code_Set_Input>;
@@ -31046,6 +33976,12 @@ export type Mutation_RootUpdate_Course_Promo_Code_By_PkArgs = {
   _inc?: InputMaybe<Course_Promo_Code_Inc_Input>;
   _set?: InputMaybe<Course_Promo_Code_Set_Input>;
   pk_columns: Course_Promo_Code_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Promo_Code_ManyArgs = {
+  updates: Array<Course_Promo_Code_Updates>;
 };
 
 
@@ -31066,6 +34002,12 @@ export type Mutation_RootUpdate_Course_Schedule_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Schedule_ManyArgs = {
+  updates: Array<Course_Schedule_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_SourceArgs = {
   _set?: InputMaybe<Course_Source_Set_Input>;
   where: Course_Source_Bool_Exp;
@@ -31080,6 +34022,12 @@ export type Mutation_RootUpdate_Course_Source_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Source_ManyArgs = {
+  updates: Array<Course_Source_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_StatusArgs = {
   _set?: InputMaybe<Course_Status_Set_Input>;
   where: Course_Status_Bool_Exp;
@@ -31090,6 +34038,12 @@ export type Mutation_RootUpdate_Course_StatusArgs = {
 export type Mutation_RootUpdate_Course_Status_By_PkArgs = {
   _set?: InputMaybe<Course_Status_Set_Input>;
   pk_columns: Course_Status_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Status_ManyArgs = {
+  updates: Array<Course_Status_Updates>;
 };
 
 
@@ -31110,6 +34064,12 @@ export type Mutation_RootUpdate_Course_Trainer_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Trainer_ManyArgs = {
+  updates: Array<Course_Trainer_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Trainer_TypeArgs = {
   _set?: InputMaybe<Course_Trainer_Type_Set_Input>;
   where: Course_Trainer_Type_Bool_Exp;
@@ -31120,6 +34080,12 @@ export type Mutation_RootUpdate_Course_Trainer_TypeArgs = {
 export type Mutation_RootUpdate_Course_Trainer_Type_By_PkArgs = {
   _set?: InputMaybe<Course_Trainer_Type_Set_Input>;
   pk_columns: Course_Trainer_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Trainer_Type_ManyArgs = {
+  updates: Array<Course_Trainer_Type_Updates>;
 };
 
 
@@ -31138,6 +34104,12 @@ export type Mutation_RootUpdate_Course_Type_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_Type_ManyArgs = {
+  updates: Array<Course_Type_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_Type_PrefixArgs = {
   _set?: InputMaybe<Course_Type_Prefix_Set_Input>;
   where: Course_Type_Prefix_Bool_Exp;
@@ -31148,6 +34120,12 @@ export type Mutation_RootUpdate_Course_Type_PrefixArgs = {
 export type Mutation_RootUpdate_Course_Type_Prefix_By_PkArgs = {
   _set?: InputMaybe<Course_Type_Prefix_Set_Input>;
   pk_columns: Course_Type_Prefix_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Type_Prefix_ManyArgs = {
+  updates: Array<Course_Type_Prefix_Updates>;
 };
 
 
@@ -31166,6 +34144,12 @@ export type Mutation_RootUpdate_Dfe_Establishment_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Dfe_Establishment_ManyArgs = {
+  updates: Array<Dfe_Establishment_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Expire_Go1_License_JobsArgs = {
   _set?: InputMaybe<Expire_Go1_License_Jobs_Set_Input>;
   where: Expire_Go1_License_Jobs_Bool_Exp;
@@ -31180,6 +34164,12 @@ export type Mutation_RootUpdate_Expire_Go1_License_Jobs_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Expire_Go1_License_Jobs_ManyArgs = {
+  updates: Array<Expire_Go1_License_Jobs_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Go1_History_EventsArgs = {
   _set?: InputMaybe<Go1_History_Events_Set_Input>;
   where: Go1_History_Events_Bool_Exp;
@@ -31190,6 +34180,12 @@ export type Mutation_RootUpdate_Go1_History_EventsArgs = {
 export type Mutation_RootUpdate_Go1_History_Events_By_PkArgs = {
   _set?: InputMaybe<Go1_History_Events_Set_Input>;
   pk_columns: Go1_History_Events_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Go1_History_Events_ManyArgs = {
+  updates: Array<Go1_History_Events_Updates>;
 };
 
 
@@ -31234,6 +34230,18 @@ export type Mutation_RootUpdate_Go1_Licenses_History_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Go1_Licenses_History_ManyArgs = {
+  updates: Array<Go1_Licenses_History_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Go1_Licenses_ManyArgs = {
+  updates: Array<Go1_Licenses_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_GradeArgs = {
   _set?: InputMaybe<Grade_Set_Input>;
   where: Grade_Bool_Exp;
@@ -31244,6 +34252,12 @@ export type Mutation_RootUpdate_GradeArgs = {
 export type Mutation_RootUpdate_Grade_By_PkArgs = {
   _set?: InputMaybe<Grade_Set_Input>;
   pk_columns: Grade_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Grade_ManyArgs = {
+  updates: Array<Grade_Updates>;
 };
 
 
@@ -31262,6 +34276,12 @@ export type Mutation_RootUpdate_Identity_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Identity_ManyArgs = {
+  updates: Array<Identity_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Identity_TypeArgs = {
   _set?: InputMaybe<Identity_Type_Set_Input>;
   where: Identity_Type_Bool_Exp;
@@ -31272,6 +34292,12 @@ export type Mutation_RootUpdate_Identity_TypeArgs = {
 export type Mutation_RootUpdate_Identity_Type_By_PkArgs = {
   _set?: InputMaybe<Identity_Type_Set_Input>;
   pk_columns: Identity_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Identity_Type_ManyArgs = {
+  updates: Array<Identity_Type_Updates>;
 };
 
 
@@ -31302,6 +34328,12 @@ export type Mutation_RootUpdate_Legacy_Certificate_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Legacy_Certificate_ManyArgs = {
+  updates: Array<Legacy_Certificate_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_ModuleArgs = {
   _set?: InputMaybe<Module_Set_Input>;
   where: Module_Bool_Exp;
@@ -31326,6 +34358,12 @@ export type Mutation_RootUpdate_Module_CategoryArgs = {
 export type Mutation_RootUpdate_Module_Category_By_PkArgs = {
   _set?: InputMaybe<Module_Category_Set_Input>;
   pk_columns: Module_Category_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Module_Category_ManyArgs = {
+  updates: Array<Module_Category_Updates>;
 };
 
 
@@ -31360,6 +34398,24 @@ export type Mutation_RootUpdate_Module_Group_Duration_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Module_Group_Duration_ManyArgs = {
+  updates: Array<Module_Group_Duration_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Module_Group_ManyArgs = {
+  updates: Array<Module_Group_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Module_ManyArgs = {
+  updates: Array<Module_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_OrderArgs = {
   _append?: InputMaybe<Order_Append_Input>;
   _delete_at_path?: InputMaybe<Order_Delete_At_Path_Input>;
@@ -31386,6 +34442,12 @@ export type Mutation_RootUpdate_Order_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Order_ManyArgs = {
+  updates: Array<Order_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Order_TempArgs = {
   _append?: InputMaybe<Order_Temp_Append_Input>;
   _delete_at_path?: InputMaybe<Order_Temp_Delete_At_Path_Input>;
@@ -31408,6 +34470,12 @@ export type Mutation_RootUpdate_Order_Temp_By_PkArgs = {
   _prepend?: InputMaybe<Order_Temp_Prepend_Input>;
   _set?: InputMaybe<Order_Temp_Set_Input>;
   pk_columns: Order_Temp_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Order_Temp_ManyArgs = {
+  updates: Array<Order_Temp_Updates>;
 };
 
 
@@ -31452,6 +34520,18 @@ export type Mutation_RootUpdate_Organization_Invites_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Organization_Invites_ManyArgs = {
+  updates: Array<Organization_Invites_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Organization_ManyArgs = {
+  updates: Array<Organization_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Organization_MemberArgs = {
   _set?: InputMaybe<Organization_Member_Set_Input>;
   where: Organization_Member_Bool_Exp;
@@ -31462,6 +34542,12 @@ export type Mutation_RootUpdate_Organization_MemberArgs = {
 export type Mutation_RootUpdate_Organization_Member_By_PkArgs = {
   _set?: InputMaybe<Organization_Member_Set_Input>;
   pk_columns: Organization_Member_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Organization_Member_ManyArgs = {
+  updates: Array<Organization_Member_Updates>;
 };
 
 
@@ -31480,6 +34566,12 @@ export type Mutation_RootUpdate_Payment_Methods_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Payment_Methods_ManyArgs = {
+  updates: Array<Payment_Methods_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Private_Course_BookingArgs = {
   _inc?: InputMaybe<Private_Course_Booking_Inc_Input>;
   _set?: InputMaybe<Private_Course_Booking_Set_Input>;
@@ -31492,6 +34584,12 @@ export type Mutation_RootUpdate_Private_Course_Booking_By_PkArgs = {
   _inc?: InputMaybe<Private_Course_Booking_Inc_Input>;
   _set?: InputMaybe<Private_Course_Booking_Set_Input>;
   pk_columns: Private_Course_Booking_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Private_Course_Booking_ManyArgs = {
+  updates: Array<Private_Course_Booking_Updates>;
 };
 
 
@@ -31522,6 +34620,12 @@ export type Mutation_RootUpdate_Profile_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Profile_ManyArgs = {
+  updates: Array<Profile_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Profile_RoleArgs = {
   _set?: InputMaybe<Profile_Role_Set_Input>;
   where: Profile_Role_Bool_Exp;
@@ -31532,6 +34636,12 @@ export type Mutation_RootUpdate_Profile_RoleArgs = {
 export type Mutation_RootUpdate_Profile_Role_By_PkArgs = {
   _set?: InputMaybe<Profile_Role_Set_Input>;
   pk_columns: Profile_Role_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Profile_Role_ManyArgs = {
+  updates: Array<Profile_Role_Updates>;
 };
 
 
@@ -31552,6 +34662,12 @@ export type Mutation_RootUpdate_Profile_Temp_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Profile_Temp_ManyArgs = {
+  updates: Array<Profile_Temp_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Profile_Trainer_Role_TypeArgs = {
   _set?: InputMaybe<Profile_Trainer_Role_Type_Set_Input>;
   where: Profile_Trainer_Role_Type_Bool_Exp;
@@ -31562,6 +34678,12 @@ export type Mutation_RootUpdate_Profile_Trainer_Role_TypeArgs = {
 export type Mutation_RootUpdate_Profile_Trainer_Role_Type_By_PkArgs = {
   _set?: InputMaybe<Profile_Trainer_Role_Type_Set_Input>;
   pk_columns: Profile_Trainer_Role_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Profile_Trainer_Role_Type_ManyArgs = {
+  updates: Array<Profile_Trainer_Role_Type_Updates>;
 };
 
 
@@ -31592,6 +34714,12 @@ export type Mutation_RootUpdate_Promo_Code_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Promo_Code_ManyArgs = {
+  updates: Array<Promo_Code_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Promo_Code_TypeArgs = {
   _set?: InputMaybe<Promo_Code_Type_Set_Input>;
   where: Promo_Code_Type_Bool_Exp;
@@ -31602,6 +34730,12 @@ export type Mutation_RootUpdate_Promo_Code_TypeArgs = {
 export type Mutation_RootUpdate_Promo_Code_Type_By_PkArgs = {
   _set?: InputMaybe<Promo_Code_Type_Set_Input>;
   pk_columns: Promo_Code_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Promo_Code_Type_ManyArgs = {
+  updates: Array<Promo_Code_Type_Updates>;
 };
 
 
@@ -31632,6 +34766,12 @@ export type Mutation_RootUpdate_Role_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Role_ManyArgs = {
+  updates: Array<Role_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Trainer_Role_TypeArgs = {
   _set?: InputMaybe<Trainer_Role_Type_Set_Input>;
   where: Trainer_Role_Type_Bool_Exp;
@@ -31646,6 +34786,12 @@ export type Mutation_RootUpdate_Trainer_Role_Type_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Trainer_Role_Type_ManyArgs = {
+  updates: Array<Trainer_Role_Type_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Trust_TypeArgs = {
   _set?: InputMaybe<Trust_Type_Set_Input>;
   where: Trust_Type_Bool_Exp;
@@ -31656,6 +34802,12 @@ export type Mutation_RootUpdate_Trust_TypeArgs = {
 export type Mutation_RootUpdate_Trust_Type_By_PkArgs = {
   _set?: InputMaybe<Trust_Type_Set_Input>;
   pk_columns: Trust_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Trust_Type_ManyArgs = {
+  updates: Array<Trust_Type_Updates>;
 };
 
 
@@ -31690,6 +34842,18 @@ export type Mutation_RootUpdate_Venue_Check_Jobs_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Venue_Check_Jobs_ManyArgs = {
+  updates: Array<Venue_Check_Jobs_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Venue_ManyArgs = {
+  updates: Array<Venue_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_WaitlistArgs = {
   _inc?: InputMaybe<Waitlist_Inc_Input>;
   _set?: InputMaybe<Waitlist_Set_Input>;
@@ -31702,6 +34866,12 @@ export type Mutation_RootUpdate_Waitlist_By_PkArgs = {
   _inc?: InputMaybe<Waitlist_Inc_Input>;
   _set?: InputMaybe<Waitlist_Set_Input>;
   pk_columns: Waitlist_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Waitlist_ManyArgs = {
+  updates: Array<Waitlist_Updates>;
 };
 
 
@@ -31730,6 +34900,12 @@ export type Mutation_RootUpdate_Xero_Contact_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Xero_Contact_ManyArgs = {
+  updates: Array<Xero_Contact_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Xero_CredentialArgs = {
   _set?: InputMaybe<Xero_Credential_Set_Input>;
   where: Xero_Credential_Bool_Exp;
@@ -31740,6 +34916,12 @@ export type Mutation_RootUpdate_Xero_CredentialArgs = {
 export type Mutation_RootUpdate_Xero_Credential_By_PkArgs = {
   _set?: InputMaybe<Xero_Credential_Set_Input>;
   pk_columns: Xero_Credential_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Xero_Credential_ManyArgs = {
+  updates: Array<Xero_Credential_Updates>;
 };
 
 
@@ -31770,6 +34952,12 @@ export type Mutation_RootUpdate_Xero_Invoice_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Xero_Invoice_ManyArgs = {
+  updates: Array<Xero_Invoice_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Xero_Invoice_StatusArgs = {
   _set?: InputMaybe<Xero_Invoice_Status_Set_Input>;
   where: Xero_Invoice_Status_Bool_Exp;
@@ -31780,6 +34968,12 @@ export type Mutation_RootUpdate_Xero_Invoice_StatusArgs = {
 export type Mutation_RootUpdate_Xero_Invoice_Status_By_PkArgs = {
   _set?: InputMaybe<Xero_Invoice_Status_Set_Input>;
   pk_columns: Xero_Invoice_Status_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Xero_Invoice_Status_ManyArgs = {
+  updates: Array<Xero_Invoice_Status_Updates>;
 };
 
 
@@ -31881,6 +35075,91 @@ export type Order_Aggregate = {
   __typename?: 'order_aggregate';
   aggregate?: Maybe<Order_Aggregate_Fields>;
   nodes: Array<Order>;
+};
+
+export type Order_Aggregate_Bool_Exp = {
+  avg?: InputMaybe<Order_Aggregate_Bool_Exp_Avg>;
+  corr?: InputMaybe<Order_Aggregate_Bool_Exp_Corr>;
+  count?: InputMaybe<Order_Aggregate_Bool_Exp_Count>;
+  covar_samp?: InputMaybe<Order_Aggregate_Bool_Exp_Covar_Samp>;
+  max?: InputMaybe<Order_Aggregate_Bool_Exp_Max>;
+  min?: InputMaybe<Order_Aggregate_Bool_Exp_Min>;
+  stddev_samp?: InputMaybe<Order_Aggregate_Bool_Exp_Stddev_Samp>;
+  sum?: InputMaybe<Order_Aggregate_Bool_Exp_Sum>;
+  var_samp?: InputMaybe<Order_Aggregate_Bool_Exp_Var_Samp>;
+};
+
+export type Order_Aggregate_Bool_Exp_Avg = {
+  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Avg_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Corr = {
+  arguments: Order_Aggregate_Bool_Exp_Corr_Arguments;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Corr_Arguments = {
+  X: Order_Select_Column_Order_Aggregate_Bool_Exp_Corr_Arguments_Columns;
+  Y: Order_Select_Column_Order_Aggregate_Bool_Exp_Corr_Arguments_Columns;
+};
+
+export type Order_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Order_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Covar_Samp = {
+  arguments: Order_Aggregate_Bool_Exp_Covar_Samp_Arguments;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Covar_Samp_Arguments = {
+  X: Order_Select_Column_Order_Aggregate_Bool_Exp_Covar_Samp_Arguments_Columns;
+  Y: Order_Select_Column_Order_Aggregate_Bool_Exp_Covar_Samp_Arguments_Columns;
+};
+
+export type Order_Aggregate_Bool_Exp_Max = {
+  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Max_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Min = {
+  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Min_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Stddev_Samp = {
+  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Stddev_Samp_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Sum = {
+  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Sum_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Var_Samp = {
+  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Var_Samp_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
 };
 
 /** aggregate fields of "order" */
@@ -32011,9 +35290,9 @@ export enum Order_By {
 
 /** unique or primary key constraints on table "order" */
 export enum Order_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   OrderPkey = 'order_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "xero_invoice_number" */
   OrderXeroInvoiceNumberKey = 'order_xero_invoice_number_key'
 }
 
@@ -32309,6 +35588,102 @@ export enum Order_Select_Column {
   XeroInvoiceNumber = 'xeroInvoiceNumber'
 }
 
+/** select "order_aggregate_bool_exp_avg_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Avg_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_corr_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Corr_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_covar_samp_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Covar_Samp_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_max_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Max_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_min_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Min_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_stddev_samp_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Stddev_Samp_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_sum_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Sum_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_var_samp_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Var_Samp_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
 /** input type for updating data in table "order" */
 export type Order_Set_Input = {
   billingAddress?: InputMaybe<Scalars['String']>;
@@ -32402,6 +35777,44 @@ export type Order_Stddev_Samp_Order_By = {
   vat?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "order" */
+export type Order_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Order_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Order_Stream_Cursor_Value_Input = {
+  billingAddress?: InputMaybe<Scalars['String']>;
+  billingEmail?: InputMaybe<Scalars['String']>;
+  billingFamilyName?: InputMaybe<Scalars['String']>;
+  billingGivenName?: InputMaybe<Scalars['String']>;
+  billingPhone?: InputMaybe<Scalars['String']>;
+  bookingContact?: InputMaybe<Scalars['jsonb']>;
+  clientPurchaseOrder?: InputMaybe<Scalars['String']>;
+  courseId?: InputMaybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  currency?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  orderDue?: InputMaybe<Scalars['float8']>;
+  orderTotal?: InputMaybe<Scalars['float8']>;
+  organizationId?: InputMaybe<Scalars['uuid']>;
+  paymentMethod?: InputMaybe<Payment_Methods_Enum>;
+  price?: InputMaybe<Scalars['float8']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+  promoCodes?: InputMaybe<Scalars['jsonb']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+  registrants?: InputMaybe<Scalars['json']>;
+  salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
+  source?: InputMaybe<Scalars['String']>;
+  stripePaymentId?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<Scalars['jsonb']>;
+  vat?: InputMaybe<Scalars['float8']>;
+  xeroInvoiceNumber?: InputMaybe<Scalars['String']>;
+};
+
 /** aggregate sum on columns */
 export type Order_Sum_Fields = {
   __typename?: 'order_sum_fields';
@@ -32483,6 +35896,91 @@ export type Order_Temp_Aggregate = {
   __typename?: 'order_temp_aggregate';
   aggregate?: Maybe<Order_Temp_Aggregate_Fields>;
   nodes: Array<Order_Temp>;
+};
+
+export type Order_Temp_Aggregate_Bool_Exp = {
+  avg?: InputMaybe<Order_Temp_Aggregate_Bool_Exp_Avg>;
+  corr?: InputMaybe<Order_Temp_Aggregate_Bool_Exp_Corr>;
+  count?: InputMaybe<Order_Temp_Aggregate_Bool_Exp_Count>;
+  covar_samp?: InputMaybe<Order_Temp_Aggregate_Bool_Exp_Covar_Samp>;
+  max?: InputMaybe<Order_Temp_Aggregate_Bool_Exp_Max>;
+  min?: InputMaybe<Order_Temp_Aggregate_Bool_Exp_Min>;
+  stddev_samp?: InputMaybe<Order_Temp_Aggregate_Bool_Exp_Stddev_Samp>;
+  sum?: InputMaybe<Order_Temp_Aggregate_Bool_Exp_Sum>;
+  var_samp?: InputMaybe<Order_Temp_Aggregate_Bool_Exp_Var_Samp>;
+};
+
+export type Order_Temp_Aggregate_Bool_Exp_Avg = {
+  arguments: Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Avg_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Temp_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Temp_Aggregate_Bool_Exp_Corr = {
+  arguments: Order_Temp_Aggregate_Bool_Exp_Corr_Arguments;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Temp_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Temp_Aggregate_Bool_Exp_Corr_Arguments = {
+  X: Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Corr_Arguments_Columns;
+  Y: Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Corr_Arguments_Columns;
+};
+
+export type Order_Temp_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Order_Temp_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Temp_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+export type Order_Temp_Aggregate_Bool_Exp_Covar_Samp = {
+  arguments: Order_Temp_Aggregate_Bool_Exp_Covar_Samp_Arguments;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Temp_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Temp_Aggregate_Bool_Exp_Covar_Samp_Arguments = {
+  X: Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Covar_Samp_Arguments_Columns;
+  Y: Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Covar_Samp_Arguments_Columns;
+};
+
+export type Order_Temp_Aggregate_Bool_Exp_Max = {
+  arguments: Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Max_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Temp_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Temp_Aggregate_Bool_Exp_Min = {
+  arguments: Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Min_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Temp_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Temp_Aggregate_Bool_Exp_Stddev_Samp = {
+  arguments: Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Stddev_Samp_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Temp_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Temp_Aggregate_Bool_Exp_Sum = {
+  arguments: Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Sum_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Temp_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Temp_Aggregate_Bool_Exp_Var_Samp = {
+  arguments: Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Var_Samp_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Temp_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
 };
 
 /** aggregate fields of "order_temp" */
@@ -32593,9 +36091,9 @@ export type Order_Temp_Bool_Exp = {
 
 /** unique or primary key constraints on table "order_temp" */
 export enum Order_Temp_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   OrderTempPkey = 'order_temp_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "xero_invoice_number" */
   OrderTempXeroInvoiceNumberKey = 'order_temp_xero_invoice_number_key'
 }
 
@@ -32876,6 +36374,102 @@ export enum Order_Temp_Select_Column {
   XeroInvoiceNumber = 'xeroInvoiceNumber'
 }
 
+/** select "order_temp_aggregate_bool_exp_avg_arguments_columns" columns of table "order_temp" */
+export enum Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Avg_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_temp_aggregate_bool_exp_corr_arguments_columns" columns of table "order_temp" */
+export enum Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Corr_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_temp_aggregate_bool_exp_covar_samp_arguments_columns" columns of table "order_temp" */
+export enum Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Covar_Samp_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_temp_aggregate_bool_exp_max_arguments_columns" columns of table "order_temp" */
+export enum Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Max_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_temp_aggregate_bool_exp_min_arguments_columns" columns of table "order_temp" */
+export enum Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Min_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_temp_aggregate_bool_exp_stddev_samp_arguments_columns" columns of table "order_temp" */
+export enum Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Stddev_Samp_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_temp_aggregate_bool_exp_sum_arguments_columns" columns of table "order_temp" */
+export enum Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Sum_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_temp_aggregate_bool_exp_var_samp_arguments_columns" columns of table "order_temp" */
+export enum Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Var_Samp_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
 /** input type for updating data in table "order_temp" */
 export type Order_Temp_Set_Input = {
   billingAddress?: InputMaybe<Scalars['String']>;
@@ -32969,6 +36563,44 @@ export type Order_Temp_Stddev_Samp_Order_By = {
   vat?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "order_temp" */
+export type Order_Temp_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Order_Temp_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Order_Temp_Stream_Cursor_Value_Input = {
+  billingAddress?: InputMaybe<Scalars['String']>;
+  billingEmail?: InputMaybe<Scalars['String']>;
+  billingFamilyName?: InputMaybe<Scalars['String']>;
+  billingGivenName?: InputMaybe<Scalars['String']>;
+  billingPhone?: InputMaybe<Scalars['String']>;
+  booking_contact?: InputMaybe<Scalars['jsonb']>;
+  clientPurchaseOrder?: InputMaybe<Scalars['String']>;
+  courseId?: InputMaybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  currency?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  orderDue?: InputMaybe<Scalars['float8']>;
+  orderTotal?: InputMaybe<Scalars['float8']>;
+  organizationId?: InputMaybe<Scalars['uuid']>;
+  paymentMethod?: InputMaybe<Payment_Methods_Enum>;
+  price?: InputMaybe<Scalars['float8']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+  promoCodes?: InputMaybe<Scalars['jsonb']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+  registrants?: InputMaybe<Scalars['json']>;
+  salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
+  source?: InputMaybe<Scalars['String']>;
+  stripePaymentId?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<Scalars['jsonb']>;
+  vat?: InputMaybe<Scalars['float8']>;
+  xeroInvoiceNumber?: InputMaybe<Scalars['String']>;
+};
+
 /** aggregate sum on columns */
 export type Order_Temp_Sum_Fields = {
   __typename?: 'order_temp_sum_fields';
@@ -33045,6 +36677,25 @@ export enum Order_Temp_Update_Column {
   /** column name */
   XeroInvoiceNumber = 'xeroInvoiceNumber'
 }
+
+export type Order_Temp_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Order_Temp_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Order_Temp_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Order_Temp_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Order_Temp_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Order_Temp_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Order_Temp_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Order_Temp_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Order_Temp_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Order_Temp_Var_Pop_Fields = {
@@ -33164,6 +36815,25 @@ export enum Order_Update_Column {
   /** column name */
   XeroInvoiceNumber = 'xeroInvoiceNumber'
 }
+
+export type Order_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Order_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Order_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Order_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Order_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Order_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Order_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Order_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Order_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Order_Var_Pop_Fields = {
@@ -33418,9 +37088,12 @@ export type Organization_Bool_Exp = {
   geoCoordinates?: InputMaybe<Point_Comparison_Exp>;
   go1Licenses?: InputMaybe<Int_Comparison_Exp>;
   go1LicensesHistory?: InputMaybe<Go1_Licenses_History_Bool_Exp>;
+  go1LicensesHistory_aggregate?: InputMaybe<Go1_Licenses_History_Aggregate_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   invites?: InputMaybe<Organization_Invites_Bool_Exp>;
+  invites_aggregate?: InputMaybe<Organization_Invites_Aggregate_Bool_Exp>;
   members?: InputMaybe<Organization_Member_Bool_Exp>;
+  members_aggregate?: InputMaybe<Organization_Member_Aggregate_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   original_record?: InputMaybe<Jsonb_Comparison_Exp>;
   preferences?: InputMaybe<Jsonb_Comparison_Exp>;
@@ -33436,7 +37109,7 @@ export type Organization_Bool_Exp = {
 
 /** unique or primary key constraints on table "organization" */
 export enum Organization_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   OrganizationPkey = 'organization_pkey'
 }
 
@@ -33525,6 +37198,33 @@ export type Organization_Invites_Aggregate = {
   nodes: Array<Organization_Invites>;
 };
 
+export type Organization_Invites_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Organization_Invites_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Organization_Invites_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Organization_Invites_Aggregate_Bool_Exp_Count>;
+};
+
+export type Organization_Invites_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Organization_Invites_Select_Column_Organization_Invites_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Organization_Invites_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Organization_Invites_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Organization_Invites_Select_Column_Organization_Invites_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Organization_Invites_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Organization_Invites_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Organization_Invites_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Organization_Invites_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
 /** aggregate fields of "organization_invites" */
 export type Organization_Invites_Aggregate_Fields = {
   __typename?: 'organization_invites_aggregate_fields';
@@ -33573,9 +37273,9 @@ export type Organization_Invites_Bool_Exp = {
 
 /** unique or primary key constraints on table "organization_invites" */
 export enum Organization_Invites_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "org_id", "email" */
   OrganizationInvitesOrgIdEmailKey = 'organization_invites_org_id_email_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   OrganizationInvitesPkey = 'organization_invites_pkey'
 }
 
@@ -33694,8 +37394,40 @@ export enum Organization_Invites_Select_Column {
   UpdatedAt = 'updatedAt'
 }
 
+/** select "organization_invites_aggregate_bool_exp_bool_and_arguments_columns" columns of table "organization_invites" */
+export enum Organization_Invites_Select_Column_Organization_Invites_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  IsAdmin = 'isAdmin'
+}
+
+/** select "organization_invites_aggregate_bool_exp_bool_or_arguments_columns" columns of table "organization_invites" */
+export enum Organization_Invites_Select_Column_Organization_Invites_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  IsAdmin = 'isAdmin'
+}
+
 /** input type for updating data in table "organization_invites" */
 export type Organization_Invites_Set_Input = {
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  email?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  isAdmin?: InputMaybe<Scalars['Boolean']>;
+  orgId?: InputMaybe<Scalars['uuid']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+  status?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** Streaming cursor of the table "organization_invites" */
+export type Organization_Invites_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Organization_Invites_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Organization_Invites_Stream_Cursor_Value_Input = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   email?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -33725,6 +37457,13 @@ export enum Organization_Invites_Update_Column {
   /** column name */
   UpdatedAt = 'updatedAt'
 }
+
+export type Organization_Invites_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Organization_Invites_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Organization_Invites_Bool_Exp;
+};
 
 /** aggregate max on columns */
 export type Organization_Max_Fields = {
@@ -33764,6 +37503,33 @@ export type Organization_Member_Aggregate = {
   __typename?: 'organization_member_aggregate';
   aggregate?: Maybe<Organization_Member_Aggregate_Fields>;
   nodes: Array<Organization_Member>;
+};
+
+export type Organization_Member_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Organization_Member_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Organization_Member_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Organization_Member_Aggregate_Bool_Exp_Count>;
+};
+
+export type Organization_Member_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Organization_Member_Select_Column_Organization_Member_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Organization_Member_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Organization_Member_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Organization_Member_Select_Column_Organization_Member_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Organization_Member_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Organization_Member_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Organization_Member_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Organization_Member_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "organization_member" */
@@ -33815,9 +37581,9 @@ export type Organization_Member_Bool_Exp = {
 
 /** unique or primary key constraints on table "organization_member" */
 export enum Organization_Member_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   OrganizationMemberPkey = 'organization_member_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "profile_id", "organization_id" */
   OrganizationMemberProfileIdOrganizationIdKey = 'organization_member_profile_id_organization_id_key'
 }
 
@@ -33944,8 +37710,41 @@ export enum Organization_Member_Select_Column {
   UpdatedAt = 'updatedAt'
 }
 
+/** select "organization_member_aggregate_bool_exp_bool_and_arguments_columns" columns of table "organization_member" */
+export enum Organization_Member_Select_Column_Organization_Member_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  IsAdmin = 'isAdmin'
+}
+
+/** select "organization_member_aggregate_bool_exp_bool_or_arguments_columns" columns of table "organization_member" */
+export enum Organization_Member_Select_Column_Organization_Member_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  IsAdmin = 'isAdmin'
+}
+
 /** input type for updating data in table "organization_member" */
 export type Organization_Member_Set_Input = {
+  _source?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  isAdmin?: InputMaybe<Scalars['Boolean']>;
+  memberType?: InputMaybe<Scalars['String']>;
+  organization_id?: InputMaybe<Scalars['uuid']>;
+  position?: InputMaybe<Scalars['String']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** Streaming cursor of the table "organization_member" */
+export type Organization_Member_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Organization_Member_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Organization_Member_Stream_Cursor_Value_Input = {
   _source?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -33978,6 +37777,13 @@ export enum Organization_Member_Update_Column {
   /** column name */
   UpdatedAt = 'updatedAt'
 }
+
+export type Organization_Member_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Organization_Member_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Organization_Member_Bool_Exp;
+};
 
 /** aggregate min on columns */
 export type Organization_Min_Fields = {
@@ -34140,6 +37946,36 @@ export type Organization_Stddev_Samp_Fields = {
   reservedGo1Licenses?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "organization" */
+export type Organization_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Organization_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Organization_Stream_Cursor_Value_Input = {
+  address?: InputMaybe<Scalars['jsonb']>;
+  attributes?: InputMaybe<Scalars['jsonb']>;
+  contactDetails?: InputMaybe<Scalars['jsonb']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  geoCoordinates?: InputMaybe<Scalars['point']>;
+  go1Licenses?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  original_record?: InputMaybe<Scalars['jsonb']>;
+  preferences?: InputMaybe<Scalars['jsonb']>;
+  region?: InputMaybe<Scalars['String']>;
+  reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
+  sector?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<Scalars['jsonb']>;
+  trustName?: InputMaybe<Scalars['String']>;
+  trustType?: InputMaybe<Trust_Type_Enum>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+  xeroContactId?: InputMaybe<Scalars['String']>;
+};
+
 /** aggregate sum on columns */
 export type Organization_Sum_Fields = {
   __typename?: 'organization_sum_fields';
@@ -34186,6 +38022,25 @@ export enum Organization_Update_Column {
   /** column name */
   XeroContactId = 'xeroContactId'
 }
+
+export type Organization_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Organization_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Organization_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Organization_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Organization_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Organization_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Organization_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Organization_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Organization_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Organization_Var_Pop_Fields = {
@@ -34246,7 +38101,7 @@ export type Payment_Methods_Bool_Exp = {
 
 /** unique or primary key constraints on table "payment_methods" */
 export enum Payment_Methods_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   PaymentMethodsPkey = 'payment_methods_pkey'
 }
 
@@ -34318,11 +38173,31 @@ export type Payment_Methods_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "payment_methods" */
+export type Payment_Methods_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Payment_Methods_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Payment_Methods_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "payment_methods" */
 export enum Payment_Methods_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Payment_Methods_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Payment_Methods_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Payment_Methods_Bool_Exp;
+};
 
 /** Boolean expression to compare columns of type "point". All fields are combined with logical 'AND'. */
 export type Point_Comparison_Exp = {
@@ -34412,9 +38287,9 @@ export type Private_Course_Booking_Bool_Exp = {
 
 /** unique or primary key constraints on table "private_course_booking" */
 export enum Private_Course_Booking_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "course_id", "email" */
   PrivateCourseBookingCourseIdEmailKey = 'private_course_booking_course_id_email_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   PrivateCourseBookingPkey = 'private_course_booking_pkey'
 }
 
@@ -34576,6 +38451,30 @@ export type Private_Course_Booking_Stddev_Samp_Fields = {
   numParticipants?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "private_course_booking" */
+export type Private_Course_Booking_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Private_Course_Booking_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Private_Course_Booking_Stream_Cursor_Value_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  email?: InputMaybe<Scalars['String']>;
+  familyName?: InputMaybe<Scalars['String']>;
+  givenName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  message?: InputMaybe<Scalars['String']>;
+  numParticipants?: InputMaybe<Scalars['Int']>;
+  orgName?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  sector?: InputMaybe<Scalars['String']>;
+  source?: InputMaybe<Scalars['String']>;
+};
+
 /** aggregate sum on columns */
 export type Private_Course_Booking_Sum_Fields = {
   __typename?: 'private_course_booking_sum_fields';
@@ -34610,6 +38509,15 @@ export enum Private_Course_Booking_Update_Column {
   /** column name */
   Source = 'source'
 }
+
+export type Private_Course_Booking_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Private_Course_Booking_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Private_Course_Booking_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Private_Course_Booking_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Private_Course_Booking_Var_Pop_Fields = {
@@ -35013,9 +38921,12 @@ export type Profile_Bool_Exp = {
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
   avatar?: InputMaybe<String_Comparison_Exp>;
   certificates?: InputMaybe<Course_Certificate_Bool_Exp>;
+  certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Bool_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   course_trainer?: InputMaybe<Course_Trainer_Bool_Exp>;
+  course_trainer_aggregate?: InputMaybe<Course_Trainer_Aggregate_Bool_Exp>;
   courses?: InputMaybe<Course_Participant_Bool_Exp>;
+  courses_aggregate?: InputMaybe<Course_Participant_Aggregate_Bool_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   dietaryRestrictions?: InputMaybe<String_Comparison_Exp>;
   disabilities?: InputMaybe<String_Comparison_Exp>;
@@ -35026,30 +38937,37 @@ export type Profile_Bool_Exp = {
   givenName?: InputMaybe<String_Comparison_Exp>;
   go1Id?: InputMaybe<Int_Comparison_Exp>;
   go1Licenses?: InputMaybe<Go1_Licenses_Bool_Exp>;
+  go1Licenses_aggregate?: InputMaybe<Go1_Licenses_Aggregate_Bool_Exp>;
   go1_profile?: InputMaybe<Jsonb_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   identities?: InputMaybe<Identity_Bool_Exp>;
+  identities_aggregate?: InputMaybe<Identity_Aggregate_Bool_Exp>;
   jobTitle?: InputMaybe<String_Comparison_Exp>;
   lastActivity?: InputMaybe<Timestamptz_Comparison_Exp>;
   organizations?: InputMaybe<Organization_Member_Bool_Exp>;
+  organizations_aggregate?: InputMaybe<Organization_Member_Aggregate_Bool_Exp>;
   original_record?: InputMaybe<Jsonb_Comparison_Exp>;
   participant_audits?: InputMaybe<Course_Participant_Audit_Bool_Exp>;
+  participant_audits_aggregate?: InputMaybe<Course_Participant_Audit_Aggregate_Bool_Exp>;
   phone?: InputMaybe<String_Comparison_Exp>;
   preferences?: InputMaybe<Jsonb_Comparison_Exp>;
   roles?: InputMaybe<Profile_Role_Bool_Exp>;
+  roles_aggregate?: InputMaybe<Profile_Role_Aggregate_Bool_Exp>;
   stripe_customer_id?: InputMaybe<String_Comparison_Exp>;
   tags?: InputMaybe<Jsonb_Comparison_Exp>;
   title?: InputMaybe<String_Comparison_Exp>;
   trainer_role_types?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+  trainer_role_types_aggregate?: InputMaybe<Profile_Trainer_Role_Type_Aggregate_Bool_Exp>;
   upcomingEnrollments?: InputMaybe<Upcoming_Enrollments_Bool_Exp>;
+  upcomingEnrollments_aggregate?: InputMaybe<Upcoming_Enrollments_Aggregate_Bool_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "profile" */
 export enum Profile_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   ProfilePkey = 'profile_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "stripe_customer_id" */
   ProfileStripeCustomerIdKey = 'profile_stripe_customer_id_key'
 }
 
@@ -35141,10 +39059,19 @@ export type Profile_Max_Fields = {
   dietaryRestrictions?: Maybe<Scalars['String']>;
   disabilities?: Maybe<Scalars['String']>;
   dob?: Maybe<Scalars['date']>;
+  /** A computed field, executes function "profile_email" */
+  email?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "profile_family_name" */
+  familyName?: Maybe<Scalars['String']>;
+  fullName?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "profile_given_name" */
+  givenName?: Maybe<Scalars['String']>;
   go1Id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   jobTitle?: Maybe<Scalars['String']>;
   lastActivity?: Maybe<Scalars['timestamptz']>;
+  /** A computed field, executes function "profile_phone" */
+  phone?: Maybe<Scalars['String']>;
   stripe_customer_id?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -35162,10 +39089,19 @@ export type Profile_Min_Fields = {
   dietaryRestrictions?: Maybe<Scalars['String']>;
   disabilities?: Maybe<Scalars['String']>;
   dob?: Maybe<Scalars['date']>;
+  /** A computed field, executes function "profile_email" */
+  email?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "profile_family_name" */
+  familyName?: Maybe<Scalars['String']>;
+  fullName?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "profile_given_name" */
+  givenName?: Maybe<Scalars['String']>;
   go1Id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   jobTitle?: Maybe<Scalars['String']>;
   lastActivity?: Maybe<Scalars['timestamptz']>;
+  /** A computed field, executes function "profile_phone" */
+  phone?: Maybe<Scalars['String']>;
   stripe_customer_id?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -35275,6 +39211,17 @@ export type Profile_Role_Aggregate = {
   nodes: Array<Profile_Role>;
 };
 
+export type Profile_Role_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Profile_Role_Aggregate_Bool_Exp_Count>;
+};
+
+export type Profile_Role_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Profile_Role_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Profile_Role_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
 /** aggregate fields of "profile_role" */
 export type Profile_Role_Aggregate_Fields = {
   __typename?: 'profile_role_aggregate_fields';
@@ -35321,9 +39268,9 @@ export type Profile_Role_Bool_Exp = {
 
 /** unique or primary key constraints on table "profile_role" */
 export enum Profile_Role_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   ProfileRolePkey = 'profile_role_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "role_id", "profile_id" */
   ProfileRoleProfileIdRoleIdKey = 'profile_role_profile_id_role_id_key'
 }
 
@@ -35440,6 +39387,24 @@ export type Profile_Role_Set_Input = {
   updated_at?: InputMaybe<Scalars['timestamptz']>;
 };
 
+/** Streaming cursor of the table "profile_role" */
+export type Profile_Role_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Profile_Role_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Profile_Role_Stream_Cursor_Value_Input = {
+  _source?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  role_id?: InputMaybe<Scalars['uuid']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** update columns of table "profile_role" */
 export enum Profile_Role_Update_Column {
   /** column name */
@@ -35455,6 +39420,13 @@ export enum Profile_Role_Update_Column {
   /** column name */
   UpdatedAt = 'updated_at'
 }
+
+export type Profile_Role_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Profile_Role_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Profile_Role_Bool_Exp;
+};
 
 /** select columns of table "profile" */
 export enum Profile_Select_Column {
@@ -35554,6 +39526,42 @@ export type Profile_Stddev_Samp_Fields = {
   go1Id?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "profile" */
+export type Profile_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Profile_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Profile_Stream_Cursor_Value_Input = {
+  _email?: InputMaybe<Scalars['String']>;
+  _family_name?: InputMaybe<Scalars['String']>;
+  _given_name?: InputMaybe<Scalars['String']>;
+  _phone?: InputMaybe<Scalars['String']>;
+  addresses?: InputMaybe<Scalars['jsonb']>;
+  archived?: InputMaybe<Scalars['Boolean']>;
+  attributes?: InputMaybe<Scalars['jsonb']>;
+  avatar?: InputMaybe<Scalars['String']>;
+  contactDetails?: InputMaybe<Scalars['jsonb']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  dietaryRestrictions?: InputMaybe<Scalars['String']>;
+  disabilities?: InputMaybe<Scalars['String']>;
+  dob?: InputMaybe<Scalars['date']>;
+  go1Id?: InputMaybe<Scalars['Int']>;
+  go1_profile?: InputMaybe<Scalars['jsonb']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  jobTitle?: InputMaybe<Scalars['String']>;
+  lastActivity?: InputMaybe<Scalars['timestamptz']>;
+  original_record?: InputMaybe<Scalars['jsonb']>;
+  preferences?: InputMaybe<Scalars['jsonb']>;
+  stripe_customer_id?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<Scalars['jsonb']>;
+  title?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Profile_Sum_Fields = {
   __typename?: 'profile_sum_fields';
@@ -35563,7 +39571,6 @@ export type Profile_Sum_Fields = {
 /** Contains partial temporary profiles until account in cognito is confirmed */
 export type Profile_Temp = {
   __typename?: 'profile_temp';
-  acceptMarketing: Scalars['Boolean'];
   acceptTnc: Scalars['Boolean'];
   /** An object relationship */
   course?: Maybe<Course>;
@@ -35624,7 +39631,6 @@ export type Profile_Temp_Bool_Exp = {
   _and?: InputMaybe<Array<Profile_Temp_Bool_Exp>>;
   _not?: InputMaybe<Profile_Temp_Bool_Exp>;
   _or?: InputMaybe<Array<Profile_Temp_Bool_Exp>>;
-  acceptMarketing?: InputMaybe<Boolean_Comparison_Exp>;
   acceptTnc?: InputMaybe<Boolean_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
   courseId?: InputMaybe<Int_Comparison_Exp>;
@@ -35643,7 +39649,7 @@ export type Profile_Temp_Bool_Exp = {
 
 /** unique or primary key constraints on table "profile_temp" */
 export enum Profile_Temp_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   ProfileTempPkey = 'profile_temp_pkey'
 }
 
@@ -35656,7 +39662,6 @@ export type Profile_Temp_Inc_Input = {
 
 /** input type for inserting data into table "profile_temp" */
 export type Profile_Temp_Insert_Input = {
-  acceptMarketing?: InputMaybe<Scalars['Boolean']>;
   acceptTnc?: InputMaybe<Scalars['Boolean']>;
   course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   courseId?: InputMaybe<Scalars['Int']>;
@@ -35725,7 +39730,6 @@ export type Profile_Temp_On_Conflict = {
 
 /** Ordering options when selecting data from "profile_temp". */
 export type Profile_Temp_Order_By = {
-  acceptMarketing?: InputMaybe<Order_By>;
   acceptTnc?: InputMaybe<Order_By>;
   course?: InputMaybe<Course_Order_By>;
   courseId?: InputMaybe<Order_By>;
@@ -35749,8 +39753,6 @@ export type Profile_Temp_Pk_Columns_Input = {
 
 /** select columns of table "profile_temp" */
 export enum Profile_Temp_Select_Column {
-  /** column name */
-  AcceptMarketing = 'acceptMarketing',
   /** column name */
   AcceptTnc = 'acceptTnc',
   /** column name */
@@ -35781,7 +39783,6 @@ export enum Profile_Temp_Select_Column {
 
 /** input type for updating data in table "profile_temp" */
 export type Profile_Temp_Set_Input = {
-  acceptMarketing?: InputMaybe<Scalars['Boolean']>;
   acceptTnc?: InputMaybe<Scalars['Boolean']>;
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -35821,6 +39822,31 @@ export type Profile_Temp_Stddev_Samp_Fields = {
   quantity?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "profile_temp" */
+export type Profile_Temp_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Profile_Temp_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Profile_Temp_Stream_Cursor_Value_Input = {
+  acceptTnc?: InputMaybe<Scalars['Boolean']>;
+  courseId?: InputMaybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  dob?: InputMaybe<Scalars['date']>;
+  email?: InputMaybe<Scalars['String']>;
+  familyName?: InputMaybe<Scalars['String']>;
+  givenName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
+  jobTitle?: InputMaybe<Scalars['String']>;
+  organizationId?: InputMaybe<Scalars['uuid']>;
+  phone?: InputMaybe<Scalars['String']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+  sector?: InputMaybe<Scalars['String']>;
+};
+
 /** aggregate sum on columns */
 export type Profile_Temp_Sum_Fields = {
   __typename?: 'profile_temp_sum_fields';
@@ -35831,8 +39857,6 @@ export type Profile_Temp_Sum_Fields = {
 
 /** update columns of table "profile_temp" */
 export enum Profile_Temp_Update_Column {
-  /** column name */
-  AcceptMarketing = 'acceptMarketing',
   /** column name */
   AcceptTnc = 'acceptTnc',
   /** column name */
@@ -35860,6 +39884,15 @@ export enum Profile_Temp_Update_Column {
   /** column name */
   Sector = 'sector'
 }
+
+export type Profile_Temp_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Profile_Temp_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Profile_Temp_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Profile_Temp_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Profile_Temp_Var_Pop_Fields = {
@@ -35902,6 +39935,17 @@ export type Profile_Trainer_Role_Type_Aggregate = {
   __typename?: 'profile_trainer_role_type_aggregate';
   aggregate?: Maybe<Profile_Trainer_Role_Type_Aggregate_Fields>;
   nodes: Array<Profile_Trainer_Role_Type>;
+};
+
+export type Profile_Trainer_Role_Type_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Profile_Trainer_Role_Type_Aggregate_Bool_Exp_Count>;
+};
+
+export type Profile_Trainer_Role_Type_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Profile_Trainer_Role_Type_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "profile_trainer_role_type" */
@@ -35948,7 +39992,7 @@ export type Profile_Trainer_Role_Type_Bool_Exp = {
 
 /** unique or primary key constraints on table "profile_trainer_role_type" */
 export enum Profile_Trainer_Role_Type_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   ProfileTrainerRoleTypePkey = 'profile_trainer_role_type_pkey'
 }
 
@@ -36054,6 +40098,23 @@ export type Profile_Trainer_Role_Type_Set_Input = {
   updated_at?: InputMaybe<Scalars['timestamptz']>;
 };
 
+/** Streaming cursor of the table "profile_trainer_role_type" */
+export type Profile_Trainer_Role_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Profile_Trainer_Role_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Profile_Trainer_Role_Type_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  trainer_role_type_id?: InputMaybe<Scalars['uuid']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** update columns of table "profile_trainer_role_type" */
 export enum Profile_Trainer_Role_Type_Update_Column {
   /** column name */
@@ -36067,6 +40128,13 @@ export enum Profile_Trainer_Role_Type_Update_Column {
   /** column name */
   UpdatedAt = 'updated_at'
 }
+
+export type Profile_Trainer_Role_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Profile_Trainer_Role_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Profile_Trainer_Role_Type_Bool_Exp;
+};
 
 /** update columns of table "profile" */
 export enum Profile_Update_Column {
@@ -36119,6 +40187,25 @@ export enum Profile_Update_Column {
   /** column name */
   UpdatedAt = 'updatedAt'
 }
+
+export type Profile_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Profile_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Profile_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Profile_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Profile_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Profile_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Profile_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Profile_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Profile_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Profile_Var_Pop_Fields = {
@@ -36247,6 +40334,7 @@ export type Promo_Code_Bool_Exp = {
   bookerSingleUse?: InputMaybe<Boolean_Comparison_Exp>;
   code?: InputMaybe<String_Comparison_Exp>;
   courses?: InputMaybe<Course_Promo_Code_Bool_Exp>;
+  courses_aggregate?: InputMaybe<Course_Promo_Code_Aggregate_Bool_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   createdBy?: InputMaybe<Uuid_Comparison_Exp>;
   creator?: InputMaybe<Profile_Bool_Exp>;
@@ -36265,9 +40353,9 @@ export type Promo_Code_Bool_Exp = {
 
 /** unique or primary key constraints on table "promo_code" */
 export enum Promo_Code_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "code" */
   PromoCodeCodeKey = 'promo_code_code_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   PromoCodePkey = 'promo_code_pkey'
 }
 
@@ -36487,6 +40575,35 @@ export type Promo_Code_Stddev_Samp_Fields = {
   usesMax?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "promo_code" */
+export type Promo_Code_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Promo_Code_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Promo_Code_Stream_Cursor_Value_Input = {
+  amount?: InputMaybe<Scalars['numeric']>;
+  approvedBy?: InputMaybe<Scalars['uuid']>;
+  bookerSingleUse?: InputMaybe<Scalars['Boolean']>;
+  code?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  createdBy?: InputMaybe<Scalars['uuid']>;
+  deniedBy?: InputMaybe<Scalars['uuid']>;
+  description?: InputMaybe<Scalars['String']>;
+  disabled?: InputMaybe<Scalars['Boolean']>;
+  enabled?: InputMaybe<Scalars['Boolean']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  levels?: InputMaybe<Scalars['jsonb']>;
+  type?: InputMaybe<Promo_Code_Type_Enum>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+  usesMax?: InputMaybe<Scalars['numeric']>;
+  validFrom?: InputMaybe<Scalars['timestamptz']>;
+  validTo?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Promo_Code_Sum_Fields = {
   __typename?: 'promo_code_sum_fields';
@@ -36532,7 +40649,7 @@ export type Promo_Code_Type_Bool_Exp = {
 
 /** unique or primary key constraints on table "promo_code_type" */
 export enum Promo_Code_Type_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   PromoCodeTypePkey = 'promo_code_type_pkey'
 }
 
@@ -36604,11 +40721,31 @@ export type Promo_Code_Type_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "promo_code_type" */
+export type Promo_Code_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Promo_Code_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Promo_Code_Type_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "promo_code_type" */
 export enum Promo_Code_Type_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Promo_Code_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Promo_Code_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Promo_Code_Type_Bool_Exp;
+};
 
 /** update columns of table "promo_code" */
 export enum Promo_Code_Update_Column {
@@ -36647,6 +40784,25 @@ export enum Promo_Code_Update_Column {
   /** column name */
   ValidTo = 'validTo'
 }
+
+export type Promo_Code_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Promo_Code_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Promo_Code_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Promo_Code_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Promo_Code_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Promo_Code_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Promo_Code_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Promo_Code_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Promo_Code_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Promo_Code_Var_Pop_Fields = {
@@ -36697,6 +40853,12 @@ export type Query_Root = {
   blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
   /** Checks whether a promo code can be applied to a given course by the current user */
   canApplyPromoCode: CanApplyPromoCodeOutput;
+  /** fetch data from the table: "certificate_expired_notification_jobs" */
+  certificate_expired_notification_jobs: Array<Certificate_Expired_Notification_Jobs>;
+  /** fetch aggregated fields from the table: "certificate_expired_notification_jobs" */
+  certificate_expired_notification_jobs_aggregate: Certificate_Expired_Notification_Jobs_Aggregate;
+  /** fetch data from the table: "certificate_expired_notification_jobs" using primary key columns */
+  certificate_expired_notification_jobs_by_pk?: Maybe<Certificate_Expired_Notification_Jobs>;
   /** fetch data from the table: "certificate_expiry_notification_jobs" */
   certificate_expiry_notification_jobs: Array<Certificate_Expiry_Notification_Jobs>;
   /** fetch aggregated fields from the table: "certificate_expiry_notification_jobs" */
@@ -36721,7 +40883,7 @@ export type Query_Root = {
   color_aggregate: Color_Aggregate;
   /** fetch data from the table: "color" using primary key columns */
   color_by_pk?: Maybe<Color>;
-  content?: Maybe<RootQuery>;
+  content?: Maybe<ContentRootQuery>;
   /** fetch data from the table: "course" */
   course: Array<Course>;
   /** fetch aggregated fields from the table: "course" */
@@ -37025,6 +41187,7 @@ export type Query_Root = {
   identity_type_aggregate: Identity_Type_Aggregate;
   /** fetch data from the table: "identity_type" using primary key columns */
   identity_type_by_pk?: Maybe<Identity_Type>;
+  importArloCertificates?: Maybe<ImportArloCertificates>;
   initAuth: InitAuthOutput;
   /** Checks whether user is subscribed to membership */
   isUserSubscribedToMembership?: Maybe<IsUserSubscribedToMembershipResponse>;
@@ -37208,6 +41371,8 @@ export type Query_Root = {
   xero_invoice_status_aggregate: Xero_Invoice_Status_Aggregate;
   /** fetch data from the table: "xero_invoice_status" using primary key columns */
   xero_invoice_status_by_pk?: Maybe<Xero_Invoice_Status>;
+  /** Zoom Users list */
+  zoomUsers?: Maybe<ZoomUsersResponse>;
 };
 
 
@@ -37305,6 +41470,29 @@ export type Query_RootBlended_Learning_Status_By_PkArgs = {
 
 export type Query_RootCanApplyPromoCodeArgs = {
   input: CanApplyPromoCodeInput;
+};
+
+
+export type Query_RootCertificate_Expired_Notification_JobsArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Order_By>>;
+  where?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
+};
+
+
+export type Query_RootCertificate_Expired_Notification_Jobs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Order_By>>;
+  where?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
+};
+
+
+export type Query_RootCertificate_Expired_Notification_Jobs_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -38543,6 +42731,11 @@ export type Query_RootIdentity_Type_By_PkArgs = {
 };
 
 
+export type Query_RootImportArloCertificatesArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootIsUserSubscribedToMembershipArgs = {
   customerId: Scalars['String'];
 };
@@ -39323,14 +43516,15 @@ export type Role_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   profile_roles?: InputMaybe<Profile_Role_Bool_Exp>;
+  profile_roles_aggregate?: InputMaybe<Profile_Role_Aggregate_Bool_Exp>;
   rank?: InputMaybe<Int_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "role" */
 export enum Role_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   RoleNameKey = 'role_name_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   RolePkey = 'role_pkey'
 }
 
@@ -39459,6 +43653,22 @@ export type Role_Stddev_Samp_Fields = {
   rank?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "role" */
+export type Role_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Role_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Role_Stream_Cursor_Value_Input = {
+  data?: InputMaybe<Scalars['jsonb']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  rank?: InputMaybe<Scalars['Int']>;
+};
+
 /** aggregate sum on columns */
 export type Role_Sum_Fields = {
   __typename?: 'role_sum_fields';
@@ -39476,6 +43686,25 @@ export enum Role_Update_Column {
   /** column name */
   Rank = 'rank'
 }
+
+export type Role_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Role_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Role_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Role_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Role_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Role_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Role_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Role_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Role_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Role_Var_Pop_Fields = {
@@ -39503,48 +43732,72 @@ export type Subscription_Root = {
   accreditors_aggregate: Accreditors_Aggregate;
   /** fetch data from the table: "accreditors" using primary key columns */
   accreditors_by_pk?: Maybe<Accreditors>;
+  /** fetch data from the table in a streaming manner: "accreditors" */
+  accreditors_stream: Array<Accreditors>;
   /** fetch data from the table: "availability" */
   availability: Array<Availability>;
   /** fetch aggregated fields from the table: "availability" */
   availability_aggregate: Availability_Aggregate;
   /** fetch data from the table: "availability" using primary key columns */
   availability_by_pk?: Maybe<Availability>;
+  /** fetch data from the table in a streaming manner: "availability" */
+  availability_stream: Array<Availability>;
   /** fetch data from the table: "bild_strategy" */
   bild_strategy: Array<Bild_Strategy>;
   /** fetch aggregated fields from the table: "bild_strategy" */
   bild_strategy_aggregate: Bild_Strategy_Aggregate;
   /** fetch data from the table: "bild_strategy" using primary key columns */
   bild_strategy_by_pk?: Maybe<Bild_Strategy>;
+  /** fetch data from the table in a streaming manner: "bild_strategy" */
+  bild_strategy_stream: Array<Bild_Strategy>;
   /** fetch data from the table: "blended_learning_status" */
   blended_learning_status: Array<Blended_Learning_Status>;
   /** fetch aggregated fields from the table: "blended_learning_status" */
   blended_learning_status_aggregate: Blended_Learning_Status_Aggregate;
   /** fetch data from the table: "blended_learning_status" using primary key columns */
   blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
+  /** fetch data from the table in a streaming manner: "blended_learning_status" */
+  blended_learning_status_stream: Array<Blended_Learning_Status>;
+  /** fetch data from the table: "certificate_expired_notification_jobs" */
+  certificate_expired_notification_jobs: Array<Certificate_Expired_Notification_Jobs>;
+  /** fetch aggregated fields from the table: "certificate_expired_notification_jobs" */
+  certificate_expired_notification_jobs_aggregate: Certificate_Expired_Notification_Jobs_Aggregate;
+  /** fetch data from the table: "certificate_expired_notification_jobs" using primary key columns */
+  certificate_expired_notification_jobs_by_pk?: Maybe<Certificate_Expired_Notification_Jobs>;
+  /** fetch data from the table in a streaming manner: "certificate_expired_notification_jobs" */
+  certificate_expired_notification_jobs_stream: Array<Certificate_Expired_Notification_Jobs>;
   /** fetch data from the table: "certificate_expiry_notification_jobs" */
   certificate_expiry_notification_jobs: Array<Certificate_Expiry_Notification_Jobs>;
   /** fetch aggregated fields from the table: "certificate_expiry_notification_jobs" */
   certificate_expiry_notification_jobs_aggregate: Certificate_Expiry_Notification_Jobs_Aggregate;
   /** fetch data from the table: "certificate_expiry_notification_jobs" using primary key columns */
   certificate_expiry_notification_jobs_by_pk?: Maybe<Certificate_Expiry_Notification_Jobs>;
+  /** fetch data from the table in a streaming manner: "certificate_expiry_notification_jobs" */
+  certificate_expiry_notification_jobs_stream: Array<Certificate_Expiry_Notification_Jobs>;
   /** fetch data from the table: "certificate_expiry_notification_timeframe" */
   certificate_expiry_notification_timeframe: Array<Certificate_Expiry_Notification_Timeframe>;
   /** fetch aggregated fields from the table: "certificate_expiry_notification_timeframe" */
   certificate_expiry_notification_timeframe_aggregate: Certificate_Expiry_Notification_Timeframe_Aggregate;
   /** fetch data from the table: "certificate_expiry_notification_timeframe" using primary key columns */
   certificate_expiry_notification_timeframe_by_pk?: Maybe<Certificate_Expiry_Notification_Timeframe>;
+  /** fetch data from the table in a streaming manner: "certificate_expiry_notification_timeframe" */
+  certificate_expiry_notification_timeframe_stream: Array<Certificate_Expiry_Notification_Timeframe>;
   /** fetch data from the table: "certificate_status" */
   certificate_status: Array<Certificate_Status>;
   /** fetch aggregated fields from the table: "certificate_status" */
   certificate_status_aggregate: Certificate_Status_Aggregate;
   /** fetch data from the table: "certificate_status" using primary key columns */
   certificate_status_by_pk?: Maybe<Certificate_Status>;
+  /** fetch data from the table in a streaming manner: "certificate_status" */
+  certificate_status_stream: Array<Certificate_Status>;
   /** fetch data from the table: "color" */
   color: Array<Color>;
   /** fetch aggregated fields from the table: "color" */
   color_aggregate: Color_Aggregate;
   /** fetch data from the table: "color" using primary key columns */
   color_by_pk?: Maybe<Color>;
+  /** fetch data from the table in a streaming manner: "color" */
+  color_stream: Array<Color>;
   /** fetch data from the table: "course" */
   course: Array<Course>;
   /** fetch aggregated fields from the table: "course" */
@@ -39555,24 +43808,32 @@ export type Subscription_Root = {
   course_audit_aggregate: Course_Audit_Aggregate;
   /** fetch data from the table: "course_audit" using primary key columns */
   course_audit_by_pk?: Maybe<Course_Audit>;
+  /** fetch data from the table in a streaming manner: "course_audit" */
+  course_audit_stream: Array<Course_Audit>;
   /** fetch data from the table: "course_audit_type" */
   course_audit_type: Array<Course_Audit_Type>;
   /** fetch aggregated fields from the table: "course_audit_type" */
   course_audit_type_aggregate: Course_Audit_Type_Aggregate;
   /** fetch data from the table: "course_audit_type" using primary key columns */
   course_audit_type_by_pk?: Maybe<Course_Audit_Type>;
+  /** fetch data from the table in a streaming manner: "course_audit_type" */
+  course_audit_type_stream: Array<Course_Audit_Type>;
   /** fetch data from the table: "course_bild_module" */
   course_bild_module: Array<Course_Bild_Module>;
   /** fetch aggregated fields from the table: "course_bild_module" */
   course_bild_module_aggregate: Course_Bild_Module_Aggregate;
   /** fetch data from the table: "course_bild_module" using primary key columns */
   course_bild_module_by_pk?: Maybe<Course_Bild_Module>;
+  /** fetch data from the table in a streaming manner: "course_bild_module" */
+  course_bild_module_stream: Array<Course_Bild_Module>;
   /** fetch data from the table: "course_bild_strategy" */
   course_bild_strategy: Array<Course_Bild_Strategy>;
   /** fetch aggregated fields from the table: "course_bild_strategy" */
   course_bild_strategy_aggregate: Course_Bild_Strategy_Aggregate;
   /** fetch data from the table: "course_bild_strategy" using primary key columns */
   course_bild_strategy_by_pk?: Maybe<Course_Bild_Strategy>;
+  /** fetch data from the table in a streaming manner: "course_bild_strategy" */
+  course_bild_strategy_stream: Array<Course_Bild_Strategy>;
   /** fetch data from the table: "course" using primary key columns */
   course_by_pk?: Maybe<Course>;
   /** fetch data from the table: "course_cancellation_request" */
@@ -39581,6 +43842,8 @@ export type Subscription_Root = {
   course_cancellation_request_aggregate: Course_Cancellation_Request_Aggregate;
   /** fetch data from the table: "course_cancellation_request" using primary key columns */
   course_cancellation_request_by_pk?: Maybe<Course_Cancellation_Request>;
+  /** fetch data from the table in a streaming manner: "course_cancellation_request" */
+  course_cancellation_request_stream: Array<Course_Cancellation_Request>;
   /** fetch data from the table: "course_certificate" */
   course_certificate: Array<Course_Certificate>;
   /** fetch aggregated fields from the table: "course_certificate" */
@@ -39593,18 +43856,26 @@ export type Subscription_Root = {
   course_certificate_changelog_aggregate: Course_Certificate_Changelog_Aggregate;
   /** fetch data from the table: "course_certificate_changelog" using primary key columns */
   course_certificate_changelog_by_pk?: Maybe<Course_Certificate_Changelog>;
+  /** fetch data from the table in a streaming manner: "course_certificate_changelog" */
+  course_certificate_changelog_stream: Array<Course_Certificate_Changelog>;
   /** fetch data from the table: "course_certificate_changelog_type" */
   course_certificate_changelog_type: Array<Course_Certificate_Changelog_Type>;
   /** fetch aggregated fields from the table: "course_certificate_changelog_type" */
   course_certificate_changelog_type_aggregate: Course_Certificate_Changelog_Type_Aggregate;
   /** fetch data from the table: "course_certificate_changelog_type" using primary key columns */
   course_certificate_changelog_type_by_pk?: Maybe<Course_Certificate_Changelog_Type>;
+  /** fetch data from the table in a streaming manner: "course_certificate_changelog_type" */
+  course_certificate_changelog_type_stream: Array<Course_Certificate_Changelog_Type>;
   /** fetch data from the table: "course_certificate_hold_request" */
   course_certificate_hold_request: Array<Course_Certificate_Hold_Request>;
   /** fetch aggregated fields from the table: "course_certificate_hold_request" */
   course_certificate_hold_request_aggregate: Course_Certificate_Hold_Request_Aggregate;
   /** fetch data from the table: "course_certificate_hold_request" using primary key columns */
   course_certificate_hold_request_by_pk?: Maybe<Course_Certificate_Hold_Request>;
+  /** fetch data from the table in a streaming manner: "course_certificate_hold_request" */
+  course_certificate_hold_request_stream: Array<Course_Certificate_Hold_Request>;
+  /** fetch data from the table in a streaming manner: "course_certificate" */
+  course_certificate_stream: Array<Course_Certificate>;
   /** fetch data from the table: "course_delivery_type" */
   course_delivery_type: Array<Course_Delivery_Type>;
   /** fetch aggregated fields from the table: "course_delivery_type" */
@@ -39617,66 +43888,90 @@ export type Subscription_Root = {
   course_delivery_type_prefix_aggregate: Course_Delivery_Type_Prefix_Aggregate;
   /** fetch data from the table: "course_delivery_type_prefix" using primary key columns */
   course_delivery_type_prefix_by_pk?: Maybe<Course_Delivery_Type_Prefix>;
+  /** fetch data from the table in a streaming manner: "course_delivery_type_prefix" */
+  course_delivery_type_prefix_stream: Array<Course_Delivery_Type_Prefix>;
+  /** fetch data from the table in a streaming manner: "course_delivery_type" */
+  course_delivery_type_stream: Array<Course_Delivery_Type>;
   /** fetch data from the table: "course_draft" */
   course_draft: Array<Course_Draft>;
   /** fetch aggregated fields from the table: "course_draft" */
   course_draft_aggregate: Course_Draft_Aggregate;
   /** fetch data from the table: "course_draft" using primary key columns */
   course_draft_by_pk?: Maybe<Course_Draft>;
+  /** fetch data from the table in a streaming manner: "course_draft" */
+  course_draft_stream: Array<Course_Draft>;
   /** fetch data from the table: "course_end_jobs" */
   course_end_jobs: Array<Course_End_Jobs>;
   /** fetch aggregated fields from the table: "course_end_jobs" */
   course_end_jobs_aggregate: Course_End_Jobs_Aggregate;
   /** fetch data from the table: "course_end_jobs" using primary key columns */
   course_end_jobs_by_pk?: Maybe<Course_End_Jobs>;
+  /** fetch data from the table in a streaming manner: "course_end_jobs" */
+  course_end_jobs_stream: Array<Course_End_Jobs>;
   /** fetch data from the table: "course_enquiry" */
   course_enquiry: Array<Course_Enquiry>;
   /** fetch aggregated fields from the table: "course_enquiry" */
   course_enquiry_aggregate: Course_Enquiry_Aggregate;
   /** fetch data from the table: "course_enquiry" using primary key columns */
   course_enquiry_by_pk?: Maybe<Course_Enquiry>;
+  /** fetch data from the table in a streaming manner: "course_enquiry" */
+  course_enquiry_stream: Array<Course_Enquiry>;
   /** fetch data from the table: "course_evaluation_answers" */
   course_evaluation_answers: Array<Course_Evaluation_Answers>;
   /** fetch aggregated fields from the table: "course_evaluation_answers" */
   course_evaluation_answers_aggregate: Course_Evaluation_Answers_Aggregate;
   /** fetch data from the table: "course_evaluation_answers" using primary key columns */
   course_evaluation_answers_by_pk?: Maybe<Course_Evaluation_Answers>;
+  /** fetch data from the table in a streaming manner: "course_evaluation_answers" */
+  course_evaluation_answers_stream: Array<Course_Evaluation_Answers>;
   /** fetch data from the table: "course_evaluation_question_group" */
   course_evaluation_question_group: Array<Course_Evaluation_Question_Group>;
   /** fetch aggregated fields from the table: "course_evaluation_question_group" */
   course_evaluation_question_group_aggregate: Course_Evaluation_Question_Group_Aggregate;
   /** fetch data from the table: "course_evaluation_question_group" using primary key columns */
   course_evaluation_question_group_by_pk?: Maybe<Course_Evaluation_Question_Group>;
+  /** fetch data from the table in a streaming manner: "course_evaluation_question_group" */
+  course_evaluation_question_group_stream: Array<Course_Evaluation_Question_Group>;
   /** fetch data from the table: "course_evaluation_question_type" */
   course_evaluation_question_type: Array<Course_Evaluation_Question_Type>;
   /** fetch aggregated fields from the table: "course_evaluation_question_type" */
   course_evaluation_question_type_aggregate: Course_Evaluation_Question_Type_Aggregate;
   /** fetch data from the table: "course_evaluation_question_type" using primary key columns */
   course_evaluation_question_type_by_pk?: Maybe<Course_Evaluation_Question_Type>;
+  /** fetch data from the table in a streaming manner: "course_evaluation_question_type" */
+  course_evaluation_question_type_stream: Array<Course_Evaluation_Question_Type>;
   /** fetch data from the table: "course_evaluation_questions" */
   course_evaluation_questions: Array<Course_Evaluation_Questions>;
   /** fetch aggregated fields from the table: "course_evaluation_questions" */
   course_evaluation_questions_aggregate: Course_Evaluation_Questions_Aggregate;
   /** fetch data from the table: "course_evaluation_questions" using primary key columns */
   course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
+  /** fetch data from the table in a streaming manner: "course_evaluation_questions" */
+  course_evaluation_questions_stream: Array<Course_Evaluation_Questions>;
   /** fetch data from the table: "course_expenses" */
   course_expenses: Array<Course_Expenses>;
   /** fetch aggregated fields from the table: "course_expenses" */
   course_expenses_aggregate: Course_Expenses_Aggregate;
   /** fetch data from the table: "course_expenses" using primary key columns */
   course_expenses_by_pk?: Maybe<Course_Expenses>;
+  /** fetch data from the table in a streaming manner: "course_expenses" */
+  course_expenses_stream: Array<Course_Expenses>;
   /** fetch data from the table: "course_invite_status" */
   course_invite_status: Array<Course_Invite_Status>;
   /** fetch aggregated fields from the table: "course_invite_status" */
   course_invite_status_aggregate: Course_Invite_Status_Aggregate;
   /** fetch data from the table: "course_invite_status" using primary key columns */
   course_invite_status_by_pk?: Maybe<Course_Invite_Status>;
+  /** fetch data from the table in a streaming manner: "course_invite_status" */
+  course_invite_status_stream: Array<Course_Invite_Status>;
   /** fetch data from the table: "course_invites" */
   course_invites: Array<Course_Invites>;
   /** fetch aggregated fields from the table: "course_invites" */
   course_invites_aggregate: Course_Invites_Aggregate;
   /** fetch data from the table: "course_invites" using primary key columns */
   course_invites_by_pk?: Maybe<Course_Invites>;
+  /** fetch data from the table in a streaming manner: "course_invites" */
+  course_invites_stream: Array<Course_Invites>;
   /** fetch data from the table: "course_level" */
   course_level: Array<Course_Level>;
   /** fetch aggregated fields from the table: "course_level" */
@@ -39689,12 +43984,18 @@ export type Subscription_Root = {
   course_level_prefix_aggregate: Course_Level_Prefix_Aggregate;
   /** fetch data from the table: "course_level_prefix" using primary key columns */
   course_level_prefix_by_pk?: Maybe<Course_Level_Prefix>;
+  /** fetch data from the table in a streaming manner: "course_level_prefix" */
+  course_level_prefix_stream: Array<Course_Level_Prefix>;
+  /** fetch data from the table in a streaming manner: "course_level" */
+  course_level_stream: Array<Course_Level>;
   /** fetch data from the table: "course_module" */
   course_module: Array<Course_Module>;
   /** fetch aggregated fields from the table: "course_module" */
   course_module_aggregate: Course_Module_Aggregate;
   /** fetch data from the table: "course_module" using primary key columns */
   course_module_by_pk?: Maybe<Course_Module>;
+  /** fetch data from the table in a streaming manner: "course_module" */
+  course_module_stream: Array<Course_Module>;
   /** fetch data from the table: "course_participant" */
   course_participant: Array<Course_Participant>;
   /** fetch aggregated fields from the table: "course_participant" */
@@ -39705,18 +44006,24 @@ export type Subscription_Root = {
   course_participant_audit_aggregate: Course_Participant_Audit_Aggregate;
   /** fetch data from the table: "course_participant_audit" using primary key columns */
   course_participant_audit_by_pk?: Maybe<Course_Participant_Audit>;
+  /** fetch data from the table in a streaming manner: "course_participant_audit" */
+  course_participant_audit_stream: Array<Course_Participant_Audit>;
   /** fetch data from the table: "course_participant_audit_type" */
   course_participant_audit_type: Array<Course_Participant_Audit_Type>;
   /** fetch aggregated fields from the table: "course_participant_audit_type" */
   course_participant_audit_type_aggregate: Course_Participant_Audit_Type_Aggregate;
   /** fetch data from the table: "course_participant_audit_type" using primary key columns */
   course_participant_audit_type_by_pk?: Maybe<Course_Participant_Audit_Type>;
+  /** fetch data from the table in a streaming manner: "course_participant_audit_type" */
+  course_participant_audit_type_stream: Array<Course_Participant_Audit_Type>;
   /** fetch data from the table: "course_participant_bild_module" */
   course_participant_bild_module: Array<Course_Participant_Bild_Module>;
   /** fetch aggregated fields from the table: "course_participant_bild_module" */
   course_participant_bild_module_aggregate: Course_Participant_Bild_Module_Aggregate;
   /** fetch data from the table: "course_participant_bild_module" using primary key columns */
   course_participant_bild_module_by_pk?: Maybe<Course_Participant_Bild_Module>;
+  /** fetch data from the table in a streaming manner: "course_participant_bild_module" */
+  course_participant_bild_module_stream: Array<Course_Participant_Bild_Module>;
   /** fetch data from the table: "course_participant" using primary key columns */
   course_participant_by_pk?: Maybe<Course_Participant>;
   /** fetch data from the table: "course_participant_cancellation" */
@@ -39725,12 +44032,18 @@ export type Subscription_Root = {
   course_participant_cancellation_aggregate: Course_Participant_Cancellation_Aggregate;
   /** fetch data from the table: "course_participant_cancellation" using primary key columns */
   course_participant_cancellation_by_pk?: Maybe<Course_Participant_Cancellation>;
+  /** fetch data from the table in a streaming manner: "course_participant_cancellation" */
+  course_participant_cancellation_stream: Array<Course_Participant_Cancellation>;
   /** fetch data from the table: "course_participant_module" */
   course_participant_module: Array<Course_Participant_Module>;
   /** fetch aggregated fields from the table: "course_participant_module" */
   course_participant_module_aggregate: Course_Participant_Module_Aggregate;
   /** fetch data from the table: "course_participant_module" using primary key columns */
   course_participant_module_by_pk?: Maybe<Course_Participant_Module>;
+  /** fetch data from the table in a streaming manner: "course_participant_module" */
+  course_participant_module_stream: Array<Course_Participant_Module>;
+  /** fetch data from the table in a streaming manner: "course_participant" */
+  course_participant_stream: Array<Course_Participant>;
   /** fetch data from the table: "course_pricing" */
   course_pricing: Array<Course_Pricing>;
   /** fetch aggregated fields from the table: "course_pricing" */
@@ -39743,42 +44056,60 @@ export type Subscription_Root = {
   course_pricing_changelog_aggregate: Course_Pricing_Changelog_Aggregate;
   /** fetch data from the table: "course_pricing_changelog" using primary key columns */
   course_pricing_changelog_by_pk?: Maybe<Course_Pricing_Changelog>;
+  /** fetch data from the table in a streaming manner: "course_pricing_changelog" */
+  course_pricing_changelog_stream: Array<Course_Pricing_Changelog>;
+  /** fetch data from the table in a streaming manner: "course_pricing" */
+  course_pricing_stream: Array<Course_Pricing>;
   /** fetch data from the table: "course_promo_code" */
   course_promo_code: Array<Course_Promo_Code>;
   /** fetch aggregated fields from the table: "course_promo_code" */
   course_promo_code_aggregate: Course_Promo_Code_Aggregate;
   /** fetch data from the table: "course_promo_code" using primary key columns */
   course_promo_code_by_pk?: Maybe<Course_Promo_Code>;
+  /** fetch data from the table in a streaming manner: "course_promo_code" */
+  course_promo_code_stream: Array<Course_Promo_Code>;
   /** fetch data from the table: "course_schedule" */
   course_schedule: Array<Course_Schedule>;
   /** fetch aggregated fields from the table: "course_schedule" */
   course_schedule_aggregate: Course_Schedule_Aggregate;
   /** fetch data from the table: "course_schedule" using primary key columns */
   course_schedule_by_pk?: Maybe<Course_Schedule>;
+  /** fetch data from the table in a streaming manner: "course_schedule" */
+  course_schedule_stream: Array<Course_Schedule>;
   /** fetch data from the table: "course_source" */
   course_source: Array<Course_Source>;
   /** fetch aggregated fields from the table: "course_source" */
   course_source_aggregate: Course_Source_Aggregate;
   /** fetch data from the table: "course_source" using primary key columns */
   course_source_by_pk?: Maybe<Course_Source>;
+  /** fetch data from the table in a streaming manner: "course_source" */
+  course_source_stream: Array<Course_Source>;
   /** fetch data from the table: "course_status" */
   course_status: Array<Course_Status>;
   /** fetch aggregated fields from the table: "course_status" */
   course_status_aggregate: Course_Status_Aggregate;
   /** fetch data from the table: "course_status" using primary key columns */
   course_status_by_pk?: Maybe<Course_Status>;
+  /** fetch data from the table in a streaming manner: "course_status" */
+  course_status_stream: Array<Course_Status>;
+  /** fetch data from the table in a streaming manner: "course" */
+  course_stream: Array<Course>;
   /** An array relationship */
   course_trainer: Array<Course_Trainer>;
   /** An aggregate relationship */
   course_trainer_aggregate: Course_Trainer_Aggregate;
   /** fetch data from the table: "course_trainer" using primary key columns */
   course_trainer_by_pk?: Maybe<Course_Trainer>;
+  /** fetch data from the table in a streaming manner: "course_trainer" */
+  course_trainer_stream: Array<Course_Trainer>;
   /** fetch data from the table: "course_trainer_type" */
   course_trainer_type: Array<Course_Trainer_Type>;
   /** fetch aggregated fields from the table: "course_trainer_type" */
   course_trainer_type_aggregate: Course_Trainer_Type_Aggregate;
   /** fetch data from the table: "course_trainer_type" using primary key columns */
   course_trainer_type_by_pk?: Maybe<Course_Trainer_Type>;
+  /** fetch data from the table in a streaming manner: "course_trainer_type" */
+  course_trainer_type_stream: Array<Course_Trainer_Type>;
   /** fetch data from the table: "course_type" */
   course_type: Array<Course_Type>;
   /** fetch aggregated fields from the table: "course_type" */
@@ -39791,24 +44122,34 @@ export type Subscription_Root = {
   course_type_prefix_aggregate: Course_Type_Prefix_Aggregate;
   /** fetch data from the table: "course_type_prefix" using primary key columns */
   course_type_prefix_by_pk?: Maybe<Course_Type_Prefix>;
+  /** fetch data from the table in a streaming manner: "course_type_prefix" */
+  course_type_prefix_stream: Array<Course_Type_Prefix>;
+  /** fetch data from the table in a streaming manner: "course_type" */
+  course_type_stream: Array<Course_Type>;
   /** fetch data from the table: "dfe_establishment" */
   dfe_establishment: Array<Dfe_Establishment>;
   /** fetch aggregated fields from the table: "dfe_establishment" */
   dfe_establishment_aggregate: Dfe_Establishment_Aggregate;
   /** fetch data from the table: "dfe_establishment" using primary key columns */
   dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
+  /** fetch data from the table in a streaming manner: "dfe_establishment" */
+  dfe_establishment_stream: Array<Dfe_Establishment>;
   /** fetch data from the table: "expire_go1_license_jobs" */
   expire_go1_license_jobs: Array<Expire_Go1_License_Jobs>;
   /** fetch aggregated fields from the table: "expire_go1_license_jobs" */
   expire_go1_license_jobs_aggregate: Expire_Go1_License_Jobs_Aggregate;
   /** fetch data from the table: "expire_go1_license_jobs" using primary key columns */
   expire_go1_license_jobs_by_pk?: Maybe<Expire_Go1_License_Jobs>;
+  /** fetch data from the table in a streaming manner: "expire_go1_license_jobs" */
+  expire_go1_license_jobs_stream: Array<Expire_Go1_License_Jobs>;
   /** fetch data from the table: "go1_history_events" */
   go1_history_events: Array<Go1_History_Events>;
   /** fetch aggregated fields from the table: "go1_history_events" */
   go1_history_events_aggregate: Go1_History_Events_Aggregate;
   /** fetch data from the table: "go1_history_events" using primary key columns */
   go1_history_events_by_pk?: Maybe<Go1_History_Events>;
+  /** fetch data from the table in a streaming manner: "go1_history_events" */
+  go1_history_events_stream: Array<Go1_History_Events>;
   /** fetch data from the table: "go1_licenses" */
   go1_licenses: Array<Go1_Licenses>;
   /** fetch aggregated fields from the table: "go1_licenses" */
@@ -39821,30 +44162,43 @@ export type Subscription_Root = {
   go1_licenses_history_aggregate: Go1_Licenses_History_Aggregate;
   /** fetch data from the table: "go1_licenses_history" using primary key columns */
   go1_licenses_history_by_pk?: Maybe<Go1_Licenses_History>;
+  /** fetch data from the table in a streaming manner: "go1_licenses_history" */
+  go1_licenses_history_stream: Array<Go1_Licenses_History>;
+  /** fetch data from the table in a streaming manner: "go1_licenses" */
+  go1_licenses_stream: Array<Go1_Licenses>;
   /** fetch data from the table: "grade" */
   grade: Array<Grade>;
   /** fetch aggregated fields from the table: "grade" */
   grade_aggregate: Grade_Aggregate;
   /** fetch data from the table: "grade" using primary key columns */
   grade_by_pk?: Maybe<Grade>;
+  /** fetch data from the table in a streaming manner: "grade" */
+  grade_stream: Array<Grade>;
   /** fetch data from the table: "identity" */
   identity: Array<Identity>;
   /** fetch aggregated fields from the table: "identity" */
   identity_aggregate: Identity_Aggregate;
   /** fetch data from the table: "identity" using primary key columns */
   identity_by_pk?: Maybe<Identity>;
+  /** fetch data from the table in a streaming manner: "identity" */
+  identity_stream: Array<Identity>;
   /** fetch data from the table: "identity_type" */
   identity_type: Array<Identity_Type>;
   /** fetch aggregated fields from the table: "identity_type" */
   identity_type_aggregate: Identity_Type_Aggregate;
   /** fetch data from the table: "identity_type" using primary key columns */
   identity_type_by_pk?: Maybe<Identity_Type>;
+  /** fetch data from the table in a streaming manner: "identity_type" */
+  identity_type_stream: Array<Identity_Type>;
+  importArloCertificates?: Maybe<ImportArloCertificates>;
   /** fetch data from the table: "legacy_certificate" */
   legacy_certificate: Array<Legacy_Certificate>;
   /** fetch aggregated fields from the table: "legacy_certificate" */
   legacy_certificate_aggregate: Legacy_Certificate_Aggregate;
   /** fetch data from the table: "legacy_certificate" using primary key columns */
   legacy_certificate_by_pk?: Maybe<Legacy_Certificate>;
+  /** fetch data from the table in a streaming manner: "legacy_certificate" */
+  legacy_certificate_stream: Array<Legacy_Certificate>;
   /** fetch data from the table: "module" */
   module: Array<Module>;
   /** fetch aggregated fields from the table: "module" */
@@ -39857,6 +44211,8 @@ export type Subscription_Root = {
   module_category_aggregate: Module_Category_Aggregate;
   /** fetch data from the table: "module_category" using primary key columns */
   module_category_by_pk?: Maybe<Module_Category>;
+  /** fetch data from the table in a streaming manner: "module_category" */
+  module_category_stream: Array<Module_Category>;
   /** fetch data from the table: "module_group" */
   module_group: Array<Module_Group>;
   /** fetch aggregated fields from the table: "module_group" */
@@ -39869,18 +44225,28 @@ export type Subscription_Root = {
   module_group_duration_aggregate: Module_Group_Duration_Aggregate;
   /** fetch data from the table: "module_group_duration" using primary key columns */
   module_group_duration_by_pk?: Maybe<Module_Group_Duration>;
+  /** fetch data from the table in a streaming manner: "module_group_duration" */
+  module_group_duration_stream: Array<Module_Group_Duration>;
+  /** fetch data from the table in a streaming manner: "module_group" */
+  module_group_stream: Array<Module_Group>;
+  /** fetch data from the table in a streaming manner: "module" */
+  module_stream: Array<Module>;
   /** fetch data from the table: "order" */
   order: Array<Order>;
   /** fetch aggregated fields from the table: "order" */
   order_aggregate: Order_Aggregate;
   /** fetch data from the table: "order" using primary key columns */
   order_by_pk?: Maybe<Order>;
+  /** fetch data from the table in a streaming manner: "order" */
+  order_stream: Array<Order>;
   /** fetch data from the table: "order_temp" */
   order_temp: Array<Order_Temp>;
   /** fetch aggregated fields from the table: "order_temp" */
   order_temp_aggregate: Order_Temp_Aggregate;
   /** fetch data from the table: "order_temp" using primary key columns */
   order_temp_by_pk?: Maybe<Order_Temp>;
+  /** fetch data from the table in a streaming manner: "order_temp" */
+  order_temp_stream: Array<Order_Temp>;
   /** fetch data from the table: "organization" */
   organization: Array<Organization>;
   /** fetch aggregated fields from the table: "organization" */
@@ -39893,24 +44259,34 @@ export type Subscription_Root = {
   organization_invites_aggregate: Organization_Invites_Aggregate;
   /** fetch data from the table: "organization_invites" using primary key columns */
   organization_invites_by_pk?: Maybe<Organization_Invites>;
+  /** fetch data from the table in a streaming manner: "organization_invites" */
+  organization_invites_stream: Array<Organization_Invites>;
   /** fetch data from the table: "organization_member" */
   organization_member: Array<Organization_Member>;
   /** fetch aggregated fields from the table: "organization_member" */
   organization_member_aggregate: Organization_Member_Aggregate;
   /** fetch data from the table: "organization_member" using primary key columns */
   organization_member_by_pk?: Maybe<Organization_Member>;
+  /** fetch data from the table in a streaming manner: "organization_member" */
+  organization_member_stream: Array<Organization_Member>;
+  /** fetch data from the table in a streaming manner: "organization" */
+  organization_stream: Array<Organization>;
   /** fetch data from the table: "payment_methods" */
   payment_methods: Array<Payment_Methods>;
   /** fetch aggregated fields from the table: "payment_methods" */
   payment_methods_aggregate: Payment_Methods_Aggregate;
   /** fetch data from the table: "payment_methods" using primary key columns */
   payment_methods_by_pk?: Maybe<Payment_Methods>;
+  /** fetch data from the table in a streaming manner: "payment_methods" */
+  payment_methods_stream: Array<Payment_Methods>;
   /** fetch data from the table: "private_course_booking" */
   private_course_booking: Array<Private_Course_Booking>;
   /** fetch aggregated fields from the table: "private_course_booking" */
   private_course_booking_aggregate: Private_Course_Booking_Aggregate;
   /** fetch data from the table: "private_course_booking" using primary key columns */
   private_course_booking_by_pk?: Maybe<Private_Course_Booking>;
+  /** fetch data from the table in a streaming manner: "private_course_booking" */
+  private_course_booking_stream: Array<Private_Course_Booking>;
   /** fetch data from the table: "profile" */
   profile: Array<Profile>;
   /** fetch aggregated fields from the table: "profile" */
@@ -39923,52 +44299,72 @@ export type Subscription_Root = {
   profile_role_aggregate: Profile_Role_Aggregate;
   /** fetch data from the table: "profile_role" using primary key columns */
   profile_role_by_pk?: Maybe<Profile_Role>;
+  /** fetch data from the table in a streaming manner: "profile_role" */
+  profile_role_stream: Array<Profile_Role>;
+  /** fetch data from the table in a streaming manner: "profile" */
+  profile_stream: Array<Profile>;
   /** fetch data from the table: "profile_temp" */
   profile_temp: Array<Profile_Temp>;
   /** fetch aggregated fields from the table: "profile_temp" */
   profile_temp_aggregate: Profile_Temp_Aggregate;
   /** fetch data from the table: "profile_temp" using primary key columns */
   profile_temp_by_pk?: Maybe<Profile_Temp>;
+  /** fetch data from the table in a streaming manner: "profile_temp" */
+  profile_temp_stream: Array<Profile_Temp>;
   /** fetch data from the table: "profile_trainer_role_type" */
   profile_trainer_role_type: Array<Profile_Trainer_Role_Type>;
   /** fetch aggregated fields from the table: "profile_trainer_role_type" */
   profile_trainer_role_type_aggregate: Profile_Trainer_Role_Type_Aggregate;
   /** fetch data from the table: "profile_trainer_role_type" using primary key columns */
   profile_trainer_role_type_by_pk?: Maybe<Profile_Trainer_Role_Type>;
+  /** fetch data from the table in a streaming manner: "profile_trainer_role_type" */
+  profile_trainer_role_type_stream: Array<Profile_Trainer_Role_Type>;
   /** fetch data from the table: "promo_code" */
   promo_code: Array<Promo_Code>;
   /** fetch aggregated fields from the table: "promo_code" */
   promo_code_aggregate: Promo_Code_Aggregate;
   /** fetch data from the table: "promo_code" using primary key columns */
   promo_code_by_pk?: Maybe<Promo_Code>;
+  /** fetch data from the table in a streaming manner: "promo_code" */
+  promo_code_stream: Array<Promo_Code>;
   /** fetch data from the table: "promo_code_type" */
   promo_code_type: Array<Promo_Code_Type>;
   /** fetch aggregated fields from the table: "promo_code_type" */
   promo_code_type_aggregate: Promo_Code_Type_Aggregate;
   /** fetch data from the table: "promo_code_type" using primary key columns */
   promo_code_type_by_pk?: Maybe<Promo_Code_Type>;
+  /** fetch data from the table in a streaming manner: "promo_code_type" */
+  promo_code_type_stream: Array<Promo_Code_Type>;
   /** fetch data from the table: "role" */
   role: Array<Role>;
   /** fetch aggregated fields from the table: "role" */
   role_aggregate: Role_Aggregate;
   /** fetch data from the table: "role" using primary key columns */
   role_by_pk?: Maybe<Role>;
+  /** fetch data from the table in a streaming manner: "role" */
+  role_stream: Array<Role>;
   /** fetch data from the table: "trainer_role_type" */
   trainer_role_type: Array<Trainer_Role_Type>;
   /** fetch aggregated fields from the table: "trainer_role_type" */
   trainer_role_type_aggregate: Trainer_Role_Type_Aggregate;
   /** fetch data from the table: "trainer_role_type" using primary key columns */
   trainer_role_type_by_pk?: Maybe<Trainer_Role_Type>;
+  /** fetch data from the table in a streaming manner: "trainer_role_type" */
+  trainer_role_type_stream: Array<Trainer_Role_Type>;
   /** fetch data from the table: "trust_type" */
   trust_type: Array<Trust_Type>;
   /** fetch aggregated fields from the table: "trust_type" */
   trust_type_aggregate: Trust_Type_Aggregate;
   /** fetch data from the table: "trust_type" using primary key columns */
   trust_type_by_pk?: Maybe<Trust_Type>;
+  /** fetch data from the table in a streaming manner: "trust_type" */
+  trust_type_stream: Array<Trust_Type>;
   /** fetch data from the table: "upcoming_enrollments" */
   upcoming_enrollments: Array<Upcoming_Enrollments>;
   /** fetch aggregated fields from the table: "upcoming_enrollments" */
   upcoming_enrollments_aggregate: Upcoming_Enrollments_Aggregate;
+  /** fetch data from the table in a streaming manner: "upcoming_enrollments" */
+  upcoming_enrollments_stream: Array<Upcoming_Enrollments>;
   /** fetch data from the table: "venue" */
   venue: Array<Venue>;
   /** fetch aggregated fields from the table: "venue" */
@@ -39981,24 +44377,34 @@ export type Subscription_Root = {
   venue_check_jobs_aggregate: Venue_Check_Jobs_Aggregate;
   /** fetch data from the table: "venue_check_jobs" using primary key columns */
   venue_check_jobs_by_pk?: Maybe<Venue_Check_Jobs>;
+  /** fetch data from the table in a streaming manner: "venue_check_jobs" */
+  venue_check_jobs_stream: Array<Venue_Check_Jobs>;
+  /** fetch data from the table in a streaming manner: "venue" */
+  venue_stream: Array<Venue>;
   /** fetch data from the table: "waitlist" */
   waitlist: Array<Waitlist>;
   /** fetch aggregated fields from the table: "waitlist" */
   waitlist_aggregate: Waitlist_Aggregate;
   /** fetch data from the table: "waitlist" using primary key columns */
   waitlist_by_pk?: Maybe<Waitlist>;
+  /** fetch data from the table in a streaming manner: "waitlist" */
+  waitlist_stream: Array<Waitlist>;
   /** fetch data from the table: "xero_contact" */
   xero_contact: Array<Xero_Contact>;
   /** fetch aggregated fields from the table: "xero_contact" */
   xero_contact_aggregate: Xero_Contact_Aggregate;
   /** fetch data from the table: "xero_contact" using primary key columns */
   xero_contact_by_pk?: Maybe<Xero_Contact>;
+  /** fetch data from the table in a streaming manner: "xero_contact" */
+  xero_contact_stream: Array<Xero_Contact>;
   /** fetch data from the table: "xero_credential" */
   xero_credential: Array<Xero_Credential>;
   /** fetch aggregated fields from the table: "xero_credential" */
   xero_credential_aggregate: Xero_Credential_Aggregate;
   /** fetch data from the table: "xero_credential" using primary key columns */
   xero_credential_by_pk?: Maybe<Xero_Credential>;
+  /** fetch data from the table in a streaming manner: "xero_credential" */
+  xero_credential_stream: Array<Xero_Credential>;
   /** fetch data from the table: "xero_invoice" */
   xero_invoice: Array<Xero_Invoice>;
   /** fetch aggregated fields from the table: "xero_invoice" */
@@ -40011,6 +44417,10 @@ export type Subscription_Root = {
   xero_invoice_status_aggregate: Xero_Invoice_Status_Aggregate;
   /** fetch data from the table: "xero_invoice_status" using primary key columns */
   xero_invoice_status_by_pk?: Maybe<Xero_Invoice_Status>;
+  /** fetch data from the table in a streaming manner: "xero_invoice_status" */
+  xero_invoice_status_stream: Array<Xero_Invoice_Status>;
+  /** fetch data from the table in a streaming manner: "xero_invoice" */
+  xero_invoice_stream: Array<Xero_Invoice>;
 };
 
 
@@ -40037,6 +44447,13 @@ export type Subscription_RootAccreditors_By_PkArgs = {
 };
 
 
+export type Subscription_RootAccreditors_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Accreditors_Stream_Cursor_Input>>;
+  where?: InputMaybe<Accreditors_Bool_Exp>;
+};
+
+
 export type Subscription_RootAvailabilityArgs = {
   distinct_on?: InputMaybe<Array<Availability_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40057,6 +44474,13 @@ export type Subscription_RootAvailability_AggregateArgs = {
 
 export type Subscription_RootAvailability_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootAvailability_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Availability_Stream_Cursor_Input>>;
+  where?: InputMaybe<Availability_Bool_Exp>;
 };
 
 
@@ -40083,6 +44507,13 @@ export type Subscription_RootBild_Strategy_By_PkArgs = {
 };
 
 
+export type Subscription_RootBild_Strategy_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Bild_Strategy_Stream_Cursor_Input>>;
+  where?: InputMaybe<Bild_Strategy_Bool_Exp>;
+};
+
+
 export type Subscription_RootBlended_Learning_StatusArgs = {
   distinct_on?: InputMaybe<Array<Blended_Learning_Status_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40103,6 +44534,43 @@ export type Subscription_RootBlended_Learning_Status_AggregateArgs = {
 
 export type Subscription_RootBlended_Learning_Status_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootBlended_Learning_Status_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Blended_Learning_Status_Stream_Cursor_Input>>;
+  where?: InputMaybe<Blended_Learning_Status_Bool_Exp>;
+};
+
+
+export type Subscription_RootCertificate_Expired_Notification_JobsArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Order_By>>;
+  where?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
+};
+
+
+export type Subscription_RootCertificate_Expired_Notification_Jobs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Certificate_Expired_Notification_Jobs_Order_By>>;
+  where?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
+};
+
+
+export type Subscription_RootCertificate_Expired_Notification_Jobs_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCertificate_Expired_Notification_Jobs_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Certificate_Expired_Notification_Jobs_Stream_Cursor_Input>>;
+  where?: InputMaybe<Certificate_Expired_Notification_Jobs_Bool_Exp>;
 };
 
 
@@ -40129,6 +44597,13 @@ export type Subscription_RootCertificate_Expiry_Notification_Jobs_By_PkArgs = {
 };
 
 
+export type Subscription_RootCertificate_Expiry_Notification_Jobs_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Certificate_Expiry_Notification_Jobs_Stream_Cursor_Input>>;
+  where?: InputMaybe<Certificate_Expiry_Notification_Jobs_Bool_Exp>;
+};
+
+
 export type Subscription_RootCertificate_Expiry_Notification_TimeframeArgs = {
   distinct_on?: InputMaybe<Array<Certificate_Expiry_Notification_Timeframe_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40149,6 +44624,13 @@ export type Subscription_RootCertificate_Expiry_Notification_Timeframe_Aggregate
 
 export type Subscription_RootCertificate_Expiry_Notification_Timeframe_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootCertificate_Expiry_Notification_Timeframe_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Certificate_Expiry_Notification_Timeframe_Stream_Cursor_Input>>;
+  where?: InputMaybe<Certificate_Expiry_Notification_Timeframe_Bool_Exp>;
 };
 
 
@@ -40175,6 +44657,13 @@ export type Subscription_RootCertificate_Status_By_PkArgs = {
 };
 
 
+export type Subscription_RootCertificate_Status_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Certificate_Status_Stream_Cursor_Input>>;
+  where?: InputMaybe<Certificate_Status_Bool_Exp>;
+};
+
+
 export type Subscription_RootColorArgs = {
   distinct_on?: InputMaybe<Array<Color_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40195,6 +44684,13 @@ export type Subscription_RootColor_AggregateArgs = {
 
 export type Subscription_RootColor_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootColor_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Color_Stream_Cursor_Input>>;
+  where?: InputMaybe<Color_Bool_Exp>;
 };
 
 
@@ -40239,6 +44735,13 @@ export type Subscription_RootCourse_Audit_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Audit_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Audit_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Audit_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_Audit_TypeArgs = {
   distinct_on?: InputMaybe<Array<Course_Audit_Type_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40259,6 +44762,13 @@ export type Subscription_RootCourse_Audit_Type_AggregateArgs = {
 
 export type Subscription_RootCourse_Audit_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootCourse_Audit_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Audit_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Audit_Type_Bool_Exp>;
 };
 
 
@@ -40285,6 +44795,13 @@ export type Subscription_RootCourse_Bild_Module_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Bild_Module_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Bild_Module_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Bild_Module_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_Bild_StrategyArgs = {
   distinct_on?: InputMaybe<Array<Course_Bild_Strategy_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40305,6 +44822,13 @@ export type Subscription_RootCourse_Bild_Strategy_AggregateArgs = {
 
 export type Subscription_RootCourse_Bild_Strategy_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Bild_Strategy_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Bild_Strategy_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Bild_Strategy_Bool_Exp>;
 };
 
 
@@ -40333,6 +44857,13 @@ export type Subscription_RootCourse_Cancellation_Request_AggregateArgs = {
 
 export type Subscription_RootCourse_Cancellation_Request_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Cancellation_Request_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Cancellation_Request_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Cancellation_Request_Bool_Exp>;
 };
 
 
@@ -40382,6 +44913,13 @@ export type Subscription_RootCourse_Certificate_Changelog_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Certificate_Changelog_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Certificate_Changelog_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Certificate_Changelog_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_Certificate_Changelog_TypeArgs = {
   distinct_on?: InputMaybe<Array<Course_Certificate_Changelog_Type_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40405,6 +44943,13 @@ export type Subscription_RootCourse_Certificate_Changelog_Type_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Certificate_Changelog_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Certificate_Changelog_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Certificate_Changelog_Type_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_Certificate_Hold_RequestArgs = {
   distinct_on?: InputMaybe<Array<Course_Certificate_Hold_Request_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40425,6 +44970,20 @@ export type Subscription_RootCourse_Certificate_Hold_Request_AggregateArgs = {
 
 export type Subscription_RootCourse_Certificate_Hold_Request_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Certificate_Hold_Request_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Certificate_Hold_Request_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Certificate_Hold_Request_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Certificate_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Certificate_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Certificate_Bool_Exp>;
 };
 
 
@@ -40474,6 +45033,20 @@ export type Subscription_RootCourse_Delivery_Type_Prefix_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Delivery_Type_Prefix_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Delivery_Type_Prefix_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Delivery_Type_Prefix_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Delivery_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Delivery_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Delivery_Type_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_DraftArgs = {
   distinct_on?: InputMaybe<Array<Course_Draft_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40494,6 +45067,13 @@ export type Subscription_RootCourse_Draft_AggregateArgs = {
 
 export type Subscription_RootCourse_Draft_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Draft_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Draft_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Draft_Bool_Exp>;
 };
 
 
@@ -40520,6 +45100,13 @@ export type Subscription_RootCourse_End_Jobs_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_End_Jobs_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_End_Jobs_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_End_Jobs_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_EnquiryArgs = {
   distinct_on?: InputMaybe<Array<Course_Enquiry_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40540,6 +45127,13 @@ export type Subscription_RootCourse_Enquiry_AggregateArgs = {
 
 export type Subscription_RootCourse_Enquiry_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Enquiry_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Enquiry_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Enquiry_Bool_Exp>;
 };
 
 
@@ -40566,6 +45160,13 @@ export type Subscription_RootCourse_Evaluation_Answers_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Evaluation_Answers_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Evaluation_Answers_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Evaluation_Answers_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_Evaluation_Question_GroupArgs = {
   distinct_on?: InputMaybe<Array<Course_Evaluation_Question_Group_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40586,6 +45187,13 @@ export type Subscription_RootCourse_Evaluation_Question_Group_AggregateArgs = {
 
 export type Subscription_RootCourse_Evaluation_Question_Group_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootCourse_Evaluation_Question_Group_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Evaluation_Question_Group_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Evaluation_Question_Group_Bool_Exp>;
 };
 
 
@@ -40612,6 +45220,13 @@ export type Subscription_RootCourse_Evaluation_Question_Type_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Evaluation_Question_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Evaluation_Question_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Evaluation_Question_Type_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_Evaluation_QuestionsArgs = {
   distinct_on?: InputMaybe<Array<Course_Evaluation_Questions_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40632,6 +45247,13 @@ export type Subscription_RootCourse_Evaluation_Questions_AggregateArgs = {
 
 export type Subscription_RootCourse_Evaluation_Questions_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Evaluation_Questions_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Evaluation_Questions_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Evaluation_Questions_Bool_Exp>;
 };
 
 
@@ -40658,6 +45280,13 @@ export type Subscription_RootCourse_Expenses_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Expenses_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Expenses_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Expenses_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_Invite_StatusArgs = {
   distinct_on?: InputMaybe<Array<Course_Invite_Status_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40681,6 +45310,13 @@ export type Subscription_RootCourse_Invite_Status_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Invite_Status_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Invite_Status_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Invite_Status_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_InvitesArgs = {
   distinct_on?: InputMaybe<Array<Course_Invites_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40701,6 +45337,13 @@ export type Subscription_RootCourse_Invites_AggregateArgs = {
 
 export type Subscription_RootCourse_Invites_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Invites_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Invites_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Invites_Bool_Exp>;
 };
 
 
@@ -40750,6 +45393,20 @@ export type Subscription_RootCourse_Level_Prefix_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Level_Prefix_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Level_Prefix_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Level_Prefix_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Level_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Level_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Level_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_ModuleArgs = {
   distinct_on?: InputMaybe<Array<Course_Module_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40770,6 +45427,13 @@ export type Subscription_RootCourse_Module_AggregateArgs = {
 
 export type Subscription_RootCourse_Module_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Module_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Module_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Module_Bool_Exp>;
 };
 
 
@@ -40814,6 +45478,13 @@ export type Subscription_RootCourse_Participant_Audit_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Participant_Audit_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Participant_Audit_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Participant_Audit_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_Participant_Audit_TypeArgs = {
   distinct_on?: InputMaybe<Array<Course_Participant_Audit_Type_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40837,6 +45508,13 @@ export type Subscription_RootCourse_Participant_Audit_Type_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Participant_Audit_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Participant_Audit_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Participant_Audit_Type_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_Participant_Bild_ModuleArgs = {
   distinct_on?: InputMaybe<Array<Course_Participant_Bild_Module_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40857,6 +45535,13 @@ export type Subscription_RootCourse_Participant_Bild_Module_AggregateArgs = {
 
 export type Subscription_RootCourse_Participant_Bild_Module_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Participant_Bild_Module_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Participant_Bild_Module_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Participant_Bild_Module_Bool_Exp>;
 };
 
 
@@ -40888,6 +45573,13 @@ export type Subscription_RootCourse_Participant_Cancellation_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Participant_Cancellation_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Participant_Cancellation_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Participant_Cancellation_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_Participant_ModuleArgs = {
   distinct_on?: InputMaybe<Array<Course_Participant_Module_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40908,6 +45600,20 @@ export type Subscription_RootCourse_Participant_Module_AggregateArgs = {
 
 export type Subscription_RootCourse_Participant_Module_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Participant_Module_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Participant_Module_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Participant_Module_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Participant_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Participant_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Participant_Bool_Exp>;
 };
 
 
@@ -40957,6 +45663,20 @@ export type Subscription_RootCourse_Pricing_Changelog_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Pricing_Changelog_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Pricing_Changelog_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Pricing_Changelog_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Pricing_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Pricing_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Pricing_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_Promo_CodeArgs = {
   distinct_on?: InputMaybe<Array<Course_Promo_Code_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -40977,6 +45697,13 @@ export type Subscription_RootCourse_Promo_Code_AggregateArgs = {
 
 export type Subscription_RootCourse_Promo_Code_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Promo_Code_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Promo_Code_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Promo_Code_Bool_Exp>;
 };
 
 
@@ -41003,6 +45730,13 @@ export type Subscription_RootCourse_Schedule_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Schedule_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Schedule_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Schedule_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_SourceArgs = {
   distinct_on?: InputMaybe<Array<Course_Source_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41023,6 +45757,13 @@ export type Subscription_RootCourse_Source_AggregateArgs = {
 
 export type Subscription_RootCourse_Source_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootCourse_Source_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Source_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Source_Bool_Exp>;
 };
 
 
@@ -41049,6 +45790,20 @@ export type Subscription_RootCourse_Status_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Status_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Status_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Status_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_TrainerArgs = {
   distinct_on?: InputMaybe<Array<Course_Trainer_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41072,6 +45827,13 @@ export type Subscription_RootCourse_Trainer_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Trainer_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Trainer_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Trainer_Bool_Exp>;
+};
+
+
 export type Subscription_RootCourse_Trainer_TypeArgs = {
   distinct_on?: InputMaybe<Array<Course_Trainer_Type_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41092,6 +45854,13 @@ export type Subscription_RootCourse_Trainer_Type_AggregateArgs = {
 
 export type Subscription_RootCourse_Trainer_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootCourse_Trainer_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Trainer_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Trainer_Type_Bool_Exp>;
 };
 
 
@@ -41141,6 +45910,20 @@ export type Subscription_RootCourse_Type_Prefix_By_PkArgs = {
 };
 
 
+export type Subscription_RootCourse_Type_Prefix_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Type_Prefix_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Type_Prefix_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Type_Bool_Exp>;
+};
+
+
 export type Subscription_RootDfe_EstablishmentArgs = {
   distinct_on?: InputMaybe<Array<Dfe_Establishment_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41161,6 +45944,13 @@ export type Subscription_RootDfe_Establishment_AggregateArgs = {
 
 export type Subscription_RootDfe_Establishment_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootDfe_Establishment_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Dfe_Establishment_Stream_Cursor_Input>>;
+  where?: InputMaybe<Dfe_Establishment_Bool_Exp>;
 };
 
 
@@ -41187,6 +45977,13 @@ export type Subscription_RootExpire_Go1_License_Jobs_By_PkArgs = {
 };
 
 
+export type Subscription_RootExpire_Go1_License_Jobs_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Expire_Go1_License_Jobs_Stream_Cursor_Input>>;
+  where?: InputMaybe<Expire_Go1_License_Jobs_Bool_Exp>;
+};
+
+
 export type Subscription_RootGo1_History_EventsArgs = {
   distinct_on?: InputMaybe<Array<Go1_History_Events_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41207,6 +46004,13 @@ export type Subscription_RootGo1_History_Events_AggregateArgs = {
 
 export type Subscription_RootGo1_History_Events_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootGo1_History_Events_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Go1_History_Events_Stream_Cursor_Input>>;
+  where?: InputMaybe<Go1_History_Events_Bool_Exp>;
 };
 
 
@@ -41256,6 +46060,20 @@ export type Subscription_RootGo1_Licenses_History_By_PkArgs = {
 };
 
 
+export type Subscription_RootGo1_Licenses_History_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Go1_Licenses_History_Stream_Cursor_Input>>;
+  where?: InputMaybe<Go1_Licenses_History_Bool_Exp>;
+};
+
+
+export type Subscription_RootGo1_Licenses_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Go1_Licenses_Stream_Cursor_Input>>;
+  where?: InputMaybe<Go1_Licenses_Bool_Exp>;
+};
+
+
 export type Subscription_RootGradeArgs = {
   distinct_on?: InputMaybe<Array<Grade_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41276,6 +46094,13 @@ export type Subscription_RootGrade_AggregateArgs = {
 
 export type Subscription_RootGrade_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootGrade_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Grade_Stream_Cursor_Input>>;
+  where?: InputMaybe<Grade_Bool_Exp>;
 };
 
 
@@ -41302,6 +46127,13 @@ export type Subscription_RootIdentity_By_PkArgs = {
 };
 
 
+export type Subscription_RootIdentity_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Identity_Stream_Cursor_Input>>;
+  where?: InputMaybe<Identity_Bool_Exp>;
+};
+
+
 export type Subscription_RootIdentity_TypeArgs = {
   distinct_on?: InputMaybe<Array<Identity_Type_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41325,6 +46157,18 @@ export type Subscription_RootIdentity_Type_By_PkArgs = {
 };
 
 
+export type Subscription_RootIdentity_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Identity_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Identity_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootImportArloCertificatesArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Subscription_RootLegacy_CertificateArgs = {
   distinct_on?: InputMaybe<Array<Legacy_Certificate_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41345,6 +46189,13 @@ export type Subscription_RootLegacy_Certificate_AggregateArgs = {
 
 export type Subscription_RootLegacy_Certificate_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootLegacy_Certificate_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Legacy_Certificate_Stream_Cursor_Input>>;
+  where?: InputMaybe<Legacy_Certificate_Bool_Exp>;
 };
 
 
@@ -41394,6 +46245,13 @@ export type Subscription_RootModule_Category_By_PkArgs = {
 };
 
 
+export type Subscription_RootModule_Category_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Module_Category_Stream_Cursor_Input>>;
+  where?: InputMaybe<Module_Category_Bool_Exp>;
+};
+
+
 export type Subscription_RootModule_GroupArgs = {
   distinct_on?: InputMaybe<Array<Module_Group_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41440,6 +46298,27 @@ export type Subscription_RootModule_Group_Duration_By_PkArgs = {
 };
 
 
+export type Subscription_RootModule_Group_Duration_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Module_Group_Duration_Stream_Cursor_Input>>;
+  where?: InputMaybe<Module_Group_Duration_Bool_Exp>;
+};
+
+
+export type Subscription_RootModule_Group_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Module_Group_Stream_Cursor_Input>>;
+  where?: InputMaybe<Module_Group_Bool_Exp>;
+};
+
+
+export type Subscription_RootModule_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Module_Stream_Cursor_Input>>;
+  where?: InputMaybe<Module_Bool_Exp>;
+};
+
+
 export type Subscription_RootOrderArgs = {
   distinct_on?: InputMaybe<Array<Order_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41463,6 +46342,13 @@ export type Subscription_RootOrder_By_PkArgs = {
 };
 
 
+export type Subscription_RootOrder_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Order_Stream_Cursor_Input>>;
+  where?: InputMaybe<Order_Bool_Exp>;
+};
+
+
 export type Subscription_RootOrder_TempArgs = {
   distinct_on?: InputMaybe<Array<Order_Temp_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41483,6 +46369,13 @@ export type Subscription_RootOrder_Temp_AggregateArgs = {
 
 export type Subscription_RootOrder_Temp_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootOrder_Temp_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Order_Temp_Stream_Cursor_Input>>;
+  where?: InputMaybe<Order_Temp_Bool_Exp>;
 };
 
 
@@ -41532,6 +46425,13 @@ export type Subscription_RootOrganization_Invites_By_PkArgs = {
 };
 
 
+export type Subscription_RootOrganization_Invites_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Organization_Invites_Stream_Cursor_Input>>;
+  where?: InputMaybe<Organization_Invites_Bool_Exp>;
+};
+
+
 export type Subscription_RootOrganization_MemberArgs = {
   distinct_on?: InputMaybe<Array<Organization_Member_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41552,6 +46452,20 @@ export type Subscription_RootOrganization_Member_AggregateArgs = {
 
 export type Subscription_RootOrganization_Member_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootOrganization_Member_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Organization_Member_Stream_Cursor_Input>>;
+  where?: InputMaybe<Organization_Member_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrganization_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Organization_Stream_Cursor_Input>>;
+  where?: InputMaybe<Organization_Bool_Exp>;
 };
 
 
@@ -41578,6 +46492,13 @@ export type Subscription_RootPayment_Methods_By_PkArgs = {
 };
 
 
+export type Subscription_RootPayment_Methods_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Payment_Methods_Stream_Cursor_Input>>;
+  where?: InputMaybe<Payment_Methods_Bool_Exp>;
+};
+
+
 export type Subscription_RootPrivate_Course_BookingArgs = {
   distinct_on?: InputMaybe<Array<Private_Course_Booking_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41598,6 +46519,13 @@ export type Subscription_RootPrivate_Course_Booking_AggregateArgs = {
 
 export type Subscription_RootPrivate_Course_Booking_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootPrivate_Course_Booking_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Private_Course_Booking_Stream_Cursor_Input>>;
+  where?: InputMaybe<Private_Course_Booking_Bool_Exp>;
 };
 
 
@@ -41647,6 +46575,20 @@ export type Subscription_RootProfile_Role_By_PkArgs = {
 };
 
 
+export type Subscription_RootProfile_Role_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Profile_Role_Stream_Cursor_Input>>;
+  where?: InputMaybe<Profile_Role_Bool_Exp>;
+};
+
+
+export type Subscription_RootProfile_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Profile_Stream_Cursor_Input>>;
+  where?: InputMaybe<Profile_Bool_Exp>;
+};
+
+
 export type Subscription_RootProfile_TempArgs = {
   distinct_on?: InputMaybe<Array<Profile_Temp_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41667,6 +46609,13 @@ export type Subscription_RootProfile_Temp_AggregateArgs = {
 
 export type Subscription_RootProfile_Temp_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+export type Subscription_RootProfile_Temp_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Profile_Temp_Stream_Cursor_Input>>;
+  where?: InputMaybe<Profile_Temp_Bool_Exp>;
 };
 
 
@@ -41693,6 +46642,13 @@ export type Subscription_RootProfile_Trainer_Role_Type_By_PkArgs = {
 };
 
 
+export type Subscription_RootProfile_Trainer_Role_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Profile_Trainer_Role_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+};
+
+
 export type Subscription_RootPromo_CodeArgs = {
   distinct_on?: InputMaybe<Array<Promo_Code_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41713,6 +46669,13 @@ export type Subscription_RootPromo_Code_AggregateArgs = {
 
 export type Subscription_RootPromo_Code_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootPromo_Code_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Promo_Code_Stream_Cursor_Input>>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
 };
 
 
@@ -41739,6 +46702,13 @@ export type Subscription_RootPromo_Code_Type_By_PkArgs = {
 };
 
 
+export type Subscription_RootPromo_Code_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Promo_Code_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Promo_Code_Type_Bool_Exp>;
+};
+
+
 export type Subscription_RootRoleArgs = {
   distinct_on?: InputMaybe<Array<Role_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41759,6 +46729,13 @@ export type Subscription_RootRole_AggregateArgs = {
 
 export type Subscription_RootRole_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootRole_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Role_Stream_Cursor_Input>>;
+  where?: InputMaybe<Role_Bool_Exp>;
 };
 
 
@@ -41785,6 +46762,13 @@ export type Subscription_RootTrainer_Role_Type_By_PkArgs = {
 };
 
 
+export type Subscription_RootTrainer_Role_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Trainer_Role_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Trainer_Role_Type_Bool_Exp>;
+};
+
+
 export type Subscription_RootTrust_TypeArgs = {
   distinct_on?: InputMaybe<Array<Trust_Type_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41808,6 +46792,13 @@ export type Subscription_RootTrust_Type_By_PkArgs = {
 };
 
 
+export type Subscription_RootTrust_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Trust_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Trust_Type_Bool_Exp>;
+};
+
+
 export type Subscription_RootUpcoming_EnrollmentsArgs = {
   distinct_on?: InputMaybe<Array<Upcoming_Enrollments_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41822,6 +46813,13 @@ export type Subscription_RootUpcoming_Enrollments_AggregateArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Upcoming_Enrollments_Order_By>>;
+  where?: InputMaybe<Upcoming_Enrollments_Bool_Exp>;
+};
+
+
+export type Subscription_RootUpcoming_Enrollments_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Upcoming_Enrollments_Stream_Cursor_Input>>;
   where?: InputMaybe<Upcoming_Enrollments_Bool_Exp>;
 };
 
@@ -41872,6 +46870,20 @@ export type Subscription_RootVenue_Check_Jobs_By_PkArgs = {
 };
 
 
+export type Subscription_RootVenue_Check_Jobs_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Venue_Check_Jobs_Stream_Cursor_Input>>;
+  where?: InputMaybe<Venue_Check_Jobs_Bool_Exp>;
+};
+
+
+export type Subscription_RootVenue_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Venue_Stream_Cursor_Input>>;
+  where?: InputMaybe<Venue_Bool_Exp>;
+};
+
+
 export type Subscription_RootWaitlistArgs = {
   distinct_on?: InputMaybe<Array<Waitlist_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41892,6 +46904,13 @@ export type Subscription_RootWaitlist_AggregateArgs = {
 
 export type Subscription_RootWaitlist_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootWaitlist_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Waitlist_Stream_Cursor_Input>>;
+  where?: InputMaybe<Waitlist_Bool_Exp>;
 };
 
 
@@ -41918,6 +46937,13 @@ export type Subscription_RootXero_Contact_By_PkArgs = {
 };
 
 
+export type Subscription_RootXero_Contact_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Xero_Contact_Stream_Cursor_Input>>;
+  where?: InputMaybe<Xero_Contact_Bool_Exp>;
+};
+
+
 export type Subscription_RootXero_CredentialArgs = {
   distinct_on?: InputMaybe<Array<Xero_Credential_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -41938,6 +46964,13 @@ export type Subscription_RootXero_Credential_AggregateArgs = {
 
 export type Subscription_RootXero_Credential_By_PkArgs = {
   client_id: Scalars['String'];
+};
+
+
+export type Subscription_RootXero_Credential_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Xero_Credential_Stream_Cursor_Input>>;
+  where?: InputMaybe<Xero_Credential_Bool_Exp>;
 };
 
 
@@ -41984,6 +47017,20 @@ export type Subscription_RootXero_Invoice_Status_AggregateArgs = {
 
 export type Subscription_RootXero_Invoice_Status_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootXero_Invoice_Status_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Xero_Invoice_Status_Stream_Cursor_Input>>;
+  where?: InputMaybe<Xero_Invoice_Status_Bool_Exp>;
+};
+
+
+export type Subscription_RootXero_Invoice_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Xero_Invoice_Stream_Cursor_Input>>;
+  where?: InputMaybe<Xero_Invoice_Bool_Exp>;
 };
 
 /** Boolean expression to compare columns of type "timestamp". All fields are combined with logical 'AND'. */
@@ -42073,13 +47120,14 @@ export type Trainer_Role_Type_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   profiles?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+  profiles_aggregate?: InputMaybe<Profile_Trainer_Role_Type_Aggregate_Bool_Exp>;
 };
 
 /** unique or primary key constraints on table "trainer_role_type" */
 export enum Trainer_Role_Type_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   TrainerRoleTypeNameKey = 'trainer_role_type_name_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   TrainerRoleTypePkey = 'trainer_role_type_pkey'
 }
 
@@ -42153,6 +47201,20 @@ export type Trainer_Role_Type_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "trainer_role_type" */
+export type Trainer_Role_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Trainer_Role_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Trainer_Role_Type_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "trainer_role_type" */
 export enum Trainer_Role_Type_Update_Column {
   /** column name */
@@ -42160,6 +47222,13 @@ export enum Trainer_Role_Type_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Trainer_Role_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Trainer_Role_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Trainer_Role_Type_Bool_Exp;
+};
 
 /** columns and relationships of "trust_type" */
 export type Trust_Type = {
@@ -42199,7 +47268,7 @@ export type Trust_Type_Bool_Exp = {
 
 /** unique or primary key constraints on table "trust_type" */
 export enum Trust_Type_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   TrustTypePkey = 'trust_type_pkey'
 }
 
@@ -42273,11 +47342,31 @@ export type Trust_Type_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "trust_type" */
+export type Trust_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Trust_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Trust_Type_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "trust_type" */
 export enum Trust_Type_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Trust_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Trust_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Trust_Type_Bool_Exp;
+};
 
 /** columns and relationships of "upcoming_enrollments" */
 export type Upcoming_Enrollments = {
@@ -42297,6 +47386,17 @@ export type Upcoming_Enrollments_Aggregate = {
   __typename?: 'upcoming_enrollments_aggregate';
   aggregate?: Maybe<Upcoming_Enrollments_Aggregate_Fields>;
   nodes: Array<Upcoming_Enrollments>;
+};
+
+export type Upcoming_Enrollments_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Upcoming_Enrollments_Aggregate_Bool_Exp_Count>;
+};
+
+export type Upcoming_Enrollments_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Upcoming_Enrollments_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Upcoming_Enrollments_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "upcoming_enrollments" */
@@ -42480,6 +47580,24 @@ export type Upcoming_Enrollments_Stddev_Samp_Order_By = {
   courseId?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "upcoming_enrollments" */
+export type Upcoming_Enrollments_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Upcoming_Enrollments_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Upcoming_Enrollments_Stream_Cursor_Value_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+  courseLevel?: InputMaybe<Scalars['String']>;
+  orgId?: InputMaybe<Scalars['uuid']>;
+  orgName?: InputMaybe<Scalars['String']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+  scheduleStart?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** aggregate sum on columns */
 export type Upcoming_Enrollments_Sum_Fields = {
   __typename?: 'upcoming_enrollments_sum_fields';
@@ -42613,6 +47731,7 @@ export type Venue_Bool_Exp = {
   name?: InputMaybe<String_Comparison_Exp>;
   postCode?: InputMaybe<String_Comparison_Exp>;
   schedule?: InputMaybe<Course_Schedule_Bool_Exp>;
+  schedule_aggregate?: InputMaybe<Course_Schedule_Aggregate_Bool_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
@@ -42672,9 +47791,9 @@ export type Venue_Check_Jobs_Bool_Exp = {
 
 /** unique or primary key constraints on table "venue_check_jobs" */
 export enum Venue_Check_Jobs_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "course_id", "job_id" */
   VenueCheckJobsCourseIdJobIdKey = 'venue_check_jobs_course_id_job_id_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   VenueCheckJobsPkey = 'venue_check_jobs_pkey'
 }
 
@@ -42769,6 +47888,21 @@ export type Venue_Check_Jobs_Stddev_Samp_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** Streaming cursor of the table "venue_check_jobs" */
+export type Venue_Check_Jobs_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Venue_Check_Jobs_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Venue_Check_Jobs_Stream_Cursor_Value_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  job_id?: InputMaybe<Scalars['uuid']>;
+};
+
 /** aggregate sum on columns */
 export type Venue_Check_Jobs_Sum_Fields = {
   __typename?: 'venue_check_jobs_sum_fields';
@@ -42784,6 +47918,15 @@ export enum Venue_Check_Jobs_Update_Column {
   /** column name */
   JobId = 'job_id'
 }
+
+export type Venue_Check_Jobs_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Venue_Check_Jobs_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Venue_Check_Jobs_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Venue_Check_Jobs_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Venue_Check_Jobs_Var_Pop_Fields = {
@@ -42805,7 +47948,7 @@ export type Venue_Check_Jobs_Variance_Fields = {
 
 /** unique or primary key constraints on table "venue" */
 export enum Venue_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   VenuePkey = 'venue_pkey'
 }
 
@@ -42933,6 +48076,28 @@ export type Venue_Set_Input = {
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
+/** Streaming cursor of the table "venue" */
+export type Venue_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Venue_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Venue_Stream_Cursor_Value_Input = {
+  addressLineOne?: InputMaybe<Scalars['String']>;
+  addressLineTwo?: InputMaybe<Scalars['String']>;
+  city?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  geoCoordinates?: InputMaybe<Scalars['point']>;
+  googlePlacesId?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  postCode?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+};
+
 /** update columns of table "venue" */
 export enum Venue_Update_Column {
   /** column name */
@@ -42957,9 +48122,17 @@ export enum Venue_Update_Column {
   UpdatedAt = 'updatedAt'
 }
 
+export type Venue_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Venue_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Venue_Bool_Exp;
+};
+
 /** columns and relationships of "waitlist" */
 export type Waitlist = {
   __typename?: 'waitlist';
+  cancellationSecret: Scalars['uuid'];
   confirmed: Scalars['Boolean'];
   /** An object relationship */
   course: Course;
@@ -42978,6 +48151,33 @@ export type Waitlist_Aggregate = {
   __typename?: 'waitlist_aggregate';
   aggregate?: Maybe<Waitlist_Aggregate_Fields>;
   nodes: Array<Waitlist>;
+};
+
+export type Waitlist_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Waitlist_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Waitlist_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Waitlist_Aggregate_Bool_Exp_Count>;
+};
+
+export type Waitlist_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Waitlist_Select_Column_Waitlist_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Waitlist_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Waitlist_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Waitlist_Select_Column_Waitlist_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Waitlist_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Waitlist_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Waitlist_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Waitlist_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "waitlist" */
@@ -43041,6 +48241,7 @@ export type Waitlist_Bool_Exp = {
   _and?: InputMaybe<Array<Waitlist_Bool_Exp>>;
   _not?: InputMaybe<Waitlist_Bool_Exp>;
   _or?: InputMaybe<Array<Waitlist_Bool_Exp>>;
+  cancellationSecret?: InputMaybe<Uuid_Comparison_Exp>;
   confirmed?: InputMaybe<Boolean_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
   courseId?: InputMaybe<Int_Comparison_Exp>;
@@ -43055,9 +48256,11 @@ export type Waitlist_Bool_Exp = {
 
 /** unique or primary key constraints on table "waitlist" */
 export enum Waitlist_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "cancellation_secret" */
+  WaitlistCancellationSecretKey = 'waitlist_cancellation_secret_key',
+  /** unique or primary key constraint on columns "course_id", "email" */
   WaitlistCourseIdEmailKey = 'waitlist_course_id_email_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   WaitlistPkey = 'waitlist_pkey'
 }
 
@@ -43068,6 +48271,7 @@ export type Waitlist_Inc_Input = {
 
 /** input type for inserting data into table "waitlist" */
 export type Waitlist_Insert_Input = {
+  cancellationSecret?: InputMaybe<Scalars['uuid']>;
   confirmed?: InputMaybe<Scalars['Boolean']>;
   course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   courseId?: InputMaybe<Scalars['Int']>;
@@ -43083,6 +48287,7 @@ export type Waitlist_Insert_Input = {
 /** aggregate max on columns */
 export type Waitlist_Max_Fields = {
   __typename?: 'waitlist_max_fields';
+  cancellationSecret?: Maybe<Scalars['uuid']>;
   courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
@@ -43095,6 +48300,7 @@ export type Waitlist_Max_Fields = {
 
 /** order by max() on columns of table "waitlist" */
 export type Waitlist_Max_Order_By = {
+  cancellationSecret?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   email?: InputMaybe<Order_By>;
@@ -43108,6 +48314,7 @@ export type Waitlist_Max_Order_By = {
 /** aggregate min on columns */
 export type Waitlist_Min_Fields = {
   __typename?: 'waitlist_min_fields';
+  cancellationSecret?: Maybe<Scalars['uuid']>;
   courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
@@ -43120,6 +48327,7 @@ export type Waitlist_Min_Fields = {
 
 /** order by min() on columns of table "waitlist" */
 export type Waitlist_Min_Order_By = {
+  cancellationSecret?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   email?: InputMaybe<Order_By>;
@@ -43148,6 +48356,7 @@ export type Waitlist_On_Conflict = {
 
 /** Ordering options when selecting data from "waitlist". */
 export type Waitlist_Order_By = {
+  cancellationSecret?: InputMaybe<Order_By>;
   confirmed?: InputMaybe<Order_By>;
   course?: InputMaybe<Course_Order_By>;
   courseId?: InputMaybe<Order_By>;
@@ -43168,6 +48377,8 @@ export type Waitlist_Pk_Columns_Input = {
 /** select columns of table "waitlist" */
 export enum Waitlist_Select_Column {
   /** column name */
+  CancellationSecret = 'cancellationSecret',
+  /** column name */
   Confirmed = 'confirmed',
   /** column name */
   CourseId = 'courseId',
@@ -43187,8 +48398,21 @@ export enum Waitlist_Select_Column {
   Phone = 'phone'
 }
 
+/** select "waitlist_aggregate_bool_exp_bool_and_arguments_columns" columns of table "waitlist" */
+export enum Waitlist_Select_Column_Waitlist_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  Confirmed = 'confirmed'
+}
+
+/** select "waitlist_aggregate_bool_exp_bool_or_arguments_columns" columns of table "waitlist" */
+export enum Waitlist_Select_Column_Waitlist_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  Confirmed = 'confirmed'
+}
+
 /** input type for updating data in table "waitlist" */
 export type Waitlist_Set_Input = {
+  cancellationSecret?: InputMaybe<Scalars['uuid']>;
   confirmed?: InputMaybe<Scalars['Boolean']>;
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -43233,6 +48457,28 @@ export type Waitlist_Stddev_Samp_Order_By = {
   courseId?: InputMaybe<Order_By>;
 };
 
+/** Streaming cursor of the table "waitlist" */
+export type Waitlist_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Waitlist_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Waitlist_Stream_Cursor_Value_Input = {
+  cancellationSecret?: InputMaybe<Scalars['uuid']>;
+  confirmed?: InputMaybe<Scalars['Boolean']>;
+  courseId?: InputMaybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  email?: InputMaybe<Scalars['String']>;
+  familyName?: InputMaybe<Scalars['String']>;
+  givenName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  orgName?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+};
+
 /** aggregate sum on columns */
 export type Waitlist_Sum_Fields = {
   __typename?: 'waitlist_sum_fields';
@@ -43246,6 +48492,8 @@ export type Waitlist_Sum_Order_By = {
 
 /** update columns of table "waitlist" */
 export enum Waitlist_Update_Column {
+  /** column name */
+  CancellationSecret = 'cancellationSecret',
   /** column name */
   Confirmed = 'confirmed',
   /** column name */
@@ -43265,6 +48513,15 @@ export enum Waitlist_Update_Column {
   /** column name */
   Phone = 'phone'
 }
+
+export type Waitlist_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Waitlist_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Waitlist_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Waitlist_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Waitlist_Var_Pop_Fields = {
@@ -43369,9 +48626,9 @@ export type Xero_Contact_Bool_Exp = {
 
 /** unique or primary key constraints on table "xero_contact" */
 export enum Xero_Contact_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   XeroContactPkey = 'xero_contact_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "xero_id" */
   XeroContactXeroIdKey = 'xero_contact_xero_id_key'
 }
 
@@ -43505,6 +48762,26 @@ export type Xero_Contact_Set_Input = {
   xeroId?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "xero_contact" */
+export type Xero_Contact_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Xero_Contact_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Xero_Contact_Stream_Cursor_Value_Input = {
+  addresses?: InputMaybe<Scalars['jsonb']>;
+  emailAddress?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  phones?: InputMaybe<Scalars['jsonb']>;
+  xeroId?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "xero_contact" */
 export enum Xero_Contact_Update_Column {
   /** column name */
@@ -43524,6 +48801,23 @@ export enum Xero_Contact_Update_Column {
   /** column name */
   XeroId = 'xeroId'
 }
+
+export type Xero_Contact_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Xero_Contact_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Xero_Contact_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Xero_Contact_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Xero_Contact_Delete_Key_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Xero_Contact_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Xero_Contact_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Xero_Contact_Bool_Exp;
+};
 
 /** columns and relationships of "xero_credential" */
 export type Xero_Credential = {
@@ -43565,7 +48859,7 @@ export type Xero_Credential_Bool_Exp = {
 
 /** unique or primary key constraints on table "xero_credential" */
 export enum Xero_Credential_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "client_id" */
   XeroCredentialPkey = 'xero_credential_pkey'
 }
 
@@ -43630,6 +48924,20 @@ export type Xero_Credential_Set_Input = {
   token?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "xero_credential" */
+export type Xero_Credential_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Xero_Credential_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Xero_Credential_Stream_Cursor_Value_Input = {
+  client_id?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "xero_credential" */
 export enum Xero_Credential_Update_Column {
   /** column name */
@@ -43637,6 +48945,13 @@ export enum Xero_Credential_Update_Column {
   /** column name */
   Token = 'token'
 }
+
+export type Xero_Credential_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Xero_Credential_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Xero_Credential_Bool_Exp;
+};
 
 /** Invoice stored on our end, and synced from Xero */
 export type Xero_Invoice = {
@@ -43741,11 +49056,11 @@ export type Xero_Invoice_Bool_Exp = {
 
 /** unique or primary key constraints on table "xero_invoice" */
 export enum Xero_Invoice_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "invoice_number" */
   XeroInvoiceInvoiceNumberKey = 'xero_invoice_invoice_number_key',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "id" */
   XeroInvoicePkey = 'xero_invoice_pkey',
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "xero_id" */
   XeroInvoiceXeroIdKey = 'xero_invoice_xero_id_key'
 }
 
@@ -43806,6 +49121,8 @@ export type Xero_Invoice_Max_Fields = {
   invoiceNumber?: Maybe<Scalars['String']>;
   issuedDate?: Maybe<Scalars['timestamp']>;
   reference?: Maybe<Scalars['String']>;
+  /** Calculated invoice status that takes due_date into account */
+  status?: Maybe<Scalars['String']>;
   subtotal?: Maybe<Scalars['numeric']>;
   total?: Maybe<Scalars['numeric']>;
   totalTax?: Maybe<Scalars['numeric']>;
@@ -43825,6 +49142,8 @@ export type Xero_Invoice_Min_Fields = {
   invoiceNumber?: Maybe<Scalars['String']>;
   issuedDate?: Maybe<Scalars['timestamp']>;
   reference?: Maybe<Scalars['String']>;
+  /** Calculated invoice status that takes due_date into account */
+  status?: Maybe<Scalars['String']>;
   subtotal?: Maybe<Scalars['numeric']>;
   total?: Maybe<Scalars['numeric']>;
   totalTax?: Maybe<Scalars['numeric']>;
@@ -43981,7 +49300,7 @@ export type Xero_Invoice_Status_Bool_Exp = {
 
 /** unique or primary key constraints on table "xero_invoice_status" */
 export enum Xero_Invoice_Status_Constraint {
-  /** unique or primary key constraint */
+  /** unique or primary key constraint on columns "name" */
   XeroInvoiceStatusPkey = 'xero_invoice_status_pkey'
 }
 
@@ -44058,11 +49377,31 @@ export type Xero_Invoice_Status_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Streaming cursor of the table "xero_invoice_status" */
+export type Xero_Invoice_Status_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Xero_Invoice_Status_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Xero_Invoice_Status_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
 /** update columns of table "xero_invoice_status" */
 export enum Xero_Invoice_Status_Update_Column {
   /** column name */
   Name = 'name'
 }
+
+export type Xero_Invoice_Status_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Xero_Invoice_Status_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Xero_Invoice_Status_Bool_Exp;
+};
 
 /** aggregate stddev on columns */
 export type Xero_Invoice_Stddev_Fields = {
@@ -44092,6 +49431,34 @@ export type Xero_Invoice_Stddev_Samp_Fields = {
   subtotal?: Maybe<Scalars['Float']>;
   total?: Maybe<Scalars['Float']>;
   totalTax?: Maybe<Scalars['Float']>;
+};
+
+/** Streaming cursor of the table "xero_invoice" */
+export type Xero_Invoice_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Xero_Invoice_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Xero_Invoice_Stream_Cursor_Value_Input = {
+  _status?: InputMaybe<Xero_Invoice_Status_Enum>;
+  amountDue?: InputMaybe<Scalars['numeric']>;
+  amountPaid?: InputMaybe<Scalars['numeric']>;
+  currencyCode?: InputMaybe<Scalars['String']>;
+  dueDate?: InputMaybe<Scalars['timestamp']>;
+  fullyPaidOnDate?: InputMaybe<Scalars['timestamp']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  invoiceNumber?: InputMaybe<Scalars['String']>;
+  issuedDate?: InputMaybe<Scalars['timestamp']>;
+  lineItems?: InputMaybe<Scalars['jsonb']>;
+  reference?: InputMaybe<Scalars['String']>;
+  subtotal?: InputMaybe<Scalars['numeric']>;
+  total?: InputMaybe<Scalars['numeric']>;
+  totalTax?: InputMaybe<Scalars['numeric']>;
+  xeroContactId?: InputMaybe<Scalars['String']>;
+  xeroId?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate sum on columns */
@@ -44139,6 +49506,25 @@ export enum Xero_Invoice_Update_Column {
   /** column name */
   XeroId = 'xeroId'
 }
+
+export type Xero_Invoice_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Xero_Invoice_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Xero_Invoice_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Xero_Invoice_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Xero_Invoice_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Xero_Invoice_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Xero_Invoice_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Xero_Invoice_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Xero_Invoice_Bool_Exp;
+};
 
 /** aggregate var_pop on columns */
 export type Xero_Invoice_Var_Pop_Fields = {
@@ -44423,12 +49809,12 @@ export type DeleteOrganizationMemberMutation = { __typename?: 'mutation_root', d
 export type FirstTagWithPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FirstTagWithPostsQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', tags?: { __typename?: 'RootQueryToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string } | null> | null } | null } | null };
+export type FirstTagWithPostsQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', tags?: { __typename?: 'RootQueryToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string } | null> | null } | null } | null };
 
 export type FirstCategoryWithPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FirstCategoryWithPostsQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', categories?: { __typename?: 'RootQueryToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string } | null> | null } | null } | null };
+export type FirstCategoryWithPostsQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', categories?: { __typename?: 'RootQueryToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string } | null> | null } | null } | null };
 
 export type ProfileByEmailQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -44522,12 +49908,24 @@ export type CoursePriceQueryVariables = Exact<{
 
 export type CoursePriceQuery = { __typename?: 'query_root', coursePrice: Array<{ __typename?: 'course_pricing', priceAmount: any, priceCurrency: string }> };
 
+export type DeleteMeetingMutationVariables = Exact<{
+  meetingId: Scalars['String'];
+}>;
+
+
+export type DeleteMeetingMutation = { __typename?: 'mutation_root', deleteMeeting: { __typename?: 'DeleteMeetingOutput', success: boolean } };
+
 export type UpsertZoomMeetingMutationVariables = Exact<{
   input?: InputMaybe<UpsertZoomMeetingInput>;
 }>;
 
 
 export type UpsertZoomMeetingMutation = { __typename?: 'mutation_root', upsertZoomMeeting?: { __typename?: 'UpsertZoomMeetingPayload', success: boolean, meeting?: { __typename?: 'ZoomMeeting', id: number, joinUrl: string } | null } | null };
+
+export type ZoomUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ZoomUsersQuery = { __typename?: 'query_root', zoomUsers?: { __typename?: 'ZoomUsersResponse', success?: boolean | null, data?: { __typename?: 'ZoomUsersResponseData', current: string, users?: Array<{ __typename?: 'ZoomUser', id: string, displayName: string, firstName: string, lastName: string, email: string }> | null } | null } | null };
 
 export type StripeCreatePaymentMutationVariables = Exact<{
   input: StripeCreatePaymentIntentInput;
@@ -44546,7 +49944,7 @@ export type ConfirmCcPaymentMutation = { __typename?: 'mutation_root', confirmCr
 export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllResourceCategoriesQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', resourceCategories?: { __typename?: 'RootQueryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resouceIcon?: { __typename?: 'ResourceCategory_Resouceicon', resourceicon?: string | null } | null, resourceArea?: { __typename?: 'ResourceCategory_Resourcearea', resourcearea?: string | null } | null } | null> | null } | null } | null };
+export type AllResourceCategoriesQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategories?: { __typename?: 'RootQueryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resouceIcon?: { __typename?: 'ResourceCategory_Resouceicon', resourceicon?: string | null } | null, resourceArea?: { __typename?: 'ResourceCategory_Resourcearea', resourcearea?: string | null } | null } | null> | null } | null } | null };
 
 export type ResourceDetailsQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -44554,11 +49952,11 @@ export type ResourceDetailsQueryVariables = Exact<{
 }>;
 
 
-export type ResourceDetailsQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', resourceCategory?: { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null> | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null> | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null } | null };
+export type ResourceDetailsQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategory?: { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null } | null };
 
-export type ResourceCategorySummaryFragment = { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null };
+export type ResourceCategorySummaryFragment = { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null };
 
-export type ResourceSummaryFragment = { __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null };
+export type ResourceSummaryFragment = { __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null };
 
 export type ParticipantTransferQueryVariables = Exact<{
   id: Scalars['uuid'];
@@ -44595,14 +49993,21 @@ export type WaitlistCourseQueryVariables = Exact<{
 }>;
 
 
-export type WaitlistCourseQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, schedule: Array<{ __typename?: 'course_schedule', end: any, start: any, venue?: { __typename?: 'venue', name: string, addressLineOne: string, addressLineTwo?: string | null, city: string, postCode: string } | null }> }> };
+export type WaitlistCourseQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', end: any, start: any, venue?: { __typename?: 'venue', name: string, addressLineOne: string, addressLineTwo?: string | null, city: string, postCode: string } | null }> }> };
 
 export type JoinWaitlistMutationVariables = Exact<{
-  input: Waitlist_Insert_Input;
+  input: JoinWaitlistInput;
 }>;
 
 
-export type JoinWaitlistMutation = { __typename?: 'mutation_root', waitlist?: { __typename?: 'waitlist_mutation_response', affected_rows: number } | null };
+export type JoinWaitlistMutation = { __typename?: 'mutation_root', joinWaitlist: { __typename?: 'JoinWaitlistOutput', success: boolean } };
+
+export type SignUpMutationVariables = Exact<{
+  input: SignUpInput;
+}>;
+
+
+export type SignUpMutation = { __typename?: 'mutation_root', signUp?: { __typename?: 'SignUpOutput', success: boolean } | null };
 
 export type SetCourseAsDraftMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -44635,6 +50040,13 @@ export type SaveGradingDetailsMutationVariables = Exact<{
 
 
 export type SaveGradingDetailsMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number, gradingConfirmed: boolean } | null };
+
+export type ArloCallbackMutationVariables = Exact<{
+  input: ArloCallbackInput;
+}>;
+
+
+export type ArloCallbackMutation = { __typename?: 'mutation_root', arloCallback?: { __typename?: 'ArloCallbackOutput', status: boolean } | null };
 
 export type ContactInfoFragment = { __typename?: 'xero_contact', firstName: string };
 
@@ -44685,6 +50097,20 @@ export type OrganizationsQueryVariables = Exact<{
 
 export type OrganizationsQuery = { __typename?: 'query_root', organizations: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null, members_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } }>, organizationsAggregation: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
 
+export type ImportArloCertificatesMutationVariables = Exact<{
+  report: Scalars['String'];
+}>;
+
+
+export type ImportArloCertificatesMutation = { __typename?: 'mutation_root', importArloCertificates: any };
+
+export type ImportArloCertificatesResultQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type ImportArloCertificatesResultQuery = { __typename?: 'query_root', importArloCertificates?: { __typename?: 'importArloCertificates', errors?: any | null, output?: { __typename?: 'ImportArloCertificatesOutput', processed: number, added: number } | null } | null };
+
 export type GetAttendeeAuditLogsQueryVariables = Exact<{
   where: Course_Participant_Audit_Bool_Exp;
   limit?: InputMaybe<Scalars['Int']>;
@@ -44700,10 +50126,11 @@ export type GetCourseAuditLogsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<Course_Audit_Order_By> | Course_Audit_Order_By>;
+  fromExceptionsLog?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type GetCourseAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_audit', id: any, created_at: any, updated_at: any, payload: any, authorizedBy: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null, archived?: boolean | null }, course: { __typename?: 'course', id: number, course_code?: string | null, type: Course_Type_Enum, orders: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null }> } }>, logsAggregate: { __typename?: 'course_audit_aggregate', aggregate?: { __typename?: 'course_audit_aggregate_fields', count: number } | null } };
+export type GetCourseAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_audit', id: any, created_at: any, updated_at: any, payload: any, authorizedBy: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null }, course: { __typename?: 'course', id: number, course_code?: string | null, type: Course_Type_Enum, start?: any | null, organization?: { __typename?: 'organization', name: string, id: any } | null, trainers?: Array<{ __typename?: 'course_trainer', type: Course_Trainer_Type_Enum, id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, id: any } }>, orders: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null }> } }>, logsAggregate: { __typename?: 'course_audit_aggregate', aggregate?: { __typename?: 'course_audit_aggregate_fields', count: number } | null } };
 
 export type GetBildStrategiesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -44733,13 +50160,6 @@ export type InsertCourseEnquiryMutationVariables = Exact<{
 
 
 export type InsertCourseEnquiryMutation = { __typename?: 'mutation_root', insert_course_enquiry?: { __typename?: 'course_enquiry_mutation_response', affected_rows: number } | null };
-
-export type InsertWaitlistMutationVariables = Exact<{
-  input: Waitlist_Insert_Input;
-}>;
-
-
-export type InsertWaitlistMutation = { __typename?: 'mutation_root', waitlist?: { __typename?: 'waitlist_mutation_response', affectedRows: number } | null };
 
 export type GetCertificateQueryVariables = Exact<{
   id: Scalars['uuid'];
@@ -44852,7 +50272,7 @@ export type SaveTrainerCourseEvaluationMutationVariables = Exact<{
 export type SaveTrainerCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null };
 
 export type ApproveCourseMutationVariables = Exact<{
-  courseId: Scalars['Int'];
+  input: ApproveCourseInput;
 }>;
 
 
@@ -44904,7 +50324,7 @@ export type GetCourseByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, notes?: string | null, start?: any | null, end?: any | null, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
+export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, notes?: string | null, start?: any | null, end?: any | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
 
 export type GetCourseDraftQueryVariables = Exact<{
   profileId: Scalars['uuid'];
@@ -44969,6 +50389,13 @@ export type NotifyCourseEditMutationVariables = Exact<{
 
 
 export type NotifyCourseEditMutation = { __typename?: 'mutation_root', notifyCourseEdit: { __typename?: 'NotifyCourseEditOutput', status: number } };
+
+export type RejectCourseMutationVariables = Exact<{
+  input: RejectCourseInput;
+}>;
+
+
+export type RejectCourseMutation = { __typename?: 'mutation_root', rejectCourse?: { __typename?: 'RejectCourseOutput', success: boolean } | null };
 
 export type RemoveCourseDraftMutationVariables = Exact<{
   courseType: Scalars['String'];
@@ -45038,14 +50465,6 @@ export type SetCourseDraftMutationVariables = Exact<{
 
 
 export type SetCourseDraftMutation = { __typename?: 'mutation_root', insert_course_draft_one?: { __typename?: 'course_draft', id: any } | null };
-
-export type SetCourseStatusMutationVariables = Exact<{
-  id: Scalars['Int'];
-  status?: InputMaybe<Course_Status_Enum>;
-}>;
-
-
-export type SetCourseStatusMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number } | null };
 
 export type SetCourseTrainerStatusMutationVariables = Exact<{
   id: Scalars['uuid'];
@@ -45222,10 +50641,12 @@ export type DeclineInviteMutationVariables = Exact<{
 
 export type DeclineInviteMutation = { __typename?: 'mutation_root', invite?: { __typename?: 'DeclineInviteOutput', status: boolean } | null };
 
-export type DeclineOrgInviteMutationVariables = Exact<{ [key: string]: never; }>;
+export type DeclineOrgInviteMutationVariables = Exact<{
+  inviteId: Scalars['uuid'];
+}>;
 
 
-export type DeclineOrgInviteMutation = { __typename?: 'mutation_root', invite?: { __typename?: 'DeclineOrgInviteOutput', id: any } | null };
+export type DeclineOrgInviteMutation = { __typename?: 'mutation_root', invite: boolean };
 
 export type DeleteOrgInviteMutationVariables = Exact<{
   inviteId: Scalars['uuid'];
@@ -45317,7 +50738,7 @@ export type BlogQueryVariables = Exact<{
 }>;
 
 
-export type BlogQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
+export type BlogQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', posts?: { __typename?: 'RootQueryToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
 
 export type CategoryQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -45330,7 +50751,7 @@ export type CategoryQueryVariables = Exact<{
 }>;
 
 
-export type CategoryQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', category?: { __typename?: 'Category', id: string, name?: string | null, posts?: { __typename?: 'CategoryToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null } | null };
+export type CategoryQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', category?: { __typename?: 'Category', id: string, name?: string | null, posts?: { __typename?: 'CategoryToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null } | null };
 
 export type EbooksQueryVariables = Exact<{
   term?: InputMaybe<Scalars['String']>;
@@ -45342,12 +50763,12 @@ export type EbooksQueryVariables = Exact<{
 }>;
 
 
-export type EbooksQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', ebooks?: { __typename?: 'RootQueryToEbookConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, ebooksCategories?: { __typename?: 'EbookToEbooksCategoryConnection', nodes?: Array<{ __typename?: 'EbooksCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
+export type EbooksQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', ebooks?: { __typename?: 'RootQueryToEbookConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, ebooksCategories?: { __typename?: 'EbookToEbooksCategoryConnection', nodes?: Array<{ __typename?: 'EbooksCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
 
 export type MembershipHomeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MembershipHomeQuery = { __typename?: 'query_root', podcasts?: { __typename?: 'PodcastsPayload', records: Array<{ __typename?: 'Podcast', id: string, name: string, thumbnail: string, publishedDate: string, mediaUrl: string, author: string, description?: string | null, episodeNumber: number }> } | null, content?: { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null, videoSeriesItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, videoSeriesCategories?: { __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnection', nodes?: Array<{ __typename?: 'VideoSeriesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null, researchSummaries?: { __typename?: 'RootQueryToResearchSummaryConnection', nodes?: Array<{ __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, researchSummariesCategories?: { __typename?: 'ResearchSummaryToResearchSummariesCategoryConnection', nodes?: Array<{ __typename?: 'ResearchSummariesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null, webinars?: { __typename?: 'RootQueryToWebinarConnection', nodes?: Array<{ __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null, webinarsCategories?: { __typename?: 'WebinarToWebinarsCategoryConnection', nodes?: Array<{ __typename?: 'WebinarsCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null, ebooks?: { __typename?: 'RootQueryToEbookConnection', nodes?: Array<{ __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, ebooksCategories?: { __typename?: 'EbookToEbooksCategoryConnection', nodes?: Array<{ __typename?: 'EbooksCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
+export type MembershipHomeQuery = { __typename?: 'query_root', podcasts?: { __typename?: 'PodcastsPayload', records: Array<{ __typename?: 'Podcast', id: string, name: string, thumbnail: string, publishedDate: string, mediaUrl: string, author: string, description?: string | null, episodeNumber: number }> } | null, content?: { __typename?: 'contentRootQuery', posts?: { __typename?: 'RootQueryToPostConnection', nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null, videoSeriesItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, videoSeriesCategories?: { __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnection', nodes?: Array<{ __typename?: 'VideoSeriesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null, researchSummaries?: { __typename?: 'RootQueryToResearchSummaryConnection', nodes?: Array<{ __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, researchSummariesCategories?: { __typename?: 'ResearchSummaryToResearchSummariesCategoryConnection', nodes?: Array<{ __typename?: 'ResearchSummariesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null, webinars?: { __typename?: 'RootQueryToWebinarConnection', nodes?: Array<{ __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null, webinarsCategories?: { __typename?: 'WebinarToWebinarsCategoryConnection', nodes?: Array<{ __typename?: 'WebinarsCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null, ebooks?: { __typename?: 'RootQueryToEbookConnection', nodes?: Array<{ __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, ebooksCategories?: { __typename?: 'EbookToEbooksCategoryConnection', nodes?: Array<{ __typename?: 'EbooksCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
 
 export type PodcastQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -45368,7 +50789,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', post?: { __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null, recentPosts?: { __typename?: 'RootQueryToPostConnection', nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
+export type PostQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', post?: { __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null, recentPosts?: { __typename?: 'RootQueryToPostConnection', nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
 
 export type ResearchSummariesQueryVariables = Exact<{
   term?: InputMaybe<Scalars['String']>;
@@ -45380,7 +50801,7 @@ export type ResearchSummariesQueryVariables = Exact<{
 }>;
 
 
-export type ResearchSummariesQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', researchSummaries?: { __typename?: 'RootQueryToResearchSummaryConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, researchSummariesCategories?: { __typename?: 'ResearchSummaryToResearchSummariesCategoryConnection', nodes?: Array<{ __typename?: 'ResearchSummariesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
+export type ResearchSummariesQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', researchSummaries?: { __typename?: 'RootQueryToResearchSummaryConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, researchSummariesCategories?: { __typename?: 'ResearchSummaryToResearchSummariesCategoryConnection', nodes?: Array<{ __typename?: 'ResearchSummariesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
 
 export type TagQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -45393,7 +50814,7 @@ export type TagQueryVariables = Exact<{
 }>;
 
 
-export type TagQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', tag?: { __typename?: 'Tag', id: string, name?: string | null, posts?: { __typename?: 'TagToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null } | null };
+export type TagQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', tag?: { __typename?: 'Tag', id: string, name?: string | null, posts?: { __typename?: 'TagToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null } | null };
 
 export type PaginationInfoFragment = { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null };
 
@@ -45408,14 +50829,14 @@ export type TermQueryVariables = Exact<{
 }>;
 
 
-export type TermQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', termNode?: { __typename: 'Category', id: string, name?: string | null, posts?: { __typename?: 'CategoryToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'EbooksCategory', id: string, name?: string | null, ebooks?: { __typename?: 'EbooksCategoryToEbookConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, ebooksCategories?: { __typename?: 'EbookToEbooksCategoryConnection', nodes?: Array<{ __typename?: 'EbooksCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'PostFormat', id: string, name?: string | null } | { __typename: 'ResearchSummariesCategory', id: string, name?: string | null, researchSummaries?: { __typename?: 'ResearchSummariesCategoryToResearchSummaryConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, researchSummariesCategories?: { __typename?: 'ResearchSummaryToResearchSummariesCategoryConnection', nodes?: Array<{ __typename?: 'ResearchSummariesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'ResourceCategory', id: string, name?: string | null } | { __typename: 'Tag', id: string, name?: string | null, posts?: { __typename?: 'TagToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'VideoSeriesCategory', id: string, name?: string | null, videoSeriesItems?: { __typename?: 'VideoSeriesCategoryToVideoSeriesItemConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, videoSeriesCategories?: { __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnection', nodes?: Array<{ __typename?: 'VideoSeriesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'WebinarsCategory', id: string, name?: string | null, webinars?: { __typename?: 'WebinarsCategoryToWebinarConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null, webinarsCategories?: { __typename?: 'WebinarToWebinarsCategoryConnection', nodes?: Array<{ __typename?: 'WebinarsCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null } | null };
+export type TermQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', termNode?: { __typename: 'Category', id: string, name?: string | null, posts?: { __typename?: 'CategoryToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'EbooksCategory', id: string, name?: string | null, ebooks?: { __typename?: 'EbooksCategoryToEbookConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, ebooksCategories?: { __typename?: 'EbookToEbooksCategoryConnection', nodes?: Array<{ __typename?: 'EbooksCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'PostFormat', id: string, name?: string | null } | { __typename: 'ResearchSummariesCategory', id: string, name?: string | null, researchSummaries?: { __typename?: 'ResearchSummariesCategoryToResearchSummaryConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, researchSummariesCategories?: { __typename?: 'ResearchSummaryToResearchSummariesCategoryConnection', nodes?: Array<{ __typename?: 'ResearchSummariesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'ResourceCategory', id: string, name?: string | null } | { __typename: 'Tag', id: string, name?: string | null, posts?: { __typename?: 'TagToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'VideoSeriesCategory', id: string, name?: string | null, videoSeriesItems?: { __typename?: 'VideoSeriesCategoryToVideoSeriesItemConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, videoSeriesCategories?: { __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnection', nodes?: Array<{ __typename?: 'VideoSeriesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'WebinarsCategory', id: string, name?: string | null, webinars?: { __typename?: 'WebinarsCategoryToWebinarConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null, webinarsCategories?: { __typename?: 'WebinarToWebinarsCategoryConnection', nodes?: Array<{ __typename?: 'WebinarsCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null } | null };
 
 export type VideoItemQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type VideoItemQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', videoSeriesItem?: { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, videoSeriesCategories?: { __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnection', nodes?: Array<{ __typename?: 'VideoSeriesCategory', id: string, name?: string | null } | null> | null } | null } | null, recentVideoItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, videoSeriesCategories?: { __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnection', nodes?: Array<{ __typename?: 'VideoSeriesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
+export type VideoItemQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', videoSeriesItem?: { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, videoSeriesCategories?: { __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnection', nodes?: Array<{ __typename?: 'VideoSeriesCategory', id: string, name?: string | null } | null> | null } | null } | null, recentVideoItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, videoSeriesCategories?: { __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnection', nodes?: Array<{ __typename?: 'VideoSeriesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
 
 export type VideoSeriesQueryVariables = Exact<{
   term?: InputMaybe<Scalars['String']>;
@@ -45427,14 +50848,14 @@ export type VideoSeriesQueryVariables = Exact<{
 }>;
 
 
-export type VideoSeriesQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', videoSeriesItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null } | null, nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, videoSeriesCategories?: { __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnection', nodes?: Array<{ __typename?: 'VideoSeriesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
+export type VideoSeriesQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', videoSeriesItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null } | null, nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, videoSeriesCategories?: { __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnection', nodes?: Array<{ __typename?: 'VideoSeriesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
 
 export type WebinarQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type WebinarQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', webinar?: { __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null, webinarsCategories?: { __typename?: 'WebinarToWebinarsCategoryConnection', nodes?: Array<{ __typename?: 'WebinarsCategory', id: string, name?: string | null } | null> | null } | null } | null, recentWebinars?: { __typename?: 'RootQueryToWebinarConnection', nodes?: Array<{ __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null, webinarsCategories?: { __typename?: 'WebinarToWebinarsCategoryConnection', nodes?: Array<{ __typename?: 'WebinarsCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
+export type WebinarQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', webinar?: { __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null, webinarsCategories?: { __typename?: 'WebinarToWebinarsCategoryConnection', nodes?: Array<{ __typename?: 'WebinarsCategory', id: string, name?: string | null } | null> | null } | null } | null, recentWebinars?: { __typename?: 'RootQueryToWebinarConnection', nodes?: Array<{ __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null, webinarsCategories?: { __typename?: 'WebinarToWebinarsCategoryConnection', nodes?: Array<{ __typename?: 'WebinarsCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
 
 export type WebinarsQueryVariables = Exact<{
   term?: InputMaybe<Scalars['String']>;
@@ -45446,7 +50867,7 @@ export type WebinarsQueryVariables = Exact<{
 }>;
 
 
-export type WebinarsQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', webinars?: { __typename?: 'RootQueryToWebinarConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null, webinarsCategories?: { __typename?: 'WebinarToWebinarsCategoryConnection', nodes?: Array<{ __typename?: 'WebinarsCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
+export type WebinarsQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', webinars?: { __typename?: 'RootQueryToWebinarConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null, webinarsCategories?: { __typename?: 'WebinarToWebinarsCategoryConnection', nodes?: Array<{ __typename?: 'WebinarsCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
 
 export type ModuleGroupsQueryVariables = Exact<{
   level: Course_Level_Enum;
@@ -45464,6 +50885,13 @@ export type CreateOrderMutationVariables = Exact<{
 
 
 export type CreateOrderMutation = { __typename?: 'mutation_root', order?: { __typename?: 'CreateOrderOutput', id: any } | null };
+
+export type GetOrderReducedQueryVariables = Exact<{
+  orderId: Scalars['uuid'];
+}>;
+
+
+export type GetOrderReducedQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null };
 
 export type GetOrderQueryVariables = Exact<{
   orderId: Scalars['uuid'];
@@ -45489,7 +50917,8 @@ export type GetOrgMembersQuery = { __typename?: 'query_root', members: Array<{ _
 
 export type GetOrgDetailsQueryVariables = Exact<{
   where?: InputMaybe<Organization_Bool_Exp>;
-  certificateStatus?: InputMaybe<String_Comparison_Exp>;
+  whereProfileCertificates?: InputMaybe<Course_Certificate_Bool_Exp>;
+  certificates?: InputMaybe<Course_Certificate_Bool_Exp>;
 }>;
 
 
@@ -45692,7 +51121,7 @@ export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __
 export type GetTempProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, accreditedBy: Accreditors_Enum, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, reaccreditation?: boolean | null, freeSpaces?: number | null, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, expenses: Array<{ __typename?: 'course_expenses', id: any, data: any, trainer: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }> } | null }> };
+export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, accreditedBy: Accreditors_Enum, price?: any | null, priceCurrency?: string | null, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, reaccreditation?: boolean | null, freeSpaces?: number | null, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, expenses: Array<{ __typename?: 'course_expenses', id: any, data: any, trainer: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }> } | null }> };
 
 export type InsertProfileTempMutationVariables = Exact<{
   input: Profile_Temp_Insert_Input;
@@ -45803,10 +51232,18 @@ export type UpdateTrainerRoleTypeMutation = { __typename?: 'mutation_root', dele
 
 export type GetUserCourseByIdQueryVariables = Exact<{
   id: Scalars['Int'];
+  withOrders?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type GetUserCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, special_instructions?: string | null, parking_instructions?: string | null, notes?: string | null, organization?: { __typename?: 'organization', id: any, name: string, members: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, profile_id: any }> } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', id: any } | null } | null };
+export type GetUserCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, special_instructions?: string | null, parking_instructions?: string | null, notes?: string | null, status?: Course_Status_Enum | null, accreditedBy: Accreditors_Enum, organization?: { __typename?: 'organization', id: any, name: string, members: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, profile_id: any }> } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', id: any } | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null }> } | null };
+
+export type GetUserByMailQueryVariables = Exact<{
+  email?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+}>;
+
+
+export type GetUserByMailQuery = { __typename?: 'query_root', profile: Array<{ __typename?: 'profile', id: any, email?: string | null }> };
 
 export type UserCourseFragment = { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, status?: Course_Status_Enum | null, course_code?: string | null, createdAt: any, max_participants: number, trainers: Array<{ __typename?: 'course_trainer', id: any, status?: Course_Invite_Status_Enum | null, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, organization?: { __typename?: 'organization', id: any, name: string } | null, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null };
 
@@ -45855,7 +51292,7 @@ export type GetProfileByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileByIdQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, adminRights: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, trainerRoles: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', name: string } }>, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null };
+export type GetProfileByIdQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, managedOrgIds: Array<{ __typename?: 'organization_member', organization_id: any }>, trainerRoles: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', name: string } }>, certificates: Array<{ __typename?: 'course_certificate', expiryDate: any, courseLevel: string }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null };
 
 export type FindVenuesQueryVariables = Exact<{
   query: Scalars['String'];
@@ -45870,6 +51307,22 @@ export type InsertVenueMutationVariables = Exact<{
 
 
 export type InsertVenueMutation = { __typename?: 'mutation_root', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null };
+
+export type CancelIndividualFromCourseWaitlistMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+  waitlistId: Scalars['uuid'];
+}>;
+
+
+export type CancelIndividualFromCourseWaitlistMutation = { __typename?: 'mutation_root', cancelIndividualFromCourseWaitlist?: { __typename?: 'CancelIndividualFromCourseWaitlistOutput', success: boolean, error?: CancelIndividualFromCourseWaitlistError | null } | null };
+
+export type CancelMyselfFromCourseWaitlistMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+  cancellationSecret: Scalars['uuid'];
+}>;
+
+
+export type CancelMyselfFromCourseWaitlistMutation = { __typename?: 'mutation_root', cancelMyselfFromCourseWaitlist?: { __typename?: 'CancelMyselfFromCourseWaitlistOutput', success: boolean, error?: CancelMyselfFromCourseWaitlistError | null } | null };
 
 export type GetXeroInvoicesForOrdersQueryVariables = Exact<{
   invoiceNumbers: Array<Scalars['String']> | Scalars['String'];

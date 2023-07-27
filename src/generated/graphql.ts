@@ -1330,7 +1330,6 @@ export enum CourseType {
 }
 
 export type CreateAppUserInput = {
-  acceptMarketing: Scalars['Boolean'];
   acceptTnc: Scalars['Boolean'];
   dob?: InputMaybe<Scalars['String']>;
   firstName: Scalars['String'];
@@ -8863,7 +8862,6 @@ export type Settings = {
 };
 
 export type SignUpInput = {
-  acceptMarketing: Scalars['Boolean'];
   acceptTnc: Scalars['Boolean'];
   courseId?: InputMaybe<Scalars['Int']>;
   dob?: InputMaybe<Scalars['date']>;
@@ -39584,7 +39582,6 @@ export type Profile_Sum_Fields = {
 /** Contains partial temporary profiles until account in cognito is confirmed */
 export type Profile_Temp = {
   __typename?: 'profile_temp';
-  acceptMarketing: Scalars['Boolean'];
   acceptTnc: Scalars['Boolean'];
   /** An object relationship */
   course?: Maybe<Course>;
@@ -39645,7 +39642,6 @@ export type Profile_Temp_Bool_Exp = {
   _and?: InputMaybe<Array<Profile_Temp_Bool_Exp>>;
   _not?: InputMaybe<Profile_Temp_Bool_Exp>;
   _or?: InputMaybe<Array<Profile_Temp_Bool_Exp>>;
-  acceptMarketing?: InputMaybe<Boolean_Comparison_Exp>;
   acceptTnc?: InputMaybe<Boolean_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
   courseId?: InputMaybe<Int_Comparison_Exp>;
@@ -39677,7 +39673,6 @@ export type Profile_Temp_Inc_Input = {
 
 /** input type for inserting data into table "profile_temp" */
 export type Profile_Temp_Insert_Input = {
-  acceptMarketing?: InputMaybe<Scalars['Boolean']>;
   acceptTnc?: InputMaybe<Scalars['Boolean']>;
   course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   courseId?: InputMaybe<Scalars['Int']>;
@@ -39746,7 +39741,6 @@ export type Profile_Temp_On_Conflict = {
 
 /** Ordering options when selecting data from "profile_temp". */
 export type Profile_Temp_Order_By = {
-  acceptMarketing?: InputMaybe<Order_By>;
   acceptTnc?: InputMaybe<Order_By>;
   course?: InputMaybe<Course_Order_By>;
   courseId?: InputMaybe<Order_By>;
@@ -39770,8 +39764,6 @@ export type Profile_Temp_Pk_Columns_Input = {
 
 /** select columns of table "profile_temp" */
 export enum Profile_Temp_Select_Column {
-  /** column name */
-  AcceptMarketing = 'acceptMarketing',
   /** column name */
   AcceptTnc = 'acceptTnc',
   /** column name */
@@ -39802,7 +39794,6 @@ export enum Profile_Temp_Select_Column {
 
 /** input type for updating data in table "profile_temp" */
 export type Profile_Temp_Set_Input = {
-  acceptMarketing?: InputMaybe<Scalars['Boolean']>;
   acceptTnc?: InputMaybe<Scalars['Boolean']>;
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -39852,7 +39843,6 @@ export type Profile_Temp_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Profile_Temp_Stream_Cursor_Value_Input = {
-  acceptMarketing?: InputMaybe<Scalars['Boolean']>;
   acceptTnc?: InputMaybe<Scalars['Boolean']>;
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -39878,8 +39868,6 @@ export type Profile_Temp_Sum_Fields = {
 
 /** update columns of table "profile_temp" */
 export enum Profile_Temp_Update_Column {
-  /** column name */
-  AcceptMarketing = 'acceptMarketing',
   /** column name */
   AcceptTnc = 'acceptTnc',
   /** column name */

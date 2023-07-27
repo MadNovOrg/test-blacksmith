@@ -84,7 +84,6 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         password: data.password,
         phone: data.phone,
         dob: data.dob ? zonedTimeToUtc(data.dob, 'GMT') : null,
-        acceptMarketing: data.marketing,
         acceptTnc: data.tcs,
       }
 
@@ -226,17 +225,6 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         </Box>
 
         <Box sx={{ my: 5 }}>
-          <Box display="flex" mb={2}>
-            <FormControlLabel
-              control={<Checkbox {...register('marketing')} />}
-              label={
-                <Typography variant="body2">
-                  {t('marketting-label-short')}
-                </Typography>
-              }
-            />
-          </Box>
-
           <Box sx={{ display: 'flex' }}>
             <FormControlLabel
               control={
