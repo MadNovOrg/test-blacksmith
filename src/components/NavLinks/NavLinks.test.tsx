@@ -68,6 +68,20 @@ describe('component: NavLinks', () => {
     expect(screen.getByRole('link', { name: /resources/i })).toBeInTheDocument()
   })
 
+  it("doesn't render resources link if a user is organisation admin and doesn't have a valid certificate", () => {
+    render(<NavLinks />, {
+      auth: {
+        activeRole: RoleName.USER,
+        isOrgAdmin: true,
+        activeCertificates: [],
+      },
+    })
+
+    expect(
+      screen.queryByRole('link', { name: /resources/i })
+    ).not.toBeInTheDocument()
+  })
+
   it('renders SALES ADMIN role links', async () => {
     render(<NavLinks />, {
       auth: {

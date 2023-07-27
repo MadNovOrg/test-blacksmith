@@ -406,10 +406,6 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return false
     },
     canViewResources: () => {
-      if (acl.isOrgAdmin()) {
-        return true
-      }
-
       if (
         auth.activeRole &&
         [RoleName.USER, RoleName.TRAINER].includes(auth.activeRole)
