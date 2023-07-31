@@ -2,13 +2,14 @@ import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
 import {
-  ResourceCategorySummaryFragment,
   ResourceDetailsQuery,
   ResourceSummaryFragment,
 } from '@app/generated/graphql'
 import { CourseLevel, RoleName, TrainerRoleTypeName } from '@app/types'
 
 import { chance, render, screen } from '@test/index'
+
+import { ResourceCategory } from '../hooks/useResourceCategory'
 
 import { ResourceCategoryDetails } from './ResourceCategoryDetails'
 
@@ -58,9 +59,11 @@ describe('page: ResourceCategoryDetails', () => {
     ).not.toBeInTheDocument()
     expect(screen.queryByTestId('resources-skeleton')).not.toBeInTheDocument()
 
-    expect(screen.getByText(resourceCategory.name ?? '')).toBeInTheDocument()
     expect(
-      screen.getByText(resourceCategory.description ?? '')
+      screen.getByText(resourceCategory?.name ?? 'should fail')
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(resourceCategory?.description ?? 'should fail')
     ).toBeInTheDocument()
   })
 
@@ -283,11 +286,94 @@ describe('page: ResourceCategoryDetails', () => {
       ).toBeInTheDocument()
     })
   })
+
+  it('filters nested resource categories and resources', () => {
+    const level1Resource = buildResource({
+      title: 'Level 1 resource',
+      resourcePermissions: {
+        certificateLevels: [CourseLevel.Level_1],
+      },
+    })
+
+    const secondLevelNestingCategory = buildResourceCategory({
+      name: 'Second level nesting',
+      resourcePermissions: {
+        principalTrainer: false,
+      },
+    })
+
+    const firstLevelNestingCategory = buildResourceCategory({
+      name: 'First level nesting',
+      resourcePermissions: {
+        principalTrainer: true,
+      },
+      resources: {
+        nodes: [
+          buildResource({
+            resourcePermissions: {
+              principalTrainer: true,
+            },
+          }),
+        ],
+      },
+      children: {
+        nodes: [secondLevelNestingCategory],
+      },
+    })
+
+    const resourceCategory = buildResourceCategory({
+      name: 'Top level category',
+      resourcePermissions: {
+        principalTrainer: true,
+      },
+      resources: {
+        nodes: [level1Resource],
+      },
+      children: {
+        nodes: [firstLevelNestingCategory],
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: ResourceDetailsQuery }>({
+          data: {
+            content: {
+              resourceCategory,
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <ResourceCategoryDetails />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+          trainerRoles: [TrainerRoleTypeName.PRINCIPAL],
+        },
+      }
+    )
+
+    expect(
+      screen.queryByText(level1Resource.title ?? 'should fail')
+    ).not.toBeInTheDocument()
+
+    expect(
+      screen.getByText(firstLevelNestingCategory.name ?? 'should fail')
+    ).toBeInTheDocument()
+
+    expect(
+      screen.queryByText(secondLevelNestingCategory.name ?? 'should fail')
+    ).not.toBeInTheDocument()
+  })
 })
 
 function buildResourceCategory(
-  overrides?: Partial<ResourceCategorySummaryFragment>
-): ResourceCategorySummaryFragment {
+  overrides?: Partial<ResourceCategory>
+): NonNullable<ResourceCategory> {
   return {
     id: chance.guid(),
     name: chance.name(),

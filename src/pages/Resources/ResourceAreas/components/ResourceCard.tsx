@@ -28,9 +28,11 @@ export const ResourceCard = ({
         <Typography variant="h3" mb={1} fontWeight={600} color="primary">
           {title}
         </Typography>
-        <Typography color="secondary" lineHeight="28px">
-          {description}
-        </Typography>
+        <Typography
+          color="secondary"
+          lineHeight="28px"
+          dangerouslySetInnerHTML={{ __html: description ?? '' }}
+        />
       </CardContent>
     </Card>
   )
