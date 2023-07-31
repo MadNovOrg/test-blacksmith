@@ -161,11 +161,21 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
       injuryQuestion: {
         yes:
           injuryQuestion.length > 0
-            ? ((injuryResponse.YES?.length ?? 0) / injuryQuestion.length) * 100
+            ? Number(
+                (
+                  ((injuryResponse.YES?.length ?? 0) / injuryQuestion.length) *
+                  100
+                ).toFixed(2)
+              )
             : 0,
         no:
           injuryQuestion.length > 0
-            ? ((injuryResponse.NO?.length ?? 0) / injuryQuestion.length) * 100
+            ? Number(
+                (
+                  ((injuryResponse.NO?.length ?? 0) / injuryQuestion.length) *
+                  100
+                ).toFixed(2)
+              )
             : 0,
       },
     }

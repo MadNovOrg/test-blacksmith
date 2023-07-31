@@ -241,8 +241,8 @@ const PDFRatingAnswer: React.FC<
       <View style={{ width: '20%', textAlign: 'right' }}>
         <Text>{t(label)}</Text>
       </View>
-      <View style={{ width: '10%', paddingLeft: '15px', textAlign: 'left' }}>
-        <Text>{value}</Text>
+      <View style={{ width: '15%', paddingLeft: '15px', textAlign: 'left' }}>
+        <Text>{value}%</Text>
       </View>
     </View>
   )
@@ -257,11 +257,11 @@ const PDFRatingSummary: React.FC<
   const num = answers?.length
 
   const values = [
-    ((groups[5]?.length ?? 0) / num) * 100,
-    ((groups[4]?.length ?? 0) / num) * 100,
-    ((groups[3]?.length ?? 0) / num) * 100,
-    ((groups[2]?.length ?? 0) / num) * 100,
-    ((groups[1]?.length ?? 0) / num) * 100,
+    Number((((groups[5]?.length ?? 0) / num) * 100).toFixed(2)),
+    Number((((groups[4]?.length ?? 0) / num) * 100).toFixed(2)),
+    Number((((groups[3]?.length ?? 0) / num) * 100).toFixed(2)),
+    Number((((groups[2]?.length ?? 0) / num) * 100).toFixed(2)),
+    Number((((groups[1]?.length ?? 0) / num) * 100).toFixed(2)),
   ]
 
   return (
