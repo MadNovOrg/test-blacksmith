@@ -1032,7 +1032,7 @@ export const EditProfilePage: React.FC<
                 container
                 direction="row"
                 justifyContent="space-between"
-                alignItems="stretch"
+                alignItems="center"
               >
                 <Typography variant="subtitle2">
                   {t('certifications')}
