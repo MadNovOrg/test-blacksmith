@@ -134,7 +134,7 @@ export const AttendeeTransferTable: React.FC<
     <Box display="flex" gap={4}>
       <AuditFilteringSidebar count={count} onChange={onFilterChange} />
 
-      <Box flex={1}>
+      <Box flex={1} sx={{ width: '100%', overflowX: 'auto' }}>
         {loading ? (
           <Stack
             alignItems="center"
@@ -144,122 +144,124 @@ export const AttendeeTransferTable: React.FC<
             <CircularProgress />
           </Stack>
         ) : (
-          <>
+          <Box display="flex" flexDirection="column">
             <Box display="flex" justifyContent="flex-end" sx={{ mb: 3 }}>
               <ExportAuditsButton
                 renderData={renderExportData}
                 prefix={'attendee-transfers-'}
               />
             </Box>
-            <Table data-testid="logs-table">
-              <TableHead
-                cols={cols}
-                orderBy={sort.by}
-                order={sort.dir}
-                onRequestSort={sort.onSort}
-              />
-
-              <TableBody>
-                {loading ? (
-                  <TableRow>
-                    <TableCell colSpan={cols.length}>
-                      <Stack direction="row" alignItems="center">
-                        <CircularProgress size={20} />
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
-                ) : null}
-
-                <TableNoRows
-                  noRecords={!loading && logs.length === 0}
-                  filtered={false}
-                  itemsName={t('common.records').toLowerCase()}
-                  colSpan={cols.length}
+            <Box sx={{ maxWidth: '100%', overflowX: 'scroll' }}>
+              <Table data-testid="logs-table">
+                <TableHead
+                  cols={cols}
+                  orderBy={sort.by}
+                  order={sort.dir}
+                  onRequestSort={sort.onSort}
                 />
 
-                {logs.map(log => {
-                  const invoice = getAttendeeInvoice(log)
-                  return (
-                    <TableRow
-                      key={log.id}
-                      data-testid={`audit-log-entry-${log.id}`}
-                    >
-                      <TableCell>
-                        {t('dates.withTime', {
-                          date: log.created_at,
-                        })}
-                      </TableCell>
-                      <TableCell>
-                        <Link
-                          href={`/manage-courses/all/${log.payload.fromCourse.id}/details`}
-                        >
-                          <Typography
-                            variant="body2"
-                            sx={{ textDecoration: 'line-through' }}
-                          >
-                            {log.payload.fromCourse.courseCode ?? ''}
-                          </Typography>
-                        </Link>
-                      </TableCell>
-                      <TableCell>
-                        <Link
-                          href={`/manage-courses/all/${log.payload.toCourse.id}/details`}
-                        >
-                          <Typography variant="body2">
-                            {log.payload.toCourse.courseCode ?? ''}
-                          </Typography>
-                        </Link>
-                      </TableCell>
-                      <TableCell>
-                        {log.profile ? (
-                          <ProfileWithAvatar
-                            profile={log.profile}
-                            useLink={true}
-                          />
-                        ) : null}
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2">
-                          {log.profile.email}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Box display="flex" flexDirection="column" gap={1}>
-                          {log.profile.organizations.map(orgMember => (
-                            <Link
-                              key={orgMember.organization.id}
-                              href={`/organisations/${orgMember.organization.id}`}
-                            >
-                              {orgMember.organization.name}
-                            </Link>
-                          ))}
-                        </Box>
-                      </TableCell>
-                      <TableCell>
-                        {invoice ? (
-                          <Link href={`/orders/${invoice.id}`}>
-                            <Typography variant="body2">
-                              {invoice.xeroInvoiceNumber}
-                            </Typography>
-                          </Link>
-                        ) : null}
-                      </TableCell>
-                      <TableCell>
-                        {log.authorizedBy ? (
-                          <ProfileWithAvatar
-                            profile={log.authorizedBy}
-                            useLink={true}
-                          />
-                        ) : null}
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={cols.length}>
+                        <Stack direction="row" alignItems="center">
+                          <CircularProgress size={20} />
+                        </Stack>
                       </TableCell>
                     </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
+                  ) : null}
 
-            <Pagination total={count} />
-          </>
+                  <TableNoRows
+                    noRecords={!loading && logs.length === 0}
+                    filtered={false}
+                    itemsName={t('common.records').toLowerCase()}
+                    colSpan={cols.length}
+                  />
+
+                  {logs.map(log => {
+                    const invoice = getAttendeeInvoice(log)
+                    return (
+                      <TableRow
+                        key={log.id}
+                        data-testid={`audit-log-entry-${log.id}`}
+                      >
+                        <TableCell>
+                          {t('dates.withTime', {
+                            date: log.created_at,
+                          })}
+                        </TableCell>
+                        <TableCell>
+                          <Link
+                            href={`/manage-courses/all/${log.payload.fromCourse.id}/details`}
+                          >
+                            <Typography
+                              variant="body2"
+                              sx={{ textDecoration: 'line-through' }}
+                            >
+                              {log.payload.fromCourse.courseCode ?? ''}
+                            </Typography>
+                          </Link>
+                        </TableCell>
+                        <TableCell>
+                          <Link
+                            href={`/manage-courses/all/${log.payload.toCourse.id}/details`}
+                          >
+                            <Typography variant="body2">
+                              {log.payload.toCourse.courseCode ?? ''}
+                            </Typography>
+                          </Link>
+                        </TableCell>
+                        <TableCell>
+                          {log.profile ? (
+                            <ProfileWithAvatar
+                              profile={log.profile}
+                              useLink={true}
+                            />
+                          ) : null}
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2">
+                            {log.profile.email}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Box display="flex" flexDirection="column" gap={1}>
+                            {log.profile.organizations.map(orgMember => (
+                              <Link
+                                key={orgMember.organization.id}
+                                href={`/organisations/${orgMember.organization.id}`}
+                              >
+                                {orgMember.organization.name}
+                              </Link>
+                            ))}
+                          </Box>
+                        </TableCell>
+                        <TableCell>
+                          {invoice ? (
+                            <Link href={`/orders/${invoice.id}`}>
+                              <Typography variant="body2">
+                                {invoice.xeroInvoiceNumber}
+                              </Typography>
+                            </Link>
+                          ) : null}
+                        </TableCell>
+                        <TableCell>
+                          {log.authorizedBy ? (
+                            <ProfileWithAvatar
+                              profile={log.authorizedBy}
+                              useLink={true}
+                            />
+                          ) : null}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+
+              <Pagination total={count} />
+            </Box>
+          </Box>
         )}
       </Box>
     </Box>

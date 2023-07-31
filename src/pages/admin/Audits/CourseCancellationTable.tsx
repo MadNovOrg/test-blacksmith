@@ -104,7 +104,7 @@ export const CourseCancellationTable: React.FC<
     <Box display="flex" gap={4}>
       <AuditFilteringSidebar count={count} onChange={onFilterChange} />
 
-      <Box flex={1}>
+      <Box flex={1} sx={{ width: '100%', overflowX: 'auto' }}>
         {loading ? (
           <Stack
             alignItems="center"
@@ -114,7 +114,7 @@ export const CourseCancellationTable: React.FC<
             <CircularProgress />
           </Stack>
         ) : (
-          <>
+          <Box display="flex" flexDirection="column">
             <Box display="flex" justifyContent="flex-end" sx={{ mb: 3 }}>
               <ExportAuditsButton
                 renderData={renderExportData}
@@ -195,7 +195,7 @@ export const CourseCancellationTable: React.FC<
             </Table>
 
             <Pagination total={count} />
-          </>
+          </Box>
         )}
       </Box>
     </Box>
