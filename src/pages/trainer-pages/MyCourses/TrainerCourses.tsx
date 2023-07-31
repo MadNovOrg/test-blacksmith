@@ -143,7 +143,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
         ),
       })
     }
-  })
+  }, [addSnackbarMessage, locationState])
 
   useEffect(() => {
     window.scrollTo(0, 0)

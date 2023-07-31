@@ -45,11 +45,9 @@ export const SnackbarProvider: React.FC<
 
   const addSnackbarMessage: SnackbarState['addSnackbarMessage'] = useCallback(
     (key, options) => {
-      const m = new Map(messages)
-      m.set(key, options)
-      setMessages(m)
+      setMessages(messages => new Map(messages.set(key, options)))
     },
-    [messages]
+    []
   )
 
   const getSnackbarMessage: SnackbarState['getSnackbarMessage'] = useCallback(
