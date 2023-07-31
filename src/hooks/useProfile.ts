@@ -36,6 +36,7 @@ const requiredCertificateLevel = {
 
 export type MissingCertificateInfo = {
   courseId: number
+  courseCode: string
   requiredCertificate: CourseLevel[] // ie. Level 1 or Level 2 required
 }
 
@@ -88,6 +89,7 @@ export default function useProfile(
             ? false
             : {
                 courseId: c.id,
+                courseCode: c.course_code,
                 requiredCertificate,
               }
         })

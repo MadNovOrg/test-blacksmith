@@ -104,6 +104,7 @@ export const QUERY = gql`
     ) {
       id
       level
+      course_code
       name
       status
     }
