@@ -2,6 +2,7 @@ import React from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { RoleName, TrainerRoleTypeName } from '@app/types'
+import { capitalize } from '@app/util'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
@@ -33,8 +34,7 @@ describe('component: EditRoles', () => {
           employeeRoles: [RoleName.TT_OPS, RoleName.FINANCE, 'sales'],
           salesRoles: [RoleName.SALES_ADMIN],
           trainerRoles: {
-            trainerRole: '',
-            AOLRole: '',
+            trainerRole: [],
             BILDRole: '',
           },
         },
@@ -72,8 +72,7 @@ describe('component: EditRoles', () => {
           employeeRoles: [],
           salesRoles: [],
           trainerRoles: {
-            trainerRole: '',
-            AOLRole: '',
+            trainerRole: [],
             BILDRole: '',
           },
         },
@@ -98,8 +97,7 @@ describe('component: EditRoles', () => {
           employeeRoles: [],
           salesRoles: [],
           trainerRoles: {
-            trainerRole: '',
-            AOLRole: '',
+            trainerRole: [],
             BILDRole: '',
           },
         },
@@ -124,8 +122,7 @@ describe('component: EditRoles', () => {
           employeeRoles: [],
           salesRoles: [],
           trainerRoles: {
-            trainerRole: TrainerRoleTypeName.PRINCIPAL,
-            AOLRole: TrainerRoleTypeName.EMPLOYER_AOL,
+            trainerRole: [TrainerRoleTypeName.PRINCIPAL],
             BILDRole: TrainerRoleTypeName.BILD_SENIOR,
           },
         },
@@ -138,17 +135,96 @@ describe('component: EditRoles', () => {
     )
 
     expect(screen.getByTestId('user-role-select')).toHaveTextContent('Trainer')
-    expect(screen.getByTestId('trainer-role-select')).toHaveTextContent(
-      'Principal'
-    )
-    expect(screen.getByTestId('aol-role-select')).toHaveTextContent(
-      'Employer AOL'
-    )
+    expect(
+      screen.getByRole('button', {
+        name: 'Principal',
+      })
+    ).toBeInTheDocument()
     expect(screen.getByTestId('bild-role-select')).toHaveTextContent(
       'BILD senior'
     )
   })
-
+  it('autoselects roles if available', async () => {
+    // Arrange
+    const mockRoles = {
+      roles: [
+        {
+          userRole: RoleName.TRAINER,
+          employeeRoles: [],
+          salesRoles: [],
+          trainerRoles: {
+            trainerRole: [TrainerRoleTypeName.PRINCIPAL],
+            BILDRole: '',
+          },
+        },
+      ],
+    }
+    // Act
+    render(
+      <FormWrapper mockRoles={mockRoles}>
+        <EditRoles />
+      </FormWrapper>
+    )
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: capitalize(TrainerRoleTypeName.PRINCIPAL),
+      })
+    )
+    // Assert
+    expect(
+      screen.getByRole('option', {
+        name: capitalize(TrainerRoleTypeName.PRINCIPAL),
+      })
+    ).toHaveAttribute('aria-selected', 'true')
+  })
+  it('can select or deselect options from the dropdown', async () => {
+    // Arrange
+    const mockRoles = {
+      roles: [
+        {
+          userRole: RoleName.TRAINER,
+          employeeRoles: [],
+          salesRoles: [],
+          trainerRoles: {
+            trainerRole: [TrainerRoleTypeName.PRINCIPAL],
+            BILDRole: '',
+          },
+        },
+      ],
+    }
+    // Act
+    render(
+      <FormWrapper mockRoles={mockRoles}>
+        <EditRoles />
+      </FormWrapper>
+    )
+    // Assert
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: capitalize(TrainerRoleTypeName.PRINCIPAL),
+      })
+    )
+    await userEvent.click(
+      screen.getByRole('option', {
+        name: capitalize(TrainerRoleTypeName.PRINCIPAL),
+      })
+    )
+    expect(
+      screen.getByRole('option', {
+        name: capitalize(TrainerRoleTypeName.PRINCIPAL),
+      })
+    ).toHaveAttribute('aria-selected', 'false')
+    await userEvent.click(
+      screen.getByRole('option', {
+        name: capitalize(TrainerRoleTypeName.PRINCIPAL),
+      })
+    )
+    expect(
+      screen.getByRole('option', {
+        name: capitalize(TrainerRoleTypeName.PRINCIPAL),
+      })
+    ).toHaveAttribute('aria-selected', 'true')
+  })
   it('allows deleting roles', async () => {
     const mockRoles = {
       roles: [
@@ -157,8 +233,7 @@ describe('component: EditRoles', () => {
           employeeRoles: [],
           salesRoles: [],
           trainerRoles: {
-            trainerRole: '',
-            AOLRole: '',
+            trainerRole: [],
             BILDRole: '',
           },
         },
@@ -167,8 +242,7 @@ describe('component: EditRoles', () => {
           employeeRoles: [],
           salesRoles: [],
           trainerRoles: {
-            trainerRole: '',
-            AOLRole: '',
+            trainerRole: [],
             BILDRole: '',
           },
         },
@@ -202,8 +276,7 @@ describe('component: EditRoles', () => {
           employeeRoles: [],
           salesRoles: [],
           trainerRoles: {
-            trainerRole: '',
-            AOLRole: '',
+            trainerRole: [],
             BILDRole: '',
           },
         },

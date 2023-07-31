@@ -17,13 +17,13 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material'
-import React from 'react'
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { InferType } from 'yup'
 
 import { yup } from '@app/schemas'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
+import { capitalize } from '@app/util'
 
 import {
   employeeRolesNames,
@@ -34,7 +34,6 @@ import {
   employeeRole,
   salesRole,
   trainerRolesNames,
-  AOLRolesNames,
   BILDRolesNames,
 } from '../../EditProfile'
 
@@ -63,8 +62,7 @@ export function rolesFormSchema() {
         trainerRoles: yup
           .object()
           .shape({
-            trainerRole: yup.string(),
-            AOLRole: yup.string(),
+            trainerRole: yup.array(),
             BILDRole: yup.string(),
             moderatorRole: yup.boolean(),
           })
@@ -81,14 +79,17 @@ export const EditRoles = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
-  const { formState, control, watch } = useFormContext<{
+  const {
+    formState: { errors },
+    control,
+    watch,
+  } = useFormContext<{
     roles: RolesFields
   }>()
   const { fields, append, remove, replace } = useFieldArray({
     control,
     name: 'roles',
   })
-  const { errors } = formState
 
   return (
     <>
@@ -190,9 +191,7 @@ export const EditRoles = () => {
                           {t('pages.view-profile.trainer-role')}
                         </InputLabel>
                         <Controller
-                          name={
-                            `roles.${index}.trainerRoles.trainerRole` as 'roles.0.trainerRoles.trainerRole'
-                          }
+                          name={`roles.${index}.trainerRoles.trainerRole`}
                           control={control}
                           render={({ field }) => (
                             <Select
@@ -200,45 +199,18 @@ export const EditRoles = () => {
                               label={t('pages.view-profile.trainer-role')}
                               sx={{ flexGrow: 1, marginRight: 1 }}
                               {...field}
-                              value={field.value}
                               fullWidth={isMobile}
+                              multiple
+                              value={field.value}
+                              renderValue={selected =>
+                                selected.map(s => capitalize(s)).join(', ')
+                              }
                             >
                               {trainerRolesNames.map(roleName => (
                                 <MenuItem value={roleName} key={roleName}>
-                                  {roleName == TrainerRoleTypeName.AOL_ETA ||
-                                  roleName == TrainerRoleTypeName.TRAINER_ETA
-                                    ? t(`trainer-role-types.eta`)
-                                    : t(`trainer-role-types.${roleName}`)}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          )}
-                        />
-                      </FormControl>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Box>
-                      <FormControl fullWidth variant="filled">
-                        <InputLabel>
-                          {t('pages.view-profile.aol-role')}
-                        </InputLabel>
-                        <Controller
-                          name={
-                            `roles.${index}.trainerRoles.AOLRole` as 'roles.0.trainerRoles.AOLRole'
-                          }
-                          control={control}
-                          render={({ field }) => (
-                            <Select
-                              data-testid="aol-role-select"
-                              label={t('pages.view-profile.aol-role')}
-                              sx={{ flexGrow: 1, marginRight: 1 }}
-                              {...field}
-                              value={field.value}
-                              fullWidth={isMobile}
-                            >
-                              {AOLRolesNames.map(roleName => (
-                                <MenuItem value={roleName} key={roleName}>
+                                  <Checkbox
+                                    checked={field.value?.includes(roleName)}
+                                  />
                                   {roleName == TrainerRoleTypeName.AOL_ETA ||
                                   roleName == TrainerRoleTypeName.TRAINER_ETA
                                     ? t(`trainer-role-types.eta`)
@@ -445,8 +417,7 @@ export const EditRoles = () => {
                     employeeRoles: [] as RoleName[],
                     salesRoles: [] as RoleName[],
                     trainerRoles: {
-                      trainerRole: '',
-                      AOLRole: '',
+                      trainerRole: [],
                       BILDRole: '',
                       moderatorRole: false,
                     },

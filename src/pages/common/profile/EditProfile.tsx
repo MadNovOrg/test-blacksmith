@@ -146,8 +146,7 @@ export const salesRole = {
 }
 
 const defaultTrainerRoles = {
-  trainerRole: '',
-  AOLRole: '',
+  trainerRole: [] as string[],
   BILDRole: '',
   moderatorRole: false,
 }
@@ -156,14 +155,8 @@ export const trainerRolesNames: TrainerRoleTypeName[] = [
   TrainerRoleTypeName.PRINCIPAL,
   TrainerRoleTypeName.SENIOR,
   TrainerRoleTypeName.SENIOR_ASSIST,
-  TrainerRoleTypeName.EMPLOYER_TRAINER,
   TrainerRoleTypeName.TRAINER_ETA,
-]
-
-export const AOLRolesNames: TrainerRoleTypeName[] = [
   TrainerRoleTypeName.EMPLOYER_AOL,
-  TrainerRoleTypeName.SPECIAL_AGREEMENT_AOL,
-  TrainerRoleTypeName.AOL_ETA,
 ]
 
 export const BILDRolesNames: TrainerRoleTypeName[] = [
@@ -338,13 +331,10 @@ export const EditProfilePage: React.FC<
                 obj.trainer_role_type.name as TrainerRoleTypeName
               )
             ) {
-              formattedTrainerRoleTypes.trainerRole = obj.trainer_role_type.name
-            } else if (
-              AOLRolesNames.includes(
-                obj.trainer_role_type.name as TrainerRoleTypeName
-              )
-            ) {
-              formattedTrainerRoleTypes.AOLRole = obj.trainer_role_type.name
+              formattedTrainerRoleTypes.trainerRole = [
+                ...formattedTrainerRoleTypes.trainerRole,
+                obj.trainer_role_type.name,
+              ]
             } else if (
               BILDRolesNames.includes(
                 obj.trainer_role_type.name as TrainerRoleTypeName
@@ -450,12 +440,11 @@ export const EditProfilePage: React.FC<
       )
       if (canEditRoles) {
         const updatedRoles: string[] = []
-        const updatedTrainerRoles: (string | undefined)[] = []
+        const updatedTrainerRoles: unknown[] = []
         data.roles.map(obj => {
           if (obj.userRole === RoleName.TRAINER) {
             updatedTrainerRoles.push(
               obj.trainerRoles.trainerRole,
-              obj.trainerRoles.AOLRole,
               obj.trainerRoles.BILDRole,
               obj.trainerRoles.moderatorRole
                 ? TrainerRoleTypeName.MODERATOR
@@ -484,9 +473,9 @@ export const EditProfilePage: React.FC<
         const filteredTrainerRoleTypes = systemTrainerRoleTypes?.reduce(
           (filteredTrainerRoleTypes, systemTrainerRoleType) => {
             if (
-              updatedTrainerRoles.find(
-                role => role === systemTrainerRoleType.name
-              )
+              updatedTrainerRoles
+                .flat()
+                .find(role => role === systemTrainerRoleType.name)
             ) {
               filteredTrainerRoleTypes.push({
                 trainer_role_type_id: systemTrainerRoleType.id,
