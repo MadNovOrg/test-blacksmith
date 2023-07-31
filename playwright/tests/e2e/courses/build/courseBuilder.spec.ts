@@ -29,9 +29,12 @@ for (const data of MODULES_SETUP) {
     await myCoursesPage.goto(`${course.id}`)
     const courseBuilderPage = await myCoursesPage.clickCourse(course.id)
     await courseBuilderPage.checkMandatoryModules(data.mandatoryModules)
-    await courseBuilderPage.checkAvailableModules(data.optionalModules)
+    await courseBuilderPage.checkAvailableModules([
+      ...data.mandatoryModules,
+      ...data.optionalModules,
+    ])
     await courseBuilderPage.checkEstimatedDuration(data.durationBefore)
-    await courseBuilderPage.dragModulesToRight(data.modulesToMove)
+    await courseBuilderPage.selectModule(data.modulesToMove)
     await courseBuilderPage.checkEstimatedDuration(data.durationAfter)
     const courseDetailsPage =
       await courseBuilderPage.clickConfirmWarningSubmitButton()

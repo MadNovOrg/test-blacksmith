@@ -219,7 +219,8 @@
         "warning-dialog": "Please be aware once you submit this course, this cannot be changed",
         "time-commitment-message": "By submitting this course, you commit to at least {{hours}} hours of training.",
         "course-level-info": "Additional intermediate modules that are not listed would need to be delivered as part of Level Two course.\n\nIf these modules are required, you will need to resubmit the course as a Level Two.",
-        "strategy-validation-error": "At least one module from \"{{name}}\" should be selected"
+        "strategy-validation-error": "At least one module from \"{{name}}\" should be selected",
+        "saving-error": "There was an issue saving the course. Please try later."
       }
     }
   },
@@ -486,7 +487,7 @@
           "description": "As the course is now complete, grading must be submitted in order for the attendees to receive a certificate.",
           "confirm-grading-criteria": "Confirm grading criteria",
           "confirm-modules-and-techniques": "Confirm the modules and techniques covered in the course",
-          "please-note-warning":"Please note, the attendees will only receive a certificate if awarded a pass grade.",
+          "please-note-warning": "Please note, the attendees will only receive a certificate if awarded a pass grade.",
           "confirm-grade": "Confirm Grade"
         },
         "grade": "Grade",
@@ -674,7 +675,7 @@
     "completed-the-course": "Completed the course",
     "valid-identification": "Valid identification was checked",
     "passed-the-quiz": "Passed the course quiz",
-    "valid-pre-requisite":"Valid pre-requisite certificate was checked",
+    "valid-pre-requisite": "Valid pre-requisite certificate was checked",
     "automatic-fail-warning": "Please note, if a course member is deselected when you proceed (automatic fail), this cannot be undone.",
     "confirm-grading": "Confirm Grading",
     "master-checkbox-label-checked": "Deselect all",

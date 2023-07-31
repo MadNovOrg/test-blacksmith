@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 export type ResponseType = {
   deleted: {
@@ -15,7 +15,7 @@ export type ParamsType = {
 }
 
 export const MUTATION = gql`
-  mutation saveCourseModules(
+  mutation SaveCourseModules(
     $courseId: Int!
     $modules: [course_module_insert_input!]!
   ) {

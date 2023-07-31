@@ -86,6 +86,7 @@
   },
   "view-cert": "View Certificate",
   "minimumXHours": "Minimum {{hours}} hours",
+  "minimum": "Minimum",
   "hrs": "{{hours}} hrs",
   "reinstate": "Reinstate",
   "certificate": "Certificate",

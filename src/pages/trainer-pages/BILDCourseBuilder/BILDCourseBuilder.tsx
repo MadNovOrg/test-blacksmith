@@ -35,7 +35,7 @@ import {
   getSWRLoadingStatus,
 } from '@app/util'
 
-import { CourseHero } from '../CourseBuilder/components/CourseHero'
+import { CourseInfo } from '../CourseBuilder/components/CourseInfo'
 import { Strategy } from '../CourseGrading/components/BILDGrading/types'
 
 import { StrategyAccordion } from './components/StrategyAccordion'
@@ -432,7 +432,7 @@ export const BILDCourseBuilder: React.FC<
                 <Typography variant="body2">{courseDescription}</Typography>
               </Box>
               <Box data-testid="course-info" mt={isMobile ? 2 : 0}>
-                <CourseHero data={courseData.course} />
+                <CourseInfo data={courseData.course} />
               </Box>
             </Box>
 

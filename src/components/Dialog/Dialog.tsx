@@ -37,6 +37,7 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
       maxWidth={false}
       onClose={onClose}
       data-testid={testId}
+      aria-labelledby={typeof title === 'string' ? title : ''}
     >
       <DialogTitle
         sx={{

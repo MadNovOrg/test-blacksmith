@@ -29,20 +29,20 @@ export class CourseBuilderPage extends BasePage {
     this.courseInfo = this.page.locator('data-testid=course-info')
     this.draftText = this.page.locator('data-testid=draft-text')
     this.availableModule = (name: string) =>
-      this.page.locator(`[data-testid="module-card"] >> text="${name}"`)
+      this.page.locator(`[data-testid="available-modules"] >> text="${name}"`)
     this.availableModuleNames = this.page.locator(
-      '[data-testid="all-modules"] [data-testid="module-name"]'
+      '[data-testid="available-modules"] [data-testid="module-name"]'
     )
     this.availableModuleDurations = this.page.locator(
-      '[data-testid="all-modules"] [data-testid="module-duration"]'
+      '[data-testid="available-modules"] [data-testid="module-duration"]'
     )
     this.emptyModuleSlots = this.page.locator('data-testid=empty-slot')
     this.courseModulesArea = this.page.locator('data-testid=course-modules')
     this.selectedModuleNames = this.page.locator(
-      '[data-testid="course-modules"] [data-testid="module-name"]'
+      '[data-testid="selected-modules"] [data-testid="module-name"]'
     )
     this.selectedModuleDurations = this.page.locator(
-      '[data-testid="course-modules"] [data-testid="module-duration"]'
+      '[data-testid="selected-modules"] [data-testid="module-duration"]'
     )
     this.estimatedDuration = this.page.locator('data-testid=progress-bar-label')
     this.submitButton = this.page.locator('data-testid=submit-button')
@@ -60,22 +60,10 @@ export class CourseBuilderPage extends BasePage {
     await super.goto(`courses/${courseId}/modules`)
   }
 
-  async dragModulesToRight(modules: string[]) {
+  async selectModule(modules: string[]) {
     await this.submitButton.scrollIntoViewIfNeeded()
     for (const name of modules) {
-      const sourceBox = await this.availableModule(name).boundingBox()
-      if (!sourceBox) {
-        throw Error('Cannot get coordinates for drag and drop')
-      }
-      const sourceX = sourceBox.x + sourceBox.width / 2
-      const sourceY = sourceBox.y + sourceBox.height / 2
-      await this.availableModule(name).hover()
-      await this.page.mouse.down()
-      // we have to move somewhere first, then to the target, otherwise won't work
-      await this.page.mouse.move(sourceX + 50, sourceY)
-      await this.emptyModuleSlots.first().hover()
-      await this.page.mouse.up()
-      await delay(1000)
+      await this.availableModule(name).click()
     }
   }
 
@@ -144,6 +132,9 @@ export class CourseBuilderPage extends BasePage {
     const moduleDurations =
       await this.availableModuleDurations.allTextContents()
     const actualModules: ModuleGroup[] = []
+
+    console.log('checking module durations')
+
     for (let i = 0; i < moduleNames.length; i++) {
       actualModules.push({ name: moduleNames[i], duration: moduleDurations[i] })
     }
@@ -158,7 +149,10 @@ export class CourseBuilderPage extends BasePage {
     const moduleDurations = await this.selectedModuleDurations.allTextContents()
     const actualModules: ModuleGroup[] = []
     for (let i = 0; i < moduleNames.length; i++) {
-      actualModules.push({ name: moduleNames[i], duration: moduleDurations[i] })
+      actualModules.push({
+        name: `${moduleNames[i]}`,
+        duration: moduleDurations[i],
+      })
     }
     actualModules.sort(sortModulesByName)
     modules.sort(sortModulesByName)

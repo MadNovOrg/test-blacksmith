@@ -28,19 +28,19 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Theory',
+        name: 'Theory *',
         duration: '3hrs',
       },
       {
-        name: 'Personal Space & Body Language',
+        name: 'Personal Space & Body Language *',
         duration: '1hr',
       },
       {
-        name: 'Elevated Risks',
+        name: 'Elevated Risks *',
         duration: '30mins',
       },
       {
-        name: 'Physical Warm Up',
+        name: 'Physical Warm Up *',
         duration: '15mins',
       },
     ],
@@ -95,19 +95,19 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Theory',
+        name: 'Theory *',
         duration: '1hr 30mins',
       },
       {
-        name: 'Personal Space & Body Language',
+        name: 'Personal Space & Body Language *',
         duration: '1hr',
       },
       {
-        name: 'Elevated Risks',
+        name: 'Elevated Risks *',
         duration: '15mins',
       },
       {
-        name: 'Physical Warm Up',
+        name: 'Physical Warm Up *',
         duration: '15mins',
       },
     ],
@@ -163,19 +163,19 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Theory',
+        name: 'Theory *',
         duration: '1hr 30mins',
       },
       {
-        name: 'Personal Space & Body Language',
+        name: 'Personal Space & Body Language *',
         duration: '1hr',
       },
       {
-        name: 'Elevated Risks',
+        name: 'Elevated Risks *',
         duration: '15mins',
       },
       {
-        name: 'Physical Warm Up',
+        name: 'Physical Warm Up *',
         duration: '15mins',
       },
     ],
@@ -231,19 +231,19 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Theory',
+        name: 'Theory *',
         duration: '1hr 30mins',
       },
       {
-        name: 'Personal Space & Body Language',
+        name: 'Personal Space & Body Language *',
         duration: '1hr',
       },
       {
-        name: 'Elevated Risks',
+        name: 'Elevated Risks *',
         duration: '15mins',
       },
       {
-        name: 'Physical Warm Up',
+        name: 'Physical Warm Up *',
         duration: '15mins',
       },
     ],
@@ -299,19 +299,19 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Theory',
+        name: 'Theory *',
         duration: '30mins',
       },
       {
-        name: 'Personal Space & Body Language',
+        name: 'Personal Space & Body Language *',
         duration: '30mins',
       },
       {
-        name: 'Elevated Risks',
+        name: 'Elevated Risks *',
         duration: '30mins',
       },
       {
-        name: 'Physical Warm Up',
+        name: 'Physical Warm Up *',
         duration: '15mins',
       },
     ],
@@ -368,19 +368,19 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Theory',
+        name: 'Theory *',
         duration: '30mins',
       },
       {
-        name: 'Personal Space & Body Language',
+        name: 'Personal Space & Body Language *',
         duration: '30mins',
       },
       {
-        name: 'Elevated Risks',
+        name: 'Elevated Risks *',
         duration: '30mins',
       },
       {
-        name: 'Physical Warm Up',
+        name: 'Physical Warm Up *',
         duration: '15mins',
       },
     ],
@@ -435,19 +435,19 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Theory',
+        name: 'Theory *',
         duration: '3hrs',
       },
       {
-        name: 'Personal Space & Body Language',
+        name: 'Personal Space & Body Language *',
         duration: '1hr',
       },
       {
-        name: 'Elevated Risks',
+        name: 'Elevated Risks *',
         duration: '30mins',
       },
       {
-        name: 'Physical Warm Up',
+        name: 'Physical Warm Up *',
         duration: '30mins',
       },
     ],
@@ -511,19 +511,19 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Theory',
+        name: 'Theory *',
         duration: '3hrs',
       },
       {
-        name: 'Personal Space & Body Language',
+        name: 'Personal Space & Body Language *',
         duration: '1hr',
       },
       {
-        name: 'Elevated Risks',
+        name: 'Elevated Risks *',
         duration: '30mins',
       },
       {
-        name: 'Physical Warm Up',
+        name: 'Physical Warm Up *',
         duration: '30mins',
       },
     ],
@@ -586,19 +586,19 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Theory',
+        name: 'Theory *',
         duration: '1hr 30mins',
       },
       {
-        name: 'Personal Space & Body Language',
+        name: 'Personal Space & Body Language *',
         duration: '1hr',
       },
       {
-        name: 'Elevated Risks',
+        name: 'Elevated Risks *',
         duration: '15mins',
       },
       {
-        name: 'Physical Warm Up',
+        name: 'Physical Warm Up *',
         duration: '15mins',
       },
     ],
@@ -661,19 +661,19 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Theory',
+        name: 'Theory *',
         duration: '1hr 30mins',
       },
       {
-        name: 'Personal Space & Body Language',
+        name: 'Personal Space & Body Language *',
         duration: '1hr',
       },
       {
-        name: 'Elevated Risks',
+        name: 'Elevated Risks *',
         duration: '15mins',
       },
       {
-        name: 'Physical Warm Up',
+        name: 'Physical Warm Up *',
         duration: '15mins',
       },
     ],
@@ -737,19 +737,19 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Theory',
+        name: 'Theory *',
         duration: '30mins',
       },
       {
-        name: 'Personal Space & Body Language',
+        name: 'Personal Space & Body Language *',
         duration: '30mins',
       },
       {
-        name: 'Elevated Risks',
+        name: 'Elevated Risks *',
         duration: '30mins',
       },
       {
-        name: 'Physical Warm Up',
+        name: 'Physical Warm Up *',
         duration: '15mins',
       },
     ],
@@ -814,19 +814,19 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Theory',
+        name: 'Theory *',
         duration: '30mins',
       },
       {
-        name: 'Personal Space & Body Language',
+        name: 'Personal Space & Body Language *',
         duration: '30mins',
       },
       {
-        name: 'Elevated Risks',
+        name: 'Elevated Risks *',
         duration: '30mins',
       },
       {
-        name: 'Physical Warm Up',
+        name: 'Physical Warm Up *',
         duration: '15mins',
       },
     ],
@@ -888,15 +888,15 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Dead Weight Response',
+        name: 'Dead Weight Response *',
         duration: '15mins',
       },
       {
-        name: 'Advanced Warm Up',
+        name: 'Advanced Warm Up *',
         duration: '15mins',
       },
       {
-        name: 'Legal & Health',
+        name: 'Legal & Health *',
         duration: '20mins',
       },
     ],

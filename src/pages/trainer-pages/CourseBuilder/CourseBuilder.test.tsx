@@ -1,46 +1,33 @@
+import { matches } from 'lodash-es'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import useSWR from 'swr'
-import { Client, Provider } from 'urql'
-import { never } from 'wonka'
+import { Client, CombinedError, Provider, TypedDocumentNode } from 'urql'
+import { fromValue, never } from 'wonka'
 
-import { CourseType, CourseLevel } from '@app/types'
+import {
+  Color_Enum,
+  CourseWithModuleGroupsQuery,
+  CourseWithModuleGroupsQueryVariables,
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
+  FinalizeCourseBuilderMutationVariables,
+  ModuleFragment,
+  ModuleGroupsQuery,
+  Module_Category_Enum,
+  SaveCourseModulesMutationVariables,
+  SetCourseAsDraftMutationVariables,
+} from '@app/generated/graphql'
+import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/queries/courses/finalize-course-builder'
+import { MUTATION as SAVE_COURSE_MODULES } from '@app/queries/courses/save-course-modules'
 
-import { render, screen } from '@test/index'
-import { buildCourse, buildModuleGroup } from '@test/mock-data-utils'
+import { FinalizeCourseBuilderMutation } from '@qa/generated/graphql'
+
+import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+
+import { COURSE_WITH_MODULE_GROUPS, SET_COURSE_AS_DRAFT } from './queries'
 
 import { CourseBuilder } from '.'
-
-jest.mock('swr')
-const useSWRMocked = jest.mocked(useSWR)
-
-const buildSWRCourseAndGroupsResponse = (
-  level: CourseLevel,
-  type: CourseType
-) => {
-  const moduleGroup = buildModuleGroup({
-    overrides: {
-      level,
-      duration: { aggregate: { sum: { duration: 1 } } },
-    },
-  })
-
-  const course = buildCourse({
-    overrides: {
-      type,
-      level,
-      moduleGroupIds: [{ module: { moduleGroup: { id: moduleGroup.id } } }],
-    },
-  })
-
-  return {
-    mutate: jest.fn(),
-    isValidating: false,
-    data: { course, groups: [moduleGroup] },
-    isLoading: false,
-    error: null,
-  }
-}
 
 describe('component: CourseBuilder', () => {
   describe('info alert for level 1 course', () => {
@@ -48,14 +35,24 @@ describe('component: CourseBuilder', () => {
       /Additional intermediate modules that are not listed would need to be delivered as part of Level Two course./
 
     it('shows the info alert for level 1 course', async () => {
-      const levelOneCourseAndGroups = buildSWRCourseAndGroupsResponse(
-        CourseLevel.Level_1,
-        CourseType.OPEN
-      )
-      useSWRMocked.mockReturnValue(levelOneCourseAndGroups)
+      const course = buildCourse({ level: Course_Level_Enum.Level_1 })
 
       const client = {
-        executeQuery: () => never,
+        executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+          if (query === COURSE_WITH_MODULE_GROUPS) {
+            return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+              data: {
+                course,
+              },
+            })
+          }
+
+          return fromValue<{ data: ModuleGroupsQuery }>({
+            data: {
+              groups: [],
+            },
+          })
+        },
       } as unknown as Client
 
       render(
@@ -66,9 +63,7 @@ describe('component: CourseBuilder', () => {
         </Provider>,
         {},
         {
-          initialEntries: [
-            `/courses/${levelOneCourseAndGroups.data.course.id}/modules`,
-          ],
+          initialEntries: [`/courses/${course.id}/modules`],
         }
       )
 
@@ -76,14 +71,26 @@ describe('component: CourseBuilder', () => {
     })
 
     it('hides the info alert for level 2 course', async () => {
-      const levelTwoCourseAndGroups = buildSWRCourseAndGroupsResponse(
-        CourseLevel.Level_2,
-        CourseType.OPEN
-      )
-      useSWRMocked.mockReturnValue(levelTwoCourseAndGroups)
+      const course = buildCourse({
+        level: Course_Level_Enum.Level_2,
+      })
 
       const client = {
-        executeQuery: () => never,
+        executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+          if (query === COURSE_WITH_MODULE_GROUPS) {
+            return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+              data: {
+                course,
+              },
+            })
+          }
+
+          return fromValue<{ data: ModuleGroupsQuery }>({
+            data: {
+              groups: [],
+            },
+          })
+        },
       } as unknown as Client
 
       render(
@@ -94,13 +101,511 @@ describe('component: CourseBuilder', () => {
         </Provider>,
         {},
         {
-          initialEntries: [
-            `/courses/${levelTwoCourseAndGroups.data.course.id}/modules`,
-          ],
+          initialEntries: [`/courses/${course.id}/modules`],
         }
       )
 
       expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
     })
   })
+
+  it('shows a spinner while loading course and modules', () => {
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <CourseBuilder />
+      </Provider>
+    )
+
+    expect(
+      screen.getByRole('progressbar', { name: /course fetching/i })
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
+
+  it("displays not found page if a course doesn't exist", () => {
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === COURSE_WITH_MODULE_GROUPS) {
+          return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+            data: {
+              course: null,
+            },
+          })
+        }
+
+        return fromValue<{ data: ModuleGroupsQuery }>({
+          data: {
+            groups: [],
+          },
+        })
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <CourseBuilder />
+      </Provider>
+    )
+
+    expect(screen.getByText(/course not found/i)).toBeInTheDocument()
+  })
+
+  it('displays an alert if there is an error fetching course or module groups', () => {
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === COURSE_WITH_MODULE_GROUPS) {
+          return fromValue({
+            error: new CombinedError({
+              networkError: Error('something went wrong!'),
+            }),
+          })
+        }
+
+        return fromValue<{ data: ModuleGroupsQuery }>({
+          data: {
+            groups: [],
+          },
+        })
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <CourseBuilder />
+      </Provider>
+    )
+
+    const alert = screen.getByRole('alert')
+    expect(alert.textContent).toMatchInlineSnapshot(
+      `"Internal error occurred."`
+    )
+  })
+
+  it('displays course information properly', () => {
+    const course = buildCourse({
+      isDraft: true,
+      organization: { name: 'Organization' },
+      start: '2023-07-28T09:00Z',
+      end: '2023-07-28T17:00Z',
+      schedule: [{ venue: { name: 'Venue', city: 'City' } }],
+    })
+
+    const client = {
+      executeQuery: ({
+        query,
+        variables,
+      }: {
+        query: TypedDocumentNode
+        variables: CourseWithModuleGroupsQueryVariables
+      }) => {
+        if (query === COURSE_WITH_MODULE_GROUPS) {
+          return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+            data: {
+              course: variables.id === course.id ? course : null,
+            },
+          })
+        }
+
+        return fromValue<{ data: ModuleGroupsQuery }>({
+          data: {
+            groups: [],
+          },
+        })
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/:id/modules" element={<CourseBuilder />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/courses/${course.id}/modules`] }
+    )
+
+    expect(screen.getByText(course.name)).toBeInTheDocument()
+    expect(screen.getByTestId('course-status-chip').textContent).toBe('Draft')
+
+    expect(
+      screen.getByTestId('course-organization').textContent
+    ).toMatchInlineSnapshot(`"Organisation: Organization"`)
+    expect(
+      screen.getByTestId('course-location').textContent
+    ).toMatchInlineSnapshot(`"Location: Venue, City"`)
+    expect(
+      screen.getByTestId('course-start-date').textContent
+    ).toMatchInlineSnapshot(`"Starts: 28 July 2023, 10:00 AM"`)
+    expect(
+      screen.getByTestId('course-end-date').textContent
+    ).toMatchInlineSnapshot(`"Ends: 28 July 2023, 06:00 PM"`)
+  })
+
+  it('saves course as draft and saves chosen modules when a module group is clicked', async () => {
+    const course = buildCourse()
+    const moduleGroup = buildModuleGroup()
+
+    let draftSaved = false
+    let modulesSaved = false
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === COURSE_WITH_MODULE_GROUPS) {
+          return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+            data: {
+              course,
+            },
+          })
+        }
+
+        return fromValue<{ data: ModuleGroupsQuery }>({
+          data: {
+            groups: [moduleGroup],
+          },
+        })
+      },
+      executeMutation: ({
+        query,
+        variables,
+      }: {
+        query: TypedDocumentNode
+        variables:
+          | SetCourseAsDraftMutationVariables
+          | SaveCourseModulesMutationVariables
+      }) => {
+        const draftMutationMatches = matches({
+          variables: { id: course.id },
+        })
+
+        const modulesMutationMatches = matches({
+          variables: {
+            courseId: course.id,
+            modules: moduleGroup.modules.map(module => ({
+              courseId: course.id,
+              moduleId: module.id,
+            })),
+          },
+        })
+
+        if (query === SET_COURSE_AS_DRAFT) {
+          draftSaved = draftMutationMatches({ variables })
+
+          return never
+        }
+
+        if (query === SAVE_COURSE_MODULES) {
+          modulesSaved = modulesMutationMatches({ query, variables })
+          return never
+        }
+
+        return never
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <CourseBuilder />
+      </Provider>
+    )
+
+    const availableModules = screen.getByTestId('available-modules')
+    const selectedModules = screen.getByTestId('selected-modules')
+
+    const moduleGroupLabel = within(availableModules).getByLabelText(
+      moduleGroup.name,
+      {
+        exact: false,
+      }
+    )
+
+    expect(
+      within(selectedModules).queryByTestId(
+        `selected-module-group-${moduleGroup.id}`
+      )
+    ).not.toBeInTheDocument()
+
+    await userEvent.click(moduleGroupLabel)
+
+    expect(
+      within(selectedModules).getByText(moduleGroup.name)
+    ).toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(draftSaved).toBe(true)
+      expect(modulesSaved).toBe(true)
+    })
+  })
+
+  it('submits the course with module groups and navigates to the course details page', async () => {
+    const course = buildCourse({ level: Course_Level_Enum.Level_1 })
+    const moduleGroup = buildModuleGroup()
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === COURSE_WITH_MODULE_GROUPS) {
+          return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+            data: {
+              course,
+            },
+          })
+        }
+
+        return fromValue<{ data: ModuleGroupsQuery }>({
+          data: {
+            groups: [moduleGroup],
+          },
+        })
+      },
+      executeMutation: ({
+        query,
+        variables,
+      }: {
+        query: TypedDocumentNode
+        variables: FinalizeCourseBuilderMutationVariables
+      }) => {
+        const mutationMatches = matches({
+          query: FINALIZE_COURSE_BUILDER_MUTATION,
+          variables: {
+            id: course.id,
+            duration: moduleGroup.duration.aggregate?.sum?.duration,
+            status: null,
+          },
+        })
+
+        if (mutationMatches({ query, variables })) {
+          return fromValue<{ data: FinalizeCourseBuilderMutation }>({
+            data: {
+              update_course_by_pk: {
+                id: course.id,
+              },
+            },
+          })
+        }
+
+        return never
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="courses/:id">
+            <Route path="modules" element={<CourseBuilder />} />
+            <Route path="details" element={<p>Course details</p>} />
+          </Route>
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/courses/${course.id}/modules`] }
+    )
+
+    const availableModules = screen.getByTestId('available-modules')
+    const selectedModules = screen.getByTestId('selected-modules')
+
+    const moduleGroupLabel = within(availableModules).getByLabelText(
+      moduleGroup.name,
+      {
+        exact: false,
+      }
+    )
+
+    expect(
+      within(selectedModules).queryByTestId(
+        `selected-module-group-${moduleGroup.id}`
+      )
+    ).not.toBeInTheDocument()
+
+    await userEvent.click(moduleGroupLabel)
+    await userEvent.click(screen.getByRole('button', { name: /submit/i }))
+
+    const timeCommitmentDialog = screen.getByRole('dialog')
+
+    await userEvent.click(
+      within(timeCommitmentDialog).getByText(/submit course/i)
+    )
+
+    const confirmDialog = screen.getByRole('dialog')
+
+    await userEvent.click(within(confirmDialog).getByText(/confirm/i))
+
+    await waitFor(() => {
+      expect(screen.getByText(/course details/i)).toBeInTheDocument()
+    })
+  })
+
+  it('displays mandatory module groups as pre-selected and disabled', () => {
+    const course = buildCourse({ level: Course_Level_Enum.Level_1 })
+    const moduleGroup = buildModuleGroup({ mandatory: true })
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === COURSE_WITH_MODULE_GROUPS) {
+          return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+            data: {
+              course,
+            },
+          })
+        }
+
+        return fromValue<{ data: ModuleGroupsQuery }>({
+          data: {
+            groups: [moduleGroup],
+          },
+        })
+      },
+      executeMutation: () => {
+        return never
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <CourseBuilder />
+      </Provider>,
+      {},
+      { initialEntries: [`/courses/${course.id}/modules`] }
+    )
+
+    const availableModules = screen.getByTestId('available-modules')
+    const selectedModules = screen.getByTestId('selected-modules')
+
+    const moduleGroupLabel = within(availableModules).getByLabelText(
+      moduleGroup.name,
+      {
+        exact: false,
+      }
+    )
+
+    expect(moduleGroupLabel).toBeDisabled()
+
+    expect(
+      within(selectedModules).queryByTestId(
+        `selected-module-group-${moduleGroup.id}`
+      )
+    ).toBeInTheDocument()
+  })
+
+  it('displays already saved modules as preselected', () => {
+    const moduleGroup = buildModuleGroup({ mandatory: false })
+    const course = buildCourse({
+      level: Course_Level_Enum.Level_1,
+      moduleGroupIds: [{ module: { moduleGroup: { id: moduleGroup.id } } }],
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === COURSE_WITH_MODULE_GROUPS) {
+          return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+            data: {
+              course,
+            },
+          })
+        }
+
+        return fromValue<{ data: ModuleGroupsQuery }>({
+          data: {
+            groups: [moduleGroup],
+          },
+        })
+      },
+      executeMutation: () => {
+        return never
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <CourseBuilder />
+      </Provider>,
+      {},
+      { initialEntries: [`/courses/${course.id}/modules`] }
+    )
+
+    const availableModules = screen.getByTestId('available-modules')
+    const selectedModules = screen.getByTestId('selected-modules')
+
+    const moduleGroupLabel = within(availableModules).getByLabelText(
+      moduleGroup.name,
+      {
+        exact: false,
+      }
+    )
+
+    expect(moduleGroupLabel).toBeChecked()
+
+    expect(
+      within(selectedModules).queryByTestId(
+        `selected-module-group-${moduleGroup.id}`
+      )
+    ).toBeInTheDocument()
+  })
 })
+
+function buildCourse(
+  overrides?: Partial<CourseWithModuleGroupsQuery['course']>
+): NonNullable<CourseWithModuleGroupsQuery['course']> {
+  return {
+    id: chance.integer(),
+    name: chance.sentence(),
+    updatedAt: new Date().toISOString(),
+    type: Course_Type_Enum.Open,
+    level: Course_Level_Enum.Level_1,
+    go1Integration: false,
+    deliveryType: Course_Delivery_Type_Enum.F2F,
+    start: new Date().toISOString(),
+    end: new Date().toISOString(),
+    organization: {
+      name: chance.name({ full: true }),
+    },
+    schedule: [
+      {
+        venue: {
+          name: chance.name(),
+          city: chance.name(),
+        },
+      },
+    ],
+    moduleGroupIds: [],
+    ...overrides,
+  }
+}
+
+function buildModuleGroup(
+  overrides?: Partial<ModuleGroupsQuery['groups'][0]>
+): NonNullable<ModuleGroupsQuery['groups'][0]> {
+  return {
+    id: chance.guid(),
+    name: chance.name(),
+    level: Course_Level_Enum.Level_1,
+    color: Color_Enum.Navy,
+    mandatory: false,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    modules: [buildModule()],
+    duration: {
+      aggregate: {
+        sum: {
+          duration: 30,
+        },
+      },
+    },
+    ...overrides,
+  }
+}
+
+function buildModule(overrides?: Partial<ModuleFragment>): ModuleFragment {
+  return {
+    id: chance.guid(),
+    name: chance.name(),
+    description: chance.sentence(),
+    level: Course_Level_Enum.Level_1,
+    type: Module_Category_Enum.Physical,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    ...overrides,
+  }
+}

@@ -1,15 +1,16 @@
-import { Box, Typography } from '@mui/material'
+import { Box, BoxProps, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { GetCourseByIdQuery } from '@app/generated/graphql'
+import { CourseWithModuleGroupsQuery } from '@app/generated/graphql'
 
-type CourseHeroProps = {
-  data: NonNullable<GetCourseByIdQuery['course']>
-}
+type CourseInfoProps = {
+  data: NonNullable<CourseWithModuleGroupsQuery['course']>
+} & BoxProps
 
-export const CourseHero: React.FC<React.PropsWithChildren<CourseHeroProps>> = ({
+export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
   data,
+  ...props
 }) => {
   const { t } = useTranslation()
 
@@ -23,6 +24,7 @@ export const CourseHero: React.FC<React.PropsWithChildren<CourseHeroProps>> = ({
 
   return (
     <Box
+      {...props}
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -33,7 +35,7 @@ export const CourseHero: React.FC<React.PropsWithChildren<CourseHeroProps>> = ({
       }}
     >
       {data.organization && (
-        <Box>
+        <Box data-testid="course-organization">
           <Typography display="inline" variant="body2" fontWeight={600}>
             {`${t(
               'pages.trainer-base.create-course.new-course.organization'
@@ -45,7 +47,7 @@ export const CourseHero: React.FC<React.PropsWithChildren<CourseHeroProps>> = ({
         </Box>
       )}
       {location && (
-        <Box>
+        <Box data-testid="course-location">
           <Typography display="inline" variant="body2" fontWeight={600}>
             {`${t('pages.trainer-base.create-course.new-course.location')}: `}
           </Typography>
@@ -55,25 +57,25 @@ export const CourseHero: React.FC<React.PropsWithChildren<CourseHeroProps>> = ({
         </Box>
       )}
 
-      <Box>
+      <Box data-testid="course-start-date">
         <Typography display="inline" variant="body2" fontWeight={600}>
           {`${t('pages.trainer-base.create-course.new-course.starts')}: `}
         </Typography>
         <Typography display="inline" variant="body2">
-          {t('dates.withTime', { date: data.schedule?.[0]?.start })}
+          {t('dates.withTime', { date: data.start })}
         </Typography>
       </Box>
-      <Box>
+      <Box data-testid="course-end-date">
         <Typography display="inline" variant="body2" fontWeight={600}>
           {`${t('pages.trainer-base.create-course.new-course.ends')}: `}
         </Typography>
         <Typography display="inline" variant="body2">
           {t('dates.withTime', {
-            date: data.schedule?.[data.schedule?.length - 1]?.end,
+            date: data.end,
           })}
         </Typography>
       </Box>
-      <Box>
+      <Box data-testid="course-type">
         <Typography display="inline" variant="body2" fontWeight={600}>
           {`${t('pages.trainer-base.create-course.new-course.course-type')}: `}
         </Typography>

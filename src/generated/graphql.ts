@@ -49720,6 +49720,13 @@ export type SetCourseAsDraftMutationVariables = Exact<{
 
 export type SetCourseAsDraftMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number } | null };
 
+export type CourseWithModuleGroupsQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type CourseWithModuleGroupsQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, type: Course_Type_Enum, go1Integration: boolean, reaccreditation?: boolean | null, start?: any | null, end?: any | null, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
+
 export type SaveBildGradeMutationVariables = Exact<{
   modules: Array<Course_Participant_Bild_Module_Insert_Input> | Course_Participant_Bild_Module_Insert_Input;
   participantIds?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;

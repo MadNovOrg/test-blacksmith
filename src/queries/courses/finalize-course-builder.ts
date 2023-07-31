@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 export const FINALIZE_COURSE_BUILDER_MUTATION = gql`
   mutation FinalizeCourseBuilder(

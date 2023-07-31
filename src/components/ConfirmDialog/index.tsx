@@ -30,7 +30,7 @@ export const ConfirmDialog: React.FC<
   const { t } = useTranslation()
 
   return (
-    <Dialog open={open} onClose={onCancel} title={title} data-testid={testId}>
+    <Dialog open={open} title={title} data-testid={testId} onClose={onCancel}>
       {message}
       <Grid container display="flex" justifyContent="flex-end" gap={2} mt={2}>
         <Button
