@@ -239,6 +239,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                   label={t('dob')}
                   format={INPUT_DATE_FORMAT}
                   value={field.value}
+                  maxDate={new Date(Date.now())}
                   onChange={(d: Date | null) => setValue('dob', d)}
                   slotProps={{
                     textField: {
