@@ -10,12 +10,14 @@ import { Sorting } from '@app/hooks/useTableSort'
 import { SortOrder } from '@app/types'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
-const QUERY = gql`
+export const MEMBERS_QUERY = gql`
   query OrgMembers(
     $offset: Int!
     $limit: Int!
     $orgId: uuid!
-    $orderBy: [organization_member_order_by!] = { profile: { createdAt: desc } }
+    $orderBy: [organization_member_order_by!] = [
+      { profile: { createdAt: desc } }
+    ]
   ) {
     members: organization_member(
       limit: $limit
@@ -76,7 +78,7 @@ export function useOrgMembers({
     OrgMembersQueryVariables
   >({
     requestPolicy: 'cache-and-network',
-    query: QUERY,
+    query: MEMBERS_QUERY,
     variables: {
       limit: perPage,
       offset: offset,
@@ -88,7 +90,7 @@ export function useOrgMembers({
   return {
     members: data?.members,
     fetching,
-    total: data?.organization_member_aggregate.aggregate?.count,
+    total: data?.organization_member_aggregate?.aggregate?.count,
     refetch,
   }
 }

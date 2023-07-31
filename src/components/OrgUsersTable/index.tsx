@@ -143,7 +143,7 @@ export const OrgUsersTable: React.FC<
               colSpan={cols.length}
             />
 
-            {members?.map(member => {
+            {members?.map((member, index) => {
               const certificateLevelsToDisplay = getProfileCertificationLevels(
                 member.profile.certificates as {
                   courseLevel: string
@@ -157,7 +157,11 @@ export const OrgUsersTable: React.FC<
                   ) >= 0
               )
               return (
-                <TableRow key={member.profile.id}>
+                <TableRow
+                  key={member.profile.id}
+                  data-testid={`org-member-row-${member.id}`}
+                  data-index={index}
+                >
                   <TableCell>
                     <Box display="flex" alignItems="center">
                       <ProfileAvatar
@@ -186,7 +190,7 @@ export const OrgUsersTable: React.FC<
                       />
                     </Box>
                   </TableCell>
-                  <TableCell>
+                  <TableCell data-testid="member-certificates">
                     {filteredCerts.map(cert => {
                       const certificationStatus =
                         cert?.status as CertificateStatus
@@ -218,10 +222,10 @@ export const OrgUsersTable: React.FC<
                       <CheckCircle color="success" />
                     ) : null}
                   </TableCell>
-                  <TableCell>
+                  <TableCell data-testid="member-last-activity">
                     {t('dates.default', { date: member.profile.lastActivity })}
                   </TableCell>
-                  <TableCell>
+                  <TableCell data-testid="member-created-at">
                     {t('dates.default', { date: member.profile.createdAt })}
                   </TableCell>
                   <TableCell>
