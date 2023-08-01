@@ -7,7 +7,7 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material'
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'urql'
@@ -136,6 +136,7 @@ export const BILDGrading: FC<Props> = ({ course }) => {
           <BILDModulesSelection
             strategyModules={bildStrategyModules}
             onChange={selection => (strategyModulesRef.current = selection)}
+            courseType={course.type}
           />
 
           <Typography variant="h6" fontWeight="500" mb={1} mt={4}>

@@ -1,4 +1,4 @@
-import React from 'react'
+import { Course_Type_Enum } from '@app/generated/graphql'
 
 import { render, screen, userEvent, within } from '@test/index'
 
@@ -6,7 +6,7 @@ import { Strategy } from '../../types'
 
 import { BILDModulesSelection } from '.'
 
-describe('component: BILDModulesSelection', () => {
+describe(BILDModulesSelection.name, () => {
   it('marks strategies and modules as initially selected', () => {
     const strategyModules: Record<string, Strategy> = {
       PRIMARY: {
@@ -24,6 +24,7 @@ describe('component: BILDModulesSelection', () => {
       <BILDModulesSelection
         strategyModules={strategyModules}
         onChange={jest.fn()}
+        courseType={Course_Type_Enum.Open}
       />
     )
 
@@ -84,6 +85,7 @@ describe('component: BILDModulesSelection', () => {
       <BILDModulesSelection
         strategyModules={strategyModules}
         onChange={jest.fn()}
+        courseType={Course_Type_Enum.Open}
       />
     )
 
@@ -106,6 +108,7 @@ describe('component: BILDModulesSelection', () => {
       <BILDModulesSelection
         strategyModules={strategyModules}
         onChange={jest.fn()}
+        courseType={Course_Type_Enum.Open}
       />
     )
 
@@ -136,6 +139,7 @@ describe('component: BILDModulesSelection', () => {
       <BILDModulesSelection
         strategyModules={strategyModules}
         onChange={jest.fn()}
+        courseType={Course_Type_Enum.Open}
       />
     )
 
@@ -165,6 +169,7 @@ describe('component: BILDModulesSelection', () => {
       <BILDModulesSelection
         strategyModules={strategyModules}
         onChange={jest.fn()}
+        courseType={Course_Type_Enum.Open}
       />
     )
 
@@ -202,6 +207,7 @@ describe('component: BILDModulesSelection', () => {
       <BILDModulesSelection
         strategyModules={strategyModules}
         onChange={onChangeMock}
+        courseType={Course_Type_Enum.Open}
       />
     )
 
@@ -220,4 +226,49 @@ describe('component: BILDModulesSelection', () => {
       },
     })
   })
+  it.each([Course_Type_Enum.Closed, Course_Type_Enum.Indirect])(
+    'marks all modules as mandatory for indirect / closed courses',
+    courseType => {
+      const strategyModules: Record<string, Strategy> = {
+        NON_TERTIARY_RESTRICTED: {
+          modules: [{ name: 'First module', mandatory: true }],
+          groups: [
+            {
+              name: 'Group',
+              modules: [{ name: 'Second module', mandatory: true }],
+            },
+          ],
+        },
+        RESTRICTIVE_TERTIARY_ADVANCED: {
+          modules: [{ name: 'First module', mandatory: true }],
+          groups: [
+            {
+              name: 'Group',
+              modules: [{ name: 'Second module', mandatory: true }],
+            },
+          ],
+        },
+      }
+
+      render(
+        <BILDModulesSelection
+          strategyModules={strategyModules}
+          onChange={jest.fn()}
+          courseType={courseType}
+        />
+      )
+
+      const mandatoryModules = screen.getAllByLabelText(/first module/i)
+      const nestedMandatoryModules = screen.getAllByLabelText(/second module/i)
+
+      mandatoryModules.map(module => {
+        expect(module).toBeChecked()
+        expect(module).toBeDisabled()
+      })
+      nestedMandatoryModules.map(module => {
+        expect(module).toBeChecked()
+        expect(module).toBeDisabled()
+      })
+    }
+  )
 })

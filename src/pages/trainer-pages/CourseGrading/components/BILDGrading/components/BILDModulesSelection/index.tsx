@@ -10,9 +10,10 @@ import {
   FormGroup,
   Box,
 } from '@mui/material'
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Course_Type_Enum } from '@app/generated/graphql'
 import { BildStrategies } from '@app/types'
 
 import { Strategy } from '../../types'
@@ -20,26 +21,22 @@ import { Strategy } from '../../types'
 type Props = {
   strategyModules: Record<string, Partial<Strategy>> // all optional since it's from jsonb field
   onChange: (selection: Record<string, Strategy>) => void
+  courseType: Course_Type_Enum
 }
-
-const mandatoryStrategies: string[] = [
-  BildStrategies.Primary,
-  BildStrategies.Secondary,
-]
-
 export const BILDModulesSelection: FC<Props> = ({
   strategyModules,
   onChange,
+  courseType,
 }) => {
   const { t } = useTranslation()
+  const mandatoryStrategies: string[] =
+    courseType === Course_Type_Enum.Open
+      ? [BildStrategies.Primary, BildStrategies.Secondary]
+      : Object.values(BildStrategies)
 
   const [selectedStrategyModules, setSelectedStrategyModules] = useState<
     Set<string>
   >(reverseTransformSelection(strategyModules))
-
-  useEffect(() => {
-    onChange(transformSelection(selectedStrategyModules))
-  }, [onChange, selectedStrategyModules])
 
   const selectStrategy = (strategyName: string) => {
     const strategySelection = new Set<string>([strategyName])
@@ -101,6 +98,10 @@ export const BILDModulesSelection: FC<Props> = ({
     })
   }
 
+  useEffect(() => {
+    onChange(transformSelection(selectedStrategyModules))
+  }, [onChange, selectedStrategyModules])
+
   const partiallySelectedStrategies = useMemo(() => {
     const strategies = new Set<string>([])
 
@@ -153,10 +154,6 @@ export const BILDModulesSelection: FC<Props> = ({
                   checked={Boolean(selectedStrategyModules.has(strategyName))}
                   disabled={mandatoryStrategies.includes(strategyName)}
                   indeterminate={partiallySelectedStrategies.has(strategyName)}
-                  inputProps={{
-                    // @ts-expect-error valid custom attribute
-                    'data-testid': `strategy-checkbox-${strategyName}`,
-                  }}
                   onChange={(_, checked) => {
                     if (
                       checked ||
@@ -166,6 +163,10 @@ export const BILDModulesSelection: FC<Props> = ({
                     } else {
                       unselectStrategy(strategyName)
                     }
+                  }}
+                  inputProps={{
+                    // @ts-expect-error valid custom attribute
+                    'data-testid': `strategy-checkbox-${strategyName}`,
                   }}
                 />
               }
@@ -191,10 +192,6 @@ export const BILDModulesSelection: FC<Props> = ({
                         control={
                           <Checkbox
                             checked={selectedStrategyModules.has(moduleKey)}
-                            disabled={
-                              mandatoryStrategies.includes(strategyName) ||
-                              module.mandatory
-                            }
                             onChange={(_, checked) => {
                               if (checked) {
                                 selectModule(moduleKey)
@@ -202,6 +199,10 @@ export const BILDModulesSelection: FC<Props> = ({
                                 unselectModule(moduleKey)
                               }
                             }}
+                            disabled={
+                              mandatoryStrategies.includes(strategyName) ||
+                              module.mandatory
+                            }
                           />
                         }
                         label={<Typography>{module.name}</Typography>}
