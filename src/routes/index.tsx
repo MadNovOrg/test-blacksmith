@@ -15,11 +15,9 @@ import { AppLayout } from '@app/layouts/AppLayout'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 import { AutoLogin } from '@app/pages/common/AutoLogin'
 import { AutoRegisterPage } from '@app/pages/common/AutoRegister'
-import { BookPrivateCourse } from '@app/pages/common/BookPrivateCourse'
 import { ChangePasswordPage } from '@app/pages/common/ChangePassword'
 import { CourseBookingPage } from '@app/pages/common/CourseBooking'
 import { CourseBookingDone } from '@app/pages/common/CourseBooking/components/CourseBookingDone'
-import { CourseEnquiry } from '@app/pages/common/CourseEnquiry'
 import { CourseWaitlist } from '@app/pages/common/CourseWaitlist'
 import { CourseWaitlistCancellation } from '@app/pages/common/CourseWaitlistCancellation'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
@@ -27,7 +25,6 @@ import { LoginPage } from '@app/pages/common/Login'
 import { RegistrationPage } from '@app/pages/common/Registration'
 import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
-import { GettingStarted } from '@app/pages/GettingStarted'
 import { InvitationPage } from '@app/pages/Invitation'
 import { OrgInvitationPage } from '@app/pages/Invitation/OrgInvitation'
 import { Onboarding } from '@app/pages/Onboarding'
@@ -51,8 +48,6 @@ const publicRoutesMap: Record<string, React.ElementType> = {
   '/auto-login': AutoLogin,
   '/waitlist': CourseWaitlist,
   '/waitlist-cancellation': CourseWaitlistCancellation,
-  '/enquiry': CourseEnquiry,
-  '/book-private-course': BookPrivateCourse,
   '/change-password': ChangePasswordPage,
 } as const
 
@@ -144,15 +139,6 @@ function LoggedInRoutes() {
           element={
             <AppShell>
               <Welcome />
-            </AppShell>
-          }
-        />
-
-        <Route
-          path="getting-started/:id?"
-          element={
-            <AppShell>
-              <GettingStarted />
             </AppShell>
           }
         />

@@ -20,4 +20,5 @@ interface ImportMetaEnv {
   VITE_UNSUBSCRIBE_URL: string
   VITE_GTM_ID: string
   VITE_RECAPTCHA_KEY: string
+  VITE_WELCOME_PAGE_URL: string
 }

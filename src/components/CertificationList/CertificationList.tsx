@@ -221,15 +221,7 @@ export const CertificationList: React.FC<
                   : undefined
 
               return (
-                <TableRow
-                  key={p.id}
-                  data-testid={`cert-row-${p.id}`}
-                  sx={
-                    isRevoked
-                      ? { bgcolor: theme => theme.colors.red[50] }
-                      : undefined
-                  }
-                >
+                <TableRow key={p.id} data-testid={`cert-row-${p.id}`}>
                   {checkbox.rowCell(p.id, isRevoked)}
 
                   {showCol('name') ? (

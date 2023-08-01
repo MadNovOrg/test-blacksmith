@@ -136,7 +136,7 @@ export const OrgInvitationPage = () => {
         width={isMobile ? undefined : 500}
       >
         <Typography variant="h3" fontWeight="600" mb={3}>
-          {t('pages.org-invite.title', { orgName: invite.orgName })}
+          {`${t('pages.org-invite.title')} ${invite.orgName}`}
         </Typography>
 
         <Box mt={3} mb={2}>

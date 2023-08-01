@@ -4,7 +4,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import AdminIcon from '@mui/icons-material/SupervisorAccount'
 import SupportIcon from '@mui/icons-material/Support'
-import { Button } from '@mui/material'
+import { Button, Link } from '@mui/material'
 import Divider from '@mui/material/Divider'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
@@ -96,7 +96,7 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
           </MenuItem>
         )}
 
-        <MenuItem onClick={() => handleMenuClick('/getting-started')}>
+        <MenuItem>
           <ListItemIcon>
             <SupportIcon fontSize="small" />
           </ListItemIcon>
@@ -104,7 +104,9 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
             data-testid="getting-started-link"
             primaryTypographyProps={{ variant: 'body2' }}
           >
-            {t('get-started')}
+            <Link href={import.meta.env.VITE_WELCOME_PAGE_URL}>
+              {t('get-started')}
+            </Link>
           </ListItemText>
         </MenuItem>
 

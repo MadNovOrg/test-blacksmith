@@ -1354,7 +1354,7 @@
     "discount-has-been-disabled": "The discount has been disabled."
   },
   "org-invite": {
-    "title": "You're invited to join {{orgName}}",
+    "title": "You're invited to join",
     "accept": "Accept",
     "decline": "Decline",
     "continue-to-organization": "Continue to organisation"

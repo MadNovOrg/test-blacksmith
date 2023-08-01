@@ -74,7 +74,7 @@ export const Welcome: React.FC<React.PropsWithChildren<unknown>> = () => {
             {t('get-started')}
           </Typography>
           <Typography>{t('get-started-description')}</Typography>
-          <Link href="/getting-started">
+          <Link href={import.meta.env.VITE_WELCOME_PAGE_URL}>
             <Button variant="contained" sx={{ mt: 4 }}>
               {t('getting-started')}
             </Button>

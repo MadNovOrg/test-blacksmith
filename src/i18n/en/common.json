@@ -403,7 +403,7 @@
     "this-certificate-hold": "This certificate is on hold",
     "confirm-dates": "Confirm new dates",
     "email-notification": "Users will be notified by email.",
-    "undo-revoke": "Reinstate certificate",
+    "undo-revoke": "Reinstate",
     "change-log": "Change log",
     "certificate-hold-history-log": "Certificate On Hold History",
     "put-on-hold-modal": {
@@ -422,7 +422,7 @@
         "others": "Other"
       }
     },
-    "revoked-warning": "This certificate has been revoked on {{date, date_default}}.",
+    "revoked-warning": "This certificate was revoked on {{date, date_default}}.",
     "revoked-warning-user": "If you wish reinstate this certificate, please contact us at info@teamteach.co.uk",
     "modify-grade-modal": {
       "warning": "Modifications to attendee’s grade will be visible to the trainer, attendee, and\nwill be reflected on their granted certificate.",

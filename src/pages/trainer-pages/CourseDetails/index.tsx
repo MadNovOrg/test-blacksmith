@@ -172,7 +172,9 @@ export const CourseDetails = () => {
           <CourseHeroSummary
             course={course}
             slots={{
-              BackButton: () => <BackButton label={t('back')} />,
+              BackButton: () => (
+                <BackButton label={t('back')} to="/manage-courses/all" />
+              ),
               EditButton: canEditCourse
                 ? () => (
                     <Button

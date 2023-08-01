@@ -85,7 +85,7 @@ describe('ManageCertificateMenu', () => {
       screen.getByRole('button', { name: 'Manage certificate' })
     )
 
-    expect(screen.queryByText('Reinstate certificate')).toBeInTheDocument()
+    expect(screen.queryByText('Reinstate')).toBeInTheDocument()
     expect(screen.queryByText('Modify grade')).toHaveAttribute('aria-disabled')
     expect(screen.queryByText('Put on hold')).toHaveAttribute('aria-disabled')
   })
