@@ -1,59 +1,59 @@
 table:
-  schema: public
   name: organization
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
+    contact_details:
+      custom_name: contactDetails
+    created_at:
+      custom_name: createdAt
+    geo_coordinates:
+      custom_name: geoCoordinates
+    go1_licenses:
+      custom_name: go1Licenses
+    reserved_go1_licenses:
+      custom_name: reservedGo1Licenses
     trust_name:
       custom_name: trustName
     trust_type:
       custom_name: trustType
-    go1_licenses:
-      custom_name: go1Licenses
     updated_at:
       custom_name: updatedAt
-    created_at:
-      custom_name: createdAt
     xero_contact_id:
       custom_name: xeroContactId
-    reserved_go1_licenses:
-      custom_name: reservedGo1Licenses
-    contact_details:
-      custom_name: contactDetails
-    geo_coordinates:
-      custom_name: geoCoordinates
   custom_column_names:
+    contact_details: contactDetails
+    created_at: createdAt
+    geo_coordinates: geoCoordinates
+    go1_licenses: go1Licenses
+    reserved_go1_licenses: reservedGo1Licenses
     trust_name: trustName
     trust_type: trustType
-    go1_licenses: go1Licenses
     updated_at: updatedAt
-    created_at: createdAt
     xero_contact_id: xeroContactId
-    reserved_go1_licenses: reservedGo1Licenses
-    contact_details: contactDetails
-    geo_coordinates: geoCoordinates
+  custom_root_fields: {}
 array_relationships:
   - name: go1LicensesHistory
     using:
       foreign_key_constraint_on:
         column: org_id
         table:
-          schema: public
           name: go1_licenses_history
+          schema: public
   - name: invites
     using:
       foreign_key_constraint_on:
         column: org_id
         table:
-          schema: public
           name: organization_invites
+          schema: public
   - name: members
     using:
       foreign_key_constraint_on:
         column: organization_id
         table:
-          schema: public
           name: organization_member
+          schema: public
 insert_permissions:
   - role: finance
     permission:
@@ -77,7 +77,6 @@ insert_permissions:
         - trust_name
         - trust_type
         - xero_contact_id
-      backend_only: false
   - role: ld
     permission:
       check: {}
@@ -97,7 +96,6 @@ insert_permissions:
         - trust_name
         - trust_type
         - xero_contact_id
-      backend_only: false
   - role: sales-admin
     permission:
       check: {}
@@ -117,7 +115,6 @@ insert_permissions:
         - trust_name
         - trust_type
         - xero_contact_id
-      backend_only: false
   - role: sales-representative
     permission:
       check: {}
@@ -137,7 +134,6 @@ insert_permissions:
         - trust_name
         - trust_type
         - xero_contact_id
-      backend_only: false
   - role: trainer
     permission:
       check: {}
@@ -154,7 +150,6 @@ insert_permissions:
         - tags
         - trust_name
         - trust_type
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -173,7 +168,6 @@ insert_permissions:
         - trust_name
         - trust_type
         - xero_contact_id
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -192,7 +186,6 @@ insert_permissions:
         - trust_name
         - trust_type
         - xero_contact_id
-      backend_only: false
   - role: unverified
     permission:
       check: {}
@@ -202,16 +195,9 @@ insert_permissions:
         - name
         - trust_name
         - trust_type
-      backend_only: false
   - role: user
     permission:
-      check:
-        members:
-          _and:
-            - is_admin:
-                _eq: true
-            - profile_id:
-                _eq: X-Hasura-User-Id
+      check: {}
       columns:
         - address
         - attributes
@@ -220,7 +206,6 @@ insert_permissions:
         - trust_name
         - trust_type
         - xero_contact_id
-      backend_only: false
 select_permissions:
   - role: finance
     permission:
@@ -537,7 +522,7 @@ event_triggers:
         columns:
           - address
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/organization/address/update'
