@@ -1,4 +1,3 @@
-import EditIcon from '@mui/icons-material/Edit'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
 import {
@@ -180,7 +179,6 @@ type CertificateInfoProps = {
   statusTooltip?: string
   expireHoldDate?: string
   onShowChangelogModal: VoidFunction
-  onShowReinstateModal: VoidFunction
 }
 
 const CertificateInfo: React.FC<
@@ -196,7 +194,6 @@ const CertificateInfo: React.FC<
   statusTooltip,
   expireHoldDate,
   onShowChangelogModal,
-  onShowReinstateModal,
 }) => {
   const imageSize = '10%'
   const { t, _t } = useScopedTranslation('common.course-certificate')
@@ -230,35 +227,39 @@ const CertificateInfo: React.FC<
       {isRevoked ? (
         <Alert
           severity="warning"
-          sx={{ mb: 2 }}
+          sx={{
+            mb: 2,
+            '&& .MuiAlert-message': {
+              width: '100%',
+            },
+          }}
           variant="outlined"
           data-testid="revoked-cert-alert"
         >
-          {t('revoked-warning', { date: revokedDate })}
-          {acl.isTTAdmin() ? (
-            <>
-              <Button
-                variant="text"
-                color="primary"
-                sx={{ ml: 1, py: 0 }}
-                size="small"
-                onClick={onShowChangelogModal}
-                startIcon={<RemoveRedEyeIcon />}
-              >
-                {_t('view-details')}
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ ml: 1, py: 0 }}
-                size="small"
-                onClick={onShowReinstateModal}
-                startIcon={<EditIcon />}
-              >
-                {_t('reinstate')}
-              </Button>
-            </>
-          ) : null}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            {t('revoked-warning', { date: revokedDate })}
+            {acl.isTTAdmin() ? (
+              <Box>
+                <Button
+                  variant="text"
+                  color="primary"
+                  sx={{ ml: 1, py: 0 }}
+                  size="small"
+                  onClick={onShowChangelogModal}
+                  startIcon={<RemoveRedEyeIcon />}
+                >
+                  {_t('view-details')}
+                </Button>
+              </Box>
+            ) : null}
+          </Box>
         </Alert>
       ) : null}
 
@@ -676,7 +677,6 @@ export const CourseCertification: React.FC<
               statusTooltip={statusTooltip}
               expireHoldDate={holdRequest ? holdRequest.expiry_date : undefined}
               onShowChangelogModal={() => setShowChangelogModal(true)}
-              onShowReinstateModal={() => setShowUndoRevokeModal(true)}
             />
           </Grid>
         </Grid>
