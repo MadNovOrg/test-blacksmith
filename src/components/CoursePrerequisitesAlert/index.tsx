@@ -123,9 +123,7 @@ export const CoursePrerequisitesAlert: React.FC<
                               color="primary"
                               underline="always"
                             >
-                              {t('course-link', {
-                                id: missingCertification.courseCode,
-                              })}
+                              {missingCertification.courseCode}
                             </Link>
                           )}
                         </ListItem>
