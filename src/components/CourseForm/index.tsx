@@ -44,7 +44,10 @@ import { SchemaDescription } from 'yup'
 
 import { FormPanel } from '@app/components/FormPanel'
 import { NumericTextField } from '@app/components/NumericTextField'
-import { UserSelector } from '@app/components/UserSelector'
+import {
+  Profile as UserSelectorProfile,
+  UserSelector,
+} from '@app/components/UserSelector'
 import { useAuth } from '@app/context/auth'
 import { Accreditors_Enum, Course_Source_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
@@ -689,18 +692,21 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     }
   }, [values.courseLevel, setValue])
 
-  const handleBookingContactEmailChange = useCallback(
-    (email: string) => {
+  const handleBookingContactChange = useCallback(
+    (value: string | UserSelectorProfile) => {
+      const isEmail = typeof value === 'string'
+      setValue('bookingContact.profileId', isEmail ? undefined : value?.id)
       setValue(
-        'bookingContact',
-        {
-          firstName: '',
-          lastName: '',
-          email,
-        },
-        {
-          shouldValidate: true,
-        }
+        'bookingContact.firstName',
+        isEmail || !value?.givenName ? '' : value.givenName
+      )
+      setValue(
+        'bookingContact.lastName',
+        isEmail || !value?.familyName ? '' : value.familyName
+      )
+      setValue(
+        'bookingContact.email',
+        isEmail || !value?.email ? '' : value.email
       )
     },
     [setValue]
@@ -783,19 +789,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     {...register(`bookingContact`)}
                     required
                     value={values.bookingContact?.email ?? undefined}
-                    onChange={p => {
-                      setValue(
-                        'bookingContact',
-                        {
-                          profileId: p?.id || undefined,
-                          email: p?.email || '',
-                          firstName: p?.givenName || '',
-                          lastName: p?.familyName || '',
-                        },
-                        { shouldValidate: true }
-                      )
-                    }}
-                    onEmailChange={handleBookingContactEmailChange}
+                    onChange={handleBookingContactChange}
+                    onEmailChange={handleBookingContactChange}
                     organisationId={getValues('organization')?.id ?? ''}
                     textFieldProps={{ variant: 'filled' }}
                     error={errors.bookingContact?.email?.message}
@@ -815,9 +810,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     error={!!errors.bookingContact?.firstName}
                     helperText={errors.bookingContact?.firstName?.message ?? ''}
                     disabled={
-                      !getValues('organization') ||
+                      !values.organization ||
                       disabledFields.has('bookingContact') ||
-                      !!getValues('bookingContact')?.profileId
+                      !!values.bookingContact?.profileId
                     }
                     InputLabelProps={{
                       shrink: !!values.bookingContact?.firstName,
