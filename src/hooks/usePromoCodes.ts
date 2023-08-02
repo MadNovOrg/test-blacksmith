@@ -78,7 +78,7 @@ export const usePromoCodes = ({
             {
               _or: [
                 {
-                  amount: { _lte: 15 },
+                  amount: { _lt: 15 },
                   type: { _eq: Promo_Code_Type_Enum.Percent },
                 },
                 {
@@ -116,7 +116,7 @@ export const usePromoCodes = ({
           q.approvedBy = { _is_null: true }
           q._or = [
             {
-              amount: { _gt: 15 },
+              amount: { _gte: 15 },
               type: { _eq: Promo_Code_Type_Enum.Percent },
             },
             {
@@ -133,7 +133,7 @@ export const usePromoCodes = ({
               approvedBy: { _is_null: true },
               _or: [
                 {
-                  amount: { _lte: 15 },
+                  amount: { _lt: 15 },
                   type: { _eq: Promo_Code_Type_Enum.Percent },
                 },
                 {
@@ -157,7 +157,7 @@ export const usePromoCodes = ({
               approvedBy: { _is_null: true },
               _or: [
                 {
-                  amount: { _lte: 15 },
+                  amount: { _lt: 15 },
                   type: { _eq: Promo_Code_Type_Enum.Percent },
                 },
                 {

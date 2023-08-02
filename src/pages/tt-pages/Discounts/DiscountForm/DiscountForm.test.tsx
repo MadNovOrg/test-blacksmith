@@ -343,7 +343,39 @@ describe('page: DiscountForm', () => {
         within(dialog).getByText(/discount approval required/i)
       ).toBeInTheDocument()
       expect(
-        within(dialog).getByText(/percentage exceeds 15%/i)
+        within(dialog).getByText(/percentage is greater or equal to 15%/i)
+      ).toBeInTheDocument()
+    })
+  })
+
+  it('shows Approval Needed if PERCENT equals to 15', async () => {
+    _render(undefined, RoleName.TT_OPS)
+
+    await userEvent.type(screen.getByPlaceholderText(/discount code/i), 'code')
+    await userEvent.click(screen.getByLabelText(/percent/i))
+
+    const percentageOptions = screen.getByTestId('percent-shortcuts')
+
+    await userEvent.click(within(percentageOptions).getByRole('button'))
+    await userEvent.click(
+      within(screen.getByRole('listbox')).getByText(/other/i)
+    )
+
+    await userEvent.clear(screen.getByPlaceholderText(/amount/i))
+    await userEvent.type(screen.getByPlaceholderText(/amount/i), '15')
+
+    await userEvent.click(
+      screen.getByRole('button', { name: /create discount/i })
+    )
+
+    await waitFor(() => {
+      const dialog = screen.getByRole('dialog')
+
+      expect(
+        within(dialog).getByText(/discount approval required/i)
+      ).toBeInTheDocument()
+      expect(
+        within(dialog).getByText(/percentage is greater or equal to 15%/i)
       ).toBeInTheDocument()
     })
   })

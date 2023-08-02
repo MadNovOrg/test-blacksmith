@@ -93,7 +93,7 @@ export const requiresApproval = (data: FormInputs, role?: RoleName) => {
     return false
   }
   if (data.type === Promo_Code_Type_Enum.Percent) {
-    return data.amount > 15
+    return data.amount >= 15
   }
   if (data.type === Promo_Code_Type_Enum.FreePlaces) {
     return data.amount > 3

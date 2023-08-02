@@ -8,7 +8,7 @@ export const QUERY = gql`
         approvedBy: { _is_null: true }
         deniedBy: { _is_null: true }
         _or: [
-          { amount: { _gt: 15 }, type: { _eq: PERCENT } }
+          { amount: { _gte: 15 }, type: { _eq: PERCENT } }
           { amount: { _gt: 3 }, type: { _eq: FREE_PLACES } }
         ]
       }
