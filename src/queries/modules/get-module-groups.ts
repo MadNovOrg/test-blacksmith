@@ -24,7 +24,7 @@ export const QUERY = gql`
   ) {
     groups: module_group(
       where: { level: { _eq: $level } }
-      order_by: { color: asc }
+      order_by: { color: asc, mandatory: desc, name: asc }
     ) {
       ...ModuleGroup
       modules {

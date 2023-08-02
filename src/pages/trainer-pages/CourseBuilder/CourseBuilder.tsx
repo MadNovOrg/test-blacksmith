@@ -52,7 +52,7 @@ export const MAX_COURSE_DURATION_MAP = {
     [CourseLevel.IntermediateTrainer]: 5 * 6 * 60, // 5 training days
     [CourseLevel.BildRegular]: 5 * 6 * 60, // 5 training days
     [CourseLevel.AdvancedTrainer]: 5 * 6 * 60, // 5 training days
-    [CourseLevel.Advanced]: 4 * 6 * 60, // 4 training days
+    [CourseLevel.Advanced]: 6 * 60, // 1 training day
     [CourseLevel.BildIntermediateTrainer]: 4 * 6 * 60, // 4 training days -  TODO change when we get clarity
     [CourseLevel.BildAdvancedTrainer]: 4 * 6 * 60, // 4 training days -  TODO change when we get clarity
   },
