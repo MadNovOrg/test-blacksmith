@@ -8,12 +8,12 @@ import { StepsNavigation } from '@app/components/StepsNavigation'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import {
-  GetOrderQuery,
-  GetOrderQueryVariables,
+  GetOrderForBookingDoneQuery,
+  GetOrderForBookingDoneQueryVariables,
   Payment_Methods_Enum,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { QUERY as GET_ORDER_QUERY } from '@app/queries/order/get-order'
+import { ORDER_FOR_BOOKING_DONE } from '@app/queries/order/get-order'
 import {
   MUTATION as DELETE_TEMP_PROFILE,
   ResponseType as DeleteTempProfileResponseType,
@@ -40,8 +40,11 @@ export const CourseBookingDone: React.FC<
     )
   }, [fetcher, profile])
 
-  const [{ data, error }] = useQuery<GetOrderQuery, GetOrderQueryVariables>({
-    query: GET_ORDER_QUERY,
+  const [{ data, error }] = useQuery<
+    GetOrderForBookingDoneQuery,
+    GetOrderForBookingDoneQueryVariables
+  >({
+    query: ORDER_FOR_BOOKING_DONE,
     variables: { orderId },
     pause: !orderId,
   })

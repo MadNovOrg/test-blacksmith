@@ -50618,6 +50618,13 @@ export type GetOrderQueryVariables = Exact<{
 
 export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId?: any | null, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, source?: string | null, bookingContact?: any | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, start?: any | null, end?: any | null, freeSpaces?: number | null }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null };
 
+export type GetOrderForBookingDoneQueryVariables = Exact<{
+  orderId: Scalars['uuid'];
+}>;
+
+
+export type GetOrderForBookingDoneQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum } | null };
+
 export type GetOrgWithKeyContactsQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;

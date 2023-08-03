@@ -415,6 +415,7 @@ select_permissions:
         - course_id
         - xero_invoice_number
         - source
+        - payment_method
       filter: {}
   - role: user
     permission:
