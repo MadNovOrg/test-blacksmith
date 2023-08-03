@@ -171,6 +171,7 @@
     "bild-strategies-required": "At least one BILD strategy should be selected",
     "special-instructions": {
       "title": "Special Instructions",
+      "subtitle": "Please ensure you include all applicable course information i.e. twilight dates, online training links, and any other relevant details.",
       "modal-title": "Reset to default special instructions",
       "modal-message": "You are going to reset the existing instructions to the default value. Do you want to proceed?",
       "instructions": {

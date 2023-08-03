@@ -1059,6 +1059,16 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             render={({ field }) => (
               <InstructionAccordionField
                 title={t('components.course-form.special-instructions.title')}
+                subtitle={
+                  <Alert
+                    severity="info"
+                    sx={{
+                      mt: 2,
+                    }}
+                  >
+                    {t('components.course-form.special-instructions.subtitle')}
+                  </Alert>
+                }
                 confirmResetTitle={t(
                   'components.course-form.special-instructions.modal-title'
                 )}

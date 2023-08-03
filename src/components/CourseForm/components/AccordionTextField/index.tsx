@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
-import React, { useState } from 'react'
+import React, { ReactElement, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ConfirmDialog } from '@app/components/ConfirmDialog'
@@ -21,6 +21,7 @@ type Props = {
   title: string
   confirmResetTitle: string
   confirmResetMessage: string
+  subtitle?: ReactElement | string
   value?: string
   defaultValue?: string
   maxLength?: number
@@ -31,6 +32,7 @@ type Props = {
 
 export const InstructionAccordionField: React.FC<Props> = ({
   title,
+  subtitle,
   confirmResetTitle,
   confirmResetMessage,
   value,
@@ -141,10 +143,14 @@ export const InstructionAccordionField: React.FC<Props> = ({
         expandIcon={<ExpandMoreIcon />}
         sx={{
           borderBottom: `1px solid ${theme.palette.grey[400]}`,
+          '.MuiAccordionSummary-contentGutters': {
+            flexDirection: 'column',
+          },
         }}
         data-testid={testId ? testId : undefined}
       >
         <Typography>{title}</Typography>
+        {subtitle}
       </AccordionSummary>
       <AccordionDetails>
         <Box
