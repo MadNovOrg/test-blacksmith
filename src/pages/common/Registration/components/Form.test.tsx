@@ -1,5 +1,4 @@
 import { Auth } from 'aws-amplify'
-import React from 'react'
 
 import { Recaptcha } from '@app/components/Recaptcha'
 import { createRecaptchaComp } from '@app/components/Recaptcha/test-utils'
@@ -244,6 +243,25 @@ describe('Form', () => {
       expect(errorMessageField).toHaveTextContent(
         'An account with the given email already exists.'
       )
+    })
+  })
+
+  it('displays error message if birth date is under minimal age', async () => {
+    const props = { ...defaultProps }
+    render(<Form {...props} />)
+
+    const form = screen.getByTestId('signup-form')
+    expect(form).toBeInTheDocument()
+
+    await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/2022')
+
+    await waitFor(async () => {
+      await userEvent.click(screen.getByTestId('signup-form-btn'))
+    })
+
+    await waitFor(() => {
+      const datePicker = screen.getByLabelText(/date of birth/i)
+      expect(datePicker).toBeInvalid()
     })
   })
 })

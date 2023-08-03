@@ -323,6 +323,7 @@
     "date-gte": "Must be {{date}} or after",
     "date-gte-field": "Must be greater or equal to '{{field}}'",
     "date-required": "Please enter your date of birth",
+    "date-too-early": "Minimal age is 16 years old",
     "max-registrants": "Please enter emails of registrants for the quantity you selected",
     "this-field-is-required": "This field is required",
     "required-field": "{{name}} is required",

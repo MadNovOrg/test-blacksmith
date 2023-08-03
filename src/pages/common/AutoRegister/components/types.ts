@@ -1,3 +1,4 @@
+import { subYears } from 'date-fns'
 import { TFunction } from 'i18next'
 
 import { schemas, yup } from '@app/schemas'
@@ -22,7 +23,8 @@ export const getFormSchema = (t: TFunction) => {
     dob: yup
       .date()
       .typeError(t('validation-errors.invalid-date'))
-      .required(t('validation-errors.date-required')),
+      .required(t('validation-errors.date-required'))
+      .max(subYears(new Date(), 16), t('validation-errors.date-too-early')),
 
     tcs: yup.boolean().oneOf([true], t('pages.signup.tcs-required')),
   })

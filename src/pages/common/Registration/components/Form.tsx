@@ -17,6 +17,7 @@ import {
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { Auth } from 'aws-amplify'
+import { subYears } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import React, { useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -76,6 +77,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   })
 
   const values = watch()
+  const minimalAge = subYears(new Date(), 16)
 
   const onSubmit = async (data: FormInputs) => {
     setLoading(true)
@@ -239,8 +241,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                   label={t('dob')}
                   format={INPUT_DATE_FORMAT}
                   value={field.value}
-                  maxDate={new Date(Date.now())}
                   onChange={(d: Date | null) => setValue('dob', d)}
+                  maxDate={minimalAge}
                   slotProps={{
                     textField: {
                       variant: 'filled',
