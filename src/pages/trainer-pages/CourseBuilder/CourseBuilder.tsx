@@ -22,6 +22,7 @@ import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Status_Enum,
+  Course_Type_Enum,
   FinalizeCourseBuilderMutation,
   FinalizeCourseBuilderMutationVariables,
   ModuleGroupsQuery,
@@ -40,7 +41,9 @@ import { CourseLevel } from '@app/types'
 import { formatDateForDraft, isNotNullish } from '@app/util'
 
 import { CourseInfo } from './components/CourseInfo'
-import GroupsSelection, { CallbackFn } from './components/GroupsSelection'
+import GroupsSelection, {
+  CallbackFn,
+} from './components/GroupsSelection/GroupsSelection'
 import { COURSE_WITH_MODULE_GROUPS, SET_COURSE_AS_DRAFT } from './queries'
 
 type CourseBuilderProps = unknown
@@ -91,9 +94,6 @@ export const CourseBuilder: React.FC<
       }
     )
 
-  const selectedIdsRef = useRef<string[]>([])
-  const estimatedDurationRef = useRef<number>()
-
   const [
     {
       data: moduleGroupsData,
@@ -122,6 +122,35 @@ export const CourseBuilder: React.FC<
       ),
     [moduleGroupsData]
   )
+
+  const mandatoryGroups = useMemo(() => {
+    if (!courseData?.course || !modulesData?.length) {
+      return []
+    }
+
+    if (
+      courseData.course.type === Course_Type_Enum.Open &&
+      [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2].includes(
+        courseData.course.level
+      )
+    ) {
+      return modulesData
+    }
+
+    return modulesData.filter(group => group.mandatory)
+  }, [courseData?.course, modulesData])
+
+  const initialGroups = useMemo(() => {
+    const ids =
+      courseData?.course?.moduleGroupIds
+        .map(module => module?.module?.moduleGroup?.id)
+        .filter(isNotNullish) ?? []
+
+    return modulesData?.filter(group => ids.includes(group.id)) ?? []
+  }, [modulesData, courseData?.course])
+
+  const selectedIdsRef = useRef<string[]>([])
+  const estimatedDurationRef = useRef<number>()
 
   const minimumTimeCommitment = useMemo(() => {
     if (courseData?.course) return getMinimumTimeCommitment(courseData?.course)
@@ -230,15 +259,6 @@ export const CourseBuilder: React.FC<
       Course_Level_Enum.AdvancedTrainer,
     ].includes(courseData?.course?.level)
 
-  const initialGroups = useMemo(() => {
-    const ids =
-      courseData?.course?.moduleGroupIds
-        .map(module => module?.module?.moduleGroup?.id)
-        .filter(isNotNullish) ?? []
-
-    return modulesData?.filter(group => ids.includes(group.id)) ?? []
-  }, [modulesData, courseData?.course])
-
   useEffect(() => {
     if (finalizeCourseData?.update_course_by_pk?.id && courseData?.course) {
       if (!courseCreated) {
@@ -268,6 +288,24 @@ export const CourseBuilder: React.FC<
     finalizeCourseData,
     courseData?.course,
   ])
+
+  useEffect(() => {
+    if (!selectedIdsRef.current.length) {
+      selectedIdsRef.current = initialGroups.length
+        ? initialGroups.map(group => group.id)
+        : mandatoryGroups.map(group => group.id)
+
+      const selectedGroups = selectedIdsRef.current
+        .map(id => (id ? modulesData?.find(group => group.id === id) : null))
+        .filter(isNotNullish)
+
+      estimatedDurationRef.current = [...selectedGroups].reduce(
+        (sum, module) =>
+          sum + (module?.duration?.aggregate?.sum?.duration ?? 0),
+        0
+      )
+    }
+  }, [initialGroups, mandatoryGroups, modulesData])
 
   if (!fetchingCourse && !courseData?.course && !courseError) {
     return (
@@ -355,6 +393,7 @@ export const CourseBuilder: React.FC<
             availableGroups={modulesData}
             showDuration={hasEstimatedDuration}
             initialGroups={initialGroups}
+            mandatoryGroups={mandatoryGroups}
             maxDuration={maxDuration}
             onSubmit={submitButtonHandler}
             onChange={handleSelectionChange}

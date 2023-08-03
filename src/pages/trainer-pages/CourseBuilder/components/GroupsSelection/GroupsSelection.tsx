@@ -23,7 +23,7 @@ import { usePrevious } from 'react-use'
 import { Color_Enum, ModuleGroupsQuery } from '@app/generated/graphql'
 import { getPercentage, formatDurationShort, isNotNullish } from '@app/util'
 
-import { StyledAccordionSummary, StyledAccordionDetails } from './styled'
+import { StyledAccordionSummary, StyledAccordionDetails } from '../styled'
 
 export type CallbackFn = (data: {
   groupIds: string[]
@@ -35,6 +35,7 @@ type ModuleGroup = ModuleGroupsQuery['groups'][0]
 type Props = {
   availableGroups: NonNullable<ModuleGroupsQuery['groups']>
   initialGroups: NonNullable<ModuleGroupsQuery['groups']>
+  mandatoryGroups: NonNullable<ModuleGroupsQuery['groups']>
   showDuration?: boolean
   maxDuration?: number
   slots?: {
@@ -47,6 +48,7 @@ type Props = {
 const GroupsSelection: React.FC<Props> = ({
   availableGroups,
   initialGroups,
+  mandatoryGroups,
   showDuration = true,
   maxDuration = 0,
   slots,
@@ -55,17 +57,15 @@ const GroupsSelection: React.FC<Props> = ({
 }) => {
   const theme = useTheme()
 
-  const mandatoryGroups = useMemo(() => {
-    return availableGroups.filter(group => group.mandatory)
-  }, [availableGroups])
-
   const [selectedIds, setSelectedIds] = useState<string[]>(
     !initialGroups.length
       ? mandatoryGroups.map(group => group.id)
       : initialGroups.map(group => group.id)
   )
 
-  const previousIds = usePrevious(selectedIds)
+  const previousIds = usePrevious(
+    selectedIds.length ? selectedIds : mandatoryGroups.map(group => group.id)
+  )
 
   const availableGroupsMap = useMemo(() => {
     const groups = new Map<string, ModuleGroup>()
@@ -163,7 +163,7 @@ const GroupsSelection: React.FC<Props> = ({
                   >
                     <FormGroup>
                       <FormControlLabel
-                        disabled={moduleGroup.mandatory}
+                        disabled={mandatoryGroups.includes(moduleGroup)}
                         control={
                           <Checkbox
                             id={moduleGroup.id}

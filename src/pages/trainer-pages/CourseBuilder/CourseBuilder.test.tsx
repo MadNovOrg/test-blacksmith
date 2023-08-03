@@ -5,16 +5,14 @@ import { Client, CombinedError, Provider, TypedDocumentNode } from 'urql'
 import { fromValue, never } from 'wonka'
 
 import {
-  Color_Enum,
   CourseWithModuleGroupsQuery,
   CourseWithModuleGroupsQueryVariables,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
   FinalizeCourseBuilderMutationVariables,
-  ModuleFragment,
   ModuleGroupsQuery,
-  Module_Category_Enum,
+  SaveCourseModulesMutation,
   SaveCourseModulesMutationVariables,
   SetCourseAsDraftMutationVariables,
 } from '@app/generated/graphql'
@@ -26,6 +24,7 @@ import { FinalizeCourseBuilderMutation } from '@qa/generated/graphql'
 import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { COURSE_WITH_MODULE_GROUPS, SET_COURSE_AS_DRAFT } from './queries'
+import { buildModuleGroup } from './test-utils'
 
 import { CourseBuilder } from '.'
 
@@ -341,7 +340,7 @@ describe('component: CourseBuilder', () => {
   })
 
   it('submits the course with module groups and navigates to the course details page', async () => {
-    const course = buildCourse({ level: Course_Level_Enum.Level_1 })
+    const course = buildCourse({ level: Course_Level_Enum.Advanced })
     const moduleGroup = buildModuleGroup()
 
     const client = {
@@ -438,7 +437,7 @@ describe('component: CourseBuilder', () => {
   })
 
   it('displays mandatory module groups as pre-selected and disabled', () => {
-    const course = buildCourse({ level: Course_Level_Enum.Level_1 })
+    const course = buildCourse({ level: Course_Level_Enum.Advanced })
     const moduleGroup = buildModuleGroup({ mandatory: true })
 
     const client = {
@@ -492,7 +491,7 @@ describe('component: CourseBuilder', () => {
   it('displays already saved modules as preselected', () => {
     const moduleGroup = buildModuleGroup({ mandatory: false })
     const course = buildCourse({
-      level: Course_Level_Enum.Level_1,
+      level: Course_Level_Enum.Advanced,
       moduleGroupIds: [{ module: { moduleGroup: { id: moduleGroup.id } } }],
     })
 
@@ -543,6 +542,131 @@ describe('component: CourseBuilder', () => {
       )
     ).toBeInTheDocument()
   })
+  ;[Course_Level_Enum.Level_1, Course_Level_Enum.Level_2].forEach(level => {
+    it(`marks all module groups as mandatory if course type is open and ${level}`, async () => {
+      const course = buildCourse({ level })
+      const moduleGroup = buildModuleGroup()
+
+      const client = {
+        executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+          if (query === COURSE_WITH_MODULE_GROUPS) {
+            return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+              data: {
+                course,
+              },
+            })
+          }
+
+          return fromValue<{ data: ModuleGroupsQuery }>({
+            data: {
+              groups: [moduleGroup],
+            },
+          })
+        },
+        executeMutation: ({
+          query,
+          variables,
+        }: {
+          query: TypedDocumentNode
+          variables: FinalizeCourseBuilderMutationVariables
+        }) => {
+          const finalizeMutationMatches = matches({
+            variables: {
+              id: course.id,
+              duration: moduleGroup.duration.aggregate?.sum?.duration,
+              status: null,
+            },
+          })
+
+          const saveModulesMutationMatches = matches({
+            variables: {
+              courseId: course.id,
+              modules: moduleGroup.modules.map(module => ({
+                courseId: course.id,
+                moduleId: module.id,
+              })),
+            },
+          })
+
+          if (
+            query === FINALIZE_COURSE_BUILDER_MUTATION &&
+            finalizeMutationMatches({ variables })
+          ) {
+            return fromValue<{ data: FinalizeCourseBuilderMutation }>({
+              data: {
+                update_course_by_pk: {
+                  id: course.id,
+                },
+              },
+            })
+          }
+
+          if (
+            query === SAVE_COURSE_MODULES &&
+            saveModulesMutationMatches({ variables })
+          ) {
+            return fromValue<{ data: SaveCourseModulesMutation }>({
+              data: {
+                inserted: {
+                  count: moduleGroup.modules.length,
+                },
+                deleted: {
+                  count: 0,
+                },
+              },
+            })
+          }
+
+          return never
+        },
+      } as unknown as Client
+
+      render(
+        <Provider value={client}>
+          <Routes>
+            <Route path="courses/:id">
+              <Route path="modules" element={<CourseBuilder />} />
+              <Route path="details" element={<p>Course details</p>} />
+            </Route>
+          </Routes>
+        </Provider>,
+        {},
+        { initialEntries: [`/courses/${course.id}/modules`] }
+      )
+
+      const availableModules = screen.getByTestId('available-modules')
+      const selectedModules = screen.getByTestId('selected-modules')
+
+      const moduleGroupLabel = within(availableModules).getByLabelText(
+        moduleGroup.name,
+        {
+          exact: false,
+        }
+      )
+
+      expect(moduleGroupLabel).toBeDisabled()
+
+      expect(
+        within(selectedModules).queryByTestId(
+          `selected-module-group-${moduleGroup.id}`
+        )
+      ).toBeInTheDocument()
+
+      await userEvent.click(screen.getByRole('button', { name: /submit/i }))
+
+      const timeCommitmentDialog = screen.getByRole('dialog')
+      await userEvent.click(
+        within(timeCommitmentDialog).getByText(/submit course/i)
+      )
+
+      const confirmDialog = screen.getByRole('dialog')
+      await userEvent.click(within(confirmDialog).getByText(/confirm/i))
+
+      await waitFor(() => {
+        expect(screen.getByText(/course details/i)).toBeInTheDocument()
+      })
+    })
+  })
 })
 
 function buildCourse(
@@ -553,7 +677,7 @@ function buildCourse(
     name: chance.sentence(),
     updatedAt: new Date().toISOString(),
     type: Course_Type_Enum.Open,
-    level: Course_Level_Enum.Level_1,
+    level: Course_Level_Enum.Advanced,
     go1Integration: false,
     deliveryType: Course_Delivery_Type_Enum.F2F,
     start: new Date().toISOString(),
@@ -570,42 +694,6 @@ function buildCourse(
       },
     ],
     moduleGroupIds: [],
-    ...overrides,
-  }
-}
-
-function buildModuleGroup(
-  overrides?: Partial<ModuleGroupsQuery['groups'][0]>
-): NonNullable<ModuleGroupsQuery['groups'][0]> {
-  return {
-    id: chance.guid(),
-    name: chance.name(),
-    level: Course_Level_Enum.Level_1,
-    color: Color_Enum.Navy,
-    mandatory: false,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    modules: [buildModule()],
-    duration: {
-      aggregate: {
-        sum: {
-          duration: 30,
-        },
-      },
-    },
-    ...overrides,
-  }
-}
-
-function buildModule(overrides?: Partial<ModuleFragment>): ModuleFragment {
-  return {
-    id: chance.guid(),
-    name: chance.name(),
-    description: chance.sentence(),
-    level: Course_Level_Enum.Level_1,
-    type: Module_Category_Enum.Physical,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
     ...overrides,
   }
 }
