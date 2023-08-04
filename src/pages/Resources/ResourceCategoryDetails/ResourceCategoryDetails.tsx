@@ -54,9 +54,12 @@ export const ResourceCategoryDetails = () => {
                   <Typography variant="h1" sx={{ mb: 1 }}>
                     {resourceCategory?.name}
                   </Typography>
-                  <Typography lineHeight="28px">
-                    {resourceCategory?.description}
-                  </Typography>
+                  <Typography
+                    lineHeight="28px"
+                    dangerouslySetInnerHTML={{
+                      __html: resourceCategory?.description ?? '',
+                    }}
+                  />
                 </>
               )}
             </Box>
