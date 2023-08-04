@@ -140,10 +140,12 @@ export function useUserCourses(
       ],
     }
     let filterConditions: Course_Bool_Exp = {}
-    // if orgId is defined then provide all available courses within that org
+    // if orgId is defined then provide all available courses within that org, only if I have an admin role
     if (orgId) {
       const allAvailableOrgs = {}
-      const onlyUserOrgs = { organization: { id: { _in: organizationIds } } }
+      const onlyUserOrgs = acl.isOrgAdmin()
+        ? { organization: { id: { _in: organizationIds } } }
+        : {}
       const specificOrg = { organization: { id: { _eq: orgId } } }
       if (orgId === ALL_ORGS) {
         userConditions = acl.isTTAdmin() ? allAvailableOrgs : onlyUserOrgs
