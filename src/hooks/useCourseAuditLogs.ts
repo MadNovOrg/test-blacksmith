@@ -7,12 +7,11 @@ import {
   Course_Level_Enum,
   GetCourseAuditLogsQuery,
   GetCourseAuditLogsQueryVariables,
+  Course_Type_Enum,
 } from '@app/generated/graphql'
 import { GET_COURSE_AUDIT_LOGS_QUERY } from '@app/queries/audit/get-course-audit-logs'
 import { SortOrder } from '@app/types'
 import { buildNestedSort, getSWRLoadingStatus, LoadingStatus } from '@app/util'
-
-import { Course_Type_Enum } from '@qa/generated/graphql'
 
 type UseCourseAuditLogsProps = {
   type: Course_Audit_Type_Enum
