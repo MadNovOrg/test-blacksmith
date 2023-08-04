@@ -4,14 +4,31 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  DialogActions,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import React from 'react'
 
 type Props = {
   id?: string
   open: boolean
+
+  /**
+   * @deprecated Please use the `slots` prop
+   */
   title?: string | React.ReactNode
+
+  /**
+   * @deprecated Please use the `slots` prop
+   */
   subtitle?: string | React.ReactNode
+  slots?: Partial<{
+    Title: React.Factory<unknown>
+    Subtitle: React.Factory<unknown>
+    Content: React.Factory<unknown>
+    Actions: React.Factory<unknown>
+  }>
   showClose?: boolean
   onClose: () => void
   maxWidth?: number
@@ -24,6 +41,7 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
   open,
   title,
   subtitle,
+  slots,
   showClose = true,
   onClose,
   children,
@@ -31,13 +49,16 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
   minWidth,
   'data-testid': testId,
 }) => {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   return (
     <MUIDialog
       open={open}
       maxWidth={false}
+      fullScreen={isMobile}
       onClose={onClose}
       data-testid={testId}
-      aria-labelledby={typeof title === 'string' ? title : ''}
     >
       <DialogTitle
         sx={{
@@ -48,10 +69,17 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
           alignItems: 'center',
         }}
       >
-        <div>
-          <div>{title ?? null}</div>
-          {subtitle ? <div>{subtitle}</div> : null}
-        </div>
+        {slots?.Title || slots?.Subtitle ? (
+          <div>
+            {slots?.Title?.()}
+            {slots?.Subtitle?.()}
+          </div>
+        ) : (
+          <div>
+            <div>{title ?? null}</div>
+            {subtitle ? <div>{subtitle}</div> : null}
+          </div>
+        )}
 
         {showClose ? (
           <IconButton
@@ -70,7 +98,21 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
           </IconButton>
         ) : null}
       </DialogTitle>
-      <DialogContent sx={{ maxWidth, minWidth }}>{children}</DialogContent>
+      <DialogContent sx={{ maxWidth, minWidth }}>
+        {slots?.Content ? slots?.Content?.() : children}
+      </DialogContent>
+      {slots?.Actions ? (
+        <DialogActions
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            m: 3,
+            flexDirection: isMobile ? 'column' : 'row',
+          }}
+        >
+          {slots?.Actions?.()}
+        </DialogActions>
+      ) : null}
     </MUIDialog>
   )
 }
