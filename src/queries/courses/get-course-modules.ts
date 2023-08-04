@@ -8,7 +8,10 @@ export type ParamsType = { id: string }
 
 export const QUERY = gql`
   query CourseModules($id: Int!) {
-    courseModules: course_module(where: { courseId: { _eq: $id } }) {
+    courseModules: course_module(
+      where: { courseId: { _eq: $id } }
+      order_by: { module: { moduleGroup: { mandatory: desc, name: asc } } }
+    ) {
       id
       covered
       module {
