@@ -25,7 +25,7 @@ const test = base.extend<{ courseId: number }>({
 
 test.use({ storageState: stateFilePath('user1') })
 
-test('@smoke renders booking page', async ({ page, courseId }) => {
+test('renders booking page', async ({ page, courseId }) => {
   const bookingDetailsPage = new BookingDetailsPage(page)
   await bookingDetailsPage.goto(String(courseId))
 
