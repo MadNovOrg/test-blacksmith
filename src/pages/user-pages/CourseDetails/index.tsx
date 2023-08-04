@@ -474,14 +474,14 @@ export const CourseDetails = () => {
                   </TabPanel>
                 ) : null}
 
-                {showCourseOverview && (
+                {showCourseOverview ? (
                   <TabPanel
                     sx={{ px: 0 }}
                     value={CourseDetailsTabs.COURSE_OVERVIEW}
                   >
                     <CourseOverview course={course} />
                   </TabPanel>
-                )}
+                ) : null}
               </Container>
             </TabContext>
           ) : null}
