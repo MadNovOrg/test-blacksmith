@@ -171,7 +171,7 @@ export const AttendeeReplacementTable: React.FC<
                 prefix={'attendee-replacements-'}
               />
             </Box>
-            <Box sx={{ maxWidth: '100%', overflowX: 'scroll' }}>
+            <Box sx={{ maxWidth: '100%', overflowX: 'auto' }}>
               <Table data-testid="logs-table">
                 <TableHead
                   cols={cols}

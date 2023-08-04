@@ -121,79 +121,80 @@ export const CourseCancellationTable: React.FC<
                 prefix={'course-cancellations-'}
               />
             </Box>
-            <Table data-testid="logs-table">
-              <TableHead
-                cols={cols}
-                orderBy={sort.by}
-                order={sort.dir}
-                onRequestSort={sort.onSort}
-              />
-
-              <TableBody>
-                {loading ? (
-                  <TableRow>
-                    <TableCell colSpan={cols.length}>
-                      <Stack direction="row" alignItems="center">
-                        <CircularProgress size={20} />
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
-                ) : null}
-
-                <TableNoRows
-                  noRecords={!loading && logs.length === 0}
-                  filtered={false}
-                  itemsName={t('common.records').toLowerCase()}
-                  colSpan={cols.length}
+            <Box sx={{ maxWidth: '100%', overflowX: 'auto' }}>
+              <Table data-testid="logs-table">
+                <TableHead
+                  cols={cols}
+                  orderBy={sort.by}
+                  order={sort.dir}
+                  onRequestSort={sort.onSort}
                 />
 
-                {logs.map(log => {
-                  const invoice = getCourseInvoice(log)
-                  return (
-                    <TableRow
-                      key={log.id}
-                      data-testid={`audit-log-entry-${log.id}`}
-                    >
-                      <TableCell>
-                        {t('dates.withTime', {
-                          date: log.created_at,
-                        })}
-                      </TableCell>
-                      <TableCell>
-                        <Link
-                          href={`/manage-courses/all/${log.course.id}/details`}
-                        >
-                          <Typography
-                            data-testid="audit-log-entry-course-code"
-                            variant="body2"
-                          >
-                            {log.course.course_code}
-                          </Typography>
-                        </Link>
-                      </TableCell>
-                      <TableCell>
-                        {invoice ? (
-                          <Link href={`/orders/${invoice.id}`}>
-                            <Typography variant="body2">
-                              {invoice.xeroInvoiceNumber}
-                            </Typography>
-                          </Link>
-                        ) : null}
-                      </TableCell>
-                      <TableCell>
-                        {log.authorizedBy ? (
-                          <ProfileWithAvatar
-                            profile={log.authorizedBy}
-                            useLink={true}
-                          />
-                        ) : null}
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={cols.length}>
+                        <Stack direction="row" alignItems="center">
+                          <CircularProgress size={20} />
+                        </Stack>
                       </TableCell>
                     </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
+                  ) : null}
 
+                  <TableNoRows
+                    noRecords={!loading && logs.length === 0}
+                    filtered={false}
+                    itemsName={t('common.records').toLowerCase()}
+                    colSpan={cols.length}
+                  />
+
+                  {logs.map(log => {
+                    const invoice = getCourseInvoice(log)
+                    return (
+                      <TableRow
+                        key={log.id}
+                        data-testid={`audit-log-entry-${log.id}`}
+                      >
+                        <TableCell>
+                          {t('dates.withTime', {
+                            date: log.created_at,
+                          })}
+                        </TableCell>
+                        <TableCell>
+                          <Link
+                            href={`/manage-courses/all/${log.course.id}/details`}
+                          >
+                            <Typography
+                              data-testid="audit-log-entry-course-code"
+                              variant="body2"
+                            >
+                              {log.course.course_code}
+                            </Typography>
+                          </Link>
+                        </TableCell>
+                        <TableCell>
+                          {invoice ? (
+                            <Link href={`/orders/${invoice.id}`}>
+                              <Typography variant="body2">
+                                {invoice.xeroInvoiceNumber}
+                              </Typography>
+                            </Link>
+                          ) : null}
+                        </TableCell>
+                        <TableCell>
+                          {log.authorizedBy ? (
+                            <ProfileWithAvatar
+                              profile={log.authorizedBy}
+                              useLink={true}
+                            />
+                          ) : null}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </Box>
             <Pagination total={count} />
           </Box>
         )}

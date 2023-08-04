@@ -151,7 +151,7 @@ export const AttendeeTransferTable: React.FC<
                 prefix={'attendee-transfers-'}
               />
             </Box>
-            <Box sx={{ maxWidth: '100%', overflowX: 'scroll' }}>
+            <Box sx={{ maxWidth: '100%', overflowX: 'auto' }}>
               <Table data-testid="logs-table">
                 <TableHead
                   cols={cols}
