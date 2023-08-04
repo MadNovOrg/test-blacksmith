@@ -165,7 +165,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
                 (
                   ((injuryResponse.YES?.length ?? 0) / injuryQuestion.length) *
                   100
-                ).toFixed(2)
+                ).toFixed(1)
               )
             : 0,
         no:
@@ -174,7 +174,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
                 (
                   ((injuryResponse.NO?.length ?? 0) / injuryQuestion.length) *
                   100
-                ).toFixed(2)
+                ).toFixed(1)
               )
             : 0,
       },

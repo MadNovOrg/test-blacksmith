@@ -399,7 +399,8 @@ export const CourseBuilder: React.FC<
             onChange={handleSelectionChange}
             slots={{
               afterChosenModulesTitle:
-                courseData.course.level === Course_Level_Enum.Level_1 ? (
+                courseData.course.level === Course_Level_Enum.Level_1 ||
+                courseData.course.level === Course_Level_Enum.Advanced ? (
                   <Alert severity="info">
                     {t(
                       'pages.trainer-base.create-course.new-course.course-level-info'
