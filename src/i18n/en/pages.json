@@ -404,6 +404,7 @@
     "title": "Edit course",
     "course-not-found": "There was an error loading the course",
     "save-button-text": "Save changes",
+    "reset-button-text": "Reset course changes",
     "cancel-this-course": "Cancel this course",
     "cancel-this-entire-course": "Cancel this entire course",
     "updating-error": "There was an error updating the course, please try again later.",

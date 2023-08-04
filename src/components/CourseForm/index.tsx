@@ -35,6 +35,7 @@ import {
   FormProvider,
   FormState,
   useForm,
+  UseFormReset,
   UseFormTrigger,
   useWatch,
 } from 'react-hook-form'
@@ -109,6 +110,7 @@ interface Props {
   methodsRef?: RefObject<{
     trigger: UseFormTrigger<CourseInput>
     formState: FormState<CourseInput>
+    reset: UseFormReset<CourseInput>
   }>
 }
 
@@ -369,6 +371,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     resetField,
     setError,
     clearErrors,
+    reset,
   } = methods
 
   const errors = formState.errors
@@ -378,8 +381,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     () => ({
       trigger,
       formState,
+      reset,
     }),
-    [trigger, formState]
+    [trigger, formState, reset]
   )
 
   const values = watch()

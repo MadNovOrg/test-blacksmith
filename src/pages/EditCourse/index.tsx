@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import { differenceInCalendarDays } from 'date-fns'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { FormState, UseFormTrigger } from 'react-hook-form'
+import { FormState, UseFormReset, UseFormTrigger } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
@@ -119,9 +119,14 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     []
   )
 
-  const methods = useRef<{
+  const courseMethods = useRef<{
     trigger: UseFormTrigger<CourseInput>
     formState: FormState<CourseInput>
+    reset: UseFormReset<CourseInput>
+  }>(null)
+
+  const trainerMethods = useRef<{
+    reset: UseFormReset<TrainersFormValues>
   }>(null)
 
   const { addSnackbarMessage } = useSnackbar()
@@ -416,6 +421,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     ]
   )
 
+  const handleReset = useCallback(() => {
+    courseMethods.current?.reset()
+    trainerMethods.current?.reset()
+  }, [])
+
   const editCourse = useCallback(() => {
     if (!autoapproved) {
       setShowReviewModal(true)
@@ -474,7 +484,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const editCourseValid = courseDataValid && trainersDataValid
 
   const submitButtonHandler = useCallback(async () => {
-    methods?.current?.trigger()
+    courseMethods?.current?.trigger()
 
     if (
       !editCourseValid ||
@@ -663,7 +673,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     onChange={handleCourseFormChange}
                     disabledFields={disabledFields}
                     isCreation={false}
-                    methodsRef={methods}
+                    methodsRef={courseMethods}
                   />
                 </Box>
 
@@ -690,6 +700,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                         : undefined
                     }
                     showAssistHint={false}
+                    methodsRef={trainerMethods}
                   />
                 ) : null}
 
@@ -728,6 +739,16 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                   ) : (
                     <></>
                   )}
+
+                  <Button
+                    data-testid="reset-edit-course-button"
+                    variant="outlined"
+                    onClick={handleReset}
+                    startIcon={<Cancel color="error" />}
+                  >
+                    {t('pages.edit-course.reset-button-text')}
+                  </Button>
+
                   <LoadingButton
                     variant="contained"
                     onClick={submitButtonHandler}

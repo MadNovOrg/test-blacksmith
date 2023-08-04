@@ -1,7 +1,20 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, FormHelperText, Stack, Typography } from '@mui/material'
-import React, { memo, useCallback, useEffect, useMemo } from 'react'
-import { Controller, Resolver, useForm, useWatch } from 'react-hook-form'
+import React, {
+  RefObject,
+  memo,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+} from 'react'
+import {
+  Controller,
+  Resolver,
+  UseFormReset,
+  useForm,
+  useWatch,
+} from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
@@ -37,6 +50,9 @@ type Props = {
   showAssistHint?: boolean
   isReAccreditation: boolean
   requiredLeaders?: RequiredTrainers
+  methodsRef?: RefObject<{
+    reset: UseFormReset<FormValues>
+  }>
 }
 
 const courseTrainerToFormValues = (
@@ -72,6 +88,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
   isReAccreditation = false,
   showAssistHint = true,
   requiredLeaders = { min: 0, max: 1 },
+  methodsRef,
 }) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
@@ -142,6 +159,16 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
   const formValues = useWatch({
     control: form.control,
   })
+
+  const { reset } = form
+
+  useImperativeHandle(
+    methodsRef,
+    () => ({
+      reset,
+    }),
+    [reset]
+  )
 
   useEffect(() => {
     onChange(formValues as FormValues, form.formState.isValid)

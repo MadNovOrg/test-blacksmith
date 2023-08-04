@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 import omit from 'lodash-es/omit'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { FormState, UseFormTrigger } from 'react-hook-form'
+import { FormState, UseFormReset, UseFormTrigger } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -99,6 +99,7 @@ export const CreateCourseForm = () => {
   const methods = useRef<{
     trigger: UseFormTrigger<CourseInput>
     formState: FormState<CourseInput>
+    reset: UseFormReset<CourseInput>
   }>(null)
 
   useEffect(() => {

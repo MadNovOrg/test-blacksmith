@@ -395,6 +395,7 @@ export const CourseBookingDetails: React.FC<
   useEffect(() => {
     if (booking.quantity !== booking.participants.length) {
       const participants = booking.participants.slice(0, booking.quantity)
+
       for (let i = 0; i < booking.quantity - booking.participants.length; i++) {
         participants.push({
           firstName: '',
@@ -402,9 +403,11 @@ export const CourseBookingDetails: React.FC<
           email: '',
         })
       }
+
+      setValue(`participants`, participants)
       setBooking({ participants })
     }
-  }, [booking.quantity, booking.participants, setBooking])
+  }, [booking.quantity, booking.participants, setBooking, values, setValue])
 
   const getParticipantError = useCallback(
     (index: number, field: keyof ParticipantInput) => {

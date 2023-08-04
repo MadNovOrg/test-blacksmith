@@ -18,7 +18,6 @@ describe('page: CreateOrganization', () => {
       expect(screen.getByText('City is required')).toBeInTheDocument()
       expect(screen.getByText('Country is required')).toBeInTheDocument()
       expect(screen.getByText('Post code is required')).toBeInTheDocument()
-      expect(screen.getByText('Work email is required')).toBeInTheDocument()
     })
   })
 })

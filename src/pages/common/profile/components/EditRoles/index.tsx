@@ -83,6 +83,7 @@ export const EditRoles = () => {
     formState: { errors },
     control,
     watch,
+    setValue,
   } = useFormContext<{
     roles: RolesFields
   }>()
@@ -180,8 +181,13 @@ export const EditRoles = () => {
                   mt={2}
                   rowSpacing={2}
                 >
-                  <Grid item xs={12} md={6}>
-                    <Box>
+                  <Grid
+                    item
+                    xs={12}
+                    display="flex"
+                    justifyContent="space-between"
+                  >
+                    <Box width="100%">
                       <FormControl
                         fullWidth
                         variant="filled"
@@ -222,9 +228,23 @@ export const EditRoles = () => {
                         />
                       </FormControl>
                     </Box>
+
+                    <Button
+                      variant="text"
+                      onClick={() => {
+                        setValue(`roles.${index}.trainerRoles.trainerRole`, [])
+                      }}
+                    >
+                      {t(`pages.view-profile.remove-role`)}
+                    </Button>
                   </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Box>
+                  <Grid
+                    item
+                    xs={12}
+                    display="flex"
+                    justifyContent="space-between"
+                  >
+                    <Box width="100%">
                       <FormControl
                         fullWidth
                         variant="filled"
@@ -257,6 +277,17 @@ export const EditRoles = () => {
                         />
                       </FormControl>
                     </Box>
+                    <Button
+                      variant="text"
+                      onClick={() => {
+                        setValue(
+                          `roles.${index}.trainerRoles.BILDRole`,
+                          undefined
+                        )
+                      }}
+                    >
+                      {t(`pages.view-profile.remove-role`)}
+                    </Button>
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Box mt={2}>

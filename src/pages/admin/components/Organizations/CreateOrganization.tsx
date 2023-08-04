@@ -81,12 +81,7 @@ export const CreateOrganization = () => {
           t('validation-errors.required-field', { name: t('trust-type') })
         ),
       trustName: yup.string(),
-      workEmail: yup
-        .string()
-        .email(t('validation-errors.email-invalid'))
-        .required(
-          requiredMsg(t, 'pages.create-organization.fields.work-email')
-        ),
+      workEmail: yup.string().email(t('validation-errors.email-invalid')),
       orgEmail: yup.string(),
       orgPhone: yup.string(),
       sector: yup.string(),
@@ -577,7 +572,6 @@ export const CreateOrganization = () => {
                   inputProps={{ 'data-testid': 'input-admin-email' }}
                   sx={{ bgcolor: 'grey.100' }}
                   fullWidth
-                  required
                 />
 
                 <Alert severity="info" sx={{ mt: 2 }}>
