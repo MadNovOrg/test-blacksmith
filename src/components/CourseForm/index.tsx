@@ -29,6 +29,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
+  useState,
 } from 'react'
 import {
   Controller,
@@ -112,6 +113,7 @@ interface Props {
     formState: FormState<CourseInput>
     reset: UseFormReset<CourseInput>
   }>
+  trainerRatioNotMet?: boolean
 }
 
 const accountCodeValue = getAccountCode()
@@ -123,6 +125,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   isCreation = true,
   disabledFields = new Set(),
   methodsRef,
+  trainerRatioNotMet,
 }) => {
   const { t } = useTranslation()
   const { activeRole, acl } = useAuth()
@@ -130,6 +133,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const hasOrg = [CourseType.CLOSED, CourseType.INDIRECT].includes(courseType)
   const isClosedCourse = courseType === CourseType.CLOSED
   const hasMinParticipants = courseType === CourseType.OPEN
+  const [attendeeRatioExceededMessage, setAttendeeRatioExceededMessage] =
+    useState<string>('')
 
   const minCourseStartDate = new Date()
   minCourseStartDate.setDate(minCourseStartDate.getDate() + 1)
@@ -296,7 +301,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           ),
       }),
 
-    [hasOrg, isClosedCourse, t, hasMinParticipants, courseType, activeRole]
+    [hasOrg, t, isClosedCourse, hasMinParticipants, activeRole, courseType]
   )
 
   const defaultValues = useMemo<CourseInput>(
@@ -520,6 +525,16 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     resetField,
     values.accreditedBy,
   ])
+
+  useEffect(() => {
+    if (trainerRatioNotMet)
+      return setAttendeeRatioExceededMessage(
+        t(
+          'components.course-form.attendees-number-exceeds-trainer-ratio-message'
+        )
+      )
+    return setAttendeeRatioExceededMessage('')
+  }, [trainerRatioNotMet, setAttendeeRatioExceededMessage, t])
 
   useEffect(() => {
     // we need to update to default values if something change in the input
@@ -1376,8 +1391,14 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 )}
                 variant="filled"
                 fullWidth
-                error={Boolean(errors.maxParticipants)}
-                helperText={errors.maxParticipants?.message}
+                error={
+                  Boolean(errors.maxParticipants) ||
+                  Boolean(attendeeRatioExceededMessage)
+                }
+                helperText={
+                  errors.maxParticipants?.message ||
+                  attendeeRatioExceededMessage
+                }
                 inputProps={{ min: 1 }}
                 data-testid="max-attendees"
                 disabled={disabledFields.has('maxParticipants')}

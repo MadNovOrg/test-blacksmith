@@ -1,4 +1,3 @@
-import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
@@ -25,7 +24,7 @@ const useFetcherMock = jest.mocked(useFetcher)
 const useCourseMocked = jest.mocked(useCourse)
 const VenueSelectorMocked = jest.mocked(VenueSelector)
 
-describe('page: EditCourse', () => {
+describe(EditCourse.name, () => {
   beforeAll(() => {
     const fetcherMock = jest.fn()
     useFetcherMock.mockReturnValue(fetcherMock)

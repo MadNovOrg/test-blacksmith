@@ -96,6 +96,12 @@ function assertCourseDataValid(
   }
 }
 
+const editAttendeesForbiddenStatuses = [
+  Course_Status_Enum.Declined,
+  Course_Status_Enum.ExceptionsApprovalPending,
+  Course_Status_Enum.ConfirmModules,
+]
+
 export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams()
   const theme = useTheme()
@@ -434,6 +440,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     }
   }, [autoapproved, saveChanges])
 
+  const canEditAttendees =
+    course?.type === CourseType.INDIRECT &&
+    !editAttendeesForbiddenStatuses.includes(course?.status)
+
   const disabledFields = useMemo(() => {
     if (course) {
       if (!acl.canEditWithoutRestrictions(course.type)) {
@@ -449,7 +459,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           'aolCountry',
           'aolRegion',
           'minParticipants',
-          'maxParticipants',
+          ...(canEditAttendees
+            ? ([] as Array<DisabledFields>)
+            : (['maxParticipants'] as Array<DisabledFields>)),
           'bildStrategies',
           'conversion',
         ])
@@ -465,7 +477,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     }
 
     return new Set([])
-  }, [acl, course])
+  }, [acl, canEditAttendees, course])
 
   const leader = course?.trainers?.find(
     c => c.type === CourseTrainerType.Leader
@@ -674,6 +686,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     disabledFields={disabledFields}
                     isCreation={false}
                     methodsRef={courseMethods}
+                    trainerRatioNotMet={showTrainerRatioWarning}
                   />
                 </Box>
 
