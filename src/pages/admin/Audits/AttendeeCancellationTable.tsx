@@ -133,7 +133,7 @@ export const AttendeeCancellationTable: React.FC<
     <Box display="flex" gap={4}>
       <AuditFilteringSidebar count={count} onChange={onFilterChange} />
 
-      <Box flex={1}>
+      <Box flex={1} sx={{ width: '100%', overflowX: 'auto' }}>
         {loading ? (
           <Stack
             alignItems="center"
