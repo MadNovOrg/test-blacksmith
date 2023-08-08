@@ -28,7 +28,6 @@ import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
-const MembershipRoutes = React.lazy(() => import('./membership'))
 const ResourcesRoutes = React.lazy(() => import('./resources'))
 
 const TrainerBaseRoutes = () => {
@@ -104,8 +103,6 @@ const TrainerBaseRoutes = () => {
           </Route>
         </Route>
       ) : null}
-
-      <Route path="membership/*" element={<MembershipRoutes />} />
 
       <Route path="resources/*" element={<ResourcesRoutes />} />
 

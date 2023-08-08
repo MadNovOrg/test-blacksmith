@@ -49,7 +49,6 @@ import { XeroConnect } from '@app/pages/tt-pages/Xero'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 const ResourcesRoutes = React.lazy(() => import('./resources'))
-const MembershipRoutes = React.lazy(() => import('./membership'))
 
 const TTAdminRoutes = () => {
   const { acl } = useAuth()
@@ -211,7 +210,6 @@ const TTAdminRoutes = () => {
         </>
       ) : null}
 
-      <Route path="membership/*" element={<MembershipRoutes />} />
       <Route path="resources/*" element={<ResourcesRoutes />} />
 
       <Route path="*" element={<NotFound />} />

@@ -88,7 +88,6 @@ const CourseExceptionsLog = React.lazy(() =>
 )
 
 const ResourcesRoutes = React.lazy(() => import('./resources'))
-const MembershipRoutes = React.lazy(() => import('./membership'))
 
 const SalesAdminRoutes = () => {
   const { acl } = useAuth()
@@ -157,7 +156,6 @@ const SalesAdminRoutes = () => {
         </Route>
       </Route>
 
-      <Route path="membership/*" element={<MembershipRoutes />} />
       <Route path="resources/*" element={<ResourcesRoutes />} />
 
       <Route path="certifications" element={<Certifications />} />

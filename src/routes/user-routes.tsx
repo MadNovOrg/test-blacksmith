@@ -29,8 +29,6 @@ import { CourseHealthAndSafetyForm } from '@app/pages/user-pages/CourseHealthAnd
 import { AttendeeCourses } from '@app/pages/user-pages/MyCourses'
 import { GET_USER_CAN_ACCESS_RESOURCES } from '@app/queries/certificate/get-user-can-access-resources'
 
-import MembershipRoutes from './membership'
-
 const ResourcesRoutes = React.lazy(() => import('./resources'))
 
 const UserRoutes = () => {
@@ -115,8 +113,6 @@ const UserRoutes = () => {
           </Route>
         </Route>
       ) : null}
-
-      <Route path="membership/*" element={<MembershipRoutes />} />
 
       {showResources ? (
         <Route path="resources/*" element={<ResourcesRoutes />} />
