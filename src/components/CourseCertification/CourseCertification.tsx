@@ -504,15 +504,6 @@ export const CourseCertification: React.FC<
   const holdRequest = data?.certificateHoldRequest[0]
   const courseParticipant = certificate?.participant
 
-  const gradingChangelogs = useMemo(() => {
-    return (
-      certificate?.participant?.certificateChanges.filter(
-        change =>
-          change.type !== Course_Certificate_Changelog_Type_Enum.PutOnHold
-      ) ?? []
-    )
-  }, [certificate])
-
   const holdChangelogs = useMemo(() => {
     return (
       certificate?.participant?.certificateChanges.filter(
@@ -738,7 +729,9 @@ export const CourseCertification: React.FC<
             maxWidth={800}
           >
             {certificate.participant?.certificateChanges?.length ? (
-              <ChangelogModal changelogs={gradingChangelogs} />
+              <ChangelogModal
+                changelogs={certificate?.participant?.certificateChanges}
+              />
             ) : null}
           </Dialog>
         </>

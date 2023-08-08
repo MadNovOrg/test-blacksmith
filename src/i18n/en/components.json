@@ -274,7 +274,8 @@
     "date": "Date",
     "change": "Change",
     "revoked": "Revoked",
-    "unrevoked": "Unrevoked"
+    "unrevoked": "Unrevoked",
+    "put_on_hold": "On Hold"
   },
   "accept-decline-course": {
     "accept": "Accept",

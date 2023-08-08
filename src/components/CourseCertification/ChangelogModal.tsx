@@ -102,6 +102,15 @@ const ChangelogModal: React.FC<React.PropsWithChildren<ChangelogModalProps>> =
                     )}
                   </Typography>
                 )}
+                {[Course_Certificate_Changelog_Type_Enum.PutOnHold].includes(
+                  changelog.type
+                ) && (
+                  <Typography variant="caption">
+                    {t(
+                      `components.changelog-modal.${changelog.type.toLowerCase()}`
+                    )}
+                  </Typography>
+                )}
                 {changelog.payload?.note && (
                   <Box
                     display="block"
