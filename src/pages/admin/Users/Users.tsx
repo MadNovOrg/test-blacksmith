@@ -22,8 +22,8 @@ import { useDebounce } from 'use-debounce'
 
 import { BackButton } from '@app/components/BackButton'
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
-import { FilterCertificateValidity } from '@app/components/FilterCertificateValidity'
-import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
+import { FilterByCertificateValidity } from '@app/components/filters/FilterByCertificateValidity'
+import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
@@ -313,7 +313,7 @@ export const Users = () => {
                 defaultExpanded={false}
                 data-testid="FilterTrainerType"
               />
-              <FilterCourseLevel
+              <FilterByCourseLevel
                 title={t('trainer-level')}
                 onChange={setFilteredByCertificateLEvel}
                 excludedStatuses={
@@ -327,7 +327,7 @@ export const Users = () => {
                   ])
                 }
               />
-              <FilterCertificateValidity onChange={setCertificateStatus} />
+              <FilterByCertificateValidity onChange={setCertificateStatus} />
               <FormControlLabel
                 control={
                   <Checkbox

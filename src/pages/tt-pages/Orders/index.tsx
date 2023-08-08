@@ -2,9 +2,9 @@ import { Container, Typography, Box, Stack, Skeleton } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FilterCurrencies } from '@app/components/FilterCurrencies'
-import { FilterOrderStatuses } from '@app/components/FilterOrderStatuses'
-import { FilterPaymentMethods } from '@app/components/FilterPaymentMethods'
+import { FilterByCurrencies } from '@app/components/filters/FilterByCurrencies'
+import { FilterByOrderStatuses } from '@app/components/filters/FilterByOrderStatuses'
+import { FilterByPaymentMethods } from '@app/components/filters/FilterByPaymentMethods'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { useOrders, FiltersType } from '@app/hooks/useOrders'
 import { useTablePagination } from '@app/hooks/useTablePagination'
@@ -64,9 +64,9 @@ export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
 
             <Box>
               <Stack gap={4}>
-                <FilterPaymentMethods onChange={onFilterChange} />
-                <FilterCurrencies onChange={onFilterChange} />
-                <FilterOrderStatuses onChange={onFilterChange} />
+                <FilterByPaymentMethods onChange={onFilterChange} />
+                <FilterByCurrencies onChange={onFilterChange} />
+                <FilterByOrderStatuses onChange={onFilterChange} />
               </Stack>
             </Box>
           </Stack>

@@ -17,8 +17,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams, useSearchParams } from 'react-router-dom'
 
-import { FilterCourseDeliveryType } from '@app/components/FilterCourseDeliveryType'
-import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
+import { FilterByCourseDeliveryType } from '@app/components/filters/FilterByCourseDeliveryType'
+import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { RequestAQuoteBanner } from '@app/components/RequestAQuoteBanner'
 import { useAuth } from '@app/context/auth'
@@ -273,11 +273,11 @@ export const AvailableCourses: React.FC<
                   </Typography>
 
                   <Stack gap={1}>
-                    <FilterCourseLevel
+                    <FilterByCourseLevel
                       title={t('course-level')}
                       onChange={setFilteredByCertificateLevel}
                     />
-                    <FilterCourseDeliveryType
+                    <FilterByCourseDeliveryType
                       onChange={setFilterDeliveryType}
                     />
                   </Stack>

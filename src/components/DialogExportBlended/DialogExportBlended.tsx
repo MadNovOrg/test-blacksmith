@@ -8,7 +8,7 @@ import { useQuery } from 'urql'
 import { utils as xlsxUtils, write } from 'xlsx'
 
 import { Dialog } from '@app/components/Dialog'
-import { FilterDates } from '@app/components/FilterDates'
+import { FilterByDates } from '@app/components/filters/FilterByDates'
 import {
   LicensesHistoryBetweenDatesQuery,
   LicensesHistoryBetweenDatesQueryVariables,
@@ -152,7 +152,7 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
           <CircularProgress />
         ) : (
           <Box>
-            <FilterDates
+            <FilterByDates
               onChange={onDatesChange}
               title={t(
                 'pages.admin.organizations.export.filter-by-captured-date'

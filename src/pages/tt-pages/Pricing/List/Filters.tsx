@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react'
 import { BooleanParam, useQueryParam, withDefault } from 'use-query-params'
 
-import { FilterByBlendedLearning } from '@app/components/FilterByBlendedLearning'
-import { FilterByReaccreditation } from '@app/components/FilterByReaccreditation'
-import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
-import { FilterCourseType } from '@app/components/FilterCourseType'
+import { FilterByBlendedLearning } from '@app/components/filters/FilterByBlendedLearning'
+import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
+import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
+import { FilterByReaccreditation } from '@app/components/filters/FilterByReaccreditation'
 
 type Props = { onChange: (next: Record<string, unknown>) => void }
 
@@ -47,8 +47,8 @@ export const Filters: React.FC<Props> = ({ onChange }) => {
 
   return (
     <>
-      <FilterCourseLevel onChange={onLevelsChange} />
-      <FilterCourseType onChange={onTypeChange} />
+      <FilterByCourseLevel onChange={onLevelsChange} />
+      <FilterByCourseType onChange={onTypeChange} />
       <FilterByBlendedLearning
         selected={filterBlendedLearning}
         onChange={onBlendedChange}

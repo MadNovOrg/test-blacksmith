@@ -2,9 +2,9 @@ import { Stack, Typography } from '@mui/material'
 import { FC, PropsWithChildren, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
-import { FilterCourseType } from '@app/components/FilterCourseType'
-import { FilterDates } from '@app/components/FilterDates'
+import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
+import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
+import { FilterByDates } from '@app/components/filters/FilterByDates'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 
@@ -41,7 +41,7 @@ export const CourseExceptionsLogFilters: FC<PropsWithChildren<Props>> = ({
           onChange({ source: 'search', value })
         }}
       />
-      <FilterDates
+      <FilterByDates
         onChange={useCallback(
           (from, to) => onChange({ source: 'dates', value: [from, to] }),
           [onChange]
@@ -50,13 +50,13 @@ export const CourseExceptionsLogFilters: FC<PropsWithChildren<Props>> = ({
         data-testid={'date-range'}
         queryParam={'Range'}
       />
-      <FilterCourseLevel
+      <FilterByCourseLevel
         onChange={useCallback(
           level => onChange({ source: 'course-level', value: level }),
           [onChange]
         )}
       />
-      <FilterCourseType
+      <FilterByCourseType
         courseTypeBlacklist={Course_Type_Enum.Open}
         onChange={useCallback(
           type => onChange({ source: 'course-type', value: type }),

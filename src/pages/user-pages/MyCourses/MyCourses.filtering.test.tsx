@@ -108,10 +108,10 @@ describe('user-pages/MyCourses', () => {
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseLevel')).getByText('Level One')
+      within(screen.getByTestId('FilterByCourseLevel')).getByText('Level One')
     )
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseLevel')).getByText('Level Two')
+      within(screen.getByTestId('FilterByCourseLevel')).getByText('Level Two')
     )
 
     await waitFor(() => {
@@ -162,7 +162,7 @@ describe('user-pages/MyCourses', () => {
       { initialEntries: ['/'] }
     )
 
-    expect(screen.queryByTestId('FilterCourseType')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('FilterByCourseType')).not.toBeInTheDocument()
   })
 
   it('filters unattended courses', async () => {
@@ -205,7 +205,7 @@ describe('user-pages/MyCourses', () => {
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseStatus')).getByText('Unattended')
+      within(screen.getByTestId('FilterByCourseStatus')).getByText('Unattended')
     )
 
     await waitFor(() => {
@@ -261,7 +261,7 @@ describe('user-pages/MyCourses', () => {
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseStatus')).getByText(
+      within(screen.getByTestId('FilterByCourseStatus')).getByText(
         'Info required'
       )
     )
@@ -337,7 +337,7 @@ describe('user-pages/MyCourses', () => {
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseStatus')).getByText(
+      within(screen.getByTestId('FilterByCourseStatus')).getByText(
         'Missing evaluation'
       )
     )
@@ -394,7 +394,7 @@ describe('user-pages/MyCourses', () => {
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseStatus')).getByText(
+      within(screen.getByTestId('FilterByCourseStatus')).getByText(
         'Missing grade'
       )
     )
@@ -455,7 +455,7 @@ describe('user-pages/MyCourses', () => {
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseStatus')).getByText('Scheduled')
+      within(screen.getByTestId('FilterByCourseStatus')).getByText('Scheduled')
     )
 
     await waitFor(() => {
@@ -514,7 +514,7 @@ describe('user-pages/MyCourses', () => {
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseStatus')).getByText('Completed')
+      within(screen.getByTestId('FilterByCourseStatus')).getByText('Completed')
     )
 
     await waitFor(() => {
@@ -589,10 +589,10 @@ describe('user-pages/MyCourses', () => {
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseStatus')).getByText('Unattended')
+      within(screen.getByTestId('FilterByCourseStatus')).getByText('Unattended')
     )
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseStatus')).getByText(
+      within(screen.getByTestId('FilterByCourseStatus')).getByText(
         'Info required'
       )
     )

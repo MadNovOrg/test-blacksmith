@@ -42,7 +42,7 @@ test.skip('my courses view @smoke', async ({ page, courses }) => {
 test('my courses filter', async ({ page, courses }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
-  await myCoursesPage.filterCourses('FilterCourseLevel', [
+  await myCoursesPage.filterCourses('FilterByCourseLevel', [
     CourseLevel.Level_1,
     CourseLevel.Level_2,
   ])

@@ -3,8 +3,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
-import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
-import { FilterDates } from '@app/components/FilterDates'
+import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
+import { FilterByDates } from '@app/components/filters/FilterByDates'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { Course_Level_Enum, Course_Status_Enum } from '@app/generated/graphql'
 import { AttendeeOnlyCourseStatus } from '@app/types'
@@ -122,13 +122,13 @@ export function Filters({ onChange }: Props) {
   return (
     <>
       <FilterSearch value={keyword} onChange={setKeyword} />
-      <FilterDates
+      <FilterByDates
         onChange={onDatesChange}
         title={t('filters.course-date-range')}
         data-testid={'date-range'}
         queryParam={'date-range'}
       />
-      <FilterDates
+      <FilterByDates
         onChange={onCreateDatesChange}
         title={t('filters.created-range')}
         data-testid={'date-created'}
@@ -140,7 +140,7 @@ export function Filters({ onChange }: Props) {
         </Typography>
 
         <Stack gap={1}>
-          <FilterCourseLevel
+          <FilterByCourseLevel
             title={t('course-level')}
             onChange={setFilterLevel}
           />
@@ -150,7 +150,7 @@ export function Filters({ onChange }: Props) {
               setStatusOptions(opts)
             }}
             title={t('course-status')}
-            data-testid="FilterCourseStatus"
+            data-testid="FilterByCourseStatus"
           />
         </Stack>
       </Box>

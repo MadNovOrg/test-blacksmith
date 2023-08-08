@@ -39,8 +39,8 @@ describe('component: PricingList', () => {
   it('renders the component', () => {
     setup()
     expect(screen.getByText('Pricing')).toBeInTheDocument()
-    expect(screen.getByTestId('FilterCourseLevel')).toBeInTheDocument()
-    expect(screen.getByTestId('FilterCourseType')).toBeInTheDocument()
+    expect(screen.getByTestId('FilterByCourseLevel')).toBeInTheDocument()
+    expect(screen.getByTestId('FilterByCourseType')).toBeInTheDocument()
     expect(screen.getByTestId('FilterByBlendedLearning')).toBeInTheDocument()
     expect(screen.getByTestId('FilterByReaccreditation')).toBeInTheDocument()
     const bulkEditButton = screen.getByText('Bulk edit prices')

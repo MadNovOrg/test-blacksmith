@@ -97,3 +97,5 @@ function formatUnits() {
     }
   }
 }
+
+export default i18n

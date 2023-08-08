@@ -1,0 +1,17 @@
+import React from 'react'
+
+import { render, screen, userEvent } from '@test/index'
+
+import { FilterByCourseType } from './index'
+
+describe(FilterByCourseType.name, () => {
+  it('triggers onChange when course type = closed is selected', async () => {
+    const onChange = jest.fn()
+    render(<FilterByCourseType onChange={onChange} />)
+
+    await userEvent.click(screen.getByText('Course Type'))
+    await userEvent.click(screen.getByText('Closed'))
+
+    expect(onChange).toHaveBeenCalledWith(['CLOSED'])
+  })
+})

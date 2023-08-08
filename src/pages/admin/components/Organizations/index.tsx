@@ -24,7 +24,7 @@ import {
 
 import { BackButton } from '@app/components/BackButton'
 import { DialogExportBlended } from '@app/components/DialogExportBlended'
-import { FilterOrgSector } from '@app/components/FilterOrgSector'
+import { FilterByOrgSector } from '@app/components/filters/FilterByOrgSector'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
@@ -167,7 +167,7 @@ export const Organizations: React.FC<
                 </Typography>
 
                 <Stack gap={1}>
-                  <FilterOrgSector onChange={setFilterSector} />
+                  <FilterByOrgSector onChange={setFilterSector} />
                 </Stack>
               </Box>
             </Stack>

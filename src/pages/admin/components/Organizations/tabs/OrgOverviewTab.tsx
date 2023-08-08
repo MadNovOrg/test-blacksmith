@@ -14,7 +14,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { FilterCertificateValidity } from '@app/components/FilterCertificateValidity'
+import { FilterByCertificateValidity } from '@app/components/filters/FilterByCertificateValidity'
 import { RequestAQuoteBanner } from '@app/components/RequestAQuoteBanner'
 import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum, Course_Type_Enum } from '@app/generated/graphql'
@@ -124,7 +124,7 @@ export const OrgOverviewTab: React.FC<
       </Grid>
 
       <Grid item xs={12} md={9} p={1} mt={2}>
-        <FilterCertificateValidity
+        <FilterByCertificateValidity
           onChange={setCertificateStatus}
           excludedStatuses={
             new Set([

@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FilterDates } from '@app/components/FilterDates'
+import { FilterByDates } from '@app/components/filters/FilterByDates'
 import { FilterSearch } from '@app/components/FilterSearch'
 
 export type FilterChangeEvent =
@@ -46,7 +46,7 @@ export const AuditFilteringSidebar: React.FC<
 
           <Box>
             <Stack gap={1}>
-              <FilterDates
+              <FilterByDates
                 onChange={(from, to) =>
                   onChange({ source: 'dates', value: [from, to] })
                 }

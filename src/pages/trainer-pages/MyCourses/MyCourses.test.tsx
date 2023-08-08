@@ -560,10 +560,10 @@ describe('trainers-pages/MyCourses', () => {
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseLevel')).getByText('Level One')
+      within(screen.getByTestId('FilterByCourseLevel')).getByText('Level One')
     )
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseLevel')).getByText('Level Two')
+      within(screen.getByTestId('FilterByCourseLevel')).getByText('Level Two')
     )
 
     const table = screen.getByTestId('courses-table')
@@ -610,10 +610,10 @@ describe('trainers-pages/MyCourses', () => {
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseType')).getByText('Open')
+      within(screen.getByTestId('FilterByCourseType')).getByText('Open')
     )
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseType')).getByText('Closed')
+      within(screen.getByTestId('FilterByCourseType')).getByText('Closed')
     )
 
     const table = screen.getByTestId('courses-table')
@@ -661,10 +661,10 @@ describe('trainers-pages/MyCourses', () => {
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseStatus')).getByText('Scheduled')
+      within(screen.getByTestId('FilterByCourseStatus')).getByText('Scheduled')
     )
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseStatus')).getByText('Completed')
+      within(screen.getByTestId('FilterByCourseStatus')).getByText('Completed')
     )
 
     const table = screen.getByTestId('courses-table')
@@ -711,7 +711,7 @@ describe('trainers-pages/MyCourses', () => {
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseDeliveryType')).getByText(
+      within(screen.getByTestId('FilterByCourseDeliveryType')).getByText(
         'Virtual'
       )
     )
@@ -764,7 +764,7 @@ describe('trainers-pages/MyCourses', () => {
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterCourseStatus')).getByText(
+      within(screen.getByTestId('FilterByCourseStatus')).getByText(
         'Cancellation requested'
       )
     )
@@ -1526,10 +1526,10 @@ describe('trainers-pages/MyCourses', () => {
       })
 
       userEvent.click(
-        within(screen.getByTestId('FilterCourseLevel')).getByText('Level One')
+        within(screen.getByTestId('FilterByCourseLevel')).getByText('Level One')
       )
       userEvent.click(
-        within(screen.getByTestId('FilterCourseLevel')).getByText('Level Two')
+        within(screen.getByTestId('FilterByCourseLevel')).getByText('Level Two')
       )
 
       await expectActionableTableTo({
@@ -1586,10 +1586,10 @@ describe('trainers-pages/MyCourses', () => {
       })
 
       userEvent.click(
-        within(screen.getByTestId('FilterCourseType')).getByText('Open')
+        within(screen.getByTestId('FilterByCourseType')).getByText('Open')
       )
       userEvent.click(
-        within(screen.getByTestId('FilterCourseType')).getByText('Closed')
+        within(screen.getByTestId('FilterByCourseType')).getByText('Closed')
       )
 
       await expectActionableTableTo({
@@ -1689,7 +1689,7 @@ describe('trainers-pages/MyCourses', () => {
       })
 
       await userEvent.click(
-        within(screen.getByTestId('FilterCourseDeliveryType')).getByText(
+        within(screen.getByTestId('FilterByCourseDeliveryType')).getByText(
           'Virtual'
         )
       )

@@ -11,13 +11,13 @@ import {
 } from 'use-query-params'
 
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
-import { FilterByBlendedLearning } from '@app/components/FilterByBlendedLearning'
-import { FilterByCourseStatusWarnings } from '@app/components/FilterByCourseStatusWarnings'
-import { FilterCourseDeliveryType } from '@app/components/FilterCourseDeliveryType'
-import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
-import { FilterCourseStatus } from '@app/components/FilterCourseStatus'
-import { FilterCourseType } from '@app/components/FilterCourseType'
-import { FilterDates } from '@app/components/FilterDates'
+import { FilterByBlendedLearning } from '@app/components/filters/FilterByBlendedLearning'
+import { FilterByCourseDeliveryType } from '@app/components/filters/FilterByCourseDeliveryType'
+import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
+import { FilterByCourseStatus } from '@app/components/filters/FilterByCourseStatus'
+import { FilterByCourseStatusWarnings } from '@app/components/filters/FilterByCourseStatusWarnings'
+import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
+import { FilterByDates } from '@app/components/filters/FilterByDates'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { useAuth } from '@app/context/auth'
 import {
@@ -173,13 +173,13 @@ export function Filters({ onChange }: Props) {
   return (
     <>
       <FilterSearch value={keyword} onChange={setKeyword} />
-      <FilterDates
+      <FilterByDates
         onChange={onDatesChange}
         title={t('filters.course-date-range')}
         data-testid={'date-range'}
         queryParam={'Range'}
       />
-      <FilterDates
+      <FilterByDates
         onChange={onCreateDatesChange}
         title={t('filters.created-range')}
         data-testid={'date-created'}
@@ -194,12 +194,12 @@ export function Filters({ onChange }: Props) {
             selected={filterBlendedLearning}
             onChange={setFilterBlendedLearning}
           />
-          <FilterCourseLevel
+          <FilterByCourseLevel
             title={t('course-level')}
             onChange={setFilterLevel}
           />
-          <FilterCourseType onChange={setFilterType} />
-          <FilterCourseStatus
+          <FilterByCourseType onChange={setFilterType} />
+          <FilterByCourseStatus
             onChange={setFilterStatus}
             customStatuses={
               acl.isTTAdmin() || isOrgAdmin
@@ -214,7 +214,7 @@ export function Filters({ onChange }: Props) {
             onChange={onAccreditedByChange}
             data-testid="filter-accredited-by"
           />
-          <FilterCourseDeliveryType onChange={setFilterDeliveryType} />
+          <FilterByCourseDeliveryType onChange={setFilterDeliveryType} />
         </Stack>
       </Box>
     </>

@@ -11,10 +11,10 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CertificationList } from '@app/components/CertificationList'
-import { FilterCertificateValidity } from '@app/components/FilterCertificateValidity'
-import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
-import { FilterCourseType } from '@app/components/FilterCourseType'
-import { FilterDates } from '@app/components/FilterDates'
+import { FilterByCertificateValidity } from '@app/components/filters/FilterByCertificateValidity'
+import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
+import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
+import { FilterByDates } from '@app/components/filters/FilterByDates'
 import { FilterSearch } from '@app/components/FilterSearch'
 import {
   Course_Participant_Bool_Exp,
@@ -159,13 +159,13 @@ export const Certifications: React.FC<
 
           <Stack gap={4} mt={4}>
             <FilterSearch value={keyword} onChange={setKeyword} />
-            <FilterDates
+            <FilterByDates
               onChange={onDatesChange}
               title={t('filters.date-obtained')}
             />
-            <FilterCourseType onChange={setFilterType} />
-            <FilterCertificateValidity onChange={setCertificateStatus} />
-            <FilterCourseLevel
+            <FilterByCourseType onChange={setFilterType} />
+            <FilterByCertificateValidity onChange={setCertificateStatus} />
+            <FilterByCourseLevel
               title={t('course-level')}
               onChange={setFilterLevel}
             />
