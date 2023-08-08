@@ -5,7 +5,7 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -32,6 +32,23 @@ export const ResourceCategoryDetails = () => {
   const [{ data, fetching }] = useResourceCategory(id, searchTerm)
 
   const resourceCategory = data?.content?.resourceCategory
+
+  const numberOfResources = useMemo(() => {
+    function countResources(category: typeof resourceCategory): number {
+      const resourceNum = category?.resources?.nodes?.length ?? 0
+
+      const childResourceNum = category?.children?.nodes?.length
+        ? category.children.nodes.reduce(
+            (acc, subCategory) => acc + countResources(subCategory),
+            0
+          )
+        : 0
+
+      return resourceNum + childResourceNum
+    }
+
+    return countResources(resourceCategory)
+  }, [resourceCategory])
 
   if (!fetching && !resourceCategory) {
     return <NotFound />
@@ -84,18 +101,20 @@ export const ResourceCategoryDetails = () => {
               {fetching ? (
                 <ResourceItemsSkeleton />
               ) : (
-                <>
+                <Box mt={4}>
+                  {numberOfResources === 0 ? (
+                    <Typography sx={{ mt: 4 }}>
+                      {t('pages.resources.resource-details.empty')}
+                    </Typography>
+                  ) : null}
+
                   {resourceCategory?.resources?.nodes?.length ? (
                     <Box sx={{ mt: 2, mb: 4 }}>
                       <ResourcesList
                         resources={resourceCategory?.resources?.nodes}
                       />
                     </Box>
-                  ) : (
-                    <Typography sx={{ mt: 4 }}>
-                      {t('pages.resources.resource-details.empty')}
-                    </Typography>
-                  )}
+                  ) : null}
                   {resourceCategory?.children?.nodes?.map(categoryLevelOne => (
                     <Box key={categoryLevelOne?.id} sx={{ mb: 7 }}>
                       {categoryLevelOne?.resources?.nodes?.length ? (
@@ -124,7 +143,7 @@ export const ResourceCategoryDetails = () => {
                       )}
                     </Box>
                   ))}
-                </>
+                </Box>
               )}
             </Box>
           </Box>

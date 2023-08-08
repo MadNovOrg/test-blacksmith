@@ -369,6 +369,120 @@ describe('page: ResourceCategoryDetails', () => {
       screen.queryByText(secondLevelNestingCategory.name ?? 'should fail')
     ).not.toBeInTheDocument()
   })
+
+  it("doesn't display no resources message if there are no direct child resources but child category has resources", () => {
+    const childCategory = buildResourceCategory({
+      name: 'First level nesting',
+      resourcePermissions: {
+        principalTrainer: true,
+      },
+      resources: {
+        nodes: [
+          buildResource({
+            resourcePermissions: {
+              principalTrainer: true,
+            },
+          }),
+        ],
+      },
+    })
+
+    const parentCategory = buildResourceCategory({
+      name: 'Top level category',
+      resourcePermissions: {
+        principalTrainer: true,
+      },
+      resources: {
+        nodes: [],
+      },
+      children: {
+        nodes: [childCategory],
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: ResourceDetailsQuery }>({
+          data: {
+            content: {
+              resourceCategory: parentCategory,
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <ResourceCategoryDetails />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+          trainerRoles: [TrainerRoleTypeName.PRINCIPAL],
+        },
+      }
+    )
+
+    expect(
+      screen.getByText(childCategory.name ?? 'should fail')
+    ).toBeInTheDocument()
+
+    expect(screen.queryByText(/no resources found/i)).not.toBeInTheDocument()
+  })
+
+  it("display no resources found message when both parent and child categories don't have resources", () => {
+    const childCategory = buildResourceCategory({
+      name: 'First level nesting',
+      resourcePermissions: {
+        principalTrainer: true,
+      },
+      resources: {
+        nodes: [],
+      },
+    })
+
+    const parentCategory = buildResourceCategory({
+      name: 'Top level category',
+      resourcePermissions: {
+        principalTrainer: true,
+      },
+      resources: {
+        nodes: [],
+      },
+      children: {
+        nodes: [childCategory],
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: ResourceDetailsQuery }>({
+          data: {
+            content: {
+              resourceCategory: parentCategory,
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <ResourceCategoryDetails />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+          trainerRoles: [TrainerRoleTypeName.PRINCIPAL],
+        },
+      }
+    )
+
+    expect(
+      screen.queryByText(childCategory.name ?? 'should fail')
+    ).not.toBeInTheDocument()
+
+    expect(screen.getByText(/no resources found/i)).toBeInTheDocument()
+  })
 })
 
 function buildResourceCategory(
