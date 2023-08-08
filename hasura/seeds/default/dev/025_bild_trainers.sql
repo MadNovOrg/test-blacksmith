@@ -117,3 +117,9 @@ INSERT INTO public.course_participant (id, course_id, profile_id, invite_id, cer
 ('d389dd72-72bc-46e4-b47a-aa7d4725e4de', 10034, '2c4b16db-bfba-4a21-a092-55ef9010ca2f', 'e5e72cab-5c8f-474a-a867-3fffd210582e', '5beb390c-450b-40b2-905e-d79d54b9daca', 'PASS'),
 ('f75fcb66-5f3e-442b-93cd-a08aeb801f26', 10034, 'c15a4b34-bb98-4096-ae2e-ea280fb14e05', 'a8c4542a-2d7c-4e26-ba66-cd372f462248', '4fff750b-ef54-461c-806e-0f087a7efae0', 'PASS'),
 ('5c7942e4-b333-4913-ac7f-7571fde2c9c2', 10034, '729e3ed4-f86e-41a7-9e29-c6387b9fbaa6', '95b96976-c985-40d9-91fc-bdf10a7e3089', 'b76ec0ea-7f48-4a91-9806-e517d97df17d', 'PASS');
+
+INSERT INTO organization_member (profile_id, organization_id) VALUES
+('9b236919-918d-45ad-84e4-fb063c1938f0', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- bild.intermediate@teamteach2.testinator.com
+('00d14fc3-7fa6-4d52-9ae4-f3bcb26baade', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- bild.advanced2@teamteach.testinator.com
+('d1c5fa19-30da-4512-88f6-dc9ef6a26958', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- bild.senior2@teamteach.testinator.com
+('c15a4b34-bb98-4096-ae2e-ea280fb14e05', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'); -- bild.certified2@teamteach.testinator.com

@@ -433,6 +433,9 @@ export function getProfileCertificationLevels(
     CourseLevel.IntermediateTrainer,
     CourseLevel.Level_2,
     CourseLevel.Level_1,
+    CourseLevel.BildAdvancedTrainer,
+    CourseLevel.BildIntermediateTrainer,
+    CourseLevel.BildRegular,
   ]
   for (const level of hierarchy) {
     const certificate = certificates.find(c => c.courseLevel === level)

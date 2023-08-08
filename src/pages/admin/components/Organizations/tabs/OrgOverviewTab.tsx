@@ -36,6 +36,9 @@ const LEVELS_IN_ORDER = [
   CourseLevel.IntermediateTrainer,
   CourseLevel.Advanced,
   CourseLevel.AdvancedTrainer,
+  CourseLevel.BildAdvancedTrainer,
+  CourseLevel.BildIntermediateTrainer,
+  CourseLevel.BildRegular,
   null,
 ]
 
