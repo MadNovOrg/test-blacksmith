@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: profile_trainer_role_type
+  schema: public
 object_relationships:
   - name: trainer_role_type
     using:
@@ -15,7 +15,15 @@ insert_permissions:
         - profile_id
         - trainer_role_type_id
         - updated_at
-      backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+        - trainer_role_type_id
 select_permissions:
   - role: finance
     permission:
@@ -55,5 +63,8 @@ select_permissions:
       filter: {}
 delete_permissions:
   - role: tt-admin
+    permission:
+      filter: {}
+  - role: tt-ops
     permission:
       filter: {}

@@ -196,7 +196,7 @@ export const EditProfilePage: React.FC<
 
   const ratherNotSayText = t<string>('rather-not-say')
 
-  const canEditRoles = acl.isTTAdmin()
+  const canEditRoles = acl.isTTAdmin() || acl.isTTOps()
 
   useEffect(() => {
     const restriction = profile?.dietaryRestrictions
