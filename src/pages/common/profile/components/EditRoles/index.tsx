@@ -280,10 +280,7 @@ export const EditRoles = () => {
                     <Button
                       variant="text"
                       onClick={() => {
-                        setValue(
-                          `roles.${index}.trainerRoles.BILDRole`,
-                          undefined
-                        )
+                        setValue(`roles.${index}.trainerRoles.BILDRole`, '')
                       }}
                     >
                       {t(`pages.view-profile.remove-role`)}
