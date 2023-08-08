@@ -7,7 +7,7 @@ import {
 
 import { render, screen, userEvent, within } from '@test/index'
 
-import { CourseGradingMenu } from '.'
+import { CourseGradingMenu } from './CourseGradingMenu'
 
 describe('component: CourseGradingMenu', () => {
   it('displays correct option for virtual L1 course', async () => {
@@ -63,6 +63,26 @@ describe('component: CourseGradingMenu', () => {
     expect(within(menu).getByText('Pass')).toBeInTheDocument()
     expect(within(menu).getByText('Fail')).toBeInTheDocument()
     expect(within(menu).getByText('Non-Physical Pass')).toBeInTheDocument()
+    expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
+  })
+
+  it('displays correct options for the advanced modules course', async () => {
+    render(
+      <CourseGradingMenu
+        courseLevel={Course_Level_Enum.Advanced}
+        courseDeliveryType={Course_Delivery_Type_Enum.F2F}
+      />
+    )
+
+    await userEvent.click(screen.getByTestId('course-grading-menu-selected'))
+
+    const menu = screen.getByTestId('course-grading-options')
+
+    expect(within(menu).getByText('Pass')).toBeInTheDocument()
+    expect(within(menu).getByText('Fail')).toBeInTheDocument()
+    expect(
+      within(menu).queryByText('Non-Physical Pass')
+    ).not.toBeInTheDocument()
     expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
   })
 

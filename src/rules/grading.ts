@@ -26,6 +26,10 @@ export function getAvailableGrades(
     return [Grade_Enum.Pass, Grade_Enum.AssistOnly, Grade_Enum.Fail]
   }
 
+  if (courseLevel === Course_Level_Enum.Advanced) {
+    return [Grade_Enum.Pass, Grade_Enum.Fail]
+  }
+
   if (courseLevel === Course_Level_Enum.BildRegular) {
     return [Grade_Enum.Pass, Grade_Enum.Fail]
   }

@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
-import { CourseGradingMenu } from '@app/components/CourseGradingMenu'
+import { CourseGradingMenu } from '@app/components/CourseGradingMenu/CourseGradingMenu'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
 import {
