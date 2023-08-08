@@ -142,7 +142,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             <Typography variant="body2" color="secondary">
               {course.course_code}
             </Typography>
-            {course.status && isMobile ? (
+            {course.status ? (
               <Box mt={2}>
                 <CourseStatusChip
                   status={
