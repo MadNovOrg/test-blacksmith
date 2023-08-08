@@ -1,5 +1,4 @@
 import { Wrapper } from '@googlemaps/react-wrapper'
-import { Info } from '@mui/icons-material'
 import DescriptionOutlined from '@mui/icons-material/DescriptionOutlined'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import PinDropIcon from '@mui/icons-material/PinDrop'
@@ -15,7 +14,6 @@ import {
   ListItemIcon,
   ListItemText,
   styled,
-  Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
@@ -258,25 +256,6 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   )}
                 </ListItemText>
               </ListItem>
-
-              {course.notes ? (
-                <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
-                  <StyledListIcon>
-                    <Info />
-                  </StyledListIcon>
-                  <ListItemText>
-                    <Tooltip title={course.notes}>
-                      <Typography
-                        component="span"
-                        data-testid="additional-notes-label"
-                        variant="body2"
-                      >
-                        {t('components.course-hero-summary.notes-label')}
-                      </Typography>
-                    </Tooltip>
-                  </ListItemText>
-                </ListItem>
-              ) : null}
 
               {course.special_instructions || course.parking_instructions ? (
                 <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>

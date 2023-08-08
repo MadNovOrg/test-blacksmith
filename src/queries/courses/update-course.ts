@@ -24,7 +24,6 @@ export type ParamsType = {
     min_participants?: number
     max_participants?: number
     freeSpaces?: number
-    notes?: string
     special_instructions?: string
     parking_instructions?: string
   }

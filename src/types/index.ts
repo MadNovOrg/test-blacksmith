@@ -42,7 +42,6 @@ export type Course = {
   aolRegion?: string
   go1Integration: boolean
   conversion: boolean
-  notes?: string
   dates: {
     aggregate: {
       start: { date: string }
@@ -594,7 +593,6 @@ export type CourseInput = {
   aolCountry: string | null
   aolRegion: string | null
   courseCost: number | null
-  notes: string | null
   specialInstructions: string
   parkingInstructions: string
   source: Course_Source_Enum | ''

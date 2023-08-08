@@ -82,7 +82,6 @@ erDiagram
     Int cancellation_fee_percent "❓"
     Boolean grading_started 
     Int modules_duration 
-    String notes "❓"
     String special_instructions "❓"
     String parking_instructions "❓"
     Boolean conversion "❓"

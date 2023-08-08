@@ -295,7 +295,6 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     aolRegion: course.aolRegion ?? null,
     freeSpaces: course.freeSpaces ?? null,
     accountCode: course.accountCode ?? null,
-    notes: course.notes ?? null,
     specialInstructions: course.special_instructions ?? '',
     parkingInstructions: course.parking_instructions ?? '',
     salesRepresentative: course.orders?.[0]?.salesRepresentative ?? null,

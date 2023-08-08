@@ -588,7 +588,6 @@ input NotifyCourseInput {
   virtualLink: String
   parkingInstructions: String!
   specialInstructions: String!
-  notes: String!
 }
 
 input NotifyCourseTrainerInput {

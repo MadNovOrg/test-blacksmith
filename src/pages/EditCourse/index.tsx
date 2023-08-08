@@ -310,7 +310,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               freeSpaces: courseData.freeSpaces,
               special_instructions: courseData.specialInstructions,
               parking_instructions: courseData.parkingInstructions,
-              notes: courseData.notes,
               ...(courseData.minParticipants
                 ? { min_participants: courseData.minParticipants }
                 : null),
@@ -391,7 +390,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 endDate: course.dates.aggregate.end.date,
                 parkingInstructions: course.parking_instructions || '',
                 specialInstructions: course.special_instructions || '',
-                notes: course.notes || '',
               },
               course.trainers?.map(trainer => ({
                 id: trainer.profile.id,

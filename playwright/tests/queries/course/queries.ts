@@ -27,7 +27,6 @@ export const ADMIN_COURSE_QUERY = gql`
       min_participants
       modulesDuration
       name
-      notes
       organization_id
       parking_instructions
       reaccreditation
@@ -65,7 +64,6 @@ export const TRAINER_COURSE_QUERY = gql`
       min_participants
       modulesDuration
       name
-      notes
       organization_id
       parking_instructions
       reaccreditation

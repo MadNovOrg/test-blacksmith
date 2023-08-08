@@ -198,7 +198,6 @@ export function useSaveCourse(): {
                 : null),
               max_participants: courseData.maxParticipants,
               type: courseData.type,
-              notes: courseData.notes,
               special_instructions: courseData.specialInstructions,
               parking_instructions: courseData.parkingInstructions,
               ...(courseData.organization

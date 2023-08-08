@@ -228,7 +228,6 @@ insert_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -264,7 +263,6 @@ insert_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - reaccreditation
@@ -303,7 +301,6 @@ insert_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -341,7 +338,6 @@ insert_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -413,7 +409,6 @@ select_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -495,7 +490,6 @@ select_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -541,7 +535,6 @@ select_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -588,7 +581,6 @@ select_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -634,7 +626,6 @@ select_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -678,7 +669,6 @@ select_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -758,7 +748,6 @@ select_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -804,7 +793,6 @@ select_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -890,7 +878,6 @@ select_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -970,7 +957,6 @@ update_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -1013,7 +999,6 @@ update_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -1055,7 +1040,6 @@ update_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -1092,7 +1076,6 @@ update_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - reaccreditation
@@ -1140,7 +1123,6 @@ update_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price
@@ -1178,7 +1160,6 @@ update_permissions:
         - min_participants
         - modules_duration
         - name
-        - notes
         - organization_id
         - parking_instructions
         - price

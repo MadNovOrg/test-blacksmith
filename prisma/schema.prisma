@@ -120,7 +120,6 @@ model course {
   cancellation_fee_percent                                               Int?
   grading_started                                                        Boolean                      @default(false)
   modules_duration                                                       Int                          @default(0)
-  notes                                                                  String?
   created_by_id                                                          String?                      @db.Uuid
   special_instructions                                                   String?
   parking_instructions                                                   String?

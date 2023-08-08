@@ -53,7 +53,6 @@ export const WithAdditionalNotes: Story = {
     course: buildCourse({
       map: obj => ({
         ...obj,
-        notes: 'Additional notes here',
       }),
     }),
   },

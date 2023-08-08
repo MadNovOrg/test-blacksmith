@@ -34,7 +34,6 @@ export type ParamsType = {
     max_participants?: number
     freeSpaces?: number
     accountCode?: string
-    notes?: string
     special_instructions?: string
     parking_instructions?: string
     status:

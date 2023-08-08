@@ -261,7 +261,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .positive(
             t('components.course-form.course-cost-positive-number-error')
           ),
-        notes: yup.string().nullable(),
         specialInstructions: yup.string().nullable().default(''),
         parkingInstructions: yup.string().nullable().default(''),
         bildStrategies: strategiesSchema.when('accreditedBy', {
@@ -348,7 +347,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       courseCost: courseInput?.courseCost ?? null,
       accountCode: courseInput?.accountCode ?? accountCodeValue,
       type: courseType,
-      notes: courseInput?.notes ?? null,
       specialInstructions: courseInput?.specialInstructions ?? '',
       parkingInstructions: courseInput?.parkingInstructions ?? '',
       source: courseInput?.source ?? '',
@@ -1412,31 +1410,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               ) : null}
             </Grid>
           </Grid>
-        </FormPanel>
-
-        <FormPanel mb={2} mt={2}>
-          <Typography fontWeight={600}>
-            {t('components.course-form.notes-title')}
-          </Typography>
-          <Typography variant="body2" mb={2}>
-            {t('components.course-form.notes-description')}
-          </Typography>
-
-          <TextField
-            label={t('components.course-form.notes-placeholder')}
-            variant="filled"
-            fullWidth
-            {...register('notes')}
-            error={Boolean(errors.notes)}
-            helperText={errors.notes?.message}
-            inputProps={{ min: 0 }}
-            data-testid="notes-input"
-            disabled={disabledFields.has('notes')}
-          />
-
-          <Alert severity="warning" variant="outlined" sx={{ marginTop: 2 }}>
-            {t('components.course-form.notes-warning')}
-          </Alert>
         </FormPanel>
 
         {isClosedCourse || (isBild && courseType === CourseType.OPEN) ? (

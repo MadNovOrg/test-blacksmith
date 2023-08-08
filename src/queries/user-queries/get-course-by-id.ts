@@ -27,7 +27,6 @@ export const QUERY = gql`
       special_instructions
       parking_instructions
       level
-      notes
       organization {
         id
         name
