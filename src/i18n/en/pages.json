@@ -1141,9 +1141,9 @@
           "level_1": "Level One ({{ count }})",
           "level_2": "Level Two ({{ count }})",
           "intermediate_trainer": "Intermediate Trainer ({{ count }})",
-          "bild_regular": "BILD ACT Certified ({{ count }})",
-          "bild_intermediate_trainer": "BILD ACT Trainer ({{ count }})",
-          "bild_advanced_trainer": "BILD ACT Certified ({{ count }})",
+          "bild_regular": "BILD Certified ({{ count }})",
+          "bild_intermediate_trainer": "BILD Intermediate Trainer ({{ count }})",
+          "bild_advanced_trainer": "BILD Advanced Trainer ({{ count }})",
           "advanced_trainer": "Advanced Trainer ({{ count }})",
           "no-certification": "No certification ({{ count }})"
         },
