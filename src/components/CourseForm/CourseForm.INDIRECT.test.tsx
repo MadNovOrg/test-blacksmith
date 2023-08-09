@@ -1,13 +1,9 @@
-import React from 'react'
-
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { screen, userEvent, waitFor } from '@test/index'
 
-import { selectDelivery, selectLevel } from './test-utils'
-
-import CourseForm from '.'
+import { renderForm, selectDelivery, selectLevel } from './test-utils'
 
 jest.mock('@app/hooks/useCoursePrice', () => ({
   useCoursePrice: jest.fn(),
@@ -29,7 +25,7 @@ describe('component: CourseForm - INDIRECT', () => {
 
   // Delivery
   it('allows INDIRECT+LEVEL_1 to be F2F, VIRTUAL or MIXED', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
 
@@ -39,7 +35,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('restricts INDIRECT+LEVEL_2 to be F2F or MIXED', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
 
@@ -49,13 +45,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('restricts INDIRECT+ADVANCED to be F2F', async () => {
-    await waitFor(() =>
-      render(<CourseForm type={type} />, {
-        auth: {
-          activeCertificates: [CourseLevel.AdvancedTrainer],
-        },
-      })
-    )
+    await waitFor(() => renderForm(type, CourseLevel.AdvancedTrainer))
 
     await selectLevel(CourseLevel.Advanced)
 
@@ -66,7 +56,7 @@ describe('component: CourseForm - INDIRECT', () => {
 
   // Blended
   it('allows INDIRECT+LEVEL_1+F2F to be Blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -80,7 +70,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('restricts INDIRECT+LEVEL_1+MIXED to Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.MIXED)
@@ -91,7 +81,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('allows INDIRECT+LEVEL_1+VIRTUAL to be Blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
@@ -105,7 +95,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('allows INDIRECT+LEVEL_2+F2F to be Blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -119,7 +109,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('restricts INDIRECT+LEVEL_2+MIXED to Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.MIXED)
@@ -130,13 +120,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('restricts INDIRECT+ADVANCED+F2F to Non-blended', async () => {
-    await waitFor(() =>
-      render(<CourseForm type={type} />, {
-        auth: {
-          activeCertificates: [CourseLevel.AdvancedTrainer],
-        },
-      })
-    )
+    await waitFor(() => renderForm(type, CourseLevel.AdvancedTrainer))
 
     await selectLevel(CourseLevel.Advanced)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -148,7 +132,7 @@ describe('component: CourseForm - INDIRECT', () => {
 
   // Reaccreditation
   it('allows INDIRECT+LEVEL_1+F2F Reaccreditation if Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -168,7 +152,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('allows INDIRECT+LEVEL_1+MIXED Reaccreditation if Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.MIXED)
@@ -183,7 +167,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('allows INDIRECT+LEVEL_1+VIRTUAL Reaccreditation if Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
@@ -203,7 +187,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('allows INDIRECT+LEVEL_2+F2F Reaccreditation for Blended or Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -223,7 +207,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('allows INDIRECT+LEVEL_2+MIXED Reaccreditation if Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.MIXED)

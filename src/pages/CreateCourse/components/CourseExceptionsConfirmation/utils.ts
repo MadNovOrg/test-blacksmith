@@ -15,6 +15,7 @@ import {
   CourseType,
   TrainerInput,
 } from '@app/types'
+import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 import {
   getRequiredAssistants,
   getRequiredLeads,
@@ -27,26 +28,6 @@ export enum CourseException {
   OUTSIDE_NOTICE_PERIOD = 'OUTSIDE_NOTICE_PERIOD',
   LEAD_TRAINER_IN_GRACE_PERIOD = 'LEAD_TRAINER_IN_GRACE_PERIOD',
   TRAINER_RATIO_NOT_MET = 'TRAINER_RATIO_NOT_MET',
-}
-
-const CourseLevelTrainerLevels = {
-  [CourseLevel.Level_1]: [
-    CourseLevel.IntermediateTrainer,
-    CourseLevel.AdvancedTrainer,
-  ],
-  [CourseLevel.Level_2]: [
-    CourseLevel.IntermediateTrainer,
-    CourseLevel.AdvancedTrainer,
-  ],
-  [CourseLevel.Advanced]: [CourseLevel.IntermediateTrainer],
-  [CourseLevel.BildRegular]: [CourseLevel.BildRegular],
-  [CourseLevel.IntermediateTrainer]: [
-    CourseLevel.IntermediateTrainer,
-    CourseLevel.AdvancedTrainer,
-  ],
-  [CourseLevel.AdvancedTrainer]: [CourseLevel.AdvancedTrainer],
-  [CourseLevel.BildIntermediateTrainer]: [CourseLevel.BildIntermediateTrainer],
-  [CourseLevel.BildAdvancedTrainer]: [CourseLevel.BildAdvancedTrainer],
 }
 
 const MIN_DURATION_FOR_TIME_COMMITMENT = 6 * 60 // 6h
@@ -87,8 +68,9 @@ export const isLeadTrainerInGracePeriod = (
     return t.type === Course_Trainer_Type_Enum.Leader
   })
   if (!leader) return false
-  const allowedLevels = CourseLevelTrainerLevels[courseData.courseLevel]
-  const matchingLevels = leader.levels.filter(
+  const allowedLevels =
+    REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[courseData.courseLevel]
+  const matchingLevels = (leader.levels ?? []).filter(
     l => allowedLevels.indexOf(l.courseLevel) != -1
   )
   const result = !matchingLevels.some(level =>

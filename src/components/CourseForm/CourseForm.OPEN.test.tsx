@@ -5,7 +5,7 @@ import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
-import { selectDelivery, selectLevel } from './test-utils'
+import { renderForm, selectDelivery, selectLevel } from './test-utils'
 
 import CourseForm from '.'
 
@@ -29,7 +29,7 @@ describe('component: CourseForm - OPEN', () => {
 
   // Delivery
   it('restricts OPEN+LEVEL_1 to be F2F or VIRTUAL', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
 
@@ -39,7 +39,7 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('restricts OPEN+INTERMEDIATE_TRAINER to be F2F', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.IntermediateTrainer)
 
@@ -49,7 +49,13 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('restricts OPEN+ADVANCED_TRAINER to be F2F', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() =>
+      render(<CourseForm type={type} />, {
+        auth: {
+          activeCertificates: [CourseLevel.AdvancedTrainer],
+        },
+      })
+    )
 
     await selectLevel(CourseLevel.AdvancedTrainer)
 
@@ -60,7 +66,7 @@ describe('component: CourseForm - OPEN', () => {
 
   // Blended
   it('restricts OPEN+LEVEL_1+F2F to Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -71,7 +77,7 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('restricts OPEN+LEVEL_1+VIRTUAL to Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
@@ -82,7 +88,7 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('restricts OPEN+INTERMEDIATE_TRAINER+F2F to Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.IntermediateTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -93,7 +99,13 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('restricts OPEN+ADVANCED_TRAINER+F2F to Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() =>
+      render(<CourseForm type={type} />, {
+        auth: {
+          activeCertificates: [CourseLevel.AdvancedTrainer],
+        },
+      })
+    )
 
     await selectLevel(CourseLevel.AdvancedTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -105,7 +117,7 @@ describe('component: CourseForm - OPEN', () => {
 
   // Reaccreditation
   it('restricts OPEN+LEVEL_1+F2F to New Certificate', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -116,7 +128,7 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('restricts OPEN+LEVEL_1+VIRTUAL to New Certificate', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -127,7 +139,7 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('allows OPEN+INTERMEDIATE_TRAINER+F2F to New Certificate and Reaccreditation', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.IntermediateTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -141,7 +153,13 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('allows OPEN+ADVANCED_TRAINER+F2F to New Certificate and Reaccreditation', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() =>
+      render(<CourseForm type={type} />, {
+        auth: {
+          activeCertificates: [CourseLevel.AdvancedTrainer],
+        },
+      })
+    )
 
     await selectLevel(CourseLevel.AdvancedTrainer)
     await selectDelivery(CourseDeliveryType.F2F)

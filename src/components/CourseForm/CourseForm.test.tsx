@@ -13,7 +13,7 @@ import {
 import { act, render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
-import { selectLevel } from './test-utils'
+import { renderForm, selectLevel } from './test-utils'
 
 import CourseForm from '.'
 
@@ -43,7 +43,7 @@ describe('component: CourseForm', () => {
 
   it('displays venue selector if F2F delivery type', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />)
+      renderForm(CourseType.CLOSED)
     })
 
     await userEvent.click(screen.getByLabelText('Face to face'))
@@ -53,7 +53,7 @@ describe('component: CourseForm', () => {
 
   it('displays venue selector if VIRTUAL delivery type', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />)
+      renderForm(CourseType.CLOSED)
     })
 
     await userEvent.click(screen.getByLabelText('Virtual'))
@@ -63,7 +63,7 @@ describe('component: CourseForm', () => {
 
   it('displays venue selector if MIXED delivery type', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />)
+      renderForm(CourseType.CLOSED)
     })
 
     await userEvent.click(screen.getByLabelText('Both'))
@@ -148,7 +148,7 @@ describe('component: CourseForm', () => {
 
   it('displays organisation selector and booking contact user selector if course type is closed', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />)
+      renderForm(CourseType.CLOSED)
     })
 
     expect(screen.getByText('Org Selector')).toBeInTheDocument()
@@ -157,7 +157,7 @@ describe('component: CourseForm', () => {
 
   it('renders correct organisation fields for indirect course type', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.INDIRECT} />)
+      renderForm(CourseType.INDIRECT)
     })
 
     expect(screen.getByText('Org Selector')).toBeInTheDocument()
@@ -166,7 +166,7 @@ describe('component: CourseForm', () => {
 
   it('does not render minimum participants for closed course type', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />)
+      renderForm(CourseType.CLOSED)
     })
 
     expect(
@@ -176,7 +176,7 @@ describe('component: CourseForm', () => {
 
   it('does not render minimum participants for indirect course type', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.INDIRECT} />)
+      renderForm(CourseType.INDIRECT)
     })
 
     expect(
@@ -191,7 +191,12 @@ describe('component: CourseForm', () => {
 
     await waitFor(() => {
       render(
-        <CourseForm courseInput={courseToCourseInput(course)} type={type} />
+        <CourseForm courseInput={courseToCourseInput(course)} type={type} />,
+        {
+          auth: {
+            activeCertificates: [CourseLevel.IntermediateTrainer],
+          },
+        }
       )
     })
 
@@ -223,7 +228,7 @@ describe('component: CourseForm', () => {
     setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
 
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />)
+      renderForm(CourseType.CLOSED)
     })
 
     act(() => {
@@ -245,7 +250,7 @@ describe('component: CourseForm', () => {
 
   it('shows an info alert for level 1 course', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />)
+      renderForm(CourseType.CLOSED)
     })
 
     const level = screen.getByTestId('course-level-select')
@@ -257,21 +262,27 @@ describe('component: CourseForm', () => {
   })
 
   it('hides the info alert for level 2 course', async () => {
-    await waitFor(() => render(<CourseForm type={CourseType.CLOSED} />))
+    await waitFor(() => renderForm(CourseType.CLOSED))
     await selectLevel(CourseLevel.Level_2)
 
     expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
   })
 
   it('hides the info alert for intermediate trainer course', async () => {
-    await waitFor(() => render(<CourseForm type={CourseType.CLOSED} />))
+    await waitFor(() => renderForm(CourseType.CLOSED))
     await selectLevel(CourseLevel.IntermediateTrainer)
 
     expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
   })
 
   it('hides the info alert for advanced trainer course', async () => {
-    await waitFor(() => render(<CourseForm type={CourseType.CLOSED} />))
+    await waitFor(() =>
+      render(<CourseForm type={CourseType.CLOSED} />, {
+        auth: {
+          activeCertificates: [CourseLevel.AdvancedTrainer],
+        },
+      })
+    )
     await selectLevel(CourseLevel.AdvancedTrainer)
 
     expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
@@ -279,7 +290,7 @@ describe('component: CourseForm', () => {
 
   it('shows an info alert for blended learning for indirect courses', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.INDIRECT} />)
+      renderForm(CourseType.INDIRECT)
     })
 
     await userEvent.click(screen.getByLabelText('Blended learning'))

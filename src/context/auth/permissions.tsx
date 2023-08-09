@@ -7,6 +7,7 @@ import {
   CourseType,
   RoleName,
 } from '@app/types'
+import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 
 import type { AuthContextType } from './types'
 
@@ -256,17 +257,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         return levels
       }
 
-      if (
-        activeCertificates.some(
-          c =>
-            c === CourseLevel.AdvancedTrainer ||
-            c === CourseLevel.BildAdvancedTrainer
+      return levels.filter(courseLevel => {
+        const allowedCertificates =
+          REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[courseLevel]
+        return allowedCertificates.some(allowed =>
+          activeCertificates.some(active => active === allowed)
         )
-      ) {
-        return levels
-      }
-
-      return levels.filter(l => l !== CourseLevel.Advanced)
+      })
     },
 
     canEditCourses: (type: CourseType, isLeader: boolean) => {

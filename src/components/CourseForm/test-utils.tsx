@@ -1,10 +1,16 @@
 import React from 'react'
 
+import CourseForm from '@app/components/CourseForm/index'
 import useZoomMeetingUrl from '@app/hooks/useZoomMeetingLink'
-import { CourseDeliveryType, CourseLevel } from '@app/types'
+import {
+  CourseDeliveryType,
+  CourseLevel,
+  CourseType,
+  RoleName,
+} from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { screen, userEvent, waitFor, within } from '@test/index'
+import { render, screen, userEvent, waitFor, within } from '@test/index'
 
 jest.mock('@app/components/OrgSelector', () => ({
   OrgSelector: jest.fn(() => <p>Org Selector</p>),
@@ -58,4 +64,17 @@ export async function selectDelivery(del: CourseDeliveryType) {
 export async function selectBildCategory() {
   await userEvent.click(screen.getByLabelText(/course category/i))
   await userEvent.click(within(screen.getByRole('listbox')).getByText(/bild/i))
+}
+
+export const renderForm = (
+  type: CourseType,
+  certificateLevel: CourseLevel = CourseLevel.IntermediateTrainer,
+  role: RoleName = RoleName.USER
+) => {
+  return render(<CourseForm type={type} />, {
+    auth: {
+      activeCertificates: [certificateLevel],
+      activeRole: role,
+    },
+  })
 }

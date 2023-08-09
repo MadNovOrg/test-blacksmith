@@ -99,6 +99,7 @@ describe('component: CourseLevelDropdown', () => {
               courseLevel: CourseLevel.IntermediateTrainer,
             },
           ],
+          activeCertificates: [CourseLevel.IntermediateTrainer],
         },
       }
     )

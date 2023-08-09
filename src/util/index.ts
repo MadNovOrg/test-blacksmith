@@ -658,3 +658,50 @@ export function expiryDateWithGracePeriod(
 
 export const DEFAULT_PAGINATION_LIMIT = 12
 export const DEFAULT_PAGINATION_ROW_OPTIONS = [12, 24, 50, 100]
+
+/*
+ * Map of required certificate for leading a certain course level.
+ * key -> desired course level
+ * value -> array of possible certificates that will meet the requirement
+ *
+ * Example: For leading Advanced Modules course you have to have either
+ *          Advanced Trainer certificate OR BILD Advanced Trainer.
+ */
+export const REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL = {
+  [CourseLevel.Level_1]: [
+    CourseLevel.IntermediateTrainer,
+    CourseLevel.BildIntermediateTrainer,
+    CourseLevel.AdvancedTrainer,
+    CourseLevel.BildAdvancedTrainer,
+  ],
+  [CourseLevel.Level_2]: [
+    CourseLevel.IntermediateTrainer,
+    CourseLevel.BildIntermediateTrainer,
+    CourseLevel.AdvancedTrainer,
+    CourseLevel.BildAdvancedTrainer,
+  ],
+  [CourseLevel.Advanced]: [
+    CourseLevel.AdvancedTrainer,
+    CourseLevel.BildAdvancedTrainer,
+  ],
+  [CourseLevel.BildRegular]: [
+    CourseLevel.BildRegular,
+    CourseLevel.BildIntermediateTrainer,
+    CourseLevel.BildAdvancedTrainer,
+  ],
+  [CourseLevel.IntermediateTrainer]: [
+    CourseLevel.IntermediateTrainer,
+    CourseLevel.BildIntermediateTrainer,
+    CourseLevel.AdvancedTrainer,
+    CourseLevel.BildAdvancedTrainer,
+  ],
+  [CourseLevel.AdvancedTrainer]: [
+    CourseLevel.AdvancedTrainer,
+    CourseLevel.BildAdvancedTrainer,
+  ],
+  [CourseLevel.BildIntermediateTrainer]: [
+    CourseLevel.BildIntermediateTrainer,
+    CourseLevel.BildAdvancedTrainer,
+  ],
+  [CourseLevel.BildAdvancedTrainer]: [CourseLevel.BildAdvancedTrainer],
+}

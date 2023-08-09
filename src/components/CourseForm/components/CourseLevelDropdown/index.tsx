@@ -43,7 +43,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   const selected = value && levels.includes(value) ? value : levels[0]
 
   useEffect(() => {
-    if (value !== selected) {
+    if (levels.length > 0 && value !== selected) {
       const ev = { target: { value: selected } }
       onChange(ev as SelectChangeEvent<CourseLevel>)
     }

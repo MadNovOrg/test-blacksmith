@@ -10,8 +10,8 @@ import {
   FormGroup,
   FormHelperText,
   Typography,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import omit from 'lodash-es/omit'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -32,8 +32,8 @@ import {
 import useProfile from '@app/hooks/useProfile'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
-  CourseException,
   checkCourseDetailsForExceptions,
+  CourseException,
   isTrainersRatioNotMet,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
@@ -45,7 +45,7 @@ import {
   TrainerRoleTypeName,
   ValidCourseInput,
 } from '@app/types'
-import { LoadingStatus, bildStrategiesToArray } from '@app/util'
+import { bildStrategiesToArray, LoadingStatus } from '@app/util'
 
 import { StepsEnum } from '../../types'
 import { useSaveCourse } from '../../useSaveCourse'
@@ -110,14 +110,14 @@ export const CreateCourseForm = () => {
           type: CourseTrainerType.Leader,
           status: InviteStatus.ACCEPTED,
           levels: certifications as TrainerInput['levels'],
-          trainer_role_types: [],
+          trainer_role_types: profile.trainer_role_types,
         },
         ...assistants.map(assistant => ({
           profile_id: assistant.id,
           type: CourseTrainerType.Assistant,
           status: InviteStatus.PENDING,
           levels: certifications as TrainerInput['levels'],
-          trainer_role_types: [],
+          trainer_role_types: assistant.trainer_role_types,
         })),
       ])
     }
@@ -198,11 +198,18 @@ export const CreateCourseForm = () => {
     if (courseType === CourseType.INDIRECT && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
         { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
-        assistants.map(assistant => ({
-          type: CourseTrainerType.Assistant,
-          trainer_role_types: assistant.trainer_role_types,
-          levels: assistant.levels,
-        }))
+        [
+          ...assistants.map(assistant => ({
+            type: CourseTrainerType.Assistant,
+            trainer_role_types: assistant.trainer_role_types,
+            levels: assistant.levels,
+          })),
+          {
+            type: CourseTrainerType.Leader,
+            levels: certifications as TrainerInput['levels'],
+            trainer_role_types: profile.trainer_role_types,
+          },
+        ]
       )
       setCourseExceptions(exceptions)
       if (exceptions.length > 0) return

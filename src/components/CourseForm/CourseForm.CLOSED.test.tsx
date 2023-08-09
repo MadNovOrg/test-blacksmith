@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
 import {
   CourseDeliveryType,
@@ -8,11 +6,9 @@ import {
   RoleName,
 } from '@app/types'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { screen, userEvent, waitFor } from '@test/index'
 
-import { selectDelivery, selectLevel } from './test-utils'
-
-import CourseForm from '.'
+import { renderForm, selectDelivery, selectLevel } from './test-utils'
 
 jest.mock('@app/hooks/useCoursePrice', () => ({
   useCoursePrice: jest.fn(),
@@ -34,7 +30,7 @@ describe('component: CourseForm - CLOSED', () => {
 
   // Delivery
   it('allows CLOSED+LEVEL_1 to be F2F, VIRTUAL or MIXED', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
 
@@ -44,7 +40,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+LEVEL_2 to be F2F or MIXED', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
 
@@ -55,9 +51,7 @@ describe('component: CourseForm - CLOSED', () => {
 
   it('restricts CLOSED+ADVANCED to be F2F', async () => {
     await waitFor(() =>
-      render(<CourseForm type={type} />, {
-        auth: { activeRole: RoleName.TT_ADMIN },
-      })
+      renderForm(type, CourseLevel.IntermediateTrainer, RoleName.TT_ADMIN)
     )
 
     await selectLevel(CourseLevel.Advanced)
@@ -68,7 +62,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+INTERMEDIATE_TRAINER to be F2F', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.IntermediateTrainer)
 
@@ -78,7 +72,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+ADVANCED_TRAINER to be F2F', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type, CourseLevel.AdvancedTrainer))
 
     await selectLevel(CourseLevel.AdvancedTrainer)
 
@@ -89,7 +83,7 @@ describe('component: CourseForm - CLOSED', () => {
 
   // Blended
   it('allows CLOSED+LEVEL_1+F2F to be Blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -103,7 +97,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+LEVEL_1+MIXED to Non-Blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.MIXED)
@@ -114,7 +108,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+LEVEL_1+VIRTUAL to be Blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
@@ -128,7 +122,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+LEVEL_2+F2F to be Blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -142,7 +136,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+LEVEL_2+MIXED to Non-Blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.MIXED)
@@ -154,9 +148,7 @@ describe('component: CourseForm - CLOSED', () => {
 
   it('restricts CLOSED+ADVANCED+F2F to Non-Blended', async () => {
     await waitFor(() =>
-      render(<CourseForm type={type} />, {
-        auth: { activeRole: RoleName.TT_ADMIN },
-      })
+      renderForm(type, CourseLevel.IntermediateTrainer, RoleName.TT_ADMIN)
     )
 
     await selectLevel(CourseLevel.Advanced)
@@ -168,7 +160,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+INTERMEDIATE_TRAINER+F2F to Non-Blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.IntermediateTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -179,7 +171,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+ADVANCED_TRAINER+F2F to Non-Blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type, CourseLevel.AdvancedTrainer))
 
     await selectLevel(CourseLevel.AdvancedTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -191,7 +183,7 @@ describe('component: CourseForm - CLOSED', () => {
 
   // Reaccreditation
   it('allows CLOSED+LEVEL_1+F2F Reaccreditation if Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -211,7 +203,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+LEVEL_1+MIXED Reaccreditation if Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.MIXED)
@@ -226,7 +218,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+LEVEL_1+VIRTUAL Reaccreditation if Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
@@ -246,7 +238,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+LEVEL_2+F2F Reaccreditation for Blended or Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -266,7 +258,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+LEVEL_2+MIXED Reaccreditation if Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.MIXED)
@@ -281,7 +273,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+INTERMEDIATE_TRAINER+F2F Reaccreditation if Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.IntermediateTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -296,7 +288,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+ADVANCED_TRAINER+F2F Reaccreditation if Non-blended', async () => {
-    await waitFor(() => render(<CourseForm type={type} />))
+    await waitFor(() => renderForm(type, CourseLevel.AdvancedTrainer))
 
     await selectLevel(CourseLevel.AdvancedTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
@@ -311,11 +303,9 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('displays price field for a Level two blended closed course that has 8 or less participants', async () => {
-    await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
-        auth: { activeRole: RoleName.TT_ADMIN },
-      })
-    })
+    await waitFor(() =>
+      renderForm(type, CourseLevel.IntermediateTrainer, RoleName.TT_ADMIN)
+    )
 
     await selectLevel(CourseLevel.Level_2)
     await userEvent.type(screen.getByLabelText(/number of attendees/i), '8')
@@ -335,9 +325,7 @@ describe('component: CourseForm - CLOSED', () => {
     })
 
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
-        auth: { activeRole: RoleName.TT_ADMIN },
-      })
+      renderForm(type, CourseLevel.IntermediateTrainer, RoleName.TT_ADMIN)
     })
 
     await selectLevel(CourseLevel.Level_2)

@@ -10,10 +10,10 @@ import { Accreditors_Enum } from '@app/generated/graphql'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import {
+  BildStrategies,
   CourseLevel,
   CourseType,
   ValidCourseInput,
-  BildStrategies,
 } from '@app/types'
 import { courseToCourseInput, LoadingStatus } from '@app/util'
 
@@ -223,7 +223,11 @@ describe('component: CreateCourseForm', () => {
           />
         </Routes>
       </Provider>,
-      {},
+      {
+        auth: {
+          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+        },
+      },
       { initialEntries: ['/?type=INDIRECT'] }
     )
 

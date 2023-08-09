@@ -7,6 +7,7 @@ import {
   CourseType,
   RoleName,
 } from '@app/types'
+import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 
 import { buildProfile } from '@test/mock-data-utils'
 
@@ -2322,6 +2323,48 @@ describe(getACL.name, () => {
       // Act & Assert
       expect(acl.canViewArchivedUsersCertificates()).toBeFalsy()
     })
+  })
+
+  describe('allowedCourseLevels', () => {
+    const allLevels = Object.values(CourseLevel)
+
+    it('should return an empty array when there is no active role', () => {
+      const acl = getACLStub({
+        activeRole: undefined,
+      })
+
+      expect(acl.allowedCourseLevels(allLevels)).toEqual([])
+    })
+
+    it.each([RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN])(
+      'should allow any course level when the activeRole is %s',
+      activeRole => {
+        const acl = getACLStub({
+          activeRole,
+        })
+
+        expect(acl.allowedCourseLevels(allLevels)).toEqual(allLevels)
+      }
+    )
+
+    it.each(Object.values(CourseLevel))(
+      'should allow only specific levels when trainer holds %s certificate',
+      activeCertificate => {
+        const acl = getACLStub({
+          activeRole: RoleName.TRAINER,
+          activeCertificates: [activeCertificate],
+        })
+        const expected = Object.keys(
+          REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL
+        ).filter(courseLevel =>
+          REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[
+            courseLevel as CourseLevel
+          ].includes(activeCertificate)
+        )
+
+        expect(acl.allowedCourseLevels(allLevels)).toEqual(expected)
+      }
+    )
   })
 })
 

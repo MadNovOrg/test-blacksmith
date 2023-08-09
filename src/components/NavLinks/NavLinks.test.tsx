@@ -29,6 +29,7 @@ describe('component: NavLinks', () => {
       auth: {
         activeRole: RoleName.USER,
         allowedRoles: new Set([RoleName.USER]),
+        activeCertificates: [],
       },
     })
 
