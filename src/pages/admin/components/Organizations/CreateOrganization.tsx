@@ -171,12 +171,14 @@ export const CreateOrganization = () => {
           postCode: data.postCode,
         } as Address,
         xeroId,
-        invites: [
-          {
-            email: data.workEmail,
-            isAdmin: true,
-          },
-        ],
+        invites: data.workEmail
+          ? [
+              {
+                email: data.workEmail,
+                isAdmin: true,
+              },
+            ]
+          : [],
       })
       if (response.org) {
         navigate(`../${response.org.id}`)
