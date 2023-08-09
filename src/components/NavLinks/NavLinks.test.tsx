@@ -18,8 +18,6 @@ describe('component: NavLinks', () => {
 
     const coursesLink = screen.getByRole('link', { name: 'My Courses' })
     expect(coursesLink).toBeInTheDocument()
-    const membershipLink = screen.getByRole('link', { name: 'Membership' })
-    expect(membershipLink).toBeInTheDocument()
     const resourcesLink = screen.getByRole('link', { name: 'Resources' })
     expect(resourcesLink).toBeInTheDocument()
     const usersLink = screen.queryByRole('link', { name: 'Users' })
@@ -172,10 +170,6 @@ describe('component: NavLinks', () => {
 
     const coursesLink = screen.getByRole('link', { name: 'My Courses' })
     expect(coursesLink).toBeInTheDocument()
-    const membershipLink = screen.getByRole('link', {
-      name: 'Membership',
-    })
-    expect(membershipLink).toBeInTheDocument()
     const usersLink = screen.queryByRole('link', { name: 'Users' })
     expect(usersLink).not.toBeInTheDocument()
   })

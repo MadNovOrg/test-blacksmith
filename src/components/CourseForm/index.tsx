@@ -913,14 +913,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
           {isBild ? (
             <>
-              <FormHelperText>
-                {t('components.course-form.course-level-one-info')}
-              </FormHelperText>
               <StrategyToggles
                 courseLevel={values.courseLevel}
                 disabled={disabledFields.has('bildStrategies')}
               />
-
               <FormHelperText error={Boolean(errors.bildStrategies?.message)}>
                 {t('components.course-form.select-one-option')}
               </FormHelperText>

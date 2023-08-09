@@ -55,12 +55,6 @@ export const NavLinks = () => {
           {t('common.orders')}
         </Link>
       )}
-
-      {acl.canViewMembership() ? (
-        <Link component={StyledNavLink} to="/membership">
-          {t('common.membership')}
-        </Link>
-      ) : null}
     </>
   )
 }

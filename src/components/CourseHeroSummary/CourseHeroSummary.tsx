@@ -23,7 +23,6 @@ import { useTranslation } from 'react-i18next'
 
 import { CourseInstructionsDialog } from '@app/components/CourseInstructionsDialog'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
-import { Course_Status_Enum } from '@app/generated/graphql'
 import { AdminOnlyCourseStatus, Course, CourseDeliveryType } from '@app/types'
 import { getCourseBeginsForMessage, formatCourseVenue } from '@app/util'
 
@@ -56,10 +55,6 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const courseBeginsForMessage = getCourseBeginsForMessage(course, t)
-
-  const showStatus =
-    course.status === Course_Status_Enum.Cancelled ||
-    course.status === Course_Status_Enum.Declined
 
   const backgroundList = isMobile
     ? { backgroundColor: 'white', borderRadius: 3, p: 2 }
@@ -167,11 +162,6 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 </Wrapper>
               </Grid>
             ) : undefined}
-            {showStatus && !isMobile ? (
-              <Box mt={1}>
-                <CourseStatusChip status={course.status} />
-              </Box>
-            ) : null}
             {slots?.EditButton?.()}
           </Grid>
           <Grid item xs={12} md={4}>

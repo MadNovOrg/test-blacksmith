@@ -431,7 +431,7 @@ export const BILDCourseBuilder: React.FC<
               <Box>
                 <Typography variant="body2">{courseDescription}</Typography>
               </Box>
-              <Box data-testid="course-info" mt={isMobile ? 2 : 0}>
+              <Box data-testid="course-info" mt={isMobile ? 2 : 0} width="100%">
                 <CourseInfo data={courseData.course} />
               </Box>
             </Box>

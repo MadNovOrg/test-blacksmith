@@ -1,9 +1,6 @@
-import { Route, Routes } from 'react-router-dom'
 import useSWR from 'swr'
 
-import { RoleName } from '@app/types'
-
-import { chance, render, screen, userEvent } from '@test/index'
+import { chance, render, screen } from '@test/index'
 
 import { AppBar } from './AppBar'
 
@@ -41,21 +38,5 @@ describe(AppBar.name, () => {
 
     const btn = screen.getByTestId('user-menu-btn')
     expect(btn).toHaveTextContent(`${profile.fullName}`)
-  })
-
-  it('renders membership link if user can access membership area', async () => {
-    render(
-      <>
-        <AppBar />
-        <Routes>
-          <Route path="/" element={<p>Home</p>} />
-          <Route path="/membership" element={<p>Membership page</p>} />
-        </Routes>
-      </>,
-      { auth: { verified: true, activeRole: RoleName.TRAINER } }
-    )
-
-    await userEvent.click(screen.getByText('Membership'))
-    expect(screen.getByText('Membership page')).toBeInTheDocument()
   })
 })
