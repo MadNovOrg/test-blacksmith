@@ -371,6 +371,9 @@ actions:
       kind: ''
       handler: '{{ACTIONS_HOST}}/xero/contacts/search'
     permissions:
+      - role: booking-contact
+      - role: trainer
+      - role: user
       - role: sales-representative
       - role: finance
       - role: ld
