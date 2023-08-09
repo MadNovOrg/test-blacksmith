@@ -227,7 +227,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             city: option.town,
             postCode: option.postcode,
           }
-        : option.address
+        : option.address ?? {}
       return [address.line1, address.line2, address.city, address.postCode]
         .filter(Boolean)
         .join(', ')
