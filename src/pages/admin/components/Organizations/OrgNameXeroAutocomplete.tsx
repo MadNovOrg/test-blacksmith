@@ -3,12 +3,12 @@ import { debounce } from 'lodash-es'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
 import {
-  ParamsType as SearchXeroContactsParamsType,
-  QUERY as SearchXeroContactsQuery,
-  ResponseType as SearchXeroContactsResponseType,
-} from '@app/queries/xero/search-xero-contacts'
+  SearchXeroContactsQuery,
+  SearchXeroContactsQueryVariables,
+} from '@app/generated/graphql'
+import { useFetcher } from '@app/hooks/use-fetcher'
+import { QUERY as SearchXeroContacts } from '@app/queries/xero/search-xero-contacts'
 
 type OrgNameXeroAutocompleteProps = {
   value: string
@@ -35,14 +35,14 @@ export const OrgNameXeroAutocomplete: React.FC<
       try {
         setSuggestions([])
         const response = await fetcher<
-          SearchXeroContactsResponseType,
-          SearchXeroContactsParamsType
-        >(SearchXeroContactsQuery, {
+          SearchXeroContactsQuery,
+          SearchXeroContactsQueryVariables
+        >(SearchXeroContacts, {
           input: {
             searchTerm: query,
           },
         })
-        setSuggestions(response.xero.contacts)
+        setSuggestions(response.xero?.contacts ?? [])
       } catch (e: unknown) {
         setInternalError((e as Error).message)
       }

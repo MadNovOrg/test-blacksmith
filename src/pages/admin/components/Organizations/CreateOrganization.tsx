@@ -14,13 +14,20 @@ import {
 } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { FormPanel } from '@app/components/FormPanel'
+import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
+import {
+  getOfstedRating,
+  getTrustType,
+  isDfeSuggestion,
+  isXeroSuggestion,
+} from '@app/components/OrgSelector/utils'
 import { Sticky } from '@app/components/Sticky'
 import {
   InsertOrgMutation,
@@ -29,7 +36,6 @@ import {
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { OrgNameXeroAutocomplete } from '@app/pages/admin/components/Organizations/OrgNameXeroAutocomplete'
 import { sectors } from '@app/pages/common/CourseBooking/components/org-data'
 import { MUTATION } from '@app/queries/organization/insert-org'
 import { yup } from '@app/schemas'
@@ -102,6 +108,8 @@ export const CreateOrganization = () => {
     formState: { errors },
     control,
     watch,
+    setValue,
+    trigger,
   } = useForm<FormInputs>({
     resolver: yupResolver(schema),
     mode: 'all',
@@ -180,6 +188,36 @@ export const CreateOrganization = () => {
     }
   }
 
+  const onOrgSelected = useCallback(
+    async (org: CallbackOption) => {
+      setXeroId(
+        org && isXeroSuggestion(org) ? (org.xeroId as string) : undefined
+      )
+      setValue('orgName', org?.name ?? '', { shouldValidate: true })
+      if (isDfeSuggestion(org)) {
+        setValue('trustType', getTrustType(org.trustType))
+        setValue('trustName', org.trustName ?? '')
+        setValue('localAuthority', org.localAuthority ?? '')
+        setValue('ofstedRating', getOfstedRating(org.ofstedRating) ?? '')
+        setValue(
+          'ofstedLastInspection',
+          org.ofstedLastInspection ? new Date(org.ofstedLastInspection) : null
+        )
+        setValue('addressLine1', org.addressLineOne ?? '')
+        setValue('addressLine2', org.addressLineTwo ?? '')
+        setValue('city', org.town ?? '')
+        setValue('country', t('common.UK'))
+        setValue('postCode', org.postcode || '')
+        setValue('headFirstName', org.headFirstName || '')
+        setValue('headLastName', org.headLastName || '')
+        setValue('headTitle', org.headTitle || '')
+        setValue('headPreferredJobTitle', org.headJobTitle || '')
+        await trigger()
+      }
+    },
+    [setValue, t, trigger]
+  )
+
   const values = watch()
 
   return (
@@ -214,20 +252,17 @@ export const CreateOrganization = () => {
 
               <FormPanel>
                 <Box mb={3}>
-                  <Controller
-                    name="orgName"
-                    control={control}
-                    render={({ field }) => (
-                      <OrgNameXeroAutocomplete
-                        value={field.value}
-                        onChange={value => {
-                          const isXeroContact = typeof value === 'object'
-                          setXeroId(isXeroContact ? value.contactID : undefined)
-                          field.onChange(isXeroContact ? value.name : value)
-                        }}
-                        error={errors.orgName?.message}
-                      />
-                    )}
+                  <OrgSelector
+                    required
+                    {...register('orgName')}
+                    error={errors.orgName?.message}
+                    allowAdding
+                    autocompleteMode={true}
+                    onChange={onOrgSelected}
+                    textFieldProps={{
+                      variant: 'filled',
+                    }}
+                    sx={{ marginBottom: 2 }}
                   />
                 </Box>
 
@@ -270,6 +305,9 @@ export const CreateOrganization = () => {
                     variant="filled"
                     error={!!errors.trustName}
                     helperText={errors.trustName?.message}
+                    InputLabelProps={{
+                      shrink: Boolean(values.trustName),
+                    }}
                     {...register('trustName')}
                     inputProps={{ 'data-testid': 'trust-name' }}
                     fullWidth
@@ -336,6 +374,9 @@ export const CreateOrganization = () => {
                       variant="filled"
                       error={!!errors.localAuthority}
                       helperText={errors.localAuthority?.message}
+                      InputLabelProps={{
+                        shrink: Boolean(values.localAuthority),
+                      }}
                       {...register('localAuthority')}
                       inputProps={{ 'data-testid': 'local-authority' }}
                       fullWidth
@@ -416,6 +457,9 @@ export const CreateOrganization = () => {
                     placeholder={t('common.addr.line1-placeholder')}
                     error={!!errors.addressLine1}
                     helperText={errors.addressLine1?.message}
+                    InputLabelProps={{
+                      shrink: Boolean(values.addressLine1),
+                    }}
                     {...register('addressLine1')}
                     inputProps={{ 'data-testid': 'addr-line1' }}
                     fullWidth
@@ -429,6 +473,9 @@ export const CreateOrganization = () => {
                     variant="filled"
                     placeholder={t('addr.line2-placeholder')}
                     error={!!errors.addressLine2}
+                    InputLabelProps={{
+                      shrink: Boolean(values.addressLine2),
+                    }}
                     helperText={errors.addressLine2?.message}
                     {...register('addressLine2')}
                     inputProps={{ 'data-testid': 'addr-line2' }}
@@ -443,6 +490,9 @@ export const CreateOrganization = () => {
                     placeholder={t('addr.city')}
                     error={!!errors.city}
                     helperText={errors.city?.message}
+                    InputLabelProps={{
+                      shrink: Boolean(values.city),
+                    }}
                     {...register('city')}
                     inputProps={{ 'data-testid': 'city' }}
                     fullWidth
@@ -457,6 +507,9 @@ export const CreateOrganization = () => {
                     placeholder={t('addr.country')}
                     error={!!errors.country}
                     helperText={errors.country?.message}
+                    InputLabelProps={{
+                      shrink: Boolean(values.country),
+                    }}
                     {...register('country')}
                     inputProps={{ 'data-testid': 'country' }}
                     fullWidth
@@ -471,6 +524,9 @@ export const CreateOrganization = () => {
                     placeholder={t('addr.postCode')}
                     error={!!errors.postCode}
                     helperText={errors.postCode?.message}
+                    InputLabelProps={{
+                      shrink: Boolean(values.postCode),
+                    }}
                     {...register('postCode')}
                     inputProps={{ 'data-testid': 'postCode' }}
                     fullWidth
@@ -492,6 +548,9 @@ export const CreateOrganization = () => {
                       variant="filled"
                       error={!!errors.headFirstName}
                       helperText={errors.headFirstName?.message}
+                      InputLabelProps={{
+                        shrink: Boolean(values.headFirstName),
+                      }}
                       {...register('headFirstName')}
                       inputProps={{ 'data-testid': 'head-first-name' }}
                       fullWidth
@@ -504,6 +563,9 @@ export const CreateOrganization = () => {
                       variant="filled"
                       error={!!errors.headLastName}
                       helperText={errors.headLastName?.message}
+                      InputLabelProps={{
+                        shrink: Boolean(values.headLastName),
+                      }}
                       {...register('headLastName')}
                       inputProps={{ 'data-testid': 'head-last-name' }}
                       fullWidth
@@ -518,6 +580,9 @@ export const CreateOrganization = () => {
                     variant="filled"
                     error={!!errors.headTitle}
                     helperText={errors.headTitle?.message}
+                    InputLabelProps={{
+                      shrink: Boolean(values.headTitle),
+                    }}
                     {...register('headTitle')}
                     inputProps={{ 'data-testid': 'head-title' }}
                     fullWidth
@@ -531,6 +596,9 @@ export const CreateOrganization = () => {
                     variant="filled"
                     error={!!errors.headPreferredJobTitle}
                     helperText={errors.headPreferredJobTitle?.message}
+                    InputLabelProps={{
+                      shrink: Boolean(values.headPreferredJobTitle),
+                    }}
                     {...register('headPreferredJobTitle')}
                     inputProps={{ 'data-testid': 'head-preferred-job-title' }}
                     fullWidth

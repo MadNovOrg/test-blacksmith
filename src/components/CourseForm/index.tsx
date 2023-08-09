@@ -46,6 +46,7 @@ import { SchemaDescription } from 'yup'
 
 import { FormPanel } from '@app/components/FormPanel'
 import { NumericTextField } from '@app/components/NumericTextField'
+import { isHubOrg } from '@app/components/OrgSelector/utils'
 import {
   Profile as UserSelectorProfile,
   UserSelector,
@@ -60,6 +61,7 @@ import {
   CourseInput,
   CourseLevel,
   CourseType,
+  Organization,
   RoleName,
 } from '@app/types'
 import { bildStrategiesToArray, extractTime, requiredMsg } from '@app/util'
@@ -783,7 +785,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 allowAdding
                 value={values.organization ?? undefined}
                 onChange={org => {
-                  setValue('organization', org, { shouldValidate: true })
+                  if (!org || isHubOrg(org)) {
+                    setValue('organization', org as Organization, {
+                      shouldValidate: true,
+                    })
+                  }
                 }}
                 textFieldProps={{
                   variant: 'filled',

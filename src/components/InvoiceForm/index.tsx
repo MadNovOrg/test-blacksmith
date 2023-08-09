@@ -4,6 +4,7 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { InferType } from 'yup'
 
+import { isHubOrg } from '@app/components/OrgSelector/utils'
 import PhoneNumberInput from '@app/components/PhoneNumberInput'
 import { schemas, yup } from '@app/schemas'
 import { normalizeAddr, requiredMsg } from '@app/util'
@@ -64,6 +65,8 @@ export const InvoiceForm: React.FC<React.PropsWithChildren<unknown>> = () => {
           allowAdding
           textFieldProps={{ variant: 'filled' }}
           onChange={org => {
+            if (org && !isHubOrg(org)) return
+
             setValue('invoiceDetails.orgId', org?.id ?? '', {
               shouldValidate: true,
             })

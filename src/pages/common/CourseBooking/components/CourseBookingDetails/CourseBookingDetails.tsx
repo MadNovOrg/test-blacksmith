@@ -35,6 +35,7 @@ import {
   InvoiceForm,
 } from '@app/components/InvoiceForm'
 import { OrgSelector } from '@app/components/OrgSelector'
+import { isHubOrg } from '@app/components/OrgSelector/utils'
 import { ProfileSelector } from '@app/components/ProfileSelector'
 import {
   Profile as UserSelectorProfile,
@@ -582,6 +583,7 @@ export const CourseBookingDetails: React.FC<
               }
               allowAdding
               onChange={org => {
+                if (org && !isHubOrg(org)) return
                 setValue('orgId', org?.id ?? '', { shouldValidate: true })
                 setValue('orgName', org?.name ?? '')
               }}

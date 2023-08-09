@@ -16,6 +16,11 @@ import { debounce } from 'lodash-es'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import {
+  isDfeSuggestion,
+  isHubOrg,
+  isXeroSuggestion,
+} from '@app/components/OrgSelector/utils'
 import { useAuth } from '@app/context/auth'
 import {
   FindEstablishmentQuery,
@@ -23,16 +28,32 @@ import {
   GetOrganizationsQuery,
   GetOrganizationsQueryVariables,
   InsertOrgMutation,
+  SearchXeroContactsQuery,
+  SearchXeroContactsQueryVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { QUERY as FindEstablishment } from '@app/queries/dfe/find-establishment'
 import { QUERY as GetOrganizations } from '@app/queries/organization/get-organizations'
+import { QUERY as SearchXeroContacts } from '@app/queries/xero/search-xero-contacts'
 import { Establishment, Organization } from '@app/types'
 
 import { AddOrg } from './components/AddOrg'
 
+type OptionToAdd = Establishment | { name: string }
+type Option = Organization | OptionToAdd
+
+export type SuggestionOption = {
+  name: string
+  xeroId?: string
+}
+export type CallbackOption =
+  | Organization
+  | Establishment
+  | SuggestionOption
+  | null
+
 export type OrgSelectorProps = {
-  onChange: (org: Organization | null) => void
+  onChange: (org: CallbackOption) => void
   sx?: SxProps
   textFieldProps?: TextFieldProps
   placeholder?: string
@@ -41,10 +62,11 @@ export type OrgSelectorProps = {
   value?: Pick<Organization, 'name' | 'id'>
   disabled?: boolean
   required?: boolean
+  showHubResults?: boolean
+  showXeroResults?: boolean
+  showDfeResults?: boolean
+  autocompleteMode?: boolean
 }
-
-type OptionToAdd = Establishment | { name: string }
-type Option = Organization | OptionToAdd
 
 const getOptionLabel = (option: Option) => option.name ?? ''
 
@@ -54,7 +76,11 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     sx,
     textFieldProps,
     placeholder,
+    autocompleteMode = false,
     allowAdding = false,
+    showHubResults = true,
+    showXeroResults = true,
+    showDfeResults = true,
     error,
     disabled = false,
     required = false,
@@ -85,6 +111,14 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           FindEstablishmentQuery,
           FindEstablishmentQueryVariables
         >(FindEstablishment, { where: condition })
+        const xeroData = await fetcher<
+          SearchXeroContactsQuery,
+          SearchXeroContactsQueryVariables
+        >(SearchXeroContacts, {
+          input: {
+            searchTerm: query,
+          },
+        })
         const hubData = await fetcher<
           GetOrganizationsQuery,
           GetOrganizationsQueryVariables
@@ -92,16 +126,35 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         setLoading(false)
         const orgs = hubData.orgs ?? []
         const establishments = dfeData.establishments ?? []
-        const suggestions = establishments.filter(
-          e => !orgs.some(org => 'name' in org && org.name === e.name)
-        )
+        const xeroContacts = xeroData.xero?.contacts ?? []
+        const xeroResults = xeroContacts
+          .filter(e => !orgs.some(org => 'name' in org && org.name === e.name))
+          .map(xeroContact => ({
+            ...xeroContact,
+            id: xeroContact.contactID,
+            fromXero: true,
+          }))
+        const dfeResults = establishments
+          .filter(e => !orgs.some(org => 'name' in org && org.name === e.name))
+          .map(r => ({
+            ...r,
+            fromDfe: true,
+          }))
         setOptions([
-          ...orgs,
-          ...(allowAdding ? [{ name: query }] : []),
-          ...suggestions,
+          ...(showHubResults ? orgs : []),
+          ...(allowAdding && !autocompleteMode ? [{ name: query }] : []),
+          ...(showXeroResults ? xeroResults : []),
+          ...(showDfeResults ? dfeResults : []),
         ])
       },
-      [allowAdding, fetcher]
+      [
+        allowAdding,
+        autocompleteMode,
+        fetcher,
+        showDfeResults,
+        showHubResults,
+        showXeroResults,
+      ]
     )
 
     const debouncedQuery = useMemo(() => {
@@ -116,8 +169,11 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           setLoading(true)
           debouncedQuery(value)
         }
+        if (autocompleteMode) {
+          onChange(value ? { name: value } : null)
+        }
       },
-      [debouncedQuery]
+      [autocompleteMode, debouncedQuery, onChange]
     )
 
     const handleClose = () => setAdding(null)
@@ -138,11 +194,19 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     ) => {
       event.preventDefault()
 
-      if (option && (!('id' in option) || 'urn' in option)) {
+      if (!autocompleteMode && (!isHubOrg(option) || isDfeSuggestion(option))) {
         return setTimeout(() => setAdding(option))
       }
 
-      onChange(option)
+      if (autocompleteMode && isXeroSuggestion(option)) {
+        onChange({
+          name: option.name,
+          xeroId:
+            'contactID' in option ? (option.contactID as string) : undefined,
+        })
+      } else {
+        onChange(option)
+      }
     }
 
     const noOptionsText =
@@ -155,16 +219,15 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       )
 
     function renderAddress(option: Option) {
-      if (!('id' in option) || !('name' in option)) return ''
-      const address =
-        'urn' in option
-          ? {
-              line1: option.addressLineOne,
-              line2: option.addressLineTwo,
-              city: option.town,
-              postCode: option.postcode,
-            }
-          : option.address
+      if (!isHubOrg(option) && !isDfeSuggestion(option)) return ''
+      const address = isDfeSuggestion(option)
+        ? {
+            line1: option.addressLineOne,
+            line2: option.addressLineTwo,
+            city: option.town,
+            postCode: option.postcode,
+          }
+        : option.address
       return [address.line1, address.line2, address.city, address.postCode]
         .filter(Boolean)
         .join(', ')
@@ -193,10 +256,13 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           loading={loading}
           disabled={disabled}
           groupBy={(value: Option) => {
-            if ('urn' in value) {
+            if (isDfeSuggestion(value)) {
               return t('components.org-selector.dfe-suggestions')
             }
-            if ('id' in value) {
+            if (isXeroSuggestion(value)) {
+              return t('components.org-selector.tt-suggestions')
+            }
+            if (isHubOrg(value)) {
               return myOrgIds?.includes(value.id)
                 ? t('components.org-selector.my-organizations')
                 : t('components.org-selector.existing-organizations')
@@ -242,7 +308,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
                     {loading ? (
                       <CircularProgress color="inherit" size={20} />
                     ) : null}
-                    {params.InputProps.endAdornment}
+                    {autocompleteMode ? null : params.InputProps.endAdornment}
                   </React.Fragment>
                 ),
               }}
@@ -251,8 +317,12 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             />
           )}
           renderOption={(props, option) => {
-            const isNew = !('id' in option) || 'urn' in option
+            const isNew =
+              !isHubOrg(option) ||
+              isXeroSuggestion(option) ||
+              isDfeSuggestion(option)
             const address = renderAddress(option)
+            const key = !('id' in option) ? 'NEW_ORG' : (option.id as string)
 
             return (
               <Box
@@ -262,21 +332,19 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
                 px={2}
                 component="li"
                 {...props}
-                {...(isNew
+                {...(isNew && !autocompleteMode
                   ? {
                       onClick: undefined,
                       onTouchStart: undefined,
                     }
                   : {})}
-                key={'id' in option ? option.id : 'NEW_ORG'}
-                data-testid={`org-selector-result-${
-                  'id' in option ? option.id : 'NEW_ORG'
-                }`}
+                key={key}
+                data-testid={`org-selector-result-${key}`}
               >
                 <Typography
                   flex={1}
                   p={1}
-                  fontStyle={isNew && !('urn' in option) ? 'italic' : undefined}
+                  fontStyle={isNew ? 'italic' : undefined}
                   component="span"
                   display="flex"
                   flexDirection={isMobile ? 'column' : 'row'}
@@ -287,7 +355,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
                     {address}
                   </Typography>
                 </Typography>
-                {isNew ? (
+                {isNew && !autocompleteMode ? (
                   <Button
                     color="primary"
                     variant="contained"
@@ -295,7 +363,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
                     size="small"
                     fullWidth={isMobile}
                   >
-                    {t('urn' in option ? 'add' : 'create')}
+                    {t(isDfeSuggestion(option) ? 'add' : 'create')}
                   </Button>
                 ) : null}
               </Box>

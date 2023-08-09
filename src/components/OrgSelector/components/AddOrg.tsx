@@ -7,6 +7,10 @@ import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/Dialog'
 import {
+  getTrustType,
+  isDfeSuggestion,
+} from '@app/components/OrgSelector/utils'
+import {
   InsertOrgLeadMutation,
   InsertOrgLeadMutationVariables,
   Trust_Type_Enum,
@@ -32,18 +36,6 @@ type FormInput = {
   city: string
   country: string
   postCode: string
-}
-
-function getTrustType(dfeValue?: string) {
-  if (dfeValue === 'Supported by a multi-academy trust') {
-    return TrustType.MultiAcademyTrust
-  } else if (dfeValue === 'Supported by a single-academy trust') {
-    return TrustType.SingleAcademyTrust
-  } else if (dfeValue === 'Supported by a trust') {
-    return TrustType.SupportedByATrust
-  } else {
-    return TrustType.NotApplicable
-  }
 }
 
 export const AddOrg: React.FC<React.PropsWithChildren<Props>> = function ({
@@ -72,28 +64,27 @@ export const AddOrg: React.FC<React.PropsWithChildren<Props>> = function ({
     })
   }, [t])
 
-  const defaultValues =
-    'urn' in option
-      ? {
-          name: option.name,
-          trustType: getTrustType(option.trustType),
-          trustName: option.trustName || '',
-          addressLine1: option.addressLineOne || '',
-          addressLine2: option.addressLineTwo || '',
-          city: option.town || '',
-          country: t('common.UK'),
-          postCode: option.postcode || '',
-        }
-      : {
-          name: option.name,
-          trustType: '',
-          trustName: '',
-          addressLine1: '',
-          addressLine2: '',
-          city: '',
-          country: '',
-          postCode: '',
-        }
+  const defaultValues = isDfeSuggestion(option)
+    ? {
+        name: option.name,
+        trustType: getTrustType(option.trustType),
+        trustName: option.trustName || '',
+        addressLine1: option.addressLineOne || '',
+        addressLine2: option.addressLineTwo || '',
+        city: option.town || '',
+        country: t('common.UK'),
+        postCode: option.postcode || '',
+      }
+    : {
+        name: option.name,
+        trustType: '',
+        trustName: '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        country: '',
+        postCode: '',
+      }
 
   const {
     register,
@@ -120,20 +111,19 @@ export const AddOrg: React.FC<React.PropsWithChildren<Props>> = function ({
           country: data.country,
           postCode: data.postCode,
         } as Address,
-        attributes:
-          'urn' in option
-            ? {
-                localAuthority: option.localAuthority,
-                headFirstName: option.headFirstName,
-                headLastName: option.headLastName,
-                headTitle: option.headTitle,
-                headPreferredJobTitle: option.headJobTitle,
-                ofstedRating: option.ofstedRating
-                  ?.toUpperCase()
-                  .replace(' ', '_'),
-                ofstedLastInspection: option.ofstedLastInspection,
-              }
-            : {},
+        attributes: isDfeSuggestion(option)
+          ? {
+              localAuthority: option.localAuthority,
+              headFirstName: option.headFirstName,
+              headLastName: option.headLastName,
+              headTitle: option.headTitle,
+              headPreferredJobTitle: option.headJobTitle,
+              ofstedRating: option.ofstedRating
+                ?.toUpperCase()
+                .replace(' ', '_'),
+              ofstedLastInspection: option.ofstedLastInspection,
+            }
+          : {},
       }
       const { org } = await fetcher<
         InsertOrgLeadMutation,
