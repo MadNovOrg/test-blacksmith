@@ -1,3 +1,4 @@
+import { InputAdornment } from '@mui/material'
 import Box from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -115,6 +116,11 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
             variant="filled"
             label={t('custom-fee-label')}
             error={Boolean(formState.errors.customFee?.message)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">£</InputAdornment>
+              ),
+            }}
             {...register('customFee')}
           />
         </Box>
