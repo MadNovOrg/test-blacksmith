@@ -11,7 +11,7 @@ import { groupBy, map, uniqBy } from 'lodash-es'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import { AttendeeMenu } from '@app/components/AttendeeMenu'
 import { BackButton } from '@app/components/BackButton'
@@ -20,17 +20,17 @@ import { RatingProgress } from '@app/components/RatingProgress'
 import { RatingSummary } from '@app/components/RatingSummary'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
+import {
+  Course_Evaluation_Question_Type_Enum,
+  GetEvaluationsSummaryQuery,
+  GetEvaluationsSummaryQueryVariables,
+} from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import {
-  ParamsType as GetEvaluationsSummaryParamsType,
-  QUERY as GET_EVALUATIONS_SUMMARY_QUERY,
-  ResponseType as GetEvaluationsSummaryResponseType,
-} from '@app/queries/course-evaluation/get-evaluations-summary'
+import { GET_EVALUATIONS_SUMMARY_QUERY } from '@app/queries/course-evaluation/get-evaluations-summary'
 import {
   CourseEvaluationGroupedQuestion,
   CourseEvaluationQuestionGroup,
-  CourseEvaluationQuestionType,
 } from '@app/types'
 
 const groups = [
@@ -41,9 +41,9 @@ const groups = [
 ]
 
 const booleanQuestionTypes = [
-  CourseEvaluationQuestionType.BOOLEAN,
-  CourseEvaluationQuestionType.BOOLEAN_REASON_Y,
-  CourseEvaluationQuestionType.BOOLEAN_REASON_N,
+  Course_Evaluation_Question_Type_Enum.Boolean,
+  Course_Evaluation_Question_Type_Enum.BooleanReasonY,
+  Course_Evaluation_Question_Type_Enum.BooleanReasonN,
 ]
 
 const QuestionText = styled(Typography)(({ theme }) => ({
@@ -53,9 +53,7 @@ const QuestionText = styled(Typography)(({ theme }) => ({
   display: 'inline',
 }))
 
-const normalizeAnswers = (
-  answers: GetEvaluationsSummaryResponseType['answers']
-) => {
+const normalizeAnswers = (answers: GetEvaluationsSummaryQuery['answers']) => {
   const { UNGROUPED: ungroupedAnswers, ...groupedAnswers } = groupBy(
     answers,
     a => a.question.group || 'UNGROUPED'
@@ -73,7 +71,7 @@ const normalizeAnswers = (
   )
 
   const injuryResponse = groupBy(injuryQuestion, a =>
-    a.answer.startsWith('YES') ? 'YES' : 'NO'
+    a.answer?.startsWith('YES') ? 'YES' : 'NO'
   )
 
   return {
@@ -118,20 +116,19 @@ export const EvaluationSummary = () => {
 
   const { data: course } = useCourse(courseId)
 
-  const { data, error } = useSWR<
-    GetEvaluationsSummaryResponseType,
-    Error,
-    [string, GetEvaluationsSummaryParamsType]
-  >([
-    GET_EVALUATIONS_SUMMARY_QUERY,
-    {
-      courseId,
+  const [{ data, fetching }] = useQuery<
+    GetEvaluationsSummaryQuery,
+    GetEvaluationsSummaryQueryVariables
+  >({
+    query: GET_EVALUATIONS_SUMMARY_QUERY,
+    requestPolicy: 'cache-and-network',
+    variables: {
+      courseId: Number(courseId),
       profileCondition: acl.canViewArchivedProfileData()
         ? {}
         : { archived: { _eq: false } },
     },
-  ])
-  const loading = !data && !error
+  })
 
   const { trainerAnswers, attendeeAnswers } = useMemo(() => {
     const { trainer, attendee } = groupBy(data?.answers, a =>
@@ -142,7 +139,9 @@ export const EvaluationSummary = () => {
 
     return {
       trainerAnswers: trainer?.sort(a =>
-        booleanQuestionTypes.includes(a.question.type) ? -1 : 0
+        a.question.type && booleanQuestionTypes.includes(a.question.type)
+          ? -1
+          : 0
       ),
       attendeeAnswers: attendee,
     }
@@ -175,7 +174,7 @@ export const EvaluationSummary = () => {
   const { ungrouped: trainerUngrouped, injuryQuestion: trainerInjuryQuestion } =
     useMemo(() => normalizeAnswers(trainerAnswers), [trainerAnswers])
 
-  if (loading) {
+  if (fetching) {
     return <CircularProgress />
   }
 

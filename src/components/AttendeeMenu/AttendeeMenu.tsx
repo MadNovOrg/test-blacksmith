@@ -10,9 +10,9 @@ import { Avatar } from '../Avatar'
 type AttendeeMenuProps = {
   options: {
     id: string
-    name: string
-    avatar?: string
-    archived?: boolean
+    name: string | undefined | null
+    avatar?: string | undefined | null
+    archived?: boolean | undefined | null
   }[]
   value?: string
   placeholder?: string
@@ -80,7 +80,7 @@ export const AttendeeMenu: React.FC<
             }}
             disableRipple
           >
-            <Avatar src={u.avatar ?? ''} name={u.name} sx={{ mr: 1 }} />
+            <Avatar src={u.avatar ?? ''} name={u.name ?? ''} sx={{ mr: 1 }} />
             {u.archived ? t('common.archived-profile') : u.name}
           </MenuItem>
         ))}

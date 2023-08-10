@@ -1,1 +1,0 @@
-export { SummaryDocument } from './Summary'

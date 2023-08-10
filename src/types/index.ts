@@ -3,12 +3,13 @@ import { DeepNonNullable } from 'ts-essentials'
 import {
   Accreditors_Enum,
   Course_Bild_Module,
+  Course_Evaluation_Question_Group_Enum,
   Course_Source_Enum,
   Course_Status_Enum,
+  GetEvaluationsSummaryQuery,
   Grade_Enum,
 } from '@app/generated/graphql'
 import { StepsEnum } from '@app/pages/CreateCourse/types'
-import { ResponseType as GetEvaluationsSummaryResponseType } from '@app/queries/course-evaluation/get-evaluations-summary'
 
 export type Base = {
   id: string
@@ -653,29 +654,19 @@ export type LegacyCertificate = {
 } & Base
 
 export type CourseEvaluationGroupedQuestion = Record<
-  CourseEvaluationQuestionGroup,
-  Record<string, GetEvaluationsSummaryResponseType['answers']>
+  Course_Evaluation_Question_Group_Enum,
+  Record<string, GetEvaluationsSummaryQuery['answers']>
 >
 
 export type CourseEvaluationUngroupedQuestion = Record<
   string,
-  GetEvaluationsSummaryResponseType['answers']
+  GetEvaluationsSummaryQuery['answers']
 >
 
 export type CourseEvaluationInjuryQuestion = {
   yes: number
   no: number
 }
-
-export type CourseEvaluationTrainerAnswers = {
-  id: string
-  question: {
-    questionKey: string
-    type: CourseEvaluationQuestionType
-    group: CourseEvaluationQuestionGroup
-  }
-  answer: string
-}[]
 
 export enum PromoCodeStatus {
   ACTIVE = 'ACTIVE',

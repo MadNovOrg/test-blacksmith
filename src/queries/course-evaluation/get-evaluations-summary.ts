@@ -1,35 +1,6 @@
 import { gql } from 'graphql-request'
 
-import { Profile_Bool_Exp } from '@app/generated/graphql'
-import {
-  CourseEvaluationQuestionGroup,
-  CourseEvaluationQuestionType,
-} from '@app/types'
-
-export type ResponseType = {
-  answers: {
-    id: string
-    profile: {
-      id: string
-      fullName: string
-      avatar?: string
-      archived?: boolean
-    }
-    answer: string
-    question: {
-      questionKey: string
-      type: CourseEvaluationQuestionType
-      group: CourseEvaluationQuestionGroup
-    }
-  }[]
-}
-
-export type ParamsType = {
-  courseId: string
-  profileCondition?: Profile_Bool_Exp
-}
-
-export const QUERY = gql`
+export const GET_EVALUATIONS_SUMMARY_QUERY = gql`
   query GetEvaluationsSummary(
     $courseId: Int!
     $profileCondition: profile_bool_exp = {}

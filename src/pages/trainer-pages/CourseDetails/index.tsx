@@ -28,11 +28,11 @@ import usePollQuery from '@app/hooks/usePollQuery'
 import { CourseAttendeesTab } from '@app/pages/trainer-pages/components/CourseAttendeesTab'
 import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
 import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading'
-import { EvaluationSummaryTab } from '@app/pages/trainer-pages/components/EvaluationSummaryTab'
 import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
 import { CourseTrainerType, CourseType } from '@app/types'
 import { courseEnded, LoadingStatus } from '@app/util'
 
+import { EvaluationSummaryTab } from './components/EvaluationSummaryTab'
 import { ExceptionsApprovalAlert } from './components/ExceptionsApprovalAlert'
 import { OrderYourWorkbookAlert } from './components/OrderYourWorkbookAlert'
 

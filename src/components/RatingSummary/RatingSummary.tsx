@@ -3,10 +3,7 @@ import { groupBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  CourseEvaluationQuestionType,
-  CourseEvaluationQuestionGroup,
-} from '@app/types'
+import { GetEvaluationsSummaryQuery } from '@app/generated/graphql'
 
 import { RatingProgress } from '../RatingProgress'
 
@@ -19,19 +16,9 @@ const colors = [
   'error.dark',
 ]
 
-type Answers = {
-  id: string
-  answer: string
-  question: {
-    questionKey: string
-    type: CourseEvaluationQuestionType
-    group: CourseEvaluationQuestionGroup
-  }
-}
-
 type Props = {
   questionKey: string
-  answers: Answers[]
+  answers: NonNullable<GetEvaluationsSummaryQuery['answers']>
 }
 
 export const RatingSummary: React.FC<React.PropsWithChildren<Props>> = ({

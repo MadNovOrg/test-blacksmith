@@ -5,44 +5,36 @@ import { useTranslation } from 'react-i18next'
 
 import TTLogoImage from '@app/assets/TT-Colour-Logo.png'
 import {
-  Course,
+  Accreditors_Enum,
+  CourseParticipantsQuery,
+  Course_Evaluation_Question_Type_Enum,
+  GetCourseByIdQuery,
+  GetEvaluationsSummaryQuery,
+} from '@app/generated/graphql'
+import {
+  CourseDeliveryType,
   CourseEvaluationGroupedQuestion,
   CourseEvaluationInjuryQuestion,
   CourseEvaluationQuestionGroup,
-  CourseEvaluationQuestionType,
-  CourseEvaluationTrainerAnswers,
   CourseEvaluationUngroupedQuestion,
-  CourseModule,
-  CourseParticipant,
 } from '@app/types'
 import { formatCourseVenue } from '@app/util'
 
 const { Document, Font, Page, StyleSheet, Text, View, Image } = pdf
 
-type SummaryDocumentProps = {
-  course: Course
-  participants: CourseParticipant[]
-  courseModules: CourseModule[]
+type Props = {
+  course: NonNullable<GetCourseByIdQuery['course']>
+  participants: NonNullable<CourseParticipantsQuery['courseParticipants']>
   grouped: CourseEvaluationGroupedQuestion
   ungrouped: CourseEvaluationUngroupedQuestion
   injuryQuestion: CourseEvaluationInjuryQuestion
-  trainerAnswers: CourseEvaluationTrainerAnswers
-}
-
-type Answer = {
-  id: string
-  answer: string
-  question: {
-    questionKey: string
-    type: CourseEvaluationQuestionType
-    group: CourseEvaluationQuestionGroup
-  }
+  trainerAnswers: GetEvaluationsSummaryQuery['answers']
 }
 
 type PDFRatingSummaryProps = {
   key: string
   questionKey: string
-  answers: Answer[]
+  answers: GetEvaluationsSummaryQuery['answers']
 }
 
 type PDFRatingAnswerProps = {
@@ -67,9 +59,9 @@ const groups = [
 ]
 
 const booleanQuestionTypes = [
-  CourseEvaluationQuestionType.BOOLEAN,
-  CourseEvaluationQuestionType.BOOLEAN_REASON_Y,
-  CourseEvaluationQuestionType.BOOLEAN_REASON_N,
+  Course_Evaluation_Question_Type_Enum.Boolean,
+  Course_Evaluation_Question_Type_Enum.BooleanReasonY,
+  Course_Evaluation_Question_Type_Enum.BooleanReasonN,
 ]
 
 const answerLabels = ['excellent', 'good', 'average', 'fair', 'poor']
@@ -123,6 +115,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: '8px',
+    lineHeight: '1.6pt',
     marginBottom: '5px',
   },
   largerText: {
@@ -131,7 +124,7 @@ const styles = StyleSheet.create({
   },
   largestText: {
     fontSize: '12px',
-    marginBottom: '15px',
+    marginBottom: '10px',
   },
   smallerText: {
     fontSize: '6px',
@@ -150,6 +143,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'space-between',
     justifyContent: 'space-between',
+    gap: 20,
   },
   flexColumn: {
     flexDirection: 'row',
@@ -295,23 +289,24 @@ const PDFRatingSummary: React.FC<
   )
 }
 
-export const SummaryDocument: React.FC<
-  React.PropsWithChildren<SummaryDocumentProps>
-> = props => {
+export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
+  course,
+  grouped,
+  ungrouped,
+  injuryQuestion,
+  trainerAnswers,
+  participants,
+}) => {
   const { t } = useTranslation()
-  const {
-    course,
-    courseModules,
-    grouped,
-    ungrouped,
-    injuryQuestion,
-    trainerAnswers,
-    participants,
-  } = props
+
+  const courseModules = course.modules ?? []
+  const bildModules = course.bildModules.length
+    ? course.bildModules[0].modules
+    : null
 
   const groupedCourseModules = groupBy(
     courseModules,
-    a => a.module.moduleGroup.name
+    a => a.module.moduleGroup?.name
   )
   const moduleGroups = Object.keys(groupedCourseModules)
 
@@ -395,10 +390,12 @@ export const SummaryDocument: React.FC<
 
               <Text style={styles.text}>
                 {t('course-evaluation.pdf-export.venue')}:{' '}
-                {formatCourseVenue(
-                  course.deliveryType,
-                  course.schedule[0].venue
-                )}
+                {course.schedule[0].venue
+                  ? formatCourseVenue(
+                      course.deliveryType as unknown as CourseDeliveryType,
+                      course.schedule[0].venue
+                    )
+                  : null}
               </Text>
             </View>
 
@@ -407,30 +404,90 @@ export const SummaryDocument: React.FC<
                 {t('course-evaluation.pdf-export.course-modules')}
               </Text>
 
-              {moduleGroups.map(groupName => (
-                <View key={groupName} wrap={false}>
-                  <Text style={[styles.largerText, styles.bold]}>
-                    {groupName}
-                  </Text>
+              {course.accreditedBy === Accreditors_Enum.Icm ? (
+                moduleGroups.map(groupName => (
+                  <View key={groupName} wrap={false}>
+                    <Text style={[styles.largerText, styles.bold]}>
+                      {groupName}
+                    </Text>
 
-                  <FlexGroup
-                    type="column"
-                    data={groupedCourseModules[groupName].map(
-                      ({ covered, module }) => (
-                        <Text
-                          key={module.id}
-                          style={[
-                            styles.text,
-                            covered ? {} : styles.strikeThrough,
-                          ]}
-                        >
-                          {module.name}
+                    <FlexGroup
+                      type="column"
+                      data={groupedCourseModules[groupName].map(
+                        ({ covered, module }) => (
+                          <Text
+                            key={module.id}
+                            style={[
+                              styles.text,
+                              covered ? {} : styles.strikeThrough,
+                            ]}
+                          >
+                            {module.name}
+                          </Text>
+                        )
+                      )}
+                    />
+                  </View>
+                ))
+              ) : (
+                <FlexGroup
+                  data={Object.keys(bildModules).map(strategyName => {
+                    return (
+                      <View key={strategyName}>
+                        <Text style={[styles.largerText, styles.bold]}>
+                          {t(`bild-strategies.${strategyName}`)}
                         </Text>
-                      )
-                    )}
-                  />
-                </View>
-              ))}
+
+                        {bildModules[strategyName].modules?.length
+                          ? bildModules[strategyName].modules.map(
+                              (module: { name: string }, index: number) => (
+                                <Text key={index} style={[styles.text]}>
+                                  {module.name}
+                                </Text>
+                              )
+                            )
+                          : null}
+
+                        {bildModules[strategyName].groups?.length
+                          ? bildModules[strategyName].groups.map(
+                              (group: {
+                                name: string
+                                modules: { name: string }[]
+                              }) => {
+                                return (
+                                  <Fragment key={group.name}>
+                                    <Text
+                                      style={[
+                                        styles.text,
+                                        styles.bold,
+                                        { marginBottom: 1, marginTop: 3 },
+                                      ]}
+                                    >
+                                      {group.name}
+                                    </Text>
+
+                                    <View style={{ marginLeft: 7 }}>
+                                      {group.modules.map(module => {
+                                        return (
+                                          <Text
+                                            key={module.name}
+                                            style={[styles.text]}
+                                          >
+                                            {module.name}
+                                          </Text>
+                                        )
+                                      })}
+                                    </View>
+                                  </Fragment>
+                                )
+                              }
+                            )
+                          : null}
+                      </View>
+                    )
+                  })}
+                />
+              )}
             </View>
 
             <View style={styles.section}>
@@ -549,14 +606,17 @@ export const SummaryDocument: React.FC<
             </Text>
 
             {trainerAnswers?.map(a => {
-              if (booleanQuestionTypes.includes(a.question.type)) {
-                const answer = a.answer.split('-')
+              if (
+                a.question.type &&
+                booleanQuestionTypes.includes(a.question.type)
+              ) {
+                const answer = a.answer?.split('-') ?? []
                 const shouldHaveReason =
                   (a.question.type ===
-                    CourseEvaluationQuestionType.BOOLEAN_REASON_Y &&
+                    Course_Evaluation_Question_Type_Enum.BooleanReasonY &&
                     answer[0] === 'YES') ||
                   (a.question.type ===
-                    CourseEvaluationQuestionType.BOOLEAN_REASON_N &&
+                    Course_Evaluation_Question_Type_Enum.BooleanReasonN &&
                     answer[0] === 'NO')
 
                 return (
@@ -608,7 +668,9 @@ export const SummaryDocument: React.FC<
                 )
               }
 
-              if (a.question.type === CourseEvaluationQuestionType.TEXT) {
+              if (
+                a.question?.type === Course_Evaluation_Question_Type_Enum.Text
+              ) {
                 return (
                   <View wrap={false} key={a.id}>
                     <Text style={styles.largerText}>

@@ -242,7 +242,7 @@ export const CourseDetails = () => {
               <Alert
                 variant="outlined"
                 color="success"
-                sx={{ mb: 3 }}
+                sx={{ mb: 3, mt: 3 }}
                 data-testid="success-alert"
               >
                 {t(alertMessage)}
@@ -338,7 +338,7 @@ export const CourseDetails = () => {
               <Container sx={{ pb: 2 }}>
                 <TabPanel sx={{ px: 0 }} value="checklist">
                   {showFeedbackRequiredAlert ? (
-                    <Alert variant="outlined" severity="error" sx={{ m: 2 }}>
+                    <Alert variant="outlined" severity="error" sx={{ mb: 3 }}>
                       <Typography>
                         {t('pages.participant-course.feedback-required-alert')}
                       </Typography>
@@ -349,7 +349,7 @@ export const CourseDetails = () => {
                     <>
                       <CoursePrerequisitesAlert
                         courseId={courseId}
-                        sx={{ m: 2 }}
+                        sx={{ m: 3 }}
                         showAction={true}
                       />
 

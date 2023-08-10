@@ -3,62 +3,51 @@ import pdf from '@react-pdf/renderer'
 import { groupBy } from 'lodash-es'
 import React, { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
-import { SummaryDocument } from '@app/components/SummaryPDF'
 import { useAuth } from '@app/context/auth'
 import {
-  ParamsType as GetEvaluationsSummaryParamsType,
-  QUERY as GET_EVALUATIONS_SUMMARY_QUERY,
-  ResponseType as GetEvaluationsSummaryResponseType,
-} from '@app/queries/course-evaluation/get-evaluations-summary'
-import {
-  ParamsType as GetCourseByIdParamsType,
-  QUERY as GET_COURSE_BY_ID_QUERY,
-  ResponseType as GetCourseByIdResponseType,
-} from '@app/queries/courses/get-course-by-id'
-import {
-  ParamsType as GetCourseModulesParamsType,
-  QUERY as GET_COURSE_MODULES,
-  ResponseType as GetCourseModulesResponseType,
-} from '@app/queries/courses/get-course-modules'
-import {
-  ParamsType as GetCourseParticipantsParamsType,
-  QUERY as GET_COURSE_PARTICIPANTS,
-  ResponseType as GetCourseParticipantsResponseType,
-} from '@app/queries/participants/get-course-participants'
-import {
-  Course,
-  CourseEvaluationGroupedQuestion,
-  CourseEvaluationQuestionGroup,
-  CourseEvaluationQuestionType,
-  CourseModule,
-  CourseParticipant,
-} from '@app/types'
+  CourseParticipantsQuery,
+  CourseParticipantsQueryVariables,
+  Course_Evaluation_Question_Group_Enum,
+  Course_Evaluation_Question_Type_Enum,
+  GetCourseByIdQuery,
+  GetCourseByIdQueryVariables,
+  GetEvaluationsSummaryQuery,
+  GetEvaluationsSummaryQueryVariables,
+  Order_By,
+} from '@app/generated/graphql'
+import { GET_EVALUATIONS_SUMMARY_QUERY } from '@app/queries/course-evaluation/get-evaluations-summary'
+import { QUERY as GET_COURSE_BY_ID_QUERY } from '@app/queries/courses/get-course-by-id'
+import { QUERY as GET_COURSE_PARTICIPANTS } from '@app/queries/participants/get-course-participants'
+import { CourseEvaluationGroupedQuestion } from '@app/types'
+
+import { SummaryDocument } from '../SummaryDocument/SummaryDocument'
 
 const { PDFDownloadLink } = pdf
 
 const groups = [
-  CourseEvaluationQuestionGroup.TRAINING_RATING,
-  CourseEvaluationQuestionGroup.TRAINING_RELEVANCE,
-  CourseEvaluationQuestionGroup.TRAINER_STANDARDS,
-  CourseEvaluationQuestionGroup.MATERIALS_AND_VENUE,
+  Course_Evaluation_Question_Group_Enum.TrainingRating,
+  Course_Evaluation_Question_Group_Enum.TrainingRelevance,
+  Course_Evaluation_Question_Group_Enum.TrainerStandards,
+  Course_Evaluation_Question_Group_Enum.MaterialsAndVenue,
 ]
 
 const booleanQuestionTypes = [
-  CourseEvaluationQuestionType.BOOLEAN,
-  CourseEvaluationQuestionType.BOOLEAN_REASON_Y,
-  CourseEvaluationQuestionType.BOOLEAN_REASON_N,
+  Course_Evaluation_Question_Type_Enum.Boolean,
+  Course_Evaluation_Question_Type_Enum.BooleanReasonY,
+  Course_Evaluation_Question_Type_Enum.BooleanReasonN,
 ]
 
-type EvaluationSummaryPDFDownloadLinkProps = {
-  courseId: string
+type Props = {
+  courseId: number
   profileId: string
 }
 
-export const EvaluationSummaryPDFDownloadLink: React.FC<
-  React.PropsWithChildren<EvaluationSummaryPDFDownloadLinkProps>
-> = ({ courseId, profileId }) => {
+export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
+  courseId,
+  profileId,
+}) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
 
@@ -76,40 +65,37 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
     </Fragment>
   )
 
-  const { data: summaryResponseData, error: summaryResponseError } = useSWR<
-    GetEvaluationsSummaryResponseType,
-    Error,
-    [string, GetEvaluationsSummaryParamsType]
-  >([
-    GET_EVALUATIONS_SUMMARY_QUERY,
-    {
+  const [{ data: summaryResponseData, error: summaryResponseError }] = useQuery<
+    GetEvaluationsSummaryQuery,
+    GetEvaluationsSummaryQueryVariables
+  >({
+    query: GET_EVALUATIONS_SUMMARY_QUERY,
+    requestPolicy: 'cache-and-network',
+    variables: {
       courseId,
       profileCondition: acl.canViewArchivedProfileData()
         ? {}
         : { archived: { _eq: false } },
     },
-  ])
+  })
 
-  const { data: courseData, error: courseError } = useSWR<
-    GetCourseByIdResponseType,
-    Error,
-    [string, GetCourseByIdParamsType]
-  >([GET_COURSE_BY_ID_QUERY, { id: courseId }])
+  const [{ data: courseData, error: courseError }] = useQuery<
+    GetCourseByIdQuery,
+    GetCourseByIdQueryVariables
+  >({
+    query: GET_COURSE_BY_ID_QUERY,
+    variables: { id: courseId },
+    requestPolicy: 'cache-and-network',
+  })
 
-  const { data: courseModulesData, error: courseModulesError } = useSWR<
-    GetCourseModulesResponseType,
-    Error,
-    [string, GetCourseModulesParamsType]
-  >([GET_COURSE_MODULES, { id: courseId }])
-
-  const { data: participantsData, error: participantsError } = useSWR<
-    GetCourseParticipantsResponseType,
-    Error,
-    [string, GetCourseParticipantsParamsType]
-  >([
-    GET_COURSE_PARTICIPANTS,
-    {
-      orderBy: { profile: { fullName: 'asc' } },
+  const [{ data: participantsData, error: participantsError }] = useQuery<
+    CourseParticipantsQuery,
+    CourseParticipantsQueryVariables
+  >({
+    query: GET_COURSE_PARTICIPANTS,
+    requestPolicy: 'cache-and-network',
+    variables: {
+      orderBy: { profile: { fullName: Order_By.Asc } },
       where: {
         course: { id: { _eq: courseId } },
         profile: acl.canViewArchivedProfileData()
@@ -117,12 +103,11 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
           : { archived: { _eq: false } },
       },
     },
-  ])
+  })
 
   const dataLoading =
     (!courseData && !courseError) ||
     (!summaryResponseData && !summaryResponseError) ||
-    (!courseModulesData && !courseModulesError) ||
     (!participantsData && !participantsError)
 
   const { trainerAnswers, grouped, ungrouped, injuryQuestion } = useMemo(() => {
@@ -131,7 +116,11 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
     )
 
     const trainerAnswers = trainer?.sort(a =>
-      booleanQuestionTypes.includes(a.question.type) ? -1 : 0
+      booleanQuestionTypes.includes(
+        a.question.type as unknown as Course_Evaluation_Question_Type_Enum
+      )
+        ? -1
+        : 0
     )
 
     const { UNGROUPED: ungroupedAnswers, ...groupedAnswers } = groupBy(
@@ -151,7 +140,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
     )
 
     const injuryResponse = groupBy(injuryQuestion, a =>
-      a.answer.startsWith('YES') ? 'YES' : 'NO'
+      a?.answer?.startsWith('YES') ? 'YES' : 'NO'
     )
 
     return {
@@ -182,40 +171,30 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
   }, [summaryResponseData, profileId])
 
   const participants = useMemo(
-    () => participantsData?.courseParticipants ?? ([] as CourseParticipant[]),
+    () => participantsData?.courseParticipants ?? [],
     [participantsData]
   )
 
-  const course = useMemo(
-    () => courseData?.course ?? ({} as Course),
-    [courseData]
-  )
-
-  const courseModules = useMemo(
-    () => courseModulesData?.courseModules ?? ([] as CourseModule[]),
-    [courseModulesData]
-  )
+  const course = courseData?.course
 
   const pdfDocument = useMemo(() => {
     if (summaryResponseData?.answers.length === 0) {
       return null
     }
 
-    return (
+    return course ? (
       <SummaryDocument
         course={course}
-        courseModules={courseModules}
         grouped={grouped}
         ungrouped={ungrouped}
         injuryQuestion={injuryQuestion}
         trainerAnswers={trainerAnswers}
         participants={participants}
       />
-    )
+    ) : null
   }, [
     course,
     participants,
-    courseModules,
     trainerAnswers,
     grouped,
     ungrouped,
@@ -239,7 +218,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
     <PDFDownloadLink
       style={{ color: 'inherit' }}
       document={pdfDocument}
-      fileName={`${course.name}.pdf`}
+      fileName={`${course?.name}.pdf`}
     >
       {({ loading, error }) => {
         if (error) {

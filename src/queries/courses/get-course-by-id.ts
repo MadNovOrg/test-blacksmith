@@ -14,7 +14,11 @@ export const QUERY = gql`
   ${COURSE_SCHEDULE}
   ${VENUE}
   ${ORGANIZATION}
-  query GetCourseById($id: Int!, $withOrders: Boolean = false) {
+  query GetCourseById(
+    $id: Int!
+    $withOrders: Boolean = false
+    $withModules: Boolean = false
+  ) {
     course: course_by_pk(id: $id) {
       ...Course
       isDraft
@@ -109,6 +113,23 @@ export const QUERY = gql`
           }
         }
       }
+
+      modules(
+        order_by: { module: { moduleGroup: { mandatory: desc, name: asc } } }
+      ) @include(if: $withModules) {
+        id
+        covered
+        module {
+          id
+          name
+          moduleGroup {
+            id
+            name
+            mandatory
+          }
+        }
+      }
+
       certificateCount: participants_aggregate(
         where: { grade: { _in: [PASS, OBSERVE_ONLY, ASSIST_ONLY] } }
       ) {

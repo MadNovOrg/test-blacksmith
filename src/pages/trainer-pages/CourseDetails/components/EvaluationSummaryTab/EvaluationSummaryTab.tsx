@@ -66,7 +66,7 @@ export const EvaluationSummaryTab: React.FC<
     () =>
       isPDFExporting ? (
         <EvaluationSummaryPDFDownloadLink
-          courseId={String(courseId)}
+          courseId={courseId}
           profileId={profileId}
         />
       ) : (
