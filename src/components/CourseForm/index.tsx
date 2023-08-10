@@ -64,7 +64,12 @@ import {
   Organization,
   RoleName,
 } from '@app/types'
-import { bildStrategiesToArray, extractTime, requiredMsg } from '@app/util'
+import {
+  bildStrategiesToArray,
+  extractTime,
+  INDIRECT_COURSE_MIN_ALLOWED_DATE,
+  requiredMsg,
+} from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
 import { ProfileSelector } from '../ProfileSelector'
@@ -206,6 +211,18 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .date()
           .nullable()
           .typeError(t('components.course-form.start-date-format'))
+          .when([], {
+            is: () =>
+              courseType === CourseType.INDIRECT &&
+              activeRole === RoleName.TRAINER,
+
+            then: sd =>
+              sd.min(
+                // Min allowed day will be 2023-10-01
+                INDIRECT_COURSE_MIN_ALLOWED_DATE,
+                t('components.course-form.min-start-date')
+              ),
+          })
           .required(t('components.course-form.start-date-required')),
         startTime: yup
           .string()
