@@ -33,6 +33,17 @@ export type AcfFieldGroup = {
   fieldGroupName?: Maybe<Scalars['String']>;
 };
 
+/** ACF Link field */
+export type AcfLink = {
+  __typename?: 'AcfLink';
+  /** The target of the link (_blank, etc) */
+  target?: Maybe<Scalars['String']>;
+  /** The title of the link */
+  title?: Maybe<Scalars['String']>;
+  /** The url of the link */
+  url?: Maybe<Scalars['String']>;
+};
+
 export type Address = {
   __typename?: 'Address';
   addressLineOne?: Maybe<Scalars['String']>;
@@ -1333,6 +1344,7 @@ export type CreateAppUserInput = {
   acceptTnc: Scalars['Boolean'];
   dob?: InputMaybe<Scalars['String']>;
   firstName: Scalars['String'];
+  jobTitle: Scalars['String'];
   lastName: Scalars['String'];
   password: Scalars['String'];
   phone?: InputMaybe<Scalars['String']>;
@@ -7158,6 +7170,7 @@ export type Resource_Resourceattachment = AcfFieldGroup & {
   fieldGroupName?: Maybe<Scalars['String']>;
   file?: Maybe<MediaItem>;
   resourcetype?: Maybe<Scalars['String']>;
+  url?: Maybe<AcfLink>;
   videourl?: Maybe<Scalars['String']>;
 };
 
@@ -12951,8 +12964,10 @@ export type Certificate_Expired_Notification_Jobs_Bool_Exp = {
 
 /** unique or primary key constraints on table "certificate_expired_notification_jobs" */
 export enum Certificate_Expired_Notification_Jobs_Constraint {
+  /** unique or primary key constraint on columns "course_certificate_id", "job_id" */
+  CertificateExpiredNotificatiCourseCertificateIdJobIdKey = 'certificate_expired_notificati_course_certificate_id_job_id_key',
   /** unique or primary key constraint on columns "id" */
-  CertificateExpiredJobsPkey = 'certificate_expired_jobs_pkey'
+  CertificateExpiredNotificationJobsPkey = 'certificate_expired_notification_jobs_pkey'
 }
 
 /** input type for inserting data into table "certificate_expired_notification_jobs" */

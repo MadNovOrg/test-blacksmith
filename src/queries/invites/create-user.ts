@@ -8,6 +8,7 @@ export type ParamsType = {
     phone: string | null
     dob: Date | null
     acceptTnc: boolean
+    jobTitle: string
   }
 }
 

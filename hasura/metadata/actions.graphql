@@ -553,6 +553,7 @@ input CreateAppUserInput {
   phone: String
   dob: String
   acceptTnc: Boolean!
+  jobTitle: String!
 }
 
 input GetCoursePricingInput {
