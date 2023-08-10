@@ -77,22 +77,44 @@ npm run hasura:metadata:reload
 - in order to apply the changes to other Hasura environments, commit and push the newly generated files
 - To squash multiple migrations run `npm run hasura:squash -- --name <migration_name> --from <migration_id>`
 
-## Deployment
+## Deployment/Release Process
+- When a PR is created CI pipeline runs. The same applies on commit push to a brunch as long as the PR is active.
+- Once the PR is merged CD process is being triggered, using related input:
+    - NPM dependencies installed
+    - Deployment step runs & S3 content is being updated
+- Deployment to `STG` is being triggered using GitHub Actions by providing a new tag with the following format (SemVer): `vX.X.X`
+- Once testing to `STG` is finished a new Release needs to be created using GitHub UI with the appropriate tag
+- When the release is created a pipeline is automatically triggered in order to deploy the chosen tag to `PROD` 
 
 ### DEV
-- When a PR is created CI pipeline runs. The same applies on branch push as long as the PR is active.
-- Once the PR is merged deployment pipeline runs using some input related to DEV environment
-- Once deployment is done Hasura migrations job is running 
+- Deployment is being triggered automatically on PR merge
+- Hasura migrations are running as a following job
 
 ### STG
-- It is only being triggered by the Github Action `CD-STG`
+- It is being triggered by the Github Action `CD-STG`
 - Expects:
-    - The branch to perform the run from. Default is `main` 
+    - The branch to perform the run from. Default is `main`
+    - Major, minor and patch numbers (SemVer) to build the right version 
+- Performs the following steps:
+    - Validates user input
+    - Updates package version according to user input
+        - Automatically commits new package version & pushes to `main`
+    - Creates a new repo tag according to user input
+    - Triggers CD pipeline for `STG` environment by checking out the code to the tag created above
+        - Installs dependencies 
+        - Builds the code using APP version according to user input
+        - Deploys the code to S3
+        - Runs Hasura migrations
 
 ### PROD
-- It is only being triggered by the Github Action `CD-PROD`
-- Expects:
-    - The branch to perform the run from. Default is `main` 
+- It is only being triggered automatically by creating a new `Release` using Github UI
+- Performs the following steps:
+    - Gets the appropriate version from the tag that was used
+    - Triggers CD pipeline for `PROD` environment by checking out the code to the chosen tag on Release creation
+        - Installs dependencies 
+        - Builds the code using APP version from retrieved version
+        - Deploys the code to S3
+        - Runs Hasura migrations
 
 ## Rollbacks
 

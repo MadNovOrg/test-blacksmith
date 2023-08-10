@@ -2,17 +2,80 @@ name: CD-STG
 
 on:
   workflow_dispatch:
+    inputs:
+      major:
+        description: 'New Tag creation (Fails on existed) - SemVer Major:'
+        required: true
+        type: string
+        default: "0"
+      minor:
+        description: '- SemVer Minor:'
+        required: true
+        type: string
+        default: "0"
+      patch:
+        description: '- SemVer Patch:'
+        required: true
+        type: string
+        default: "0"
 
 permissions:
   id-token: write
   contents: read
 
+env:
+  VERSION: "${{ github.event.inputs.major }}.${{ github.event.inputs.minor }}.${{ github.event.inputs.patch }}"
+
 jobs:
+  tag:
+    name: TAG
+    runs-on: ubuntu-latest
+
+    env:
+      TAG: "v${{ github.event.inputs.major }}.${{ github.event.inputs.minor }}.${{ github.event.inputs.patch }}" #GH Actions do not support env vars concatenation yet
+
+    outputs:
+      version: ${{ env.VERSION }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Validate User Input
+        run: |
+          [[ ${{ github.event.inputs.major }} == ?(-)+([0-9]) ]] && \
+          [[ ${{ github.event.inputs.minor }} == ?(-)+([0-9]) ]] && \
+          [[ ${{ github.event.inputs.patch }} == ?(-)+([0-9]) ]] && \
+          echo "Inputs are valid" || \
+          (echo "Inputs are not numbers!" && exit 1)
+
+      - name: Update Package Version
+        run: | 
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "username@users.noreply.github.com"
+          npm version "${VERSION}" -m "new version: ${VERSION}"
+          git push
+
+      - name: Creates User Input Tag - Fails if it already exists
+        uses: actions/github-script@v6.3.3
+        with:
+          script: |
+            const {TAG} = process.env
+            github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `refs/tags/${TAG}`,
+                sha: context.sha
+            })
+
   stg-cd:
+    needs: tag
     name: STG
     uses: ./.github/workflows/pipeline.yml
     with:
       mode: 'staging'
+      checkout_ref: "refs/tags/v${{ needs.tag.outputs.version }}" #GH Actions do not support env vars on input
+      version: ${{ needs.tag.outputs.version }} #GH Actions do not support env vars on input
     secrets:
       cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG }}
       cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG }}

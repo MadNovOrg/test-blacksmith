@@ -1,16 +1,38 @@
 name: CD-PROD
 
 on:
-  workflow_dispatch:
+  release:
+    types: [released]
+    tags: 
+      - v*
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
+  version:
+    name: VERSION
+    if: contains( github.ref, 'v' )
+    runs-on: ubuntu-latest
+
+    outputs:
+      tag: ${{ steps.get.outputs.ref }}
+
+    steps:
+      - name: Gets Version
+        id: get
+        run: |
+          ref=$(echo "${{ github.ref }}" | awk -F/v '{print $NF}')
+          echo "ref=${ref}" >> $GITHUB_OUTPUT
+
   prod-cd:
     name: PROD
+    needs: version
+    if: contains( github.ref, 'v' )
     uses: ./.github/workflows/pipeline.yml
+    with:
+      version: ${{ needs.version.outputs.tag }}
     secrets:
       cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_PROD }}
       cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_PROD }}
