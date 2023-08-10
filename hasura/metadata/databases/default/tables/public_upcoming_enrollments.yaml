@@ -1,39 +1,108 @@
 table:
-  schema: public
   name: upcoming_enrollments
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
     course_id:
       custom_name: courseId
-    schedule_start:
-      custom_name: scheduleStart
-    org_name:
-      custom_name: orgName
-    org_id:
-      custom_name: orgId
     course_level:
       custom_name: courseLevel
+    org_id:
+      custom_name: orgId
+    org_name:
+      custom_name: orgName
     profile_id:
       custom_name: profileId
+    schedule_start:
+      custom_name: scheduleStart
   custom_column_names:
     course_id: courseId
-    schedule_start: scheduleStart
-    org_name: orgName
-    org_id: orgId
     course_level: courseLevel
+    org_id: orgId
+    org_name: orgName
     profile_id: profileId
+    schedule_start: scheduleStart
+  custom_root_fields: {}
 object_relationships:
+  - name: course
+    using:
+      manual_configuration:
+        column_mapping:
+          course_id: id
+        insertion_order: null
+        remote_table:
+          name: course
+          schema: public
   - name: profile
     using:
       manual_configuration:
-        remote_table:
-          schema: public
-          name: profile
-        insertion_order: null
         column_mapping:
           profile_id: id
+        insertion_order: null
+        remote_table:
+          name: profile
+          schema: public
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - org_name
+        - course_id
+        - course_level
+        - schedule_start
+        - org_id
+        - profile_id
+      filter: {}
+  - role: ld
+    permission:
+      columns:
+        - org_name
+        - course_id
+        - course_level
+        - schedule_start
+        - org_id
+        - profile_id
+      filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - org_name
+        - course_id
+        - course_level
+        - schedule_start
+        - org_id
+        - profile_id
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - org_name
+        - course_id
+        - course_level
+        - schedule_start
+        - org_id
+        - profile_id
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - org_name
+        - course_id
+        - course_level
+        - schedule_start
+        - org_id
+        - profile_id
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - org_name
+        - course_id
+        - course_level
+        - schedule_start
+        - org_id
+        - profile_id
+      filter: {}
   - role: user
     permission:
       columns:

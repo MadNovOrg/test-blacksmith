@@ -202,7 +202,7 @@ export const IndividualsByLevelList: React.FC<
                       >
                         {`${t(
                           `common.certificates.${enrollment?.courseLevel?.toLowerCase()}`
-                        )} ${enrollment.courseId}`}
+                        )} ${enrollment.course?.course_code}`}
                       </Link>
                     ))}
                   </Box>

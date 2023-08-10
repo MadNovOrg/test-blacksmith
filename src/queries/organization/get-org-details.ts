@@ -48,6 +48,10 @@ export const QUERY = gql`
         orgName
         courseLevel
         courseId
+        course {
+          name
+          course_code
+        }
       }
       organizations {
         id
