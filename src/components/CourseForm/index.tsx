@@ -740,10 +740,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         'bookingContact.lastName',
         isEmail || !value?.familyName ? '' : value.familyName
       )
-      setValue(
-        'bookingContact.email',
-        isEmail || !value?.email ? '' : value.email
-      )
+      setValue('bookingContact.email', isEmail ? value : value?.email ?? '', {
+        shouldValidate: true,
+      })
     },
     [setValue]
   )
