@@ -27846,6 +27846,166 @@ export type IsUserSubscribedToMembershipResponse = {
   isSubscribed: Scalars['Boolean'];
 };
 
+/** columns and relationships of "job_title" */
+export type Job_Title = {
+  __typename?: 'job_title';
+  created_at: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  title: Scalars['String'];
+  updated_at: Scalars['timestamptz'];
+};
+
+/** aggregated selection of "job_title" */
+export type Job_Title_Aggregate = {
+  __typename?: 'job_title_aggregate';
+  aggregate?: Maybe<Job_Title_Aggregate_Fields>;
+  nodes: Array<Job_Title>;
+};
+
+/** aggregate fields of "job_title" */
+export type Job_Title_Aggregate_Fields = {
+  __typename?: 'job_title_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Job_Title_Max_Fields>;
+  min?: Maybe<Job_Title_Min_Fields>;
+};
+
+
+/** aggregate fields of "job_title" */
+export type Job_Title_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Job_Title_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "job_title". All fields are combined with a logical 'AND'. */
+export type Job_Title_Bool_Exp = {
+  _and?: InputMaybe<Array<Job_Title_Bool_Exp>>;
+  _not?: InputMaybe<Job_Title_Bool_Exp>;
+  _or?: InputMaybe<Array<Job_Title_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  title?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "job_title" */
+export enum Job_Title_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  JobTitlePkey = 'job_title_pkey',
+  /** unique or primary key constraint on columns "title" */
+  JobTitleTitleKey = 'job_title_title_key'
+}
+
+/** input type for inserting data into table "job_title" */
+export type Job_Title_Insert_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  title?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Job_Title_Max_Fields = {
+  __typename?: 'job_title_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  title?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type Job_Title_Min_Fields = {
+  __typename?: 'job_title_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  title?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "job_title" */
+export type Job_Title_Mutation_Response = {
+  __typename?: 'job_title_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Job_Title>;
+};
+
+/** on_conflict condition type for table "job_title" */
+export type Job_Title_On_Conflict = {
+  constraint: Job_Title_Constraint;
+  update_columns?: Array<Job_Title_Update_Column>;
+  where?: InputMaybe<Job_Title_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "job_title". */
+export type Job_Title_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  title?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: job_title */
+export type Job_Title_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "job_title" */
+export enum Job_Title_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Title = 'title',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "job_title" */
+export type Job_Title_Set_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  title?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** Streaming cursor of the table "job_title" */
+export type Job_Title_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Job_Title_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Job_Title_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  title?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** update columns of table "job_title" */
+export enum Job_Title_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Title = 'title',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+export type Job_Title_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Job_Title_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Job_Title_Bool_Exp;
+};
+
 /** Boolean expression to compare columns of type "json". All fields are combined with logical 'AND'. */
 export type Json_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['json']>;
@@ -29556,6 +29716,10 @@ export type Mutation_Root = {
   delete_identity_type?: Maybe<Identity_Type_Mutation_Response>;
   /** delete single row from the table: "identity_type" */
   delete_identity_type_by_pk?: Maybe<Identity_Type>;
+  /** delete data from the table: "job_title" */
+  delete_job_title?: Maybe<Job_Title_Mutation_Response>;
+  /** delete single row from the table: "job_title" */
+  delete_job_title_by_pk?: Maybe<Job_Title>;
   /** delete data from the table: "legacy_certificate" */
   delete_legacy_certificate?: Maybe<Legacy_Certificate_Mutation_Response>;
   /** delete single row from the table: "legacy_certificate" */
@@ -29904,6 +30068,10 @@ export type Mutation_Root = {
   insert_identity_type?: Maybe<Identity_Type_Mutation_Response>;
   /** insert a single row into the table: "identity_type" */
   insert_identity_type_one?: Maybe<Identity_Type>;
+  /** insert data into the table: "job_title" */
+  insert_job_title?: Maybe<Job_Title_Mutation_Response>;
+  /** insert a single row into the table: "job_title" */
+  insert_job_title_one?: Maybe<Job_Title>;
   /** insert data into the table: "legacy_certificate" */
   insert_legacy_certificate?: Maybe<Legacy_Certificate_Mutation_Response>;
   /** insert a single row into the table: "legacy_certificate" */
@@ -30386,6 +30554,12 @@ export type Mutation_Root = {
   update_identity_type_by_pk?: Maybe<Identity_Type>;
   /** update multiples rows of table: "identity_type" */
   update_identity_type_many?: Maybe<Array<Maybe<Identity_Type_Mutation_Response>>>;
+  /** update data of the table: "job_title" */
+  update_job_title?: Maybe<Job_Title_Mutation_Response>;
+  /** update single row of the table: "job_title" */
+  update_job_title_by_pk?: Maybe<Job_Title>;
+  /** update multiples rows of table: "job_title" */
+  update_job_title_many?: Maybe<Array<Maybe<Job_Title_Mutation_Response>>>;
   /** update data of the table: "legacy_certificate" */
   update_legacy_certificate?: Maybe<Legacy_Certificate_Mutation_Response>;
   /** update single row of the table: "legacy_certificate" */
@@ -31349,6 +31523,18 @@ export type Mutation_RootDelete_Identity_TypeArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Identity_Type_By_PkArgs = {
   value: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Job_TitleArgs = {
+  where: Job_Title_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Job_Title_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -32515,6 +32701,20 @@ export type Mutation_RootInsert_Identity_TypeArgs = {
 export type Mutation_RootInsert_Identity_Type_OneArgs = {
   object: Identity_Type_Insert_Input;
   on_conflict?: InputMaybe<Identity_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Job_TitleArgs = {
+  objects: Array<Job_Title_Insert_Input>;
+  on_conflict?: InputMaybe<Job_Title_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Job_Title_OneArgs = {
+  object: Job_Title_Insert_Input;
+  on_conflict?: InputMaybe<Job_Title_On_Conflict>;
 };
 
 
@@ -34294,6 +34494,26 @@ export type Mutation_RootUpdate_Identity_Type_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Identity_Type_ManyArgs = {
   updates: Array<Identity_Type_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Job_TitleArgs = {
+  _set?: InputMaybe<Job_Title_Set_Input>;
+  where: Job_Title_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Job_Title_By_PkArgs = {
+  _set?: InputMaybe<Job_Title_Set_Input>;
+  pk_columns: Job_Title_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Job_Title_ManyArgs = {
+  updates: Array<Job_Title_Updates>;
 };
 
 
@@ -38582,6 +38802,7 @@ export type Profile = {
   identities: Array<Identity>;
   /** An aggregate relationship */
   identities_aggregate: Identity_Aggregate;
+  job?: Maybe<Scalars['String']>;
   jobTitle?: Maybe<Scalars['String']>;
   lastActivity: Scalars['timestamptz'];
   /** An array relationship */
@@ -38938,6 +39159,7 @@ export type Profile_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   identities?: InputMaybe<Identity_Bool_Exp>;
   identities_aggregate?: InputMaybe<Identity_Aggregate_Bool_Exp>;
+  job?: InputMaybe<String_Comparison_Exp>;
   jobTitle?: InputMaybe<String_Comparison_Exp>;
   lastActivity?: InputMaybe<Timestamptz_Comparison_Exp>;
   organizations?: InputMaybe<Organization_Member_Bool_Exp>;
@@ -39028,6 +39250,7 @@ export type Profile_Insert_Input = {
   go1_profile?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
   identities?: InputMaybe<Identity_Arr_Rel_Insert_Input>;
+  job?: InputMaybe<Scalars['String']>;
   jobTitle?: InputMaybe<Scalars['String']>;
   lastActivity?: InputMaybe<Scalars['timestamptz']>;
   organizations?: InputMaybe<Organization_Member_Arr_Rel_Insert_Input>;
@@ -39064,6 +39287,7 @@ export type Profile_Max_Fields = {
   givenName?: Maybe<Scalars['String']>;
   go1Id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
+  job?: Maybe<Scalars['String']>;
   jobTitle?: Maybe<Scalars['String']>;
   lastActivity?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "profile_phone" */
@@ -39094,6 +39318,7 @@ export type Profile_Min_Fields = {
   givenName?: Maybe<Scalars['String']>;
   go1Id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
+  job?: Maybe<Scalars['String']>;
   jobTitle?: Maybe<Scalars['String']>;
   lastActivity?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "profile_phone" */
@@ -39153,6 +39378,7 @@ export type Profile_Order_By = {
   go1_profile?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   identities_aggregate?: InputMaybe<Identity_Aggregate_Order_By>;
+  job?: InputMaybe<Order_By>;
   jobTitle?: InputMaybe<Order_By>;
   lastActivity?: InputMaybe<Order_By>;
   organizations_aggregate?: InputMaybe<Organization_Member_Aggregate_Order_By>;
@@ -39459,6 +39685,8 @@ export enum Profile_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  Job = 'job',
+  /** column name */
   JobTitle = 'jobTitle',
   /** column name */
   LastActivity = 'lastActivity',
@@ -39494,6 +39722,7 @@ export type Profile_Set_Input = {
   go1Id?: InputMaybe<Scalars['Int']>;
   go1_profile?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
+  job?: InputMaybe<Scalars['String']>;
   jobTitle?: InputMaybe<Scalars['String']>;
   lastActivity?: InputMaybe<Scalars['timestamptz']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
@@ -39548,6 +39777,7 @@ export type Profile_Stream_Cursor_Value_Input = {
   go1Id?: InputMaybe<Scalars['Int']>;
   go1_profile?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
+  job?: InputMaybe<Scalars['String']>;
   jobTitle?: InputMaybe<Scalars['String']>;
   lastActivity?: InputMaybe<Scalars['timestamptz']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
@@ -40166,6 +40396,8 @@ export enum Profile_Update_Column {
   Go1Profile = 'go1_profile',
   /** column name */
   Id = 'id',
+  /** column name */
+  Job = 'job',
   /** column name */
   JobTitle = 'jobTitle',
   /** column name */
@@ -41187,6 +41419,12 @@ export type Query_Root = {
   initAuth: InitAuthOutput;
   /** Checks whether user is subscribed to membership */
   isUserSubscribedToMembership?: Maybe<IsUserSubscribedToMembershipResponse>;
+  /** fetch data from the table: "job_title" */
+  job_title: Array<Job_Title>;
+  /** fetch aggregated fields from the table: "job_title" */
+  job_title_aggregate: Job_Title_Aggregate;
+  /** fetch data from the table: "job_title" using primary key columns */
+  job_title_by_pk?: Maybe<Job_Title>;
   /** fetch data from the table: "legacy_certificate" */
   legacy_certificate: Array<Legacy_Certificate>;
   /** fetch aggregated fields from the table: "legacy_certificate" */
@@ -42737,6 +42975,29 @@ export type Query_RootIsUserSubscribedToMembershipArgs = {
 };
 
 
+export type Query_RootJob_TitleArgs = {
+  distinct_on?: InputMaybe<Array<Job_Title_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Job_Title_Order_By>>;
+  where?: InputMaybe<Job_Title_Bool_Exp>;
+};
+
+
+export type Query_RootJob_Title_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Job_Title_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Job_Title_Order_By>>;
+  where?: InputMaybe<Job_Title_Bool_Exp>;
+};
+
+
+export type Query_RootJob_Title_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootLegacy_CertificateArgs = {
   distinct_on?: InputMaybe<Array<Legacy_Certificate_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -44187,6 +44448,14 @@ export type Subscription_Root = {
   /** fetch data from the table in a streaming manner: "identity_type" */
   identity_type_stream: Array<Identity_Type>;
   importArloCertificates?: Maybe<ImportArloCertificates>;
+  /** fetch data from the table: "job_title" */
+  job_title: Array<Job_Title>;
+  /** fetch aggregated fields from the table: "job_title" */
+  job_title_aggregate: Job_Title_Aggregate;
+  /** fetch data from the table: "job_title" using primary key columns */
+  job_title_by_pk?: Maybe<Job_Title>;
+  /** fetch data from the table in a streaming manner: "job_title" */
+  job_title_stream: Array<Job_Title>;
   /** fetch data from the table: "legacy_certificate" */
   legacy_certificate: Array<Legacy_Certificate>;
   /** fetch aggregated fields from the table: "legacy_certificate" */
@@ -46162,6 +46431,36 @@ export type Subscription_RootIdentity_Type_StreamArgs = {
 
 export type Subscription_RootImportArloCertificatesArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootJob_TitleArgs = {
+  distinct_on?: InputMaybe<Array<Job_Title_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Job_Title_Order_By>>;
+  where?: InputMaybe<Job_Title_Bool_Exp>;
+};
+
+
+export type Subscription_RootJob_Title_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Job_Title_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Job_Title_Order_By>>;
+  where?: InputMaybe<Job_Title_Bool_Exp>;
+};
+
+
+export type Subscription_RootJob_Title_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootJob_Title_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Job_Title_Stream_Cursor_Input>>;
+  where?: InputMaybe<Job_Title_Bool_Exp>;
 };
 
 
@@ -50430,6 +50729,11 @@ export type VerifyUserMutationVariables = Exact<{
 
 
 export type VerifyUserMutation = { __typename?: 'mutation_root', verifyUser: boolean };
+
+export type GetJobTitlesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetJobTitlesQuery = { __typename?: 'query_root', jobTitles: Array<{ __typename?: 'job_title', title: string }> };
 
 export type BlogQueryVariables = Exact<{
   orderDirection?: OrderEnum;

@@ -10,6 +10,7 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  MenuItem,
   styled,
   TextField as MuiTextField,
   Typography,
@@ -24,6 +25,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useToggle } from 'react-use'
 
 import PhoneNumberInput from '@app/components/PhoneNumberInput'
+import { useJobTitles } from '@app/hooks/useJobTitles'
 import { gqlRequest } from '@app/lib/gql-request'
 import {
   MUTATION as CREATE_USER_MUTATION,
@@ -58,6 +60,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
   const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
 
+  const positions = useJobTitles()
+
   const {
     register,
     handleSubmit,
@@ -87,6 +91,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         phone: data.phone,
         dob: data.dob ? zonedTimeToUtc(data.dob, 'GMT') : null,
         acceptTnc: data.tcs,
+        jobTitle:
+          data.position === 'Other' ? data.otherPosition : data.position,
       }
 
       await gqlRequest<CreateUserResponseType, CreateUserParamsType>(
@@ -199,7 +205,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           />
         </Box>
 
-        <Box>
+        <Box sx={{ mb: 3 }}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Controller
               name="dob"
@@ -225,6 +231,45 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               )}
             />
           </LocalizationProvider>
+        </Box>
+
+        <Box>
+          <TextField
+            select
+            value={values.position}
+            {...register('position')}
+            variant="filled"
+            fullWidth
+            label={t('position')}
+          >
+            <MenuItem value="" disabled>
+              {positions.length ? t('position') : t('select-sector')}
+            </MenuItem>
+            {positions.map((option, i) => (
+              <MenuItem key={i} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+          {errors.position ? (
+            <FormHelperText error>{errors.position?.message}</FormHelperText>
+          ) : null}
+
+          <Box sx={{ my: 1 }}>
+            {values.position === 'Other' ? (
+              <TextField
+                id="other-position"
+                variant="filled"
+                label={t('position-name')}
+                placeholder={t('position-placeholder')}
+                error={!!errors.otherPosition}
+                helperText={errors.otherPosition?.message || ''}
+                {...register('otherPosition')}
+                fullWidth
+                inputProps={{ 'data-testid': 'other-position-input' }}
+              />
+            ) : null}
+          </Box>
         </Box>
 
         <Box sx={{ my: 5 }}>

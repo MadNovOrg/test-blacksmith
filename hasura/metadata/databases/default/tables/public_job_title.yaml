@@ -1,0 +1,59 @@
+table:
+  name: job_title
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - title
+      filter: {}
+  - role: booking-contact
+    permission:
+      columns:
+        - title
+      filter: {}
+  - role: finance
+    permission:
+      columns:
+        - title
+      filter: {}
+  - role: ld
+    permission:
+      columns:
+        - title
+      filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - title
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - title
+      filter: {}
+  - role: trainer
+    permission:
+      columns: []
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - title
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns: []
+      filter: {}
+  - role: unverified
+    permission:
+      columns:
+        - title
+      filter: {}
+  - role: user
+    permission:
+      columns: []
+      filter: {}

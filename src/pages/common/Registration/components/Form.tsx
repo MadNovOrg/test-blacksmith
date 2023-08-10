@@ -10,6 +10,7 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  MenuItem,
   styled,
   TextField as MuiTextField,
   Typography,
@@ -27,6 +28,7 @@ import { useToggle } from 'react-use'
 import PhoneNumberInput from '@app/components/PhoneNumberInput'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 import { SignUpMutation, SignUpMutationVariables } from '@app/generated/graphql'
+import { useJobTitles } from '@app/hooks/useJobTitles'
 import { gqlRequest } from '@app/lib/gql-request'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
@@ -61,6 +63,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
   const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
 
+  const positions = useJobTitles()
+
   const {
     register,
     handleSubmit,
@@ -93,6 +97,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         courseId,
         quantity,
         recaptchaToken: data.recaptchaToken,
+        jobTitle:
+          data.position === 'Other' ? data.otherPosition : data.position,
       }
 
       await gqlRequest<SignUpMutation, SignUpMutationVariables>(
@@ -231,7 +237,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           />
         </Box>
 
-        <Box>
+        <Box sx={{ mb: 3 }}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Controller
               name="dob"
@@ -259,6 +265,50 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               )}
             />
           </LocalizationProvider>
+        </Box>
+
+        <Box>
+          <TextField
+            select
+            value={values.position}
+            {...register('position')}
+            variant="filled"
+            fullWidth
+            label={t('position')}
+            inputProps={{ 'data-testid': 'input-position' }}
+          >
+            <MenuItem value="" disabled>
+              {positions.length ? t('position') : t('select-sector')}
+            </MenuItem>
+            {positions.map((option, i) => (
+              <MenuItem
+                key={i}
+                value={option}
+                data-testid={`position-${option}`}
+              >
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+          {errors.position ? (
+            <FormHelperText error>{errors.position?.message}</FormHelperText>
+          ) : null}
+
+          <Box sx={{ my: 1 }}>
+            {values.position === 'Other' ? (
+              <TextField
+                id="other-position"
+                variant="filled"
+                label={t('position-name')}
+                placeholder={t('position-placeholder')}
+                error={!!errors.otherPosition}
+                helperText={errors.otherPosition?.message || ''}
+                {...register('otherPosition')}
+                fullWidth
+                inputProps={{ 'data-testid': 'other-position-input' }}
+              />
+            ) : null}
+          </Box>
         </Box>
 
         <Box sx={{ my: 5 }}>

@@ -13,6 +13,8 @@ export type FormInputs = {
   dob: Date | null
   tcs: boolean
   recaptchaToken: string
+  position: string
+  otherPosition: string
 }
 
 export const getFormSchema = (t: TFunction) => {
@@ -36,5 +38,12 @@ export const getFormSchema = (t: TFunction) => {
     recaptchaToken: yup
       .string()
       .required(t('validation-errors.recaptcha-required')),
+
+    position: yup.string().required(requiredMsg(t, 'position')),
+    otherPosition: yup.string().when('position', ([position], schema) => {
+      return position === 'Other'
+        ? schema.required(t('validation-errors.other-position-required'))
+        : schema
+    }),
   })
 }

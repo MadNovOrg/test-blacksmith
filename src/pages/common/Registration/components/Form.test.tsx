@@ -2,6 +2,7 @@ import { Auth } from 'aws-amplify'
 
 import { Recaptcha } from '@app/components/Recaptcha'
 import { createRecaptchaComp } from '@app/components/Recaptcha/test-utils'
+import { useJobTitles } from '@app/hooks/useJobTitles'
 import { gqlRequest } from '@app/lib/gql-request'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
@@ -10,7 +11,11 @@ import { Form } from './Form'
 
 jest.mock('@app/hooks/use-fetcher')
 jest.mock('@app/lib/gql-request')
+jest.mock('../../../../hooks/useJobTitles')
 
+const mockUseJobTitles = useJobTitles as jest.MockedFunction<
+  typeof useJobTitles
+>
 const gqlRequestMocked = jest.mocked(gqlRequest)
 const authRequestMocked = jest.mocked(Auth)
 
@@ -21,6 +26,13 @@ const defaultProps = {
 }
 
 const RecaptchaMock = createRecaptchaComp()
+
+mockUseJobTitles.mockReturnValue([
+  'Administrator',
+  'Assistant Director of Nursing',
+  'Assistant Headteacher',
+  'Other',
+])
 
 jest.mock('@app/components/Recaptcha', () => ({
   __esModule: true,
@@ -176,6 +188,7 @@ describe('Form', () => {
     gqlRequestMocked.mockImplementation(() => {
       throw new Error()
     })
+
     const props = { ...defaultProps }
     render(<Form {...props} />)
 
@@ -194,6 +207,10 @@ describe('Form', () => {
     await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
 
     await userEvent.click(screen.getByLabelText('T&Cs'))
+
+    await userEvent.click(screen.getByLabelText('Position'))
+    await userEvent.click(screen.getByTestId('position-Other'))
+    await userEvent.type(screen.getByTestId('other-position-input'), 'Admin')
 
     await waitFor(async () => {
       await userEvent.click(screen.getByTestId('signup-form-btn'))
@@ -215,6 +232,7 @@ describe('Form', () => {
       error.code = 'UsernameExistsException'
       throw error
     })
+
     const props = { ...defaultProps }
     render(<Form {...props} />)
 
@@ -226,6 +244,10 @@ describe('Form', () => {
     await userEvent.type(screen.getByTestId('input-email'), 'test@email.com')
     await userEvent.type(screen.getByTestId('input-password'), 'Test1234!')
     await userEvent.type(screen.getByTestId('input-phone'), '1234567890')
+
+    await userEvent.click(screen.getByLabelText('Position'))
+    await userEvent.click(screen.getByTestId('position-Other'))
+    await userEvent.type(screen.getByTestId('other-position-input'), 'Admin')
 
     // Selects your default value of the date field
     await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
