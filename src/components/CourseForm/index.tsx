@@ -1422,7 +1422,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               />
             </Grid>
             <Grid item>
-              {!isCreation ? (
+              {!isCreation && courseType === CourseType.INDIRECT ? (
                 <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
                   {t('components.course-form.attendees-edit-label')}
                 </Alert>
