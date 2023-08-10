@@ -138,7 +138,7 @@ export const RemoveIndividualDialog = ({
         courseId: course.id,
         profileId: participant.profile.id,
         reason: capitalize(data.cancellationReason),
-        fee: data.cancellationFeePercent,
+        fee: Number(data.cancellationFeePercent),
       })
 
       if (onSave) {

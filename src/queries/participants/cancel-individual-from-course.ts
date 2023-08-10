@@ -5,7 +5,7 @@ export const CANCEL_INDIVIDUAL_FROM_COURSE_MUTATION = gql`
     $courseId: Int!
     $profileId: uuid!
     $reason: String!
-    $fee: Int!
+    $fee: Float!
   ) {
     cancelIndividualFromCourse(
       courseId: $courseId

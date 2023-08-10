@@ -9482,7 +9482,7 @@ export type TransferCourse = {
 };
 
 export type TransferFee = {
-  customFee?: InputMaybe<Scalars['Int']>;
+  customFee?: InputMaybe<Scalars['Float']>;
   type: TransferFeeType;
 };
 
@@ -30757,7 +30757,7 @@ export type Mutation_RootArloCallbackArgs = {
 /** mutation root */
 export type Mutation_RootCancelIndividualFromCourseArgs = {
   courseId: Scalars['Int'];
-  fee: Scalars['Int'];
+  fee: Scalars['Float'];
   profileId: Scalars['uuid'];
   reason: Scalars['String'];
 };
@@ -51009,7 +51009,7 @@ export type CancelIndividualFromCourseMutationVariables = Exact<{
   courseId: Scalars['Int'];
   profileId: Scalars['uuid'];
   reason: Scalars['String'];
-  fee: Scalars['Int'];
+  fee: Scalars['Float'];
 }>;
 
 
