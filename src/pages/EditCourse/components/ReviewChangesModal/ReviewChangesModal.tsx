@@ -18,8 +18,8 @@ import { Course_Level_Enum, TransferFeeType } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { yup } from '@app/schemas'
 
-import { CourseDiffTable } from '../../CourseDiffTable'
-import { CourseDiff } from '../../types'
+import type { CourseDiff } from '../../shared'
+import { CourseDiffTable } from '../CourseDiffTable'
 import { ReschedulingTermsTable } from '../ReschedulingTermsTable'
 
 const TRAINING_EMAIL = import.meta.env.VITE_TT_TRAINING_EMAIL_ADDRESS

@@ -63,3 +63,9 @@ export const getReschedulingTermsFee = (
 
   throw new Error('Not supported course level')
 }
+
+export type CourseDiff = {
+  type: 'date' | 'venue'
+  oldValue: string | Date[]
+  newValue: string | Date[]
+}

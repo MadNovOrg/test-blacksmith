@@ -1,10 +1,8 @@
-import React from 'react'
-
 import { Course_Level_Enum, TransferFeeType } from '@app/generated/graphql'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
-import { CourseDiff } from '../../types'
+import type { CourseDiff } from '../../shared'
 
 import { ReviewChangesModal } from '.'
 

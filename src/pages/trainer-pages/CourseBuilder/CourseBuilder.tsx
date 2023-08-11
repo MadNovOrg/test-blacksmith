@@ -46,7 +46,7 @@ import GroupsSelection, {
 } from './components/GroupsSelection/GroupsSelection'
 import { COURSE_WITH_MODULE_GROUPS, SET_COURSE_AS_DRAFT } from './queries'
 
-type CourseBuilderProps = unknown
+type CourseBuilderProps = unknown & { editMode?: boolean }
 
 export const MAX_COURSE_DURATION_MAP = {
   normal: {
@@ -73,12 +73,11 @@ export const MAX_COURSE_DURATION_MAP = {
 
 export const CourseBuilder: React.FC<
   React.PropsWithChildren<CourseBuilderProps>
-> = () => {
+> = ({ editMode }) => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
 
   const navigate = useNavigate()
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false)
   const [isTimeCommitmentModalOpen, setIsTimeCommitmentModalOpen] =
     useState(false)
 
@@ -191,6 +190,7 @@ export const CourseBuilder: React.FC<
   >(FINALIZE_COURSE_BUILDER_MUTATION)
 
   const submitCourse = useCallback(async () => {
+    setIsTimeCommitmentModalOpen(false)
     if (courseData?.course) {
       const selectedGroups =
         modulesData?.filter(group =>
@@ -214,11 +214,6 @@ export const CourseBuilder: React.FC<
       })
     }
   }, [courseData?.course, finalizeCourse, modulesData, saveModules])
-
-  const onCourseSubmit = useCallback(async () => {
-    setIsTimeCommitmentModalOpen(false)
-    setIsConfirmationModalOpen(true)
-  }, [])
 
   const handleSelectionChange: CallbackFn = useCallback(
     ({ groupIds, estimatedDuration }) => {
@@ -245,12 +240,8 @@ export const CourseBuilder: React.FC<
   )
 
   const submitButtonHandler = useCallback(() => {
-    if (minimumTimeCommitment) {
-      setIsTimeCommitmentModalOpen(true)
-    } else {
-      return onCourseSubmit()
-    }
-  }, [minimumTimeCommitment, onCourseSubmit])
+    if (minimumTimeCommitment) setIsTimeCommitmentModalOpen(true)
+  }, [minimumTimeCommitment])
 
   const hasEstimatedDuration =
     courseData?.course?.level &&
@@ -413,37 +404,34 @@ export const CourseBuilder: React.FC<
       )}
       <ConfirmDialog
         open={isTimeCommitmentModalOpen}
-        onOk={onCourseSubmit}
+        onOk={submitCourse}
         onCancel={() => setIsTimeCommitmentModalOpen(false)}
-        message={t(
-          'pages.trainer-base.create-course.new-course.time-commitment-message',
-          {
-            hours: Math.max(
-              minimumTimeCommitment,
-              Math.ceil((estimatedDurationRef.current ?? 0) / 60)
-            ),
-          }
-        )}
+        message={
+          <>
+            {t(
+              'pages.trainer-base.create-course.new-course.time-commitment-message',
+              {
+                hours: Math.max(
+                  minimumTimeCommitment,
+                  Math.ceil((estimatedDurationRef.current ?? 0) / 60)
+                ),
+              }
+            )}
+            {editMode ? (
+              <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
+                {t(
+                  'pages.trainer-base.create-course.new-course.time-commitment-warning'
+                )}
+              </Alert>
+            ) : null}
+          </>
+        }
         title={t(
           'pages.trainer-base.create-course.new-course.time-commitment-title'
         )}
         okLabel={t('pages.trainer-base.create-course.new-course.submit-course')}
         data-testid="time-commitment-dialog"
       ></ConfirmDialog>
-      <ConfirmDialog
-        open={isConfirmationModalOpen}
-        message={t(
-          'pages.trainer-base.create-course.new-course.warning-dialog'
-        )}
-        onOk={submitCourse}
-        title={t(
-          'pages.trainer-base.create-course.new-course.warning-dialog-title'
-        )}
-        onCancel={() => setIsConfirmationModalOpen(false)}
-        okLabel={t('common.confirm')}
-        cancelLabel={t('common.cancel')}
-        data-testid="confirm-warning-dialog"
-      />
     </Container>
   )
 }

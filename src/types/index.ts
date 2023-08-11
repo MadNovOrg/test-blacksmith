@@ -565,6 +565,7 @@ export type CourseCertificateChangelog = {
 
 export type CourseInput = {
   type: CourseType | null
+  id: number
   organization: Organization | null
   bookingContact: {
     profileId?: string

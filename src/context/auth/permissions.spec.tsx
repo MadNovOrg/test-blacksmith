@@ -9,7 +9,7 @@ import {
 } from '@app/types'
 import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 
-import { buildProfile } from '@test/mock-data-utils'
+import { buildCourse, buildProfile } from '@test/mock-data-utils'
 
 import { getACL, injectACL } from './permissions'
 import { AuthContextType } from './types'
@@ -2300,6 +2300,53 @@ describe(getACL.name, () => {
     })
   })
 
+  describe('canViewCourseBuilderOnEditPage', () => {
+    it.each([
+      RoleName.TRAINER,
+      RoleName.TT_OPS,
+      RoleName.LD,
+      RoleName.TT_ADMIN,
+    ])('should return true if activerole is %s', activeRole => {
+      // Arrange
+      const acl = getACLStub({ activeRole })
+      const course = buildCourse({
+        overrides: {
+          accreditedBy: Accreditors_Enum.Icm,
+          type: CourseType.CLOSED,
+        },
+      })
+
+      // Act & Assert
+      expect(acl.canViewCourseBuilderOnEditPage(course))
+    })
+    it('should return false if course is not icm', () => {
+      // Arrange
+      const acl = getACLStub({ activeRole: RoleName.TRAINER })
+      const course = buildCourse({
+        overrides: {
+          accreditedBy: Accreditors_Enum.Bild,
+          type: CourseType.CLOSED,
+        },
+      })
+
+      // Act & Assert
+      expect(acl.canViewCourseBuilderOnEditPage(course)).toBeFalsy()
+    })
+    it('should return false if course is not closed or indirect', () => {
+      // Arrange
+      const acl = getACLStub({ activeRole: RoleName.TRAINER })
+      const course = buildCourse({
+        overrides: {
+          accreditedBy: Accreditors_Enum.Icm,
+          type: CourseType.OPEN,
+        },
+      })
+
+      // Act & Assert
+      expect(acl.canViewCourseBuilderOnEditPage(course)).toBeFalsy()
+    })
+  })
+
   describe('canViewArchivedUsersCertificates()', () => {
     it.each([[RoleName.TT_ADMIN]])(
       `should return true when activeRole is %s`,
@@ -2324,7 +2371,6 @@ describe(getACL.name, () => {
       expect(acl.canViewArchivedUsersCertificates()).toBeFalsy()
     })
   })
-
   describe('allowedCourseLevels', () => {
     const allLevels = Object.values(CourseLevel)
 

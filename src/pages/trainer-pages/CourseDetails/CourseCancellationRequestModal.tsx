@@ -20,7 +20,7 @@ import {
   RequestCourseCancellationMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { CancellationTermsTable } from '@app/pages/EditCourse/CancellationTermsTable'
+import { CancellationTermsTable } from '@app/pages/EditCourse/components/CancellationTermsTable'
 import { REQUEST_COURSE_CANCELLATION_MUTATION } from '@app/queries/courses/request-course-cancellation'
 import { yup } from '@app/schemas'
 import { Course } from '@app/types'

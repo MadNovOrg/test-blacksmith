@@ -1,3 +1,4 @@
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import Cancel from '@mui/icons-material/Cancel'
 import { LoadingButton } from '@mui/lab'
 import {
@@ -50,8 +51,8 @@ import {
   isTrainersRatioNotMet,
   shouldGoIntoExceptionApproval,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
-import { CourseCancellationModal } from '@app/pages/EditCourse/CourseCancellationModal'
-import { RegistrantsCancellationModal } from '@app/pages/EditCourse/RegistrantsCancellationModal'
+import { CourseCancellationModal } from '@app/pages/EditCourse/components/CourseCancellationModal'
+import { RegistrantsCancellationModal } from '@app/pages/EditCourse/components/RegistrantsCancellationModal'
 import { INSERT_COURSE_AUDIT } from '@app/queries/courses/insert-course-audit'
 import {
   MUTATION as NOTIFY_COURSE_INPUT,
@@ -85,7 +86,7 @@ import {
 import { NotFound } from '../common/NotFound'
 
 import { FormValues, ReviewChangesModal } from './components/ReviewChangesModal'
-import { CourseDiff } from './types'
+import type { CourseDiff } from './shared'
 
 function assertCourseDataValid(
   data: CourseInput,
@@ -124,6 +125,17 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
     []
   )
+  const {
+    data: course,
+    status: courseStatus,
+    mutate: mutateCourse,
+  } = useCourse(id ?? '')
+
+  const courseInput: CourseInput | undefined = useMemo(() => {
+    return course ? courseToCourseInput(course) : undefined
+  }, [course])
+
+  const canGoToCourseBuilder = acl.canViewCourseBuilderOnEditPage(courseInput)
 
   const courseMethods = useRef<{
     trigger: UseFormTrigger<CourseInput>
@@ -143,12 +155,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     useMutation<InsertCourseAuditMutation, InsertCourseAuditMutationVariables>(
       INSERT_COURSE_AUDIT
     )
-
-  const {
-    data: course,
-    status: courseStatus,
-    mutate: mutateCourse,
-  } = useCourse(id ?? '')
 
   const participantsCount =
     (course as GetCourseByIdQuery['course'])?.attendeesCount?.aggregate
@@ -224,10 +230,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     },
     []
   )
-
-  const courseInput: CourseInput | undefined = useMemo(() => {
-    return course ? courseToCourseInput(course) : undefined
-  }, [course])
 
   const saveChanges = useCallback(
     async (reviewInput?: FormValues) => {
@@ -397,7 +399,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               })) || []
             )
             mutateCourse()
-            navigate(`/courses/${course.id}/details`)
+            canGoToCourseBuilder
+              ? navigate(`/courses/${courseInput?.id}/modules`, {
+                  state: { editMode: true },
+                })
+              : navigate(`/courses/${course.id}/details`)
           } else {
             console.error('error updating course')
           }
@@ -408,11 +414,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     },
     [
       acl,
+      canGoToCourseBuilder,
       course,
       courseData,
       courseDataValid,
       courseDiffs,
       courseExceptions.length,
+      courseInput?.id,
       insertAudit,
       mutateCourse,
       navigate,
@@ -529,13 +537,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     }
     editCourse()
   }, [
-    acl,
-    courseData,
-    editCourse,
-    profile,
-    seniorOrPrincipalLead,
-    trainersData,
     editCourseValid,
+    courseData,
+    profile,
+    trainersData,
+    acl,
+    editCourse,
+    seniorOrPrincipalLead,
   ])
 
   const showTrainerRatioWarning = useMemo(() => {
@@ -766,8 +774,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     loading={fetching}
                     data-testid="save-button"
                     sx={{ mt: isMobile ? 2 : 0 }}
+                    endIcon={canGoToCourseBuilder ? <ArrowForwardIcon /> : null}
                   >
-                    {t('pages.edit-course.save-button-text')}
+                    {canGoToCourseBuilder
+                      ? t('pages.edit-course.course-builder-button-text')
+                      : t('pages.edit-course.save-button-text')}
                   </LoadingButton>
                 </Box>
               </Box>

@@ -322,7 +322,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     [hasOrg, t, isClosedCourse, hasMinParticipants, activeRole, courseType]
   )
 
-  const defaultValues = useMemo<CourseInput>(
+  const defaultValues = useMemo<Omit<CourseInput, 'id'>>(
     () => ({
       accreditedBy: courseInput?.accreditedBy ?? Accreditors_Enum.Icm,
       organization: courseInput?.organization ?? null,

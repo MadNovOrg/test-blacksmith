@@ -421,15 +421,11 @@ describe('component: CourseBuilder', () => {
     await userEvent.click(moduleGroupLabel)
     await userEvent.click(screen.getByRole('button', { name: /submit/i }))
 
-    const timeCommitmentDialog = screen.getByRole('dialog')
+    const timeCommitmentDialog = screen.getByTestId('time-commitment-dialog')
 
     await userEvent.click(
       within(timeCommitmentDialog).getByText(/submit course/i)
     )
-
-    const confirmDialog = screen.getByRole('dialog')
-
-    await userEvent.click(within(confirmDialog).getByText(/confirm/i))
 
     await waitFor(() => {
       expect(screen.getByText(/course details/i)).toBeInTheDocument()
@@ -542,8 +538,9 @@ describe('component: CourseBuilder', () => {
       )
     ).toBeInTheDocument()
   })
-  ;[Course_Level_Enum.Level_1, Course_Level_Enum.Level_2].forEach(level => {
-    it(`marks all module groups as mandatory if course type is open and ${level}`, async () => {
+  it.each([Course_Level_Enum.Level_1, Course_Level_Enum.Level_2])(
+    `marks all module groups as mandatory if course type is open and %s`,
+    async level => {
       const course = buildCourse({ level })
       const moduleGroup = buildModuleGroup()
 
@@ -654,19 +651,16 @@ describe('component: CourseBuilder', () => {
 
       await userEvent.click(screen.getByRole('button', { name: /submit/i }))
 
-      const timeCommitmentDialog = screen.getByRole('dialog')
+      const timeCommitmentDialog = screen.getByTestId('time-commitment-dialog')
       await userEvent.click(
         within(timeCommitmentDialog).getByText(/submit course/i)
       )
 
-      const confirmDialog = screen.getByRole('dialog')
-      await userEvent.click(within(confirmDialog).getByText(/confirm/i))
-
       await waitFor(() => {
         expect(screen.getByText(/course details/i)).toBeInTheDocument()
       })
-    })
-  })
+    }
+  )
 })
 
 function buildCourse(

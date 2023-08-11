@@ -20,7 +20,7 @@ import {
   DeleteCourseCancellationRequestMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { CourseCancellationModal } from '@app/pages/EditCourse/CourseCancellationModal'
+import { CourseCancellationModal } from '@app/pages/EditCourse/components/CourseCancellationModal'
 import { CourseCancellationRequestModal } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestModal'
 import { DELETE_COURSE_CANCELLATION_REQUEST_MUTATION } from '@app/queries/courses/delete-course-cancellation-request'
 import { Course } from '@app/types'

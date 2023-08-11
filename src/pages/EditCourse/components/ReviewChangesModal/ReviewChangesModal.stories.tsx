@@ -1,6 +1,5 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import { addHours } from 'date-fns'
-import React from 'react'
 
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
@@ -18,9 +17,9 @@ export default {
     onCancel: { action: 'cancelled' },
     onConfirm: { action: 'confirmed' },
   },
-} as ComponentMeta<typeof ReviewChangesModal>
+} as Meta<typeof ReviewChangesModal>
 
-const Template: ComponentStory<typeof ReviewChangesModal> = args => (
+const Template: StoryFn<typeof ReviewChangesModal> = args => (
   <ReviewChangesModal {...args} />
 )
 

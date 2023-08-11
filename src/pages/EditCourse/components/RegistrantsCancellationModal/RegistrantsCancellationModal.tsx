@@ -14,7 +14,7 @@ export const RegistrantsCancellationModal: React.FC<
   const { t } = useTranslation()
 
   return (
-    <Container>
+    <Container data-testid="registrants-cancellation-modal">
       <Typography variant="body1" color="grey.600">
         {t('pages.edit-course.registrants-cancellation-modal.description')}
       </Typography>

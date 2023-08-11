@@ -29,8 +29,8 @@ import {
   CancelIndividualFromCourseMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { CancellationTermsTable } from '@app/pages/EditCourse/CancellationTermsTable'
-import { getCancellationTermsFee } from '@app/pages/EditCourse/utils'
+import { CancellationTermsTable } from '@app/pages/EditCourse/components/CancellationTermsTable'
+import { getCancellationTermsFee } from '@app/pages/EditCourse/shared'
 import { CANCEL_INDIVIDUAL_FROM_COURSE_MUTATION } from '@app/queries/participants/cancel-individual-from-course'
 import { yup } from '@app/schemas'
 import { Course, CourseParticipant } from '@app/types'

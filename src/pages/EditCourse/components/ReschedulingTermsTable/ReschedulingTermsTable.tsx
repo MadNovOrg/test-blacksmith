@@ -8,7 +8,7 @@ import React from 'react'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
-import { getReschedulingTermsFee } from '../../utils'
+import { getReschedulingTermsFee } from '../../shared'
 
 type Props = {
   startDate: Date

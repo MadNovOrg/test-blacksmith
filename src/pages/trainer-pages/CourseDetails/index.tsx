@@ -42,6 +42,7 @@ export enum CourseDetailsTabs {
   EVALUATION = 'EVALUATION',
   CERTIFICATIONS = 'CERTIFICATIONS',
   COURSE_OVERVIEW = 'COURSE_OVERVIEW',
+  EDIT = 'EDIT',
 }
 
 export const CourseDetails = () => {
@@ -140,6 +141,8 @@ export const CourseDetails = () => {
   const showCourseOverview =
     (course?.moduleGroupIds?.length || course?.bildModules?.length) &&
     course.status !== Course_Status_Enum.Draft
+
+  const showCourseBuilderOnEditPage = acl.canViewCourseBuilderOnEditPage(course)
 
   if (courseLoadingStatus === LoadingStatus.FETCHING) {
     return (
@@ -244,7 +247,9 @@ export const CourseDetails = () => {
                   variant="scrollable"
                   scrollButtons="auto"
                   onChange={(_, tab) =>
-                    navigate(`.?tab=${tab}`, { replace: true })
+                    tab !== CourseDetailsTabs.EDIT
+                      ? navigate(`.?tab=${tab}`, { replace: true })
+                      : null
                   }
                 >
                   <PillTab
@@ -273,7 +278,7 @@ export const CourseDetails = () => {
                       data-testid="certifications-tab"
                     />
                   ) : null}
-                  {showCourseOverview && (
+                  {showCourseOverview ? (
                     <PillTab
                       label={t(
                         'pages.course-details.tabs.course-overview.title'
@@ -281,7 +286,16 @@ export const CourseDetails = () => {
                       value={CourseDetailsTabs.COURSE_OVERVIEW}
                       data-testid="course-overview-tab"
                     />
-                  )}
+                  ) : null}
+
+                  {showCourseBuilderOnEditPage ? (
+                    <PillTab
+                      label={t('common.edit')}
+                      value={CourseDetailsTabs.EDIT}
+                      data-testid="course-edit-tab"
+                      onClick={() => navigate(`/courses/${course.id}/modules`)}
+                    />
+                  ) : null}
                 </PillTabList>
                 <Box>
                   {!course.cancellationRequest &&

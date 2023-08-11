@@ -1,7 +1,7 @@
 import { Alert, Box, CircularProgress } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 
 import {
@@ -19,6 +19,8 @@ import { CourseBuilder } from '../CourseBuilder/CourseBuilder'
 export const CourseBuilderCommon: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
+
+  const { editMode } = (useLocation().state as { editMode: boolean }) ?? {}
 
   const { data: courseData, error: courseDataError } = useSWR<
     GetCourseByIdQuery,
@@ -54,7 +56,7 @@ export const CourseBuilderCommon: React.FC<React.PropsWithChildren> = () => {
   }
 
   if (courseData?.course?.accreditedBy === Accreditors_Enum.Icm) {
-    return <CourseBuilder />
+    return <CourseBuilder editMode={editMode ?? false} />
   }
 
   if (courseData?.course?.accreditedBy === Accreditors_Enum.Bild) {

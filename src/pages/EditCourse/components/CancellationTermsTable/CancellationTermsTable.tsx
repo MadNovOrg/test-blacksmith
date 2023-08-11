@@ -10,9 +10,9 @@ import {
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getCancellationTermsFee } from '@app/pages/EditCourse/utils'
+import { getCancellationTermsFee } from '@app/pages/EditCourse/shared'
 
-const TERMS = {
+export const TERMS = {
   'four-weeks-plus': 25,
   'two-to-four-weeks': 50,
   'one-to-two-weeks': 75,
@@ -32,7 +32,7 @@ export const CancellationTermsTable: React.FC<
   const applicableFee = getCancellationTermsFee(courseStartDate)
 
   return (
-    <Table sx={sx}>
+    <Table data-testid="cancellation-terms-table" sx={sx}>
       <TableHead sx={{ bgColor: 'grey.200' }}>
         <TableRow>
           <TableCell>

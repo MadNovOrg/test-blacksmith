@@ -16,7 +16,7 @@ import {
   CancelMyselfFromCourseMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { CancellationTermsTable } from '@app/pages/EditCourse/CancellationTermsTable'
+import { CancellationTermsTable } from '@app/pages/EditCourse/components/CancellationTermsTable'
 import { CANCEL_MYSELF_FROM_COURSE_MUTATION } from '@app/queries/courses/cancel-myself-from-course'
 import { Course, CourseType } from '@app/types'
 

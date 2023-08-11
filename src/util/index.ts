@@ -264,6 +264,7 @@ export function bildStrategiesToArray(
 
 export const courseToCourseInput = (course: Course): CourseInput => {
   return {
+    id: course.id,
     type: course.type,
     deliveryType: course.deliveryType,
     organization: course.organization ?? null,

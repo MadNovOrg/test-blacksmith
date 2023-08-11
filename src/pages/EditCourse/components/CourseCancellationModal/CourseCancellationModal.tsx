@@ -27,19 +27,19 @@ import {
   CancelIndirectCourseMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { CancellationTermsTable } from '@app/pages/EditCourse/CancellationTermsTable'
-import { getCancellationTermsFee } from '@app/pages/EditCourse/utils'
+import { CancellationTermsTable } from '@app/pages/EditCourse/components/CancellationTermsTable'
+import { getCancellationTermsFee } from '@app/pages/EditCourse/shared'
 import { CANCEL_COURSE_MUTATION } from '@app/queries/courses/cancel-course'
 import { CANCEL_INDIRECT_COURSE_MUTATION } from '@app/queries/courses/cancel-indirect-course'
 import { yup } from '@app/schemas'
-import { Course, CourseType } from '@app/types'
+import { Course, CourseType } from '@app/types' // 🙃 TODO: replace with generated type
 
 type FormInput = {
   cancellationFeePercent?: number
   cancellationReason: string
 }
 
-enum FeesRadioValue {
+export enum FeesRadioValue {
   APPLY_CANCELLATION_TERMS = 'apply-cancellation-terms',
   CUSTOM_FEE = 'custom-fee',
   NO_FEES = 'no-fees',
@@ -173,18 +173,19 @@ export const CourseCancellationModal: React.FC<
   }
 
   const isIndirect = course.type === CourseType.INDIRECT
-
   return (
-    <Container>
+    <Container data-testid="course-cancellation-modal">
       <Typography variant="body1" color="grey.600">
-        {t('pages.edit-course.cancellation-modal.description-p-1')}
+        {t('pages.edit-course.cancellation-modal.permanently-cancel-course')}
       </Typography>
 
-      {course.type !== CourseType.INDIRECT ? (
+      {!isIndirect ? (
         <Typography variant="body1" color="grey.600" mt={1}>
-          {t('pages.edit-course.cancellation-modal.description-p-2')}
+          {t('pages.edit-course.cancellation-modal.finance-invoice-changes')}
           {course.type === CourseType.OPEN
-            ? t('pages.edit-course.cancellation-modal.description-p-3')
+            ? t(
+                'pages.edit-course.cancellation-modal.attendees-will-not-incur-cancellation-charges'
+              )
             : null}
         </Typography>
       ) : null}
@@ -196,7 +197,7 @@ export const CourseCancellationModal: React.FC<
           </Typography>
 
           <RadioGroup
-            onChange={(event, v: string) => setFeeType(v as FeesRadioValue)}
+            onChange={(_, v: string) => setFeeType(v as FeesRadioValue)}
             row
             value={feeType}
             sx={{ mt: 1 }}
@@ -299,6 +300,7 @@ export const CourseCancellationModal: React.FC<
 
       {isIndirect || reasonType === 'other' ? (
         <TextField
+          data-testid="cancel-course-reason-input"
           fullWidth
           required
           variant="filled"

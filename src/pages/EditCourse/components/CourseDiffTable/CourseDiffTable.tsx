@@ -7,7 +7,7 @@ import React from 'react'
 
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
-import { CourseDiff } from '../types'
+import type { CourseDiff } from '../../shared'
 
 type Props = {
   diff: CourseDiff[]
@@ -20,13 +20,15 @@ export const CourseDiffTable: React.FC<React.PropsWithChildren<Props>> = ({
     'pages.edit-course.review-changes-modal'
   )
 
+  const cells = [t('col-property'), t('col-old-value'), t('col-new-value')]
+
   return (
     <Table data-testid="course-diff-table" sx={{ mb: 2 }}>
       <TableHead>
         <TableRow>
-          <TableCell>{t('col-property')}</TableCell>
-          <TableCell>{t('col-old-value')}</TableCell>
-          <TableCell>{t('col-new-value')}</TableCell>
+          {cells.map((cell, index) => (
+            <TableCell key={`${cell}+${index}`}>{cell}</TableCell>
+          ))}
         </TableRow>
       </TableHead>
       <TableBody>
