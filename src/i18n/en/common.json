@@ -14,7 +14,10 @@
     "bild_act_trainer": "BILD ACT Trainer",
     "advanced_trainer": "Advanced Trainer",
     "first-aid": "One Day Emergency at Work First Aid",
-    "no-certification": "No certification"
+    "no-certification": "No certification",
+    "bild_regular": "BILD Certified",
+    "bild_intermediate_trainer": "BILD Intermediate Trainer",
+    "bild_advanced_trainer": "BILD Advanced Trainer"
   },
   "errors": {
     "loading-participants": "There was an error loading course participants",
