@@ -49,12 +49,12 @@ jobs:
           echo "Inputs are valid" || \
           (echo "Inputs are not numbers!" && exit 1)
 
-      - name: Update Package Version
-        run: | 
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "username@users.noreply.github.com"
-          npm version "${VERSION}" -m "new version: ${VERSION}"
-          git push
+#      - name: Update Package Version
+#        run: | 
+#          git config --global user.name "${{ github.actor }}"
+#          git config --global user.email "username@users.noreply.github.com"
+#          npm version "${VERSION}" -m "new version: ${VERSION}"
+#          git push
 
       - name: Creates User Input Tag - Fails if it already exists
         uses: actions/github-script@v6.3.3
