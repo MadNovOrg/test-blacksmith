@@ -1,13 +1,5 @@
 import { gql } from 'graphql-request'
 
-export type ParamsType = {
-  id: string
-  member: {
-    position?: string | null
-    isAdmin?: boolean
-  }
-}
-
 export const MUTATION = gql`
   mutation UpdateOrgMember(
     $id: uuid!

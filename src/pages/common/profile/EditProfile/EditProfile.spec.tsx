@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
@@ -6,7 +7,7 @@ import useRoles from '@app/hooks/useRoles'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen } from '@test/index'
+import { render, renderHook, screen } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
 import { EditProfilePage } from './EditProfile'
@@ -17,7 +18,12 @@ jest.mock('@app/hooks/useProfile')
 const useRolesMock = jest.mocked(useRoles)
 jest.mock('@app/hooks/useRoles')
 
-describe('page: EditProfile', () => {
+describe(EditProfilePage.name, () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
   it('should show profile roles with admins', async () => {
     useProfileMock.mockReturnValue({
       profile: {
@@ -87,4 +93,23 @@ describe('page: EditProfile', () => {
 
     expect(screen.queryByText('Hub access')).not.toBeInTheDocument()
   })
+  it.each([t('first-name'), t('surname'), t('dob')])(
+    'should disable %s field',
+    field => {
+      const client = {
+        executeQuery: () => never,
+      } as unknown as Client
+      render(
+        <Provider value={client}>
+          <EditProfilePage />
+        </Provider>,
+        {
+          auth: {
+            activeRole: RoleName.USER,
+          },
+        }
+      )
+      expect(screen.getByLabelText(field)).toHaveAttribute('disabled')
+    }
+  )
 })

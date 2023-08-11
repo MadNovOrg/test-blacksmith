@@ -15,7 +15,7 @@ export type ImportCertificateModalProps = {
   onSubmit: () => void
 }
 
-const ImportCertificateModal: React.FC<
+export const ImportCertificateModal: React.FC<
   React.PropsWithChildren<ImportCertificateModalProps>
 > = function ({ onCancel, onSubmit }) {
   const { t } = useTranslation()
@@ -87,5 +87,3 @@ const ImportCertificateModal: React.FC<
     </Box>
   )
 }
-
-export default ImportCertificateModal

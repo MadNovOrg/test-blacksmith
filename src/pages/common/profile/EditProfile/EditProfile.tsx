@@ -10,19 +10,18 @@ import {
   Container,
   Grid,
   Switch,
-  TextField as MuiTextField,
+  TextField,
   Typography,
   useTheme,
   useMediaQuery,
+  Link,
 } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
-import { styled } from '@mui/system'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { formatDistanceToNow, isPast } from 'date-fns'
 import { uniq } from 'lodash-es'
 import React, {
   ChangeEvent,
@@ -39,6 +38,7 @@ import {
   useParams,
   useSearchParams,
 } from 'react-router-dom'
+import { useMutation } from 'urql'
 import * as yup from 'yup'
 import { InferType } from 'yup'
 
@@ -49,8 +49,12 @@ import { Dialog } from '@app/components/Dialog'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
+  GetProfileDetailsQuery,
   Profile_Role_Insert_Input,
   Profile_Trainer_Role_Type_Insert_Input,
+  RemoveOrgMemberMutation,
+  RemoveOrgMemberMutationVariables,
+  UpdateOrgMemberMutationVariables,
   UpdateProfileMutation,
   UpdateProfileMutationVariables,
   UpdateProfileRolesMutation,
@@ -58,126 +62,82 @@ import {
   UpdateTrainerRoleTypeMutation,
   UpdateTrainerRoleTypeMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import useProfile from '@app/hooks/useProfile'
 import useRoles from '@app/hooks/useRoles'
 import useTrainerRoleTypes from '@app/hooks/useTrainerRoleTypes'
 import { positions } from '@app/pages/common/CourseBooking/components/org-data'
-import ImportCertificateModal from '@app/pages/common/profile/ImportCertificateModal'
-import {
-  MUTATION as RemoveOrgMemberQuery,
-  ParamsType as RemoveOrgMemberParamsType,
-} from '@app/queries/organization/remove-org-member'
-import {
-  MUTATION as UpdateOrgMemberQuery,
-  ParamsType as UpdateOrgMemberParamsType,
-} from '@app/queries/organization/update-org-member'
+import { ImportCertificateModal } from '@app/pages/common/profile/components/ImportCertificateModal'
+import { MUTATION as REMOVE_ORG_MEMBER_MUTATION } from '@app/queries/organization/remove-org-member'
+import { MUTATION as UPDATE_ORG_MEMBER_MUTATION } from '@app/queries/organization/update-org-member'
 import { MUTATION as UPDATE_PROFILE_MUTATION } from '@app/queries/profile/update-profile'
 import { MUTATION as UPDATE_PROFILE_ROLES_MUTATION } from '@app/queries/profile/update-profile-roles'
 import { MUTATION as UPDATE_PROFILE_TRAINER_ROLE_TYPES } from '@app/queries/trainer/update-trainer-role-types'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 
-import { EditRoles, RolesFields, rolesFormSchema } from './components/EditRoles'
-import { InviteUserToOrganisation } from './components/InviteUserToOrganisation'
-import { UserGo1License } from './components/UserGo1License'
-import { getRoleColor } from './utils'
+import { UpdateOrgMemberMutation } from '@qa/generated/graphql'
 
-type EditProfilePageProps = unknown
-
-const TextField = styled(MuiTextField)(({ theme }) => ({
-  backgroundColor: theme.palette.grey[100],
-  minWidth: 300,
-
-  '& .MuiInput-root': {
-    height: 50,
-  },
-}))
-
-enum DietaryRestrictionRadioValues {
-  NO = 'NO',
-  YES = 'YES',
-}
-enum DisabilitiesRadioValues {
-  NO = 'NO',
-  YES = 'YES',
-  RATHER_NOT_SAY = 'RATHER_NOT_SAY',
-}
-
-type OrgMemberType = {
-  id: string
-  organization: { name: string }
-}
-
-const avatarSize = 220
-const maxAvatarFileSizeBytes = Number.parseInt(
-  import.meta.env.VITE_PROFILE_AVATAR_MAX_SIZE_BYTES ?? 0
-)
-
-export type UserRoleName = RoleName | 'tt-employee'
-
-export type EmployeeRoleName = RoleName | 'sales'
-
-export const userRolesNames: UserRoleName[] = [
-  RoleName.USER,
-  RoleName.TRAINER,
-  RoleName.TT_ADMIN,
-  'tt-employee',
-]
-
-export const employeeRolesNames: EmployeeRoleName[] = [
-  RoleName.TT_OPS,
-  RoleName.FINANCE,
-  RoleName.LD,
-  'sales',
-]
-
-export const salesRolesNames: RoleName[] = [
-  RoleName.SALES_ADMIN,
-  RoleName.SALES_REPRESENTATIVE,
-]
-
-export const employeeRole = {
-  id: '0',
-  name: 'tt-employee' as RoleName,
-}
-export const salesRole = {
-  id: '1',
-  name: 'sales' as RoleName,
-}
-
-const defaultTrainerRoles = {
-  trainerRole: [] as string[],
-  BILDRole: '',
-  moderatorRole: false,
-}
-
-export const trainerRolesNames: TrainerRoleTypeName[] = [
-  TrainerRoleTypeName.PRINCIPAL,
-  TrainerRoleTypeName.SENIOR,
-  TrainerRoleTypeName.SENIOR_ASSIST,
-  TrainerRoleTypeName.TRAINER_ETA,
-  TrainerRoleTypeName.EMPLOYER_AOL,
-]
-
-export const BILDRolesNames: TrainerRoleTypeName[] = [
-  TrainerRoleTypeName.BILD_SENIOR,
-]
+import {
+  BILDRolesNames,
+  DietaryRestrictionRadioValues,
+  DisabilitiesRadioValues,
+  EmployeeRoleName,
+  OrgMemberType,
+  UserRoleName,
+  avatarSize,
+  defaultTrainerRoles,
+  employeeRole,
+  employeeRolesNames,
+  getRoleColor,
+  maxAvatarFileSizeBytes,
+  salesRole,
+  salesRolesNames,
+  trainerRolesNames,
+  userRolesNames,
+} from '../'
+import { CertificationsAlerts } from '../components/CertificationsAlerts'
+import {
+  EditRoles,
+  RolesFields,
+  rolesFormSchema,
+} from '../components/EditRoles'
+import { InviteUserToOrganisation } from '../components/InviteUserToOrganisation'
+import { UserGo1License } from '../components/UserGo1License'
 
 export const EditProfilePage: React.FC<
-  React.PropsWithChildren<EditProfilePageProps>
+  React.PropsWithChildren<unknown>
 > = () => {
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-
-  const fetcher = useFetcher()
-  const [loading, setLoading] = useState(false)
   const [avatarError, setAvatarError] = useState('')
   const { profile: currentUserProfile, reloadCurrentProfile, acl } = useAuth()
   const navigate = useNavigate()
   const { id } = useParams()
   const [searchParams] = useSearchParams()
   const orgId = searchParams.get('orgId')
+
+  const [{ fetching: updateProfileFetching }, updateProfile] = useMutation<
+    UpdateProfileMutation,
+    UpdateProfileMutationVariables
+  >(UPDATE_PROFILE_MUTATION)
+  const [{ fetching: updateProfileRolesFetching }, updateProfileRoles] =
+    useMutation<
+      UpdateProfileRolesMutation,
+      UpdateProfileRolesMutationVariables
+    >(UPDATE_PROFILE_ROLES_MUTATION)
+  const [{ fetching: updateTrainerRolesFetching }, updateProfileTrainerRoles] =
+    useMutation<
+      UpdateTrainerRoleTypeMutation,
+      UpdateTrainerRoleTypeMutationVariables
+    >(UPDATE_PROFILE_TRAINER_ROLE_TYPES)
+  const [{ fetching: updateOrgMemberFetching }, updateOrgMember] = useMutation<
+    UpdateOrgMemberMutation,
+    UpdateOrgMemberMutationVariables
+  >(UPDATE_ORG_MEMBER_MUTATION)
+  const [{ fetching: removeOrgMemberFetching }, removeOrgMember] = useMutation<
+    RemoveOrgMemberMutation,
+    RemoveOrgMemberMutationVariables
+  >(REMOVE_ORG_MEMBER_MUTATION)
 
   const { profile, certifications, go1Licenses, mutate, updateAvatar } =
     useProfile(id ?? currentUserProfile?.id, undefined, orgId ?? undefined)
@@ -197,6 +157,7 @@ export const EditProfilePage: React.FC<
   const ratherNotSayText = t<string>('rather-not-say')
 
   const canEditRoles = acl.isTTAdmin() || acl.isTTOps()
+  const isIndividual = acl.isUser()
 
   useEffect(() => {
     const restriction = profile?.dietaryRestrictions
@@ -264,7 +225,7 @@ export const EditProfilePage: React.FC<
         roles: rolesFormSchema(),
       })
       .required()
-  }, [t, disabilitiesRadioValue, dietaryRestrictionsRadioValue])
+  }, [disabilitiesRadioValue, t, dietaryRestrictionsRadioValue])
 
   const methods = useForm<InferType<typeof formSchema>>({
     resolver: yupResolver(formSchema),
@@ -418,26 +379,26 @@ export const EditProfilePage: React.FC<
   const navigateBackPath = orgId ? `../?orgId=${orgId}` : '..'
 
   const onSubmit = async (data: InferType<typeof formSchema>) => {
-    setLoading(true)
     if (!profile) return
 
     try {
-      await fetcher<UpdateProfileMutation, UpdateProfileMutationVariables>(
-        UPDATE_PROFILE_MUTATION,
-        {
-          input: {
-            profileId: profile.id,
-            avatar: data.avatar,
-            givenName: data.firstName,
-            familyName: data.surname,
-            phone: data.phone,
-            dob: data.dob?.toISOString(),
-            jobTitle: data.jobTitle,
-            disabilities: data.disabilities,
-            dietaryRestrictions: data.dietaryRestrictions,
-          },
-        }
-      )
+      await updateProfile({
+        input: {
+          profileId: profile.id,
+          avatar: data.avatar,
+          ...(!isIndividual
+            ? {
+                givenName: data.firstName,
+                familyName: data.surname,
+                dob: data.dob?.toISOString(),
+              }
+            : null),
+          jobTitle: data.jobTitle,
+          disabilities: data.disabilities,
+          dietaryRestrictions: data.dietaryRestrictions,
+        },
+      })
+
       if (canEditRoles) {
         const updatedRoles: string[] = []
         const updatedTrainerRoles: unknown[] = []
@@ -487,28 +448,21 @@ export const EditProfilePage: React.FC<
           [] as Profile_Trainer_Role_Type_Insert_Input[]
         )
 
-        await fetcher<
-          UpdateProfileRolesMutation,
-          UpdateProfileRolesMutationVariables
-        >(UPDATE_PROFILE_ROLES_MUTATION, {
+        await updateProfileRoles({
           id: profile?.id,
           roles: filteredRoles ?? [],
         })
 
-        await fetcher<
-          UpdateTrainerRoleTypeMutation,
-          UpdateTrainerRoleTypeMutationVariables
-        >(UPDATE_PROFILE_TRAINER_ROLE_TYPES, {
+        await updateProfileTrainerRoles({
           id: profile?.id,
           trainerRoleTypes: filteredTrainerRoleTypes ?? [],
         })
       }
 
-      setLoading(false)
       await refreshData()
       navigate(navigateBackPath, { replace: true })
     } catch (err) {
-      setLoading(false)
+      return err
     }
   }
 
@@ -523,7 +477,7 @@ export const EditProfilePage: React.FC<
 
   const updatePosition = useCallback(
     async (orgMember: OrgMemberType, position: string) => {
-      await fetcher<null, UpdateOrgMemberParamsType>(UpdateOrgMemberQuery, {
+      await updateOrgMember({
         id: orgMember.id,
         member: {
           position: position,
@@ -531,12 +485,12 @@ export const EditProfilePage: React.FC<
       })
       await refreshData()
     },
-    [fetcher, refreshData]
+    [refreshData, updateOrgMember]
   )
 
   const updateIsAdmin = useCallback(
     async (orgMember: OrgMemberType, isAdmin: boolean) => {
-      await fetcher<null, UpdateOrgMemberParamsType>(UpdateOrgMemberQuery, {
+      await updateOrgMember({
         id: orgMember.id,
         member: {
           isAdmin: isAdmin,
@@ -544,18 +498,18 @@ export const EditProfilePage: React.FC<
       })
       await refreshData()
     },
-    [fetcher, refreshData]
+    [refreshData, updateOrgMember]
   )
 
   const deleteOrgMember = useCallback(
     async (orgMember: OrgMemberType) => {
-      await fetcher<null, RemoveOrgMemberParamsType>(RemoveOrgMemberQuery, {
+      await removeOrgMember({
         id: orgMember.id,
       })
       await refreshData()
       setOrgToLeave(undefined)
     },
-    [fetcher, refreshData]
+    [refreshData, removeOrgMember]
   )
 
   const handleAvatarUpload = useCallback(
@@ -579,16 +533,31 @@ export const EditProfilePage: React.FC<
         const buffer = await file.arrayBuffer()
         const data = Array.from(new Uint8Array(buffer))
 
-        setLoading(true)
         const response = await updateAvatar(data)
         setValue('avatar', response?.avatar as string)
       } catch (err) {
         console.error(err)
         setAvatarError(t('unknown-error'))
-        setLoading(false)
       }
     },
-    [setAvatarError, setLoading, setValue, t, updateAvatar]
+    [setAvatarError, setValue, t, updateAvatar]
+  )
+  const loading = useMemo(
+    () =>
+      [
+        updateProfileFetching,
+        updateProfileRolesFetching,
+        updateTrainerRolesFetching,
+        updateOrgMemberFetching,
+        removeOrgMemberFetching,
+      ].some(v => v),
+    [
+      updateProfileFetching,
+      updateProfileRolesFetching,
+      updateTrainerRolesFetching,
+      updateOrgMemberFetching,
+      removeOrgMemberFetching,
+    ]
   )
 
   if (!profile || !systemRoles) return null
@@ -638,11 +607,6 @@ export const EditProfilePage: React.FC<
                   src={values.avatar ?? undefined}
                   name={`${values.firstName} ${values.surname}`}
                   size={avatarSize}
-                  imgProps={{
-                    onLoad: () => {
-                      setLoading(false)
-                    },
-                  }}
                   sx={{
                     mb: 4,
                     opacity: loading ? 0.3 : 1,
@@ -722,6 +686,7 @@ export const EditProfilePage: React.FC<
                       inputProps={{ 'data-testid': 'first-name' }}
                       autoFocus
                       fullWidth
+                      disabled={isIndividual}
                     />
                   </Grid>
                   <Grid item md={6} xs={12}>
@@ -735,6 +700,7 @@ export const EditProfilePage: React.FC<
                       {...register('surname')}
                       inputProps={{ 'data-testid': 'surname' }}
                       fullWidth
+                      disabled={isIndividual}
                     />
                   </Grid>
                 </Grid>
@@ -773,6 +739,7 @@ export const EditProfilePage: React.FC<
                       <DatePicker
                         format="dd/MM/yyyy"
                         value={values.dob}
+                        disabled={isIndividual}
                         onChange={(d: Date | null) => setValue('dob', d)}
                         slotProps={{
                           textField: {
@@ -798,13 +765,27 @@ export const EditProfilePage: React.FC<
                     />
                   </Grid>
                 </Grid>
+                {isIndividual ? (
+                  <Alert severity="info" variant="outlined">
+                    {t('cant-update-personal-info-warning')}{' '}
+                    <Link
+                      underline="always"
+                      href={`mailto:${
+                        import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
+                      }`}
+                      component="a"
+                    >
+                      {import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}
+                    </Link>
+                  </Alert>
+                ) : null}
                 <Grid item md={12} pt={2}>
                   <FormControl>
                     <Typography variant="body1" fontWeight={600}>
                       {t('dietary-restrictions-question')}
                     </Typography>
                     <RadioGroup
-                      onChange={(event, newValue: string) => {
+                      onChange={(_, newValue: string) => {
                         setDietaryRestrictionsRadioValue(
                           newValue as DietaryRestrictionRadioValues
                         )
@@ -1046,50 +1027,14 @@ export const EditProfilePage: React.FC<
                 </Button>
               </Grid>
 
-              {(certifications ?? []).map((certificate, index) => (
-                <Box
-                  mt={2}
-                  bgcolor="common.white"
-                  p={3}
-                  borderRadius={1}
-                  key={certificate.id}
-                >
-                  <Typography color={theme.palette.grey[700]} fontWeight={600}>
-                    {certificate.courseName}
-                  </Typography>
-
-                  <Typography color={theme.palette.grey[700]} mt={1}>
-                    {certificate.number}
-                  </Typography>
-
-                  {certificate.expiryDate ? (
-                    isPast(new Date(certificate.expiryDate)) ? (
-                      <Alert
-                        severity={index === 0 ? 'error' : 'info'}
-                        sx={{ mt: 1 }}
-                      >
-                        {t('course-certificate.expired-on', {
-                          date: certificate.expiryDate,
-                        })}
-                        ({formatDistanceToNow(new Date(certificate.expiryDate))}{' '}
-                        {t('ago')})
-                      </Alert>
-                    ) : (
-                      <Alert
-                        variant="outlined"
-                        severity="success"
-                        sx={{ mt: 1 }}
-                      >
-                        {t('course-certificate.active-until', {
-                          date: certificate.expiryDate,
-                        })}
-                        ({t('course-certificate.expires-in')}{' '}
-                        {formatDistanceToNow(new Date(certificate.expiryDate))}
-                        ).
-                      </Alert>
-                    )
-                  ) : null}
-                </Box>
+              {(
+                (certifications as GetProfileDetailsQuery['certificates']) ?? []
+              ).map((certificate, index) => (
+                <CertificationsAlerts
+                  key={`${certificate.id}*${index}`}
+                  certificate={certificate}
+                  index={index}
+                />
               ))}
 
               {go1Licenses?.length ? (
@@ -1138,7 +1083,11 @@ export const EditProfilePage: React.FC<
       <Dialog
         open={showImportModal}
         onClose={() => setShowImportModal(false)}
-        title={t('common.course-certificate.update-certification-details')}
+        slots={{
+          Title: () => (
+            <>{t('common.course-certificate.update-certification-details')}</>
+          ),
+        }}
         maxWidth={600}
       >
         <ImportCertificateModal
@@ -1153,7 +1102,9 @@ export const EditProfilePage: React.FC<
       <Dialog
         open={showInviteOrgModal}
         onClose={() => setShowInviteOrgModal(false)}
-        title={t('pages.invite-to-org.title')}
+        slots={{
+          Title: () => <>{t('pages.invite-to-org.title')}</>,
+        }}
         maxWidth={600}
         minWidth={400}
       >

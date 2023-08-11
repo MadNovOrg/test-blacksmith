@@ -1,1 +1,1 @@
-export { TableMenu, TableMenuSelections } from './TableMenu'
+export * from './TableMenu'

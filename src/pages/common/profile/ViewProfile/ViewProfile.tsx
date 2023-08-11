@@ -14,39 +14,34 @@ import {
   Grid,
   Link,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-import { formatDistanceToNow, isPast } from 'date-fns'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { Avatar } from '@app/components/Avatar'
 import { BackButton } from '@app/components/BackButton'
-import { CertificateStatusChip } from '@app/components/CertificateStatusChip'
 import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAlert'
 import { DetailsRow } from '@app/components/DetailsRow'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
-import { Course_Status_Enum } from '@app/generated/graphql'
+import { GetProfileDetailsQuery } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 import { ProfileArchiveDialog } from '@app/pages/common/profile/components/ProfileArchiveDialog'
-import { CertificateStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { CourseAsTrainer } from './components/CourseAsTrainer'
-import { InviteUserToOrganisation } from './components/InviteUserToOrganisation'
-import { ProfileDeleteDialog } from './components/ProfileDeleteDialog'
-import { TableMenu, TableMenuSelections } from './components/TableMenu'
-import { UserGo1License } from './components/UserGo1License'
-import { getRoleColor } from './utils'
+import { CertificationsTable } from '../components/CertificationsTable'
+import { CourseAsTrainer } from '../components/CourseAsTrainer'
+import { CoursesTable } from '../components/CoursesTable'
+import { InviteUserToOrganisation } from '../components/InviteUserToOrganisation'
+import { OrganisationsTable } from '../components/OrganisationsTable'
+import { ProfileDeleteDialog } from '../components/ProfileDeleteDialog'
+import { TableMenu, TableMenuSelections } from '../components/TableMenu'
+import { UserGo1License } from '../components/UserGo1License'
+import { getRoleColor } from '../helpers'
 
 type ViewProfilePageProps = unknown
 
@@ -118,9 +113,6 @@ export const ViewProfilePage: React.FC<
     !profile.archived && // can't delete archived profiles
     certifications?.length === 0 && // can't delete if you have certifications
     (acl.isTTAdmin() || acl.isTTOps()) // only TT Admins and TT Ops can delete
-
-  const certificateExpired = (expiryDate: string) =>
-    isPast(new Date(expiryDate))
 
   const editProFilePath = orgId ? `./edit?orgId=${orgId}` : './edit'
 
@@ -385,76 +377,7 @@ export const ViewProfilePage: React.FC<
                   {t('org-details')}
                 </Typography>
                 <Box sx={{ mt: 1, overflowX: 'auto' }}>
-                  <Table>
-                    <TableHead>
-                      <TableRow
-                        sx={{
-                          '&&.MuiTableRow-root': {
-                            backgroundColor: 'grey.300',
-                          },
-                          '&& .MuiTableCell-root': {
-                            py: 1,
-                            color: 'grey.700',
-                            fontWeight: '600',
-                          },
-                        }}
-                      >
-                        <TableCell>{t('organization')}</TableCell>
-                        <TableCell>{t('group')}</TableCell>
-                        <TableCell>{t('position')}</TableCell>
-                        <TableCell>{t('permissions')}</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {profile.organizations.length ? (
-                        profile.organizations.map(orgMember => (
-                          <TableRow
-                            key={orgMember.id}
-                            sx={{
-                              '&&.MuiTableRow-root': {
-                                backgroundColor: 'common.white',
-                              },
-                            }}
-                          >
-                            <TableCell>
-                              {orgMember.organization?.name}
-                            </TableCell>
-                            <TableCell>
-                              {orgMember.organization?.trustName}
-                            </TableCell>
-                            <TableCell>{orgMember.position}</TableCell>
-                            <TableCell>
-                              <Chip
-                                label={
-                                  orgMember.isAdmin
-                                    ? t(
-                                        'pages.org-details.tabs.users.organization-admin'
-                                      )
-                                    : t(
-                                        'pages.org-details.tabs.users.no-permissions'
-                                      )
-                                }
-                                color={orgMember.isAdmin ? 'success' : 'gray'}
-                                size="small"
-                              />
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      ) : (
-                        <TableRow
-                          sx={{
-                            '&&.MuiTableRow-root': {
-                              backgroundColor: 'common.white',
-                            },
-                          }}
-                        >
-                          <TableCell colSpan={4} sx={{ textAlign: 'center' }}>
-                            {t('pages.my-profile.user-is-not-assigned-to-org')}
-                          </TableCell>
-                        </TableRow>
-                      )}
-                    </TableBody>
-                  </Table>
+                  <OrganisationsTable profile={profile} />
                 </Box>
               </>
             ) : null}
@@ -465,92 +388,7 @@ export const ViewProfilePage: React.FC<
                   {t('course-as-attendee')}
                 </Typography>
                 <Box sx={{ mt: 1, overflowX: 'auto' }}>
-                  <Table data-testid="course-as-attendee" sx={{ mt: 1 }}>
-                    <TableHead>
-                      <TableRow
-                        sx={{
-                          '&&.MuiTableRow-root': {
-                            backgroundColor: 'grey.300',
-                          },
-                          '&& .MuiTableCell-root': {
-                            py: 1,
-                            color: 'grey.700',
-                            fontWeight: '600',
-                          },
-                        }}
-                      >
-                        <TableCell>{t('course-name')}</TableCell>
-                        <TableCell>{t('action')}</TableCell>
-                        <TableCell>{t('date')}</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {profile.participantAudits?.map(row => {
-                        return (
-                          <TableRow
-                            key={row.id}
-                            sx={{
-                              '&&.MuiTableRow-root': {
-                                backgroundColor: 'common.white',
-                              },
-                            }}
-                            data-testid={`course-row-${row.course_id}`}
-                          >
-                            <TableCell data-testid="course-name">
-                              <Link href={`/courses/${row.course_id}/details`}>
-                                {row.course.name}
-                              </Link>
-                            </TableCell>
-                            <TableCell data-testid="course-action">
-                              {t(`participant-audit-types.${row.type}`)}
-                            </TableCell>
-                            <TableCell data-testid="course-date">
-                              {t('dates.defaultShort', {
-                                date: row.course.dates.aggregate?.end?.date,
-                              })}
-                            </TableCell>
-                          </TableRow>
-                        )
-                      })}
-                      {profile.courses.map(row => {
-                        if (row.course.status !== Course_Status_Enum.Cancelled)
-                          return
-
-                        return (
-                          <TableRow
-                            key={row.id}
-                            sx={{
-                              '&&.MuiTableRow-root': {
-                                backgroundColor: 'common.white',
-                              },
-                            }}
-                          >
-                            <TableCell>{row.course.name}</TableCell>
-                            <TableCell>
-                              {t(`course-statuses.${row.course.status}`)}
-                            </TableCell>
-                            <TableCell>-</TableCell>
-                          </TableRow>
-                        )
-                      })}
-
-                      {(profile.participantAudits?.length ?? 0) +
-                        profile.courses.length <
-                      1 ? (
-                        <TableRow
-                          sx={{
-                            '&&.MuiTableRow-root': {
-                              backgroundColor: 'common.white',
-                            },
-                          }}
-                        >
-                          <TableCell colSpan={4} sx={{ textAlign: 'center' }}>
-                            {t('pages.my-profile.no-course-history')}
-                          </TableCell>
-                        </TableRow>
-                      ) : null}
-                    </TableBody>
-                  </Table>
+                  <CoursesTable profile={profile} />
                 </Box>
               </>
             ) : null}
@@ -569,114 +407,12 @@ export const ViewProfilePage: React.FC<
             ) : null}
 
             {!isMobile || selectedTab === TableMenuSelections.CERTIFICATIONS ? (
-              <>
-                {verified && (
-                  <>
-                    <Typography variant="subtitle2" mt={3}>
-                      {t('certifications')}
-                    </Typography>
-                    <Box sx={{ mt: 1, overflowX: 'auto' }}>
-                      <Table>
-                        <TableHead>
-                          <TableRow
-                            sx={{
-                              '&&.MuiTableRow-root': {
-                                backgroundColor: 'grey.300',
-                              },
-                              '&& .MuiTableCell-root': {
-                                py: 1,
-                                color: 'grey.700',
-                                fontWeight: '600',
-                              },
-                            }}
-                          >
-                            <TableCell>{t('course-name')}</TableCell>
-                            <TableCell>{t('certificate')}</TableCell>
-                            <TableCell>{t('status')}</TableCell>
-                            <TableCell>{t('certificate')}</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {(certifications ?? []).map(certificate => {
-                            const isRevoked =
-                              certificate.status === CertificateStatus.REVOKED
-
-                            return (
-                              <TableRow
-                                data-testid={
-                                  'certificate-' + certificate.number
-                                }
-                                key={certificate.id}
-                                sx={{
-                                  '&&.MuiTableRow-root': {
-                                    backgroundColor: 'common.white',
-                                  },
-                                }}
-                              >
-                                <TableCell>{certificate.courseName}</TableCell>
-                                <TableCell>{certificate.number}</TableCell>
-                                <TableCell>
-                                  <Grid
-                                    container
-                                    direction="column"
-                                    alignItems="start"
-                                  >
-                                    {certificate.status ? (
-                                      <CertificateStatusChip
-                                        status={
-                                          certificate.status as CertificateStatus
-                                        }
-                                        tooltip={
-                                          certificate.participant
-                                            ?.certificateChanges[0]?.payload
-                                            ?.note
-                                        }
-                                      />
-                                    ) : null}
-                                    {!isRevoked && (
-                                      <Typography
-                                        mt={1}
-                                        variant="body2"
-                                        color="grey.700"
-                                      >
-                                        {certificateExpired(
-                                          certificate.expiryDate ?? ''
-                                        )
-                                          ? `${formatDistanceToNow(
-                                              new Date(certificate.expiryDate)
-                                            )} ${t('common.ago')}`
-                                          : certificate.expiryDate}
-                                      </Typography>
-                                    )}
-                                  </Grid>
-                                </TableCell>
-                                <TableCell>
-                                  <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={() =>
-                                      navigate(
-                                        `/certification/${certificate.id}`
-                                      )
-                                    }
-                                    disabled={
-                                      isRevoked && !acl.canViewRevokedCert()
-                                    }
-                                  >
-                                    {t(
-                                      'components.certification-list.view-certificate'
-                                    )}
-                                  </Button>
-                                </TableCell>
-                              </TableRow>
-                            )
-                          })}
-                        </TableBody>
-                      </Table>
-                    </Box>
-                  </>
-                )}
-              </>
+              <CertificationsTable
+                verified={Boolean(verified)}
+                certifications={
+                  certifications as GetProfileDetailsQuery['certificates']
+                }
+              />
             ) : null}
 
             {go1Licenses?.length ? (

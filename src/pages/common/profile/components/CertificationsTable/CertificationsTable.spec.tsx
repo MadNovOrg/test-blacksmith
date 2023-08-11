@@ -1,0 +1,62 @@
+import { useTranslation } from 'react-i18next'
+
+import { GetProfileDetailsQuery } from '@app/generated/graphql'
+import { capitalize } from '@app/util'
+
+import { render, renderHook, screen, userEvent } from '@test/index'
+import { buildCertificate } from '@test/mock-data-utils'
+
+import { CertificationsTable } from './CertificationsTable'
+
+const mockNavigate = jest.fn()
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}))
+
+describe(CertificationsTable.name, () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+  const certifications = [
+    buildCertificate(),
+  ] as GetProfileDetailsQuery['certificates']
+  beforeEach(() =>
+    render(
+      <CertificationsTable certifications={certifications} verified={true} />
+    )
+  )
+  it('should render the component', () => {
+    expect(screen.getByText(t('certifications'))).toBeInTheDocument()
+  })
+  it.each([t('course-name'), t('certificate'), t('status'), t('certificate')])(
+    'should render table head cells: %s',
+    cell => {
+      screen
+        .getAllByText(cell)
+        .forEach(cellText => expect(cellText).toBeInTheDocument())
+    }
+  )
+  describe.each(certifications)(
+    'should render all certificate details',
+    certificate => {
+      it.each([
+        certificate.courseName,
+        certificate.number,
+        capitalize(certificate.status as string),
+      ])('should render: %s', value => {
+        expect(screen.getByText(value)).toBeInTheDocument()
+      })
+      it('should navigate to certificate details', async () => {
+        const viewCertificateButton = screen.getByRole('button')
+        await userEvent.click(viewCertificateButton)
+        expect(mockNavigate).toHaveBeenCalledTimes(certifications.length)
+        expect(mockNavigate).toHaveBeenCalledWith(
+          `/certification/${certificate.id}`
+        )
+      })
+    }
+  )
+})

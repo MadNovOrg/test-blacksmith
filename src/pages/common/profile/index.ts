@@ -1,3 +1,5 @@
-export { EditProfilePage } from './EditProfile'
+export * from './EditProfile'
 
-export { ViewProfilePage } from './ViewProfile'
+export * from './ViewProfile'
+
+export * from './helpers'

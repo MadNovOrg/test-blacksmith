@@ -10076,8 +10076,8 @@ export type UpdateUserProfileInput = {
   dietaryRestrictions?: InputMaybe<Scalars['String']>;
   disabilities?: InputMaybe<Scalars['String']>;
   dob?: InputMaybe<Scalars['String']>;
-  familyName: Scalars['String'];
-  givenName: Scalars['String'];
+  familyName?: InputMaybe<Scalars['String']>;
+  givenName?: InputMaybe<Scalars['String']>;
   jobTitle?: InputMaybe<Scalars['String']>;
   phone?: InputMaybe<Scalars['String']>;
   profileId: Scalars['uuid'];

@@ -630,8 +630,8 @@ input GetOrdersInput {
 
 input UpdateUserProfileInput {
   profileId: uuid!
-  givenName: String!
-  familyName: String!
+  givenName: String
+  familyName: String
   phone: String
   jobTitle: String
   avatar: String

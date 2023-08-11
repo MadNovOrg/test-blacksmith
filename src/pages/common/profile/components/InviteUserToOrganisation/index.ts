@@ -1,1 +1,1 @@
-export { InviteUserToOrganisation } from './InviteUserToOrganisation'
+export * from './InviteUserToOrganisation'

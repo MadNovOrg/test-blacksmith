@@ -15,17 +15,17 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
-import { OrgMembersQuery } from '@app/generated/graphql'
+import {
+  OrgMembersQuery,
+  RemoveOrgMemberMutation,
+  RemoveOrgMemberMutationVariables,
+  UpdateOrgMemberMutation,
+  UpdateOrgMemberMutationVariables,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { positions } from '@app/pages/common/CourseBooking/components/org-data'
-import {
-  MUTATION as RemoveOrgMemberQuery,
-  ParamsType as RemoveOrgMemberParamsType,
-} from '@app/queries/organization/remove-org-member'
-import {
-  MUTATION as UpdateOrgMemberQuery,
-  ParamsType as UpdateOrgMemberParamsType,
-} from '@app/queries/organization/update-org-member'
+import { MUTATION as RemoveOrgMemberQuery } from '@app/queries/organization/remove-org-member'
+import { MUTATION as UpdateOrgMemberQuery } from '@app/queries/organization/update-org-member'
 import theme from '@app/theme'
 
 export type EditOrgUserModalProps = {
@@ -48,9 +48,12 @@ export const EditOrgUserModal: React.FC<
 
   const onRemove = useCallback(async () => {
     try {
-      await fetcher<null, RemoveOrgMemberParamsType>(RemoveOrgMemberQuery, {
-        id: orgMember.id,
-      })
+      await fetcher<RemoveOrgMemberMutation, RemoveOrgMemberMutationVariables>(
+        RemoveOrgMemberQuery,
+        {
+          id: orgMember.id,
+        }
+      )
       if (onChange) onChange()
       onClose()
     } catch (e: unknown) {
@@ -60,10 +63,13 @@ export const EditOrgUserModal: React.FC<
 
   const onSave = useCallback(async () => {
     try {
-      await fetcher<null, UpdateOrgMemberParamsType>(UpdateOrgMemberQuery, {
-        id: orgMember.id,
-        member: { isAdmin: !!isAdmin, position },
-      })
+      await fetcher<UpdateOrgMemberMutation, UpdateOrgMemberMutationVariables>(
+        UpdateOrgMemberQuery,
+        {
+          id: orgMember.id,
+          member: { isAdmin: !!isAdmin, position },
+        }
+      )
       if (onChange) onChange()
       onClose()
     } catch (e: unknown) {
