@@ -29,7 +29,6 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
-  useState,
 } from 'react'
 import {
   Controller,
@@ -140,8 +139,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const hasOrg = [CourseType.CLOSED, CourseType.INDIRECT].includes(courseType)
   const isClosedCourse = courseType === CourseType.CLOSED
   const hasMinParticipants = courseType === CourseType.OPEN
-  const [attendeeRatioExceededMessage, setAttendeeRatioExceededMessage] =
-    useState<string>('')
 
   const minCourseStartDate = new Date()
   minCourseStartDate.setDate(minCourseStartDate.getDate() + 1)
@@ -254,7 +251,14 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .number()
           .typeError(t('components.course-form.max-participants-required'))
           .positive(t('components.course-form.max-participants-positive'))
-          .required(t('components.course-form.max-participants-required')),
+          .required(t('components.course-form.max-participants-required'))
+          .test(
+            'attendees-exceeded',
+            t(
+              'components.course-form.attendees-number-exceeds-trainer-ratio-message'
+            ),
+            () => !trainerRatioNotMet || !acl.isTrainer()
+          ),
         usesAOL: yup.boolean(),
         aolCountry: yup
           .string()
@@ -319,7 +323,16 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           ),
       }),
 
-    [hasOrg, t, isClosedCourse, hasMinParticipants, activeRole, courseType]
+    [
+      hasOrg,
+      t,
+      isClosedCourse,
+      hasMinParticipants,
+      activeRole,
+      trainerRatioNotMet,
+      acl,
+      courseType,
+    ]
   )
 
   const defaultValues = useMemo<Omit<CourseInput, 'id'>>(
@@ -544,14 +557,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   ])
 
   useEffect(() => {
-    if (trainerRatioNotMet)
-      return setAttendeeRatioExceededMessage(
-        t(
-          'components.course-form.attendees-number-exceeds-trainer-ratio-message'
-        )
-      )
-    return setAttendeeRatioExceededMessage('')
-  }, [trainerRatioNotMet, setAttendeeRatioExceededMessage, t])
+    if (!isCreation) {
+      trigger('maxParticipants')
+      if (!trainerRatioNotMet) clearErrors('maxParticipants')
+    }
+  }, [trainerRatioNotMet, clearErrors, trigger, isCreation, activeRole])
 
   useEffect(() => {
     // we need to update to default values if something change in the input
@@ -1407,14 +1417,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 )}
                 variant="filled"
                 fullWidth
-                error={
-                  Boolean(errors.maxParticipants) ||
-                  Boolean(attendeeRatioExceededMessage)
-                }
-                helperText={
-                  errors.maxParticipants?.message ||
-                  attendeeRatioExceededMessage
-                }
+                error={Boolean(errors.maxParticipants)}
+                helperText={errors.maxParticipants?.message}
                 inputProps={{ min: 1 }}
                 data-testid="max-attendees"
                 disabled={disabledFields.has('maxParticipants')}

@@ -500,10 +500,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [profile])
 
   const editCourseValid = courseDataValid && trainersDataValid
-
   const submitButtonHandler = useCallback(async () => {
     courseMethods?.current?.trigger()
-
     if (
       !editCourseValid ||
       !courseData?.courseLevel ||
@@ -847,13 +845,15 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             level={course.level as unknown as Course_Level_Enum}
           />
 
-          <CourseExceptionsConfirmation
-            open={courseExceptions.length > 0}
-            onCancel={() => setCourseExceptions([])}
-            onSubmit={editCourse}
-            exceptions={courseExceptions}
-            courseType={courseData?.type ?? undefined}
-          />
+          {!showTrainerRatioWarning ? (
+            <CourseExceptionsConfirmation
+              open={courseExceptions.length > 0}
+              onCancel={() => setCourseExceptions([])}
+              onSubmit={editCourse}
+              exceptions={courseExceptions}
+              courseType={courseData?.type ?? undefined}
+            />
+          ) : null}
         </>
       ) : null}
     </FullHeightPageLayout>
