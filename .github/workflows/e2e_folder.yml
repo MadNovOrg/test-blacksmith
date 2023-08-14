@@ -81,7 +81,7 @@ jobs:
 
       - name: Playwright tests
         id: playwright
-        run: npm run test:e2e:${{ matrix.browsers }} -- playwright/tests/e2e/${{ github.event.inputs.folder }}
+        run: npm run test:e2e:${{ matrix.browsers }} -- playwright/tests/${{ github.event.inputs.folder }}
 
       - name: Playwright report
         uses: actions/upload-artifact@v3

@@ -77,7 +77,7 @@ jobs:
       - name: Playwright setup
         run: |
           npm run dev &
-          npx playwright install chromium
+          npx playwright install --with-deps
 
       - name: Playwright tests
         id: playwright

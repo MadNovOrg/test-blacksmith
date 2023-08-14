@@ -5,7 +5,7 @@ import { Browser, chromium } from '@playwright/test'
 import { bypassHSCookieConsent } from '@qa/commands'
 import { TARGET_ENV, TEMP_DIR } from '@qa/constants'
 import { users } from '@qa/data/users'
-import { LoginPage } from '@qa/pages/auth/LoginPage'
+import { LoginPage } from '@qa/fixtures/pages/auth/LoginPage.fixture'
 
 export const stateFilePath = (userKey: string) =>
   `${TEMP_DIR}/storage-${userKey}-${TARGET_ENV}.json`
@@ -29,6 +29,7 @@ const login = async (browser: Browser, userKey: string, role: string) => {
 }
 
 async function globalSetup() {
+  // TODO Improve this by setting different tear down scripts per project.
   // We skip the login when running the 'query' tests as it isn't required
   if (process.env.QUERY) return
   // Remove temp directory if requested
