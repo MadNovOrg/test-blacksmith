@@ -410,7 +410,7 @@ export const INVOICE_STATUS_COLOR: Record<
   [Xero_Invoice_Status_Enum.Voided]: 'default',
 }
 
-// more on this logic [here](https://github.com/TeamTeach/application/wiki/Organisations)
+// more on this logic [here](https://github.com/TeamTeach/hub/wiki/Organisations)
 export function getProfileCertificationLevels(
   certificates: { courseLevel: string; status: CertificateStatus }[]
 ): (CourseLevel | null)[] {

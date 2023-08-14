@@ -1,4 +1,4 @@
-# Team Teach Hub
+# Hub
 
 ## Setup
 - `npm i`
@@ -33,7 +33,7 @@ This application is built using:
 
 ## Architecture
 
-A draft variant of the current architecture can be found [here](https://github.com/TeamTeach/application/wiki/Architecture).
+A draft variant of the current architecture can be found [here](https://github.com/TeamTeach/hub/wiki/Architecture).
 
 ## Managing database schema
 

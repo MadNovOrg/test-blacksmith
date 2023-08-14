@@ -1,6 +1,10 @@
 {
-  "name": "tth-frontend",
-  "version": "0.0.0",
+  "name": "@teamteach/hub",
+  "version": "1.0.0-alpha",
+  "description": "Hub application portal",
+  "authors": [
+    "NearForm Ltd."
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
