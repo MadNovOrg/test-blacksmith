@@ -35,6 +35,7 @@ export const SEARCH_TRAINERS = gql`
     id
     fullName
     avatar
+    email
     levels {
       courseLevel
       expiryDate

@@ -8778,6 +8778,7 @@ export type SearchTrainer = {
   __typename?: 'SearchTrainer';
   availability?: Maybe<SearchTrainerAvailability>;
   avatar?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
   fullName: Scalars['String'];
   id: Scalars['uuid'];
   levels: Array<CourseCertificateLevel>;
@@ -38815,7 +38816,6 @@ export type Profile = {
   identities: Array<Identity>;
   /** An aggregate relationship */
   identities_aggregate: Identity_Aggregate;
-  job?: Maybe<Scalars['String']>;
   jobTitle?: Maybe<Scalars['String']>;
   lastActivity: Scalars['timestamptz'];
   /** An array relationship */
@@ -39172,7 +39172,6 @@ export type Profile_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   identities?: InputMaybe<Identity_Bool_Exp>;
   identities_aggregate?: InputMaybe<Identity_Aggregate_Bool_Exp>;
-  job?: InputMaybe<String_Comparison_Exp>;
   jobTitle?: InputMaybe<String_Comparison_Exp>;
   lastActivity?: InputMaybe<Timestamptz_Comparison_Exp>;
   organizations?: InputMaybe<Organization_Member_Bool_Exp>;
@@ -39263,7 +39262,6 @@ export type Profile_Insert_Input = {
   go1_profile?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
   identities?: InputMaybe<Identity_Arr_Rel_Insert_Input>;
-  job?: InputMaybe<Scalars['String']>;
   jobTitle?: InputMaybe<Scalars['String']>;
   lastActivity?: InputMaybe<Scalars['timestamptz']>;
   organizations?: InputMaybe<Organization_Member_Arr_Rel_Insert_Input>;
@@ -39300,7 +39298,6 @@ export type Profile_Max_Fields = {
   givenName?: Maybe<Scalars['String']>;
   go1Id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
-  job?: Maybe<Scalars['String']>;
   jobTitle?: Maybe<Scalars['String']>;
   lastActivity?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "profile_phone" */
@@ -39331,7 +39328,6 @@ export type Profile_Min_Fields = {
   givenName?: Maybe<Scalars['String']>;
   go1Id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
-  job?: Maybe<Scalars['String']>;
   jobTitle?: Maybe<Scalars['String']>;
   lastActivity?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "profile_phone" */
@@ -39391,7 +39387,6 @@ export type Profile_Order_By = {
   go1_profile?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   identities_aggregate?: InputMaybe<Identity_Aggregate_Order_By>;
-  job?: InputMaybe<Order_By>;
   jobTitle?: InputMaybe<Order_By>;
   lastActivity?: InputMaybe<Order_By>;
   organizations_aggregate?: InputMaybe<Organization_Member_Aggregate_Order_By>;
@@ -39698,8 +39693,6 @@ export enum Profile_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Job = 'job',
-  /** column name */
   JobTitle = 'jobTitle',
   /** column name */
   LastActivity = 'lastActivity',
@@ -39735,7 +39728,6 @@ export type Profile_Set_Input = {
   go1Id?: InputMaybe<Scalars['Int']>;
   go1_profile?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
-  job?: InputMaybe<Scalars['String']>;
   jobTitle?: InputMaybe<Scalars['String']>;
   lastActivity?: InputMaybe<Scalars['timestamptz']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
@@ -39790,7 +39782,6 @@ export type Profile_Stream_Cursor_Value_Input = {
   go1Id?: InputMaybe<Scalars['Int']>;
   go1_profile?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
-  job?: InputMaybe<Scalars['String']>;
   jobTitle?: InputMaybe<Scalars['String']>;
   lastActivity?: InputMaybe<Scalars['timestamptz']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
@@ -40409,8 +40400,6 @@ export enum Profile_Update_Column {
   Go1Profile = 'go1_profile',
   /** column name */
   Id = 'id',
-  /** column name */
-  Job = 'job',
   /** column name */
   JobTitle = 'jobTitle',
   /** column name */
@@ -49886,14 +49875,14 @@ export type ReplaceParticipantMutationVariables = Exact<{
 
 export type ReplaceParticipantMutation = { __typename?: 'mutation_root', replaceParticipant?: { __typename?: 'ReplaceParticipantOutput', success: boolean, error?: ReplaceParticipantError | null } | null };
 
-export type SearchTrainerDetailsFragment = { __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> };
+export type SearchTrainerDetailsFragment = { __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> };
 
 export type SearchTrainersQueryVariables = Exact<{
   input: SearchTrainersInput;
 }>;
 
 
-export type SearchTrainersQuery = { __typename?: 'query_root', trainers?: Array<{ __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> } | null> | null };
+export type SearchTrainersQuery = { __typename?: 'query_root', trainers?: Array<{ __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> } | null> | null };
 
 export type SearchCourseFragment = { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> };
 

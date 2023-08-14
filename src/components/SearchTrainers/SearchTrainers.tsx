@@ -46,8 +46,6 @@ type Props = {
   disabled?: boolean
 }
 
-const T_PREFIX = 'components.searchTrainers'
-
 export function SearchTrainers({
   trainerType,
   courseLevel,
@@ -84,8 +82,10 @@ export function SearchTrainers({
     const maxReached = selected.length === max
 
     const maxPlaceholder =
-      maxReachedPlaceholder ?? t(`${T_PREFIX}.maxReachedPlaceholder`)
-    const emptyPlaceholder = placeholder ?? t(`${T_PREFIX}.placeholder`)
+      maxReachedPlaceholder ??
+      t(`components.searchTrainers.maxReachedPlaceholder`)
+    const emptyPlaceholder =
+      placeholder ?? t(`components.searchTrainers.placeholder`)
 
     return renderTextField({
       params,
@@ -114,10 +114,15 @@ export function SearchTrainers({
         data-testid="SearchTrainers-option"
       >
         <Avatar size={32} src={option.avatar ?? ''} name={option.fullName} />
-        <Box sx={{ flex: 1 }}>
+        <Box>
           <Typography variant="body1">{option.fullName}</Typography>
           <Typography variant="body2">{trainerRoles}</Typography>
         </Box>
+
+        <Typography sx={{ flex: 1 }} variant="body2">
+          {option.email}
+        </Typography>
+
         <TrainerAvailabilityStatus
           availability={option.availability ?? undefined}
         />
@@ -128,19 +133,17 @@ export function SearchTrainers({
   const searchTrainers = useDebouncedCallback(async (query: string) => {
     const { trainers } = await search(query)
     if (!isMounted()) return
-    setMatches(matchesFilter(trainers ? trainers.filter(Boolean) : []))
+    setMatches(matchesFilter(trainers?.filter(Boolean) ?? []))
     setLoading(false)
   }, 500)
 
   const onInputChange = useCallback(
-    (ev: React.SyntheticEvent, value: string) => {
+    (_: React.SyntheticEvent, value: string) => {
       setInputValue(value)
-
       if (value.trim().length >= 3) {
         setLoading(true)
         return searchTrainers(value)
       }
-
       setMatches([])
       setLoading(false)
     },
@@ -148,7 +151,7 @@ export function SearchTrainers({
   )
 
   const onSelected = useCallback(
-    (ev: React.SyntheticEvent, updated: SearchTrainer[]) => {
+    (_: React.SyntheticEvent, updated: SearchTrainer[]) => {
       const newSelection = updated.length <= max ? updated : selected
       if (!isControlled) setSelected(newSelection)
       onChange({ target: { value: newSelection } })
@@ -161,7 +164,13 @@ export function SearchTrainers({
     if (inputValue.trim().length >= 3)
       return t('components.searchTrainers.noResults')
     return ''
-  }, [t, loading, inputValue])
+  }, [loading, t, inputValue])
+  const filterOptionsByNameOrEmail = (options: SearchTrainer[]) =>
+    options.filter(
+      option =>
+        option.fullName?.toLowerCase().includes(inputValue.toLowerCase()) ||
+        option.email?.toLowerCase().includes(inputValue.toLowerCase())
+    )
 
   return (
     <Autocomplete
@@ -175,6 +184,7 @@ export function SearchTrainers({
       renderOption={renderOption}
       options={matches}
       filterSelectedOptions={true}
+      filterOptions={filterOptionsByNameOrEmail}
       getOptionLabel={t => t.fullName ?? ''}
       isOptionEqualToValue={(o, v) => o.id === v.id}
       onChange={onSelected}

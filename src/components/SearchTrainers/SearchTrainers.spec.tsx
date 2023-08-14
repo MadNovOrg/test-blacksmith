@@ -26,7 +26,7 @@ jest.mock('./useQueryTrainers.ts', () => ({
   useQueryTrainers: () => ({ search: mockSearch }),
 }))
 
-describe('component: SearchTrainers', () => {
+describe(SearchTrainers.name, () => {
   it('renders as expected', async () => {
     const course = buildCourse()
 

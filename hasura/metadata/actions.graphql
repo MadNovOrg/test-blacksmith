@@ -803,6 +803,7 @@ type StripeCreatePaymentIntentOutput {
 type SearchTrainer {
   id: uuid!
   fullName: String!
+  email: String!
   avatar: String
   trainer_role_types: [TrainerRoleType!]!
   levels: [CourseCertificateLevel!]!
