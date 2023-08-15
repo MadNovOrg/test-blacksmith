@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { groupBy, map } from 'lodash-es'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
@@ -102,7 +102,6 @@ export const TrainerFeedback = () => {
       if (q.type === CourseEvaluationQuestionType.RATING) return
 
       const s = yup.string()
-
       if (q.questionKey === 'SIGNATURE') {
         obj[q.id] = s.required(t('course-evaluation.required-field')).oneOf(
           [
@@ -111,6 +110,16 @@ export const TrainerFeedback = () => {
           ],
           t('course-evaluation.invalid-signature')
         )
+      } else if (
+        q.required &&
+        q.type === CourseEvaluationQuestionType.BOOLEAN_REASON_Y
+      ) {
+        obj[q.id] = s.required(t('course-evaluation.required-field'))
+        obj['yesResponse'] = s.when(q.id, {
+          is: 'NO-',
+          then: s => s.nullable(),
+          otherwise: s => s.required(t('course-evaluation.required-answer')),
+        })
       } else if (q.required) {
         obj[q.id] = s.required(t('course-evaluation.required-field'))
       } else {
@@ -121,14 +130,17 @@ export const TrainerFeedback = () => {
     return yup.object(obj).required()
   }, [t, questions, profile])
 
+  const methods = useForm<Record<string, string>>({
+    resolver: yupResolver(schema),
+  })
+
   const {
     register,
     handleSubmit,
     setValue,
     watch,
     formState: { errors },
-  } = useForm<Record<string, string>>({ resolver: yupResolver(schema) })
-
+  } = methods
   const values = watch()
 
   useEffect(() => {
@@ -179,129 +191,134 @@ export const TrainerFeedback = () => {
   }, [dataLoaded, hasSubmitted, readOnly, navigate])
 
   return (
-    <Box bgcolor="grey.100" sx={{ pb: 6 }}>
-      <Container component="form" onSubmit={handleSubmit(onSubmit)}>
-        <Grid container>
-          <Grid item md={3}>
-            <Sticky top={20}>
-              <Box mt={5} pr={3}>
-                <BackButton label={t('back')} />
+    <FormProvider {...methods}>
+      <Box bgcolor="grey.100" sx={{ pb: 6 }}>
+        <Container component="form" onSubmit={handleSubmit(onSubmit)}>
+          <Grid container>
+            <Grid item md={3}>
+              <Sticky top={20}>
+                <Box mt={5} pr={3}>
+                  <BackButton label={t('back')} />
 
-                <Typography
-                  variant="h2"
-                  gutterBottom
-                  my={2}
-                  data-testid="course-evaluation-heading"
-                >
-                  {t('course-evaluation.trainer-heading')}
-                </Typography>
+                  <Typography
+                    variant="h2"
+                    gutterBottom
+                    my={2}
+                    data-testid="course-evaluation-heading"
+                  >
+                    {t('course-evaluation.trainer-heading')}
+                  </Typography>
 
-                <Typography variant="h6" gutterBottom>
-                  {course?.name}
-                </Typography>
-              </Box>
-            </Sticky>
+                  <Typography variant="h6" gutterBottom>
+                    {course?.name}
+                  </Typography>
+                </Box>
+              </Sticky>
+            </Grid>
+
+            <Grid item md={7} pt={10}>
+              {ungroupedQuestions?.map(q => {
+                if (booleanQuestionTypes.includes(q.type)) {
+                  const value = (values[q.id] ?? '').split('-')
+
+                  return (
+                    <QuestionGroup
+                      key={q.id}
+                      title={t(`course-evaluation.questions.${q.questionKey}`)}
+                      error={errors[q.id]?.message}
+                    >
+                      <BooleanQuestion
+                        value={value[0]}
+                        reason={value[1] || ''}
+                        type={q.type}
+                        onChange={(value, reason) => {
+                          setValue(q.id, `${value}-${reason}`)
+                        }}
+                        infoText={t('course-evaluation.provide-details')}
+                        data-testid="course-evaluation-boolean-question"
+                        disabled={readOnly}
+                      />
+                    </QuestionGroup>
+                  )
+                }
+
+                if (q.type === CourseEvaluationQuestionType.TEXT) {
+                  return (
+                    <QuestionGroup
+                      key={q.id}
+                      title={t(`course-evaluation.questions.${q.questionKey}`)}
+                      error={errors[q.id]?.message}
+                    >
+                      <TextField
+                        sx={{ bgcolor: 'common.white', mt: 1 }}
+                        variant="filled"
+                        placeholder={t('course-evaluation.your-response')}
+                        inputProps={{ sx: { px: 1, py: 1.5 } }}
+                        data-testid="course-evaluation-text-question"
+                        {...register(q.id)}
+                        disabled={readOnly}
+                      />
+                    </QuestionGroup>
+                  )
+                }
+
+                return null
+              })}
+
+              <Typography variant="h6" gutterBottom sx={{ mt: 6 }}>
+                {t('course-evaluation.signature')}
+              </Typography>
+              <Typography variant="body1" color="grey.600" gutterBottom>
+                {t('course-evaluation.signature-desc')}
+              </Typography>
+
+              {signatureQuestion && (
+                <TextField
+                  sx={{ mt: 1 }}
+                  variant="filled"
+                  placeholder="Full name"
+                  inputProps={{
+                    sx: { bgcolor: 'common.white', px: 1, py: 1.5 },
+                  }}
+                  fullWidth
+                  {...register(signatureQuestion.id)}
+                  error={!!errors[signatureQuestion.id]}
+                  helperText={errors[signatureQuestion.id]?.message}
+                  data-testid="course-evaluation-signature"
+                  disabled={readOnly}
+                />
+              )}
+            </Grid>
           </Grid>
 
-          <Grid item md={7} pt={10}>
-            {ungroupedQuestions?.map(q => {
-              if (booleanQuestionTypes.includes(q.type)) {
-                const value = (values[q.id] ?? '').split('-')
-
-                return (
-                  <QuestionGroup
-                    key={q.id}
-                    title={t(`course-evaluation.questions.${q.questionKey}`)}
-                    error={errors[q.id]?.message}
-                  >
-                    <BooleanQuestion
-                      value={value[0]}
-                      reason={value[1] || ''}
-                      type={q.type}
-                      onChange={(value, reason) =>
-                        setValue(q.id, `${value}-${reason}`)
-                      }
-                      infoText={t('course-evaluation.provide-details')}
-                      data-testid="course-evaluation-boolean-question"
-                      disabled={readOnly}
-                    />
-                  </QuestionGroup>
-                )
-              }
-
-              if (q.type === CourseEvaluationQuestionType.TEXT) {
-                return (
-                  <QuestionGroup
-                    key={q.id}
-                    title={t(`course-evaluation.questions.${q.questionKey}`)}
-                    error={errors[q.id]?.message}
-                  >
-                    <TextField
-                      sx={{ bgcolor: 'common.white', mt: 1 }}
-                      variant="filled"
-                      placeholder={t('course-evaluation.your-response')}
-                      inputProps={{ sx: { px: 1, py: 1.5 } }}
-                      data-testid="course-evaluation-text-question"
-                      {...register(q.id)}
-                      disabled={readOnly}
-                    />
-                  </QuestionGroup>
-                )
-              }
-
-              return null
-            })}
-
-            <Typography variant="h6" gutterBottom sx={{ mt: 6 }}>
-              {t('course-evaluation.signature')}
-            </Typography>
-            <Typography variant="body1" color="grey.600" gutterBottom>
-              {t('course-evaluation.signature-desc')}
-            </Typography>
-
-            {signatureQuestion && (
-              <TextField
-                sx={{ mt: 1 }}
-                variant="filled"
-                placeholder="Full name"
-                inputProps={{ sx: { bgcolor: 'common.white', px: 1, py: 1.5 } }}
-                fullWidth
-                {...register(signatureQuestion.id)}
-                error={!!errors[signatureQuestion.id]}
-                helperText={errors[signatureQuestion.id]?.message}
-                data-testid="course-evaluation-signature"
-                disabled={readOnly}
-              />
-            )}
-          </Grid>
-        </Grid>
-
-        {!readOnly && (
-          <Box
-            sx={{ mt: 6 }}
-            alignItems="center"
-            display="flex"
-            flexDirection="column"
-            data-testid="submit-course-evaluation"
-          >
-            <LoadingButton
-              loading={loading}
-              type="submit"
-              variant="contained"
-              color="primary"
-              size="large"
+          {!readOnly && (
+            <Box
+              sx={{ mt: 6 }}
+              alignItems="center"
+              display="flex"
+              flexDirection="column"
+              data-testid="submit-course-evaluation"
             >
-              {t('course-evaluation.submit')}
-            </LoadingButton>
+              <LoadingButton
+                loading={loading}
+                type="submit"
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={handleSubmit(onSubmit)}
+              >
+                {t('course-evaluation.submit')}
+              </LoadingButton>
 
-            {error && (
-              <Box mt={2}>
-                <FormHelperText error>{error}</FormHelperText>
-              </Box>
-            )}
-          </Box>
-        )}
-      </Container>
-    </Box>
+              {error && (
+                <Box mt={2}>
+                  <FormHelperText error>{error}</FormHelperText>
+                </Box>
+              )}
+            </Box>
+          )}
+        </Container>
+      </Box>
+    </FormProvider>
   )
 }

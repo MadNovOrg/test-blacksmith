@@ -4,6 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import React from 'react'
+import { Controller, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { CourseEvaluationQuestionType } from '@app/types'
@@ -36,6 +37,11 @@ export const BooleanQuestion: React.FC<
 > = ({ type, value, reason, onChange = noop, infoText, disabled = false }) => {
   const { t } = useTranslation()
 
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext()
+
   return (
     <FormControl>
       <RadioGroup
@@ -65,34 +71,52 @@ export const BooleanQuestion: React.FC<
       {type === CourseEvaluationQuestionType.BOOLEAN_REASON_Y &&
         value === 'YES' && (
           <Box mt={2}>
-            <TextField
-              sx={{ bgcolor: 'common.white', mt: 1 }}
-              onChange={event => onChange(value, event.target.value)}
-              variant="filled"
-              placeholder={infoText}
-              error={false}
-              fullWidth
-              inputProps={{ sx: { px: 1, py: 1.5 } }}
-              value={reason}
-              disabled={disabled}
-              data-testid="rating-boolean-reason-yes"
+            <Controller
+              name="yesResponse"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  onChange={event => {
+                    field.onChange(event.target.value)
+                    onChange(value, event.target.value)
+                  }}
+                  variant="filled"
+                  placeholder={infoText}
+                  fullWidth
+                  inputProps={{ sx: { px: 1, py: 1.5 } }}
+                  value={field.value}
+                  disabled={disabled}
+                  data-testid="rating-boolean-reason-yes"
+                  error={!!errors.yesResponse}
+                  helperText={errors?.yesResponse?.message as string}
+                />
+              )}
             />
           </Box>
         )}
       {type === CourseEvaluationQuestionType.BOOLEAN_REASON_N &&
         value === 'NO' && (
           <Box mt={2}>
-            <TextField
-              sx={{ bgcolor: 'common.white', mt: 1 }}
-              onChange={event => onChange(value, event.target.value)}
-              variant="filled"
-              placeholder={infoText}
-              error={false}
-              fullWidth
-              inputProps={{ sx: { px: 1, py: 1.5 } }}
-              value={reason}
-              disabled={disabled}
-              data-testid="rating-boolean-reason-no"
+            <Controller
+              name="noResponse"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  onChange={event => {
+                    field.onChange(event.target.value)
+                    onChange(value, event.target.value)
+                  }}
+                  variant="filled"
+                  placeholder={infoText}
+                  fullWidth
+                  inputProps={{ sx: { px: 1, py: 1.5 } }}
+                  value={field.value}
+                  disabled={disabled}
+                  data-testid="rating-boolean-reason-no"
+                  error={!!errors.noResponse}
+                  helperText={errors.noResponse?.message as string}
+                />
+              )}
             />
           </Box>
         )}

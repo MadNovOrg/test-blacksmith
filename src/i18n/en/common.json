@@ -576,6 +576,7 @@
     "saved": "Your course evaluation feedback has been submitted",
     "error-submitting": "There was an error saving your feedback",
     "required-field": "This is a required question",
+    "required-answer": "This is a required answer",
     "complete-my-evaluation": "Complete my evaluation",
     "trainer-evaluate": "Submit your Trainer Summary Evaluation to view summary evaluation and complete this course.",
     "excellent": "Excellent",
