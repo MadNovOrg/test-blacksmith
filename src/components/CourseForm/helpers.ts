@@ -412,7 +412,7 @@ export function canBeMixed(
     [CourseType.INDIRECT]: () => {
       if (!courseLevel) return false
 
-      const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
+      const levels = [CourseLevel.Level_2]
       return levels.includes(courseLevel)
     },
   }
@@ -442,7 +442,7 @@ export function canBeVirtual(
     [CourseType.INDIRECT]: () => {
       if (!courseLevel) return false
 
-      const levels = [CourseLevel.Level_1]
+      const levels = [] as CourseLevel[]
       return levels.includes(courseLevel)
     },
   }

@@ -30,8 +30,8 @@ describe('component: CourseForm - INDIRECT', () => {
     await selectLevel(CourseLevel.Level_1)
 
     expect(screen.getByLabelText('Face to face')).toBeEnabled()
-    expect(screen.getByLabelText('Virtual')).toBeEnabled()
-    expect(screen.getByLabelText('Both')).toBeEnabled()
+    expect(screen.getByLabelText('Virtual')).toBeDisabled()
+    expect(screen.getByLabelText('Both')).toBeDisabled()
   })
 
   it('restricts INDIRECT+LEVEL_2 to be F2F or MIXED', async () => {
@@ -69,14 +69,14 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(blended).toBeChecked()
   })
 
-  it('restricts INDIRECT+LEVEL_1+MIXED to Non-blended', async () => {
+  it('allows INDIRECT+LEVEL_1+MIXED to Non-blended', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.MIXED)
 
     const blended = screen.getByLabelText('Blended learning')
-    expect(blended).toBeDisabled()
+    expect(blended).toBeEnabled()
     expect(blended).not.toBeChecked()
   })
 
@@ -151,7 +151,7 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(reacc).not.toBeChecked()
   })
 
-  it('allows INDIRECT+LEVEL_1+MIXED Reaccreditation if Non-blended', async () => {
+  it('allows INDIRECT+LEVEL_1+MIXED Reaccreditation if blended', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
@@ -160,7 +160,7 @@ describe('component: CourseForm - INDIRECT', () => {
     const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
-    expect(blended).toBeDisabled()
+    expect(blended).toBeEnabled()
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
