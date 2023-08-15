@@ -1,6 +1,8 @@
 name: CD-PROD-SCHEDULE
 
 on:
+  # Make it possible to manually trigger as well for now.
+  workflow_dispatch:
   schedule:
     ## CRONS RUN BY DEFAULT IN UTC time which is -1 hour to UK time
     - cron: '0 7 * * *' # runs every day at 08:00 UK time
