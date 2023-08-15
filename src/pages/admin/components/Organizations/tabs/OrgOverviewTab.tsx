@@ -10,11 +10,15 @@ import {
   Typography,
 } from '@mui/material'
 import { Box } from '@mui/system'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import {
+  createEnumArrayParam,
+  useQueryParam,
+  withDefault,
+} from 'use-query-params'
 
-import { FilterByCertificateValidity } from '@app/components/filters/FilterByCertificateValidity'
 import { RequestAQuoteBanner } from '@app/components/RequestAQuoteBanner'
 import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum, Course_Type_Enum } from '@app/generated/graphql'
@@ -50,9 +54,14 @@ export const OrgOverviewTab: React.FC<
   const { profile, acl } = useAuth()
   const [userByLevelSelectedTab, setUserByLevelSelectedTab] = useState<string>()
 
-  const [certificateStatus, setCertificateStatus] = useState<
-    CertificateStatus[]
-  >([])
+  const statuses = Object.values(CertificateStatus) as CertificateStatus[]
+  const [certificateStatus, setCertificateStatus] = useQueryParam(
+    'status',
+    withDefault(
+      createEnumArrayParam<CertificateStatus>(statuses),
+      [] as CertificateStatus[]
+    )
+  )
 
   const {
     stats,
@@ -108,7 +117,24 @@ export const OrgOverviewTab: React.FC<
       : defaultTab
   }
 
-  if (orgLoading || coursesLoading) {
+  const onKPITileSelected = useCallback(
+    (status: CertificateStatus | null) => {
+      if (status) {
+        setCertificateStatus(currentStatuses => {
+          if (currentStatuses && currentStatuses.includes(status)) {
+            return currentStatuses.filter(s => s !== status)
+          } else {
+            return [...(currentStatuses ?? []), status]
+          }
+        })
+      } else {
+        setCertificateStatus([])
+      }
+    },
+    [setCertificateStatus]
+  )
+
+  if ((orgLoading || coursesLoading) && !stats) {
     return (
       <Stack
         alignItems="center"
@@ -123,26 +149,19 @@ export const OrgOverviewTab: React.FC<
   return (
     <Grid container>
       <Grid item xs={12}>
-        <OrgStatsTiles orgId={orgId} />
+        <OrgStatsTiles
+          orgId={orgId}
+          selected={certificateStatus}
+          onTileSelect={onKPITileSelected}
+        />
       </Grid>
 
       <Grid item xs={12} md={9} p={1} mt={2}>
-        <FilterByCertificateValidity
-          onChange={setCertificateStatus}
-          excludedStatuses={
-            new Set([
-              CertificateStatus.REVOKED,
-              CertificateStatus.EXPIRED,
-              CertificateStatus.ON_HOLD,
-            ])
-          }
-        />
-
         <Typography variant="h4" mt={3}>
           {t('pages.org-details.tabs.overview.individuals-by-training-level')}
         </Typography>
 
-        {!stats[orgId]?.profiles.count ? (
+        {!stats[orgId]?.profiles.count && !orgLoading ? (
           <>
             {certificateStatus.length ? (
               <>
