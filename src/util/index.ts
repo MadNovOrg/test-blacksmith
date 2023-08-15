@@ -430,13 +430,33 @@ export function getProfileCertificationLevels(
     levels.push(CourseLevel.Advanced)
   }
 
+  // There is no specification on how the rule should be for BILD.
+  //So here is just a logic to show the higher one treating BILD as separate certification
+  if (
+    certificates.find(c => c.courseLevel === CourseLevel.BildAdvancedTrainer)
+  ) {
+    levels.push(CourseLevel.BildAdvancedTrainer)
+  } else {
+    const bildHierarchy = [
+      CourseLevel.BildIntermediateTrainer,
+      CourseLevel.BildRegular,
+    ]
+
+    for (const level of bildHierarchy) {
+      const certificate = certificates.find(c => c.courseLevel === level)
+      if (certificate) {
+        levels.push(level)
+        if (certificate.status !== CertificateStatus.EXPIRED_RECENTLY) {
+          break
+        }
+      }
+    }
+  }
+
   const hierarchy = [
     CourseLevel.IntermediateTrainer,
     CourseLevel.Level_2,
     CourseLevel.Level_1,
-    CourseLevel.BildAdvancedTrainer,
-    CourseLevel.BildIntermediateTrainer,
-    CourseLevel.BildRegular,
   ]
   for (const level of hierarchy) {
     const certificate = certificates.find(c => c.courseLevel === level)
