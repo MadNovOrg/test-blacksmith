@@ -270,13 +270,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -320,7 +320,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -353,7 +353,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -528,7 +528,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -561,7 +561,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -612,7 +612,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -645,7 +645,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -775,13 +775,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -874,7 +874,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -907,7 +907,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -958,7 +958,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -991,7 +991,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -1119,13 +1119,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -1169,7 +1169,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -1202,7 +1202,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -1330,13 +1330,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -1380,7 +1380,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -1413,7 +1413,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -1509,7 +1509,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -1542,7 +1542,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -1612,13 +1612,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -1662,7 +1662,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -1695,7 +1695,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -1774,7 +1774,7 @@ VALUES (10034, '{
   "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -1807,7 +1807,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -1860,13 +1860,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -1991,13 +1991,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -2227,13 +2227,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -2277,7 +2277,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -2310,7 +2310,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -2361,13 +2361,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -2473,13 +2473,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -2651,13 +2651,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -2874,13 +2874,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -2924,7 +2924,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -2957,7 +2957,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -3008,7 +3008,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -3041,7 +3041,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -3064,13 +3064,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -3114,7 +3114,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -3147,7 +3147,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -3196,7 +3196,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -3229,7 +3229,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -3297,7 +3297,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -3330,7 +3330,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -3490,13 +3490,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -3540,7 +3540,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -3573,7 +3573,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -3733,13 +3733,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -3783,7 +3783,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -3816,7 +3816,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -3944,13 +3944,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -3994,7 +3994,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -4027,7 +4027,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -4125,13 +4125,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"
@@ -4175,7 +4175,7 @@ VALUES (10034, '{
    "PRIMARY":{
       "modules":[
          {
-            "name":"Values excercise"
+            "name":"Values exercise"
          },
          {
             "name":"Legal framework"
@@ -4208,7 +4208,7 @@ VALUES (10034, '{
             "name":"Mission Statement"
          },
          {
-            "name":"Rights & Responsibilies"
+            "name":"Rights & Responsibilities"
          },
          {
             "name":"Handling plans"
@@ -4289,13 +4289,13 @@ VALUES (10034, '{
             "duration":180,
             "modules":[
                {
-                  "name":"Sheild"
+                  "name":"Shield"
                },
                {
-                  "name":"Sitting cradle sheild"
+                  "name":"Sitting cradle shield"
                },
                {
-                  "name":"Sheild to FGR"
+                  "name":"Shield to FGR"
                },
                {
                   "name":"Front Ground recovery"

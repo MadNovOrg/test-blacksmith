@@ -46,7 +46,7 @@ INSERT into module_group_duration (module_group_id, course_delivery_type, reaccr
 ((SELECT id FROM module_group WHERE name = 'Seated Holds' AND course_level = 'INTERMEDIATE_TRAINER'), 'F2F', true, false, 45);
 
 INSERT INTO module (name, module_group_id, module_category, course_level) VALUES
-('Values excercise', (SELECT id FROM module_group WHERE name = 'Theory' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
+('Values exercise', (SELECT id FROM module_group WHERE name = 'Theory' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Legal framework', (SELECT id FROM module_group WHERE name = 'Theory' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Policies Practices & procedure', (SELECT id FROM module_group WHERE name = 'Theory' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Understanding emotions & behaviour', (SELECT id FROM module_group WHERE name = 'Theory' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),

@@ -23,7 +23,7 @@ Default.args = {
       name: 'CORE - Theory Module',
       mandatory: true,
       modules: [
-        { id: 'Values excercise', name: 'Values excercise', covered: true },
+        { id: 'Values exercise', name: 'Values exercise', covered: true },
         { id: 'Legal framework', name: 'Legal framework', covered: true },
       ],
     },
