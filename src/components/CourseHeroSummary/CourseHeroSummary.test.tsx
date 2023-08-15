@@ -1,7 +1,7 @@
 import { add, sub } from 'date-fns'
 import React from 'react'
 
-import { CourseDeliveryType } from '@app/types'
+import { CourseDeliveryType, RoleName } from '@app/types'
 
 import { render, screen } from '@test/index'
 import {
@@ -22,7 +22,11 @@ describe('component: CourseHeroSummary', () => {
   it('displays basic course information', () => {
     const course = buildCourse()
 
-    render(<CourseHeroSummary course={course} />)
+    render(<CourseHeroSummary course={course} />, {
+      auth: {
+        activeRole: RoleName.TT_ADMIN,
+      },
+    })
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
     expect(screen.getByText(course.course_code)).toBeInTheDocument()
@@ -39,7 +43,11 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(<CourseHeroSummary course={course} />)
+    render(<CourseHeroSummary course={course} />, {
+      auth: {
+        activeRole: RoleName.TT_ADMIN,
+      },
+    })
 
     expect(screen.getByText('Course has begun.')).toBeInTheDocument()
   })
@@ -55,7 +63,11 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(<CourseHeroSummary course={course} />)
+    render(<CourseHeroSummary course={course} />, {
+      auth: {
+        activeRole: RoleName.TT_ADMIN,
+      },
+    })
 
     expect(screen.getByText('Course begins today.')).toBeInTheDocument()
   })
@@ -87,7 +99,11 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(<CourseHeroSummary course={course} />)
+    render(<CourseHeroSummary course={course} />, {
+      auth: {
+        activeRole: RoleName.TT_ADMIN,
+      },
+    })
 
     expect(screen.getByText('2 days until course begins')).toBeInTheDocument()
   })
@@ -103,7 +119,11 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(<CourseHeroSummary course={course} />)
+    render(<CourseHeroSummary course={course} />, {
+      auth: {
+        activeRole: RoleName.TT_ADMIN,
+      },
+    })
 
     expect(screen.getByText('Course has ended.')).toBeInTheDocument()
   })
@@ -122,7 +142,11 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(<CourseHeroSummary course={course} />)
+    render(<CourseHeroSummary course={course} />, {
+      auth: {
+        activeRole: RoleName.TT_ADMIN,
+      },
+    })
 
     expect(screen.getByText('12 May 2022, 06:30 AM')).toBeInTheDocument()
     expect(screen.getByText('15 May 2022, 07:30 AM')).toBeInTheDocument()

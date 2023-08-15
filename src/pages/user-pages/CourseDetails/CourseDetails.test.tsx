@@ -35,7 +35,11 @@ function registerMocks(
     let data = null
     if (key[0].includes('GetUserCourseById')) {
       data = {
-        course: { ...course, organization: { members: orgMembers ?? [] } },
+        course: {
+          ...course,
+          organization: { members: orgMembers ?? [] },
+          participants: courseParticipants,
+        },
       }
     } else if (key[0].includes('GetCourseParticipantId')) {
       data = { course_participant: courseParticipants ?? [buildParticipant()] }

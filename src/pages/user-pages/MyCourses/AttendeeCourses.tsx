@@ -12,22 +12,16 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
-import { isPast } from 'date-fns'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CourseStatusChip } from '@app/components/CourseStatusChip'
+import { AttendeeCourseStatus } from '@app/components/AttendeeCourseStatus/AttendeeCourseStatus'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
-import {
-  AdminOnlyCourseStatus,
-  AllCourseStatuses,
-  AttendeeOnlyCourseStatus,
-} from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { FilterDrawer } from './Components/FilterDrawer'
@@ -138,36 +132,6 @@ export const AttendeeCourses: React.FC<
               />
 
               {courses?.map((c, index) => {
-                const courseEnded = isPast(new Date(c.schedule[0].end))
-                const participant = c.participants[0]
-                const evaluated = Boolean(
-                  c.evaluation_answers_aggregate.aggregate?.count
-                )
-
-                let courseStatus: AllCourseStatuses =
-                  Course_Status_Enum.Scheduled
-                if (c.status === Course_Status_Enum.Cancelled) {
-                  courseStatus = Course_Status_Enum.Cancelled
-                } else if (c.cancellationRequest) {
-                  courseStatus = AdminOnlyCourseStatus.CancellationRequested
-                } else {
-                  if (courseEnded) {
-                    courseStatus = Course_Status_Enum.Completed
-                  }
-                  if (participant) {
-                    // user participated in the course
-                    if (!participant.attended && courseEnded) {
-                      courseStatus = AttendeeOnlyCourseStatus.NotAttended
-                    } else if (!participant.healthSafetyConsent) {
-                      courseStatus = AttendeeOnlyCourseStatus.InfoRequired
-                    } else if (!evaluated && courseEnded) {
-                      courseStatus = Course_Status_Enum.EvaluationMissing
-                    } else if (!participant.grade && courseEnded) {
-                      courseStatus = Course_Status_Enum.GradeMissing
-                    }
-                  }
-                }
-
                 const nameCell = (
                   <>
                     <Typography mb={1}>{c.name}</Typography>
@@ -268,7 +232,7 @@ export const AttendeeCourses: React.FC<
                       />
                     </TableCell>
                     <TableCell>
-                      <CourseStatusChip status={courseStatus} />
+                      <AttendeeCourseStatus course={c} />
                     </TableCell>
                   </TableRow>
                 )

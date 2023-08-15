@@ -86,7 +86,14 @@ export const CourseDetails = () => {
     },
     Error,
     [string, GetCourseParamsType]
-  >([GET_COURSE_QUERY, { id: courseId, withOrders: canViewOrderItem }])
+  >([
+    GET_COURSE_QUERY,
+    {
+      id: courseId,
+      withOrders: canViewOrderItem,
+      profileId: profile?.id || '',
+    },
+  ])
   const course = courseData?.course
   const courseLoadingStatus = getSWRLoadingStatus(courseData, courseError)
 

@@ -7,13 +7,17 @@ import { COURSE_SCHEDULE, ORGANIZATION, VENUE } from '../fragments'
 // TODO: can't share types as user queries select different columns
 export type ResponseType = { course: Course }
 
-export type ParamsType = { id: string; withOrders?: boolean }
+export type ParamsType = { id: string; withOrders?: boolean; profileId: string }
 
 export const QUERY = gql`
   ${COURSE_SCHEDULE}
   ${VENUE}
   ${ORGANIZATION}
-  query GetUserCourseById($id: Int!, $withOrders: Boolean = false) {
+  query GetUserCourseById(
+    $id: Int!
+    $withOrders: Boolean = false
+    $profileId: uuid!
+  ) {
     course: course_by_pk(id: $id) {
       id
       name
@@ -45,6 +49,19 @@ export const QUERY = gql`
           fullName
           avatar
           archived
+        }
+      }
+      participants(where: { profile_id: { _eq: $profileId } }) {
+        healthSafetyConsent
+        grade
+        attended
+      }
+      evaluation_answers_aggregate(
+        distinct_on: profileId
+        where: { profileId: { _eq: $profileId } }
+      ) {
+        aggregate {
+          count
         }
       }
       schedule {

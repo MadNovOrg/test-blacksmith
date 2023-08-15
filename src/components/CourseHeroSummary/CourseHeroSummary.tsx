@@ -21,8 +21,13 @@ import {
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import {
+  AttendeeCourse,
+  AttendeeCourseStatus,
+} from '@app/components/AttendeeCourseStatus/AttendeeCourseStatus'
 import { CourseInstructionsDialog } from '@app/components/CourseInstructionsDialog'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
+import { useAuth } from '@app/context/auth'
 import { AdminOnlyCourseStatus, Course, CourseDeliveryType } from '@app/types'
 import { getCourseBeginsForMessage, formatCourseVenue } from '@app/util'
 
@@ -51,6 +56,8 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
   const [isInstructionsDialogOpen, setIsInstructionsDialogOpen] =
     useState(false)
+
+  const { acl } = useAuth()
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -139,13 +146,19 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             </Typography>
             {course.status ? (
               <Box mt={2}>
-                <CourseStatusChip
-                  status={
-                    course.cancellationRequest
-                      ? AdminOnlyCourseStatus.CancellationRequested
-                      : course.status
-                  }
-                />
+                {!acl.isUser() ? (
+                  <CourseStatusChip
+                    status={
+                      course.cancellationRequest
+                        ? AdminOnlyCourseStatus.CancellationRequested
+                        : course.status
+                    }
+                  />
+                ) : (
+                  <AttendeeCourseStatus
+                    course={course as unknown as AttendeeCourse}
+                  />
+                )}
               </Box>
             ) : null}
             {isMobile && course.schedule[0].venue?.geoCoordinates ? (

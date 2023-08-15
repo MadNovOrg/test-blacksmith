@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 
 import useCourse from '@app/hooks/useCourse'
-import { Course, CourseType } from '@app/types'
+import { Course, CourseType, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, screen } from '@test/index'
@@ -29,7 +29,11 @@ describe('page: CourseDetails', () => {
       <Routes>
         <Route path="/course/:id/details" element={<CourseDetails />} />
       </Routes>,
-      {},
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
       { initialEntries: [`/course/${course.id}/details`] }
     )
 
