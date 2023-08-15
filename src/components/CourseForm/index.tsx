@@ -108,6 +108,12 @@ import {
 
 export type DisabledFields = Partial<keyof CourseInput>
 
+const INDIRECT_COURSE_MIN_ALLOWED_DATE_FOR_YUP = new Date(
+  new Date(INDIRECT_COURSE_MIN_ALLOWED_DATE.getTime()).setDate(
+    INDIRECT_COURSE_MIN_ALLOWED_DATE.getDate() - 1
+  )
+)
+
 interface Props {
   type?: CourseType
   courseInput?: CourseInput
@@ -215,8 +221,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
             then: sd =>
               sd.min(
-                // Min allowed day will be 2023-10-01
-                INDIRECT_COURSE_MIN_ALLOWED_DATE,
+                INDIRECT_COURSE_MIN_ALLOWED_DATE_FOR_YUP,
                 t('components.course-form.min-start-date')
               ),
           })
@@ -1285,7 +1290,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       name={field.name}
                       label={t('components.course-form.start-date-placeholder')}
                       value={field.value}
-                      minDate={minCourseStartDate}
+                      minDate={
+                        courseType === CourseType.INDIRECT &&
+                        activeRole === RoleName.TRAINER
+                          ? INDIRECT_COURSE_MIN_ALLOWED_DATE
+                          : minCourseStartDate
+                      }
                       maxDate={values.endDate || undefined}
                       onChange={newStartDate => {
                         field.onChange(newStartDate)

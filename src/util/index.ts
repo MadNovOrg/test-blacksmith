@@ -727,4 +727,4 @@ export const REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL = {
   [CourseLevel.BildAdvancedTrainer]: [CourseLevel.BildAdvancedTrainer],
 }
 
-export const INDIRECT_COURSE_MIN_ALLOWED_DATE = new Date('2023-09-30')
+export const INDIRECT_COURSE_MIN_ALLOWED_DATE = new Date('2023-10-01')
