@@ -1,0 +1,59 @@
+table:
+  name: country
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - name
+      filter: {}
+  - role: booking-contact
+    permission:
+      columns:
+        - name
+      filter: {}
+  - role: finance
+    permission:
+      columns:
+        - name
+      filter: {}
+  - role: ld
+    permission:
+      columns:
+        - name
+      filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - name
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - name
+      filter: {}
+  - role: trainer
+    permission:
+      columns:
+        - name
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - name
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - name
+      filter: {}
+  - role: unverified
+    permission:
+      columns:
+        - name
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - name
+      filter: {}

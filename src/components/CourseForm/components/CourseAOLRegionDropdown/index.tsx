@@ -1,8 +1,8 @@
 import { Autocomplete, Box, TextField } from '@mui/material'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getAOLRegions } from '../../helpers'
+import useCountryRegions from '@app/hooks/useCountryRegions'
 
 interface Props {
   value: string | null
@@ -26,8 +26,7 @@ export const CourseAOLRegionDropdown: React.FC<
   required = false,
 }) => {
   const { t } = useTranslation()
-
-  const regions = useMemo(() => [...getAOLRegions(aolCountry)], [aolCountry])
+  const regions = useCountryRegions(aolCountry)
   const selected = value
 
   useEffect(() => {
@@ -41,7 +40,7 @@ export const CourseAOLRegionDropdown: React.FC<
 
   return (
     <Autocomplete
-      disabled={disabled}
+      disabled={disabled || !regions.length}
       multiple={false}
       value={selected || ''}
       options={regions}

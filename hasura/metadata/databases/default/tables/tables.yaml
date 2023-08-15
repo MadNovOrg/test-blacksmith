@@ -7,6 +7,8 @@
 - "!include public_certificate_expiry_notification_timeframe.yaml"
 - "!include public_certificate_status.yaml"
 - "!include public_color.yaml"
+- "!include public_country.yaml"
+- "!include public_country_region.yaml"
 - "!include public_course.yaml"
 - "!include public_course_audit.yaml"
 - "!include public_course_audit_type.yaml"

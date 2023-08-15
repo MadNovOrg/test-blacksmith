@@ -14711,6 +14711,298 @@ export type ContentRootQueryWebinarsCategoryArgs = {
   idType?: InputMaybe<WebinarsCategoryIdType>;
 };
 
+/** columns and relationships of "country" */
+export type Country = {
+  __typename?: 'country';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "country" */
+export type Country_Aggregate = {
+  __typename?: 'country_aggregate';
+  aggregate?: Maybe<Country_Aggregate_Fields>;
+  nodes: Array<Country>;
+};
+
+/** aggregate fields of "country" */
+export type Country_Aggregate_Fields = {
+  __typename?: 'country_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Country_Max_Fields>;
+  min?: Maybe<Country_Min_Fields>;
+};
+
+
+/** aggregate fields of "country" */
+export type Country_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Country_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "country". All fields are combined with a logical 'AND'. */
+export type Country_Bool_Exp = {
+  _and?: InputMaybe<Array<Country_Bool_Exp>>;
+  _not?: InputMaybe<Country_Bool_Exp>;
+  _or?: InputMaybe<Array<Country_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "country" */
+export enum Country_Constraint {
+  /** unique or primary key constraint on columns "name" */
+  CountryPkey = 'country_pkey'
+}
+
+/** input type for inserting data into table "country" */
+export type Country_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Country_Max_Fields = {
+  __typename?: 'country_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Country_Min_Fields = {
+  __typename?: 'country_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "country" */
+export type Country_Mutation_Response = {
+  __typename?: 'country_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Country>;
+};
+
+/** on_conflict condition type for table "country" */
+export type Country_On_Conflict = {
+  constraint: Country_Constraint;
+  update_columns?: Array<Country_Update_Column>;
+  where?: InputMaybe<Country_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "country". */
+export type Country_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: country */
+export type Country_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** columns and relationships of "country_region" */
+export type Country_Region = {
+  __typename?: 'country_region';
+  country: Scalars['String'];
+  created_at: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  name: Scalars['String'];
+  updated_at: Scalars['timestamptz'];
+};
+
+/** aggregated selection of "country_region" */
+export type Country_Region_Aggregate = {
+  __typename?: 'country_region_aggregate';
+  aggregate?: Maybe<Country_Region_Aggregate_Fields>;
+  nodes: Array<Country_Region>;
+};
+
+/** aggregate fields of "country_region" */
+export type Country_Region_Aggregate_Fields = {
+  __typename?: 'country_region_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Country_Region_Max_Fields>;
+  min?: Maybe<Country_Region_Min_Fields>;
+};
+
+
+/** aggregate fields of "country_region" */
+export type Country_Region_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Country_Region_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "country_region". All fields are combined with a logical 'AND'. */
+export type Country_Region_Bool_Exp = {
+  _and?: InputMaybe<Array<Country_Region_Bool_Exp>>;
+  _not?: InputMaybe<Country_Region_Bool_Exp>;
+  _or?: InputMaybe<Array<Country_Region_Bool_Exp>>;
+  country?: InputMaybe<String_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "country_region" */
+export enum Country_Region_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  CountryRegionPkey = 'country_region_pkey'
+}
+
+/** input type for inserting data into table "country_region" */
+export type Country_Region_Insert_Input = {
+  country?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Country_Region_Max_Fields = {
+  __typename?: 'country_region_max_fields';
+  country?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type Country_Region_Min_Fields = {
+  __typename?: 'country_region_min_fields';
+  country?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "country_region" */
+export type Country_Region_Mutation_Response = {
+  __typename?: 'country_region_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Country_Region>;
+};
+
+/** on_conflict condition type for table "country_region" */
+export type Country_Region_On_Conflict = {
+  constraint: Country_Region_Constraint;
+  update_columns?: Array<Country_Region_Update_Column>;
+  where?: InputMaybe<Country_Region_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "country_region". */
+export type Country_Region_Order_By = {
+  country?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: country_region */
+export type Country_Region_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "country_region" */
+export enum Country_Region_Select_Column {
+  /** column name */
+  Country = 'country',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "country_region" */
+export type Country_Region_Set_Input = {
+  country?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** Streaming cursor of the table "country_region" */
+export type Country_Region_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Country_Region_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Country_Region_Stream_Cursor_Value_Input = {
+  country?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** update columns of table "country_region" */
+export enum Country_Region_Update_Column {
+  /** column name */
+  Country = 'country',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+export type Country_Region_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Country_Region_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Country_Region_Bool_Exp;
+};
+
+/** select columns of table "country" */
+export enum Country_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "country" */
+export type Country_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "country" */
+export type Country_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Country_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Country_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "country" */
+export enum Country_Update_Column {
+  /** column name */
+  Name = 'name'
+}
+
+export type Country_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Country_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Country_Bool_Exp;
+};
+
 /** columns and relationships of "course" */
 export type Course = {
   __typename?: 'course';
@@ -29534,6 +29826,14 @@ export type Mutation_Root = {
   delete_color?: Maybe<Color_Mutation_Response>;
   /** delete single row from the table: "color" */
   delete_color_by_pk?: Maybe<Color>;
+  /** delete data from the table: "country" */
+  delete_country?: Maybe<Country_Mutation_Response>;
+  /** delete single row from the table: "country" */
+  delete_country_by_pk?: Maybe<Country>;
+  /** delete data from the table: "country_region" */
+  delete_country_region?: Maybe<Country_Region_Mutation_Response>;
+  /** delete single row from the table: "country_region" */
+  delete_country_region_by_pk?: Maybe<Country_Region>;
   /** delete data from the table: "course" */
   delete_course?: Maybe<Course_Mutation_Response>;
   /** delete data from the table: "course_audit" */
@@ -29886,6 +30186,14 @@ export type Mutation_Root = {
   insert_color?: Maybe<Color_Mutation_Response>;
   /** insert a single row into the table: "color" */
   insert_color_one?: Maybe<Color>;
+  /** insert data into the table: "country" */
+  insert_country?: Maybe<Country_Mutation_Response>;
+  /** insert a single row into the table: "country" */
+  insert_country_one?: Maybe<Country>;
+  /** insert data into the table: "country_region" */
+  insert_country_region?: Maybe<Country_Region_Mutation_Response>;
+  /** insert a single row into the table: "country_region" */
+  insert_country_region_one?: Maybe<Country_Region>;
   /** insert data into the table: "course" */
   insert_course?: Maybe<Course_Mutation_Response>;
   /** insert data into the table: "course_audit" */
@@ -30274,6 +30582,18 @@ export type Mutation_Root = {
   update_color_by_pk?: Maybe<Color>;
   /** update multiples rows of table: "color" */
   update_color_many?: Maybe<Array<Maybe<Color_Mutation_Response>>>;
+  /** update data of the table: "country" */
+  update_country?: Maybe<Country_Mutation_Response>;
+  /** update single row of the table: "country" */
+  update_country_by_pk?: Maybe<Country>;
+  /** update multiples rows of table: "country" */
+  update_country_many?: Maybe<Array<Maybe<Country_Mutation_Response>>>;
+  /** update data of the table: "country_region" */
+  update_country_region?: Maybe<Country_Region_Mutation_Response>;
+  /** update single row of the table: "country_region" */
+  update_country_region_by_pk?: Maybe<Country_Region>;
+  /** update multiples rows of table: "country_region" */
+  update_country_region_many?: Maybe<Array<Maybe<Country_Region_Mutation_Response>>>;
   /** update data of the table: "course" */
   update_course?: Maybe<Course_Mutation_Response>;
   /** update data of the table: "course_audit" */
@@ -30949,6 +31269,30 @@ export type Mutation_RootDelete_ColorArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Color_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_CountryArgs = {
+  where: Country_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Country_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Country_RegionArgs = {
+  where: Country_Region_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Country_Region_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -32029,6 +32373,34 @@ export type Mutation_RootInsert_ColorArgs = {
 export type Mutation_RootInsert_Color_OneArgs = {
   object: Color_Insert_Input;
   on_conflict?: InputMaybe<Color_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_CountryArgs = {
+  objects: Array<Country_Insert_Input>;
+  on_conflict?: InputMaybe<Country_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Country_OneArgs = {
+  object: Country_Insert_Input;
+  on_conflict?: InputMaybe<Country_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Country_RegionArgs = {
+  objects: Array<Country_Region_Insert_Input>;
+  on_conflict?: InputMaybe<Country_Region_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Country_Region_OneArgs = {
+  object: Country_Region_Insert_Input;
+  on_conflict?: InputMaybe<Country_Region_On_Conflict>;
 };
 
 
@@ -33394,6 +33766,46 @@ export type Mutation_RootUpdate_Color_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Color_ManyArgs = {
   updates: Array<Color_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_CountryArgs = {
+  _set?: InputMaybe<Country_Set_Input>;
+  where: Country_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Country_By_PkArgs = {
+  _set?: InputMaybe<Country_Set_Input>;
+  pk_columns: Country_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Country_ManyArgs = {
+  updates: Array<Country_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Country_RegionArgs = {
+  _set?: InputMaybe<Country_Region_Set_Input>;
+  where: Country_Region_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Country_Region_By_PkArgs = {
+  _set?: InputMaybe<Country_Region_Set_Input>;
+  pk_columns: Country_Region_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Country_Region_ManyArgs = {
+  updates: Array<Country_Region_Updates>;
 };
 
 
@@ -41114,6 +41526,18 @@ export type Query_Root = {
   /** fetch data from the table: "color" using primary key columns */
   color_by_pk?: Maybe<Color>;
   content?: Maybe<ContentRootQuery>;
+  /** fetch data from the table: "country" */
+  country: Array<Country>;
+  /** fetch aggregated fields from the table: "country" */
+  country_aggregate: Country_Aggregate;
+  /** fetch data from the table: "country" using primary key columns */
+  country_by_pk?: Maybe<Country>;
+  /** fetch data from the table: "country_region" */
+  country_region: Array<Country_Region>;
+  /** fetch aggregated fields from the table: "country_region" */
+  country_region_aggregate: Country_Region_Aggregate;
+  /** fetch data from the table: "country_region" using primary key columns */
+  country_region_by_pk?: Maybe<Country_Region>;
   /** fetch data from the table: "course" */
   course: Array<Course>;
   /** fetch aggregated fields from the table: "course" */
@@ -41821,6 +42245,52 @@ export type Query_RootColor_AggregateArgs = {
 
 export type Query_RootColor_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Query_RootCountryArgs = {
+  distinct_on?: InputMaybe<Array<Country_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Order_By>>;
+  where?: InputMaybe<Country_Bool_Exp>;
+};
+
+
+export type Query_RootCountry_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Country_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Order_By>>;
+  where?: InputMaybe<Country_Bool_Exp>;
+};
+
+
+export type Query_RootCountry_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Query_RootCountry_RegionArgs = {
+  distinct_on?: InputMaybe<Array<Country_Region_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Region_Order_By>>;
+  where?: InputMaybe<Country_Region_Bool_Exp>;
+};
+
+
+export type Query_RootCountry_Region_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Country_Region_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Region_Order_By>>;
+  where?: InputMaybe<Country_Region_Bool_Exp>;
+};
+
+
+export type Query_RootCountry_Region_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -44057,6 +44527,22 @@ export type Subscription_Root = {
   color_by_pk?: Maybe<Color>;
   /** fetch data from the table in a streaming manner: "color" */
   color_stream: Array<Color>;
+  /** fetch data from the table: "country" */
+  country: Array<Country>;
+  /** fetch aggregated fields from the table: "country" */
+  country_aggregate: Country_Aggregate;
+  /** fetch data from the table: "country" using primary key columns */
+  country_by_pk?: Maybe<Country>;
+  /** fetch data from the table: "country_region" */
+  country_region: Array<Country_Region>;
+  /** fetch aggregated fields from the table: "country_region" */
+  country_region_aggregate: Country_Region_Aggregate;
+  /** fetch data from the table: "country_region" using primary key columns */
+  country_region_by_pk?: Maybe<Country_Region>;
+  /** fetch data from the table in a streaming manner: "country_region" */
+  country_region_stream: Array<Country_Region>;
+  /** fetch data from the table in a streaming manner: "country" */
+  country_stream: Array<Country>;
   /** fetch data from the table: "course" */
   course: Array<Course>;
   /** fetch aggregated fields from the table: "course" */
@@ -44958,6 +45444,66 @@ export type Subscription_RootColor_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Color_Stream_Cursor_Input>>;
   where?: InputMaybe<Color_Bool_Exp>;
+};
+
+
+export type Subscription_RootCountryArgs = {
+  distinct_on?: InputMaybe<Array<Country_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Order_By>>;
+  where?: InputMaybe<Country_Bool_Exp>;
+};
+
+
+export type Subscription_RootCountry_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Country_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Order_By>>;
+  where?: InputMaybe<Country_Bool_Exp>;
+};
+
+
+export type Subscription_RootCountry_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Subscription_RootCountry_RegionArgs = {
+  distinct_on?: InputMaybe<Array<Country_Region_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Region_Order_By>>;
+  where?: InputMaybe<Country_Region_Bool_Exp>;
+};
+
+
+export type Subscription_RootCountry_Region_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Country_Region_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Region_Order_By>>;
+  where?: InputMaybe<Country_Region_Bool_Exp>;
+};
+
+
+export type Subscription_RootCountry_Region_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCountry_Region_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Country_Region_Stream_Cursor_Input>>;
+  where?: InputMaybe<Country_Region_Bool_Exp>;
+};
+
+
+export type Subscription_RootCountry_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Country_Stream_Cursor_Input>>;
+  where?: InputMaybe<Country_Bool_Exp>;
 };
 
 
@@ -50220,6 +50766,18 @@ export type UndoRevokeCertMutationVariables = Exact<{
 
 
 export type UndoRevokeCertMutation = { __typename?: 'mutation_root', undoRevoked?: { __typename?: 'course_certificate', id: any } | null, insertChangeLog?: { __typename?: 'course_certificate_changelog', id: any } | null };
+
+export type GetRegionsByCountryQueryVariables = Exact<{
+  country: Scalars['String'];
+}>;
+
+
+export type GetRegionsByCountryQuery = { __typename?: 'query_root', regions: Array<{ __typename?: 'country_region', name: string }> };
+
+export type GetCountriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCountriesQuery = { __typename?: 'query_root', countries: Array<{ __typename?: 'country', name: string }> };
 
 export type GetEvaluationQueryVariables = Exact<{
   courseId: Scalars['Int'];

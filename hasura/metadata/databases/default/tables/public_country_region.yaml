@@ -1,0 +1,70 @@
+table:
+  name: country_region
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - name
+        - country
+      filter: {}
+  - role: booking-contact
+    permission:
+      columns:
+        - name
+        - country
+      filter: {}
+  - role: finance
+    permission:
+      columns:
+        - name
+        - country
+      filter: {}
+  - role: ld
+    permission:
+      columns:
+        - name
+        - country
+      filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - name
+        - country
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - name
+        - country
+      filter: {}
+  - role: trainer
+    permission:
+      columns:
+        - name
+        - country
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - name
+        - country
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - name
+        - country
+      filter: {}
+  - role: unverified
+    permission:
+      columns:
+        - name
+        - country
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - name
+        - country
+      filter: {}

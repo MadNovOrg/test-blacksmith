@@ -7,8 +7,13 @@ import {
 } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useQuery } from 'urql'
 
-import { getAOLCountries } from '../../helpers'
+import {
+  GetCountriesQuery,
+  GetCountriesQueryVariables,
+} from '@app/generated/graphql'
+import { Query as QUERY_COUNTRIES } from '@app/queries/country/get-countries'
 
 type SelectValue = string | null
 
@@ -20,12 +25,13 @@ interface Props {
   required?: boolean
 }
 
-const countries = [...getAOLCountries()]
-
 export const CourseAOLCountryDropdown: React.FC<
   React.PropsWithChildren<Props>
 > = ({ value, onChange, usesAOL, error, required = false }) => {
   const { t } = useTranslation()
+  const [response] = useQuery<GetCountriesQuery, GetCountriesQueryVariables>({
+    query: QUERY_COUNTRIES,
+  })
 
   const selected = value
 
@@ -45,21 +51,23 @@ export const CourseAOLCountryDropdown: React.FC<
       </InputLabel>
 
       <Select
+        disabled={response.fetching}
         error={error}
         value={selected}
         onChange={onChange}
         data-testid="course-aol-country-select"
         id="course-aol-country"
       >
-        {countries.map(country => (
-          <MenuItem
-            key={country}
-            value={country}
-            data-testid={`course-aol-country-option-${country}`}
-          >
-            {t(`aol.countries.${country}`)}
-          </MenuItem>
-        ))}
+        {response.data?.countries.length &&
+          response.data.countries.map(country => (
+            <MenuItem
+              key={country.name}
+              value={country.name}
+              data-testid={`course-aol-country-option-${country}`}
+            >
+              {t(`aol.countries.${country.name}`)}
+            </MenuItem>
+          ))}
       </Select>
     </FormControl>
   )
