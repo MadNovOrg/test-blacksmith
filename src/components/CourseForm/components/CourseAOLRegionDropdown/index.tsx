@@ -63,7 +63,7 @@ export const CourseAOLRegionDropdown: React.FC<
       renderInput={params => (
         <TextField
           {...params}
-          label={t('region')}
+          label={t('licenced-area')}
           data-testid={`course-aol-region-select-${aolCountry}`}
           fullWidth
           sx={{ bgcolor: 'grey.100' }}

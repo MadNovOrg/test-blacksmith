@@ -799,9 +799,127 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               />
             </FormControl>
           ) : null}
+
+          {courseType === CourseType.INDIRECT ? (
+            <>
+              <Typography
+                mt={2}
+                fontWeight={600}
+                color={isBild ? 'text.disabled' : undefined}
+              >
+                {t('components.course-form.aol-title')}
+              </Typography>
+              <Alert severity="info" sx={{ mt: 1 }}>
+                {t('components.course-form.aol-info')}
+              </Alert>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={e => {
+                      setValue('usesAOL', e.target.checked, {
+                        shouldValidate: true,
+                      })
+                      if (!e.target.checked) {
+                        resetField('courseCost')
+                      }
+                    }}
+                    checked={usesAOL}
+                    disabled={disabledFields.has('usesAOL') || isBild}
+                  />
+                }
+                label={t('components.course-form.aol-label')}
+              />
+
+              {usesAOL ? (
+                <>
+                  <Grid container spacing={2}>
+                    <Grid item md={6} sm={12}>
+                      <FormControl
+                        variant="filled"
+                        sx={{ mb: theme.spacing(2) }}
+                        fullWidth
+                        disabled={disabledFields.has('aolCountry')}
+                      >
+                        <Controller
+                          name="aolCountry"
+                          control={control}
+                          render={({ field }) => (
+                            <CourseAOLCountryDropdown
+                              required
+                              {...register('aolCountry')}
+                              value={field.value}
+                              onChange={e => {
+                                setValue('aolRegion', '')
+                                field.onChange(e)
+                              }}
+                              usesAOL={usesAOL}
+                              error={Boolean(errors.aolCountry?.message)}
+                            />
+                          )}
+                        />
+                      </FormControl>
+                    </Grid>
+
+                    <Grid item md={6} sm={12}>
+                      <FormControl
+                        variant="filled"
+                        sx={{ mb: theme.spacing(2) }}
+                        fullWidth
+                      >
+                        <Controller
+                          name="aolRegion"
+                          control={control}
+                          render={({ field }) => (
+                            <CourseAOLRegionDropdown
+                              required
+                              {...register('aolRegion')}
+                              value={field.value}
+                              onChange={field.onChange}
+                              usesAOL={usesAOL}
+                              aolCountry={aolCountry}
+                              disabled={
+                                !aolCountry || disabledFields.has('aolRegion')
+                              }
+                              error={Boolean(errors.aolRegion?.message)}
+                            />
+                          )}
+                        />
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+
+                  <Typography mt={5} fontWeight={600}>
+                    {t('components.course-form.course-cost')}
+                  </Typography>
+                  <Typography mb={1} variant="body2">
+                    {t('components.course-form.course-cost-disclaimer')}
+                  </Typography>
+                  <TextField
+                    type={'number'}
+                    {...register('courseCost')}
+                    variant="filled"
+                    placeholder={t(
+                      'components.course-form.course-cost-placeholder'
+                    )}
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">£</InputAdornment>
+                      ),
+                    }}
+                    label={t('components.course-form.course-cost-title')}
+                    error={Boolean(errors.courseCost)}
+                    helperText={errors.courseCost?.message ?? ''}
+                    disabled={disabledFields.has('courseCost')}
+                  />
+                </>
+              ) : null}
+            </>
+          ) : null}
+
           {hasOrg ? (
             <>
-              <Typography mb={2} fontWeight={600}>
+              <Typography my={2} fontWeight={600}>
                 {t('components.course-form.organization-label')}
               </Typography>
               <OrgSelector
@@ -1259,119 +1377,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               </Grid>
             </Grid>
           </LocalizationProvider>
-
-          {courseType === CourseType.INDIRECT ? (
-            <>
-              <Typography
-                mt={2}
-                fontWeight={600}
-                color={isBild ? 'text.disabled' : undefined}
-              >
-                {t('components.course-form.aol-title')}
-              </Typography>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    onChange={e => {
-                      setValue('usesAOL', e.target.checked, {
-                        shouldValidate: true,
-                      })
-                      if (!e.target.checked) {
-                        resetField('courseCost')
-                      }
-                    }}
-                    checked={usesAOL}
-                    disabled={disabledFields.has('usesAOL') || isBild}
-                  />
-                }
-                label={t('components.course-form.aol-label')}
-              />
-
-              {usesAOL ? (
-                <>
-                  <Grid container spacing={2}>
-                    <Grid item md={6} sm={12}>
-                      <FormControl
-                        variant="filled"
-                        sx={{ mb: theme.spacing(2) }}
-                        fullWidth
-                        disabled={disabledFields.has('aolCountry')}
-                      >
-                        <Controller
-                          name="aolCountry"
-                          control={control}
-                          render={({ field }) => (
-                            <CourseAOLCountryDropdown
-                              required
-                              {...register('aolCountry')}
-                              value={field.value}
-                              onChange={e => {
-                                setValue('aolRegion', '')
-                                field.onChange(e)
-                              }}
-                              usesAOL={usesAOL}
-                              error={Boolean(errors.aolCountry?.message)}
-                            />
-                          )}
-                        />
-                      </FormControl>
-                    </Grid>
-
-                    <Grid item md={6} sm={12}>
-                      <FormControl
-                        variant="filled"
-                        sx={{ mb: theme.spacing(2) }}
-                        fullWidth
-                      >
-                        <Controller
-                          name="aolRegion"
-                          control={control}
-                          render={({ field }) => (
-                            <CourseAOLRegionDropdown
-                              required
-                              {...register('aolRegion')}
-                              value={field.value}
-                              onChange={field.onChange}
-                              usesAOL={usesAOL}
-                              aolCountry={aolCountry}
-                              disabled={
-                                !aolCountry || disabledFields.has('aolRegion')
-                              }
-                              error={Boolean(errors.aolRegion?.message)}
-                            />
-                          )}
-                        />
-                      </FormControl>
-                    </Grid>
-                  </Grid>
-
-                  <Typography mt={5} fontWeight={600}>
-                    {t('components.course-form.course-cost')}
-                  </Typography>
-                  <Typography mb={1} variant="body2">
-                    {t('components.course-form.course-cost-disclaimer')}
-                  </Typography>
-                  <TextField
-                    {...register('courseCost')}
-                    variant="filled"
-                    placeholder={t(
-                      'components.course-form.course-cost-placeholder'
-                    )}
-                    fullWidth
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">£</InputAdornment>
-                      ),
-                    }}
-                    label={t('components.course-form.course-cost-title')}
-                    error={Boolean(errors.courseCost)}
-                    helperText={errors.courseCost?.message ?? ''}
-                    disabled={disabledFields.has('courseCost')}
-                  />
-                </>
-              ) : null}
-            </>
-          ) : null}
         </FormPanel>
         <Typography variant="h5" fontWeight={500} gutterBottom>
           {t('components.course-form.attendees-section-title')}
