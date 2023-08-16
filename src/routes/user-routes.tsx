@@ -11,7 +11,7 @@ import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableC
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import Organizations from '@app/pages/admin/components/Organizations'
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
-import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
+import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization/InviteUserToOrganization'
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { NotFound } from '@app/pages/common/NotFound'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'

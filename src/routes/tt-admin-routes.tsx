@@ -9,7 +9,7 @@ import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses
 import Organizations from '@app/pages/admin/components/Organizations'
 import { CreateOrganization } from '@app/pages/admin/components/Organizations/CreateOrganization'
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
-import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
+import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization/InviteUserToOrganization'
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { Contacts } from '@app/pages/admin/Contacts'
 import { CourseExceptionsLog } from '@app/pages/admin/CourseExceptionsLog'

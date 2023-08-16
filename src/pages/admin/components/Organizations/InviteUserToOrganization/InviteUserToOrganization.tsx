@@ -325,7 +325,6 @@ export const InviteUserToOrganization = () => {
                   color="primary"
                   data-testid="invite-user-submit-btn"
                   size="large"
-                  onClick={onSubmit}
                 >
                   {t('pages.invite-to-org.invite-users')}
                 </LoadingButton>
