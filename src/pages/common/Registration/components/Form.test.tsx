@@ -208,9 +208,9 @@ describe('Form', () => {
 
     await userEvent.click(screen.getByLabelText('T&Cs'))
 
-    await userEvent.click(screen.getByLabelText('Position'))
+    await userEvent.click(screen.getByLabelText('Job Title'))
     await userEvent.click(screen.getByTestId('position-Other'))
-    await userEvent.type(screen.getByTestId('other-position-input'), 'Admin')
+    await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
 
     await waitFor(async () => {
       await userEvent.click(screen.getByTestId('signup-form-btn'))
@@ -245,9 +245,9 @@ describe('Form', () => {
     await userEvent.type(screen.getByTestId('input-password'), 'Test1234!')
     await userEvent.type(screen.getByTestId('input-phone'), '1234567890')
 
-    await userEvent.click(screen.getByLabelText('Position'))
+    await userEvent.click(screen.getByLabelText('Job Title'))
     await userEvent.click(screen.getByTestId('position-Other'))
-    await userEvent.type(screen.getByTestId('other-position-input'), 'Admin')
+    await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
 
     // Selects your default value of the date field
     await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')

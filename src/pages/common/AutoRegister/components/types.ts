@@ -11,8 +11,8 @@ export type FormInputs = {
   password: string
   dob: Date | null
   tcs: boolean
-  position: string
-  otherPosition: string
+  jobTitle: string
+  otherJobTitle: string
 }
 
 export const getFormSchema = (t: TFunction) => {
@@ -30,10 +30,10 @@ export const getFormSchema = (t: TFunction) => {
 
     tcs: yup.boolean().oneOf([true], t('pages.signup.tcs-required')),
 
-    position: yup.string().required(requiredMsg(t, 'position')),
-    otherPosition: yup.string().when('position', ([position], schema) => {
-      return position === 'Other'
-        ? schema.required(t('validation-errors.other-position-required'))
+    jobTitle: yup.string().required(requiredMsg(t, 'job-title')),
+    otherJobTitle: yup.string().when('jobTitle', ([jobTitle], schema) => {
+      return jobTitle === 'Other'
+        ? schema.required(t('validation-errors.other-job-title-required'))
         : schema
     }),
   })

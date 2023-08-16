@@ -60,7 +60,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
   const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
 
-  const positions = useJobTitles()
+  const jobTitles = useJobTitles()
 
   const {
     register,
@@ -92,7 +92,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         dob: data.dob ? zonedTimeToUtc(data.dob, 'GMT') : null,
         acceptTnc: data.tcs,
         jobTitle:
-          data.position === 'Other' ? data.otherPosition : data.position,
+          data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
       }
 
       await gqlRequest<CreateUserResponseType, CreateUserParamsType>(
@@ -236,37 +236,37 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         <Box>
           <TextField
             select
-            value={values.position}
-            {...register('position')}
+            value={values.jobTitle}
+            {...register('jobTitle')}
             variant="filled"
             fullWidth
-            label={t('position')}
+            label={t('job-title')}
           >
             <MenuItem value="" disabled>
-              {positions.length ? t('position') : t('select-sector')}
+              {t('job-title')}
             </MenuItem>
-            {positions.map((option, i) => (
+            {jobTitles.map((option, i) => (
               <MenuItem key={i} value={option}>
                 {option}
               </MenuItem>
             ))}
           </TextField>
-          {errors.position ? (
-            <FormHelperText error>{errors.position?.message}</FormHelperText>
+          {errors.jobTitle ? (
+            <FormHelperText error>{errors.jobTitle?.message}</FormHelperText>
           ) : null}
 
           <Box sx={{ my: 1 }}>
-            {values.position === 'Other' ? (
+            {values.jobTitle === 'Other' ? (
               <TextField
-                id="other-position"
+                id="other-job-title"
                 variant="filled"
-                label={t('position-name')}
-                placeholder={t('position-placeholder')}
-                error={!!errors.otherPosition}
-                helperText={errors.otherPosition?.message || ''}
-                {...register('otherPosition')}
+                label={t('other-job-title')}
+                placeholder={t('other-job-title')}
+                error={!!errors.otherJobTitle}
+                helperText={errors.otherJobTitle?.message || ''}
+                {...register('otherJobTitle')}
                 fullWidth
-                inputProps={{ 'data-testid': 'other-position-input' }}
+                inputProps={{ 'data-testid': 'other-job-title-input' }}
               />
             ) : null}
           </Box>
