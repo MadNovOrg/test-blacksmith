@@ -1,12 +1,10 @@
-import React from 'react'
-
 import { render, screen } from '@test/index'
 
-import { Footer } from './index'
+import { AppFooter } from './index'
 
-describe('component: Footer', () => {
+describe(AppFooter.name, () => {
   it('displays Footer links', async () => {
-    render(<Footer />)
+    render(<AppFooter />)
     expect(screen.getByText('Follow Team Teach')).toBeVisible()
     const links = screen.getAllByRole('link')
     expect(links).toHaveLength(4)

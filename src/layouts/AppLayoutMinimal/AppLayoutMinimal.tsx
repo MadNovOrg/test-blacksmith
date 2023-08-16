@@ -1,7 +1,7 @@
 import { Box, SxProps, useTheme, useMediaQuery } from '@mui/material'
 import React from 'react'
 
-import { Logo } from '@app/components/Logo'
+import { AppLogo } from '@app/components/AppLogo'
 
 type Props = {
   width?: number
@@ -38,10 +38,15 @@ export const AppLayoutMinimal: React.FC<React.PropsWithChildren<Props>> = ({
           py={1}
           sx={{ borderBottom: 0.1, borderColor: 'grey.200' }}
         >
-          <Logo width={230} height={48} variant="full" data-testid="app-logo" />
+          <AppLogo
+            width={230}
+            height={48}
+            variant="full"
+            data-testid="app-logo"
+          />
         </Box>
       ) : (
-        <Logo width={80} height={80} />
+        <AppLogo width={80} height={80} />
       )}
       <Box
         mt={3}

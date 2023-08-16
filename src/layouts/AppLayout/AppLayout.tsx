@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import React from 'react'
 
 import { AppBar } from '@app/components/AppBar'
-import { Footer } from '@app/components/Footer'
+import { AppFooter } from '@app/components/AppFooter'
 
 type LayoutProps = {
   children: React.ReactNode
@@ -19,7 +19,7 @@ export const AppLayout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
         {children}
       </Box>
 
-      <Footer />
+      <AppFooter />
     </Box>
   )
 }

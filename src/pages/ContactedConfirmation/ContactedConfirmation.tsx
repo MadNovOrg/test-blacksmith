@@ -1,8 +1,7 @@
 import { Box, Typography } from '@mui/material'
-import React from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import { Logo } from '@app/components/Logo'
+import { AppLogo } from '@app/components/AppLogo'
 
 export const ContactedConfirmationPage = () => {
   const [searchParams] = useSearchParams()
@@ -18,7 +17,7 @@ export const ContactedConfirmationPage = () => {
       flexDirection="column"
       alignItems="center"
     >
-      <Logo width={80} height={80} />
+      <AppLogo width={80} height={80} />
 
       <Box
         mt={5}

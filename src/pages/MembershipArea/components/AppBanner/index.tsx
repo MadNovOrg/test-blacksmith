@@ -2,7 +2,7 @@ import { Box, Typography, useMediaQuery } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import BannerBox from '@app/components/BannerBox'
+import { BannerBox } from '@app/components/BannerBox'
 import theme from '@app/theme'
 
 import appStoreImage from './assets/app-store.png'

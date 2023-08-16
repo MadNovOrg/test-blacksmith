@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
-import { Logo } from '../Logo'
+import { AppLogo } from '../AppLogo'
 
 type Props = {
   errorData?: Parameters<FallbackRender>[0]
@@ -23,7 +23,7 @@ export const ErrorPage: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <Container sx={{ pt: 10 }}>
-      <Logo width={230} height={48} variant="full" data-testid="app-logo" />
+      <AppLogo width={230} height={48} variant="full" data-testid="app-logo" />
       <Typography variant="h1" color="grey.800" mt={3}>
         {t('title')}
       </Typography>

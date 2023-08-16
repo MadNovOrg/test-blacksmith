@@ -17,16 +17,22 @@ type LogoProps = {
   height?: number
 }
 
-export const Logo: React.FC<React.PropsWithChildren<LogoProps>> = ({
+export const AppLogo: React.FC<React.PropsWithChildren<LogoProps>> = ({
   variant = 'partial',
   width = 40,
   height = 40,
   ...rest
 }) => {
   const Comp = map[variant]
+
   return (
     <Box display="flex" alignItems="center">
-      <Comp width={width} height={height} {...rest} />
+      <Comp
+        width={width}
+        height={height}
+        data-testid="app-logo-svg"
+        {...rest}
+      />
     </Box>
   )
 }

@@ -3,14 +3,13 @@ import InstagramIcon from '@mui/icons-material/Instagram'
 import TwitterIcon from '@mui/icons-material/Twitter'
 import YouTubeIcon from '@mui/icons-material/YouTube'
 import { Box, Container, Link, Typography } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import theme, { FOOTER_HEIGHT } from '@app/theme'
 
-import { Logo } from '../Logo'
+import { AppLogo } from '../AppLogo'
 
-export const Footer = () => {
+export const AppFooter = () => {
   const { t } = useTranslation()
 
   return (
@@ -24,7 +23,7 @@ export const Footer = () => {
           justifyContent: 'space-between',
         }}
       >
-        <Logo variant="white" />
+        <AppLogo variant="white" />
         <Box display="flex">
           <Typography color={theme.palette.common.white} mr={1}>
             {t('components.footer.follow')}

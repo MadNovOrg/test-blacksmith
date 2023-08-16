@@ -7,8 +7,8 @@ import Toolbar from '@mui/material/Toolbar'
 import { RoleSwitcher } from '@app/components/RoleSwitcher'
 import { useAuth } from '@app/context/auth'
 
+import { AppLogo } from '../AppLogo'
 import { DrawerMenu } from '../DrawerMenu'
-import { Logo } from '../Logo'
 import { NavLinks } from '../NavLinks'
 import { UserMenu } from '../UserMenu'
 
@@ -23,7 +23,7 @@ export const AppBar = () => {
       <Toolbar sx={{ justifyContent: 'space-between' }}>
         <Box display="flex" alignItems="center" gap={3}>
           <Link underline="none" href="/" variant="h5">
-            <Logo
+            <AppLogo
               width={isMobile ? undefined : 230}
               height={48}
               variant={isMobile ? 'partial' : 'full'}

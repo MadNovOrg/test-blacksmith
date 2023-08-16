@@ -2,7 +2,7 @@ import { Box, styled } from '@mui/material'
 
 import gradient from './assets/gradient-bg.png'
 
-const BannerBox = styled(Box)<{ roundedCorners?: boolean }>(
+export const BannerBox = styled(Box)<{ roundedCorners?: boolean }>(
   ({ theme, roundedCorners = false }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -18,5 +18,3 @@ const BannerBox = styled(Box)<{ roundedCorners?: boolean }>(
     },
   })
 )
-
-export default BannerBox

@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import React from 'react'
 
-import BannerBox from '@app/components/BannerBox'
+import { BannerBox } from '@app/components/BannerBox'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 import jnImage from './assets/jn-image.jpg'

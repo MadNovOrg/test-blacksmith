@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
 
-import { Logo } from '@app/components/Logo'
+import { AppLogo } from '@app/components/AppLogo'
 import { useAuth } from '@app/context/auth'
 import { gqlRequest } from '@app/lib/gql-request'
 import {
@@ -168,7 +168,7 @@ export const InvitationPage = () => {
       alignItems="center"
       overflow="scroll"
     >
-      <Logo width={80} height={80} />
+      <AppLogo width={80} height={80} />
 
       <Box
         mt={5}

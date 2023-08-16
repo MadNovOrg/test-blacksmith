@@ -20,7 +20,7 @@ import {
 import CodeInput from 'react18-input-otp'
 import * as yup from 'yup'
 
-import { Logo } from '@app/components/Logo'
+import { AppLogo } from '@app/components/AppLogo'
 
 type ResetPassInput = {
   email: string
@@ -129,7 +129,7 @@ export const ResetPasswordPage = () => {
       flexDirection="column"
       alignItems="center"
     >
-      <Logo width={80} height={80} />
+      <AppLogo width={80} height={80} />
 
       <Box mt={2} width={400} textAlign="center">
         <Typography variant="body2" gutterBottom>
