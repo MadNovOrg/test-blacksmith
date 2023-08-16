@@ -9,7 +9,7 @@ import { users } from '@qa/data/users'
 import { CourseApprovalRequiredModal } from '@qa/fixtures/pages/courses/CourseApprovalRequiredModal.fixture'
 import { CourseBuilderPage } from '@qa/fixtures/pages/courses/CourseBuilderPage.fixture'
 import { MyCoursesPage } from '@qa/fixtures/pages/courses/MyCoursesPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {

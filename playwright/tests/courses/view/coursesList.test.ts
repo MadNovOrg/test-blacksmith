@@ -7,7 +7,7 @@ import { COURSES_TO_VIEW } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
 import { users } from '@qa/data/users'
 import { MyCoursesPage } from '@qa/fixtures/pages/courses/MyCoursesPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const deleteCourses = async (courses: Course[]) => {
   const deletePromises = courses.map(course =>

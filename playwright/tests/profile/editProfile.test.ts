@@ -4,7 +4,7 @@ import { Chance } from 'chance'
 import { getProfileId } from '@qa/api/hasura/profile'
 import { users } from '@qa/data/users'
 import { ProfilePage } from '@qa/fixtures/pages/profile/ProfilePage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const allowedRoles = ['salesAdmin']
 

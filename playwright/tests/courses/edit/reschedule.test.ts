@@ -12,7 +12,7 @@ import { users } from '@qa/data/users'
 import { ConfirmRescheduleModal } from '@qa/fixtures/pages/courses/ConfirmRescheduleModal.fixture'
 import { CourseDetailsPage } from '@qa/fixtures/pages/courses/course-details/CourseDetailsPage.fixture'
 import { CreateCoursePage } from '@qa/fixtures/pages/courses/CreateCoursePage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const testDataMovingEarlier = [
   {

@@ -8,7 +8,7 @@ import {
 
 import * as API from '@qa/api'
 import { OrderPage } from '@qa/fixtures/pages/orders/OrderPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{
   unfilteredOrders: OrderInfoFragment[]

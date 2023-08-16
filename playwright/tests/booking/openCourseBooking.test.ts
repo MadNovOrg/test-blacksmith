@@ -5,7 +5,7 @@ import { CourseType } from '@app/types'
 import { deleteCourse, insertCourse } from '@qa/api/hasura/course'
 import { UNIQUE_COURSE } from '@qa/data/courses'
 import { BookingDetailsPage } from '@qa/fixtures/pages/booking/BookingDetailsPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{ courseId: number }>({
   courseId: async ({}, use) => {

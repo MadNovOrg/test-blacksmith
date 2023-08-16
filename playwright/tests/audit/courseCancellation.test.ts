@@ -9,7 +9,7 @@ import { Audit_Type } from '@qa/data/enums'
 import { Course } from '@qa/data/types'
 import { users } from '@qa/data/users'
 import { AuditPage } from '@qa/fixtures/pages/administration/AuditPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{ course: Course; role: string }>({
   course: async ({}, use) => {

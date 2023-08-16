@@ -7,7 +7,7 @@ import { UNIQUE_ORGANIZATION } from '@qa/data/organization'
 import { users } from '@qa/data/users'
 import { EmailPage } from '@qa/fixtures/pages/EmailPage.fixture'
 import { AllOrganisations } from '@qa/fixtures/pages/org/AllOrganisations.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{
   org: { id: string; name: string }

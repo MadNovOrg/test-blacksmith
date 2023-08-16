@@ -2,13 +2,16 @@ import * as fs from 'fs'
 
 import { addDays, format } from 'date-fns'
 
+import { TARGET_ENV, TEMP_DIR } from './constants'
 import { CourseTableRow, ModuleGroup } from './data/types'
-import { stateFilePath } from './hooks/global-setup'
 
 type KeyValue = {
   name: string
   value: string
 }
+
+export const stateFilePath = (userKey: string) =>
+  `${TEMP_DIR}/storage-${userKey}-${TARGET_ENV}.json`
 
 export const delay = (ms: number) =>
   new Promise(resolve => setTimeout(resolve, ms))

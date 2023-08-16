@@ -8,7 +8,7 @@ import { FINISHED_COURSE } from '@qa/data/courses'
 import { Course, User } from '@qa/data/types'
 import { users } from '@qa/data/users'
 import { CertificationPage } from '@qa/fixtures/pages/certificate/CertificationPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const allowedRoles = ['ops', 'admin']
 

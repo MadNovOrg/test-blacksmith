@@ -6,7 +6,7 @@ import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
 import { users } from '@qa/data/users'
 import { ProfilePage } from '@qa/fixtures/pages/profile/ProfilePage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{ courses: Course[] }>({
   courses: async ({}, use) => {

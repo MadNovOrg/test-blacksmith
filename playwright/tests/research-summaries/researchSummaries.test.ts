@@ -2,7 +2,7 @@ import { test as base } from '@playwright/test'
 
 import * as API from '@qa/api'
 import { ResearchSummariesPage } from '@qa/fixtures/pages/membership/ResearchSummariesPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{
   researchSummaries: Awaited<

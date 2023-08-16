@@ -8,7 +8,7 @@ import { FINISHED_COURSE } from '@qa/data/courses'
 import { Course, User } from '@qa/data/types'
 import { users } from '@qa/data/users'
 import { MyCoursesPage } from '@qa/fixtures/pages/courses/MyCoursesPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{ certificate: { course: Course; user: User } }>({
   certificate: async ({}, use) => {

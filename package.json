@@ -27,7 +27,7 @@
     "test:e2e:chromium": "playwright test -c playwright --project=chromium",
     "test:e2e:firefox": "playwright test -c playwright --project=firefox",
     "test:e2e:webkit": "playwright test -c playwright --project=webkit",
-    "test:e2e:smoke": "npm run test:e2e -- --grep @smoke",
+    "test:e2e:smoke": "npm run test:e2e -- --project=chromium --grep @smoke",
     "test:e2e:report": "playwright show-report",
     "test:e2e:sandbox": "playwright codegen",
     "hasura": "env-cmd -f ./hasura/.env -- hasura --project hasura --skip-update-check",

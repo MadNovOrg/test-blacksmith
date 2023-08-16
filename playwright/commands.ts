@@ -60,8 +60,11 @@ export async function bypassHSCookieConsent(page: Page): Promise<void> {
     declineBtn: '#hs-eu-decline-button',
   }
   const locator = page.locator(cookieDialogElements.declineBtn)
-  await locator.click({
-    noWaitAfter: true,
-    timeout: 1000,
-  })
+
+  if ((await locator.count()) > 0) {
+    await locator.click({
+      noWaitAfter: true,
+      timeout: 1000,
+    })
+  }
 }

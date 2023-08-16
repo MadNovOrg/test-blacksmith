@@ -4,7 +4,7 @@ import { WebinarSummaryFragment } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
 import { WebinarPage } from '@qa/fixtures/pages/membership/WebinarPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{
   data: {

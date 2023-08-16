@@ -8,7 +8,7 @@ import {
 import * as API from '@qa/api'
 import { UNIQUE_ORGANIZATION } from '@qa/data/organization'
 import { AllOrganisations } from '@qa/fixtures/pages/org/AllOrganisations.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const invoiceData: Go1_Licenses_History_Set_Input = {
   event: Go1_History_Events_Enum.LicensesAdded,

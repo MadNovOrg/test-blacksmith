@@ -5,7 +5,7 @@ import { test as base } from '@playwright/test'
 import * as API from '@qa/api'
 import { UNIQUE_ORGANIZATION } from '@qa/data/organization'
 import { AllOrganisations } from '@qa/fixtures/pages/org/AllOrganisations.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{
   orgId: string

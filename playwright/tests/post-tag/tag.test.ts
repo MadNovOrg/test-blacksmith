@@ -2,7 +2,7 @@ import { test as base } from '@playwright/test'
 
 import * as API from '@qa/api'
 import { TermPage } from '@qa/fixtures/pages/membership/TermPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{
   tag: Awaited<ReturnType<typeof API.post.getTagById>>

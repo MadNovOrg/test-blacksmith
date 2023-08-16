@@ -2,7 +2,7 @@ import { test } from '@playwright/test'
 
 import * as API from '@qa/api'
 import { AllOrganisations } from '@qa/fixtures/pages/org/AllOrganisations.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 test.use({ storageState: stateFilePath('admin') })
 

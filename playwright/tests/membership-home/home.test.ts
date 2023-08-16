@@ -1,7 +1,7 @@
 import { test } from '@playwright/test'
 
 import { MembershipPage } from '@qa/fixtures/pages/membership/MembershipPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 test.use({ storageState: stateFilePath('trainer') })
 

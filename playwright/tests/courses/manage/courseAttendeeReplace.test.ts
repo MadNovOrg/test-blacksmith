@@ -6,7 +6,7 @@ import { Course } from '@qa/data/types'
 import { users } from '@qa/data/users'
 import { MyCoursesPage } from '@qa/fixtures/pages/courses/MyCoursesPage.fixture'
 import { EmailPage } from '@qa/fixtures/pages/EmailPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {

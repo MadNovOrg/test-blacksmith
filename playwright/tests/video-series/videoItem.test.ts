@@ -4,7 +4,7 @@ import { VideoItemSummaryFragment } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
 import { VideoPage } from '@qa/fixtures/pages/membership/VideoPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{
   data: {

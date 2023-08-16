@@ -7,11 +7,11 @@ import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
 import { users } from '@qa/data/users'
 import { MyCoursesPage } from '@qa/fixtures/pages/courses/MyCoursesPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const testData = [
   {
-    name: 'accept open course as trainer @smoke',
+    name: 'accept open course as trainer',
     course: async () => {
       const course = UNIQUE_COURSE()
       course.id = await API.course.insertCourse(
@@ -23,7 +23,7 @@ const testData = [
     },
   },
   {
-    name: 'accept indirect course as trainer @smoke',
+    name: 'accept indirect course as trainer',
     course: async () => {
       const course = UNIQUE_COURSE()
       course.type = CourseType.INDIRECT
@@ -36,7 +36,7 @@ const testData = [
     },
   },
   {
-    name: 'accept closed course as trainer @smoke',
+    name: 'accept closed course as trainer',
     course: async () => {
       const course = UNIQUE_COURSE()
       course.type = CourseType.CLOSED

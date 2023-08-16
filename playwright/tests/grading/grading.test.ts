@@ -8,7 +8,7 @@ import { FINISHED_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
 import { users } from '@qa/data/users'
 import { CourseDetailsPage } from '@qa/fixtures/pages/courses/course-details/CourseDetailsPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{
   course: Course

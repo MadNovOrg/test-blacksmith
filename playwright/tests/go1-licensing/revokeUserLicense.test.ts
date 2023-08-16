@@ -5,7 +5,7 @@ import * as API from '@qa/api'
 import { UNIQUE_ORGANIZATION } from '@qa/data/organization'
 import { users } from '@qa/data/users'
 import { ProfilePage } from '@qa/fixtures/pages/profile/ProfilePage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 type Go1LicenseContext = {
   orgId: string

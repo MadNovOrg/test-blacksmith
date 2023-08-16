@@ -4,7 +4,7 @@ import { PostSummaryFragment } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
 import { BlogPage } from '@qa/fixtures/pages/membership/BlogPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{
   posts: (PostSummaryFragment | null)[]

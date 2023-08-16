@@ -97,3 +97,13 @@ export const users: { [key: string]: User } = {
     organization: { name: 'London First School' },
   },
 }
+
+export const credentials = [
+  { name: 'admin', role: 'Administrator' },
+  { name: 'ops', role: 'Operations' },
+  { name: 'trainer', role: 'Trainer' },
+  { name: 'trainerWithOrg', role: 'Trainer' },
+  { name: 'user1', role: 'Individual' },
+  { name: 'userOrgAdmin', role: 'Individual' },
+  { name: 'salesAdmin', role: 'Sales administrator' },
+]

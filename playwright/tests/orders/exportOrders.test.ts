@@ -6,7 +6,7 @@ import { UNIQUE_COURSE } from '@qa/data/courses'
 import { UNIQUE_ORDER } from '@qa/data/order'
 import { users } from '@qa/data/users'
 import { OrderPage } from '@qa/fixtures/pages/orders/OrderPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 type Orders = Awaited<ReturnType<typeof API.order.getOrders>>
 

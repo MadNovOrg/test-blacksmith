@@ -4,7 +4,7 @@ import { Podcast } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
 import { PodcastPage } from '@qa/fixtures/pages/membership/PodcastPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{ podcast: Podcast | null }>({
   podcast: async ({}, use) => {

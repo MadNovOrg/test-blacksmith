@@ -4,18 +4,21 @@ const PROJECTS_BY_DEVICE = [
   {
     name: 'chromium',
     testIgnore: /.*\.query.test.ts/,
+    dependencies: ['setup'],
     use: devices['Desktop Chrome'],
   },
 
   {
     name: 'firefox',
     testIgnore: /.*\.query.test.ts/,
+    dependencies: ['setup'],
     use: devices['Desktop Firefox'],
   },
 
   {
     name: 'webkit',
     testIgnore: /.*\.query.test.ts/,
+    dependencies: ['setup'],
     use: devices['Desktop Safari'],
   },
 
@@ -23,6 +26,7 @@ const PROJECTS_BY_DEVICE = [
   {
     name: 'mobile',
     testIgnore: /.*\.query.test.ts/,
+    dependencies: ['setup'],
     use: devices['Pixel 5'],
   },
 ]
@@ -36,7 +40,6 @@ const PROJECTS_BY_TEST_TYPE = [
 ]
 
 const config: PlaywrightTestConfig = {
-  globalSetup: require.resolve('./hooks/global-setup'),
   use: {
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
@@ -48,7 +51,15 @@ const config: PlaywrightTestConfig = {
     timeout: 30 * 1000,
   },
   timeout: 60 * 1000,
-  projects: [...PROJECTS_BY_DEVICE, ...PROJECTS_BY_TEST_TYPE],
+  projects: [
+    {
+      name: 'setup',
+      testMatch: '**/*.setup.ts',
+      fullyParallel: true,
+    },
+    ...PROJECTS_BY_DEVICE,
+    ...PROJECTS_BY_TEST_TYPE,
+  ],
 }
 
 export default config

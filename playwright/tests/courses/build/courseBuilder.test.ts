@@ -7,7 +7,7 @@ import { MODULES_SETUP } from '@qa/data/modules'
 import { Course } from '@qa/data/types'
 import { users } from '@qa/data/users'
 import { MyCoursesPage } from '@qa/fixtures/pages/courses/MyCoursesPage.fixture'
-import { stateFilePath } from '@qa/hooks/global-setup'
+import { stateFilePath } from '@qa/util'
 
 for (const data of MODULES_SETUP) {
   const test = base.extend<{ course: Course }>({
