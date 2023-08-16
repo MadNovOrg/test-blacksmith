@@ -5,6 +5,7 @@
   "authors": [
     "NearForm Ltd."
   ],
+  "license": "LICENSE.md",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
