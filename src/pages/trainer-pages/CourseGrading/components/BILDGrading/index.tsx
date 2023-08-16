@@ -23,6 +23,7 @@ import {
   SaveBildGradeMutationVariables,
 } from '@app/generated/graphql'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
+import { Strategy } from '@app/types'
 
 import { useGradingParticipants } from '../../hooks'
 import useCourseGradingData from '../../useCourseGradingData'
@@ -33,7 +34,6 @@ import { ParticipantsList } from '../ParticipantsList'
 
 import { BILDModulesSelection } from './components/BILDModulesSelection'
 import { SAVE_BILD_GRADE_MUTATION } from './queries'
-import { Strategy } from './types'
 
 type Props = {
   course: NonNullable<ReturnType<typeof useCourseGradingData>['data']>

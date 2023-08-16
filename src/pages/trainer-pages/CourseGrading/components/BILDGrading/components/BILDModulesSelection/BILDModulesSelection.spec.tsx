@@ -1,8 +1,7 @@
 import { Course_Type_Enum } from '@app/generated/graphql'
+import { Strategy } from '@app/types'
 
 import { render, screen, userEvent, within } from '@test/index'
-
-import { Strategy } from '../../types'
 
 import { BILDModulesSelection } from '.'
 

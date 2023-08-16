@@ -2,10 +2,10 @@ import { Box, BoxProps, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CourseWithModuleGroupsQuery } from '@app/generated/graphql'
+import { CourseInfoFragment } from '@app/generated/graphql'
 
 type CourseInfoProps = {
-  data: NonNullable<CourseWithModuleGroupsQuery['course']>
+  data: CourseInfoFragment
 } & BoxProps
 
 export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({

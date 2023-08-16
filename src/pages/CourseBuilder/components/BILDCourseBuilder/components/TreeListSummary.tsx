@@ -2,7 +2,7 @@ import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { BILDModuleGroup } from '../../CourseGrading/components/BILDGrading/types'
+import { BILDModuleGroup } from '@app/types'
 
 type TreeListSummaryProps = {
   parentName: string

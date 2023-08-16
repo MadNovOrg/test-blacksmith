@@ -7,7 +7,8 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { BILDModule } from '../../CourseGrading/components/BILDGrading/types'
+import { BILDModule } from '@app/types'
+
 import { hasKeyStartingWith } from '../helpers'
 
 import { TreeListSummary } from './TreeListSummary'

@@ -5,11 +5,9 @@ import { Client, CombinedError, Provider, TypedDocumentNode } from 'urql'
 import { fromValue, never } from 'wonka'
 
 import {
-  CourseWithModuleGroupsQuery,
-  CourseWithModuleGroupsQueryVariables,
-  Course_Delivery_Type_Enum,
+  CourseToBuildQuery,
+  CourseToBuildQueryVariables,
   Course_Level_Enum,
-  Course_Type_Enum,
   FinalizeCourseBuilderMutationVariables,
   ModuleGroupsQuery,
   SaveCourseModulesMutation,
@@ -21,12 +19,12 @@ import { MUTATION as SAVE_COURSE_MODULES } from '@app/queries/courses/save-cours
 
 import { FinalizeCourseBuilderMutation } from '@qa/generated/graphql'
 
-import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+import { render, screen, userEvent, waitFor, within } from '@test/index'
 
-import { COURSE_WITH_MODULE_GROUPS, SET_COURSE_AS_DRAFT } from './queries'
-import { buildModuleGroup } from './test-utils'
+import { buildCourse, buildModuleGroup } from '../../test-utils'
 
-import { CourseBuilder } from '.'
+import { ICMCourseBuilder } from './ICMCourseBuilder'
+import { COURSE_QUERY, SET_COURSE_AS_DRAFT } from './queries'
 
 describe('component: CourseBuilder', () => {
   describe('info alert for level 1 course', () => {
@@ -38,8 +36,8 @@ describe('component: CourseBuilder', () => {
 
       const client = {
         executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-          if (query === COURSE_WITH_MODULE_GROUPS) {
-            return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+          if (query === COURSE_QUERY) {
+            return fromValue<{ data: CourseToBuildQuery }>({
               data: {
                 course,
               },
@@ -57,7 +55,7 @@ describe('component: CourseBuilder', () => {
       render(
         <Provider value={client}>
           <Routes>
-            <Route path="/courses/:id/modules" element={<CourseBuilder />} />
+            <Route path="/courses/:id/modules" element={<ICMCourseBuilder />} />
           </Routes>
         </Provider>,
         {},
@@ -76,8 +74,8 @@ describe('component: CourseBuilder', () => {
 
       const client = {
         executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-          if (query === COURSE_WITH_MODULE_GROUPS) {
-            return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+          if (query === COURSE_QUERY) {
+            return fromValue<{ data: CourseToBuildQuery }>({
               data: {
                 course,
               },
@@ -95,7 +93,7 @@ describe('component: CourseBuilder', () => {
       render(
         <Provider value={client}>
           <Routes>
-            <Route path="/courses/:id/modules" element={<CourseBuilder />} />
+            <Route path="/courses/:id/modules" element={<ICMCourseBuilder />} />
           </Routes>
         </Provider>,
         {},
@@ -115,7 +113,7 @@ describe('component: CourseBuilder', () => {
 
     render(
       <Provider value={client}>
-        <CourseBuilder />
+        <ICMCourseBuilder />
       </Provider>
     )
 
@@ -128,8 +126,8 @@ describe('component: CourseBuilder', () => {
   it("displays not found page if a course doesn't exist", () => {
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === COURSE_WITH_MODULE_GROUPS) {
-          return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+        if (query === COURSE_QUERY) {
+          return fromValue<{ data: CourseToBuildQuery }>({
             data: {
               course: null,
             },
@@ -146,7 +144,7 @@ describe('component: CourseBuilder', () => {
 
     render(
       <Provider value={client}>
-        <CourseBuilder />
+        <ICMCourseBuilder />
       </Provider>
     )
 
@@ -156,7 +154,7 @@ describe('component: CourseBuilder', () => {
   it('displays an alert if there is an error fetching course or module groups', () => {
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === COURSE_WITH_MODULE_GROUPS) {
+        if (query === COURSE_QUERY) {
           return fromValue({
             error: new CombinedError({
               networkError: Error('something went wrong!'),
@@ -174,7 +172,7 @@ describe('component: CourseBuilder', () => {
 
     render(
       <Provider value={client}>
-        <CourseBuilder />
+        <ICMCourseBuilder />
       </Provider>
     )
 
@@ -199,10 +197,10 @@ describe('component: CourseBuilder', () => {
         variables,
       }: {
         query: TypedDocumentNode
-        variables: CourseWithModuleGroupsQueryVariables
+        variables: CourseToBuildQueryVariables
       }) => {
-        if (query === COURSE_WITH_MODULE_GROUPS) {
-          return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+        if (query === COURSE_QUERY) {
+          return fromValue<{ data: CourseToBuildQuery }>({
             data: {
               course: variables.id === course.id ? course : null,
             },
@@ -220,7 +218,7 @@ describe('component: CourseBuilder', () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/:id/modules" element={<CourseBuilder />} />
+          <Route path="/courses/:id/modules" element={<ICMCourseBuilder />} />
         </Routes>
       </Provider>,
       {},
@@ -253,8 +251,8 @@ describe('component: CourseBuilder', () => {
 
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === COURSE_WITH_MODULE_GROUPS) {
-          return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+        if (query === COURSE_QUERY) {
+          return fromValue<{ data: CourseToBuildQuery }>({
             data: {
               course,
             },
@@ -307,7 +305,7 @@ describe('component: CourseBuilder', () => {
 
     render(
       <Provider value={client}>
-        <CourseBuilder />
+        <ICMCourseBuilder />
       </Provider>
     )
 
@@ -345,8 +343,8 @@ describe('component: CourseBuilder', () => {
 
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === COURSE_WITH_MODULE_GROUPS) {
-          return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+        if (query === COURSE_QUERY) {
+          return fromValue<{ data: CourseToBuildQuery }>({
             data: {
               course,
             },
@@ -393,7 +391,7 @@ describe('component: CourseBuilder', () => {
       <Provider value={client}>
         <Routes>
           <Route path="courses/:id">
-            <Route path="modules" element={<CourseBuilder />} />
+            <Route path="modules" element={<ICMCourseBuilder />} />
             <Route path="details" element={<p>Course details</p>} />
           </Route>
         </Routes>
@@ -438,8 +436,8 @@ describe('component: CourseBuilder', () => {
 
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === COURSE_WITH_MODULE_GROUPS) {
-          return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+        if (query === COURSE_QUERY) {
+          return fromValue<{ data: CourseToBuildQuery }>({
             data: {
               course,
             },
@@ -459,7 +457,7 @@ describe('component: CourseBuilder', () => {
 
     render(
       <Provider value={client}>
-        <CourseBuilder />
+        <ICMCourseBuilder />
       </Provider>,
       {},
       { initialEntries: [`/courses/${course.id}/modules`] }
@@ -493,8 +491,8 @@ describe('component: CourseBuilder', () => {
 
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === COURSE_WITH_MODULE_GROUPS) {
-          return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+        if (query === COURSE_QUERY) {
+          return fromValue<{ data: CourseToBuildQuery }>({
             data: {
               course,
             },
@@ -514,7 +512,7 @@ describe('component: CourseBuilder', () => {
 
     render(
       <Provider value={client}>
-        <CourseBuilder />
+        <ICMCourseBuilder />
       </Provider>,
       {},
       { initialEntries: [`/courses/${course.id}/modules`] }
@@ -546,8 +544,8 @@ describe('component: CourseBuilder', () => {
 
       const client = {
         executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-          if (query === COURSE_WITH_MODULE_GROUPS) {
-            return fromValue<{ data: CourseWithModuleGroupsQuery }>({
+          if (query === COURSE_QUERY) {
+            return fromValue<{ data: CourseToBuildQuery }>({
               data: {
                 course,
               },
@@ -622,7 +620,7 @@ describe('component: CourseBuilder', () => {
         <Provider value={client}>
           <Routes>
             <Route path="courses/:id">
-              <Route path="modules" element={<CourseBuilder />} />
+              <Route path="modules" element={<ICMCourseBuilder />} />
               <Route path="details" element={<p>Course details</p>} />
             </Route>
           </Routes>
@@ -662,32 +660,3 @@ describe('component: CourseBuilder', () => {
     }
   )
 })
-
-function buildCourse(
-  overrides?: Partial<CourseWithModuleGroupsQuery['course']>
-): NonNullable<CourseWithModuleGroupsQuery['course']> {
-  return {
-    id: chance.integer(),
-    name: chance.sentence(),
-    updatedAt: new Date().toISOString(),
-    type: Course_Type_Enum.Open,
-    level: Course_Level_Enum.Advanced,
-    go1Integration: false,
-    deliveryType: Course_Delivery_Type_Enum.F2F,
-    start: new Date().toISOString(),
-    end: new Date().toISOString(),
-    organization: {
-      name: chance.name({ full: true }),
-    },
-    schedule: [
-      {
-        venue: {
-          name: chance.name(),
-          city: chance.name(),
-        },
-      },
-    ],
-    moduleGroupIds: [],
-    ...overrides,
-  }
-}

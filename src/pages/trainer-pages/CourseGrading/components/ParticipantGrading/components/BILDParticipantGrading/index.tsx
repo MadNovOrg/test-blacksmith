@@ -10,8 +10,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CourseParticipantQuery } from '@app/generated/graphql'
-
-import { Strategy } from '../../../BILDGrading/types'
+import { Strategy } from '@app/types'
 
 type Props = {
   participant: NonNullable<CourseParticipantQuery['participant']>

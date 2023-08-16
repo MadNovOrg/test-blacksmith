@@ -9,7 +9,7 @@ import {
 } from '@mui/material'
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { BILDModuleGroup } from '../../CourseGrading/components/BILDGrading/types'
+import { BILDModuleGroup } from '@app/types'
 
 type TreeListProps = {
   parentName: string

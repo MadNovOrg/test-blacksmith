@@ -50482,6 +50482,26 @@ export type ConfirmCcPaymentMutationVariables = Exact<{
 
 export type ConfirmCcPaymentMutation = { __typename?: 'mutation_root', confirmCreditCardPayment?: { __typename?: 'ConfirmCreditCardPaymentOutput', confirmed: boolean, error?: ConfirmCreditCardPaymentError | null } | null };
 
+export type CourseInfoFragment = { __typename?: 'course', name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> };
+
+export type CourseHeroFragment = { __typename?: 'course', id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> };
+
+export type SetCourseAsDraftMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type SetCourseAsDraftMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number } | null };
+
+export type CourseToBuildQueryVariables = Exact<{
+  id: Scalars['Int'];
+  withModules?: InputMaybe<Scalars['Boolean']>;
+  withStrategies?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+
+export type CourseToBuildQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, bildModules?: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies?: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
+
 export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -50549,20 +50569,6 @@ export type SignUpMutationVariables = Exact<{
 
 
 export type SignUpMutation = { __typename?: 'mutation_root', signUp?: { __typename?: 'SignUpOutput', success: boolean } | null };
-
-export type SetCourseAsDraftMutationVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type SetCourseAsDraftMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number } | null };
-
-export type CourseWithModuleGroupsQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type CourseWithModuleGroupsQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, type: Course_Type_Enum, go1Integration: boolean, reaccreditation?: boolean | null, start?: any | null, end?: any | null, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
 
 export type SaveBildGradeMutationVariables = Exact<{
   modules: Array<Course_Participant_Bild_Module_Insert_Input> | Course_Participant_Bild_Module_Insert_Input;

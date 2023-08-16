@@ -1,12 +1,4 @@
-import {
-  Alert,
-  Box,
-  CircularProgress,
-  Grid,
-  Typography,
-  Container,
-  Link,
-} from '@mui/material'
+import { Alert, Box, CircularProgress, Container, Link } from '@mui/material'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -14,14 +6,12 @@ import { useMutation, useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { ConfirmDialog } from '@app/components/ConfirmDialog'
-import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { useSnackbar } from '@app/context/snackbar'
 import {
-  CourseWithModuleGroupsQuery,
-  CourseWithModuleGroupsQueryVariables,
+  CourseToBuildQuery,
+  CourseToBuildQueryVariables,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
-  Course_Status_Enum,
   Course_Type_Enum,
   FinalizeCourseBuilderMutation,
   FinalizeCourseBuilderMutationVariables,
@@ -33,18 +23,19 @@ import {
   SetCourseAsDraftMutationVariables,
 } from '@app/generated/graphql'
 import { NotFound } from '@app/pages/common/NotFound'
-import { getMinimumTimeCommitment } from '@app/pages/trainer-pages/CourseBuilder/helpers'
 import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/queries/courses/finalize-course-builder'
 import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-modules'
 import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups'
 import { CourseLevel } from '@app/types'
-import { formatDateForDraft, isNotNullish } from '@app/util'
+import { isNotNullish } from '@app/util'
 
-import { CourseInfo } from './components/CourseInfo'
+import { Hero } from '../Hero/Hero'
+
 import GroupsSelection, {
   CallbackFn,
 } from './components/GroupsSelection/GroupsSelection'
-import { COURSE_WITH_MODULE_GROUPS, SET_COURSE_AS_DRAFT } from './queries'
+import { getMinimumTimeCommitment } from './helpers'
+import { COURSE_QUERY, SET_COURSE_AS_DRAFT } from './queries'
 
 type CourseBuilderProps = unknown & { editMode?: boolean }
 
@@ -71,7 +62,7 @@ export const MAX_COURSE_DURATION_MAP = {
   },
 }
 
-export const CourseBuilder: React.FC<
+export const ICMCourseBuilder: React.FC<
   React.PropsWithChildren<CourseBuilderProps>
 > = ({ editMode }) => {
   const { t } = useTranslation()
@@ -85,13 +76,13 @@ export const CourseBuilder: React.FC<
   const courseCreated = Boolean(getSnackbarMessage('course-created'))
 
   const [{ data: courseData, fetching: fetchingCourse, error: courseError }] =
-    useQuery<CourseWithModuleGroupsQuery, CourseWithModuleGroupsQueryVariables>(
-      {
-        query: COURSE_WITH_MODULE_GROUPS,
-        variables: courseId ? { id: Number(courseId) } : undefined,
-        requestPolicy: 'cache-and-network',
-      }
-    )
+    useQuery<CourseToBuildQuery, CourseToBuildQueryVariables>({
+      query: COURSE_QUERY,
+      variables: courseId
+        ? { id: Number(courseId), withModules: true }
+        : undefined,
+      requestPolicy: 'cache-and-network',
+    })
 
   const [
     {
@@ -337,49 +328,22 @@ export const CourseBuilder: React.FC<
             label={t('pages.course-participants.back-button')}
             to="../.."
           />
-          <Grid container mt={2} spacing={2}>
-            <Grid item xs={12} md={7}>
-              <Typography variant="h2">{courseData.course.name}</Typography>
-
-              {courseData?.course?.isDraft && (
-                <Box sx={{ display: 'flex', alignItems: 'center' }} mt={1}>
-                  <CourseStatusChip status={Course_Status_Enum.Draft} />
-
-                  <Typography
-                    variant="body2"
-                    data-testid="draft-text"
-                    sx={{ ml: 1 }}
-                  >
-                    {t('common.last-modified', {
-                      date: formatDateForDraft(
-                        courseData.course.updatedAt || new Date(),
-                        t('common.ago'),
-                        t
+          {courseData.course ? (
+            <Hero
+              course={courseData.course}
+              slots={{
+                afterTitle:
+                  courseDescription !== ''
+                    ? courseDescription
+                    : t(
+                        'pages.trainer-base.create-course.new-course.description',
+                        {
+                          duration: maxDuration ? maxDuration / 60 : 0,
+                        }
                       ),
-                    })}
-                  </Typography>
-                </Box>
-              )}
-              <Typography
-                variant="body2"
-                mt={2}
-                data-testid="course-description"
-              >
-                {courseDescription !== ''
-                  ? courseDescription
-                  : t(
-                      'pages.trainer-base.create-course.new-course.description',
-                      {
-                        duration: maxDuration ? maxDuration / 60 : 0,
-                      }
-                    )}
-              </Typography>
-            </Grid>
-
-            <Grid item xs={12} md={5}>
-              <CourseInfo data={courseData.course} data-testid="course-info" />
-            </Grid>
-          </Grid>
+              }}
+            />
+          ) : null}
           <GroupsSelection
             availableGroups={modulesData}
             showDuration={hasEstimatedDuration}

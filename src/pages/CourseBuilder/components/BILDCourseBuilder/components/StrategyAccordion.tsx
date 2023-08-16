@@ -9,10 +9,7 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  BILDModule,
-  BILDModuleGroup,
-} from '../../CourseGrading/components/BILDGrading/types'
+import { BILDModule, BILDModuleGroup } from '@app/types'
 
 import { TreeList } from './TreeList'
 

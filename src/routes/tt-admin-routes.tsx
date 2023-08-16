@@ -15,6 +15,7 @@ import { Contacts } from '@app/pages/admin/Contacts'
 import { CourseExceptionsLog } from '@app/pages/admin/CourseExceptionsLog'
 import { Users } from '@app/pages/admin/Users'
 import { NotFound } from '@app/pages/common/NotFound'
+import { CourseBuilder } from '@app/pages/CourseBuilder/CourseBuilder'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
 import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCourseForm'
@@ -24,7 +25,6 @@ import { ReviewAndConfirm } from '@app/pages/CreateCourse/components/ReviewAndCo
 import { ReviewLicenseOrder } from '@app/pages/CreateCourse/components/ReviewLicenseOrder'
 import { TrainerExpenses } from '@app/pages/CreateCourse/components/TrainerExpenses'
 import { EditCourse } from '@app/pages/EditCourse'
-import { CourseBuilderCommon } from '@app/pages/trainer-pages/CourseBuilderCommon'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
@@ -81,7 +81,7 @@ const TTAdminRoutes = () => {
         <Route path="edit/:id" element={<EditCourse />} />
 
         <Route path=":id">
-          <Route path="modules" element={<CourseBuilderCommon />} />
+          <Route path="modules" element={<CourseBuilder />} />
           <Route path="details" element={<TrainerCourseDetails />} />
           <Route path="grading" element={<CourseGrading />} />
           <Route
@@ -115,7 +115,7 @@ const TTAdminRoutes = () => {
           <Route path=":orgId">
             <Route index element={<ManageCourses />} />
             <Route path=":id">
-              <Route path="modules" element={<CourseBuilderCommon />} />
+              <Route path="modules" element={<CourseBuilder />} />
               <Route path="details" element={<TrainerCourseDetails />} />
               <Route
                 path="transfer/:participantId"

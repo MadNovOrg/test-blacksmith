@@ -13,10 +13,10 @@ import { NotFound } from '@app/pages/common/NotFound'
 import { QUERY as GET_COURSE_BY_ID_QUERY } from '@app/queries/courses/get-course-by-id'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
-import { BILDCourseBuilder } from '../BILDCourseBuilder'
-import { CourseBuilder } from '../CourseBuilder/CourseBuilder'
+import { BILDCourseBuilder } from './components/BILDCourseBuilder/BILDCourseBuilder'
+import { ICMCourseBuilder } from './components/ICMCourseBuilder/ICMCourseBuilder'
 
-export const CourseBuilderCommon: React.FC<React.PropsWithChildren> = () => {
+export const CourseBuilder: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
 
@@ -56,7 +56,7 @@ export const CourseBuilderCommon: React.FC<React.PropsWithChildren> = () => {
   }
 
   if (courseData?.course?.accreditedBy === Accreditors_Enum.Icm) {
-    return <CourseBuilder editMode={editMode ?? false} />
+    return <ICMCourseBuilder editMode={editMode ?? false} />
   }
 
   if (courseData?.course?.accreditedBy === Accreditors_Enum.Bild) {

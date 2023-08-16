@@ -9,13 +9,13 @@ import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOr
 import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { NotFound } from '@app/pages/common/NotFound'
+import { CourseBuilder } from '@app/pages/CourseBuilder/CourseBuilder'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
 import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCourseForm'
 import { LicenseOrderDetails } from '@app/pages/CreateCourse/components/LicenseOrderDetails'
 import { ReviewLicenseOrder } from '@app/pages/CreateCourse/components/ReviewLicenseOrder'
 import { EditCourse } from '@app/pages/EditCourse'
-import { CourseBuilderCommon } from '@app/pages/trainer-pages/CourseBuilderCommon'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
@@ -59,7 +59,7 @@ const TrainerBaseRoutes = () => {
 
         <Route path=":id">
           <Route index element={<Navigate replace to="details" />} />
-          <Route path="modules" element={<CourseBuilderCommon />} />
+          <Route path="modules" element={<CourseBuilder />} />
           <Route path="details" element={<TrainerCourseDetails />} />
           <Route path="grading" element={<CourseGrading />} />
           <Route

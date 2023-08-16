@@ -49,8 +49,8 @@ import {
   Grade_Enum,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { Strategy } from '@app/pages/trainer-pages/CourseGrading/components/BILDGrading/types'
 import { QUERY } from '@app/queries/certificate/get-certificate'
+import { Strategy } from '@app/types'
 import { CertificateStatus, CourseLevel, NonNullish } from '@app/types'
 import {
   getSWRLoadingStatus,
