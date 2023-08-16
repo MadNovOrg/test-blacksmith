@@ -233,6 +233,17 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .date()
           .nullable()
           .typeError(t('components.course-form.end-date-format'))
+          .when([], {
+            is: () =>
+              courseType === CourseType.INDIRECT &&
+              activeRole === RoleName.TRAINER,
+
+            then: sd =>
+              sd.min(
+                INDIRECT_COURSE_MIN_ALLOWED_DATE_FOR_YUP,
+                t('components.course-form.min-end-date')
+              ),
+          })
           .required(t('components.course-form.end-date-required')),
         endTime: yup
           .string()
@@ -1350,7 +1361,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       name={field.name}
                       label={t('components.course-form.end-date-placeholder')}
                       value={field.value}
-                      minDate={values.startDate ?? minCourseStartDate}
+                      minDate={
+                        values.startDate ??
+                        (courseType === CourseType.INDIRECT &&
+                        activeRole === RoleName.TRAINER
+                          ? INDIRECT_COURSE_MIN_ALLOWED_DATE
+                          : minCourseStartDate)
+                      }
                       onChange={newEndDate => {
                         field.onChange(newEndDate)
                         setValue('endDateTime', makeDate(newEndDate, endTime))

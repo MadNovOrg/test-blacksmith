@@ -106,6 +106,7 @@
     "organisation-required": "Organisation is a required field",
     "start-date-required": "Start date is required field",
     "min-start-date": "Start date should not be earlier that 1st October 2023",
+    "min-end-date": "End date should not be earlier that 1st October 2023",
     "start-time-required": "Start time is required field",
     "start-date-format": "Start date must be a valid date",
     "start-time-placeholder": "Start time",
