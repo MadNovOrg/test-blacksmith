@@ -302,6 +302,7 @@
     "anonymous": "Anonymous"
   },
   "trainer-role-types": {
+    "assistant": "Assistant",
     "principal": "Principal",
     "senior": "Senior",
     "senior-assist": "Senior assist",

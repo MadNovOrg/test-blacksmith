@@ -46,6 +46,8 @@ type Props = {
   disabled?: boolean
 }
 
+const searchDebounceDelay = 300
+
 export function SearchTrainers({
   trainerType,
   courseLevel,
@@ -135,7 +137,7 @@ export function SearchTrainers({
     if (!isMounted()) return
     setMatches(matchesFilter(trainers?.filter(Boolean) ?? []))
     setLoading(false)
-  }, 500)
+  }, searchDebounceDelay)
 
   const onInputChange = useCallback(
     (_: React.SyntheticEvent, value: string) => {

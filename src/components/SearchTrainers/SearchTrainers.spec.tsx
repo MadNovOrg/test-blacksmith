@@ -28,8 +28,10 @@ jest.mock('./useQueryTrainers.ts', () => ({
 
 describe(SearchTrainers.name, () => {
   it('renders as expected', async () => {
+    // Arrange
     const course = buildCourse()
 
+    // Act
     const { container } = render(
       <SearchTrainers
         trainerType={CourseTrainerType.Leader}
@@ -39,6 +41,7 @@ describe(SearchTrainers.name, () => {
       />
     )
 
+    // Assert
     const input = screen.getByTestId('SearchTrainers-input')
     expect(input).toBeInTheDocument()
     expect(input).toHaveValue('')
@@ -52,9 +55,12 @@ describe(SearchTrainers.name, () => {
   })
 
   it('uses provided placeholder', async () => {
+    // Arrange
     const course = buildCourse()
 
     const placeholder = chance.sentence()
+
+    // Act
     render(
       <SearchTrainers
         trainerType={CourseTrainerType.Leader}
@@ -65,14 +71,17 @@ describe(SearchTrainers.name, () => {
       />
     )
 
+    // Assert
     const input = screen.getByPlaceholderText(placeholder)
     expect(input).toBeInTheDocument()
     expect(input).toHaveValue('')
   })
 
   it('calls search trainers when input term length is >= 3', async () => {
+    // Arrange
     const course = buildCourse()
 
+    // Act
     const { container } = render(
       <SearchTrainers
         trainerType={CourseTrainerType.Leader}
@@ -81,9 +90,11 @@ describe(SearchTrainers.name, () => {
         courseType={CourseType.OPEN}
       />
     )
-    const input = screen.getByTestId('SearchTrainers-input')
-    const loadingIcon = container.querySelector('.MuiCircularProgress-root')
 
+    // Assert
+    const input = screen.getByTestId('SearchTrainers-input')
+
+    const loadingIcon = container.querySelector('.MuiCircularProgress-root')
     expect(loadingIcon).toHaveClass('MuiCircularProgress-determinate') // paused
 
     const shortQuery = chance.last().slice(0, 3)
@@ -106,6 +117,7 @@ describe(SearchTrainers.name, () => {
   })
 
   it('shows options matching search term', async () => {
+    // Arrange
     const course = buildCourse()
 
     const lastName = 'Smith'
@@ -141,6 +153,7 @@ describe(SearchTrainers.name, () => {
       ],
     })
 
+    // Act
     render(
       <SearchTrainers
         trainerType={CourseTrainerType.Leader}
@@ -149,6 +162,8 @@ describe(SearchTrainers.name, () => {
         courseType={CourseType.OPEN}
       />
     )
+
+    // Assert
     const input = screen.getByTestId('SearchTrainers-input')
 
     await userEvent.type(input, lastName.slice(0, 4))
@@ -171,12 +186,15 @@ describe(SearchTrainers.name, () => {
   })
 
   it('calls matchesFilter to further filter options', async () => {
+    // Arrange
     const course = buildCourse()
 
     const trainers = makeTrainers()
     mockSearch.mockResolvedValueOnce({ trainers })
 
     const matchesFilter = jest.fn().mockReturnValueOnce([trainers[2]])
+
+    // Act
     render(
       <SearchTrainers
         trainerType={CourseTrainerType.Leader}
@@ -186,6 +204,8 @@ describe(SearchTrainers.name, () => {
         courseType={CourseType.OPEN}
       />
     )
+
+    // Assert
     const input = screen.getByTestId('SearchTrainers-input')
 
     await userEvent.type(input, trainers[2].fullName.slice(0, 4))
@@ -200,6 +220,7 @@ describe(SearchTrainers.name, () => {
   })
 
   it('enforces max selected items when max is set', async () => {
+    // Arrange
     const course = buildCourse()
 
     const lastName = 'Smith'
@@ -232,6 +253,7 @@ describe(SearchTrainers.name, () => {
       ],
     })
 
+    // Act
     render(
       <SearchTrainers
         trainerType={CourseTrainerType.Leader}
@@ -241,6 +263,8 @@ describe(SearchTrainers.name, () => {
         courseType={CourseType.OPEN}
       />
     )
+
+    // Assert
     const input = screen.getByTestId('SearchTrainers-input')
 
     await userEvent.type(input, lastName.slice(0, 4))
@@ -257,12 +281,15 @@ describe(SearchTrainers.name, () => {
   })
 
   it('calls onChange when a trainer is selected', async () => {
+    // Arrange
     const course = buildCourse()
 
     const trainers = makeTrainers()
     mockSearch.mockResolvedValueOnce({ trainers })
 
     const onChange = jest.fn()
+
+    // Act
     render(
       <SearchTrainers
         trainerType={CourseTrainerType.Leader}
@@ -272,6 +299,8 @@ describe(SearchTrainers.name, () => {
         courseType={CourseType.OPEN}
       />
     )
+
+    // Assert
     const input = screen.getByTestId('SearchTrainers-input')
 
     await userEvent.type(input, trainers[2].fullName.slice(0, 4))
@@ -292,10 +321,12 @@ describe(SearchTrainers.name, () => {
   })
 
   it('shows info message when no matches are found', async () => {
+    // Arrange
     const course = buildCourse()
 
     mockSearch.mockResolvedValueOnce({ trainers: [] })
 
+    // Act
     render(
       <SearchTrainers
         trainerType={CourseTrainerType.Leader}
@@ -304,6 +335,8 @@ describe(SearchTrainers.name, () => {
         courseType={CourseType.OPEN}
       />
     )
+
+    // Assert
     const input = screen.getByTestId('SearchTrainers-input')
 
     await userEvent.type(input, chance.last().slice(0, 4))

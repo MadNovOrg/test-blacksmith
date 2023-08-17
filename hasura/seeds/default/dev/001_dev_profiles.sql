@@ -111,7 +111,6 @@ INSERT INTO profile_role (profile_id, role_id) VALUES
 ('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', (SELECT id from role WHERE name = 'trainer')), -- trainer.with.org@teamteach.testinator.com
 ('bb5526c7-198c-4be5-a53a-1177f55c1c5b', (SELECT id from role WHERE name = 'trainer')), -- trainer.and.user@teamteach.testinator.com
 ('4d43e8b0-1143-4cfa-bbb7-bac97e76ddf5', (SELECT id from role WHERE name = 'trainer')), -- assistant@teamteach.testinator.com
-('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', (SELECT id from role WHERE name = 'trainer')), -- assistant.with.org@teamteach.testinator.com
 ('6b72504a-6447-4b30-9909-e8e6fc1d300f', (SELECT id from role WHERE name = 'user')), -- user1@teamteach.testinator.com
 ('d394a9ff-7517-4e35-91aa-466f9d4c1b77', (SELECT id from role WHERE name = 'user')), -- user2@teamteach.testinator.com
 ('fb523ef0-7fd1-42b2-b078-dce29a1713fe', (SELECT id from role WHERE name = 'user')), -- user1.with.org@teamteach.testinator.com

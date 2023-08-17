@@ -231,6 +231,7 @@ export enum TrainerRoleTypeName {
   EMPLOYER_AOL = 'employer-aol',
   SPECIAL_AGREEMENT_AOL = 'special-agreement-aol',
   MODERATOR = 'moderator',
+  ASSISTANT = 'assistant',
 }
 
 export enum CourseType {
