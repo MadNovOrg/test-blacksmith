@@ -10,6 +10,9 @@ export const RESOURCE_SUMMARY = gql`
       file {
         mediaItemUrl
       }
+      link {
+        url
+      }
     }
     resourcePermissions {
       certificateLevels

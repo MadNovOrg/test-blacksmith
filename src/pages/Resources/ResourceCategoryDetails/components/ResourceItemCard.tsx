@@ -1,5 +1,6 @@
 import AttachFileIcon from '@mui/icons-material/AttachFile'
 import LaunchIcon from '@mui/icons-material/Launch'
+import LinkIcon from '@mui/icons-material/Link'
 import SlideshowIcon from '@mui/icons-material/Slideshow'
 import { Card, Box, Typography, Link } from '@mui/material'
 import React, { ReactNode } from 'react'
@@ -11,7 +12,7 @@ export type Props = {
   resource: ResourceSummaryFragment
 }
 
-type ResourceType = 'file' | 'video'
+type ResourceType = 'file' | 'video' | 'link'
 
 function getIconByResourceType(type: ResourceType | string): ReactNode {
   switch (type) {
@@ -19,6 +20,8 @@ function getIconByResourceType(type: ResourceType | string): ReactNode {
       return <AttachFileIcon color="success" fontSize="small" />
     case 'video':
       return <SlideshowIcon color="warning" fontSize="small" />
+    case 'link':
+      return <LinkIcon color="success" fontSize="small" />
     default: {
       return <AttachFileIcon color="success" fontSize="small" />
     }
@@ -32,6 +35,8 @@ export const ResourceItemCard = ({ resource }: Props) => {
   const attachmentURL =
     resourceType === 'video'
       ? resource.resourceAttachment?.videourl
+      : resourceType === 'link'
+      ? resource.resourceAttachment?.link?.url
       : resource.resourceAttachment?.file?.mediaItemUrl
 
   const resourceIcon = resourceType ? getIconByResourceType(resourceType) : null
