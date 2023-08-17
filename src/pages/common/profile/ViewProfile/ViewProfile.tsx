@@ -31,6 +31,7 @@ import { useAuth } from '@app/context/auth'
 import { GetProfileDetailsQuery } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 import { ProfileArchiveDialog } from '@app/pages/common/profile/components/ProfileArchiveDialog'
+import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { CertificationsTable } from '../components/CertificationsTable'
@@ -69,6 +70,7 @@ export const ViewProfilePage: React.FC<
     orgId ?? undefined,
     acl.canViewCourseHistory()
   )
+  const { activeRole } = useAuth()
 
   const isMyProfile = !id
 
@@ -293,20 +295,26 @@ export const ViewProfilePage: React.FC<
                         label={t('work-email')}
                         value={profile.email}
                       />
-                      <DetailsRow
-                        data-testid="profile-phone"
-                        label={t('phone')}
-                        value={profile.phone}
-                      />
-                      <DetailsRow
-                        data-testid="profile-dob"
-                        label={t('dob')}
-                        value={
-                          profile.dob
-                            ? t('dates.default', { date: profile.dob })
-                            : ''
-                        }
-                      />
+
+                      {activeRole !== RoleName.TRAINER ? (
+                        <>
+                          <DetailsRow
+                            data-testid="profile-phone"
+                            label={t('phone')}
+                            value={profile.phone}
+                          />
+                          <DetailsRow
+                            data-testid="profile-dob"
+                            label={t('dob')}
+                            value={
+                              profile.dob
+                                ? t('dates.default', { date: profile.dob })
+                                : ''
+                            }
+                          />
+                        </>
+                      ) : null}
+
                       <DetailsRow
                         data-testid="profile-job-title"
                         label={t('job-title')}
@@ -381,8 +389,9 @@ export const ViewProfilePage: React.FC<
                 </Box>
               </>
             ) : null}
-            {!isMobile ||
-            selectedTab === TableMenuSelections.COURSE_ATTENDEE ? (
+            {(!isMobile ||
+              selectedTab === TableMenuSelections.COURSE_ATTENDEE) &&
+            activeRole !== RoleName.TRAINER ? (
               <>
                 <Typography variant="subtitle2" mb={1} mt={3}>
                   {t('course-as-attendee')}
