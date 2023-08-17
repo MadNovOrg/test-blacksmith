@@ -70,7 +70,7 @@ import {
   requiredMsg,
 } from '@app/util'
 
-import { OrgSelector } from '../OrgSelector'
+import { CallbackOption, OrgSelector } from '../OrgSelector'
 import { ProfileSelector } from '../ProfileSelector'
 import { VenueSelector } from '../VenueSelector'
 
@@ -427,6 +427,25 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const errors = formState.errors
 
+  const orgSelectorOnChange = useCallback(
+    (org: CallbackOption) => {
+      if (!org) {
+        setValue('organization', null, {
+          shouldValidate: true,
+        })
+        return
+      }
+
+      if (isHubOrg(org)) {
+        setValue('organization', org as Organization, {
+          shouldValidate: true,
+        })
+        return
+      }
+    },
+    [setValue]
+  )
+
   useImperativeHandle(
     methodsRef,
     () => ({
@@ -773,6 +792,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     [setValue]
   )
 
+  const showTrainerOrgOnly =
+    !values.usesAOL &&
+    courseType === CourseType.INDIRECT &&
+    activeRole === RoleName.TRAINER
+
   return (
     <form>
       <FormProvider {...methods}>
@@ -941,16 +965,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               <OrgSelector
                 required
                 {...register('organization')}
+                autocompleteMode={showTrainerOrgOnly}
+                showTrainerOrgOnly={showTrainerOrgOnly}
                 error={errors.organization?.message}
                 allowAdding
                 value={values.organization ?? undefined}
-                onChange={org => {
-                  if (!org || isHubOrg(org)) {
-                    setValue('organization', org as Organization, {
-                      shouldValidate: true,
-                    })
-                  }
-                }}
+                onChange={orgSelectorOnChange}
                 textFieldProps={{
                   variant: 'filled',
                 }}

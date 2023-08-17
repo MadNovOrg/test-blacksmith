@@ -13,7 +13,7 @@ import {
   useTheme,
 } from '@mui/material'
 import { debounce } from 'lodash-es'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -66,12 +66,14 @@ export type OrgSelectorProps = {
   showXeroResults?: boolean
   showDfeResults?: boolean
   autocompleteMode?: boolean
+  showTrainerOrgOnly?: boolean
 }
 
 const getOptionLabel = (option: Option) => option.name ?? ''
 
 export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
   function ({
+    showTrainerOrgOnly = false,
     onChange,
     sx,
     textFieldProps,
@@ -100,6 +102,32 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     const [q, setQ] = useState('')
 
     const myOrgIds = profile?.organizations.map(org => org.organization.id)
+
+    const myOrg = useMemo(
+      () => profile?.organizations.map(org => org.organization),
+      [profile?.organizations]
+    )
+
+    const showTrainerNonAOLOrgs: boolean = showTrainerOrgOnly && !!profile
+
+    const defaultOrg = useMemo(
+      () =>
+        showTrainerOrgOnly && profile?.organizations.length === 1
+          ? profile?.organizations[0]?.organization
+          : undefined,
+      [profile?.organizations, showTrainerOrgOnly]
+    )
+
+    useEffect(() => {
+      if (showTrainerNonAOLOrgs) {
+        setOptions(() => myOrg as Organization[])
+
+        if (defaultOrg) onChange(defaultOrg)
+        return
+      }
+
+      setOptions(() => [])
+    }, [defaultOrg, myOrg, onChange, showTrainerNonAOLOrgs])
 
     const refreshOptions = useCallback(
       async (query: string) => {
@@ -210,7 +238,11 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     }
 
     const noOptionsText =
-      q.length < 3 ? (
+      showTrainerNonAOLOrgs && !myOrg?.length ? (
+        <Typography variant="body2">
+          {loading ? t('loading') : t('components.org-selector.no-results')}
+        </Typography>
+      ) : q.length < 3 ? (
         t('components.org-selector.min-chars')
       ) : (
         <Typography variant="body2">
@@ -236,6 +268,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     return (
       <>
         <Autocomplete
+          defaultValue={defaultOrg}
           open={open}
           onOpen={() => setOpen(true)}
           onClose={() => setOpen(false)}
@@ -243,10 +276,10 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           sx={sx}
           openOnFocus
           clearOnBlur={false}
-          onInputChange={onInputChange}
+          onInputChange={!showTrainerOrgOnly ? onInputChange : undefined}
           onChange={handleChange}
           options={options}
-          filterOptions={options => options}
+          filterOptions={!showTrainerOrgOnly ? options => options : undefined}
           getOptionLabel={getOptionLabel}
           noOptionsText={noOptionsText}
           isOptionEqualToValue={(o, v) => {
