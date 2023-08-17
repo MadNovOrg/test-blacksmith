@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
+import { MenuItem } from '@mui/material'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Checkbox from '@mui/material/Checkbox'
@@ -23,6 +24,7 @@ import {
   UpdateProfileMutation,
   UpdateProfileMutationVariables,
 } from '@app/generated/graphql'
+import { useJobTitles } from '@app/hooks/useJobTitles'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { MUTATION as UPDATE_PROFILE_MUTATION } from '@app/queries/profile/update-profile'
 import { schemas, yup } from '@app/schemas'
@@ -32,6 +34,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t, _t } = useScopedTranslation('pages.onboarding')
   const { profile, reloadCurrentProfile } = useAuth()
   const navigate = useNavigate()
+  const jobTitles = useJobTitles()
 
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
   const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
@@ -46,6 +49,12 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
       .typeError(t('validation-errors.invalid-date-optional'))
       .required(_t('validation-errors.date-required')),
     tcs: yup.boolean().oneOf([true], t('tcs-required')),
+    jobTitle: yup.string().required(requiredMsg(_t, 'job-title')),
+    otherJobTitle: yup.string().when('jobTitle', ([jobTitle], schema) => {
+      return jobTitle === 'Other'
+        ? schema.required(_t('validation-errors.other-job-title-required'))
+        : schema
+    }),
   })
 
   const { register, handleSubmit, formState, watch, setValue, control } =
@@ -78,6 +87,8 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
         givenName: data.givenName,
         dob: data.dob.toDateString(), // not an ISO, we are not storing timezone info
         phone: data.phone,
+        jobTitle:
+          data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
       },
     })
   }
@@ -157,7 +168,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
           />
         </Box>
 
-        <Box>
+        <Box mb={3}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Controller
               name="dob"
@@ -185,6 +196,49 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               )}
             />
           </LocalizationProvider>
+        </Box>
+
+        <Box>
+          <TextField
+            select
+            value={values.jobTitle}
+            {...register('jobTitle')}
+            variant="filled"
+            fullWidth
+            label={_t('job-title')}
+          >
+            <MenuItem value="" disabled>
+              {_t('job-title')}
+            </MenuItem>
+            {jobTitles.map((option, i) => (
+              <MenuItem
+                key={i}
+                value={option}
+                data-testid={`job-title-${option}`}
+              >
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+          {errors.jobTitle ? (
+            <FormHelperText error>{errors.jobTitle?.message}</FormHelperText>
+          ) : null}
+
+          <Box sx={{ my: 1 }}>
+            {values.jobTitle === 'Other' ? (
+              <TextField
+                id="other-job-title"
+                variant="filled"
+                label={_t('other-job-title')}
+                placeholder={_t('other-job-title')}
+                error={!!errors.otherJobTitle}
+                helperText={errors.otherJobTitle?.message || ''}
+                {...register('otherJobTitle')}
+                fullWidth
+                inputProps={{ 'data-testid': 'other-job-title-input' }}
+              />
+            ) : null}
+          </Box>
         </Box>
 
         <Box sx={{ my: 5 }}>

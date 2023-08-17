@@ -27,6 +27,7 @@ describe('page: Onboarding', () => {
   it('validates form data', async () => {
     const client = {
       executeMutation: () => never,
+      executeQuery: () => never,
     } as unknown as Client
 
     render(
@@ -65,6 +66,7 @@ describe('page: Onboarding', () => {
         fromValue({
           error: new CombinedError({ networkError: Error('network error') }),
         }),
+      executeQuery: () => never,
     } as unknown as Client
 
     render(
@@ -79,6 +81,10 @@ describe('page: Onboarding', () => {
     await userEvent.type(screen.getByLabelText(/surname/i), 'Doe')
     await userEvent.type(screen.getByLabelText(/phone/i), VALID_PHONE_NUMBER)
     await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
+
+    await userEvent.click(screen.getByLabelText('Job Title'))
+    await userEvent.click(screen.getByTestId('job-title-Other'))
+    await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
 
     await userEvent.click(screen.getByLabelText(/i accept/i))
 
@@ -95,6 +101,7 @@ describe('page: Onboarding', () => {
   it('prefills first and last name from profile', async () => {
     const client = {
       executeMutation: () => never,
+      executeQuery: () => never,
     } as unknown as Client
 
     render(
@@ -139,6 +146,7 @@ describe('page: Onboarding', () => {
           },
         })
       },
+      executeQuery: () => never,
     } as unknown as Client
 
     render(
@@ -168,6 +176,11 @@ describe('page: Onboarding', () => {
 
     await userEvent.type(screen.getByLabelText(/phone/i), phone)
     await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
+
+    await userEvent.click(screen.getByLabelText('Job Title'))
+    await userEvent.click(screen.getByTestId('job-title-Other'))
+    await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
+
     await userEvent.click(screen.getByLabelText(/i accept/i))
 
     await userEvent.click(screen.getByText(/update/i))
