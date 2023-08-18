@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { groupBy, map, uniqBy } from 'lodash-es'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import {
   Navigate,
@@ -54,6 +54,7 @@ import {
   CourseEvaluationQuestionGroup,
   CourseEvaluationQuestionType,
   CourseParticipant,
+  RoleName,
 } from '@app/types'
 import { courseStarted, LoadingStatus } from '@app/util'
 
@@ -81,7 +82,7 @@ export const CourseEvaluation = () => {
   const [error, setError] = useState<string | null>(null)
   const params = useParams()
   const [searchParams] = useSearchParams()
-  const { profile } = useAuth()
+  const { profile, activeRole } = useAuth()
   const courseId = params.id as string
   const profileId = searchParams.get('profile_id') as string
   const readOnly = !!profileId
@@ -91,7 +92,7 @@ export const CourseEvaluation = () => {
   const { data: participantData, isValidating: participantDataLoading } =
     useSWR([GetParticipant, { profileId: profile?.id, courseId }])
 
-  const { data: questions, isValidating: questionsLoading } =
+  const { data: questionsData, isValidating: questionsLoading } =
     useSWR<GetCourseEvaluationQuestionsResponseType>(
       GET_COURSE_EVALUATION_QUESTIONS_QUERY
     )
@@ -126,14 +127,31 @@ export const CourseEvaluation = () => {
     )
   }, [usersData, profile])
 
+  const questions = useMemo(() => {
+    if (questionsData?.questions.length) {
+      if (activeRole === RoleName.USER) {
+        return questionsData.questions.filter(
+          q =>
+            ![
+              'ANY_INJURIES',
+              'ISSUES_ARISING_FROM_COURSE',
+              'TRAINER_COMMENTS',
+            ].includes(q.questionKey)
+        )
+      }
+
+      return questionsData.questions
+    }
+  }, [questionsData, activeRole])
+
   const { UNGROUPED: ungroupedQuestions, ...groupedQuestions } = groupBy(
-    questions?.questions,
+    questions,
     q => q.group || 'UNGROUPED'
   )
 
   const signatureQuestion = useMemo(
     () =>
-      questions?.questions.find(
+      questions?.find(
         q => q.questionKey === 'SIGNATURE'
       ) as CourseEvaluationQuestion,
     [questions]
@@ -142,7 +160,7 @@ export const CourseEvaluation = () => {
   const schema = useMemo(() => {
     const obj: Record<string, yup.StringSchema> = {}
 
-    questions?.questions.forEach(q => {
+    questions?.forEach(q => {
       const s = yup.string()
 
       if (q.questionKey === 'SIGNATURE') {
@@ -163,13 +181,17 @@ export const CourseEvaluation = () => {
     return yup.object(obj).required()
   }, [t, questions, profile])
 
+  const methods = useForm<Record<string, string>>({
+    resolver: yupResolver(schema),
+  })
+
   const {
     register,
     handleSubmit,
     setValue,
     watch,
     formState: { errors },
-  } = useForm<Record<string, string>>({ resolver: yupResolver(schema) })
+  } = methods
 
   useEffect(() => {
     if (!evaluation?.answers) return
@@ -260,195 +282,200 @@ export const CourseEvaluation = () => {
   }
 
   return (
-    <Box bgcolor="grey.100" sx={{ pb: 6 }}>
-      <Container component="form" onSubmit={handleSubmit(onSubmit)}>
-        <Grid container>
-          <Grid item md={3}>
-            <Sticky top={20}>
-              <Box mt={5} pr={3}>
-                <BackButton label={t('back')} />
+    <FormProvider {...methods}>
+      <Box bgcolor="grey.100" sx={{ pb: 6 }}>
+        <Container component="form" onSubmit={handleSubmit(onSubmit)}>
+          <Grid container>
+            <Grid item md={3}>
+              <Sticky top={20}>
+                <Box mt={5} pr={3}>
+                  <BackButton label={t('back')} />
 
-                <Typography
-                  variant="h2"
-                  gutterBottom
-                  my={2}
-                  data-testid="course-evaluation-heading"
-                >
-                  {t('course-evaluation.heading')}
-                </Typography>
+                  <Typography
+                    variant="h2"
+                    gutterBottom
+                    my={2}
+                    data-testid="course-evaluation-heading"
+                  >
+                    {t('course-evaluation.heading')}
+                  </Typography>
 
-                <Typography variant="h6" gutterBottom>
-                  {course?.name}
-                </Typography>
+                  <Typography variant="h6" gutterBottom>
+                    {course?.name}
+                  </Typography>
 
-                {readOnly && (
-                  <Box>
-                    <Typography variant="body1">{t('attendee')}</Typography>
+                  {readOnly && (
+                    <Box>
+                      <Typography variant="body1">{t('attendee')}</Typography>
 
-                    <Box mt={2}>
-                      <AttendeeMenu
-                        options={attendees}
-                        value={profileId}
-                        onSelect={(id: string) => {
-                          if (
-                            course?.trainers?.find(t => t.profile.id === id)
-                          ) {
-                            navigate(
-                              `../../evaluation/submit?profile_id=${id}`,
-                              {
-                                replace: false,
-                              }
-                            )
-                          } else {
-                            navigate(`../../evaluation/view?profile_id=${id}`, {
-                              replace: true,
-                            })
-                          }
-                        }}
-                      />
+                      <Box mt={2}>
+                        <AttendeeMenu
+                          options={attendees}
+                          value={profileId}
+                          onSelect={(id: string) => {
+                            if (
+                              course?.trainers?.find(t => t.profile.id === id)
+                            ) {
+                              navigate(
+                                `../../evaluation/submit?profile_id=${id}`,
+                                {
+                                  replace: false,
+                                }
+                              )
+                            } else {
+                              navigate(
+                                `../../evaluation/view?profile_id=${id}`,
+                                {
+                                  replace: true,
+                                }
+                              )
+                            }
+                          }}
+                        />
+                      </Box>
                     </Box>
-                  </Box>
-                )}
-              </Box>
-            </Sticky>
-          </Grid>
+                  )}
+                </Box>
+              </Sticky>
+            </Grid>
 
-          <Grid item md={7} pt={10}>
-            {groups.map(g => (
-              <QuestionGroup
-                key={g}
-                title={t(`course-evaluation.groups.${g}`)}
-                description={
-                  isAllRequired(groupedQuestions[g])
-                    ? t('common.all-fields-are-mandatory')
-                    : ''
+            <Grid item md={7} pt={10}>
+              {groups.map(g => (
+                <QuestionGroup
+                  key={g}
+                  title={t(`course-evaluation.groups.${g}`)}
+                  description={
+                    isAllRequired(groupedQuestions[g])
+                      ? t('common.all-fields-are-mandatory')
+                      : ''
+                  }
+                >
+                  {groupedQuestions[g]?.map(q => (
+                    <RatingQuestion
+                      key={q.id}
+                      title={t(`course-evaluation.questions.${q.questionKey}`)}
+                      value={values[q.id]}
+                      onChange={v => {
+                        setValue(q.id, v ? `${v}` : '')
+                      }}
+                      error={errors[q.id]?.message}
+                      readOnly={readOnly}
+                    />
+                  ))}
+                </QuestionGroup>
+              ))}
+
+              {ungroupedQuestions?.map(q => {
+                if (booleanQuestionTypes.includes(q.type)) {
+                  const value = (values[q.id] ?? '').split('-')
+
+                  return (
+                    <QuestionGroup
+                      key={q.id}
+                      title={t(`course-evaluation.questions.${q.questionKey}`)}
+                      error={errors[q.id]?.message}
+                    >
+                      <BooleanQuestion
+                        value={value[0]}
+                        reason={value[1] ?? ''}
+                        type={q.type}
+                        onChange={(value, reason) =>
+                          setValue(q.id, `${value}-${reason}`)
+                        }
+                        infoText={t('course-evaluation.provide-details')}
+                        disabled={readOnly}
+                      />
+                    </QuestionGroup>
+                  )
                 }
-              >
-                {groupedQuestions[g]?.map(q => (
-                  <RatingQuestion
-                    key={q.id}
-                    title={t(`course-evaluation.questions.${q.questionKey}`)}
-                    value={values[q.id]}
-                    onChange={v => {
-                      setValue(q.id, v ? `${v}` : '')
+
+                if (q.type === CourseEvaluationQuestionType.TEXT) {
+                  return (
+                    <QuestionGroup
+                      key={q.id}
+                      title={t(`course-evaluation.questions.${q.questionKey}`)}
+                      error={errors[q.id]?.message}
+                    >
+                      <TextField
+                        sx={{ bgcolor: 'common.white', mt: 1 }}
+                        variant="filled"
+                        placeholder={t('course-evaluation.your-response')}
+                        inputProps={{ sx: { px: 1, py: 1.5 } }}
+                        {...register(q.id)}
+                        disabled={readOnly}
+                        data-testid="course-evaluation-text-question"
+                      />
+                    </QuestionGroup>
+                  )
+                }
+
+                return null
+              })}
+
+              {!readOnly && signatureQuestion && (
+                <>
+                  <Typography variant="h6" gutterBottom sx={{ mt: 6 }}>
+                    {t('course-evaluation.signature')}
+                  </Typography>
+                  <Typography variant="body1" color="grey.600" gutterBottom>
+                    {t('course-evaluation.signature-desc')}
+                  </Typography>
+                  <TextField
+                    sx={{ mt: 1 }}
+                    variant="filled"
+                    placeholder="Full name"
+                    inputProps={{
+                      sx: { bgcolor: 'common.white', px: 1, py: 1.5 },
                     }}
-                    error={errors[q.id]?.message}
-                    readOnly={readOnly}
+                    fullWidth
+                    {...register(signatureQuestion.id)}
+                    error={!!errors[signatureQuestion.id]}
+                    helperText={errors[signatureQuestion.id]?.message}
+                    data-testid="course-evaluation-signature"
                   />
-                ))}
-              </QuestionGroup>
-            ))}
-
-            {ungroupedQuestions?.map(q => {
-              if (booleanQuestionTypes.includes(q.type)) {
-                const value = (values[q.id] ?? '').split('-')
-
-                return (
-                  <QuestionGroup
-                    key={q.id}
-                    title={t(`course-evaluation.questions.${q.questionKey}`)}
-                    error={errors[q.id]?.message}
-                  >
-                    <BooleanQuestion
-                      value={value[0]}
-                      reason={value[1] ?? ''}
-                      type={q.type}
-                      onChange={(value, reason) =>
-                        setValue(q.id, `${value}-${reason}`)
-                      }
-                      infoText={t('course-evaluation.provide-details')}
-                      disabled={readOnly}
-                    />
-                  </QuestionGroup>
-                )
-              }
-
-              if (q.type === CourseEvaluationQuestionType.TEXT) {
-                return (
-                  <QuestionGroup
-                    key={q.id}
-                    title={t(`course-evaluation.questions.${q.questionKey}`)}
-                    error={errors[q.id]?.message}
-                  >
-                    <TextField
-                      sx={{ bgcolor: 'common.white', mt: 1 }}
-                      variant="filled"
-                      placeholder={t('course-evaluation.your-response')}
-                      inputProps={{ sx: { px: 1, py: 1.5 } }}
-                      {...register(q.id)}
-                      disabled={readOnly}
-                      data-testid="course-evaluation-text-question"
-                    />
-                  </QuestionGroup>
-                )
-              }
-
-              return null
-            })}
-
-            {!readOnly && signatureQuestion && (
-              <>
-                <Typography variant="h6" gutterBottom sx={{ mt: 6 }}>
-                  {t('course-evaluation.signature')}
-                </Typography>
-                <Typography variant="body1" color="grey.600" gutterBottom>
-                  {t('course-evaluation.signature-desc')}
-                </Typography>
-                <TextField
-                  sx={{ mt: 1 }}
-                  variant="filled"
-                  placeholder="Full name"
-                  inputProps={{
-                    sx: { bgcolor: 'common.white', px: 1, py: 1.5 },
-                  }}
-                  fullWidth
-                  {...register(signatureQuestion.id)}
-                  error={!!errors[signatureQuestion.id]}
-                  helperText={errors[signatureQuestion.id]?.message}
-                  data-testid="course-evaluation-signature"
-                />
-              </>
-            )}
+                </>
+              )}
+            </Grid>
           </Grid>
-        </Grid>
 
-        {!readOnly ? (
-          <Box
-            sx={{ mt: 6 }}
-            alignItems="center"
-            display="flex"
-            flexDirection="column"
-            data-testid="submit-course-evaluation"
-          >
-            <LoadingButton
-              loading={loading}
-              type="submit"
-              variant="contained"
-              color="primary"
-              size="large"
+          {!readOnly ? (
+            <Box
+              sx={{ mt: 6 }}
+              alignItems="center"
+              display="flex"
+              flexDirection="column"
+              data-testid="submit-course-evaluation"
             >
-              {t('course-evaluation.submit')}
-            </LoadingButton>
+              <LoadingButton
+                loading={loading}
+                type="submit"
+                variant="contained"
+                color="primary"
+                size="large"
+              >
+                {t('course-evaluation.submit')}
+              </LoadingButton>
 
-            {error && (
-              <Box mt={2}>
-                <FormHelperText error>{error}</FormHelperText>
-              </Box>
-            )}
+              {error && (
+                <Box mt={2}>
+                  <FormHelperText error>{error}</FormHelperText>
+                </Box>
+              )}
 
-            <Typography
-              maxWidth={600}
-              color="grey.600"
-              sx={{ mt: 4 }}
-              gutterBottom={true}
-              align="center"
-              variant="body2"
-            >
-              {t('course-evaluation.disclaimer')}
-            </Typography>
-          </Box>
-        ) : null}
-      </Container>
-    </Box>
+              <Typography
+                maxWidth={600}
+                color="grey.600"
+                sx={{ mt: 4 }}
+                gutterBottom={true}
+                align="center"
+                variant="body2"
+              >
+                {t('course-evaluation.disclaimer')}
+              </Typography>
+            </Box>
+          ) : null}
+        </Container>
+      </Box>
+    </FormProvider>
   )
 }
