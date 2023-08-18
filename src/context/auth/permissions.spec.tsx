@@ -1183,6 +1183,7 @@ describe(getACL.name, () => {
       // Arrange
       const acl = getACLStub({
         activeRole: RoleName.TRAINER,
+        activeCertificates: [CourseLevel.IntermediateTrainer],
       })
 
       // Act & Assert

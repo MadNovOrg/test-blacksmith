@@ -1,10 +1,11 @@
+import { Warning } from '@mui/icons-material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { Button, Menu, MenuItem } from '@mui/material'
+import { Box, Button, Menu, MenuItem, Tooltip } from '@mui/material'
 import React, { useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
+import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { CourseType } from '@app/types'
 
 const CREATE_COURSE_PATH = '/courses/new'
@@ -16,7 +17,7 @@ export const CreateCourseMenu = () => {
   const open = Boolean(anchorEl)
   const navigate = useNavigate()
   const { acl } = useAuth()
-  const { t } = useTranslation()
+  const { t } = useScopedTranslation('components.create-course-menu')
 
   const options: Options = useMemo(() => {
     return Object.values(CourseType).flatMap(type =>
@@ -24,9 +25,7 @@ export const CreateCourseMenu = () => {
         ? [
             {
               key: type,
-              label: t(
-                `components.create-course-menu.${type.toLowerCase()}-course-label`
-              ),
+              label: t(`${type.toLowerCase()}-course-label`),
             },
           ]
         : []
@@ -47,16 +46,25 @@ export const CreateCourseMenu = () => {
     setAnchorEl(event.currentTarget)
   }
 
+  const canCreateSomeCourseLevel = acl.canCreateSomeCourseLevel()
+
   return (
-    <div>
+    <Box display="flex" alignItems="center">
       <Button
         variant="contained"
         onClick={handleMenuButtonClick}
         data-testid="create-course-menu-button"
         endIcon={options.length > 1 ? <ArrowDropDownIcon /> : null}
+        disabled={!canCreateSomeCourseLevel}
       >
-        {t('components.create-course-menu.button-text')}
+        {t('button-text')}
       </Button>
+      {!canCreateSomeCourseLevel ? (
+        <Tooltip title={t('tooltip-text')}>
+          <Warning color="warning" sx={{ ml: 1 }} />
+        </Tooltip>
+      ) : null}
+
       {options.length ? (
         <Menu
           id="course-type-menu"
@@ -81,6 +89,6 @@ export const CreateCourseMenu = () => {
           ))}
         </Menu>
       ) : null}
-    </div>
+    </Box>
   )
 }

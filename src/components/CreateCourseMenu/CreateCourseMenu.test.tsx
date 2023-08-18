@@ -2,7 +2,7 @@ import { Typography } from '@mui/material'
 import React from 'react'
 import { Routes, Route, useSearchParams } from 'react-router-dom'
 
-import { RoleName } from '@app/types'
+import { CourseLevel, RoleName } from '@app/types'
 
 import { render, userEvent, screen, within, waitFor } from '@test/index'
 import { generateRolesUpTo } from '@test/utils'
@@ -131,6 +131,7 @@ describe('components: CreateCourseMenu', () => {
         auth: {
           activeRole: RoleName.TRAINER,
           allowedRoles: generateRolesUpTo(RoleName.TRAINER),
+          activeCertificates: [CourseLevel.IntermediateTrainer],
         },
       },
       { initialEntries: ['/'] }
@@ -170,5 +171,18 @@ describe('components: CreateCourseMenu', () => {
         /closed course/i
       )
     ).toBeInTheDocument()
+  })
+
+  it('disables the button if a user is a trainer without trainer level certificates', async () => {
+    render(<CreateCourseMenu />, {
+      auth: {
+        activeRole: RoleName.TRAINER,
+        activeCertificates: [CourseLevel.Level_1],
+      },
+    })
+
+    expect(
+      screen.getByRole('button', { name: /create course/i })
+    ).toBeDisabled()
   })
 })

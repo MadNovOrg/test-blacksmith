@@ -73,7 +73,8 @@
     "open-course-label": "Open course",
     "closed-course-label": "Closed course",
     "indirect-course-label": "Indirect course",
-    "bulk-import-label": "Bulk import open courses"
+    "bulk-import-label": "Bulk import open courses",
+    "tooltip-text": "You don't have the proper certificate for course creation"
   },
   "role-switcher": {
     "subtitle": "Switch Role",

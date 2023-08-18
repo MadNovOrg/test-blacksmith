@@ -1,5 +1,6 @@
 import { MarkOptional } from 'ts-essentials'
 
+import { getLevels } from '@app/components/CourseForm/helpers'
 import { Accreditors_Enum } from '@app/generated/graphql'
 import {
   CourseInput,
@@ -238,7 +239,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
           return [CourseType.CLOSED, CourseType.OPEN].includes(type)
         }
         case RoleName.TRAINER:
-          return [CourseType.INDIRECT].includes(type)
+          return (
+            [CourseType.INDIRECT].includes(type) &&
+            acl.canCreateSomeCourseLevel()
+          )
       }
 
       return false
@@ -264,6 +268,19 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
           activeCertificates.some(active => active === allowed)
         )
       })
+    },
+
+    canCreateSomeCourseLevel: () => {
+      const allowedICMLevels =
+        acl.allowedCourseLevels(
+          getLevels(CourseType.INDIRECT, Accreditors_Enum.Icm)
+        ).length > 0
+      const allowedBILDLevels =
+        acl.allowedCourseLevels(
+          getLevels(CourseType.INDIRECT, Accreditors_Enum.Bild)
+        ).length > 0
+
+      return allowedBILDLevels || allowedICMLevels
     },
 
     canEditCourses: (type: CourseType, isLeader: boolean) => {
