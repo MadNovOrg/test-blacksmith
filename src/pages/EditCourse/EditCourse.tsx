@@ -71,6 +71,7 @@ import {
   CourseTrainerType,
   CourseType,
   InviteStatus,
+  RoleName,
   TrainerRoleTypeName,
   ValidCourseInput,
 } from '@app/types'
@@ -110,7 +111,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const { t } = useTranslation()
   const fetcher = useFetcher()
-  const { profile, acl } = useAuth()
+  const { profile, acl, activeRole } = useAuth()
   const navigate = useNavigate()
   const [courseData, setCourseData] = useState<CourseInput>()
   const [courseDataValid, setCourseDataValid] = useState(false)
@@ -135,7 +136,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     return course ? courseToCourseInput(course) : undefined
   }, [course])
 
-  const canGoToCourseBuilder = acl.canViewCourseBuilderOnEditPage(courseInput)
+  const canGoToCourseBuilder =
+    activeRole === RoleName.TRAINER &&
+    course?.accreditedBy === Accreditors_Enum.Icm &&
+    course?.type === CourseType.INDIRECT
 
   const courseMethods = useRef<{
     trigger: UseFormTrigger<CourseInput>
