@@ -1,4 +1,5 @@
 import Cancel from '@mui/icons-material/Cancel'
+import EditIcon from '@mui/icons-material/Edit'
 import { TabContext, TabPanel } from '@mui/lab'
 import {
   Alert,
@@ -289,9 +290,8 @@ export const CourseDetails = () => {
                   ) : null}
 
                   {showCourseBuilderOnEditPage ? (
-                    <PillTab
-                      label={t('common.edit')}
-                      value={CourseDetailsTabs.EDIT}
+                    <EditIcon
+                      sx={{ ml: 2, cursor: 'pointer' }}
                       data-testid="course-edit-tab"
                       onClick={() => navigate(`/courses/${course.id}/modules`)}
                     />
