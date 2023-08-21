@@ -1,6 +1,7 @@
 {
   "name": "@teamteach/hub",
   "version": "1.0.0-alpha",
+  "private": true,
   "description": "Hub application portal",
   "authors": [
     "NearForm Ltd."
@@ -48,9 +49,13 @@
     "graphql-codegen": "graphql-codegen --config codegen.yml",
     "graphql-codegen:watch": "graphql-codegen --config codegen.yml --watch",
     "e2e:graphql-codegen": "graphql-codegen --config playwright/codegen.yml",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "release:add": "npx changeset",
+    "release:version": "npx changeset version"
   },
   "dependencies": {
+    "@changesets/changelog-github": "^0.4.8",
+    "@changesets/cli": "^2.26.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@googlemaps/react-wrapper": "^1.1.35",
