@@ -157,7 +157,8 @@ export const EditProfilePage: React.FC<
   const ratherNotSayText = t<string>('rather-not-say')
 
   const canEditRoles = acl.isTTAdmin() || acl.isTTOps()
-  const isIndividual = acl.isUser()
+  const canEditNamesAndDOB =
+    acl.isAdmin() || acl.isTTOps() || acl.isSalesAdmin()
 
   useEffect(() => {
     const restriction = profile?.dietaryRestrictions
@@ -386,7 +387,7 @@ export const EditProfilePage: React.FC<
         input: {
           profileId: profile.id,
           avatar: data.avatar,
-          ...(!isIndividual
+          ...(!canEditNamesAndDOB
             ? {
                 givenName: data.firstName,
                 familyName: data.surname,
@@ -686,7 +687,7 @@ export const EditProfilePage: React.FC<
                       inputProps={{ 'data-testid': 'first-name' }}
                       autoFocus
                       fullWidth
-                      disabled={isIndividual}
+                      disabled={!canEditNamesAndDOB}
                     />
                   </Grid>
                   <Grid item md={6} xs={12}>
@@ -700,7 +701,7 @@ export const EditProfilePage: React.FC<
                       {...register('surname')}
                       inputProps={{ 'data-testid': 'surname' }}
                       fullWidth
-                      disabled={isIndividual}
+                      disabled={!canEditNamesAndDOB}
                     />
                   </Grid>
                 </Grid>
@@ -739,7 +740,7 @@ export const EditProfilePage: React.FC<
                       <DatePicker
                         format="dd/MM/yyyy"
                         value={values.dob}
-                        disabled={isIndividual}
+                        disabled={!canEditNamesAndDOB}
                         onChange={(d: Date | null) => setValue('dob', d)}
                         slotProps={{
                           textField: {
@@ -765,7 +766,7 @@ export const EditProfilePage: React.FC<
                     />
                   </Grid>
                 </Grid>
-                {isIndividual ? (
+                {!canEditNamesAndDOB ? (
                   <Alert severity="info" variant="outlined">
                     {t('cant-update-personal-info-warning')}{' '}
                     <Link

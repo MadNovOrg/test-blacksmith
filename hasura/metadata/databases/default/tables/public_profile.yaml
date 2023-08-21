@@ -341,17 +341,31 @@ select_permissions:
       filter: {}
       allow_aggregations: true
 update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - _family_name
+        - _given_name
+        - dob
+      filter: {}
+      check: null
   - role: tt-admin
     permission:
       columns:
         - archived
+        - _family_name
+        - _given_name
         - last_activity
+        - dob
       filter: {}
       check: null
   - role: tt-ops
     permission:
       columns:
+        - _family_name
+        - _given_name
         - archived
+        - dob
         - last_activity
       filter: {}
       check: null
