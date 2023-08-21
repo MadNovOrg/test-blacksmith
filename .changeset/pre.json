@@ -1,8 +1,11 @@
 {
-    "mode": "pre",
-    "tag": "alpha.1",
-    "initialVersions": {
-      "@teamteach/hub-api": "1.0.0-alpha"
-    },
-    "changesets": []
-  }
+  "mode": "pre",
+  "tag": "alpha.1",
+  "initialVersions": {
+    "@teamteach/hub-api": "1.0.0-alpha",
+    "@teamteach/hub": "1.0.0-alpha"
+  },
+  "changesets": [
+    "funny-hornets-wave"
+  ]
+}
