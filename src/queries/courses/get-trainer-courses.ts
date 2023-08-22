@@ -59,6 +59,7 @@ export const QUERY = gql`
         count
       }
     }
+    isDraft
     schedule {
       id
       venue {

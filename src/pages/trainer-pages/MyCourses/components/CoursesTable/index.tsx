@@ -16,7 +16,6 @@ import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Invite_Status_Enum,
-  Course_Status_Enum,
   TrainerCoursesQuery,
 } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -158,23 +157,15 @@ export function CourseTitle({
 export function CourseTitleCell({ course }: { course: TableCourse }) {
   const { profile, acl } = useAuth()
 
-  const handleNavigation = (course: {
-    id: number
-    status?: Course_Status_Enum | null
-  }) => {
-    if (
-      (course.status === Course_Status_Enum.Draft ||
-        course.status === Course_Status_Enum.ConfirmModules) &&
-      acl.canBuildCourse()
-    ) {
-      return `${course.id}/modules`
-    }
-    return `${course.id}/details`
-  }
-
   const courseTrainer = profile
     ? findCourseTrainer(course?.trainers, profile.id)
     : undefined
+
+  const titleLink =
+    (course.isDraft || course.modulesAgg.aggregate?.count === 0) &&
+    acl.canBuildCourse()
+      ? `${course.id}/modules`
+      : `${course.id}/details`
 
   return (
     <TableCell data-testid="course-name-cell">
@@ -182,7 +173,7 @@ export function CourseTitleCell({ course }: { course: TableCourse }) {
       courseTrainer.status === Course_Invite_Status_Enum.Pending ? (
         <CourseTitle code={course.course_code} name={course.name} />
       ) : (
-        <Link href={handleNavigation(course)}>
+        <Link href={titleLink}>
           <CourseTitle code={course.course_code} name={course.name} />
         </Link>
       )}

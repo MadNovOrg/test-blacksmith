@@ -1,19 +1,27 @@
 import { setMedia } from 'mock-match-media'
 import React from 'react'
 import { getI18n } from 'react-i18next'
+import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
 import {
+  Course_Invite_Status_Enum,
+  Course_Status_Enum,
   Order_By,
   TrainerCoursesQuery,
   TrainerCoursesQueryVariables,
 } from '@app/generated/graphql'
+import { RoleName } from '@app/types'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities } from '@test/mock-data-utils'
 
-import { buildTrainerCourse, expectCourseTableTo } from './test-utils'
+import {
+  buildCourseTrainer,
+  buildTrainerCourse,
+  expectCourseTableTo,
+} from './test-utils'
 import { TrainerCourses } from './TrainerCourses'
 
 const { t } = getI18n()
@@ -270,5 +278,129 @@ describe('trainers-pages/MyCourses', () => {
         screen.queryByTestId(`course-row-${firstBatch[0].id}`)
       ).not.toBeInTheDocument()
     })
+  })
+
+  it('redirects to the course builder if course is in draft', async () => {
+    const TRAINER_PROFILE_ID = chance.guid()
+
+    const trainerCourse = buildTrainerCourse({
+      overrides: {
+        trainers: [
+          buildCourseTrainer({
+            profile: { id: TRAINER_PROFILE_ID },
+            status: Course_Invite_Status_Enum.Accepted,
+          }),
+        ],
+        status: Course_Status_Enum.TrainerPending,
+        isDraft: true,
+        modulesAgg: {
+          aggregate: {
+            count: 5,
+          },
+        },
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses: [trainerCourse],
+            course_aggregate: {
+              aggregate: {
+                count: 1,
+              },
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="courses">
+            <Route index element={<TrainerCourses />} />
+            <Route path=":id/modules" element={<p>course builder</p>} />
+          </Route>
+        </Routes>
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+          profile: { id: TRAINER_PROFILE_ID },
+        },
+      },
+      { initialEntries: ['/courses'] }
+    )
+
+    await userEvent.click(
+      within(screen.getByTestId(`course-row-${trainerCourse.id}`)).getByText(
+        trainerCourse.name
+      )
+    )
+
+    expect(screen.getByText(/course builder/i)).toBeInTheDocument()
+  })
+
+  it("redirects to the course builder if is not in draft but doesn't have any modules", async () => {
+    const TRAINER_PROFILE_ID = chance.guid()
+
+    const trainerCourse = buildTrainerCourse({
+      overrides: {
+        trainers: [
+          buildCourseTrainer({
+            profile: { id: TRAINER_PROFILE_ID },
+            status: Course_Invite_Status_Enum.Accepted,
+          }),
+        ],
+        status: Course_Status_Enum.TrainerPending,
+        isDraft: false,
+        modulesAgg: {
+          aggregate: {
+            count: 0,
+          },
+        },
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses: [trainerCourse],
+            course_aggregate: {
+              aggregate: {
+                count: 1,
+              },
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="courses">
+            <Route index element={<TrainerCourses />} />
+            <Route path=":id/modules" element={<p>course builder</p>} />
+          </Route>
+        </Routes>
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+          profile: { id: TRAINER_PROFILE_ID },
+        },
+      },
+      { initialEntries: ['/courses'] }
+    )
+
+    await userEvent.click(
+      within(screen.getByTestId(`course-row-${trainerCourse.id}`)).getByText(
+        trainerCourse.name
+      )
+    )
+
+    expect(screen.getByText(/course builder/i)).toBeInTheDocument()
   })
 })
