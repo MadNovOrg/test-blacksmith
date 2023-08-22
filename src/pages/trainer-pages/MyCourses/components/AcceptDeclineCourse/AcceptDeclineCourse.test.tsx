@@ -1,24 +1,18 @@
 import React from 'react'
+import { Client, CombinedError, Provider, TypedDocumentNode } from 'urql'
+import { never, fromValue } from 'wonka'
 
 import {
   Course_Invite_Status_Enum,
   Course_Trainer_Type_Enum,
+  SetCourseTrainerStatusMutation,
+  SetCourseTrainerStatusMutationVariables,
 } from '@app/generated/graphql'
+import { SetCourseTrainerStatus } from '@app/queries/courses/set-course-trainer-status'
 
-import {
-  chance,
-  render,
-  screen,
-  userEvent,
-  waitForCalls,
-  waitForElementToBeRemoved,
-} from '@test/index'
-import { buildProfile } from '@test/mock-data-utils'
+import { chance, render, screen, userEvent, within } from '@test/index'
 
 import { AcceptDeclineCourse } from '.'
-
-const mockFetcher = jest.fn()
-jest.mock('@app/hooks/use-fetcher', () => ({ useFetcher: () => mockFetcher }))
 
 const mockNavigate = jest.fn()
 jest.mock('react-router-dom', () => ({
@@ -26,213 +20,282 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }))
 
-const tid = (s: string) => `AcceptDeclineCourse-${s}`
-
 describe('AcceptDeclineCourse', () => {
-  it('renders children if current user is not assigned trainer (tt-ops, etc)', async () => {
-    _render()
-
-    expect(screen.queryByTestId(tid('acceptBtn'))).not.toBeInTheDocument()
-    expect(screen.queryByTestId(tid('declineBtn'))).not.toBeInTheDocument()
-    expect(screen.queryByTestId(tid('declinedChip'))).not.toBeInTheDocument()
-  })
-
   it('renders children if current user has accepted', async () => {
-    _render(Course_Invite_Status_Enum.Accepted)
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
 
-    expect(screen.queryByTestId(tid('acceptBtn'))).not.toBeInTheDocument()
-    expect(screen.queryByTestId(tid('declineBtn'))).not.toBeInTheDocument()
-    expect(screen.queryByTestId(tid('declinedChip'))).not.toBeInTheDocument()
+    render(
+      <Provider value={client}>
+        <AcceptDeclineCourse
+          onUpdate={jest.fn()}
+          trainer={{
+            status: Course_Invite_Status_Enum.Accepted,
+            id: chance.guid(),
+            type: Course_Trainer_Type_Enum.Leader,
+          }}
+        />
+      </Provider>
+    )
+
+    expect(
+      screen.queryByRole('button', { name: /accept/i })
+    ).not.toBeInTheDocument()
+
+    expect(
+      screen.queryByRole('button', { name: /decline/i })
+    ).not.toBeInTheDocument()
+
+    expect(screen.queryByText(/declined/i)).not.toBeInTheDocument()
   })
 
   it('renders declined status chip if user has declined', async () => {
-    _render(Course_Invite_Status_Enum.Declined)
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
 
-    expect(screen.getByTestId(tid('declinedChip'))).toBeInTheDocument()
-    expect(screen.queryByText('FALLBACK_CONTENT')).not.toBeInTheDocument()
-    expect(screen.queryByTestId(tid('acceptBtn'))).not.toBeInTheDocument()
-    expect(screen.queryByTestId(tid('declineBtn'))).not.toBeInTheDocument()
+    render(
+      <Provider value={client}>
+        <AcceptDeclineCourse
+          onUpdate={jest.fn()}
+          trainer={{
+            status: Course_Invite_Status_Enum.Declined,
+            id: chance.guid(),
+            type: Course_Trainer_Type_Enum.Leader,
+          }}
+        />
+      </Provider>
+    )
+
+    expect(
+      screen.queryByRole('button', { name: /accept/i })
+    ).not.toBeInTheDocument()
+
+    expect(
+      screen.queryByRole('button', { name: /decline/i })
+    ).not.toBeInTheDocument()
+
+    expect(screen.getByText(/declined/i)).toBeInTheDocument()
   })
 
   it('renders accept and decline buttons if user has not accepted/declined', async () => {
-    _render(Course_Invite_Status_Enum.Pending)
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
 
-    expect(screen.getByTestId(tid('acceptBtn'))).toBeInTheDocument()
-    expect(screen.getByTestId(tid('declineBtn'))).toBeInTheDocument()
-    expect(screen.queryByText('FALLBACK_CONTENT')).not.toBeInTheDocument()
-    expect(screen.queryByTestId(tid('modalSubmit'))).not.toBeInTheDocument()
+    render(
+      <Provider value={client}>
+        <AcceptDeclineCourse
+          onUpdate={jest.fn()}
+          trainer={{
+            status: Course_Invite_Status_Enum.Pending,
+            id: chance.guid(),
+            type: Course_Trainer_Type_Enum.Leader,
+          }}
+        />
+      </Provider>
+    )
+
+    expect(screen.getByRole('button', { name: /accept/i })).toBeInTheDocument()
+
+    expect(screen.getByRole('button', { name: /decline/i })).toBeInTheDocument()
+
+    expect(screen.queryByText(/declined/i)).not.toBeInTheDocument()
   })
 
   it('calls onUpdate as expected when user ACCEPTS', async () => {
-    const onUpdate = jest.fn()
-    const courseId = 10000
-    const { trainer } = _render(
-      Course_Invite_Status_Enum.Pending,
-      onUpdate,
-      courseId
+    const onUpdateMock = jest.fn()
+    const trainer = {
+      status: Course_Invite_Status_Enum.Pending,
+      id: chance.guid(),
+      type: Course_Trainer_Type_Enum.Leader,
+    }
+
+    const client = {
+      executeMutation: ({
+        query,
+        variables,
+      }: {
+        query: TypedDocumentNode
+        variables: SetCourseTrainerStatusMutationVariables
+      }) => {
+        const mutationMatches =
+          query === SetCourseTrainerStatus &&
+          variables.status === Course_Invite_Status_Enum.Accepted
+
+        if (mutationMatches) {
+          return fromValue<{ data: SetCourseTrainerStatusMutation }>({
+            data: {
+              update_course_trainer_by_pk: {
+                id: trainer.id,
+                status: Course_Invite_Status_Enum.Accepted,
+              },
+            },
+          })
+        } else {
+          return fromValue({
+            error: new CombinedError({ networkError: Error('network error') }),
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <AcceptDeclineCourse onUpdate={onUpdateMock} trainer={trainer} />
+      </Provider>
     )
 
-    await userEvent.click(screen.getByTestId(tid('acceptBtn')))
-    await userEvent.click(screen.getByTestId(tid('modalSubmit')))
+    await userEvent.click(screen.getByRole('button', { name: /accept/i }))
 
-    await waitForCalls(onUpdate)
+    const confirmDialog = screen.getByRole('dialog')
 
-    expect(onUpdate).toHaveBeenCalledWith(
+    await userEvent.click(
+      within(confirmDialog).getByRole('button', {
+        name: /continue to course builder/i,
+      })
+    )
+
+    expect(onUpdateMock).toHaveBeenCalledTimes(1)
+    expect(onUpdateMock).toHaveBeenCalledWith(
       trainer,
       Course_Invite_Status_Enum.Accepted
-    )
-    expect(mockFetcher).toHaveBeenCalledWith(
-      expect.stringContaining('mutation'),
-      {
-        id: trainer.id,
-        status: Course_Invite_Status_Enum.Accepted,
-      }
     )
   })
 
   it('calls onUpdate as expected when user DECLINES', async () => {
-    const onUpdate = jest.fn()
-    const { trainer } = _render(Course_Invite_Status_Enum.Pending, onUpdate)
+    const onUpdateMock = jest.fn()
+    const trainer = {
+      status: Course_Invite_Status_Enum.Pending,
+      id: chance.guid(),
+      type: Course_Trainer_Type_Enum.Leader,
+    }
 
-    await userEvent.click(screen.getByTestId(tid('declineBtn')))
-    await userEvent.click(screen.getByTestId(tid('modalSubmit')))
+    const client = {
+      executeMutation: ({
+        query,
+        variables,
+      }: {
+        query: TypedDocumentNode
+        variables: SetCourseTrainerStatusMutationVariables
+      }) => {
+        const mutationMatches =
+          query === SetCourseTrainerStatus &&
+          variables.status === Course_Invite_Status_Enum.Declined
 
-    await waitForCalls(onUpdate)
+        if (mutationMatches) {
+          return fromValue<{ data: SetCourseTrainerStatusMutation }>({
+            data: {
+              update_course_trainer_by_pk: {
+                id: trainer.id,
+                status: Course_Invite_Status_Enum.Declined,
+              },
+            },
+          })
+        } else {
+          return fromValue({
+            error: new CombinedError({ networkError: Error('network error') }),
+          })
+        }
+      },
+    } as unknown as Client
 
-    expect(onUpdate).toHaveBeenCalledWith(
+    render(
+      <Provider value={client}>
+        <AcceptDeclineCourse onUpdate={onUpdateMock} trainer={trainer} />
+      </Provider>
+    )
+
+    await userEvent.click(screen.getByRole('button', { name: /Decline/i }))
+
+    const confirmDialog = screen.getByRole('dialog')
+
+    await userEvent.click(
+      within(confirmDialog).getByRole('button', {
+        name: /decline/i,
+      })
+    )
+
+    expect(onUpdateMock).toHaveBeenCalledTimes(1)
+    expect(onUpdateMock).toHaveBeenCalledWith(
       trainer,
       Course_Invite_Status_Enum.Declined
     )
-    expect(mockFetcher).toHaveBeenCalledWith(
-      expect.stringContaining('mutation'),
-      {
-        id: trainer.id,
-        status: Course_Invite_Status_Enum.Declined,
-      }
+  })
+
+  it('does not call onUpdate when user cancels', async () => {
+    const onUpdateMock = jest.fn()
+    const courseId = 10000
+    const trainer = {
+      status: Course_Invite_Status_Enum.Pending,
+      id: chance.guid(),
+      type: Course_Trainer_Type_Enum.Leader,
+    }
+
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <AcceptDeclineCourse
+          onUpdate={onUpdateMock}
+          trainer={trainer}
+          courseId={courseId}
+        />
+      </Provider>
     )
-  })
 
-  it('does not call onUpdate when user CANCELs', async () => {
-    const onUpdate = jest.fn()
-    _render(Course_Invite_Status_Enum.Pending, onUpdate)
+    await userEvent.click(screen.getByRole('button', { name: /Decline/i }))
 
-    await userEvent.click(screen.getByTestId(tid('acceptBtn')))
-    await userEvent.click(screen.getByTestId(tid('modalCancel')))
+    const confirmDialog = screen.getByRole('dialog')
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId(tid('modalCancel'))
+    await userEvent.click(
+      within(confirmDialog).getByRole('button', {
+        name: /cancel/i,
+      })
     )
 
-    expect(onUpdate).not.toHaveBeenCalled()
-    expect(mockFetcher).not.toHaveBeenCalled()
+    expect(onUpdateMock).toHaveBeenCalledTimes(0)
   })
 
-  it('does not crash if fetcher throws', async () => {
-    mockFetcher.mockRejectedValueOnce(Error('Failed for testing'))
-    const logSpy = jest.spyOn(console, 'error').mockImplementation()
+  it('handles network error', async () => {
+    const onUpdateMock = jest.fn()
+    const courseId = 10000
+    const trainer = {
+      status: Course_Invite_Status_Enum.Pending,
+      id: chance.guid(),
+      type: Course_Trainer_Type_Enum.Leader,
+    }
 
-    const onUpdate = jest.fn()
-    _render(Course_Invite_Status_Enum.Pending, onUpdate)
+    const client = {
+      executeMutation: () =>
+        fromValue({
+          error: new CombinedError({ networkError: Error('network error') }),
+        }),
+    } as unknown as Client
 
-    await userEvent.click(screen.getByTestId(tid('acceptBtn')))
-    await userEvent.click(screen.getByTestId(tid('modalSubmit')))
+    render(
+      <Provider value={client}>
+        <AcceptDeclineCourse
+          onUpdate={onUpdateMock}
+          trainer={trainer}
+          courseId={courseId}
+        />
+      </Provider>
+    )
 
-    await waitForCalls(mockFetcher)
+    await userEvent.click(screen.getByRole('button', { name: /Decline/i }))
 
-    expect(onUpdate).not.toHaveBeenCalled()
-    expect(logSpy).toHaveBeenCalledWith(Error('Failed for testing'))
-    expect(screen.getByTestId(tid('modalSubmit'))).toBeInTheDocument()
+    const confirmDialog = screen.getByRole('dialog')
+
+    await userEvent.click(
+      within(confirmDialog).getByRole('button', {
+        name: /decline/i,
+      })
+    )
+
+    expect(onUpdateMock).toHaveBeenCalledTimes(0)
   })
 })
-
-it(`should navigate to '/courses/{courseId}/modules' when the trainer is lead`, async () => {
-  // Arrange
-  const onUpdate = jest.fn()
-  const courseId = 10000
-
-  _render(Course_Invite_Status_Enum.Pending, onUpdate, courseId)
-
-  // Act
-  await userEvent.click(screen.getByTestId(tid('acceptBtn')))
-  await userEvent.click(screen.getByTestId(tid('modalSubmit')))
-
-  // Assert
-  expect(mockNavigate).toHaveBeenCalledWith(
-    expect.stringContaining(`./${courseId}/modules`)
-  )
-})
-
-it(`should navigate to '/courses/{courseId}/details' when the trainer is moderator`, async () => {
-  // Arrange
-  const onUpdate = jest.fn()
-  const courseId = 10000
-
-  _render(
-    Course_Invite_Status_Enum.Pending,
-    onUpdate,
-    courseId,
-    Course_Trainer_Type_Enum.Moderator
-  )
-
-  // Act
-  await userEvent.click(screen.getByTestId(tid('acceptBtn')))
-  await userEvent.click(screen.getByTestId(tid('modalSubmit')))
-
-  // Assert
-  expect(mockNavigate).toHaveBeenCalledWith(
-    expect.stringContaining(`./${courseId}/details`)
-  )
-})
-
-it(`should navigate to '/courses/{courseId}/details' when the trainer is assistant`, async () => {
-  // Arrange
-  const onUpdate = jest.fn()
-  const courseId = 10000
-
-  _render(
-    Course_Invite_Status_Enum.Pending,
-    onUpdate,
-    courseId,
-    Course_Trainer_Type_Enum.Assistant
-  )
-
-  // Act
-  await userEvent.click(screen.getByTestId(tid('acceptBtn')))
-  await userEvent.click(screen.getByTestId(tid('modalSubmit')))
-
-  // Assert
-  expect(mockNavigate).toHaveBeenCalledWith(
-    expect.stringContaining(`./${courseId}/details`)
-  )
-})
-
-/**
- * Helpers
- */
-
-function _render(
-  status = Course_Invite_Status_Enum.Accepted,
-  onUpdate = jest.fn(),
-  courseId?: number,
-  trainerType?: Course_Trainer_Type_Enum
-) {
-  const trainer = {
-    id: chance.guid(),
-    type: trainerType || Course_Trainer_Type_Enum.Leader,
-    status,
-  }
-  const profile = buildProfile()
-
-  render(
-    <AcceptDeclineCourse
-      courseId={courseId}
-      trainer={trainer}
-      onUpdate={onUpdate}
-    >
-      <div>FALLBACK_CONTENT</div>
-    </AcceptDeclineCourse>,
-    { auth: { profile } }
-  )
-
-  return { trainer }
-}

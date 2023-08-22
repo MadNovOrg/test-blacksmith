@@ -157,12 +157,19 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
       trainer: { type: Course_Trainer_Type_Enum },
       status: Course_Invite_Status_Enum
     ) => {
-      const isAccepted =
-        status === Course_Invite_Status_Enum.Accepted &&
-        trainer.type === Course_Trainer_Type_Enum.Leader
+      const isAccepted = status === Course_Invite_Status_Enum.Accepted
 
       if (isAccepted) {
-        navigate(`./${course.id}/modules`)
+        switch (trainer.type) {
+          case Course_Trainer_Type_Enum.Leader: {
+            navigate(`./${course.id}/modules`)
+            break
+          }
+          default: {
+            navigate(`./${course.id}/details`)
+            break
+          }
+        }
       } else {
         mutate()
         refetchActionableCourses({ requestPolicy: 'network-only' })

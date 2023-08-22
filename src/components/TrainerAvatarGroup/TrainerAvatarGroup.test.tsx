@@ -46,9 +46,7 @@ describe('component: TrainerAvatarGroup', () => {
 
     const trainers: TrainerAvatar[] = [assistTrainer, leadTrainer]
 
-    render(
-      <TrainerAvatarGroup trainers={trainers} courseId={chance.integer()} />
-    )
+    render(<TrainerAvatarGroup trainers={trainers} />)
 
     const leadTrainerNode = screen.getByTestId(
       `trainer-avatar-${leadTrainer.id}`

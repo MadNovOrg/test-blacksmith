@@ -2,15 +2,15 @@ import { LoadingButton } from '@mui/lab'
 import { Button, Chip, Stack, Typography } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useMutation } from 'urql'
 
 import { Dialog } from '@app/components/Dialog'
 import {
   CourseTrainerInfoFragment,
   Course_Invite_Status_Enum,
-  Course_Trainer_Type_Enum,
+  SetCourseTrainerStatusMutation,
+  SetCourseTrainerStatusMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { SetCourseTrainerStatus } from '@app/queries/courses/set-course-trainer-status'
 
 enum Action {
@@ -38,15 +38,16 @@ export const AcceptDeclineCourse: React.FC<
     keyPrefix: 'accept-decline-course',
   })
 
-  const fetcher = useFetcher()
-  const navigate = useNavigate()
-
   const [action, setAction] = useState<Action>()
-  const [saving, setSaving] = useState(false)
 
   const openModal = useCallback((_action: Action) => {
     return () => setAction(_action)
   }, [])
+
+  const [{ fetching: saving }, saveTrainerStatus] = useMutation<
+    SetCourseTrainerStatusMutation,
+    SetCourseTrainerStatusMutationVariables
+  >(SetCourseTrainerStatus)
 
   const closeModal = useCallback(
     () => !saving && setAction(undefined),
@@ -56,32 +57,22 @@ export const AcceptDeclineCourse: React.FC<
   const onSubmit = useCallback(async () => {
     if (!trainer || !action) return
 
-    setSaving(true)
     const status = actionToStatus[action]
-    try {
-      await fetcher(SetCourseTrainerStatus, { id: trainer.id, status })
 
-      setSaving(false)
-      closeModal()
-      onUpdate(trainer, status)
+    const { error } = await saveTrainerStatus({ id: trainer.id, status })
 
-      if (!courseId) {
-        return
-      }
-
-      switch (trainer.type) {
-        case Course_Trainer_Type_Enum.Leader:
-          return navigate(`./${courseId}/modules`)
-        case Course_Trainer_Type_Enum.Assistant:
-        case Course_Trainer_Type_Enum.Moderator:
-          return navigate(`./${courseId}/details`)
-        default: /** Unsupported trainer, do nothing */
-      }
-    } catch (err) {
-      console.error(err)
-      setSaving(false)
+    if (error) {
+      console.error(error)
+      return
     }
-  }, [trainer, action, fetcher, closeModal, onUpdate, navigate, courseId])
+
+    closeModal()
+    onUpdate(trainer, status)
+
+    if (!courseId) {
+      return
+    }
+  }, [trainer, action, saveTrainerStatus, closeModal, onUpdate, courseId])
 
   if (!trainer || trainer?.status === Course_Invite_Status_Enum.Accepted) {
     return null
@@ -90,7 +81,7 @@ export const AcceptDeclineCourse: React.FC<
   if (trainer?.status === Course_Invite_Status_Enum.Declined) {
     return (
       <Chip
-        label={t('components.accept-decline-course.declined')}
+        label={t('declined')}
         size="small"
         color="error"
         data-testid="AcceptDeclineCourse-declinedChip"

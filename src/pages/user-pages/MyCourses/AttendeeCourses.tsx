@@ -226,10 +226,7 @@ export const AttendeeCourses: React.FC<
                       )}
                     </TableCell>
                     <TableCell>
-                      <TrainerAvatarGroup
-                        trainers={c.trainers ?? []}
-                        courseId={c.id}
-                      />
+                      <TrainerAvatarGroup trainers={c.trainers ?? []} />
                     </TableCell>
                     <TableCell>
                       <AttendeeCourseStatus course={c} />

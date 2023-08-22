@@ -61,10 +61,7 @@ export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
           <DateCell date={course.dates?.aggregate?.end?.date} />
           <DateCell date={course.createdAt} />
           <TableCell>
-            <TrainerAvatarGroup
-              trainers={course.trainers}
-              courseId={course.id}
-            />
+            <TrainerAvatarGroup trainers={course.trainers} />
           </TableCell>
           <TableCell data-testid="participants-cell">
             <ParticipantsCount
@@ -76,7 +73,6 @@ export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
           <TableCell>
             {activeRole === RoleName.TRAINER ? (
               <AcceptDeclineCourse
-                courseId={course.id}
                 trainer={
                   profile
                     ? findCourseTrainer(course.trainers, profile.id)

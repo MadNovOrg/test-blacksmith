@@ -26,7 +26,6 @@ export type TrainerAvatar = Pick<Course_Trainer, 'id' | 'status' | 'type'> & {
 }
 type Props = {
   trainers?: TrainerAvatar[]
-  courseId: number
 }
 
 type ProfileAvatarProp = {
@@ -84,7 +83,6 @@ function sortTrainers(a: TrainerAvatar, b: TrainerAvatar): 1 | -1 | 0 {
 
 export const TrainerAvatarGroup: React.FC<React.PropsWithChildren<Props>> = ({
   trainers,
-  courseId,
 }) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
@@ -122,17 +120,7 @@ export const TrainerAvatarGroup: React.FC<React.PropsWithChildren<Props>> = ({
 
   const sortedTrainers = trainers.slice().sort(sortTrainers)
 
-  return acl.canViewProfiles() ? (
-    <Link
-      href={`/manage-courses/all/${courseId}/details`}
-      underline="none"
-      ml={-1}
-    >
-      <AvatarGroup sx={{ justifyContent: 'center' }}>
-        {sortedTrainers.map(trainerAvatar)}
-      </AvatarGroup>
-    </Link>
-  ) : (
+  return (
     <AvatarGroup sx={{ justifyContent: 'center' }}>
       {sortedTrainers.map(trainerAvatar)}
     </AvatarGroup>

@@ -98,30 +98,33 @@ export const buildTrainerCourseWithDates = (
     },
   })
 
+export const buildCourseTrainer = (
+  overrides?: Partial<TrainerCourseFragment['trainers'][0]>
+): TrainerCourseFragment['trainers'][0] => {
+  return {
+    id: chance.guid(),
+    profile: { id: chance.guid() },
+    type: Course_Trainer_Type_Enum.Leader,
+    ...overrides,
+  }
+}
+
 export const buildActionableTrainerCourse = (
-  trainerProfileId: string,
   overrides?: Partial<TrainerCourseFragment>
 ) =>
   buildTrainerCourse({
     overrides: {
       status: Course_Status_Enum.TrainerPending,
-      trainers: [
-        {
-          id: chance.guid(),
-          profile: { id: trainerProfileId },
-          type: Course_Trainer_Type_Enum.Leader,
-        },
-      ],
+      trainers: [buildCourseTrainer()],
       ...overrides,
     },
   })
 
 export const buildActionableTrainerCourseWithDates = (
-  trainerProfileId: string,
   start: Date,
   end: Date
 ): TrainerCourseFragment =>
-  buildActionableTrainerCourse(trainerProfileId, {
+  buildActionableTrainerCourse({
     dates: {
       aggregate: {
         start: {

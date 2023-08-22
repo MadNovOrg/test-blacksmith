@@ -115,7 +115,7 @@ export const CoursesTable: React.FC<React.PropsWithChildren<Props>> = ({
               ) : null}
               {!hiddenColumns.has('trainers') ? (
                 <TableCell>
-                  <TrainerAvatarGroup trainers={c.trainers} courseId={c.id} />
+                  <TrainerAvatarGroup trainers={c.trainers} />
                 </TableCell>
               ) : null}
               {!hiddenColumns.has('registrants') ? (
