@@ -1,15 +1,8 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
-export const MUTATION = gql`
+export const SAVE_ORG_INVITES_MUTATION = gql`
   mutation SaveOrgInvites($invites: [organization_invites_insert_input!]!) {
-    insert_organization_invites(
-      objects: $invites
-      on_conflict: {
-        constraint: organization_invites_org_id_email_key
-        update_columns: [updatedAt, isAdmin, status]
-        where: { status: { _neq: "ACCEPTED" } }
-      }
-    ) {
+    insert_organization_invites(objects: $invites) {
       returning {
         id
       }

@@ -23,7 +23,7 @@ import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useOrganizations } from '@app/hooks/useOrganizations'
-import { MUTATION as SaveOrgInvitesQuery } from '@app/queries/invites/save-org-invites'
+import { SAVE_ORG_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
 import { Organization } from '@app/types'
 
 export type ImportCertificateModalProps = {
@@ -76,7 +76,7 @@ export const InviteUserToOrganisation: React.FC<
     if (!selectedOrg) return
     setLoading(true)
     try {
-      await fetcher(SaveOrgInvitesQuery, {
+      await fetcher(SAVE_ORG_INVITES_MUTATION, {
         invites: [
           {
             email,

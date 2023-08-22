@@ -18,20 +18,24 @@ import {
   useTheme,
 } from '@mui/material'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { useMutation } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { FormPanel } from '@app/components/FormPanel'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
-import { useFetcher } from '@app/hooks/use-fetcher'
+import {
+  SaveOrgInvitesMutation,
+  SaveOrgInvitesMutationVariables,
+} from '@app/generated/graphql'
 import { useOrganizations } from '@app/hooks/useOrganizations'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgDashboardTabs } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { OrgIndividualsSubtabs } from '@app/pages/admin/components/Organizations/tabs/OrgIndividualsTab'
-import { MUTATION as SaveOrgInvitesQuery } from '@app/queries/invites/save-org-invites'
+import { SAVE_ORG_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
 import { yup } from '@app/schemas'
 import { Organization } from '@app/types'
 import { getFieldError, requiredMsg } from '@app/util'
@@ -41,10 +45,6 @@ export const InviteUserToOrganization = () => {
   const { acl, profile } = useAuth()
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const fetcher = useFetcher()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [isOrgAdmin, setIsOrgAdmin] = useState(false)
   const { id } = useParams()
   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
 
@@ -66,8 +66,9 @@ export const InviteUserToOrganization = () => {
       : undefined
   )
 
-  const emailsSchema = useMemo(() => {
+  const schema = useMemo(() => {
     return yup.object({
+      isOrgAdmin: yup.boolean(),
       emails: yup
         .array()
         .of(
@@ -76,6 +77,7 @@ export const InviteUserToOrganization = () => {
             .email(t('validation-errors.email-invalid'))
             .required(t('validation-errors.email-invalid'))
         )
+        .required()
         .min(1, requiredMsg(t, 'pages.invite-to-org.work-email')),
     })
   }, [t])
@@ -85,10 +87,12 @@ export const InviteUserToOrganization = () => {
     formState: { errors, isSubmitted },
     watch,
     setValue,
-  } = useForm<{ emails: string[] }>({
-    resolver: yupResolver(emailsSchema),
+    control,
+  } = useForm<yup.InferType<typeof schema>>({
+    resolver: yupResolver(schema),
     defaultValues: {
       emails: [],
+      isOrgAdmin: false,
     },
   })
 
@@ -100,33 +104,31 @@ export const InviteUserToOrganization = () => {
     }
   }, [id, orgs, selectedOrg])
 
-  const onSubmit = async () => {
-    setLoading(true)
-    setError('')
+  const [
+    { data: savingInvitesResponse, error: savingError, fetching: loading },
+    saveOrgInvites,
+  ] = useMutation<SaveOrgInvitesMutation, SaveOrgInvitesMutationVariables>(
+    SAVE_ORG_INVITES_MUTATION
+  )
+
+  const errorMessage = savingError
+    ? savingError.message.includes('organization_invites_org_id_email_key')
+      ? t('pages.invite-to-org.duplicate-email')
+      : t('pages.invite-to-org.error-message')
+    : null
+
+  const onSubmit: SubmitHandler<
+    yup.InferType<typeof schema>
+  > = async values => {
     if (!selectedOrg) return
-    try {
-      await fetcher(SaveOrgInvitesQuery, {
-        invites: values.emails.map(email => ({
-          email,
-          orgId: selectedOrg.id,
-          isAdmin: isOrgAdmin,
-        })),
-      })
-      navigate(
-        `../?tab=${OrgDashboardTabs.INDIVIDUALS}&subtab=${OrgIndividualsSubtabs.INVITES}`
-      )
-    } catch (e: unknown) {
-      const errorMessage = (e as Error).message
-      if (
-        errorMessage.indexOf('organization_invites_org_id_email_key') !== -1
-      ) {
-        setError(t('pages.invite-to-org.duplicate-email'))
-      } else {
-        setError(errorMessage)
-      }
-    } finally {
-      setLoading(false)
-    }
+
+    saveOrgInvites({
+      invites: values.emails.map(email => ({
+        email,
+        orgId: selectedOrg.id,
+        isAdmin: values.isOrgAdmin,
+      })),
+    })
   }
 
   if (loadingOrgs) {
@@ -138,6 +140,14 @@ export const InviteUserToOrganization = () => {
       >
         <CircularProgress />
       </Stack>
+    )
+  }
+
+  if (savingInvitesResponse?.insert_organization_invites?.returning.length) {
+    return (
+      <Navigate
+        to={`../?tab=${OrgDashboardTabs.INDIVIDUALS}&subtab=${OrgIndividualsSubtabs.INVITES}`}
+      />
     )
   }
 
@@ -198,6 +208,17 @@ export const InviteUserToOrganization = () => {
               </Typography>
 
               <FormPanel>
+                {errorMessage ? (
+                  <Alert
+                    variant="outlined"
+                    severity="error"
+                    data-testid="error-alert"
+                    sx={{ mb: 4 }}
+                  >
+                    {errorMessage}
+                  </Alert>
+                ) : null}
+
                 <Autocomplete
                   multiple
                   id="emails"
@@ -262,45 +283,37 @@ export const InviteUserToOrganization = () => {
               </Typography>
 
               {acl.canSetOrgAdminRole() ? (
-                <FormPanel>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={isOrgAdmin}
-                        onChange={e => {
-                          setIsOrgAdmin(e.target.checked)
-                        }}
-                        sx={{ px: 2 }}
+                <Controller
+                  name="isOrgAdmin"
+                  control={control}
+                  render={({ field }) => (
+                    <FormPanel>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            {...field}
+                            checked={field.value === true}
+                            sx={{ px: 2 }}
+                          />
+                        }
+                        label={
+                          <Box>
+                            <Typography variant="body1">
+                              {t('pages.invite-to-org.organization-admin')}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color={theme.palette.grey[700]}
+                            >
+                              {t('pages.invite-to-org.organization-admin-hint')}
+                            </Typography>
+                          </Box>
+                        }
                       />
-                    }
-                    label={
-                      <Box>
-                        <Typography variant="body1">
-                          {t('pages.invite-to-org.organization-admin')}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          color={theme.palette.grey[700]}
-                        >
-                          {t('pages.invite-to-org.organization-admin-hint')}
-                        </Typography>
-                      </Box>
-                    }
-                  />
-                </FormPanel>
+                    </FormPanel>
+                  )}
+                />
               ) : undefined}
-
-              {error ? (
-                <FormPanel>
-                  <FormHelperText
-                    sx={{ mt: 2 }}
-                    error
-                    data-testid="invite-user-form-error"
-                  >
-                    {error}
-                  </FormHelperText>
-                </FormPanel>
-              ) : null}
 
               <Grid
                 container
