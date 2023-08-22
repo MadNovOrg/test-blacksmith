@@ -117,7 +117,8 @@ export function canBeBlendedBild(
   )
 
   switch (courseType) {
-    case CourseType.INDIRECT: {
+    case CourseType.INDIRECT:
+    case CourseType.CLOSED: {
       return selectedStrategies.includes(BildStrategies.Primary)
     }
   }
@@ -334,15 +335,17 @@ export function canBeVirtualBild(
   )
 
   switch (courseType) {
-    case CourseType.INDIRECT: {
+    case CourseType.INDIRECT:
+    case CourseType.CLOSED: {
       return (
         selectedStrategies.includes(BildStrategies.Primary) &&
         selectedStrategies.length === 1
       )
     }
+    default: {
+      return false
+    }
   }
-
-  return false
 }
 
 export function canBeF2F(

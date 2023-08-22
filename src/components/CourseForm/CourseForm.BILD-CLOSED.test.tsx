@@ -214,6 +214,22 @@ describe('CourseForm - closed BILD', () => {
     expect(screen.getByLabelText(/both/i)).toBeDisabled()
   })
 
+  it('enables virtual delivery type for BILD Certified if only Primary strategy is selected', async () => {
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.CLOSED} />, {
+        auth: { activeRole: RoleName.TT_ADMIN },
+      })
+    })
+
+    await selectBildCategory()
+
+    expect(screen.getByLabelText(/virtual/i)).toBeDisabled()
+
+    await userEvent.click(screen.getByLabelText(/primary/i))
+
+    expect(screen.getByLabelText(/virtual/i)).toBeEnabled()
+  })
+
   it('disables mixed delivery type for BILD Advanced Trainer level', async () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.CLOSED} />, {
@@ -244,7 +260,7 @@ describe('CourseForm - closed BILD', () => {
     expect(screen.getByLabelText(/both/i)).toBeEnabled()
   })
 
-  it('disables blended learning toggle', async () => {
+  it('toggles blended learning flag', async () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.CLOSED} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
@@ -254,6 +270,10 @@ describe('CourseForm - closed BILD', () => {
     await selectBildCategory()
 
     expect(screen.getByLabelText(/blended learning/i)).toBeDisabled()
+
+    await userEvent.click(screen.getByLabelText(/primary/i))
+
+    expect(screen.getByLabelText(/blended learning/i)).toBeEnabled()
   })
 
   it('displays price field', async () => {
