@@ -149,6 +149,21 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const minCourseStartDate = new Date()
   minCourseStartDate.setDate(minCourseStartDate.getDate() + 1)
 
+  /**
+   * TODO Remove after October 1 the PRODUCTION mode condition
+   * @description PRODUCTION mode condition for minimal start date on
+   * indirect course creation by trainer was added to be tested
+   * the changes regarding rescheduling indirect course under
+   * 2 weeks
+   * @see https://behaviourhub.atlassian.net/jira/software/projects/TTHP/issues/TTHP-2410
+   * @see https://behaviourhub.atlassian.net/jira/software/projects/TTHP/issues/TTHP-1484
+   * @author ion.mereuta@amdaris.com
+   */
+  const minStartDateRestriction =
+    courseType === CourseType.INDIRECT &&
+    activeRole === RoleName.TRAINER &&
+    import.meta.env.PROD
+
   const schema = useMemo(
     () =>
       yup.object({
@@ -215,9 +230,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .nullable()
           .typeError(t('components.course-form.start-date-format'))
           .when([], {
-            is: () =>
-              courseType === CourseType.INDIRECT &&
-              activeRole === RoleName.TRAINER,
+            is: () => minStartDateRestriction,
 
             then: sd =>
               sd.min(
@@ -234,9 +247,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .nullable()
           .typeError(t('components.course-form.end-date-format'))
           .when([], {
-            is: () =>
-              courseType === CourseType.INDIRECT &&
-              activeRole === RoleName.TRAINER,
+            is: () => minStartDateRestriction,
 
             then: sd =>
               sd.min(
@@ -345,6 +356,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       isClosedCourse,
       hasMinParticipants,
       activeRole,
+      minStartDateRestriction,
       trainerRatioNotMet,
       acl,
       courseType,
@@ -1322,8 +1334,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       label={t('components.course-form.start-date-placeholder')}
                       value={field.value}
                       minDate={
-                        courseType === CourseType.INDIRECT &&
-                        activeRole === RoleName.TRAINER
+                        minStartDateRestriction
                           ? INDIRECT_COURSE_MIN_ALLOWED_DATE
                           : minCourseStartDate
                       }
@@ -1383,8 +1394,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       value={field.value}
                       minDate={
                         values.startDate ??
-                        (courseType === CourseType.INDIRECT &&
-                        activeRole === RoleName.TRAINER
+                        (minStartDateRestriction
                           ? INDIRECT_COURSE_MIN_ALLOWED_DATE
                           : minCourseStartDate)
                       }
