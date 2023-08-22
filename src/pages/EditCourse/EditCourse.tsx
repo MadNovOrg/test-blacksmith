@@ -503,6 +503,27 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     )
   }, [profile])
 
+  const alignedWithProtocol =
+    (courseData?.startDateTime &&
+      differenceInCalendarDays(courseData.startDateTime, new Date()) > 14) ||
+    acl.canRescheduleWithoutWarning()
+
+  const hasError = updatingError || auditError
+  const fetching = updatingCourse || insertingAudit
+  const cancellableCourse =
+    course &&
+    [
+      Course_Status_Enum.TrainerDeclined,
+      Course_Status_Enum.TrainerPending,
+      Course_Status_Enum.Scheduled,
+      Course_Status_Enum.ConfirmModules,
+    ].indexOf(course.status) !== -1
+  const canCancelCourse =
+    acl.canCancelCourses() ||
+    course?.trainers?.find(
+      t => t.profile.id === profile?.id && t.type === CourseTrainerType.Leader
+    )
+
   const editCourseValid = courseDataValid && trainersDataValid
   const submitButtonHandler = useCallback(async () => {
     courseMethods?.current?.trigger()
@@ -532,6 +553,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           levels: assistant.levels,
         }))
       )
+      if (!autoapproved && !alignedWithProtocol) {
+        setShowReviewModal(true)
+        return
+      }
+
       if (exceptions.length > 0) {
         setCourseExceptions(exceptions)
         return
@@ -546,6 +572,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     acl,
     editCourse,
     seniorOrPrincipalLead,
+    autoapproved,
+    alignedWithProtocol,
   ])
 
   const showTrainerRatioWarning = useMemo(() => {
@@ -594,27 +622,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   ) {
     return <NotFound />
   }
-
-  const alignedWithProtocol =
-    (courseData?.startDateTime &&
-      differenceInCalendarDays(courseData.startDateTime, new Date()) > 14) ||
-    acl.canRescheduleWithoutWarning()
-
-  const hasError = updatingError || auditError
-  const fetching = updatingCourse || insertingAudit
-  const cancellableCourse =
-    course &&
-    [
-      Course_Status_Enum.TrainerDeclined,
-      Course_Status_Enum.TrainerPending,
-      Course_Status_Enum.Scheduled,
-      Course_Status_Enum.ConfirmModules,
-    ].indexOf(course.status) !== -1
-  const canCancelCourse =
-    acl.canCancelCourses() ||
-    course?.trainers?.find(
-      t => t.profile.id === profile?.id && t.type === CourseTrainerType.Leader
-    )
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
