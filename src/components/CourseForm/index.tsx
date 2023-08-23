@@ -162,7 +162,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const minStartDateRestriction =
     courseType === CourseType.INDIRECT &&
     activeRole === RoleName.TRAINER &&
-    import.meta.env.PROD
+    import.meta.env.MODE === 'production'
 
   const schema = useMemo(
     () =>
