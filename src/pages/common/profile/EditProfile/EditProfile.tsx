@@ -158,7 +158,7 @@ export const EditProfilePage: React.FC<
 
   const canEditRoles = acl.isTTAdmin() || acl.isTTOps()
   const canEditNamesAndDOB =
-    acl.isAdmin() || acl.isTTOps() || acl.isSalesAdmin()
+    acl.isTTAdmin() || acl.isTTOps() || acl.isSalesAdmin()
 
   useEffect(() => {
     const restriction = profile?.dietaryRestrictions
