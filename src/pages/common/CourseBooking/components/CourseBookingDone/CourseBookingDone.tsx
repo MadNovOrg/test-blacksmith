@@ -1,6 +1,6 @@
 import { Alert, Box, Container, Link, Stack, Typography } from '@mui/material'
 import React, { useEffect, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 import { useQuery } from 'urql'
 
@@ -78,7 +78,7 @@ export const CourseBookingDone: React.FC<
               {steps.length ? (
                 <Box mb={7}>
                   <Typography variant="h2" mb={2}>
-                    {t('pages.book-course.title')}
+                    {t('pages.book-course.title-complete')}
                   </Typography>
                 </Box>
               ) : null}
@@ -101,14 +101,16 @@ export const CourseBookingDone: React.FC<
                   </Alert>
                 ) : (
                   <Alert variant="outlined" color="success" sx={{ mb: 4 }}>
-                    {t('pages.book-course.order-success-info')}
-                    {acl.canViewOrders() ? (
-                      <Link href={`/orders/${order?.id}`}>
-                        {order?.xeroInvoiceNumber}
-                      </Link>
-                    ) : (
-                      order?.xeroInvoiceNumber
-                    )}
+                    <Trans
+                      i18nKey="pages.book-course.order-success-info"
+                      values={{ orderNumber: order?.xeroInvoiceNumber }}
+                    >
+                      {acl.canViewOrders() ? (
+                        <Link href={`/orders/${order?.id}`} />
+                      ) : (
+                        <></>
+                      )}
+                    </Trans>
                   </Alert>
                 )}
 
