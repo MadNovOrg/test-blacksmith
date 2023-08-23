@@ -4,7 +4,9 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import Link from '@mui/material/Link'
 import React, { useState } from 'react'
+import { Trans } from 'react-i18next'
 
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { CourseLevel } from '@app/generated/graphql'
@@ -28,7 +30,21 @@ export const ParticipantTransferInfo: React.FC<
   return (
     <Box>
       <Alert severity="warning" variant="outlined" sx={{ mt: 4 }}>
-        {t('alert-message')}
+        {/* {t('alert-message')} */}
+        <Trans
+          i18nKey="pages.course-details.modify-my-attendance.transfer-info.alert-message"
+          components={{
+            termsOfBusinessLink: (
+              <Link
+                target="_blank"
+                rel="noreferrer"
+                href={`${
+                  import.meta.env.VITE_BASE_WORDPRESS_URL
+                }/terms-of-business/`}
+              />
+            ),
+          }}
+        />
       </Alert>
       <Box mt={2}>
         <TransferTermsTable startDate={startDate} courseLevel={courseLevel} />

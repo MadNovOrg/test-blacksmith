@@ -1,6 +1,7 @@
 import { LoadingButton } from '@mui/lab'
 import {
   Alert,
+  Link,
   Box,
   Button,
   Checkbox,
@@ -9,7 +10,7 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 
 import {
   CancelMyselfFromCourseMutation,
@@ -60,7 +61,20 @@ export const CancelAttendanceForm: React.FC<
   return (
     <Box>
       <Alert severity="warning" variant="outlined" sx={{ mt: 4 }}>
-        {t('pages.course-details.request-cancellation-modal.warning')}
+        <Trans
+          i18nKey="pages.course-details.request-cancellation-modal.warning"
+          components={{
+            termsOfBusinessLink: (
+              <Link
+                target="_blank"
+                rel="noreferrer"
+                href={`${
+                  import.meta.env.VITE_BASE_WORDPRESS_URL
+                }/terms-of-business/`}
+              />
+            ),
+          }}
+        />
       </Alert>
 
       <CancellationTermsTable

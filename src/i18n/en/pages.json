@@ -425,7 +425,7 @@
         "other": "Other"
       },
       "specify-reason": "Specify reason",
-      "close-modal": "Do not cancel this course",
+      "close-modal": "Close",
       "cancel-entire-course": "Cancel course",
       "fee": "Fee",
       "before-course-start-date": "Before course start date",
@@ -437,7 +437,7 @@
         "one-to-two-weeks": "1 - 2 weeks",
         "less-than-week": "Less than 1 week"
       },
-      "cannot-be-undone-confirmation": "I understand this cannot be undone."
+      "cannot-be-undone-confirmation": "I understand and agree to the change."
     },
     "registrants-cancellation-modal": {
       "description": "There are still registrants on this course. Have you transferred all registered attendees first?\n\nProceeding to cancel will cancel attendees off this course. If you would like to transfer registered attendees to another course instead, please change this per attendee in course details.",
@@ -529,7 +529,7 @@
     "course-has-been-cancelled": "{{ code }} has been cancelled.",
     "request-cancellation-modal": {
       "description": "This will be escalated with Team Teach and a representative will contact you to complete this action.",
-      "warning": "Cancellation terms apply based on the course start date.",
+      "warning": "Cancellation terms apply based on the course start date in line with Team Teach <strong><termsOfBusinessLink>Terms of Business.</termsOfBusinessLink></strong>",
       "title": "Request to cancel this course"
     },
     "cancellation-request-alert": "This course has a pending cancellation request.",
@@ -539,12 +539,12 @@
     "modify-my-attendance": {
       "title": "Modify my attendance",
       "description": "Please select one of the following options.",
-      "cancel-my-attendance": "Cancel my attendance",
-      "transfer-to-another-course": "Transfer to another course",
+      "cancel-my-attendance": "Cancel course",
+      "transfer-to-another-course": "Transfer course",
       "transfer-info": {
-        "alert-message": "Transfer terms apply based on the course start date.",
-        "terms-notice": "I understand the terms and conditions.",
-        "transfer-btn-text": "Transfer to another course",
+        "alert-message": "Transfer terms apply based on the course start date in line with Team Teach <strong><termsOfBusinessLink>Terms of Business.</termsOfBusinessLink></strong>",
+        "terms-notice": "I understand and agree to the change.",
+        "transfer-btn-text": "Transfer course",
         "cancel-btn-text": "Close"
       }
     }
