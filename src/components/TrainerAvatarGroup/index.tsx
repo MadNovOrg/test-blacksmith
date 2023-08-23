@@ -121,7 +121,16 @@ export const TrainerAvatarGroup: React.FC<React.PropsWithChildren<Props>> = ({
   const sortedTrainers = trainers.slice().sort(sortTrainers)
 
   return (
-    <AvatarGroup sx={{ justifyContent: 'center' }}>
+    <AvatarGroup
+      // max={2}
+      sx={{
+        '& .MuiAvatar-root': {
+          width: 32,
+          height: 32,
+          justifyContent: 'center',
+        },
+      }}
+    >
       {sortedTrainers.map(trainerAvatar)}
     </AvatarGroup>
   )
