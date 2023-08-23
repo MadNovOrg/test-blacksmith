@@ -369,6 +369,7 @@ select_permissions:
         - end
       computed_fields:
         - course_code
+        - freeSlots
       filter:
         _and:
           - course_type:
@@ -468,6 +469,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_invite_data
         - booking_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
@@ -479,6 +481,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - end
         - exceptions_pending
         - free_spaces
         - go1_integration
@@ -497,9 +500,8 @@ select_permissions:
         - reaccreditation
         - source
         - special_instructions
-        - updated_at
         - start
-        - end
+        - updated_at
       computed_fields:
         - course_code
         - freeSlots
@@ -513,6 +515,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_invite_data
         - booking_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
@@ -524,6 +527,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - end
         - exceptions_pending
         - free_spaces
         - go1_integration
@@ -542,9 +546,8 @@ select_permissions:
         - reaccreditation
         - source
         - special_instructions
-        - updated_at
         - start
-        - end
+        - updated_at
       computed_fields:
         - course_code
         - freeSlots
@@ -604,6 +607,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_invite_data
         - booking_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
@@ -615,6 +619,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - end
         - exceptions_pending
         - free_spaces
         - go1_integration
@@ -633,9 +638,8 @@ select_permissions:
         - reaccreditation
         - source
         - special_instructions
-        - updated_at
         - start
-        - end
+        - updated_at
       computed_fields:
         - course_code
         - freeSlots
@@ -649,6 +653,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_invite_data
         - booking_contact_profile_id
         - conversion
         - course_delivery_type
@@ -658,6 +663,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - end
         - exceptions_pending
         - free_spaces
         - go1_integration
@@ -676,9 +682,8 @@ select_permissions:
         - reaccreditation
         - source
         - special_instructions
-        - updated_at
         - start
-        - end
+        - updated_at
       computed_fields:
         - course_code
         - freeSlots
@@ -726,6 +731,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_invite_data
         - booking_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
@@ -737,6 +743,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - end
         - exceptions_pending
         - free_spaces
         - go1_integration
@@ -755,9 +762,8 @@ select_permissions:
         - reaccreditation
         - source
         - special_instructions
-        - updated_at
         - start
-        - end
+        - updated_at
       computed_fields:
         - course_code
         - freeSlots
@@ -771,6 +777,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_invite_data
         - booking_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
@@ -782,6 +789,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - end
         - exceptions_pending
         - free_spaces
         - go1_integration
@@ -800,12 +808,10 @@ select_permissions:
         - reaccreditation
         - source
         - special_instructions
-        - updated_at
         - start
-        - end
+        - updated_at
       computed_fields:
         - course_code
-        - freeSlots
       filter: {}
       allow_aggregations: true
   - role: unverified
@@ -815,6 +821,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_invite_data
         - booking_contact_profile_id
         - course_delivery_type
         - course_level
@@ -822,6 +829,7 @@ select_permissions:
         - course_type
         - created_at
         - description
+        - end
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -834,9 +842,8 @@ select_permissions:
         - price
         - price_currency
         - reaccreditation
-        - updated_at
         - start
-        - end
+        - updated_at
       computed_fields:
         - course_code
       filter:
@@ -858,6 +865,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - booking_contact_invite_data
         - booking_contact_profile_id
         - conversion
         - course_delivery_type
@@ -867,6 +875,7 @@ select_permissions:
         - created_at
         - created_at
         - description
+        - end
         - exceptions_pending
         - free_spaces
         - go1_integration
@@ -885,9 +894,8 @@ select_permissions:
         - reaccreditation
         - source
         - special_instructions
-        - updated_at
         - start
-        - end
+        - updated_at
       computed_fields:
         - course_code
         - freeSlots

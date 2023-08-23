@@ -15049,7 +15049,7 @@ export type Course = {
   /** An aggregate relationship */
   expenses_aggregate: Course_Expenses_Aggregate;
   /** A computed field, executes function "course_free_slots" */
-  freeSlots?: Maybe<Scalars['String']>;
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   go1Integration: Scalars['Boolean'];
   gradingConfirmed: Scalars['Boolean'];
@@ -15851,6 +15851,8 @@ export type Course_Avg_Fields = {
   __typename?: 'course_avg_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -16533,7 +16535,7 @@ export type Course_Bool_Exp = {
   exceptionsPending?: InputMaybe<Boolean_Comparison_Exp>;
   expenses?: InputMaybe<Course_Expenses_Bool_Exp>;
   expenses_aggregate?: InputMaybe<Course_Expenses_Aggregate_Bool_Exp>;
-  freeSlots?: InputMaybe<String_Comparison_Exp>;
+  freeSlots?: InputMaybe<Int_Comparison_Exp>;
   freeSpaces?: InputMaybe<Int_Comparison_Exp>;
   go1Integration?: InputMaybe<Boolean_Comparison_Exp>;
   gradingConfirmed?: InputMaybe<Boolean_Comparison_Exp>;
@@ -21027,7 +21029,7 @@ export type Course_Max_Fields = {
   description?: Maybe<Scalars['String']>;
   end?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "course_free_slots" */
-  freeSlots?: Maybe<Scalars['String']>;
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
@@ -21088,7 +21090,7 @@ export type Course_Min_Fields = {
   description?: Maybe<Scalars['String']>;
   end?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "course_free_slots" */
-  freeSlots?: Maybe<Scalars['String']>;
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
@@ -25233,6 +25235,8 @@ export type Course_Stddev_Fields = {
   __typename?: 'course_stddev_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -25258,6 +25262,8 @@ export type Course_Stddev_Pop_Fields = {
   __typename?: 'course_stddev_pop_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -25283,6 +25289,8 @@ export type Course_Stddev_Samp_Fields = {
   __typename?: 'course_stddev_samp_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -25358,6 +25366,8 @@ export type Course_Sum_Fields = {
   __typename?: 'course_sum_fields';
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
   cancellationFeePercent?: Maybe<Scalars['Int']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
@@ -26236,6 +26246,8 @@ export type Course_Var_Pop_Fields = {
   __typename?: 'course_var_pop_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -26261,6 +26273,8 @@ export type Course_Var_Samp_Fields = {
   __typename?: 'course_var_samp_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -26286,6 +26300,8 @@ export type Course_Variance_Fields = {
   __typename?: 'course_variance_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;

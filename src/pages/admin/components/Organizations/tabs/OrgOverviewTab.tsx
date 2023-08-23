@@ -78,7 +78,7 @@ export const OrgOverviewTab: React.FC<
       profile?.id,
       {
         _and: [
-          { freeSlots: { _neq: '0' } },
+          { freeSlots: { _gt: 0 } },
           { type: { _eq: Course_Type_Enum.Open } },
           {
             status: {

@@ -33,6 +33,17 @@ export type AcfFieldGroup = {
   fieldGroupName?: Maybe<Scalars['String']>;
 };
 
+/** ACF Link field */
+export type AcfLink = {
+  __typename?: 'AcfLink';
+  /** The target of the link (_blank, etc) */
+  target?: Maybe<Scalars['String']>;
+  /** The title of the link */
+  title?: Maybe<Scalars['String']>;
+  /** The url of the link */
+  url?: Maybe<Scalars['String']>;
+};
+
 export type Address = {
   __typename?: 'Address';
   addressLineOne?: Maybe<Scalars['String']>;
@@ -1333,6 +1344,7 @@ export type CreateAppUserInput = {
   acceptTnc: Scalars['Boolean'];
   dob?: InputMaybe<Scalars['String']>;
   firstName: Scalars['String'];
+  jobTitle: Scalars['String'];
   lastName: Scalars['String'];
   password: Scalars['String'];
   phone?: InputMaybe<Scalars['String']>;
@@ -7157,6 +7169,7 @@ export type Resource_Resourceattachment = AcfFieldGroup & {
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']>;
   file?: Maybe<MediaItem>;
+  link?: Maybe<AcfLink>;
   resourcetype?: Maybe<Scalars['String']>;
   videourl?: Maybe<Scalars['String']>;
 };
@@ -8765,6 +8778,7 @@ export type SearchTrainer = {
   __typename?: 'SearchTrainer';
   availability?: Maybe<SearchTrainerAvailability>;
   avatar?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
   fullName: Scalars['String'];
   id: Scalars['uuid'];
   levels: Array<CourseCertificateLevel>;
@@ -9482,7 +9496,7 @@ export type TransferCourse = {
 };
 
 export type TransferFee = {
-  customFee?: InputMaybe<Scalars['Int']>;
+  customFee?: InputMaybe<Scalars['Float']>;
   type: TransferFeeType;
 };
 
@@ -10063,8 +10077,8 @@ export type UpdateUserProfileInput = {
   dietaryRestrictions?: InputMaybe<Scalars['String']>;
   disabilities?: InputMaybe<Scalars['String']>;
   dob?: InputMaybe<Scalars['String']>;
-  familyName: Scalars['String'];
-  givenName: Scalars['String'];
+  familyName?: InputMaybe<Scalars['String']>;
+  givenName?: InputMaybe<Scalars['String']>;
   jobTitle?: InputMaybe<Scalars['String']>;
   phone?: InputMaybe<Scalars['String']>;
   profileId: Scalars['uuid'];
@@ -14697,6 +14711,300 @@ export type ContentRootQueryWebinarsCategoryArgs = {
   idType?: InputMaybe<WebinarsCategoryIdType>;
 };
 
+/** columns and relationships of "country" */
+export type Country = {
+  __typename?: 'country';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "country" */
+export type Country_Aggregate = {
+  __typename?: 'country_aggregate';
+  aggregate?: Maybe<Country_Aggregate_Fields>;
+  nodes: Array<Country>;
+};
+
+/** aggregate fields of "country" */
+export type Country_Aggregate_Fields = {
+  __typename?: 'country_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Country_Max_Fields>;
+  min?: Maybe<Country_Min_Fields>;
+};
+
+
+/** aggregate fields of "country" */
+export type Country_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Country_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "country". All fields are combined with a logical 'AND'. */
+export type Country_Bool_Exp = {
+  _and?: InputMaybe<Array<Country_Bool_Exp>>;
+  _not?: InputMaybe<Country_Bool_Exp>;
+  _or?: InputMaybe<Array<Country_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "country" */
+export enum Country_Constraint {
+  /** unique or primary key constraint on columns "name" */
+  CountryPkey = 'country_pkey'
+}
+
+/** input type for inserting data into table "country" */
+export type Country_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Country_Max_Fields = {
+  __typename?: 'country_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Country_Min_Fields = {
+  __typename?: 'country_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "country" */
+export type Country_Mutation_Response = {
+  __typename?: 'country_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Country>;
+};
+
+/** on_conflict condition type for table "country" */
+export type Country_On_Conflict = {
+  constraint: Country_Constraint;
+  update_columns?: Array<Country_Update_Column>;
+  where?: InputMaybe<Country_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "country". */
+export type Country_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: country */
+export type Country_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** columns and relationships of "country_region" */
+export type Country_Region = {
+  __typename?: 'country_region';
+  country: Scalars['String'];
+  created_at: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  name: Scalars['String'];
+  updated_at: Scalars['timestamptz'];
+};
+
+/** aggregated selection of "country_region" */
+export type Country_Region_Aggregate = {
+  __typename?: 'country_region_aggregate';
+  aggregate?: Maybe<Country_Region_Aggregate_Fields>;
+  nodes: Array<Country_Region>;
+};
+
+/** aggregate fields of "country_region" */
+export type Country_Region_Aggregate_Fields = {
+  __typename?: 'country_region_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Country_Region_Max_Fields>;
+  min?: Maybe<Country_Region_Min_Fields>;
+};
+
+
+/** aggregate fields of "country_region" */
+export type Country_Region_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Country_Region_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "country_region". All fields are combined with a logical 'AND'. */
+export type Country_Region_Bool_Exp = {
+  _and?: InputMaybe<Array<Country_Region_Bool_Exp>>;
+  _not?: InputMaybe<Country_Region_Bool_Exp>;
+  _or?: InputMaybe<Array<Country_Region_Bool_Exp>>;
+  country?: InputMaybe<String_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "country_region" */
+export enum Country_Region_Constraint {
+  /** unique or primary key constraint on columns "country", "name" */
+  CountryRegionCountryNameKey = 'country_region_country_name_key',
+  /** unique or primary key constraint on columns "id" */
+  CountryRegionPkey = 'country_region_pkey'
+}
+
+/** input type for inserting data into table "country_region" */
+export type Country_Region_Insert_Input = {
+  country?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Country_Region_Max_Fields = {
+  __typename?: 'country_region_max_fields';
+  country?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type Country_Region_Min_Fields = {
+  __typename?: 'country_region_min_fields';
+  country?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "country_region" */
+export type Country_Region_Mutation_Response = {
+  __typename?: 'country_region_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Country_Region>;
+};
+
+/** on_conflict condition type for table "country_region" */
+export type Country_Region_On_Conflict = {
+  constraint: Country_Region_Constraint;
+  update_columns?: Array<Country_Region_Update_Column>;
+  where?: InputMaybe<Country_Region_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "country_region". */
+export type Country_Region_Order_By = {
+  country?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: country_region */
+export type Country_Region_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "country_region" */
+export enum Country_Region_Select_Column {
+  /** column name */
+  Country = 'country',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "country_region" */
+export type Country_Region_Set_Input = {
+  country?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** Streaming cursor of the table "country_region" */
+export type Country_Region_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Country_Region_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Country_Region_Stream_Cursor_Value_Input = {
+  country?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** update columns of table "country_region" */
+export enum Country_Region_Update_Column {
+  /** column name */
+  Country = 'country',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+export type Country_Region_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Country_Region_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Country_Region_Bool_Exp;
+};
+
+/** select columns of table "country" */
+export enum Country_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "country" */
+export type Country_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "country" */
+export type Country_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Country_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Country_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "country" */
+export enum Country_Update_Column {
+  /** column name */
+  Name = 'name'
+}
+
+export type Country_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Country_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Country_Bool_Exp;
+};
+
 /** columns and relationships of "course" */
 export type Course = {
   __typename?: 'course';
@@ -14741,7 +15049,7 @@ export type Course = {
   /** An aggregate relationship */
   expenses_aggregate: Course_Expenses_Aggregate;
   /** A computed field, executes function "course_free_slots" */
-  freeSlots?: Maybe<Scalars['String']>;
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   go1Integration: Scalars['Boolean'];
   gradingConfirmed: Scalars['Boolean'];
@@ -15543,6 +15851,8 @@ export type Course_Avg_Fields = {
   __typename?: 'course_avg_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -16225,7 +16535,7 @@ export type Course_Bool_Exp = {
   exceptionsPending?: InputMaybe<Boolean_Comparison_Exp>;
   expenses?: InputMaybe<Course_Expenses_Bool_Exp>;
   expenses_aggregate?: InputMaybe<Course_Expenses_Aggregate_Bool_Exp>;
-  freeSlots?: InputMaybe<String_Comparison_Exp>;
+  freeSlots?: InputMaybe<Int_Comparison_Exp>;
   freeSpaces?: InputMaybe<Int_Comparison_Exp>;
   go1Integration?: InputMaybe<Boolean_Comparison_Exp>;
   gradingConfirmed?: InputMaybe<Boolean_Comparison_Exp>;
@@ -20719,7 +21029,7 @@ export type Course_Max_Fields = {
   description?: Maybe<Scalars['String']>;
   end?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "course_free_slots" */
-  freeSlots?: Maybe<Scalars['String']>;
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
@@ -20780,7 +21090,7 @@ export type Course_Min_Fields = {
   description?: Maybe<Scalars['String']>;
   end?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "course_free_slots" */
-  freeSlots?: Maybe<Scalars['String']>;
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
@@ -24925,6 +25235,8 @@ export type Course_Stddev_Fields = {
   __typename?: 'course_stddev_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -24950,6 +25262,8 @@ export type Course_Stddev_Pop_Fields = {
   __typename?: 'course_stddev_pop_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -24975,6 +25289,8 @@ export type Course_Stddev_Samp_Fields = {
   __typename?: 'course_stddev_samp_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -25050,6 +25366,8 @@ export type Course_Sum_Fields = {
   __typename?: 'course_sum_fields';
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
   cancellationFeePercent?: Maybe<Scalars['Int']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
@@ -25928,6 +26246,8 @@ export type Course_Var_Pop_Fields = {
   __typename?: 'course_var_pop_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -25953,6 +26273,8 @@ export type Course_Var_Samp_Fields = {
   __typename?: 'course_var_samp_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -25978,6 +26300,8 @@ export type Course_Variance_Fields = {
   __typename?: 'course_variance_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
   cancellationFeePercent?: Maybe<Scalars['Float']>;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -27846,6 +28170,166 @@ export type IsUserSubscribedToMembershipResponse = {
   isSubscribed: Scalars['Boolean'];
 };
 
+/** columns and relationships of "job_title" */
+export type Job_Title = {
+  __typename?: 'job_title';
+  created_at: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  title: Scalars['String'];
+  updated_at: Scalars['timestamptz'];
+};
+
+/** aggregated selection of "job_title" */
+export type Job_Title_Aggregate = {
+  __typename?: 'job_title_aggregate';
+  aggregate?: Maybe<Job_Title_Aggregate_Fields>;
+  nodes: Array<Job_Title>;
+};
+
+/** aggregate fields of "job_title" */
+export type Job_Title_Aggregate_Fields = {
+  __typename?: 'job_title_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Job_Title_Max_Fields>;
+  min?: Maybe<Job_Title_Min_Fields>;
+};
+
+
+/** aggregate fields of "job_title" */
+export type Job_Title_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Job_Title_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "job_title". All fields are combined with a logical 'AND'. */
+export type Job_Title_Bool_Exp = {
+  _and?: InputMaybe<Array<Job_Title_Bool_Exp>>;
+  _not?: InputMaybe<Job_Title_Bool_Exp>;
+  _or?: InputMaybe<Array<Job_Title_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  title?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "job_title" */
+export enum Job_Title_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  JobTitlePkey = 'job_title_pkey',
+  /** unique or primary key constraint on columns "title" */
+  JobTitleTitleKey = 'job_title_title_key'
+}
+
+/** input type for inserting data into table "job_title" */
+export type Job_Title_Insert_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  title?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Job_Title_Max_Fields = {
+  __typename?: 'job_title_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  title?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type Job_Title_Min_Fields = {
+  __typename?: 'job_title_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  title?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "job_title" */
+export type Job_Title_Mutation_Response = {
+  __typename?: 'job_title_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Job_Title>;
+};
+
+/** on_conflict condition type for table "job_title" */
+export type Job_Title_On_Conflict = {
+  constraint: Job_Title_Constraint;
+  update_columns?: Array<Job_Title_Update_Column>;
+  where?: InputMaybe<Job_Title_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "job_title". */
+export type Job_Title_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  title?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: job_title */
+export type Job_Title_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "job_title" */
+export enum Job_Title_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Title = 'title',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "job_title" */
+export type Job_Title_Set_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  title?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** Streaming cursor of the table "job_title" */
+export type Job_Title_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Job_Title_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Job_Title_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  title?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** update columns of table "job_title" */
+export enum Job_Title_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Title = 'title',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+export type Job_Title_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Job_Title_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Job_Title_Bool_Exp;
+};
+
 /** Boolean expression to compare columns of type "json". All fields are combined with logical 'AND'. */
 export type Json_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['json']>;
@@ -29360,6 +29844,14 @@ export type Mutation_Root = {
   delete_color?: Maybe<Color_Mutation_Response>;
   /** delete single row from the table: "color" */
   delete_color_by_pk?: Maybe<Color>;
+  /** delete data from the table: "country" */
+  delete_country?: Maybe<Country_Mutation_Response>;
+  /** delete single row from the table: "country" */
+  delete_country_by_pk?: Maybe<Country>;
+  /** delete data from the table: "country_region" */
+  delete_country_region?: Maybe<Country_Region_Mutation_Response>;
+  /** delete single row from the table: "country_region" */
+  delete_country_region_by_pk?: Maybe<Country_Region>;
   /** delete data from the table: "course" */
   delete_course?: Maybe<Course_Mutation_Response>;
   /** delete data from the table: "course_audit" */
@@ -29556,6 +30048,10 @@ export type Mutation_Root = {
   delete_identity_type?: Maybe<Identity_Type_Mutation_Response>;
   /** delete single row from the table: "identity_type" */
   delete_identity_type_by_pk?: Maybe<Identity_Type>;
+  /** delete data from the table: "job_title" */
+  delete_job_title?: Maybe<Job_Title_Mutation_Response>;
+  /** delete single row from the table: "job_title" */
+  delete_job_title_by_pk?: Maybe<Job_Title>;
   /** delete data from the table: "legacy_certificate" */
   delete_legacy_certificate?: Maybe<Legacy_Certificate_Mutation_Response>;
   /** delete single row from the table: "legacy_certificate" */
@@ -29708,6 +30204,14 @@ export type Mutation_Root = {
   insert_color?: Maybe<Color_Mutation_Response>;
   /** insert a single row into the table: "color" */
   insert_color_one?: Maybe<Color>;
+  /** insert data into the table: "country" */
+  insert_country?: Maybe<Country_Mutation_Response>;
+  /** insert a single row into the table: "country" */
+  insert_country_one?: Maybe<Country>;
+  /** insert data into the table: "country_region" */
+  insert_country_region?: Maybe<Country_Region_Mutation_Response>;
+  /** insert a single row into the table: "country_region" */
+  insert_country_region_one?: Maybe<Country_Region>;
   /** insert data into the table: "course" */
   insert_course?: Maybe<Course_Mutation_Response>;
   /** insert data into the table: "course_audit" */
@@ -29904,6 +30408,10 @@ export type Mutation_Root = {
   insert_identity_type?: Maybe<Identity_Type_Mutation_Response>;
   /** insert a single row into the table: "identity_type" */
   insert_identity_type_one?: Maybe<Identity_Type>;
+  /** insert data into the table: "job_title" */
+  insert_job_title?: Maybe<Job_Title_Mutation_Response>;
+  /** insert a single row into the table: "job_title" */
+  insert_job_title_one?: Maybe<Job_Title>;
   /** insert data into the table: "legacy_certificate" */
   insert_legacy_certificate?: Maybe<Legacy_Certificate_Mutation_Response>;
   /** insert a single row into the table: "legacy_certificate" */
@@ -30092,6 +30600,18 @@ export type Mutation_Root = {
   update_color_by_pk?: Maybe<Color>;
   /** update multiples rows of table: "color" */
   update_color_many?: Maybe<Array<Maybe<Color_Mutation_Response>>>;
+  /** update data of the table: "country" */
+  update_country?: Maybe<Country_Mutation_Response>;
+  /** update single row of the table: "country" */
+  update_country_by_pk?: Maybe<Country>;
+  /** update multiples rows of table: "country" */
+  update_country_many?: Maybe<Array<Maybe<Country_Mutation_Response>>>;
+  /** update data of the table: "country_region" */
+  update_country_region?: Maybe<Country_Region_Mutation_Response>;
+  /** update single row of the table: "country_region" */
+  update_country_region_by_pk?: Maybe<Country_Region>;
+  /** update multiples rows of table: "country_region" */
+  update_country_region_many?: Maybe<Array<Maybe<Country_Region_Mutation_Response>>>;
   /** update data of the table: "course" */
   update_course?: Maybe<Course_Mutation_Response>;
   /** update data of the table: "course_audit" */
@@ -30386,6 +30906,12 @@ export type Mutation_Root = {
   update_identity_type_by_pk?: Maybe<Identity_Type>;
   /** update multiples rows of table: "identity_type" */
   update_identity_type_many?: Maybe<Array<Maybe<Identity_Type_Mutation_Response>>>;
+  /** update data of the table: "job_title" */
+  update_job_title?: Maybe<Job_Title_Mutation_Response>;
+  /** update single row of the table: "job_title" */
+  update_job_title_by_pk?: Maybe<Job_Title>;
+  /** update multiples rows of table: "job_title" */
+  update_job_title_many?: Maybe<Array<Maybe<Job_Title_Mutation_Response>>>;
   /** update data of the table: "legacy_certificate" */
   update_legacy_certificate?: Maybe<Legacy_Certificate_Mutation_Response>;
   /** update single row of the table: "legacy_certificate" */
@@ -30583,7 +31109,7 @@ export type Mutation_RootArloCallbackArgs = {
 /** mutation root */
 export type Mutation_RootCancelIndividualFromCourseArgs = {
   courseId: Scalars['Int'];
-  fee: Scalars['Int'];
+  fee: Scalars['Float'];
   profileId: Scalars['uuid'];
   reason: Scalars['String'];
 };
@@ -30761,6 +31287,30 @@ export type Mutation_RootDelete_ColorArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Color_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_CountryArgs = {
+  where: Country_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Country_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Country_RegionArgs = {
+  where: Country_Region_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Country_Region_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -31353,6 +31903,18 @@ export type Mutation_RootDelete_Identity_Type_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootDelete_Job_TitleArgs = {
+  where: Job_Title_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Job_Title_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
 export type Mutation_RootDelete_Legacy_CertificateArgs = {
   where: Legacy_Certificate_Bool_Exp;
 };
@@ -31829,6 +32391,34 @@ export type Mutation_RootInsert_ColorArgs = {
 export type Mutation_RootInsert_Color_OneArgs = {
   object: Color_Insert_Input;
   on_conflict?: InputMaybe<Color_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_CountryArgs = {
+  objects: Array<Country_Insert_Input>;
+  on_conflict?: InputMaybe<Country_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Country_OneArgs = {
+  object: Country_Insert_Input;
+  on_conflict?: InputMaybe<Country_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Country_RegionArgs = {
+  objects: Array<Country_Region_Insert_Input>;
+  on_conflict?: InputMaybe<Country_Region_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Country_Region_OneArgs = {
+  object: Country_Region_Insert_Input;
+  on_conflict?: InputMaybe<Country_Region_On_Conflict>;
 };
 
 
@@ -32519,6 +33109,20 @@ export type Mutation_RootInsert_Identity_Type_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_Job_TitleArgs = {
+  objects: Array<Job_Title_Insert_Input>;
+  on_conflict?: InputMaybe<Job_Title_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Job_Title_OneArgs = {
+  object: Job_Title_Insert_Input;
+  on_conflict?: InputMaybe<Job_Title_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_Legacy_CertificateArgs = {
   objects: Array<Legacy_Certificate_Insert_Input>;
   on_conflict?: InputMaybe<Legacy_Certificate_On_Conflict>;
@@ -33180,6 +33784,46 @@ export type Mutation_RootUpdate_Color_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Color_ManyArgs = {
   updates: Array<Color_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_CountryArgs = {
+  _set?: InputMaybe<Country_Set_Input>;
+  where: Country_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Country_By_PkArgs = {
+  _set?: InputMaybe<Country_Set_Input>;
+  pk_columns: Country_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Country_ManyArgs = {
+  updates: Array<Country_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Country_RegionArgs = {
+  _set?: InputMaybe<Country_Region_Set_Input>;
+  where: Country_Region_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Country_Region_By_PkArgs = {
+  _set?: InputMaybe<Country_Region_Set_Input>;
+  pk_columns: Country_Region_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Country_Region_ManyArgs = {
+  updates: Array<Country_Region_Updates>;
 };
 
 
@@ -34294,6 +34938,26 @@ export type Mutation_RootUpdate_Identity_Type_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Identity_Type_ManyArgs = {
   updates: Array<Identity_Type_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Job_TitleArgs = {
+  _set?: InputMaybe<Job_Title_Set_Input>;
+  where: Job_Title_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Job_Title_By_PkArgs = {
+  _set?: InputMaybe<Job_Title_Set_Input>;
+  pk_columns: Job_Title_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Job_Title_ManyArgs = {
+  updates: Array<Job_Title_Updates>;
 };
 
 
@@ -40880,6 +41544,18 @@ export type Query_Root = {
   /** fetch data from the table: "color" using primary key columns */
   color_by_pk?: Maybe<Color>;
   content?: Maybe<ContentRootQuery>;
+  /** fetch data from the table: "country" */
+  country: Array<Country>;
+  /** fetch aggregated fields from the table: "country" */
+  country_aggregate: Country_Aggregate;
+  /** fetch data from the table: "country" using primary key columns */
+  country_by_pk?: Maybe<Country>;
+  /** fetch data from the table: "country_region" */
+  country_region: Array<Country_Region>;
+  /** fetch aggregated fields from the table: "country_region" */
+  country_region_aggregate: Country_Region_Aggregate;
+  /** fetch data from the table: "country_region" using primary key columns */
+  country_region_by_pk?: Maybe<Country_Region>;
   /** fetch data from the table: "course" */
   course: Array<Course>;
   /** fetch aggregated fields from the table: "course" */
@@ -41187,6 +41863,12 @@ export type Query_Root = {
   initAuth: InitAuthOutput;
   /** Checks whether user is subscribed to membership */
   isUserSubscribedToMembership?: Maybe<IsUserSubscribedToMembershipResponse>;
+  /** fetch data from the table: "job_title" */
+  job_title: Array<Job_Title>;
+  /** fetch aggregated fields from the table: "job_title" */
+  job_title_aggregate: Job_Title_Aggregate;
+  /** fetch data from the table: "job_title" using primary key columns */
+  job_title_by_pk?: Maybe<Job_Title>;
   /** fetch data from the table: "legacy_certificate" */
   legacy_certificate: Array<Legacy_Certificate>;
   /** fetch aggregated fields from the table: "legacy_certificate" */
@@ -41581,6 +42263,52 @@ export type Query_RootColor_AggregateArgs = {
 
 export type Query_RootColor_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Query_RootCountryArgs = {
+  distinct_on?: InputMaybe<Array<Country_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Order_By>>;
+  where?: InputMaybe<Country_Bool_Exp>;
+};
+
+
+export type Query_RootCountry_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Country_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Order_By>>;
+  where?: InputMaybe<Country_Bool_Exp>;
+};
+
+
+export type Query_RootCountry_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Query_RootCountry_RegionArgs = {
+  distinct_on?: InputMaybe<Array<Country_Region_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Region_Order_By>>;
+  where?: InputMaybe<Country_Region_Bool_Exp>;
+};
+
+
+export type Query_RootCountry_Region_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Country_Region_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Region_Order_By>>;
+  where?: InputMaybe<Country_Region_Bool_Exp>;
+};
+
+
+export type Query_RootCountry_Region_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -42737,6 +43465,29 @@ export type Query_RootIsUserSubscribedToMembershipArgs = {
 };
 
 
+export type Query_RootJob_TitleArgs = {
+  distinct_on?: InputMaybe<Array<Job_Title_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Job_Title_Order_By>>;
+  where?: InputMaybe<Job_Title_Bool_Exp>;
+};
+
+
+export type Query_RootJob_Title_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Job_Title_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Job_Title_Order_By>>;
+  where?: InputMaybe<Job_Title_Bool_Exp>;
+};
+
+
+export type Query_RootJob_Title_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootLegacy_CertificateArgs = {
   distinct_on?: InputMaybe<Array<Legacy_Certificate_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -43794,6 +44545,22 @@ export type Subscription_Root = {
   color_by_pk?: Maybe<Color>;
   /** fetch data from the table in a streaming manner: "color" */
   color_stream: Array<Color>;
+  /** fetch data from the table: "country" */
+  country: Array<Country>;
+  /** fetch aggregated fields from the table: "country" */
+  country_aggregate: Country_Aggregate;
+  /** fetch data from the table: "country" using primary key columns */
+  country_by_pk?: Maybe<Country>;
+  /** fetch data from the table: "country_region" */
+  country_region: Array<Country_Region>;
+  /** fetch aggregated fields from the table: "country_region" */
+  country_region_aggregate: Country_Region_Aggregate;
+  /** fetch data from the table: "country_region" using primary key columns */
+  country_region_by_pk?: Maybe<Country_Region>;
+  /** fetch data from the table in a streaming manner: "country_region" */
+  country_region_stream: Array<Country_Region>;
+  /** fetch data from the table in a streaming manner: "country" */
+  country_stream: Array<Country>;
   /** fetch data from the table: "course" */
   course: Array<Course>;
   /** fetch aggregated fields from the table: "course" */
@@ -44187,6 +44954,14 @@ export type Subscription_Root = {
   /** fetch data from the table in a streaming manner: "identity_type" */
   identity_type_stream: Array<Identity_Type>;
   importArloCertificates?: Maybe<ImportArloCertificates>;
+  /** fetch data from the table: "job_title" */
+  job_title: Array<Job_Title>;
+  /** fetch aggregated fields from the table: "job_title" */
+  job_title_aggregate: Job_Title_Aggregate;
+  /** fetch data from the table: "job_title" using primary key columns */
+  job_title_by_pk?: Maybe<Job_Title>;
+  /** fetch data from the table in a streaming manner: "job_title" */
+  job_title_stream: Array<Job_Title>;
   /** fetch data from the table: "legacy_certificate" */
   legacy_certificate: Array<Legacy_Certificate>;
   /** fetch aggregated fields from the table: "legacy_certificate" */
@@ -44687,6 +45462,66 @@ export type Subscription_RootColor_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Color_Stream_Cursor_Input>>;
   where?: InputMaybe<Color_Bool_Exp>;
+};
+
+
+export type Subscription_RootCountryArgs = {
+  distinct_on?: InputMaybe<Array<Country_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Order_By>>;
+  where?: InputMaybe<Country_Bool_Exp>;
+};
+
+
+export type Subscription_RootCountry_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Country_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Order_By>>;
+  where?: InputMaybe<Country_Bool_Exp>;
+};
+
+
+export type Subscription_RootCountry_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Subscription_RootCountry_RegionArgs = {
+  distinct_on?: InputMaybe<Array<Country_Region_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Region_Order_By>>;
+  where?: InputMaybe<Country_Region_Bool_Exp>;
+};
+
+
+export type Subscription_RootCountry_Region_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Country_Region_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Country_Region_Order_By>>;
+  where?: InputMaybe<Country_Region_Bool_Exp>;
+};
+
+
+export type Subscription_RootCountry_Region_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCountry_Region_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Country_Region_Stream_Cursor_Input>>;
+  where?: InputMaybe<Country_Region_Bool_Exp>;
+};
+
+
+export type Subscription_RootCountry_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Country_Stream_Cursor_Input>>;
+  where?: InputMaybe<Country_Bool_Exp>;
 };
 
 
@@ -46165,6 +47000,36 @@ export type Subscription_RootImportArloCertificatesArgs = {
 };
 
 
+export type Subscription_RootJob_TitleArgs = {
+  distinct_on?: InputMaybe<Array<Job_Title_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Job_Title_Order_By>>;
+  where?: InputMaybe<Job_Title_Bool_Exp>;
+};
+
+
+export type Subscription_RootJob_Title_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Job_Title_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Job_Title_Order_By>>;
+  where?: InputMaybe<Job_Title_Bool_Exp>;
+};
+
+
+export type Subscription_RootJob_Title_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootJob_Title_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Job_Title_Stream_Cursor_Input>>;
+  where?: InputMaybe<Job_Title_Bool_Exp>;
+};
+
+
 export type Subscription_RootLegacy_CertificateArgs = {
   distinct_on?: InputMaybe<Array<Legacy_Certificate_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -47367,6 +48232,8 @@ export type Trust_Type_Updates = {
 /** columns and relationships of "upcoming_enrollments" */
 export type Upcoming_Enrollments = {
   __typename?: 'upcoming_enrollments';
+  /** An object relationship */
+  course?: Maybe<Course>;
   courseId?: Maybe<Scalars['Int']>;
   courseLevel?: Maybe<Scalars['String']>;
   orgId?: Maybe<Scalars['uuid']>;
@@ -47454,6 +48321,7 @@ export type Upcoming_Enrollments_Bool_Exp = {
   _and?: InputMaybe<Array<Upcoming_Enrollments_Bool_Exp>>;
   _not?: InputMaybe<Upcoming_Enrollments_Bool_Exp>;
   _or?: InputMaybe<Array<Upcoming_Enrollments_Bool_Exp>>;
+  course?: InputMaybe<Course_Bool_Exp>;
   courseId?: InputMaybe<Int_Comparison_Exp>;
   courseLevel?: InputMaybe<String_Comparison_Exp>;
   orgId?: InputMaybe<Uuid_Comparison_Exp>;
@@ -47465,6 +48333,7 @@ export type Upcoming_Enrollments_Bool_Exp = {
 
 /** input type for inserting data into table "upcoming_enrollments" */
 export type Upcoming_Enrollments_Insert_Input = {
+  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   courseId?: InputMaybe<Scalars['Int']>;
   courseLevel?: InputMaybe<Scalars['String']>;
   orgId?: InputMaybe<Scalars['uuid']>;
@@ -47518,6 +48387,7 @@ export type Upcoming_Enrollments_Min_Order_By = {
 
 /** Ordering options when selecting data from "upcoming_enrollments". */
 export type Upcoming_Enrollments_Order_By = {
+  course?: InputMaybe<Course_Order_By>;
   courseId?: InputMaybe<Order_By>;
   courseLevel?: InputMaybe<Order_By>;
   orgId?: InputMaybe<Order_By>;
@@ -49841,19 +50711,26 @@ export type InsertCourseForCodesMutationVariables = Exact<{
 
 export type InsertCourseForCodesMutation = { __typename?: 'mutation_root', insert_course_one?: { __typename?: 'course', id: number, course_code?: string | null } | null };
 
+export type CourseFreeSlotsQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type CourseFreeSlotsQuery = { __typename?: 'query_root', course_by_pk?: { __typename?: 'course', freeSlots?: number | null } | null };
+
 export type AdminCourseQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type AdminCourseQuery = { __typename?: 'query_root', course_by_pk?: { __typename?: 'course', id: number, accountCode?: string | null, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, cancellationFeePercent?: number | null, cancellationReason?: string | null, bookingContactProfileId?: any | null, course_code?: string | null, createdAt: any, createdById?: any | null, deliveryType: Course_Delivery_Type_Enum, description?: string | null, end?: any | null, freeSlots?: string | null, freeSpaces?: number | null, go1Integration: boolean, gradingConfirmed: boolean, gradingStarted: boolean, level: Course_Level_Enum, max_participants: number, min_participants: number, modulesDuration: number, name: string, organization_id?: any | null, parking_instructions?: string | null, reaccreditation?: boolean | null, source?: Course_Source_Enum | null, special_instructions?: string | null, status?: Course_Status_Enum | null, type: Course_Type_Enum, updatedAt: any } | null };
+export type AdminCourseQuery = { __typename?: 'query_root', course_by_pk?: { __typename?: 'course', id: number, accountCode?: string | null, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, cancellationFeePercent?: number | null, cancellationReason?: string | null, bookingContactProfileId?: any | null, course_code?: string | null, createdAt: any, createdById?: any | null, deliveryType: Course_Delivery_Type_Enum, description?: string | null, end?: any | null, freeSlots?: number | null, freeSpaces?: number | null, go1Integration: boolean, gradingConfirmed: boolean, gradingStarted: boolean, level: Course_Level_Enum, max_participants: number, min_participants: number, modulesDuration: number, name: string, organization_id?: any | null, parking_instructions?: string | null, reaccreditation?: boolean | null, source?: Course_Source_Enum | null, special_instructions?: string | null, status?: Course_Status_Enum | null, type: Course_Type_Enum, updatedAt: any } | null };
 
 export type TrainerCourseQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type TrainerCourseQuery = { __typename?: 'query_root', course_by_pk?: { __typename?: 'course', id: number, accountCode?: string | null, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, bookingContactProfileId?: any | null, course_code?: string | null, createdAt: any, createdById?: any | null, deliveryType: Course_Delivery_Type_Enum, description?: string | null, end?: any | null, freeSlots?: string | null, freeSpaces?: number | null, go1Integration: boolean, gradingConfirmed: boolean, gradingStarted: boolean, level: Course_Level_Enum, max_participants: number, min_participants: number, modulesDuration: number, name: string, organization_id?: any | null, parking_instructions?: string | null, reaccreditation?: boolean | null, source?: Course_Source_Enum | null, special_instructions?: string | null, status?: Course_Status_Enum | null, type: Course_Type_Enum, updatedAt: any } | null };
+export type TrainerCourseQuery = { __typename?: 'query_root', course_by_pk?: { __typename?: 'course', id: number, accountCode?: string | null, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, bookingContactProfileId?: any | null, course_code?: string | null, createdAt: any, createdById?: any | null, deliveryType: Course_Delivery_Type_Enum, description?: string | null, end?: any | null, freeSlots?: number | null, freeSpaces?: number | null, go1Integration: boolean, gradingConfirmed: boolean, gradingStarted: boolean, level: Course_Level_Enum, max_participants: number, min_participants: number, modulesDuration: number, name: string, organization_id?: any | null, parking_instructions?: string | null, reaccreditation?: boolean | null, source?: Course_Source_Enum | null, special_instructions?: string | null, status?: Course_Status_Enum | null, type: Course_Type_Enum, updatedAt: any } | null };
 
 export type UnverifiedUserCoursesQueryVariables = Exact<{
   ids: Array<Scalars['Int']> | Scalars['Int'];
@@ -49886,14 +50763,14 @@ export type ReplaceParticipantMutationVariables = Exact<{
 
 export type ReplaceParticipantMutation = { __typename?: 'mutation_root', replaceParticipant?: { __typename?: 'ReplaceParticipantOutput', success: boolean, error?: ReplaceParticipantError | null } | null };
 
-export type SearchTrainerDetailsFragment = { __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> };
+export type SearchTrainerDetailsFragment = { __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> };
 
 export type SearchTrainersQueryVariables = Exact<{
   input: SearchTrainersInput;
 }>;
 
 
-export type SearchTrainersQuery = { __typename?: 'query_root', trainers?: Array<{ __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> } | null> | null };
+export type SearchTrainersQuery = { __typename?: 'query_root', trainers?: Array<{ __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> } | null> | null };
 
 export type SearchCourseFragment = { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> };
 
@@ -49947,6 +50824,26 @@ export type ConfirmCcPaymentMutationVariables = Exact<{
 
 export type ConfirmCcPaymentMutation = { __typename?: 'mutation_root', confirmCreditCardPayment?: { __typename?: 'ConfirmCreditCardPaymentOutput', confirmed: boolean, error?: ConfirmCreditCardPaymentError | null } | null };
 
+export type CourseInfoFragment = { __typename?: 'course', name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> };
+
+export type CourseHeroFragment = { __typename?: 'course', id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> };
+
+export type SetCourseAsDraftMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type SetCourseAsDraftMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number } | null };
+
+export type CourseToBuildQueryVariables = Exact<{
+  id: Scalars['Int'];
+  withModules?: InputMaybe<Scalars['Boolean']>;
+  withStrategies?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+
+export type CourseToBuildQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, bildModules?: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies?: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
+
 export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -49958,11 +50855,11 @@ export type ResourceDetailsQueryVariables = Exact<{
 }>;
 
 
-export type ResourceDetailsQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategory?: { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null } | null };
+export type ResourceDetailsQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategory?: { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null } | null };
 
-export type ResourceCategorySummaryFragment = { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null };
+export type ResourceCategorySummaryFragment = { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null };
 
-export type ResourceSummaryFragment = { __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null };
+export type ResourceSummaryFragment = { __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null };
 
 export type ParticipantTransferQueryVariables = Exact<{
   id: Scalars['uuid'];
@@ -50014,20 +50911,6 @@ export type SignUpMutationVariables = Exact<{
 
 
 export type SignUpMutation = { __typename?: 'mutation_root', signUp?: { __typename?: 'SignUpOutput', success: boolean } | null };
-
-export type SetCourseAsDraftMutationVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type SetCourseAsDraftMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number } | null };
-
-export type CourseWithModuleGroupsQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type CourseWithModuleGroupsQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, type: Course_Type_Enum, go1Integration: boolean, reaccreditation?: boolean | null, start?: any | null, end?: any | null, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
 
 export type SaveBildGradeMutationVariables = Exact<{
   modules: Array<Course_Participant_Bild_Module_Insert_Input> | Course_Participant_Bild_Module_Insert_Input;
@@ -50232,6 +51115,18 @@ export type UndoRevokeCertMutationVariables = Exact<{
 
 export type UndoRevokeCertMutation = { __typename?: 'mutation_root', undoRevoked?: { __typename?: 'course_certificate', id: any } | null, insertChangeLog?: { __typename?: 'course_certificate_changelog', id: any } | null };
 
+export type GetRegionsByCountryQueryVariables = Exact<{
+  country: Scalars['String'];
+}>;
+
+
+export type GetRegionsByCountryQuery = { __typename?: 'query_root', regions: Array<{ __typename?: 'country_region', name: string }> };
+
+export type GetCountriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCountriesQuery = { __typename?: 'query_root', countries: Array<{ __typename?: 'country', name: string }> };
+
 export type GetEvaluationQueryVariables = Exact<{
   courseId: Scalars['Int'];
   profileId: Scalars['uuid'];
@@ -50334,10 +51229,11 @@ export type FinalizeCourseBuilderMutation = { __typename?: 'mutation_root', upda
 export type GetCourseByIdQueryVariables = Exact<{
   id: Scalars['Int'];
   withOrders?: InputMaybe<Scalars['Boolean']>;
+  withModules?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
+export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, modules?: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
 
 export type GetCourseDraftQueryVariables = Exact<{
   profileId: Scalars['uuid'];
@@ -50361,7 +51257,7 @@ export type GetCoursePricingQueryVariables = Exact<{
 
 export type GetCoursePricingQuery = { __typename?: 'query_root', pricing?: { __typename?: 'GetCoursePricingOutput', priceAmount: number, priceCurrency: Currency, xeroCode: string } | null };
 
-export type TrainerCourseFragment = { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, status?: Course_Status_Enum | null, createdAt: any, course_code?: string | null, go1Integration: boolean, max_participants: number, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null };
+export type TrainerCourseFragment = { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, status?: Course_Status_Enum | null, createdAt: any, course_code?: string | null, go1Integration: boolean, max_participants: number, isDraft?: boolean | null, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null };
 
 export type TrainerCoursesQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Course_Order_By> | Course_Order_By>;
@@ -50371,7 +51267,7 @@ export type TrainerCoursesQueryVariables = Exact<{
 }>;
 
 
-export type TrainerCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, status?: Course_Status_Enum | null, createdAt: any, course_code?: string | null, go1Integration: boolean, max_participants: number, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null }>, course_aggregate: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null } };
+export type TrainerCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, status?: Course_Status_Enum | null, createdAt: any, course_code?: string | null, go1Integration: boolean, max_participants: number, isDraft?: boolean | null, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null }>, course_aggregate: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null } };
 
 export type GetUpcomingCoursesQueryVariables = Exact<{
   courseFilter?: InputMaybe<Course_Bool_Exp>;
@@ -50741,6 +51637,11 @@ export type VerifyUserMutationVariables = Exact<{
 
 export type VerifyUserMutation = { __typename?: 'mutation_root', verifyUser: boolean };
 
+export type GetJobTitlesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetJobTitlesQuery = { __typename?: 'query_root', jobTitles: Array<{ __typename?: 'job_title', title: string }> };
+
 export type BlogQueryVariables = Exact<{
   orderDirection?: OrderEnum;
   term?: InputMaybe<Scalars['String']>;
@@ -50942,7 +51843,7 @@ export type GetOrgDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, lastActivity: any, createdAt: any, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, go1Licenses: Array<{ __typename?: 'go1_licenses', id: any, expireDate: any }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, organization: { __typename?: 'organization', id: any, name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
+export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, lastActivity: any, createdAt: any, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, go1Licenses: Array<{ __typename?: 'go1_licenses', id: any, expireDate: any }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null, course?: { __typename?: 'course', name: string, course_code?: string | null } | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, organization: { __typename?: 'organization', id: any, name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
 
 export type GetOrgUsersQueryVariables = Exact<{
   orgId: Scalars['uuid'];
@@ -51014,7 +51915,7 @@ export type CancelIndividualFromCourseMutationVariables = Exact<{
   courseId: Scalars['Int'];
   profileId: Scalars['uuid'];
   reason: Scalars['String'];
-  fee: Scalars['Int'];
+  fee: Scalars['Float'];
 }>;
 
 
@@ -51253,10 +52154,11 @@ export type UpdateTrainerRoleTypeMutation = { __typename?: 'mutation_root', dele
 export type GetUserCourseByIdQueryVariables = Exact<{
   id: Scalars['Int'];
   withOrders?: InputMaybe<Scalars['Boolean']>;
+  profileId: Scalars['uuid'];
 }>;
 
 
-export type GetUserCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, special_instructions?: string | null, parking_instructions?: string | null, status?: Course_Status_Enum | null, accreditedBy: Accreditors_Enum, organization?: { __typename?: 'organization', id: any, name: string, members: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, profile_id: any }> } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', id: any } | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null }> } | null };
+export type GetUserCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, special_instructions?: string | null, parking_instructions?: string | null, status?: Course_Status_Enum | null, accreditedBy: Accreditors_Enum, organization?: { __typename?: 'organization', id: any, name: string, members: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, profile_id: any }> } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', id: any } | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null }> } | null };
 
 export type GetUserByMailQueryVariables = Exact<{
   email?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;

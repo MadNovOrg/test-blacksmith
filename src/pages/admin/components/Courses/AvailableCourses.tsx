@@ -77,7 +77,7 @@ export const AvailableCourses: React.FC<
   const { Pagination, perPage, offset } = useTablePagination()
   const filters = useMemo(() => {
     const conditions: Course_Bool_Exp[] = [
-      { freeSlots: { _neq: '0' } },
+      { freeSlots: { _gt: 0 } },
       { type: { _eq: Course_Type_Enum.Open } },
       {
         status: {
@@ -120,7 +120,7 @@ export const AvailableCourses: React.FC<
             schedule: { venue: { addressLineTwo: { _ilike: `%${keyword}%` } } },
           },
           {
-            name: { _ilike: `%${keyword}%` },
+            course_code: { _ilike: `%${keyword}%` },
           },
         ],
       })
