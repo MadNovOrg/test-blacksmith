@@ -444,18 +444,6 @@ export const ViewProfilePage: React.FC<
               >
                 {t('pages.my-profile.manage-data')}
               </Link>
-              <Link
-                href={import.meta.env.VITE_UNSUBSCRIBE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                underline="always"
-                component="a"
-                aria-label={`${t('pages.my-profile.unsubscribe')} (${t(
-                  'opens-new-window'
-                )})`}
-              >
-                {t('pages.my-profile.unsubscribe')}
-              </Link>
             </Box>
           </Grid>
         </Grid>
