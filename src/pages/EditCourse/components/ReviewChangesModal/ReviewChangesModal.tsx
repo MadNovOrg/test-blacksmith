@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Link from '@mui/material/Link/Link'
@@ -141,6 +142,7 @@ export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
         </FormProvider>
       ) : (
         <>
+          <WarningAmberIcon color={'warning'} />
           <Typography>
             {roleProtocolNotMet ? (
               roleProtocolNotMet
