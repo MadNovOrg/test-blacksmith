@@ -387,13 +387,14 @@ export const EditProfilePage: React.FC<
         input: {
           profileId: profile.id,
           avatar: data.avatar,
-          ...(!canEditNamesAndDOB
+          ...(canEditNamesAndDOB
             ? {
                 givenName: data.firstName,
                 familyName: data.surname,
                 dob: data.dob?.toISOString(),
               }
             : null),
+          phone: data.phone,
           jobTitle: data.jobTitle,
           disabilities: data.disabilities,
           dietaryRestrictions: data.dietaryRestrictions,
