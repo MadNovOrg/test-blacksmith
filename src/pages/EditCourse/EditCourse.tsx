@@ -705,8 +705,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                   />
                 </Box>
 
-                {courseData?.maxParticipants &&
-                courseData?.startDateTime &&
+                {courseData?.startDateTime &&
                 courseData.endDateTime &&
                 courseData.type ? (
                   <ChooseTrainers
