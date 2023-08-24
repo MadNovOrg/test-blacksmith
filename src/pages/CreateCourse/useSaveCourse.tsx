@@ -15,6 +15,7 @@ import {
   ParamsType,
   ResponseType,
 } from '@app/queries/courses/insert-course'
+import { isModeratorNeeded } from '@app/rules/trainers'
 import {
   BildStrategies,
   CourseDeliveryType,
@@ -142,6 +143,16 @@ export function useSaveCourse(): {
       if (courseData) {
         setSavingStatus(LoadingStatus.FETCHING)
 
+        const needsModerator = isModeratorNeeded({
+          courseLevel: courseData.courseLevel,
+          courseType: courseData.type,
+          isReaccreditation: courseData.reaccreditation,
+        })
+
+        const hasModerator = trainers.find(
+          t => t.type === CourseTrainerType.Moderator
+        )
+
         const leadTrainerMissing =
           trainers.filter(t => t.type === CourseTrainerType.Leader).length === 0
         const approveExceptions =
@@ -151,7 +162,7 @@ export function useSaveCourse(): {
 
         const status = approveExceptions
           ? Course_Status_Enum.ExceptionsApprovalPending
-          : leadTrainerMissing
+          : leadTrainerMissing || (needsModerator && !hasModerator)
           ? Course_Status_Enum.TrainerMissing
           : Course_Status_Enum.TrainerPending
 
