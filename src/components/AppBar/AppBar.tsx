@@ -34,12 +34,11 @@ export const AppBar = () => {
         </Box>
         {verified && (
           <Box
-            flex={1}
             display="flex"
             justifyContent="center"
-            px={3}
             color="secondary.dark"
             sx={{
+              flex: 1,
               display: { xs: 'none', lg: 'flex' },
               alignItems: 'center',
             }}
@@ -49,6 +48,7 @@ export const AppBar = () => {
         )}
         <Box
           sx={{
+            p: 0,
             flexGrow: 0,
             display: { xs: 'none', lg: 'flex' },
             alignItems: 'center',

@@ -221,7 +221,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
           )}
         </Box>
 
-        <Box flex={1}>
+        <Box flex={1} sx={{ overflowX: 'auto' }}>
           <Box
             display="flex"
             alignItems="right"
@@ -253,7 +253,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
           {(actionableCourses?.courses.length && !isMobile) ||
           (actionableCourses?.courses.length &&
             selectedTab === Tables.ACTIONABLE) ? (
-            <Box mb={3}>
+            <Box mb={3} sx={{ overflowX: 'auto' }}>
               <Typography variant="h6" mb={1}>
                 {t('pages.my-courses.actionable-courses-title')}
               </Typography>
