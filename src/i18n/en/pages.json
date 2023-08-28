@@ -411,6 +411,8 @@
     "cancellation-modal": {
       "title": "Cancel this entire course",
       "permanently-cancel-course": "This action will permanently cancel the course and notify all trainers, registered attendees, and organisations.",
+      "permanently-cancel-indirect-blended-course-first": "This action will permanently cancel and notify everyone associated to this course.",
+      "permanently-cancel-indirect-blended-course-second": "Please note, a full refund of licences purchased may not be returned based on the number of licences already redeemed. Team Teach will review and confirm back regarding any fees applicable to your course cancellation, any due credit relating to licences is at the discretion of Team Teach.",
       "finance-invoice-changes": "Finance will make changes on the invoice(s), where necessary. ",
       "attendees-will-not-incur-cancellation-charges": "Registered attendees will not incur cancellation charges. ",
       "will-any-fees-apply": "Will any fees apply?",

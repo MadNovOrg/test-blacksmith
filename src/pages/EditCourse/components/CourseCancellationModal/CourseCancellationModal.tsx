@@ -76,6 +76,13 @@ export const CourseCancellationModal: React.FC<
   const [error, setError] = useState('')
   const [confirmed, setConfirmed] = useState(false)
 
+  const isIndirect = course.type === CourseType.INDIRECT
+  const isIndirectBlendedLearning =
+    course.type === CourseType.INDIRECT && course.go1Integration
+
+  const showConfirmationCheck =
+    course.type === CourseType.OPEN || (isIndirect && isIndirectBlendedLearning)
+
   const schema = useMemo(() => {
     const cancellationFeePercent = yup.number().required()
     const cancellationReason = yup.string().required()
@@ -172,12 +179,27 @@ export const CourseCancellationModal: React.FC<
     }
   }
 
-  const isIndirect = course.type === CourseType.INDIRECT
   return (
     <Container data-testid="course-cancellation-modal">
-      <Typography variant="body1" color="grey.600">
-        {t('pages.edit-course.cancellation-modal.permanently-cancel-course')}
-      </Typography>
+      {isIndirectBlendedLearning ? (
+        <>
+          <Typography variant="body1" color="grey.600">
+            {t(
+              'pages.edit-course.cancellation-modal.permanently-cancel-indirect-blended-course-first'
+            )}
+          </Typography>
+          <br />
+          <Typography variant="body1" color="grey.600">
+            {t(
+              'pages.edit-course.cancellation-modal.permanently-cancel-indirect-blended-course-second'
+            )}
+          </Typography>
+        </>
+      ) : (
+        <Typography variant="body1" color="grey.600">
+          {t('pages.edit-course.cancellation-modal.permanently-cancel-course')}
+        </Typography>
+      )}
 
       {!isIndirect ? (
         <Typography variant="body1" color="grey.600" mt={1}>
@@ -189,7 +211,6 @@ export const CourseCancellationModal: React.FC<
             : null}
         </Typography>
       ) : null}
-
       {course.type === CourseType.CLOSED ? (
         <>
           <Typography variant="h4" fontWeight={600} mt={4}>
@@ -262,7 +283,6 @@ export const CourseCancellationModal: React.FC<
           ) : null}
         </>
       ) : null}
-
       {!isIndirect ? (
         <TextField
           select
@@ -297,7 +317,6 @@ export const CourseCancellationModal: React.FC<
           ))}
         </TextField>
       ) : null}
-
       {isIndirect || reasonType === 'other' ? (
         <TextField
           data-testid="cancel-course-reason-input"
@@ -323,8 +342,7 @@ export const CourseCancellationModal: React.FC<
           {...register('cancellationReason')}
         />
       ) : null}
-
-      {course.type === CourseType.OPEN ? (
+      {showConfirmationCheck ? (
         <Box mt={4}>
           <FormControlLabel
             label={t(
@@ -338,16 +356,14 @@ export const CourseCancellationModal: React.FC<
           />
         </Box>
       ) : null}
-
       {error && <Alert severity="error">{error}</Alert>}
-
       <Box display="flex" justifyContent="space-between" mt={4}>
         <Button type="button" variant="text" color="primary" onClick={onClose}>
           {t('pages.edit-course.cancellation-modal.close-modal')}
         </Button>
         <LoadingButton
           loading={loading}
-          disabled={course.type === CourseType.OPEN && !confirmed}
+          disabled={showConfirmationCheck && !confirmed}
           onClick={handleSubmit(onFormSubmit)}
           type="button"
           data-testid="cancel-entire-course-button"
