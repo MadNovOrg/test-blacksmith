@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import WarningAmberIcon from '@mui/icons-material/WarningAmber'
+import { Alert } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Link from '@mui/material/Link/Link'
@@ -142,20 +142,21 @@ export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
         </FormProvider>
       ) : (
         <>
-          <WarningAmberIcon color={'warning'} />
-          <Typography>
-            {roleProtocolNotMet ? (
-              roleProtocolNotMet
-            ) : (
-              <Trans
-                i18nKey="protocol-not-met"
-                t={t}
-                values={{ email: TRAINING_EMAIL }}
-              >
-                <Link href={`mailto:${TRAINING_EMAIL}`} component="a" />
-              </Trans>
-            )}
-          </Typography>
+          <Alert severity="warning" variant="outlined">
+            <Typography variant="body1" fontWeight={600}>
+              {roleProtocolNotMet ? (
+                roleProtocolNotMet
+              ) : (
+                <Trans
+                  i18nKey="protocol-not-met"
+                  t={t}
+                  values={{ email: TRAINING_EMAIL }}
+                >
+                  <Link href={`mailto:${TRAINING_EMAIL}`} component="a" />
+                </Trans>
+              )}
+            </Typography>
+          </Alert>
 
           <Button onClick={onCancel} sx={{ mt: 2 }}>
             {t('cancel-btn-text')}
