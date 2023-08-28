@@ -1,3 +1,4 @@
+import { anyPass } from 'lodash/fp'
 import { MarkOptional } from 'ts-essentials'
 
 import { getLevels } from '@app/components/CourseForm/helpers'
@@ -20,11 +21,9 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
   const managedOrgIds = auth.managedOrgIds ?? []
 
   const acl = Object.freeze({
-    isAdmin: () => acl.isTTOps() || acl.isTTAdmin() || acl.isLD(),
+    isTTAdmin: () => activeRole === RoleName.TT_ADMIN,
 
     isTTOps: () => activeRole === RoleName.TT_OPS,
-
-    isTTAdmin: () => activeRole === RoleName.TT_ADMIN,
 
     isSalesAdmin: () => activeRole === RoleName.SALES_ADMIN,
 
@@ -38,110 +37,95 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     isLD: () => activeRole === RoleName.LD,
 
-    isOrgAdmin: (orgId?: string) =>
-      auth.isOrgAdmin && (orgId ? managedOrgIds.includes(orgId) : true),
+    isAdmin: () => acl.isTTAdmin() || acl.isTTOps() || acl.isLD(),
 
-    isBookingContact: () => allowedRoles?.has(RoleName.BOOKING_CONTACT),
+    isOrgAdmin: (orgId?: string) =>
+      Boolean(
+        auth.isOrgAdmin && (orgId ? managedOrgIds.includes(orgId) : true)
+      ),
+
+    isBookingContact: () =>
+      Boolean(allowedRoles?.has(RoleName.BOOKING_CONTACT)),
 
     isInternalUser: () =>
-      [
+      anyPass([
         acl.isTTAdmin,
         acl.isTTOps,
+        acl.isLD,
         acl.isSalesAdmin,
         acl.isSalesRepresentative,
         acl.isFinance,
-        acl.isLD,
-      ].some(f => f()),
+      ])(),
 
-    canViewRevokedCert: () => {
-      const roles = [
-        RoleName.TT_OPS,
-        RoleName.TT_ADMIN,
-        RoleName.LD,
-        RoleName.SALES_ADMIN,
-      ]
-      return roles.some(r => r === activeRole)
-    },
+    canViewRevokedCert: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD, acl.isSalesAdmin])(),
 
-    canSeeActionableCourseTable: () => {
-      const roles = [RoleName.TT_ADMIN, RoleName.LD]
-      return roles.some(r => r === activeRole)
-    },
+    canSeeActionableCourseTable: () => anyPass([acl.isTTAdmin, acl.isLD])(),
 
-    canViewMyOrganization: () => {
-      const roles = [RoleName.USER]
-      return roles.some(r => r === activeRole)
-    },
+    canApproveCourseExceptions: () => anyPass([acl.isAdmin, acl.isLD])(),
 
-    canApproveCourseExceptions: () => {
-      const roles = [RoleName.TT_ADMIN, RoleName.LD]
-      return roles.some(r => r === activeRole)
+    /**
+     * @deprecated Will be removed in the near future
+     */
+    canViewMembership: () => {
+      if (activeRole === RoleName.USER) {
+        return Boolean(auth.activeCertificates?.length)
+      }
+
+      return anyPass([
+        acl.isUser,
+        acl.isTrainer,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isFinance,
+        acl.isAdmin,
+      ])()
     },
 
     canViewAdmin: () => acl.isInternalUser(),
 
-    canViewAdminDiscount: () => {
-      const roles = [
-        RoleName.TT_OPS,
-        RoleName.TT_ADMIN,
-        RoleName.SALES_ADMIN,
-        RoleName.FINANCE,
-      ]
+    canViewAdminDiscount: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin, acl.isFinance])(),
 
-      return roles.some(r => r === activeRole)
-    },
+    canViewAdminPricing: () => anyPass([acl.isTTAdmin, acl.isFinance])(),
 
-    canViewAdminPricing: () => {
-      const roles = [RoleName.TT_ADMIN, RoleName.FINANCE]
-      return roles.some(r => r === activeRole)
-    },
+    canApproveDiscount: () => anyPass([acl.isTTAdmin, acl.isFinance])(),
 
-    canApproveDiscount: () => {
-      const roles = [RoleName.FINANCE, RoleName.TT_ADMIN]
-      return roles.some(r => r === activeRole)
-    },
+    canViewAdminCancellationsTransfersReplacements: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isFinance,
+        acl.isSalesRepresentative,
+      ])(),
 
-    canViewAdminCancellationsTransfersReplacements: () => {
-      const roles = [
-        RoleName.TT_OPS,
-        RoleName.TT_ADMIN,
-        RoleName.SALES_ADMIN,
-        RoleName.FINANCE,
-        RoleName.SALES_REPRESENTATIVE,
-      ]
-      return roles.some(r => r === activeRole)
-    },
-
-    canViewContacts: () => {
-      const roles = [
-        RoleName.TRAINER,
-        RoleName.TT_OPS,
-        RoleName.TT_ADMIN,
-        RoleName.LD,
-        RoleName.SALES_ADMIN,
-      ]
-      return roles.some(r => r === activeRole)
-    },
+    canViewContacts: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isLD,
+        acl.isTrainer,
+        acl.isSalesAdmin,
+      ])(),
 
     canViewCertifications: () => acl.isInternalUser(),
 
     canViewOrders: () => acl.isInternalUser(),
 
     canViewCourseOrder: () =>
-      [
+      anyPass([
         acl.isInternalUser,
-        acl.isOrgAdmin,
         acl.isTrainer,
+        acl.isOrgAdmin,
         acl.isBookingContact,
-      ].some(f => f()),
+      ])(),
 
     canViewProfiles: () =>
-      [acl.isInternalUser, acl.isTrainer, acl.isOrgAdmin].some(f => f()),
+      anyPass([acl.isInternalUser, acl.isTrainer, acl.isOrgAdmin])(),
 
-    canEditProfiles: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.SALES_ADMIN]
-      return roles.some(r => r === activeRole)
-    },
+    canEditProfiles: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])(),
 
     canViewEmailContacts: (courseType: CourseType) => {
       const can =
@@ -152,33 +136,23 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canInviteAttendees: (courseType: CourseType) => {
       switch (courseType) {
-        case CourseType.OPEN: {
-          const roles = [
-            RoleName.TT_ADMIN,
-            RoleName.SALES_REPRESENTATIVE,
-            RoleName.SALES_ADMIN,
-            RoleName.TT_OPS,
-          ]
-          return roles.some(r => r === activeRole) || acl.isOrgAdmin()
-        }
-        case CourseType.CLOSED: {
-          const roles = [
-            RoleName.TT_ADMIN,
-            RoleName.SALES_REPRESENTATIVE,
-            RoleName.SALES_ADMIN,
-            RoleName.TT_OPS,
-          ]
-          return roles.some(r => r === activeRole) || acl.isOrgAdmin()
-        }
-        case CourseType.INDIRECT: {
-          const roles = [
-            RoleName.TT_ADMIN,
-            RoleName.SALES_ADMIN,
-            RoleName.TT_OPS,
-            RoleName.TRAINER,
-          ]
-          return roles.some(r => r === activeRole) || acl.isOrgAdmin()
-        }
+        case CourseType.OPEN:
+        case CourseType.CLOSED:
+          return anyPass([
+            acl.isTTAdmin,
+            acl.isTTOps,
+            acl.isSalesAdmin,
+            acl.isSalesRepresentative,
+            acl.isOrgAdmin,
+          ])()
+        case CourseType.INDIRECT:
+          return anyPass([
+            acl.isTTAdmin,
+            acl.isTTOps,
+            acl.isSalesAdmin,
+            acl.isTrainer,
+            acl.isOrgAdmin,
+          ])()
       }
     },
 
@@ -186,49 +160,36 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canViewAllOrganizations: () => acl.isInternalUser(),
 
-    canInviteToOrganizations: () => {
-      const roles = [
-        RoleName.TT_OPS,
-        RoleName.TT_ADMIN,
-        RoleName.SALES_ADMIN,
-        RoleName.SALES_REPRESENTATIVE,
-      ]
-      return auth.isOrgAdmin || roles.some(r => r === activeRole)
-    },
+    canInviteToOrganizations: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isOrgAdmin,
+      ])(),
 
-    canViewOrganizations: () => {
-      return auth.isOrgAdmin || acl.isInternalUser()
-    },
+    canViewOrganizations: () => anyPass([acl.isInternalUser, acl.isOrgAdmin])(),
 
-    canEditOrAddOrganizations: () => {
-      const roles = [
-        RoleName.TT_OPS,
-        RoleName.TT_ADMIN,
-        RoleName.SALES_ADMIN,
-        RoleName.SALES_REPRESENTATIVE,
-      ]
-      return auth.isOrgAdmin || roles.some(r => r === activeRole)
-    },
+    canEditOrAddOrganizations: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isOrgAdmin,
+      ])(),
 
-    canSetOrgAdminRole: () => {
-      const roles = [
-        RoleName.TT_OPS,
-        RoleName.TT_ADMIN,
-        RoleName.SALES_ADMIN,
-        RoleName.SALES_REPRESENTATIVE,
-      ]
-      return roles.some(r => r === activeRole)
-    },
+    canSetOrgAdminRole: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+      ])(),
 
-    canCreateCourses: () => {
-      const roles = [
-        RoleName.TT_OPS,
-        RoleName.TT_ADMIN,
-        RoleName.SALES_ADMIN,
-        RoleName.TRAINER,
-      ]
-      return roles.some(r => r === activeRole)
-    },
+    canCreateCourses: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin, acl.isTrainer])(),
 
     canCreateCourse: (type: CourseType) => {
       switch (activeRole) {
@@ -248,16 +209,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return false
     },
 
+    // TODO RMX | Too chonky, revise this later
     allowedCourseLevels: (levels: CourseLevel[]) => {
       if (!activeRole) {
         return []
       }
 
-      if (
-        [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].includes(
-          activeRole
-        )
-      ) {
+      if (anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])()) {
         return levels
       }
 
@@ -298,83 +256,52 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return false
     },
 
-    canAssignLeadTrainer: () => {
-      const roles = [
-        RoleName.TT_OPS,
-        RoleName.TT_ADMIN,
-        RoleName.SALES_ADMIN,
-        RoleName.LD,
-      ]
-      return roles.some(r => r === activeRole)
-    },
+    canAssignLeadTrainer: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin, acl.isLD])(),
 
-    canRevokeCert: () => {
-      const roles = [RoleName.TT_ADMIN, RoleName.TT_OPS]
-      return roles.some(r => r === activeRole)
-    },
+    canRevokeCert: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
 
-    canHoldCert: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
-      return roles.some(r => r === activeRole)
-    },
+    canHoldCert: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
 
-    canOverrideGrades: () => {
-      const roles = [RoleName.TT_ADMIN, RoleName.TT_OPS]
-      return roles.some(r => r === activeRole)
-    },
-    canViewXeroConnect: () => {
-      const roles = [RoleName.TT_ADMIN]
-      return roles.some(r => r === activeRole)
-    },
-    canViewArloConnect: () => {
-      const roles = [RoleName.TT_ADMIN]
-      return roles.some(r => r === activeRole)
-    },
-    canCreateOrgs: () => {
-      const roles = [
-        RoleName.TT_ADMIN,
-        RoleName.SALES_ADMIN,
-        RoleName.TT_OPS,
-        RoleName.SALES_REPRESENTATIVE,
-      ]
-      return roles.some(r => r === activeRole)
-    },
+    canOverrideGrades: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
+
+    canViewXeroConnect: () => anyPass([acl.isTTAdmin])(),
+
+    canViewArloConnect: () => anyPass([acl.isTTAdmin])(),
+
+    canCreateOrgs: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+      ])(),
+
     canEditOrgUser: (userOrgIds?: string[]) => {
-      const roles = [RoleName.TT_ADMIN, RoleName.SALES_ADMIN, RoleName.TT_OPS]
       return (
-        roles.some(r => r === activeRole) ||
-        (acl.isOrgAdmin() && acl.isOrgAdminOf(userOrgIds ?? []))
+        anyPass([acl.isTTAdmin, acl.isSalesAdmin, acl.isTTOps])() ||
+        acl.isOrgAdminOf(userOrgIds ?? [])
       )
     },
-    canEditOrgs: () => {
-      const roles = [
-        RoleName.TT_ADMIN,
-        RoleName.SALES_ADMIN,
-        RoleName.SALES_REPRESENTATIVE,
-        RoleName.TT_OPS,
-      ]
-      return auth.isOrgAdmin || roles.some(r => r === activeRole)
-    },
 
-    canCancelCourses: () => {
-      const roles = [RoleName.TT_ADMIN, RoleName.SALES_ADMIN, RoleName.TT_OPS]
-      return roles.some(r => r === activeRole)
-    },
+    canEditOrgs: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isOrgAdmin,
+      ])(),
 
-    canManageOrgCourses: () =>
-      [acl.isInternalUser, acl.isOrgAdmin].some(f => f()),
+    canCancelCourses: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])(),
 
-    canSeeWaitingLists: () => {
-      const roles = [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN]
-      return roles.some(r => r === activeRole)
-    },
-    canRescheduleWithoutWarning: () => {
-      if (activeRole) {
-        return [RoleName.TT_ADMIN, RoleName.TT_OPS].includes(activeRole)
-      }
+    canManageOrgCourses: () => anyPass([acl.isInternalUser, acl.isOrgAdmin])(),
 
-      return false
-    },
+    canSeeWaitingLists: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])(),
+
+    canRescheduleWithoutWarning: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
 
     canEditWithoutRestrictions: (courseType: CourseType) => {
       if (!activeRole) {
@@ -391,79 +318,69 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         }
 
         case CourseType.CLOSED: {
-          return [RoleName.TT_OPS].includes(activeRole)
+          return anyPass([acl.isTTOps])()
         }
 
         case CourseType.OPEN: {
-          return [RoleName.SALES_ADMIN, RoleName.TT_OPS].includes(activeRole)
+          return anyPass([acl.isTTOps, acl.isSalesAdmin])()
         }
       }
-
-      return false
     },
+
     canViewResources: () => {
-      if (
-        activeRole &&
-        [RoleName.USER, RoleName.TRAINER].includes(activeRole)
-      ) {
+      if (anyPass([acl.isUser, acl.isTrainer])()) {
         return Boolean(auth.activeCertificates?.length)
       }
 
       return acl.isInternalUser()
     },
-    canViewCourseHistory: () => {
-      return RoleName.TT_ADMIN === activeRole
-    },
+
+    canViewCourseHistory: () => anyPass([acl.isTTAdmin])(),
+
     isOrgAdminOf: (participantOrgIds: string[]) => {
       return (
-        auth.isOrgAdmin &&
+        acl.isOrgAdmin() &&
         participantOrgIds.some(participantOrgId =>
           managedOrgIds.some(managedOrgId => managedOrgId === participantOrgId)
         )
       )
     },
-    canParticipateInCourses: () => {
-      const roles = [RoleName.USER, RoleName.TRAINER]
-      return roles.some(r => r === activeRole)
-    },
+
+    canParticipateInCourses: () => anyPass([acl.isUser, acl.isTrainer])(),
+
     canTransferParticipant: (participantOrgIds: string[]) => {
       return (
-        [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].some(
-          r => r === activeRole
-        ) || acl.isOrgAdminOf(participantOrgIds)
+        anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])() ||
+        acl.isOrgAdminOf(participantOrgIds)
       )
     },
+
     canReplaceParticipant: (
       participantOrgIds: string[],
       accreditedBy: Accreditors_Enum
     ) => {
       return (
-        [
-          RoleName.TT_ADMIN,
-          RoleName.TT_OPS,
-          RoleName.SALES_ADMIN,
-          RoleName.SALES_REPRESENTATIVE,
-        ].some(r => r === activeRole) ||
+        anyPass([
+          acl.isTTAdmin,
+          acl.isTTOps,
+          acl.isSalesAdmin,
+          acl.isSalesRepresentative,
+        ])() ||
         (accreditedBy === Accreditors_Enum.Icm &&
           acl.isOrgAdminOf(participantOrgIds))
       )
     },
+
     canRemoveParticipant: (participantOrgIds: string[]) => {
       return (
-        [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].some(
-          r => r === activeRole
-        ) || acl.isOrgAdminOf(participantOrgIds)
+        anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])() ||
+        acl.isOrgAdminOf(participantOrgIds)
       )
     },
-    canSendCourseInformation: () => {
-      const roles = [
-        RoleName.TRAINER,
-        RoleName.TT_OPS,
-        RoleName.TT_ADMIN,
-        RoleName.SALES_ADMIN,
-      ]
-      return roles.some(r => r === activeRole)
-    },
+
+    canSendCourseInformation: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin, acl.isTrainer])(),
+
     canManageParticipantAttendance: (
       participantOrgIds: string[],
       accreditedBy: Accreditors_Enum
@@ -475,6 +392,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.canSendCourseInformation()
       )
     },
+
     canOnlySendCourseInformation: (
       participantOrgIds: string[],
       accreditedBy: Accreditors_Enum
@@ -486,6 +404,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.canSendCourseInformation()
       )
     },
+
     canGradeParticipants: (
       trainers: { profile: { id: string }; type: CourseTrainerType }[]
     ) => {
@@ -500,53 +419,42 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         return true
       }
 
-      return [RoleName.TT_ADMIN, RoleName.TT_OPS].some(
-        role => role === activeRole
-      )
-    },
-    canBuildCourse: () => {
-      return RoleName.TRAINER === activeRole
+      return anyPass([acl.isTTAdmin, acl.isTTOps])()
     },
 
-    canManageBlendedLicenses: () => {
-      const roles = [
-        RoleName.TT_ADMIN,
-        RoleName.FINANCE,
-        RoleName.SALES_ADMIN,
-        RoleName.TT_OPS,
-      ]
-      return roles.some(r => r === activeRole)
-    },
+    canBuildCourse: () => acl.isTrainer(),
+
+    canManageBlendedLicenses: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin, acl.isFinance])(),
 
     canSeeProfileRoles: () => {
       const hubVisibilityDeniedRoles = [RoleName.TRAINER, RoleName.USER]
       return activeRole && !hubVisibilityDeniedRoles.includes(activeRole)
     },
-    canMergeProfiles: () => {
-      const roles = [RoleName.TT_ADMIN, RoleName.SALES_ADMIN, RoleName.TT_OPS]
-      return roles.some(r => r === activeRole)
-    },
+    canMergeProfiles: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])(),
+
     canArchiveProfile: () => {
-      return acl.isTTOps() || acl.isTTAdmin()
+      return acl.isTTAdmin() || acl.isTTOps()
     },
-    canViewArchivedProfileData: () => {
-      const roles = [
-        RoleName.TT_OPS,
-        RoleName.TT_ADMIN,
-        RoleName.LD,
-        RoleName.SALES_ADMIN,
-        RoleName.SALES_REPRESENTATIVE,
-      ]
-      return roles.some(r => r === activeRole)
-    },
-    canManageCert: () => {
-      return (
-        acl.canOverrideGrades() ||
-        acl.canHoldCert() ||
-        acl.isTTAdmin() ||
-        acl.canRevokeCert()
-      )
-    },
+
+    canViewArchivedProfileData: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isLD,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+      ])(),
+
+    canManageCert: () =>
+      anyPass([
+        acl.isSalesAdmin,
+        acl.canHoldCert,
+        acl.canRevokeCert,
+        acl.canOverrideGrades,
+      ])(),
+
     canCreateBildCourse: (type: CourseType) => {
       if (!activeRole) {
         return false
@@ -565,10 +473,15 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         }
         case CourseType.OPEN:
         case CourseType.CLOSED: {
+          /**
+           * TODO: Patch this bug.
+           * @see https://behaviourhub.atlassian.net/browse/TTHP-761
+           */
           return [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN]
         }
       }
     },
+
     canDeliveryTertiaryAdvancedStrategy: () => {
       if (activeRole === RoleName.TRAINER) {
         return activeCertificates.includes(CourseLevel.BildAdvancedTrainer)
@@ -577,10 +490,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return true
     },
 
-    canDisableDiscounts: () => {
-      const roles = [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.FINANCE]
-      return roles.some(r => r === activeRole)
-    },
+    canDisableDiscounts: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isFinance])(),
 
     canViewArchivedUsersCertificates: () => {
       return acl.isAdmin()
@@ -588,14 +499,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canViewCourseBuilderOnEditPage: (
       course: Pick<CourseInput, 'accreditedBy' | 'type'> | undefined | null
     ) => {
-      const roles = [
-        RoleName.TRAINER,
-        RoleName.TT_OPS,
-        RoleName.LD,
-        RoleName.TT_ADMIN,
-      ]
       return (
-        roles.some(role => role === activeRole) &&
+        anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD, acl.isTrainer])() &&
         course?.accreditedBy === Accreditors_Enum.Icm &&
         (course?.type === CourseType.CLOSED ||
           course?.type === CourseType.INDIRECT)
