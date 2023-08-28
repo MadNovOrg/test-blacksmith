@@ -30,6 +30,8 @@ describe('component: CourseBuilder', () => {
   describe('info alert for level 1 course', () => {
     const levelOneInfoMessage =
       /Additional intermediate modules that are not listed would need to be delivered as part of Level Two course./
+    const levelTwoInfoMessage =
+      /To deliver your course as a Level Two, you must include at least one of the following intermediate modules:/
 
     it('shows the info alert for level 1 course', async () => {
       const course = buildCourse({ level: Course_Level_Enum.Level_1 })
@@ -102,7 +104,7 @@ describe('component: CourseBuilder', () => {
         }
       )
 
-      expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
+      expect(screen.queryByText(levelTwoInfoMessage)).toBeInTheDocument()
     })
   })
 

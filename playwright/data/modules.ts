@@ -450,6 +450,10 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Physical Warm Up *',
         duration: '30mins',
       },
+      {
+        name: 'Two Person Escorts',
+        duration: '1hr 30mins',
+      },
     ],
     optionalModules: [
       {
@@ -483,10 +487,6 @@ export const MODULES_SETUP: ModuleSetup[] = [
       {
         name: 'Small Child and One Person Holds',
         duration: '1hr',
-      },
-      {
-        name: 'Two Person Escorts',
-        duration: '1hr 30mins',
       },
       {
         name: 'Seated Holds',
@@ -526,6 +526,10 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Physical Warm Up *',
         duration: '30mins',
       },
+      {
+        name: 'Seated Holds',
+        duration: '1hr 30mins',
+      },
     ],
     optionalModules: [
       {
@@ -562,10 +566,6 @@ export const MODULES_SETUP: ModuleSetup[] = [
       },
       {
         name: 'Two Person Escorts',
-        duration: '1hr 30mins',
-      },
-      {
-        name: 'Seated Holds',
         duration: '1hr 30mins',
       },
     ],
@@ -601,6 +601,14 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Physical Warm Up *',
         duration: '15mins',
       },
+      {
+        name: 'Two Person Escorts',
+        duration: '45mins',
+      },
+      {
+        name: 'Seated Holds',
+        duration: '45mins',
+      },
     ],
     optionalModules: [
       {
@@ -634,14 +642,6 @@ export const MODULES_SETUP: ModuleSetup[] = [
       {
         name: 'Small Child and One Person Holds',
         duration: '30mins',
-      },
-      {
-        name: 'Two Person Escorts',
-        duration: '45mins',
-      },
-      {
-        name: 'Seated Holds',
-        duration: '45mins',
       },
     ],
     modulesToMove: [],
@@ -676,6 +676,10 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Physical Warm Up *',
         duration: '15mins',
       },
+      {
+        name: 'Two Person Escorts',
+        duration: '45mins',
+      },
     ],
     optionalModules: [
       {
@@ -709,10 +713,6 @@ export const MODULES_SETUP: ModuleSetup[] = [
       {
         name: 'Small Child and One Person Holds',
         duration: '30mins',
-      },
-      {
-        name: 'Two Person Escorts',
-        duration: '45mins',
       },
       {
         name: 'Seated Holds',
@@ -752,6 +752,10 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Physical Warm Up *',
         duration: '15mins',
       },
+      {
+        name: 'Two Person Escorts',
+        duration: '1hr 30mins',
+      },
     ],
     optionalModules: [
       {
@@ -785,10 +789,6 @@ export const MODULES_SETUP: ModuleSetup[] = [
       {
         name: 'Small Child and One Person Holds',
         duration: '1hr',
-      },
-      {
-        name: 'Two Person Escorts',
-        duration: '1hr 30mins',
       },
       {
         name: 'Seated Holds',
@@ -829,6 +829,10 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Physical Warm Up *',
         duration: '15mins',
       },
+      {
+        name: 'Two Person Escorts',
+        duration: '45mins',
+      },
     ],
     optionalModules: [
       {
@@ -862,10 +866,6 @@ export const MODULES_SETUP: ModuleSetup[] = [
       {
         name: 'Small Child and One Person Holds',
         duration: '30mins',
-      },
-      {
-        name: 'Two Person Escorts',
-        duration: '45mins',
       },
       {
         name: 'Seated Holds',

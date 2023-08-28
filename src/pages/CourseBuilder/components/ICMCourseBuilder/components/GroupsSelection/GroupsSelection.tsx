@@ -19,7 +19,11 @@ import { memo } from 'react'
 import React, { useEffect, useMemo, useState } from 'react'
 import { usePrevious } from 'react-use'
 
-import { Color_Enum, ModuleGroupsQuery } from '@app/generated/graphql'
+import {
+  Color_Enum,
+  Course_Level_Enum,
+  ModuleGroupsQuery,
+} from '@app/generated/graphql'
 import { getPercentage, formatDurationShort, isNotNullish } from '@app/util'
 
 import { LeftPane, PanesContainer, RightPane } from '../../../Panes/Panes'
@@ -37,6 +41,8 @@ type Props = {
   initialGroups: NonNullable<ModuleGroupsQuery['groups']>
   mandatoryGroups: NonNullable<ModuleGroupsQuery['groups']>
   showDuration?: boolean
+  purpleModuleIds?: string[]
+  level?: Course_Level_Enum
   maxDuration?: number
   slots?: {
     afterChosenModulesTitle?: React.ReactNode
@@ -49,6 +55,8 @@ const GroupsSelection: React.FC<Props> = ({
   availableGroups,
   initialGroups,
   mandatoryGroups,
+  purpleModuleIds,
+  level,
   showDuration = true,
   maxDuration = 0,
   slots,
@@ -321,7 +329,11 @@ const GroupsSelection: React.FC<Props> = ({
             fullWidth
             size="large"
             sx={{ mb: 2, fontWeight: 600, fontSize: '16px' }}
-            disabled={!selectedIds.length}
+            disabled={
+              !selectedIds.length ||
+              (level == Course_Level_Enum.Level_2 &&
+                !selectedIds.some(id => purpleModuleIds?.includes(id)))
+            }
             onClick={submitButtonHandler}
             data-testid="submit-button"
           >

@@ -8,6 +8,7 @@ import { BackButton } from '@app/components/BackButton'
 import { ConfirmDialog } from '@app/components/ConfirmDialog'
 import { useSnackbar } from '@app/context/snackbar'
 import {
+  Color_Enum,
   CourseToBuildQuery,
   CourseToBuildQueryVariables,
   Course_Delivery_Type_Enum,
@@ -111,6 +112,14 @@ export const ICMCourseBuilder: React.FC<
         group => (group?.duration?.aggregate?.sum?.duration ?? 0) > 0
       ),
     [moduleGroupsData]
+  )
+
+  const purpleModuleIds = useMemo(
+    () =>
+      modulesData
+        ?.filter(module => module.color == Color_Enum.Purple)
+        .map(m => m.id),
+    [modulesData]
   )
 
   const mandatoryGroups = useMemo(() => {
@@ -350,6 +359,8 @@ export const ICMCourseBuilder: React.FC<
             initialGroups={initialGroups}
             mandatoryGroups={mandatoryGroups}
             maxDuration={maxDuration}
+            purpleModuleIds={purpleModuleIds}
+            level={courseData.course.level}
             onSubmit={submitButtonHandler}
             onChange={handleSelectionChange}
             slots={{
@@ -359,6 +370,12 @@ export const ICMCourseBuilder: React.FC<
                   <Alert severity="info">
                     {t(
                       'pages.trainer-base.create-course.new-course.course-level-info'
+                    )}
+                  </Alert>
+                ) : courseData.course.level === Course_Level_Enum.Level_2 ? (
+                  <Alert severity="info">
+                    {t(
+                      'pages.trainer-base.create-course.new-course.course-level-2-info'
                     )}
                   </Alert>
                 ) : null,
