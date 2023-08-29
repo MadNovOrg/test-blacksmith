@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import React, { useMemo } from 'react'
 import { noop } from 'ts-essentials'
 
-import { Dialog } from '@app/components/Dialog'
+import { Dialog } from '@app/components/dialogs'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'

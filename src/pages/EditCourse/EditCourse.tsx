@@ -25,7 +25,7 @@ import ChooseTrainers, {
 } from '@app/components/ChooseTrainers'
 import CourseForm, { DisabledFields } from '@app/components/CourseForm'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
-import { Dialog } from '@app/components/Dialog'
+import { Dialog } from '@app/components/dialogs'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'

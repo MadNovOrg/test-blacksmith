@@ -4,7 +4,7 @@ import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
 
-import { Dialog } from '@app/components/Dialog'
+import { Dialog } from '@app/components/dialogs'
 import {
   CourseTrainerInfoFragment,
   Course_Invite_Status_Enum,

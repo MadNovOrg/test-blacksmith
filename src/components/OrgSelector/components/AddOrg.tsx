@@ -5,7 +5,7 @@ import React, { useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { Dialog } from '@app/components/Dialog'
+import { Dialog } from '@app/components/dialogs'
 import {
   getTrustType,
   isDfeSuggestion,

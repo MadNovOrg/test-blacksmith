@@ -15,12 +15,13 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useDebounce } from 'use-debounce'
 
 import { BackButton } from '@app/components/BackButton'
+import { MergeUsersDialog } from '@app/components/dialogs'
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterByCertificateValidity } from '@app/components/filters/FilterByCertificateValidity'
 import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
@@ -35,8 +36,6 @@ import { useTablePagination } from '@app/hooks/useTablePagination'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import theme from '@app/theme'
 import { CertificateStatus, RoleName, TrainerRoleTypeName } from '@app/types'
-
-import { MergeUsersDialog } from './components/MergeUsersDialog'
 
 export const Users = () => {
   const { t } = useTranslation()

@@ -10,7 +10,7 @@ import {
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Dialog } from '@app/components/Dialog'
+import { Dialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
 import { Course_Type_Enum } from '@app/generated/graphql'
 import {

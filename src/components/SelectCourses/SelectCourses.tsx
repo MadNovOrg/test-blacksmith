@@ -12,9 +12,9 @@ import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
 
+import { Dialog } from '@app/components/dialogs'
 import { CourseLevel } from '@app/types'
 
-import { Dialog } from '../Dialog'
 import { SelectLevels } from '../SelectLevels'
 
 import { QueryResult, SEARCH_COURSES, SearchCourse } from './queries'

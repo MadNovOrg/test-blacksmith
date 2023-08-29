@@ -23,7 +23,7 @@ import {
 } from 'use-query-params'
 
 import { BackButton } from '@app/components/BackButton'
-import { DialogExportBlended } from '@app/components/DialogExportBlended'
+import { ExportBlendedDialog } from '@app/components/dialogs'
 import { FilterByOrgSector } from '@app/components/filters/FilterByOrgSector'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
@@ -201,7 +201,7 @@ export const Organizations: React.FC<
                 </Button>
               ) : null}
             </Box>
-            <DialogExportBlended
+            <ExportBlendedDialog
               isOpen={showExportModal}
               closeModal={closeExportModal}
             />

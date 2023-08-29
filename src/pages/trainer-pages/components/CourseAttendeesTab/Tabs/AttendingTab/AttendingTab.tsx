@@ -15,14 +15,14 @@ import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { ConfirmDialog } from '@app/components/ConfirmDialog'
 import { CourseActionsMenu } from '@app/components/CourseActionsMenu'
-import { LinkToProfile } from '@app/components/LinkToProfile'
-import { RemoveIndividualDialog } from '@app/components/RemoveIndividualDialog'
 import {
-  Mode,
+  ConfirmDialog,
+  RemoveIndividualDialog,
   ReplaceParticipantDialog,
-} from '@app/components/ReplaceParticipantDialog'
+  Mode,
+} from '@app/components/dialogs'
+import { LinkToProfile } from '@app/components/LinkToProfile'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'

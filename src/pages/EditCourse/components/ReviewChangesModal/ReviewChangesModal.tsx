@@ -12,7 +12,7 @@ import { Trans } from 'react-i18next'
 import { noop } from 'ts-essentials'
 import { InferType } from 'yup'
 
-import { Dialog } from '@app/components/Dialog'
+import { Dialog } from '@app/components/dialogs'
 import { FeesForm, schema as feesSchema } from '@app/components/FeesForm'
 import { useAuth } from '@app/context/auth'
 import { Course_Level_Enum, TransferFeeType } from '@app/generated/graphql'

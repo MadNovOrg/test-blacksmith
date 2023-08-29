@@ -25,8 +25,8 @@ import {
   AttendeeCourse,
   AttendeeCourseStatus,
 } from '@app/components/AttendeeCourseStatus/AttendeeCourseStatus'
-import { CourseInstructionsDialog } from '@app/components/CourseInstructionsDialog'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
+import { CourseInstructionsDialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
 import { AdminOnlyCourseStatus, Course, CourseDeliveryType } from '@app/types'
 import { getCourseBeginsForMessage, formatCourseVenue } from '@app/util'

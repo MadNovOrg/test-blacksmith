@@ -1,7 +1,7 @@
 import { Alert, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
-import { Dialog } from '@app/components/Dialog'
+import { Dialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
 import {
   Go1ChangeError,

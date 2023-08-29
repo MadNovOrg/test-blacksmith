@@ -13,7 +13,7 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import React, { ReactElement, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ConfirmDialog } from '@app/components/ConfirmDialog'
+import { ConfirmDialog } from '@app/components/dialogs'
 import { RichTextEditor } from '@app/components/RichTextEditor'
 import { noop } from '@app/util'
 

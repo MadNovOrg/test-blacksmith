@@ -43,9 +43,8 @@ import * as yup from 'yup'
 import { InferType } from 'yup'
 
 import { Avatar } from '@app/components/Avatar'
-import { ConfirmDialog } from '@app/components/ConfirmDialog'
 import { DetailsRow } from '@app/components/DetailsRow'
-import { Dialog } from '@app/components/Dialog'
+import { Dialog, ConfirmDialog } from '@app/components/dialogs'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {

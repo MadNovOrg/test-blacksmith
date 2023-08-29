@@ -27,7 +27,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { Dialog } from '@app/components/Dialog'
+import { Dialog } from '@app/components/dialogs'
 import { ProfileSelector } from '@app/components/ProfileSelector'
 import { SelectCourses } from '@app/components/SelectCourses'
 import { SelectLevels } from '@app/components/SelectLevels'

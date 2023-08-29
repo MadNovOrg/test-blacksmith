@@ -9,7 +9,7 @@ import {
   useNavigate,
 } from 'react-router-dom'
 
-import { GettingStartedModal } from '@app/components/GettingStartedModal'
+import { GettingStartedDialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
 import { AppLayout } from '@app/layouts/AppLayout'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
@@ -25,6 +25,7 @@ import { LoginPage } from '@app/pages/common/Login'
 import { RegistrationPage } from '@app/pages/common/Registration'
 import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
+import options from '@app/pages/GettingStarted/options'
 import { InvitationPage } from '@app/pages/Invitation'
 import { OrgInvitationPage } from '@app/pages/Invitation/OrgInvitation'
 import { Onboarding } from '@app/pages/Onboarding'
@@ -109,7 +110,8 @@ function LoggedInRoutes() {
   const { activeRole, profile } = useAuth()
   const navigate = useNavigate()
 
-  const [showGettingStartedModal, setShowGettingStartedModal] = useState(false) // initial state should be firstTimeLogin || longTimeSinceLastLogin
+  const [showGettingStartedDialog, setShowGettingStartedDialog] =
+    useState(false) // initial state should be firstTimeLogin || longTimeSinceLastLogin
 
   useEffect(() => {
     if (
@@ -128,9 +130,10 @@ function LoggedInRoutes() {
 
   return (
     <>
-      <GettingStartedModal
-        open={showGettingStartedModal}
-        onClose={() => setShowGettingStartedModal(false)}
+      <GettingStartedDialog
+        options={options}
+        open={showGettingStartedDialog}
+        onClose={() => setShowGettingStartedDialog(false)}
       />
 
       <Routes>

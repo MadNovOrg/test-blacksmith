@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
-import { ConfirmDialog } from '@app/components/ConfirmDialog'
+import { ConfirmDialog } from '@app/components/dialogs'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   Color_Enum,

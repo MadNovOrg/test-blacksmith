@@ -18,7 +18,7 @@ import { debounce } from 'lodash-es'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Dialog } from '@app/components/Dialog'
+import { Dialog } from '@app/components/dialogs'
 import VenueForm, {
   VenueFormProps,
 } from '@app/components/VenueSelector/VenueForm'

@@ -14,7 +14,7 @@ import { useMutation } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { CourseGradingMenu } from '@app/components/CourseGradingMenu/CourseGradingMenu'
-import { Dialog } from '@app/components/Dialog'
+import { Dialog } from '@app/components/dialogs'
 import { Sticky } from '@app/components/Sticky'
 import {
   Course_Level_Enum,

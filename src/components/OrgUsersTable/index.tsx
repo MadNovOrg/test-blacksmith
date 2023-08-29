@@ -17,7 +17,7 @@ import { Box } from '@mui/system'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Dialog } from '@app/components/Dialog'
+import { Dialog } from '@app/components/dialogs'
 import { EditOrgUserModal } from '@app/components/OrgUsersTable/EditOrgUserModal'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
