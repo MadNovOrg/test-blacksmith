@@ -22,8 +22,6 @@ import {
   CourseLevel,
   Payment_Methods_Enum,
   Xero_Invoice_Status_Enum,
-  XeroAddress,
-  XeroAddressType,
   XeroLineItem,
   XeroPhone,
   XeroPhoneType,
@@ -37,7 +35,6 @@ import theme from '@app/theme'
 import { INVOICE_STATUS_COLOR, isNotNullish } from '@app/util'
 
 import {
-  formatContactAddress,
   getTrainerExpensesLineItems,
   isDiscountLineItem,
   isGo1LicensesItem,
@@ -81,10 +78,6 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     (p: XeroPhone) => p?.phoneType === XeroPhoneType.Default
   )
 
-  const address = invoice?.contact.addresses?.find(
-    (address: XeroAddress) => address?.addressType === XeroAddressType.Pobox
-  )
-
   const [discountAmount, discountLineItem] = useMemo(() => {
     const discountLineItem = invoice?.lineItems?.find((li: XeroLineItem) =>
       isDiscountLineItem(li)
@@ -122,20 +115,20 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const invoicedToInfo = useMemo(() => {
     return [
       <Typography component="span" key="contact-name">
-        {invoice?.contact.name}
+        {order?.organization.name}
       </Typography>,
-      address ? ', ' : null,
-      address ? (
+      order?.billingAddress ? ', ' : null,
+      order?.billingAddress ? (
         <Typography
           component="span"
           key="contact-address"
           data-testid="contact-address"
         >
-          {formatContactAddress(address)}
+          {order.billingAddress}
         </Typography>
       ) : null,
     ].filter(Boolean)
-  }, [address, invoice?.contact.name])
+  }, [order])
 
   const isInvoiceInXero = Boolean(xeroInvoiceUrl)
 
@@ -525,15 +518,14 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                           )}
                         </Typography>
                         <Typography color="grey.700">
-                          {invoice?.contact.firstName}{' '}
-                          {invoice?.contact.lastName}
+                          {order.billingGivenName} {order.billingFamilyName}
                         </Typography>
                         <Typography color="grey.700">
-                          {invoice?.contact.emailAddress}
+                          {order.billingEmail}
                         </Typography>
                         {phone ? (
                           <Typography color="grey.700">
-                            {phone.phoneNumber}
+                            {order.billingPhone}
                           </Typography>
                         ) : null}
                       </Stack>

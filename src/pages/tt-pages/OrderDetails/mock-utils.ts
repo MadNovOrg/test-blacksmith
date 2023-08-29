@@ -35,6 +35,14 @@ export const buildOrder = build<NonNullish<GetOrderQuery['order']>>({
     currency: 'GBP',
     organizationId: chance.guid(),
     salesRepresentative: null,
+    billingAddress: chance.address(),
+    billingEmail: chance.email(),
+    billingFamilyName: chance.name(),
+    billingGivenName: chance.name(),
+    billingPhone: chance.phone(),
+    organization: {
+      name: chance.name(),
+    },
     course: {
       id: chance.integer(),
       max_participants: chance.integer(),

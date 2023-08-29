@@ -10407,6 +10407,12 @@ export enum UserRoleEnum {
   /** User role with specific capabilities */
   Author = 'AUTHOR',
   /** User role with specific capabilities */
+  BackwpupAdmin = 'BACKWPUP_ADMIN',
+  /** User role with specific capabilities */
+  BackwpupJobsChecker = 'BACKWPUP_JOBS_CHECKER',
+  /** User role with specific capabilities */
+  BackwpupJobsFunctions = 'BACKWPUP_JOBS_FUNCTIONS',
+  /** User role with specific capabilities */
   Contributor = 'CONTRIBUTOR',
   /** User role with specific capabilities */
   Editor = 'EDITOR',
@@ -12518,6 +12524,7 @@ export type Bild_Strategy = {
   id: Scalars['uuid'];
   modules: Scalars['jsonb'];
   name: Scalars['String'];
+  rank?: Maybe<Scalars['Int']>;
   shortName: Scalars['String'];
 };
 
@@ -12566,6 +12573,7 @@ export type Bild_Strategy_Append_Input = {
 export type Bild_Strategy_Avg_Fields = {
   __typename?: 'bild_strategy_avg_fields';
   duration?: Maybe<Scalars['Float']>;
+  rank?: Maybe<Scalars['Float']>;
 };
 
 /** Boolean expression to filter rows from the table "bild_strategy". All fields are combined with a logical 'AND'. */
@@ -12577,6 +12585,7 @@ export type Bild_Strategy_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   modules?: InputMaybe<Jsonb_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
+  rank?: InputMaybe<Int_Comparison_Exp>;
   shortName?: InputMaybe<String_Comparison_Exp>;
 };
 
@@ -12606,6 +12615,7 @@ export type Bild_Strategy_Delete_Key_Input = {
 /** input type for incrementing numeric columns in table "bild_strategy" */
 export type Bild_Strategy_Inc_Input = {
   duration?: InputMaybe<Scalars['Int']>;
+  rank?: InputMaybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "bild_strategy" */
@@ -12614,6 +12624,7 @@ export type Bild_Strategy_Insert_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
+  rank?: InputMaybe<Scalars['Int']>;
   shortName?: InputMaybe<Scalars['String']>;
 };
 
@@ -12623,6 +12634,7 @@ export type Bild_Strategy_Max_Fields = {
   duration?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
+  rank?: Maybe<Scalars['Int']>;
   shortName?: Maybe<Scalars['String']>;
 };
 
@@ -12632,6 +12644,7 @@ export type Bild_Strategy_Min_Fields = {
   duration?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
+  rank?: Maybe<Scalars['Int']>;
   shortName?: Maybe<Scalars['String']>;
 };
 
@@ -12657,6 +12670,7 @@ export type Bild_Strategy_Order_By = {
   id?: InputMaybe<Order_By>;
   modules?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
+  rank?: InputMaybe<Order_By>;
   shortName?: InputMaybe<Order_By>;
 };
 
@@ -12681,6 +12695,8 @@ export enum Bild_Strategy_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
+  Rank = 'rank',
+  /** column name */
   ShortName = 'shortName'
 }
 
@@ -12690,6 +12706,7 @@ export type Bild_Strategy_Set_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
+  rank?: InputMaybe<Scalars['Int']>;
   shortName?: InputMaybe<Scalars['String']>;
 };
 
@@ -12697,18 +12714,21 @@ export type Bild_Strategy_Set_Input = {
 export type Bild_Strategy_Stddev_Fields = {
   __typename?: 'bild_strategy_stddev_fields';
   duration?: Maybe<Scalars['Float']>;
+  rank?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Bild_Strategy_Stddev_Pop_Fields = {
   __typename?: 'bild_strategy_stddev_pop_fields';
   duration?: Maybe<Scalars['Float']>;
+  rank?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Bild_Strategy_Stddev_Samp_Fields = {
   __typename?: 'bild_strategy_stddev_samp_fields';
   duration?: Maybe<Scalars['Float']>;
+  rank?: Maybe<Scalars['Float']>;
 };
 
 /** Streaming cursor of the table "bild_strategy" */
@@ -12725,6 +12745,7 @@ export type Bild_Strategy_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
+  rank?: InputMaybe<Scalars['Int']>;
   shortName?: InputMaybe<Scalars['String']>;
 };
 
@@ -12732,6 +12753,7 @@ export type Bild_Strategy_Stream_Cursor_Value_Input = {
 export type Bild_Strategy_Sum_Fields = {
   __typename?: 'bild_strategy_sum_fields';
   duration?: Maybe<Scalars['Int']>;
+  rank?: Maybe<Scalars['Int']>;
 };
 
 /** update columns of table "bild_strategy" */
@@ -12744,6 +12766,8 @@ export enum Bild_Strategy_Update_Column {
   Modules = 'modules',
   /** column name */
   Name = 'name',
+  /** column name */
+  Rank = 'rank',
   /** column name */
   ShortName = 'shortName'
 }
@@ -12771,18 +12795,21 @@ export type Bild_Strategy_Updates = {
 export type Bild_Strategy_Var_Pop_Fields = {
   __typename?: 'bild_strategy_var_pop_fields';
   duration?: Maybe<Scalars['Float']>;
+  rank?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate var_samp on columns */
 export type Bild_Strategy_Var_Samp_Fields = {
   __typename?: 'bild_strategy_var_samp_fields';
   duration?: Maybe<Scalars['Float']>;
+  rank?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate variance on columns */
 export type Bild_Strategy_Variance_Fields = {
   __typename?: 'bild_strategy_variance_fields';
   duration?: Maybe<Scalars['Float']>;
+  rank?: Maybe<Scalars['Float']>;
 };
 
 /** status enum for go1 course/module */
@@ -51495,7 +51522,7 @@ export type GetOrderQueryVariables = Exact<{
 }>;
 
 
-export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId?: any | null, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, source?: string | null, bookingContact?: any | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, start?: any | null, end?: any | null, freeSpaces?: number | null }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null };
+export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId?: any | null, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, start?: any | null, end?: any | null, freeSpaces?: number | null }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null };
 
 export type GetOrderForBookingDoneQueryVariables = Exact<{
   orderId: Scalars['uuid'];

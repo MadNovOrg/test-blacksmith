@@ -13,6 +13,11 @@ export const QUERY = gql`
       orderTotal
       currency
       source
+      billingAddress
+      billingGivenName
+      billingFamilyName
+      billingEmail
+      billingPhone
       salesRepresentative {
         id
         fullName
@@ -24,6 +29,9 @@ export const QUERY = gql`
       promoCodes
       xeroInvoiceNumber
       organizationId
+      organization {
+        name
+      }
       user
       course {
         id

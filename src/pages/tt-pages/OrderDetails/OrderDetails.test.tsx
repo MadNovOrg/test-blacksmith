@@ -455,8 +455,6 @@ describe('page: OrderDetails', () => {
   })
 
   it('renders invoice to information', () => {
-    const invoicePhone = chance.phone()
-
     const order = buildOrder({
       overrides: {
         paymentMethod: Payment_Methods_Enum.Invoice,
@@ -497,7 +495,6 @@ describe('page: OrderDetails', () => {
                     phones: [
                       {
                         phoneType: XeroPhoneType.Default,
-                        phoneNumber: invoicePhone,
                       },
                     ],
                   },
@@ -522,23 +519,25 @@ describe('page: OrderDetails', () => {
     const invoicedToRow = screen.getByTestId('order-invoiced-to')
 
     expect(
-      within(invoicedToRow).getByText(invoice.contact.name ?? '')
+      within(invoicedToRow).getByText(order.organization.name ?? '')
     ).toBeInTheDocument()
 
     expect(
       within(invoicedToRow).getByText(
-        `${invoice.contact.firstName} ${invoice.contact.lastName}`
+        `${order.billingGivenName} ${order.billingFamilyName}`
       )
     ).toBeInTheDocument()
 
     expect(
-      within(invoicedToRow).getByText(invoice.contact.emailAddress ?? '')
+      within(invoicedToRow).getByText(order.billingEmail ?? '')
     ).toBeInTheDocument()
 
-    expect(within(invoicedToRow).getByText(invoicePhone)).toBeInTheDocument()
     expect(
-      within(invoicedToRow).getByTestId('contact-address').textContent
-    ).toMatchInlineSnapshot(`"Tankfield, Convent Hill, Tramore, X91 PV08, UK"`)
+      within(invoicedToRow).getByText(order.billingPhone)
+    ).toBeInTheDocument()
+    expect(
+      within(invoicedToRow).getByTestId('contact-address')
+    ).toHaveTextContent(order.billingAddress)
   })
 
   it('displays free spaces if applied for the closed course', () => {
