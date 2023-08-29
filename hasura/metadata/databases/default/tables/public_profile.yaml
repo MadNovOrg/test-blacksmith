@@ -347,6 +347,7 @@ update_permissions:
         - _family_name
         - _given_name
         - dob
+        - last_activity
       filter: {}
       check: null
   - role: tt-admin
