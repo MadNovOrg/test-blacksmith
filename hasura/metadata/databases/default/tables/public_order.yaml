@@ -225,7 +225,6 @@ insert_permissions:
         - quantity
         - registrants
         - user
-      backend_only: false
 select_permissions:
   - role: finance
     permission:
@@ -467,17 +466,21 @@ select_permissions:
         - payment_method
         - source
       filter:
-        course:
-          _or:
-            - organization:
-                members:
-                  _and:
-                    - profile_id:
-                        _eq: X-Hasura-User-Id
-                    - is_admin:
-                        _eq: true
-            - booking_contact_profile_id:
-                _eq: X-Hasura-User-Id
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - course:
+              _or:
+                - organization:
+                    members:
+                      _and:
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
+                        - is_admin:
+                            _eq: true
+                - booking_contact_profile_id:
+                    _eq: X-Hasura-User-Id
+      limit: 0
       allow_aggregations: true
 update_permissions:
   - role: ld
