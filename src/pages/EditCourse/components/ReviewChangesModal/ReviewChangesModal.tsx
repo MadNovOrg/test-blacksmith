@@ -23,7 +23,7 @@ import type { CourseDiff } from '../../shared'
 import { CourseDiffTable } from '../CourseDiffTable'
 import { ReschedulingTermsTable } from '../ReschedulingTermsTable'
 
-const TRAINING_EMAIL = import.meta.env.VITE_TT_TRAINING_EMAIL_ADDRESS
+const INFO_EMAIL = import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
 
 function schema(t: TFunction, withFees = false) {
   const defaultSchema = yup.object({
@@ -150,9 +150,9 @@ export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
                 <Trans
                   i18nKey="protocol-not-met"
                   t={t}
-                  values={{ email: TRAINING_EMAIL }}
+                  values={{ email: INFO_EMAIL }}
                 >
-                  <Link href={`mailto:${TRAINING_EMAIL}`} component="a" />
+                  <Link href={`mailto:${INFO_EMAIL}`} component="a" />
                 </Trans>
               )}
             </Typography>
