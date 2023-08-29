@@ -331,7 +331,7 @@ const GroupsSelection: React.FC<Props> = ({
             sx={{ mb: 2, fontWeight: 600, fontSize: '16px' }}
             disabled={
               !selectedIds.length ||
-              (level == Course_Level_Enum.Level_2 &&
+              (level === Course_Level_Enum.Level_2 &&
                 !selectedIds.some(id => purpleModuleIds?.includes(id)))
             }
             onClick={submitButtonHandler}

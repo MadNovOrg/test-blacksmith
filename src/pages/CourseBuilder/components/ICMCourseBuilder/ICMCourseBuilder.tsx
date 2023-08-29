@@ -117,7 +117,7 @@ export const ICMCourseBuilder: React.FC<
   const purpleModuleIds = useMemo(
     () =>
       modulesData
-        ?.filter(module => module.color == Color_Enum.Purple)
+        ?.filter(module => module.color === Color_Enum.Purple)
         .map(m => m.id),
     [modulesData]
   )

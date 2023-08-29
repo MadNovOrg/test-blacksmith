@@ -5,6 +5,7 @@ import { Client, CombinedError, Provider, TypedDocumentNode } from 'urql'
 import { fromValue, never } from 'wonka'
 
 import {
+  Color_Enum,
   CourseToBuildQuery,
   CourseToBuildQueryVariables,
   Course_Level_Enum,
@@ -538,11 +539,28 @@ describe('component: CourseBuilder', () => {
       )
     ).toBeInTheDocument()
   })
+
+  /**
+   * TODO Write proper unit tests to cover for purple modules scenario
+   */
   it.each([Course_Level_Enum.Level_1, Course_Level_Enum.Level_2])(
     `marks all module groups as mandatory if course type is open and %s`,
     async level => {
-      const course = buildCourse({ level })
-      const moduleGroup = buildModuleGroup()
+      const moduleGroup = buildModuleGroup({
+        color: Color_Enum.Purple,
+      })
+      const course = buildCourse({
+        level,
+        moduleGroupIds: [
+          {
+            module: {
+              moduleGroup: {
+                id: moduleGroup.id,
+              },
+            },
+          },
+        ],
+      })
 
       const client = {
         executeQuery: ({ query }: { query: TypedDocumentNode }) => {
