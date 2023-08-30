@@ -443,7 +443,8 @@
         "one-to-two-weeks": "1 - 2 weeks",
         "less-than-week": "Less than 1 week"
       },
-      "cannot-be-undone-confirmation": "I understand and agree to the change."
+      "cannot-be-undone-confirmation": "I understand and agree to the change.",
+      "cannot-be-undone-confirmation-indirect-blended-learning": "I understand this cannot be undone."
     },
     "registrants-cancellation-modal": {
       "description": "There are still registrants on this course. Have you transferred all registered attendees first?\n\nProceeding to cancel will cancel attendees off this course. If you would like to transfer registered attendees to another course instead, please change this per attendee in course details.",

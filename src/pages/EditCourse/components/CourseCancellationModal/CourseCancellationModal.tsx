@@ -81,7 +81,7 @@ export const CourseCancellationModal: React.FC<
     course.type === CourseType.INDIRECT && course.go1Integration
 
   const showConfirmationCheck =
-    course.type === CourseType.OPEN || (isIndirect && isIndirectBlendedLearning)
+    course.type === CourseType.OPEN || isIndirectBlendedLearning
 
   const schema = useMemo(() => {
     const cancellationFeePercent = yup.number().required()
@@ -345,9 +345,15 @@ export const CourseCancellationModal: React.FC<
       {showConfirmationCheck ? (
         <Box mt={4}>
           <FormControlLabel
-            label={t(
-              'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation'
-            )}
+            label={
+              isIndirectBlendedLearning
+                ? t(
+                    'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation-indirect-blended-learning'
+                  )
+                : t(
+                    'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation'
+                  )
+            }
             control={<Checkbox />}
             checked={confirmed}
             data-testid="cancel-entire-course-checkbox"
