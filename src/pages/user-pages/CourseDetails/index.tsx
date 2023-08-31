@@ -12,8 +12,8 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  styled,
 } from '@mui/material'
-import { styled } from '@mui/system'
 import { useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'

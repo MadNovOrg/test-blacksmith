@@ -1,7 +1,5 @@
-import { LinearProgress, LinearProgressProps } from '@mui/material'
-import { styled } from '@mui/system'
+import { styled, LinearProgress, LinearProgressProps } from '@mui/material'
 import { get } from 'lodash-es'
-import React from 'react'
 
 export const RatingProgress = styled(
   ({

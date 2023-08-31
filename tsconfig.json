@@ -15,8 +15,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "typeRoots": ["./node_modules/@types", "./src/types"],
-    "types": ["vite-plugin-svgr/client", "@types/jest", "@types/mdx"],
     "baseUrl": "./",
     "paths": {
       "@app/*": ["./src/*"],

@@ -47,37 +47,40 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
-
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Build
         uses: actions/setup-node@v3
         with:
           node-version: '18.14.2'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm pkg delete scripts.prepare && npm ci
+        run: pnpm pkg delete scripts.prepare && pnpm i --frozen-lockfile
 
       - name: Hasura Migration
         run: |
           cp hasura/.env.sample hasura/.env
-          npm run hasura -- metadata apply
-          npm run hasura -- migrate apply --database-name default
-          npm run hasura -- migrate status --database-name default
-          npm run hasura -- metadata reload
-          npm run hasura -- metadata ic list
-          npm run hasura -- migrate apply --goto 101 --database-name default
-          npm run hasura -- migrate status --database-name default
-          npm run hasura -- migrate apply --database-name default
-          npm run hasura -- migrate status --database-name default
-          npm run hasura -- metadata reload
-          npm run hasura -- metadata ic list
+          pnpm hasura metadata apply
+          pnpm hasura migrate apply --database-name default
+          pnpm hasura migrate status --database-name default
+          pnpm hasura metadata reload
+          pnpm hasura metadata ic list
+          pnpm hasura migrate apply --goto 101 --database-name default
+          pnpm hasura migrate status --database-name default
+          pnpm hasura migrate apply --database-name default
+          pnpm hasura migrate status --database-name default
+          pnpm hasura metadata reload
+          pnpm hasura metadata ic list
 
       - name: Hasura Seed Data
-        run: npm run hasura -- seed apply --database-name default
+        run: pnpm hasura seed apply --database-name default
 
       - name: Playwright tests
         id: playwright
-        run: npm run test:e2e:queries
+        run: pnpm test:e2e:queries
 
       - name: Playwright report
         uses: actions/upload-artifact@v3

@@ -8,9 +8,9 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  styled,
 } from '@mui/material'
-import { styled } from '@mui/system'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 

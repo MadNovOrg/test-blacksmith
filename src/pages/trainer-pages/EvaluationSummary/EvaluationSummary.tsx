@@ -5,10 +5,10 @@ import {
   Container,
   Grid,
   Typography,
+  styled,
 } from '@mui/material'
-import { styled } from '@mui/system'
 import { groupBy, map, uniqBy } from 'lodash-es'
-import React, { useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useQuery } from 'urql'

@@ -48,43 +48,47 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+            version: 8
 
       - name: Build
         uses: actions/setup-node@v3
         with:
           node-version: '18.14.2'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm pkg delete scripts.prepare && npm ci
+        run: pnpm pkg delete scripts.prepare && pnpm i --frozen-lockfile
 
       - name: Hasura Migration
         run: |
           cp hasura/.env.sample hasura/.env
-          npm run hasura -- metadata apply
-          npm run hasura -- migrate apply --database-name default
-          npm run hasura -- migrate status --database-name default
-          npm run hasura -- metadata reload
-          npm run hasura -- migrate apply --goto 101 --database-name default
-          npm run hasura -- migrate status --database-name default
-          npm run hasura -- migrate apply --database-name default
-          npm run hasura -- migrate status --database-name default
-          npm run hasura -- metadata reload
+          pnpm hasura metadata apply
+          pnpm hasura migrate apply --database-name default
+          pnpm hasura migrate status --database-name default
+          pnpm hasura metadata reload
+          pnpm hasura migrate apply --goto 101 --database-name default
+          pnpm hasura migrate status --database-name default
+          pnpm hasura migrate apply --database-name default
+          pnpm hasura migrate status --database-name default
+          pnpm hasura metadata reload
 
       - name: Hasura Seed Data
-        run: npm run hasura -- seed apply --database-name default
+        run: pnpm hasura seed apply --database-name default
 
       - name: Playwright setup
         run: |
-          npm run dev &
-          npx playwright install --with-deps
+          pnpm dev &
+          pnpm playwright install --with-deps
 
       - name: Playwright tests
         id: playwright
         run: |
           while ! response=$(curl --silent --output /dev/null --write-out "%{http_code}" --fail --max-time 300 http://localhost:3000); do sleep 1; done && echo "Server started succesfully and responding!"
           sleep 10
-          npm run test:e2e:smoke -- --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+          pnpm test:e2e:smoke --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Playwright report
         uses: actions/upload-artifact@v3

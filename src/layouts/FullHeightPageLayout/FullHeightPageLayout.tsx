@@ -1,5 +1,4 @@
-import { Box } from '@mui/material'
-import { BoxProps } from '@mui/system'
+import { Box, BoxProps } from '@mui/material'
 import React from 'react'
 
 import { APP_BAR_HEIGHT, FOOTER_HEIGHT } from '@app/theme'

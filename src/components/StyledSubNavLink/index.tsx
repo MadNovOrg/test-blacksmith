@@ -1,4 +1,4 @@
-import { styled } from '@mui/system'
+import { styled } from '@mui/material'
 import { NavLink } from 'react-router-dom'
 
 export const StyledSubNavLink = styled(NavLink)(({ theme }) => ({

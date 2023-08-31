@@ -1,5 +1,6 @@
 import { CheckCircle } from '@mui/icons-material'
 import {
+  Box,
   Button,
   Chip,
   CircularProgress,
@@ -13,7 +14,6 @@ import {
   Typography,
 } from '@mui/material'
 import Link from '@mui/material/Link'
-import { Box } from '@mui/system'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

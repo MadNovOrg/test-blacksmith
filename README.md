@@ -1,9 +1,9 @@
 # Hub
 
 ## Setup
-- `npm i`
+- `pnpm i`
 - `docker compose up -d` to spin up postgres, hasura and adminer for local developement
-- `npm run dev` to run the frontend
+- `pnpm dev` to run the frontend
 
 ## New Dev Account
 
@@ -14,7 +14,7 @@ For first time setup:
   2. insert row in `identity` with uuid from cognito and `profile.id` (uuid from step 1)
   3. insert row in `organization_member` with `profile.id` and organization id desired
   4. insert row in `profile_role` with `profile.id` (uuid from step 1) and `role.id` from desired `role` record
-- The steps above can be done locally by updating `dev_profiles.sql` seed file and running `npm run hasura:seed:apply` (needs clean database - see [here](https://github.com/TeamTeach/hub-data) for how to populate the local database with more data)
+- The steps above can be done locally by updating `dev_profiles.sql` seed file and running `pnpm hasura:seed:apply` (needs clean database - see [here](https://github.com/TeamTeach/hub-data) for how to populate the local database with more data)
 - Login locally at http://localhost:3000
 
 ## Designs
@@ -37,7 +37,7 @@ A draft variant of the current architecture can be found [here](https://github.c
 
 ## Managing database schema
 
-Schema and metadata should be managed via database migrations. Hasura provides a way to manage migrations via the Hasura CLI, which is automatically installed via npm.
+Schema and metadata should be managed via database migrations. Hasura provides a way to manage migrations via the Hasura CLI, which is automatically installed via `pnpm`.
 
 The `hasura` folder contains all the configuration.
 
@@ -47,24 +47,24 @@ Oftentimes after syncing the `main` branch the schema may go inconsistent, to fi
 
 1. Apply the database migrations first, if any
 ```bash
-npm run hasura:migrate:apply
+pnpm hasura:migrate:apply
 ```
 
 2. Apply hasura metadata
 ```bash
-npm run hasura:metadata:apply
+pnpm hasura:metadata:apply
 ```
 
 3. Regenerate graphql types
 ```bash
-npm run graphql-codegen
-npm run graphql-codegen:watch
+pnpm graphql-codegen
+pnpm graphql-codegen:watch
 ```
 
 > ⚠ If there were problems in applying metadata try
 
 ```bash
-npm run hasura:metadata:reload
+pnpm hasura:metadata:reload
 ```
 
 ### Creating migrations
@@ -72,10 +72,10 @@ npm run hasura:metadata:reload
 - run your local instance of Hasura as described in [setup](#setup)
 - `cp hasura/.env.sample hasura/.env`
 - populate the file as needed, make sure it's pointing to your local instance of Hasura (by default it is)
-- `npm run hasura:console`
+- `pnpm hasura:console`
 - make changes to the database schema in the web console, this will generate files on the file system in the hasura directory
 - in order to apply the changes to other Hasura environments, commit and push the newly generated files
-- To squash multiple migrations run `npm run hasura:squash -- --name <migration_name> --from <migration_id>`
+- To squash multiple migrations run `pnpm hasura:squash -- --name <migration_name> --from <migration_id>`
 
 ## Deployment/Release Process
 - When a PR is created CI pipeline runs. The same applies on commit push to a brunch as long as the PR is active.
@@ -127,11 +127,11 @@ npm run hasura:metadata:reload
 ## E2E tests
 
 [Playwright](https://playwright.dev/) is used for E2E tests. To run tests locally, first make sure you have started the app according to [setup](#setup). Then run the following commands:
-- `npx playwright install` - only the first time on each machine, this installs the browsers (chromium, firefox and webkit) via npm
-- `npm run test:e2e` - runs all the tests (filtering will be possible when there are more tests)
-- `npm run test:e2e -- --headed` - runs tests in a visible browser
+- `npx playwright install` - only the first time on each machine, this installs the browsers (chromium, firefox and webkit) via pnpm
+- `pnpm test:e2e` - runs all the tests (filtering will be possible when there are more tests)
+- `pnpm test:e2e --headed` - runs tests in a visible browser
 
 ## Insert test data
 To insert or refresh some courses for a specific trainer, you can run the following commands:
-- `TRAINER=trainer@email.com npm run test:e2e:data` - deletes all current trainer's courses and inserts new ones, see [insertTestData.spec.ts](playwright/tests/insertTestData.spec.ts) for details
-- `TARGET=dev TRAINER=trainer@email.com npm run test:e2e:data` - runs the same for `dev` environment. You can use also `stg` and `prod`
+- `TRAINER=trainer@email.com pnpm test:e2e:data` - deletes all current trainer's courses and inserts new ones, see [insertTestData.spec.ts](playwright/tests/insertTestData.spec.ts) for details
+- `TARGET=dev TRAINER=trainer@email.com pnpm test:e2e:data` - runs the same for `dev` environment. You can use also `stg` and `prod`

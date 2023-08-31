@@ -1,4 +1,5 @@
 import {
+  Box,
   CircularProgress,
   Stack,
   Table,
@@ -9,7 +10,6 @@ import {
   Typography,
 } from '@mui/material'
 import Link from '@mui/material/Link'
-import { Box } from '@mui/system'
 import { formatDistanceToNow } from 'date-fns'
 import { sortBy } from 'lodash-es'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'

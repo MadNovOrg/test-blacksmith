@@ -38,15 +38,18 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
-
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+            version: 8
       - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: '18.14.2'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm pkg delete scripts.prepare && npm ci
+        run: pnpm pkg delete scripts.prepare && pnpm i --frozen-lockfile
 
       - name: Install Hasura CLI
         run: |
@@ -63,7 +66,7 @@ jobs:
           hasura seed apply --admin-secret $SECRET --endpoint $ENDPOINT --database-name default
 
       - name: Seed orders
-        run: npm run seed:orders
+        run: pnpm seed:orders
 
   users-auth:
     needs: data

@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { LoadingButton } from '@mui/lab'
 import {
+  Box,
   Alert,
   FormHelperText,
   Link,
@@ -9,8 +10,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-import { Box } from '@mui/system'
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import {

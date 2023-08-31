@@ -1,7 +1,6 @@
 import InfoIcon from '@mui/icons-material/Info'
-import { Chip, Tooltip } from '@mui/material'
+import { Chip, Tooltip, Box } from '@mui/material'
 import Typography from '@mui/material/Typography'
-import { Box } from '@mui/system'
 import React from 'react'
 
 import { Tile } from '../Tile'

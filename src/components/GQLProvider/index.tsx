@@ -1,8 +1,8 @@
-import { makeOperation } from '@urql/core'
 import { devtoolsExchange } from '@urql/devtools'
 import { authExchange } from '@urql/exchange-auth'
 import React, { useMemo } from 'react'
 import {
+  makeOperation,
   cacheExchange,
   createClient,
   dedupExchange,

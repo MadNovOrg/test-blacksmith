@@ -1,5 +1,5 @@
 import { Alert, CircularProgress, Stack } from '@mui/material'
-import { round } from 'lodash'
+import { round } from 'lodash-es'
 import React, {
   useCallback,
   useContext,

@@ -66,22 +66,26 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+            version: 8
 
       - name: Build
         uses: actions/setup-node@v3
         with:
           node-version: '18.14.2'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm pkg delete scripts.prepare && npm ci
+        run: pnpm pkg delete scripts.prepare && pnpm i --frozen-lockfile
 
       - name: Playwright setup
-        run: npx playwright install
+        run: pnpx playwright install
 
       - name: Playwright tests
         id: playwright
-        run: npm run test:e2e:${{ matrix.browsers }} -- playwright/tests/${{ github.event.inputs.folder }}
+        run: pnpm test:e2e:${{ matrix.browsers }} playwright/tests/${{ github.event.inputs.folder }}
 
       - name: Playwright report
         uses: actions/upload-artifact@v3

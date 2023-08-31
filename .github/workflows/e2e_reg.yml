@@ -22,12 +22,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+            version: 8
       - name: Build
         uses: actions/setup-node@v3
         with:
           node-version: '18.14.2'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -47,11 +50,11 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci
+        run: pnpm i --frozen-lockfile
 
       - name: Install Playwright Browsers
         if: steps.cache-playwright.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
+        run: pnpm playwright install --with-deps
 
   tests:
     name: E2E regression tests
@@ -83,7 +86,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.14.2'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Cache dependencies
         uses: actions/cache@v3
@@ -91,17 +94,18 @@ jobs:
           path: |
             node_modules
             ~/.cache/ms-playwright
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          # TODO Rewrite it
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
       
       - name: Install Dependencies
-        run: npm pkg delete scripts.prepare && npm ci
+        run: pnpm pkg delete scripts.prepare && pnpm i --frozen-lockfile
   
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
       - name: Playwright tests
         id: playwright
-        run: npm run test:e2e:${{ matrix.browsers }} -- --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} playwright/tests/e2e
+        run: pnpm test:e2e:${{ matrix.browsers }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} playwright/tests
 
       - name: Playwright report
         uses: actions/upload-artifact@v3

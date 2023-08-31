@@ -1,5 +1,4 @@
-import { Typography, useTheme, useMediaQuery } from '@mui/material'
-import { Box } from '@mui/system'
+import { Box, Typography, useTheme, useMediaQuery } from '@mui/material'
 import React, { useMemo } from 'react'
 
 import { StepItem } from './StepItem'

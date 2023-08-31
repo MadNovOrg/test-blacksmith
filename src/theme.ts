@@ -3,20 +3,6 @@ import { ColorPartial } from '@mui/material/styles/createPalette'
 
 import { LinkBehavior } from './components/LinkBehavior'
 
-declare module '@mui/system' {
-  interface Theme {
-    colors: {
-      navy: ColorPartial
-      lime: ColorPartial
-      teal: ColorPartial
-      yellow: ColorPartial
-      purple: ColorPartial
-      fuschia: ColorPartial
-      grey: ColorPartial
-    }
-  }
-}
-
 declare module '@mui/material/styles' {
   interface Theme {
     colors: {

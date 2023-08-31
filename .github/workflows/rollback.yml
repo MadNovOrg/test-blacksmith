@@ -32,7 +32,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+            version: 8
       - name: Source Code Rollback Action
         run: |
           if ${{ github.event.inputs.git_commit_sha != 'default' }}; then
@@ -54,13 +57,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.14.2'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm pkg delete scripts.prepare && npm ci
+        run: pnpm pkg delete scripts.prepare && pnpm i --frozen-lockfile
 
       - name: Build web
-        run: npm run build
+        run: pnpm build
         env:
           VITE_AWS_REGION: eu-west-2
           VITE_COGNITO_USER_POOL_ID: ${{ secrets[format('COGNITO_POOL_ID_{0}', env.ENV_NAME)] }}

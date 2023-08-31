@@ -1,5 +1,6 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import {
+  Box,
   Alert,
   Button,
   CircularProgress,
@@ -9,7 +10,6 @@ import {
   Tab,
   Typography,
 } from '@mui/material'
-import { Box } from '@mui/system'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'

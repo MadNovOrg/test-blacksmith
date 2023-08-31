@@ -1,11 +1,11 @@
 import {
+  Box,
   Button,
   Grid,
   Typography,
   useTheme,
   useMediaQuery,
 } from '@mui/material'
-import { Box } from '@mui/system'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
