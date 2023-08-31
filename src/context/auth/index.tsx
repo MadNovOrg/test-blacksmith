@@ -1,11 +1,11 @@
 import { Auth } from 'aws-amplify'
-import Cookies from 'js-cookie'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { gqlRequest } from '@app/lib/gql-request'
 import { MUTATION as UPDATE_PROFILE_ACTIVITY_QUERY } from '@app/queries/profile/update-profile-activity'
 import { RoleName } from '@app/types'
 
+import { TTCookies } from './cookies'
 import { fetchUserProfile, getQueryRole, lsActiveRoleClient } from './helpers'
 import { injectACL } from './permissions'
 import type { AuthContextType, AuthState, CognitoUser, E } from './types'
@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
       )
 
       // write to cookie
-      Cookies.set('mo_jwt_token', token, {
+      TTCookies.setCookie('mo_jwt_token', token, {
         secure: true,
         expires: expiryUnixSeconds * 1000,
         path: '/',
@@ -76,7 +76,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   const logout = useCallback(async () => {
     await Auth.signOut()
     // delete cookie if exists
-    Cookies.remove('mo_jwt_token', {
+    TTCookies.deleteCookie('mo_jwt_token', {
       secure: true,
       path: '/',
       domain: '.teamteach.com',
