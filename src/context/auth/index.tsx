@@ -1,4 +1,5 @@
 import { Auth } from 'aws-amplify'
+import Cookies from 'js-cookie'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { gqlRequest } from '@app/lib/gql-request'
@@ -24,7 +25,10 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     setLoading(false)
 
     if (data?.profile) {
-      const token = (await Auth.currentSession()).getIdToken().getJwtToken()
+      const idToken = (await Auth.currentSession()).getIdToken()
+      const expiryUnixSeconds = idToken.getExpiration()
+      const token = idToken.getJwtToken()
+
       await gqlRequest(
         UPDATE_PROFILE_ACTIVITY_QUERY,
         { profileId: data.profile.id },
@@ -33,6 +37,15 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
           role: data.activeRole,
         }
       )
+
+      // write to cookie
+      Cookies.set('mo_jwt_token', token, {
+        secure: true,
+        expires: expiryUnixSeconds * 1000,
+        path: '/',
+        domain: '.teamteach.com',
+        sameSite: 'Strict',
+      })
     }
   }, [])
 
@@ -62,6 +75,13 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
 
   const logout = useCallback(async () => {
     await Auth.signOut()
+    // delete cookie if exists
+    Cookies.remove('mo_jwt_token', {
+      secure: true,
+      path: '/',
+      domain: '.teamteach.com',
+      sameSite: 'Strict',
+    })
     setState({ loggedOut: true })
   }, [])
 

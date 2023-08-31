@@ -51,6 +51,7 @@ export const LoginPage = () => {
 
   const passwordResent = searchParams.get('passwordResent')
   const invitationDeclined = searchParams.get('invitationDeclined')
+  const callbackUrl = searchParams.get('callbackUrl')
 
   const from = (location.state as LocationState)?.from || {}
 
@@ -101,6 +102,10 @@ export const LoginPage = () => {
             email: data.email,
           })}`,
         })
+      }
+      if (callbackUrl !== null) {
+        window.location.replace(callbackUrl)
+        return
       }
       return navigate(to, { replace: true })
     }

@@ -1,5 +1,6 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
 import { Auth } from 'aws-amplify'
+import Cookies from 'js-cookie'
 
 import { RoleName } from '@app/types'
 
@@ -216,6 +217,28 @@ describe('context: Auth', () => {
       expect(cognitoToProfileMock).toHaveBeenCalledTimes(2)
       expect(console.error).toHaveBeenCalledWith(Error('Failed for tests'))
     })
+
+    it('saves a cookie when login is successful', async () => {
+      const [email, pass] = [chance.email(), chance.string()]
+
+      const { result } = render()
+
+      await waitFor(async () => {
+        await act(result.current.logout)
+        expect(result.current.profile).toBeUndefined()
+
+        mockCognitoToProfile({ profile: { email } })
+        await act(async () => {
+          await result.current.login(email, pass)
+        })
+
+        expect(Auth.signIn).toHaveBeenCalledWith(email, pass)
+        expect(result.current.profile?.email).toBe(email)
+        expect(result.current.loggedOut).toBe(false)
+
+        expect(Cookies.get('mo_jwt_token')).toBeDefined()
+      })
+    })
   })
 
   describe('logout', () => {
@@ -235,6 +258,8 @@ describe('context: Auth', () => {
         expect(result.current.profile).toBeUndefined()
         expect(result.current.activeRole).toBeUndefined()
         expect(result.current.loggedOut).toBe(true)
+
+        expect(Cookies.get('mo_jwt_token')).toBeUndefined()
 
         // ActiveRole is kept so that re-login picks up last role before logout
         expect(localStorage.getItem(key)).toBe(RoleName.USER)
