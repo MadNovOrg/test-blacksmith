@@ -32,28 +32,18 @@ jobs:
           node-version: '18.14.2'
           cache: 'pnpm'
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        id: cache-node-modules
-        with:
-          path: |
-            node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
-
       - name: Cache Playwright binaries
         uses: actions/cache@v3
         id: cache-playwright
         with:
           path: |
             ~/.cache/ms-playwright
-          key: playwright-${{ hashFiles('package-lock.json') }}
+          key: playwright-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: pnpm i --frozen-lockfile
+        run: pnpm i 
 
       - name: Install Playwright Browsers
-        if: steps.cache-playwright.outputs.cache-hit != 'true'
         run: pnpm playwright install --with-deps
 
   tests:
@@ -88,17 +78,16 @@ jobs:
           node-version: '18.14.2'
           cache: 'pnpm'
 
-      - name: Cache dependencies
+      - name: Cache Playwright binaries
         uses: actions/cache@v3
+        id: cache-playwright
         with:
           path: |
-            node_modules
             ~/.cache/ms-playwright
-          # TODO Rewrite it
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: playwright-${{ hashFiles('pnpm-lock.yaml') }}
       
       - name: Install Dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i --frozen-lockfile
+        run: pnpm pkg delete scripts.prepare && pnpm i 
   
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps

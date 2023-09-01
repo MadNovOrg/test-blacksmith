@@ -68,7 +68,7 @@ jobs:
       - run: echo 'NODE_OPTIONS="--max-old-space-size=6656"' >> $GITHUB_ENV
 
       - name: Install dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i --frozen-lockfile
+        run: pnpm pkg delete scripts.prepare && pnpm i 
 
       - name: Build web
         run: pnpm build --mode ${{inputs.mode}}

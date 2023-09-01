@@ -30,20 +30,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.14.2'
+          cache: 'pnpm'
 
       - run: echo 'NODE_OPTIONS="--max-old-space-size=4096"' >> $GITHUB_ENV
 
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          # TODO Rewrite this
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm pkg delete scripts.prepare && pnpm i --frozen-lockfile
+        run: pnpm pkg delete scripts.prepare && pnpm i 
 
       - name: Lint
         run: pnpm lint
@@ -69,19 +61,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.14.2'
+          cache: 'pnpm'
 
       - run: echo 'NODE_OPTIONS="--max-old-space-size=4096"' >> $GITHUB_ENV
 
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm pkg delete scripts.prepare && pnpm i --frozen-lockfile
+        run: pnpm pkg delete scripts.prepare && pnpm i 
 
       - name: Test
         run: pnpm test -- --maxWorkers=2 --shard=${{ matrix.shard }}/${{ strategy.job-total }}

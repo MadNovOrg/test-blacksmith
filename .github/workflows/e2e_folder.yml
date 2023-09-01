@@ -78,7 +78,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i --frozen-lockfile
+        run: pnpm pkg delete scripts.prepare && pnpm i 
 
       - name: Playwright setup
         run: pnpx playwright install
