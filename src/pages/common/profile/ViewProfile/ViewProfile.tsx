@@ -143,7 +143,14 @@ export const ViewProfilePage: React.FC<
               ) : null}
             </Avatar>
             <Box display={'flex'} flexDirection={'column'}>
-              <Typography variant="h1">
+              <Typography
+                variant="h1"
+                sx={{
+                  maxWidth: '240px',
+                  overflowWrap: 'break-word',
+                  whiteSpace: 'initial',
+                }}
+              >
                 {profile.archived
                   ? t('common.archived-profile')
                   : profile.fullName}

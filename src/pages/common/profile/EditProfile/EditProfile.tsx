@@ -625,7 +625,15 @@ export const EditProfilePage: React.FC<
                   {avatarError}
                 </Typography>
               ) : null}
-              <Typography variant="h1" whiteSpace="nowrap">
+              <Typography
+                variant="h1"
+                whiteSpace="nowrap"
+                sx={{
+                  maxWidth: '240px',
+                  overflowWrap: 'break-word',
+                  whiteSpace: 'initial',
+                }}
+              >
                 {profile.fullName}
               </Typography>
               <Typography variant="body1" color="grey.700">
