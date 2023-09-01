@@ -8,9 +8,7 @@
     "Amdaris Ltd."
   ],
   "license": "LICENSE.md",
-  "scripts": {
-    "test": "echo \"It Lives! 🧟‍♂️\""
-  },
+  "scripts": {},
   "dependencies": {},
   "devDependencies": {}
 }
