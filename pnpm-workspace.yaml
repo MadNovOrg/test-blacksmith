@@ -1,0 +1,5 @@
+packages:
+  # executable/launchable applications & services
+  - 'apps/*'
+  # all packages in shared libraries
+  - 'libs/*'

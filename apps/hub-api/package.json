@@ -1,0 +1,16 @@
+{
+  "name": "@teamteach/hub.api",
+  "version": "1.0.0-alpha.1.0",
+  "private": true,
+  "description": "Hub application API",
+  "authors": [
+    "NearForm Ltd.",
+    "Amdaris Ltd."
+  ],
+  "license": "LICENSE.md",
+  "scripts": {
+    "test": "echo \"It Lives! 🧟‍♂️\""
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
