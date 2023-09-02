@@ -4,8 +4,8 @@ import { chance, render, screen } from '@test/index'
 
 import { AppBar } from './AppBar'
 
-jest.mock('swr')
-const useSWRMock = jest.mocked(useSWR)
+vi.mock('swr')
+const useSWRMock = vi.mocked(useSWR)
 
 function registerMocks(certificateCount: number, courseCount: number) {
   useSWRMock.mockReturnValueOnce({
@@ -13,7 +13,7 @@ function registerMocks(certificateCount: number, courseCount: number) {
       certificates: { aggregate: { count: certificateCount } },
       participant: { aggregate: { count: courseCount } },
     },
-    mutate: jest.fn(),
+    mutate: vi.fn(),
     isValidating: false,
     error: null,
     isLoading: false,

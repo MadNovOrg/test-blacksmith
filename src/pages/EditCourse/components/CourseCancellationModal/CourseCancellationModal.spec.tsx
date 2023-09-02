@@ -9,7 +9,7 @@ import { buildCourse } from '@test/mock-data-utils'
 import { CourseCancellationModal, FeesRadioValue } from '.'
 
 describe(CourseCancellationModal.name, () => {
-  const onClose = jest.fn()
+  const onClose = vi.fn()
   const {
     result: {
       current: { t },
@@ -73,7 +73,9 @@ describe(CourseCancellationModal.name, () => {
     //Assert
     radioGroup.forEach(async radioButton => {
       await userEvent.click(radioButton)
-      waitFor(() => expect(radioButton).toHaveAttribute('selected', 'true'))
+      await waitFor(() =>
+        expect(radioButton).toHaveAttribute('selected', 'true')
+      )
     })
   })
   it('should render the cancel course dropdown', () => {

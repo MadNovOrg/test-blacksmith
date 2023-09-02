@@ -12,8 +12,8 @@ import { buildCourse, buildParticipant } from '@test/mock-data-utils'
 
 import { CourseGrading } from './CourseGrading'
 
-jest.mock('@app/hooks/useCourseParticipants')
-const useCourseParticipantsMocked = jest.mocked(useCourseParticipants)
+vi.mock('@app/hooks/useCourseParticipants')
+const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
 
 describe('component: CourseGrading', () => {
   it('displays spinner while loading for participants', () => {
@@ -21,7 +21,7 @@ describe('component: CourseGrading', () => {
     course.gradingConfirmed = true
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.FETCHING,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(<CourseGrading course={course} refreshCourse={noop} />)
@@ -40,7 +40,7 @@ describe('component: CourseGrading', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(<CourseGrading course={course} refreshCourse={noop} />)
@@ -85,7 +85,7 @@ describe('component: CourseGrading', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(
@@ -124,7 +124,7 @@ describe('component: CourseGrading', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(<CourseGrading course={course} refreshCourse={noop} />, {
@@ -149,7 +149,7 @@ describe('component: CourseGrading', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(<CourseGrading course={course} refreshCourse={noop} />, {
@@ -171,7 +171,7 @@ describe('component: CourseGrading', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(<CourseGrading course={course} refreshCourse={noop} />, {
@@ -202,7 +202,7 @@ describe('component: CourseGrading', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(<CourseGrading course={course} refreshCourse={noop} />, {

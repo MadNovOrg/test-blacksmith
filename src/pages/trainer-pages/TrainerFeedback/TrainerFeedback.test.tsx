@@ -5,10 +5,10 @@ import { render, screen, useSWRDefaultResponse, chance } from '@test/index'
 
 import { TrainerFeedback } from './index'
 
-jest.mock('@app/lib/gql-request')
+vi.mock('@app/lib/gql-request')
 
-jest.mock('swr')
-const useSWRMock = jest.mocked(useSWR)
+vi.mock('swr')
+const useSWRMock = vi.mocked(useSWR)
 
 describe('TrainerFeedback component', () => {
   const trainerName = chance.name()

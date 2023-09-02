@@ -8,9 +8,9 @@ import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { PricingList } from './PricingList'
 
-jest.mock('@app/hooks/useCoursePricing')
+vi.mock('@app/hooks/useCoursePricing')
 
-const useCoursePricingMock = jest.mocked(useCoursePricing)
+const useCoursePricingMock = vi.mocked(useCoursePricing)
 
 describe('component: PricingList', () => {
   const setup = () => {
@@ -31,7 +31,7 @@ describe('component: PricingList', () => {
       error: undefined,
       status: LoadingStatus.IDLE,
       isLoading: false,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
     render(<PricingList />)
   }

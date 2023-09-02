@@ -28,7 +28,7 @@ describe('i18n', () => {
     expect(t('dates.default', { date })).toBe('27 April 2022')
   })
 
-  it('formats dates to date_withTime', () => {
+  it('formats dates to date_withTime', async () => {
     expect(t('dates.withTime', { date })).toBe('27 April 2022, 10:10 AM')
   })
 

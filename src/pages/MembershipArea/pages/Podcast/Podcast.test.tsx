@@ -121,6 +121,7 @@ describe('page: Podcast', () => {
     ).toBeInTheDocument()
   })
 
+  // eslint-disable-next-line vitest/expect-expect
   it('links back to the podcasts page', async () => {
     const PODCAST_ID = 'podcast-id'
     const podcast = buildPodcast()

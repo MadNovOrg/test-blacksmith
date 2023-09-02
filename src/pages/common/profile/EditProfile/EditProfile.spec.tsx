@@ -12,11 +12,11 @@ import { buildProfile } from '@test/mock-data-utils'
 
 import { EditProfilePage } from './EditProfile'
 
-const useProfileMock = jest.mocked(useProfile)
-jest.mock('@app/hooks/useProfile')
+const useProfileMock = vi.mocked(useProfile)
+vi.mock('@app/hooks/useProfile')
 
-const useRolesMock = jest.mocked(useRoles)
-jest.mock('@app/hooks/useRoles')
+const useRolesMock = vi.mocked(useRoles)
+vi.mock('@app/hooks/useRoles')
 
 describe(EditProfilePage.name, () => {
   const {

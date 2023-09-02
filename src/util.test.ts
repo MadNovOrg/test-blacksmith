@@ -17,40 +17,40 @@ import {
 
 describe('formatDateForDraft', () => {
   beforeAll(() => {
-    jest.useFakeTimers()
+    vi.useFakeTimers({ shouldAdvanceTime: true })
   })
   afterAll(() => {
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   it('returns appropriate message if date is within the last half a minute', () => {
-    jest.setSystemTime(new Date(2022, 3, 28, 15, 15, 59))
+    vi.setSystemTime(new Date(2022, 3, 28, 15, 15, 59))
     const date = new Date(2022, 3, 28, 15, 15, 31)
-    const tMock = jest.fn()
-    expect(formatDateForDraft(date, 'ago', tMock)).toEqual(
+    const tMock = vi.fn()
+    expect(formatDateForDraft(date, 'ago', tMock)).toBe(
       'less than a minute ago'
     )
   })
 
   it('returns minutes elapsed if date is within the hour', () => {
-    jest.setSystemTime(new Date(2022, 3, 28, 15, 15))
+    vi.setSystemTime(new Date(2022, 3, 28, 15, 15))
     const date = new Date(2022, 3, 28, 15, 0)
-    const tMock = jest.fn()
-    expect(formatDateForDraft(date, 'ago', tMock)).toEqual('15 minutes ago')
+    const tMock = vi.fn()
+    expect(formatDateForDraft(date, 'ago', tMock)).toBe('15 minutes ago')
   })
 
   it('returns hours elapsed if date is within the day', () => {
-    jest.setSystemTime(new Date(2022, 3, 28, 23, 59))
+    vi.setSystemTime(new Date(2022, 3, 28, 23, 59))
     const date = new Date(2022, 3, 28, 0, 0)
-    const tMock = jest.fn()
-    expect(formatDateForDraft(date, 'ago', tMock)).toEqual('about 24 hours ago')
+    const tMock = vi.fn()
+    expect(formatDateForDraft(date, 'ago', tMock)).toBe('about 24 hours ago')
   })
 
   it('returns actual date, if date is over one day ago', () => {
-    jest.setSystemTime(new Date('2022-03-28 12:00'))
+    vi.setSystemTime(new Date('2022-03-28 12:00'))
     const date = new Date('2022-03-27 11:59')
-    const tMock = jest.fn().mockReturnValue('27 March 2022')
-    expect(formatDateForDraft(date, 'ago', tMock)).toEqual('27 March 2022')
+    const tMock = vi.fn().mockReturnValue('27 March 2022')
+    expect(formatDateForDraft(date, 'ago', tMock)).toBe('27 March 2022')
   })
 })
 
@@ -93,7 +93,7 @@ describe('getCourseLeadTrainer', () => {
       buildCourseLeader({ profile: lead }),
       buildCourseAssistant({ profile: assistant2 }),
     ])
-    expect(trainer).not.toBeUndefined()
+    expect(trainer).toBeDefined()
     expect(trainer?.profile?.id).toBe(lead.id)
     expect(trainer?.profile?.fullName).toBe(lead.fullName)
   })
@@ -153,10 +153,10 @@ describe('getTimeDifferenceAndContext() -', () => {
     const end = new Date('2022-01-02 00:00')
     const { count, context } = getTimeDifferenceAndContext(end, start)
     test('count: 2', () => {
-      expect(count).toEqual(2)
+      expect(count).toBe(2)
     })
     test('context: days', () => {
-      expect(context).toEqual('days')
+      expect(context).toBe('days')
     })
   })
 
@@ -165,10 +165,10 @@ describe('getTimeDifferenceAndContext() -', () => {
     const end = new Date('2022-01-01 23:59')
     const { count, context } = getTimeDifferenceAndContext(end, start)
     test('count: 23', () => {
-      expect(count).toEqual(23)
+      expect(count).toBe(23)
     })
     test('context: hours', () => {
-      expect(context).toEqual('hours')
+      expect(context).toBe('hours')
     })
   })
 
@@ -177,10 +177,10 @@ describe('getTimeDifferenceAndContext() -', () => {
     const end = new Date('2022-01-01 01:00')
     const { count, context } = getTimeDifferenceAndContext(end, start)
     test('count: 1', () => {
-      expect(count).toEqual(1)
+      expect(count).toBe(1)
     })
     test('context: hours', () => {
-      expect(context).toEqual('hours')
+      expect(context).toBe('hours')
     })
   })
 
@@ -189,10 +189,10 @@ describe('getTimeDifferenceAndContext() -', () => {
     const end = new Date('2022-01-01 00:59')
     const { count, context } = getTimeDifferenceAndContext(end, start)
     test('count: 59', () => {
-      expect(count).toEqual(59)
+      expect(count).toBe(59)
     })
     test('context: minutes', () => {
-      expect(context).toEqual('minutes')
+      expect(context).toBe('minutes')
     })
   })
 
@@ -201,10 +201,10 @@ describe('getTimeDifferenceAndContext() -', () => {
     const end = new Date('2022-01-01 00:00:59')
     const { count, context } = getTimeDifferenceAndContext(end, start)
     test('count: 0', () => {
-      expect(count).toEqual(0)
+      expect(count).toBe(0)
     })
     test('context: none', () => {
-      expect(context).toEqual('none')
+      expect(context).toBe('none')
     })
   })
 })

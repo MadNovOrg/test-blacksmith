@@ -7,11 +7,11 @@ import { render, screen, userEvent } from '@test/index'
 import { ManageCertificateMenu } from './ManageCertificateMenu'
 
 describe('ManageCertificateMenu', () => {
-  const onShowModifyGradeMock = jest.fn()
-  const onShowRevokeModalMock = jest.fn()
-  const onShowUndoRevokeModalMock = jest.fn()
-  const onShowPutOnHoldModalMock = jest.fn()
-  const onShowChangelogModalMock = jest.fn()
+  const onShowModifyGradeMock = vi.fn()
+  const onShowRevokeModalMock = vi.fn()
+  const onShowUndoRevokeModalMock = vi.fn()
+  const onShowPutOnHoldModalMock = vi.fn()
+  const onShowChangelogModalMock = vi.fn()
 
   it('when role is admin', async () => {
     render(

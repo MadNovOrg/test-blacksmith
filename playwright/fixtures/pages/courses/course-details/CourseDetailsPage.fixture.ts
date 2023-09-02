@@ -179,7 +179,7 @@ export class CourseDetailsPage extends BasePage {
   }
 
   async checkNotesOnCoursePage(inputtedNote: string) {
-    const infoIcon = await this.page.locator('[data-testid="InfoIcon"]')
+    const infoIcon = this.page.locator('[data-testid="InfoIcon"]')
     await expect(infoIcon).toBeVisible()
     await expect(this.additionalNotes).toHaveAttribute(
       'aria-label',

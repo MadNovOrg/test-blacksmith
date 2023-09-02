@@ -12,24 +12,24 @@ import { LoadingStatus } from '@app/util'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 
-jest.mock('@app/components/OrgSelector', () => ({
-  OrgSelector: jest.fn(() => <p>Org Selector</p>),
+vi.mock('@app/components/OrgSelector', () => ({
+  OrgSelector: vi.fn(() => <p>Org Selector</p>),
 }))
 
-jest.mock('@app/components/VenueSelector', () => ({
-  VenueSelector: jest.fn(() => <p>Venue Selector</p>),
+vi.mock('@app/components/VenueSelector', () => ({
+  VenueSelector: vi.fn(() => <p>Venue Selector</p>),
 }))
 
 export const ZOOM_MOCKED_URL = 'https://us99web.zoom.us/j/99999?pwd=mockP4ss'
-jest.mock('@app/hooks/useZoomMeetingLink')
-const useZoomMeetingUrlMocked = jest.mocked(useZoomMeetingUrl)
-const zoomGenerateLink = jest.mocked(() => {
+vi.mock('@app/hooks/useZoomMeetingLink')
+const useZoomMeetingUrlMocked = vi.mocked(useZoomMeetingUrl)
+const zoomGenerateLink = vi.mocked(() => {
   useZoomMeetingUrlMocked.mockReturnValue({
     meetingUrl: ZOOM_MOCKED_URL,
     meetingId: 123,
     status: LoadingStatus.SUCCESS,
     generateLink: zoomGenerateLink,
-    clearLink: jest.fn(),
+    clearLink: vi.fn(),
   })
 })
 
@@ -39,7 +39,7 @@ beforeEach(() => {
     meetingId: 123,
     status: LoadingStatus.IDLE,
     generateLink: zoomGenerateLink,
-    clearLink: jest.fn(),
+    clearLink: vi.fn(),
   })
 })
 

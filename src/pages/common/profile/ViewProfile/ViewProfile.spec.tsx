@@ -10,8 +10,8 @@ import { LoadingStatus } from '@app/util'
 import { render, screen } from '@test/index'
 import { buildCertificate, buildProfile } from '@test/mock-data-utils'
 
-jest.mock('@app/hooks/useProfile')
-const useProfileMock = jest.mocked(useProfile)
+vi.mock('@app/hooks/useProfile')
+const useProfileMock = vi.mocked(useProfile)
 describe('page: ViewProfile', () => {
   describe('delete profile', () => {
     it('should show delete button when profile is not archived', async () => {

@@ -69,7 +69,7 @@ jobs:
         run: pnpm pkg delete scripts.prepare && pnpm i 
 
       - name: Test
-        run: pnpm test -- --maxWorkers=2 --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+        run: pnpm test -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
   dev-cd:
     name: DEV

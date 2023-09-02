@@ -57,7 +57,7 @@ export class VideoPage extends BasePage {
   }
 
   async checkVideoContainer(id: string) {
-    const ytFrame = await this.page.frameLocator(`iframe#yt-embed-${id}`)
+    const ytFrame = this.page.frameLocator(`iframe#yt-embed-${id}`)
     await expect(ytFrame.locator(this.overlay)).toHaveCount(1)
     await ytFrame.locator(this.play).click()
   }

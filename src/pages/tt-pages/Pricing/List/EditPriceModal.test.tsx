@@ -8,12 +8,12 @@ import { profile } from '@test/providers'
 
 import { EditPriceModal } from './EditPriceModal'
 
-jest.mock('@app/hooks/use-fetcher')
-jest.mock('@app/hooks/useProfile')
-jest.mock('@app/queries/pricing/set-course-pricing', () => ({
+vi.mock('@app/hooks/use-fetcher')
+vi.mock('@app/hooks/useProfile')
+vi.mock('@app/queries/pricing/set-course-pricing', () => ({
   MUTATION: 'set-pricing-query',
 }))
-const useFetcherMock = jest.mocked(useFetcher)
+const useFetcherMock = vi.mocked(useFetcher)
 
 const pricing = {
   id: chance.guid(),
@@ -27,9 +27,9 @@ const pricing = {
 }
 
 describe('component: EditPriceModal', () => {
-  const onCloseMock = jest.fn()
-  const onSaveMock = jest.fn()
-  const fetcherMock = jest.fn()
+  const onCloseMock = vi.fn()
+  const onSaveMock = vi.fn()
+  const fetcherMock = vi.fn()
 
   const setup = () => {
     useFetcherMock.mockReturnValue(fetcherMock)

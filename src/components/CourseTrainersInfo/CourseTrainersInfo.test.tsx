@@ -34,7 +34,7 @@ describe('component: CourseTrainersInfo', () => {
 
     render(<CourseTrainersInfo trainers={trainers} />)
 
-    expect(screen.queryByText('Show more')).toBe(null)
+    expect(screen.queryByText('Show more')).toBeNull()
   })
 
   it('href is referenced correctly when Admin', async () => {
@@ -90,9 +90,9 @@ describe('component: CourseTrainersInfo', () => {
 
     providers.auth.activeRole = providers.auth.defaultRole
 
-    expect(screen.getByText('Leader').closest('a')).toBe(null)
-    expect(screen.getByText('Assistant 1').closest('a')).toBe(null)
-    expect(screen.getByText('Assistant 2').closest('a')).toBe(null)
+    expect(screen.getByText('Leader').closest('a')).toBeNull()
+    expect(screen.getByText('Assistant 1').closest('a')).toBeNull()
+    expect(screen.getByText('Assistant 2').closest('a')).toBeNull()
   })
 
   it('display you are trainer text if id match', () => {

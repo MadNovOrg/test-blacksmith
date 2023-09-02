@@ -7,21 +7,21 @@ import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { MergeUsersDialog } from './MergeUsersDialog'
 
-jest.mock('@app/hooks/useProfile')
-jest.mock('@app/hooks/use-fetcher')
-jest.mock('@app/queries/user/merge-users', () => ({
+vi.mock('@app/hooks/useProfile')
+vi.mock('@app/hooks/use-fetcher')
+vi.mock('@app/queries/user/merge-users', () => ({
   MUTATION: 'merge-query',
 }))
 
-const useFetcherMock = jest.mocked(useFetcher)
-const useProfileMock = jest.mocked(useProfile)
+const useFetcherMock = vi.mocked(useFetcher)
+const useProfileMock = vi.mocked(useProfile)
 
 describe(MergeUsersDialog.name, () => {
   const profileId1 = chance.guid()
   const profileId2 = chance.guid()
-  const fetcherMock = jest.fn()
-  const onCloseMock = jest.fn()
-  const onSuccessMock = jest.fn()
+  const fetcherMock = vi.fn()
+  const onCloseMock = vi.fn()
+  const onSuccessMock = vi.fn()
 
   const setup = () => {
     useFetcherMock.mockReturnValue(fetcherMock)
@@ -143,7 +143,7 @@ describe(MergeUsersDialog.name, () => {
     })
     expect(onSuccessMock).toHaveBeenCalledTimes(0)
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(screen.getByText(/Unable to merge users/i)).toBeInTheDocument()
     })
   })

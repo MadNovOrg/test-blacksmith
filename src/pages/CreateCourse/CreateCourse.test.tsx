@@ -13,8 +13,8 @@ import { StepsEnum } from './types'
 
 import { CreateCourse } from '.'
 
-jest.mock('@app/hooks/useCourseDraft')
-const useCourseDraftMocked = jest.mocked(useCourseDraft)
+vi.mock('@app/hooks/useCourseDraft')
+const useCourseDraftMocked = vi.mocked(useCourseDraft)
 
 function createFetchingClient() {
   return {
@@ -25,9 +25,9 @@ function createFetchingClient() {
 describe('page: CreateCourse', () => {
   beforeAll(() => {
     useCourseDraftMocked.mockReturnValue({
-      fetchDraft: jest.fn(() => ({ data: {}, status: LoadingStatus.SUCCESS })),
-      removeDraft: jest.fn(),
-      setDraft: jest.fn(),
+      fetchDraft: vi.fn(() => ({ data: {}, status: LoadingStatus.SUCCESS })),
+      removeDraft: vi.fn(),
+      setDraft: vi.fn(),
     })
   })
 
@@ -77,7 +77,7 @@ describe('page: CreateCourse', () => {
     const attendanceNavItem = within(subnav).getByTestId('step-item-1')
     const modulesNavItem = within(subnav).getByTestId('step-item-2')
 
-    expect(within(attendanceNavItem).queryByTestId('CheckIcon')).toBe(null)
+    expect(within(attendanceNavItem).queryByTestId('CheckIcon')).toBeNull()
     expect(within(modulesNavItem).getByText('2')).toBeInTheDocument()
   })
 

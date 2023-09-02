@@ -9,11 +9,11 @@ import { renderForm, selectDelivery, selectLevel } from './test-utils'
 
 import CourseForm from '.'
 
-jest.mock('@app/hooks/useCoursePrice', () => ({
-  useCoursePrice: jest.fn(),
+vi.mock('@app/hooks/useCoursePrice', () => ({
+  useCoursePrice: vi.fn(),
 }))
 
-const useCoursePriceMock = jest.mocked(useCoursePrice)
+const useCoursePriceMock = vi.mocked(useCoursePrice)
 
 describe('component: CourseForm - OPEN', () => {
   const type = CourseType.OPEN

@@ -11,8 +11,8 @@ import { Type } from '../ManageLicensesForm'
 
 import { ManageLicensesDialog } from './'
 
-jest.mock('@app/hooks/use-fetcher')
-const useFetcherMock = jest.mocked(useFetcher)
+vi.mock('@app/hooks/use-fetcher')
+const useFetcherMock = vi.mocked(useFetcher)
 
 describe('ManageLicensesDialog', () => {
   it('adds licenses to an organization', async () => {
@@ -22,9 +22,9 @@ describe('ManageLicensesDialog', () => {
     const profileId = chance.guid()
     const fullName = chance.name({ full: true })
     const invoiceId = 'inv-001'
-    const onSaveMock = jest.fn()
+    const onSaveMock = vi.fn()
 
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
 
     fetcherMock.mockResolvedValue({
       go1LicensesChange: {
@@ -39,7 +39,7 @@ describe('ManageLicensesDialog', () => {
         orgId={orgId}
         opened
         onSave={onSaveMock}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
         currentBalance={balance}
       />,
       {
@@ -81,9 +81,9 @@ describe('ManageLicensesDialog', () => {
     const fullName = chance.name({ full: true })
     const invoiceId = 'inv-001'
     const licensePrice = 15
-    const onSaveMock = jest.fn()
+    const onSaveMock = vi.fn()
 
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
 
     fetcherMock.mockResolvedValue({
       go1LicensesChange: {
@@ -98,7 +98,7 @@ describe('ManageLicensesDialog', () => {
         orgId={orgId}
         opened
         onSave={onSaveMock}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
         currentBalance={balance}
       />,
       {
@@ -147,9 +147,9 @@ describe('ManageLicensesDialog', () => {
     const fullName = chance.name({ full: true })
     const invoiceId = 'inv-001'
     const licensePrice = 15
-    const onSaveMock = jest.fn()
+    const onSaveMock = vi.fn()
 
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
 
     fetcherMock.mockResolvedValue({
       go1LicensesChange: {
@@ -164,7 +164,7 @@ describe('ManageLicensesDialog', () => {
         orgId={orgId}
         opened
         onSave={onSaveMock}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
         currentBalance={balance}
       />,
       {
@@ -219,9 +219,9 @@ describe('ManageLicensesDialog', () => {
     const fullName = chance.name({ full: true })
     const invoiceId = 'inv-001'
     const licensePrice = 15
-    const onSaveMock = jest.fn()
+    const onSaveMock = vi.fn()
 
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
 
     fetcherMock.mockResolvedValue({
       go1LicensesChange: {
@@ -237,7 +237,7 @@ describe('ManageLicensesDialog', () => {
         orgId={orgId}
         opened
         onSave={onSaveMock}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
         currentBalance={balance}
       />,
       {
@@ -292,9 +292,9 @@ describe('ManageLicensesDialog', () => {
     const fullName = chance.name({ full: true })
     const invoiceId = 'inv-001'
     const licensePrice = 15
-    const onSaveMock = jest.fn()
+    const onSaveMock = vi.fn()
 
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
 
     fetcherMock.mockResolvedValue({
       go1LicensesChange: {
@@ -310,7 +310,7 @@ describe('ManageLicensesDialog', () => {
         orgId={orgId}
         opened
         onSave={onSaveMock}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
         currentBalance={balance}
       />,
       {

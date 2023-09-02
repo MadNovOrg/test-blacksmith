@@ -22,8 +22,8 @@ import {
 
 import { CourseDetails } from '.'
 
-jest.mock('swr')
-const useSWRMock = jest.mocked(useSWR)
+vi.mock('swr')
+const useSWRMock = vi.mocked(useSWR)
 
 function registerMocks(
   course: Course,

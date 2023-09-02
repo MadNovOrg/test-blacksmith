@@ -33,6 +33,7 @@ describe('page: Post', () => {
     expect(screen.getByTestId('recent-posts-skeleton')).toBeInTheDocument()
   })
 
+  // eslint-disable-next-line vitest/expect-expect
   it('navigates back to the blog page', async () => {
     const post = buildPost()
 

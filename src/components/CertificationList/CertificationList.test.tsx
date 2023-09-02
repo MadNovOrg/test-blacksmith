@@ -18,7 +18,7 @@ describe('component: CertificationList', () => {
     const sorting = {
       by: 'name',
       dir: 'asc' as SortOrder,
-      onSort: jest.fn(),
+      onSort: vi.fn(),
     }
 
     render(<CertificationList participants={participants} sorting={sorting} />)
@@ -46,7 +46,7 @@ describe('component: CertificationList', () => {
     const sorting = {
       by: 'name',
       dir: 'asc' as SortOrder,
-      onSort: jest.fn(),
+      onSort: vi.fn(),
     }
     const columns = [
       'name',
@@ -108,7 +108,7 @@ describe('component: CertificationList', () => {
     const sorting = {
       by: 'name',
       dir: 'asc' as SortOrder,
-      onSort: jest.fn(),
+      onSort: vi.fn(),
     }
 
     render(<CertificationList participants={participants} sorting={sorting} />)

@@ -6,7 +6,7 @@ import { FilterSearch } from './FilterSearch'
 
 describe(FilterSearch.name, () => {
   it('renders as expected', async () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<FilterSearch onChange={onChange} />)
 
     const input = screen.getByTestId('FilterSearch-Input')
@@ -20,7 +20,7 @@ describe(FilterSearch.name, () => {
 
   it('takes in a value', async () => {
     const value = chance.first()
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<FilterSearch value={value} onChange={onChange} />)
 
     const input = screen.getByTestId('FilterSearch-Input')
@@ -34,7 +34,7 @@ describe(FilterSearch.name, () => {
 
   it('calls onChange debounced when user types', async () => {
     const value = chance.first()
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<FilterSearch value="" onChange={onChange} />)
 
     const input = screen.getByTestId('FilterSearch-Input')
@@ -48,7 +48,7 @@ describe(FilterSearch.name, () => {
 
   it('calls onChange not debounced when user types', async () => {
     const value = chance.first()
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<FilterSearch value="" onChange={onChange} debounce={0} />)
 
     const input = screen.getByTestId('FilterSearch-Input')
@@ -66,7 +66,7 @@ describe(FilterSearch.name, () => {
 
   it('clears text', async () => {
     const value = chance.first()
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<FilterSearch value={value} onChange={onChange} debounce={0} />)
 
     const input = screen.getByTestId('FilterSearch-Input')

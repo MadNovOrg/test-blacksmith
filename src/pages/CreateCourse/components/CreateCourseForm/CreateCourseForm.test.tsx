@@ -31,20 +31,20 @@ import { CreateCourseProvider } from '../CreateCourseProvider'
 
 import { CreateCourseForm } from '.'
 
-jest.mock('@app/components/VenueSelector', () => ({
-  VenueSelector: jest.fn(),
+vi.mock('@app/components/VenueSelector', () => ({
+  VenueSelector: vi.fn(),
 }))
 
-jest.mock('@app/hooks/useZoomMeetingLink')
+vi.mock('@app/hooks/useZoomMeetingLink')
 
-jest.mock('@app/hooks/useCourseDraft')
+vi.mock('@app/hooks/useCourseDraft')
 
-const VenueSelectorMocked = jest.mocked(VenueSelector)
-const useZoomMeetingUrlMocked = jest.mocked(useZoomMeetingLink)
-const useCourseDraftMocked = jest.mocked(useCourseDraft)
+const VenueSelectorMocked = vi.mocked(VenueSelector)
+const useZoomMeetingUrlMocked = vi.mocked(useZoomMeetingLink)
+const useCourseDraftMocked = vi.mocked(useCourseDraft)
 
-const mockTrainerSearch = jest.fn().mockResolvedValue({ trainers: [] })
-jest.mock('@app/components/SearchTrainers/useQueryTrainers', () => ({
+const mockTrainerSearch = vi.fn().mockResolvedValue({ trainers: [] })
+vi.mock('@app/components/SearchTrainers/useQueryTrainers', () => ({
   useQueryTrainers: () => ({ search: mockTrainerSearch }),
 }))
 
@@ -54,14 +54,14 @@ describe('component: CreateCourseForm', () => {
     useZoomMeetingUrlMocked.mockReturnValue({
       meetingUrl: '',
       meetingId: 123,
-      generateLink: jest.fn(),
-      clearLink: jest.fn(),
+      generateLink: vi.fn(),
+      clearLink: vi.fn(),
       status: LoadingStatus.SUCCESS,
     })
     useCourseDraftMocked.mockReturnValue({
-      fetchDraft: jest.fn(),
-      removeDraft: jest.fn(),
-      setDraft: jest.fn(),
+      fetchDraft: vi.fn(),
+      removeDraft: vi.fn(),
+      setDraft: vi.fn(),
     })
   })
 

@@ -1,12 +1,10 @@
-import React from 'react'
-
 import { render, screen, userEvent, waitFor } from '@test/index'
 
 import { FilterByOrgSector } from './FilterByOrgSector'
 
-describe(FilterByOrgSector.name, () => {
-  it('onChange FilterByOrgSector', async () => {
-    const onChange = jest.fn()
+describe('FilterOrgSector', () => {
+  it('onChange FilterOrgSector', async () => {
+    const onChange = vi.fn()
     render(<FilterByOrgSector onChange={onChange} />)
 
     await userEvent.click(screen.getByText('Adults Health and Social Care'))

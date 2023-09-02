@@ -11,24 +11,24 @@ import { buildCourse } from '@test/mock-data-utils'
 
 import { ExceptionsApprovalModalContent } from '.'
 
-jest.mock('@app/hooks/use-fetcher')
-jest.mock('@app/hooks/useCourse')
+vi.mock('@app/hooks/use-fetcher')
+vi.mock('@app/hooks/useCourse')
 
-jest.mock('@app/queries/courses/approve-course', () => ({
+vi.mock('@app/queries/courses/approve-course', () => ({
   MUTATION: 'approve-course-mutation',
 }))
-jest.mock('@app/queries/courses/reject-course', () => ({
+vi.mock('@app/queries/courses/reject-course', () => ({
   MUTATION: 'reject-course-mutation',
 }))
 
-const fetcherMock = jest.fn()
-const closeModalMock = jest.fn()
-const useFetcherMock = jest.mocked(useFetcher)
-const useCourseMocked = jest.mocked(useCourse)
+const fetcherMock = vi.fn()
+const closeModalMock = vi.fn()
+const useFetcherMock = vi.mocked(useFetcher)
+const useCourseMocked = vi.mocked(useCourse)
 const urqlMockClient = {
-  executeQuery: () => jest.fn(),
-  executeMutation: () => jest.fn(),
-  executeSubscription: () => jest.fn(),
+  executeQuery: () => vi.fn(),
+  executeMutation: () => vi.fn(),
+  executeSubscription: () => vi.fn(),
 } as never as Client
 
 describe('component: ExceptionsApprovalModalContent', () => {
@@ -52,7 +52,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: course,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
   })
   it('should render the ExceptionsApprovalModalContent component', () => {

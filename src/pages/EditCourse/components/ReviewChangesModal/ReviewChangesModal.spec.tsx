@@ -125,7 +125,7 @@ describe('component: ReviewChangesModal', () => {
   })
 
   it('cancels review when clicked on cancel button', async () => {
-    const onCancelMock = jest.fn()
+    const onCancelMock = vi.fn()
 
     render(
       <ReviewChangesModal
@@ -142,7 +142,7 @@ describe('component: ReviewChangesModal', () => {
   })
 
   it('confirms review when clicked on the confirm button', async () => {
-    const onConfirmMock = jest.fn()
+    const onConfirmMock = vi.fn()
 
     const dateDiff: CourseDiff = {
       type: 'date',

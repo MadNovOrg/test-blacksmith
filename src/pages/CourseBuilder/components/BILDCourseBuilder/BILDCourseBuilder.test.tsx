@@ -14,9 +14,9 @@ import { buildCourse } from '../../test-utils'
 
 import { BILDCourseBuilder } from './BILDCourseBuilder'
 
-jest.mock('@app/hooks/useBildStrategies')
+vi.mock('@app/hooks/useBildStrategies')
 
-const useBildStrategiesMocked = jest.mocked(useBildStrategies)
+const useBildStrategiesMocked = vi.mocked(useBildStrategies)
 
 describe('component: BILDCourseBuilder', () => {
   it('renders course builder', async () => {

@@ -1,4 +1,5 @@
 import { Auth } from 'aws-amplify'
+import { vi, MockedFunction } from 'vitest'
 
 import { Recaptcha } from '@app/components/Recaptcha'
 import { createRecaptchaComp } from '@app/components/Recaptcha/test-utils'
@@ -9,18 +10,18 @@ import { render, screen, userEvent, waitFor } from '@test/index'
 
 import { Form } from './Form'
 
-jest.mock('@app/hooks/use-fetcher')
-jest.mock('@app/lib/gql-request')
-jest.mock('../../../../hooks/useJobTitles')
+vi.mock('@app/hooks/use-fetcher')
+vi.mock('@app/lib/gql-request')
+vi.mock('aws-amplify')
+vi.mock('../../../../hooks/useJobTitles')
 
-const mockUseJobTitles = useJobTitles as jest.MockedFunction<
-  typeof useJobTitles
->
-const gqlRequestMocked = jest.mocked(gqlRequest)
-const authRequestMocked = jest.mocked(Auth)
+const gqlRequestMocked = vi.mocked(gqlRequest)
+const mockSignup = vi.mocked(Auth.signUp)
+
+const mockUseJobTitles = useJobTitles as MockedFunction<typeof useJobTitles>
 
 const defaultProps = {
-  onSignUp: jest.fn(),
+  onSignUp: vi.fn(),
   courseId: 123,
   quantity: 2,
 }
@@ -34,13 +35,13 @@ mockUseJobTitles.mockReturnValue([
   'Other',
 ])
 
-jest.mock('@app/components/Recaptcha', () => ({
+vi.mock('@app/components/Recaptcha', async () => ({
   __esModule: true,
-  ...jest.requireActual('@app/components/Recaptcha'),
-  Recaptcha: jest.fn(),
+  ...((await vi.importActual('@app/components/Recaptcha')) as object),
+  Recaptcha: vi.fn(),
 }))
 
-const MockedRecaptcha = jest.mocked(Recaptcha)
+const MockedRecaptcha = vi.mocked(Recaptcha)
 
 describe('Form', () => {
   beforeEach(() => {
@@ -227,7 +228,7 @@ describe('Form', () => {
 
   it('displays error message if email already exists', async () => {
     gqlRequestMocked.mockResolvedValue({})
-    authRequestMocked.signUp.mockImplementation(() => {
+    mockSignup.mockImplementation(() => {
       const error = new Error() as Error & { code: string }
       error.code = 'UsernameExistsException'
       throw error

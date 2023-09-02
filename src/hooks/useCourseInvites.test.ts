@@ -5,23 +5,23 @@ import { chance } from '@test/index'
 
 import useCourseInvites from './useCourseInvites'
 
-jest.mock('swr')
-const useSWRMock = jest.mocked(useSWR)
+vi.mock('swr')
+const useSWRMock = vi.mocked(useSWR)
 const useSWRMockDefaults = {
   data: undefined,
-  mutate: jest.fn(),
+  mutate: vi.fn(),
   isValidating: false,
   error: null,
   isLoading: false,
 }
 
-const mockFetcher = jest.fn()
-jest.mock('@app/hooks/use-fetcher', () => ({
+const mockFetcher = vi.fn()
+vi.mock('@app/hooks/use-fetcher', () => ({
   useFetcher: () => mockFetcher,
 }))
 
-const mockMatchMutate = jest.fn()
-jest.mock('@app/hooks/useMatchMutate', () => ({
+const mockMatchMutate = vi.fn()
+vi.mock('@app/hooks/useMatchMutate', () => ({
   useMatchMutate: () => mockMatchMutate,
 }))
 

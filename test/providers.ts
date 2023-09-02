@@ -1,4 +1,5 @@
 import { MarkOptional } from 'ts-essentials'
+import vi, { vi as v } from 'vitest'
 
 import type { AuthContextType } from '@app/context/auth/types'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
@@ -33,27 +34,27 @@ export const profile = {
 
 export interface Providers {
   auth: MarkOptional<AuthContextType, 'acl'> & {
-    login: jest.Mock
-    logout: jest.Mock
-    changeRole: jest.Mock
+    login: vi.Mock
+    logout: vi.Mock
+    changeRole: vi.Mock
     acl?: AuthContextType['acl']
   }
 }
 
 export const defaultProviders: Providers = {
   auth: {
-    login: jest.fn().mockResolvedValue(undefined),
-    logout: jest.fn().mockResolvedValue(undefined),
-    changeRole: jest.fn().mockResolvedValue(undefined),
-    getJWT: jest.fn().mockResolvedValue(undefined),
+    login: v.fn().mockResolvedValue(undefined),
+    logout: v.fn().mockResolvedValue(undefined),
+    changeRole: v.fn().mockResolvedValue(undefined),
+    getJWT: v.fn().mockResolvedValue(undefined),
     loading: false,
     defaultRole: RoleName.USER,
     allowedRoles: new Set([RoleName.USER]),
     claimsRoles: new Set([RoleName.USER]),
     activeRole: RoleName.USER,
     queryRole: RoleName.USER,
-    loadProfile: jest.fn().mockResolvedValue(undefined),
-    reloadCurrentProfile: jest.fn().mockResolvedValue(undefined),
+    loadProfile: v.fn().mockResolvedValue(undefined),
+    reloadCurrentProfile: v.fn().mockResolvedValue(undefined),
     profile,
   },
 }

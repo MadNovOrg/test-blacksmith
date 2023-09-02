@@ -12,7 +12,7 @@ describe('AddOrg component', () => {
       name: 'name',
     }
 
-    render(<AddOrg option={option} onSuccess={jest.fn()} onClose={jest.fn()} />)
+    render(<AddOrg option={option} onSuccess={vi.fn()} onClose={vi.fn()} />)
     expect(screen.getByText('Organisation Name')).toBeInTheDocument()
     expect(screen.getByText('Trust type')).toBeInTheDocument()
     expect(screen.getByText('Trust name')).toBeInTheDocument()

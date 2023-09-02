@@ -7,8 +7,8 @@ import { buildLogs } from '@test/mock-data-utils'
 import { CourseExceptionsLogTabs } from '.'
 
 const logsMock = [buildLogs()]
-jest.mock('@app/hooks/useCourseAuditLogs')
-const useCourseAuditLogsMock = jest.mocked(useCourseAuditLogs)
+vi.mock('@app/hooks/useCourseAuditLogs')
+const useCourseAuditLogsMock = vi.mocked(useCourseAuditLogs)
 
 describe('component: CourseExceptionsLogsTabs', () => {
   useCourseAuditLogsMock.mockReturnValue({

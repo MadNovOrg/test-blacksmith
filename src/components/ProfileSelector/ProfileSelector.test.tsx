@@ -9,18 +9,18 @@ import { buildProfile } from '@test/mock-data-utils'
 
 import { ProfileSelector } from '.'
 
-jest.mock('@app/hooks/use-fetcher')
+vi.mock('@app/hooks/use-fetcher')
 
-const useFetcherMock = jest.mocked(useFetcher)
+const useFetcherMock = vi.mocked(useFetcher)
 
 describe('component: ProfileSelector', () => {
   beforeEach(() => {
-    jest.useFakeTimers({ advanceTimers: true })
+    vi.useFakeTimers({ shouldAdvanceTime: true })
   })
 
   afterEach(() => {
-    jest.runOnlyPendingTimers()
-    jest.useRealTimers()
+    vi.runOnlyPendingTimers()
+    vi.useRealTimers()
   })
 
   it("doesn't display options initially", async () => {
@@ -35,7 +35,7 @@ describe('component: ProfileSelector', () => {
   it('loads profiles when the user types profile full name', async () => {
     const SEARCH_NAME = 'John Doe'
     const ORG_ID = 'org-id'
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
 
     fetcherMock.mockResolvedValue({
       profiles: [
@@ -57,7 +57,7 @@ describe('component: ProfileSelector', () => {
       SEARCH_NAME
     )
 
-    jest.runAllTimers()
+    vi.runAllTimers()
 
     await waitFor(() => {
       expect(fetcherMock).toHaveBeenCalledTimes(1)
@@ -76,8 +76,8 @@ describe('component: ProfileSelector', () => {
   it('calls callback when the user makes the selection', async () => {
     const SEARCH_NAME = 'John Doe'
     const ORG_ID = 'org-id'
-    const fetcherMock = jest.fn()
-    const onChangeMock = jest.fn()
+    const fetcherMock = vi.fn()
+    const onChangeMock = vi.fn()
     const profile = buildProfile({
       overrides: {
         givenName: 'John',
@@ -98,7 +98,7 @@ describe('component: ProfileSelector', () => {
       SEARCH_NAME
     )
 
-    jest.runAllTimers()
+    vi.runAllTimers()
 
     await waitFor(() => {
       expect(

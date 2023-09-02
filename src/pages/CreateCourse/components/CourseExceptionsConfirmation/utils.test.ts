@@ -38,12 +38,12 @@ describe('course exception utils', () => {
   }
 
   beforeAll(() => {
-    jest.useFakeTimers()
-    jest.setSystemTime(new Date(2022, 1, 1, 10, 0))
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    vi.setSystemTime(new Date(2022, 1, 1, 10, 0))
   })
 
   afterAll(() => {
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   describe('isOutsideOfNoticePeriod', () => {

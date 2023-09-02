@@ -1,5 +1,4 @@
 import { addDays, addWeeks } from 'date-fns'
-import React from 'react'
 
 import { CourseLevel } from '@app/generated/graphql'
 

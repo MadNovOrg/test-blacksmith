@@ -133,6 +133,5 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     loadProfile,
     reloadCurrentProfile,
   ])
-
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

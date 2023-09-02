@@ -15,6 +15,7 @@ hasura/.env
 /playwright/tmp/
 /tmp/
 /coverage/
+/html
 
 # IDE Files
 ## VScode

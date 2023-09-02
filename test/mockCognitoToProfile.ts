@@ -1,4 +1,5 @@
 import { DeepPartial } from 'ts-essentials'
+import { vi } from 'vitest'
 
 import cognitoToProfile, {
   CognitoProfileDetails,
@@ -7,9 +8,9 @@ import { RoleName } from '@app/types'
 
 import { profile } from '@test/providers'
 
-jest.mock('@app/context/auth/cognitoToProfile')
+vi.mock('@app/context/auth/cognitoToProfile')
 
-const mock = jest.mocked(cognitoToProfile)
+const mock = vi.mocked(cognitoToProfile)
 
 export const defaultCognitoProfile = {
   profile: {

@@ -12,8 +12,8 @@ describe(RemoveIndividualDialog.name, () => {
       <RemoveIndividualDialog
         participant={mockParticipant}
         course={mockCourse}
-        onClose={jest.fn()}
-        onSave={jest.fn()}
+        onClose={vi.fn()}
+        onSave={vi.fn()}
       />
     )
 

@@ -8,9 +8,9 @@ import { render, renderHook, screen, userEvent } from '@test/index'
 import { ExceptionsApprovalAlert } from '.'
 
 const urqlMockClient = {
-  executeQuery: () => jest.fn(),
-  executeMutation: () => jest.fn(),
-  executeSubscription: () => jest.fn(),
+  executeQuery: () => vi.fn(),
+  executeMutation: () => vi.fn(),
+  executeSubscription: () => vi.fn(),
 } as never as Client
 
 describe('component: ExceptionsApprovalAlert', () => {

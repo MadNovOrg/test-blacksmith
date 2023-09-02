@@ -14,19 +14,19 @@ import { buildCourse } from '@test/mock-data-utils'
 
 import { EditCourse } from '.'
 
-jest.mock('@app/hooks/useCourse')
-jest.mock('@app/components/VenueSelector', () => ({
-  VenueSelector: jest.fn(),
+vi.mock('@app/hooks/useCourse')
+vi.mock('@app/components/VenueSelector', () => ({
+  VenueSelector: vi.fn(),
 }))
-jest.mock('@app/hooks/use-fetcher')
-const useFetcherMock = jest.mocked(useFetcher)
+vi.mock('@app/hooks/use-fetcher')
+const useFetcherMock = vi.mocked(useFetcher)
 
-const useCourseMocked = jest.mocked(useCourse)
-const VenueSelectorMocked = jest.mocked(VenueSelector)
+const useCourseMocked = vi.mocked(useCourse)
+const VenueSelectorMocked = vi.mocked(VenueSelector)
 
 describe(EditCourse.name, () => {
   beforeAll(() => {
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
     useFetcherMock.mockReturnValue(fetcherMock)
     fetcherMock.mockResolvedValue({ members: [] })
     VenueSelectorMocked.mockImplementation(() => <p>test</p>)
@@ -36,7 +36,7 @@ describe(EditCourse.name, () => {
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.FETCHING,
       data: undefined,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -60,7 +60,7 @@ describe(EditCourse.name, () => {
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: undefined,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -85,7 +85,7 @@ describe(EditCourse.name, () => {
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.ERROR,
       data: undefined,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -118,7 +118,7 @@ describe(EditCourse.name, () => {
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: openCourse,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -148,7 +148,7 @@ describe(EditCourse.name, () => {
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: openCourse,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -178,7 +178,7 @@ describe(EditCourse.name, () => {
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: openCourse,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -208,7 +208,7 @@ describe(EditCourse.name, () => {
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: openCourse,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -238,7 +238,7 @@ describe(EditCourse.name, () => {
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: openCourse,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -268,7 +268,7 @@ describe(EditCourse.name, () => {
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: openCourse,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -304,7 +304,7 @@ describe(EditCourse.name, () => {
     useCourseMocked.mockReturnValue({
       data: openCourse,
       status: LoadingStatus.IDLE,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -367,7 +367,7 @@ describe(EditCourse.name, () => {
     useCourseMocked.mockReturnValue({
       data: closedCourse,
       status: LoadingStatus.IDLE,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -411,7 +411,7 @@ describe(EditCourse.name, () => {
     useCourseMocked.mockReturnValue({
       data: openCourse,
       status: LoadingStatus.IDLE,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {

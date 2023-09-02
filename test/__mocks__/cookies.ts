@@ -1,6 +1,6 @@
 const TTCookies = {
-  setCookie: jest.fn(),
-  deleteCookie: jest.fn(),
+  setCookie: vi.fn(),
+  deleteCookie: vi.fn(),
 }
 
 export default TTCookies

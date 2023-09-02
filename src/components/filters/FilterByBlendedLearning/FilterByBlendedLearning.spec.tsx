@@ -6,7 +6,7 @@ import { FilterByBlendedLearning } from './index'
 
 describe(FilterByBlendedLearning.name, () => {
   it('triggers onChange when filtering by blended learning', async () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<FilterByBlendedLearning onChange={onChange} selected />)
 
     await userEvent.click(screen.getByLabelText('Blended learning'))

@@ -21,8 +21,8 @@ import { buildCourse } from '@test/mock-data-utils'
 
 import { SearchTrainers } from './SearchTrainers'
 
-const mockSearch = jest.fn().mockResolvedValue({ trainers: [] })
-jest.mock('./useQueryTrainers.ts', () => ({
+const mockSearch = vi.fn().mockResolvedValue({ trainers: [] })
+vi.mock('./useQueryTrainers.ts', () => ({
   useQueryTrainers: () => ({ search: mockSearch }),
 }))
 
@@ -192,9 +192,7 @@ describe(SearchTrainers.name, () => {
     const trainers = makeTrainers()
     mockSearch.mockResolvedValueOnce({ trainers })
 
-    const matchesFilter = jest.fn().mockReturnValueOnce([trainers[2]])
-
-    // Act
+    const matchesFilter = vi.fn().mockReturnValueOnce([trainers[2]])
     render(
       <SearchTrainers
         trainerType={CourseTrainerType.Leader}
@@ -287,9 +285,7 @@ describe(SearchTrainers.name, () => {
     const trainers = makeTrainers()
     mockSearch.mockResolvedValueOnce({ trainers })
 
-    const onChange = jest.fn()
-
-    // Act
+    const onChange = vi.fn()
     render(
       <SearchTrainers
         trainerType={CourseTrainerType.Leader}

@@ -1,31 +1,28 @@
 import { useTranslation } from 'react-i18next'
 
+import useOrg from '@app/hooks/useOrg'
+import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
 import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import { RoleName } from '@app/types'
 
-import { act, renderHook, userEvent, waitFor } from '@test/index'
+import { act, renderHook, userEvent } from '@test/index'
 import { render, screen } from '@test/index'
 
-const mockUseOrgs = { loading: false }
+vi.mock('@app/hooks/useOrg')
+vi.mock('@app/hooks/useUpcomingCourses')
 
-jest.mock('@app/hooks/useOrg', () => jest.fn(() => mockUseOrgs))
-jest.mock('@app/hooks/useUpcomingCourses', () =>
-  jest
-    .fn()
-    .mockReturnValue({
-      loading: false,
-    })
-    .mockReturnValueOnce({
-      loading: true,
-    })
-)
+vi.mocked(useOrg, { partial: true }).mockReturnValue({
+  loading: false,
+})
+vi.mocked(useUpcomingCourses, { partial: true })
+  .mockReturnValueOnce({ loading: true })
+  .mockReturnValue({ loading: false })
 
 describe('AvailableCourse', () => {
   beforeEach(async () => {
-    await waitFor(() =>
-      render(<AvailableCourses />, { auth: { activeRole: RoleName.TT_ADMIN } })
-    )
+    render(<AvailableCourses />, { auth: { activeRole: RoleName.TT_ADMIN } })
   })
+
   it('should handle the loading state', () => {
     expect(screen.getByTestId('courses-fetching')).toBeInTheDocument()
   })

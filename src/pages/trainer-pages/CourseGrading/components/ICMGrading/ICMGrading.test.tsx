@@ -1,4 +1,3 @@
-import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 
 import { Grade_Enum } from '@app/generated/graphql'
@@ -13,9 +12,9 @@ import { buildGradingCourse, selectGradingOption } from '../../test-utils'
 
 import { ICMGrading } from '.'
 
-jest.mock('@app/hooks/use-fetcher')
+vi.mock('@app/hooks/use-fetcher')
 
-const useFetcherMock = jest.mocked(useFetcher)
+const useFetcherMock = vi.mocked(useFetcher)
 
 describe('page: CourseGrading', () => {
   afterEach(() => {
@@ -289,7 +288,7 @@ describe('page: CourseGrading', () => {
 
   it('saves grades for participants when an intent for saving is confirmed', async () => {
     const COURSE_ID = 'course-id'
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
 
     useFetcherMock.mockReturnValue(fetcherMock)
     fetcherMock.mockResolvedValue({

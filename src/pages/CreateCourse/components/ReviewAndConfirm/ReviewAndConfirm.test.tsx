@@ -28,17 +28,17 @@ import { CreateCourseProvider } from '../CreateCourseProvider'
 
 import { ReviewAndConfirm } from '.'
 
-const mockNavigate = jest.fn()
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+const mockNavigate = vi.fn()
+vi.mock('react-router-dom', async () => ({
+  ...((await vi.importActual('react-router-dom')) as object),
   useNavigate: () => mockNavigate,
 }))
 
-jest.mock('swr')
-const mockSWR = jest.mocked(useSWR)
+vi.mock('swr')
+const mockSWR = vi.mocked(useSWR)
 
-const mockFetcher = jest.fn()
-jest.mock('@app/hooks/use-fetcher', () => ({
+const mockFetcher = vi.fn()
+vi.mock('@app/hooks/use-fetcher', () => ({
   useFetcher: () => mockFetcher,
 }))
 mockFetcher.mockReturnValue({})
@@ -71,7 +71,7 @@ describe('component: ReviewAndConfirm', () => {
     mockSWR.mockReturnValue({
       data: null,
       error: new Error(),
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       isValidating: false,
       isLoading: false,
     })

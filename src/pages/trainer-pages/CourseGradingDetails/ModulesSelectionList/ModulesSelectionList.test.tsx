@@ -38,10 +38,8 @@ describe('component: ModulesSelectionList', () => {
         const moduleCheckbox = within(groupElement).getByLabelText(module.name)
 
         if (module.covered) {
-          // eslint-disable-next-line jest/no-conditional-expect
           expect(moduleCheckbox).toBeChecked()
         } else {
-          // eslint-disable-next-line jest/no-conditional-expect
           expect(moduleCheckbox).not.toBeChecked()
         }
       })
@@ -70,7 +68,7 @@ describe('component: ModulesSelectionList', () => {
       },
     ]
 
-    const onChangeMock = jest.fn()
+    const onChangeMock = vi.fn()
 
     render(
       <ModulesSelectionList
@@ -132,7 +130,7 @@ describe('component: ModulesSelectionList', () => {
       },
     ]
 
-    const onChangeMock = jest.fn()
+    const onChangeMock = vi.fn()
 
     render(
       <ModulesSelectionList

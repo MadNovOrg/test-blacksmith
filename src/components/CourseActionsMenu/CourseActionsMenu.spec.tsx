@@ -24,10 +24,10 @@ describe(CourseActionsMenu.name, () => {
             organizations: defaultOrganizations,
           },
         }}
-        onRemoveClick={jest.fn()}
-        onReplaceClick={jest.fn()}
-        onTransferClick={jest.fn()}
-        onResendCourseInformationClick={jest.fn()}
+        onRemoveClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendCourseInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -54,10 +54,10 @@ describe(CourseActionsMenu.name, () => {
             organizations: defaultOrganizations,
           },
         }}
-        onRemoveClick={jest.fn()}
-        onReplaceClick={jest.fn()}
-        onTransferClick={jest.fn()}
-        onResendCourseInformationClick={jest.fn()}
+        onRemoveClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendCourseInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -84,10 +84,10 @@ describe(CourseActionsMenu.name, () => {
             organizations: defaultOrganizations,
           },
         }}
-        onRemoveClick={jest.fn()}
-        onReplaceClick={jest.fn()}
-        onTransferClick={jest.fn()}
-        onResendCourseInformationClick={jest.fn()}
+        onRemoveClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendCourseInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -114,10 +114,10 @@ describe(CourseActionsMenu.name, () => {
             organizations: defaultOrganizations,
           },
         }}
-        onRemoveClick={jest.fn()}
-        onReplaceClick={jest.fn()}
-        onTransferClick={jest.fn()}
-        onResendCourseInformationClick={jest.fn()}
+        onRemoveClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendCourseInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -146,10 +146,10 @@ describe(CourseActionsMenu.name, () => {
             organizations: defaultOrganizations,
           },
         }}
-        onRemoveClick={jest.fn()}
-        onReplaceClick={jest.fn()}
-        onTransferClick={jest.fn()}
-        onResendCourseInformationClick={jest.fn()}
+        onRemoveClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendCourseInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -172,10 +172,10 @@ describe(CourseActionsMenu.name, () => {
             organizations: defaultOrganizations,
           },
         }}
-        onRemoveClick={jest.fn()}
-        onReplaceClick={jest.fn()}
-        onTransferClick={jest.fn()}
-        onResendCourseInformationClick={jest.fn()}
+        onRemoveClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendCourseInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -206,10 +206,10 @@ describe(CourseActionsMenu.name, () => {
             organizations: defaultOrganizations,
           },
         }}
-        onRemoveClick={jest.fn()}
-        onReplaceClick={jest.fn()}
-        onTransferClick={jest.fn()}
-        onResendCourseInformationClick={jest.fn()}
+        onRemoveClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendCourseInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -233,10 +233,10 @@ describe(CourseActionsMenu.name, () => {
             organizations: defaultOrganizations,
           },
         }}
-        onRemoveClick={jest.fn()}
-        onReplaceClick={jest.fn()}
-        onTransferClick={jest.fn()}
-        onResendCourseInformationClick={jest.fn()}
+        onRemoveClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendCourseInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -265,10 +265,10 @@ describe(CourseActionsMenu.name, () => {
         organizations: defaultOrganizations,
       },
     }
-    const onRemoveMock = jest.fn()
-    const onReplaceMock = jest.fn()
-    const onTransferMock = jest.fn()
-    const onResendCourseInformationMock = jest.fn()
+    const onRemoveMock = vi.fn()
+    const onReplaceMock = vi.fn()
+    const onTransferMock = vi.fn()
+    const onResendCourseInformationMock = vi.fn()
 
     render(
       <CourseActionsMenu
@@ -318,9 +318,9 @@ describe(CourseActionsMenu.name, () => {
         organizations: defaultOrganizations,
       },
     }
-    const onRemoveMock = jest.fn()
-    const onReplaceMock = jest.fn()
-    const onTransferMock = jest.fn()
+    const onRemoveMock = vi.fn()
+    const onReplaceMock = vi.fn()
+    const onTransferMock = vi.fn()
 
     render(
       <CourseActionsMenu
@@ -328,7 +328,7 @@ describe(CourseActionsMenu.name, () => {
         onRemoveClick={onRemoveMock}
         onReplaceClick={onReplaceMock}
         onTransferClick={onTransferMock}
-        onResendCourseInformationClick={jest.fn()}
+        onResendCourseInformationClick={vi.fn()}
       />,
       {
         auth: {

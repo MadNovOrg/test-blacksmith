@@ -21,13 +21,13 @@ import { CourseWaitlist } from './CourseWaitlist'
 
 const RecaptchaMock = createRecaptchaComp()
 
-jest.mock('@app/components/Recaptcha', () => ({
+vi.mock('@app/components/Recaptcha', async () => ({
   __esModule: true,
-  ...jest.requireActual('@app/components/Recaptcha'),
-  Recaptcha: jest.fn(),
+  ...((await vi.importActual('@app/components/Recaptcha')) as object),
+  Recaptcha: vi.fn(),
 }))
 
-const MockedRecaptcha = jest.mocked(Recaptcha)
+const MockedRecaptcha = vi.mocked(Recaptcha)
 
 describe('page: Waitlist', () => {
   it('displays a skeleton while loading course details', () => {

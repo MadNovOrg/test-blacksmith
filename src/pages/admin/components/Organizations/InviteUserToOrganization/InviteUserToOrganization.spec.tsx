@@ -20,11 +20,11 @@ import { OrgIndividualsSubtabs } from '../tabs/OrgIndividualsTab'
 
 import { InviteUserToOrganization } from './InviteUserToOrganization'
 
-jest.mock('@app/hooks/useOrganizations', () => ({
-  useOrganizations: jest.fn(),
+vi.mock('@app/hooks/useOrganizations', () => ({
+  useOrganizations: vi.fn(),
 }))
 
-const useOrganizationsMock = jest.mocked(useOrganizations)
+const useOrganizationsMock = vi.mocked(useOrganizations)
 
 it('validates that at least one email has been entered', async () => {
   const client = {
@@ -35,7 +35,7 @@ it('validates that at least one email has been entered', async () => {
     loading: false,
     orgs: [],
     status: LoadingStatus.SUCCESS,
-    mutate: jest.fn(),
+    mutate: vi.fn(),
     error: undefined,
   })
 
@@ -59,7 +59,7 @@ it('validates that entered email is valid', async () => {
     loading: false,
     orgs: [],
     status: LoadingStatus.SUCCESS,
-    mutate: jest.fn(),
+    mutate: vi.fn(),
     error: undefined,
   })
 
@@ -94,7 +94,7 @@ it('displays an error message that user already exist within organization', asyn
     loading: false,
     orgs: [buildOrganization({ overrides: { id: orgId } })],
     status: LoadingStatus.SUCCESS,
-    mutate: jest.fn(),
+    mutate: vi.fn(),
     error: undefined,
   })
 
@@ -162,7 +162,7 @@ it('saves org invites and redirects back to the organization individuals tab', a
     loading: false,
     orgs: [buildOrganization({ overrides: { id: orgId } })],
     status: LoadingStatus.SUCCESS,
-    mutate: jest.fn(),
+    mutate: vi.fn(),
     error: undefined,
   })
 

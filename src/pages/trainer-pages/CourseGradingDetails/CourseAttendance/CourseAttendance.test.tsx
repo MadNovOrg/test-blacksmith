@@ -23,13 +23,13 @@ import { GradingDetailsProvider } from '../GradingDetailsProvider'
 
 import { CourseAttendance } from './index'
 
-jest.mock('@app/hooks/useCourseParticipants')
-jest.mock('@app/hooks/use-fetcher', () => ({
-  useFetcher: jest.fn(),
+vi.mock('@app/hooks/useCourseParticipants')
+vi.mock('@app/hooks/use-fetcher', () => ({
+  useFetcher: vi.fn(),
 }))
 
-const useCourseParticipantsMocked = jest.mocked(useCourseParticipants)
-const useFetcherMock = jest.mocked(useFetcher)
+const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
+const useFetcherMock = vi.mocked(useFetcher)
 
 describe('component: CourseAttendance', () => {
   const {
@@ -46,7 +46,7 @@ describe('component: CourseAttendance', () => {
 
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.FETCHING,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -84,7 +84,7 @@ describe('component: CourseAttendance', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -130,7 +130,7 @@ describe('component: CourseAttendance', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -186,7 +186,7 @@ describe('component: CourseAttendance', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -236,7 +236,7 @@ describe('component: CourseAttendance', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     localStorage.setItem(
@@ -277,7 +277,7 @@ describe('component: CourseAttendance', () => {
   })
 
   it('saves course attendance', async () => {
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
 
     useFetcherMock.mockReturnValue(fetcherMock)
 
@@ -291,7 +291,7 @@ describe('component: CourseAttendance', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {
@@ -366,7 +366,7 @@ describe('component: CourseAttendance', () => {
   })
 
   it('confirms grading details if course is BILD', async () => {
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
 
     useFetcherMock.mockReturnValue(fetcherMock)
 
@@ -380,7 +380,7 @@ describe('component: CourseAttendance', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {

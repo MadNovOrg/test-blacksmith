@@ -1,4 +1,3 @@
-import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import useSWR from 'swr'
 
@@ -7,15 +6,15 @@ import { buildProfile } from '@test/mock-data-utils'
 
 import { EvaluationSummaryTab } from './EvaluationSummaryTab'
 
-jest.mock('swr')
+vi.mock('swr')
 
-const useSWRMock = jest.mocked(useSWR)
+const useSWRMock = vi.mocked(useSWR)
 
 const baseSWRMockData = {
   data: null,
   error: null,
   isValidating: false,
-  mutate: jest.fn(),
+  mutate: vi.fn(),
   isLoading: false,
 }
 
@@ -271,12 +270,10 @@ describe('component: EvaluationSummaryTab', () => {
 
       for (const evaluation of evaluations) {
         if (evaluation.profile.id !== trainers[0].profile.id) {
-          // eslint-disable-next-line jest/no-conditional-expect
           expect(
             screen.queryByText(evaluation.profile.fullName)
           ).toBeInTheDocument()
         } else {
-          // eslint-disable-next-line jest/no-conditional-expect
           expect(
             screen.queryByText(evaluation.profile.fullName)
           ).not.toBeInTheDocument()
@@ -303,12 +300,10 @@ describe('component: EvaluationSummaryTab', () => {
 
       for (const evaluation of evaluations) {
         if (evaluation.profile.id !== trainers[1].profile.id) {
-          // eslint-disable-next-line jest/no-conditional-expect
           expect(
             screen.queryByText(evaluation.profile.fullName)
           ).toBeInTheDocument()
         } else {
-          // eslint-disable-next-line jest/no-conditional-expect
           expect(
             screen.queryByText(evaluation.profile.fullName)
           ).not.toBeInTheDocument()

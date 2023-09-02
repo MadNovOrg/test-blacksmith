@@ -8,17 +8,17 @@ import { buildOrganization, buildProfile } from '@test/mock-data-utils'
 
 import { OrgSelector } from '.'
 
-jest.mock('@app/hooks/use-fetcher')
-const useFetcherMock = jest.mocked(useFetcher)
+vi.mock('@app/hooks/use-fetcher')
+const useFetcherMock = vi.mocked(useFetcher)
 
 describe('component: OrgSelector', () => {
   beforeEach(() => {
-    jest.useFakeTimers({ advanceTimers: true })
+    vi.useFakeTimers({ shouldAdvanceTime: true })
   })
 
   afterEach(() => {
-    jest.runOnlyPendingTimers()
-    jest.useRealTimers()
+    vi.runOnlyPendingTimers()
+    vi.useRealTimers()
   })
 
   const profile = buildProfile({
@@ -50,7 +50,7 @@ describe('component: OrgSelector', () => {
   it('loads organizations when the user types organization name', async () => {
     const ORG_SEARCH_NAME = 'My Org'
 
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
     fetcherMock.mockResolvedValue({
       orgs: [
         buildOrganization({
@@ -69,7 +69,7 @@ describe('component: OrgSelector', () => {
       ORG_SEARCH_NAME
     )
 
-    jest.runAllTimers()
+    vi.runAllTimers()
 
     await waitFor(() =>
       expect(
@@ -93,7 +93,7 @@ describe('component: OrgSelector', () => {
         },
       }),
     ]
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
     fetcherMock.mockResolvedValue({ orgs })
     useFetcherMock.mockReturnValue(fetcherMock)
 
@@ -104,7 +104,7 @@ describe('component: OrgSelector', () => {
       'Org'
     )
 
-    jest.runAllTimers()
+    vi.runAllTimers()
 
     await waitFor(() => {
       const myOrgsGroup = screen.getByTestId(
@@ -122,14 +122,14 @@ describe('component: OrgSelector', () => {
 
   it('calls callback when the user makes the selection', async () => {
     const ORG_SEARCH_NAME = 'Organization'
-    const onChangeMock = jest.fn()
+    const onChangeMock = vi.fn()
     const organization = buildOrganization({
       overrides: {
         name: ORG_SEARCH_NAME,
       },
     })
 
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
     fetcherMock.mockResolvedValue({
       orgs: [organization],
     })
@@ -142,7 +142,7 @@ describe('component: OrgSelector', () => {
       ORG_SEARCH_NAME
     )
 
-    jest.runAllTimers()
+    vi.runAllTimers()
 
     await waitFor(() => {
       expect(

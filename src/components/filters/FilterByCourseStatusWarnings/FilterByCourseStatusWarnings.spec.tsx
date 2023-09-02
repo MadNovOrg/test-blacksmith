@@ -8,7 +8,7 @@ import { FilterByCourseStatusWarnings } from './index'
 
 describe(FilterByCourseStatusWarnings.name, () => {
   it('triggers onChange when filtering by show all warning statuses', async () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<FilterByCourseStatusWarnings onChange={onChange} />)
 
     //Initial render with call of URL value

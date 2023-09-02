@@ -12,14 +12,14 @@ import { CreateCourseProvider } from '../CreateCourseProvider'
 
 import { AssignTrainers } from './AssignTrainers'
 
-const mockNavigate = jest.fn()
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+const mockNavigate = vi.fn()
+vi.mock('react-router-dom', async () => ({
+  ...((await vi.importActual('react-router-dom')) as object),
   useNavigate: () => mockNavigate,
 }))
 
-const mockFetcher = jest.fn()
-jest.mock('@app/hooks/use-fetcher', () => ({
+const mockFetcher = vi.fn()
+vi.mock('@app/hooks/use-fetcher', () => ({
   useFetcher: () => mockFetcher,
 }))
 

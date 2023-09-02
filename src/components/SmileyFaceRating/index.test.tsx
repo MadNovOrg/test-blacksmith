@@ -6,7 +6,7 @@ import { SmileyFaceRating } from './SmileyFaceRating'
 
 describe('SmileyFaceRating', () => {
   it('renders five rating options from best to worst', async () => {
-    render(<SmileyFaceRating value={''} onChange={jest.fn()} />)
+    render(<SmileyFaceRating value={''} onChange={vi.fn()} />)
 
     const container = screen.getByTestId('smiley-faces-container')
     expect(container).toBeInTheDocument()
@@ -21,7 +21,7 @@ describe('SmileyFaceRating', () => {
   })
 
   it('calls onChange with rating value when an icon is clicked', async () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<SmileyFaceRating value={''} onChange={onChange} />)
     const icon = screen.queryAllByTestId('rating')[0]
     fireEvent.click(icon)
@@ -32,7 +32,7 @@ describe('SmileyFaceRating', () => {
   })
 
   it('does not call onChange when an icon is hovered', async () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<SmileyFaceRating value={''} onChange={onChange} />)
     const icon = screen.queryAllByTestId('rating')[0]
     fireEvent.mouseEnter(icon)
@@ -42,14 +42,14 @@ describe('SmileyFaceRating', () => {
   })
 
   it('sets selected icon to active', async () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<SmileyFaceRating value={'5'} onChange={onChange} />)
     const icon = screen.queryAllByTestId('rating')[0]
     expect(icon).toHaveClass('active')
   })
 
   it('sets icon to active when it is hovered', async () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<SmileyFaceRating value={'5'} onChange={onChange} />)
     const icons = screen.queryAllByTestId('rating')
     const firstIcon = icons[0]
@@ -64,7 +64,7 @@ describe('SmileyFaceRating', () => {
   })
 
   it('adds readOnly class when readOnly is true', async () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<SmileyFaceRating value={''} onChange={onChange} readOnly={true} />)
     const icon = screen.queryAllByTestId('rating')[0]
     expect(icon).toHaveClass('readOnly')

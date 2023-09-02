@@ -1,4 +1,8 @@
-/* eslint jest/expect-expect: ["error", { "assertFunctionNames": ["expect*"] }] */
+/**
+ * TODO Fix this eslint ignore
+ * @author Alexei.Gaidulean <Alexei.Gaidulean@teamteach.co.uk>
+ */
+/* eslint-disable vitest/expect-expect */
 import { setMedia } from 'mock-match-media'
 import React from 'react'
 import { getI18n } from 'react-i18next'

@@ -15,8 +15,8 @@ describe(ConfirmDialog.name, () => {
         okLabel={okLabel}
         cancelLabel={cancelLabel}
         message={message}
-        onOk={jest.fn()}
-        onCancel={jest.fn()}
+        onOk={vi.fn()}
+        onCancel={vi.fn()}
       />
     )
     expect(screen.getByText('Dialog title')).toBeVisible()

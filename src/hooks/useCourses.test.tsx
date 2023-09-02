@@ -50,7 +50,7 @@ describe('hook: useCourses', () => {
       () =>
         useCourses(RoleName.USER, {
           orgId: ALL_ORGS,
-          sorting: { by: 'name', onSort: jest.fn(), dir: 'asc' },
+          sorting: { by: 'name', onSort: vi.fn(), dir: 'asc' },
         }),
       {
         wrapper: Wrapper,
@@ -58,34 +58,34 @@ describe('hook: useCourses', () => {
     )
 
     expect(whereClause).toMatchInlineSnapshot(`
-      Object {
-        "_or": Array [
-          Object {
-            "organization": Object {
-              "id": Object {
-                "_in": Array [],
+      {
+        "_or": [
+          {
+            "organization": {
+              "id": {
+                "_in": [],
               },
             },
-            "type": Object {
-              "_in": Array [
+            "type": {
+              "_in": [
                 "CLOSED",
                 "INDIRECT",
               ],
             },
           },
-          Object {
-            "participants": Object {
-              "profile": Object {
-                "organizations": Object {
-                  "organization": Object {
-                    "id": Object {
-                      "_in": Array [],
+          {
+            "participants": {
+              "profile": {
+                "organizations": {
+                  "organization": {
+                    "id": {
+                      "_in": [],
                     },
-                    "members": Object {
-                      "isAdmin": Object {
+                    "members": {
+                      "isAdmin": {
                         "_eq": true,
                       },
-                      "profile_id": Object {
+                      "profile_id": {
                         "_eq": "cacb559d-b85d-5e64-b623-37252520ebda",
                       },
                     },
@@ -93,7 +93,7 @@ describe('hook: useCourses', () => {
                 },
               },
             },
-            "type": Object {
+            "type": {
               "_eq": "OPEN",
             },
           },
@@ -138,7 +138,7 @@ describe('hook: useCourses', () => {
       () =>
         useCourses(RoleName.USER, {
           orgId: orgId,
-          sorting: { by: 'name', onSort: jest.fn(), dir: 'asc' },
+          sorting: { by: 'name', onSort: vi.fn(), dir: 'asc' },
         }),
       {
         wrapper: Wrapper,
@@ -146,34 +146,34 @@ describe('hook: useCourses', () => {
     )
 
     expect(whereClause).toMatchInlineSnapshot(`
-      Object {
-        "_or": Array [
-          Object {
-            "organization": Object {
-              "id": Object {
+      {
+        "_or": [
+          {
+            "organization": {
+              "id": {
                 "_eq": "org-id",
               },
             },
-            "type": Object {
-              "_in": Array [
+            "type": {
+              "_in": [
                 "CLOSED",
                 "INDIRECT",
               ],
             },
           },
-          Object {
-            "participants": Object {
-              "profile": Object {
-                "organizations": Object {
-                  "organization": Object {
-                    "id": Object {
+          {
+            "participants": {
+              "profile": {
+                "organizations": {
+                  "organization": {
+                    "id": {
                       "_eq": "org-id",
                     },
-                    "members": Object {
-                      "isAdmin": Object {
+                    "members": {
+                      "isAdmin": {
                         "_eq": true,
                       },
-                      "profile_id": Object {
+                      "profile_id": {
                         "_eq": "cacb559d-b85d-5e64-b623-37252520ebda",
                       },
                     },
@@ -181,7 +181,7 @@ describe('hook: useCourses', () => {
                 },
               },
             },
-            "type": Object {
+            "type": {
               "_eq": "OPEN",
             },
           },

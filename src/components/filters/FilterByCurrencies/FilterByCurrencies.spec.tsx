@@ -1,12 +1,10 @@
-import React from 'react'
-
 import { render, screen, waitFor, userEvent } from '@test/index'
 
 import { FilterByCurrencies } from './index'
 
 describe(FilterByCurrencies.name, () => {
   it('triggers onChange when currency = GBP is selected', async () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<FilterByCurrencies onChange={onChange} />)
 
     await userEvent.click(screen.getByText('Currency'))

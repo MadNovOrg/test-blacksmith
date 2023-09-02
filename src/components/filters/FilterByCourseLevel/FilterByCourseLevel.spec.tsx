@@ -1,12 +1,10 @@
-import React from 'react'
-
 import { render, screen, userEvent, waitFor } from '@test/index'
 
 import { FilterByCourseLevel } from './index'
 
 describe(FilterByCourseLevel.name, () => {
   it('triggers onChange when course level = Advanced Trainer is selected', async () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<FilterByCourseLevel onChange={onChange} />)
 
     await waitFor(() => {

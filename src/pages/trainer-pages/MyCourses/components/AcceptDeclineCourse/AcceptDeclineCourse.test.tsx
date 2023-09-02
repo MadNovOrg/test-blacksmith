@@ -14,9 +14,12 @@ import { chance, render, screen, userEvent, within } from '@test/index'
 
 import { AcceptDeclineCourse } from '.'
 
-const mockNavigate = jest.fn()
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+const mockFetcher = vi.fn()
+vi.mock('@app/hooks/use-fetcher', () => ({ useFetcher: () => mockFetcher }))
+
+const mockNavigate = vi.fn()
+vi.mock('react-router-dom', async () => ({
+  ...((await vi.importActual('react-router-dom')) as object),
   useNavigate: () => mockNavigate,
 }))
 
@@ -29,7 +32,7 @@ describe('AcceptDeclineCourse', () => {
     render(
       <Provider value={client}>
         <AcceptDeclineCourse
-          onUpdate={jest.fn()}
+          onUpdate={vi.fn()}
           trainer={{
             status: Course_Invite_Status_Enum.Accepted,
             id: chance.guid(),
@@ -58,7 +61,7 @@ describe('AcceptDeclineCourse', () => {
     render(
       <Provider value={client}>
         <AcceptDeclineCourse
-          onUpdate={jest.fn()}
+          onUpdate={vi.fn()}
           trainer={{
             status: Course_Invite_Status_Enum.Declined,
             id: chance.guid(),
@@ -87,7 +90,7 @@ describe('AcceptDeclineCourse', () => {
     render(
       <Provider value={client}>
         <AcceptDeclineCourse
-          onUpdate={jest.fn()}
+          onUpdate={vi.fn()}
           trainer={{
             status: Course_Invite_Status_Enum.Pending,
             id: chance.guid(),
@@ -105,7 +108,7 @@ describe('AcceptDeclineCourse', () => {
   })
 
   it('calls onUpdate as expected when user ACCEPTS', async () => {
-    const onUpdateMock = jest.fn()
+    const onUpdateMock = vi.fn()
     const trainer = {
       status: Course_Invite_Status_Enum.Pending,
       id: chance.guid(),
@@ -165,7 +168,7 @@ describe('AcceptDeclineCourse', () => {
   })
 
   it('calls onUpdate as expected when user DECLINES', async () => {
-    const onUpdateMock = jest.fn()
+    const onUpdateMock = vi.fn()
     const trainer = {
       status: Course_Invite_Status_Enum.Pending,
       id: chance.guid(),
@@ -225,7 +228,7 @@ describe('AcceptDeclineCourse', () => {
   })
 
   it('does not call onUpdate when user cancels', async () => {
-    const onUpdateMock = jest.fn()
+    const onUpdateMock = vi.fn()
     const courseId = 10000
     const trainer = {
       status: Course_Invite_Status_Enum.Pending,
@@ -261,7 +264,7 @@ describe('AcceptDeclineCourse', () => {
   })
 
   it('handles network error', async () => {
-    const onUpdateMock = jest.fn()
+    const onUpdateMock = vi.fn()
     const courseId = 10000
     const trainer = {
       status: Course_Invite_Status_Enum.Pending,

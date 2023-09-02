@@ -1,5 +1,4 @@
 import { build, perBuild } from '@jackfranklin/test-data-bot'
-import React from 'react'
 
 import {
   GetProfilesQuery,
@@ -12,9 +11,9 @@ import { render, screen, within, chance, userEvent, waitFor } from '@test/index'
 
 import { Users } from './Users'
 
-jest.mock('@app/hooks/useProfiles')
+vi.mock('@app/hooks/useProfiles')
 
-const useProfilesMocked = jest.mocked(useProfiles)
+const useProfilesMocked = vi.mocked(useProfiles)
 
 const notAllowedRoles = [
   RoleName.FINANCE,
@@ -64,7 +63,7 @@ describe('page: Users', () => {
       isLoading: true,
       count: 0,
       error: undefined,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(<Users />)
@@ -78,7 +77,7 @@ describe('page: Users', () => {
       isLoading: false,
       count: 0,
       error: undefined,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(<Users />)
@@ -93,7 +92,7 @@ describe('page: Users', () => {
       isLoading: false,
       count: 0,
       error: undefined,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(<Users />)
@@ -145,7 +144,7 @@ describe('page: Users', () => {
           isLoading: false,
           count: 0,
           error: undefined,
-          mutate: jest.fn(),
+          mutate: vi.fn(),
         }
       }
     )
@@ -180,7 +179,7 @@ describe('page: Users', () => {
           isLoading: false,
           count: 0,
           error: undefined,
-          mutate: jest.fn(),
+          mutate: vi.fn(),
         }
       }
     )
@@ -218,7 +217,7 @@ describe('page: Users', () => {
           isLoading: false,
           count: 0,
           error: undefined,
-          mutate: jest.fn(),
+          mutate: vi.fn(),
         }
       }
     )
@@ -248,7 +247,7 @@ describe('page: Users', () => {
           isLoading: false,
           count: 0,
           error: undefined,
-          mutate: jest.fn(),
+          mutate: vi.fn(),
         }
       }
     )
@@ -272,7 +271,7 @@ describe('page: Users', () => {
       isLoading: false,
       count: 0,
       error: undefined,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(<Users />, {
@@ -297,7 +296,7 @@ describe('page: Users', () => {
         isLoading: false,
         count: 0,
         error: undefined,
-        mutate: jest.fn(),
+        mutate: vi.fn(),
       })
 
       render(<Users />, {
@@ -321,7 +320,7 @@ describe('page: Users', () => {
       isLoading: false,
       count: 0,
       error: undefined,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(
@@ -356,7 +355,7 @@ describe('page: Users', () => {
       isLoading: false,
       count: 0,
       error: undefined,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(<Users />, {}, { initialEntries: ['/users/merge'] })

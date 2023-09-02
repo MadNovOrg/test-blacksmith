@@ -59,7 +59,7 @@ describe('page: Onboarding', () => {
   })
 
   it('displays an alert if there is an error updating profile', async () => {
-    const reloadProfileMock = jest.fn().mockResolvedValue(undefined)
+    const reloadProfileMock = vi.fn().mockResolvedValue(undefined)
 
     const client = {
       executeMutation: () =>
@@ -125,7 +125,7 @@ describe('page: Onboarding', () => {
     const phone = VALID_PHONE_NUMBER
     const profileId = chance.guid()
 
-    const reloadProfileMock = jest.fn().mockResolvedValue(undefined)
+    const reloadProfileMock = vi.fn().mockResolvedValue(undefined)
 
     const client = {
       executeMutation: ({

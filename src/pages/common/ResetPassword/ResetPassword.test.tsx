@@ -5,6 +5,7 @@ import { render, screen, userEvent, waitForText } from '@test/index'
 import { ResetPasswordPage } from './ResetPassword'
 
 describe('page: ResetPasswordPage', () => {
+  // eslint-disable-next-line vitest/expect-expect
   it('error when both password fields are empty', async () => {
     render(<ResetPasswordPage />)
 

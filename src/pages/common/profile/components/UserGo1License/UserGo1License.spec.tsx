@@ -19,8 +19,8 @@ function buildGo1License(overrides?: Partial<Go1LicenseInfo>): Go1LicenseInfo {
   }
 }
 
-jest.mock('@app/hooks/use-fetcher')
-const useFetcherMock = jest.mocked(useFetcher)
+vi.mock('@app/hooks/use-fetcher')
+const useFetcherMock = vi.mocked(useFetcher)
 
 describe('component: UserGo1License', () => {
   it('displays Go1 license information', () => {
@@ -53,8 +53,8 @@ describe('component: UserGo1License', () => {
 
   it('deletes Go1 license when clicked on remove button', async () => {
     const LICENSE_ID = 'license-id'
-    const handleDeletedMock = jest.fn()
-    const fetcherMock = jest.fn()
+    const handleDeletedMock = vi.fn()
+    const fetcherMock = vi.fn()
 
     useFetcherMock.mockReturnValue(fetcherMock)
     fetcherMock.mockResolvedValue({
@@ -82,8 +82,8 @@ describe('component: UserGo1License', () => {
 
   it('displays a message if there is an error deleting the license', async () => {
     const LICENSE_ID = 'license-id'
-    const handleDeletedMock = jest.fn()
-    const fetcherMock = jest.fn()
+    const handleDeletedMock = vi.fn()
+    const fetcherMock = vi.fn()
 
     useFetcherMock.mockReturnValue(fetcherMock)
     fetcherMock.mockRejectedValue(new Error())

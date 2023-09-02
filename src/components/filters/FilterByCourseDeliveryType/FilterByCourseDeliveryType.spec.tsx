@@ -1,12 +1,10 @@
-import React from 'react'
-
 import { render, screen, userEvent } from '@test/index'
 
 import { FilterByCourseDeliveryType } from './index'
 
-describe(FilterByCourseDeliveryType.name, () => {
+describe('component: FilterCourseDelivery', () => {
   it('triggers onChange when Delivery = Face to Face is selected', async () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<FilterByCourseDeliveryType onChange={onChange} />)
 
     await userEvent.click(screen.getByText('Delivery'))

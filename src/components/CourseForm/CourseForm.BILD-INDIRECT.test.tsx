@@ -9,19 +9,19 @@ import { selectBildCategory, selectLevel } from './test-utils'
 
 import CourseForm from '.'
 
-jest.mock('@app/components/OrgSelector', () => ({
-  OrgSelector: jest.fn(() => <p>Org Selector</p>),
+vi.mock('@app/components/OrgSelector', () => ({
+  OrgSelector: vi.fn(() => <p>Org Selector</p>),
 }))
 
-jest.mock('@app/components/VenueSelector', () => ({
-  VenueSelector: jest.fn(() => <p>Venue Selector</p>),
+vi.mock('@app/components/VenueSelector', () => ({
+  VenueSelector: vi.fn(() => <p>Venue Selector</p>),
 }))
 
-jest.mock('@app/hooks/useCoursePrice', () => ({
-  useCoursePrice: jest.fn(),
+vi.mock('@app/hooks/useCoursePrice', () => ({
+  useCoursePrice: vi.fn(),
 }))
 
-const useCoursePriceMock = jest.mocked(useCoursePrice)
+const useCoursePriceMock = vi.mocked(useCoursePrice)
 
 describe('CourseForm - indirect BILD', () => {
   beforeEach(() => {

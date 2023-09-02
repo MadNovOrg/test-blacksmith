@@ -1,5 +1,4 @@
 import { matches } from 'lodash-es'
-import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Client, CombinedError, Provider, TypedDocumentNode } from 'urql'
 import { fromValue, never } from 'wonka'

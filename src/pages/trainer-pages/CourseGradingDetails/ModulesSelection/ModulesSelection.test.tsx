@@ -14,11 +14,11 @@ import { GradingDetailsProvider } from '../GradingDetailsProvider'
 
 import { ModulesSelection } from './index'
 
-jest.mock('@app/hooks/useCourseModules')
-jest.mock('@app/hooks/use-fetcher')
+vi.mock('@app/hooks/useCourseModules')
+vi.mock('@app/hooks/use-fetcher')
 
-const useCourseModulesMock = jest.mocked(useCourseModules)
-const useFetcherMock = jest.mocked(useFetcher)
+const useCourseModulesMock = vi.mocked(useCourseModules)
+const useFetcherMock = vi.mocked(useFetcher)
 
 describe('page: ModulesSelection', () => {
   afterEach(() => {
@@ -214,7 +214,7 @@ describe('page: ModulesSelection', () => {
 
   it('saves modules selection and redirects to the course manage page', async () => {
     const COURSE_ID = 'course-id'
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
 
     useFetcherMock.mockReturnValue(fetcherMock)
     fetcherMock.mockResolvedValue({
@@ -260,6 +260,7 @@ describe('page: ModulesSelection', () => {
     await waitForText('Manage page')
   })
 
+  // eslint-disable-next-line vitest/expect-expect
   it('navigates back to the module grading clearance page when clicked on the button', async () => {
     useCourseModulesMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,

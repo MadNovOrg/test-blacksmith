@@ -31,14 +31,14 @@ import { CreateCourseProvider } from '../CreateCourseProvider'
 
 import { ReviewLicenseOrder } from '.'
 
-jest.mock('@app/hooks/useCourseDraft', () => ({
-  useCourseDraft: jest
+vi.mock('@app/hooks/useCourseDraft', () => ({
+  useCourseDraft: vi
     .fn()
-    .mockReturnValue({ removeDraft: jest.fn(), setDraft: jest.fn() }),
+    .mockReturnValue({ removeDraft: vi.fn(), setDraft: vi.fn() }),
 }))
 
-jest.mock('@app/hooks/use-fetcher')
-const useFetcherMock = jest.mocked(useFetcher)
+vi.mock('@app/hooks/use-fetcher')
+const useFetcherMock = vi.mocked(useFetcher)
 
 function createFetchingClient() {
   return {
@@ -192,7 +192,7 @@ describe('component: ReviewLicenseOrder', () => {
       },
     }
 
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
     fetcherMock.mockResolvedValue({
       insertCourse: { inserted: [{ id: 'course-id' }] },
     })

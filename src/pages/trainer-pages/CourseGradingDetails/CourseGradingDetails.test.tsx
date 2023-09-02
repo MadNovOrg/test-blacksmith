@@ -11,16 +11,16 @@ import { buildCourse } from '@test/mock-data-utils'
 
 import { CourseGradingDetails } from '.'
 
-jest.mock('@app/hooks/useCourse')
+vi.mock('@app/hooks/useCourse')
 
-const useCourseMocked = jest.mocked(useCourse)
+const useCourseMocked = vi.mocked(useCourse)
 
 describe('page: CourseGradingDetails', () => {
   it('displays a spinner while the course is loading', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       data: undefined,
       status: LoadingStatus.FETCHING,
     })
@@ -40,7 +40,7 @@ describe('page: CourseGradingDetails', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       data: undefined,
       status: LoadingStatus.ERROR,
     })
@@ -62,7 +62,7 @@ describe('page: CourseGradingDetails', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
@@ -82,7 +82,7 @@ describe('page: CourseGradingDetails', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
@@ -108,7 +108,7 @@ describe('page: CourseGradingDetails', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
@@ -137,7 +137,7 @@ describe('page: CourseGradingDetails', () => {
     })
 
     useCourseMocked.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
@@ -166,7 +166,7 @@ describe('page: CourseGradingDetails', () => {
     })
 
     useCourseMocked.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
@@ -199,7 +199,7 @@ describe('page: CourseGradingDetails', () => {
     })
 
     useCourseMocked.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })

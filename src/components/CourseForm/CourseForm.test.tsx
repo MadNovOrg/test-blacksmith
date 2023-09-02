@@ -25,11 +25,11 @@ const blendedLearningInfoMessage = t(
   `components.course-form.blended-learning-price-label`
 )
 
-jest.mock('@app/hooks/useCoursePrice', () => ({
-  useCoursePrice: jest.fn(),
+vi.mock('@app/hooks/useCoursePrice', () => ({
+  useCoursePrice: vi.fn(),
 }))
 
-const useCoursePriceMock = jest.mocked(useCoursePrice)
+const useCoursePriceMock = vi.mocked(useCoursePrice)
 
 describe('component: CourseForm', () => {
   beforeEach(() => {

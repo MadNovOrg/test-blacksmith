@@ -16,7 +16,7 @@ import { CourseHeroSummary } from './CourseHeroSummary'
 
 describe('component: CourseHeroSummary', () => {
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('displays basic course information', () => {

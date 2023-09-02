@@ -6,18 +6,18 @@ import { chance, render, screen, userEvent } from '@test/index'
 
 import RevokeCertModal from './RevokeCertModal'
 
-jest.mock('@app/hooks/useProfile')
-jest.mock('@app/hooks/use-fetcher')
-jest.mock('@app/queries/certificate/revoke-certificate', () => ({
+vi.mock('@app/hooks/useProfile')
+vi.mock('@app/hooks/use-fetcher')
+vi.mock('@app/queries/certificate/revoke-certificate', () => ({
   MUTATION: 'revoke-mutation',
 }))
 
-const useFetcherMock = jest.mocked(useFetcher)
+const useFetcherMock = vi.mocked(useFetcher)
 
 describe('RevokeCertModal', () => {
-  const fetcherMock = jest.fn()
-  const onCloseMock = jest.fn()
-  const onSuccessMock = jest.fn()
+  const fetcherMock = vi.fn()
+  const onCloseMock = vi.fn()
+  const onSuccessMock = vi.fn()
 
   const setup = (
     props: { certificateId?: string; participantId?: string } = {}

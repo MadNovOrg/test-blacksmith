@@ -32,8 +32,8 @@ const CreateCourseContextConsumer: React.FC<
   return <>{invoiceDetails?.orgId ? <p>Invoice details are saved!</p> : null}</>
 }
 
-jest.mock('@app/components/OrgSelector', () => ({
-  OrgSelector: jest.fn(({ onChange }) => {
+vi.mock('@app/components/OrgSelector', () => ({
+  OrgSelector: vi.fn(({ onChange }) => {
     return (
       <input
         name="org-selector"
@@ -44,10 +44,10 @@ jest.mock('@app/components/OrgSelector', () => ({
   }),
 }))
 
-jest.mock('@app/hooks/useCourseDraft', () => ({
-  useCourseDraft: jest
+vi.mock('@app/hooks/useCourseDraft', () => ({
+  useCourseDraft: vi
     .fn()
-    .mockReturnValue({ removeDraft: jest.fn(), setDraft: jest.fn() }),
+    .mockReturnValue({ removeDraft: vi.fn(), setDraft: vi.fn() }),
 }))
 
 describe('component: OrderDetails', () => {
@@ -208,7 +208,7 @@ describe('component: OrderDetails', () => {
     } as unknown as Client
 
     render(
-      <Provider value={client as unknown as Client}>
+      <Provider value={client}>
         <CreateCourseProvider
           courseType={CourseType.INDIRECT}
           initialValue={{
@@ -230,7 +230,6 @@ describe('component: OrderDetails', () => {
       {},
       { initialEntries: ['/order-details'] }
     )
-
     await userEvent.type(screen.getByTestId('org-selector'), 'Organization')
     await userEvent.type(screen.getByLabelText('First Name *'), 'John')
     await userEvent.type(screen.getByLabelText('Surname *'), 'Doe')
@@ -238,9 +237,7 @@ describe('component: OrderDetails', () => {
       screen.getByLabelText('Email *'),
       'john.doe@example.com'
     )
-    await userEvent.type(screen.getByLabelText('Phone *'), '1234567890', {
-      delay: 500,
-    })
+    await userEvent.type(screen.getByLabelText('Phone *'), '1234567890')
 
     await userEvent.click(screen.getByText('Review & confirm'))
 

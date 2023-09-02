@@ -26,19 +26,15 @@ import {
 
 import { CourseAttendeesTab } from './CourseAttendeesTab'
 
-jest.mock('@app/hooks/useCourse')
-jest.mock('@app/hooks/useWaitlist')
-jest.mock('@app/hooks/useCourseInvites')
-jest.mock('@app/hooks/useCourseParticipants')
+vi.mock('@app/hooks/useCourse')
+vi.mock('@app/hooks/useWaitlist')
+vi.mock('@app/hooks/useCourseInvites')
+vi.mock('@app/hooks/useCourseParticipants')
 
-const useCourseMock = useCourse as jest.MockedFunction<typeof useCourse>
-const useWaitlistMock = useWaitlist as jest.MockedFunction<typeof useWaitlist>
-const useCourseInvitesMock = useCourseInvites as jest.MockedFunction<
-  typeof useCourseInvites
->
-const useCourseParticipantsMock = useCourseParticipants as jest.MockedFunction<
-  typeof useCourseParticipants
->
+const useCourseMock = vi.mocked(useCourse)
+const useWaitlistMock = vi.mocked(useWaitlist)
+const useCourseInvitesMock = vi.mocked(useCourseInvites)
+const useCourseParticipantsMock = vi.mocked(useCourseParticipants)
 
 const emptyWaitlistResponse = {
   data: [],
@@ -53,25 +49,25 @@ const emptyWaitlistResponse = {
 const emptyPendingInvitesResponse = {
   data: [],
   total: 0,
-  send: jest.fn(),
+  send: vi.fn(),
   error: undefined,
-  resend: jest.fn(),
-  cancel: jest.fn(),
+  resend: vi.fn(),
+  cancel: vi.fn(),
   status: LoadingStatus.SUCCESS,
-  invalidateCache: jest.fn(),
+  invalidateCache: vi.fn(),
 }
 
 describe(CourseAttendeesTab.name, () => {
   let course: Course
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     course = buildCourse()
   })
 
   it('displays a spinner while loading course participants', () => {
     useCourseMock.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       status: LoadingStatus.SUCCESS,
       data: course,
     })
@@ -81,7 +77,7 @@ describe(CourseAttendeesTab.name, () => {
 
     useCourseParticipantsMock.mockReturnValue({
       status: LoadingStatus.FETCHING,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     render(<CourseAttendeesTab course={course} />)
@@ -116,7 +112,7 @@ describe(CourseAttendeesTab.name, () => {
         status: LoadingStatus.SUCCESS,
         data: testData.participants,
         total: testData.participants.length,
-        mutate: jest.fn(),
+        mutate: vi.fn(),
       })
 
       useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
@@ -129,7 +125,7 @@ describe(CourseAttendeesTab.name, () => {
       })
 
       useCourseMock.mockReturnValue({
-        mutate: jest.fn(),
+        mutate: vi.fn(),
         status: LoadingStatus.SUCCESS,
         data: tableCourse,
       })
@@ -264,14 +260,14 @@ describe(CourseAttendeesTab.name, () => {
       status: LoadingStatus.SUCCESS,
       data: participants,
       total: participants.length,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
     useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
 
     useCourseMock.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       status: LoadingStatus.SUCCESS,
       data: course,
     })
@@ -296,14 +292,14 @@ describe(CourseAttendeesTab.name, () => {
       status: LoadingStatus.SUCCESS,
       data: participants,
       total: 15,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
     useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
 
     useCourseMock.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       status: LoadingStatus.SUCCESS,
       data: course,
     })
@@ -338,14 +334,14 @@ describe(CourseAttendeesTab.name, () => {
       status: LoadingStatus.SUCCESS,
       data: participants,
       total: 15,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
     useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
 
     useCourseMock.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       status: LoadingStatus.SUCCESS,
       data: course,
     })
@@ -390,7 +386,7 @@ describe(CourseAttendeesTab.name, () => {
       status: LoadingStatus.SUCCESS,
       data: participants,
       total: 3,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     useWaitlistMock.mockReturnValue({
@@ -407,7 +403,7 @@ describe(CourseAttendeesTab.name, () => {
     openCourse.type = CourseType.OPEN
 
     useCourseMock.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       status: LoadingStatus.SUCCESS,
       data: openCourse,
     })
@@ -465,7 +461,7 @@ describe(CourseAttendeesTab.name, () => {
       status: LoadingStatus.SUCCESS,
       data: [],
       total: 0,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     useWaitlistMock.mockReturnValue({
@@ -482,7 +478,7 @@ describe(CourseAttendeesTab.name, () => {
     openCourse.type = CourseType.OPEN
 
     useCourseMock.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       status: LoadingStatus.SUCCESS,
       data: openCourse,
     })
@@ -502,17 +498,17 @@ describe(CourseAttendeesTab.name, () => {
         status: LoadingStatus.SUCCESS,
         data: [],
         total: 0,
-        mutate: jest.fn(),
+        mutate: vi.fn(),
       })
       useCourseMock.mockReturnValue({
-        mutate: jest.fn(),
+        mutate: vi.fn(),
         status: LoadingStatus.SUCCESS,
         data: course,
       })
     })
 
     afterEach(() => {
-      jest.clearAllMocks()
+      vi.clearAllMocks()
     })
 
     it('shows no invites pending message if list is empty', async () => {

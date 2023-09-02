@@ -1,21 +1,20 @@
 import { setMedia } from 'mock-match-media'
-import React from 'react'
 
 import { screen, render, userEvent, waitFor } from '@test/index'
 
 import { ExportBlendedDialog } from './index'
 
-const mockNavigate = jest.fn()
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+const mockNavigate = vi.fn()
+vi.mock('react-router-dom', async () => ({
+  ...((await vi.importActual('react-router-dom')) as object),
   useNavigate: () => mockNavigate,
 }))
 
-describe(ExportBlendedDialog.name, () => {
+describe('component: DialogExportBlended', () => {
   setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
 
   it('render export dialog with filters', async () => {
-    const onClose = jest.fn()
+    const onClose = vi.fn()
     render(<ExportBlendedDialog isOpen={true} closeModal={onClose} />)
     expect(
       screen.getByText('Export blended learning license summary')
@@ -26,7 +25,7 @@ describe(ExportBlendedDialog.name, () => {
   })
 
   it('render export dialog to show dates error if one is missing', async () => {
-    const onClose = jest.fn()
+    const onClose = vi.fn()
     render(<ExportBlendedDialog isOpen={true} closeModal={onClose} />)
 
     await waitFor(

@@ -8,8 +8,8 @@ import { chance, render, screen, userEvent, waitFor } from '@test/index'
 
 import { ChangelogModal } from './ChangelogModal'
 
-jest.mock('swr')
-const useSWRMock = jest.mocked(useSWR)
+vi.mock('swr')
+const useSWRMock = vi.mocked(useSWR)
 
 const useSWRMockDefaults = {
   data: {
@@ -20,7 +20,7 @@ const useSWRMockDefaults = {
       },
     },
   },
-  mutate: jest.fn(),
+  mutate: vi.fn(),
   isValidating: false,
   error: null,
   isLoading: false,
@@ -68,7 +68,7 @@ const changelogData = {
 }
 
 describe('component: ChangelogModal', () => {
-  const onCloseMock = jest.fn()
+  const onCloseMock = vi.fn()
 
   it('renders as expected', async () => {
     useSWRMock.mockReturnValue({

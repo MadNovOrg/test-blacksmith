@@ -8,20 +8,20 @@ import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { ProfileDeleteDialog } from '.'
 
-jest.mock('@app/hooks/useProfile')
-jest.mock('@app/hooks/use-fetcher')
-jest.mock('@app/queries/profile/delete-profile', () => ({
+vi.mock('@app/hooks/useProfile')
+vi.mock('@app/hooks/use-fetcher')
+vi.mock('@app/queries/profile/delete-profile', () => ({
   MUTATION: 'delete-query',
 }))
 
-const useFetcherMock = jest.mocked(useFetcher)
-const useProfileMock = jest.mocked(useProfile)
+const useFetcherMock = vi.mocked(useFetcher)
+const useProfileMock = vi.mocked(useProfile)
 
 describe('DeleteUsersDialog', () => {
   const profileId = chance.guid()
-  const fetcherMock = jest.fn()
-  const onCloseMock = jest.fn()
-  const onSuccessMock = jest.fn()
+  const fetcherMock = vi.fn()
+  const onCloseMock = vi.fn()
+  const onSuccessMock = vi.fn()
 
   const setup = () => {
     useFetcherMock.mockReturnValue(fetcherMock)

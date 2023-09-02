@@ -14,26 +14,27 @@ module.exports = {
   overrides: [
     {
       files: ['**/**/*.test.*', '**/**/*.test.tsx.snap'],
-      plugins: ['jest'],
-      extends: ['plugin:jest/recommended'],
+      plugins: ['vitest'],
+      extends: ['plugin:vitest/recommended'],
       parserOptions: {
         ecmaVersion: 12,
       },
-      rules: {
-        'jest/no-large-snapshots': ['error'],
-        'jest/expect-expect': [
-          'error',
-          {
-            assertFunctionNames: [
-              'expect',
-              'waitForText',
-              'waitForCalls',
-              'runTestsForTrainer',
-              'expectCourseTableTo',
-            ],
-          },
-        ],
-      },
+      // TODO Uncomment & Cleanup
+      // rules: {
+      //   'jest/no-large-snapshots': ['error'],
+      //   'jest/expect-expect': [
+      //     'error',
+      //     {
+      //       assertFunctionNames: [
+      //         'expect',
+      //         'waitForText',
+      //         'waitForCalls',
+      //         'runTestsForTrainer',
+      //         'expectCourseTableTo',
+      //       ],
+      //     },
+      //   ],
+      // },
     },
     {
       files: ['**/playwright/**'],
@@ -48,6 +49,8 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'vitest/prefer-to-be': 'off',
+    'vitest/expect-expect': 'off',
     'import/order': [
       'error',
       {
@@ -108,8 +111,6 @@ module.exports = {
     browser: true,
     commonjs: true,
     node: true,
-    jest: true,
     es6: true,
-    'jest/globals': true,
-  },
+  }
 }

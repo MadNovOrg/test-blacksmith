@@ -16,20 +16,20 @@ import {
 
 import { VerifyEmailPage } from './VerifyEmail'
 
-jest.mock('@app/context/auth', () => ({
-  ...jest.requireActual('@app/context/auth'),
-  useAuth: jest.fn().mockReturnValue({ loadProfile: jest.fn() }),
+vi.mock('@app/context/auth', async () => ({
+  ...((await vi.importActual('@app/context/auth')) as object),
+  useAuth: vi.fn().mockReturnValue({ loadProfile: vi.fn() }),
 }))
 
-jest.mock('aws-amplify', () => ({
+vi.mock('aws-amplify', () => ({
   Auth: {
-    verifyCurrentUserAttribute: jest.fn().mockResolvedValue({}),
-    verifyCurrentUserAttributeSubmit: jest.fn().mockResolvedValue({}),
-    currentUserPoolUser: jest.fn(),
+    verifyCurrentUserAttribute: vi.fn().mockResolvedValue({}),
+    verifyCurrentUserAttributeSubmit: vi.fn().mockResolvedValue({}),
+    currentUserPoolUser: vi.fn(),
   },
 }))
-const AuthMock = jest.mocked(Auth)
-const useAuthMock = jest.mocked(useAuth)
+const AuthMock = vi.mocked(Auth)
+const useAuthMock = vi.mocked(useAuth)
 
 describe('page: VerifyEmailPage', () => {
   const setup = () => {
@@ -187,12 +187,12 @@ describe('page: VerifyEmailPage', () => {
   it('reloads profile before navigating away', async () => {
     AuthMock.verifyCurrentUserAttributeSubmit.mockResolvedValue('')
 
-    const refreshSessionIfPossibleMock = jest.fn().mockResolvedValue('')
+    const refreshSessionIfPossibleMock = vi.fn().mockResolvedValue('')
     AuthMock.currentUserPoolUser.mockResolvedValue({
       refreshSessionIfPossible: refreshSessionIfPossibleMock,
     })
 
-    const loadProfileMock = jest.fn().mockResolvedValue('')
+    const loadProfileMock = vi.fn().mockResolvedValue('')
     useAuthMock.mockReturnValue({
       loadProfile: loadProfileMock,
     } as unknown as AuthContextType)

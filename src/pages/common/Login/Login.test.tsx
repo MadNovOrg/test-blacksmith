@@ -13,9 +13,9 @@ import {
 
 import { LoginPage } from './Login'
 
-const mockNavigate = jest.fn()
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+const mockNavigate = vi.fn()
+vi.mock('react-router-dom', async () => ({
+  ...((await vi.importActual('react-router-dom')) as object),
   useNavigate: () => mockNavigate,
 }))
 
@@ -50,6 +50,7 @@ describe('Login', () => {
     expect(providers.auth.login).not.toHaveBeenCalled()
   })
 
+  // eslint-disable-next-line vitest/expect-expect
   it('attempts login when email is valid', async () => {
     providers.auth.login.mockResolvedValue({ error: { code: 'OnPurpose' } })
 
@@ -66,6 +67,7 @@ describe('Login', () => {
     await waitForCalls(providers.auth.login, 1)
   })
 
+  // eslint-disable-next-line vitest/expect-expect
   it('shows error if password is incorrect', async () => {
     providers.auth.login.mockResolvedValue({
       error: { code: 'NotAuthorizedException' },

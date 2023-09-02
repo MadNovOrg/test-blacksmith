@@ -18,8 +18,8 @@ describe(RegistrantsCancellationModal.name, () => {
       'pages.edit-course.registrants-cancellation-modal.transfer-attendees-first'
     ),
   ]
-  const onProceed = jest.fn()
-  const onTransfer = jest.fn()
+  const onProceed = vi.fn()
+  const onTransfer = vi.fn()
   beforeEach(() =>
     render(
       <RegistrantsCancellationModal

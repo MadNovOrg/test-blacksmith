@@ -17,7 +17,7 @@ describe('component: CourseAttendanceList', () => {
       { id: chance.guid(), attending: false, name: chance.name() },
     ]
 
-    const onChangeMock = jest.fn()
+    const onChangeMock = vi.fn()
 
     render(
       <CourseAttendanceList
@@ -45,7 +45,7 @@ describe('component: CourseAttendanceList', () => {
       { id: chance.guid(), attending: true, name: chance.name() },
     ]
 
-    const onChangeMock = jest.fn()
+    const onChangeMock = vi.fn()
 
     render(
       <CourseAttendanceList
@@ -76,7 +76,7 @@ describe('component: CourseAttendanceList', () => {
       { id: chance.guid(), attending: false, name: chance.name() },
     ]
 
-    const onChangeMock = jest.fn()
+    const onChangeMock = vi.fn()
 
     render(
       <CourseAttendanceList
@@ -103,7 +103,7 @@ describe('component: CourseAttendanceList', () => {
       { id: chance.guid(), attending: true, name: chance.name() },
     ]
 
-    const onChangeMock = jest.fn()
+    const onChangeMock = vi.fn()
 
     render(
       <CourseAttendanceList

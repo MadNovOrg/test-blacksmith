@@ -8,7 +8,7 @@ import { SnackbarMessage } from '.'
 
 describe('component: SnackbarMessage', () => {
   beforeAll(() => {
-    jest.useFakeTimers()
+    vi.useFakeTimers({ shouldAdvanceTime: true })
   })
 
   it("doesn't render anything if message by key is not found", () => {
@@ -53,7 +53,7 @@ describe('component: SnackbarMessage', () => {
     )
 
     act(() => {
-      jest.runAllTimers()
+      vi.runAllTimers()
     })
 
     await waitFor(() => {

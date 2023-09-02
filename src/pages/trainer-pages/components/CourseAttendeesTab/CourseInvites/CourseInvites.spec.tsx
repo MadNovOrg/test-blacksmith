@@ -15,17 +15,17 @@ import { profile } from '@test/providers'
 
 import { CourseInvites } from './CourseInvites'
 
-jest.mock('@app/hooks/useCourseInvites')
-const useCourseInvitesMock = jest.mocked(useCourseInvites)
+vi.mock('@app/hooks/useCourseInvites')
+const useCourseInvitesMock = vi.mocked(useCourseInvites)
 const useCourseInvitesDefaults = {
   data: [],
   total: 0,
   status: LoadingStatus.FETCHING,
   error: undefined,
-  send: jest.fn(),
-  resend: jest.fn(),
-  cancel: jest.fn(),
-  invalidateCache: jest.fn(),
+  send: vi.fn(),
+  resend: vi.fn(),
+  cancel: vi.fn(),
+  invalidateCache: vi.fn(),
 }
 
 describe(CourseInvites.name, () => {

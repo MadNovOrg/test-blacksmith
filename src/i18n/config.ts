@@ -1,6 +1,5 @@
 import convertUnits from 'convert-units'
 import { format as F } from 'date-fns'
-import {} from 'date-fns/locale'
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 

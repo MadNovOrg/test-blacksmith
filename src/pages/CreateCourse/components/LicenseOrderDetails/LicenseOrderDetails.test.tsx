@@ -13,8 +13,8 @@ import { CreateCourseProvider, useCreateCourse } from '../CreateCourseProvider'
 
 import { LicenseOrderDetails } from '.'
 
-jest.mock('@app/components/OrgSelector', () => ({
-  OrgSelector: jest.fn(({ onChange }) => {
+vi.mock('@app/components/OrgSelector', () => ({
+  OrgSelector: vi.fn(({ onChange }) => {
     return (
       <input
         name="org-selector"
@@ -25,10 +25,10 @@ jest.mock('@app/components/OrgSelector', () => ({
   }),
 }))
 
-jest.mock('@app/hooks/useCourseDraft', () => ({
-  useCourseDraft: jest
+vi.mock('@app/hooks/useCourseDraft', () => ({
+  useCourseDraft: vi
     .fn()
-    .mockReturnValue({ removeDraft: jest.fn(), setDraft: jest.fn() }),
+    .mockReturnValue({ removeDraft: vi.fn(), setDraft: vi.fn() }),
 }))
 
 const CreateCourseContextConsumer: React.FC<
@@ -225,9 +225,7 @@ describe('component: LicenseOrderDetails', () => {
       screen.getByLabelText('Email *'),
       'john.doe@example.com'
     )
-    await userEvent.type(screen.getByLabelText('Phone *'), '1234567890', {
-      delay: 400,
-    })
+    await userEvent.type(screen.getByLabelText('Phone *'), '1234567890')
 
     await waitFor(
       () => {

@@ -4,14 +4,14 @@ import { render, screen, chance, waitFor } from '@test/index'
 
 import { XeroConnect } from './XeroConnect'
 
-const mockNavigate = jest.fn()
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+const mockNavigate = vi.fn()
+vi.mock('react-router-dom', async () => ({
+  ...((await vi.importActual('react-router-dom')) as object),
   useNavigate: () => mockNavigate,
 }))
 
-const mockFetcher = jest.fn()
-jest.mock('@app/hooks/use-fetcher', () => ({
+const mockFetcher = vi.fn()
+vi.mock('@app/hooks/use-fetcher', () => ({
   useFetcher: () => mockFetcher,
 }))
 
@@ -20,7 +20,7 @@ const _render = (ui: React.ReactElement) => {
 }
 
 const savedLocation = window.location
-const mockLocationHref = jest.fn(() => savedLocation.href)
+const mockLocationHref = vi.fn(() => savedLocation.href)
 
 describe('page: XeroConnect', () => {
   beforeAll(() => {

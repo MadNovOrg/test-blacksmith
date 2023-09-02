@@ -78,7 +78,7 @@ describe(ReplaceParticipantDialog.name, () => {
       avatar: chance.url(),
     }
 
-    const onCloseMock = jest.fn()
+    const onCloseMock = vi.fn()
 
     render(
       <Provider value={client}>
@@ -127,7 +127,7 @@ describe(ReplaceParticipantDialog.name, () => {
       avatar: chance.url(),
     }
 
-    const onSuccessMock = jest.fn()
+    const onSuccessMock = vi.fn()
 
     render(
       <Provider value={client}>
@@ -172,7 +172,7 @@ describe(ReplaceParticipantDialog.name, () => {
       avatar: chance.url(),
     }
 
-    const onSuccessMock = jest.fn()
+    const onSuccessMock = vi.fn()
 
     render(
       <Provider value={client}>

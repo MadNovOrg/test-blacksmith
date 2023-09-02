@@ -9,9 +9,9 @@ import { buildCourse } from '@test/mock-data-utils'
 
 import { CourseDetails } from '.'
 
-jest.mock('@app/hooks/useCourse')
+vi.mock('@app/hooks/useCourse')
 
-const useCourseMocked = jest.mocked(useCourse)
+const useCourseMocked = vi.mocked(useCourse)
 
 describe('page: CourseDetails', () => {
   it('should render CourseHeroSummary component', () => {
@@ -19,7 +19,7 @@ describe('page: CourseDetails', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
-      mutate: jest.fn(),
+      mutate: vi.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
@@ -61,7 +61,7 @@ describe('page: CourseDetails', () => {
       })
 
       useCourseMocked.mockReturnValue({
-        mutate: jest.fn(),
+        mutate: vi.fn(),
         data: course,
         status: LoadingStatus.SUCCESS,
       })

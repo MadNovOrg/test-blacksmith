@@ -28,12 +28,12 @@ describe(getACL.name, () => {
   ) => {
     const defaults = {
       loading: false,
-      login: jest.fn(),
-      logout: jest.fn(),
-      getJWT: jest.fn(),
-      changeRole: jest.fn(),
-      loadProfile: jest.fn(),
-      reloadCurrentProfile: jest.fn(),
+      login: vi.fn(),
+      logout: vi.fn(),
+      getJWT: vi.fn(),
+      changeRole: vi.fn(),
+      loadProfile: vi.fn(),
+      reloadCurrentProfile: vi.fn(),
     }
     return getACL({
       ...auth,

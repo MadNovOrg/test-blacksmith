@@ -2,16 +2,16 @@ import { extractAdrStreetAddress } from './adr-parser'
 
 describe('extractAdrStreetAddress', () => {
   it('returns an empty string if the input adr string is undefined', () => {
-    expect(extractAdrStreetAddress(undefined)).toEqual('')
+    expect(extractAdrStreetAddress(undefined)).toBe('')
   })
 
   it('returns an empty string if the input adr string is empty', () => {
-    expect(extractAdrStreetAddress('')).toEqual('')
+    expect(extractAdrStreetAddress('')).toBe('')
   })
 
   it('returns an empty string if the input adr string does not contain an element with "street-address" class', () => {
     const inputAdr = `<span class="locality">London</span> <span class="postal-code">EC4R 9HA</span>, <span class="country-name">UK</span>`
-    expect(extractAdrStreetAddress(inputAdr)).toEqual('')
+    expect(extractAdrStreetAddress(inputAdr)).toBe('')
   })
 
   it('returns the address if the input adr string contains a span element with "street-address" class', () => {

@@ -15,11 +15,11 @@ import {
 
 import { InviteUserToOrganisation } from '.'
 
-jest.mock('@app/hooks/use-fetcher')
-jest.mock('@app/hooks/useOrganizations')
+vi.mock('@app/hooks/use-fetcher')
+vi.mock('@app/hooks/useOrganizations')
 
-const useFetcherMock = jest.mocked(useFetcher)
-const useOrganisationMock = jest.mocked(useOrganizations)
+const useFetcherMock = vi.mocked(useFetcher)
+const useOrganisationMock = vi.mocked(useOrganizations)
 
 const orgs = [
   {
@@ -34,8 +34,8 @@ const orgs = [
 
 describe('InviteUserToOrganisation', () => {
   const email = chance.email()
-  const fetcherMock = jest.fn()
-  const onCloseMock = jest.fn()
+  const fetcherMock = vi.fn()
+  const onCloseMock = vi.fn()
 
   const setup = () => {
     useFetcherMock.mockReturnValue(fetcherMock)

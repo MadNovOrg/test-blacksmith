@@ -22,7 +22,7 @@ describe(BILDModulesSelection.name, () => {
     render(
       <BILDModulesSelection
         strategyModules={strategyModules}
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         courseType={Course_Type_Enum.Open}
       />
     )
@@ -83,7 +83,7 @@ describe(BILDModulesSelection.name, () => {
     render(
       <BILDModulesSelection
         strategyModules={strategyModules}
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         courseType={Course_Type_Enum.Open}
       />
     )
@@ -106,7 +106,7 @@ describe(BILDModulesSelection.name, () => {
     render(
       <BILDModulesSelection
         strategyModules={strategyModules}
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         courseType={Course_Type_Enum.Open}
       />
     )
@@ -137,7 +137,7 @@ describe(BILDModulesSelection.name, () => {
     render(
       <BILDModulesSelection
         strategyModules={strategyModules}
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         courseType={Course_Type_Enum.Open}
       />
     )
@@ -167,7 +167,7 @@ describe(BILDModulesSelection.name, () => {
     render(
       <BILDModulesSelection
         strategyModules={strategyModules}
-        onChange={jest.fn()}
+        onChange={vi.fn()}
         courseType={Course_Type_Enum.Open}
       />
     )
@@ -183,7 +183,7 @@ describe(BILDModulesSelection.name, () => {
   })
 
   it('calls a callback with the selection make', async () => {
-    const onChangeMock = jest.fn()
+    const onChangeMock = vi.fn()
 
     const strategyModules: Record<string, Strategy> = {
       NON_TERTIARY_RESTRICTED: {
@@ -252,7 +252,7 @@ describe(BILDModulesSelection.name, () => {
       render(
         <BILDModulesSelection
           strategyModules={strategyModules}
-          onChange={jest.fn()}
+          onChange={vi.fn()}
           courseType={courseType}
         />
       )

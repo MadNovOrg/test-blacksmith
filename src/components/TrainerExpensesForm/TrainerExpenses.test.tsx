@@ -197,7 +197,7 @@ const runTestsForTrainer = async (trainer: TrainerInput) => {
     within(screen.getByTestId(`trainer-${pid}`)).queryByTestId(
       'trip-1-dropdown'
     )
-  ).toBe(null)
+  ).toBeNull()
   expect(
     within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-2-dropdown')
   ).toBeVisible()
@@ -206,10 +206,11 @@ const runTestsForTrainer = async (trainer: TrainerInput) => {
     within(screen.getByTestId(`trainer-${pid}`)).queryByText('Flight', {
       exact: false,
     })
-  ).toBe(null)
+  ).toBeNull()
 }
 
 describe('component: TrainerExpensesForm', () => {
+  // eslint-disable-next-line vitest/expect-expect
   it('allows inputting expenses for single trainer', async () => {
     const [trainer] = makeTrainers({ lead: true })
     await waitFor(() => render(<TrainerExpensesForm trainers={[trainer]} />))

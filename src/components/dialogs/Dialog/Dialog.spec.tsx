@@ -8,7 +8,7 @@ describe(Dialog.name, () => {
   it('should not render children when open is false', async () => {
     // Act
     const { queryByTestId } = render(
-      <Dialog open={false} onClose={jest.fn()}>
+      <Dialog open={false} onClose={vi.fn()}>
         <p data-testid="dialog-children">test</p>
       </Dialog>
     )
@@ -20,7 +20,7 @@ describe(Dialog.name, () => {
   it('should render children when open is true', async () => {
     // Act
     const { queryByTestId } = render(
-      <Dialog open={true} onClose={jest.fn()}>
+      <Dialog open={true} onClose={vi.fn()}>
         <p data-testid="dialog-children">test</p>
       </Dialog>
     )
@@ -35,7 +35,7 @@ describe(Dialog.name, () => {
       <Dialog
         open={true}
         title={<p data-testid="dialog-title">my title</p>}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       >
         <p data-testid="dialog-children">test</p>
       </Dialog>
@@ -48,7 +48,7 @@ describe(Dialog.name, () => {
   it('should render close button by default', async () => {
     // Act
     const { queryByTestId } = render(
-      <Dialog open={true} onClose={jest.fn()}></Dialog>
+      <Dialog open={true} onClose={vi.fn()}></Dialog>
     )
 
     // Assert
@@ -57,7 +57,7 @@ describe(Dialog.name, () => {
 
   it('should call onClose when close button is clicked', async () => {
     // Arrange
-    const onClose = jest.fn()
+    const onClose = vi.fn()
 
     // Act
     const { getByTestId } = render(
@@ -74,7 +74,7 @@ describe(Dialog.name, () => {
   it('should not render close button when showClose is false', async () => {
     // Act
     const { queryByTestId } = render(
-      <Dialog open={true} showClose={false} onClose={jest.fn()}></Dialog>
+      <Dialog open={true} showClose={false} onClose={vi.fn()}></Dialog>
     )
 
     // Assert
@@ -90,7 +90,7 @@ describe(Dialog.name, () => {
         <Dialog
           open={true}
           showClose={false}
-          onClose={jest.fn()}
+          onClose={vi.fn()}
           slots={{
             Title: () => <TitleSlot />,
           }}
@@ -109,7 +109,7 @@ describe(Dialog.name, () => {
         <Dialog
           open={true}
           showClose={false}
-          onClose={jest.fn()}
+          onClose={vi.fn()}
           slots={{
             Subtitle: () => <SubtitleSlot />,
           }}
@@ -128,7 +128,7 @@ describe(Dialog.name, () => {
         <Dialog
           open={true}
           showClose={false}
-          onClose={jest.fn()}
+          onClose={vi.fn()}
           slots={{
             Content: () => <ContentSlot />,
           }}
@@ -152,7 +152,7 @@ describe(Dialog.name, () => {
         <Dialog
           open={true}
           showClose={false}
-          onClose={jest.fn()}
+          onClose={vi.fn()}
           slots={{
             Actions: () => <ActionsSlot />,
           }}

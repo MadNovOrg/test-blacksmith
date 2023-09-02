@@ -8,11 +8,11 @@ import { render, waitForText } from '@test/index'
 
 import { AcceptInvite } from '.'
 
-jest.mock('@app/hooks/use-fetcher', () => ({
-  useFetcher: jest.fn(),
+vi.mock('@app/hooks/use-fetcher', () => ({
+  useFetcher: vi.fn(),
 }))
 
-const useFetcherMocked = jest.mocked(useFetcher)
+const useFetcherMocked = vi.mocked(useFetcher)
 
 const DummyParticipantPage = () => {
   const { id } = useParams()
@@ -20,12 +20,13 @@ const DummyParticipantPage = () => {
 }
 
 describe('page: AcceptInvite', () => {
-  const fetcherMocked = jest.fn()
+  const fetcherMocked = vi.fn()
 
   beforeEach(async () => {
     useFetcherMocked.mockReturnValue(fetcherMocked)
   })
 
+  // eslint-disable-next-line vitest/expect-expect
   it('redirects to the participant course page if invitation accepted successfuly', async () => {
     fetcherMocked.mockResolvedValue({
       acceptInvite: { status: InviteStatus.ACCEPTED },
@@ -47,6 +48,7 @@ describe('page: AcceptInvite', () => {
     await waitForText(COURSE_ID)
   })
 
+  // eslint-disable-next-line vitest/expect-expect
   it("displays an error if invitation didn't get accepted and doesn't redirect to the participant course page", async () => {
     fetcherMocked.mockResolvedValue({
       acceptInvite: null,

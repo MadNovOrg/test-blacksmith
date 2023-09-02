@@ -7,17 +7,17 @@ import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { UserSelector } from '.'
 
-jest.mock('@app/hooks/use-fetcher')
-const useFetcherMock = jest.mocked(useFetcher)
+vi.mock('@app/hooks/use-fetcher')
+const useFetcherMock = vi.mocked(useFetcher)
 
 describe('component: UserSelector', () => {
   beforeEach(() => {
-    jest.useFakeTimers({ advanceTimers: true })
+    vi.useFakeTimers({ shouldAdvanceTime: true })
   })
 
   afterEach(() => {
-    jest.runOnlyPendingTimers()
-    jest.useRealTimers()
+    vi.runOnlyPendingTimers()
+    vi.useRealTimers()
   })
 
   it("doesn't display options initially", async () => {
@@ -33,7 +33,7 @@ describe('component: UserSelector', () => {
     const USER_SEARCH_EMAIL = 'USER_EMAIL'
     const USER_SEARCH_FULL_NAME = chance.name()
 
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
     fetcherMock.mockResolvedValue({
       members: [
         {
@@ -58,7 +58,7 @@ describe('component: UserSelector', () => {
       USER_SEARCH_EMAIL
     )
 
-    jest.runAllTimers()
+    vi.runAllTimers()
 
     await waitFor(() =>
       expect(
@@ -73,7 +73,7 @@ describe('component: UserSelector', () => {
     const USER_SEARCH_EMAIL = 'USER_EMAIL'
     const USER_SEARCH_FULL_NAME = chance.name()
 
-    const onChangeMock = jest.fn()
+    const onChangeMock = vi.fn()
     const profile = {
       id: chance.guid(),
       email: USER_SEARCH_EMAIL,
@@ -82,7 +82,7 @@ describe('component: UserSelector', () => {
       fullName: USER_SEARCH_FULL_NAME,
     }
 
-    const fetcherMock = jest.fn()
+    const fetcherMock = vi.fn()
     fetcherMock.mockResolvedValue({
       members: [
         {
@@ -105,7 +105,7 @@ describe('component: UserSelector', () => {
       USER_SEARCH_EMAIL
     )
 
-    jest.runAllTimers()
+    vi.runAllTimers()
 
     const optionLabel = `${USER_SEARCH_EMAIL}, ${USER_SEARCH_FULL_NAME}`
 

@@ -6,7 +6,7 @@ import { FilterByCourseType } from './index'
 
 describe(FilterByCourseType.name, () => {
   it('triggers onChange when course type = closed is selected', async () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(<FilterByCourseType onChange={onChange} />)
 
     await userEvent.click(screen.getByText('Course Type'))

@@ -1,14 +1,14 @@
 export const Auth = {
-  currentAuthenticatedUser: jest.fn().mockResolvedValue({
-    getSignInUserSession: jest.fn(),
+  currentAuthenticatedUser: vi.fn().mockResolvedValue({
+    getSignInUserSession: vi.fn(),
   }),
 
-  signIn: jest.fn(),
-  signOut: jest.fn(),
+  signIn: vi.fn(),
+  signOut: vi.fn(),
 
-  signUp: jest.fn().mockResolvedValue(undefined),
-  confirmSignUp: jest.fn().mockResolvedValue(undefined),
-  resendSignUp: jest.fn().mockResolvedValue(undefined),
+  signUp: vi.fn().mockResolvedValue(undefined),
+  confirmSignUp: vi.fn().mockResolvedValue(undefined),
+  resendSignUp: vi.fn().mockResolvedValue(undefined),
 
-  forgotPassword: jest.fn().mockResolvedValue(undefined),
+  forgotPassword: vi.fn().mockResolvedValue(undefined),
 }

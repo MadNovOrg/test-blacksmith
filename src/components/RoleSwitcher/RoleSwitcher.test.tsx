@@ -11,9 +11,9 @@ const { t } = getI18n()
 const RoleUserLabel = t(`components.role-switcher.${RoleName.USER}`)
 const RoleTrainerLabel = t(`components.role-switcher.${RoleName.TRAINER}`)
 
-const mockNavigate = jest.fn()
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+const mockNavigate = vi.fn()
+vi.mock('react-router-dom', async () => ({
+  ...((await vi.importActual('react-router-dom')) as object),
   useNavigate: () => mockNavigate,
 }))
 

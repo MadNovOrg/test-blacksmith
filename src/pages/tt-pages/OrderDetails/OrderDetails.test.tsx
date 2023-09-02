@@ -30,9 +30,9 @@ import {
 
 import { OrderDetails } from '.'
 
-jest.mock('@app/hooks/usePromoCodes')
+vi.mock('@app/hooks/usePromoCodes')
 
-const usePromoCodesMock = jest.mocked(usePromoCodes)
+const usePromoCodesMock = vi.mocked(usePromoCodes)
 
 describe('page: OrderDetails', () => {
   beforeEach(() => {
@@ -42,7 +42,7 @@ describe('page: OrderDetails', () => {
       total: 0,
       error: undefined,
       status: LoadingStatus.IDLE,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
   })
 
@@ -121,7 +121,7 @@ describe('page: OrderDetails', () => {
 
     expect(
       screen.getByTestId('order-course-duration').textContent
-    ).toMatchInlineSnapshot(`"25 Jan 202308:00 AM - 04:00 PM"`)
+    ).toMatchInlineSnapshot('"25 Jan 202308:00 AM - 04:00 PM"')
   })
 
   it('renders order line items', () => {
@@ -278,7 +278,7 @@ describe('page: OrderDetails', () => {
       status: LoadingStatus.IDLE,
       error: undefined,
       total: 1,
-      mutate: jest.fn(),
+      mutate: vi.fn(),
     })
 
     const client = {

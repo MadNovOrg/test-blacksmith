@@ -9,13 +9,13 @@ import { Form, FormInputs } from './Form'
 
 const RecaptchaMock = createRecaptchaComp()
 
-jest.mock('@app/components/Recaptcha', () => ({
+vi.mock('@app/components/Recaptcha', async () => ({
   __esModule: true,
-  ...jest.requireActual('@app/components/Recaptcha'),
-  Recaptcha: jest.fn(),
+  ...((await vi.importActual('@app/components/Recaptcha')) as object),
+  Recaptcha: vi.fn(),
 }))
 
-const MockedRecaptcha = jest.mocked(Recaptcha)
+const MockedRecaptcha = vi.mocked(Recaptcha)
 
 describe('component: Waitlist/Form', () => {
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe('component: Waitlist/Form', () => {
   })
 
   it('validates form', async () => {
-    render(<Form onSuccess={jest.fn} saving={false} />)
+    render(<Form onSuccess={vi.fn} saving={false} />)
 
     await userEvent.click(screen.getByText(/join waiting list/i))
 
@@ -56,7 +56,7 @@ describe('component: Waitlist/Form', () => {
       phone: '1111111',
       recaptchaToken: 'token',
     }
-    const onSuccessMock = jest.fn()
+    const onSuccessMock = vi.fn()
 
     render(<Form onSuccess={onSuccessMock} saving={false} />)
 
@@ -100,7 +100,7 @@ describe('component: Waitlist/Form', () => {
       recaptchaToken: 'token',
     }
 
-    render(<Form onSuccess={jest.fn()} saving={false} />)
+    render(<Form onSuccess={vi.fn()} saving={false} />)
 
     await userEvent.type(
       screen.getByLabelText(/first name/i),

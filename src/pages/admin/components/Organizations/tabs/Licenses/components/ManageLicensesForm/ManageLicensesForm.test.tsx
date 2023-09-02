@@ -47,7 +47,7 @@ describe('component: ManageLicencesForm', () => {
   })
 
   it('calls callback on save with entered data', async () => {
-    const onSaveMock = jest.fn()
+    const onSaveMock = vi.fn()
     const invoiceId = 'INV.1234'
     const note = 'Note'
 
@@ -113,7 +113,7 @@ describe('component: ManageLicencesForm', () => {
   })
 
   it('makes an invoice id an optional field for REMOVE type and when issue refund is not checked', async () => {
-    const onSaveMock = jest.fn()
+    const onSaveMock = vi.fn()
     const note = 'Note'
 
     render(<ManageLicensesForm currentBalance={100} onSave={onSaveMock} />)
@@ -140,7 +140,7 @@ describe('component: ManageLicencesForm', () => {
   })
 
   it('calls callback with correct data when type is REMOVE and issue refund is checked', async () => {
-    const onSaveMock = jest.fn()
+    const onSaveMock = vi.fn()
     const note = 'Note'
     const invoiceId = 'INV-0001'
 
