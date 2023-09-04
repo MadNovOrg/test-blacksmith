@@ -14,10 +14,9 @@ import {
   SaveCourseModulesMutationVariables,
   SetCourseAsDraftMutationVariables,
 } from '@app/generated/graphql'
+import { FinalizeCourseBuilderMutation } from '@app/generated/graphql'
 import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/queries/courses/finalize-course-builder'
 import { MUTATION as SAVE_COURSE_MODULES } from '@app/queries/courses/save-course-modules'
-
-import { FinalizeCourseBuilderMutation } from '@qa/generated/graphql'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 

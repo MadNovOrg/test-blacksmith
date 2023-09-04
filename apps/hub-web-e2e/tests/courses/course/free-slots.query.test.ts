@@ -11,7 +11,8 @@ import {
 import { UNIQUE_COURSE } from '@qa/data/courses'
 import { users } from '@qa/data/users'
 import { CourseFreeSlotsQuery } from '@qa/generated/graphql'
-import { runQueryAsRole } from '@qa/tests/gql-query'
+
+import { runQueryAsRole } from '../../gql-query'
 
 const QUERY = gql`
   query CourseFreeSlots($id: Int!) {

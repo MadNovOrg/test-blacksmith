@@ -2,6 +2,7 @@ node_modules
 .DS_Store
 dist
 dist-ssr
+.cache
 
 # Env variables
 .env
@@ -9,11 +10,9 @@ dist-ssr
 hasura/.env
 
 # Test artifacts
-/test-results/
-/playwright-report/
-/playwright/.cache/
-/playwright/tmp/
-/tmp/
+test-results
+playwright-report
+tmp
 /coverage/
 /html
 

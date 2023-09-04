@@ -36,10 +36,6 @@ module.exports = {
       //   ],
       // },
     },
-    {
-      files: ['**/playwright/**'],
-      extends: ['plugin:playwright/playwright-test'],
-    },
   ],
   parserOptions: {
     ecmaFeatures: {
@@ -79,11 +75,13 @@ module.exports = {
         ],
       },
     ],
+    /** ! TODO REVISE THIS ENTIRELY */
     '@typescript-eslint/ban-ts-ignore': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 0,
     '@typescript-eslint/no-explicit-any': 'error',
     'no-shadow': 'off',
     'no-use-before-define': 'off',
+    'no-empty-pattern': 'off',
     '@typescript-eslint/no-use-before-define': ['error', 'nofunc'],
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': [

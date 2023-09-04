@@ -61,6 +61,7 @@ import {
   UpdateTrainerRoleTypeMutation,
   UpdateTrainerRoleTypeMutationVariables,
 } from '@app/generated/graphql'
+import { UpdateOrgMemberMutation } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 import useRoles from '@app/hooks/useRoles'
 import useTrainerRoleTypes from '@app/hooks/useTrainerRoleTypes'
@@ -72,8 +73,6 @@ import { MUTATION as UPDATE_PROFILE_MUTATION } from '@app/queries/profile/update
 import { MUTATION as UPDATE_PROFILE_ROLES_MUTATION } from '@app/queries/profile/update-profile-roles'
 import { MUTATION as UPDATE_PROFILE_TRAINER_ROLE_TYPES } from '@app/queries/trainer/update-trainer-role-types'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
-
-import { UpdateOrgMemberMutation } from '@qa/generated/graphql'
 
 import {
   BILDRolesNames,

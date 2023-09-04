@@ -79,16 +79,11 @@ jobs:
         run: pnpm hasura seed apply --database-name default
 
       - name: Playwright setup
-        run: |
-          pnpm dev &
-          pnpm playwright install --with-deps
+        run: pnpm playwright install --with-deps
 
       - name: Playwright tests
         id: playwright
-        run: |
-          while ! response=$(curl --silent --output /dev/null --write-out "%{http_code}" --fail --max-time 300 http://localhost:3000); do sleep 1; done && echo "Server started succesfully and responding!"
-          sleep 10
-          pnpm test:e2e:smoke --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        run: pnpm nx e2e:smoke @teamteach/hub.web-e2e --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Playwright report
         uses: actions/upload-artifact@v3

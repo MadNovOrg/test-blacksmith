@@ -80,7 +80,7 @@ jobs:
 
       - name: Playwright tests
         id: playwright
-        run: pnpm test:e2e:queries
+        run: pnpm nx e2e:queries @teamteach/hub.web-e2e
 
       - name: Playwright report
         uses: actions/upload-artifact@v3

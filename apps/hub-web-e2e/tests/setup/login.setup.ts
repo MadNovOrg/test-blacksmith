@@ -1,10 +1,9 @@
 import { test as setup } from '@playwright/test'
 
 import { bypassHSCookieConsent } from '@qa/commands'
+import { users, credentials } from '@qa/data/users'
+import { LoginPage } from '@qa/fixtures/pages/auth/LoginPage.fixture'
 import { stateFilePath } from '@qa/util'
-
-import { users, credentials } from '../data/users'
-import { LoginPage } from '../fixtures/pages/auth/LoginPage.fixture'
 
 setup.describe.configure({ mode: 'parallel' })
 

@@ -9,7 +9,6 @@
     "baseUrl": "./",
     "paths": {
       "@app/*": ["./src/*"],
-      "@qa/*": ["./playwright/*"],
       "@storybook-decorators/*": ["./.storybook/decorators/*"],
       "@test/*": ["./test/*"]
     }

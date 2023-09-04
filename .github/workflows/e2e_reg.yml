@@ -94,7 +94,7 @@ jobs:
 
       - name: Playwright tests
         id: playwright
-        run: pnpm test:e2e:${{ matrix.browsers }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} playwright/tests
+        run: pnpm nx e2e:${{ matrix.browsers }} @teamteach/hub.web-e2e --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Playwright report
         uses: actions/upload-artifact@v3
