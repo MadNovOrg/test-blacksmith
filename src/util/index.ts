@@ -706,7 +706,6 @@ export const REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL = {
     CourseLevel.BildAdvancedTrainer,
   ],
   [CourseLevel.BildRegular]: [
-    CourseLevel.BildRegular,
     CourseLevel.BildIntermediateTrainer,
     CourseLevel.BildAdvancedTrainer,
   ],
