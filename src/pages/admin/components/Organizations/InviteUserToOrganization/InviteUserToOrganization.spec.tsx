@@ -115,7 +115,7 @@ it('displays an error message that user already exist within organization', asyn
   await userEvent.click(screen.getByRole('button', { name: /invite user/i }))
 
   expect(screen.getByTestId('error-alert').textContent).toMatchInlineSnapshot(
-    `"User with provided email address has already been invited to this organisation."`
+    '"A user with this email address already exists within this organisation."'
   )
 })
 
