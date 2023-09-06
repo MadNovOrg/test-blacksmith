@@ -28,13 +28,10 @@ import {
   GetOrganizationsQuery,
   GetOrganizationsQueryVariables,
   InsertOrgMutation,
-  SearchXeroContactsQuery,
-  SearchXeroContactsQueryVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { QUERY as FindEstablishment } from '@app/queries/dfe/find-establishment'
 import { QUERY as GetOrganizations } from '@app/queries/organization/get-organizations'
-import { QUERY as SearchXeroContacts } from '@app/queries/xero/search-xero-contacts'
 import { Establishment, Organization } from '@app/types'
 
 import { AddOrg } from './components/AddOrg'
@@ -63,7 +60,6 @@ export type OrgSelectorProps = {
   disabled?: boolean
   required?: boolean
   showHubResults?: boolean
-  showXeroResults?: boolean
   showDfeResults?: boolean
   autocompleteMode?: boolean
   showTrainerOrgOnly?: boolean
@@ -81,7 +77,6 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     autocompleteMode = false,
     allowAdding = false,
     showHubResults = true,
-    showXeroResults = true,
     showDfeResults = true,
     error,
     disabled = false,
@@ -139,14 +134,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           FindEstablishmentQuery,
           FindEstablishmentQueryVariables
         >(FindEstablishment, { where: condition })
-        const xeroData = await fetcher<
-          SearchXeroContactsQuery,
-          SearchXeroContactsQueryVariables
-        >(SearchXeroContacts, {
-          input: {
-            searchTerm: query,
-          },
-        })
+
         const hubData = await fetcher<
           GetOrganizationsQuery,
           GetOrganizationsQueryVariables
@@ -154,14 +142,6 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         setLoading(false)
         const orgs = hubData.orgs ?? []
         const establishments = dfeData.establishments ?? []
-        const xeroContacts = xeroData.xero?.contacts ?? []
-        const xeroResults = xeroContacts
-          .filter(e => !orgs.some(org => 'name' in org && org.name === e.name))
-          .map(xeroContact => ({
-            ...xeroContact,
-            id: xeroContact.contactID,
-            fromXero: true,
-          }))
         const dfeResults = establishments
           .filter(e => !orgs.some(org => 'name' in org && org.name === e.name))
           .map(r => ({
@@ -171,18 +151,10 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         setOptions([
           ...(showHubResults ? orgs : []),
           ...(allowAdding && !autocompleteMode ? [{ name: query }] : []),
-          ...(showXeroResults ? xeroResults : []),
           ...(showDfeResults ? dfeResults : []),
         ])
       },
-      [
-        allowAdding,
-        autocompleteMode,
-        fetcher,
-        showDfeResults,
-        showHubResults,
-        showXeroResults,
-      ]
+      [allowAdding, autocompleteMode, fetcher, showDfeResults, showHubResults]
     )
 
     const debouncedQuery = useMemo(() => {
