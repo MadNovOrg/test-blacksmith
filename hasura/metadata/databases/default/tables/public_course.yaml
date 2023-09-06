@@ -1194,6 +1194,16 @@ delete_permissions:
     permission:
       filter: {}
 event_triggers:
+  - name: cancel_licenses
+    definition:
+      enable_manual: true
+      update:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1-licensing/cancel-licenses'
   - name: course_attendees_changed
     definition:
       enable_manual: false
