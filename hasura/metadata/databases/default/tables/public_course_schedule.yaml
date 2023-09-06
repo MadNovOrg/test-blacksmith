@@ -45,9 +45,7 @@ insert_permissions:
         - virtual_link
   - role: trainer
     permission:
-      check:
-        start:
-          _gte: "2023-10-01"
+      check: {}
       columns:
         - course_id
         - created_at
