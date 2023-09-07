@@ -45,6 +45,11 @@ export const QUERY = gql`
         start
         end
         freeSpaces
+        bookingContact {
+          fullName
+          email
+          phone
+        }
       }
       invoice {
         xeroId

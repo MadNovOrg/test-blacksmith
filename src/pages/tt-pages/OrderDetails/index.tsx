@@ -453,21 +453,6 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </DetailsItemBox>
                   )}
 
-                  {order.bookingContact && (
-                    <DetailsItemBox>
-                      <Stack spacing={2}>
-                        <Typography fontWeight={600}>
-                          {_t('components.course-form.booking-contact')}
-                        </Typography>
-                        <Typography color="grey.700">
-                          {order.bookingContact.firstName +
-                            ' ' +
-                            order.bookingContact.lastName}
-                        </Typography>
-                      </Stack>
-                    </DetailsItemBox>
-                  )}
-
                   <DetailsItemBox>
                     <Stack spacing={2}>
                       <Typography fontWeight={600}>
@@ -484,17 +469,33 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                       <Typography fontWeight={600}>
                         {t('ordered-by')}
                       </Typography>
-                      <Typography color="grey.700">
-                        {order.user.fullName}
-                      </Typography>
-                      <Typography color="grey.700">
-                        {order.user.email}
-                      </Typography>
-                      {order.user.phone ? (
-                        <Typography color="grey.700">
-                          {order.user.phone}
-                        </Typography>
-                      ) : null}
+                      {course?.bookingContact ? (
+                        <>
+                          <Typography color="grey.700">
+                            {course.bookingContact.fullName}
+                          </Typography>
+                          <Typography color="grey.700">
+                            {course.bookingContact.email}
+                          </Typography>
+                          <Typography color="grey.700">
+                            {course.bookingContact.phone}
+                          </Typography>
+                        </>
+                      ) : (
+                        <>
+                          <Typography color="grey.700">
+                            {order.user.fullName}
+                          </Typography>
+                          <Typography color="grey.700">
+                            {order.user.email}
+                          </Typography>
+                          {order.user.phone ? (
+                            <Typography color="grey.700">
+                              {order.user.phone}
+                            </Typography>
+                          ) : null}
+                        </>
+                      )}
                     </Stack>
                   </DetailsItemBox>
 
