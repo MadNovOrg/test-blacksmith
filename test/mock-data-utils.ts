@@ -415,6 +415,7 @@ export const buildParticipant = build<CourseParticipant>({
     profile: perBuild(() => buildProfile()),
     course: perBuild(() => buildCourse()),
     go1EnrolmentStatus: BlendedLearningStatus.IN_PROGRESS,
+    go1EnrolmentProgress: 50,
     gradingModules: [buildParticipantModule(), buildParticipantModule()],
     grade: perBuild(() => undefined),
     gradingFeedback: perBuild(() => chance.word()),

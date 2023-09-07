@@ -63,6 +63,7 @@ export const QUERY = gql`
       invoiceID
       bookingDate
       go1EnrolmentStatus
+      go1EnrolmentProgress
       grade
       healthSafetyConsent
       certificate {

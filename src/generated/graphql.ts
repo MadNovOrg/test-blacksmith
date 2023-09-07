@@ -21637,6 +21637,7 @@ export type Course_Participant = {
   created_at?: Maybe<Scalars['timestamptz']>;
   dateGraded?: Maybe<Scalars['timestamptz']>;
   go1EnrolmentId?: Maybe<Scalars['Int']>;
+  go1EnrolmentProgress?: Maybe<Scalars['numeric']>;
   go1EnrolmentStatus?: Maybe<Blended_Learning_Status_Enum>;
   grade?: Maybe<Grade_Enum>;
   /** An array relationship */
@@ -22373,12 +22374,14 @@ export type Course_Participant_Avg_Fields = {
   __typename?: 'course_participant_avg_fields';
   course_id?: Maybe<Scalars['Float']>;
   go1EnrolmentId?: Maybe<Scalars['Float']>;
+  go1EnrolmentProgress?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "course_participant" */
 export type Course_Participant_Avg_Order_By = {
   course_id?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
+  go1EnrolmentProgress?: InputMaybe<Order_By>;
 };
 
 /** Graded BILD modules for a course participant */
@@ -22598,6 +22601,7 @@ export type Course_Participant_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   dateGraded?: InputMaybe<Timestamptz_Comparison_Exp>;
   go1EnrolmentId?: InputMaybe<Int_Comparison_Exp>;
+  go1EnrolmentProgress?: InputMaybe<Numeric_Comparison_Exp>;
   go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum_Comparison_Exp>;
   grade?: InputMaybe<Grade_Enum_Comparison_Exp>;
   gradingModules?: InputMaybe<Course_Participant_Module_Bool_Exp>;
@@ -22894,6 +22898,7 @@ export enum Course_Participant_Constraint {
 export type Course_Participant_Inc_Input = {
   course_id?: InputMaybe<Scalars['Int']>;
   go1EnrolmentId?: InputMaybe<Scalars['Int']>;
+  go1EnrolmentProgress?: InputMaybe<Scalars['numeric']>;
 };
 
 /** input type for inserting data into table "course_participant" */
@@ -22910,6 +22915,7 @@ export type Course_Participant_Insert_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   dateGraded?: InputMaybe<Scalars['timestamptz']>;
   go1EnrolmentId?: InputMaybe<Scalars['Int']>;
+  go1EnrolmentProgress?: InputMaybe<Scalars['numeric']>;
   go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum>;
   grade?: InputMaybe<Grade_Enum>;
   gradingModules?: InputMaybe<Course_Participant_Module_Arr_Rel_Insert_Input>;
@@ -22936,6 +22942,7 @@ export type Course_Participant_Max_Fields = {
   created_at?: Maybe<Scalars['timestamptz']>;
   dateGraded?: Maybe<Scalars['timestamptz']>;
   go1EnrolmentId?: Maybe<Scalars['Int']>;
+  go1EnrolmentProgress?: Maybe<Scalars['numeric']>;
   grading_feedback?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   invite_id?: Maybe<Scalars['uuid']>;
@@ -22954,6 +22961,7 @@ export type Course_Participant_Max_Order_By = {
   created_at?: InputMaybe<Order_By>;
   dateGraded?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
+  go1EnrolmentProgress?: InputMaybe<Order_By>;
   grading_feedback?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   invite_id?: InputMaybe<Order_By>;
@@ -22973,6 +22981,7 @@ export type Course_Participant_Min_Fields = {
   created_at?: Maybe<Scalars['timestamptz']>;
   dateGraded?: Maybe<Scalars['timestamptz']>;
   go1EnrolmentId?: Maybe<Scalars['Int']>;
+  go1EnrolmentProgress?: Maybe<Scalars['numeric']>;
   grading_feedback?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   invite_id?: Maybe<Scalars['uuid']>;
@@ -22991,6 +23000,7 @@ export type Course_Participant_Min_Order_By = {
   created_at?: InputMaybe<Order_By>;
   dateGraded?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
+  go1EnrolmentProgress?: InputMaybe<Order_By>;
   grading_feedback?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   invite_id?: InputMaybe<Order_By>;
@@ -23273,6 +23283,7 @@ export type Course_Participant_Order_By = {
   created_at?: InputMaybe<Order_By>;
   dateGraded?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
+  go1EnrolmentProgress?: InputMaybe<Order_By>;
   go1EnrolmentStatus?: InputMaybe<Order_By>;
   grade?: InputMaybe<Order_By>;
   gradingModules_aggregate?: InputMaybe<Course_Participant_Module_Aggregate_Order_By>;
@@ -23313,6 +23324,8 @@ export enum Course_Participant_Select_Column {
   DateGraded = 'dateGraded',
   /** column name */
   Go1EnrolmentId = 'go1EnrolmentId',
+  /** column name */
+  Go1EnrolmentProgress = 'go1EnrolmentProgress',
   /** column name */
   Go1EnrolmentStatus = 'go1EnrolmentStatus',
   /** column name */
@@ -23367,6 +23380,7 @@ export type Course_Participant_Set_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   dateGraded?: InputMaybe<Scalars['timestamptz']>;
   go1EnrolmentId?: InputMaybe<Scalars['Int']>;
+  go1EnrolmentProgress?: InputMaybe<Scalars['numeric']>;
   go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum>;
   grade?: InputMaybe<Grade_Enum>;
   grading_feedback?: InputMaybe<Scalars['String']>;
@@ -23385,12 +23399,14 @@ export type Course_Participant_Stddev_Fields = {
   __typename?: 'course_participant_stddev_fields';
   course_id?: Maybe<Scalars['Float']>;
   go1EnrolmentId?: Maybe<Scalars['Float']>;
+  go1EnrolmentProgress?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "course_participant" */
 export type Course_Participant_Stddev_Order_By = {
   course_id?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
+  go1EnrolmentProgress?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
@@ -23398,12 +23414,14 @@ export type Course_Participant_Stddev_Pop_Fields = {
   __typename?: 'course_participant_stddev_pop_fields';
   course_id?: Maybe<Scalars['Float']>;
   go1EnrolmentId?: Maybe<Scalars['Float']>;
+  go1EnrolmentProgress?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "course_participant" */
 export type Course_Participant_Stddev_Pop_Order_By = {
   course_id?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
+  go1EnrolmentProgress?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -23411,12 +23429,14 @@ export type Course_Participant_Stddev_Samp_Fields = {
   __typename?: 'course_participant_stddev_samp_fields';
   course_id?: Maybe<Scalars['Float']>;
   go1EnrolmentId?: Maybe<Scalars['Float']>;
+  go1EnrolmentProgress?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "course_participant" */
 export type Course_Participant_Stddev_Samp_Order_By = {
   course_id?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
+  go1EnrolmentProgress?: InputMaybe<Order_By>;
 };
 
 /** Streaming cursor of the table "course_participant" */
@@ -23437,6 +23457,7 @@ export type Course_Participant_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   dateGraded?: InputMaybe<Scalars['timestamptz']>;
   go1EnrolmentId?: InputMaybe<Scalars['Int']>;
+  go1EnrolmentProgress?: InputMaybe<Scalars['numeric']>;
   go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum>;
   grade?: InputMaybe<Grade_Enum>;
   grading_feedback?: InputMaybe<Scalars['String']>;
@@ -23455,12 +23476,14 @@ export type Course_Participant_Sum_Fields = {
   __typename?: 'course_participant_sum_fields';
   course_id?: Maybe<Scalars['Int']>;
   go1EnrolmentId?: Maybe<Scalars['Int']>;
+  go1EnrolmentProgress?: Maybe<Scalars['numeric']>;
 };
 
 /** order by sum() on columns of table "course_participant" */
 export type Course_Participant_Sum_Order_By = {
   course_id?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
+  go1EnrolmentProgress?: InputMaybe<Order_By>;
 };
 
 /** update columns of table "course_participant" */
@@ -23481,6 +23504,8 @@ export enum Course_Participant_Update_Column {
   DateGraded = 'dateGraded',
   /** column name */
   Go1EnrolmentId = 'go1EnrolmentId',
+  /** column name */
+  Go1EnrolmentProgress = 'go1EnrolmentProgress',
   /** column name */
   Go1EnrolmentStatus = 'go1EnrolmentStatus',
   /** column name */
@@ -23519,12 +23544,14 @@ export type Course_Participant_Var_Pop_Fields = {
   __typename?: 'course_participant_var_pop_fields';
   course_id?: Maybe<Scalars['Float']>;
   go1EnrolmentId?: Maybe<Scalars['Float']>;
+  go1EnrolmentProgress?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "course_participant" */
 export type Course_Participant_Var_Pop_Order_By = {
   course_id?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
+  go1EnrolmentProgress?: InputMaybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
@@ -23532,12 +23559,14 @@ export type Course_Participant_Var_Samp_Fields = {
   __typename?: 'course_participant_var_samp_fields';
   course_id?: Maybe<Scalars['Float']>;
   go1EnrolmentId?: Maybe<Scalars['Float']>;
+  go1EnrolmentProgress?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "course_participant" */
 export type Course_Participant_Var_Samp_Order_By = {
   course_id?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
+  go1EnrolmentProgress?: InputMaybe<Order_By>;
 };
 
 /** aggregate variance on columns */
@@ -23545,12 +23574,14 @@ export type Course_Participant_Variance_Fields = {
   __typename?: 'course_participant_variance_fields';
   course_id?: Maybe<Scalars['Float']>;
   go1EnrolmentId?: Maybe<Scalars['Float']>;
+  go1EnrolmentProgress?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "course_participant" */
 export type Course_Participant_Variance_Order_By = {
   course_id?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
+  go1EnrolmentProgress?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: course */
@@ -50459,13 +50490,6 @@ export type OrgMembersQueryVariables = Exact<{
 
 export type OrgMembersQuery = { __typename?: 'query_root', members: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, lastActivity: any, createdAt: any, go1Licenses: Array<{ __typename?: 'go1_licenses', expireDate: any }>, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', payload?: any | null }> } | null }> } }>, organization_member_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
 
-export type ReplaceParticipantMutationVariables = Exact<{
-  input: ReplaceParticipantInput;
-}>;
-
-
-export type ReplaceParticipantMutation = { __typename?: 'mutation_root', replaceParticipant?: { __typename?: 'ReplaceParticipantOutput', success: boolean, error?: ReplaceParticipantError | null } | null };
-
 export type SearchTrainerDetailsFragment = { __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> };
 
 export type SearchTrainersQueryVariables = Exact<{
@@ -50483,6 +50507,13 @@ export type SearchCoursesQueryVariables = Exact<{
 
 
 export type SearchCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> }> };
+
+export type ReplaceParticipantMutationVariables = Exact<{
+  input: ReplaceParticipantInput;
+}>;
+
+
+export type ReplaceParticipantMutation = { __typename?: 'mutation_root', replaceParticipant?: { __typename?: 'ReplaceParticipantOutput', success: boolean, error?: ReplaceParticipantError | null } | null };
 
 export type CoursePriceQueryVariables = Exact<{
   type: Course_Type_Enum;
@@ -51662,7 +51693,7 @@ export type CourseParticipantsQueryVariables = Exact<{
 }>;
 
 
-export type CourseParticipantsQuery = { __typename?: 'query_root', courseParticipants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, invoiceID?: any | null, bookingDate?: any | null, go1EnrolmentStatus?: Blended_Learning_Status_Enum | null, grade?: Grade_Enum | null, healthSafetyConsent: boolean, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null } | null, order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null, course: { __typename?: 'course', accreditedBy: Accreditors_Enum, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null, bildStrategies: Array<{ __typename?: 'course_bild_strategy', id: any, strategyName: string }>, organization?: { __typename?: 'organization', name: string, id: any } | null }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> }>, courseParticipantsAggregation: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
+export type CourseParticipantsQuery = { __typename?: 'query_root', courseParticipants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, invoiceID?: any | null, bookingDate?: any | null, go1EnrolmentStatus?: Blended_Learning_Status_Enum | null, go1EnrolmentProgress?: any | null, grade?: Grade_Enum | null, healthSafetyConsent: boolean, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null } | null, order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null, course: { __typename?: 'course', accreditedBy: Accreditors_Enum, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null, bildStrategies: Array<{ __typename?: 'course_bild_strategy', id: any, strategyName: string }>, organization?: { __typename?: 'organization', name: string, id: any } | null }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> }>, courseParticipantsAggregation: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
 
 export type PricingChangelogQueryVariables = Exact<{
   where?: InputMaybe<Course_Pricing_Changelog_Bool_Exp>;

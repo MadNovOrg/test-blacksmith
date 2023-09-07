@@ -9,6 +9,8 @@ configuration:
       custom_name: dateGraded
     go1_enrolment_id:
       custom_name: go1EnrolmentId
+    go1_enrolment_progress:
+      custom_name: go1EnrolmentProgress
     go1_enrolment_status:
       custom_name: go1EnrolmentStatus
     hs_consent:
@@ -21,6 +23,7 @@ configuration:
     booking_date: bookingDate
     date_graded: dateGraded
     go1_enrolment_id: go1EnrolmentId
+    go1_enrolment_progress: go1EnrolmentProgress
     go1_enrolment_status: go1EnrolmentStatus
     hs_consent: healthSafetyConsent
     invoice_id: invoiceID
@@ -141,6 +144,7 @@ select_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_status
+        - go1_enrolment_progress
         - grade
         - grading_feedback
         - hs_consent
@@ -163,6 +167,7 @@ select_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_status
+        - go1_enrolment_progress
         - grade
         - grading_feedback
         - hs_consent
@@ -186,6 +191,7 @@ select_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_status
+        - go1_enrolment_progress
         - grade
         - grading_feedback
         - hs_consent
@@ -211,6 +217,7 @@ select_permissions:
         - course_id
         - go1_enrolment_id
         - go1_enrolment_status
+        - go1_enrolment_progress
         - grade
         - grading_feedback
         - booking_date
@@ -250,6 +257,7 @@ select_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_status
+        - go1_enrolment_progress
         - grade
         - grading_feedback
         - hs_consent
@@ -273,6 +281,7 @@ select_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_status
+        - go1_enrolment_progress
         - grade
         - grading_feedback
         - hs_consent
@@ -293,6 +302,7 @@ select_permissions:
         - course_id
         - go1_enrolment_id
         - go1_enrolment_status
+        - go1_enrolment_progress
         - grade
         - grading_feedback
         - booking_date
@@ -319,6 +329,7 @@ select_permissions:
         - course_id
         - date_graded
         - go1_enrolment_status
+        - go1_enrolment_progress
         - grade
         - grading_feedback
         - hs_consent
@@ -364,6 +375,7 @@ update_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_status
+        - go1_enrolment_progress
         - grade
         - grading_feedback
         - hs_consent
@@ -393,6 +405,7 @@ update_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_status
+        - go1_enrolment_progress
         - grade
         - grading_feedback
         - hs_consent
