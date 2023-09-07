@@ -418,7 +418,7 @@ export type CourseParticipant = {
   profile: Profile
   attended?: boolean
   go1EnrolmentStatus: BlendedLearningStatus
-  go1EnrolmentProgress: number
+  go1EnrolmentProgress: number | null
   grade?: Grade_Enum
   gradingFeedback?: string
   dateGraded?: string
