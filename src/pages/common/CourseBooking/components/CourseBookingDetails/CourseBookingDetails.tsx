@@ -38,8 +38,8 @@ import { OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
 import { ProfileSelector } from '@app/components/ProfileSelector'
 import {
-  Profile as UserSelectorProfile,
   UserSelector,
+  Profile as UserSelectorProfile,
 } from '@app/components/UserSelector'
 import { useAuth } from '@app/context/auth'
 import { Course_Source_Enum, PaymentMethod } from '@app/generated/graphql'

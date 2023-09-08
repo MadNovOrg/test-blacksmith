@@ -68,6 +68,7 @@
     "payment-processing-fee": "Payment processing fee",
     "trainer-expenses": "Trainer expenses",
     "promo-codes-not-applicable": "Promo codes not applicable: {{codes}}",
+    "user-already-registered": "Unable to proceed with a booking for <0>{{emails}}</0> on this course <0>{{courseCode}}</0>, please contact Team Teach for assistance.",
     "due-immediately": "Due immediately",
     "error-creating-order": "There was an error placing the order.",
     "venue": "Venue",

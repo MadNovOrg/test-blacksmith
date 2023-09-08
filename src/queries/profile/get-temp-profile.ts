@@ -16,6 +16,7 @@ export type ResponseType = {
   tempProfiles: {
     course: {
       id: number
+      courseCode: string
       name: string
       accreditedBy: Accreditors_Enum
       dates: Course['dates']
@@ -55,6 +56,7 @@ export const QUERY = gql`
     tempProfiles: profile_temp(order_by: { createdAt: desc }, limit: 1) {
       course {
         id
+        courseCode: course_code
         name
         accreditedBy
         price

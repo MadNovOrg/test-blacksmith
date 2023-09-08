@@ -11,7 +11,7 @@ import {
 import Big from 'big.js'
 import { isPast } from 'date-fns'
 import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
@@ -45,7 +45,10 @@ export const CourseBookingReview: React.FC<
 
   const [accept, setAccept] = useState(false)
   const [creatingOrder, setCreatingOrder] = useState(false)
-  const [error, setError] = useState('')
+  const [error, setError] = useState<{
+    key: string
+    values?: Record<string, string>
+  } | null>(null)
 
   const handleConfirmBooking = async () => {
     setCreatingOrder(true)
@@ -55,7 +58,7 @@ export const CourseBookingReview: React.FC<
       setCreatingOrder(false)
 
       if (!order) {
-        setError(t('pages.book-course.error-creating-order'))
+        setError({ key: 'pages.book-course.error-creating-order' })
         return
       }
 
@@ -65,6 +68,8 @@ export const CourseBookingReview: React.FC<
         navigate(`../done?order_id=${order.id}`, { replace: true })
       }
     } catch (err) {
+      let errorMessage: typeof error = null
+
       if ((err as Error)?.message?.includes('Promo codes not applicable')) {
         const invalidPromoCodes = (err as Error).message
           .split(': ')[1]
@@ -74,11 +79,32 @@ export const CourseBookingReview: React.FC<
         invalidPromoCodes.slice(1).forEach(code => {
           codes = `${codes}, ${code}`
         })
-        setError(t('pages.book-course.promo-codes-not-applicable', { codes }))
+        errorMessage = {
+          key: 'pages.book-course.promo-codes-not-applicable',
+          values: { codes },
+        }
+      }
+
+      if (
+        (err as Error)?.message?.includes(
+          'A user is already registered on the course'
+        )
+      ) {
+        const [, emails] = (err as Error)?.message?.split('Email(s): ') || []
+
+        errorMessage = {
+          key: 'pages.book-course.user-already-registered',
+          values: {
+            emails,
+            courseCode: course.courseCode,
+          },
+        }
       }
 
       setCreatingOrder(false)
-      setError(t('pages.book-course.error-creating-order'))
+      setError(
+        errorMessage || { key: 'pages.book-course.error-creating-order' }
+      )
     }
   }
 
@@ -100,7 +126,9 @@ export const CourseBookingReview: React.FC<
 
       {error ? (
         <Alert severity="error" variant="outlined" sx={{ mb: 2, mt: 2 }}>
-          {error}
+          <Trans i18nKey={error.key} values={error.values}>
+            <b></b>
+          </Trans>
         </Alert>
       ) : null}
 
