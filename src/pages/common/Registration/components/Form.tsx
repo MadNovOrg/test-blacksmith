@@ -274,6 +274,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             {...register('jobTitle')}
             variant="filled"
             fullWidth
+            required
             label={t('job-title')}
           >
             <MenuItem value="" disabled>

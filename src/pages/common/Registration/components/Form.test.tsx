@@ -151,6 +151,29 @@ describe('Form', () => {
     })
   })
 
+  it('displays error message if job title is not provided', async () => {
+    const props = { ...defaultProps }
+    render(<Form {...props} />)
+
+    const form = screen.getByTestId('signup-form')
+    expect(form).toBeInTheDocument()
+
+    await userEvent.type(screen.getByTestId('input-first-name'), 'testName')
+    await userEvent.type(screen.getByTestId('input-surname'), 'testSurname')
+    await userEvent.type(screen.getByTestId('input-email'), 'test@email.com')
+    await userEvent.type(screen.getByTestId('input-password'), 'Test1234!')
+    await userEvent.type(screen.getByTestId('input-phone'), '0000000000')
+    await userEvent.click(screen.getByLabelText('T&Cs'))
+
+    await waitFor(async () => {
+      await userEvent.click(screen.getByTestId('signup-form-btn'))
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText(/Job Title is required/)).toBeInTheDocument()
+    })
+  })
+
   it('displays error message if T&Cs not accepted', async () => {
     const props = { ...defaultProps }
     render(<Form {...props} />)
@@ -209,7 +232,7 @@ describe('Form', () => {
 
     await userEvent.click(screen.getByLabelText('T&Cs'))
 
-    await userEvent.click(screen.getByLabelText('Job Title'))
+    await userEvent.click(screen.getByLabelText('Job Title *'))
     await userEvent.click(screen.getByTestId('position-Other'))
     await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
 
@@ -246,7 +269,7 @@ describe('Form', () => {
     await userEvent.type(screen.getByTestId('input-password'), 'Test1234!')
     await userEvent.type(screen.getByTestId('input-phone'), '1234567890')
 
-    await userEvent.click(screen.getByLabelText('Job Title'))
+    await userEvent.click(screen.getByLabelText('Job Title *'))
     await userEvent.click(screen.getByTestId('position-Other'))
     await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
 
