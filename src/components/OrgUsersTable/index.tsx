@@ -37,11 +37,12 @@ import { useOrgMembers } from './useOrgMembers'
 type OrgUsersTableParams = {
   orgId: string
   onChange?: () => void
+  certificateStatus?: CertificateStatus[]
 }
 
 export const OrgUsersTable: React.FC<
   React.PropsWithChildren<OrgUsersTableParams>
-> = ({ orgId, onChange }) => {
+> = ({ orgId, onChange, certificateStatus }) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
 
@@ -57,6 +58,7 @@ export const OrgUsersTable: React.FC<
     offset,
     orgId,
     sort: { by: sorting.by, dir: sorting.dir },
+    certificateFilter: certificateStatus,
   })
 
   const cols = useMemo(() => {

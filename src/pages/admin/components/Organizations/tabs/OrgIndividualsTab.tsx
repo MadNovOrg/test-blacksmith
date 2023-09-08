@@ -1,9 +1,14 @@
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, CircularProgress, Grid, Stack, Tab } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import {
+  createEnumArrayParam,
+  useQueryParam,
+  withDefault,
+} from 'use-query-params'
 
 import { OrgInvitesTable } from '@app/components/OrgInvitesTable'
 import { OrgUsersTable } from '@app/components/OrgUsersTable'
@@ -11,6 +16,7 @@ import { useOrgMembers } from '@app/components/OrgUsersTable/useOrgMembers'
 import { useAuth } from '@app/context/auth'
 import useOrg from '@app/hooks/useOrg'
 import { OrgStatsTiles } from '@app/pages/admin/components/Organizations/tabs/components/OrgStatsTiles'
+import { CertificateStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 export enum OrgIndividualsSubtabs {
@@ -34,6 +40,14 @@ export const OrgIndividualsTab: React.FC<
   const [selectedTab, setSelectedTab] = useState(
     initialTab || OrgIndividualsSubtabs.USERS
   )
+  const statuses = Object.values(CertificateStatus) as CertificateStatus[]
+  const [certificateStatus, setCertificateStatus] = useQueryParam(
+    'status',
+    withDefault(
+      createEnumArrayParam<CertificateStatus>(statuses),
+      [] as CertificateStatus[]
+    )
+  )
 
   useEffect(() => {
     if (initialTab) setSelectedTab(initialTab)
@@ -42,7 +56,8 @@ export const OrgIndividualsTab: React.FC<
   const { data, stats, status, mutate } = useOrg(
     orgId,
     profile?.id,
-    acl.canViewAllOrganizations()
+    acl.canViewAllOrganizations(),
+    certificateStatus
   )
 
   const { total: totalMembers, refetch: refetchOrgMembers } = useOrgMembers({
@@ -50,6 +65,23 @@ export const OrgIndividualsTab: React.FC<
   })
 
   const org = data?.length ? data[0] : null
+
+  const onKPITileSelected = useCallback(
+    (status: CertificateStatus | null) => {
+      if (status) {
+        setCertificateStatus(currentStatuses => {
+          if (currentStatuses && currentStatuses.includes(status)) {
+            return currentStatuses.filter(s => s !== status)
+          } else {
+            return [...(currentStatuses ?? []), status]
+          }
+        })
+      } else {
+        setCertificateStatus([])
+      }
+    },
+    [setCertificateStatus]
+  )
 
   return (
     <Box sx={{ pb: 4 }}>
@@ -66,7 +98,11 @@ export const OrgIndividualsTab: React.FC<
       {org && status === LoadingStatus.SUCCESS ? (
         <Grid container>
           <Grid item xs={12}>
-            <OrgStatsTiles orgId={orgId} />
+            <OrgStatsTiles
+              orgId={orgId}
+              selected={certificateStatus}
+              onTileSelect={onKPITileSelected}
+            />
           </Grid>
 
           <Grid item xs={12} mt={2}>
@@ -108,6 +144,7 @@ export const OrgIndividualsTab: React.FC<
               >
                 <OrgUsersTable
                   orgId={orgId}
+                  certificateStatus={certificateStatus}
                   onChange={async () => {
                     refetchOrgMembers()
                     await mutate()

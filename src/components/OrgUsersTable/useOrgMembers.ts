@@ -7,7 +7,7 @@ import {
   Organization_Member_Order_By,
 } from '@app/generated/graphql'
 import { Sorting } from '@app/hooks/useTableSort'
-import { SortOrder } from '@app/types'
+import { CertificateStatus, SortOrder } from '@app/types'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 export const MEMBERS_QUERY = gql`
@@ -18,11 +18,15 @@ export const MEMBERS_QUERY = gql`
     $orderBy: [organization_member_order_by!] = [
       { profile: { createdAt: desc } }
     ]
+    $whereProfileCertificates: course_certificate_bool_exp = {}
   ) {
     members: organization_member(
       limit: $limit
       offset: $offset
-      where: { organization_id: { _eq: $orgId } }
+      where: {
+        organization_id: { _eq: $orgId }
+        profile: { certificates: $whereProfileCertificates }
+      }
       order_by: $orderBy
     ) {
       id
@@ -62,6 +66,7 @@ export function useOrgMembers({
   offset = 0,
   sort = { dir: 'asc', by: 'createdAt' },
   orgId,
+  certificateFilter,
 }: {
   perPage?: number
   offset?: number
@@ -70,8 +75,13 @@ export function useOrgMembers({
     dir: SortOrder
     by: string
   }
+  certificateFilter?: CertificateStatus[]
 }) {
   const orderBy = getOrderBy(sort)
+
+  const whereProfileCertificates = certificateFilter?.length
+    ? { _and: [{ status: { _in: certificateFilter } }] }
+    : {}
 
   const [{ data, fetching }, refetch] = useQuery<
     OrgMembersQuery,
@@ -84,6 +94,7 @@ export function useOrgMembers({
       offset: offset,
       orgId,
       orderBy,
+      whereProfileCertificates,
     },
   })
 
