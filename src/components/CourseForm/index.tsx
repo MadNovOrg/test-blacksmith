@@ -570,6 +570,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       level: CourseLevel | '',
       deliveryType: CourseDeliveryType,
       reaccreditation: boolean,
+      conversion: boolean,
       t: TFunction
     ) => {
       isCreation &&
@@ -580,6 +581,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             level,
             deliveryType,
             reaccreditation,
+            conversion,
             t
           )
         )
@@ -624,6 +626,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         courseLevel,
         deliveryType,
         values.reaccreditation,
+        values.conversion,
         t
       )
 
@@ -637,6 +640,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     setValue,
     t,
     values.reaccreditation,
+    values.conversion,
   ])
 
   useEffect(() => {
@@ -686,6 +690,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         courseLevel,
         CourseDeliveryType.F2F,
         newReaccreditationValue,
+        values.conversion,
         t
       )
     }
@@ -697,6 +702,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     setValue,
     t,
     values.reaccreditation,
+    values.conversion,
   ])
 
   useEffect(() => {
@@ -709,6 +715,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         courseLevel,
         CourseDeliveryType.F2F,
         values.reaccreditation,
+        values.conversion,
         t
       )
     }
@@ -721,6 +728,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     t,
     values.deliveryType,
     values.reaccreditation,
+    values.conversion,
   ])
 
   useEffect(() => {
@@ -733,6 +741,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         courseLevel,
         CourseDeliveryType.F2F,
         values.reaccreditation,
+        values.conversion,
         t
       )
     }
@@ -745,6 +754,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     t,
     values.deliveryType,
     values.reaccreditation,
+    values.conversion,
   ])
 
   useEffect(() => {
@@ -764,9 +774,17 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         courseLevel,
         deliveryType,
         values.reaccreditation,
+        values.conversion,
         t
       ),
-    [courseLevel, courseType, deliveryType, t, values.reaccreditation]
+    [
+      courseLevel,
+      courseType,
+      deliveryType,
+      t,
+      values.reaccreditation,
+      values.conversion,
+    ]
   )
 
   useEffect(() => {
@@ -1088,6 +1106,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       event.target.value as CourseLevel,
                       deliveryType,
                       values.reaccreditation,
+                      values.conversion,
                       t
                     )
                   }}
@@ -1230,6 +1249,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   courseLevel,
                   deliveryType,
                   values.reaccreditation,
+                  values.conversion,
                   t
                 )
               }}

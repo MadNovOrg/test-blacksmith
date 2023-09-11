@@ -493,6 +493,7 @@ export function getDefaultSpecialInstructions(
   level: CourseLevel | '',
   deliveryType: CourseDeliveryType,
   reaccreditation: boolean,
+  conversion: boolean,
   t: TFunction
 ) {
   const keyPrefixPath =
@@ -505,6 +506,8 @@ export function getDefaultSpecialInstructions(
     key = `${key}.default`
   } else if (reaccreditation) {
     key = `${key}.reaccreditation`
+  } else if (conversion) {
+    key = `${key}.conversion`
   } else {
     key = `${key}.default`
   }
