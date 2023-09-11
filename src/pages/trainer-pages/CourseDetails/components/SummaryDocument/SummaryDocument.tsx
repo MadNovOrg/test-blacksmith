@@ -405,30 +405,29 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
               </Text>
 
               {course.accreditedBy === Accreditors_Enum.Icm ? (
-                moduleGroups.map(groupName => (
-                  <View key={groupName} wrap={false}>
-                    <Text style={[styles.largerText, styles.bold]}>
-                      {groupName}
-                    </Text>
+                moduleGroups.map(
+                  groupName =>
+                    groupedCourseModules[groupName].some(
+                      ({ covered }) => !!covered
+                    ) && (
+                      <View key={groupName} wrap={false}>
+                        <Text style={[styles.largerText, styles.bold]}>
+                          {groupName}
+                        </Text>
 
-                    <FlexGroup
-                      type="column"
-                      data={groupedCourseModules[groupName].map(
-                        ({ covered, module }) => (
-                          <Text
-                            key={module.id}
-                            style={[
-                              styles.text,
-                              covered ? {} : styles.strikeThrough,
-                            ]}
-                          >
-                            {module.name}
-                          </Text>
-                        )
-                      )}
-                    />
-                  </View>
-                ))
+                        <FlexGroup
+                          type="column"
+                          data={groupedCourseModules[groupName]
+                            .filter(({ covered }) => !!covered)
+                            .map(({ module }) => (
+                              <Text key={module.id} style={[styles.text]}>
+                                {module.name}
+                              </Text>
+                            ))}
+                        />
+                      </View>
+                    )
+                )
               ) : (
                 <FlexGroup
                   data={Object.keys(bildModules).map(strategyName => {

@@ -84,7 +84,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
     GetCourseByIdQueryVariables
   >({
     query: GET_COURSE_BY_ID_QUERY,
-    variables: { id: courseId },
+    variables: { id: courseId, withModules: true },
     requestPolicy: 'cache-and-network',
   })
 
