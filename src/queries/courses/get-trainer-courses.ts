@@ -12,6 +12,8 @@ export type ParamsType = {
 export const QUERY = gql`
   fragment TrainerCourse on course {
     id
+    # TODO: Delete this after Arlo migration
+    arloReferenceId
     name
     type
     level

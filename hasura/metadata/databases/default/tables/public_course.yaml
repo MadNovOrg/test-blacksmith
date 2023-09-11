@@ -206,6 +206,7 @@ insert_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - arloReferenceId
         - booking_contact_invite_data
         - booking_contact_profile_id
         - cancellation_fee_percent
@@ -279,6 +280,7 @@ insert_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - arloReferenceId
         - booking_contact_invite_data
         - booking_contact_profile_id
         - cancellation_fee_percent
@@ -319,6 +321,7 @@ insert_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - arloReferenceId
         - booking_contact_invite_data
         - booking_contact_profile_id
         - conversion
@@ -561,6 +564,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - arloReferenceId
         - booking_contact_invite_data
         - booking_contact_profile_id
         - cancellation_fee_percent
@@ -573,6 +577,7 @@ select_permissions:
         - created_at
         - created_by_id
         - description
+        - end
         - exceptions_pending
         - free_spaces
         - go1_integration
@@ -591,9 +596,8 @@ select_permissions:
         - reaccreditation
         - source
         - special_instructions
-        - updated_at
         - start
-        - end
+        - updated_at
       computed_fields:
         - course_code
         - freeSlots
@@ -731,6 +735,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - arloReferenceId
         - booking_contact_invite_data
         - booking_contact_profile_id
         - cancellation_fee_percent
@@ -777,6 +782,7 @@ select_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - arloReferenceId
         - booking_contact_invite_data
         - booking_contact_profile_id
         - cancellation_fee_percent

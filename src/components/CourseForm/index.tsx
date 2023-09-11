@@ -202,6 +202,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               accountCode: yup.string().required(),
             }
           : null),
+        //TODO: Delete this after Arlo migration ------ search for Delete this after Arlo migration to find every occurence that needs to be deleted //
+        ...(courseType !== CourseType.INDIRECT
+          ? {
+              arloReferenceId: yup.string(),
+            }
+          : null),
         courseLevel: yup
           .string()
           .required(t('components.course-form.course-level-required')),
@@ -1096,6 +1102,23 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 {t('components.course-form.course-level-one-info')}
               </Alert>
             )}
+            {/* TODO: Delete this after Arlo migration to the hub - HAVENT USED THE translations file to have this easier to find by text search */}
+            {acl.isInternalUser() && courseType !== CourseType.INDIRECT ? (
+              <>
+                <TextField
+                  sx={{ mt: theme.spacing(2) }}
+                  required
+                  label={'Course reference ID'}
+                  variant="filled"
+                  {...register(`arloReferenceId`)}
+                  fullWidth
+                />
+                <Alert severity="info" sx={{ mt: 2 }}>
+                  This only applies to courses that have been migrated from Arlo
+                </Alert>
+              </>
+            ) : null}
+            {/* TODO: REMOVE THE ABOVE after Arlo migration to the hub */}
             {errors.courseLevel?.message ? (
               <FormHelperText error>
                 {errors.courseLevel.message}

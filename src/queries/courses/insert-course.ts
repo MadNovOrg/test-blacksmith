@@ -66,6 +66,8 @@ export type ParamsType = {
     }
     conversion?: boolean
     price?: number | null
+    /// TODO: Delete this after Arlo migration
+    arloReferenceId?: string
   }
 }
 

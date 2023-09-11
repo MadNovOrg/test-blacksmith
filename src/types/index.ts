@@ -18,6 +18,8 @@ export type Base = {
 }
 
 export type Course = {
+  // TODO: Delete this after Arlo migration
+  arloReferenceId?: string
   id: number
   createdAt: string
   updatedAt?: string
@@ -604,6 +606,8 @@ export type CourseInput = {
   accreditedBy: Accreditors_Enum | null
   conversion: boolean
   price: number | null
+  //TODO: Delete this after Arlo migration
+  arloReferenceId?: string
 }
 
 export type ValidCourseInput = DeepNonNullable<

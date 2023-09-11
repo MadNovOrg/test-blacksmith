@@ -144,6 +144,17 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             <Typography variant="body2" color="secondary">
               {course.course_code}
             </Typography>
+            {/* TODO: Delete this after Arlo migration */}
+            {acl.isInternalUser() && course.arloReferenceId ? (
+              <>
+                <Typography variant="body2" color="secondary">
+                  Arlo ref:
+                </Typography>
+                <Typography variant="body2" color="secondary">
+                  {course.arloReferenceId}
+                </Typography>
+              </>
+            ) : null}
             {course.status ? (
               <Box mt={2}>
                 {!acl.isUser() ? (

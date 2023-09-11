@@ -173,10 +173,23 @@ export function CourseTitleCell({ course }: { course: TableCourse }) {
       courseTrainer.status === Course_Invite_Status_Enum.Pending ? (
         <CourseTitle code={course.course_code} name={course.name} />
       ) : (
-        <Link href={titleLink}>
-          <CourseTitle code={course.course_code} name={course.name} />
-        </Link>
+        <>
+          <Link href={titleLink}>
+            <CourseTitle code={course.course_code} name={course.name} />
+          </Link>
+        </>
       )}
+      {/* TODO: Delete this after Arlo migration */}
+      {course.arloReferenceId && acl.isInternalUser() ? (
+        <>
+          <Typography variant="body2" data-testid="course-code">
+            Arlo ref:
+          </Typography>
+          <Typography variant="body2" data-testid="course-code">
+            {course.arloReferenceId}
+          </Typography>
+        </>
+      ) : null}
     </TableCell>
   )
 }

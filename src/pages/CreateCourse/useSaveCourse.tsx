@@ -180,6 +180,8 @@ export function useSaveCourse(): {
           INSERT_COURSE_MUTATION,
           {
             course: {
+              /// TODO: Delete this after Arlo migration
+              arloReferenceId: courseData.arloReferenceId,
               name: courseName,
               deliveryType: courseData.deliveryType,
               accreditedBy: courseData.accreditedBy,
