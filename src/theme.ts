@@ -220,7 +220,7 @@ const breakpoints = {
     xs: 0,
     sm: 0,
     md: 768,
-    lg: 1280,
+    lg: 1300,
     xl: 1920,
   },
 }
