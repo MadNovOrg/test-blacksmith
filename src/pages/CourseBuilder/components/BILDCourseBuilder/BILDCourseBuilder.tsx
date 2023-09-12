@@ -11,7 +11,6 @@ import { cond, constant, matches, stubTrue } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useMount } from 'react-use'
 import { useMutation, useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
@@ -206,9 +205,11 @@ export const BILDCourseBuilder: React.FC<
     setSubmitError(undefined)
   }, [bildStrategies, courseData?.course])
 
-  useMount(() => {
-    setInitialModules()
-  })
+  useEffect(() => {
+    if (courseData && Object.keys(selectedModules).length === 0) {
+      setInitialModules()
+    }
+  }, [courseData, selectedModules, setInitialModules])
 
   const courseStrategies = useMemo(() => {
     return bildStrategies.filter(s =>
