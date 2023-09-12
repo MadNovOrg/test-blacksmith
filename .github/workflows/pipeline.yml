@@ -41,6 +41,8 @@ on:
 jobs:
   build-deploy:
     name: CD
+    env:
+      NODE_OPTIONS: "--max-old-space-size=6656"
     runs-on: ubuntu-latest
 
     steps:
@@ -65,10 +67,8 @@ jobs:
           node-version: '18.14.2'
           cache: 'pnpm'
 
-      - run: echo 'NODE_OPTIONS="--max-old-space-size=6656"' >> $GITHUB_ENV
-
       - name: Install dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i 
+        run: pnpm pkg delete scripts.prepare && pnpm i
 
       - name: Build web
         run: pnpm build --mode ${{inputs.mode}}
@@ -101,7 +101,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.checkout_ref }}
-          
+
       - name: Install Hasura CLI
         run: |
           curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=v2.28.2 bash

@@ -15,6 +15,8 @@ permissions:
 jobs:
   lint-and-typecheck:
     name: Lint & Typecheck
+    env:
+      NODE_OPTIONS: "--max-old-space-size=4096"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,10 +34,8 @@ jobs:
           node-version: '18.14.2'
           cache: 'pnpm'
 
-      - run: echo 'NODE_OPTIONS="--max-old-space-size=4096"' >> $GITHUB_ENV
-
       - name: Install dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i 
+        run: pnpm pkg delete scripts.prepare && pnpm i
 
       - name: Lint
         run: pnpm lint
@@ -44,6 +44,8 @@ jobs:
         run: pnpm typecheck
   test:
     name: test
+    env:
+      NODE_OPTIONS: "--max-old-space-size=4096"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -63,10 +65,8 @@ jobs:
           node-version: '18.14.2'
           cache: 'pnpm'
 
-      - run: echo 'NODE_OPTIONS="--max-old-space-size=4096"' >> $GITHUB_ENV
-
       - name: Install dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i 
+        run: pnpm pkg delete scripts.prepare && pnpm i
 
       - name: Test
         run: pnpm test -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
