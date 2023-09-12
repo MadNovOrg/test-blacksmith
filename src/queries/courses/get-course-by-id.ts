@@ -7,7 +7,12 @@ import { COURSE, COURSE_SCHEDULE, ORGANIZATION, VENUE } from '../fragments'
 
 export type ResponseType = { course: Maybe<Course> }
 
-export type ParamsType = { id: string; withOrders?: boolean }
+// TODO: Scrap this and use GetCourseByIdQuery and GetCourseByIdQueryVariables
+export type ParamsType = {
+  id: string
+  withOrders?: boolean
+  withArloRefId: boolean
+}
 
 export const QUERY = gql`
   ${COURSE}
@@ -18,10 +23,13 @@ export const QUERY = gql`
     $id: Int!
     $withOrders: Boolean = false
     $withModules: Boolean = false
+    $withArloRefId: Boolean = false
   ) {
     course: course_by_pk(id: $id) {
       ...Course
       isDraft
+      # TODO: Delete this after Arlo migration
+      arloReferenceId @include(if: $withArloRefId)
       bildModules {
         id
         modules

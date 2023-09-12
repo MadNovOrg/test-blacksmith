@@ -236,6 +236,7 @@ export const useCourses = (
             offset: pagination.perPage * (pagination?.currentPage - 1),
           }
         : null),
+      withArloRefId: acl.isInternalUser(),
     },
   })
 

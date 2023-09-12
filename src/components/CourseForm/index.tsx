@@ -1126,8 +1126,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               <>
                 <TextField
                   sx={{ mt: theme.spacing(2) }}
-                  required
-                  label={'Course reference ID'}
+                  label={'Arlo reference'}
                   variant="filled"
                   {...register(`arloReferenceId`)}
                   fullWidth

@@ -12,8 +12,6 @@ export type ParamsType = {
 export const QUERY = gql`
   fragment TrainerCourse on course {
     id
-    # TODO: Delete this after Arlo migration
-    arloReferenceId
     name
     type
     level
@@ -81,6 +79,7 @@ export const QUERY = gql`
     $where: course_bool_exp = {}
     $offset: Int
     $limit: Int
+    $withArloRefId: Boolean = false
   ) {
     courses: course(
       where: $where
@@ -89,6 +88,8 @@ export const QUERY = gql`
       offset: $offset
     ) {
       ...TrainerCourse
+      # TODO: Delete this after Arlo migration
+      arloReferenceId @include(if: $withArloRefId)
     }
     course_aggregate(where: $where) {
       aggregate {

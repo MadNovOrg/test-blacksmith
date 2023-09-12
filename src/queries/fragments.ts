@@ -92,8 +92,6 @@ export const MODULE_GROUP = gql`
 
 export const COURSE = gql`
   fragment Course on course {
-    # TODO: Delete this after Arlo migration
-    arloReferenceId
     id
     createdAt
     updatedAt

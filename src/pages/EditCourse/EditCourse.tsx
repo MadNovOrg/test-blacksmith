@@ -306,6 +306,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           const editResponse = await updateCourse({
             courseId: course.id,
             courseInput: {
+              // TODO: Delete this after arlo migration
+              arloReferenceId: courseData.arloReferenceId || '',
               status,
               exceptionsPending:
                 status === Course_Status_Enum.ExceptionsApprovalPending,

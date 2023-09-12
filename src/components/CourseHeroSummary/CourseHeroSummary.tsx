@@ -148,7 +148,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             {acl.isInternalUser() && course.arloReferenceId ? (
               <>
                 <Typography variant="body2" color="secondary">
-                  Arlo ref:
+                  Arlo reference:
                 </Typography>
                 <Typography variant="body2" color="secondary">
                   {course.arloReferenceId}

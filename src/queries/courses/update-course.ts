@@ -3,6 +3,7 @@ import { gql } from 'graphql-request'
 import { Course_Source_Enum, Course_Status_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseLevel, CourseTrainerType } from '@app/types'
 
+// TODO: Scrap these custom types 🥲 and use UpdateCourseMutation and UpdateCourseMutation variables from graphql.ts
 export type ParamsType = {
   courseId: number
   scheduleId: string
@@ -26,6 +27,8 @@ export type ParamsType = {
     freeSpaces?: number
     special_instructions?: string
     parking_instructions?: string
+    // TODO: Delete this after arlo migration
+    arloReferenceId?: string
   }
   orderInput: {
     salesRepresentativeId: string
