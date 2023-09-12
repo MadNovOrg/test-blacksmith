@@ -1,0 +1,24 @@
+name: XERO-ARLO-INVOICE-SYNC
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Env you want to sync invoices on'
+        required: false
+        type: choice
+        options:
+          - STG
+          - PROD
+          - DEV
+  # schedule:
+  ## Not decided if we want it periodically yet
+  #   - cron: '0 0 * * *' ## run daily at 00:00
+
+jobs:
+  invoice-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync request
+        id: syncRequest
+        run: curl -X POST ${{ !github.event.inputs.environment && format('{0}/xero/invoices/sync', secrets.HASURA_ENDPOINT_DEV) || join(secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)], '/xero/invoices/sync')}}
