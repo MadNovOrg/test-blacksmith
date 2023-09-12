@@ -1,3 +1,4 @@
+import { LoadingButton } from '@mui/lab'
 import {
   Box,
   Button,
@@ -7,14 +8,23 @@ import {
   Radio,
   RadioGroup,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useMutation } from 'urql'
 
 import { Dialog } from '@app/components/dialogs'
+import { LinkBehavior } from '@app/components/LinkBehavior'
+import {
+  CancelMyselfFromCourseMutation,
+  CancelMyselfFromCourseMutationVariables,
+} from '@app/generated/graphql'
 import { CancelAttendanceForm } from '@app/pages/user-pages/CourseDetails/CancelAttendanceForm'
-import { Course } from '@app/types'
+import { CANCEL_MYSELF_FROM_COURSE_MUTATION } from '@app/queries/courses/cancel-myself-from-course'
+import { Course, CourseType } from '@app/types'
 
 import { ParticipantTransferInfo } from './ParticipantTransferInfo'
 
@@ -23,7 +33,7 @@ type ModifyAttendanceModalProps = {
   onClose: () => void
 }
 
-enum ACTION_TYPE {
+export enum ACTION_TYPE {
   CANCEL = 'CANCEL',
   TRANSFER = 'TRANSFER',
 }
@@ -33,9 +43,50 @@ export const ModifyAttendanceModal: React.FC<
 > = function ({ course, onClose }) {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+  const [courseAction, setCourseAction] = useState({
+    agreeCancellation: false,
+    agreeTransfer: false,
+  })
+
   const [selectedAction, setSelectedAction] = useState<ACTION_TYPE>(
     ACTION_TYPE.CANCEL
   )
+
+  const handleAgreeTerms = (actionType: ACTION_TYPE, isChecked: boolean) => {
+    if (actionType === ACTION_TYPE.CANCEL) {
+      setCourseAction(prev => ({
+        ...prev,
+        agreeCancellation: isChecked,
+        agreeTransfer: false,
+      }))
+    } else {
+      setCourseAction(prev => ({
+        ...prev,
+        agreeTransfer: isChecked,
+        agreeCancellation: false,
+      }))
+    }
+  }
+
+  const [{ data, fetching, error }, cancelMyselfFromCourse] = useMutation<
+    CancelMyselfFromCourseMutation,
+    CancelMyselfFromCourseMutationVariables
+  >(CANCEL_MYSELF_FROM_COURSE_MUTATION)
+
+  const onCancelCourseSubmit = async () => {
+    await cancelMyselfFromCourse({
+      courseId: course.id,
+    })
+  }
+
+  useEffect(() => {
+    if (data && !error) {
+      navigate('/courses')
+    }
+  }, [data, error, navigate])
 
   return (
     <Container>
@@ -90,20 +141,72 @@ export const ModifyAttendanceModal: React.FC<
           </FormControl>
         </Box>
 
-        {selectedAction === ACTION_TYPE.CANCEL ? (
-          <CancelAttendanceForm
-            course={course}
-            onClose={onClose}
-            onSubmit={() => navigate('/courses')}
-          />
-        ) : null}
-        {selectedAction === ACTION_TYPE.TRANSFER ? (
-          <ParticipantTransferInfo
-            startDate={new Date(course.schedule[0].start)}
-            onCancel={onClose}
-            courseLevel={course.level}
-          />
-        ) : null}
+        <Box>
+          {selectedAction === ACTION_TYPE.CANCEL ? (
+            <CancelAttendanceForm
+              course={course}
+              onAgreeTerms={handleAgreeTerms}
+              cancellationError={error?.message}
+            />
+          ) : null}
+          {selectedAction === ACTION_TYPE.TRANSFER ? (
+            <ParticipantTransferInfo
+              startDate={new Date(course.schedule[0].start)}
+              courseLevel={course.level}
+              onAgreeTerms={handleAgreeTerms}
+            />
+          ) : null}
+        </Box>
+
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          mt={4}
+          flexDirection={isMobile ? 'column' : 'row'}
+        >
+          <Button
+            type="button"
+            variant="text"
+            color="primary"
+            fullWidth={isMobile}
+            onClick={onClose}
+          >
+            {t('pages.edit-course.cancellation-modal.close-modal')}
+          </Button>
+
+          {selectedAction === ACTION_TYPE.CANCEL && (
+            <LoadingButton
+              loading={fetching}
+              disabled={
+                course.type === CourseType.OPEN &&
+                !courseAction.agreeCancellation
+              }
+              onClick={onCancelCourseSubmit}
+              type="button"
+              variant="contained"
+              color="primary"
+              sx={{ ml: 1 }}
+              fullWidth={isMobile}
+            >
+              {t('pages.edit-course.cancellation-modal.cancel-entire-course')}
+            </LoadingButton>
+          )}
+
+          {selectedAction === ACTION_TYPE.TRANSFER && (
+            <Button
+              disabled={!courseAction.agreeTransfer}
+              variant="contained"
+              component={LinkBehavior}
+              fullWidth={isMobile}
+              href="../transfer"
+            >
+              {t(
+                'pages.course-details.modify-my-attendance.transfer-info.transfer-btn-text'
+              )}
+            </Button>
+          )}
+        </Box>
+
         {!selectedAction ? (
           <Box display="flex" mt={4}>
             <Button

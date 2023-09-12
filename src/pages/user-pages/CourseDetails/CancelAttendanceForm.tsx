@@ -1,65 +1,34 @@
-import { LoadingButton } from '@mui/lab'
-import {
-  Alert,
-  Link,
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  useTheme,
-  useMediaQuery,
-} from '@mui/material'
+import { Alert, Link, Box, Checkbox, FormControlLabel } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 
-import {
-  CancelMyselfFromCourseMutation,
-  CancelMyselfFromCourseMutationVariables,
-} from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { CancellationTermsTable } from '@app/pages/EditCourse/components/CancellationTermsTable'
-import { CANCEL_MYSELF_FROM_COURSE_MUTATION } from '@app/queries/courses/cancel-myself-from-course'
-import { Course, CourseType } from '@app/types'
+import { Course } from '@app/types'
+
+import { ACTION_TYPE } from './ModifyAttendanceModal'
 
 type CancelAttendanceFormProps = {
   course: Course
-  onClose: () => void
-  onSubmit: () => void
+  cancellationError: string | undefined
+  onAgreeTerms: (actionType: ACTION_TYPE, state: boolean) => void
 }
 
 export const CancelAttendanceForm: React.FC<
   React.PropsWithChildren<CancelAttendanceFormProps>
-> = ({ course, onClose, onSubmit }) => {
+> = ({ course, onAgreeTerms, cancellationError }) => {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const startDate = course.schedule[0].start
 
-  const [confirmed, setConfirmed] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [agreeTerms, setAgreeTerms] = useState(false)
 
-  const onFormSubmit = async () => {
-    setLoading(true)
-
-    try {
-      await fetcher<
-        CancelMyselfFromCourseMutation,
-        CancelMyselfFromCourseMutationVariables
-      >(CANCEL_MYSELF_FROM_COURSE_MUTATION, {
-        courseId: course.id,
-      })
-      onSubmit()
-    } catch (e: unknown) {
-      setError((e as Error).message)
-    } finally {
-      setLoading(false)
-    }
+  const onAgreeTermsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = event.target.checked
+    setAgreeTerms(isChecked)
+    onAgreeTerms(ACTION_TYPE.CANCEL, isChecked)
   }
 
   return (
-    <Box>
+    <Box width={750} height={350}>
       <Alert severity="warning" variant="outlined" sx={{ mt: 4 }}>
         <Trans
           i18nKey="pages.course-details.request-cancellation-modal.warning"
@@ -87,43 +56,14 @@ export const CancelAttendanceForm: React.FC<
           label={t(
             'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation'
           )}
-          control={<Checkbox />}
-          checked={confirmed}
-          onChange={(_, v) => setConfirmed(v)}
+          control={
+            <Checkbox checked={agreeTerms} onChange={onAgreeTermsChange} />
+          }
           sx={{ userSelect: 'none' }}
         />
       </Box>
 
-      {error && <Alert severity="error">{error}</Alert>}
-
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        mt={4}
-        flexDirection={isMobile ? 'column' : 'row'}
-      >
-        <Button
-          type="button"
-          variant="text"
-          color="primary"
-          fullWidth={isMobile}
-          onClick={onClose}
-        >
-          {t('pages.edit-course.cancellation-modal.close-modal')}
-        </Button>
-        <LoadingButton
-          loading={loading}
-          disabled={course.type === CourseType.OPEN && !confirmed}
-          onClick={onFormSubmit}
-          type="button"
-          variant="contained"
-          color="primary"
-          sx={{ ml: 1 }}
-          fullWidth={isMobile}
-        >
-          {t('pages.edit-course.cancellation-modal.cancel-entire-course')}
-        </LoadingButton>
-      </Box>
+      {cancellationError && <Alert severity="error">{cancellationError}</Alert>}
     </Box>
   )
 }
