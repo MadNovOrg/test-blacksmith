@@ -10,8 +10,8 @@ import {
   Grid,
   Stack,
   Typography,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
@@ -23,13 +23,13 @@ import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
 import {
+  bildImage,
   CertificateAssistIcon,
   CertificateObserveIcon,
   CertificatePassIcon,
   cpdImage,
   icmImage,
   ntaImage,
-  bildImage,
 } from '@app/assets'
 import { CertificateDocument } from '@app/components/CertificatePDF'
 import ChangelogModal from '@app/components/CourseCertification/ChangelogModal'
@@ -50,8 +50,12 @@ import {
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { QUERY } from '@app/queries/certificate/get-certificate'
-import { Strategy } from '@app/types'
-import { CertificateStatus, CourseLevel, NonNullish } from '@app/types'
+import {
+  CertificateStatus,
+  CourseLevel,
+  NonNullish,
+  Strategy,
+} from '@app/types'
 import {
   getSWRLoadingStatus,
   LoadingStatus,
@@ -170,6 +174,7 @@ type Participant = Pick<
 
 type CertificateInfoProps = {
   courseParticipant?: Participant['participant']
+  courseName: string
   grade: Grade_Enum
   revokedDate: string
   expiryDate: string
@@ -185,6 +190,7 @@ const CertificateInfo: React.FC<
   React.PropsWithChildren<CertificateInfoProps>
 > = ({
   courseParticipant,
+  courseName,
   grade,
   revokedDate,
   expiryDate,
@@ -214,16 +220,14 @@ const CertificateInfo: React.FC<
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
-  if (!courseParticipant) {
-    return (
-      <Typography variant="body2">
-        {t('completed-modules-unavailable')}
-      </Typography>
-    )
-  }
-
   return (
     <Box mt={isMobile ? 8 : 0}>
+      {!courseParticipant && (
+        <Alert severity="warning" variant="outlined" sx={{ mb: 2 }}>
+          {t('completed-modules-unavailable')}
+        </Alert>
+      )}
+
       {isRevoked ? (
         <Alert
           severity="warning"
@@ -276,7 +280,7 @@ const CertificateInfo: React.FC<
       </Typography>
 
       <Typography variant="subtitle1" gutterBottom>
-        {courseParticipant.course?.name}
+        {courseName}
       </Typography>
 
       {grade !== Grade_Enum.Fail ? (
@@ -350,7 +354,7 @@ const CertificateInfo: React.FC<
           </Grid>
 
           <Box mt={8} gap={6} display="flex" mb={9} alignItems="center">
-            {courseParticipant.course.accreditedBy === Accreditors_Enum.Icm ? (
+            {courseParticipant?.course.accreditedBy === Accreditors_Enum.Icm ? (
               <MUIImage
                 duration={0}
                 src={icmImage}
@@ -359,7 +363,8 @@ const CertificateInfo: React.FC<
               />
             ) : null}
 
-            {courseParticipant.course.accreditedBy === Accreditors_Enum.Bild ? (
+            {courseParticipant?.course.accreditedBy ===
+            Accreditors_Enum.Bild ? (
               <MUIImage
                 duration={0}
                 src={bildImage}
@@ -407,7 +412,7 @@ const CertificateInfo: React.FC<
         </>
       ) : null}
 
-      {courseParticipant.bildGradingModules?.modules ? (
+      {courseParticipant?.bildGradingModules?.modules ? (
         <>
           <Typography variant="h3" gutterBottom>
             {t('modules-list-title')}
@@ -503,6 +508,7 @@ export const CourseCertification: React.FC<
   const certificate = data?.certificate
   const holdRequest = data?.certificateHoldRequest[0]
   const courseParticipant = certificate?.participant
+  const isLegacyCertificate = certificate && !certificate.participant
 
   const holdChangelogs = useMemo(() => {
     return (
@@ -528,7 +534,6 @@ export const CourseCertification: React.FC<
   if (
     !certificate ||
     !certificate.profile ||
-    !certificate.participant ||
     certificateLoadingStatus === LoadingStatus.ERROR
   ) {
     return (
@@ -558,7 +563,7 @@ export const CourseCertification: React.FC<
 
   const statusTooltip =
     isRevoked || isOnHold
-      ? certificate.participant.certificateChanges[0]?.payload?.note
+      ? certificate.participant?.certificateChanges[0]?.payload?.note
       : ''
 
   if (isRevoked && (acl.isUser() || acl.isTrainer())) {
@@ -627,7 +632,7 @@ export const CourseCertification: React.FC<
                   </PDFDownloadLink>
                 </Button>
               ) : null}
-              {acl.canManageCert() && (
+              {acl.canManageCert() && !isLegacyCertificate && (
                 <ManageCertificateMenu
                   isRevoked={isRevoked}
                   certificateChangeLength={
@@ -660,6 +665,7 @@ export const CourseCertification: React.FC<
             <CertificateInfo
               grade={grade as Grade_Enum}
               courseParticipant={courseParticipant}
+              courseName={certificate.courseName}
               revokedDate={certificate.updatedAt}
               expiryDate={certificate.expiryDate}
               certificationNumber={certificationNumber}
@@ -737,7 +743,7 @@ export const CourseCertification: React.FC<
         </>
       ) : null}
 
-      {showRevokeCertModal && (
+      {showRevokeCertModal && certificate.participant && (
         <Dialog
           open={showRevokeCertModal}
           onClose={() => setShowRevokeCertModal(false)}
@@ -758,7 +764,7 @@ export const CourseCertification: React.FC<
         </Dialog>
       )}
 
-      {showUndoRevokeModal && (
+      {showUndoRevokeModal && certificate.participant && (
         <Dialog
           open={showUndoRevokeModal}
           onClose={() => setShowUndoRevokeModal(false)}

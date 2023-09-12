@@ -455,7 +455,7 @@
     "update-certification": "Update certification",
     "add-certificate": "Add certificate",
     "certification-code-incorrect": "We could not locate this certificate, please contact Team Teach.",
-    "completed-modules-unavailable": "Information on completed modules is unavailable."
+    "completed-modules-unavailable": "This is a certificate imported from legacy system. Information on completed modules is unavailable."
   },
   "items": "items",
   "from": "From",
