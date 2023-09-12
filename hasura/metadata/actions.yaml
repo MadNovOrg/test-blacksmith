@@ -20,7 +20,7 @@ actions:
       handler: '{{ACTIONS_HOST}}/arlo/callback'
   - name: canApplyPromoCode
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/promocode/can-apply'
     permissions:
       - role: unverified
@@ -39,29 +39,29 @@ actions:
       - role: tt-ops
       - role: ld
       - role: user
+  - name: cancelIndividualFromCourseWaitlist
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/waitlist/cancel/individual'
+    permissions:
+      - role: sales-admin
+      - role: tt-admin
+      - role: tt-ops
+    comment: Removes another user from course waitlist
   - name: cancelMyselfFromCourse
     definition:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/participant/cancel/self'
     permissions:
       - role: user
-  - name: cancelIndividualFromCourseWaitlist
-    definition:
-      kind: synchronous
-      handler: '{{ACTIONS_HOST}}/waitlist/cancel/individual'
-    comment: Removes another user from course waitlist
-    permissions:
-      - role: sales-admin
-      - role: tt-admin
-      - role: tt-ops
   - name: cancelMyselfFromCourseWaitlist
     definition:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/waitlist/cancel/self'
-    comment: Removes current anonymous user from course waitlist
     permissions:
       - role: anonymous
       - role: user
+    comment: Removes current anonymous user from course waitlist
   - name: confirmCreditCardPayment
     definition:
       kind: synchronous
@@ -122,19 +122,19 @@ actions:
     comment: Delete users
   - name: eligibleTransferCourses
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/transfer/eligible-courses'
     permissions:
       - role: user
     comment: eligibleTransferCourses
   - name: fetchPlans
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/stripe/prices/list'
     comment: Fetches membership plans
   - name: getCoursePricing
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/course/price'
     permissions:
       - role: user
@@ -142,21 +142,21 @@ actions:
     comment: getCoursePricing
   - name: getInvite
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/invite/get'
       forward_client_headers: true
     permissions:
       - role: anonymous
   - name: getOrgInvite
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/organization/invite/get'
       forward_client_headers: true
     permissions:
       - role: anonymous
   - name: getXeroInvoicesForOrders
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/xero/invoices'
     permissions:
       - role: sales-admin
@@ -187,14 +187,14 @@ actions:
       - role: user
   - name: initAuth
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/user/auth'
       forward_client_headers: true
     permissions:
       - role: anonymous
   - name: isUserSubscribedToMembership
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/stripe/subscriptions/check'
     comment: Checks whether user is subscribed to membership
   - name: joinWaitlist
@@ -240,14 +240,14 @@ actions:
     comment: Creates a membership plan
   - name: podcast
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/podcasts/single'
     permissions:
       - role: user
     comment: Podcast
   - name: podcasts
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/podcasts'
     permissions:
       - role: user
@@ -279,7 +279,7 @@ actions:
       - role: anonymous
   - name: searchTrainers
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/trainers/search'
     permissions:
       - role: sales-admin
@@ -362,13 +362,13 @@ actions:
       - role: tt-admin
   - name: xeroConnect
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/xero/setup'
     permissions:
       - role: tt-admin
   - name: xeroContactSearch
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/xero/contacts/search'
     permissions:
       - role: booking-contact
@@ -386,14 +386,19 @@ actions:
       handler: '{{ACTIONS_HOST}}/xero/disconnect'
   - name: xeroInvoicesStatus
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/xero/invoices/status'
     permissions:
       - role: sales-admin
       - role: tt-admin
+  - name: xeroSync
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/xero/invoices/sync'
+    comment: Sync Xero Invoices with the hub invoices
   - name: zoomUsers
     definition:
-      kind: ''
+      kind: ""
       handler: '{{ACTIONS_HOST}}/zoom/get-users'
     permissions:
       - role: user
@@ -402,364 +407,366 @@ custom_types:
   enums:
     - name: BillingInterval
       values:
-        - value: day
+        - description: null
           is_deprecated: null
-          description: null
-        - value: week
+          value: day
+        - description: null
           is_deprecated: null
-          description: null
-        - value: month
+          value: week
+        - description: null
           is_deprecated: null
-          description: null
-        - value: year
+          value: month
+        - description: null
           is_deprecated: null
-          description: null
+          value: year
     - name: InviteStatus
       values:
-        - value: PENDING
+        - description: null
           is_deprecated: null
-          description: null
-        - value: ACCEPTED
+          value: PENDING
+        - description: null
           is_deprecated: null
-          description: null
-        - value: DECLINED
+          value: ACCEPTED
+        - description: null
           is_deprecated: null
-          description: null
+          value: DECLINED
     - name: CourseLevel
       values:
-        - value: LEVEL_1
+        - description: null
           is_deprecated: null
-          description: null
-        - value: LEVEL_2
+          value: LEVEL_1
+        - description: null
           is_deprecated: null
-          description: null
-        - value: ADVANCED
+          value: LEVEL_2
+        - description: null
           is_deprecated: null
-          description: null
-        - value: INTERMEDIATE_TRAINER
+          value: ADVANCED
+        - description: null
           is_deprecated: null
-          description: null
-        - value: ADVANCED_TRAINER
+          value: INTERMEDIATE_TRAINER
+        - description: null
           is_deprecated: null
-          description: null
-        - value: BILD_REGULAR
+          value: ADVANCED_TRAINER
+        - description: null
           is_deprecated: null
-          description: null
-        - value: BILD_INTERMEDIATE_TRAINER
+          value: BILD_REGULAR
+        - description: null
           is_deprecated: null
-          description: null
-        - value: BILD_ADVANCED_TRAINER
+          value: BILD_INTERMEDIATE_TRAINER
+        - description: null
           is_deprecated: null
-          description: null
+          value: BILD_ADVANCED_TRAINER
     - name: SearchTrainerAvailability
       values:
-        - value: UNAVAILABLE
+        - description: null
           is_deprecated: null
-          description: null
-        - value: AVAILABLE
+          value: UNAVAILABLE
+        - description: null
           is_deprecated: null
-          description: null
-        - value: PENDING
+          value: AVAILABLE
+        - description: null
           is_deprecated: null
-          description: null
-        - value: EXPIRED
+          value: PENDING
+        - description: null
           is_deprecated: null
-          description: null
+          value: EXPIRED
     - name: CourseTrainerType
       values:
-        - value: LEADER
+        - description: null
           is_deprecated: null
-          description: null
-        - value: ASSISTANT
+          value: LEADER
+        - description: null
           is_deprecated: null
-          description: null
-        - value: MODERATOR
+          value: ASSISTANT
+        - description: null
           is_deprecated: null
-          description: null
+          value: MODERATOR
     - name: Currency
       values:
-        - value: GBP
+        - description: null
           is_deprecated: null
-          description: null
+          value: GBP
     - name: OrderDirection
       values:
-        - value: ASC
+        - description: null
           is_deprecated: null
-          description: null
-        - value: DESC
+          value: ASC
+        - description: null
           is_deprecated: null
-          description: null
+          value: DESC
     - name: XeroContactStatus
       values:
-        - value: ACTIVE
+        - description: null
           is_deprecated: null
-          description: null
-        - value: ARCHIVED
+          value: ACTIVE
+        - description: null
           is_deprecated: null
-          description: null
-        - value: GDPRREQUEST
+          value: ARCHIVED
+        - description: null
           is_deprecated: null
-          description: null
+          value: GDPRREQUEST
     - name: CourseType
       values:
-        - value: OPEN
+        - description: null
           is_deprecated: null
-          description: null
-        - value: CLOSED
+          value: OPEN
+        - description: null
           is_deprecated: null
-          description: null
-        - value: INDIRECT
+          value: CLOSED
+        - description: null
           is_deprecated: null
-          description: null
+          value: INDIRECT
     - name: XeroInvoiceStatus
       values:
-        - value: AUTHORISED
+        - description: null
           is_deprecated: null
-          description: null
-        - value: DELETED
+          value: AUTHORISED
+        - description: null
           is_deprecated: null
-          description: null
-        - value: DRAFT
+          value: DELETED
+        - description: null
           is_deprecated: null
-          description: null
-        - value: OVERDUE
+          value: DRAFT
+        - description: null
           is_deprecated: null
-          description: null
-        - value: PAID
+          value: OVERDUE
+        - description: null
           is_deprecated: null
-          description: null
-        - value: SUBMITTED
+          value: PAID
+        - description: null
           is_deprecated: null
-          description: null
-        - value: UNKNOWN
+          value: SUBMITTED
+        - description: null
           is_deprecated: null
-          description: null
-        - value: VOIDED
+          value: UNKNOWN
+        - description: null
           is_deprecated: null
-          description: null
+          value: VOIDED
     - name: Go1ChangeType
       values:
-        - value: LICENSES_ADDED
+        - description: null
           is_deprecated: null
-          description: null
-        - value: LICENSES_REMOVED
+          value: LICENSES_ADDED
+        - description: null
           is_deprecated: null
-          description: null
-        - value: LICENSE_REVOKED
+          value: LICENSES_REMOVED
+        - description: null
           is_deprecated: null
-          description: null
-        - value: LICENSES_RELEASED
+          value: LICENSE_REVOKED
+        - description: null
           is_deprecated: null
-          description: null
-        - value: LICENSE_ISSUED
+          value: LICENSES_RELEASED
+        - description: null
           is_deprecated: null
-          description: null
-        - value: LICENSES_PURCHASED
+          value: LICENSE_ISSUED
+        - description: null
           is_deprecated: null
-          description: null
+          value: LICENSES_PURCHASED
     - name: PaymentMethod
       values:
-        - value: CC
+        - description: null
           is_deprecated: null
-          description: null
-        - value: INVOICE
+          value: CC
+        - description: null
           is_deprecated: null
-          description: null
+          value: INVOICE
     - name: ReplaceParticipantError
       values:
-        - value: NO_PARTICIPANT
+        - description: null
           is_deprecated: null
-          description: null
-        - value: INVALID_EMAIL
+          value: NO_PARTICIPANT
+        - description: null
           is_deprecated: null
-          description: null
-        - value: GENERIC_ERROR
+          value: INVALID_EMAIL
+        - description: null
           is_deprecated: null
-          description: null
-        - value: NOT_AUTHORIZED
+          value: GENERIC_ERROR
+        - description: null
           is_deprecated: null
-          description: null
+          value: NOT_AUTHORIZED
     - name: TransferFeeType
       values:
-        - value: APPLY_TERMS
+        - description: null
           is_deprecated: null
-          description: null
-        - value: CUSTOM_FEE
+          value: APPLY_TERMS
+        - description: null
           is_deprecated: null
-          description: null
-        - value: FREE
+          value: CUSTOM_FEE
+        - description: null
           is_deprecated: null
-          description: null
+          value: FREE
     - name: TransferFeeTypeEnum
       values:
-        - value: APPLY_TERMS
+        - description: null
           is_deprecated: null
-          description: null
-        - value: CUSTOM_FEE
+          value: APPLY_TERMS
+        - description: null
           is_deprecated: null
-          description: null
-        - value: FREE
+          value: CUSTOM_FEE
+        - description: null
           is_deprecated: null
-          description: null
+          value: FREE
     - name: Go1ChangeError
       values:
-        - value: GENERIC_ERROR
+        - description: null
           is_deprecated: null
-          description: null
-        - value: INVOICE_NOT_AUTHORIZED
+          value: GENERIC_ERROR
+        - description: null
           is_deprecated: null
-          description: null
-        - value: INVOICE_PAID
+          value: INVOICE_NOT_AUTHORIZED
+        - description: null
           is_deprecated: null
-          description: null
+          value: INVOICE_PAID
     - name: ConfirmCreditCardPaymentError
       values:
-        - value: GENERIC_ERROR
+        - description: null
           is_deprecated: null
-          description: null
-        - value: PAYMENT_NOT_SUCCEEDED
+          value: GENERIC_ERROR
+        - description: null
           is_deprecated: null
-          description: null
-        - value: ORDER_NOT_FOUND
+          value: PAYMENT_NOT_SUCCEEDED
+        - description: null
           is_deprecated: null
-          description: null
+          value: ORDER_NOT_FOUND
     - name: XeroPhoneType
       values:
-        - value: DEFAULT
+        - description: null
           is_deprecated: null
-          description: null
-        - value: DDI
+          value: DEFAULT
+        - description: null
           is_deprecated: null
-          description: null
-        - value: FAX
+          value: DDI
+        - description: null
           is_deprecated: null
-          description: null
-        - value: MOBILE
+          value: FAX
+        - description: null
           is_deprecated: null
-          description: null
+          value: MOBILE
     - name: XeroAddressType
       values:
-        - value: POBOX
+        - description: null
           is_deprecated: null
-          description: null
-        - value: STREET
+          value: POBOX
+        - description: null
           is_deprecated: null
-          description: null
+          value: STREET
     - name: TransferParticipantError
       values:
-        - value: GENERAL_ERROR
+        - description: null
           is_deprecated: null
-          description: null
-        - value: WRONG_COURSE_TYPE
+          value: GENERAL_ERROR
+        - description: null
           is_deprecated: null
-          description: null
-        - value: PARTICIPANT_NOT_FOUND
+          value: WRONG_COURSE_TYPE
+        - description: null
           is_deprecated: null
-          description: null
-        - value: COURSE_NOT_FOUND
+          value: PARTICIPANT_NOT_FOUND
+        - description: null
           is_deprecated: null
-          description: null
-        - value: NOT_ELIGIBLE_FOR_TRANSFER
+          value: COURSE_NOT_FOUND
+        - description: null
           is_deprecated: null
-          description: null
-        - value: TRANSFER_NOT_ALLOWED
+          value: NOT_ELIGIBLE_FOR_TRANSFER
+        - description: null
           is_deprecated: null
-          description: null
-        - value: NOT_ENOUGH_SPACES
+          value: TRANSFER_NOT_ALLOWED
+        - description: null
           is_deprecated: null
-          description: null
+          value: NOT_ENOUGH_SPACES
     - name: CourseDeliveryType
       values:
-        - value: F2F
+        - description: null
           is_deprecated: null
-          description: null
-        - value: MIXED
+          value: F2F
+        - description: null
           is_deprecated: null
-          description: null
-        - value: VIRTUAL
+          value: MIXED
+        - description: null
           is_deprecated: null
-          description: null
+          value: VIRTUAL
     - name: MergeUserError
       values:
-        - value: GENERAL_ERROR
+        - description: null
           is_deprecated: null
-          description: null
+          value: GENERAL_ERROR
     - name: DeleteUserError
       values:
-        - value: GENERAL_ERROR
+        - description: null
           is_deprecated: null
-          description: null
-        - value: CERT_EXIST
+          value: GENERAL_ERROR
+        - description: null
           is_deprecated: null
-          description: null
-        - value: SELF_DELETE
+          value: CERT_EXIST
+        - description: null
           is_deprecated: null
-          description: null
-        - value: USER_TRAINER
+          value: SELF_DELETE
+        - description: null
           is_deprecated: null
-          description: null
-        - value: PENDING_COURSE
+          value: USER_TRAINER
+        - description: null
           is_deprecated: null
-          description: null
+          value: PENDING_COURSE
     - name: SendCourseInformationError
       values:
-        - value: COURSE_NOT_FOUND
+        - description: null
           is_deprecated: null
-          description: null
-        - value: ATTENDEE_NOT_FOUND
+          value: COURSE_NOT_FOUND
+        - description: null
           is_deprecated: null
-          description: null
-        - value: ATTENDEE_LIST_IS_EMPTY
+          value: ATTENDEE_NOT_FOUND
+        - description: null
           is_deprecated: null
-          description: null
-    - name: BildStrategy
-      values:
-        - value: PRIMARY
-          is_deprecated: null
-          description: null
-        - value: SECONDARY
-          is_deprecated: null
-          description: null
-        - value: NON_RESTRICTIVE_TERTIARY
-          is_deprecated: null
-          description: null
-        - value: RESTRICTIVE_TERTIARY_INTERMEDIATE
-          is_deprecated: null
-          description: null
-        - value: RESTRICTIVE_TERTIARY_ADVANCED
-          is_deprecated: null
-          description: null
-    - name: CourseApprovalError
-      values:
-        - value: COURSE_NOT_FOUND
-          is_deprecated: null
-          description: null
-        - value: TRAINER_NOT_FOUND
-          is_deprecated: null
-          description: null
-        - value: INVALID_COURSE_ID
-          is_deprecated: null
-          description: null
-        - value: INVALID_STATUS
-          is_deprecated: null
-          description: null
-        - value: NO_AUDIT_FOUND
-          is_deprecated: null
-          description: null
-    - name: CancelIndividualFromCourseWaitlistError
-      values:
-        - value: COURSE_NOT_FOUND
-          is_deprecated: null
-          description: null
-        - value: WAITLIST_NOT_FOUND
+          value: ATTENDEE_LIST_IS_EMPTY
     - name: CancelMyselfFromCourseWaitlistError
       values:
-        - value: COURSE_NOT_FOUND
+        - description: null
           is_deprecated: null
-          description: null
-        - value: CANCELLATION_SECRET_INVALID
+          value: COURSE_NOT_FOUND
+        - description: null
           is_deprecated: null
-          description: null
+          value: CANCELLATION_SECRET_INVALID
+    - name: CancelIndividualFromCourseWaitlistError
+      values:
+        - description: null
+          is_deprecated: null
+          value: COURSE_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: WAITLIST_NOT_FOUND
+    - name: BildStrategy
+      values:
+        - description: null
+          is_deprecated: null
+          value: PRIMARY
+        - description: null
+          is_deprecated: null
+          value: SECONDARY
+        - description: null
+          is_deprecated: null
+          value: NON_RESTRICTIVE_TERTIARY
+        - description: null
+          is_deprecated: null
+          value: RESTRICTIVE_TERTIARY_INTERMEDIATE
+        - description: null
+          is_deprecated: null
+          value: RESTRICTIVE_TERTIARY_ADVANCED
+    - name: CourseApprovalError
+      values:
+        - description: null
+          is_deprecated: null
+          value: COURSE_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: TRAINER_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: INVALID_COURSE_ID
+        - description: null
+          is_deprecated: null
+          value: INVALID_STATUS
+        - description: null
+          is_deprecated: null
+          value: NO_AUDIT_FOUND
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -786,10 +793,9 @@ custom_types:
     - name: NotifyCourseInput
     - name: NotifyCourseTrainerInput
     - name: JoinWaitlistInput
-    - name: CancelIndividualFromCourseWaitlistInput
-    - name: CancelMyselfFromCourseWaitlistInput
     - name: SignUpInput
     - name: ArloCallbackInput
+    - name: CancelIndividualFromCourseWaitlistInput
     - name: CancelMyselfFromCourseWaitlistInput
     - name: RejectCourseInput
     - name: ApproveCourseInput
@@ -852,16 +858,17 @@ custom_types:
     - name: NotifyCourseEditOutput
     - name: ApproveCourseOutput
     - name: SendCourseInformationOutput
-    - name: JoinWaitlistOutput
     - name: CancelIndividualFromCourseWaitlistOutput
     - name: CancelMyselfFromCourseWaitlistOutput
     - name: JoinWaitlistOutput
-    - name: SignUpOutput
-    - name: ArloCallbackOutput
     - name: ZoomUser
     - name: ZoomUsersResponse
     - name: ZoomUsersResponseData
     - name: DeleteMeetingOutput
+    - name: SignUpOutput
+    - name: ArloCallbackOutput
     - name: RejectCourseOutput
+    - name: ImportArloCertificatesOutput
+    - name: XeroInvoiceSyncOutput
   scalars:
     - name: Date

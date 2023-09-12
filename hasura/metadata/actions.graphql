@@ -295,6 +295,10 @@ type Query {
 }
 
 type Query {
+  xeroSync: XeroInvoiceSyncOutput
+}
+
+type Query {
   zoomUsers: ZoomUsersResponse
 }
 
@@ -1124,6 +1128,10 @@ type RejectCourseOutput {
 type ImportArloCertificatesOutput {
   processed: Int!
   added: Int!
+}
+
+type XeroInvoiceSyncOutput {
+  message: String!
 }
 
 scalar Date
