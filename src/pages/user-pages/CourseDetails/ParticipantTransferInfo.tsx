@@ -21,7 +21,7 @@ export const ParticipantTransferInfo: React.FC<
   }>
 > = ({ startDate, onCancel, courseLevel }) => {
   const { t } = useScopedTranslation(
-    'pages.course-details.modify-my-attendance.transfer-info'
+    'pages.course-details.change-my-attendance.transfer-info'
   )
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -30,9 +30,8 @@ export const ParticipantTransferInfo: React.FC<
   return (
     <Box>
       <Alert severity="warning" variant="outlined" sx={{ mt: 4 }}>
-        {/* {t('alert-message')} */}
         <Trans
-          i18nKey="pages.course-details.modify-my-attendance.transfer-info.alert-message"
+          i18nKey="pages.course-details.change-my-attendance.transfer-info.alert-message"
           components={{
             termsOfBusinessLink: (
               <Link

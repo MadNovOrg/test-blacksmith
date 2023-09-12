@@ -315,6 +315,7 @@ export const CourseDetails = () => {
                             color="primary"
                             my={1}
                             onClick={() => setShowModifyAttendanceModal(true)}
+                            data-testid="change-my-attendance-btn"
                           >
                             {t('pages.participant-course.change-my-attendance')}
                           </Typography>

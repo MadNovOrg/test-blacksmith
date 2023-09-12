@@ -544,8 +544,8 @@
     "delete-request": "Delete request",
     "approve-cancellation": "Approve cancellation",
     "course-approval-message": "<strong><courseLink>{{ code }}</courseLink></strong> has been {{ action }}",
-    "modify-my-attendance": {
-      "title": "Modify my attendance",
+    "change-my-attendance": {
+      "title": "Change my attendance",
       "description": "Please select one of the following options.",
       "cancel-my-attendance": "Cancel Course",
       "transfer-to-another-course": "Transfer Course",

@@ -43,14 +43,17 @@ export const ModifyAttendanceModal: React.FC<
         open={true}
         onClose={onClose}
         title={
-          <Typography variant="h3">
-            {t('pages.course-details.modify-my-attendance.title')}
+          <Typography
+            variant="h3"
+            data-testid="change-my-attendance-modal-title"
+          >
+            {t('pages.course-details.change-my-attendance.title')}
           </Typography>
         }
         maxWidth={800}
       >
         <Typography variant="body1" color="grey.600" mt={1}>
-          {t('pages.course-details.modify-my-attendance.description')}
+          {t('pages.course-details.change-my-attendance.description')}
         </Typography>
 
         <Box
@@ -72,14 +75,14 @@ export const ModifyAttendanceModal: React.FC<
               <FormControlLabel
                 value={ACTION_TYPE.CANCEL}
                 label={t(
-                  'pages.course-details.modify-my-attendance.cancel-my-attendance'
+                  'pages.course-details.change-my-attendance.cancel-my-attendance'
                 )}
                 control={<Radio />}
               />
               <FormControlLabel
                 value={ACTION_TYPE.TRANSFER}
                 label={t(
-                  'pages.course-details.modify-my-attendance.transfer-to-another-course'
+                  'pages.course-details.change-my-attendance.transfer-to-another-course'
                 )}
                 control={<Radio />}
               />

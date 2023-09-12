@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import useSWR from 'swr'
 
-import { Course, CourseParticipant } from '@app/types'
+import { Course, CourseParticipant, CourseType } from '@app/types'
 
 import {
   chance,
@@ -56,6 +56,42 @@ function registerMocks(
 }
 
 describe('page: CourseDetails', () => {
+  it('correctly displays *Change my attendance* modal title', async () => {
+    const course = buildCourse.one({
+      overrides: {
+        type: CourseType.OPEN,
+        schedule: [
+          {
+            id: chance.guid(),
+            createdAt: new Date(chance.date({ year: 2025 })).toISOString(),
+            start: new Date(chance.date({ year: 2025 })).toISOString(),
+            end: new Date(chance.date({ year: 2025 })).toISOString(),
+            virtualLink: chance.url(),
+          },
+        ],
+      },
+    })
+    registerMocks(course)
+
+    const user = userEvent.setup()
+
+    render(
+      <Routes>
+        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/courses/${course.id}/details`] }
+    )
+
+    const changeMyAttendanceBtn = screen.getByTestId('change-my-attendance-btn')
+
+    await user.click(changeMyAttendanceBtn)
+
+    expect(
+      screen.getByTestId('change-my-attendance-modal-title')
+    ).toHaveTextContent('Change my attendance')
+  })
+
   it('displays course hero info', () => {
     const course = buildCourse()
     registerMocks(course)
