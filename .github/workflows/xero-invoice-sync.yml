@@ -20,6 +20,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Sync request
-        run: curl -X POST ${{ !inputs.environment && format('{0}/xero/invoices/sync', secrets.HASURA_ENDPOINT_DEV) || secrets[format('HASURA_ENDPOINT_{0}/xero/invoices/sync', inputs.environment)]}}
-      - name: Log Response
-        run: echo ${{ steps.xeroArloInvoiceSync.outputs.response }}
+        id: syncRequest
+        run: curl -X POST ${{ !github.event.inputs.environment && format('{0}/xero/invoices/sync', secrets.HASURA_ENDPOINT_DEV) || secrets[format('HASURA_ENDPOINT_{0}/xero/invoices/sync', github.event.inputs.environment)]}}
