@@ -21,8 +21,6 @@ jobs:
     steps:
       - name: Sync request
         id: syncRequest
-        uses: fjogeleit/http-request-action@v1
-        with:
-          url: ${{ !github.event.inputs.environment && format('{0}/xero/invoices/sync', secrets.HASURA_ENDPOINT_DEV) || join(secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)], '/xero/invoices/sync')}}
-      - name: Log Response
-        run: echo ${{steps.syncRequest.outputs.response}}
+        run: echo "::set-output name=curl_response::$(curl -X POST ${{ !github.event.inputs.environment && format('{0}/xero/invoices/sync', secrets.HASURA_ENDPOINT_DEV) || join(secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)], '/xero/invoices/sync')}})"
+      - name: Log response
+        run: echo ${{steps.syncRequest.outputs.curl_response}}
