@@ -28,7 +28,7 @@ import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAle
 import { DetailsRow } from '@app/components/DetailsRow'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
-import { GetProfileDetailsQuery } from '@app/generated/graphql'
+import { GetProfileDetailsQuery, Grade_Enum } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 import { ProfileArchiveDialog } from '@app/pages/common/profile/components/ProfileArchiveDialog'
 import { RoleName } from '@app/types'
@@ -117,6 +117,10 @@ export const ViewProfilePage: React.FC<
     (acl.isTTAdmin() || acl.isTTOps()) // only TT Admins and TT Ops can delete
 
   const editProFilePath = orgId ? `./edit?orgId=${orgId}` : './edit'
+
+  const certificatesToShow = (certifications ?? []).filter(
+    c => !c.participant || c.participant.grade !== Grade_Enum.Fail
+  )
 
   return (
     <Box bgcolor="grey.100" pb={6} pt={3} flex={1}>
@@ -426,7 +430,7 @@ export const ViewProfilePage: React.FC<
               <CertificationsTable
                 verified={Boolean(verified)}
                 certifications={
-                  certifications as GetProfileDetailsQuery['certificates']
+                  certificatesToShow as GetProfileDetailsQuery['certificates']
                 }
               />
             ) : null}
