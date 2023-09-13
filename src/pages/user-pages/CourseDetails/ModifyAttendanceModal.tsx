@@ -201,7 +201,7 @@ export const ModifyAttendanceModal: React.FC<
               href="../transfer"
             >
               {t(
-                'pages.course-details.modify-my-attendance.transfer-info.transfer-btn-text'
+                'pages.course-details.change-my-attendance.transfer-info.transfer-btn-text'
               )}
             </Button>
           )}
