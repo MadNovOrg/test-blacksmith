@@ -687,6 +687,7 @@ export enum PromoCodeStatus {
 export enum AttendeeOnlyCourseStatus {
   InfoRequired = 'INFO_REQUIRED',
   NotAttended = 'NOT_ATTENDED',
+  AwaitingGrade = 'AWAITING_GRADE',
 }
 
 export enum AdminOnlyCourseStatus {

@@ -193,7 +193,7 @@ describe('user-pages/MyCourses - displaying statuses', () => {
 
     expect(
       within(screen.getByTestId(`course-row-${course.id}`)).getByText(
-        'Missing grade'
+        'Awaiting grade'
       )
     ).toBeInTheDocument()
   })

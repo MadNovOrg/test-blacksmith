@@ -54,8 +54,8 @@ export function Filters({ onChange }: Props) {
         selected: false,
       },
       {
-        id: Course_Status_Enum.GradeMissing,
-        title: t(`course-statuses.${Course_Status_Enum.GradeMissing}`),
+        id: AttendeeOnlyCourseStatus.AwaitingGrade,
+        title: t(`course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`),
         selected: false,
       },
       {

@@ -26,7 +26,6 @@ export type UserCourseStatus =
   | Course_Status_Enum.EvaluationMissing
   | Course_Status_Enum.Scheduled
   | Course_Status_Enum.Completed
-  | Course_Status_Enum.GradeMissing
 
 export type CoursesFilters = {
   keyword?: string
@@ -85,6 +84,7 @@ export function useUserCourses(
               id: { _in: unevaluatedIds },
               participants: {
                 healthSafetyConsent: { _eq: true },
+                grade: { _is_null: false },
               },
               schedule: {
                 end: { _lt: dateRef.current },
@@ -115,11 +115,14 @@ export function useUserCourses(
             },
           ],
         },
-        [Course_Status_Enum.GradeMissing]: {
+        [AttendeeOnlyCourseStatus.AwaitingGrade]: {
           _or: [
             {
               participants: {
                 grade: { _is_null: true },
+              },
+              schedule: {
+                end: { _lt: dateRef.current },
               },
             },
           ],
@@ -189,10 +192,10 @@ export function useUserCourses(
       )
     }
 
-    if (filters?.statuses?.includes(Course_Status_Enum.GradeMissing)) {
+    if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.AwaitingGrade)) {
       filterConditions = deepmerge(
         filterConditions,
-        courseStatusConditionsMap.GRADE_MISSING
+        courseStatusConditionsMap.AWAITING_GRADE
       )
     }
 

@@ -395,7 +395,7 @@ describe('user-pages/MyCourses', () => {
 
     await userEvent.click(
       within(screen.getByTestId('FilterByCourseStatus')).getByText(
-        'Missing grade'
+        'Awaiting grade'
       )
     )
 

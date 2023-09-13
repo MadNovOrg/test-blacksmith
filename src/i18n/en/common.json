@@ -255,6 +255,7 @@
     "TRAINER_DECLINED": "Trainer declined",
     "INFO_REQUIRED": "Info required",
     "NOT_ATTENDED": "Unattended",
+    "AWAITING_GRADE": "Awaiting grade",
     "CANCELLATION_REQUESTED": "Cancellation requested",
     "TRAINER_MISSING": "Trainer missing",
     "VENUE_MISSING": "Venue missing"

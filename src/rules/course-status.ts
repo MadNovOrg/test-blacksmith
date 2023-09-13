@@ -28,16 +28,16 @@ export function getAttendeeCourseStatus({
     return AttendeeOnlyCourseStatus.InfoRequired
   }
 
-  if (courseEnded && !attended) {
-    return AttendeeOnlyCourseStatus.NotAttended
+  if (courseEnded && !graded) {
+    return AttendeeOnlyCourseStatus.AwaitingGrade
   }
 
   if (courseEnded && !evaluated) {
     return Course_Status_Enum.EvaluationMissing
   }
 
-  if (courseEnded && evaluated && !graded) {
-    return Course_Status_Enum.GradeMissing
+  if (courseEnded && !attended) {
+    return AttendeeOnlyCourseStatus.NotAttended
   }
 
   if (courseEnded && graded) {

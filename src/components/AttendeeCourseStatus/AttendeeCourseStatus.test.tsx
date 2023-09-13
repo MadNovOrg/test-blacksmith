@@ -16,7 +16,9 @@ it('shows cancelled status if course was cancelled', () => {
 
 it("shows not attended if a participant didn't attend the course", () => {
   const course = buildAttendeeCourse({
-    participants: [{ attended: false, healthSafetyConsent: true }],
+    participants: [
+      { attended: false, healthSafetyConsent: true, grade: Grade_Enum.Fail },
+    ],
     schedule: [
       {
         id: chance.guid(),
@@ -50,7 +52,9 @@ it("shows info required if a participant didn't fill health and safety form", ()
 
 it("shows evaluation missing if course has ended and a participant didn't evaluate the course", () => {
   const course = buildAttendeeCourse({
-    participants: [{ attended: true, healthSafetyConsent: true }],
+    participants: [
+      { attended: true, healthSafetyConsent: true, grade: Grade_Enum.Pass },
+    ],
     evaluation_answers_aggregate: {
       aggregate: {
         count: 0,
@@ -89,7 +93,7 @@ it("shows grade missing if course has ended and participant has provided evaluat
 
   render(<AttendeeCourseStatus course={course} />)
 
-  expect(screen.getByText(/missing grade/i)).toBeInTheDocument()
+  expect(screen.getByText(/awaiting grade/i)).toBeInTheDocument()
 })
 
 it('shows completed if course has ended, participant evaluation the course and has been graded', () => {
