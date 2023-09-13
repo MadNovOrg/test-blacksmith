@@ -93,7 +93,11 @@ export const InviteUserToOrganisation: React.FC<
       onClose()
     } catch (e: unknown) {
       const errorMessage = (e as Error).message
-      setError(errorMessage)
+      setError(
+        errorMessage.includes('organization_invites_org_id_email_key')
+          ? t('pages.invite-to-org.duplicate-email')
+          : errorMessage
+      )
     } finally {
       setLoading(false)
     }
