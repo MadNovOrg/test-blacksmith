@@ -141,7 +141,7 @@ export const AttendingTab = ({
         isBlendedCourse
           ? {
               id: 'bl-progress',
-              label: 'Blended Learning Progress',
+              label: t('bl-progress'),
               sorting: true,
             }
           : null,
@@ -292,12 +292,13 @@ export const AttendingTab = ({
                           )}
                         </TableCell>
                       )}
-                      {isBlendedCourse &&
-                      courseParticipant.go1EnrolmentProgress !== null ? (
+                      {isBlendedCourse && (
                         <TableCell>
-                          {`${courseParticipant.go1EnrolmentProgress}%`}
+                          {courseParticipant.go1EnrolmentProgress !== null
+                            ? `${courseParticipant.go1EnrolmentProgress}%`
+                            : null}
                         </TableCell>
-                      ) : null}
+                      )}
                       <TableCell>
                         {courseParticipant.healthSafetyConsent
                           ? t('common.yes')

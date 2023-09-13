@@ -170,6 +170,7 @@
   "course-status": "Course Status",
   "training-level": "Training Level",
   "bl-status": "Blended Learning Status",
+  "bl-progress": "Blended Learning Progress",
   "blended-learning": "Blended learning",
   "my-courses": "My Courses",
   "x-items_one": "{{count}} item",
