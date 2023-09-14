@@ -1,22 +1,22 @@
 table:
-  schema: public
   name: organization_member
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
+    created_at:
+      custom_name: createdAt
+    is_admin:
+      custom_name: isAdmin
     member_type:
       custom_name: memberType
     updated_at:
       custom_name: updatedAt
-    is_admin:
-      custom_name: isAdmin
-    created_at:
-      custom_name: createdAt
   custom_column_names:
+    created_at: createdAt
+    is_admin: isAdmin
     member_type: memberType
     updated_at: updatedAt
-    is_admin: isAdmin
-    created_at: createdAt
+  custom_root_fields: {}
 object_relationships:
   - name: organization
     using:
@@ -31,14 +31,12 @@ insert_permissions:
       columns:
         - organization_id
         - profile_id
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
       columns:
         - organization_id
         - profile_id
-      backend_only: false
 select_permissions:
   - role: finance
     permission:
@@ -81,6 +79,19 @@ select_permissions:
         - profile_id
       filter: {}
       allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - is_admin
+        - member_type
+        - _source
+        - position
+        - created_at
+        - updated_at
+        - id
+        - organization_id
+        - profile_id
+      filter: {}
   - role: tt-admin
     permission:
       columns:
