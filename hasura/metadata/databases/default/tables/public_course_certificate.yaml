@@ -149,22 +149,25 @@ select_permissions:
       computed_fields:
         - status
       filter:
-        _or:
-          - profile_id:
-              _eq: X-Hasura-User-Id
-          - course:
-              trainers:
-                profile_id:
+        _and:
+          - _or:
+              - profile_id:
                   _eq: X-Hasura-User-Id
-          - profile:
-              organizations:
-                organization:
-                  members:
-                    _and:
-                      - profile_id:
-                          _eq: X-Hasura-User-Id
-                      - is_admin:
-                          _eq: true
+              - course:
+                  trainers:
+                    profile_id:
+                      _eq: X-Hasura-User-Id
+              - profile:
+                  organizations:
+                    organization:
+                      members:
+                        _and:
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+                          - is_admin:
+                              _eq: true
+          - is_revoked:
+              _eq: false
       allow_aggregations: true
   - role: tt-admin
     permission:
@@ -219,8 +222,11 @@ select_permissions:
       computed_fields:
         - status
       filter:
-        profile_id:
-          _eq: X-Hasura-User-Id
+        _and:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - is_revoked:
+              _eq: false
   - role: user
     permission:
       columns:
@@ -238,18 +244,21 @@ select_permissions:
       computed_fields:
         - status
       filter:
-        _or:
-          - profile_id:
-              _eq: X-Hasura-User-Id
-          - profile:
-              organizations:
-                organization:
-                  members:
-                    _and:
-                      - profile_id:
-                          _eq: X-Hasura-User-Id
-                      - is_admin:
-                          _eq: true
+        _and:
+          - _or:
+              - profile_id:
+                  _eq: X-Hasura-User-Id
+              - profile:
+                  organizations:
+                    organization:
+                      members:
+                        _and:
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+                          - is_admin:
+                              _eq: true
+          - is_revoked:
+              _eq: false
       allow_aggregations: true
 update_permissions:
   - role: sales-admin

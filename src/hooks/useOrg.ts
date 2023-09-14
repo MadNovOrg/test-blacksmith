@@ -97,8 +97,12 @@ export default function useOrg(
   certificateFilter?: CertificateStatus[]
 ) {
   const whereProfileCertificates = certificateFilter?.length
-    ? { _and: [{ status: { _in: certificateFilter } }] }
-    : { status: { _neq: CertificateStatus.EXPIRED } }
+    ? {
+        _and: [
+          { status: { _in: certificateFilter }, isRevoked: { _eq: false } },
+        ],
+      }
+    : { status: { _neq: CertificateStatus.EXPIRED }, isRevoked: { _eq: false } }
 
   let conditions
   if (orgId !== ALL_ORGS) {

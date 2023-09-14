@@ -10,7 +10,10 @@ export const QUERY = gql`
   query GetOrgDetails(
     $where: organization_bool_exp = {}
     $whereProfileCertificates: course_certificate_bool_exp = {}
-    $certificates: course_certificate_bool_exp = { status: { _neq: "EXPIRED" } }
+    $certificates: course_certificate_bool_exp = {
+      status: { _neq: "EXPIRED" }
+      isRevoked: { _eq: false }
+    }
   ) {
     orgs: organization(where: $where) {
       ...Organization
