@@ -419,10 +419,10 @@
       "permanently-cancel-indirect-blended-course-second": "Please note, a full refund of licences purchased may not be returned based on the number of licences already redeemed. Team Teach will review and confirm back regarding any fees applicable to your course cancellation, any due credit relating to licences is at the discretion of Team Teach.",
       "finance-invoice-changes": "Finance will make changes on the invoice(s), where necessary. ",
       "attendees-will-not-incur-cancellation-charges": "Registered attendees will not incur cancellation charges. ",
-      "will-any-fees-apply": "Will any fees apply?",
-      "apply-cancellation-terms": "Apply cancellation terms",
+      "cancellation-fees-apply": "Cancellation fees",
+      "apply-cancellation-terms": "Apply cancellation fee",
       "custom-fee": "Custom fee",
-      "no-fees": "No fees",
+      "no-fees": "No fee",
       "reason-for-cancellation": "Reason for cancellation",
       "reasons": {
         "booking-amendments-made-by-venue": "Booking amendments made by venue",
@@ -1469,9 +1469,9 @@
     }
   },
   "individual-cancellation": {
-    "title": "Remove {{ name }} from {{ course }}?",
-    "description": "This action will immediately remove this attendee from this course. This will notify the attendee and organisation (if applicable). Finance will make changes on the invoice(s), where necessary.",
-    "remove-attendee": "Remove attendee"
+    "title": "Cancel {{ name }} from {{ course }}?",
+    "description": "This action will notify the attendee and booking contact (if applicable) and Finance will update the invoice for this booking where necessary.",
+    "remove-attendee": "Cancel attendee"
   },
   "audits": {
     "title": "Cancellations, Transfers & Replacements",

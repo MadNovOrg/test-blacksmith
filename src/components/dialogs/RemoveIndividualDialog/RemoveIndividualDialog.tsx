@@ -159,7 +159,11 @@ export const RemoveIndividualDialog = ({
         open={true}
         onClose={onClose}
         title={
-          <Typography variant="h3" fontWeight={600}>
+          <Typography
+            variant="h3"
+            fontWeight={600}
+            data-testid="remove-individual-dialog-title"
+          >
             {t('pages.individual-cancellation.title', {
               name: participant.profile.fullName,
               course: course.course_code,
@@ -187,7 +191,9 @@ export const RemoveIndividualDialog = ({
           {acl.isTTAdmin() ? (
             <>
               <Typography variant="h4" fontWeight={600} mt={4}>
-                {t('pages.edit-course.cancellation-modal.will-any-fees-apply')}
+                {t(
+                  'pages.edit-course.cancellation-modal.cancellation-fees-apply'
+                )}
               </Typography>
               <RadioGroup
                 onChange={(event, v: string) => setFeeType(v as FeesRadioValue)}

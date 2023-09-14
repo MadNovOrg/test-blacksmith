@@ -214,7 +214,7 @@ export const CourseCancellationModal: React.FC<
       {course.type === CourseType.CLOSED ? (
         <>
           <Typography variant="h4" fontWeight={600} mt={4}>
-            {t('pages.edit-course.cancellation-modal.will-any-fees-apply')}
+            {t('pages.edit-course.cancellation-modal.cancellation-fees-apply')}
           </Typography>
 
           <RadioGroup
