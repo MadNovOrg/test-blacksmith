@@ -307,7 +307,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             courseId: course.id,
             courseInput: {
               // TODO: Delete this after arlo migration
-              arloReferenceId: courseData.arloReferenceId || '',
+              ...(acl.isInternalUser()
+                ? { arloReferenceId: courseData.arloReferenceId || '' }
+                : null),
               status,
               exceptionsPending:
                 status === Course_Status_Enum.ExceptionsApprovalPending,
