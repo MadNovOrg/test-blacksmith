@@ -23,7 +23,7 @@ jobs:
         run: echo Selected value is ---- ${{github.event.inputs.environment}}
       - name: Sync request
         env:
-          action_url: ${{ !github.event.inputs.environment && secrets.HASURA_ENDPOINT_DEV || join(secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)])}}
+          action_url: ${{ !github.event.inputs.environment && format('{0}/v1/graphql', secrets.HASURA_ENDPOINT_DEV) || join(secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)], '/v1/graphql')}}
           HASURA_ADMIN_SECRET: ${{ !github.event.inputs.environment && secrets.HASURA_ADMIN_PASS_DEV || secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment)] }}
         id: syncRequest
         run: |
