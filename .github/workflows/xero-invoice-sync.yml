@@ -1,4 +1,4 @@
-name: XERO-ARLO-INVOICE-SYNC
+name: XERO-HUB-INVOICE-SYNC
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ on:
   #   - cron: '0 0 * * *' ## run daily at 00:00
 
 env:
-  action_url: curl -X POST ${{ !github.event.inputs.environment && format('{0}/xero/invoices/sync', secrets.HASURA_ENDPOINT_DEV) || join(secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)], '/xero/invoices/sync')}}
+  action_url: ${{ !github.event.inputs.environment && format('{0}/xero/invoices/sync', secrets.HASURA_ENDPOINT_DEV) || join(secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)], '/xero/invoices/sync')}}
 
 jobs:
   invoice-sync:
@@ -24,8 +24,10 @@ jobs:
     steps:
       - name: Log selected Environment
         run: echo Selected value is ---- ${{github.event.inputs.environment}}
-      - name: Sync request
+      - name: Sync Request
         id: syncRequest
-        run: |
-          curl_response=$(${{env.action_url}}) >> $GITHUB_OUTPUT
-          echo $curl_response
+        uses: fjogeleit/http-request-action@master
+        with:
+          url: ${{env.action_url}}
+      - name: Log Response
+        run: echo "${{steps.syncRequest.outputs.response}}"
