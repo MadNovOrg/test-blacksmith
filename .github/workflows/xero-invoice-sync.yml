@@ -26,7 +26,6 @@ jobs:
         run: echo Selected value is ---- ${{github.event.inputs.environment}}
       - name: Sync request
         id: syncRequest
-        run: echo curl_response=$(${{env.action_url}}) >> $GITHUB_OUTPUT
-      - name: Log response
-        if: steps.syncRequest.outputs.curl_response
-        run: echo ${{steps.syncRequest.outputs.curl_response}}
+        run: |
+          curl_response=$(${{env.action_url}}) >> $GITHUB_OUTPUT
+          echo $curl_response
