@@ -24,10 +24,9 @@ jobs:
     steps:
       - name: Log selected Environment
         run: echo Selected value is ---- ${{github.event.inputs.environment}}
-      - name: Log action URL
-        run: echo ${{env.action_url}} on ${{github.event.inputs.environment}}
       - name: Sync request
         id: syncRequest
         run: echo curl_response=$(${{env.action_url}}) >> $GITHUB_OUTPUT
       - name: Log response
-        run: echo ${{env.curl_response}}
+        if: steps.syncRequest.outputs.curl_response
+        run: echo ${{steps.syncRequest.outputs.curl_response}}
