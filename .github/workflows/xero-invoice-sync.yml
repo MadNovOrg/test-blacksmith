@@ -15,33 +15,23 @@ on:
   ## Not decided if we want it periodically yet
   #   - cron: '0 0 * * *' ## run daily at 00:00
 
-env:
-  action_url: curl -X POST ${{ !github.event.inputs.environment && format('{0}/xero/invoices/sync', secrets.HASURA_ENDPOINT_DEV) || join(secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)], '/xero/invoices/sync')}}
-
 jobs:
   invoice-sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up environment
-        id: set_env
-        run: |
-          case "${{github.event.inputs.environment}}" in 
-            DEV)
-              ACTION_URL="${{secrets.HASURA_ENDPOINT_DEV}}/xero/invoice/sync"
-              ;;
-            STG)
-              ACTION_URL="${{secrets.HASURA_ENDPOINT_STG}}/xero/invoice/sync"
-              ;;
-            PROD)
-              ACTION_URL="${{secrets.HASURA_ENDPOINT_PROD}}/xero/invoice/sync"
-              ;;
-            *)
-              ACTION_URL="${{secrets.HASURA_ENDPOINT_DEV}}/xero/invoice/sync"
-              ;;
-            esac
-            echo "action_url=$ACTION_URL" >> "$GITHUB_OUTPUT"
+      - name: Log selected Environment
+        run: echo Selected value is ---- ${{github.event.inputs.environment}}
       - name: Sync request
+        env:
+          action_url: ${{ !github.event.inputs.environment && secrets.HASURA_ENDPOINT_DEV || join(secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)])}}
+          HASURA_ADMIN_SECRET: ${{ !github.event.inputs.environment && secrets.HASURA_ADMIN_PASS_DEV || secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment)] }}
         id: syncRequest
         run: |
-          response=$(curl -X ${{env.action_url}})
-          echo "Request response is: $response"
+          response=$(curl -X POST \
+          -H "Content-Type: application/json" \
+          -H "x-hasura-admin-secret: $HASURA_ADMIN_SECRET" \
+          -d '{
+            "query": "query { xeroSync { message } }"
+          }' \
+          $action_url)
+          echo "$response"

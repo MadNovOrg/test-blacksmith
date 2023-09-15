@@ -1131,7 +1131,7 @@ type ImportArloCertificatesOutput {
 }
 
 type XeroInvoiceSyncOutput {
-  message: String!
+  message: String
 }
 
 scalar Date
