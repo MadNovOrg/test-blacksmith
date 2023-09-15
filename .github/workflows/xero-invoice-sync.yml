@@ -16,7 +16,7 @@ on:
   #   - cron: '0 0 * * *' ## run daily at 00:00
 
 env:
-  action_url: ${{ !github.event.inputs.environment && format('{0}/xero/invoices/sync', secrets.HASURA_ENDPOINT_DEV) || join(secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)], '/xero/invoices/sync')}}
+  action_url: curl -X POST ${{ !github.event.inputs.environment && format('{0}/xero/invoices/sync', secrets.HASURA_ENDPOINT_DEV) || join(secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)], '/xero/invoices/sync')}}
 
 jobs:
   invoice-sync:
@@ -24,10 +24,8 @@ jobs:
     steps:
       - name: Log selected Environment
         run: echo Selected value is ---- ${{github.event.inputs.environment}}
-      - name: Sync Request
+      - name: Sync request
         id: syncRequest
-        uses: fjogeleit/http-request-action@master
-        with:
-          url: ${{env.action_url}}
-      - name: Log Response
-        run: echo "${{steps.syncRequest.outputs.response}}"
+        run: |
+          response=$(${{env.action_url}})
+          echo "Request response is: $response"
