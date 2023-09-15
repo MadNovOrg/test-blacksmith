@@ -136,12 +136,12 @@ select_permissions:
       columns:
         - id
         - avatar
+        - archived
       computed_fields:
         - email
         - familyName
         - fullName
         - givenName
-        - archived
       filter: {}
   - role: finance
     permission:
