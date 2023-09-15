@@ -14,24 +14,26 @@ on:
   # schedule:
   ## Not decided if we want it periodically yet
   #   - cron: '0 0 * * *' ## run daily at 00:00
-
+env:
+  DEFAULT_ENV: 'DEV'
 jobs:
   invoice-sync:
     runs-on: ubuntu-latest
     steps:
       - name: Log selected Environment
         run: echo Selected value is ---- ${{github.event.inputs.environment}}
+      - name: Set hasura URL variable
+        run: echo "HASURA_URL=${{ secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
+      - name: Set Hasura secret
+        run: echo "HASURA_SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
       - name: Sync request
-        env:
-          action_url: ${{ !github.event.inputs.environment && format('{0}/v1/graphql', secrets.HASURA_ENDPOINT_DEV) || join(secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)], '/v1/graphql')}}
-          HASURA_ADMIN_SECRET: ${{ !github.event.inputs.environment && secrets.HASURA_ADMIN_PASS_DEV || secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment)] }}
         id: syncRequest
         run: |
-          response=$(curl -X POST \
+          response=$(curl -s --location --request POST "${HASURA_URL}/v1/graphql" \
           -H "Content-Type: application/json" \
           -H "x-hasura-admin-secret: $HASURA_ADMIN_SECRET" \
           -d '{
             "query": "query { xeroSync { message } }"
           }' \
-          $action_url)
+          )
           echo "$response"
