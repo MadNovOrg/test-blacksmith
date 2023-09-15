@@ -36,6 +36,8 @@ export type Course = {
   bildModules?: Array<Course_Bild_Module>
   bookingContact?: Profile
   bookingContactProfileId?: string
+  organizationKeyContact?: Profile
+  organizationKeyContactProfileId?: string
   schedule: CourseSchedule[]
   trainers?: CourseTrainer[]
   gradingConfirmed: boolean
@@ -577,6 +579,14 @@ export type CourseInput = {
     lastName: string
     email: string
   } | null
+
+  organizationKeyContact: {
+    profileId?: string
+    firstName: string
+    lastName: string
+    email: string
+  } | null
+
   salesRepresentative: Profile | null
   courseLevel: CourseLevel | ''
   blendedLearning: boolean

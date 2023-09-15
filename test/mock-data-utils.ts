@@ -235,6 +235,7 @@ export const buildCourse = build<Course>({
     modulesAgg: { aggregate: { count: 0 } },
     moduleGroupIds: [],
     bookingContact: perBuild(() => buildProfile()),
+    organizationKeyContact: perBuild(() => buildProfile()),
     aolCostOfCourse: undefined,
     accountCode: getAccountCode(),
     freeSpaces: 0,

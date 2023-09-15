@@ -131,6 +131,18 @@ computed_fields:
         name: profile_phone
       session_argument: hasura_session
 select_permissions:
+  - role: trainer
+    permission:
+      columns:
+        - id
+        - avatar
+      computed_fields:
+        - email
+        - familyName
+        - fullName
+        - givenName
+        - archived
+      filter: {}
   - role: finance
     permission:
       columns:

@@ -15243,6 +15243,12 @@ export type CourseOrders_AggregateArgs = {
 
 
 /** columns and relationships of "course" */
+export type CourseOrganizationKeyContactInviteDataArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "course" */
 export type CourseParticipantsArgs = {
   distinct_on?: InputMaybe<Array<Course_Participant_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -15409,6 +15415,7 @@ export type Course_Aggregate_Order_By = {
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Course_Append_Input = {
   bookingContactInviteData?: InputMaybe<Scalars['jsonb']>;
+  organizationKeyContactInviteData?: InputMaybe<Scalars['jsonb']>;
 };
 
 /** columns and relationships of "course_audit" */
@@ -16560,6 +16567,9 @@ export type Course_Bool_Exp = {
   orders?: InputMaybe<Order_Bool_Exp>;
   orders_aggregate?: InputMaybe<Order_Aggregate_Bool_Exp>;
   organization?: InputMaybe<Organization_Bool_Exp>;
+  organizationKeyContact?: InputMaybe<Profile_Bool_Exp>;
+  organizationKeyContactInviteData?: InputMaybe<Jsonb_Comparison_Exp>;
+  organizationKeyContactProfileId?: InputMaybe<Uuid_Comparison_Exp>;
   organization_id?: InputMaybe<Uuid_Comparison_Exp>;
   parking_instructions?: InputMaybe<String_Comparison_Exp>;
   participants?: InputMaybe<Course_Participant_Bool_Exp>;
@@ -17925,16 +17935,19 @@ export enum Course_Constraint {
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Course_Delete_At_Path_Input = {
   bookingContactInviteData?: InputMaybe<Array<Scalars['String']>>;
+  organizationKeyContactInviteData?: InputMaybe<Array<Scalars['String']>>;
 };
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Course_Delete_Elem_Input = {
   bookingContactInviteData?: InputMaybe<Scalars['Int']>;
+  organizationKeyContactInviteData?: InputMaybe<Scalars['Int']>;
 };
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Course_Delete_Key_Input = {
   bookingContactInviteData?: InputMaybe<Scalars['String']>;
+  organizationKeyContactInviteData?: InputMaybe<Scalars['String']>;
 };
 
 /** columns and relationships of "course_delivery_type" */
@@ -20299,6 +20312,9 @@ export type Course_Insert_Input = {
   name?: InputMaybe<Scalars['String']>;
   orders?: InputMaybe<Order_Arr_Rel_Insert_Input>;
   organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
+  organizationKeyContact?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
+  organizationKeyContactInviteData?: InputMaybe<Scalars['jsonb']>;
+  organizationKeyContactProfileId?: InputMaybe<Scalars['uuid']>;
   organization_id?: InputMaybe<Scalars['uuid']>;
   parking_instructions?: InputMaybe<Scalars['String']>;
   participants?: InputMaybe<Course_Participant_Arr_Rel_Insert_Input>;
@@ -21046,6 +21062,7 @@ export type Course_Max_Fields = {
   min_participants?: Maybe<Scalars['Int']>;
   modulesDuration?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
+  organizationKeyContactProfileId?: Maybe<Scalars['uuid']>;
   organization_id?: Maybe<Scalars['uuid']>;
   parking_instructions?: Maybe<Scalars['String']>;
   price?: Maybe<Scalars['numeric']>;
@@ -21075,6 +21092,7 @@ export type Course_Max_Order_By = {
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
+  organizationKeyContactProfileId?: InputMaybe<Order_By>;
   organization_id?: InputMaybe<Order_By>;
   parking_instructions?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
@@ -21109,6 +21127,7 @@ export type Course_Min_Fields = {
   min_participants?: Maybe<Scalars['Int']>;
   modulesDuration?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
+  organizationKeyContactProfileId?: Maybe<Scalars['uuid']>;
   organization_id?: Maybe<Scalars['uuid']>;
   parking_instructions?: Maybe<Scalars['String']>;
   price?: Maybe<Scalars['numeric']>;
@@ -21138,6 +21157,7 @@ export type Course_Min_Order_By = {
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
+  organizationKeyContactProfileId?: InputMaybe<Order_By>;
   organization_id?: InputMaybe<Order_By>;
   parking_instructions?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
@@ -21584,6 +21604,9 @@ export type Course_Order_By = {
   name?: InputMaybe<Order_By>;
   orders_aggregate?: InputMaybe<Order_Aggregate_Order_By>;
   organization?: InputMaybe<Organization_Order_By>;
+  organizationKeyContact?: InputMaybe<Profile_Order_By>;
+  organizationKeyContactInviteData?: InputMaybe<Order_By>;
+  organizationKeyContactProfileId?: InputMaybe<Order_By>;
   organization_id?: InputMaybe<Order_By>;
   parking_instructions?: InputMaybe<Order_By>;
   participants_aggregate?: InputMaybe<Course_Participant_Aggregate_Order_By>;
@@ -23579,6 +23602,7 @@ export type Course_Pk_Columns_Input = {
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Course_Prepend_Input = {
   bookingContactInviteData?: InputMaybe<Scalars['jsonb']>;
+  organizationKeyContactInviteData?: InputMaybe<Scalars['jsonb']>;
 };
 
 /** Prices per participant for various course variants */
@@ -24921,6 +24945,10 @@ export enum Course_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
+  OrganizationKeyContactInviteData = 'organizationKeyContactInviteData',
+  /** column name */
+  OrganizationKeyContactProfileId = 'organizationKeyContactProfileId',
+  /** column name */
   OrganizationId = 'organization_id',
   /** column name */
   ParkingInstructions = 'parking_instructions',
@@ -24974,6 +25002,8 @@ export type Course_Set_Input = {
   min_participants?: InputMaybe<Scalars['Int']>;
   modulesDuration?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
+  organizationKeyContactInviteData?: InputMaybe<Scalars['jsonb']>;
+  organizationKeyContactProfileId?: InputMaybe<Scalars['uuid']>;
   organization_id?: InputMaybe<Scalars['uuid']>;
   parking_instructions?: InputMaybe<Scalars['String']>;
   price?: InputMaybe<Scalars['numeric']>;
@@ -25397,6 +25427,8 @@ export type Course_Stream_Cursor_Value_Input = {
   min_participants?: InputMaybe<Scalars['Int']>;
   modulesDuration?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
+  organizationKeyContactInviteData?: InputMaybe<Scalars['jsonb']>;
+  organizationKeyContactProfileId?: InputMaybe<Scalars['uuid']>;
   organization_id?: InputMaybe<Scalars['uuid']>;
   parking_instructions?: InputMaybe<Scalars['String']>;
   price?: InputMaybe<Scalars['numeric']>;
@@ -26249,6 +26281,10 @@ export enum Course_Update_Column {
   ModulesDuration = 'modulesDuration',
   /** column name */
   Name = 'name',
+  /** column name */
+  OrganizationKeyContactInviteData = 'organizationKeyContactInviteData',
+  /** column name */
+  OrganizationKeyContactProfileId = 'organizationKeyContactProfileId',
   /** column name */
   OrganizationId = 'organization_id',
   /** column name */

@@ -17,6 +17,10 @@ configuration:
       custom_name: bookingContactInviteData
     booking_contact_profile_id:
       custom_name: bookingContactProfileId
+    organization_key_contact_invite_data:
+      custom_name: organizationKeyContactInviteData
+    organization_key_contact_profile_id:
+      custom_name: organizationKeyContactProfileId
     cancellation_fee_percent:
       custom_name: cancellationFeePercent
     cancellation_reason:
@@ -59,6 +63,8 @@ configuration:
     aol_region: aolRegion
     booking_contact_invite_data: bookingContactInviteData
     booking_contact_profile_id: bookingContactProfileId
+    organization_key_contact_invite_data: organizationKeyContactInviteData
+    organization_key_contact_profile_id: organizationKeyContactProfileId
     cancellation_fee_percent: cancellationFeePercent
     cancellation_reason: cancellationReason
     course_delivery_type: deliveryType
@@ -81,6 +87,9 @@ object_relationships:
   - name: bookingContact
     using:
       foreign_key_constraint_on: booking_contact_profile_id
+  - name: organizationKeyContact
+    using:
+      foreign_key_constraint_on: organization_key_contact_profile_id
   - name: cancellationRequest
     using:
       foreign_key_constraint_on:
@@ -208,7 +217,9 @@ insert_permissions:
         - aol_region
         - arloReferenceId
         - booking_contact_invite_data
+        - organization_key_contact_invite_data
         - booking_contact_profile_id
+        - organization_key_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
         - conversion
@@ -247,7 +258,9 @@ insert_permissions:
         - aol_country
         - aol_region
         - booking_contact_invite_data
+        - organization_key_contact_invite_data
         - booking_contact_profile_id
+        - organization_key_contact_profile_id
         - course_delivery_type
         - course_level
         - course_status
@@ -282,7 +295,9 @@ insert_permissions:
         - aol_region
         - arloReferenceId
         - booking_contact_invite_data
+        - organization_key_contact_invite_data
         - booking_contact_profile_id
+        - organization_key_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
         - conversion
@@ -323,7 +338,9 @@ insert_permissions:
         - aol_region
         - arloReferenceId
         - booking_contact_invite_data
+        - organization_key_contact_invite_data
         - booking_contact_profile_id
+        - organization_key_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -393,7 +410,9 @@ select_permissions:
         - aol_country
         - aol_region
         - booking_contact_invite_data
+        - organization_key_contact_invite_data
         - booking_contact_profile_id
+        - organization_key_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -467,6 +486,17 @@ select_permissions:
   - role: finance
     permission:
       columns:
+        - account_code
+        - accredited_by
+        - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - booking_contact_invite_data
+        - booking_contact_profile_id
+        - organization_key_contact_profile_id
+        - cancellation_fee_percent
+        - cancellation_reason
+        - conversion
         - created_at
         - updated_at
         - name
@@ -514,6 +544,17 @@ select_permissions:
   - role: ld
     permission:
       columns:
+        - account_code
+        - accredited_by
+        - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - booking_contact_invite_data
+        - booking_contact_profile_id
+        - organization_key_contact_profile_id
+        - cancellation_fee_percent
+        - cancellation_reason
+        - conversion
         - created_at
         - updated_at
         - name
@@ -565,7 +606,9 @@ select_permissions:
         - aol_region
         - arloReferenceId
         - booking_contact_invite_data
+        - organization_key_contact_invite_data
         - booking_contact_profile_id
+        - organization_key_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
         - conversion
@@ -605,6 +648,17 @@ select_permissions:
   - role: sales-representative
     permission:
       columns:
+        - account_code
+        - accredited_by
+        - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - booking_contact_invite_data
+        - booking_contact_profile_id
+        - organization_key_contact_profile_id
+        - cancellation_fee_percent
+        - cancellation_reason
+        - conversion
         - created_at
         - updated_at
         - name
@@ -659,6 +713,7 @@ select_permissions:
         - aol_region
         - booking_contact_invite_data
         - booking_contact_profile_id
+        - organization_key_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -738,6 +793,7 @@ select_permissions:
         - arloReferenceId
         - booking_contact_invite_data
         - booking_contact_profile_id
+        - organization_key_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
         - conversion
@@ -785,6 +841,7 @@ select_permissions:
         - arloReferenceId
         - booking_contact_invite_data
         - booking_contact_profile_id
+        - organization_key_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
         - conversion
@@ -829,6 +886,7 @@ select_permissions:
         - aol_region
         - booking_contact_invite_data
         - booking_contact_profile_id
+        - organization_key_contact_profile_id
         - course_delivery_type
         - course_level
         - course_status
@@ -873,6 +931,7 @@ select_permissions:
         - aol_region
         - booking_contact_invite_data
         - booking_contact_profile_id
+        - organization_key_contact_profile_id
         - conversion
         - course_delivery_type
         - course_level
@@ -964,6 +1023,11 @@ update_permissions:
         - booking_contact_profile_id
         - aol_country
         - aol_region
+        - booking_contact_invite_data
+        - organization_key_contact_invite_data
+        - booking_contact_profile_id
+        - organization_key_contact_profile_id
+        - cancellation_fee_percent
         - free_spaces
         - account_code
         - cancellation_reason
@@ -988,6 +1052,17 @@ update_permissions:
   - role: sales-admin
     permission:
       columns:
+        - account_code
+        - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - booking_contact_invite_data
+        - organization_key_contact_invite_data
+        - booking_contact_profile_id
+        - organization_key_contact_profile_id
+        - cancellation_fee_percent
+        - cancellation_reason
+        - conversion
         - created_at
         - updated_at
         - name
@@ -1036,7 +1111,9 @@ update_permissions:
         - aol_country
         - aol_region
         - booking_contact_invite_data
+        - organization_key_contact_invite_data
         - booking_contact_profile_id
+        - organization_key_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
         - conversion
@@ -1076,6 +1153,7 @@ update_permissions:
         - aol_country
         - aol_region
         - booking_contact_profile_id
+        - organization_key_contact_profile_id
         - cancellation_reason
         - course_delivery_type
         - course_status
@@ -1132,6 +1210,20 @@ update_permissions:
         - booking_contact_profile_id
         - aol_country
         - aol_region
+        - booking_contact_invite_data
+        - organization_key_contact_invite_data
+        - booking_contact_profile_id
+        - organization_key_contact_profile_id
+        - cancellation_fee_percent
+        - cancellation_reason
+        - conversion
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - created_at
+        - description
+        - exceptions_pending
         - free_spaces
         - account_code
         - cancellation_reason
@@ -1171,6 +1263,9 @@ update_permissions:
         - booking_contact_profile_id
         - aol_country
         - aol_region
+        - booking_contact_profile_id
+        - organization_key_contact_profile_id
+        - cancellation_fee_percent
         - free_spaces
         - account_code
         - cancellation_reason
@@ -1246,6 +1341,18 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/course-created'
+  - name: course_organization_key_contact_change
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - organization_key_contact_invite_data
+          - organization_key_contact_profile_id
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/organization-key-contact'
   - name: course_status_changed
     definition:
       enable_manual: false

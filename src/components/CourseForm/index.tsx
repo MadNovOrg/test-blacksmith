@@ -144,6 +144,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const hasOrg = [CourseType.CLOSED, CourseType.INDIRECT].includes(courseType)
   const isClosedCourse = courseType === CourseType.CLOSED
+  const isIndirectCourse = courseType === CourseType.INDIRECT
   const hasMinParticipants = courseType === CourseType.OPEN
 
   const minCourseStartDate = new Date()
@@ -206,6 +207,16 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         ...(courseType !== CourseType.INDIRECT
           ? {
               arloReferenceId: yup.string(),
+            }
+          : null),
+        ...(isIndirectCourse
+          ? {
+              organizationKeyContact: yup.object({
+                profileId: yup.string(),
+                firstName: yup.string().required(requiredMsg(t, 'first-name')),
+                lastName: yup.string().required(requiredMsg(t, 'last-name')),
+                email: schemas.email(t).required(requiredMsg(t, 'email')),
+              }),
             }
           : null),
         courseLevel: yup
@@ -360,12 +371,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       hasOrg,
       t,
       isClosedCourse,
+      isIndirectCourse,
       hasMinParticipants,
       activeRole,
+      courseType,
       minStartDateRestriction,
       trainerRatioNotMet,
       acl,
-      courseType,
     ]
   )
 
@@ -375,6 +387,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       organization: courseInput?.organization ?? null,
       salesRepresentative: courseInput?.salesRepresentative ?? null,
       bookingContact: courseInput?.bookingContact ?? {
+        firstName: '',
+        lastName: '',
+        email: '',
+      },
+      organizationKeyContact: courseInput?.organizationKeyContact ?? {
         firstName: '',
         lastName: '',
         email: '',
@@ -809,22 +826,23 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     }
   }, [values.courseLevel, setValue])
 
-  const handleBookingContactChange = useCallback(
-    (value: string | UserSelectorProfile) => {
-      const isEmail = typeof value === 'string'
-      setValue('bookingContact.profileId', isEmail ? undefined : value?.id)
-      setValue(
-        'bookingContact.firstName',
-        isEmail || !value?.givenName ? '' : value.givenName
-      )
-      setValue(
-        'bookingContact.lastName',
-        isEmail || !value?.familyName ? '' : value.familyName
-      )
-      setValue('bookingContact.email', isEmail ? value : value?.email ?? '', {
-        shouldValidate: true,
-      })
-    },
+  const handleContactChange = useCallback(
+    (field: 'bookingContact' | 'organizationKeyContact' = 'bookingContact') =>
+      (value: string | UserSelectorProfile) => {
+        const isEmail = typeof value === 'string'
+        setValue(`${field}.profileId`, isEmail ? undefined : value?.id)
+        setValue(
+          `${field}.firstName`,
+          isEmail || !value?.givenName ? '' : value.givenName
+        )
+        setValue(
+          `${field}.lastName`,
+          isEmail || !value?.familyName ? '' : value.familyName
+        )
+        setValue(`${field}.email`, isEmail ? value : value?.email ?? '', {
+          shouldValidate: true,
+        })
+      },
     [setValue]
   )
 
@@ -1016,6 +1034,79 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             </>
           ) : null}
 
+          {isIndirectCourse ? (
+            <>
+              <Typography mb={2} fontWeight={600}>
+                {t('components.course-form.organization-key-contact-label')}
+              </Typography>
+
+              <Grid container spacing={3} mb={3}>
+                <Grid item md={12} xs={12}>
+                  <UserSelector
+                    {...register(`organizationKeyContact`)}
+                    required
+                    value={values.organizationKeyContact?.email ?? undefined}
+                    onChange={handleContactChange('organizationKeyContact')}
+                    onEmailChange={handleContactChange(
+                      'organizationKeyContact'
+                    )}
+                    organisationId={getValues('organization')?.id ?? ''}
+                    textFieldProps={{ variant: 'filled' }}
+                    error={errors.organizationKeyContact?.email?.message}
+                    disabled={
+                      !getValues('organization') ||
+                      disabledFields.has('organizationKeyContact')
+                    }
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    label={t('first-name')}
+                    variant="filled"
+                    placeholder={t('first-name-placeholder')}
+                    {...register(`organizationKeyContact.firstName`)}
+                    error={!!errors.organizationKeyContact?.firstName}
+                    helperText={
+                      errors.organizationKeyContact?.firstName?.message ?? ''
+                    }
+                    disabled={
+                      !values.organization ||
+                      disabledFields.has('organizationKeyContact') ||
+                      !!values.organizationKeyContact?.profileId
+                    }
+                    InputLabelProps={{
+                      shrink: !!values.organizationKeyContact?.firstName,
+                    }}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    required
+                    label={t('surname')}
+                    variant="filled"
+                    placeholder={t('surname-placeholder')}
+                    {...register(`organizationKeyContact.lastName`)}
+                    error={!!errors.organizationKeyContact?.lastName}
+                    helperText={
+                      errors.organizationKeyContact?.lastName?.message ?? ''
+                    }
+                    disabled={
+                      !getValues('organization') ||
+                      disabledFields.has('organizationKeyContact') ||
+                      !!getValues('organizationKeyContact')?.profileId
+                    }
+                    InputLabelProps={{
+                      shrink: !!values.organizationKeyContact?.lastName,
+                    }}
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+            </>
+          ) : null}
+
           {isClosedCourse ? (
             <>
               <Typography mb={2} fontWeight={600}>
@@ -1028,8 +1119,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     {...register(`bookingContact`)}
                     required
                     value={values.bookingContact?.email ?? undefined}
-                    onChange={handleBookingContactChange}
-                    onEmailChange={handleBookingContactChange}
+                    onChange={handleContactChange()}
+                    onEmailChange={handleContactChange()}
                     organisationId={getValues('organization')?.id ?? ''}
                     textFieldProps={{ variant: 'filled' }}
                     error={errors.bookingContact?.email?.message}

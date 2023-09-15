@@ -225,6 +225,20 @@ export function useSaveCourse(): {
               ...(courseData.bookingContact?.email
                 ? { bookingContactInviteData: courseData.bookingContact }
                 : null),
+
+              ...(courseData.organizationKeyContact?.profileId
+                ? {
+                    organizationKeyContactProfileId:
+                      courseData.organizationKeyContact.profileId,
+                  }
+                : null),
+              ...(courseData.organizationKeyContact?.email
+                ? {
+                    organizationKeyContactInviteData:
+                      courseData.organizationKeyContact,
+                  }
+                : null),
+
               ...(courseData.usesAOL
                 ? {
                     aolCostOfCourse: courseData.courseCost,

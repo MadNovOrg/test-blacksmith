@@ -337,6 +337,19 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               ...(courseData.bookingContact?.email
                 ? { bookingContactInviteData: courseData.bookingContact }
                 : null),
+              ...(courseData.organizationKeyContact?.profileId ||
+              courseData.organizationKeyContact?.email
+                ? {
+                    organizationKeyContactProfileId:
+                      courseData.organizationKeyContact?.profileId ?? null,
+                  }
+                : null),
+              ...(courseData.organizationKeyContact?.email
+                ? {
+                    organizationKeyContactInviteData:
+                      courseData.organizationKeyContact,
+                  }
+                : null),
               ...(courseData.usesAOL
                 ? {
                     aolCostOfCourse: courseData.courseCost,
@@ -465,6 +478,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           'accreditedBy',
           'organization',
           'bookingContact',
+          'organizationKeyContact',
           'courseLevel',
           'blendedLearning',
           'reaccreditation',

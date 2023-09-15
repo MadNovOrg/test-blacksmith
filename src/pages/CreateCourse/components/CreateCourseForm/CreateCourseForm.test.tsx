@@ -7,6 +7,7 @@ import { never } from 'wonka'
 
 import { VenueSelector } from '@app/components/VenueSelector'
 import { Accreditors_Enum } from '@app/generated/graphql'
+import { useFetcher } from '@app/hooks/use-fetcher'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import {
@@ -30,6 +31,9 @@ import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
 import { CreateCourseProvider } from '../CreateCourseProvider'
 
 import { CreateCourseForm } from '.'
+
+vi.mock('@app/hooks/use-fetcher')
+const useFetcherMock = vi.mocked(useFetcher)
 
 vi.mock('@app/components/VenueSelector', () => ({
   VenueSelector: vi.fn(),
@@ -101,7 +105,6 @@ describe('component: CreateCourseForm', () => {
    * Come back to this test separately
    * @author Alexei.Gaidulean <alexei.gaidulean@teamteach.co.uk>
    */
-  // eslint-disable-next-line playwright/no-skipped-test
   it.skip('update max allowed trainers according to number of attendees', async () => {
     const overrides = {
       max_participants: 80,
@@ -206,6 +209,12 @@ describe('component: CreateCourseForm', () => {
         ],
       },
     })
+
+    const fetcherMock = vi.fn()
+    fetcherMock.mockResolvedValue({
+      members: [],
+    })
+    useFetcherMock.mockReturnValue(fetcherMock)
 
     const client = {
       executeQuery: () => never,
