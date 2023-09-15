@@ -168,7 +168,6 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
   const allowInvites =
     acl.canInviteAttendees(course.type) ||
     (course.type === CourseType.CLOSED &&
-      acl.isBookingContact() &&
       course.bookingContact?.id === profile?.id)
 
   return (

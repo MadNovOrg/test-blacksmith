@@ -43,7 +43,8 @@ export function useUserCourses(
   filters?: CoursesFilters,
   sorting?: Sorting,
   pagination?: { perPage: number; currentPage: number },
-  orgId?: string
+  orgId?: string,
+  bookingContactOnly?: boolean
 ): {
   courses?: UserCoursesQuery['courses']
   error?: Error
@@ -132,16 +133,14 @@ export function useUserCourses(
     )
 
   const where = useMemo(() => {
-    let userConditions: Course_Bool_Exp = {
-      _or: [
-        {
-          participants: { profile_id: { _eq: profile?.id } },
-        },
-        {
+    let userConditions: Course_Bool_Exp = bookingContactOnly
+      ? {
           bookingContact: { id: { _eq: profile?.id } },
-        },
-      ],
-    }
+        }
+      : {
+          participants: { profile_id: { _eq: profile?.id } },
+        }
+
     let filterConditions: Course_Bool_Exp = {}
     // if orgId is defined then provide all available courses within that org, only if I have an admin role
     if (orgId) {
@@ -260,6 +259,7 @@ export function useUserCourses(
       _and: [userConditions, filterConditions],
     }
   }, [
+    bookingContactOnly,
     orgId,
     filters,
     profile?.id,

@@ -8,6 +8,7 @@ import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/OrgSelectionToolbar'
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
+import { BookingContactCourses } from '@app/pages/user-pages/MyCourses/BookingContactCourses'
 import { LoadingStatus } from '@app/util'
 
 export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
@@ -59,11 +60,15 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
             ) : null}
 
             {data && status === LoadingStatus.SUCCESS ? (
-              <TrainerCourses
-                title={t('courses')}
-                orgId={orgId}
-                showAvailableCoursesButton={true}
-              />
+              acl.isBookingContact() ? (
+                <BookingContactCourses />
+              ) : (
+                <TrainerCourses
+                  title={t('courses')}
+                  orgId={orgId}
+                  showAvailableCoursesButton={true}
+                />
+              )
             ) : null}
           </Container>
         </>

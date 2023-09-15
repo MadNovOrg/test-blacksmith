@@ -45,7 +45,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ),
 
     isBookingContact: () =>
-      Boolean(allowedRoles?.has(RoleName.BOOKING_CONTACT)),
+      Boolean(allowedRoles?.has(RoleName.BOOKING_CONTACT)) && acl.isUser(),
 
     isInternalUser: () =>
       anyPass([

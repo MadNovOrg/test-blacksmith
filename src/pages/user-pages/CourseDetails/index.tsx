@@ -14,7 +14,7 @@ import {
   useMediaQuery,
   styled,
 } from '@mui/material'
-import { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
@@ -62,7 +62,13 @@ const successAlerts = {
   course_evaluated: 'course-evaluation.saved',
 } as const
 
-export const CourseDetails = () => {
+export type CourseDetailsProps = {
+  bookingOnly?: boolean
+}
+
+export const CourseDetails: React.FC<
+  React.PropsWithChildren<CourseDetailsProps>
+> = ({ bookingOnly }) => {
   const { profile, acl } = useAuth()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -120,19 +126,18 @@ export const CourseDetails = () => {
   const courseParticipant: CourseParticipant | null =
     data?.course_participant?.length > 0 ? data?.course_participant[0] : null
 
-  const isBookingContact =
-    acl.isBookingContact() && course?.bookingContact?.id === profileId
+  const isBookingContact = course?.bookingContact?.id === profileId
   const isParticipant = !!courseParticipant
 
   useEffect(() => {
     if (course && !activeTab) {
       setActiveTab(
-        isBookingContact && !isParticipant
+        isBookingContact && bookingOnly
           ? CourseDetailsTabs.ATTENDEES
           : 'checklist'
       )
     }
-  }, [course, isBookingContact, isParticipant, activeTab])
+  }, [bookingOnly, course, isBookingContact, isParticipant, activeTab])
 
   const { data: usersData, error } = useSWR<
     GetFeedbackUsersQuery,
@@ -267,7 +272,7 @@ export const CourseDetails = () => {
                         onChange={handleActiveTabChange}
                         aria-label="Course participant tabs"
                       >
-                        {isParticipant ? (
+                        {!bookingOnly && isParticipant ? (
                           <PillTab
                             data-testid="participant-course-checklist"
                             label={t(
@@ -276,7 +281,7 @@ export const CourseDetails = () => {
                             value="checklist"
                           />
                         ) : null}
-                        {courseParticipant?.certificate ? (
+                        {!bookingOnly && courseParticipant?.certificate ? (
                           <PillTab
                             data-testid="participant-course-certification"
                             label={t(
@@ -295,7 +300,7 @@ export const CourseDetails = () => {
                           />
                         ) : null}
 
-                        {showCourseOverview && (
+                        {!bookingOnly && showCourseOverview && (
                           <PillTab
                             label={t(
                               'pages.course-details.tabs.course-overview.title'

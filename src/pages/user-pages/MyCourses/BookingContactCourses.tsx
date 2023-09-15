@@ -13,7 +13,7 @@ import { FilterDrawer } from './Components/FilterDrawer'
 import { Filters } from './Components/Filters'
 import { useUserCourses, CoursesFilters } from './hooks/useUserCourses'
 
-export const AttendeeCourses: React.FC<
+export const BookingContactCourses: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { t } = useTranslation()
@@ -29,10 +29,16 @@ export const AttendeeCourses: React.FC<
     courses = [],
     status,
     total,
-  } = useUserCourses(filters, sorting, {
-    perPage,
-    currentPage,
-  })
+  } = useUserCourses(
+    filters,
+    sorting,
+    {
+      perPage,
+      currentPage,
+    },
+    undefined,
+    true
+  )
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -55,7 +61,7 @@ export const AttendeeCourses: React.FC<
     <Container maxWidth="lg" sx={{ py: 5, px: 0 }} disableGutters={!isMobile}>
       <Box flexDirection={isMobile ? 'column' : 'row'} display="flex" gap={4}>
         <Box width={isMobile ? undefined : 250}>
-          <Typography variant="h1">{t('my-courses')}</Typography>
+          <Typography variant="h1">{t('courses')}</Typography>
           <Typography variant="body2" color="grey.600" mt={1}>
             {loading ? <>&nbsp;</> : t('x-items', { count: courses.length })}
           </Typography>
