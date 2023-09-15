@@ -22,10 +22,26 @@ jobs:
   invoice-sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Log selected Environment
-        run: echo Selected value is ---- ${{github.event.inputs.environment}}
+      - name: Set up environment
+        id: set_env
+        run: |
+          case "${{github.event.inputs.environment}}" in 
+            DEV)
+              ACTION_URL="${{secrets.HASURA_ENDPOINT_DEV}}/xero/invoice/sync"
+              ;;
+            STG)
+              ACTION_URL="${{secrets.HASURA_ENDPOINT_STG}}/xero/invoice/sync"
+              ;;
+            PROD)
+              ACTION_URL="${{secrets.HASURA_ENDPOINT_PROD}}/xero/invoice/sync"
+              ;;
+            *)
+              ACTION_URL="${{secrets.HASURA_ENDPOINT_DEV}}/xero/invoice/sync"
+              ;;
+            esac
+            echo "action_url=$ACTION_URL" >> "$GITHUB_OUTPUT"
       - name: Sync request
         id: syncRequest
         run: |
-          response=$(${{env.action_url}})
+          response=$(curl -X ${{env.action_url}})
           echo "Request response is: $response"
