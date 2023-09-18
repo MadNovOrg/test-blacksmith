@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import useSWR from 'swr'
 
 import {
+  Course_Certificate_Bool_Exp,
   GetOrgDetailsQuery,
   GetOrgDetailsQueryVariables,
 } from '@app/generated/graphql'
@@ -96,13 +97,24 @@ export default function useOrg(
   showAll?: boolean,
   certificateFilter?: CertificateStatus[]
 ) {
-  const whereProfileCertificates = certificateFilter?.length
-    ? {
-        _and: [
-          { status: { _in: certificateFilter }, isRevoked: { _eq: false } },
-        ],
-      }
-    : { status: { _neq: CertificateStatus.EXPIRED }, isRevoked: { _eq: false } }
+  const whereProfileCertificates = {
+    _and: [
+      {
+        status: certificateFilter?.length
+          ? { _in: certificateFilter }
+          : { _neq: CertificateStatus.EXPIRED },
+        isRevoked: { _eq: false },
+      },
+      {
+        participant: {
+          _or: [
+            { id: { _is_null: true } },
+            { grade: { _neq: 'FAIL' } },
+          ] as Course_Certificate_Bool_Exp[],
+        },
+      },
+    ],
+  }
 
   let conditions
   if (orgId !== ALL_ORGS) {

@@ -5,6 +5,7 @@ import {
   OrgMembersQuery,
   OrgMembersQueryVariables,
   Organization_Member_Order_By,
+  Course_Certificate_Bool_Exp,
 } from '@app/generated/graphql'
 import { Sorting } from '@app/hooks/useTableSort'
 import { CertificateStatus, SortOrder } from '@app/types'
@@ -79,9 +80,21 @@ export function useOrgMembers({
 }) {
   const orderBy = getOrderBy(sort)
 
-  const whereProfileCertificates = certificateFilter?.length
-    ? { _and: [{ status: { _in: certificateFilter } }] }
-    : {}
+  const whereProfileCertificates = {
+    _and: [
+      certificateFilter?.length
+        ? { _and: [{ status: { _in: certificateFilter } }] }
+        : {},
+      {
+        participant: {
+          _or: [
+            { id: { _is_null: true } },
+            { grade: { _neq: 'FAIL' } },
+          ] as Course_Certificate_Bool_Exp[],
+        },
+      },
+    ],
+  }
 
   const [{ data, fetching }, refetch] = useQuery<
     OrgMembersQuery,
