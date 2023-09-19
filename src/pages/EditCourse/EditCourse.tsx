@@ -478,7 +478,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           'accreditedBy',
           'organization',
           'bookingContact',
-          'organizationKeyContact',
           'courseLevel',
           'blendedLearning',
           'reaccreditation',
@@ -640,6 +639,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   ) {
     return <NotFound />
   }
+
+  // 10010
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>

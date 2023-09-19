@@ -1154,6 +1154,7 @@ update_permissions:
         - aol_region
         - booking_contact_profile_id
         - organization_key_contact_profile_id
+        - organization_key_contact_invite_data
         - cancellation_reason
         - course_delivery_type
         - course_status

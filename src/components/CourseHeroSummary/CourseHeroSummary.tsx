@@ -270,6 +270,11 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   )}
                 </ListItemText>
               </ListItem>
+              {course.organizationKeyContact?.email ? (
+                <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
+                  <ListItemText>{`Organization key contact: ${course.organizationKeyContact?.email}`}</ListItemText>
+                </ListItem>
+              ) : null}
 
               {course.special_instructions || course.parking_instructions ? (
                 <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
