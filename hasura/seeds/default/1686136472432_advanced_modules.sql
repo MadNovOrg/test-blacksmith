@@ -73,6 +73,8 @@ INSERT INTO module (name, module_group_id, module_category, course_level) VALUES
 ('Fix and stabilise', (SELECT id FROM module_group WHERE name = 'Everyday Objects' AND course_level = 'ADVANCED'), 'THEORY', 'ADVANCED'),
 ('Elbow guide', (SELECT id FROM module_group WHERE name = 'Everyday Objects' AND course_level = 'ADVANCED'), 'THEORY', 'ADVANCED'),
 
+('Legal & Health', (SELECT id FROM module_group WHERE name = 'Legal & Health' AND course_level = 'ADVANCED'), 'THEORY', 'ADVANCED'),
+
 ('Risks associated with transport', (SELECT id FROM module_group WHERE name = 'Transport' AND course_level = 'ADVANCED'), 'THEORY', 'ADVANCED'),
 ('Driver', (SELECT id FROM module_group WHERE name = 'Transport' AND course_level = 'ADVANCED'), 'THEORY', 'ADVANCED'),
 ('Vehicle design', (SELECT id FROM module_group WHERE name = 'Transport' AND course_level = 'ADVANCED'), 'THEORY', 'ADVANCED'),
