@@ -134,14 +134,29 @@ select_permissions:
   - role: trainer
     permission:
       columns:
-        - id
-        - avatar
+        - addresses
         - archived
+        - attributes
+        - avatar
+        - contact_details
+        - created_at
+        - dietary_restrictions
+        - disabilities
+        - dob
+        - id
+        - job_title
+        - last_activity
+        - original_record
+        - preferences
+        - tags
+        - title
+        - updated_at
       computed_fields:
         - email
         - familyName
         - fullName
         - givenName
+        - phone
       filter: {}
   - role: finance
     permission:
