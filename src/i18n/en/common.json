@@ -519,7 +519,8 @@
     "expiring_soon": "Expiring soon",
     "active": "Active",
     "on_hold": "On Hold",
-    "revoked": "Revoked"
+    "revoked": "Revoked",
+    "inactive": "Inactive"
   },
   "expired-ago": "Expired {{ time }} ago",
   "expiring-in": "Expiring in {{ time }}",

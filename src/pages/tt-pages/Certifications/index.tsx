@@ -10,20 +10,21 @@ import Typography from '@mui/material/Typography'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CertificationList } from '@app/components/CertificationList'
 import { FilterByCertificateValidity } from '@app/components/filters/FilterByCertificateValidity'
 import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
 import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
 import { FilterByDates } from '@app/components/filters/FilterByDates'
 import { FilterSearch } from '@app/components/FilterSearch'
 import {
-  Course_Participant_Bool_Exp,
   Course_Level_Enum,
   Course_Type_Enum,
+  Course_Certificate_Bool_Exp,
+  Order_By,
 } from '@app/generated/graphql'
-import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import useCertifications from '@app/hooks/useCertifications'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { CertificationsTable } from '@app/pages/tt-pages/Certifications/CertificationsTable'
 import { CertificateStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
@@ -56,9 +57,7 @@ export const Certifications: React.FC<
   const [archived, setArchived] = useState<boolean>(false)
 
   const where = useMemo(() => {
-    const conditions: Course_Participant_Bool_Exp[] = [
-      { certificate: { id: { _is_null: false } } },
-    ]
+    const conditions: Course_Certificate_Bool_Exp[] = []
 
     if (keyword) {
       const query = keyword?.trim()
@@ -81,17 +80,17 @@ export const Certifications: React.FC<
     if (dateFrom) {
       const from = new Date(dateFrom)
       from.setHours(0, 0, 0)
-      conditions.push({ certificate: { certificationDate: { _gte: from } } })
+      conditions.push({ certificationDate: { _gte: from } })
     }
 
     if (dateTo) {
       const to = new Date(dateTo)
       to.setHours(23, 59, 59)
-      conditions.push({ certificate: { certificationDate: { _lte: to } } })
+      conditions.push({ certificationDate: { _lte: to } })
     }
 
     if (certificateStatus.length) {
-      conditions.push({ certificate: { status: { _in: certificateStatus } } })
+      conditions.push({ status: { _in: certificateStatus } })
     }
 
     conditions.push({
@@ -124,12 +123,11 @@ export const Certifications: React.FC<
   })
 
   const {
-    data: participants,
+    data: certificates,
     status,
     total,
-  } = useCourseParticipants(undefined, {
-    sortBy: sorting.by,
-    order: sorting.dir,
+  } = useCertifications({
+    order: sorting.dir as Order_By,
     where,
     pagination: {
       limit,
@@ -146,7 +144,7 @@ export const Certifications: React.FC<
     !!filterType.length ||
     !!filterLevel.length ||
     archived
-  const count = participants?.length ?? 0
+  const count = certificates?.length ?? 0
 
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
@@ -195,18 +193,8 @@ export const Certifications: React.FC<
             </Stack>
           ) : (
             <>
-              <CertificationList
-                columns={[
-                  'name',
-                  'certificate',
-                  'course-code',
-                  'status',
-                  'date-expired',
-                  'date-obtained',
-                  'organisation',
-                ]}
-                hideTitle={true}
-                participants={participants ?? []}
+              <CertificationsTable
+                certificates={certificates ?? []}
                 sorting={sorting}
                 filtered={filtered}
               />

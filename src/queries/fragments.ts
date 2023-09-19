@@ -166,6 +166,7 @@ export const CERTIFICATE = gql`
     courseName
     courseLevel
     status
+    legacyCourseCode
   }
 `
 

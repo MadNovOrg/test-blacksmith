@@ -102,6 +102,7 @@ export enum CertificateStatus {
   ACTIVE = 'ACTIVE',
   ON_HOLD = 'ON_HOLD',
   REVOKED = 'REVOKED',
+  INACTIVE = 'INACTIVE',
 }
 
 export type CourseCertificate = {
