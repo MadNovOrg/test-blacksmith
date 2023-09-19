@@ -505,7 +505,7 @@ event_triggers:
       interval_sec: 10
       num_retries: 0
       timeout_sec: 60
-    webhook: '{{EVENTS_HOST}}/course/status'
+    webhook: '{{EVENTS_HOST}}/participant/graded'
   - name: create_certificate
     definition:
       enable_manual: true
