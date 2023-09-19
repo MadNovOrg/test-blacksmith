@@ -1,40 +1,43 @@
 table:
-  schema: public
   name: legacy_certificate
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    legacy_id:
-      custom_name: legacyId
-    first_name:
-      custom_name: firstName
-    course_name:
-      custom_name: courseName
     certification_date:
       custom_name: certificationDate
-    original_record:
-      custom_name: originalRecord
-    expiry_date:
-      custom_name: expiryDate
-    updated_at:
-      custom_name: updatedAt
-    last_name:
-      custom_name: lastName
-    created_at:
-      custom_name: createdAt
     course_certificate_id:
       custom_name: courseCertificateId
+    course_code:
+      custom_name: courseCode
+    course_name:
+      custom_name: courseName
+    created_at:
+      custom_name: createdAt
+    expiry_date:
+      custom_name: expiryDate
+    first_name:
+      custom_name: firstName
+    last_name:
+      custom_name: lastName
+    legacy_id:
+      custom_name: legacyId
+    original_record:
+      custom_name: originalRecord
+    updated_at:
+      custom_name: updatedAt
   custom_column_names:
-    legacy_id: legacyId
-    first_name: firstName
-    course_name: courseName
     certification_date: certificationDate
-    original_record: originalRecord
-    expiry_date: expiryDate
-    updated_at: updatedAt
-    last_name: lastName
-    created_at: createdAt
     course_certificate_id: courseCertificateId
+    course_code: courseCode
+    course_name: courseName
+    created_at: createdAt
+    expiry_date: expiryDate
+    first_name: firstName
+    last_name: lastName
+    legacy_id: legacyId
+    original_record: originalRecord
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
   - name: courseCertificate
     using:
