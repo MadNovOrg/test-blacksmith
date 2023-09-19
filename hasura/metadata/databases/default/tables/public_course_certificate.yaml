@@ -1,37 +1,40 @@
 table:
-  schema: public
   name: course_certificate
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    course_id:
-      custom_name: courseId
-    course_name:
-      custom_name: courseName
     certification_date:
       custom_name: certificationDate
+    course_id:
+      custom_name: courseId
     course_level:
       custom_name: courseLevel
-    expiry_date:
-      custom_name: expiryDate
-    updated_at:
-      custom_name: updatedAt
+    course_name:
+      custom_name: courseName
     created_at:
       custom_name: createdAt
-    profile_id:
-      custom_name: profileId
+    expiry_date:
+      custom_name: expiryDate
     is_revoked:
       custom_name: isRevoked
+    legacy_course_code:
+      custom_name: legacyCourseCode
+    profile_id:
+      custom_name: profileId
+    updated_at:
+      custom_name: updatedAt
   custom_column_names:
-    course_id: courseId
-    course_name: courseName
     certification_date: certificationDate
+    course_id: courseId
     course_level: courseLevel
-    expiry_date: expiryDate
-    updated_at: updatedAt
+    course_name: courseName
     created_at: createdAt
-    profile_id: profileId
+    expiry_date: expiryDate
     is_revoked: isRevoked
+    legacy_course_code: legacyCourseCode
+    profile_id: profileId
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
   - name: course
     using:
@@ -39,27 +42,27 @@ object_relationships:
   - name: participant
     using:
       manual_configuration:
-        remote_table:
-          schema: public
-          name: course_participant
-        insertion_order: null
         column_mapping:
           id: certificate_id
+        insertion_order: null
+        remote_table:
+          name: course_participant
+          schema: public
   - name: profile
     using:
       manual_configuration:
-        remote_table:
-          schema: public
-          name: profile
-        insertion_order: null
         column_mapping:
           profile_id: id
+        insertion_order: null
+        remote_table:
+          name: profile
+          schema: public
 computed_fields:
   - name: status
     definition:
       function:
-        schema: public
         name: course_certificate_status
+        schema: public
 insert_permissions:
   - role: trainer
     permission:
@@ -76,7 +79,6 @@ insert_permissions:
         - expiry_date
         - number
         - profile_id
-      backend_only: false
 select_permissions:
   - role: finance
     permission:
@@ -89,6 +91,7 @@ select_permissions:
         - expiry_date
         - id
         - is_revoked
+        - legacy_course_code
         - number
         - profile_id
         - updated_at
@@ -107,6 +110,7 @@ select_permissions:
         - expiry_date
         - id
         - is_revoked
+        - legacy_course_code
         - number
         - profile_id
         - updated_at
@@ -125,6 +129,7 @@ select_permissions:
         - expiry_date
         - id
         - is_revoked
+        - legacy_course_code
         - number
         - profile_id
         - updated_at
@@ -143,6 +148,7 @@ select_permissions:
         - expiry_date
         - id
         - is_revoked
+        - legacy_course_code
         - number
         - profile_id
         - updated_at
@@ -180,6 +186,7 @@ select_permissions:
         - expiry_date
         - id
         - is_revoked
+        - legacy_course_code
         - number
         - profile_id
         - updated_at
@@ -198,6 +205,7 @@ select_permissions:
         - expiry_date
         - id
         - is_revoked
+        - legacy_course_code
         - number
         - profile_id
         - updated_at
@@ -216,6 +224,7 @@ select_permissions:
         - expiry_date
         - id
         - is_revoked
+        - legacy_course_code
         - number
         - profile_id
         - updated_at
@@ -238,6 +247,7 @@ select_permissions:
         - expiry_date
         - id
         - is_revoked
+        - legacy_course_code
         - number
         - profile_id
         - updated_at
@@ -293,8 +303,8 @@ event_triggers:
         columns:
           - is_revoked
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/certificate/revoke'
   - name: course_certificate_added
@@ -303,8 +313,8 @@ event_triggers:
       insert:
         columns: '*'
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/participant/role'
   - name: course_certificate_expiry_date_changed
@@ -317,7 +327,7 @@ event_triggers:
           - is_revoked
           - expiry_date
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/certificate/expiry-date-changed'
