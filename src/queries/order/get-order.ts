@@ -50,6 +50,7 @@ export const QUERY = gql`
           email
           phone
         }
+        bookingContactInviteData
       }
       invoice {
         xeroId

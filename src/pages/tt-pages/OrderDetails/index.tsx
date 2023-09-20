@@ -483,7 +483,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </Stack>
                   </DetailsItemBox>
 
-                  {course?.bookingContact && (
+                  {course?.bookingContact ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
                         <Typography fontWeight={600}>
@@ -497,7 +497,22 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         </Typography>
                       </Stack>
                     </DetailsItemBox>
-                  )}
+                  ) : course?.bookingContactInviteData ? (
+                    <DetailsItemBox>
+                      <Stack spacing={2}>
+                        <Typography fontWeight={600}>
+                          {_t('components.course-form.booking-contact')}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {course.bookingContactInviteData.firstName}{' '}
+                          {course.bookingContactInviteData.lastName}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {course.bookingContactInviteData.email}
+                        </Typography>
+                      </Stack>
+                    </DetailsItemBox>
+                  ) : null}
 
                   {order?.paymentMethod === Payment_Methods_Enum.Invoice ? (
                     <DetailsItemBox data-testid="order-invoiced-to">
