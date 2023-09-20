@@ -155,6 +155,13 @@ describe('component: CourseForm', () => {
     expect(screen.getByTestId('user-selector')).toBeInTheDocument()
   })
 
+  it('displays AOL checkbox for indirect course type', async () => {
+    await waitFor(() => renderForm(CourseType.INDIRECT))
+    await selectLevel(CourseLevel.Level_2)
+
+    expect(screen.queryByTestId('aol-checkbox')).toBeInTheDocument()
+  })
+
   it('renders correct organisation fields for indirect course type', async () => {
     await waitFor(() => {
       renderForm(CourseType.INDIRECT)

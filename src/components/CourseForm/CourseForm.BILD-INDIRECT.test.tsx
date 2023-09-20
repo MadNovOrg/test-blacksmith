@@ -241,4 +241,20 @@ describe('CourseForm - indirect BILD', () => {
 
     expect(mixedDeliveryToggle).toBeEnabled()
   })
+
+  it("doesn't show AOL checkbox", async () => {
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.INDIRECT} />, {
+        auth: {
+          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+          activeRole: RoleName.TRAINER,
+        },
+      })
+    })
+
+    await selectBildCategory()
+    await selectLevel(CourseLevel.BildRegular)
+
+    expect(screen.queryByTestId('aol-checkbox')).not.toBeInTheDocument()
+  })
 })

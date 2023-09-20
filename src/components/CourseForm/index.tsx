@@ -539,7 +539,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const hasVenue = [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(
     deliveryType
   )
-  const usesAOL = courseType === CourseType.INDIRECT ? values.usesAOL : false
+  const usesAOL =
+    courseType === CourseType.INDIRECT && !isBild ? values.usesAOL : false
   const aolCountry = values.aolCountry
   const startDate = useWatch({ control, name: 'startDate' })
   const startTime = useWatch({ control, name: 'startTime' })
@@ -894,7 +895,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             </FormControl>
           ) : null}
 
-          {courseType === CourseType.INDIRECT ? (
+          {courseType === CourseType.INDIRECT && !isBild ? (
             <>
               <Typography
                 mt={2}
@@ -919,6 +920,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     }}
                     checked={usesAOL}
                     disabled={disabledFields.has('usesAOL') || isBild}
+                    data-testid="aol-checkbox"
                   />
                 }
                 label={t('components.course-form.aol-label')}
