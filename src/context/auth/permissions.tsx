@@ -497,14 +497,31 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return acl.isAdmin()
     },
     canViewCourseBuilderOnEditPage: (
-      course: Pick<CourseInput, 'accreditedBy' | 'type'> | undefined | null
+      course: Pick<CourseInput, 'accreditedBy' | 'type'> | undefined | null,
+      trainers: { profile: { id: string }; type: CourseTrainerType }[]
     ) => {
-      return (
-        anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD, acl.isTrainer])() &&
-        course?.accreditedBy === Accreditors_Enum.Icm &&
-        (course?.type === CourseType.CLOSED ||
-          course?.type === CourseType.INDIRECT)
-      )
+      if (
+        !(
+          course?.accreditedBy === Accreditors_Enum.Icm &&
+          (course?.type === CourseType.CLOSED ||
+            course?.type === CourseType.INDIRECT)
+        )
+      ) {
+        return false
+      }
+
+      if (
+        acl.isTrainer() &&
+        trainers.find(
+          t =>
+            t.profile.id === auth.profile?.id &&
+            t.type === CourseTrainerType.Leader
+        )
+      ) {
+        return true
+      }
+
+      return anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD])()
     },
   })
 

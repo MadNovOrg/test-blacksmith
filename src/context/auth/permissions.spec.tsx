@@ -2302,14 +2302,36 @@ describe(getACL.name, () => {
   })
 
   describe('canViewCourseBuilderOnEditPage', () => {
-    it.each([
-      RoleName.TRAINER,
-      RoleName.TT_OPS,
-      RoleName.LD,
-      RoleName.TT_ADMIN,
-    ])('should return true if activerole is %s', activeRole => {
+    it.each([RoleName.TT_OPS, RoleName.LD, RoleName.TT_ADMIN])(
+      'should return true if activerole is %s',
+      activeRole => {
+        // Arrange
+        const acl = getACLStub({ activeRole })
+        const course = buildCourse({
+          overrides: {
+            accreditedBy: Accreditors_Enum.Icm,
+            type: CourseType.CLOSED,
+          },
+        })
+
+        // Act & Assert
+        expect(acl.canViewCourseBuilderOnEditPage(course, []))
+      }
+    )
+    it('should return true if activerole is trainer and is lead trainer', () => {
       // Arrange
-      const acl = getACLStub({ activeRole })
+      const profileId = '123'
+      const trainerType = CourseTrainerType.Leader
+
+      const acl = getACLStub({
+        profile: buildProfile({
+          overrides: {
+            id: profileId,
+          },
+        }),
+        activeRole: RoleName.TRAINER,
+      })
+
       const course = buildCourse({
         overrides: {
           accreditedBy: Accreditors_Enum.Icm,
@@ -2318,7 +2340,43 @@ describe(getACL.name, () => {
       })
 
       // Act & Assert
-      expect(acl.canViewCourseBuilderOnEditPage(course))
+      expect(
+        acl.canViewCourseBuilderOnEditPage(course, [
+          {
+            profile: { id: profileId },
+            type: trainerType,
+          },
+        ])
+      ).toBeTruthy()
+    })
+    it('should return false if activerole is trainer and is not the lead trainer', () => {
+      // Arrange
+      const profileId = '123'
+      const trainerType = CourseTrainerType.Assistant
+      const acl = getACLStub({
+        profile: buildProfile({
+          overrides: {
+            id: profileId,
+          },
+        }),
+        activeRole: RoleName.TRAINER,
+      })
+      const course = buildCourse({
+        overrides: {
+          accreditedBy: Accreditors_Enum.Icm,
+          type: CourseType.CLOSED,
+        },
+      })
+
+      // Act & Assert
+      expect(
+        acl.canViewCourseBuilderOnEditPage(course, [
+          {
+            profile: { id: profileId },
+            type: trainerType,
+          },
+        ])
+      ).toBeFalsy()
     })
     it('should return false if course is not icm', () => {
       // Arrange
@@ -2331,7 +2389,7 @@ describe(getACL.name, () => {
       })
 
       // Act & Assert
-      expect(acl.canViewCourseBuilderOnEditPage(course)).toBeFalsy()
+      expect(acl.canViewCourseBuilderOnEditPage(course, [])).toBeFalsy()
     })
     it('should return false if course is not closed or indirect', () => {
       // Arrange
@@ -2344,7 +2402,7 @@ describe(getACL.name, () => {
       })
 
       // Act & Assert
-      expect(acl.canViewCourseBuilderOnEditPage(course)).toBeFalsy()
+      expect(acl.canViewCourseBuilderOnEditPage(course, [])).toBeFalsy()
     })
   })
 

@@ -143,7 +143,10 @@ export const CourseDetails = () => {
     (course?.moduleGroupIds?.length || course?.bildModules?.length) &&
     course.status !== Course_Status_Enum.Draft
 
-  const showCourseBuilderOnEditPage = acl.canViewCourseBuilderOnEditPage(course)
+  const showCourseBuilderOnEditPage = acl.canViewCourseBuilderOnEditPage(
+    course,
+    course?.trainers ?? []
+  )
 
   if (courseLoadingStatus === LoadingStatus.FETCHING) {
     return (
