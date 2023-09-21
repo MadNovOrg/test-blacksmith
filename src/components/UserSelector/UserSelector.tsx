@@ -79,6 +79,10 @@ export const UserSelector: React.FC<
     return debounce(async query => refreshOptions(query), 1000)
   }, [refreshOptions])
 
+  const emailOptions = useMemo(() => {
+    return options.map(o => o.profile.email)
+  }, [options])
+
   useMount(() => {
     if (value) {
       setQ(value)
@@ -107,11 +111,13 @@ export const UserSelector: React.FC<
     [debouncedQuery, disableSuggestions, onEmailChange, organisationId]
   )
 
-  const getOptionLabel = (option: Member) => option.profile.email ?? ''
-
-  const handleChange = (event: React.SyntheticEvent, option: Member | null) => {
+  const handleChange = (
+    event: React.SyntheticEvent,
+    option?: string | null
+  ) => {
     event.preventDefault()
-    onChange(option?.profile ?? null)
+    const profile = options.find(o => o.profile.email === option)
+    onChange(profile?.profile ?? null)
   }
 
   const noOptionsText =
@@ -123,13 +129,12 @@ export const UserSelector: React.FC<
       </Typography>
     )
 
-  function renderProfile(option: Member) {
+  function renderProfile(email: string) {
+    const option = options.find(o => o.profile.email === email) as Member
     return [option.profile.email, option.profile.fullName]
       .filter(Boolean)
       .join(', ')
   }
-
-  const selected = options.find(o => o.profile.email === value)
 
   return (
     <>
@@ -141,15 +146,11 @@ export const UserSelector: React.FC<
         sx={sx}
         openOnFocus
         clearOnBlur={false}
-        getOptionLabel={getOptionLabel}
         onInputChange={onInputChange}
         onChange={handleChange}
-        value={selected ?? null}
-        options={options}
+        value={value ?? null}
+        options={emailOptions}
         noOptionsText={noOptionsText}
-        isOptionEqualToValue={(o, v) => {
-          return o.profile.id === v.profile.id
-        }}
         loading={loading}
         disabled={disabled}
         renderInput={params => (
@@ -175,8 +176,9 @@ export const UserSelector: React.FC<
             {...textFieldProps}
           />
         )}
-        renderOption={(props, option) => {
-          const profile = renderProfile(option)
+        renderOption={(props, email) => {
+          if (!email) return null
+          const profile = renderProfile(email)
 
           return (
             <Box
@@ -185,8 +187,8 @@ export const UserSelector: React.FC<
               px={2}
               component="li"
               {...props}
-              key={option.profile.id}
-              data-testid={`profile-selector-result-${option.profile.id}`}
+              key={email}
+              data-testid={`profile-selector-result-${email}`}
             >
               <Typography
                 flex={1}

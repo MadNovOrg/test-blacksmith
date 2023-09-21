@@ -93,6 +93,7 @@ export const QUERY = gql`
         givenName
         familyName
       }
+      bookingContactInviteData
       organizationKeyContact {
         id
         fullName

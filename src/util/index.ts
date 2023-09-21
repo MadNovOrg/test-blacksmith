@@ -288,9 +288,15 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     bookingContact: course.bookingContact
       ? {
           profileId: course.bookingContact.id,
-          firstName: course.bookingContact?.givenName,
-          lastName: course.bookingContact?.familyName,
-          email: course.bookingContact?.email,
+          firstName: course.bookingContact.givenName,
+          lastName: course.bookingContact.familyName,
+          email: course.bookingContact.email,
+        }
+      : course.bookingContactInviteData
+      ? {
+          firstName: course.bookingContactInviteData.firstName,
+          lastName: course.bookingContactInviteData.lastName,
+          email: course.bookingContactInviteData.email,
         }
       : null,
     organizationKeyContact: course.organizationKeyContact

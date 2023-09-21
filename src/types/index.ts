@@ -35,6 +35,11 @@ export type Course = {
   organization?: Organization
   bildModules?: Array<Course_Bild_Module>
   bookingContact?: Profile
+  bookingContactInviteData?: {
+    firstName: string
+    lastName: string
+    email: string
+  }
   bookingContactProfileId?: string
   organizationKeyContact?: Profile
   organizationKeyContactProfileId?: string
