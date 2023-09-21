@@ -1,13 +1,13 @@
 import SearchIcon from '@mui/icons-material/Search'
 import {
-  Box,
   Autocomplete,
-  TextField,
-  CircularProgress,
-  AutocompleteRenderInputParams,
   AutocompleteRenderGetTagProps,
-  Chip,
+  AutocompleteRenderInputParams,
   AutocompleteRenderOptionState,
+  Box,
+  Chip,
+  CircularProgress,
+  TextField,
   Typography,
 } from '@mui/material'
 import React, { HTMLAttributes, useCallback, useMemo, useState } from 'react'
@@ -16,13 +16,14 @@ import { useMountedState } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { Avatar } from '@app/components/Avatar'
+import { useAuth } from '@app/context/auth'
 import {
   BildStrategy,
   CourseLevel,
   CourseTrainerType,
+  CourseType as CourseTypeEnum,
   SearchTrainer,
   SearchTrainerAvailability,
-  CourseType as CourseTypeEnum,
 } from '@app/generated/graphql'
 import { CourseType } from '@app/types'
 import { noop } from '@app/util'
@@ -63,6 +64,7 @@ export function SearchTrainers({
   matchesFilter = t => t,
   disabled = false,
 }: Props) {
+  const { acl } = useAuth()
   const { t } = useTranslation()
   const isMounted = useMountedState()
   const [loading, setLoading] = useState(false)
@@ -76,6 +78,8 @@ export function SearchTrainers({
     bildStrategies,
     courseType: courseType as unknown as CourseTypeEnum,
   })
+
+  console.log(courseType)
 
   const isControlled = value != null
   const selected = isControlled ? value : _selected
@@ -106,7 +110,7 @@ export function SearchTrainers({
     _state: AutocompleteRenderOptionState
   ) => {
     const trainerRoles = option.trainer_role_types
-      .map(obj => t(`trainer-role-types.${obj.trainer_role_type?.name}`))
+      ?.map(obj => t(`trainer-role-types.${obj.trainer_role_type?.name}`))
       .join(', ')
     return (
       <Box
@@ -118,12 +122,17 @@ export function SearchTrainers({
         <Avatar size={32} src={option.avatar ?? ''} name={option.fullName} />
         <Box>
           <Typography variant="body1">{option.fullName}</Typography>
-          <Typography variant="body2">{trainerRoles}</Typography>
+          {courseType === CourseType.INDIRECT &&
+          !acl.isInternalUser() ? null : (
+            <Typography variant="body2">{trainerRoles}</Typography>
+          )}
         </Box>
 
-        <Typography sx={{ flex: 1 }} variant="body2">
-          {option.email}
-        </Typography>
+        {courseType === CourseType.INDIRECT && !acl.isInternalUser() ? null : (
+          <Typography sx={{ flex: 1 }} variant="body2">
+            {option.email}
+          </Typography>
+        )}
 
         <TrainerAvailabilityStatus
           availability={option.availability ?? undefined}

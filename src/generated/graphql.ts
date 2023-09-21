@@ -12083,6 +12083,11 @@ export type XeroInvoiceStatusKv = {
   status: XeroInvoiceStatus;
 };
 
+export type XeroInvoiceSyncOutput = {
+  __typename?: 'XeroInvoiceSyncOutput';
+  message?: Maybe<Scalars['String']>;
+};
+
 export type XeroInvoicesStatusInput = {
   invoiceNumberContains?: InputMaybe<Scalars['String']>;
   invoiceNumbers: Array<InputMaybe<Scalars['String']>>;
@@ -15078,6 +15083,10 @@ export type Course = {
   orders_aggregate: Order_Aggregate;
   /** An object relationship */
   organization?: Maybe<Organization>;
+  /** An object relationship */
+  organizationKeyContact?: Maybe<Profile>;
+  organizationKeyContactInviteData?: Maybe<Scalars['jsonb']>;
+  organizationKeyContactProfileId?: Maybe<Scalars['uuid']>;
   organization_id?: Maybe<Scalars['uuid']>;
   parking_instructions?: Maybe<Scalars['String']>;
   /** An array relationship */
@@ -42138,6 +42147,8 @@ export type Query_Root = {
   xeroConnect?: Maybe<XeroConnectOutput>;
   xeroContactSearch?: Maybe<XeroContactSearchOutput>;
   xeroInvoicesStatus?: Maybe<XeroInvoicesStatusOutput>;
+  /** Sync Xero Invoices with the hub invoices */
+  xeroSync?: Maybe<XeroInvoiceSyncOutput>;
   /** fetch data from the table: "xero_contact" */
   xero_contact: Array<Xero_Contact>;
   /** fetch aggregated fields from the table: "xero_contact" */
