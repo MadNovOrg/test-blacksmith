@@ -22,22 +22,42 @@ describe(CancellationTermsTable.name, () => {
     t('pages.edit-course.cancellation-modal.cancellation-fee'),
   ])('should render table head cell: %s', cellName => {
     //Assert
-    expect(screen.getByText(cellName)).toBeInTheDocument
+    expect(screen.getByText(cellName)).toBeInTheDocument()
   })
-  it.each(Object.keys(TERMS))('maps terms correctly -> term: %s', term => {
-    //Arrange
-    const fee = TERMS[term as keyof typeof TERMS]
+  it.each(Object.entries(TERMS).filter(([_, fee]) => fee > 0))(
+    'maps terms with fee greater than 0 correctly -> term: %s',
+    (term, fee) => {
+      //Assert
+      expect(
+        screen.getByText(
+          t(`pages.edit-course.cancellation-modal.terms.${term}`)
+        )
+      ).toBeInTheDocument()
+      expect(
+        screen.getByText(
+          t(
+            `pages.edit-course.cancellation-modal.terms.percent-of-payment-due`,
+            {
+              percent: fee,
+            }
+          )
+        )
+      ).toBeInTheDocument()
+    }
+  )
+  it.each(Object.entries(TERMS).filter(([_, fee]) => fee === 0))(
+    'maps terms with fee equal to 0 correctly -> term: %s',
+    term => {
+      //Assert
+      expect(
+        screen.getByText(
+          t(`pages.edit-course.cancellation-modal.terms.${term}`)
+        )
+      ).toBeInTheDocument()
 
-    //Assert
-    expect(
-      screen.getByText(t(`pages.edit-course.cancellation-modal.terms.${term}`))
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(
-        t(`pages.edit-course.cancellation-modal.terms.percent-of-payment-due`, {
-          percent: fee,
-        })
-      )
-    ).toBeInTheDocument()
-  })
+      expect(
+        screen.getByText(t(`pages.edit-course.cancellation-modal.terms.no-fee`))
+      ).toBeInTheDocument()
+    }
+  )
 })

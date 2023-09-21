@@ -16,8 +16,10 @@ export const getCancellationTermsFee = (
     return 75
   } else if (diff < 29) {
     return 50
-  } else {
+  } else if (diff < 57) {
     return 25
+  } else {
+    return 0
   }
 }
 

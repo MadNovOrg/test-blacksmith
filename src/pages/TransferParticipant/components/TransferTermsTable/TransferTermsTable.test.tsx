@@ -19,7 +19,9 @@ describe('component: TransferTermsTable', () => {
         const twentyfiveFee = screen.getByTestId('term-row-25-fee')
 
         expect(within(zeroFee).getByText(/4\+ weeks/i)).toBeInTheDocument()
-        expect(within(zeroFee).getByText(/free/i)).toBeInTheDocument()
+        expect(
+          within(zeroFee).getByText(/no transfer fee/i)
+        ).toBeInTheDocument()
 
         expect(within(fifteenFee).getByText(/2-4 weeks/i)).toBeInTheDocument()
         expect(
@@ -27,7 +29,7 @@ describe('component: TransferTermsTable', () => {
         ).toBeInTheDocument()
 
         expect(
-          within(twentyfiveFee).getByText(/less than 2 weeks/i)
+          within(twentyfiveFee).getByText(/0-2 weeks/i)
         ).toBeInTheDocument()
         expect(
           within(twentyfiveFee).getByText(/25% of payment due/i)
@@ -47,7 +49,9 @@ describe('component: TransferTermsTable', () => {
         const fiftyFee = screen.getByTestId('term-row-50-fee-trainer')
 
         expect(within(zeroFee).getByText(/4\+ weeks/i)).toBeInTheDocument()
-        expect(within(zeroFee).getByText(/free/i)).toBeInTheDocument()
+        expect(
+          within(zeroFee).getByText(/no transfer fee/i)
+        ).toBeInTheDocument()
 
         expect(
           within(twentyfiveFee).getByText(/1-4 weeks/i)
@@ -56,9 +60,7 @@ describe('component: TransferTermsTable', () => {
           within(twentyfiveFee).getByText(/25% of payment due/i)
         ).toBeInTheDocument()
 
-        expect(
-          within(fiftyFee).getByText(/less than a week/i)
-        ).toBeInTheDocument()
+        expect(within(fiftyFee).getByText(/0-1 week/i)).toBeInTheDocument()
         expect(
           within(fiftyFee).getByText(/50% of payment due/i)
         ).toBeInTheDocument()

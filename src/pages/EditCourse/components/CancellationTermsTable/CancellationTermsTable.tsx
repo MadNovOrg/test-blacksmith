@@ -13,7 +13,8 @@ import { useTranslation } from 'react-i18next'
 import { getCancellationTermsFee } from '@app/pages/EditCourse/shared'
 
 export const TERMS = {
-  'four-weeks-plus': 25,
+  'eight-weeks-plus': 0,
+  'four-to-eight-weeks': 25,
   'two-to-four-weeks': 50,
   'one-to-two-weeks': 75,
   'less-than-week': 100,
@@ -70,10 +71,12 @@ export const CancellationTermsTable: React.FC<
                   color="grey.700"
                   fontWeight={fontWeight}
                 >
-                  {t(
-                    `pages.edit-course.cancellation-modal.terms.percent-of-payment-due`,
-                    { percent: fee }
-                  )}
+                  {fee === 0
+                    ? t(`pages.edit-course.cancellation-modal.terms.no-fee`)
+                    : t(
+                        `pages.edit-course.cancellation-modal.terms.percent-of-payment-due`,
+                        { percent: fee }
+                      )}
                 </Typography>
               </TableCell>
             </TableRow>
