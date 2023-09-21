@@ -1,3 +1,5 @@
+import { Course_Trainer_Type_Enum } from '@app/generated/graphql'
+
 import {
   buildCourse,
   buildCourseAssistant,
@@ -5,7 +7,6 @@ import {
   buildProfile,
 } from '@test/mock-data-utils'
 
-import { CourseTrainerType } from './types'
 import {
   courseEnded,
   courseStarted,
@@ -125,8 +126,8 @@ describe('getCourseAssistants', () => {
     ])
     expect(assistants).toHaveLength(2)
 
-    const notAssistants = assistants.filter(a => {
-      return a.type !== CourseTrainerType.Assistant
+    const notAssistants = assistants?.filter(a => {
+      return a.type !== Course_Trainer_Type_Enum.Assistant
     })
     expect(notAssistants).toHaveLength(0)
 

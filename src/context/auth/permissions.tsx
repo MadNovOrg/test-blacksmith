@@ -4,17 +4,20 @@ import { MarkOptional } from 'ts-essentials'
 import { getLevels } from '@app/components/CourseForm/helpers'
 import { Accreditors_Enum } from '@app/generated/graphql'
 import {
+  Course,
   CourseInput,
   CourseLevel,
   CourseTrainerType,
   CourseType,
   RoleName,
 } from '@app/types'
+import { getCourseLeadTrainer } from '@app/util'
 import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 
 import type { AuthContextType } from './types'
 
 export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
+  const profile = auth.profile
   const activeRole = auth.activeRole
   const allowedRoles = auth.allowedRoles
   const activeCertificates = auth.activeCertificates ?? []
@@ -59,6 +62,9 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canViewRevokedCert: () =>
       anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD, acl.isSalesAdmin])(),
+
+    isCourseLeader: (course: Pick<Course, 'trainers'>) =>
+      getCourseLeadTrainer(course.trainers)?.profile.id === profile?.id,
 
     canSeeActionableCourseTable: () => anyPass([acl.isTTAdmin, acl.isLD])(),
 
@@ -241,16 +247,19 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return allowedBILDLevels || allowedICMLevels
     },
 
-    canEditCourses: (type: CourseType, isLeader: boolean) => {
+    canEditCourses: (course: Pick<Course, 'type' | 'trainers'>) => {
       switch (activeRole) {
         case RoleName.TT_ADMIN:
         case RoleName.TT_OPS:
           return true
         case RoleName.SALES_ADMIN: {
-          return [CourseType.CLOSED, CourseType.OPEN].includes(type)
+          return [CourseType.CLOSED, CourseType.OPEN].includes(course.type)
         }
         case RoleName.TRAINER:
-          return [CourseType.INDIRECT].includes(type) && isLeader
+          return (
+            [CourseType.INDIRECT].includes(course.type) &&
+            acl.isCourseLeader(course)
+          )
       }
 
       return false
@@ -348,17 +357,14 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canParticipateInCourses: () => anyPass([acl.isUser, acl.isTrainer])(),
 
-    canTransferParticipant: (participantOrgIds: string[]) => {
+    canTransferParticipant: (participantOrgIds: string[], _course: Course) => {
       return (
         anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])() ||
         acl.isOrgAdminOf(participantOrgIds)
       )
     },
 
-    canReplaceParticipant: (
-      participantOrgIds: string[],
-      accreditedBy: Accreditors_Enum
-    ) => {
+    canReplaceParticipant: (participantOrgIds: string[], course: Course) => {
       return (
         anyPass([
           acl.isTTAdmin,
@@ -366,42 +372,41 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
           acl.isSalesAdmin,
           acl.isSalesRepresentative,
         ])() ||
-        (accreditedBy === Accreditors_Enum.Icm &&
+        (course.accreditedBy === Accreditors_Enum.Icm &&
           acl.isOrgAdminOf(participantOrgIds))
       )
     },
 
-    canRemoveParticipant: (participantOrgIds: string[]) => {
+    canCancelParticipant: (participantOrgIds: string[], _course: Course) => {
       return (
         anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])() ||
         acl.isOrgAdminOf(participantOrgIds)
       )
     },
 
-    canSendCourseInformation: () =>
+    canSendCourseInformation: (_participantOrgIds: string[], _course: Course) =>
       anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin, acl.isTrainer])(),
 
     canManageParticipantAttendance: (
       participantOrgIds: string[],
-      accreditedBy: Accreditors_Enum
-    ) => {
-      return (
-        acl.canTransferParticipant(participantOrgIds) ||
-        acl.canReplaceParticipant(participantOrgIds, accreditedBy) ||
-        acl.canRemoveParticipant(participantOrgIds) ||
-        acl.canSendCourseInformation()
-      )
-    },
+      course: Course
+    ) =>
+      [
+        acl.canTransferParticipant(participantOrgIds, course),
+        acl.canReplaceParticipant(participantOrgIds, course),
+        acl.canCancelParticipant(participantOrgIds, course),
+        acl.canSendCourseInformation(participantOrgIds, course),
+      ].some(Boolean),
 
     canOnlySendCourseInformation: (
       participantOrgIds: string[],
-      accreditedBy: Accreditors_Enum
+      course: Course
     ) => {
       return (
-        !acl.canTransferParticipant(participantOrgIds) &&
-        !acl.canReplaceParticipant(participantOrgIds, accreditedBy) &&
-        !acl.canRemoveParticipant(participantOrgIds) &&
-        acl.canSendCourseInformation()
+        !acl.canTransferParticipant(participantOrgIds, course) &&
+        !acl.canReplaceParticipant(participantOrgIds, course) &&
+        !acl.canCancelParticipant(participantOrgIds, course) &&
+        acl.canSendCourseInformation(participantOrgIds, course)
       )
     },
 

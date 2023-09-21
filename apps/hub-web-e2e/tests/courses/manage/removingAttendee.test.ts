@@ -57,7 +57,7 @@ for (const data of testData) {
       data.userToRemove.email
     )
     const attendeeRemovingPopup = await courseDetailsPage.clickAttendeeRemove()
-    await attendeeRemovingPopup.removeAttendeeWithNoteUsingUser(data.user)
+    await attendeeRemovingPopup.cancelAttendeeWithNoteUsingUser(data.user)
     await courseDetailsPage.checkAttendingText(
       usersArray.length - 1,
       course.max_participants

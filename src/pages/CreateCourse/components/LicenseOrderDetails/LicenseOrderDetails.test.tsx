@@ -131,7 +131,6 @@ describe('component: LicenseOrderDetails', () => {
    * Come back to this test separately
    * @author Alexei.Gaidulean <alexei.gaidulean@teamteach.co.uk>
    */
-  // eslint-disable-next-line playwright/no-skipped-test
   test.skip
   it.skip('validates invoice form', async () => {
     const client = {

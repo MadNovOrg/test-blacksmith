@@ -1,11 +1,12 @@
 import { Accreditors_Enum } from '@app/generated/graphql'
-import { RoleName } from '@app/types'
+import { CourseParticipant, RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent } from '@test/index'
+import { buildCourse } from '@test/mock-data-utils'
 
-import { CourseActionsMenu } from './CourseActionsMenu'
+import { ManageAttendanceMenu } from './ManageAttendanceMenu'
 
-describe(CourseActionsMenu.name, () => {
+describe(ManageAttendanceMenu.name, () => {
   const defaultOrganizations = [
     {
       organization: {
@@ -15,19 +16,23 @@ describe(CourseActionsMenu.name, () => {
   ]
 
   it('displays correct options for an admin user', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse()
+
     render(
-      <CourseActionsMenu
-        item={{
-          id: chance.guid(),
-          course: { accreditedBy: Accreditors_Enum.Icm },
-          profile: {
-            organizations: defaultOrganizations,
-          },
-        }}
-        onRemoveClick={vi.fn()}
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
         onReplaceClick={vi.fn()}
         onTransferClick={vi.fn()}
-        onResendCourseInformationClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -38,26 +43,30 @@ describe(CourseActionsMenu.name, () => {
 
     await userEvent.click(screen.getByText(/manage attendance/i))
 
-    expect(screen.getByText(/remove/i)).toBeInTheDocument()
+    expect(screen.getByText(/cancel/i)).toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
     expect(screen.getByText(/resend course information/i)).toBeInTheDocument()
   })
 
   it('renders correct options for an ops user', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse()
+
     render(
-      <CourseActionsMenu
-        item={{
-          id: chance.guid(),
-          course: { accreditedBy: Accreditors_Enum.Icm },
-          profile: {
-            organizations: defaultOrganizations,
-          },
-        }}
-        onRemoveClick={vi.fn()}
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
         onReplaceClick={vi.fn()}
         onTransferClick={vi.fn()}
-        onResendCourseInformationClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -68,26 +77,30 @@ describe(CourseActionsMenu.name, () => {
 
     await userEvent.click(screen.getByText(/manage attendance/i))
 
-    expect(screen.getByText(/remove/i)).toBeInTheDocument()
+    expect(screen.getByText(/cancel/i)).toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
     expect(screen.getByText(/resend course information/i)).toBeInTheDocument()
   })
 
   it('renders correct options for a sales admin user', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse()
+
     render(
-      <CourseActionsMenu
-        item={{
-          id: chance.guid(),
-          course: { accreditedBy: Accreditors_Enum.Icm },
-          profile: {
-            organizations: defaultOrganizations,
-          },
-        }}
-        onRemoveClick={vi.fn()}
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
         onReplaceClick={vi.fn()}
         onTransferClick={vi.fn()}
-        onResendCourseInformationClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -98,26 +111,30 @@ describe(CourseActionsMenu.name, () => {
 
     await userEvent.click(screen.getByText(/manage attendance/i))
 
-    expect(screen.getByText(/remove/i)).toBeInTheDocument()
+    expect(screen.getByText(/cancel/i)).toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
     expect(screen.getByText(/resend course information/i)).toBeInTheDocument()
   })
 
   it('renders correct options for a sales representative user', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse()
+
     render(
-      <CourseActionsMenu
-        item={{
-          id: chance.guid(),
-          course: { accreditedBy: Accreditors_Enum.Icm },
-          profile: {
-            organizations: defaultOrganizations,
-          },
-        }}
-        onRemoveClick={vi.fn()}
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
         onReplaceClick={vi.fn()}
         onTransferClick={vi.fn()}
-        onResendCourseInformationClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -128,7 +145,7 @@ describe(CourseActionsMenu.name, () => {
 
     await userEvent.click(screen.getByText(/manage attendance/i))
 
-    expect(screen.queryByText(/remove/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/cancel/i)).not.toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.queryByText(/transfer/i)).not.toBeInTheDocument()
     expect(
@@ -137,19 +154,23 @@ describe(CourseActionsMenu.name, () => {
   })
 
   it('displays correct options for a trainer user', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse()
+
     render(
-      <CourseActionsMenu
-        item={{
-          id: chance.guid(),
-          course: { accreditedBy: Accreditors_Enum.Icm },
-          profile: {
-            organizations: defaultOrganizations,
-          },
-        }}
-        onRemoveClick={vi.fn()}
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
         onReplaceClick={vi.fn()}
         onTransferClick={vi.fn()}
-        onResendCourseInformationClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -163,19 +184,23 @@ describe(CourseActionsMenu.name, () => {
   })
 
   it('renders correct options for an org admin user', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse()
+
     render(
-      <CourseActionsMenu
-        item={{
-          id: chance.guid(),
-          course: { accreditedBy: Accreditors_Enum.Icm },
-          profile: {
-            organizations: defaultOrganizations,
-          },
-        }}
-        onRemoveClick={vi.fn()}
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
         onReplaceClick={vi.fn()}
         onTransferClick={vi.fn()}
-        onResendCourseInformationClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -188,7 +213,7 @@ describe(CourseActionsMenu.name, () => {
 
     await userEvent.click(screen.getByText(/manage attendance/i))
 
-    expect(screen.getByText(/remove/i)).toBeInTheDocument()
+    expect(screen.getByText(/cancel/i)).toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
     expect(
@@ -197,19 +222,23 @@ describe(CourseActionsMenu.name, () => {
   })
 
   it('does not render correct options for an org admin of another org', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse()
+
     render(
-      <CourseActionsMenu
-        item={{
-          id: chance.guid(),
-          course: { accreditedBy: Accreditors_Enum.Icm },
-          profile: {
-            organizations: defaultOrganizations,
-          },
-        }}
-        onRemoveClick={vi.fn()}
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
         onReplaceClick={vi.fn()}
         onTransferClick={vi.fn()}
-        onResendCourseInformationClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -224,19 +253,23 @@ describe(CourseActionsMenu.name, () => {
   })
 
   it('renders correct options for an org admin user for BILD course', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Bild },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse()
+
     render(
-      <CourseActionsMenu
-        item={{
-          id: chance.guid(),
-          course: { accreditedBy: Accreditors_Enum.Bild },
-          profile: {
-            organizations: defaultOrganizations,
-          },
-        }}
-        onRemoveClick={vi.fn()}
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
         onReplaceClick={vi.fn()}
         onTransferClick={vi.fn()}
-        onResendCourseInformationClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
       />,
       {
         auth: {
@@ -249,8 +282,8 @@ describe(CourseActionsMenu.name, () => {
 
     await userEvent.click(screen.getByText(/manage attendance/i))
 
-    expect(screen.getByText(/remove/i)).toBeInTheDocument()
-    expect(screen.queryByText(/replace/i)).not.toBeInTheDocument()
+    expect(screen.getByText(/cancel/i)).toBeInTheDocument()
+    expect(screen.queryByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
     expect(
       screen.queryByText(/resend course information/i)
@@ -264,19 +297,21 @@ describe(CourseActionsMenu.name, () => {
       profile: {
         organizations: defaultOrganizations,
       },
-    }
+    } as CourseParticipant
+    const course = buildCourse()
     const onRemoveMock = vi.fn()
     const onReplaceMock = vi.fn()
     const onTransferMock = vi.fn()
     const onResendCourseInformationMock = vi.fn()
 
     render(
-      <CourseActionsMenu
-        item={actionableItem}
-        onRemoveClick={onRemoveMock}
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={onRemoveMock}
         onReplaceClick={onReplaceMock}
         onTransferClick={onTransferMock}
-        onResendCourseInformationClick={onResendCourseInformationMock}
+        onResendInformationClick={onResendCourseInformationMock}
       />,
       {
         auth: {
@@ -287,7 +322,7 @@ describe(CourseActionsMenu.name, () => {
 
     await userEvent.click(screen.getByText(/manage attendance/i))
 
-    await userEvent.click(screen.getByText(/remove/i))
+    await userEvent.click(screen.getByText(/cancel/i))
     expect(onRemoveMock).toHaveBeenCalledTimes(1)
     expect(onRemoveMock).toHaveBeenCalledWith(actionableItem)
 
@@ -317,18 +352,20 @@ describe(CourseActionsMenu.name, () => {
       profile: {
         organizations: defaultOrganizations,
       },
-    }
+    } as CourseParticipant
+    const course = buildCourse()
     const onRemoveMock = vi.fn()
     const onReplaceMock = vi.fn()
     const onTransferMock = vi.fn()
 
     render(
-      <CourseActionsMenu
-        item={actionableItem}
-        onRemoveClick={onRemoveMock}
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={onRemoveMock}
         onReplaceClick={onReplaceMock}
         onTransferClick={onTransferMock}
-        onResendCourseInformationClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
       />,
       {
         auth: {

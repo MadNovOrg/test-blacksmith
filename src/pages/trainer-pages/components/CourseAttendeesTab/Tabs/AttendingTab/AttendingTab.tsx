@@ -1,7 +1,5 @@
-import SendIcon from '@mui/icons-material/Send'
 import {
   Box,
-  Button,
   Chip,
   Link,
   Table,
@@ -15,16 +13,17 @@ import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { CourseActionsMenu } from '@app/components/CourseActionsMenu'
 import {
   ConfirmDialog,
-  RemoveIndividualDialog,
+  CancelAttendeeDialog,
   ReplaceParticipantDialog,
   Mode,
 } from '@app/components/dialogs'
 import { LinkToProfile } from '@app/components/LinkToProfile'
+import { ManageAttendanceMenu } from '@app/components/ManageAttendanceMenu'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
+import { Scalars } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useMatchMutate } from '@app/hooks/useMatchMutate'
@@ -36,10 +35,10 @@ import {
 import { Matcher } from '@app/queries/participants/get-course-participants'
 import {
   BlendedLearningStatus,
-  Course,
   CourseParticipant,
   CourseType,
   SortOrder,
+  Course,
 } from '@app/types'
 import {
   courseEnded,
@@ -47,6 +46,7 @@ import {
   DEFAULT_PAGINATION_ROW_OPTIONS,
   LoadingStatus,
 } from '@app/util'
+import { getParticipantOrgIds } from '@app/util'
 
 type TabProperties = {
   course: Course
@@ -63,11 +63,10 @@ export const AttendingTab = ({
   const [perPage, setPerPage] = useState(DEFAULT_PAGINATION_LIMIT)
   const [sortColumn, setSortColumn] = useState<string>('name')
   const [order, setOrder] = useState<SortOrder>('asc')
-  const [individualToRemove, setIndividualToRemove] =
+  const [attendeeToCancel, setAttendeeToCancel] = useState<CourseParticipant>()
+  const [attendeeToReplace, setAttendeeToReplace] =
     useState<CourseParticipant>()
-  const [participantToReplace, setParticipantToReplace] =
-    useState<CourseParticipant>()
-  const [individualToResendInfo, setIndividualToResendInfo] =
+  const [attendeeToResendInfo, setAttendeeToResendInfo] =
     useState<CourseParticipant>()
   const isBlendedCourse = course.go1Integration
   const isOpenCourse = course.type === CourseType.OPEN
@@ -160,15 +159,10 @@ export const AttendingTab = ({
         !isCourseEnded &&
         acl.canManageParticipantAttendance(
           courseParticipants?.reduce(
-            (acc, courseParticipant) => [
-              ...acc,
-              ...courseParticipant.profile.organizations.map(
-                org => org.organization.id
-              ),
-            ],
+            (acc, cp) => [...acc, ...getParticipantOrgIds(cp)],
             [] as string[]
           ) ?? [],
-          course.accreditedBy
+          course
         )
           ? {
               id: 'actions',
@@ -184,15 +178,25 @@ export const AttendingTab = ({
       acl,
       isCourseEnded,
       courseParticipants,
-      course.accreditedBy,
+      course,
     ]
   )
 
-  const handleTransfer = useCallback(
-    (id: string) => {
-      navigate(`../transfer/${id}`, { replace: true })
+  const handleTransferAttendee = useCallback(
+    (participant: CourseParticipant) => {
+      navigate(`../transfer/${participant.id}`, { replace: true })
     },
     [navigate]
+  )
+
+  const canViewRowActions = useCallback(
+    (cp: CourseParticipant) =>
+      [
+        !isCourseEnded,
+        !cp.profile.archived,
+        acl.canManageParticipantAttendance(getParticipantOrgIds(cp), course),
+      ].every(Boolean),
+    [acl, course, isCourseEnded]
   )
 
   const sendCourseInfo = useCallback(
@@ -200,7 +204,7 @@ export const AttendingTab = ({
       courseId: SendCourseInfoParamType['courseId'],
       attendeeIds: SendCourseInfoParamType['attendeeIds']
     ) => {
-      setIndividualToResendInfo(undefined)
+      setAttendeeToResendInfo(undefined)
       try {
         const response = await fetcher<
           SendCourseInfoResponseType,
@@ -220,6 +224,16 @@ export const AttendingTab = ({
     [fetcher, onSendingCourseInformation]
   )
 
+  const rowActions = useMemo(
+    () => ({
+      onTransferClick: handleTransferAttendee,
+      onReplaceClick: setAttendeeToReplace,
+      onCancelClick: setAttendeeToCancel,
+      onResendInformationClick: setAttendeeToResendInfo,
+    }),
+    [handleTransferAttendee]
+  )
+
   return (
     <>
       {courseParticipantsLoadingStatus === LoadingStatus.SUCCESS &&
@@ -235,10 +249,6 @@ export const AttendingTab = ({
               />
               <TableBody>
                 {courseParticipants?.map(courseParticipant => {
-                  const participantOrgIds =
-                    courseParticipant.profile.organizations.map(
-                      org => org.organization.id
-                    )
                   return (
                     <TableRow
                       key={courseParticipant.id}
@@ -261,7 +271,7 @@ export const AttendingTab = ({
                         >
                           {courseParticipant.profile.email}
                           {courseParticipant.profile.contactDetails.map(
-                            contact => contact.value
+                            (contact: Scalars['jsonb']) => contact.value
                           )}
                         </LinkToProfile>
                       </TableCell>
@@ -326,46 +336,14 @@ export const AttendingTab = ({
                           )}
                         </TableCell>
                       ) : null}
-                      {!isCourseEnded &&
-                      acl.canManageParticipantAttendance(
-                        participantOrgIds,
-                        course.accreditedBy
-                      ) &&
-                      !courseParticipant.profile.archived ? (
+                      {canViewRowActions(courseParticipant) ? (
                         <TableCell>
-                          {!isOpenCourse ||
-                          acl.canOnlySendCourseInformation(
-                            participantOrgIds,
-                            course.accreditedBy
-                          ) ? (
-                            <Button
-                              startIcon={
-                                <SendIcon color="primary" titleAccess="Send" />
-                              }
-                              onClick={() =>
-                                setIndividualToResendInfo(courseParticipant)
-                              }
-                            >
-                              {t('common.resend-course-information')}
-                            </Button>
-                          ) : (
-                            <CourseActionsMenu
-                              item={courseParticipant}
-                              data-testid="manage-attendance"
-                              onReplaceClick={participant => {
-                                setParticipantToReplace(participant)
-                              }}
-                              onRemoveClick={participant => {
-                                setIndividualToRemove(participant)
-                              }}
-                              onTransferClick={participant => {
-                                handleTransfer(participant.id)
-                              }}
-                              onResendCourseInformationClick={participant =>
-                                setIndividualToResendInfo(participant)
-                              }
-                            />
-                          )}
+                          <ManageAttendanceMenu
+                            course={course}
+                            courseParticipant={courseParticipant}
+                            data-testid="manage-attendance"
+                            {...rowActions}
+                          />
                         </TableCell>
                       ) : null}
                     </TableRow>
@@ -395,43 +373,50 @@ export const AttendingTab = ({
             />
           ) : null}
 
-          {individualToRemove ? (
-            <RemoveIndividualDialog
-              participant={individualToRemove}
+          {attendeeToCancel ? (
+            <CancelAttendeeDialog
+              variant={
+                [
+                  acl.isOrgAdmin(course.organization?.id),
+                  acl.isCourseLeader(course),
+                  acl.isBookingContact(),
+                ].some(Boolean)
+                  ? 'minimal'
+                  : 'complete'
+              }
+              participant={attendeeToCancel}
               course={course}
-              onClose={() => setIndividualToRemove(undefined)}
+              onClose={() => setAttendeeToCancel(undefined)}
               onSave={invalidateCache}
             />
           ) : null}
 
-          {participantToReplace ? (
+          {attendeeToReplace ? (
             <ReplaceParticipantDialog
               course={course}
               participant={{
-                id: participantToReplace.id,
-                fullName: participantToReplace.profile.fullName,
-                avatar: participantToReplace.profile.avatar,
+                id: attendeeToReplace.id,
+                fullName: attendeeToReplace.profile.fullName,
+                avatar: attendeeToReplace.profile.avatar,
               }}
-              onClose={() => setParticipantToReplace(undefined)}
+              onClose={() => setAttendeeToReplace(undefined)}
               onSuccess={invalidateCache}
               mode={isOrgAdmin ? Mode.ORG_ADMIN : Mode.TT_ADMIN}
             />
           ) : null}
 
-          {individualToResendInfo ? (
+          {attendeeToResendInfo ? (
             <ConfirmDialog
-              open={Boolean(individualToResendInfo)}
+              open={Boolean(attendeeToResendInfo)}
               title={t(
                 'pages.course-participants.resend-course-info.modal.title'
               )}
               message={t(
                 'pages.course-participants.resend-course-info.modal.message',
-                { fullName: individualToResendInfo?.profile.fullName }
+                { fullName: attendeeToResendInfo?.profile.fullName }
               )}
-              onCancel={() => setIndividualToResendInfo(undefined)}
-              onOk={() =>
-                sendCourseInfo(course.id, [individualToResendInfo?.id])
-              }
+              onCancel={() => setAttendeeToResendInfo(undefined)}
+              onOk={() => sendCourseInfo(course.id, [attendeeToResendInfo?.id])}
             />
           ) : null}
         </>

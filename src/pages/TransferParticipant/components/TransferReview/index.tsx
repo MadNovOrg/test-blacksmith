@@ -55,7 +55,7 @@ export const TransferReview: React.FC<
     TransferParticipantMutationVariables
   >(TRANSFER_PARTICIPANT)
 
-  const handleTransfer = async () => {
+  const handleParticipantTransfer = async () => {
     if (toCourse && participant && fees && fees.type) {
       try {
         const result = await transferParticipant({
@@ -211,7 +211,7 @@ export const TransferReview: React.FC<
               <LoadingButton
                 variant="contained"
                 loading={fetching}
-                onClick={handleTransfer}
+                onClick={handleParticipantTransfer}
                 data-testid="confirm-transfer"
               >
                 {t('review-transfer.submit-btn-text')}

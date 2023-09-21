@@ -9,7 +9,11 @@ import {
 } from '@app/types'
 import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 
-import { buildCourse, buildProfile } from '@test/mock-data-utils'
+import {
+  buildCourse,
+  buildCourseTrainer,
+  buildProfile,
+} from '@test/mock-data-utils'
 
 import { getACL, injectACL } from './permissions'
 import { AuthContextType } from './types'
@@ -1211,12 +1215,17 @@ describe(getACL.name, () => {
       `should always return true when activeRole is %s`,
       activeRole => {
         // Arrange
+        const course = buildCourse({
+          overrides: {
+            type: CourseType.CLOSED,
+          },
+        })
         const acl = getACLStub({
           activeRole,
         })
 
         // Act & Assert
-        expect(acl.canEditCourses(CourseType.CLOSED, false)).toBeTruthy()
+        expect(acl.canEditCourses(course)).toBeTruthy()
       }
     )
 
@@ -1224,23 +1233,49 @@ describe(getACL.name, () => {
       `should return true when activeRole is ${RoleName.SALES_ADMIN} and the courseType is %s`,
       courseType => {
         // Arrange
+        const course = buildCourse({
+          overrides: {
+            type: courseType,
+          },
+        })
         const acl = getACLStub({
           activeRole: RoleName.SALES_ADMIN,
         })
 
         // Act & Assert
-        expect(acl.canEditCourses(courseType, false)).toBeTruthy()
+        expect(acl.canEditCourses(course)).toBeTruthy()
       }
     )
 
     it(`should return true when the activeRole is ${RoleName.TRAINER}, course type is ${CourseType.INDIRECT} and active user is leader on a course`, () => {
       // Arrange
+      const profile = buildProfile()
+      const profileId = '100'
+      const course = buildCourse({
+        map: course => ({
+          ...course,
+          trainers: [
+            buildCourseTrainer({
+              map: courseTrainer => ({
+                ...courseTrainer,
+                profile: {
+                  ...profile,
+                  id: profileId,
+                },
+                type: CourseTrainerType.Leader,
+              }),
+            }),
+          ],
+          type: CourseType.INDIRECT,
+        }),
+      })
       const acl = getACLStub({
+        profile: { ...profile, id: profileId },
         activeRole: RoleName.TRAINER,
       })
 
       // Act & Assert
-      expect(acl.canEditCourses(CourseType.INDIRECT, true)).toBeTruthy()
+      expect(acl.canEditCourses(course)).toBeTruthy()
     })
 
     it.each([
@@ -1824,18 +1859,24 @@ describe(getACL.name, () => {
       `should return true when activeRole is %s`,
       activeRole => {
         // Arrange
+        const course = buildCourse()
         const acl = getACLStub({
           activeRole,
         })
 
         // Act & Assert
-        expect(acl.canTransferParticipant([])).toBeTruthy()
+        expect(acl.canTransferParticipant([], course)).toBeTruthy()
       }
     )
 
     it(`should return true when user is org admin for an organization`, () => {
       // Arrange
       const managedOrgIds = '123'
+      const course = buildCourse({
+        overrides: {
+          type: CourseType.OPEN,
+        },
+      })
       const acl = getACLStub({
         activeRole: RoleName.USER,
         isOrgAdmin: true,
@@ -1843,17 +1884,18 @@ describe(getACL.name, () => {
       })
 
       // Act & Assert
-      expect(acl.canTransferParticipant([managedOrgIds])).toBeTruthy()
+      expect(acl.canTransferParticipant([managedOrgIds], course)).toBeTruthy()
     })
 
     it(`should return false when the activeRole is any other`, () => {
       // Arrange
+      const course = buildCourse()
       const acl = getACLStub({
         activeRole: RoleName.USER,
       })
 
       // Act & Assert
-      expect(acl.canTransferParticipant([])).toBeFalsy()
+      expect(acl.canTransferParticipant([], course)).toBeFalsy()
     })
   })
 
@@ -1865,16 +1907,28 @@ describe(getACL.name, () => {
       [RoleName.SALES_REPRESENTATIVE],
     ])(`should return true when activeRole is %s`, activeRole => {
       // Arrange
+      const course = buildCourse({
+        overrides: {
+          type: CourseType.OPEN,
+          accreditedBy: Accreditors_Enum.Bild,
+        },
+      })
       const acl = getACLStub({
         activeRole,
       })
 
       // Act & Assert
-      expect(acl.canReplaceParticipant([], Accreditors_Enum.Bild)).toBeTruthy()
+      expect(acl.canReplaceParticipant([], course)).toBeTruthy()
     })
 
     it(`should return true when the org admin is accredited by ${Accreditors_Enum.Icm}`, () => {
       // Arrange
+      const course = buildCourse({
+        overrides: {
+          type: CourseType.OPEN,
+          accreditedBy: Accreditors_Enum.Icm,
+        },
+      })
       const managedOrgIds = '123'
       const acl = getACLStub({
         activeRole: RoleName.USER,
@@ -1883,38 +1937,49 @@ describe(getACL.name, () => {
       })
 
       // Act & Assert
-      expect(
-        acl.canReplaceParticipant([managedOrgIds], Accreditors_Enum.Icm)
-      ).toBeTruthy()
+      expect(acl.canReplaceParticipant([managedOrgIds], course)).toBeTruthy()
     })
 
     it(`should return false when the activeRole is any other`, () => {
       // Arrange
+      const course = buildCourse({
+        overrides: {
+          type: CourseType.OPEN,
+          accreditedBy: Accreditors_Enum.Bild,
+        },
+      })
       const acl = getACLStub({
         activeRole: RoleName.USER,
       })
 
       // Act & Assert
-      expect(acl.canReplaceParticipant([], Accreditors_Enum.Bild)).toBeFalsy()
+      expect(acl.canReplaceParticipant([], course)).toBeFalsy()
     })
   })
 
-  describe('canRemoveParticipant()', () => {
+  describe('canCancelParticipant()', () => {
     it.each([[RoleName.TT_ADMIN], [RoleName.TT_OPS], [RoleName.SALES_ADMIN]])(
       `should return true when activeRole is %s`,
       activeRole => {
         // Arrange
+        const course = buildCourse({
+          overrides: {
+            type: CourseType.CLOSED,
+            accreditedBy: Accreditors_Enum.Bild,
+          },
+        })
         const acl = getACLStub({
           activeRole,
         })
 
         // Act & Assert
-        expect(acl.canRemoveParticipant([])).toBeTruthy()
+        expect(acl.canCancelParticipant([], course)).toBeTruthy()
       }
     )
 
     it(`should return true when user is org admin for an organization`, () => {
       // Arrange
+      const course = buildCourse({})
       const managedOrgIds = '123'
       const acl = getACLStub({
         activeRole: RoleName.USER,
@@ -1923,17 +1988,18 @@ describe(getACL.name, () => {
       })
 
       // Act & Assert
-      expect(acl.canRemoveParticipant([managedOrgIds])).toBeTruthy()
+      expect(acl.canCancelParticipant([managedOrgIds], course)).toBeTruthy()
     })
 
     it(`should return false when the activeRole is any other`, () => {
       // Arrange
+      const course = buildCourse({})
       const acl = getACLStub({
         activeRole: RoleName.USER,
       })
 
       // Act & Assert
-      expect(acl.canRemoveParticipant([])).toBeFalsy()
+      expect(acl.canCancelParticipant([], course)).toBeFalsy()
     })
   })
 
@@ -1945,22 +2011,24 @@ describe(getACL.name, () => {
       [RoleName.TRAINER],
     ])(`should return true when activeRole is %s`, activeRole => {
       // Arrange
+      const course = buildCourse({})
       const acl = getACLStub({
         activeRole,
       })
 
       // Act & Assert
-      expect(acl.canSendCourseInformation()).toBeTruthy()
+      expect(acl.canSendCourseInformation([], course)).toBeTruthy()
     })
 
     it(`should return false when the activeRole is any other`, () => {
       // Arrange
+      const course = buildCourse({})
       const acl = getACLStub({
         activeRole: RoleName.USER,
       })
 
       // Act & Assert
-      expect(acl.canSendCourseInformation()).toBeFalsy()
+      expect(acl.canSendCourseInformation([], course)).toBeFalsy()
     })
   })
 
@@ -1972,6 +2040,11 @@ describe(getACL.name, () => {
       [RoleName.TRAINER],
     ])(`should return true when activeRole is %s`, activeRole => {
       // Arrange
+      const course = buildCourse({
+        overrides: {
+          accreditedBy: Accreditors_Enum.Icm,
+        },
+      })
       const managedOrgIds = '123'
       const acl = getACLStub({
         activeRole: activeRole,
@@ -1981,33 +2054,9 @@ describe(getACL.name, () => {
 
       // Act & Assert
       expect(
-        acl.canManageParticipantAttendance(
-          [managedOrgIds],
-          Accreditors_Enum.Icm
-        )
+        acl.canManageParticipantAttendance([managedOrgIds], course)
       ).toBeTruthy()
     })
-  })
-
-  describe('canOnlySendCourseInformation()', () => {
-    it.each([[RoleName.TRAINER]])(
-      `should return true when activeRole is %s and the visited org id does not match the managed one`,
-      activeRole => {
-        // Arrange
-        const managedOrgId = '123'
-        const visitedOrgId = '456'
-        const acl = getACLStub({
-          activeRole: activeRole,
-          isOrgAdmin: true,
-          managedOrgIds: [managedOrgId],
-        })
-
-        // Act & Assert
-        expect(
-          acl.canOnlySendCourseInformation([visitedOrgId], Accreditors_Enum.Icm)
-        ).toBeTruthy()
-      }
-    )
   })
 
   describe('canGradeParticipants()', () => {

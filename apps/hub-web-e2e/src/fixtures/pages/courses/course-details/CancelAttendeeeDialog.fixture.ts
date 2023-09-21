@@ -2,11 +2,11 @@ import { Locator, Page } from '@playwright/test'
 
 import { BasePage } from '@qa/fixtures/pages/BasePage.fixture'
 
-export class RemoveAttendeePopUp extends BasePage {
+export class CancelAttendeeDialog extends BasePage {
   readonly applyCancellationTermsRadioButton: Locator
   readonly customFeeRadioButton: Locator
   readonly noFeesRadioButton: Locator
-  readonly removeAttendeeButton: Locator
+  readonly cancelAttendeeButton: Locator
   readonly closeButton: Locator
   readonly reasonForCancellationInput: Locator
   readonly confirmationCheckbox: Locator
@@ -22,8 +22,8 @@ export class RemoveAttendeePopUp extends BasePage {
     this.noFeesRadioButton = this.page.locator(
       '[data-testid="no-fees-radioButton"]'
     )
-    this.removeAttendeeButton = this.page.locator(
-      '[data-testid="removeAttendee-button"]'
+    this.cancelAttendeeButton = this.page.locator(
+      '[data-testid="cancelAttendee-button"]'
     )
     this.closeButton = this.page.locator('[data-testid="close-button"]')
     this.reasonForCancellationInput = this.page.locator(
@@ -34,12 +34,12 @@ export class RemoveAttendeePopUp extends BasePage {
     )
   }
 
-  async removeAttendeeWithNoteUsingUser(
+  async cancelAttendeeWithNoteUsingUser(
     userRole = 'admin',
     note = 'Reason of removing the attendee'
   ) {
     await this.reasonForCancellationInput.type(note)
     userRole !== 'admin' && (await this.confirmationCheckbox.click())
-    await this.removeAttendeeButton.click()
+    await this.cancelAttendeeButton.click()
   }
 }

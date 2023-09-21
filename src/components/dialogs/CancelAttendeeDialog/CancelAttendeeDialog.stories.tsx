@@ -6,19 +6,19 @@ import { RoleName } from '@app/types'
 
 import { buildCourse, buildParticipant } from '@test/mock-data-utils'
 
-import { RemoveIndividualDialog } from './RemoveIndividualDialog'
+import { CancelAttendeeDialog } from './CancelAttendeeDialog'
 
 import withAuthContext from '@storybook-decorators/withAuthContext'
 
 import '@app/i18n/config'
 
 export default {
-  title: 'components/dialogs/RemoveIndividualDialog',
-  component: RemoveIndividualDialog,
+  title: 'components/dialogs/CancelAttendeeDialog',
+  component: CancelAttendeeDialog,
   decorators: [withAuthContext({ activeRole: RoleName.USER })],
-} as Meta<typeof RemoveIndividualDialog>
+} as Meta<typeof CancelAttendeeDialog>
 
-type Story = StoryObj<typeof RemoveIndividualDialog>
+type Story = StoryObj<typeof CancelAttendeeDialog>
 
 export const Default: Story = {
   args: {
@@ -35,8 +35,22 @@ export const Default: Story = {
       <>
         <Button onClick={toggle}>Open dialog</Button>
 
-        {isOpen ? <RemoveIndividualDialog {...args} onClose={toggle} /> : null}
+        {isOpen ? <CancelAttendeeDialog {...args} onClose={toggle} /> : null}
       </>
     )
+  },
+}
+
+export const Minimal: Story = {
+  args: {
+    ...Default.args,
+    variant: 'minimal',
+  },
+}
+
+export const Complete: Story = {
+  args: {
+    ...Default.args,
+    variant: 'complete',
   },
 }

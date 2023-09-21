@@ -11,15 +11,21 @@ import {
   parse,
 } from 'date-fns'
 import { TFunction } from 'i18next'
+import { find, prop, propEq, map, pipe, filter } from 'lodash/fp'
 import { FieldError, Merge } from 'react-hook-form'
 
 import {
+  Course_Participant,
   Course_Participant_Module,
   Course_Status_Enum,
   Currency,
   Grade_Enum,
   Profile,
   Xero_Invoice_Status_Enum,
+} from '@app/generated/graphql'
+import {
+  Course_Trainer,
+  Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import {
@@ -32,10 +38,11 @@ import {
   Course,
   CourseInput,
   CourseLevel,
-  CourseTrainer,
+  CourseParticipant,
   CourseTrainerType,
   CourseType,
   NonNullish,
+  Organization,
   SearchTrainer,
   SetCourseTrainerInput,
   SortOrder,
@@ -141,17 +148,27 @@ export const courseStarted = (course: Course) =>
 export const courseEnded = (course: Course) =>
   isPast(new Date(course.schedule[0].end))
 
-export const getCourseLeadTrainer = (trainers: CourseTrainer[]) => {
-  return trainers.find(t => t.type === CourseTrainerType.Leader)
-}
+export const getCourseLeadTrainer = find<Course_Trainer>(
+  propEq('type', Course_Trainer_Type_Enum.Leader)
+)
 
-export const getCourseAssistants = (trainers: CourseTrainer[]) => {
-  return trainers.filter(t => t.type === CourseTrainerType.Assistant)
-}
+export const getCourseAssistants = filter<Course_Trainer>(
+  propEq('type', Course_Trainer_Type_Enum.Assistant)
+)
 
-export const getCourseModerator = (trainers: CourseTrainer[]) => {
-  return trainers.find(t => t.type === CourseTrainerType.Moderator)
-}
+export const getCourseModerator = find<Course_Trainer>(
+  propEq('type', Course_Trainer_Type_Enum.Moderator)
+)
+
+export const getParticipantOrgIds = pipe<
+  /**
+   * TODO Remove CourseParticipant after refactor
+   * @see https://behaviourhub.atlassian.net/browse/TTHP-2215
+   */
+  [Course_Participant | CourseParticipant | Pick<CourseParticipant, 'profile'>],
+  Organization[],
+  string[]
+>(prop('profile.organizations'), map(prop('organization.id')))
 
 export const transformModulesToGroups = (
   courseModules: NonNullish<Course_Participant_Module>[]

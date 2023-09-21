@@ -12,7 +12,7 @@ import React, { useCallback } from 'react'
 export type Action<T> = {
   icon: React.ReactNode
   label: string
-  onClick: (item: T) => void
+  onClick?: (item: T) => void
   testId?: string
 }
 
@@ -45,7 +45,7 @@ export const ActionsMenu = <T,>({
   const onClick = useCallback(
     (action: Action<T>) => {
       setAnchorEl(null)
-      action.onClick(item)
+      action?.onClick?.(item)
     },
     [item]
   )

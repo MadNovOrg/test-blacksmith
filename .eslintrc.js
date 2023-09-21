@@ -110,5 +110,5 @@ module.exports = {
     commonjs: true,
     node: true,
     es6: true,
-  }
+  },
 }

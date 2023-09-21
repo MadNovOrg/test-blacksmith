@@ -3,7 +3,10 @@ import React, { useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
-import { CourseTrainerType } from '@app/generated/graphql'
+import {
+  Course_Trainer,
+  Course_Trainer_Type_Enum,
+} from '@app/generated/graphql'
 import { CourseTrainer } from '@app/types'
 import {
   getCourseLeadTrainer,
@@ -28,7 +31,7 @@ const ListItemTranslated: React.FC<React.PropsWithChildren<ItemProps>> = ({
 }
 
 interface ListItemWrapperProps {
-  courseTrainer: CourseTrainer
+  courseTrainer: Course_Trainer
   enableLinks: boolean | undefined
 }
 
@@ -37,11 +40,11 @@ const ListItemWrapper: React.FC<
 > = ({ courseTrainer, enableLinks }) => {
   const i18nKey = useMemo(() => {
     switch (courseTrainer.type) {
-      case CourseTrainerType.Leader:
+      case Course_Trainer_Type_Enum.Leader:
         return 'pages.course-participants.trained-by'
-      case CourseTrainerType.Assistant:
+      case Course_Trainer_Type_Enum.Assistant:
         return 'pages.course-participants.assisted-by'
-      case CourseTrainerType.Moderator:
+      case Course_Trainer_Type_Enum.Moderator:
         return 'pages.course-participants.moderated-by'
       default:
         return 'pages.course-participants.trained-by'
@@ -54,13 +57,13 @@ const ListItemWrapper: React.FC<
         <Link href={`/profile/${courseTrainer.profile.id}`}>
           <ListItemTranslated
             i18nKey={i18nKey}
-            fullName={courseTrainer.profile.fullName}
+            fullName={courseTrainer.profile.fullName || ''}
           />
         </Link>
       ) : (
         <ListItemTranslated
           i18nKey={i18nKey}
-          fullName={courseTrainer.profile.fullName}
+          fullName={courseTrainer.profile.fullName || ''}
         />
       )}
     </>

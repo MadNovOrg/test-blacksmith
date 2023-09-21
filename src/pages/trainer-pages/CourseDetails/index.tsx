@@ -30,7 +30,7 @@ import { CourseAttendeesTab } from '@app/pages/trainer-pages/components/CourseAt
 import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
 import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading'
 import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
-import { CourseTrainerType, CourseType } from '@app/types'
+import { CourseType } from '@app/types'
 import { courseEnded, LoadingStatus } from '@app/util'
 
 import { EvaluationSummaryTab } from './components/EvaluationSummaryTab'
@@ -52,7 +52,7 @@ export const CourseDetails = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const navigate = useNavigate()
   const { id: courseId } = useParams()
-  const { acl, isOrgAdmin, profile } = useAuth()
+  const { acl, isOrgAdmin } = useAuth()
   const [searchParams] = useSearchParams()
 
   const initialTab = searchParams.get('tab') as CourseDetailsTabs | null
@@ -87,17 +87,13 @@ export const CourseDetails = () => {
   const exceptionsApprovalPending =
     course?.status === Course_Status_Enum.ExceptionsApprovalPending
 
-  const leader = course?.trainers?.find(
-    c => c.type === CourseTrainerType.Leader
-  )
-
   const canEditCourse = useMemo(
     () =>
       course &&
-      acl.canEditCourses(course.type, leader?.profile.id === profile?.id) &&
+      acl.canEditCourses(course) &&
       !courseEnded(course) &&
       !courseCancelled,
-    [acl, course, courseCancelled, leader?.profile.id, profile?.id]
+    [acl, course, courseCancelled]
   )
 
   const linkedOrderItem = useMemo(() => course?.orders?.[0], [course])

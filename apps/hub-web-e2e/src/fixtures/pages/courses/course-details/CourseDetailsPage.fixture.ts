@@ -9,9 +9,9 @@ import { BasePage } from '@qa/fixtures/pages/BasePage.fixture'
 import { CourseGradingPage } from '../CourseGradingPage.fixture'
 import { CourseTransferPage } from '../CourseTransferPage.fixture'
 
+import { CancelAttendeeDialog } from './CancelAttendeeeDialog.fixture'
 import { CancelEntireCoursePopUp } from './CancelEntireCoursePopup.fixture'
 import { InviteAttendeesPopUp } from './InviteAttendeesPopup.fixture'
-import { RemoveAttendeePopUp } from './RemoveAttendeePopup.fixture'
 import { ReplaceAttendeePopUp } from './ReplaceAttendeePopup.fixture'
 import { RequestCancellationPopup } from './RequestCancellationPopup.fixture'
 
@@ -210,9 +210,9 @@ export class CourseDetailsPage extends BasePage {
     return new CourseTransferPage(this.page)
   }
 
-  async clickAttendeeRemove(): Promise<RemoveAttendeePopUp> {
+  async clickAttendeeRemove(): Promise<CancelAttendeeDialog> {
     await this.attendeeRemoveButton.click()
-    return new RemoveAttendeePopUp(this.page)
+    return new CancelAttendeeDialog(this.page)
   }
 
   async clickAttendeeReplace(): Promise<ReplaceAttendeePopUp> {
