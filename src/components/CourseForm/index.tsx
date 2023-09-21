@@ -214,7 +214,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               organizationKeyContact: yup.object({
                 profileId: yup.string(),
                 firstName: yup.string().required(requiredMsg(t, 'first-name')),
-                lastName: yup.string().required(requiredMsg(t, 'last-name')),
+                lastName: yup.string().required(requiredMsg(t, 'surname')),
                 email: schemas.email(t).required(requiredMsg(t, 'email')),
               }),
             }
@@ -834,11 +834,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         setValue(`${field}.profileId`, isEmail ? undefined : value?.id)
         setValue(
           `${field}.firstName`,
-          isEmail || !value?.givenName ? '' : value.givenName
+          isEmail || !value?.givenName ? '' : value.givenName,
+          { shouldValidate: true }
         )
         setValue(
           `${field}.lastName`,
-          isEmail || !value?.familyName ? '' : value.familyName
+          isEmail || !value?.familyName ? '' : value.familyName,
+          { shouldValidate: true }
         )
         setValue(`${field}.email`, isEmail ? value : value?.email ?? '', {
           shouldValidate: true,
