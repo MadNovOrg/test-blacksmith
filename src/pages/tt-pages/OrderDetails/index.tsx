@@ -130,6 +130,33 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     ].filter(Boolean)
   }, [order])
 
+  const bookingContact = useMemo(() => {
+    if (!order?.course) return null
+
+    const course = order.course
+
+    if (course.type === Course_Type_Enum.Open && order.bookingContact) {
+      return {
+        fullName: `${order.bookingContact.firstName} ${order.bookingContact.lastName}`,
+        email: order.bookingContact.email,
+      }
+    }
+
+    if (course.bookingContact) {
+      return {
+        fullName: course.bookingContact.fullName,
+        email: course.bookingContact.email,
+      }
+    }
+
+    if (course.bookingContactInviteData) {
+      return {
+        fullName: `${course.bookingContactInviteData.firstName} ${course.bookingContactInviteData.lastName}`,
+        email: course.bookingContactInviteData.email,
+      }
+    }
+  }, [order])
+
   const isInvoiceInXero = Boolean(xeroInvoiceUrl)
 
   const loadingData = fetching || isUsePromoCodesLoading
@@ -483,32 +510,17 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </Stack>
                   </DetailsItemBox>
 
-                  {course?.bookingContact ? (
+                  {bookingContact ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
                         <Typography fontWeight={600}>
                           {_t('components.course-form.booking-contact')}
                         </Typography>
                         <Typography color="grey.700">
-                          {course.bookingContact.fullName}
+                          {bookingContact.fullName}
                         </Typography>
                         <Typography color="grey.700">
-                          {course.bookingContact.email}
-                        </Typography>
-                      </Stack>
-                    </DetailsItemBox>
-                  ) : course?.bookingContactInviteData ? (
-                    <DetailsItemBox>
-                      <Stack spacing={2}>
-                        <Typography fontWeight={600}>
-                          {_t('components.course-form.booking-contact')}
-                        </Typography>
-                        <Typography color="grey.700">
-                          {course.bookingContactInviteData.firstName}{' '}
-                          {course.bookingContactInviteData.lastName}
-                        </Typography>
-                        <Typography color="grey.700">
-                          {course.bookingContactInviteData.email}
+                          {bookingContact.email}
                         </Typography>
                       </Stack>
                     </DetailsItemBox>
