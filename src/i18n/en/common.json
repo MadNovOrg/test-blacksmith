@@ -613,7 +613,7 @@
       "ANY_INJURIES": "Were there any injuries?",
       "TRAINER_COMMENTS": "Trainer comments"
     },
-    "disclaimer": "Your ratings and comments are appreciated as the course involves physical participation including attention to Health and Safety issues working within the Team Teach Code of Practice. By completing this evaluation, you consent to Team Teach collecting and processing this data in compliance with the General Data Protection Regulations (GDPR). See our Privacy Policy for more.",
+    "disclaimer": "Your ratings and comments are appreciated as the course involves physical participation including attention to Health and Safety issues working within the Team Teach Code of Practice. By completing this evaluation, you consent to Team Teach collecting and processing this data in compliance with the General Data Protection Regulations (GDPR). See our <0>Privacy Policy</0> for more.",
     "pdf-export": {
       "started-at": "Started at",
       "ended-at": "Ended at",
