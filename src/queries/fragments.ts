@@ -19,6 +19,13 @@ export const ORGANIZATION = gql`
   }
 `
 
+export const SHALLOW_ORGANIZATION = gql`
+  fragment ShallowOrganization on organization {
+    id
+    name
+  }
+`
+
 export const PROFILE = gql`
   ${ORGANIZATION}
   fragment Profile on profile {

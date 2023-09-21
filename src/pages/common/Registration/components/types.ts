@@ -2,6 +2,7 @@ import { subYears } from 'date-fns'
 import { TFunction } from 'i18next'
 
 import { schemas, yup } from '@app/schemas'
+import { Organization } from '@app/types'
 import { requiredMsg } from '@app/util'
 
 export type FormInputs = {
@@ -15,6 +16,7 @@ export type FormInputs = {
   recaptchaToken: string
   jobTitle: string
   otherJobTitle: string
+  organization?: Pick<Organization, 'name' | 'id'>
 }
 
 export const getFormSchema = (t: TFunction) => {
@@ -45,5 +47,9 @@ export const getFormSchema = (t: TFunction) => {
         ? schema.required(t('validation-errors.other-job-title-required'))
         : schema
     }),
+
+    organization: yup
+      .object()
+      .required(t('components.course-form.organisation-required')),
   })
 }

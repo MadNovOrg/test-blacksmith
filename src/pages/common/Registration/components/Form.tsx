@@ -20,16 +20,19 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { Auth } from 'aws-amplify'
 import { subYears } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useCallback } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { useToggle } from 'react-use'
 
+import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
+import { isHubOrg } from '@app/components/OrgSelector/utils'
 import PhoneNumberInput from '@app/components/PhoneNumberInput'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 import { SignUpMutation, SignUpMutationVariables } from '@app/generated/graphql'
 import { useJobTitles } from '@app/hooks/useJobTitles'
 import { gqlRequest } from '@app/lib/gql-request'
+import { Organization } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
 import { SIGN_UP_MUTATION } from '../queries'
@@ -99,6 +102,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         recaptchaToken: data.recaptchaToken,
         jobTitle:
           data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
+        orgId: data.organization?.id,
       }
 
       await gqlRequest<SignUpMutation, SignUpMutationVariables>(
@@ -125,6 +129,24 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       setLoading(false)
     }
   }
+
+  const orgSelectorOnChange = useCallback(
+    (org: CallbackOption) => {
+      if (!org) {
+        setValue('organization', undefined, {
+          shouldValidate: true,
+        })
+        return
+      }
+      if (isHubOrg(org)) {
+        setValue('organization', org as Organization, {
+          shouldValidate: true,
+        })
+        return
+      }
+    },
+    [setValue]
+  )
 
   return (
     <>
@@ -266,6 +288,22 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             />
           </LocalizationProvider>
         </Box>
+
+        <OrgSelector
+          required
+          {...register('organization')}
+          autocompleteMode={false}
+          showTrainerOrgOnly={false}
+          error={errors.organization?.message}
+          allowAdding
+          value={values.organization ?? undefined}
+          onChange={orgSelectorOnChange}
+          textFieldProps={{
+            variant: 'filled',
+          }}
+          sx={{ mb: 3 }}
+          isShallowRetrieval
+        />
 
         <Box>
           <TextField

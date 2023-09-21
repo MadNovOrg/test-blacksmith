@@ -207,6 +207,12 @@ insert_permissions:
         - trust_type
         - xero_contact_id
 select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - id
+        - name
+      filter: {}
   - role: finance
     permission:
       columns:

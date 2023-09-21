@@ -1346,6 +1346,7 @@ export type CreateAppUserInput = {
   firstName: Scalars['String'];
   jobTitle: Scalars['String'];
   lastName: Scalars['String'];
+  orgId?: InputMaybe<Scalars['String']>;
   password: Scalars['String'];
   phone?: InputMaybe<Scalars['String']>;
 };
@@ -10080,6 +10081,7 @@ export type UpdateUserProfileInput = {
   familyName?: InputMaybe<Scalars['String']>;
   givenName?: InputMaybe<Scalars['String']>;
   jobTitle?: InputMaybe<Scalars['String']>;
+  orgId?: InputMaybe<Scalars['String']>;
   phone?: InputMaybe<Scalars['String']>;
   profileId: Scalars['uuid'];
 };
@@ -51682,6 +51684,14 @@ export type GetOrganizationsQueryVariables = Exact<{
 
 
 export type GetOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity: any } }> }> };
+
+export type GetShallowOrganizationsQueryVariables = Exact<{
+  orderBy?: InputMaybe<Array<Organization_Order_By> | Organization_Order_By>;
+  where?: InputMaybe<Organization_Bool_Exp>;
+}>;
+
+
+export type GetShallowOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string }> };
 
 export type InsertOrgLeadMutationVariables = Exact<{
   name: Scalars['String'];

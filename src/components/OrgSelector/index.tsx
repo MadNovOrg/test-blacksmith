@@ -15,6 +15,7 @@ import {
 import { debounce } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useQuery } from 'urql'
 
 import {
   isDfeSuggestion,
@@ -27,11 +28,15 @@ import {
   FindEstablishmentQueryVariables,
   GetOrganizationsQuery,
   GetOrganizationsQueryVariables,
+  GetShallowOrganizationsQuery,
+  GetShallowOrganizationsQueryVariables,
   InsertOrgMutation,
+  Dfe_Establishment_Bool_Exp,
+  Organization_Bool_Exp,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { QUERY as FindEstablishment } from '@app/queries/dfe/find-establishment'
 import { QUERY as GetOrganizations } from '@app/queries/organization/get-organizations'
+import { QUERY as GetShallowOrganizations } from '@app/queries/organization/get-shallow-organizations'
 import { Establishment, Organization } from '@app/types'
 
 import { AddOrg } from './components/AddOrg'
@@ -63,6 +68,7 @@ export type OrgSelectorProps = {
   showDfeResults?: boolean
   autocompleteMode?: boolean
   showTrainerOrgOnly?: boolean
+  isShallowRetrieval?: boolean
 }
 
 const getOptionLabel = (option: Option) => option.name ?? ''
@@ -81,10 +87,10 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     error,
     disabled = false,
     required = false,
+    isShallowRetrieval = false,
     ...props
   }) {
     const { t } = useTranslation()
-    const fetcher = useFetcher()
 
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -93,8 +99,19 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     const [open, setOpen] = useState(false)
     const [adding, setAdding] = useState<OptionToAdd | null>()
     const [options, setOptions] = useState<Option[]>([])
-    const [loading, setLoading] = useState(false)
     const [q, setQ] = useState('')
+    const [queryVariable, setQueryVariable] = useState<
+      Dfe_Establishment_Bool_Exp | Organization_Bool_Exp
+    >()
+    const [exectureQuery, setExecuteQuery] = useState<{
+      pauseDfeQuery: boolean
+      pauseShallowOrgDataQuery: boolean
+      pauseOrgDataQuery: boolean
+    }>({
+      pauseDfeQuery: true,
+      pauseShallowOrgDataQuery: true,
+      pauseOrgDataQuery: true,
+    })
 
     const myOrgIds = profile?.organizations.map(org => org.organization.id)
 
@@ -113,6 +130,47 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       [profile?.organizations, showTrainerOrgOnly]
     )
 
+    const [{ data: dfeData }] = useQuery<
+      FindEstablishmentQuery,
+      FindEstablishmentQueryVariables
+    >({
+      query: FindEstablishment,
+      variables: { where: queryVariable as Dfe_Establishment_Bool_Exp },
+      pause: exectureQuery.pauseDfeQuery,
+    })
+
+    const [{ data: shallowOrgData, fetching: shallowOrgDataFetching }] =
+      useQuery<
+        GetShallowOrganizationsQuery,
+        GetShallowOrganizationsQueryVariables
+      >({
+        query: GetShallowOrganizations,
+        variables: { where: queryVariable as Organization_Bool_Exp },
+        pause: exectureQuery.pauseShallowOrgDataQuery,
+      })
+
+    const [{ data: orgData, fetching: orgDatFetching }] = useQuery<
+      GetOrganizationsQuery,
+      GetOrganizationsQueryVariables
+    >({
+      query: GetOrganizations,
+      variables: { where: queryVariable as Organization_Bool_Exp },
+      pause: exectureQuery.pauseOrgDataQuery,
+    })
+
+    const orgs = isShallowRetrieval ? shallowOrgData?.orgs : orgData?.orgs
+
+    const establishments = dfeData?.establishments
+    const dfeResults = establishments
+      ?.filter(
+        establishment =>
+          !orgs?.some(org => 'name' in org && org.name === establishment.name)
+      )
+      .map(r => ({
+        ...r,
+        fromDfe: true,
+      }))
+
     useEffect(() => {
       if (showTrainerNonAOLOrgs) {
         setOptions(() => myOrg as Organization[])
@@ -125,36 +183,44 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     }, [defaultOrg, myOrg, onChange, showTrainerNonAOLOrgs])
 
     const refreshOptions = useCallback(
-      async (query: string) => {
+      (query: string) => {
         const keywords = (query ?? '').split(' ')
         const condition = {
           _and: keywords.map(k => ({ name: { _ilike: `%${k}%` } })),
         }
-        const dfeData = await fetcher<
-          FindEstablishmentQuery,
-          FindEstablishmentQueryVariables
-        >(FindEstablishment, { where: condition })
+        setQueryVariable(condition)
+        setExecuteQuery(() => {
+          if (isShallowRetrieval) {
+            return {
+              pauseOrgDataQuery: true,
+              pauseShallowOrgDataQuery: false,
+              pauseDfeQuery: false,
+            }
+          } else {
+            return {
+              pauseOrgDataQuery: false,
+              pauseShallowOrgDataQuery: true,
+              pauseDfeQuery: false,
+            }
+          }
+        })
 
-        const hubData = await fetcher<
-          GetOrganizationsQuery,
-          GetOrganizationsQueryVariables
-        >(GetOrganizations, { where: condition })
-        setLoading(false)
-        const orgs = hubData.orgs ?? []
-        const establishments = dfeData.establishments ?? []
-        const dfeResults = establishments
-          .filter(e => !orgs.some(org => 'name' in org && org.name === e.name))
-          .map(r => ({
-            ...r,
-            fromDfe: true,
-          }))
         setOptions([
-          ...(showHubResults ? orgs : []),
+          ...(showHubResults && orgs ? orgs : []),
           ...(allowAdding && !autocompleteMode ? [{ name: query }] : []),
-          ...(showDfeResults ? dfeResults : []),
+          ...(showDfeResults && dfeResults ? dfeResults : []),
         ])
       },
-      [allowAdding, autocompleteMode, fetcher, showDfeResults, showHubResults]
+      [
+        setQueryVariable,
+        showHubResults,
+        orgs,
+        allowAdding,
+        autocompleteMode,
+        showDfeResults,
+        dfeResults,
+        isShallowRetrieval,
+      ]
     )
 
     const debouncedQuery = useMemo(() => {
@@ -166,7 +232,6 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         setQ(value)
         setOptions([])
         if (reason === 'input' && value && value.length > 2) {
-          setLoading(true)
           debouncedQuery(value)
         }
         if (autocompleteMode) {
@@ -185,7 +250,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       await refreshOptions(org.name)
 
       // TODO: Not auto selecting the newly added org, needs fixing
-      onChange(org as unknown as Organization)
+      onChange(org)
     }
 
     const handleChange = (
@@ -212,13 +277,17 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     const noOptionsText =
       showTrainerNonAOLOrgs && !myOrg?.length ? (
         <Typography variant="body2">
-          {loading ? t('loading') : t('components.org-selector.no-results')}
+          {shallowOrgDataFetching || orgDatFetching
+            ? t('loading')
+            : t('components.org-selector.no-results')}
         </Typography>
       ) : q.length < 3 ? (
         t('components.org-selector.min-chars')
       ) : (
         <Typography variant="body2">
-          {loading ? t('loading') : t('components.org-selector.no-results')}
+          {shallowOrgDataFetching || orgDatFetching
+            ? t('loading')
+            : t('components.org-selector.no-results')}
         </Typography>
       )
 
@@ -258,7 +327,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             if (!('id' in v) || !('id' in o)) return false
             return o.id === v.id
           }}
-          loading={loading}
+          loading={shallowOrgDataFetching || orgDatFetching}
           disabled={disabled}
           groupBy={(value: Option) => {
             if (isDfeSuggestion(value)) {
@@ -310,7 +379,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
                 ...params.InputProps,
                 endAdornment: (
                   <React.Fragment>
-                    {loading ? (
+                    {shallowOrgDataFetching || orgDatFetching ? (
                       <CircularProgress color="inherit" size={20} />
                     ) : null}
                     {autocompleteMode ? null : params.InputProps.endAdornment}

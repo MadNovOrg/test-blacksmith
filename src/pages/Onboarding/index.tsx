@@ -11,23 +11,26 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useCallback } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'urql'
 import { InferType } from 'yup'
 
+import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import PhoneNumberInput from '@app/components/PhoneNumberInput'
 import { useAuth } from '@app/context/auth'
 import {
   UpdateProfileMutation,
   UpdateProfileMutationVariables,
+  UpdateUserProfileInput,
 } from '@app/generated/graphql'
 import { useJobTitles } from '@app/hooks/useJobTitles'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { MUTATION as UPDATE_PROFILE_MUTATION } from '@app/queries/profile/update-profile'
 import { schemas, yup } from '@app/schemas'
+import { Organization } from '@app/types'
 import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
 
 export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
@@ -55,6 +58,14 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
         ? schema.required(_t('validation-errors.other-job-title-required'))
         : schema
     }),
+    organization: yup
+      .object()
+      .shape({
+        id: yup.string(),
+        name: yup.string(),
+        moderatorRole: yup.boolean(),
+      })
+      .required(t('components.course-form.organisation-required')),
   })
 
   const { register, handleSubmit, formState, watch, setValue, control } =
@@ -89,12 +100,25 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
         phone: data.phone,
         jobTitle:
           data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
-      },
+        orgId: data.organization.id,
+      } as UpdateUserProfileInput,
     })
   }
 
   const errors = formState.errors
   const values = watch()
+
+  const orgSelectorOnChange = useCallback(
+    (org: CallbackOption) => {
+      if (org) {
+        setValue('organization', org as Organization, {
+          shouldValidate: true,
+        })
+        return
+      }
+    },
+    [setValue]
+  )
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
@@ -197,6 +221,24 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
             />
           </LocalizationProvider>
         </Box>
+
+        <OrgSelector
+          required
+          {...register('organization')}
+          autocompleteMode={false}
+          showTrainerOrgOnly={false}
+          error={errors.organization?.message}
+          allowAdding
+          value={
+            (values.organization as Pick<Organization, 'name' | 'id'>) ?? null
+          }
+          onChange={orgSelectorOnChange}
+          textFieldProps={{
+            variant: 'filled',
+          }}
+          sx={{ mb: 3 }}
+          isShallowRetrieval
+        />
 
         <Box>
           <TextField

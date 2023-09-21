@@ -558,6 +558,7 @@ input CreateAppUserInput {
   dob: String
   acceptTnc: Boolean!
   jobTitle: String!
+  orgId: String
 }
 
 input GetCoursePricingInput {
@@ -642,6 +643,7 @@ input UpdateUserProfileInput {
   dob: String
   dietaryRestrictions: String
   disabilities: String
+  orgId: String
 }
 
 input NotifyCourseInput {
