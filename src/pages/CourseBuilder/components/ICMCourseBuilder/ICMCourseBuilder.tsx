@@ -40,6 +40,12 @@ import { COURSE_QUERY, SET_COURSE_AS_DRAFT } from './queries'
 
 type CourseBuilderProps = unknown & { editMode?: boolean }
 
+const courseBuilderWarning: Partial<Record<Course_Level_Enum, string>> = {
+  [Course_Level_Enum.Level_1]: 'course-l1-info',
+  [Course_Level_Enum.Level_2]: 'course-l2-info',
+  [Course_Level_Enum.Advanced]: 'course-adv-info',
+}
+
 export const MAX_COURSE_DURATION_MAP = {
   normal: {
     [CourseLevel.Level_1]: 6 * 60, // 1 training day
@@ -364,22 +370,16 @@ export const ICMCourseBuilder: React.FC<
             onSubmit={submitButtonHandler}
             onChange={handleSelectionChange}
             slots={{
-              afterChosenModulesTitle: (
-                <Alert severity="info">
-                  {courseData.course.level === Course_Level_Enum.Level_1 &&
-                    t(
-                      'pages.trainer-base.create-course.new-course.course-l1-info'
+              afterChosenModulesTitle:
+                courseBuilderWarning[courseData.course.level] != null ? (
+                  <Alert severity="info">
+                    {t(
+                      `pages.trainer-base.create-course.new-course.${
+                        courseBuilderWarning[courseData.course.level]
+                      }`
                     )}
-                  {courseData.course.level === Course_Level_Enum.Level_2 &&
-                    t(
-                      'pages.trainer-base.create-course.new-course.course-l2-info'
-                    )}
-                  {courseData.course.level === Course_Level_Enum.Advanced &&
-                    t(
-                      'pages.trainer-base.create-course.new-course.course-adv-info'
-                    )}
-                </Alert>
-              ),
+                  </Alert>
+                ) : null,
             }}
           />
         </Box>
