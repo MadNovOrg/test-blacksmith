@@ -152,6 +152,7 @@
   "org-name": "Organisation Name",
   "filter-by": " Filter By",
   "level": "Course level",
+  "certificate-level": "Certificate Level",
   "trainer-level": "Trainer Level",
   "course-level": "Course Level",
   "verify": "Verify",

@@ -313,18 +313,8 @@ export const Users = () => {
                 data-testid="FilterTrainerType"
               />
               <FilterByCourseLevel
-                title={t('trainer-level')}
+                title={t('certificate-level')}
                 onChange={setFilteredByCertificateLEvel}
-                excludedStatuses={
-                  new Set([
-                    Course_Level_Enum.Advanced,
-                    Course_Level_Enum.BildRegular,
-                    Course_Level_Enum.BildIntermediateTrainer,
-                    Course_Level_Enum.BildAdvancedTrainer,
-                    Course_Level_Enum.Level_1,
-                    Course_Level_Enum.Level_2,
-                  ])
-                }
               />
               <FilterByCertificateValidity onChange={setCertificateStatus} />
               <FormControlLabel
