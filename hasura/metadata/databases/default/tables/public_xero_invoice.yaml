@@ -1,43 +1,43 @@
 table:
-  schema: public
   name: xero_invoice
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    line_items:
-      custom_name: lineItems
     amount_due:
       custom_name: amountDue
     amount_paid:
       custom_name: amountPaid
-    due_date:
-      custom_name: dueDate
-    xero_id:
-      custom_name: xeroId
     currency_code:
       custom_name: currencyCode
-    total_tax:
-      custom_name: totalTax
+    due_date:
+      custom_name: dueDate
     fully_paid_on_date:
       custom_name: fullyPaidOnDate
-    xero_contact_id:
-      custom_name: xeroContactId
     invoice_number:
       custom_name: invoiceNumber
     issued_date:
       custom_name: issuedDate
+    line_items:
+      custom_name: lineItems
+    total_tax:
+      custom_name: totalTax
+    xero_contact_id:
+      custom_name: xeroContactId
+    xero_id:
+      custom_name: xeroId
   custom_column_names:
-    line_items: lineItems
     amount_due: amountDue
     amount_paid: amountPaid
-    due_date: dueDate
-    xero_id: xeroId
     currency_code: currencyCode
-    total_tax: totalTax
+    due_date: dueDate
     fully_paid_on_date: fullyPaidOnDate
-    xero_contact_id: xeroContactId
     invoice_number: invoiceNumber
     issued_date: issuedDate
+    line_items: lineItems
+    total_tax: totalTax
+    xero_contact_id: xeroContactId
+    xero_id: xeroId
+  custom_root_fields: {}
 object_relationships:
   - name: contact
     using:
@@ -46,8 +46,8 @@ computed_fields:
   - name: status
     definition:
       function:
-        schema: public
         name: calculate_invoice_status
+        schema: public
     comment: Calculated invoice status that takes due_date into account
 select_permissions:
   - role: finance

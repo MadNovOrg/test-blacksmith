@@ -1,61 +1,61 @@
 table:
-  schema: public
   name: order
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
+    billing_address:
+      custom_name: billingAddress
+    billing_email:
+      custom_name: billingEmail
+    billing_family_name:
+      custom_name: billingFamilyName
+    billing_given_name:
+      custom_name: billingGivenName
+    billing_phone:
+      custom_name: billingPhone
+    booking_contact:
+      custom_name: bookingContact
     client_purchase_order:
       custom_name: clientPurchaseOrder
     course_id:
       custom_name: courseId
-    xero_invoice_number:
-      custom_name: xeroInvoiceNumber
-    billing_family_name:
-      custom_name: billingFamilyName
-    payment_method:
-      custom_name: paymentMethod
-    billing_address:
-      custom_name: billingAddress
-    order_due:
-      custom_name: orderDue
-    booking_contact:
-      custom_name: bookingContact
-    sales_representative_id:
-      custom_name: salesRepresentativeId
-    promo_codes:
-      custom_name: promoCodes
-    organization_id:
-      custom_name: organizationId
-    billing_given_name:
-      custom_name: billingGivenName
     created_at:
       custom_name: createdAt
-    billing_phone:
-      custom_name: billingPhone
-    billing_email:
-      custom_name: billingEmail
+    order_due:
+      custom_name: orderDue
     order_total:
       custom_name: orderTotal
+    organization_id:
+      custom_name: organizationId
+    payment_method:
+      custom_name: paymentMethod
     profile_id:
       custom_name: profileId
+    promo_codes:
+      custom_name: promoCodes
+    sales_representative_id:
+      custom_name: salesRepresentativeId
+    xero_invoice_number:
+      custom_name: xeroInvoiceNumber
   custom_column_names:
+    billing_address: billingAddress
+    billing_email: billingEmail
+    billing_family_name: billingFamilyName
+    billing_given_name: billingGivenName
+    billing_phone: billingPhone
+    booking_contact: bookingContact
     client_purchase_order: clientPurchaseOrder
     course_id: courseId
-    xero_invoice_number: xeroInvoiceNumber
-    billing_family_name: billingFamilyName
-    payment_method: paymentMethod
-    billing_address: billingAddress
-    order_due: orderDue
-    booking_contact: bookingContact
-    sales_representative_id: salesRepresentativeId
-    promo_codes: promoCodes
-    organization_id: organizationId
-    billing_given_name: billingGivenName
     created_at: createdAt
-    billing_phone: billingPhone
-    billing_email: billingEmail
+    order_due: orderDue
     order_total: orderTotal
+    organization_id: organizationId
+    payment_method: paymentMethod
     profile_id: profileId
+    promo_codes: promoCodes
+    sales_representative_id: salesRepresentativeId
+    xero_invoice_number: xeroInvoiceNumber
+  custom_root_fields: {}
 object_relationships:
   - name: course
     using:
@@ -65,8 +65,8 @@ object_relationships:
       foreign_key_constraint_on:
         column: invoice_number
         table:
-          schema: public
           name: xero_invoice
+          schema: public
   - name: organization
     using:
       foreign_key_constraint_on: organization_id
@@ -78,7 +78,6 @@ insert_permissions:
     permission:
       check: {}
       columns: []
-      backend_only: false
   - role: sales-admin
     permission:
       check: {}
@@ -104,7 +103,6 @@ insert_permissions:
         - source
         - user
         - xero_invoice_number
-      backend_only: false
   - role: sales-representative
     permission:
       check: {}
@@ -131,7 +129,6 @@ insert_permissions:
         - quantity
         - registrants
         - user
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -157,7 +154,6 @@ insert_permissions:
         - source
         - user
         - xero_invoice_number
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -183,7 +179,6 @@ insert_permissions:
         - source
         - user
         - xero_invoice_number
-      backend_only: false
   - role: unverified
     permission:
       check: {}
@@ -204,7 +199,6 @@ insert_permissions:
         - quantity
         - registrants
         - user
-      backend_only: false
   - role: user
     permission:
       check: {}
@@ -226,6 +220,31 @@ insert_permissions:
         - registrants
         - user
 select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - id
+        - course_id
+        - xero_invoice_number
+        - payment_method
+        - source
+      filter:
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - course:
+              _or:
+                - organization:
+                    members:
+                      _and:
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
+                        - is_admin:
+                            _eq: true
+                - booking_contact_profile_id:
+                    _eq: X-Hasura-User-Id
+      limit: 0
+      allow_aggregations: true
   - role: finance
     permission:
       columns:
@@ -319,6 +338,15 @@ select_permissions:
         - xero_invoice_number
       filter: {}
       allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - id
+        - course_id
+        - xero_invoice_number
+        - source
+        - payment_method
+      filter: {}
   - role: tt-admin
     permission:
       columns:
@@ -407,15 +435,6 @@ select_permissions:
       filter:
         profile_id:
           _eq: X-Hasura-User-Id
-  - role: trainer
-    permission:
-      columns:
-        - id
-        - course_id
-        - xero_invoice_number
-        - source
-        - payment_method
-      filter: {}
   - role: user
     permission:
       columns:
@@ -457,31 +476,6 @@ select_permissions:
           - course:
               booking_contact_profile_id:
                 _eq: X-Hasura-User-Id
-  - role: booking-contact
-    permission:
-      columns:
-        - id
-        - course_id
-        - xero_invoice_number
-        - payment_method
-        - source
-      filter:
-        _or:
-          - profile_id:
-              _eq: X-Hasura-User-Id
-          - course:
-              _or:
-                - organization:
-                    members:
-                      _and:
-                        - profile_id:
-                            _eq: X-Hasura-User-Id
-                        - is_admin:
-                            _eq: true
-                - booking_contact_profile_id:
-                    _eq: X-Hasura-User-Id
-      limit: 0
-      allow_aggregations: true
 update_permissions:
   - role: ld
     permission:
@@ -560,8 +554,8 @@ event_triggers:
         columns:
           - quantity
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/go1-licensing/purchase-licenses'
   - name: new_order
@@ -570,7 +564,7 @@ event_triggers:
       insert:
         columns: '*'
     retry_conf:
-      num_retries: 3
       interval_sec: 10
+      num_retries: 3
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/order'
