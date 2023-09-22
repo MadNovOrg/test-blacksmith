@@ -23,7 +23,6 @@ export class CreateCoursePage extends BasePage {
   readonly reaccreditationCheckbox: Locator
   readonly deliveryTypeRadioButton: (type: string) => Locator
   readonly venueInput: Locator
-  readonly onlineMeetingLinkInput: Locator
   readonly organisationInput: Locator
   readonly contactInput: Locator
   readonly autocompleteOption: Locator
@@ -59,9 +58,7 @@ export class CreateCoursePage extends BasePage {
       'input[name="reaccreditation"]'
     )
     this.deliveryTypeRadioButton = (type: string) =>
-      this.page.locator(
-        `input[name="row-radio-buttons-group"][value="${type}"]`
-      )
+      this.page.locator(`input[name="delivery-type-radio"][value="${type}"]`)
     this.venueInput = this.page.locator('[data-testid="venue-selector"] input')
     this.organisationInput = this.page.locator(
       '[data-testid="org-selector"] input'
@@ -89,9 +86,6 @@ export class CreateCoursePage extends BasePage {
     )
     this.nextPageButton = this.page.locator('data-testid=next-page-btn')
     this.orderDetailsButton = this.page.locator('[data-testid="next-page-btn"]')
-    this.onlineMeetingLinkInput = this.page.locator(
-      '[data-testid="onlineMeetingLink-input"] input'
-    )
     this.freeSpacesInput = this.page.locator(
       '[data-testid="free-spaces"] input'
     )
@@ -270,13 +264,10 @@ export class CreateCoursePage extends BasePage {
     }
     // TODO workaround - remove this if after fixing /TTHP-1216
     if (
-      (course.deliveryType === CourseDeliveryType.VIRTUAL ||
-        course.deliveryType === CourseDeliveryType.MIXED) &&
-      (await this.onlineMeetingLinkInput.inputValue()) === ''
-    ) {
-      await this.onlineMeetingLinkInput.type('www.zoom.com/blabla')
-    }
-    await this.setSpecialInstructions()
+      course.deliveryType === CourseDeliveryType.VIRTUAL ||
+      course.deliveryType === CourseDeliveryType.MIXED
+    )
+      await this.setSpecialInstructions()
     if (course.deliveryType != CourseDeliveryType.VIRTUAL) {
       await this.setParkingInstructions()
     }

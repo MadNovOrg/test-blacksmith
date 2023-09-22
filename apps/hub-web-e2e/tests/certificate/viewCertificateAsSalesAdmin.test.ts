@@ -40,6 +40,6 @@ test('sales can view the certificate on the certificate page @smoke', async ({
   await certificationPage.goto(
     `${certificate.user.givenName} ${certificate.user.familyName}`
   )
-  await certificationPage.clickViewCertificate(certificate.course.id)
+  await certificationPage.clickFirstViewCertificate()
   await certificationPage.confirmGrade(Grade_Enum.Pass)
 })

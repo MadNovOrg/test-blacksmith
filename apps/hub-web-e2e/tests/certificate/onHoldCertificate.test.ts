@@ -37,9 +37,7 @@ test('admin can put a certificate on hold', async ({ page, certificate }) => {
   await certificationPage.goto(
     `${certificate.user.givenName} ${certificate.user.familyName}`
   )
-  const certPage = await certificationPage.clickViewCertificate(
-    certificate.course.id
-  )
+  const certPage = await certificationPage.clickFirstViewCertificate()
   await certPage.clickManageCertificateButton()
   const putOnHoldPopup = await certPage.clickPutOnHold()
   await putOnHoldPopup.selectReason()

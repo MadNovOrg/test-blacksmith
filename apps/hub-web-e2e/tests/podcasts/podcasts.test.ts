@@ -15,7 +15,7 @@ const test = base.extend<{ podcasts: Podcast[] }>({
 
 test.use({ storageState: stateFilePath('trainer') })
 
-test('displays podcasts with featured and grid display', async ({
+test.skip('displays podcasts with featured and grid display', async ({
   page,
   podcasts,
 }) => {

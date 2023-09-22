@@ -12,8 +12,8 @@ export class BasePage {
     this.muiSkeletonPulse = this.page.locator('.MuiSkeleton-pulse')
     this.muiProgressCircle = this.page.locator('.MuiCircularProgress-circle')
   }
-
   async goto(url?: string) {
+    await this.page.setViewportSize({ width: 1300, height: 1200 })
     await this.page.goto(`${BASE_URL}/${url ?? ''}`)
     await this.waitForPageLoad()
   }

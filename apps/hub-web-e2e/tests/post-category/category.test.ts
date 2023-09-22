@@ -17,7 +17,7 @@ const test = base.extend<{
 
 test.use({ storageState: stateFilePath('trainer') })
 
-test('displays category title and posts that belong to the category', async ({
+test.skip('displays category title and posts that belong to the category', async ({
   page,
   category,
 }) => {

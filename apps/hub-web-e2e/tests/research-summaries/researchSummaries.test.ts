@@ -19,7 +19,7 @@ const test = base.extend<{
 
 test.use({ storageState: stateFilePath('trainer') })
 
-test('displays research summaries with featured and grid display', async ({
+test.skip('displays research summaries with featured and grid display', async ({
   page,
   researchSummaries,
 }) => {

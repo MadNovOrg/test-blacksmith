@@ -40,13 +40,10 @@ allowedRoles.forEach(role => {
     await certificationPage.goto(
       `${certificate.user.givenName} ${certificate.user.familyName}`
     )
-    const certPage = await certificationPage.clickViewCertificate(
-      certificate.course.id
-    )
+    const certPage = await certificationPage.clickSecondViewCertificate()
     await certPage.clickManageCertificateButton()
     const revokeCertPopup = await certPage.clickRevokeCertificate()
     //new popup page
-    await revokeCertPopup.selectReasonDropdown()
     await revokeCertPopup.addAReason('reason')
     await revokeCertPopup.tickCheckBox()
     await revokeCertPopup.submitRevokePopup()

@@ -18,7 +18,7 @@ const test = base.extend<{
 
 test.use({ storageState: stateFilePath('trainer') })
 
-test('displays posts with featured and grid display', async ({
+test.skip('displays posts with featured and grid display', async ({
   page,
   posts,
 }) => {

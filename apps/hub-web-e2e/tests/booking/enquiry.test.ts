@@ -17,8 +17,8 @@ const test = base.extend<{ course: Course }>({
     await API.course.deleteCourse(course.id)
   },
 })
-
-test('saves course enquiry', async ({ page, course }) => {
+// there's No enquiry page
+test.skip('saves course enquiry', async ({ page, course }) => {
   const enquiryPage = new EnquiryPage(page)
   await enquiryPage.goto(`${course.id}`)
   await enquiryPage.fillInterest('Course')

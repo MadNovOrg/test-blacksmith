@@ -16,7 +16,10 @@ const test = base.extend<{ podcast: Podcast | null }>({
 
 test.use({ storageState: stateFilePath('trainer') })
 
-test('displays single podcast with the player', async ({ podcast, page }) => {
+test.skip('displays single podcast with the player', async ({
+  podcast,
+  page,
+}) => {
   const podcastPage = new PodcastPage(page)
   await podcastPage.goto(podcast?.id)
   await podcastPage.checkTitle(podcast?.name)

@@ -255,6 +255,7 @@ export const CreateOrganization = () => {
               <FormPanel>
                 <Box mb={3}>
                   <OrgSelector
+                    data-testid="org-name"
                     required
                     {...register('orgName')}
                     error={errors.orgName?.message}
