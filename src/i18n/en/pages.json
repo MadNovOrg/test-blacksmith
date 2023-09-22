@@ -221,8 +221,9 @@
         "time-commitment-title": "Time commitment",
         "time-commitment-message": "By submitting this course, you commit to at least {{hours}} hours of training.",
         "time-commitment-warning": "Please update course date and times accordingly.",
-        "course-level-info": "Additional intermediate modules that are not listed would need to be delivered as part of Level Two course.\n\nIf these modules are required, you will need to resubmit the course as a Level Two.",
-        "course-level-2-info": "To deliver your course as a Level Two, you must include at least one of the following intermediate modules:\n\n\u2022 Two Person Escorts\n\n\u2022 Seated Holds\n\nIf these modules are not required, you will need to resubmit as a Level One course.",
+        "course-l1-info": "Additional intermediate modules that are not listed would need to be delivered as part of Level Two course.\n\nIf these modules are required, you will need to resubmit the course as a Level Two.",
+        "course-l2-info": "To deliver your course as a Level Two, you must include at least one of the following intermediate modules:\n\n\u2022 Two Person Escorts\n\u2022 Seated Holds\n\nIf these modules are not required, you will need to resubmit as a Level One course.",
+        "course-adv-info": " Should the estimated duration equal less than 6 hours, then the course must still be delivered over the minimum 6-hour period.",
         "strategy-validation-error": "At least one module from \"{{name}}\" should be selected",
         "saving-error": "There was an issue saving the course. Please try later."
       }

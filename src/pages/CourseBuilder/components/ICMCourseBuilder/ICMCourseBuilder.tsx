@@ -364,21 +364,22 @@ export const ICMCourseBuilder: React.FC<
             onSubmit={submitButtonHandler}
             onChange={handleSelectionChange}
             slots={{
-              afterChosenModulesTitle:
-                courseData.course.level === Course_Level_Enum.Level_1 ||
-                courseData.course.level === Course_Level_Enum.Advanced ? (
-                  <Alert severity="info">
-                    {t(
-                      'pages.trainer-base.create-course.new-course.course-level-info'
+              afterChosenModulesTitle: (
+                <Alert severity="info">
+                  {courseData.course.level === Course_Level_Enum.Level_1 &&
+                    t(
+                      'pages.trainer-base.create-course.new-course.course-l1-info'
                     )}
-                  </Alert>
-                ) : courseData.course.level === Course_Level_Enum.Level_2 ? (
-                  <Alert severity="info">
-                    {t(
-                      'pages.trainer-base.create-course.new-course.course-level-2-info'
+                  {courseData.course.level === Course_Level_Enum.Level_2 &&
+                    t(
+                      'pages.trainer-base.create-course.new-course.course-l2-info'
                     )}
-                  </Alert>
-                ) : null,
+                  {courseData.course.level === Course_Level_Enum.Advanced &&
+                    t(
+                      'pages.trainer-base.create-course.new-course.course-adv-info'
+                    )}
+                </Alert>
+              ),
             }}
           />
         </Box>
