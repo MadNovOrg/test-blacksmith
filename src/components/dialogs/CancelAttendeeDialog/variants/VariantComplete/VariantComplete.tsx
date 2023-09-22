@@ -150,7 +150,7 @@ export const VariantComplete = ({
         maxWidth={800}
       >
         <Container>
-          <Typography sx={{ mb: 2 }} variant="body1" color="grey.600">
+          <Typography sx={{ mb: 1 }} variant="body1" color="grey.600">
             {t(`pages.individual-cancellation.description`)}
           </Typography>
           {course && (
@@ -186,14 +186,14 @@ export const VariantComplete = ({
               'pages.edit-course.cancellation-modal.reason-for-cancellation'
             )}
             inputProps={{
-              sx: { height: 40 },
+              sx: { height: 20 },
             }}
             sx={{ bgcolor: 'grey.100', my: 2 }}
             {...register('cancellationReason')}
           />
 
           {!acl.isTTAdmin() ? (
-            <Box mt={4}>
+            <Box mt={2}>
               <FormControlLabel
                 data-testid="confirmation-checkbox"
                 label={t(

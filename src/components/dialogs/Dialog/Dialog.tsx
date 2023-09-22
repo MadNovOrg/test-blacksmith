@@ -67,6 +67,7 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          padding: '1rem',
         }}
       >
         {slots?.Title || slots?.Subtitle ? (
@@ -98,7 +99,7 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
           </IconButton>
         ) : null}
       </DialogTitle>
-      <DialogContent sx={{ maxWidth, minWidth }}>
+      <DialogContent sx={{ maxWidth, minWidth, overflowY: 'hidden' }}>
         {slots?.Content ? slots?.Content?.() : children}
       </DialogContent>
       {slots?.Actions ? (
@@ -106,7 +107,9 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
-            m: 3,
+            mt: 0,
+            mx: 3,
+            mb: 3,
             flexDirection: isMobile ? 'column' : 'row',
           }}
         >

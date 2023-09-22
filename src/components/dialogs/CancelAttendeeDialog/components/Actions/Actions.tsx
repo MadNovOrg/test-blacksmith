@@ -1,7 +1,7 @@
 import { LoadingButton } from '@mui/lab'
 import { Button, useMediaQuery, useTheme } from '@mui/material'
-import { t } from 'i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export type ActionsProps = {
   loading?: boolean
@@ -16,6 +16,7 @@ export const Actions: React.FC<ActionsProps> = ({
   onClose,
   onSubmit,
 }) => {
+  const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 

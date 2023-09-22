@@ -14,7 +14,7 @@ export const Title: React.FC<PropsWithChildren<TitleProps>> = ({
   const { t } = useTranslation()
 
   return (
-    <Typography variant="h3" fontWeight={600}>
+    <Typography variant="h4" fontWeight={600}>
       {t('pages.individual-cancellation.title', {
         fullName,
         courseCode,

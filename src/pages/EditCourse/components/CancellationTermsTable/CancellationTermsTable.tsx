@@ -37,14 +37,14 @@ export const CancellationTermsTable: React.FC<
       <TableHead sx={{ bgColor: 'grey.200' }}>
         <TableRow>
           <TableCell>
-            <Typography variant="caption" color="grey.700">
+            <Typography fontSize={13} color="grey.700">
               {t(
                 'pages.edit-course.cancellation-modal.before-course-start-date'
               )}
             </Typography>
           </TableCell>
           <TableCell>
-            <Typography variant="caption" color="grey.700">
+            <Typography fontSize={13} color="grey.700">
               {t('pages.edit-course.cancellation-modal.cancellation-fee')}
             </Typography>
           </TableCell>
@@ -56,20 +56,22 @@ export const CancellationTermsTable: React.FC<
           const fontWeight = fee === applicableFee ? 700 : 500
           return (
             <TableRow key={k}>
-              <TableCell>
+              <TableCell sx={{ padding: '.2rem' }}>
                 <Typography
                   variant="body2"
                   color="grey.700"
                   fontWeight={fontWeight}
+                  fontSize={12}
                 >
                   {t(`pages.edit-course.cancellation-modal.terms.${k}`)}
                 </Typography>
               </TableCell>
-              <TableCell>
+              <TableCell sx={{ padding: '.2rem' }}>
                 <Typography
                   variant="body2"
                   color="grey.700"
                   fontWeight={fontWeight}
+                  fontSize={12}
                 >
                   {fee === 0
                     ? t(`pages.edit-course.cancellation-modal.terms.no-fee`)

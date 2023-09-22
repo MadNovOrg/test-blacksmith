@@ -54,7 +54,7 @@ export const CancellationFeeDetails: React.FC<
     <Box>
       {showEditFeePercent ? (
         <>
-          <Typography variant="h4" fontWeight={600} mt={4}>
+          <Typography variant="h4" fontWeight={600} mt={2}>
             {t('pages.edit-course.cancellation-modal.will-any-fees-apply')}
           </Typography>
           <RadioGroup
@@ -63,7 +63,7 @@ export const CancellationFeeDetails: React.FC<
             }
             row
             value={feeType}
-            sx={{ mt: 1 }}
+            sx={{ mt: 1, fontSize: '.5rem' }}
           >
             {Object.values(CancellationFeeType).map(cancelFeeType => (
               <FormControlLabel
@@ -84,9 +84,11 @@ export const CancellationFeeDetails: React.FC<
                     }
                   />
                 }
-                label={t(
-                  `pages.edit-course.cancellation-modal.${cancelFeeType}`
-                )}
+                label={
+                  <Typography sx={{ fontSize: 15 }}>
+                    {t(`pages.edit-course.cancellation-modal.${cancelFeeType}`)}
+                  </Typography>
+                }
               />
             ))}
             {!feeType && errors.cancellationFeePercent ? (
@@ -105,7 +107,7 @@ export const CancellationFeeDetails: React.FC<
       {feeType === CancellationFeeType.APPLY_CANCELLATION_TERMS ? (
         <CancellationTermsTable
           courseStartDate={new Date(startDate)}
-          sx={{ mt: 4 }}
+          sx={{ mt: 2 }}
         />
       ) : null}
       {feeType === CancellationFeeType.CUSTOM_FEE ? (

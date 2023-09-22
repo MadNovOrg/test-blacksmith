@@ -1472,9 +1472,9 @@
     }
   },
   "individual-cancellation": {
-    "title": "Cancel {{ name }} from {{ course }}?",
+    "title": "Cancel {{ fullName }} from {{ courseCode }}?",
     "description": "This action will notify the attendee and booking contact (if applicable) and Finance will update the invoice for this booking where necessary.",
-    "remove-attendee": "Cancel attendee"
+    "cancel-attendee": "Cancel attendee"
   },
   "individual-cancellation-minimal": {
     "title": "Cancel {{ fullName }} from {{ courseCode }}?",
