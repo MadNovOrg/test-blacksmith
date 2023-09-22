@@ -485,7 +485,8 @@
       "apply-terms-option": "Apply rescheduling terms",
       "protocol-not-met": "This course can only be rescheduled to start later than 2 weeks from today’s date. If you need to deliver this course within 2 weeks from now, please contact Team Teach at <0>{{email}}</0> for review.",
       "protocol-not-met-sales-admin": "This change does not meet Team Teach protocols, only TT Admin can action this change"
-    }
+    },
+    "cannot-save-without-trainer": "You cannot save this course without a lead trainer assigned."
   },
   "course-details": {
     "tabs": {

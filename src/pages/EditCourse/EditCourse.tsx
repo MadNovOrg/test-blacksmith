@@ -628,6 +628,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     trainersData?.lead,
   ])
 
+  const submitDisabled =
+    (courseData?.type === CourseType.CLOSED ||
+      courseData?.type === CourseType.INDIRECT) &&
+    !trainersData?.lead.length
+
   if (
     (courseStatus === LoadingStatus.SUCCESS && !course) ||
     (course && !acl.canEditCourses(course))
@@ -745,8 +750,12 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                   />
                 ) : null}
 
-                {showTrainerRatioWarning ? (
-                  <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
+                {submitDisabled ? (
+                  <Alert severity="error" variant="outlined" sx={{ mt: 2 }}>
+                    {t('pages.edit-course.cannot-save-without-trainer')}
+                  </Alert>
+                ) : showTrainerRatioWarning ? (
+                  <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
                     {t(
                       `pages.create-course.exceptions.type_${CourseException.TRAINER_RATIO_NOT_MET}`
                     )}
@@ -797,6 +806,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     data-testid="save-button"
                     sx={{ mt: isMobile ? 2 : 0 }}
                     endIcon={canGoToCourseBuilder ? <ArrowForwardIcon /> : null}
+                    disabled={submitDisabled}
                   >
                     {canGoToCourseBuilder
                       ? t('pages.edit-course.course-builder-button-text')
