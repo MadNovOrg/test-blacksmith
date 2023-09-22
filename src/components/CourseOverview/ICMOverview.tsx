@@ -4,6 +4,7 @@ import {
   AccordionSummary,
   Alert,
   Box,
+  Checkbox,
   CircularProgress,
   Container,
   Typography,
@@ -81,8 +82,16 @@ export const ICMOverview: React.FC<React.PropsWithChildren<Props>> = ({
       {modulesData?.map(item =>
         usedModules.includes(item.id) ? (
           <Accordion key={item.id}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              sx={{ width: { sm: '100%', md: '75%', lg: '50%' } }}
+            >
               <Box display="flex" alignItems="center">
+                <Checkbox
+                  defaultChecked={true}
+                  disabled={true}
+                  sx={{ marginRight: 2 }}
+                />
                 <Typography variant="body1">{item.name}</Typography>
                 <Typography variant="body2" ml={1}>
                   {t('areas', { count: item.modules.length })}

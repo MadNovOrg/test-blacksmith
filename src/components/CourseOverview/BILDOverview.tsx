@@ -4,6 +4,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Checkbox,
   Typography,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
@@ -45,8 +46,16 @@ export const BILDOverview: React.FC<React.PropsWithChildren<Props>> = ({
 
         return (
           <Accordion key={strategyName} disableGutters>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              sx={{ width: { sm: '100%', md: '75%', lg: '50%' } }}
+            >
               <Box display="flex" alignItems="center">
+                <Checkbox
+                  defaultChecked={true}
+                  disabled={true}
+                  sx={{ marginRight: 2 }}
+                />
                 <Typography variant="body1">
                   {t(`bild-strategies.${strategyName}`)}
                 </Typography>
