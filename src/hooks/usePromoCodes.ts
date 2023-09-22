@@ -92,6 +92,7 @@ export const usePromoCodes = ({
             },
           ]
 
+          q.disabled = { _eq: false }
           q.deniedBy = { _is_null: true }
           q.validFrom = { _lte: new Date().toISOString() }
           q._and = [
