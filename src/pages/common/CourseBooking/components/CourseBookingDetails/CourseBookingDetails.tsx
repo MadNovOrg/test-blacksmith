@@ -394,10 +394,10 @@ export const CourseBookingDetails: React.FC<
   }
 
   useEffect(() => {
-    if (booking.quantity !== booking.participants.length) {
-      const participants = booking.participants.slice(0, booking.quantity)
+    if (booking.quantity !== values.participants.length) {
+      const participants = values.participants.slice(0, booking.quantity)
 
-      for (let i = 0; i < booking.quantity - booking.participants.length; i++) {
+      for (let i = 0; i < booking.quantity - values.participants.length; i++) {
         participants.push({
           firstName: '',
           lastName: '',
@@ -405,7 +405,7 @@ export const CourseBookingDetails: React.FC<
         })
       }
 
-      setValue(`participants`, participants)
+      setValue(`participants`, [...participants])
       setBooking({ participants })
     }
   }, [booking.quantity, booking.participants, setBooking, values, setValue])
