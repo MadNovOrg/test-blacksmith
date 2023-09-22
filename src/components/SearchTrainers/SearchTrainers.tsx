@@ -79,8 +79,6 @@ export function SearchTrainers({
     courseType: courseType as unknown as CourseTypeEnum,
   })
 
-  console.log(courseType)
-
   const isControlled = value != null
   const selected = isControlled ? value : _selected
 
