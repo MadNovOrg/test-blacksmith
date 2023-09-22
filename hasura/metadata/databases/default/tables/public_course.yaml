@@ -1327,6 +1327,7 @@ event_triggers:
       update:
         columns:
           - booking_contact_profile_id
+          - booking_contact_invite_data
     retry_conf:
       interval_sec: 10
       num_retries: 0
