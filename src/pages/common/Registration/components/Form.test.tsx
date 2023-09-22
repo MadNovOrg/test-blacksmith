@@ -14,6 +14,17 @@ vi.mock('@app/hooks/use-fetcher')
 vi.mock('@app/lib/gql-request')
 vi.mock('aws-amplify')
 vi.mock('../../../../hooks/useJobTitles')
+vi.mock('@app/components/OrgSelector', () => ({
+  OrgSelector: vi.fn(({ onChange }) => {
+    return (
+      <input
+        name="org-selector"
+        data-testid="org-selector"
+        onChange={() => onChange({ id: 'org-id' })}
+      />
+    )
+  }),
+}))
 
 const gqlRequestMocked = vi.mocked(gqlRequest)
 const mockSignup = vi.mocked(Auth.signUp)
@@ -224,6 +235,7 @@ describe('Form', () => {
     await userEvent.type(screen.getByTestId('input-email'), 'test@email.com')
     await userEvent.type(screen.getByTestId('input-password'), 'Test1234!')
     await userEvent.type(screen.getByTestId('input-phone'), '1234567890')
+    await userEvent.type(screen.getByTestId('org-selector'), 'Organization')
 
     await userEvent.click(screen.getByTestId('recaptcha-success'))
 
@@ -268,6 +280,7 @@ describe('Form', () => {
     await userEvent.type(screen.getByTestId('input-email'), 'test@email.com')
     await userEvent.type(screen.getByTestId('input-password'), 'Test1234!')
     await userEvent.type(screen.getByTestId('input-phone'), '1234567890')
+    await userEvent.type(screen.getByTestId('org-selector'), 'Organization')
 
     await userEvent.click(screen.getByLabelText('Job Title *'))
     await userEvent.click(screen.getByTestId('position-Other'))
