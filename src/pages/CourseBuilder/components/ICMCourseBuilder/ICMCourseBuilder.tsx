@@ -371,6 +371,7 @@ export const ICMCourseBuilder: React.FC<
             onChange={handleSelectionChange}
             slots={{
               afterChosenModulesTitle:
+                courseData.course.type !== Course_Type_Enum.Open &&
                 courseBuilderWarning[courseData.course.level] != null ? (
                   <Alert severity="info">
                     {t(

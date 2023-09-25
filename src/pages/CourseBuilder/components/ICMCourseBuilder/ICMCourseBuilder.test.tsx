@@ -8,6 +8,7 @@ import {
   CourseToBuildQuery,
   CourseToBuildQueryVariables,
   Course_Level_Enum,
+  Course_Type_Enum,
   FinalizeCourseBuilderMutationVariables,
   ModuleGroupsQuery,
   SaveCourseModulesMutation,
@@ -33,7 +34,10 @@ describe('component: CourseBuilder', () => {
       /To deliver your course as a Level Two, you must include at least one of the following intermediate modules:/
 
     it('shows the info alert for level 1 course', async () => {
-      const course = buildCourse({ level: Course_Level_Enum.Level_1 })
+      const course = buildCourse({
+        level: Course_Level_Enum.Level_1,
+        type: Course_Type_Enum.Closed,
+      })
 
       const client = {
         executeQuery: ({ query }: { query: TypedDocumentNode }) => {
@@ -68,9 +72,10 @@ describe('component: CourseBuilder', () => {
       expect(screen.getByText(levelOneInfoMessage)).toBeInTheDocument()
     })
 
-    it('hides the info alert for level 2 course', async () => {
+    it('hides the info alert for open courses', async () => {
       const course = buildCourse({
         level: Course_Level_Enum.Level_2,
+        type: Course_Type_Enum.Open,
       })
 
       const client = {
@@ -103,7 +108,7 @@ describe('component: CourseBuilder', () => {
         }
       )
 
-      expect(screen.queryByText(levelTwoInfoMessage)).toBeInTheDocument()
+      expect(screen.queryByText(levelTwoInfoMessage)).not.toBeInTheDocument()
     })
   })
 
