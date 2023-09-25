@@ -6,11 +6,13 @@ import { getAccountCode } from '@app/components/CourseForm/helpers'
 import {
   Accreditors_Enum,
   CategorySummaryFragment,
+  Course_Level_Enum,
   Course_Status_Enum,
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
   EbookSummaryFragment,
   GetCourseAuditLogsQuery,
+  Grade_Enum,
   Podcast,
   PostSummaryFragment,
   ResearchSummaryDetailsFragment,
@@ -128,6 +130,24 @@ export const buildProfile = build<Profile>({
     dietaryRestrictions: null,
     disabilities: null,
     lastActivity: perBuild(() => chance.date()),
+    courses: [
+      {
+        grade: 'PASS' as Grade_Enum,
+        course: {
+          start: perBuild(() => chance.date().toISOString()).toString(),
+          end: perBuild(() => chance.date().toISOString()).toString(),
+          level: 'LEVEL_1' as Course_Level_Enum,
+        },
+      },
+      {
+        grade: null,
+        course: {
+          start: perBuild(() => chance.date().toISOString()).toString(),
+          end: perBuild(() => chance.date().toISOString()).toString(),
+          level: 'BILD_ADVANCED_TRAINER' as Course_Level_Enum,
+        },
+      },
+    ],
   },
   postBuild: profile => ({
     ...profile,

@@ -4,6 +4,7 @@ import {
   Accreditors_Enum,
   Course_Bild_Module,
   Course_Evaluation_Question_Group_Enum,
+  Course_Level_Enum,
   Course_Source_Enum,
   Course_Status_Enum,
   GetEvaluationsSummaryQuery,
@@ -198,6 +199,14 @@ export type Profile = {
   trainer_role_types: Array<{ trainer_role_type: TrainerRoleType }>
   lastActivity: Date
   certificates?: Omit<CourseCertificate, 'profile' | 'participant'>[] // circular refs
+  courses?: {
+    grade?: Grade_Enum | null | undefined
+    course: {
+      start?: string
+      end?: string
+      level?: Course_Level_Enum
+    }
+  }[]
   archived?: boolean
 } & Base
 

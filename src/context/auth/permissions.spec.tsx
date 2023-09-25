@@ -1,6 +1,10 @@
 // TODO RMX | https://behaviourhub.atlassian.net/browse/TTHP-2215
 
-import { Accreditors_Enum } from '@app/generated/graphql'
+import {
+  Accreditors_Enum,
+  Course_Level_Enum,
+  Grade_Enum,
+} from '@app/generated/graphql'
 import {
   CourseLevel,
   CourseTrainerType,
@@ -1758,6 +1762,150 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewResources()).toBeTruthy()
+      }
+    )
+
+    it.each([[RoleName.USER], [RoleName.TRAINER]])(
+      `should return false when activeRole is %s and has no certificates`,
+      activeRole => {
+        // Arrange
+        const acl = getACLStub({
+          activeRole,
+          activeCertificates: [],
+        })
+
+        // Act & Assert
+        expect(acl.canViewResources()).toBeFalsy()
+      }
+    )
+
+    it.each([[RoleName.USER], [RoleName.TRAINER]])(
+      `should return true activeRole is %s, has no certificates for 'non-trainer' courses but attends an ongoing trainer course`,
+      activeRole => {
+        const date = new Date()
+        const pastDate = new Date(date)
+        const futureDate = new Date(date)
+        pastDate.setDate(date.getDate() - 2)
+        futureDate.setDate(date.getDate() + 3)
+
+        // Arrange
+        const acl = getACLStub({
+          activeRole,
+          activeCertificates: [],
+          profile: buildProfile({
+            overrides: {
+              courses: [
+                {
+                  grade: null,
+                  course: {
+                    start: pastDate.toISOString(),
+                    level: 'BILD_ADVANCED_TRAINER' as Course_Level_Enum,
+                    end: futureDate.toISOString(),
+                  },
+                },
+              ],
+            },
+          }),
+        })
+
+        // Act & Assert
+        expect(acl.canViewResources()).toBeTruthy()
+      }
+    )
+
+    it.each([[RoleName.USER], [RoleName.TRAINER]])(
+      `should return true activeRole is %s, has no certificates for 'non-trainer' courses but got a PASS grading on a trainer course`,
+      activeRole => {
+        const date = new Date()
+        const pastDate = new Date(date)
+        pastDate.setDate(date.getDate() - 2)
+
+        // Arrange
+        const acl = getACLStub({
+          activeRole,
+          activeCertificates: [],
+          profile: buildProfile({
+            overrides: {
+              courses: [
+                {
+                  grade: 'PASS' as Grade_Enum,
+                  course: {
+                    start: pastDate.toISOString(),
+                    level: 'BILD_ADVANCED_TRAINER' as Course_Level_Enum,
+                    end: pastDate.toISOString(),
+                  },
+                },
+              ],
+            },
+          }),
+        })
+
+        // Act & Assert
+        expect(acl.canViewResources()).toBeTruthy()
+      }
+    )
+
+    it.each([[RoleName.USER], [RoleName.TRAINER]])(
+      `should return false activeRole is %s, has no certificates for 'non-trainer' courses but attended a past trainer course`,
+      activeRole => {
+        const date = new Date()
+        const pastDate = new Date(date)
+        pastDate.setDate(date.getDate() - 2)
+
+        // Arrange
+        const acl = getACLStub({
+          activeRole,
+          activeCertificates: [],
+          profile: buildProfile({
+            overrides: {
+              courses: [
+                {
+                  grade: null,
+                  course: {
+                    start: pastDate.toISOString(),
+                    level: 'BILD_ADVANCED_TRAINER' as Course_Level_Enum,
+                    end: pastDate.toISOString(),
+                  },
+                },
+              ],
+            },
+          }),
+        })
+
+        // Act & Assert
+        expect(acl.canViewResources()).toBeFalsy()
+      }
+    )
+
+    it.each([[RoleName.USER], [RoleName.TRAINER]])(
+      `should return false activeRole is %s, has no certificates for 'non-trainer' courses but got a FAIL grading on a past trainer course`,
+      activeRole => {
+        const date = new Date()
+        const pastDate = new Date(date)
+        pastDate.setDate(date.getDate() - 2)
+
+        // Arrange
+        const acl = getACLStub({
+          activeRole,
+          activeCertificates: [],
+          profile: buildProfile({
+            overrides: {
+              courses: [
+                {
+                  grade: 'FAIL' as Grade_Enum,
+                  course: {
+                    start: pastDate.toISOString(),
+                    level: 'BILD_ADVANCED_TRAINER' as Course_Level_Enum,
+                    end: pastDate.toISOString(),
+                  },
+                },
+              ],
+            },
+          }),
+        })
+
+        // Act & Assert
+        expect(acl.canViewResources()).toBeFalsy()
       }
     )
 

@@ -30,6 +30,14 @@ export const getUserProfile = gql`
         expiryDate
         courseLevel
       }
+      courses {
+        grade
+        course {
+          end
+          level
+          start
+        }
+      }
     }
   }
 `

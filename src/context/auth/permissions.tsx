@@ -4,6 +4,11 @@ import { MarkOptional } from 'ts-essentials'
 import { getLevels } from '@app/components/CourseForm/helpers'
 import { Accreditors_Enum } from '@app/generated/graphql'
 import {
+  courseCategoryUserAttends,
+  trainerCourseProgress,
+  hasGotPassForTrainerCourse,
+} from '@app/pages/Resources/utils'
+import {
   Course,
   CourseInput,
   CourseLevel,
@@ -337,8 +342,22 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canViewResources: () => {
-      if (anyPass([acl.isUser, acl.isTrainer])()) {
-        return Boolean(auth.activeCertificates?.length)
+      const attendedCourse = courseCategoryUserAttends(auth.profile?.courses)
+      const courseProgress = trainerCourseProgress(auth.profile?.courses)
+      const hasPassed = hasGotPassForTrainerCourse(auth.profile?.courses)
+
+      const attendedTrainerCourse =
+        attendedCourse && attendedCourse.attendsTrainer
+      const trainerCourseIsOngoing =
+        courseProgress?.started && !courseProgress.ended
+      const hasPassedTrainerCourse = hasPassed
+
+      if (anyPass([acl.isUser, acl.isTrainer] || attendedTrainerCourse)()) {
+        return Boolean(
+          auth.activeCertificates?.length ||
+            trainerCourseIsOngoing ||
+            hasPassedTrainerCourse
+        )
       }
 
       return acl.isInternalUser()

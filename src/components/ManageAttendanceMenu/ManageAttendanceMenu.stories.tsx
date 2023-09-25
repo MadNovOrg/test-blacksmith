@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import withAuthContext from '@storybook-decorators/withAuthContext'
 
 import { RoleName } from '@app/types'
 
 import { buildCourse, buildParticipant } from '@test/mock-data-utils'
 
 import { ManageAttendanceMenu } from './ManageAttendanceMenu'
+
+import withAuthContext from '@storybook-decorators/withAuthContext'
 
 import '@app/i18n/config'
 
