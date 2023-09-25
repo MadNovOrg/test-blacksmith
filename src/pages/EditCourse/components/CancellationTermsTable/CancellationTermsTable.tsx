@@ -37,16 +37,10 @@ export const CancellationTermsTable: React.FC<
       <TableHead sx={{ bgColor: 'grey.200' }}>
         <TableRow>
           <TableCell>
-            <Typography fontSize={13} color="grey.700">
-              {t(
-                'pages.edit-course.cancellation-modal.before-course-start-date'
-              )}
-            </Typography>
+            {t('pages.edit-course.cancellation-modal.before-course-start-date')}
           </TableCell>
           <TableCell>
-            <Typography fontSize={13} color="grey.700">
-              {t('pages.edit-course.cancellation-modal.cancellation-fee')}
-            </Typography>
+            {t('pages.edit-course.cancellation-modal.cancellation-fee')}
           </TableCell>
         </TableRow>
       </TableHead>

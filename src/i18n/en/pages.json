@@ -434,7 +434,7 @@
       },
       "specify-reason": "Specify reason",
       "close-modal": "Close",
-      "cancel-entire-course": "Cancel Course",
+      "cancel-entire-course": "Cancel course",
       "fee": "Fee",
       "before-course-start-date": "Before course start date",
       "cancellation-fee": "Cancellation fee",
@@ -551,12 +551,12 @@
     "change-my-attendance": {
       "title": "Change my attendance",
       "description": "Please select one of the following options.",
-      "cancel-my-attendance": "Cancel Course",
-      "transfer-to-another-course": "Transfer Course",
+      "cancel-my-attendance": "Cancel course",
+      "transfer-to-another-course": "Transfer course",
       "transfer-info": {
         "alert-message": "Transfer terms apply based on the course start date in line with Team Teach <strong><termsOfBusinessLink>Terms of Business.</termsOfBusinessLink></strong>",
         "terms-notice": "I understand and agree to the change.",
-        "transfer-btn-text": "Transfer Course",
+        "transfer-btn-text": "Transfer course",
         "cancel-btn-text": "Close"
       }
     }
