@@ -291,12 +291,15 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     const freeSpacesDiscount = !ready ? 0 : booking.price * booking.freeSpaces
     const discount = !ready
       ? 0
-      : booking.promoCodes.reduce(
-          (acc, c) => acc + booking.discounts[c]?.amountCurrency ?? 0,
-          0
-        )
+      : booking.promoCodes.reduce((acc, c) => {
+          const isCorrectSum = acc + booking.discounts[c]?.amountCurrency
+          return !isNaN(isCorrectSum) ? isCorrectSum : 0
+        }, 0)
 
-    const subtotalDiscounted = max(subtotal - discount - freeSpacesDiscount, 0)
+    const subtotalDiscounted = max(
+      subtotal - Number(discount) - freeSpacesDiscount,
+      0
+    )
     const vat = (subtotalDiscounted * booking.vat) / 100
     const amountDue = subtotalDiscounted + vat
 
