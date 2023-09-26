@@ -214,11 +214,9 @@ describe(ManageAttendanceMenu.name, () => {
     await userEvent.click(screen.getByText(/manage attendance/i))
 
     expect(screen.getByText(/cancel/i)).toBeInTheDocument()
-    expect(screen.getByText(/replace/i)).toBeInTheDocument()
-    expect(screen.getByText(/transfer/i)).toBeInTheDocument()
-    expect(
-      screen.queryByText(/resend course information/i)
-    ).not.toBeInTheDocument()
+    expect(screen.queryByText(/replace/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/transfer/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/resend course information/i)).toBeInTheDocument()
   })
 
   it('does not render correct options for an org admin of another org', async () => {
@@ -283,11 +281,9 @@ describe(ManageAttendanceMenu.name, () => {
     await userEvent.click(screen.getByText(/manage attendance/i))
 
     expect(screen.getByText(/cancel/i)).toBeInTheDocument()
-    expect(screen.queryByText(/replace/i)).toBeInTheDocument()
-    expect(screen.getByText(/transfer/i)).toBeInTheDocument()
-    expect(
-      screen.queryByText(/resend course information/i)
-    ).not.toBeInTheDocument()
+    expect(screen.queryByText(/replace/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/transfer/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/resend course information/i)).toBeInTheDocument()
   })
 
   it('calls correct callbacks when clicked on an option', async () => {

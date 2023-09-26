@@ -5,8 +5,8 @@ import { getLevels } from '@app/components/CourseForm/helpers'
 import { Accreditors_Enum } from '@app/generated/graphql'
 import {
   courseCategoryUserAttends,
-  trainerCourseProgress,
   hasGotPassForTrainerCourse,
+  trainerCourseProgress,
 } from '@app/pages/Resources/utils'
 import {
   Course,
@@ -16,8 +16,10 @@ import {
   CourseType,
   RoleName,
 } from '@app/types'
-import { getCourseLeadTrainer } from '@app/util'
-import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
+import {
+  getCourseLeadTrainer,
+  REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL,
+} from '@app/util'
 
 import type { AuthContextType } from './types'
 
@@ -379,7 +381,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canTransferParticipant: (participantOrgIds: string[], _course: Course) => {
       return (
         anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])() ||
-        acl.isOrgAdminOf(participantOrgIds)
+        (![CourseType.INDIRECT, CourseType.CLOSED].includes(_course.type) &&
+          acl.isOrgAdminOf(participantOrgIds))
       )
     },
 
@@ -392,6 +395,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
           acl.isSalesRepresentative,
         ])() ||
         (course.accreditedBy === Accreditors_Enum.Icm &&
+          ![CourseType.INDIRECT, CourseType.CLOSED].includes(course.type) &&
           acl.isOrgAdminOf(participantOrgIds))
       )
     },
@@ -399,12 +403,22 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canCancelParticipant: (participantOrgIds: string[], _course: Course) => {
       return (
         anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])() ||
-        acl.isOrgAdminOf(participantOrgIds)
+        acl.isOrgAdminOf(participantOrgIds) ||
+        ([CourseType.INDIRECT].includes(_course.type) &&
+          acl.isCourseLeader(_course)) ||
+        ([CourseType.CLOSED].includes(_course.type) && acl.isBookingContact())
       )
     },
 
     canSendCourseInformation: (_participantOrgIds: string[], _course: Course) =>
-      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin, acl.isTrainer])(),
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isTrainer,
+      ])() ||
+      acl.isOrgAdminOf(_participantOrgIds) ||
+      ([CourseType.CLOSED].includes(_course.type) && acl.isBookingContact()),
 
     canManageParticipantAttendance: (
       participantOrgIds: string[],

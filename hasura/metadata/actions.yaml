@@ -34,6 +34,7 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/participant/cancel/individual'
     permissions:
+      - role: booking-contact
       - role: trainer
       - role: tt-admin
       - role: tt-ops
@@ -293,6 +294,7 @@ actions:
       - role: tt-ops
       - role: trainer
       - role: sales-admin
+      - role: booking-contact
     comment: Send course information to the specified course attendees
   - name: signUp
     definition:

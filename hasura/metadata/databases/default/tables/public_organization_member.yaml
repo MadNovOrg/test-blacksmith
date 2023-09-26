@@ -106,6 +106,19 @@ select_permissions:
         - updated_at
       filter: {}
       allow_aggregations: true
+  - role: booking-contact
+    permission:
+      columns:
+        - created_at
+        - id
+        - is_admin
+        - member_type
+        - organization_id
+        - position
+        - profile_id
+        - updated_at
+      filter: { }
+      allow_aggregations: true
   - role: tt-ops
     permission:
       columns:
