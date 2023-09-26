@@ -103,7 +103,7 @@ export const CoursesTable: React.FC<
                 <TableCell>
                   <Typography mb={1}>{c.schedule[0].venue?.name}</Typography>
                   <Typography variant="body2">
-                    {c.schedule[0].virtualLink
+                    {!c.schedule[0].venue?.id
                       ? 'Online'
                       : c.schedule[0].venue?.city}
                   </Typography>

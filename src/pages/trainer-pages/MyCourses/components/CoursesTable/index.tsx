@@ -199,7 +199,7 @@ export function VenueCell({ course }: { course: TableCourse }) {
     <TableCell>
       <Typography mb={1}>{course.schedule[0]?.venue?.name}</Typography>
       <Typography variant="body2">
-        {course.schedule[0]?.virtualLink
+        {!course.schedule[0]?.venue?.id
           ? 'Online'
           : course.schedule[0]?.venue?.city}
       </Typography>
