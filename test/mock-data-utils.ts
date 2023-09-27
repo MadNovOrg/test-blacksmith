@@ -12,6 +12,7 @@ import {
   Course_Type_Enum,
   EbookSummaryFragment,
   GetCourseAuditLogsQuery,
+  GetOrgTypesQuery,
   Grade_Enum,
   Podcast,
   PostSummaryFragment,
@@ -740,5 +741,16 @@ export const buildLogs = build<GetCourseAuditLogsQuery['logs'][0]>({
     },
     created_at: sub(new Date(), { days: 2 }).toISOString(),
     updated_at: sub(new Date(), { days: 2 }).toISOString(),
+  },
+})
+
+export const buildOrgType = build<GetOrgTypesQuery>({
+  fields: {
+    organization_type: [
+      {
+        id: perBuild(() => chance.guid()),
+        name: perBuild(() => chance.name()),
+      },
+    ],
   },
 })

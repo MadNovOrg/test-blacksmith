@@ -1,0 +1,4 @@
+table:
+  name: organisation_sector
+  schema: public
+is_enum: true

@@ -504,6 +504,7 @@
     "childrens-health-and-social-care": "Childrens Health and Social Care"
   },
   "trust-name": "Trust name",
+  "org-type": "Organisation Type",
   "org-email": "Organisation email",
   "org-phone": "Organisation phone",
   "local-authority": "Local authority",

@@ -1,0 +1,46 @@
+table:
+  name: organization_type
+  schema: public
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+      filter: {}
+  - role: ld
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+      filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+      filter: {}

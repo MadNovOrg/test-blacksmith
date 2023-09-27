@@ -30204,6 +30204,10 @@ export type Mutation_Root = {
   delete_order_temp?: Maybe<Order_Temp_Mutation_Response>;
   /** delete single row from the table: "order_temp" */
   delete_order_temp_by_pk?: Maybe<Order_Temp>;
+  /** delete data from the table: "organisation_sector" */
+  delete_organisation_sector?: Maybe<Organisation_Sector_Mutation_Response>;
+  /** delete single row from the table: "organisation_sector" */
+  delete_organisation_sector_by_pk?: Maybe<Organisation_Sector>;
   /** delete data from the table: "organization" */
   delete_organization?: Maybe<Organization_Mutation_Response>;
   /** delete single row from the table: "organization" */
@@ -30216,6 +30220,10 @@ export type Mutation_Root = {
   delete_organization_member?: Maybe<Organization_Member_Mutation_Response>;
   /** delete single row from the table: "organization_member" */
   delete_organization_member_by_pk?: Maybe<Organization_Member>;
+  /** delete data from the table: "organization_type" */
+  delete_organization_type?: Maybe<Organization_Type_Mutation_Response>;
+  /** delete single row from the table: "organization_type" */
+  delete_organization_type_by_pk?: Maybe<Organization_Type>;
   /** delete data from the table: "payment_methods" */
   delete_payment_methods?: Maybe<Payment_Methods_Mutation_Response>;
   /** delete single row from the table: "payment_methods" */
@@ -30564,6 +30572,10 @@ export type Mutation_Root = {
   insert_order_temp?: Maybe<Order_Temp_Mutation_Response>;
   /** insert a single row into the table: "order_temp" */
   insert_order_temp_one?: Maybe<Order_Temp>;
+  /** insert data into the table: "organisation_sector" */
+  insert_organisation_sector?: Maybe<Organisation_Sector_Mutation_Response>;
+  /** insert a single row into the table: "organisation_sector" */
+  insert_organisation_sector_one?: Maybe<Organisation_Sector>;
   /** insert data into the table: "organization" */
   insert_organization?: Maybe<Organization_Mutation_Response>;
   /** insert data into the table: "organization_invites" */
@@ -30576,6 +30588,10 @@ export type Mutation_Root = {
   insert_organization_member_one?: Maybe<Organization_Member>;
   /** insert a single row into the table: "organization" */
   insert_organization_one?: Maybe<Organization>;
+  /** insert data into the table: "organization_type" */
+  insert_organization_type?: Maybe<Organization_Type_Mutation_Response>;
+  /** insert a single row into the table: "organization_type" */
+  insert_organization_type_one?: Maybe<Organization_Type>;
   /** insert data into the table: "payment_methods" */
   insert_payment_methods?: Maybe<Payment_Methods_Mutation_Response>;
   /** insert a single row into the table: "payment_methods" */
@@ -31078,6 +31094,12 @@ export type Mutation_Root = {
   update_order_temp_by_pk?: Maybe<Order_Temp>;
   /** update multiples rows of table: "order_temp" */
   update_order_temp_many?: Maybe<Array<Maybe<Order_Temp_Mutation_Response>>>;
+  /** update data of the table: "organisation_sector" */
+  update_organisation_sector?: Maybe<Organisation_Sector_Mutation_Response>;
+  /** update single row of the table: "organisation_sector" */
+  update_organisation_sector_by_pk?: Maybe<Organisation_Sector>;
+  /** update multiples rows of table: "organisation_sector" */
+  update_organisation_sector_many?: Maybe<Array<Maybe<Organisation_Sector_Mutation_Response>>>;
   /** update data of the table: "organization" */
   update_organization?: Maybe<Organization_Mutation_Response>;
   /** update single row of the table: "organization" */
@@ -31096,6 +31118,12 @@ export type Mutation_Root = {
   update_organization_member_by_pk?: Maybe<Organization_Member>;
   /** update multiples rows of table: "organization_member" */
   update_organization_member_many?: Maybe<Array<Maybe<Organization_Member_Mutation_Response>>>;
+  /** update data of the table: "organization_type" */
+  update_organization_type?: Maybe<Organization_Type_Mutation_Response>;
+  /** update single row of the table: "organization_type" */
+  update_organization_type_by_pk?: Maybe<Organization_Type>;
+  /** update multiples rows of table: "organization_type" */
+  update_organization_type_many?: Maybe<Array<Maybe<Organization_Type_Mutation_Response>>>;
   /** update data of the table: "payment_methods" */
   update_payment_methods?: Maybe<Payment_Methods_Mutation_Response>;
   /** update single row of the table: "payment_methods" */
@@ -32123,6 +32151,18 @@ export type Mutation_RootDelete_Order_Temp_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootDelete_Organisation_SectorArgs = {
+  where: Organisation_Sector_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Organisation_Sector_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+/** mutation root */
 export type Mutation_RootDelete_OrganizationArgs = {
   where: Organization_Bool_Exp;
 };
@@ -32154,6 +32194,18 @@ export type Mutation_RootDelete_Organization_MemberArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Organization_Member_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Organization_TypeArgs = {
+  where: Organization_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Organization_Type_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -33345,6 +33397,20 @@ export type Mutation_RootInsert_Order_Temp_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_Organisation_SectorArgs = {
+  objects: Array<Organisation_Sector_Insert_Input>;
+  on_conflict?: InputMaybe<Organisation_Sector_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Organisation_Sector_OneArgs = {
+  object: Organisation_Sector_Insert_Input;
+  on_conflict?: InputMaybe<Organisation_Sector_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_OrganizationArgs = {
   objects: Array<Organization_Insert_Input>;
   on_conflict?: InputMaybe<Organization_On_Conflict>;
@@ -33383,6 +33449,20 @@ export type Mutation_RootInsert_Organization_Member_OneArgs = {
 export type Mutation_RootInsert_Organization_OneArgs = {
   object: Organization_Insert_Input;
   on_conflict?: InputMaybe<Organization_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Organization_TypeArgs = {
+  objects: Array<Organization_Type_Insert_Input>;
+  on_conflict?: InputMaybe<Organization_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Organization_Type_OneArgs = {
+  object: Organization_Type_Insert_Input;
+  on_conflict?: InputMaybe<Organization_Type_On_Conflict>;
 };
 
 
@@ -35264,6 +35344,26 @@ export type Mutation_RootUpdate_Order_Temp_ManyArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Organisation_SectorArgs = {
+  _set?: InputMaybe<Organisation_Sector_Set_Input>;
+  where: Organisation_Sector_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Organisation_Sector_By_PkArgs = {
+  _set?: InputMaybe<Organisation_Sector_Set_Input>;
+  pk_columns: Organisation_Sector_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Organisation_Sector_ManyArgs = {
+  updates: Array<Organisation_Sector_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_OrganizationArgs = {
   _append?: InputMaybe<Organization_Append_Input>;
   _delete_at_path?: InputMaybe<Organization_Delete_At_Path_Input>;
@@ -35332,6 +35432,26 @@ export type Mutation_RootUpdate_Organization_Member_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Organization_Member_ManyArgs = {
   updates: Array<Organization_Member_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Organization_TypeArgs = {
+  _set?: InputMaybe<Organization_Type_Set_Input>;
+  where: Organization_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Organization_Type_By_PkArgs = {
+  _set?: InputMaybe<Organization_Type_Set_Input>;
+  pk_columns: Organization_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Organization_Type_ManyArgs = {
+  updates: Array<Organization_Type_Updates>;
 };
 
 
@@ -37682,6 +37802,142 @@ export type Order_Variance_Order_By = {
   vat?: InputMaybe<Order_By>;
 };
 
+/** columns and relationships of "organisation_sector" */
+export type Organisation_Sector = {
+  __typename?: 'organisation_sector';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "organisation_sector" */
+export type Organisation_Sector_Aggregate = {
+  __typename?: 'organisation_sector_aggregate';
+  aggregate?: Maybe<Organisation_Sector_Aggregate_Fields>;
+  nodes: Array<Organisation_Sector>;
+};
+
+/** aggregate fields of "organisation_sector" */
+export type Organisation_Sector_Aggregate_Fields = {
+  __typename?: 'organisation_sector_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Organisation_Sector_Max_Fields>;
+  min?: Maybe<Organisation_Sector_Min_Fields>;
+};
+
+
+/** aggregate fields of "organisation_sector" */
+export type Organisation_Sector_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Organisation_Sector_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "organisation_sector". All fields are combined with a logical 'AND'. */
+export type Organisation_Sector_Bool_Exp = {
+  _and?: InputMaybe<Array<Organisation_Sector_Bool_Exp>>;
+  _not?: InputMaybe<Organisation_Sector_Bool_Exp>;
+  _or?: InputMaybe<Array<Organisation_Sector_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "organisation_sector" */
+export enum Organisation_Sector_Constraint {
+  /** unique or primary key constraint on columns "name" */
+  OrganisationSectorPkey = 'organisation_sector_pkey'
+}
+
+export enum Organisation_Sector_Enum {
+  Edu = 'EDU',
+  HscAdultAndChildren = 'HSC_ADULT_AND_CHILDREN'
+}
+
+/** Boolean expression to compare columns of type "organisation_sector_enum". All fields are combined with logical 'AND'. */
+export type Organisation_Sector_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Organisation_Sector_Enum>;
+  _in?: InputMaybe<Array<Organisation_Sector_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<Organisation_Sector_Enum>;
+  _nin?: InputMaybe<Array<Organisation_Sector_Enum>>;
+};
+
+/** input type for inserting data into table "organisation_sector" */
+export type Organisation_Sector_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Organisation_Sector_Max_Fields = {
+  __typename?: 'organisation_sector_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Organisation_Sector_Min_Fields = {
+  __typename?: 'organisation_sector_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "organisation_sector" */
+export type Organisation_Sector_Mutation_Response = {
+  __typename?: 'organisation_sector_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Organisation_Sector>;
+};
+
+/** on_conflict condition type for table "organisation_sector" */
+export type Organisation_Sector_On_Conflict = {
+  constraint: Organisation_Sector_Constraint;
+  update_columns?: Array<Organisation_Sector_Update_Column>;
+  where?: InputMaybe<Organisation_Sector_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "organisation_sector". */
+export type Organisation_Sector_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: organisation_sector */
+export type Organisation_Sector_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** select columns of table "organisation_sector" */
+export enum Organisation_Sector_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "organisation_sector" */
+export type Organisation_Sector_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "organisation_sector" */
+export type Organisation_Sector_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Organisation_Sector_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Organisation_Sector_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "organisation_sector" */
+export enum Organisation_Sector_Update_Column {
+  /** column name */
+  Name = 'name'
+}
+
+export type Organisation_Sector_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Organisation_Sector_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Organisation_Sector_Bool_Exp;
+};
+
 /** columns and relationships of "organization" */
 export type Organization = {
   __typename?: 'organization';
@@ -38765,6 +39021,152 @@ export type Organization_Sum_Fields = {
   __typename?: 'organization_sum_fields';
   go1Licenses?: Maybe<Scalars['Int']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+};
+
+/** columns and relationships of "organization_type" */
+export type Organization_Type = {
+  __typename?: 'organization_type';
+  id: Scalars['uuid'];
+  name: Scalars['String'];
+  sector: Organisation_Sector_Enum;
+};
+
+/** aggregated selection of "organization_type" */
+export type Organization_Type_Aggregate = {
+  __typename?: 'organization_type_aggregate';
+  aggregate?: Maybe<Organization_Type_Aggregate_Fields>;
+  nodes: Array<Organization_Type>;
+};
+
+/** aggregate fields of "organization_type" */
+export type Organization_Type_Aggregate_Fields = {
+  __typename?: 'organization_type_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Organization_Type_Max_Fields>;
+  min?: Maybe<Organization_Type_Min_Fields>;
+};
+
+
+/** aggregate fields of "organization_type" */
+export type Organization_Type_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Organization_Type_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "organization_type". All fields are combined with a logical 'AND'. */
+export type Organization_Type_Bool_Exp = {
+  _and?: InputMaybe<Array<Organization_Type_Bool_Exp>>;
+  _not?: InputMaybe<Organization_Type_Bool_Exp>;
+  _or?: InputMaybe<Array<Organization_Type_Bool_Exp>>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  sector?: InputMaybe<Organisation_Sector_Enum_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "organization_type" */
+export enum Organization_Type_Constraint {
+  /** unique or primary key constraint on columns "name" */
+  OrganisationTypeNameKey = 'organisation_type_name_key',
+  /** unique or primary key constraint on columns "id" */
+  OrganisationTypePkey = 'organisation_type_pkey'
+}
+
+/** input type for inserting data into table "organization_type" */
+export type Organization_Type_Insert_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  sector?: InputMaybe<Organisation_Sector_Enum>;
+};
+
+/** aggregate max on columns */
+export type Organization_Type_Max_Fields = {
+  __typename?: 'organization_type_max_fields';
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Organization_Type_Min_Fields = {
+  __typename?: 'organization_type_min_fields';
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "organization_type" */
+export type Organization_Type_Mutation_Response = {
+  __typename?: 'organization_type_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Organization_Type>;
+};
+
+/** on_conflict condition type for table "organization_type" */
+export type Organization_Type_On_Conflict = {
+  constraint: Organization_Type_Constraint;
+  update_columns?: Array<Organization_Type_Update_Column>;
+  where?: InputMaybe<Organization_Type_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "organization_type". */
+export type Organization_Type_Order_By = {
+  id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  sector?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: organization_type */
+export type Organization_Type_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "organization_type" */
+export enum Organization_Type_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Sector = 'sector'
+}
+
+/** input type for updating data in table "organization_type" */
+export type Organization_Type_Set_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  sector?: InputMaybe<Organisation_Sector_Enum>;
+};
+
+/** Streaming cursor of the table "organization_type" */
+export type Organization_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Organization_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Organization_Type_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  sector?: InputMaybe<Organisation_Sector_Enum>;
+};
+
+/** update columns of table "organization_type" */
+export enum Organization_Type_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Sector = 'sector'
+}
+
+export type Organization_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Organization_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Organization_Type_Bool_Exp;
 };
 
 /** update columns of table "organization" */
@@ -42035,6 +42437,12 @@ export type Query_Root = {
   order_temp_aggregate: Order_Temp_Aggregate;
   /** fetch data from the table: "order_temp" using primary key columns */
   order_temp_by_pk?: Maybe<Order_Temp>;
+  /** fetch data from the table: "organisation_sector" */
+  organisation_sector: Array<Organisation_Sector>;
+  /** fetch aggregated fields from the table: "organisation_sector" */
+  organisation_sector_aggregate: Organisation_Sector_Aggregate;
+  /** fetch data from the table: "organisation_sector" using primary key columns */
+  organisation_sector_by_pk?: Maybe<Organisation_Sector>;
   /** fetch data from the table: "organization" */
   organization: Array<Organization>;
   /** fetch aggregated fields from the table: "organization" */
@@ -42053,6 +42461,12 @@ export type Query_Root = {
   organization_member_aggregate: Organization_Member_Aggregate;
   /** fetch data from the table: "organization_member" using primary key columns */
   organization_member_by_pk?: Maybe<Organization_Member>;
+  /** fetch data from the table: "organization_type" */
+  organization_type: Array<Organization_Type>;
+  /** fetch aggregated fields from the table: "organization_type" */
+  organization_type_aggregate: Organization_Type_Aggregate;
+  /** fetch data from the table: "organization_type" using primary key columns */
+  organization_type_by_pk?: Maybe<Organization_Type>;
   /** fetch data from the table: "payment_methods" */
   payment_methods: Array<Payment_Methods>;
   /** fetch aggregated fields from the table: "payment_methods" */
@@ -43775,6 +44189,29 @@ export type Query_RootOrder_Temp_By_PkArgs = {
 };
 
 
+export type Query_RootOrganisation_SectorArgs = {
+  distinct_on?: InputMaybe<Array<Organisation_Sector_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organisation_Sector_Order_By>>;
+  where?: InputMaybe<Organisation_Sector_Bool_Exp>;
+};
+
+
+export type Query_RootOrganisation_Sector_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Organisation_Sector_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organisation_Sector_Order_By>>;
+  where?: InputMaybe<Organisation_Sector_Bool_Exp>;
+};
+
+
+export type Query_RootOrganisation_Sector_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
 export type Query_RootOrganizationArgs = {
   distinct_on?: InputMaybe<Array<Organization_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -43840,6 +44277,29 @@ export type Query_RootOrganization_Member_AggregateArgs = {
 
 
 export type Query_RootOrganization_Member_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootOrganization_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Organization_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organization_Type_Order_By>>;
+  where?: InputMaybe<Organization_Type_Bool_Exp>;
+};
+
+
+export type Query_RootOrganization_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Organization_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organization_Type_Order_By>>;
+  where?: InputMaybe<Organization_Type_Bool_Exp>;
+};
+
+
+export type Query_RootOrganization_Type_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -45144,6 +45604,14 @@ export type Subscription_Root = {
   order_temp_by_pk?: Maybe<Order_Temp>;
   /** fetch data from the table in a streaming manner: "order_temp" */
   order_temp_stream: Array<Order_Temp>;
+  /** fetch data from the table: "organisation_sector" */
+  organisation_sector: Array<Organisation_Sector>;
+  /** fetch aggregated fields from the table: "organisation_sector" */
+  organisation_sector_aggregate: Organisation_Sector_Aggregate;
+  /** fetch data from the table: "organisation_sector" using primary key columns */
+  organisation_sector_by_pk?: Maybe<Organisation_Sector>;
+  /** fetch data from the table in a streaming manner: "organisation_sector" */
+  organisation_sector_stream: Array<Organisation_Sector>;
   /** fetch data from the table: "organization" */
   organization: Array<Organization>;
   /** fetch aggregated fields from the table: "organization" */
@@ -45168,6 +45636,14 @@ export type Subscription_Root = {
   organization_member_stream: Array<Organization_Member>;
   /** fetch data from the table in a streaming manner: "organization" */
   organization_stream: Array<Organization>;
+  /** fetch data from the table: "organization_type" */
+  organization_type: Array<Organization_Type>;
+  /** fetch aggregated fields from the table: "organization_type" */
+  organization_type_aggregate: Organization_Type_Aggregate;
+  /** fetch data from the table: "organization_type" using primary key columns */
+  organization_type_by_pk?: Maybe<Organization_Type>;
+  /** fetch data from the table in a streaming manner: "organization_type" */
+  organization_type_stream: Array<Organization_Type>;
   /** fetch data from the table: "payment_methods" */
   payment_methods: Array<Payment_Methods>;
   /** fetch aggregated fields from the table: "payment_methods" */
@@ -47366,6 +47842,36 @@ export type Subscription_RootOrder_Temp_StreamArgs = {
 };
 
 
+export type Subscription_RootOrganisation_SectorArgs = {
+  distinct_on?: InputMaybe<Array<Organisation_Sector_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organisation_Sector_Order_By>>;
+  where?: InputMaybe<Organisation_Sector_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrganisation_Sector_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Organisation_Sector_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organisation_Sector_Order_By>>;
+  where?: InputMaybe<Organisation_Sector_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrganisation_Sector_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Subscription_RootOrganisation_Sector_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Organisation_Sector_Stream_Cursor_Input>>;
+  where?: InputMaybe<Organisation_Sector_Bool_Exp>;
+};
+
+
 export type Subscription_RootOrganizationArgs = {
   distinct_on?: InputMaybe<Array<Organization_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -47453,6 +47959,36 @@ export type Subscription_RootOrganization_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Organization_Stream_Cursor_Input>>;
   where?: InputMaybe<Organization_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrganization_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Organization_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organization_Type_Order_By>>;
+  where?: InputMaybe<Organization_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrganization_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Organization_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organization_Type_Order_By>>;
+  where?: InputMaybe<Organization_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrganization_Type_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootOrganization_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Organization_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Organization_Type_Bool_Exp>;
 };
 
 
@@ -51227,6 +51763,8 @@ export type FindEstablishmentQuery = { __typename?: 'query_root', establishments
 
 export type OrganizationFragment = { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null };
 
+export type ShallowOrganizationFragment = { __typename?: 'organization', id: any, name: string };
+
 export type ProfileFragment = { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> };
 
 export type ModuleFragment = { __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any };
@@ -51666,6 +52204,13 @@ export type GetOrgDetailsQueryVariables = Exact<{
 
 
 export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, lastActivity: any, createdAt: any, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, go1Licenses: Array<{ __typename?: 'go1_licenses', id: any, expireDate: any }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null, course?: { __typename?: 'course', name: string, course_code?: string | null } | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, organization: { __typename?: 'organization', id: any, name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
+
+export type GetOrgTypesQueryVariables = Exact<{
+  sector: Organisation_Sector_Enum;
+}>;
+
+
+export type GetOrgTypesQuery = { __typename?: 'query_root', organization_type: Array<{ __typename?: 'organization_type', id: any, name: string }> };
 
 export type GetOrgUsersQueryVariables = Exact<{
   orgId: Scalars['uuid'];

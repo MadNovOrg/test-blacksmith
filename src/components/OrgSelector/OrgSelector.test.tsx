@@ -1,4 +1,3 @@
-import React from 'react'
 import { noop } from 'ts-essentials'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
