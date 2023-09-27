@@ -1,5 +1,5 @@
 import { Alert, Box, Typography, useTheme } from '@mui/material'
-import { formatDistanceToNow, isPast } from 'date-fns'
+import { isPast } from 'date-fns'
 import { FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -41,7 +41,6 @@ export const CertificationsAlerts: FC<
             {t('course-certificate.expired-on', {
               date: certificate.expiryDate,
             })}
-            ({formatDistanceToNow(new Date(certificate.expiryDate))} {t('ago')})
           </Alert>
         ) : (
           <Alert
@@ -53,9 +52,6 @@ export const CertificationsAlerts: FC<
             {t('course-certificate.active-until', {
               date: certificate.expiryDate,
             })}
-            ({t('course-certificate.expires-in')}{' '}
-            {formatDistanceToNow(new Date(certificate.expiryDate))}
-            ).
           </Alert>
         )
       ) : null}
