@@ -69,7 +69,7 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(blended).toBeChecked()
   })
 
-  it('restricts  INDIRECT+LEVEL_1+MIXED to Non-blended', async () => {
+  it('restricts INDIRECT+LEVEL_1+MIXED to be Blended', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
@@ -108,7 +108,7 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(blended).toBeChecked()
   })
 
-  it('restricts INDIRECT+LEVEL_2+MIXED to Non-blended', async () => {
+  it('restricts INDIRECT+LEVEL_2+MIXED to be Blended', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
@@ -119,7 +119,7 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(blended).not.toBeChecked()
   })
 
-  it('restricts INDIRECT+ADVANCED+F2F to Non-blended', async () => {
+  it('restricts INDIRECT+ADVANCED+F2F to be Blended', async () => {
     await waitFor(() => renderForm(type, CourseLevel.AdvancedTrainer))
 
     await selectLevel(CourseLevel.Advanced)
@@ -131,27 +131,20 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   // Reaccreditation
-  it('allows INDIRECT+LEVEL_1+F2F Reaccreditation if Non-blended', async () => {
+  it('allows INDIRECT+LEVEL_1+F2F to be Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
 
-    const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
-    expect(blended).not.toBeChecked()
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
-
-    await userEvent.click(blended)
-    expect(blended).toBeChecked()
-    expect(reacc).toBeDisabled()
-    expect(reacc).not.toBeChecked()
   })
 
-  it('allows INDIRECT+LEVEL_1+MIXED Reaccreditation if Non-blended', async () => {
+  it('allows INDIRECT+LEVEL_1+MIXED to be Reaccreditation but not Blended', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
@@ -161,52 +154,40 @@ describe('component: CourseForm - INDIRECT', () => {
     const reacc = screen.getByLabelText('Reaccreditation')
 
     expect(blended).toBeDisabled()
+    expect(blended).not.toBeChecked()
+
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
   })
 
-  it('allows INDIRECT+LEVEL_1+VIRTUAL Reaccreditation if Non-blended', async () => {
+  it('allows INDIRECT+LEVEL_1+VIRTUAL to be Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
 
-    const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
-    expect(blended).not.toBeChecked()
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
-
-    await userEvent.click(blended)
-    expect(blended).toBeChecked()
-    expect(reacc).toBeDisabled()
-    expect(reacc).not.toBeChecked()
   })
 
-  it('allows INDIRECT+LEVEL_2+F2F Reaccreditation for Blended or Non-blended', async () => {
+  it('allows INDIRECT+LEVEL_2+F2F to be Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.F2F)
 
-    const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
-    expect(blended).not.toBeChecked()
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
-
-    await userEvent.click(blended)
-    expect(blended).toBeChecked()
-    expect(reacc).toBeEnabled()
-    expect(reacc).toBeChecked()
   })
 
-  it('allows INDIRECT+LEVEL_2+MIXED Reaccreditation if Non-blended', async () => {
+  it('allows INDIRECT+LEVEL_2+MIXED to be Reaccreditation but not Blended', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
@@ -216,6 +197,8 @@ describe('component: CourseForm - INDIRECT', () => {
     const reacc = screen.getByLabelText('Reaccreditation')
 
     expect(blended).toBeDisabled()
+    expect(blended).not.toBeChecked()
+
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()

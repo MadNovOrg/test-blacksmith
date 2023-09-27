@@ -96,7 +96,7 @@ describe('component: CourseForm - CLOSED', () => {
     expect(blended).toBeChecked()
   })
 
-  it('restricts CLOSED+LEVEL_1+MIXED to Non-Blended', async () => {
+  it('restricts CLOSED+LEVEL_1+MIXED to be Blended', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
@@ -135,18 +135,21 @@ describe('component: CourseForm - CLOSED', () => {
     expect(blended).toBeChecked()
   })
 
-  it('restricts CLOSED+LEVEL_2+MIXED to Non-Blended', async () => {
+  it('allows CLOSED+LEVEL_2+MIXED to be Blended', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.MIXED)
 
     const blended = screen.getByLabelText('Blended learning')
-    expect(blended).toBeDisabled()
+    expect(blended).toBeEnabled()
     expect(blended).not.toBeChecked()
+
+    await userEvent.click(blended)
+    expect(blended).toBeChecked()
   })
 
-  it('restricts CLOSED+ADVANCED+F2F to Non-Blended', async () => {
+  it('restricts CLOSED+ADVANCED+F2F to be Blended', async () => {
     await waitFor(() =>
       renderForm(type, CourseLevel.IntermediateTrainer, RoleName.TT_ADMIN)
     )
@@ -159,7 +162,7 @@ describe('component: CourseForm - CLOSED', () => {
     expect(blended).not.toBeChecked()
   })
 
-  it('restricts CLOSED+INTERMEDIATE_TRAINER+F2F to Non-Blended', async () => {
+  it('restricts CLOSED+INTERMEDIATE_TRAINER+F2F to be Blended', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.IntermediateTrainer)
@@ -170,7 +173,7 @@ describe('component: CourseForm - CLOSED', () => {
     expect(blended).not.toBeChecked()
   })
 
-  it('restricts CLOSED+ADVANCED_TRAINER+F2F to Non-Blended', async () => {
+  it('restricts CLOSED+ADVANCED_TRAINER+F2F to be Blended', async () => {
     await waitFor(() => renderForm(type, CourseLevel.AdvancedTrainer))
 
     await selectLevel(CourseLevel.AdvancedTrainer)
@@ -182,97 +185,72 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   // Reaccreditation
-  it('allows CLOSED+LEVEL_1+F2F Reaccreditation if Non-blended', async () => {
+  it('allows CLOSED+LEVEL_1+F2F to be Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
 
-    const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
-    expect(blended).not.toBeChecked()
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
-
-    await userEvent.click(blended)
-    expect(blended).toBeChecked()
-    expect(reacc).toBeDisabled()
-    expect(reacc).not.toBeChecked()
   })
 
-  it('allows CLOSED+LEVEL_1+MIXED Reaccreditation if Non-blended', async () => {
+  it('allows CLOSED+LEVEL_1+MIXED to be Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.MIXED)
 
-    const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
-    expect(blended).toBeDisabled()
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
   })
 
-  it('allows CLOSED+LEVEL_1+VIRTUAL Reaccreditation if Non-blended', async () => {
+  it('allows CLOSED+LEVEL_1+VIRTUAL to be Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
 
-    const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
-    expect(blended).not.toBeChecked()
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
-
-    await userEvent.click(blended)
-    expect(blended).toBeChecked()
-    expect(reacc).toBeDisabled()
-    expect(reacc).not.toBeChecked()
   })
 
-  it('allows CLOSED+LEVEL_2+F2F Reaccreditation for Blended or Non-blended', async () => {
+  it('allows CLOSED+LEVEL_2+F2F to be Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.F2F)
 
-    const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
-    expect(blended).not.toBeChecked()
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
-
-    await userEvent.click(blended)
-    expect(blended).toBeChecked()
-    expect(reacc).toBeEnabled()
-    expect(reacc).toBeChecked()
   })
 
-  it('allows CLOSED+LEVEL_2+MIXED Reaccreditation if Non-blended', async () => {
+  it('allows CLOSED+LEVEL_2+MIXED to be Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.MIXED)
 
-    const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
-    expect(blended).toBeDisabled()
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
   })
 
-  it('allows CLOSED+INTERMEDIATE_TRAINER+F2F Reaccreditation if Non-blended', async () => {
+  it('allows CLOSED+INTERMEDIATE_TRAINER+F2F to be Reaccreditation but not Blended', async () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(CourseLevel.IntermediateTrainer)
@@ -282,12 +260,13 @@ describe('component: CourseForm - CLOSED', () => {
     const reacc = screen.getByLabelText('Reaccreditation')
 
     expect(blended).toBeDisabled()
+    expect(blended).not.toBeChecked()
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
   })
 
-  it('allows CLOSED+ADVANCED_TRAINER+F2F Reaccreditation if Non-blended', async () => {
+  it('allows CLOSED+ADVANCED_TRAINER+F2F to be Reaccreditation but not Blended', async () => {
     await waitFor(() => renderForm(type, CourseLevel.AdvancedTrainer))
 
     await selectLevel(CourseLevel.AdvancedTrainer)
@@ -297,6 +276,7 @@ describe('component: CourseForm - CLOSED', () => {
     const reacc = screen.getByLabelText('Reaccreditation')
 
     expect(blended).toBeDisabled()
+    expect(blended).not.toBeChecked()
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()

@@ -155,7 +155,10 @@ export function canBeBlended(
       }
 
       if (isMixed) {
-        // CLOSED + Mixed can never be blended
+        if (courseLevel === CourseLevel.Level_2) {
+          return true
+        }
+        return false
       }
 
       if (isVirtual) {
@@ -175,7 +178,7 @@ export function canBeBlended(
       }
 
       if (isMixed) {
-        // INDIRECT + Mixed can never be blended
+        return false
       }
 
       if (isVirtual) {
@@ -260,21 +263,21 @@ export function canBeReacc(
       if (isF2F) {
         const levels = [
           CourseLevel.Level_1,
+          CourseLevel.Level_2,
           CourseLevel.IntermediateTrainer,
           CourseLevel.AdvancedTrainer,
         ]
-        if (levels.includes(courseLevel)) return !blended
-        if (courseLevel === CourseLevel.Level_2) return true
+        return levels.includes(courseLevel)
       }
 
       if (isMixed) {
         const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
-        if (levels.includes(courseLevel)) return !blended
+        return levels.includes(courseLevel)
       }
 
       if (isVirtual) {
         const levels = [CourseLevel.Level_1]
-        if (levels.includes(courseLevel)) return !blended
+        return levels.includes(courseLevel)
       }
 
       return false
@@ -284,19 +287,18 @@ export function canBeReacc(
       if (!courseLevel) return false
 
       if (isF2F) {
-        const levels = [CourseLevel.Level_1, CourseLevel.BildRegular]
-        if (levels.includes(courseLevel)) return !blended
-        if (courseLevel === CourseLevel.Level_2) return true
+        const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
+        return levels.includes(courseLevel)
       }
 
       if (isMixed) {
         const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
-        if (levels.includes(courseLevel)) return !blended
+        return levels.includes(courseLevel)
       }
 
       if (isVirtual) {
         const levels = [CourseLevel.Level_1]
-        if (levels.includes(courseLevel)) return !blended
+        return levels.includes(courseLevel)
       }
 
       return false
