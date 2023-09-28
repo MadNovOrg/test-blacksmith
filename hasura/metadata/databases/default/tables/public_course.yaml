@@ -676,6 +676,8 @@ select_permissions:
         - start
         - end
         - arloReferenceId
+      computed_fields:
+        - course_code
       filter: {}
       allow_aggregations: true
   - role: sales-admin
