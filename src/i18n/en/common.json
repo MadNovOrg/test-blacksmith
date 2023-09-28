@@ -526,6 +526,7 @@
   },
   "expired-ago": "Expired {{ time }} ago",
   "expiring-in": "Expiring in {{ time }}",
+  "expiry-date": "Expiry date",
   "city": "City",
   "individuals": "Individuals",
   "day": "day",

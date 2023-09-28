@@ -10,7 +10,6 @@ import {
   Typography,
 } from '@mui/material'
 import Link from '@mui/material/Link'
-import { formatDistanceToNow } from 'date-fns'
 import { sortBy } from 'lodash-es'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -88,6 +87,13 @@ export const IndividualsByLevelList: React.FC<
         ? {
             id: 'status',
             label: t('common.status'),
+            sorting: true,
+          }
+        : null,
+      courseLevel
+        ? {
+            id: 'expiryDate',
+            label: t('common.expiry-date'),
             sorting: true,
           }
         : null,
@@ -176,19 +182,15 @@ export const IndividualsByLevelList: React.FC<
                       status={certificationStatus}
                       tooltip={statusTooltip}
                     />
+                  </TableCell>
+                ) : null}
+                {courseLevel ? (
+                  <TableCell>
                     <Typography variant="body2">
                       {certificationStatus !== CertificateStatus.REVOKED &&
-                        t(
-                          certificationStatus ===
-                            CertificateStatus.EXPIRED_RECENTLY
-                            ? 'common.expired-ago'
-                            : 'common.expiring-in',
-                          {
-                            time: formatDistanceToNow(
-                              new Date(certification?.expiryDate)
-                            ),
-                          }
-                        )}
+                        t('dates.default', {
+                          date: new Date(certification?.expiryDate),
+                        })}
                     </Typography>
                   </TableCell>
                 ) : null}
