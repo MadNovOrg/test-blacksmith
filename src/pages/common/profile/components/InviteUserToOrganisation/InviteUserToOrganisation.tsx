@@ -48,7 +48,7 @@ export const InviteUserToOrganisation: React.FC<
 
   const where = useMemo(
     () =>
-      acl.isOrgAdmin()
+      acl.isOrgAdmin() && !acl.isInternalUser()
         ? {
             members: {
               _and: {
