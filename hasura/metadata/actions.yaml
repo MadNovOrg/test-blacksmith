@@ -297,6 +297,7 @@ actions:
       - role: sales-admin
       - role: booking-contact
       - role: organization-key-contact
+      - role: user
     comment: Send course information to the specified course attendees
   - name: signUp
     definition:
