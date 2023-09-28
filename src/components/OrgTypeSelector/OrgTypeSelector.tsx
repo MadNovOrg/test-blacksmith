@@ -1,6 +1,5 @@
 import { MenuItem, TextField } from '@mui/material'
 import { ChangeEvent, FC, PropsWithChildren } from 'react'
-import { FieldError } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
 
@@ -17,10 +16,10 @@ type Props = {
   sector: string
   onChange: (orgId: Pick<Organization_Type, 'id'> | null) => void
   label?: string
-  error?: FieldError | undefined
+  error?: string | undefined
   required?: boolean
   disabled?: boolean
-  value?: Organization_Type | ''
+  value?: Pick<Organization_Type, 'id'> | null
 }
 
 export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
@@ -59,7 +58,7 @@ export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
       onChange={handleChange}
       disabled={disabled}
       required={required}
-      helperText={error?.message}
+      helperText={error}
       value={value}
     >
       {data?.organization_type.length ? (
@@ -69,7 +68,9 @@ export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
           </MenuItem>
         ))
       ) : (
-        <div></div>
+        <MenuItem value="" disabled>
+          {t('fields.organization-sector')}
+        </MenuItem>
       )}
     </TextField>
   )
