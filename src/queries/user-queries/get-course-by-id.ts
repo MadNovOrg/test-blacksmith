@@ -83,6 +83,11 @@ export const QUERY = gql`
       bookingContact {
         id
       }
+
+      organizationKeyContact {
+        id
+      }
+
       status
       accreditedBy
       bildModules {

@@ -80,7 +80,8 @@ export const CourseDetails: React.FC<
   const alertType = searchParams.get('success') as keyof typeof successAlerts
   const alertMessage = alertType ? successAlerts[alertType] : null
   const courseId = params.id as string
-  const canViewOrderItem = acl.isBookingContact() || acl.isOrgAdmin()
+  const canViewOrderItem =
+    acl.isBookingContact() || acl.isOrgAdmin() || acl.isOrgKeyContact()
 
   const [pollCertificateCounter, setPollCertificateCounter] = useState(10)
 
@@ -127,17 +128,25 @@ export const CourseDetails: React.FC<
     data?.course_participant?.length > 0 ? data?.course_participant[0] : null
 
   const isBookingContact = course?.bookingContact?.id === profileId
+  const isOrgKeyContact = course?.organizationKeyContact?.id === profileId
   const isParticipant = !!courseParticipant
 
   useEffect(() => {
     if (course && !activeTab) {
       setActiveTab(
-        isBookingContact && bookingOnly
+        (isOrgKeyContact || isBookingContact) && bookingOnly
           ? CourseDetailsTabs.ATTENDEES
           : 'checklist'
       )
     }
-  }, [bookingOnly, course, isBookingContact, isParticipant, activeTab])
+  }, [
+    bookingOnly,
+    course,
+    isBookingContact,
+    isOrgKeyContact,
+    isParticipant,
+    activeTab,
+  ])
 
   const { data: usersData, error } = useSWR<
     GetFeedbackUsersQuery,
@@ -215,7 +224,7 @@ export const CourseDetails: React.FC<
         <Alert severity="error">There was an error loading a course.</Alert>
       ) : null}
 
-      {course && (isParticipant || isBookingContact) ? (
+      {course && (isParticipant || isBookingContact || isOrgKeyContact) ? (
         <>
           <CourseHeroSummary
             course={course}
@@ -290,7 +299,7 @@ export const CourseDetails: React.FC<
                             value="certification"
                           />
                         ) : null}
-                        {isBookingContact ? (
+                        {isBookingContact || isOrgKeyContact ? (
                           <PillTab
                             label={t(
                               'pages.course-details.tabs.attendees.title'
@@ -481,7 +490,7 @@ export const CourseDetails: React.FC<
                     )}
                   </TabPanel>
                 ) : null}
-                {isBookingContact ? (
+                {isBookingContact || isOrgKeyContact ? (
                   <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.ATTENDEES}>
                     <CourseAttendeesTab course={course} />
                   </TabPanel>

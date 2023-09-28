@@ -17,6 +17,7 @@ export const ActiveRoles = new Set([
   RoleName.SALES_REPRESENTATIVE,
   RoleName.FINANCE,
   RoleName.BOOKING_CONTACT,
+  RoleName.ORGANIZATION_KEY_CONTACT,
 ])
 
 function getRequestedRole() {
@@ -35,6 +36,11 @@ export function getQueryRole(
     allowedRoles.has(RoleName.BOOKING_CONTACT)
   ) {
     return RoleName.BOOKING_CONTACT
+  } else if (
+    activeRole === RoleName.USER &&
+    allowedRoles.has(RoleName.ORGANIZATION_KEY_CONTACT)
+  ) {
+    return RoleName.ORGANIZATION_KEY_CONTACT
   }
   return activeRole
 }

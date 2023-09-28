@@ -54,7 +54,9 @@ export const NavLinks: React.FC<INavLinksProps> = () => {
         </Link>
       ) : null}
 
-      {acl.canManageOrgCourses() || acl.isBookingContact() ? (
+      {acl.canManageOrgCourses() ||
+      acl.isBookingContact() ||
+      acl.isOrgKeyContact() ? (
         <Link
           component={StyledNavLink}
           to="/manage-courses"

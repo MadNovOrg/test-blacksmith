@@ -95,6 +95,7 @@ export const Contacts: React.FC<
       RoleName.FINANCE,
       RoleName.TT_ADMIN,
       RoleName.BOOKING_CONTACT,
+      RoleName.ORGANIZATION_KEY_CONTACT,
       RoleName.UNVERIFIED,
     ]).map<FilterOption>(role => ({
       id: role,

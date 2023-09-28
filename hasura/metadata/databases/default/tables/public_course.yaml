@@ -483,6 +483,88 @@ select_permissions:
           - booking_contact_profile_id:
               _eq: X-Hasura-User-Id
       allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - account_code
+        - accredited_by
+        - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - booking_contact_invite_data
+        - organization_key_contact_invite_data
+        - booking_contact_profile_id
+        - organization_key_contact_profile_id
+        - conversion
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - created_at
+        - created_by_id
+        - description
+        - exceptions_pending
+        - free_spaces
+        - go1_integration
+        - grading_confirmed
+        - grading_started
+        - id
+        - is_draft
+        - max_participants
+        - min_participants
+        - modules_duration
+        - name
+        - organization_id
+        - parking_instructions
+        - price
+        - price_currency
+        - reaccreditation
+        - source
+        - special_instructions
+        - updated_at
+        - start
+        - end
+      computed_fields:
+        - course_code
+        - freeSlots
+      filter:
+        _or:
+          - participants:
+              profile_id:
+                _eq: X-Hasura-User-Id
+          - _and:
+              - course_type:
+                  _eq: OPEN
+              - participants:
+                  profile:
+                    organizations:
+                      organization:
+                        members:
+                          _and:
+                            - is_admin:
+                                _eq: true
+                            - profile_id:
+                                _eq: X-Hasura-User-Id
+          - organization:
+              members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+          - _and:
+              - course_type:
+                  _eq: OPEN
+              - course_status:
+                  _in:
+                    - CONFIRM_MODULES
+                    - SCHEDULED
+                    - TRAINER_MISSING
+                    - TRAINER_PENDING
+                    - TRAINER_DECLINED
+          - organization_key_contact_profile_id:
+              _eq: X-Hasura-User-Id
+      allow_aggregations: true
   - role: finance
     permission:
       columns:

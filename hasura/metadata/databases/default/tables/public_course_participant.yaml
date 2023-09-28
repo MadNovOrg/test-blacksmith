@@ -156,9 +156,12 @@ select_permissions:
         - registration_id
         - updated_at
       filter:
-        course:
-          booking_contact_profile_id:
-            _eq: X-Hasura-User-Id
+        _or:
+          - course:
+              booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+          - profile_id:
+              _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: finance
     permission:

@@ -58,6 +58,7 @@ const roleRoutesMap: Record<RoleName, React.ElementType> = {
   [RoleName.FINANCE]: FinanceRoute,
   [RoleName.TRAINER]: TrainerRoutes,
   [RoleName.BOOKING_CONTACT]: UserRoutes,
+  [RoleName.ORGANIZATION_KEY_CONTACT]: UserRoutes,
   [RoleName.USER]: UserRoutes,
   [RoleName.LD]: TTAdminRoutes,
   [RoleName.TT_OPS]: TTAdminRoutes,

@@ -51,6 +51,26 @@ insert_permissions:
         - created_at
         - organization_id
       backend_only: false
+  - role: organization-key-contact
+    permission:
+      check: { }
+      set:
+        email: x-hasura-User-Email
+      columns:
+        - accept_tcs
+        - dob
+        - course_id
+        - id
+        - quantity
+        - email
+        - family_name
+        - given_name
+        - job_title
+        - phone
+        - sector
+        - created_at
+        - organization_id
+      backend_only: false
   - role: finance
     permission:
       check: {}

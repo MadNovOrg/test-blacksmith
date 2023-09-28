@@ -380,6 +380,7 @@ export const AttendingTab = ({
                   acl.isOrgAdmin(course.organization?.id),
                   acl.isCourseLeader(course),
                   acl.isBookingContact(),
+                  acl.isOrgKeyContact(),
                 ].some(Boolean)
                   ? 'minimal'
                   : 'complete'

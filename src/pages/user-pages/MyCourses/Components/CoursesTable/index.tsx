@@ -10,30 +10,48 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AttendeeCourseStatus } from '@app/components/AttendeeCourseStatus/AttendeeCourseStatus'
+import { ParticipantsCount } from '@app/components/ParticipantsCount'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
 import { Course_Status_Enum, UserCoursesQuery } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { Cols } from '@app/pages/trainer-pages/MyCourses/components/CoursesTable'
 
 export type CoursesTableProps = {
+  additionalColumns?: Set<Extract<Cols, 'type' | 'registrants'>>
   courses: UserCoursesQuery['courses']
   sorting: ReturnType<typeof useTableSort>
   paginationComponent?: React.ReactNode
   loading?: boolean
-
   filtered?: boolean
 }
 
 export const CoursesTable: React.FC<
   React.PropsWithChildren<CoursesTableProps>
-> = ({ courses, sorting, loading, filtered, paginationComponent }) => {
+> = ({
+  courses,
+  sorting,
+  loading,
+  filtered,
+  paginationComponent,
+  additionalColumns,
+}) => {
   const { t } = useTranslation()
 
   const cols = useMemo(
     () => [
       { id: 'name', label: t('pages.my-courses.col-name'), sorting: true },
       { id: 'venue', label: t('pages.my-courses.col-venue'), sorting: false },
+      ...(additionalColumns?.has('type')
+        ? [
+            {
+              id: 'type',
+              label: t('pages.my-courses.col-type'),
+              sorting: false,
+            },
+          ]
+        : []),
       { id: 'start', label: t('pages.my-courses.col-start'), sorting: true },
       { id: 'end', label: t('pages.my-courses.col-end'), sorting: true },
       {
@@ -46,9 +64,19 @@ export const CoursesTable: React.FC<
         label: t('pages.my-courses.col-trainers'),
         sorting: false,
       },
+      ...(additionalColumns?.has('registrants')
+        ? [
+            {
+              id: 'registrants',
+              label: t('pages.my-courses.col-registrations'),
+              sorting: false,
+            },
+          ]
+        : []),
       { id: 'status', label: t('pages.my-courses.col-status'), sorting: false },
     ],
-    [t]
+
+    [additionalColumns, t]
   )
 
   return (
@@ -108,6 +136,13 @@ export const CoursesTable: React.FC<
                       : c.schedule[0].venue?.city}
                   </Typography>
                 </TableCell>
+                {additionalColumns?.has('type') ? (
+                  <TableCell>
+                    <Typography variant="body2" sx={{ color: 'inherit' }}>
+                      {t(`course-types.${c.type}`)}
+                    </Typography>
+                  </TableCell>
+                ) : null}
                 <TableCell>
                   {c.dates?.aggregate?.start?.date && (
                     <Box>
@@ -171,6 +206,15 @@ export const CoursesTable: React.FC<
                 <TableCell>
                   <TrainerAvatarGroup trainers={c.trainers ?? []} />
                 </TableCell>
+                {additionalColumns?.has('registrants') ? (
+                  <TableCell data-testid="participants-cell">
+                    <ParticipantsCount
+                      participating={c.participantsAgg?.aggregate?.count ?? 0}
+                      capacity={c.max_participants}
+                      waitlist={c.waitlistAgg?.aggregate?.count}
+                    />
+                  </TableCell>
+                ) : null}
                 <TableCell>
                   <AttendeeCourseStatus course={c} />
                 </TableCell>

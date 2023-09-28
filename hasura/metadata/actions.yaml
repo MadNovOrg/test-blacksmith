@@ -206,6 +206,7 @@ actions:
       - role: unverified
       - role: finance
       - role: booking-contact
+      - role: organization-key-contact
       - role: anonymous
       - role: sales-representative
       - role: tt-ops
@@ -295,6 +296,7 @@ actions:
       - role: trainer
       - role: sales-admin
       - role: booking-contact
+      - role: organization-key-contact
     comment: Send course information to the specified course attendees
   - name: signUp
     definition:
@@ -374,6 +376,7 @@ actions:
       handler: '{{ACTIONS_HOST}}/xero/contacts/search'
     permissions:
       - role: booking-contact
+      - role: organization-key-contact
       - role: trainer
       - role: user
       - role: sales-representative

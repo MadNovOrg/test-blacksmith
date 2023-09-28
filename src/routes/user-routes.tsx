@@ -106,6 +106,16 @@ const UserRoutes = () => {
         </Route>
       ) : null}
 
+      {acl.isOrgKeyContact() ? (
+        <Route path="manage-courses">
+          <Route index element={<ManageCourses />} />
+          <Route
+            path=":id/details"
+            element={<CourseDetails bookingOnly={true} />}
+          />
+        </Route>
+      ) : null}
+
       <Route path="accept-invite/:id" element={<AcceptInvite />} />
       <Route path="accept-org-invite/:id" element={<AcceptOrgInvite />} />
 

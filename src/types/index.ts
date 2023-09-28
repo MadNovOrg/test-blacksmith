@@ -237,6 +237,7 @@ export enum RoleName {
   UNVERIFIED = 'unverified',
   USER = 'user',
   BOOKING_CONTACT = 'booking-contact',
+  ORGANIZATION_KEY_CONTACT = 'organization-key-contact',
 }
 
 export enum TrainerRoleTypeName {

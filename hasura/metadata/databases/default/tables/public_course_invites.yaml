@@ -44,6 +44,25 @@ insert_permissions:
         - email
         - status
       backend_only: false
+  - role: organization-key-contact
+    permission:
+      check:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - organization_key_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      columns:
+        - course_id
+        - email
+        - status
+      backend_only: false
   - role: ld
     permission:
       check: {}
@@ -139,6 +158,29 @@ select_permissions:
                     - is_admin:
                         _eq: true
             - booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - id
+        - note
+        - status
+        - updated_at
+      filter:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - organization_key_contact_profile_id:
                 _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: finance
@@ -336,6 +378,20 @@ delete_permissions:
                     - is_admin:
                         _eq: true
             - booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+  - role: organization-key-contact
+    permission:
+      filter:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - organization_key_contact_profile_id:
                 _eq: X-Hasura-User-Id
   - role: ld
     permission:

@@ -118,6 +118,18 @@ select_permissions:
         - profile_id
         - updated_at
       filter: { }
+  - role: organization-key-contact
+    permission:
+      columns:
+        - created_at
+        - id
+        - is_admin
+        - member_type
+        - organization_id
+        - position
+        - profile_id
+        - updated_at
+      filter: { }
       allow_aggregations: true
   - role: tt-ops
     permission:

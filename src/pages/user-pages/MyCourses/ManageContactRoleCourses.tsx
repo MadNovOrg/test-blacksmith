@@ -13,9 +13,13 @@ import { FilterDrawer } from './Components/FilterDrawer'
 import { Filters } from './Components/Filters'
 import { useUserCourses, CoursesFilters } from './hooks/useUserCourses'
 
-export const BookingContactCourses: React.FC<
-  React.PropsWithChildren<unknown>
-> = () => {
+type ManageContactRoleCoursesProps = {
+  isOrgKeyContact?: boolean
+}
+
+export const ManageContactRoleCourses: React.FC<
+  React.PropsWithChildren<ManageContactRoleCoursesProps>
+> = ({ isOrgKeyContact }) => {
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -78,6 +82,9 @@ export const BookingContactCourses: React.FC<
         </Box>
 
         <CoursesTable
+          additionalColumns={
+            isOrgKeyContact ? new Set(['type', 'registrants']) : undefined
+          }
           courses={courses}
           sorting={sorting}
           loading={loading}

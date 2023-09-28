@@ -57,6 +57,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     isBookingContact: () =>
       Boolean(allowedRoles?.has(RoleName.BOOKING_CONTACT)) && acl.isUser(),
 
+    isOrgKeyContact: () =>
+      Boolean(allowedRoles?.has(RoleName.ORGANIZATION_KEY_CONTACT)) &&
+      acl.isUser(),
+
     isInternalUser: () =>
       anyPass([
         acl.isTTAdmin,
@@ -165,6 +169,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
             acl.isSalesAdmin,
             acl.isTrainer,
             acl.isOrgAdmin,
+            acl.isOrgKeyContact,
           ])()
       }
     },
@@ -376,6 +381,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       )
     },
 
+    isOrganizationKeyContactOfCourse: (_course: Course) =>
+      acl.isOrgKeyContact() &&
+      _course.organizationKeyContact?.id === auth.profile?.id,
+
     canParticipateInCourses: () => anyPass([acl.isUser, acl.isTrainer])(),
 
     canTransferParticipant: (participantOrgIds: string[], _course: Course) => {
@@ -405,7 +414,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])() ||
         acl.isOrgAdminOf(participantOrgIds) ||
         ([CourseType.INDIRECT].includes(_course.type) &&
-          acl.isCourseLeader(_course)) ||
+          (acl.isCourseLeader(_course) ||
+            acl.isOrganizationKeyContactOfCourse(_course))) ||
         ([CourseType.CLOSED].includes(_course.type) && acl.isBookingContact())
       )
     },
@@ -418,7 +428,9 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.isTrainer,
       ])() ||
       acl.isOrgAdminOf(_participantOrgIds) ||
-      ([CourseType.CLOSED].includes(_course.type) && acl.isBookingContact()),
+      ([CourseType.CLOSED].includes(_course.type) && acl.isBookingContact()) ||
+      ([CourseType.INDIRECT].includes(_course.type) &&
+        acl.isOrganizationKeyContactOfCourse(_course)),
 
     canManageParticipantAttendance: (
       participantOrgIds: string[],

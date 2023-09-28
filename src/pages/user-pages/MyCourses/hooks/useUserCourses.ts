@@ -44,7 +44,8 @@ export function useUserCourses(
   sorting?: Sorting,
   pagination?: { perPage: number; currentPage: number },
   orgId?: string,
-  bookingContactOnly?: boolean
+  bookingContactOnly?: boolean,
+  orgKeyContactOnly?: boolean
 ): {
   courses?: UserCoursesQuery['courses']
   error?: Error
@@ -137,6 +138,8 @@ export function useUserCourses(
       ? {
           bookingContact: { id: { _eq: profile?.id } },
         }
+      : orgKeyContactOnly
+      ? { organizationKeyContact: { id: { _eq: profile?.id } } }
       : {
           participants: { profile_id: { _eq: profile?.id } },
         }
@@ -259,6 +262,7 @@ export function useUserCourses(
       _and: [userConditions, filterConditions],
     }
   }, [
+    orgKeyContactOnly,
     bookingContactOnly,
     orgId,
     filters,
