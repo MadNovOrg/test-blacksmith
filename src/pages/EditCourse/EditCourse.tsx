@@ -65,6 +65,7 @@ import {
   UPDATE_COURSE_MUTATION,
 } from '@app/queries/courses/update-course'
 import {
+  BildStrategies,
   CourseDeliveryType,
   CourseInput,
   CourseLevel,
@@ -235,6 +236,21 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     []
   )
 
+  const getCourseName = useCallback(() => {
+    return courseData?.accreditedBy === Accreditors_Enum.Bild
+      ? generateBildCourseName(
+          courseData?.bildStrategies as Record<BildStrategies, boolean>,
+          strategies
+        )
+      : generateCourseName(
+          {
+            level: courseData?.courseLevel as CourseLevel,
+            reaccreditation: courseData?.reaccreditation as boolean,
+          },
+          t
+        )
+  }, [courseData, strategies, t])
+
   const saveChanges = useCallback(
     async (reviewInput?: FormValues) => {
       const trainersMap = new Map(course?.trainers?.map(t => [t.profile.id, t]))
@@ -292,17 +308,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             source: courseData.source,
           }
 
-          const courseName =
-            courseData.accreditedBy === Accreditors_Enum.Bild
-              ? generateBildCourseName(courseData.bildStrategies, strategies)
-              : generateCourseName(
-                  {
-                    level: courseData.courseLevel,
-                    reaccreditation: courseData.reaccreditation,
-                  },
-                  t
-                )
-
           const editResponse = await updateCourse({
             courseId: course.id,
             courseInput: {
@@ -313,7 +318,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               status,
               exceptionsPending:
                 status === Course_Status_Enum.ExceptionsApprovalPending,
-              name: courseName,
+              name: getCourseName(),
               deliveryType: courseData.deliveryType,
               reaccreditation: courseData.reaccreditation,
               go1Integration: courseData.blendedLearning,
@@ -447,10 +452,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       navigate,
       notifyCourseEdit,
       profile,
-      strategies,
-      t,
       trainersData,
       updateCourse,
+      getCourseName,
     ]
   )
 
@@ -640,8 +644,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     return <NotFound />
   }
 
-  // 10010
-
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
@@ -671,8 +673,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               <Sticky top={20}>
                 <Box mb={2}>
                   <BackButton
-                    label={t('pages.create-course.back-button-text')}
-                    to="/courses"
+                    label={t('pages.create-course.back-button-text', {
+                      courseName: getCourseName(),
+                    })}
+                    to={'/courses/' + id + '/details'}
                   />
                 </Box>
                 <Typography variant="h2" mb={4}>
