@@ -24976,7 +24976,6 @@ export enum Course_Status_Enum {
   TrainerDeclined = 'TRAINER_DECLINED',
   TrainerMissing = 'TRAINER_MISSING',
   TrainerPending = 'TRAINER_PENDING',
-  VenueMissing = 'VENUE_MISSING',
 }
 
 /** Boolean expression to compare columns of type "course_status_enum". All fields are combined with logical 'AND'. */

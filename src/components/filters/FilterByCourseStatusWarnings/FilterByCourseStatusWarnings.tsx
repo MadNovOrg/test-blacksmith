@@ -32,7 +32,6 @@ export const FilterByCourseStatusWarnings: React.FC<
       Course_Status_Enum.ExceptionsApprovalPending,
       Course_Status_Enum.GradeMissing,
       Course_Status_Enum.TrainerPending,
-      Course_Status_Enum.VenueMissing,
     ],
     []
   )

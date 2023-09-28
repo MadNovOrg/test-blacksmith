@@ -236,9 +236,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .nullable()
           .when('deliveryType', {
             is: (deliveryType: CourseDeliveryType) =>
-              activeRole !== RoleName.TT_ADMIN &&
-              (deliveryType === CourseDeliveryType.F2F ||
-                deliveryType === CourseDeliveryType.MIXED),
+              deliveryType === CourseDeliveryType.F2F ||
+              deliveryType === CourseDeliveryType.MIXED,
             then: schema =>
               schema.required(t('components.course-form.venue-required')),
           }),
@@ -373,7 +372,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       isClosedCourse,
       isIndirectCourse,
       hasMinParticipants,
-      activeRole,
       courseType,
       minStartDateRestriction,
       trainerRatioNotMet,

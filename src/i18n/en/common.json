@@ -258,8 +258,7 @@
     "NOT_ATTENDED": "Unattended",
     "AWAITING_GRADE": "Awaiting grade",
     "CANCELLATION_REQUESTED": "Cancellation requested",
-    "TRAINER_MISSING": "Trainer missing",
-    "VENUE_MISSING": "Venue missing"
+    "TRAINER_MISSING": "Trainer missing"
   },
   "participant-audit-types": {
     "ATTENDED": "Attended",
