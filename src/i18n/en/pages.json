@@ -390,6 +390,7 @@
       "send-for-approval": "Send for approval",
       "no-approval-header": "This course does not require approval from a Team Teach administrator. This is a warning to highlight this course does not meet protocol for reasons:",
       "approval-header": "This course has been created with exceptions that fall outside of Team Teach standard protocols:",
+      "approval-footer": "Training will not be supported until all exceptions have been approved.",
       "modal-subtitle-approve": "Please provide a reason to the trainer for your decision to accept",
       "modal-subtitle-reject": "Please provide a reason to the trainer for your decision to reject",
       "course-rejection-warning": "Once this is submitted, this cannot be undone and a new course will need to be created.",

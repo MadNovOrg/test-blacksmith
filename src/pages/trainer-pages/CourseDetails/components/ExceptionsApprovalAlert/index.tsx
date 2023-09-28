@@ -120,6 +120,9 @@ export const ExceptionsApprovalAlert: FC = () => {
                 </li>
               ))}
             </ul>
+            <Typography variant="body1" fontWeight={600}>
+              {t('pages.create-course.exceptions.approval-footer')}
+            </Typography>
           </Box>
           {acl.canApproveCourseExceptions() ? (
             <>
