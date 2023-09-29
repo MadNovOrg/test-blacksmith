@@ -84,6 +84,9 @@ export const CourseDetails = () => {
     (course.status === Course_Status_Enum.Cancelled ||
       course.status === Course_Status_Enum.Declined)
 
+  const isCourseInExceptionDisabledStatus =
+    course?.status === Course_Status_Enum.ExceptionsApprovalPending
+
   const exceptionsApprovalPending =
     course?.status === Course_Status_Enum.ExceptionsApprovalPending
 
@@ -262,6 +265,7 @@ export const CourseDetails = () => {
                       label={t('pages.course-details.tabs.grading.title')}
                       value={CourseDetailsTabs.GRADING}
                       data-testid="grading-tab"
+                      disabled={isCourseInExceptionDisabledStatus}
                     />
                   ) : null}
                   <PillTab
