@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import InfoIcon from '@mui/icons-material/Info'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Alert,
@@ -11,6 +12,7 @@ import {
   TextField,
   Typography,
   useTheme,
+  Tooltip,
 } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
@@ -40,7 +42,7 @@ import { sectors } from '@app/pages/common/CourseBooking/components/org-data'
 import { MUTATION } from '@app/queries/organization/insert-org'
 import { yup } from '@app/schemas'
 import { Address, OfstedRating, TrustType } from '@app/types'
-import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
+import { INPUT_DATE_FORMAT, requiredMsg, isValidUKPostalCode } from '@app/util'
 
 type FormInputs = {
   orgName: string
@@ -98,7 +100,14 @@ export const CreateOrganization = () => {
       addressLine2: yup.string(),
       city: yup.string().required(requiredMsg(t, 'addr.city')),
       country: yup.string().required(requiredMsg(t, 'addr.country')),
-      postCode: yup.string().required(requiredMsg(t, 'addr.postCode')),
+      postCode: yup
+        .string()
+        .required(requiredMsg(t, 'addr.postCode'))
+        .test(
+          'is-uk-postcode',
+          t('common.validation-errors.invalid-postcode'),
+          isValidUKPostalCode
+        ),
     })
   }, [t])
 
@@ -534,6 +543,13 @@ export const CreateOrganization = () => {
                     inputProps={{ 'data-testid': 'postCode' }}
                     fullWidth
                     required
+                    InputProps={{
+                      endAdornment: (
+                        <Tooltip title={t('common.post-code-tooltip')}>
+                          <InfoIcon color={'action'} />
+                        </Tooltip>
+                      ),
+                    }}
                   />
                 </Box>
               </FormPanel>

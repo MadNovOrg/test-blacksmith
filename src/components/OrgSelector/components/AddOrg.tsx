@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import InfoIcon from '@mui/icons-material/Info'
 import { LoadingButton } from '@mui/lab'
-import { Box, Button, MenuItem, TextField } from '@mui/material'
+import { Box, Button, MenuItem, TextField, Tooltip } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -19,7 +20,7 @@ import { useFetcher } from '@app/hooks/use-fetcher'
 import { MUTATION } from '@app/queries/organization/insert-org-lead'
 import { yup } from '@app/schemas'
 import { Address, Establishment, TrustType } from '@app/types'
-import { requiredMsg } from '@app/util'
+import { requiredMsg, isValidUKPostalCode } from '@app/util'
 
 type Props = {
   onSuccess: (org: InsertOrgLeadMutation['org']) => void
@@ -52,7 +53,7 @@ export const AddOrg: React.FC<React.PropsWithChildren<Props>> = function ({
       name: yup.string().required(requiredMsg(t, 'org-name')),
       trustType: yup.string().required(
         t('validation-errors.required-field', {
-          name: t(t('pages.edit-org-details.trust-type')),
+          name: t('pages.edit-org-details.trust-type'),
         })
       ),
       trustName: yup.string(),
@@ -60,7 +61,14 @@ export const AddOrg: React.FC<React.PropsWithChildren<Props>> = function ({
       addressLine2: yup.string(),
       city: yup.string().required(requiredMsg(t, 'addr.city')),
       country: yup.string().required(requiredMsg(t, 'addr.country')),
-      postCode: yup.string().required(requiredMsg(t, 'addr.postCode')),
+      postCode: yup
+        .string()
+        .required(requiredMsg(t, 'addr.postCode'))
+        .test(
+          'is-uk-postcode',
+          t('common.validation-errors.invalid-postcode'),
+          isValidUKPostalCode
+        ),
     })
   }, [t])
 
@@ -288,6 +296,16 @@ export const AddOrg: React.FC<React.PropsWithChildren<Props>> = function ({
             inputProps={{ 'data-testid': 'postCode' }}
             fullWidth
             required
+            InputProps={{
+              endAdornment: (
+                <Tooltip
+                  title={t('common.post-code-tooltip')}
+                  data-testid="post-code-tooltip"
+                >
+                  <InfoIcon color={'action'} />
+                </Tooltip>
+              ),
+            }}
           />
         </Box>
 
@@ -303,6 +321,7 @@ export const AddOrg: React.FC<React.PropsWithChildren<Props>> = function ({
           <LoadingButton
             loading={loading}
             onClick={handleSubmit(onSubmit)}
+            data-testid="add-org-form-submit-btn"
             type="button"
             variant="contained"
             color="primary"

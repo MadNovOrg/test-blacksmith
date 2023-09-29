@@ -99,7 +99,7 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
           </IconButton>
         ) : null}
       </DialogTitle>
-      <DialogContent sx={{ maxWidth, minWidth, overflowY: 'hidden' }}>
+      <DialogContent sx={{ maxWidth, minWidth }}>
         {slots?.Content ? slots?.Content?.() : children}
       </DialogContent>
       {slots?.Actions ? (

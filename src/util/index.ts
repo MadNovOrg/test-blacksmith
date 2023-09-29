@@ -344,6 +344,12 @@ export const normalizeAddr = (addr: Address | undefined) => {
   return [addr.line1, addr.line2, addr.city, addr.country, addr.postCode]
 }
 
+export const isValidUKPostalCode = (postcode: string) => {
+  const regex =
+    /^[A-Z]{1,2}[0-9RCHNQ][0-9A-Z]?\s?[0-9][ABD-HJLNP-UW-Z]{2}$|^[A-Z]{2}-?[ 0-9]{4}$/
+  return regex.test(postcode)
+}
+
 export const findCourseTrainer = <T extends { profile: Profile['id'] }>(
   trainers: T[] | undefined,
   profileId: string

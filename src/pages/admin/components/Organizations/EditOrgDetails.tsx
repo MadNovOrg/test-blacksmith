@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import InfoIcon from '@mui/icons-material/Info'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Box,
@@ -7,6 +8,7 @@ import {
   Grid,
   MenuItem,
   TextField as MuiTextField,
+  Tooltip,
   Typography,
   styled,
 } from '@mui/material'
@@ -30,7 +32,7 @@ import useOrg from '@app/hooks/useOrg'
 import { sectors } from '@app/pages/common/CourseBooking/components/org-data'
 import { MUTATION as UPDATE_ORG_MUTATION } from '@app/queries/organization/update-org'
 import { OfstedRating, TrustType } from '@app/types'
-import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
+import { INPUT_DATE_FORMAT, requiredMsg, isValidUKPostalCode } from '@app/util'
 
 type OrgDetailsInput = {
   orgName: string
@@ -99,7 +101,14 @@ export const EditOrgDetails: React.FC<
         line2: yup.string(),
         city: yup.string().required(requiredMsg(t, 'addr.city')),
         country: yup.string().required(requiredMsg(t, 'addr.country')),
-        postCode: yup.string().required(requiredMsg(t, 'addr.postCode')),
+        postCode: yup
+          .string()
+          .required(requiredMsg(t, 'addr.postCode'))
+          .test(
+            'is-uk-postcode',
+            t('common.validation-errors.invalid-postcode'),
+            isValidUKPostalCode
+          ),
       })
       .required()
   }, [t])
@@ -500,6 +509,13 @@ export const EditOrgDetails: React.FC<
                   {...register('postCode')}
                   inputProps={{ 'data-testid': 'postCode' }}
                   fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <Tooltip title={t('common.post-code-tooltip')}>
+                        <InfoIcon color={'action'} />
+                      </Tooltip>
+                    ),
+                  }}
                 />
               </Box>
             </Box>

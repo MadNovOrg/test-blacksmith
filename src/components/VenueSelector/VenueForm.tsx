@@ -1,5 +1,15 @@
-import { Alert, Box, Button, Grid, TextField, Typography } from '@mui/material'
-import React, { useCallback, useState } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import InfoIcon from '@mui/icons-material/Info'
+import {
+  Alert,
+  Box,
+  Button,
+  Grid,
+  TextField,
+  Typography,
+  Tooltip,
+} from '@mui/material'
+import React, { useCallback, useState, useMemo } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -9,7 +19,9 @@ import {
   ParamsType,
   ResponseType,
 } from '@app/queries/venue/insert-venue'
+import { yup } from '@app/schemas'
 import { Venue } from '@app/types'
+import { requiredMsg, isValidUKPostalCode } from '@app/util'
 
 export type VenueFormProps = {
   data: Omit<Venue, 'id'> | undefined
@@ -24,7 +36,34 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
 }) {
   const { t } = useTranslation()
   const fetcher = useFetcher()
-  const { control, handleSubmit, trigger } = useForm({
+
+  const schema = useMemo(() => {
+    return yup.object({
+      name: yup.string().required(requiredMsg(t, 'venue-name')),
+      addressLineOne: yup
+        .string()
+        .required(requiredMsg(t, 'addr.line1-placeholder')),
+      addressLineTwo: yup.string(),
+      city: yup.string().required(requiredMsg(t, 'addr.city')),
+      postCode: yup
+        .string()
+        .required(requiredMsg(t, 'addr.postCode'))
+        .test(
+          'is-uk-postcode',
+          t('common.validation-errors.invalid-postcode'),
+          isValidUKPostalCode
+        ),
+    })
+  }, [t])
+
+  const {
+    control,
+    handleSubmit,
+    trigger,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'all',
     defaultValues: data ?? {
       name: '',
       addressLineOne: '',
@@ -32,7 +71,6 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
       city: '',
       postCode: '',
     },
-    mode: 'all',
   })
 
   const [error, setError] = useState<string>()
@@ -88,6 +126,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                   color="secondary"
                   error={fieldState.invalid}
                   label={t('components.venue-selector.modal.fields.name')}
+                  helperText={errors.name?.message}
                   {...field}
                 />
               )}
@@ -108,6 +147,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                   label={t(
                     'components.venue-selector.modal.fields.addressLineOne'
                   )}
+                  helperText={errors.addressLineOne?.message}
                   {...field}
                 />
               )}
@@ -143,6 +183,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                   required
                   error={fieldState.invalid}
                   label={t('components.venue-selector.modal.fields.city')}
+                  helperText={errors.city?.message}
                   {...field}
                 />
               )}
@@ -161,7 +202,15 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                   required
                   error={fieldState.invalid}
                   label={t('components.venue-selector.modal.fields.postCode')}
+                  helperText={errors.postCode?.message}
                   {...field}
+                  InputProps={{
+                    endAdornment: (
+                      <Tooltip title={t('common.post-code-tooltip')}>
+                        <InfoIcon color={'action'} />
+                      </Tooltip>
+                    ),
+                  }}
                 />
               )}
             />

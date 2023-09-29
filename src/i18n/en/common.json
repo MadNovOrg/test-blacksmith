@@ -84,6 +84,8 @@
     "country": "Country",
     "postCode": "Post code"
   },
+  "post-code-tooltip": "Please enter in block capitals and include a space to separate the outcode and incode. For example: XX12 3XX",
+  "venue-name": "Venue name",
   "view-cert": "View Certificate",
   "minimumXHours": "Minimum {{hours}} hours",
   "minimum": "Minimum",
@@ -353,7 +355,8 @@
     "other-position-required": "Please enter your job position",
     "other-job-title-required": "Please enter your job title",
     "maximum-chars-limit": "Maximum {{ number }} characters exceeded",
-    "recaptcha-required": "Recaptcha is required"
+    "recaptcha-required": "Recaptcha is required",
+    "invalid-postcode": "Invalid Postcode"
   },
   "validation-notice": "All fields are mandatory.",
   "create-free-account": "Create your free Team Teach Hub account",
