@@ -1117,7 +1117,7 @@ export const EditProfilePage: React.FC<
         minWidth={400}
       >
         <InviteUserToOrganisation
-          email={profile.email || ''}
+          userProfile={profile}
           onClose={() => setShowInviteOrgModal(false)}
         />
       </Dialog>

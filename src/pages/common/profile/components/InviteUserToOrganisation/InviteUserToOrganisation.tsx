@@ -26,14 +26,21 @@ import { useOrganizations } from '@app/hooks/useOrganizations'
 import { SAVE_ORG_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
 import { Organization } from '@app/types'
 
-export type ImportCertificateModalProps = {
-  email: string
+export type InviteUserToOrganisationProps = {
+  userProfile: {
+    email?: string | null | undefined
+    organizations: Array<{
+      organization: {
+        id: string
+      }
+    }>
+  }
   onClose: () => void
 }
 
 export const InviteUserToOrganisation: React.FC<
-  React.PropsWithChildren<ImportCertificateModalProps>
-> = ({ email, onClose }) => {
+  React.PropsWithChildren<InviteUserToOrganisationProps>
+> = ({ userProfile, onClose }) => {
   const theme = useTheme()
   const { acl, profile } = useAuth()
   const { t } = useTranslation()
@@ -65,6 +72,11 @@ export const InviteUserToOrganisation: React.FC<
 
   const { handleSubmit } = useForm<{ emails: string[] }>()
 
+  const isUserAlreadyInOrganisation = (
+    user: typeof userProfile,
+    orgId: string
+  ) => user.organizations.some(o => o.organization.id === orgId)
+
   useEffect(() => {
     if (orgs.length > 0 && !selectedOrg && id) {
       setSelectedOrg(orgs.find(o => o.id === id) ?? null)
@@ -74,12 +86,22 @@ export const InviteUserToOrganisation: React.FC<
   const submit = async () => {
     setError('')
     if (!selectedOrg) return
+
+    if (
+      userProfile &&
+      isUserAlreadyInOrganisation(userProfile, selectedOrg.id)
+    ) {
+      setError(t('pages.invite-to-org.duplicate-email'))
+      return
+    }
+
     setLoading(true)
+
     try {
       await fetcher(SAVE_ORG_INVITES_MUTATION, {
         invites: [
           {
-            email,
+            email: userProfile.email,
             orgId: selectedOrg.id,
             isAdmin: isOrgAdmin,
           },

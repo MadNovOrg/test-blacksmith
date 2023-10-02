@@ -467,7 +467,7 @@ export const ViewProfilePage: React.FC<
         maxWidth={'md'}
       >
         <InviteUserToOrganisation
-          email={profile.email || ''}
+          userProfile={profile}
           onClose={() => setShowInviteOrgModal(false)}
         />
       </Dialog>

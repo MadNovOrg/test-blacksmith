@@ -33,7 +33,16 @@ const orgs = [
 ]
 
 describe('InviteUserToOrganisation', () => {
-  const email = chance.email()
+  const userProfile = {
+    email: chance.email(),
+    organizations: [
+      {
+        organization: {
+          id: chance.guid(),
+        },
+      },
+    ],
+  }
   const fetcherMock = vi.fn()
   const onCloseMock = vi.fn()
 
@@ -48,7 +57,10 @@ describe('InviteUserToOrganisation', () => {
     useOrganisationMock.mockReturnValue(organisations)
 
     return render(
-      <InviteUserToOrganisation onClose={onCloseMock} email={email} />,
+      <InviteUserToOrganisation
+        onClose={onCloseMock}
+        userProfile={userProfile}
+      />,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
