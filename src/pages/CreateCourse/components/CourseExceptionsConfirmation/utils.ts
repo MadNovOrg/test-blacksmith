@@ -19,6 +19,7 @@ import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 import {
   getRequiredAssistants,
   getRequiredLeads,
+  getRequiredModerators,
   RatioCourseData,
   RatioTrainerData,
 } from '@app/util/trainerRatio'
@@ -85,6 +86,7 @@ export const isTrainersRatioNotMet = (
 ) => {
   const { min } = getRequiredAssistants(courseData)
   const { min: minLead } = getRequiredLeads(courseData)
+  const { min: minModerator } = getRequiredModerators(courseData)
 
   const missingAssistants =
     trainers.filter(t => t.type === CourseTrainerType.Assistant).length < min
@@ -95,7 +97,13 @@ export const isTrainersRatioNotMet = (
         minLead
       : false
 
-  return missingAssistants || missingLeads
+  const missingModerators =
+    courseData.type === CourseType.OPEN
+      ? trainers.filter(t => t.type === CourseTrainerType.Moderator).length <
+        minModerator
+      : false
+
+  return missingAssistants || missingLeads || missingModerators
 }
 
 export const isAdvisedTimeExceeded = (courseData: CourseData) => {

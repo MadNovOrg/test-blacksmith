@@ -623,6 +623,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           trainer_role_types: lead.trainer_role_types,
           levels: lead.levels,
         })),
+        ...(trainersData?.moderator ?? []).map(moderator => ({
+          type: CourseTrainerType.Moderator,
+          trainer_role_types: moderator.trainer_role_types,
+          levels: moderator.levels,
+        })),
       ]
     )
   }, [
@@ -630,6 +635,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     seniorOrPrincipalLead,
     trainersData?.assist,
     trainersData?.lead,
+    trainersData?.moderator,
   ])
 
   const submitDisabled =

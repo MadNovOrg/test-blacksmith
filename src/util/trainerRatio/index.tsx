@@ -1,5 +1,11 @@
 import { Accreditors_Enum } from '@app/generated/graphql'
-import { BildStrategies, Course, CourseType, TrainerInput } from '@app/types'
+import {
+  BildStrategies,
+  Course,
+  CourseLevel,
+  CourseType,
+  TrainerInput,
+} from '@app/types'
 
 import {
   getRequiredAssistantsBild,
@@ -75,5 +81,18 @@ export function getRequiredLeads(
     })
   }
 
+  return { min: 0, max: 0 }
+}
+
+export function getRequiredModerators(
+  courseData: RatioCourseData
+): RequiredTrainers {
+  if (
+    courseData.accreditedBy === Accreditors_Enum.Icm &&
+    (courseData.level === CourseLevel.AdvancedTrainer ||
+      courseData.level === CourseLevel.IntermediateTrainer)
+  ) {
+    return { min: 1, max: 1 }
+  }
   return { min: 0, max: 0 }
 }
