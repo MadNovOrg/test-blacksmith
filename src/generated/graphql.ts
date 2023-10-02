@@ -10409,12 +10409,6 @@ export enum UserRoleEnum {
   /** User role with specific capabilities */
   Author = 'AUTHOR',
   /** User role with specific capabilities */
-  BackwpupAdmin = 'BACKWPUP_ADMIN',
-  /** User role with specific capabilities */
-  BackwpupJobsChecker = 'BACKWPUP_JOBS_CHECKER',
-  /** User role with specific capabilities */
-  BackwpupJobsFunctions = 'BACKWPUP_JOBS_FUNCTIONS',
-  /** User role with specific capabilities */
   Contributor = 'CONTRIBUTOR',
   /** User role with specific capabilities */
   Editor = 'EDITOR',
@@ -25240,7 +25234,8 @@ export enum Course_Status_Enum {
   Scheduled = 'SCHEDULED',
   TrainerDeclined = 'TRAINER_DECLINED',
   TrainerMissing = 'TRAINER_MISSING',
-  TrainerPending = 'TRAINER_PENDING'
+  TrainerPending = 'TRAINER_PENDING',
+  VenueMissing = 'VENUE_MISSING'
 }
 
 /** Boolean expression to compare columns of type "course_status_enum". All fields are combined with logical 'AND'. */
@@ -39065,9 +39060,9 @@ export type Organization_Type_Bool_Exp = {
 /** unique or primary key constraints on table "organization_type" */
 export enum Organization_Type_Constraint {
   /** unique or primary key constraint on columns "name" */
-  OrganisationTypeNameKey = 'organisation_type_name_key',
+  OrganizationTypeNameKey = 'organization_type_name_key',
   /** unique or primary key constraint on columns "id" */
-  OrganisationTypePkey = 'organisation_type_pkey'
+  OrganizationTypePkey = 'organization_type_pkey'
 }
 
 /** input type for inserting data into table "organization_type" */

@@ -1,3 +1,4 @@
+import { omit } from 'lodash'
 import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useEffectOnce } from 'react-use'
@@ -18,7 +19,10 @@ type Props = {
   customStatuses?: Set<string>
 }
 
-const statuses = Object.values(Course_Status_Enum) as string[]
+// Todo VenueMissing status is using on backend so this is the reason still need to keep this value.
+const statuses = Object.values(
+  omit(Course_Status_Enum, 'VenueMissing')
+) as string[]
 
 export const FilterByCourseStatus: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,

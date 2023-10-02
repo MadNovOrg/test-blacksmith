@@ -21,6 +21,7 @@ const colorsMap: Record<AllCourseStatuses, ChipProps['color']> = {
   [Course_Status_Enum.Scheduled]: 'info',
   [Course_Status_Enum.TrainerPending]: 'warning',
   [Course_Status_Enum.TrainerDeclined]: 'warning',
+  [Course_Status_Enum.VenueMissing]: 'warning',
   [Course_Status_Enum.TrainerMissing]: 'info',
   [Course_Status_Enum.ExceptionsApprovalPending]: 'warning',
   [AttendeeOnlyCourseStatus.InfoRequired]: 'warning',
