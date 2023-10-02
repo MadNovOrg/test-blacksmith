@@ -469,6 +469,7 @@ export const buildInvite = build<CourseInvite>({
     email: perBuild(() => chance.email()),
     status: InviteStatus.PENDING,
     createdAt: new Date(),
+    note: perBuild(() => chance.string()),
   },
 })
 

@@ -35,6 +35,7 @@ export const QUERY = gql`
       email
       status
       createdAt
+      note
     }
     courseInvitesAggregate: course_invites_aggregate(
       where: { _and: [{ course_id: { _eq: $courseId } }, $where] }

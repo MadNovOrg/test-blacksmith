@@ -18,7 +18,13 @@ import { useTranslation } from 'react-i18next'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import useCourseInvites from '@app/hooks/useCourseInvites'
-import { Course, CourseInvite, InviteStatus, SortOrder } from '@app/types'
+import {
+  Course,
+  CourseInvite,
+  CourseType,
+  InviteStatus,
+  SortOrder,
+} from '@app/types'
 import {
   DEFAULT_PAGINATION_LIMIT,
   DEFAULT_PAGINATION_ROW_OPTIONS,
@@ -42,6 +48,8 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
   const [order, setOrder] = useState<SortOrder>('asc')
   const [messageSnackbarOpen, setMessageSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
+  const isClosedIndirectCourse =
+    course.type === CourseType.CLOSED || course.type === CourseType.INDIRECT
 
   const { data, status, total, resend, cancel } = useCourseInvites(
     course?.id,
@@ -65,24 +73,32 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
   )
 
   const cols = useMemo(
-    () => [
-      {
-        id: 'contact',
-        label: t('common.email'),
-        sorting: true,
-      },
-      {
-        id: 'createdAt',
-        label: t('pages.course-participants.invite-date'),
-        sorting: true,
-      },
-      {
-        id: 'actions',
-        label: '',
-        sorting: false,
-      },
-    ],
-    [t]
+    () =>
+      [
+        {
+          id: 'contact',
+          label: t('common.email'),
+          sorting: true,
+        },
+        {
+          id: 'createdAt',
+          label: t('pages.course-participants.invite-date'),
+          sorting: true,
+        },
+        isClosedIndirectCourse && inviteStatus === InviteStatus.DECLINED
+          ? {
+              id: 'note',
+              label: t('common.notes'),
+              sorting: true,
+            }
+          : null,
+        {
+          id: 'actions',
+          label: '',
+          sorting: false,
+        },
+      ].filter(Boolean),
+    [t, inviteStatus, isClosedIndirectCourse]
   )
 
   const handleResendInvite = async (invite: CourseInvite) => {
@@ -119,6 +135,10 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
                     <TableCell>
                       {t('dates.default', { date: invite.createdAt })}
                     </TableCell>
+                    {isClosedIndirectCourse &&
+                    inviteStatus === InviteStatus.DECLINED ? (
+                      <TableCell>{invite.note}</TableCell>
+                    ) : null}
                     <TableCell sx={{ textAlign: 'right' }}>
                       {invite.status === InviteStatus.PENDING &&
                         acl.canInviteAttendees(course.type) && (
