@@ -3,21 +3,21 @@ import LocationOnIcon from '@mui/icons-material/LocationOn'
 import PersonIcon from '@mui/icons-material/Person'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
+  Alert,
   Box,
-  Typography,
-  FormHelperText,
   Chip,
   CircularProgress,
-  Alert,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  FormLabel,
   Link,
+  Radio,
+  RadioGroup,
   TextField,
-  useTheme,
+  Typography,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import jwtDecode from 'jwt-decode'
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
@@ -38,16 +38,17 @@ import {
   ResponseType as GetInviteResponseType,
 } from '@app/queries/invites/get-invite'
 import {
+  CourseDeliveryType,
   GqlError,
   InviteStatus,
+  RoleName,
   TimeDifferenceAndContext,
-  CourseDeliveryType,
 } from '@app/types'
 import {
+  formatCourseVenueName,
   getTimeDifferenceAndContext,
   now,
   userExistsInCognito,
-  formatCourseVenueName,
 } from '@app/util'
 
 export const InvitationPage = () => {
@@ -55,6 +56,7 @@ export const InvitationPage = () => {
   const navigate = useNavigate()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const auth = useAuth()
 
   const { profile, logout } = useAuth()
   const [searchParams] = useSearchParams()
@@ -108,6 +110,9 @@ export const InvitationPage = () => {
       const nextUrl = exists ? '/auto-login' : '/auto-register'
       const continueUrl = `/accept-invite/${inviteId}?courseId=${courseId}`
       const qs = new URLSearchParams({ token, continue: continueUrl })
+
+      if (isUserLoggedIn && auth.activeRole === RoleName.TRAINER)
+        auth.changeRole(RoleName.USER)
 
       return navigate(isUserLoggedIn ? continueUrl : `${nextUrl}?${qs}`, {
         replace: true,

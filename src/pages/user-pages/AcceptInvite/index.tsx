@@ -1,8 +1,8 @@
 import { Alert, CircularProgress, Container } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Navigate, useParams, useSearchParams } from 'react-router-dom'
+import { useMutation } from 'urql'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
 import {
   MUTATION as ACCEPT_INVITE_MUTATION,
   ParamsType as AcceptInviteParamsType,
@@ -15,28 +15,31 @@ export const AcceptInvite = () => {
   const [error, setError] = useState(false)
   const params = useParams()
   const [searchParams] = useSearchParams()
-  const fetcher = useFetcher()
 
   const courseId = searchParams.get('courseId') || ''
   const inviteId = params.id as string
 
-  useEffect(() => {
-    fetcher<AcceptInviteResponseType, AcceptInviteParamsType>(
-      ACCEPT_INVITE_MUTATION,
-      { inviteId, courseId }
-    )
-      .then(resp => {
-        if (
-          resp?.acceptInvite?.status !== InviteStatus.ACCEPTED &&
-          !resp?.addParticipant?.id
-        ) {
-          return Promise.reject()
-        }
+  const [, acceptInvite] = useMutation<
+    AcceptInviteResponseType,
+    AcceptInviteParamsType
+  >(ACCEPT_INVITE_MUTATION)
 
-        setSuccess(true)
-      })
-      .catch(() => setError(true))
-  }, [inviteId, courseId, fetcher])
+  const acceptInviteCallback = useCallback(async () => {
+    const { data: resp } = await acceptInvite({ inviteId, courseId })
+
+    if (
+      resp?.acceptInvite?.status !== InviteStatus.ACCEPTED &&
+      !resp?.addParticipant?.id
+    ) {
+      setError(true)
+    }
+
+    setSuccess(true)
+  }, [acceptInvite, courseId, inviteId])
+
+  useEffect(() => {
+    acceptInviteCallback()
+  }, [acceptInviteCallback])
 
   if (error) {
     return (
