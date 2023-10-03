@@ -102,7 +102,16 @@ export const CreateCourseProvider: React.FC<
     }
 
     if (courseData.accreditedBy === Accreditors_Enum.Bild) {
-      return generateBildCourseName(courseData.bildStrategies, strategies)
+      return generateBildCourseName(
+        strategies,
+        {
+          level: courseData.courseLevel,
+          reaccreditation: courseData.reaccreditation,
+          conversion: courseData.conversion,
+          bildStrategies: courseData.bildStrategies,
+        },
+        t
+      )
     }
 
     return generateCourseName(

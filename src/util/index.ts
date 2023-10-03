@@ -220,19 +220,38 @@ export const generateCourseName = (
 }
 
 export const generateBildCourseName = (
-  strategies: Record<BildStrategies, boolean>,
-  allStrategies: ReturnType<typeof useBildStrategies>['strategies']
+  allStrategies: ReturnType<typeof useBildStrategies>['strategies'],
+  courseData: Pick<Course, 'level' | 'reaccreditation' | 'conversion'> & {
+    bildStrategies: Record<BildStrategies, boolean>
+  },
+  t: TFunction
 ) => {
-  const chosenStrategies = Object.keys(strategies).filter(
-    strategy => strategies[strategy as BildStrategies] === true
-  )
+  if (
+    courseData.level === CourseLevel.BildIntermediateTrainer ||
+    courseData.level === CourseLevel.BildAdvancedTrainer
+  ) {
+    const bildTrainerCourseName = t(`common.course-levels.${courseData.level}`)
+    let suffix = ''
 
-  const strategyAbbreviations = chosenStrategies
-    .map(strategy => allStrategies.find(s => s.name === strategy)?.shortName)
-    .filter(Boolean)
-    .join('')
+    if (courseData.reaccreditation) {
+      suffix = t('common.reaccreditation')
+    } else if (courseData.conversion) {
+      suffix = t('common.conversion')
+    }
 
-  return `BILD Certified Course: ${strategyAbbreviations}`
+    return `${bildTrainerCourseName} ${suffix}`.trim()
+  } else {
+    const chosenStrategies = Object.keys(courseData.bildStrategies).filter(
+      strategy => courseData.bildStrategies[strategy as BildStrategies] === true
+    )
+
+    const strategyAbbreviations = chosenStrategies
+      .map(strategy => allStrategies.find(s => s.name === strategy)?.shortName)
+      .filter(Boolean)
+      .join('')
+
+    return `BILD Certified Course: ${strategyAbbreviations}`
+  }
 }
 
 export const COURSE_TYPE_TO_PREFIX = {

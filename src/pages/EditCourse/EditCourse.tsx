@@ -239,8 +239,17 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const getCourseName = useCallback(() => {
     return courseData?.accreditedBy === Accreditors_Enum.Bild
       ? generateBildCourseName(
-          courseData?.bildStrategies as Record<BildStrategies, boolean>,
-          strategies
+          strategies,
+          {
+            level: courseData.courseLevel as CourseLevel,
+            reaccreditation: courseData.reaccreditation,
+            conversion: courseData.conversion,
+            bildStrategies: courseData.bildStrategies as Record<
+              BildStrategies,
+              boolean
+            >,
+          },
+          t
         )
       : generateCourseName(
           {

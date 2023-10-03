@@ -1,13 +1,13 @@
 
 INSERT INTO public.course (id, name, course_type, course_delivery_type, course_level, reaccreditation, go1_integration, course_status, grading_confirmed, min_participants, max_participants, accredited_by) VALUES
     (10032, 'BILD Certified Course: PS', 'INDIRECT', 'F2F', 'BILD_REGULAR', false, false, 'CONFIRM_MODULES', false, 2, 10, 'BILD'),
-    (10033, 'BILD Certified Course: PSTI', 'CLOSED', 'MIXED', 'BILD_INTERMEDIATE_TRAINER', false, false, 'GRADE_MISSING', false, 2, 10, 'BILD'),
-    (10034, 'BILD Certified Course: A', 'OPEN', 'F2F', 'BILD_ADVANCED_TRAINER', false, false, 'SCHEDULED', false, 2, 10, 'BILD'),
+    (10033, 'BILD Intermediate Trainer', 'CLOSED', 'MIXED', 'BILD_INTERMEDIATE_TRAINER', false, false, 'GRADE_MISSING', false, 2, 10, 'BILD'),
+    (10034, 'BILD Advanced Trainer', 'OPEN', 'F2F', 'BILD_ADVANCED_TRAINER', false, false, 'SCHEDULED', false, 2, 10, 'BILD'),
     (10035, 'BILD Certified Course: S', 'CLOSED', 'F2F', 'BILD_REGULAR', false, false, 'SCHEDULED', false, 1, 6, 'BILD'),    
     (10036, 'BILD Certified Course: P', 'CLOSED', 'F2F', 'BILD_REGULAR', false, false, 'SCHEDULED', false, 1, 7, 'BILD'),
     (10037, 'BILD Certified Course: T', 'CLOSED', 'F2F', 'BILD_REGULAR', false, false, 'SCHEDULED', false, 1, 3, 'BILD'),    
-    (10038, 'BILD Certified Course: PSTI', 'OPEN', 'F2F', 'BILD_INTERMEDIATE_TRAINER', true, false, 'SCHEDULED', false, 1, 14, 'BILD'),
-    (10039, 'BILD Certified Course: A', 'OPEN', 'F2F', 'BILD_ADVANCED_TRAINER', true, false, 'SCHEDULED', false, 2, 8, 'BILD'),
+    (10038, 'BILD Intermediate Trainer Reaccreditation', 'OPEN', 'F2F', 'BILD_INTERMEDIATE_TRAINER', true, false, 'SCHEDULED', false, 1, 14, 'BILD'),
+    (10039, 'BILD Advanced Trainer Reaccreditation', 'OPEN', 'F2F', 'BILD_ADVANCED_TRAINER', true, false, 'SCHEDULED', false, 2, 8, 'BILD'),
     (10040, 'BILD Certified Course: S', 'CLOSED', 'F2F', 'BILD_REGULAR', true, false, 'SCHEDULED', false, 1, 20, 'BILD'),    
     (10041, 'BILD Certified Course: P', 'CLOSED', 'F2F', 'BILD_REGULAR', true, false, 'SCHEDULED', false, 1, 12, 'BILD'),
     (10042, 'BILD Certified Course: T', 'CLOSED', 'F2F', 'BILD_REGULAR', true, false, 'SCHEDULED', false, 1, 14, 'BILD'),
