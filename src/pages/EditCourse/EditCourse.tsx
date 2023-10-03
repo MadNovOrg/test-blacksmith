@@ -534,6 +534,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       differenceInCalendarDays(courseData.startDateTime, new Date()) > 14) ||
     acl.canRescheduleWithoutWarning()
 
+  const courseRescheduleConfirmation =
+    activeRole === RoleName.SALES_ADMIN ||
+    (activeRole === RoleName.TRAINER && course?.type === CourseType.INDIRECT)
+
   const hasError = updatingError || auditError
   const fetching = updatingCourse || insertingAudit
   const cancellableCourse =
@@ -579,7 +583,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           levels: assistant.levels,
         }))
       )
-      if (!autoapproved && !alignedWithProtocol) {
+      if (
+        courseRescheduleConfirmation ||
+        (!autoapproved && !alignedWithProtocol)
+      ) {
         setShowReviewModal(true)
         return
       }
@@ -600,6 +607,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     seniorOrPrincipalLead,
     autoapproved,
     alignedWithProtocol,
+    courseRescheduleConfirmation,
   ])
 
   const showTrainerRatioWarning = useMemo(() => {
@@ -894,7 +902,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               saveChanges(reviewInput)
             }}
             withFees={course.type === CourseType.CLOSED}
-            alignedWithProtocol={alignedWithProtocol}
+            alignedWithProtocol={
+              alignedWithProtocol || courseRescheduleConfirmation
+            }
             level={course.level as unknown as Course_Level_Enum}
           />
 

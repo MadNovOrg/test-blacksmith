@@ -14,7 +14,6 @@ import { InferType } from 'yup'
 
 import { Dialog } from '@app/components/dialogs'
 import { FeesForm, schema as feesSchema } from '@app/components/FeesForm'
-import { useAuth } from '@app/context/auth'
 import { Course_Level_Enum, TransferFeeType } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { yup } from '@app/schemas'
@@ -64,7 +63,6 @@ export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
   level,
 }) => {
   const { t } = useScopedTranslation('pages.edit-course.review-changes-modal')
-  const { activeRole } = useAuth()
 
   const methods = useForm<FormValues>({
     resolver: yupResolver(schema(t, withFees)),
@@ -79,7 +77,6 @@ export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   const dateDiff = diff.find(d => d.type === 'date')
-  const roleProtocolNotMet = t(`protocol-not-met-${activeRole}`)
 
   return (
     <Dialog
@@ -144,17 +141,13 @@ export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
         <>
           <Alert severity="warning" variant="outlined">
             <Typography variant="body1" fontWeight={600}>
-              {roleProtocolNotMet ? (
-                roleProtocolNotMet
-              ) : (
-                <Trans
-                  i18nKey="protocol-not-met"
-                  t={t}
-                  values={{ email: INFO_EMAIL }}
-                >
-                  <Link href={`mailto:${INFO_EMAIL}`} component="a" />
-                </Trans>
-              )}
+              <Trans
+                i18nKey="protocol-not-met"
+                t={t}
+                values={{ email: INFO_EMAIL }}
+              >
+                <Link href={`mailto:${INFO_EMAIL}`} component="a" />
+              </Trans>
             </Typography>
           </Alert>
 
