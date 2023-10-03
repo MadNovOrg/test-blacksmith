@@ -7,12 +7,13 @@ import {
   Checkbox,
   Container,
   FormControlLabel,
+  Link,
   TextField,
   Typography,
 } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
 import {
@@ -98,7 +99,20 @@ export const CourseCancellationRequestModal: React.FC<
       </Typography>
 
       <Alert severity="warning" variant="outlined" sx={{ mt: 4 }}>
-        {t('pages.course-details.request-cancellation-modal.warning')}
+        <Trans
+          i18nKey="pages.course-details.request-cancellation-modal.warning"
+          components={{
+            termsOfBusinessLink: (
+              <Link
+                target="_blank"
+                rel="noreferrer"
+                href={`${
+                  import.meta.env.VITE_BASE_WORDPRESS_URL
+                }/terms-of-business/`}
+              />
+            ),
+          }}
+        />
       </Alert>
 
       <CancellationTermsTable
@@ -117,7 +131,7 @@ export const CourseCancellationRequestModal: React.FC<
           t('common.validation-errors.this-field-is-required')
         }
         label={t(
-          'pages.edit-course.cancellation-modal.reason-for-cancellation'
+          'pages.course-details.request-cancellation-modal.reason-for-request'
         )}
         inputProps={{
           sx: { height: 40 },
@@ -134,7 +148,7 @@ export const CourseCancellationRequestModal: React.FC<
       <Box mt={4}>
         <FormControlLabel
           label={t(
-            'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation'
+            'pages.course-details.request-cancellation-modal.agree-terms-confirmation'
           )}
           control={<Checkbox />}
           data-testid="request-cancel-checkbox"
@@ -160,7 +174,7 @@ export const CourseCancellationRequestModal: React.FC<
           color="primary"
           sx={{ ml: 1 }}
         >
-          {t('pages.edit-course.cancellation-modal.cancel-entire-course')}
+          {t('pages.course-details.request-cancellation-modal.submit-request')}
         </LoadingButton>
       </Box>
     </Container>

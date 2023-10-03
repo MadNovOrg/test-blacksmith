@@ -541,9 +541,12 @@
     },
     "course-has-been-cancelled": "{{ code }} has been cancelled.",
     "request-cancellation-modal": {
-      "description": "This will be escalated with Team Teach and a representative will contact you to complete this action.",
+      "description": "By completing this action, a cancellation request will be sent to Team Teach for review and a member of the team will be in touch as soon as possible.",
       "warning": "Cancellation terms apply based on the course start date in line with Team Teach <strong><termsOfBusinessLink>Terms of Business.</termsOfBusinessLink></strong>",
-      "title": "Request to cancel this course"
+      "title": "Request to cancel this course",
+      "reason-for-request": "Reason for request",
+      "agree-terms-confirmation": "By submitting this request, I understand and agree to the above terms.",
+      "submit-request": "Submit request"
     },
     "cancellation-request-alert": "This course has a pending cancellation request.",
     "delete-request": "Delete request",
