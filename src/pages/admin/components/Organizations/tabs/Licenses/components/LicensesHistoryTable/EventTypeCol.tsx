@@ -138,7 +138,11 @@ export const EventTypeCol: React.FC<React.PropsWithChildren<Props>> = ({
               {item.payload?.courseCode}
             </Link>
           </Typography>
-          <Typography variant="body2">{t('licenses-cancelled')}</Typography>
+          <Typography variant="body2">
+            <Link href={`/profile/${item.payload?.invokedById}`}>
+              {t('licenses-cancelled', { fullName: item.payload.invokedBy })}
+            </Link>
+          </Typography>
         </>
       )
     }

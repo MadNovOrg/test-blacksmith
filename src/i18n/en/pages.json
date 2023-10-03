@@ -1209,7 +1209,7 @@
           "purchased": "Purchased at course creation by {{fullName}}",
           "revoked-by": "Revoked by {{fullName}}",
           "reserved-by": "Reserved by {{fullName}}",
-          "licenses-cancelled": "Course cancelled",
+          "licenses-cancelled": "Course cancelled by {{fullName}}",
           "licenses-declined": "Course declined"
         },
         "export": {
