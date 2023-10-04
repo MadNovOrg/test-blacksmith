@@ -157,6 +157,7 @@ export const VENUE = gql`
     addressLineOne
     addressLineTwo
     postCode
+    country
     geoCoordinates
     googlePlacesId
   }

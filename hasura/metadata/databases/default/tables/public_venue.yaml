@@ -1,55 +1,55 @@
 table:
-  schema: public
   name: venue
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    address_line_two:
-      custom_name: addressLineTwo
     address_line_one:
       custom_name: addressLineOne
+    address_line_two:
+      custom_name: addressLineTwo
+    created_at:
+      custom_name: createdAt
+    geo_coordinates:
+      custom_name: geoCoordinates
     google_places_id:
       custom_name: googlePlacesId
     post_code:
       custom_name: postCode
     updated_at:
       custom_name: updatedAt
-    created_at:
-      custom_name: createdAt
-    geo_coordinates:
-      custom_name: geoCoordinates
   custom_column_names:
-    address_line_two: addressLineTwo
     address_line_one: addressLineOne
+    address_line_two: addressLineTwo
+    created_at: createdAt
+    geo_coordinates: geoCoordinates
     google_places_id: googlePlacesId
     post_code: postCode
     updated_at: updatedAt
-    created_at: createdAt
-    geo_coordinates: geoCoordinates
+  custom_root_fields: {}
 array_relationships:
   - name: schedule
     using:
       foreign_key_constraint_on:
         column: venue_id
         table:
-          schema: public
           name: course_schedule
+          schema: public
 insert_permissions:
   - role: sales-admin
     permission:
       check: {}
       columns:
-        - geo_coordinates
         - address_line_one
         - address_line_two
         - city
+        - country
+        - created_at
+        - geo_coordinates
         - google_places_id
+        - id
         - name
         - post_code
-        - created_at
         - updated_at
-        - id
-      backend_only: false
   - role: trainer
     permission:
       check: {}
@@ -57,12 +57,12 @@ insert_permissions:
         - address_line_one
         - address_line_two
         - city
+        - country
         - created_at
         - geo_coordinates
         - google_places_id
         - name
         - post_code
-      backend_only: false
 select_permissions:
   - role: anonymous
     permission:
@@ -70,6 +70,7 @@ select_permissions:
         - address_line_one
         - address_line_two
         - city
+        - country
         - created_at
         - geo_coordinates
         - id
@@ -92,16 +93,17 @@ select_permissions:
   - role: sales-admin
     permission:
       columns:
-        - geo_coordinates
         - address_line_one
         - address_line_two
         - city
+        - country
+        - created_at
+        - geo_coordinates
         - google_places_id
+        - id
         - name
         - post_code
-        - created_at
         - updated_at
-        - id
       filter: {}
   - role: trainer
     permission:
@@ -109,6 +111,7 @@ select_permissions:
         - address_line_one
         - address_line_two
         - city
+        - country
         - created_at
         - geo_coordinates
         - google_places_id
@@ -123,6 +126,7 @@ select_permissions:
         - address_line_one
         - address_line_two
         - city
+        - country
         - created_at
         - geo_coordinates
         - google_places_id
@@ -141,6 +145,7 @@ select_permissions:
         - address_line_one
         - address_line_two
         - city
+        - country
         - created_at
         - geo_coordinates
         - google_places_id
@@ -156,6 +161,7 @@ update_permissions:
         - address_line_one
         - address_line_two
         - city
+        - country
         - geo_coordinates
         - google_places_id
         - name
@@ -179,7 +185,7 @@ event_triggers:
           - city
           - post_code
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/venue/address/update'

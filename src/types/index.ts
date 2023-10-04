@@ -400,6 +400,7 @@ export type Venue = {
   addressLineTwo?: string
   city: string
   postCode: string
+  country?: string
   geoCoordinates: string
   googlePlacesId?: string
 }

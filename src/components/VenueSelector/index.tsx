@@ -58,6 +58,13 @@ function getAddressPart(placeDetails: PlaceResult, partName: string): string {
   return addressPart?.long_name || ''
 }
 
+function getCountry(placeDetails: PlaceResult): string {
+  if (placeDetails?.address_components) {
+    return placeDetails?.address_components[4].long_name
+  }
+  return ''
+}
+
 export const VenueSelector: React.FC<
   React.PropsWithChildren<VenueSelectorProps>
 > = function ({ value, onChange, sx, textFieldProps, ...props }) {
@@ -130,6 +137,7 @@ export const VenueSelector: React.FC<
           addressLineOne: extractAdrStreetAddress(placeDetails.adr_address),
           city: getAddressPart(placeDetails, 'administrative_area_level_2'),
           postCode: getAddressPart(placeDetails, 'postal_code'),
+          country: getCountry(placeDetails),
           geoCoordinates: placeDetails.geometry?.location
             ? `(${placeDetails.geometry.location.lat()}, ${placeDetails.geometry.location.lng()})`
             : '',

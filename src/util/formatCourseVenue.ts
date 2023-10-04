@@ -7,13 +7,16 @@ export function formatCourseVenue(
   venue?: {
     name?: string
     city?: string
+    country?: string
   }
 ): string {
   if (
     [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(deliveryType)
   ) {
-    if (venue?.name || venue?.city) {
-      return [venue?.name, venue?.city].filter(Boolean).join(', ')
+    if (venue?.name || venue?.city || venue?.country) {
+      return [venue?.name, venue?.city, venue?.country]
+        .filter(Boolean)
+        .join(', ')
     } else {
       return t('common.tbc')
     }

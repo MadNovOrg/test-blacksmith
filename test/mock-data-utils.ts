@@ -163,6 +163,7 @@ export const buildVenue = build<Venue>({
     city: perBuild(() => chance.city()),
     addressLineOne: perBuild(() => chance.street()),
     postCode: perBuild(() => chance.zip()),
+    country: perBuild(() => chance.country()),
     geoCoordinates: `(${perBuild(() => chance.latitude())},${perBuild(() =>
       chance.longitude()
     )}`,

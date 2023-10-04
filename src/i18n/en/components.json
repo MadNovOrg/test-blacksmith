@@ -59,7 +59,8 @@
         "addressLineOne": "Address line 1",
         "addressLineTwo": "Address line 2 (optional)",
         "city": "Town/City",
-        "postCode": "Postcode"
+        "postCode": "Postcode",
+        "country": "Select country"
       }
     },
     "no-results": "No results found.",

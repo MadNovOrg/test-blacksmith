@@ -7,6 +7,9 @@ export const getGoogleMapsSuggestions = async (
   return new google.maps.places.AutocompleteService().getPlacePredictions({
     input: query,
     types: ['establishment'],
+    componentRestrictions: {
+      country: 'gb',
+    },
   })
 }
 

@@ -9,13 +9,13 @@ import {
   Typography,
   Tooltip,
 } from '@mui/material'
-import React, { useCallback, useState, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useMutation } from 'urql'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
 import {
-  MUTATION,
+  ADD_VENUE_MUTATION,
   ParamsType,
   ResponseType,
 } from '@app/queries/venue/insert-venue'
@@ -23,9 +23,11 @@ import { yup } from '@app/schemas'
 import { Venue } from '@app/types'
 import { requiredMsg, isValidUKPostalCode } from '@app/util'
 
+import CountryDropdown from './CountryDropdown'
+
 export type VenueFormProps = {
   data: Omit<Venue, 'id'> | undefined
-  onSubmit: (venue: Venue) => void
+  onSubmit: (venue?: Venue) => void
   onCancel: () => void
 }
 
@@ -35,8 +37,11 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
   onCancel,
 }) {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
 
+  const [{ data: addVenueResponse, error }, handleAddVenue] = useMutation<
+    ResponseType,
+    ParamsType
+  >(ADD_VENUE_MUTATION)
   const schema = useMemo(() => {
     return yup.object({
       name: yup.string().required(requiredMsg(t, 'venue-name')),
@@ -53,6 +58,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
           t('common.validation-errors.invalid-postcode'),
           isValidUKPostalCode
         ),
+      country: yup.string().required(requiredMsg(t, 'addr.country')),
     })
   }, [t])
 
@@ -60,6 +66,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
     control,
     handleSubmit,
     trigger,
+    register,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -70,10 +77,9 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
       addressLineTwo: '',
       city: '',
       postCode: '',
+      country: '',
     },
   })
-
-  const [error, setError] = useState<string>()
 
   const submitHandler = useCallback(
     async (formData: VenueFormProps['data']) => {
@@ -82,19 +88,14 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
         return
       }
 
-      setError(undefined)
-      try {
-        if (formData) {
-          const { venue } = await fetcher<ResponseType, ParamsType>(MUTATION, {
-            venue: formData,
-          })
-          onSubmit(venue)
-        }
-      } catch (e: unknown) {
-        setError((e as Error).message)
+      if (formData) {
+        await handleAddVenue({
+          venue: formData,
+        })
       }
+      onSubmit(addVenueResponse?.venue)
     },
-    [fetcher, onSubmit, trigger]
+    [addVenueResponse?.venue, handleAddVenue, onSubmit, trigger]
   )
 
   return (
@@ -109,7 +110,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
 
           {error && (
             <Grid item xs={12}>
-              <Alert severity="error">{error}</Alert>
+              <Alert severity="error">{error.message}</Alert>
             </Grid>
           )}
 
@@ -213,6 +214,16 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                   }}
                 />
               )}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <CountryDropdown
+              {...register('country')}
+              required
+              error={Object.prototype.hasOwnProperty.call(errors, 'country')}
+              errormessage={errors.country?.message}
+              data-testid="country-dropdown"
             />
           </Grid>
 
