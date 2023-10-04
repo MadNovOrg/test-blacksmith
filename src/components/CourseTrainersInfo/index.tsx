@@ -1,4 +1,12 @@
-import { Button, Link, ListItemText, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Link,
+  ListItemText,
+  Tooltip,
+  Typography,
+} from '@mui/material'
+import CircleIcon from '@mui/icons-material/Circle'
 import React, { useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
@@ -6,6 +14,7 @@ import { useAuth } from '@app/context/auth'
 import {
   Course_Trainer,
   Course_Trainer_Type_Enum,
+  Course_Invite_Status_Enum,
 } from '@app/generated/graphql'
 import { CourseTrainer } from '@app/types'
 import {
@@ -13,6 +22,7 @@ import {
   getCourseAssistants,
   getCourseModerator,
 } from '@app/util'
+import { STATUS_COLORS } from './statusColorConsts'
 
 interface ItemProps {
   i18nKey: string
@@ -51,21 +61,39 @@ const ListItemWrapper: React.FC<
     }
   }, [courseTrainer])
 
+  const statusColor = useMemo(() => {
+    switch (courseTrainer.status) {
+      case Course_Invite_Status_Enum.Accepted:
+        return STATUS_COLORS.accepted_green
+      case Course_Invite_Status_Enum.Pending:
+        return STATUS_COLORS.pending_orange
+      case Course_Invite_Status_Enum.Declined:
+        return STATUS_COLORS.declined_red
+      default:
+        return STATUS_COLORS.default
+    }
+  }, [courseTrainer])
+
   return (
     <>
-      {enableLinks ? (
-        <Link href={`/profile/${courseTrainer.profile.id}`}>
+      <Box display="flex">
+        {enableLinks ? (
+          <Link href={`/profile/${courseTrainer.profile.id}`}>
+            <ListItemTranslated
+              i18nKey={i18nKey}
+              fullName={courseTrainer.profile.fullName || ''}
+            />
+          </Link>
+        ) : (
           <ListItemTranslated
             i18nKey={i18nKey}
             fullName={courseTrainer.profile.fullName || ''}
           />
-        </Link>
-      ) : (
-        <ListItemTranslated
-          i18nKey={i18nKey}
-          fullName={courseTrainer.profile.fullName || ''}
-        />
-      )}
+        )}
+        <Tooltip title={courseTrainer.status}>
+          <CircleIcon sx={{ color: statusColor, height: 18, width: 18 }} />
+        </Tooltip>
+      </Box>
     </>
   )
 }
