@@ -97,7 +97,9 @@ export const EventTypeCol: React.FC<React.PropsWithChildren<Props>> = ({
         <>
           <Typography sx={{ mb: 1 }}>{item.payload?.invoiceId}</Typography>
           <Typography variant="body2">
-            {t('purchased', { fullName: item.payload?.invokedBy })}
+            <Link href={`/profile/${item.payload?.invokedById}`}>
+              {t('purchased', { fullName: item.payload?.invokedBy })}
+            </Link>
           </Typography>
         </>
       )
