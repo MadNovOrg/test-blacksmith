@@ -41,7 +41,8 @@ export const ManageContactRoleCourses: React.FC<
       currentPage,
     },
     undefined,
-    true
+    !isOrgKeyContact,
+    isOrgKeyContact
   )
 
   useEffect(() => {

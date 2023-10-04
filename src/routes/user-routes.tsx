@@ -96,17 +96,7 @@ const UserRoutes = () => {
         </Route>
       ) : null}
 
-      {acl.isBookingContact() ? (
-        <Route path="manage-courses">
-          <Route index element={<ManageCourses />} />
-          <Route
-            path=":id/details"
-            element={<CourseDetails bookingOnly={true} />}
-          />
-        </Route>
-      ) : null}
-
-      {acl.isOrgKeyContact() ? (
+      {acl.isBookingContact() || acl.isOrgKeyContact() ? (
         <Route path="manage-courses">
           <Route index element={<ManageCourses />} />
           <Route
