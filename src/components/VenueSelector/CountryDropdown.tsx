@@ -19,6 +19,7 @@ interface ICountryDropdownProps {
   required: boolean
   error: boolean
   errormessage?: string
+  label?: string
 }
 
 const CountryDropdown = React.forwardRef(function CountryDropdown(
@@ -26,7 +27,7 @@ const CountryDropdown = React.forwardRef(function CountryDropdown(
   ref: React.Ref<HTMLSelectElement>
 ) {
   const { t } = useScopedTranslation('components.venue-selector.modal.fields')
-  const { required, error, errormessage } = props
+  const { required, error, errormessage, label } = props
 
   const [{ data }] = useQuery<GetCountriesQuery, GetCountriesQueryVariables>({
     query: QUERY_COUNTRIES,
@@ -39,7 +40,7 @@ const CountryDropdown = React.forwardRef(function CountryDropdown(
   return (
     <FormControl fullWidth variant="filled" required={required} error={error}>
       <InputLabel id="country-dropdown" data-testid="country-dropdown">
-        {t('country')}
+        {!label ? t('country') : label}
       </InputLabel>
       <Select {...props} id="country-dropdown" ref={ref}>
         {options?.length &&

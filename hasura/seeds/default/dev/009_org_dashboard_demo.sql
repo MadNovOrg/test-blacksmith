@@ -7,7 +7,7 @@ values ('117c12fc-d7c6-4987-9841-a499765ade4b', 'Krista', 'Kuhn', 'krista.kuhn@t
        ('85687c6e-d8a4-4e98-a47e-a66c8059919b', 'Ralph', 'Smith', 'ralph.smith@teamteach.testinator.com'),
        ('49f34a78-a73d-46c3-a17f-5cee00feb1ca', 'Martin', 'Cartwright', 'martin.cartwright@teamteach.testinator.com');
 
-insert into "organization" (id, name, address, attributes, sector, trust_type, trust_name)
+insert into "organization" (id, name, address, attributes, sector)
 values ('d787defd-481c-414b-95ff-ecbcc12ae500',
         'Park Community School',
         '{
@@ -29,7 +29,7 @@ values ('d787defd-481c-414b-95ff-ecbcc12ae500',
           "ofstedLastInspection": "2020-08-11T10:11:57.000Z",
           "headPreferredJobTitle": "Boss"
         }',
-        'Healthcare', 'MULTI_ACADEMY_TRUST', 'Kenningtons Primary Academy');
+        'Healthcare');
 
 insert into "organization_member" (organization_id, profile_id, is_admin)
 values ('d787defd-481c-414b-95ff-ecbcc12ae500', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', true),

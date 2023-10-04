@@ -13,10 +13,6 @@ configuration:
       custom_name: go1Licenses
     reserved_go1_licenses:
       custom_name: reservedGo1Licenses
-    trust_name:
-      custom_name: trustName
-    trust_type:
-      custom_name: trustType
     updated_at:
       custom_name: updatedAt
     xero_contact_id:
@@ -27,8 +23,6 @@ configuration:
     geo_coordinates: geoCoordinates
     go1_licenses: go1Licenses
     reserved_go1_licenses: reservedGo1Licenses
-    trust_name: trustName
-    trust_type: trustType
     updated_at: updatedAt
     xero_contact_id: xeroContactId
   custom_root_fields: {}
@@ -55,6 +49,16 @@ array_relationships:
           name: organization_member
           schema: public
 insert_permissions:
+  - role: anonymous
+    permission:
+      check: {}
+      columns:
+        - address
+        - attributes
+        - name
+        - organisation_type
+        - sector
+        - tags
   - role: finance
     permission:
       check: {}
@@ -62,8 +66,6 @@ insert_permissions:
         - address
         - attributes
         - name
-        - trust_name
-        - trust_type
         - contact_details
         - geo_coordinates
         - go1_licenses
@@ -72,10 +74,9 @@ insert_permissions:
         - preferences
         - region
         - reserved_go1_licenses
+        - organisation_type
         - sector
         - tags
-        - trust_name
-        - trust_type
         - xero_contact_id
   - role: ld
     permission:
@@ -91,10 +92,9 @@ insert_permissions:
         - preferences
         - region
         - reserved_go1_licenses
+        - organisation_type
         - sector
         - tags
-        - trust_name
-        - trust_type
         - xero_contact_id
   - role: sales-admin
     permission:
@@ -110,10 +110,9 @@ insert_permissions:
         - preferences
         - region
         - reserved_go1_licenses
+        - organisation_type
         - sector
         - tags
-        - trust_name
-        - trust_type
         - xero_contact_id
   - role: sales-representative
     permission:
@@ -129,10 +128,9 @@ insert_permissions:
         - preferences
         - region
         - reserved_go1_licenses
+        - organisation_type
         - sector
         - tags
-        - trust_name
-        - trust_type
         - xero_contact_id
   - role: trainer
     permission:
@@ -146,10 +144,9 @@ insert_permissions:
         - original_record
         - preferences
         - region
+        - organisation_type
         - sector
         - tags
-        - trust_name
-        - trust_type
   - role: tt-admin
     permission:
       check: {}
@@ -163,10 +160,9 @@ insert_permissions:
         - original_record
         - preferences
         - region
+        - organisation_type
         - sector
         - tags
-        - trust_name
-        - trust_type
         - xero_contact_id
   - role: tt-ops
     permission:
@@ -181,10 +177,9 @@ insert_permissions:
         - original_record
         - preferences
         - region
+        - organisation_type
         - sector
         - tags
-        - trust_name
-        - trust_type
         - xero_contact_id
   - role: unverified
     permission:
@@ -193,8 +188,8 @@ insert_permissions:
         - address
         - attributes
         - name
-        - trust_name
-        - trust_type
+        - organisation_type
+        - sector
   - role: user
     permission:
       check: {}
@@ -203,8 +198,8 @@ insert_permissions:
         - attributes
         - go1_licenses
         - name
-        - trust_name
-        - trust_type
+        - organisation_type
+        - sector
         - xero_contact_id
 select_permissions:
   - role: anonymous
@@ -227,9 +222,8 @@ select_permissions:
         - tags
         - geo_coordinates
         - region
+        - organisation_type
         - sector
-        - trust_name
-        - trust_type
         - xero_contact_id
         - created_at
         - updated_at
@@ -250,9 +244,8 @@ select_permissions:
         - tags
         - geo_coordinates
         - region
+        - organisation_type
         - sector
-        - trust_name
-        - trust_type
         - xero_contact_id
         - created_at
         - updated_at
@@ -272,9 +265,8 @@ select_permissions:
         - tags
         - geo_coordinates
         - region
+        - organisation_type
         - sector
-        - trust_name
-        - trust_type
         - xero_contact_id
         - created_at
         - updated_at
@@ -295,9 +287,8 @@ select_permissions:
         - tags
         - geo_coordinates
         - region
+        - organisation_type
         - sector
-        - trust_name
-        - trust_type
         - xero_contact_id
         - created_at
         - updated_at
@@ -320,9 +311,8 @@ select_permissions:
         - region
         - reserved_go1_licenses
         - sector
+        - organisation_type
         - tags
-        - trust_name
-        - trust_type
         - updated_at
         - xero_contact_id
       filter: {}
@@ -342,10 +332,9 @@ select_permissions:
         - preferences
         - region
         - reserved_go1_licenses
+        - organisation_type
         - sector
         - tags
-        - trust_name
-        - trust_type
         - updated_at
         - xero_contact_id
       filter: {}
@@ -364,9 +353,8 @@ select_permissions:
         - tags
         - geo_coordinates
         - region
+        - organisation_type
         - sector
-        - trust_name
-        - trust_type
         - xero_contact_id
         - created_at
         - updated_at
@@ -385,10 +373,9 @@ select_permissions:
         - name
         - preferences
         - region
+        - organisation_type
         - sector
         - tags
-        - trust_name
-        - trust_type
         - updated_at
         - xero_contact_id
       filter: {}
@@ -407,10 +394,9 @@ select_permissions:
         - preferences
         - region
         - reserved_go1_licenses
+        - organisation_type
         - sector
         - tags
-        - trust_name
-        - trust_type
         - updated_at
         - xero_contact_id
       filter: {}
@@ -430,10 +416,9 @@ update_permissions:
         - preferences
         - region
         - reserved_go1_licenses
+        - organisation_type
         - sector
         - tags
-        - trust_name
-        - trust_type
         - xero_contact_id
       filter: {}
       check: {}
@@ -447,10 +432,9 @@ update_permissions:
         - name
         - preferences
         - region
+        - organisation_type
         - sector
         - tags
-        - trust_name
-        - trust_type
       filter: {}
       check: null
   - role: tt-admin
@@ -464,9 +448,8 @@ update_permissions:
         - preferences
         - region
         - sector
+        - organisation_type
         - tags
-        - trust_name
-        - trust_type
         - xero_contact_id
       filter: {}
       check: null
@@ -485,9 +468,8 @@ update_permissions:
         - region
         - reserved_go1_licenses
         - sector
+        - organisation_type
         - tags
-        - trust_name
-        - trust_type
         - xero_contact_id
       filter: {}
       check: {}
@@ -501,10 +483,9 @@ update_permissions:
         - name
         - preferences
         - region
+        - organisation_type
         - sector
         - tags
-        - trust_name
-        - trust_type
       filter:
         members:
           _and:

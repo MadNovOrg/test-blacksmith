@@ -267,6 +267,20 @@
     "add-manually": "Create new organisation",
     "my-organizations": "My organisations"
   },
+  "add-organisation": {
+    "component-title": "Add Organisation",
+    "fields":{
+      "organisation-name": "Organisation name",
+      "organisation-type": "Organisation type",
+      "organisation-email": "Organisation email",
+      "sector": "Sector",
+      "primary-address-line": "Address line 1",
+      "secondary-address-line": "Address line 2",
+      "city": "Town/City",
+      "postCode": "Post code",
+      "country": "Country"
+    }
+  },
   "user-selector": {
     "placeholder": "User email",
     "min-chars": "Start typing to get suggestions",

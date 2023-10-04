@@ -236,7 +236,6 @@ export const Organizations: React.FC<
                         {org?.name}
                       </Link>
                     </TableCell>
-                    <TableCell>{org?.trustName}</TableCell>
                     <TableCell>{org?.address.country}</TableCell>
                     <TableCell>{org?.region}</TableCell>
                     <TableCell>{org?.sector}</TableCell>

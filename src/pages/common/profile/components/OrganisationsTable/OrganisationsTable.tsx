@@ -55,7 +55,6 @@ export const OrganisationsTable: FC<
               }}
             >
               <TableCell>{orgMember.organization?.name}</TableCell>
-              <TableCell>{orgMember.organization?.trustName}</TableCell>
               <TableCell>{orgMember.position}</TableCell>
               <TableCell>
                 <Chip

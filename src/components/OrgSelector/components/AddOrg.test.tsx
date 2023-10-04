@@ -1,12 +1,8 @@
-import React from 'react'
-import { getI18n } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
-import { render, screen, fireEvent } from '@test/index'
+import { render, screen, fireEvent, renderHook } from '@test/index'
 
 import { AddOrg } from './AddOrg'
-
-const { t } = getI18n()
-
 const option = {
   id: 'id',
   urn: 'urn',
@@ -14,18 +10,19 @@ const option = {
 }
 
 describe('AddOrg component', () => {
-  it('renders AddOrg', async () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+  it.each([
+    t('components.add-organisation.component-title'),
+    ...Object.values(
+      t('components.add-organisation.fields', { returnObjects: true })
+    ),
+  ])('renders % field', async field => {
     render(<AddOrg option={option} onSuccess={vi.fn()} onClose={vi.fn()} />)
-    expect(screen.getByText('Organisation Name')).toBeInTheDocument()
-    expect(screen.getByText('Trust type')).toBeInTheDocument()
-    expect(screen.getByText('Trust name')).toBeInTheDocument()
-    expect(screen.getByText('Line 1')).toBeInTheDocument()
-    expect(screen.getByText('Line 2')).toBeInTheDocument()
-    expect(screen.getByText('City')).toBeInTheDocument()
-    expect(screen.getByText('Country')).toBeInTheDocument()
-    expect(screen.getByText('Post code')).toBeInTheDocument()
-    expect(screen.getByText('Cancel')).toBeInTheDocument()
-    expect(screen.getByText('Submit')).toBeInTheDocument()
+    expect(screen.getByText(field)).toBeInTheDocument()
   })
 
   it('should display the Postcode tooltip message on hover', async () => {

@@ -51,7 +51,6 @@ import {
   RoleName,
   TrainerInput,
   TransportMethod,
-  TrustType,
   Venue,
 } from '@app/types'
 
@@ -89,10 +88,9 @@ export const buildOrganization = build<Organization>({
     address: buildAddress(),
     region: perBuild(() => chance.word()),
     sector: perBuild(() => chance.word()),
-    trustName: perBuild(() => chance.word()),
-    trustType: TrustType.NotApplicable,
     preferences: {},
     go1Licenses: 0,
+    organizationType: perBuild(() => chance.word()),
   },
 })
 

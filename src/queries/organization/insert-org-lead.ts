@@ -6,21 +6,21 @@ export const MUTATION = gql`
   ${ORGANIZATION}
   mutation InsertOrgLead(
     $name: String!
-    $trustName: String!
-    $trustType: trust_type_enum!
+    $sector: String!
+    $orgType: String!
     $address: jsonb!
     $attributes: jsonb = {}
   ) {
     org: insert_organization_one(
       object: {
         name: $name
-        trustName: $trustName
-        trustType: $trustType
         address: $address
         attributes: $attributes
+        sector: $sector
+        organisation_type: $orgType
       }
     ) {
-      ...Organization
+      name
     }
   }
 `

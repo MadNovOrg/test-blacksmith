@@ -74,22 +74,6 @@ export const OrgDetailsTab: React.FC<
                 />
                 <DetailsRow
                   label={t(
-                    'pages.org-details.tabs.details.org-details-section.trust-type'
-                  )}
-                  value={
-                    org.trustType
-                      ? t(`trust-type.${org.trustType.toLowerCase()}`)
-                      : ''
-                  }
-                />
-                <DetailsRow
-                  label={t(
-                    'pages.org-details.tabs.details.org-details-section.trust'
-                  )}
-                  value={org.trustName}
-                />
-                <DetailsRow
-                  label={t(
                     'pages.org-details.tabs.details.org-details-section.local-authority'
                   )}
                   value={org.attributes.localAuthority}

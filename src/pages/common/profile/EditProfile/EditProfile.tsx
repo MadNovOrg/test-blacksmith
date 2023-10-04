@@ -953,9 +953,6 @@ export const EditProfilePage: React.FC<
                               <Typography variant="body1" fontWeight="600">
                                 {orgMember.organization.name}
                               </Typography>
-                              <Typography variant="body2">
-                                {orgMember.organization.trustName}
-                              </Typography>
                             </Box>
                             <Button
                               variant="outlined"

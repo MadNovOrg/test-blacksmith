@@ -6,8 +6,6 @@ export const MUTATION = gql`
   ${ORGANIZATION}
   mutation InsertOrg(
     $name: String!
-    $trustName: String!
-    $trustType: trust_type_enum!
     $sector: String
     $address: jsonb!
     $attributes: jsonb = {}
@@ -17,8 +15,6 @@ export const MUTATION = gql`
     org: insert_organization_one(
       object: {
         name: $name
-        trustName: $trustName
-        trustType: $trustType
         sector: $sector
         address: $address
         attributes: $attributes

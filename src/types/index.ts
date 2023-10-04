@@ -149,8 +149,7 @@ export type Organization = {
   preferences: { [name: string]: string }
   region: string
   sector: string
-  trustName: string
-  trustType: TrustType
+  organizationType: string
   go1Licenses?: number
 } & Base
 

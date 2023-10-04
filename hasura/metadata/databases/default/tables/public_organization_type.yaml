@@ -2,6 +2,13 @@ table:
   name: organization_type
   schema: public
 select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+      filter: {}
   - role: finance
     permission:
       columns:
@@ -38,6 +45,13 @@ select_permissions:
         - id
       filter: {}
   - role: tt-ops
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+      filter: {}
+  - role: unverified
     permission:
       columns:
         - name

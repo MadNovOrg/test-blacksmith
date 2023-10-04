@@ -23,7 +23,6 @@ import * as yup from 'yup'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import {
-  Trust_Type_Enum,
   UpdateOrgMutation,
   UpdateOrgMutationVariables,
 } from '@app/generated/graphql'
@@ -31,13 +30,11 @@ import { useFetcher } from '@app/hooks/use-fetcher'
 import useOrg from '@app/hooks/useOrg'
 import { sectors } from '@app/pages/common/CourseBooking/components/org-data'
 import { MUTATION as UPDATE_ORG_MUTATION } from '@app/queries/organization/update-org'
-import { OfstedRating, TrustType } from '@app/types'
+import { OfstedRating } from '@app/types'
 import { INPUT_DATE_FORMAT, requiredMsg, isValidUKPostalCode } from '@app/util'
 
 type OrgDetailsInput = {
   orgName: string
-  trustType: string
-  trustName: string
   orgEmail: string
   orgPhone: string
   sector: string
@@ -124,8 +121,6 @@ export const EditOrgDetails: React.FC<
     resolver: yupResolver(schema),
     defaultValues: {
       orgName: '',
-      trustType: '',
-      trustName: '',
       orgEmail: '',
       orgPhone: '',
       sector: '',
@@ -150,8 +145,6 @@ export const EditOrgDetails: React.FC<
   useEffect(() => {
     if (org) {
       setValue('orgName', org.name)
-      setValue('trustType', org.trustType || TrustType.NotApplicable)
-      setValue('trustName', org.trustName || '')
       setValue('orgEmail', org.attributes.email)
       setValue('orgPhone', org.attributes.phone)
       setValue('sector', org.sector || '')
@@ -188,8 +181,6 @@ export const EditOrgDetails: React.FC<
           id,
           org: {
             name: data.orgName,
-            trustType: data.trustType as Trust_Type_Enum,
-            trustName: data.trustName,
             sector: data.sector,
             attributes: {
               email: data.orgEmail,
@@ -266,51 +257,6 @@ export const EditOrgDetails: React.FC<
                   helperText={errors.orgName?.message}
                   {...register('orgName')}
                   inputProps={{ 'data-testid': 'org-name' }}
-                  fullWidth
-                />
-              </Box>
-
-              <Box mb={3}>
-                <Controller
-                  name="trustType"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      id="trustType"
-                      required
-                      select
-                      label={t('pages.edit-org-details.trust-type')}
-                      variant="filled"
-                      error={!!errors.trustType}
-                      helperText={errors.trustType?.message}
-                      value={field.value}
-                      onChange={field.onChange}
-                      inputProps={{ 'data-testid': 'trust-type' }}
-                      fullWidth
-                    >
-                      {Object.values(TrustType).map(option => (
-                        <MenuItem
-                          key={option}
-                          value={option}
-                          data-testid={`trust-type-option-${option}`}
-                        >
-                          {t(`trust-type.${option.toLowerCase()}`)}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  )}
-                />
-              </Box>
-
-              <Box mb={3}>
-                <TextField
-                  id="trustName"
-                  label={t('pages.edit-org-details.trust-name')}
-                  variant="filled"
-                  error={!!errors.trustName}
-                  helperText={errors.trustName?.message}
-                  {...register('trustName')}
-                  inputProps={{ 'data-testid': 'trust-name' }}
                   fullWidth
                 />
               </Box>

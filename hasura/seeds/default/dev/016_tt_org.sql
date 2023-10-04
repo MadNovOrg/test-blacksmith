@@ -1,7 +1,6 @@
-INSERT INTO public.organization (id, name, address, trust_type, trust_name)
+INSERT INTO public.organization (id, name, address)
 VALUES ('a24397aa-b059-46b9-a728-955580823ce4', 'Team Teach',
-        '{"city": "London", "line1": "Second Floor, Longbow House", "line2": "20 Chiswell Street", "country": "United Kingdom", "postCode": "EC1Y 4TW"}',
-        'NOT_APPLICABLE', '-');
+        '{"city": "London", "line1": "Second Floor, Longbow House", "line2": "20 Chiswell Street", "country": "United Kingdom", "postCode": "EC1Y 4TW"}');
 
 INSERT INTO public.profile (id, _given_name, _family_name, _email, _phone) VALUES
 ('467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 'TeamTeach', 'Org-Admin', 'tt.org.adm@teamteach.testinator.com', '+44 55 5555 5555'),

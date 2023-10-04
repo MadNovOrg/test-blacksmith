@@ -17,6 +17,7 @@ import {
   CourseEvaluationInjuryQuestion,
   CourseEvaluationQuestionGroup,
   CourseEvaluationUngroupedQuestion,
+  Venue,
 } from '@app/types'
 import { formatCourseVenue } from '@app/util'
 
@@ -393,7 +394,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                 {course.schedule[0].venue
                   ? formatCourseVenue(
                       course.deliveryType as unknown as CourseDeliveryType,
-                      course.schedule[0].venue
+                      course.schedule[0].venue as Venue // Random TS error came up here
                     )
                   : null}
               </Text>

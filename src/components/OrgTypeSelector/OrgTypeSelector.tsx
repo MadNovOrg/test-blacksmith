@@ -8,18 +8,17 @@ import {
   GetOrgTypesQueryVariables,
   Organisation_Sector_Enum,
   Organization_Type,
-  Scalars,
 } from '@app/generated/graphql'
 import { GET_ORG_TYPES } from '@app/queries/organization/get-org-types'
 
 type Props = {
   sector: string
-  onChange: (orgId: Pick<Organization_Type, 'id'> | null) => void
+  onChange: (orgType: Pick<Organization_Type, 'name'> | '') => void
   label?: string
   error?: string | undefined
   required?: boolean
   disabled?: boolean
-  value?: Pick<Organization_Type, 'id'> | null
+  value?: Pick<Organization_Type, 'name'> | ''
 }
 
 export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
@@ -44,8 +43,8 @@ export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
     },
     pause: !sector,
   })
-  const handleChange = (event: ChangeEvent<Scalars['uuid']>) => {
-    onChange(event.target.value)
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onChange(event.target.value as Pick<Organization_Type, 'name'> | '')
   }
   return (
     <TextField
@@ -63,7 +62,7 @@ export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
     >
       {data?.organization_type.length ? (
         data?.organization_type.map(m => (
-          <MenuItem key={m.id} value={m.id} data-testid={`type-${m.name}`}>
+          <MenuItem key={m.id} value={m.name} data-testid={`type-${m.name}`}>
             {m.name}
           </MenuItem>
         ))

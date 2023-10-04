@@ -22,7 +22,7 @@ describe(OrgTypeSelector.name, () => {
     render(
       <Provider value={urqlMockClient}>
         <OrgTypeSelector
-          value={null}
+          value={''}
           disabled={false}
           sector="edu"
           onChange={noop}
@@ -41,7 +41,7 @@ describe(OrgTypeSelector.name, () => {
     render(
       <Provider value={urqlMockClient}>
         <OrgTypeSelector
-          value={null}
+          value={''}
           disabled={false}
           sector="edu"
           onChange={noop}

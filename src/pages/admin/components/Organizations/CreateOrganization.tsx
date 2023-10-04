@@ -26,7 +26,6 @@ import { FormPanel } from '@app/components/FormPanel'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import {
   getOfstedRating,
-  getTrustType,
   isDfeSuggestion,
   isXeroSuggestion,
 } from '@app/components/OrgSelector/utils'
@@ -34,20 +33,17 @@ import { Sticky } from '@app/components/Sticky'
 import {
   InsertOrgMutation,
   InsertOrgMutationVariables,
-  Trust_Type_Enum,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { sectors } from '@app/pages/common/CourseBooking/components/org-data'
 import { MUTATION } from '@app/queries/organization/insert-org'
 import { yup } from '@app/schemas'
-import { Address, OfstedRating, TrustType } from '@app/types'
+import { Address, OfstedRating } from '@app/types'
 import { INPUT_DATE_FORMAT, requiredMsg, isValidUKPostalCode } from '@app/util'
 
 type FormInputs = {
   orgName: string
-  trustType: string
-  trustName: string
   orgEmail: string
   orgPhone: string
   sector: string
@@ -83,12 +79,6 @@ export const CreateOrganization = () => {
         .required(
           requiredMsg(t, 'pages.create-organization.fields.organization-name')
         ),
-      trustType: yup
-        .string()
-        .required(
-          t('validation-errors.required-field', { name: t('trust-type') })
-        ),
-      trustName: yup.string(),
       workEmail: yup.string().email(t('validation-errors.email-invalid')),
       orgEmail: yup.string(),
       orgPhone: yup.string(),
@@ -124,8 +114,6 @@ export const CreateOrganization = () => {
     mode: 'all',
     defaultValues: {
       orgName: '',
-      trustName: '',
-      trustType: Trust_Type_Enum.NotApplicable,
       orgEmail: '',
       orgPhone: '',
       sector: '',
@@ -155,8 +143,6 @@ export const CreateOrganization = () => {
         InsertOrgMutationVariables
       >(MUTATION, {
         name: data.orgName,
-        trustName: data.trustName,
-        trustType: data.trustType as Trust_Type_Enum,
         sector: data.sector,
         attributes: {
           email: data.orgEmail,
@@ -206,8 +192,6 @@ export const CreateOrganization = () => {
       )
       setValue('orgName', org?.name ?? '', { shouldValidate: true })
       if (isDfeSuggestion(org)) {
-        setValue('trustType', getTrustType(org.trustType))
-        setValue('trustName', org.trustName ?? '')
         setValue('localAuthority', org.localAuthority ?? '')
         setValue('ofstedRating', getOfstedRating(org.ofstedRating) ?? '')
         setValue(
@@ -275,54 +259,6 @@ export const CreateOrganization = () => {
                       variant: 'filled',
                     }}
                     sx={{ marginBottom: 2 }}
-                  />
-                </Box>
-
-                <Box mb={3}>
-                  <Controller
-                    name="trustType"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        id="trustType"
-                        select
-                        required
-                        label={t('pages.edit-org-details.trust-type')}
-                        variant="filled"
-                        error={!!errors.trustType}
-                        helperText={errors.trustType?.message}
-                        value={field.value}
-                        onChange={field.onChange}
-                        inputProps={{ 'data-testid': 'trust-type' }}
-                        fullWidth
-                      >
-                        {Object.values(TrustType).map(option => (
-                          <MenuItem
-                            key={option}
-                            value={option}
-                            data-testid={`trust-type-option-${option}`}
-                          >
-                            {t(`trust-type.${option.toLowerCase()}`)}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    )}
-                  />
-                </Box>
-
-                <Box mb={3}>
-                  <TextField
-                    id="trustName"
-                    label={t('pages.edit-org-details.trust-name')}
-                    variant="filled"
-                    error={!!errors.trustName}
-                    helperText={errors.trustName?.message}
-                    InputLabelProps={{
-                      shrink: Boolean(values.trustName),
-                    }}
-                    {...register('trustName')}
-                    inputProps={{ 'data-testid': 'trust-name' }}
-                    fullWidth
                   />
                 </Box>
 

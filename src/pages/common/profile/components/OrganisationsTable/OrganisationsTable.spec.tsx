@@ -33,12 +33,9 @@ describe(OrganisationsTable.name, () => {
   describe.each(profile.organizations)(
     'should render each organisation`s details',
     org => {
-      it.each([org.organization.name, org.organization.trustName])(
-        'it should render: %s',
-        value => {
-          expect(screen.getByText(value as string)).toBeInTheDocument()
-        }
-      )
+      it.each([org.organization.name])('it should render: %s', value => {
+        expect(screen.getByText(value as string)).toBeInTheDocument()
+      })
     }
   )
 })

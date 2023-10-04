@@ -29,7 +29,7 @@ import {
   GetOrganizationsQueryVariables,
   GetShallowOrganizationsQuery,
   GetShallowOrganizationsQueryVariables,
-  InsertOrgMutation,
+  InsertOrgLeadMutation,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { QUERY as FindEstablishment } from '@app/queries/dfe/find-establishment'
@@ -182,7 +182,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       [autocompleteMode, debouncedQuery, onChange]
     )
     const handleClose = () => setAdding(null)
-    const handleSuccess = async (org: InsertOrgMutation['org']) => {
+    const handleSuccess = async (org: InsertOrgLeadMutation['org']) => {
       if (!org) return
       setAdding(null)
       await refreshOptions(org.name)
