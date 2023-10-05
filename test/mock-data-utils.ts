@@ -5,12 +5,14 @@ import { add, sub } from 'date-fns'
 import { getAccountCode } from '@app/components/CourseForm/helpers'
 import {
   Accreditors_Enum,
+  BlendedLearningAttendeeExportData,
   CategorySummaryFragment,
   Course_Level_Enum,
   Course_Status_Enum,
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
   EbookSummaryFragment,
+  ExportBlendedLearningCourseDataQuery,
   GetCourseAuditLogsQuery,
   GetOrgTypesQuery,
   Grade_Enum,
@@ -67,6 +69,40 @@ export const buildAddress = build<Address>({
     country: perBuild(() => chance.country()),
     state: perBuild(() => chance.state()),
     type: perBuild(() => chance.word()),
+  },
+})
+
+export const buildBlExportDataAttendee =
+  build<BlendedLearningAttendeeExportData>({
+    fields: {
+      email: perBuild(() => chance.email()),
+      blendedLearningEndDate: sub(new Date(), { days: 2 }).toISOString(),
+      blendedLearningStartDate: sub(new Date(), {
+        days: 1,
+      }).toISOString(),
+      userName: perBuild(() => chance.first()),
+      blendedLearningPass: 'FALSE',
+      blendedLearningStatus: 'in-progress',
+    },
+  })
+
+export const buildBlExportData = build<{
+  data: ExportBlendedLearningCourseDataQuery
+}>({
+  fields: {
+    data: {
+      attendees: {
+        attendees: [buildBlExportDataAttendee(), buildBlExportDataAttendee()],
+        commissioningOrganisationName: perBuild(() =>
+          chance.word({ length: 3 })
+        ),
+        courseCode: 'CL-L1-10000',
+        courseEndDate: sub(new Date(), { days: 2 }).toISOString(),
+        courseName: perBuild(() => chance.word({ length: 3 })),
+        courseStartDate: sub(new Date(), { days: 1 }).toISOString(),
+        leadTrainerName: perBuild(() => chance.first()),
+      },
+    },
   },
 })
 

@@ -125,6 +125,31 @@ export enum BillingInterval {
   Year = 'year'
 }
 
+export type BlendedLearningAttendeeExportData = {
+  __typename?: 'BlendedLearningAttendeeExportData';
+  blendedLearningEndDate?: Maybe<Scalars['String']>;
+  blendedLearningPass: Scalars['String'];
+  blendedLearningStartDate: Scalars['String'];
+  blendedLearningStatus: Scalars['String'];
+  email: Scalars['String'];
+  userName: Scalars['String'];
+};
+
+export type BlendedLearningExportDataInput = {
+  courseId: Scalars['Int'];
+};
+
+export type BlendedLearningExportDataOutput = {
+  __typename?: 'BlendedLearningExportDataOutput';
+  attendees: Array<BlendedLearningAttendeeExportData>;
+  commissioningOrganisationName: Scalars['String'];
+  courseCode: Scalars['String'];
+  courseEndDate: Scalars['String'];
+  courseName: Scalars['String'];
+  courseStartDate: Scalars['String'];
+  leadTrainerName: Scalars['String'];
+};
+
 /** Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'. */
 export type Boolean_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['Boolean']>;
@@ -42326,6 +42351,7 @@ export type Query_Root = {
   expire_go1_license_jobs_aggregate: Expire_Go1_License_Jobs_Aggregate;
   /** fetch data from the table: "expire_go1_license_jobs" using primary key columns */
   expire_go1_license_jobs_by_pk?: Maybe<Expire_Go1_License_Jobs>;
+  exportBlendedLearningCourseData?: Maybe<BlendedLearningExportDataOutput>;
   /** Fetches membership plans */
   fetchPlans?: Maybe<Array<Maybe<PlanObject>>>;
   /** getCoursePricing */
@@ -43828,6 +43854,11 @@ export type Query_RootExpire_Go1_License_Jobs_AggregateArgs = {
 
 export type Query_RootExpire_Go1_License_Jobs_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Query_RootExportBlendedLearningCourseDataArgs = {
+  input: BlendedLearningExportDataInput;
 };
 
 
@@ -51351,6 +51382,15 @@ export type GetBildStrategiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetBildStrategiesQuery = { __typename?: 'query_root', strategies: Array<{ __typename?: 'bild_strategy', id: any, name: string, shortName: string, modules: any, duration?: number | null }> };
+
+export type BlendedLearningExportDataDetailsFragment = { __typename?: 'BlendedLearningExportDataOutput', courseName: string, courseCode: string, courseStartDate: string, courseEndDate: string, commissioningOrganisationName: string, leadTrainerName: string, attendees: Array<{ __typename?: 'BlendedLearningAttendeeExportData', userName: string, email: string, blendedLearningStatus: string, blendedLearningPass: string, blendedLearningStartDate: string, blendedLearningEndDate?: string | null }> };
+
+export type ExportBlendedLearningCourseDataQueryVariables = Exact<{
+  input: BlendedLearningExportDataInput;
+}>;
+
+
+export type ExportBlendedLearningCourseDataQuery = { __typename?: 'query_root', attendees?: { __typename?: 'BlendedLearningExportDataOutput', courseName: string, courseCode: string, courseStartDate: string, courseEndDate: string, commissioningOrganisationName: string, leadTrainerName: string, attendees: Array<{ __typename?: 'BlendedLearningAttendeeExportData', userName: string, email: string, blendedLearningStatus: string, blendedLearningPass: string, blendedLearningStartDate: string, blendedLearningEndDate?: string | null }> } | null };
 
 export type GetWaitlistQueryVariables = Exact<{
   where: Waitlist_Bool_Exp;

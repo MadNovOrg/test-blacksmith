@@ -10,26 +10,40 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
+import { saveAs } from 'file-saver'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useUpdateEffect } from 'react-use'
+import { useQuery } from 'urql'
+import * as XLSX from 'xlsx'
 import * as yup from 'yup'
 
 import { Dialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
-import { Course_Status_Enum } from '@app/generated/graphql'
+import {
+  Course_Status_Enum,
+  ExportBlendedLearningCourseDataQuery,
+  ExportBlendedLearningCourseDataQueryVariables,
+} from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
+import { EXPORT_BLENDED_LEARNING_ATTENDEES } from '@app/queries/blended-learning-attendees/blended-learning-attendees-data'
 import { Course, CourseType, InviteStatus } from '@app/types'
 import { courseStarted } from '@app/util'
 
 type Props = {
   course: Course
   attendeesCount?: number
+  onExportError?: () => void
 }
 
 const emailSchema = yup.string().email().required()
 
-export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
+export const CourseInvites = ({
+  course,
+  attendeesCount = 0,
+  onExportError,
+}: Props) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { acl, profile } = useAuth()
@@ -42,6 +56,15 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
   const [saving, setSaving] = useState(false)
   const [newEmail, setNewEmail] = useState('')
   const [emails, setEmails] = useState<string[]>([])
+
+  const [{ data, fetching, error: exportError }, reexecuteQuery] = useQuery<
+    ExportBlendedLearningCourseDataQuery,
+    ExportBlendedLearningCourseDataQueryVariables
+  >({
+    query: EXPORT_BLENDED_LEARNING_ATTENDEES,
+    variables: { input: { courseId: course.id } },
+    pause: true,
+  })
 
   const invites = useCourseInvites(course?.id)
   const pendingInvites = invites.data.filter(
@@ -170,19 +193,75 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
     (course.type === CourseType.CLOSED &&
       course.bookingContact?.id === profile?.id)
 
+  useUpdateEffect(() => {
+    if (exportError?.message && onExportError) onExportError()
+  }, [exportError?.message])
+
+  useUpdateEffect(() => {
+    if (exportError && onExportError) onExportError()
+
+    const formatDateTime = (dateTime?: string | null) =>
+      dateTime
+        ? new Date(dateTime).toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+          })
+        : ''
+
+    if (data?.attendees) {
+      const exportedData = data?.attendees
+
+      const attendeesData = [
+        Object.values(
+          t('pages.blended-learning-attendees-cols', { returnObjects: true })
+        ),
+        ...exportedData.attendees.map(attendee => {
+          return [
+            attendee.userName,
+            attendee.email,
+            exportedData?.courseName,
+            exportedData?.courseCode,
+            formatDateTime(exportedData?.courseStartDate),
+            formatDateTime(exportedData?.courseEndDate),
+            attendee.blendedLearningStatus,
+            attendee.blendedLearningPass,
+            formatDateTime(attendee.blendedLearningStartDate),
+            formatDateTime(attendee.blendedLearningEndDate),
+            exportedData?.commissioningOrganisationName,
+            exportedData?.leadTrainerName,
+          ]
+        }),
+      ]
+
+      const wb = XLSX.utils.book_new()
+      const ws = XLSX.utils.aoa_to_sheet(attendeesData)
+      XLSX.utils.book_append_sheet(wb, ws, 'Attendees')
+
+      const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
+
+      saveAs(new Blob([buffer]), 'attendees.xlsx')
+    }
+  }, [data, reexecuteQuery, t])
+
+  const displayInviteTools =
+    !courseHasStarted && !courseCancelled && allowInvites
+
   return (
     <>
       <Grid
         item
         container
-        md={6}
+        md={7}
         sm={12}
         alignItems="center"
         justifyContent="flex-end"
       >
-        {!courseHasStarted &&
-          !courseCancelled &&
-          allowInvites &&
+        {displayInviteTools &&
           (isOpenCourse ? (
             <>
               <Typography variant="subtitle2" data-testid="seats-left">
@@ -221,7 +300,7 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
                   })}
                 </Typography>
               </Grid>
-              <Grid item md={6} sm={12}>
+              <Grid item md={3} sm={12}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -235,8 +314,28 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
               </Grid>
             </>
           ))}
+        {acl.canSeeExportProgressBtnOnBLCourse(course) &&
+        attendeesCount > 0 &&
+        course.go1Integration ? (
+          <Grid
+            item
+            md={3}
+            sm={12}
+            sx={{ mt: { sm: 1, md: 0 }, ml: { sm: 0, md: 2 } }}
+          >
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              loading={fetching}
+              data-testid="progress-export"
+              onClick={() => reexecuteQuery({ requestPolicy: 'network-only' })}
+              fullWidth={isMobile}
+            >
+              {t('pages.course-details.tabs.attendees.progress-export')}
+            </LoadingButton>
+          </Grid>
+        ) : null}
       </Grid>
-
       <Dialog
         open={showModal}
         onClose={closeModal}

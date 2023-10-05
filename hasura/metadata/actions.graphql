@@ -106,6 +106,12 @@ type Query {
 }
 
 type Query {
+  exportBlendedLearningCourseData(
+    input: BlendedLearningExportDataInput!
+  ): BlendedLearningExportDataOutput
+}
+
+type Query {
   fetchPlans: [PlanObject]
 }
 
@@ -709,6 +715,10 @@ input ApproveCourseInput {
   courseId: Int!
 }
 
+input BlendedLearningExportDataInput {
+  courseId: Int!
+}
+
 type LinkProfileResult {
   status: Boolean!
 }
@@ -1134,6 +1144,25 @@ type ImportArloCertificatesOutput {
 
 type XeroInvoiceSyncOutput {
   message: String
+}
+
+type BlendedLearningExportDataOutput {
+  courseName: String!
+  courseCode: String!
+  courseStartDate: String!
+  courseEndDate: String!
+  commissioningOrganisationName: String!
+  leadTrainerName: String!
+  attendees: [BlendedLearningAttendeeExportData!]!
+}
+
+type BlendedLearningAttendeeExportData {
+  userName: String!
+  email: String!
+  blendedLearningStatus: String!
+  blendedLearningPass: String!
+  blendedLearningStartDate: String!
+  blendedLearningEndDate: String
 }
 
 scalar Date

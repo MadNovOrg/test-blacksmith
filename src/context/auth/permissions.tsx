@@ -74,6 +74,15 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canViewRevokedCert: () =>
       anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD, acl.isSalesAdmin])(),
 
+    canSeeExportProgressBtnOnBLCourse: (course: Course) =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isOrgAdmin,
+        acl.isBookingContact,
+        () => acl.isOrganizationKeyContactOfCourse(course),
+      ]),
+
     isCourseLeader: (course: Pick<Course, 'trainers'>) =>
       getCourseLeadTrainer(course.trainers)?.profile.id === profile?.id,
 
@@ -382,8 +391,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     isOrganizationKeyContactOfCourse: (_course: Course) =>
-      acl.isOrgKeyContact() &&
-      _course.organizationKeyContact?.id === auth.profile?.id,
+      Boolean(
+        acl.isOrgKeyContact() &&
+          _course.organizationKeyContact?.id === auth.profile?.id
+      ),
 
     canParticipateInCourses: () => anyPass([acl.isUser, acl.isTrainer])(),
 

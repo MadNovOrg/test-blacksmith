@@ -7,7 +7,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -65,6 +65,10 @@ export const CourseAttendeesTab: React.FC<
 
   const isOpenCourse = course?.type === CourseType.OPEN
 
+  const showErrorAlert = useCallback(() => {
+    setShowCourseInformationAlert({ success: false })
+  }, [])
+
   return (
     <Container disableGutters>
       {!course || courseParticipantsLoadingStatus === LoadingStatus.FETCHING ? (
@@ -116,6 +120,9 @@ export const CourseAttendeesTab: React.FC<
             <CourseInvites
               course={course}
               attendeesCount={courseParticipantsTotal ?? 0}
+              onExportError={() =>
+                setShowCourseInformationAlert({ success: false })
+              }
             />
           </Grid>
           <TabContext value={selectedTab}>
@@ -132,9 +139,7 @@ export const CourseAttendeesTab: React.FC<
             <TabPanel value="0" sx={{ px: 0 }}>
               <AttendingTab
                 course={course}
-                onSendingCourseInformation={success =>
-                  setShowCourseInformationAlert({ success })
-                }
+                onSendingCourseInformation={showErrorAlert}
               />
             </TabPanel>
             {!isOpenCourse ? (

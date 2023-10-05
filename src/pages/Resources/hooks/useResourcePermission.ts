@@ -5,13 +5,12 @@ import {
   CourseLevel,
   Resource_Resourcepermissions,
 } from '@app/generated/graphql'
-import { TrainerRoleTypeName } from '@app/types'
-
 import {
   courseCategoryUserAttends,
   trainerCourseProgress,
   hasGotPassForTrainerCourse,
-} from '../utils'
+} from '@app/pages/Resources/utils'
+import { TrainerRoleTypeName } from '@app/types'
 
 export function useResourcePermission() {
   const { activeCertificates, trainerRoles, acl, profile } = useAuth()

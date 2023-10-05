@@ -492,7 +492,8 @@
     "tabs": {
       "attendees": {
         "title": "Attendees",
-        "hs-consent": "H&S submitted"
+        "hs-consent": "H&S submitted",
+        "progress-export": "Progress export"
       },
       "grading": {
         "title": "Grading",
@@ -1019,6 +1020,20 @@
     "export-selected": "Export selected",
     "export-whole-page": "Export all orders",
     "no-organisation": "-NA-"
+  },
+  "blended-learning-attendees-cols": {
+    "userName": "User name",
+    "email": "Email",
+    "courseName": "Course name",
+    "courseCode": "Course code",
+    "courseStartDate": "Course start date",
+    "courseEndDate": "Course end date",
+    "blendedLearningStatus": "Blended Learning status",
+    "blendedLearningPass": "Blended Learning pass",
+    "blendedLearningStartDate": "Blended Learning course start date",
+    "blendedLearningEndDate": "Blended Learning course end date",
+    "commissioningOrganisation": "Commissioning organisation",
+    "leadTrainerName": "Lead Trainer Name"
   },
   "hs-form": {
     "back-to-checklist": "Back to Checklist",

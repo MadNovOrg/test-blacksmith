@@ -516,7 +516,7 @@ describe(CourseAttendeesTab.name, () => {
 
       await userEvent.click(screen.getByText('Pending (0)', { exact: false }))
 
-      expect(useCourseInvitesMock).toHaveBeenCalledTimes(7)
+      expect(useCourseInvitesMock).toHaveBeenCalledTimes(8)
       expect(useCourseInvitesMock.mock.calls[6]).toMatchObject([
         course.id,
         'PENDING',
@@ -546,7 +546,7 @@ describe(CourseAttendeesTab.name, () => {
 
       await userEvent.click(screen.getByText('Pending (3)', { exact: false }))
 
-      expect(useCourseInvitesMock).toHaveBeenCalledTimes(7)
+      expect(useCourseInvitesMock).toHaveBeenCalledTimes(8)
       expect(useCourseInvitesMock.mock.calls[6]).toMatchObject([
         course.id,
         'PENDING',

@@ -128,6 +128,15 @@ actions:
     permissions:
       - role: user
     comment: eligibleTransferCourses
+  - name: exportBlendedLearningCourseData
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/go1/export'
+    permissions:
+      - role: booking-contact
+      - role: tt-ops
+      - role: tt-admin
+      - role: organization-key-contact
   - name: fetchPlans
     definition:
       kind: ""
@@ -805,6 +814,7 @@ custom_types:
     - name: CancelMyselfFromCourseWaitlistInput
     - name: RejectCourseInput
     - name: ApproveCourseInput
+    - name: BlendedLearningExportDataInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -876,5 +886,7 @@ custom_types:
     - name: RejectCourseOutput
     - name: ImportArloCertificatesOutput
     - name: XeroInvoiceSyncOutput
+    - name: BlendedLearningExportDataOutput
+    - name: BlendedLearningAttendeeExportData
   scalars:
     - name: Date

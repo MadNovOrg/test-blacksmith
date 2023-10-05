@@ -1,11 +1,16 @@
 import { add, addWeeks, sub } from 'date-fns'
+import { saveAs } from 'file-saver'
+import { Client, Provider } from 'urql'
+import { fromValue } from 'wonka'
 
+import { ExportBlendedLearningCourseDataQuery } from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import { Course, CourseType, InviteStatus, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { chance, render, screen, userEvent, waitForCalls } from '@test/index'
 import {
+  buildBlExportData,
   buildCourse,
   buildCourseSchedule,
   buildInvite,
@@ -17,6 +22,9 @@ import { CourseInvites } from './CourseInvites'
 
 vi.mock('@app/hooks/useCourseInvites')
 const useCourseInvitesMock = vi.mocked(useCourseInvites)
+
+vi.mock('file-saver', () => ({ saveAs: () => vi.fn() }))
+
 const useCourseInvitesDefaults = {
   data: [],
   total: 0,
@@ -27,6 +35,15 @@ const useCourseInvitesDefaults = {
   cancel: vi.fn(),
   invalidateCache: vi.fn(),
 }
+
+vi.mock('file-saver', () => ({ saveAs: vi.fn() }))
+
+const urqlMockClient = {
+  executeQuery: () =>
+    fromValue<{ data: ExportBlendedLearningCourseDataQuery }>(
+      buildBlExportData()
+    ),
+} as never as Client
 
 describe(CourseInvites.name, () => {
   let course: Course
@@ -410,5 +427,116 @@ describe(CourseInvites.name, () => {
     })
 
     expect(screen.queryByTestId('course-invite-btn')).toBeInTheDocument()
+  })
+
+  it('should render progress export button for blended learning', () => {
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.INDIRECT,
+        go1Integration: true,
+      },
+    })
+
+    useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
+
+    render(<CourseInvites course={course} attendeesCount={1} />, {
+      auth: {
+        activeRole: RoleName.TT_ADMIN,
+        allowedRoles: new Set([RoleName.TT_ADMIN]),
+      },
+    })
+
+    expect(screen.queryByTestId('progress-export')).toBeInTheDocument()
+
+    const course2 = buildCourse({
+      overrides: {
+        type: CourseType.INDIRECT,
+        go1Integration: false,
+      },
+    })
+
+    render(<CourseInvites course={course2} attendeesCount={1} />, {
+      auth: {
+        activeRole: RoleName.TT_ADMIN,
+        allowedRoles: new Set([RoleName.TT_ADMIN]),
+      },
+    })
+
+    expect(screen.queryByTestId('progress-export')).toBeInTheDocument()
+  })
+
+  it('should not render progress export button for non blended learning course', () => {
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.INDIRECT,
+        go1Integration: false,
+      },
+    })
+
+    useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
+
+    render(<CourseInvites course={course} attendeesCount={1} />, {
+      auth: {
+        activeRole: RoleName.TT_ADMIN,
+        allowedRoles: new Set([RoleName.TT_ADMIN]),
+      },
+    })
+
+    expect(screen.queryByTestId('progress-export')).not.toBeInTheDocument()
+  })
+
+  it('should not render progress export button if number of attendances is 0', () => {
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.INDIRECT,
+        go1Integration: true,
+      },
+    })
+
+    render(
+      <Provider value={urqlMockClient}>
+        <CourseInvites course={course} attendeesCount={0} />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+          allowedRoles: new Set([RoleName.TT_ADMIN]),
+        },
+      }
+    )
+
+    const exportProgressBtn = screen.queryByTestId('progress-export')
+    expect(exportProgressBtn).not.toBeInTheDocument()
+  })
+
+  it('should be called saveAs on progress button clicked', async () => {
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.INDIRECT,
+        go1Integration: true,
+      },
+    })
+
+    render(
+      <Provider value={urqlMockClient}>
+        <CourseInvites
+          course={course}
+          attendeesCount={buildBlExportData().data.attendees?.attendees.length}
+        />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+          allowedRoles: new Set([RoleName.TT_ADMIN]),
+        },
+      }
+    )
+
+    const exportProgressBtn = screen.getByTestId('progress-export')
+    expect(exportProgressBtn).toBeInTheDocument()
+
+    await userEvent.click(exportProgressBtn)
+
+    expect(saveAs).toHaveBeenCalled()
   })
 })
