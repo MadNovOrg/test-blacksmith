@@ -51548,6 +51548,14 @@ export type SaveTrainerCourseEvaluationMutationVariables = Exact<{
 
 export type SaveTrainerCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null };
 
+export type GetCourseParticipantByInviteQueryVariables = Exact<{
+  inviteId: Scalars['uuid'];
+  courseId: Scalars['Int'];
+}>;
+
+
+export type GetCourseParticipantByInviteQuery = { __typename?: 'query_root', course_participant: Array<{ __typename?: 'course_participant', id: any }> };
+
 export type ApproveCourseMutationVariables = Exact<{
   input: ApproveCourseInput;
 }>;

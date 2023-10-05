@@ -3,7 +3,6 @@ import { Routes, Route, useParams } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { InviteStatus } from '@app/types'
 
 import { render, waitForText } from '@test/index'
@@ -14,23 +13,16 @@ vi.mock('@app/hooks/use-fetcher', () => ({
   useFetcher: vi.fn(),
 }))
 
-const useFetcherMocked = vi.mocked(useFetcher)
-
 const DummyParticipantPage = () => {
   const { id } = useParams()
   return <p>{id}</p>
 }
 
 describe('page: AcceptInvite', () => {
-  const fetcherMocked = vi.fn()
-
-  beforeEach(async () => {
-    useFetcherMocked.mockReturnValue(fetcherMocked)
-  })
-
   // eslint-disable-next-line vitest/expect-expect
-  it('redirects to the participant course page if invitation accepted successfuly', async () => {
+  it('redirects to the participant course page if invitation accepted successfully', async () => {
     const client = {
+      executeQuery: () => fromValue({ data: { course_participant: [] } }),
       executeMutation: () =>
         fromValue({
           data: {
@@ -63,6 +55,7 @@ describe('page: AcceptInvite', () => {
   // eslint-disable-next-line vitest/expect-expect
   it("displays an error if invitation didn't get accepted and doesn't redirect to the participant course page", async () => {
     const client = {
+      executeQuery: () => fromValue({ data: { course_participant: [] } }),
       executeMutation: () =>
         fromValue({
           data: { acceptInvite: undefined, addParticipant: undefined },

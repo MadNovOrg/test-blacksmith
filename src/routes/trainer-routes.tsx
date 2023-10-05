@@ -26,6 +26,7 @@ import { ModulesSelection } from '@app/pages/trainer-pages/CourseGradingDetails/
 import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
+import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 const ResourcesRoutes = React.lazy(() => import('./resources'))
@@ -105,6 +106,8 @@ const TrainerBaseRoutes = () => {
       ) : null}
 
       <Route path="resources/*" element={<ResourcesRoutes />} />
+
+      <Route path="accept-invite/:id" element={<AcceptInvite />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

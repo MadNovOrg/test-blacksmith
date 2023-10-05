@@ -46,6 +46,7 @@ import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
 import { PricingList } from '@app/pages/tt-pages/Pricing'
 import { XeroConnect } from '@app/pages/tt-pages/Xero'
+import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 const ResourcesRoutes = React.lazy(() => import('./resources'))
@@ -211,7 +212,7 @@ const TTAdminRoutes = () => {
       ) : null}
 
       <Route path="resources/*" element={<ResourcesRoutes />} />
-
+      <Route path="accept-invite/:id" element={<AcceptInvite />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

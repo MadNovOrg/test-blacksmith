@@ -155,10 +155,42 @@ select_permissions:
         - profile_id
         - registration_id
         - updated_at
+        - invite_id
       filter:
         _or:
           - course:
               booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+          - profile_id:
+              _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_status
+        - go1_enrolment_progress
+        - grade
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - order_id
+        - profile_id
+        - registration_id
+        - updated_at
+        - invite_id
+      filter:
+        _or:
+          - course:
+              organization_key_contact_profile_id:
                 _eq: X-Hasura-User-Id
           - profile_id:
               _eq: X-Hasura-User-Id
@@ -367,6 +399,7 @@ select_permissions:
         - invoice_id
         - profile_id
         - registration_id
+        - invite_id
       filter:
         _or:
           - profile:

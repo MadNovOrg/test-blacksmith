@@ -41,7 +41,6 @@ import {
   CourseDeliveryType,
   GqlError,
   InviteStatus,
-  RoleName,
   TimeDifferenceAndContext,
 } from '@app/types'
 import {
@@ -56,7 +55,6 @@ export const InvitationPage = () => {
   const navigate = useNavigate()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const auth = useAuth()
 
   const { profile, logout } = useAuth()
   const [searchParams] = useSearchParams()
@@ -110,9 +108,6 @@ export const InvitationPage = () => {
       const nextUrl = exists ? '/auto-login' : '/auto-register'
       const continueUrl = `/accept-invite/${inviteId}?courseId=${courseId}`
       const qs = new URLSearchParams({ token, continue: continueUrl })
-
-      if (isUserLoggedIn && auth.activeRole === RoleName.TRAINER)
-        auth.changeRole(RoleName.USER)
 
       return navigate(isUserLoggedIn ? continueUrl : `${nextUrl}?${qs}`, {
         replace: true,

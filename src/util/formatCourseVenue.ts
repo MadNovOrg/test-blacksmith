@@ -7,7 +7,7 @@ export function formatCourseVenue(
   venue?: {
     name?: string
     city?: string
-    country?: string
+    country?: string | null
   }
 ): string {
   if (

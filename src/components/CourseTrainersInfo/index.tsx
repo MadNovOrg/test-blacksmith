@@ -1,3 +1,4 @@
+import CircleIcon from '@mui/icons-material/Circle'
 import {
   Box,
   Button,
@@ -6,7 +7,6 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import CircleIcon from '@mui/icons-material/Circle'
 import React, { useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
@@ -22,6 +22,7 @@ import {
   getCourseAssistants,
   getCourseModerator,
 } from '@app/util'
+
 import { STATUS_COLORS } from './statusColorConsts'
 
 interface ItemProps {

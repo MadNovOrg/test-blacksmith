@@ -27,6 +27,7 @@ import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
+import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 const NotFound = React.lazy(() =>
@@ -195,6 +196,8 @@ const SalesAdminRoutes = () => {
           </Route>
         </>
       ) : null}
+
+      <Route path="accept-invite/:id" element={<AcceptInvite />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

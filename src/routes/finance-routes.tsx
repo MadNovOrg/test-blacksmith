@@ -22,6 +22,7 @@ import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
 import { PricingList } from '@app/pages/tt-pages/Pricing'
+import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 import ResourcesRoutes from './resources'
@@ -186,6 +187,8 @@ const FinanceRoute = () => {
           </Route>
         </>
       ) : null}
+
+      <Route path="accept-invite/:id" element={<AcceptInvite />} />
     </Routes>
   )
 }
