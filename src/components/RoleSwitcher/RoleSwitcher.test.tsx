@@ -50,7 +50,14 @@ describe('component: RoleSwitcher', () => {
     const allowedRoles = new Set([RoleName.USER, RoleName.TRAINER])
 
     const { context } = render(<RoleSwitcher />, {
-      auth: { allowedRoles, activeRole },
+      auth: {
+        allowedRoles,
+        activeRole,
+        individualAllowedRoles: new Set<
+          RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT
+        >([]),
+        isOrgAdmin: false,
+      },
     })
     const roleSwitcherBtn = screen.getByTestId('RoleSwitcher-btn')
     await userEvent.click(roleSwitcherBtn)
@@ -72,5 +79,223 @@ describe('component: RoleSwitcher', () => {
     render(<RoleSwitcher />, { auth: { allowedRoles, activeRole } })
 
     expect(screen.queryByTestId('RoleSwitcher-btn')).not.toBeInTheDocument()
+  })
+
+  it('show only individual on none individual roles present', async () => {
+    const activeRole = RoleName.TT_ADMIN
+    const allowedRoles = new Set([
+      RoleName.FINANCE,
+      RoleName.LD,
+      RoleName.SALES_ADMIN,
+      RoleName.SALES_REPRESENTATIVE,
+      RoleName.TRAINER,
+      RoleName.TT_ADMIN,
+      RoleName.TT_OPS,
+      RoleName.USER,
+    ])
+
+    render(<RoleSwitcher />, {
+      auth: {
+        allowedRoles,
+        activeRole,
+        individualAllowedRoles: new Set<
+          RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT
+        >([]),
+      },
+    })
+
+    const roleSwitcherBtn = screen.getByTestId('RoleSwitcher-btn')
+    await userEvent.click(roleSwitcherBtn)
+
+    const individualRolePicker = screen.queryByTestId(
+      'RoleSwitcher-individual-arrow'
+    )
+
+    expect(individualRolePicker).not.toBeInTheDocument()
+  })
+
+  it('show only individual on only one (booking contact) individual roles present', async () => {
+    const activeRole = RoleName.TT_ADMIN
+    const allowedRoles = new Set([
+      RoleName.BOOKING_CONTACT,
+      RoleName.FINANCE,
+      RoleName.LD,
+      RoleName.SALES_ADMIN,
+      RoleName.SALES_REPRESENTATIVE,
+      RoleName.TRAINER,
+      RoleName.TT_ADMIN,
+      RoleName.TT_OPS,
+      RoleName.USER,
+    ])
+
+    render(<RoleSwitcher />, {
+      auth: {
+        allowedRoles,
+        activeRole,
+        individualAllowedRoles: new Set<
+          RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT
+        >([RoleName.BOOKING_CONTACT]),
+      },
+    })
+
+    const roleSwitcherBtn = screen.getByTestId('RoleSwitcher-btn')
+    await userEvent.click(roleSwitcherBtn)
+
+    const individualRolePicker = screen.queryByTestId(
+      'RoleSwitcher-individual-arrow'
+    )
+
+    expect(individualRolePicker).not.toBeInTheDocument()
+  })
+
+  it('show arrow button on present more that one individual role', async () => {
+    const activeRole = RoleName.TT_ADMIN
+    const allowedRoles = new Set([
+      RoleName.BOOKING_CONTACT,
+      RoleName.ORGANIZATION_KEY_CONTACT,
+      RoleName.TRAINER,
+      RoleName.USER,
+    ])
+
+    render(<RoleSwitcher />, {
+      auth: {
+        allowedRoles,
+        activeRole,
+        individualAllowedRoles: new Set<
+          RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT
+        >([RoleName.BOOKING_CONTACT, RoleName.ORGANIZATION_KEY_CONTACT]),
+      },
+    })
+
+    const roleSwitcherBtn = screen.getByTestId('RoleSwitcher-btn')
+    await userEvent.click(roleSwitcherBtn)
+
+    const individualRolePicker = screen.getByTestId(
+      'RoleSwitcher-individual-arrow'
+    )
+    expect(individualRolePicker).toBeInTheDocument()
+  })
+
+  it('show arrow button on present more that one individual role, one of them is org admin', async () => {
+    const activeRole = RoleName.USER
+    const allowedRoles = new Set([
+      RoleName.BOOKING_CONTACT,
+      RoleName.ORGANIZATION_KEY_CONTACT,
+      RoleName.TRAINER,
+      RoleName.USER,
+    ])
+
+    render(<RoleSwitcher />, {
+      auth: {
+        allowedRoles,
+        activeRole,
+        individualAllowedRoles: new Set<
+          RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT
+        >([RoleName.BOOKING_CONTACT]),
+        isOrgAdmin: true,
+      },
+    })
+
+    const roleSwitcherBtn = screen.getByTestId('RoleSwitcher-btn')
+    await userEvent.click(roleSwitcherBtn)
+
+    const individualRolePicker = screen.getByTestId(
+      'RoleSwitcher-individual-arrow'
+    )
+    expect(individualRolePicker).toBeInTheDocument()
+  })
+
+  it('show individual role picker with booking contact role and org admin property presented', async () => {
+    const activeRole = RoleName.USER
+    const allowedRoles = new Set([
+      RoleName.BOOKING_CONTACT,
+      RoleName.ORGANIZATION_KEY_CONTACT,
+      RoleName.TRAINER,
+      RoleName.USER,
+    ])
+
+    render(<RoleSwitcher />, {
+      auth: {
+        allowedRoles,
+        activeRole,
+        individualAllowedRoles: new Set<
+          RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT
+        >([RoleName.BOOKING_CONTACT]),
+        isOrgAdmin: true,
+      },
+    })
+
+    const roleSwitcherBtn = screen.getByTestId('RoleSwitcher-btn')
+    await userEvent.click(roleSwitcherBtn)
+
+    const individualRolePicker = screen.getByTestId(
+      'RoleSwitcher-individual-arrow'
+    )
+    expect(individualRolePicker).toBeInTheDocument()
+
+    await userEvent.click(individualRolePicker)
+
+    const individualRoleMenu = screen.getByTestId(
+      'RoleSwitcher-list-individual'
+    )
+    const bookingContactMenuOption = screen.queryByTestId(
+      'Individual-role-booking-contact'
+    )
+    const organisationAdminMenuOption = screen.queryByTestId(
+      'Individual-role-organisation-admin'
+    )
+
+    expect(individualRoleMenu).toBeInTheDocument()
+    expect(bookingContactMenuOption).toBeInTheDocument()
+    expect(organisationAdminMenuOption).not.toBeInTheDocument()
+  })
+
+  it('show individual role picker for multiple individual roles, but not org admin', async () => {
+    const activeRole = RoleName.TT_ADMIN
+    const allowedRoles = new Set([
+      RoleName.BOOKING_CONTACT,
+      RoleName.ORGANIZATION_KEY_CONTACT,
+      RoleName.TRAINER,
+      RoleName.USER,
+    ])
+
+    render(<RoleSwitcher />, {
+      auth: {
+        allowedRoles,
+        activeRole,
+        individualAllowedRoles: new Set<
+          RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT
+        >([RoleName.BOOKING_CONTACT, RoleName.ORGANIZATION_KEY_CONTACT]),
+        isOrgAdmin: false,
+      },
+    })
+
+    const roleSwitcherBtn = screen.getByTestId('RoleSwitcher-btn')
+    await userEvent.click(roleSwitcherBtn)
+
+    const individualRolePicker = screen.getByTestId(
+      'RoleSwitcher-individual-arrow'
+    )
+    expect(individualRolePicker).toBeInTheDocument()
+
+    await userEvent.click(individualRolePicker)
+
+    const individualRoleMenu = screen.getByTestId(
+      'RoleSwitcher-list-individual'
+    )
+    const bookingContactMenuOption = screen.queryByTestId(
+      'Individual-role-booking-contact'
+    )
+    const orgKeyContactContactMenuOption = screen.queryByTestId(
+      'Individual-role-organization-key-contact'
+    )
+    const organisationAdminMenuOption = screen.queryByTestId(
+      'Individual-role-organisation-admin'
+    )
+
+    expect(individualRoleMenu).toBeInTheDocument()
+    expect(bookingContactMenuOption).toBeInTheDocument()
+    expect(orgKeyContactContactMenuOption).toBeInTheDocument()
+    expect(organisationAdminMenuOption).not.toBeInTheDocument()
   })
 })

@@ -1,6 +1,7 @@
 import { useTheme, useMediaQuery } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
@@ -11,7 +12,7 @@ interface INavLinksProps {
   shownOnDrawer?: boolean
 }
 
-export const NavLinks: React.FC<INavLinksProps> = () => {
+export const NavLinks: FC<INavLinksProps> = () => {
   const { t } = useTranslation()
   const { acl } = useAuth()
 

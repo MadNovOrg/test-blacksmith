@@ -6,7 +6,7 @@ import { MUTATION as UPDATE_PROFILE_ACTIVITY_QUERY } from '@app/queries/profile/
 import { RoleName } from '@app/types'
 
 import { TTCookies } from './cookies'
-import { fetchUserProfile, getQueryRole, lsActiveRoleClient } from './helpers'
+import { fetchUserProfile, lsActiveRoleClient } from './helpers'
 import { injectACL } from './permissions'
 import type { AuthContextType, AuthState, CognitoUser, E } from './types'
 
@@ -105,7 +105,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
       setState(prev => ({
         ...prev,
         activeRole,
-        queryRole: getQueryRole(activeRole, state.claimsRoles ?? new Set()),
+        queryRole: activeRole,
       }))
       return activeRole
     },

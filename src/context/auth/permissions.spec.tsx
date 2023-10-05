@@ -280,7 +280,7 @@ describe(getACL.name, () => {
     it(`should return true when the allowedRoles contains ${RoleName.BOOKING_CONTACT}`, () => {
       // Arrange
       const acl = getACLStub({
-        activeRole: RoleName.USER,
+        activeRole: RoleName.BOOKING_CONTACT,
         allowedRoles: new Set([RoleName.BOOKING_CONTACT]),
       })
 
@@ -297,6 +297,30 @@ describe(getACL.name, () => {
 
       // Act & Assert
       expect(acl.isBookingContact()).toBeFalsy()
+    })
+  })
+
+  describe('isOrgKeyContact()', () => {
+    it(`should return true when the allowedRoles contains ${RoleName.ORGANIZATION_KEY_CONTACT}`, () => {
+      // Arrange
+      const acl = getACLStub({
+        activeRole: RoleName.ORGANIZATION_KEY_CONTACT,
+        allowedRoles: new Set([RoleName.ORGANIZATION_KEY_CONTACT]),
+      })
+
+      // Act & Assert
+      expect(acl.isOrgKeyContact()).toBeTruthy()
+    })
+
+    it(`should return false when the activeRole is any other`, () => {
+      // Arrange
+      const acl = getACLStub({
+        activeRole: RoleName.USER,
+        allowedRoles: new Set(),
+      })
+
+      // Act & Assert
+      expect(acl.isOrgKeyContact()).toBeFalsy()
     })
   })
 
@@ -688,8 +712,19 @@ describe(getACL.name, () => {
     it(`should return true when the the user is a ${RoleName.BOOKING_CONTACT}`, () => {
       // Arrange
       const acl = getACLStub({
-        activeRole: RoleName.USER,
+        activeRole: RoleName.BOOKING_CONTACT,
         allowedRoles: new Set([RoleName.BOOKING_CONTACT]),
+      })
+
+      // Act & Assert
+      expect(acl.canViewCourseOrder()).toBeTruthy()
+    })
+
+    it(`should return true when the the user is a ${RoleName.ORGANIZATION_KEY_CONTACT}`, () => {
+      // Arrange
+      const acl = getACLStub({
+        activeRole: RoleName.ORGANIZATION_KEY_CONTACT,
+        allowedRoles: new Set([RoleName.ORGANIZATION_KEY_CONTACT]),
       })
 
       // Act & Assert

@@ -27,6 +27,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
   const profile = auth.profile
   const activeRole = auth.activeRole
   const allowedRoles = auth.allowedRoles
+  const individualAllowedRoles = auth.individualAllowedRoles
   const activeCertificates = auth.activeCertificates ?? []
   const managedOrgIds = auth.managedOrgIds ?? []
 
@@ -49,17 +50,24 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     isAdmin: () => acl.isTTAdmin() || acl.isTTOps() || acl.isLD(),
 
-    isOrgAdmin: (orgId?: string) =>
+    hasOrgAdmin: (orgId?: string) =>
       Boolean(
         auth.isOrgAdmin && (orgId ? managedOrgIds.includes(orgId) : true)
       ),
 
+    isOrgAdmin: (orgId?: string) =>
+      acl.hasOrgAdmin(orgId) && activeRole === RoleName.USER,
+
     isBookingContact: () =>
-      Boolean(allowedRoles?.has(RoleName.BOOKING_CONTACT)) && acl.isUser(),
+      Boolean(allowedRoles?.has(RoleName.BOOKING_CONTACT)) &&
+      activeRole === RoleName.BOOKING_CONTACT,
 
     isOrgKeyContact: () =>
       Boolean(allowedRoles?.has(RoleName.ORGANIZATION_KEY_CONTACT)) &&
-      acl.isUser(),
+      activeRole === RoleName.ORGANIZATION_KEY_CONTACT,
+
+    isUserAndHaveUpToOneSubRole: () =>
+      (individualAllowedRoles?.size ?? 0) + +acl.isOrgAdmin() <= 1,
 
     isInternalUser: () =>
       anyPass([
@@ -70,6 +78,21 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.isSalesRepresentative,
         acl.isFinance,
       ])(),
+
+    isRegularUser: () => {
+      allowedRoles?.forEach(allowedRole => {
+        if (
+          ![
+            RoleName.BOOKING_CONTACT,
+            RoleName.ORGANIZATION_KEY_CONTACT,
+            RoleName.USER,
+          ].includes(allowedRole)
+        )
+          return false
+      })
+
+      return true
+    },
 
     canViewRevokedCert: () =>
       anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD, acl.isSalesAdmin])(),
@@ -145,6 +168,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.isTrainer,
         acl.isOrgAdmin,
         acl.isBookingContact,
+        acl.isOrgKeyContact,
       ])(),
 
     canViewProfiles: () =>
@@ -368,7 +392,16 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         courseProgress?.started && !courseProgress.ended
       const hasPassedTrainerCourse = hasPassed
 
-      if (anyPass([acl.isUser, acl.isTrainer] || attendedTrainerCourse)()) {
+      if (
+        anyPass(
+          [
+            acl.isBookingContact,
+            acl.isOrgKeyContact,
+            acl.isTrainer,
+            acl.isUser,
+          ] || attendedTrainerCourse
+        )()
+      ) {
         return Boolean(
           auth.activeCertificates?.length ||
             trainerCourseIsOngoing ||
@@ -396,7 +429,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
           _course.organizationKeyContact?.id === auth.profile?.id
       ),
 
-    canParticipateInCourses: () => anyPass([acl.isUser, acl.isTrainer])(),
+    canParticipateInCourses: () =>
+      anyPass([
+        acl.isBookingContact,
+        acl.isOrgKeyContact,
+        acl.isTrainer,
+        acl.isUser,
+      ])(),
 
     canTransferParticipant: (participantOrgIds: string[], _course: Course) => {
       return (

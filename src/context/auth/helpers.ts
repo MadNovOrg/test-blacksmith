@@ -27,24 +27,6 @@ function getRequestedRole() {
   return requestedRole
 }
 
-export function getQueryRole(
-  activeRole: RoleName,
-  allowedRoles: Set<RoleName>
-) {
-  if (
-    activeRole === RoleName.USER &&
-    allowedRoles.has(RoleName.BOOKING_CONTACT)
-  ) {
-    return RoleName.BOOKING_CONTACT
-  } else if (
-    activeRole === RoleName.USER &&
-    allowedRoles.has(RoleName.ORGANIZATION_KEY_CONTACT)
-  ) {
-    return RoleName.ORGANIZATION_KEY_CONTACT
-  }
-  return activeRole
-}
-
 export async function fetchUserProfile(
   user: CognitoUser
 ): Promise<Required<AuthState> | void> {
@@ -60,6 +42,16 @@ export async function fetchUserProfile(
     const claimsRoles = claims?.['x-hasura-allowed-roles'] ?? []
     const claimsRolesSet = new Set(claimsRoles)
     const allowedRoles = new Set(claimsRoles.filter(r => ActiveRoles.has(r)))
+    const individualAllowedRoles = new Set(
+      claimsRoles.filter(r =>
+        Boolean(
+          [
+            RoleName.BOOKING_CONTACT,
+            RoleName.ORGANIZATION_KEY_CONTACT,
+          ].includes(r)
+        )
+      )
+    ) as Set<RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT>
     const lsActiveRole = lsActiveRoleClient(profile)
     const desiredRole = getRequestedRole() ?? lsActiveRole.get() ?? defaultRole
     const activeRole = allowedRoles.has(desiredRole) ? desiredRole : defaultRole
@@ -77,8 +69,9 @@ export async function fetchUserProfile(
       defaultRole,
       claimsRoles: claimsRolesSet,
       allowedRoles,
+      individualAllowedRoles,
       activeRole,
-      queryRole: getQueryRole(activeRole, claimsRolesSet),
+      queryRole: activeRole,
       verified: emailVerified ?? false,
       loggedOut: false,
       trainerRoles: profile.trainerRoles?.map(

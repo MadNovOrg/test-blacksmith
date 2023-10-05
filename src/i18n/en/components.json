@@ -86,7 +86,10 @@
     "sales-representative": "Sales representative",
     "sales-admin": "Sales administrator",
     "ld": "L&D",
-    "finance": "Finance"
+    "finance": "Finance",
+    "booking-contact": "Booking contact",
+    "organization-key-contact": "Organisation key contact",
+    "organization-admin": "Organisation administrator"
   },
   "course-form": {
     "zoom-user": "Zoom User",

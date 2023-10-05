@@ -29,6 +29,9 @@ export type AuthState = {
     expiryDate: string
   }[]
   activeCertificates?: CourseLevel[]
+  individualAllowedRoles?: Set<
+    RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT
+  >
 }
 
 export interface AuthContextType extends AuthState {
