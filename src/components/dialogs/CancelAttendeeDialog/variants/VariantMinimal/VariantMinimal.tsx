@@ -1,4 +1,5 @@
-import { Alert, Container, Typography } from '@mui/material'
+import InfoIcon from '@mui/icons-material/Info'
+import { Alert, Container, Grid, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
 
@@ -53,10 +54,13 @@ export const VariantMinimal: React.FC<VariantMinimalProps> = ({
         onClose={onClose}
         slots={{
           Title: () => (
-            <Title
-              fullName={participant.profile.fullName}
-              courseCode={course.course_code}
-            />
+            <Grid container sx={{ gap: 1 }}>
+              <InfoIcon color={'info'} />
+              <Title
+                fullName={participant.profile.fullName}
+                courseCode={course.course_code}
+              />
+            </Grid>
           ),
           Actions: () => (
             <Actions
