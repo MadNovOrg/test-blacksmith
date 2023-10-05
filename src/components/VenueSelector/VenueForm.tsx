@@ -38,10 +38,10 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
 }) {
   const { t } = useTranslation()
 
-  const [{ data: addVenueResponse, error }, handleAddVenue] = useMutation<
-    ResponseType,
-    ParamsType
-  >(ADD_VENUE_MUTATION)
+  const [{ error }, handleAddVenue] = useMutation<ResponseType, ParamsType>(
+    ADD_VENUE_MUTATION
+  )
+
   const schema = useMemo(() => {
     return yup.object({
       name: yup.string().required(requiredMsg(t, 'venue-name')),
@@ -89,13 +89,13 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
       }
 
       if (formData) {
-        await handleAddVenue({
+        const { data } = await handleAddVenue({
           venue: formData,
         })
+        onSubmit(data?.venue)
       }
-      onSubmit(addVenueResponse?.venue)
     },
-    [addVenueResponse?.venue, handleAddVenue, onSubmit, trigger]
+    [handleAddVenue, onSubmit, trigger]
   )
 
   return (
