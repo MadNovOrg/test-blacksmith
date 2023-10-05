@@ -9,6 +9,13 @@ select_permissions:
         - sector
         - id
       filter: {}
+  - role: booking-contact
+    permission:
+      columns:
+        - id
+        - name
+        - sector
+      filter: {}
   - role: finance
     permission:
       columns:
@@ -23,6 +30,13 @@ select_permissions:
         - sector
         - id
       filter: {}
+  - role: organization-key-contact
+    permission:
+      columns:
+        - id
+        - name
+        - sector
+      filter: {}
   - role: sales-admin
     permission:
       columns:
@@ -36,6 +50,13 @@ select_permissions:
         - name
         - sector
         - id
+      filter: {}
+  - role: trainer
+    permission:
+      columns:
+        - id
+        - name
+        - sector
       filter: {}
   - role: tt-admin
     permission:
@@ -57,4 +78,11 @@ select_permissions:
         - name
         - sector
         - id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - id
+        - name
+        - sector
       filter: {}
