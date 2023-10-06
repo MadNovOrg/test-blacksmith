@@ -902,7 +902,7 @@
     "resend": "Resend",
     "verify-resend-btn": "Resend verification email",
     "success-hint": "Thank you for signing up. \n You can now login to your Team Teach account.",
-    "success-btn": "Go to Login",
+    "success-btn": "Go to Home",
     "form-errors": {
       "UnknownError": "An error occurred. Please try again.",
       "UsernameExistsException": "An account with the given email already exists."
