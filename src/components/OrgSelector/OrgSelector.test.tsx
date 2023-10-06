@@ -112,7 +112,7 @@ describe('component: OrgSelector', () => {
       expect(myOrgsGroup).toBeInTheDocument()
       within(myOrgsGroup).getByTestId(`org-selector-result-${orgs[0].id}`)
       const foundInHubGroup = screen.getByTestId(
-        'org-selector-result-group-Found in Team Teach Hub'
+        'org-selector-result-group-Found in Team Teach Connect'
       )
       expect(foundInHubGroup).toBeInTheDocument()
       within(foundInHubGroup).getByTestId(`org-selector-result-${orgs[1].id}`)

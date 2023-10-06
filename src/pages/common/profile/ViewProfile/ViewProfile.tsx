@@ -355,7 +355,7 @@ export const ViewProfilePage: React.FC<
                 {acl.canSeeProfileRoles() && (
                   <>
                     <Typography variant="subtitle2" mb={1} mt={3}>
-                      {t('pages.view-profile.hub-access')}
+                      {t('pages.view-profile.connect-access')}
                     </Typography>
 
                     <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>

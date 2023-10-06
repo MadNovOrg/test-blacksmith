@@ -56,7 +56,7 @@ describe(EditProfilePage.name, () => {
       }
     )
 
-    expect(screen.queryByText('Hub access')).toBeInTheDocument()
+    expect(screen.queryByText('Connect access')).toBeInTheDocument()
   })
 
   it('should not show profile roles with users', async () => {
@@ -91,7 +91,7 @@ describe(EditProfilePage.name, () => {
       }
     )
 
-    expect(screen.queryByText('Hub access')).not.toBeInTheDocument()
+    expect(screen.queryByText('Connect access')).not.toBeInTheDocument()
   })
   it.each([t('first-name'), t('surname'), t('dob')])(
     'should disable %s field',

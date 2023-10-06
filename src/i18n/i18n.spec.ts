@@ -7,7 +7,7 @@ const dateTo = '2022-04-27T17:10:11.125Z'
 
 describe('i18n', () => {
   it('translates as expected', () => {
-    expect(t('appTitle')).toBe('Team Teach Hub')
+    expect(t('appTitle')).toBe('Team Teach Connect')
   })
 
   it('translates prices to GBP implicitly or explicitly', () => {

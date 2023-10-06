@@ -1,5 +1,5 @@
 {
-  "appTitle": "Team Teach Hub",
+  "appTitle": "Team Teach Connect",
   "internal-error": "Internal error occurred.",
   "currency": "{{amount, currency(GBP)}}",
   "certificates": {
@@ -191,7 +191,7 @@
   "confirm": "Confirm",
   "apply": "Apply",
   "save-changes": "Save Changes",
-  "goto-tt": "Go to Team Teach Hub",
+  "goto-tt": "Go to Team Teach Connect",
   "need-help": "Need help",
   "contact-us": "Contact us",
   "clear": "Clear",
@@ -365,7 +365,7 @@
     "invalid-postcode": "Invalid Postcode"
   },
   "validation-notice": "All fields are mandatory.",
-  "create-free-account": "Create your free Team Teach Hub account",
+  "create-free-account": "Create your free Team Teach Connect account",
   "have-account": "Have an account?",
   "login": "Login",
   "course-registration": "Course Registration",
@@ -572,7 +572,7 @@
     "wont-attend": "I will not attend",
     "will-attend": "I will attend",
     "can-attend-q": "Are you able to attend?",
-    "goto-tt": "Go to Team Teach Hub",
+    "goto-tt": "Go to Team Teach Connect",
     "response-sent": "Your response has been sent"
   },
   "trust-type": {

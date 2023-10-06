@@ -47,7 +47,7 @@ export const AdminPage: React.FC<
     >
       <Box sx={{ width: '80%', maxWidth: '628px' }}>
         <Typography variant="h1" pt={3} pb={2} fontWeight={600}>
-          {t(`pages.admin.hub-settings.title`)}
+          {t(`pages.admin.connect-settings.title`)}
         </Typography>
         <List>
           {hubSettings.map(({ name, link }) => (
@@ -55,10 +55,10 @@ export const AdminPage: React.FC<
               <Link href={link} sx={{ width: '100%' }}>
                 <Tile sx={{ display: 'block' }}>
                   <Typography variant="subtitle2" mb={1}>
-                    {t(`pages.admin.hub-settings.${name}.title`)}
+                    {t(`pages.admin.connect-settings.${name}.title`)}
                   </Typography>
                   <Typography variant="body1">
-                    {t(`pages.admin.hub-settings.${name}.description`)}
+                    {t(`pages.admin.connect-settings.${name}.description`)}
                   </Typography>
                 </Tile>
               </Link>

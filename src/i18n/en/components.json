@@ -266,7 +266,7 @@
     },
     "dfe-suggestions": "Suggestions from Department for Education",
     "tt-suggestions": "Suggestions from Team Teach",
-    "existing-organizations": "Found in Team Teach Hub",
+    "existing-organizations": "Found in Team Teach Connect",
     "add-manually": "Create new organisation",
     "my-organizations": "My organisations"
   },
@@ -412,7 +412,7 @@
   },
   "profile-archive-dialog": {
     "title": "Archive profile",
-    "confirmation-message": "Are you sure you want to archive user {{firstName}} {{lastName}} with the email {{email}}? Archiving a user will remove them from view from within the Hub and make them unable to log in to their account. The archived user will not be visible to organisation admins and all non-admin Team Teach employees. This action can not be undone.",
+    "confirmation-message": "Are you sure you want to archive user {{firstName}} {{lastName}} with the email {{email}}? Archiving a user will remove them from view from within Connect and make them unable to log in to their account. The archived user will not be visible to organisation admins and all non-admin Team Teach employees. This action can not be undone.",
     "trainer-for-courses": "This user is a trainer for course(s):",
     "trainer-for-courses-action": "To archive this user, they cannot be assigned as a trainer for any course that hasn’t been completed or cancelled.",
     "course-participant": "This user is an attendee in course(s):",
@@ -422,7 +422,7 @@
   "profile-delete-dialog": {
     "title": "Delete Confirmation",
     "confirmation-title": "Are you sure you want to delete user \"{{firstName}} {{lastName}}\" with the email \"{{email}}\"?",
-    "confirmation-message": "Deleting a user will remove them completely from the Hub and make them unable to log in to their account.",
+    "confirmation-message": "Deleting a user will remove them completely from Connect and make them unable to log in to their account.",
     "confirmation-warning": "This action can not be undone.",
     "delete": "Delete",
     "delete-error": "An error occurred while deleting the user.",

@@ -16,7 +16,7 @@ describe(`${AdminPage.name}`, () => {
   it('displays settings list', async () => {
     // Arrange
     const hubAdminLinks = Object.values(
-      t(`pages.admin.hub-settings`, {
+      t(`pages.admin.connect-settings`, {
         returnObjects: true,
       })
     )
@@ -35,7 +35,7 @@ describe(`${AdminPage.name}`, () => {
 
     // Assert
     expect(
-      screen.getByText(t('pages.admin.hub-settings.title'))
+      screen.getByText(t('pages.admin.connect-settings.title'))
     ).toBeInTheDocument()
     const links = screen.getAllByRole('link')
     expect(links).toHaveLength(hubAdminLinks.length)
@@ -52,18 +52,18 @@ describe(`${AdminPage.name}`, () => {
 
     // Assert
     expect(
-      screen.getByText(t('pages.admin.hub-settings.title'))
+      screen.getByText(t('pages.admin.connect-settings.title'))
     ).toBeInTheDocument()
     const links = screen.getAllByRole('link')
     expect(links).toHaveLength(3)
     expect(links[0]).toHaveTextContent(
-      t(`pages.admin.hub-settings.users.title`)
+      t(`pages.admin.connect-settings.users.title`)
     )
     expect(links[1]).toHaveTextContent(
-      t(`pages.admin.hub-settings.organisations.title`)
+      t(`pages.admin.connect-settings.organisations.title`)
     )
     expect(links[2]).toHaveTextContent(
-      t(`pages.admin.hub-settings.course-exceptions-log.title`)
+      t(`pages.admin.connect-settings.course-exceptions-log.title`)
     )
   })
 })

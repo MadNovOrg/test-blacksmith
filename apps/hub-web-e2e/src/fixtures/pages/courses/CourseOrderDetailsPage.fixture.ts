@@ -27,7 +27,7 @@ export class CourseOrderDetailsPage extends BasePage {
     this.phoneInput = this.page.locator('[data-testid="input-phone"]')
     this.purchaseOrderInput = this.page.locator('[data-testid="input-po"]')
     this.autocompleteOption = this.page.locator(
-      '[data-testid="org-selector-result-group-Found in Team Teach Hub"] [data-testid*="org-selector-result"]'
+      '[data-testid="org-selector-result-group-Found in Team Teach Connect"] [data-testid*="org-selector-result"]'
     )
     this.reviewAndConfirmButton = this.page.locator(
       '[data-testid="AssignTrainers-submit"]'
