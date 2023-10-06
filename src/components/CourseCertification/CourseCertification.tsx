@@ -614,7 +614,6 @@ export const CourseCertification: React.FC<
                         blendedLearning={
                           courseParticipant.course.go1Integration
                         }
-                        bildStrategies={courseParticipant.course.bildStrategies}
                         reaccreditation={
                           courseParticipant.course.reaccreditation ?? false
                         }

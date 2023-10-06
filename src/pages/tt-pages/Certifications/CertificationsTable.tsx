@@ -89,7 +89,6 @@ export const CertificationsTable: React.FC<
           expiryDate={c.expiryDate}
           accreditedBy={c.course?.accreditedBy ?? Accreditors_Enum.Icm}
           blendedLearning={Boolean(c.course?.go1Integration)}
-          bildStrategies={c.course?.bildStrategies ?? []}
           reaccreditation={Boolean(c.course?.reaccreditation)}
         />,
       ])

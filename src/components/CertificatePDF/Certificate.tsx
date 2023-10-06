@@ -2,11 +2,11 @@ import pdf from '@react-pdf/renderer'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import BILDOutlineImage from '@app/assets/outline_bild.jpg'
+import BILDOutlineImage from '@app/assets/bild-outline.jpg'
 import ICMOutlineImage from '@app/assets/outline_icm.jpg'
 import { Accreditors_Enum, Grade_Enum } from '@app/generated/graphql'
 import theme from '@app/theme'
-import { Course, CourseLevel } from '@app/types'
+import { CourseLevel } from '@app/types'
 
 // workaround for using react-pdf with vite
 const { Document, Image, Page, StyleSheet, Text, Font } = pdf
@@ -107,7 +107,6 @@ type CertificateDocumentProps = {
   accreditedBy: Accreditors_Enum
   blendedLearning: boolean
   reaccreditation: boolean
-  bildStrategies: Course['bildStrategies']
 }
 
 export const CertificateDocument: React.FC<
@@ -121,7 +120,6 @@ export const CertificateDocument: React.FC<
   accreditedBy,
   blendedLearning,
   reaccreditation,
-  bildStrategies,
 }) => {
   const { t } = useTranslation()
 
@@ -148,16 +146,18 @@ export const CertificateDocument: React.FC<
         <Text style={{ ...styles.smallerText, marginBottom: theme.spacing(1) }}>
           {t('common.course-certificate.completed-message')}
         </Text>
-        <Text
-          style={{
-            ...styles.text,
-            ...styles.largerText,
-            ...styles.grey,
-            marginBottom: theme.spacing(2),
-          }}
-        >
-          {t(`common.course-certificate.course-title-${accreditedBy}`)}
-        </Text>
+        {accreditedBy === Accreditors_Enum.Icm && (
+          <Text
+            style={{
+              ...styles.text,
+              ...styles.largerText,
+              ...styles.grey,
+              marginBottom: theme.spacing(2),
+            }}
+          >
+            {t(`common.course-certificate.course-title-${accreditedBy}`)}
+          </Text>
+        )}
 
         <Text
           style={{
@@ -170,11 +170,7 @@ export const CertificateDocument: React.FC<
           }}
         >
           {[
-            accreditedBy === Accreditors_Enum.Icm
-              ? t(`course-levels.${courseLevel}`)
-              : bildStrategies
-                  .map(s => t(`bild-strategies.${s.strategyName}`))
-                  .join(', '),
+            t(`course-levels.${courseLevel}`),
             reaccreditation ? t('common.reaccreditation') : null,
           ]
             .filter(Boolean)

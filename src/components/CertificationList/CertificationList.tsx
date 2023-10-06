@@ -114,7 +114,6 @@ export const CertificationList: React.FC<
           expiryDate={p.certificate?.expiryDate ?? ''}
           accreditedBy={p.course.accreditedBy}
           blendedLearning={p.course.go1Integration}
-          bildStrategies={p.course.bildStrategies}
           reaccreditation={p.course.reaccreditation}
         />,
       ])
