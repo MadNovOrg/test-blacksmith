@@ -23,6 +23,7 @@ export type ResponseType = {
       deliveryType: CourseDeliveryType
       level: CourseLevel
       reaccreditation: boolean
+      conversion: boolean
       maxParticipants: number
       price?: number
       priceCurrency?: string
@@ -74,6 +75,7 @@ export const QUERY = gql`
         deliveryType
         level
         reaccreditation
+        conversion
         freeSpaces
         expenses {
           id

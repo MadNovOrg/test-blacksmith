@@ -219,6 +219,10 @@
     "VIRTUAL": "Virtual",
     "MIXED": "Face to Face and Virtual"
   },
+  "course-categories": {
+    "ICM": "ICM",
+    "BILD": "BILD"
+  },
   "course-levels": {
     "LEVEL_1": "Level One",
     "LEVEL_2": "Level Two",

@@ -60,20 +60,32 @@ export type AttendeeValidCertificateProps = {
   errors: FieldErrors
   courseLevel: CourseLevel
   reaccreditation: boolean
+  conversion: boolean
   totalAttendees: number
 }
 
 const AttendeeValidCertificate: React.FC<
   React.PropsWithChildren<AttendeeValidCertificateProps>
-> = ({ control, courseLevel, reaccreditation, totalAttendees, errors }) => {
+> = ({
+  control,
+  courseLevel,
+  reaccreditation,
+  conversion,
+  totalAttendees,
+  errors,
+}) => {
   const { t } = useTranslation()
   const showAttendeeTranslationOptions = useCallback(
-    (courseLevel: CourseLevel, reaccreditation: boolean, attendees: number) => {
+    (
+      courseLevel: CourseLevel,
+      reaccreditation: boolean,
+      conversion: boolean,
+      attendees: number
+    ) => {
       switch (courseLevel) {
         case CourseLevel.Advanced:
           return {
             attendees,
-            certificates: 1,
             levels: reaccreditation
               ? t(
                   'pages.book-course.attendee-with-valid-certificate.levels.advanced.reaccreditation'
@@ -85,7 +97,6 @@ const AttendeeValidCertificate: React.FC<
         case CourseLevel.IntermediateTrainer:
           return {
             attendees,
-            certificates: 1,
             levels: reaccreditation
               ? t(
                   'pages.book-course.attendee-with-valid-certificate.levels.intermediate-trainer.reaccreditation'
@@ -97,13 +108,42 @@ const AttendeeValidCertificate: React.FC<
         case CourseLevel.AdvancedTrainer:
           return {
             attendees,
-            certificates: 2,
             levels: reaccreditation
               ? t(
                   'pages.book-course.attendee-with-valid-certificate.levels.advanced-trainer.reaccreditation'
                 )
               : t(
                   'pages.book-course.attendee-with-valid-certificate.levels.advanced-trainer.default'
+                ),
+          }
+        case CourseLevel.BildIntermediateTrainer:
+          return {
+            attendees,
+            levels: reaccreditation
+              ? t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.bild-intermediate-trainer.reaccreditation'
+                )
+              : conversion
+              ? t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.bild-intermediate-trainer.conversion'
+                )
+              : t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.bild-intermediate-trainer.default'
+                ),
+          }
+        case CourseLevel.BildAdvancedTrainer:
+          return {
+            attendees,
+            levels: reaccreditation
+              ? t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.bild-advanced-trainer.reaccreditation'
+                )
+              : conversion
+              ? t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.bild-advanced-trainer.conversion'
+                )
+              : t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.bild-advanced-trainer.default'
                 ),
           }
         default:
@@ -129,6 +169,7 @@ const AttendeeValidCertificate: React.FC<
                   showAttendeeTranslationOptions(
                     courseLevel,
                     reaccreditation,
+                    conversion,
                     totalAttendees
                   )
                 )}
@@ -155,6 +196,8 @@ const isAttendeeValidCertificateMandatory = (
     CourseLevel.Advanced,
     CourseLevel.IntermediateTrainer,
     CourseLevel.AdvancedTrainer,
+    CourseLevel.BildIntermediateTrainer,
+    CourseLevel.BildAdvancedTrainer,
   ].includes(courseLevel)
 
 type FormInputs = {
@@ -856,6 +899,7 @@ export const CourseBookingDetails: React.FC<
               errors={errors}
               courseLevel={course.level}
               reaccreditation={course.reaccreditation}
+              conversion={course.conversion}
               totalAttendees={values.quantity}
             />
           )}
