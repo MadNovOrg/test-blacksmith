@@ -145,7 +145,7 @@ describe(ReplaceParticipantDialog.name, () => {
       'example@example.com'
     )
 
-    await userEvent.click(screen.getByText(/replace attendee/i))
+    await userEvent.click(screen.getByTestId('replace-submit'))
 
     await waitFor(() => {
       expect(onSuccessMock).toHaveBeenCalledTimes(1)
@@ -191,7 +191,7 @@ describe(ReplaceParticipantDialog.name, () => {
     )
 
     await waitFor(async () => {
-      await userEvent.click(screen.getByText(/replace attendee/i))
+      await userEvent.click(screen.getByTestId('replace-submit'))
     })
 
     await waitFor(() => {
@@ -231,13 +231,13 @@ describe(ReplaceParticipantDialog.name, () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByText(/replace attendee/i)).toBeDisabled()
+      expect(screen.getByTestId('replace-submit')).toBeDisabled()
     })
 
     await userEvent.click(screen.getByTestId('terms-checkbox'))
 
     await waitFor(() => {
-      expect(screen.getByText(/replace attendee/i)).toBeEnabled()
+      expect(screen.getByTestId('replace-submit')).toBeEnabled()
     })
   })
 

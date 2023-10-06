@@ -7,6 +7,7 @@ import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Grid from '@mui/material/Grid'
+import Link from '@mui/material/Link'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import ListItemText from '@mui/material/ListItemText'
 import TextField from '@mui/material/TextField'
@@ -236,7 +237,25 @@ export const ReplaceParticipantDialog: React.FC<
                   data-testid="terms-checkbox"
                 />
               }
-              label={t('terms-notice')}
+              label={
+                <Trans
+                  i18nKey="components.replace-participant.terms-notice"
+                  components={{
+                    termsOfBusinessLink: (
+                      <Link
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`${_t('terms-of-business')} (${t(
+                          'opens-new-window'
+                        )})`}
+                        href={`${
+                          import.meta.env.VITE_BASE_WORDPRESS_URL
+                        }/policies-procedures/terms-of-business/`}
+                      />
+                    ),
+                  }}
+                />
+              }
               sx={{ mt: 2, color: 'dimGrey.main' }}
             />
           ) : null}

@@ -16,11 +16,11 @@
     "no-fee-option": "No fees"
   },
   "replace-participant": {
-    "title": "Replace with new attendee",
-    "description": "This action will replace the original attendee with the new attendee entered below. Course instructions will be sent to the relevant details provided and Finance will update the invoice for this booking where necessary.",
+    "title": "Replace attendee",
+    "description": "This action will replace the original attendee with the new attendee details entered below. Course instructions will be sent to the relevant details provided and the order will be updated accordingly.",
     "participant-title": "Original attendee",
-    "invite-title": "Replace with",
-    "email-placeholder": "Email *",
+    "invite-title": "New attendee",
+    "email-placeholder": "Email address *",
     "first-name-placeholder": "First name *",
     "surname-placeholder": "Surname *",
     "alert-message": "<strong>Important:</strong> Please ensure the email address is entered correctly and is for the participant attending the course.",
@@ -28,7 +28,7 @@
     "submit-btn-text": "Replace attendee",
     "replacement-error": "There was an error replacing the participant.",
     "replacement-error-INVALID_EMAIL": "Invite email is already registered on the course.",
-    "terms-notice": "I acknowledge that the new attendee has the same billing details as the original booking. A charge will only incur if billing details change."
+    "terms-notice": "I confirm that the billing details remain the same for this booking in line with Team Teach <strong><termsOfBusinessLink>Terms of Business.</termsOfBusinessLink></strong>"
   },
   "not-found": {
     "title": "Page not found",
