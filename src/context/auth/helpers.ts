@@ -42,6 +42,7 @@ export async function fetchUserProfile(
     const claimsRoles = claims?.['x-hasura-allowed-roles'] ?? []
     const claimsRolesSet = new Set(claimsRoles)
     const allowedRoles = new Set(claimsRoles.filter(r => ActiveRoles.has(r)))
+
     const individualAllowedRoles = new Set(
       claimsRoles.filter(r =>
         Boolean(
@@ -52,8 +53,22 @@ export async function fetchUserProfile(
         )
       )
     ) as Set<RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT>
+
+    const defaultIndividualRole =
+      individualAllowedRoles.size === 1 ? [...individualAllowedRoles][0] : null
+
     const lsActiveRole = lsActiveRoleClient(profile)
-    const desiredRole = getRequestedRole() ?? lsActiveRole.get() ?? defaultRole
+    let desiredRole = getRequestedRole() ?? lsActiveRole.get() ?? defaultRole
+
+    /**
+     * For the case when user has an individual sub role, no org admin and the user
+     * role is saved in local storage. When an user has an individual user has a sub role and
+     * isn't org admin the active role should not be RoleName.USER
+     */
+    if (desiredRole === RoleName.USER && !isOrgAdmin) {
+      desiredRole = defaultIndividualRole ?? desiredRole
+    }
+
     const activeRole = allowedRoles.has(desiredRole) ? desiredRole : defaultRole
     lsActiveRole.set(activeRole)
 
