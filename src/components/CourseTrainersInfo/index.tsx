@@ -130,6 +130,17 @@ export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
     [trainers]
   )
 
+  const canEnableLinks = (trainer: Course_Trainer) => {
+    if (acl.isTrainer()) {
+      return (
+        acl.canViewProfiles() &&
+        trainer.status === Course_Invite_Status_Enum.Accepted
+      )
+    }
+
+    return acl.canViewProfiles()
+  }
+
   return (
     <>
       {courseLeadTrainer && (
@@ -138,7 +149,7 @@ export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
             t('pages.course-participants.trainer')
           ) : (
             <ListItemWrapper
-              enableLinks={acl.canViewProfiles()}
+              enableLinks={canEnableLinks(courseLeadTrainer)}
               courseTrainer={courseLeadTrainer}
             />
           )}
@@ -151,7 +162,7 @@ export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
               t('pages.course-participants.assistant')
             ) : (
               <ListItemWrapper
-                enableLinks={acl.canViewProfiles()}
+                enableLinks={canEnableLinks(assistant)}
                 courseTrainer={assistant}
               />
             )}
@@ -176,7 +187,7 @@ export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
             t('pages.course-participants.moderator')
           ) : (
             <ListItemWrapper
-              enableLinks={acl.canViewProfiles()}
+              enableLinks={canEnableLinks(courseModerator)}
               courseTrainer={courseModerator}
             />
           )}
