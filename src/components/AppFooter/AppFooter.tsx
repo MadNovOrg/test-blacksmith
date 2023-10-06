@@ -2,15 +2,53 @@ import FacebookIcon from '@mui/icons-material/Facebook'
 import InstagramIcon from '@mui/icons-material/Instagram'
 import TwitterIcon from '@mui/icons-material/Twitter'
 import YouTubeIcon from '@mui/icons-material/YouTube'
-import { Box, Container, Link, Typography } from '@mui/material'
+import {
+  Box,
+  Container,
+  Link,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import theme, { FOOTER_HEIGHT } from '@app/theme'
+import { FOOTER_HEIGHT } from '@app/theme'
 
 import { AppLogo } from '../AppLogo'
 
 export const AppFooter = () => {
   const { t } = useTranslation()
+  const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
+  const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+  const links = [
+    {
+      href: `${origin}/policies-procedures/terms-of-use/`,
+      labelKey: 'terms-of-use',
+    },
+    {
+      href: `${origin}/policies-procedures/terms-of-business/`,
+      labelKey: 'terms-of-business',
+    },
+    {
+      href: `${origin}/policies-procedures/privacy-policy/`,
+      labelKey: 'privacy-policy',
+    },
+    {
+      href: `${origin}/policies-procedures/cookie-policy/`,
+      labelKey: 'cookie-policy',
+    },
+    {
+      href: import.meta.env.VITE_MANAGE_ACCOUNT_URL,
+      labelKey: 'right-to-withdrawal',
+    },
+  ]
 
   return (
     <Box bgcolor={theme.palette.primary.main} sx={{ minHeight: FOOTER_HEIGHT }}>
@@ -19,12 +57,37 @@ export const AppFooter = () => {
         sx={{
           display: 'flex',
           alignItems: 'center',
-          height: '96px',
+          height: '192px',
           justifyContent: 'space-between',
         }}
       >
-        <AppLogo variant="white" />
-        <Box display="flex">
+        <Box display="flex" alignItems="center">
+          <AppLogo variant="white" />
+          <Box>
+            <List dense sx={{ listStyleType: 'none', px: isMobile ? 2 : 4 }}>
+              {links.map(({ href, labelKey }) => (
+                <ListItem key={labelKey} disablePadding>
+                  <ListItemText>
+                    <Link
+                      href={href}
+                      target="_blank"
+                      role="link"
+                      rel="noopener noreferrer"
+                      component={'a'}
+                      color={theme.palette.common.white}
+                      aria-label={`${t(labelKey)} (${t('opens-new-window')})`}
+                      sx={{ fontSize: isMobile ? '0.8rem' : '1rem' }}
+                      data-testid={labelKey}
+                    >
+                      {t(labelKey)}
+                    </Link>
+                  </ListItemText>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Box>
+        <Box display={isMobile ? 'block' : 'flex'}>
           <Typography color={theme.palette.common.white} mr={1}>
             {t('components.footer.follow')}
           </Typography>

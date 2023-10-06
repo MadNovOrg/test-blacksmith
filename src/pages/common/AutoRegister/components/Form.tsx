@@ -287,19 +287,21 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                     <Trans i18nKey="pages.signup.tcs-label">
                       I accept the
                       <a
-                        href={`${origin}/terms-of-business/`}
+                        href={`${origin}/policies-procedures/terms-of-use/`}
                         target="_blank"
                         rel="noreferrer"
-                        aria-label={`${t('terms-of-business')} (${t(
+                        aria-label={`${t('terms-of-use')} (${t(
                           'opens-new-window'
                         )})`}
                       >
-                        Terms of Business
+                        Terms of Use
                       </a>
                       and agree to Team Teach processing my personal data in
                       accordance with our
                       <a
-                        href={`${origin}/privacy-policy`}
+                        href={`${origin}/policies-procedures/privacy-policy/`}
+                        target="_blank"
+                        rel="noreferrer"
                         aria-label={`${t('privacy-policy')} (${t(
                           'opens-new-window'
                         )})`}

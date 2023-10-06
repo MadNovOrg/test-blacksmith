@@ -5,6 +5,7 @@ import {
   Checkbox,
   Divider,
   FormControlLabel,
+  Link,
   Stack,
   Typography,
 } from '@mui/material'
@@ -379,7 +380,35 @@ export const CourseBookingReview: React.FC<
         }
         label={
           <Typography variant="body2">
-            {t('pages.book-course.review-tnc')}
+            <Trans
+              i18nKey="pages.book-course.review-tnc"
+              components={{
+                termsOfUseLink: (
+                  <Link
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`${t('terms-of-use')} (${t(
+                      'opens-new-window'
+                    )})`}
+                    href={`${
+                      import.meta.env.VITE_BASE_WORDPRESS_URL
+                    }/policies-procedures/terms-of-use/`}
+                  />
+                ),
+                privacyPolicyLink: (
+                  <Link
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`${t('privacy-policy')} (${t(
+                      'opens-new-window'
+                    )})`}
+                    href={`${
+                      import.meta.env.VITE_BASE_WORDPRESS_URL
+                    }/policies-procedures/privacy-policy/`}
+                  />
+                ),
+              }}
+            />
           </Typography>
         }
       />

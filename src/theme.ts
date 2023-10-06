@@ -226,7 +226,7 @@ const breakpoints = {
 }
 
 export const APP_BAR_HEIGHT = 72
-export const FOOTER_HEIGHT = 96
+export const FOOTER_HEIGHT = 192
 
 export default createTheme({
   ...theme,
