@@ -22,6 +22,7 @@ import { CourseWaitlist } from '@app/pages/common/CourseWaitlist'
 import { CourseWaitlistCancellation } from '@app/pages/common/CourseWaitlistCancellation'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
 import { LoginPage } from '@app/pages/common/Login'
+import { LogoutPage } from '@app/pages/common/Logout'
 import { RegistrationPage } from '@app/pages/common/Registration'
 import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
@@ -93,6 +94,7 @@ function LoggedOutRoutes() {
       <Route index element={<Navigate replace to="login" />} />
       <Route path="*" element={<RedirectToLogin />} />
       <Route path="login" element={<LoginPage />} />
+      <Route path="logout" element={<LogoutPage />} />
       <Route path="forgot-password" element={<ForgotPasswordPage />} />
       <Route path="reset-password" element={<ResetPasswordPage />} />
       <Route path="invitation" element={<InvitationPage />} />
@@ -202,6 +204,7 @@ function LoggedInRoutes() {
         />
 
         <Route path="login/*" element={<Navigate replace to="/" />} />
+        <Route path="logout" element={<LogoutPage />} />
       </Routes>
     </>
   )
