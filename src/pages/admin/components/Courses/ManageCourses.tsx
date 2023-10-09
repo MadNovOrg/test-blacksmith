@@ -9,11 +9,12 @@ import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/OrgSelectionToolbar'
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { ManageContactRoleCourses } from '@app/pages/user-pages/MyCourses/ManageContactRoleCourses'
+import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { orgId: id } = useParams()
-  const { profile, acl } = useAuth()
+  const { profile, acl, activeRole } = useAuth()
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -30,11 +31,19 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
     acl.canViewAllOrganizations()
   )
 
+  const navigateToOrgCourses =
+    allOrgs &&
+    allOrgs.length === 1 &&
+    activeRole &&
+    ![RoleName.BOOKING_CONTACT, RoleName.ORGANIZATION_KEY_CONTACT].includes(
+      activeRole
+    )
+
   useEffect(() => {
-    if (allOrgs && allOrgs.length === 1) {
+    if (navigateToOrgCourses) {
       navigate('/manage-courses/' + allOrgs[0].id)
     }
-  }, [allOrgs, navigate])
+  }, [allOrgs, navigate, navigateToOrgCourses])
 
   return (
     <FullHeightPageLayout pb={3}>

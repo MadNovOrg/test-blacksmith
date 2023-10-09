@@ -79,21 +79,6 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.isFinance,
       ])(),
 
-    isRegularUser: () => {
-      allowedRoles?.forEach(allowedRole => {
-        if (
-          ![
-            RoleName.BOOKING_CONTACT,
-            RoleName.ORGANIZATION_KEY_CONTACT,
-            RoleName.USER,
-          ].includes(allowedRole)
-        )
-          return false
-      })
-
-      return true
-    },
-
     canViewRevokedCert: () =>
       anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD, acl.isSalesAdmin])(),
 
