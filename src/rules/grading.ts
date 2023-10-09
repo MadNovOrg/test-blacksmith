@@ -40,7 +40,7 @@ export function getAvailableGrades(
       Course_Level_Enum.BildAdvancedTrainer,
     ].includes(courseLevel)
   ) {
-    return [Grade_Enum.Pass, Grade_Enum.Fail, Grade_Enum.AssistOnly]
+    return [Grade_Enum.Pass, Grade_Enum.Fail]
   }
 
   return [Grade_Enum.Pass, Grade_Enum.ObserveOnly, Grade_Enum.Fail]
