@@ -629,6 +629,7 @@ input TransferInput {
   participantId: uuid!
   toCourseId: Int!
   fee: TransferFee!
+  reason: String!
 }
 
 input GetOrdersInput {

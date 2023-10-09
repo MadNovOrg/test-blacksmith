@@ -56,6 +56,8 @@ export type ContextValue = {
   backFrom: (step: TransferStepsEnum) => void
   mode: TransferModeEnum
   cancel: () => void
+  reason: string
+  setReason: (reason: string) => void
 }
 
 export const TransferParticipantContext = React.createContext<
@@ -98,6 +100,7 @@ export const TransferParticipantProvider: React.FC<
   const [currentStepKey, setCurrentStepKey] = useState<TransferStepsEnum>(
     initialValue?.currentStepKey ?? TransferStepsEnum.SELECT_COURSE
   )
+  const [reason, setReason] = useState<ContextValue['reason']>('')
 
   const { t } = useScopedTranslation('pages.transfer-participant')
 
@@ -211,20 +214,23 @@ export const TransferParticipantProvider: React.FC<
       feesChosen,
       mode,
       cancel,
+      reason,
+      setReason,
     }),
     [
       participant,
       fromCourse,
-      completedSteps,
       completeStep,
+      completedSteps,
       currentStepKey,
       courseChosen,
       toCourse,
+      backFrom,
       fees,
       feesChosen,
-      backFrom,
       mode,
       cancel,
+      reason,
     ]
   )
 

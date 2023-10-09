@@ -1,5 +1,6 @@
 import { addDays } from 'date-fns'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
@@ -10,7 +11,7 @@ import {
   TransferFeeType,
 } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { render, renderHook, screen, userEvent, waitFor } from '@test/index'
 
 import { EligibleCourse } from '../../types'
 import {
@@ -24,6 +25,12 @@ import {
 import { TransferDetails } from '.'
 
 describe('page: TransferDetails', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+
   it('redirects to the first step if there is no chosen course', async () => {
     const client = {
       executeQuery: () =>
@@ -128,7 +135,11 @@ describe('page: TransferDetails', () => {
       { initialEntries: ['/transfer/participant-id/details'] }
     )
 
-    await userEvent.click(screen.getByText(/Back to selection/i))
+    await userEvent.click(
+      screen.getByText(
+        t('pages.transfer-participant.transfer-details.back-btn-label')
+      )
+    )
 
     await waitFor(() => {
       expect(screen.getByText('First step')).toBeInTheDocument()
@@ -199,11 +210,22 @@ describe('page: TransferDetails', () => {
       { initialEntries: ['/transfer/participant-id/details'] }
     )
 
-    await userEvent.click(screen.getByLabelText(/apply transfer terms/i))
+    await userEvent.click(
+      screen.getByLabelText(
+        t('pages.transfer-participant.transfer-details.apply-terms-option')
+      )
+    )
 
     expect(screen.getByTestId('transfer-terms-table')).toBeInTheDocument()
 
-    await userEvent.click(screen.getByText(/review & confirm/i))
+    const transferReasonField = screen.getByTestId('reasonForTransfer-input')
+    await userEvent.type(transferReasonField, 'Why not?')
+
+    await userEvent.click(
+      screen.getByText(
+        t('pages.transfer-participant.transfer-details.next-btn-label')
+      )
+    )
 
     await waitFor(() => {
       expect(screen.getByText('APPLY_TERMS')).toBeInTheDocument()
@@ -274,12 +296,26 @@ describe('page: TransferDetails', () => {
       { initialEntries: ['/transfer/participant-id/details'] }
     )
 
-    await userEvent.click(screen.getByLabelText(/custom fee/i))
-    await userEvent.type(screen.getByLabelText(/amount/i), '50')
+    await userEvent.click(
+      screen.getByLabelText(
+        t('pages.transfer-participant.review-transfer.custom-fee')
+      )
+    )
+    await userEvent.type(
+      screen.getByLabelText(t('components.fees-form.custom-fee-label')),
+      '50'
+    )
+
+    const transferReasonField = screen.getByTestId('reasonForTransfer-input')
+    await userEvent.type(transferReasonField, 'Why not?')
 
     expect(screen.queryByTestId('transfer-terms-table')).not.toBeInTheDocument()
 
-    await userEvent.click(screen.getByText(/review & confirm/i))
+    await userEvent.click(
+      screen.getByText(
+        t('pages.transfer-participant.transfer-details.next-btn-label')
+      )
+    )
 
     await waitFor(() => {
       expect(screen.getByText(TransferFeeType.CustomFee)).toBeInTheDocument()
@@ -339,9 +375,17 @@ describe('page: TransferDetails', () => {
       { initialEntries: ['/transfer/participant-id/details'] }
     )
 
-    await userEvent.click(screen.getByLabelText(/custom fee/i))
+    await userEvent.click(
+      screen.getByLabelText(
+        t('pages.transfer-participant.review-transfer.custom-fee')
+      )
+    )
 
-    expect(screen.getByText(/review & confirm/i)).toBeDisabled()
+    expect(
+      screen.getByText(
+        t('pages.transfer-participant.transfer-details.next-btn-label')
+      )
+    ).toBeDisabled()
   })
 
   it("doesn't display fee options when an org admin is doing the transfer", async () => {
@@ -403,11 +447,19 @@ describe('page: TransferDetails', () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByLabelText(/apply transfer terms/i)
+        screen.queryByLabelText(
+          t('pages.transfer-participant.transfer-details.apply-terms-option')
+        )
       ).not.toBeInTheDocument()
 
-      expect(screen.queryByLabelText(/custom fee/i)).not.toBeInTheDocument()
-      expect(screen.queryByLabelText(/no fees/i)).not.toBeInTheDocument()
+      expect(
+        screen.queryByLabelText(
+          t('pages.transfer-participant.review-transfer.custom-fee')
+        )
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByLabelText(t('components.fees-form.no-fee-option'))
+      ).not.toBeInTheDocument()
 
       expect(screen.getByTestId('transfer-terms-table')).toBeInTheDocument()
     })

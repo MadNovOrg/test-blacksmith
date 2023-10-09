@@ -100,6 +100,13 @@ export const AttendeeTransferTable: React.FC<
           ),
       },
       {
+        id: 'reason',
+        label: 'Reason',
+        sorting: false,
+        exportRender: (log: AttendeeLogType) =>
+          log.payload?.transfer_reason ?? '',
+      },
+      {
         id: 'invoice_no',
         label: t('common.invoice-no'),
         sorting: false,
@@ -234,6 +241,11 @@ export const AttendeeTransferTable: React.FC<
                                 {orgMember.organization.name}
                               </Link>
                             ))}
+                          </Box>
+                        </TableCell>
+                        <TableCell>
+                          <Box display="flex" flexDirection="column" gap={1}>
+                            {log.payload.transfer_reason ?? ''}
                           </Box>
                         </TableCell>
                         <TableCell>

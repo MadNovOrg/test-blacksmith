@@ -46,6 +46,7 @@ export const TransferReview: React.FC<
     mode,
     completeStep,
     cancel,
+    reason,
   } = useTransferParticipantContext()
 
   const { addSnackbarMessage } = useSnackbar()
@@ -66,13 +67,14 @@ export const TransferReview: React.FC<
               type: fees.type,
               customFee: fees.customFee,
             },
+            reason,
           },
         })
 
-        const transferSuccessfull = result.data?.transferParticipant?.success
+        const transferSuccessfully = result.data?.transferParticipant?.success
 
         if (
-          transferSuccessfull &&
+          transferSuccessfully &&
           mode !== TransferModeEnum.ATTENDEE_TRANSFERS
         ) {
           addSnackbarMessage('participant-transferred', {
@@ -80,7 +82,7 @@ export const TransferReview: React.FC<
           })
 
           navigate('../../details')
-        } else if (transferSuccessfull) {
+        } else if (transferSuccessfully) {
           completeStep(TransferStepsEnum.REVIEW)
           setSuccess(true)
         } else {

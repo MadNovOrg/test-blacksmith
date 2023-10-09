@@ -8,3 +8,7 @@ export enum TransferStepsEnum {
 
 export type EligibleCourse =
   TransferEligibleCoursesQuery['eligibleTransferCourses'][0]
+
+export type TransferFormInput = {
+  transferReason: string
+}

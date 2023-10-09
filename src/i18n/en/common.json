@@ -555,6 +555,7 @@
   "cancelled": "Cancelled",
   "replace": "Replace",
   "transfer": "Transfer",
+  "transfer-reason": "Transfer reason",
   "cancellation-reason": "Cancellation reason",
   "close-modal": "Close",
   "course": "Course",
