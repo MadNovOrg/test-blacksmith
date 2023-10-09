@@ -425,6 +425,14 @@ update_permissions:
           trainers:
             profile_id:
               _eq: X-Hasura-User-Id
+        _or:
+          - course:
+              trainers:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - course:
+              course_status:
+                _eq: EXCEPTIONS_APPROVAL_PENDING
       check: {}
   - role: tt-admin
     permission:
