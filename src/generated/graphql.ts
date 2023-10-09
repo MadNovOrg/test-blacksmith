@@ -31350,6 +31350,7 @@ export type Mutation_RootDeleteMeetingArgs = {
 
 /** mutation root */
 export type Mutation_RootDeleteUserArgs = {
+  dryRun?: InputMaybe<Scalars['Boolean']>;
   profileId: Scalars['uuid'];
 };
 
@@ -52402,6 +52403,7 @@ export type ArchiveProfileMutation = { __typename?: 'mutation_root', update_prof
 
 export type DeleteProfileMutationVariables = Exact<{
   profileId: Scalars['uuid'];
+  dryRun?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 

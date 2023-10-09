@@ -95,6 +95,7 @@ type Mutation {
 type Mutation {
   deleteUser(
     profileId: uuid!
+    dryRun: Boolean
   ): DeleteUserOutput!
 }
 

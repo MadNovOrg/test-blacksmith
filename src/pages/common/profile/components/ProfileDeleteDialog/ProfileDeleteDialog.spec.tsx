@@ -51,18 +51,27 @@ describe('DeleteUsersDialog', () => {
 
     const dialog = screen.getByRole('dialog')
     expect(within(dialog).getByText(/delete user/i)).toBeInTheDocument()
+    expect(screen.getByRole('checkbox')).not.toBeChecked()
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled()
+  })
+
+  it('allows delete only after confirmation checkbox is checked', async () => {
+    fetcherMock.mockResolvedValueOnce({ deleteUser: { success: true } })
+    setup()
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled()
+
+    await userEvent.click(screen.getByRole('checkbox'))
 
     expect(screen.getByRole('button', { name: 'Delete' })).toBeEnabled()
   })
 
   it('delete user', async () => {
-    fetcherMock.mockResolvedValueOnce({ deleteUser: { success: true } })
+    fetcherMock.mockResolvedValue({ deleteUser: { success: true } })
     setup()
-
+    await userEvent.click(screen.getByRole('checkbox'))
     await userEvent.click(screen.getByRole('button', { name: 'Delete' }))
 
-    expect(fetcherMock).toHaveBeenCalledTimes(1)
-    expect(fetcherMock).toHaveBeenCalledWith('delete-query', { profileId })
+    expect(fetcherMock).toHaveBeenCalledTimes(2)
 
     expect(onSuccessMock).toHaveBeenCalledTimes(1)
   })
@@ -71,10 +80,13 @@ describe('DeleteUsersDialog', () => {
     fetcherMock.mockResolvedValueOnce({ deleteUser: { error: 'some error' } })
     setup()
 
-    await userEvent.click(screen.getByRole('button', { name: 'Delete' }))
+    expect(screen.getByRole('checkbox')).not.toBeVisible()
 
     expect(fetcherMock).toHaveBeenCalledTimes(1)
-    expect(fetcherMock).toHaveBeenCalledWith('delete-query', { profileId })
+    expect(fetcherMock).toHaveBeenCalledWith('delete-query', {
+      profileId,
+      dryRun: true,
+    })
 
     expect(onSuccessMock).toHaveBeenCalledTimes(0)
 
@@ -92,6 +104,6 @@ describe('DeleteUsersDialog', () => {
 
     expect(onCloseMock).toHaveBeenCalledTimes(1)
     expect(onSuccessMock).toHaveBeenCalledTimes(0)
-    expect(fetcherMock).toHaveBeenCalledTimes(0)
+    expect(fetcherMock).toHaveBeenCalledTimes(1)
   })
 })
