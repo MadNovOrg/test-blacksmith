@@ -11,8 +11,8 @@ export type Props = {
 }
 export const sectors = {
   edu: 'Education',
-  hsc_child: "H & SC Children's",
-  hsc_adult: "H & SC Adult's",
+  hsc_child: 'Health & Social Care Children',
+  hsc_adult: 'Health & Social Care Adults',
   other: 'Other',
 } as const
 export const OrganisationSectorDropdown: FC<PropsWithChildren<Props>> = ({
