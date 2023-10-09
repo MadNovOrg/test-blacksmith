@@ -2215,7 +2215,7 @@ describe(getACL.name, () => {
     })
   })
 
-  describe('canManageParticipantAttendance()', () => {
+  describe('canManageParticipantAttendance(), OPEN course type', () => {
     it.each([
       [RoleName.TT_ADMIN],
       [RoleName.TT_OPS],
@@ -2226,6 +2226,7 @@ describe(getACL.name, () => {
       const course = buildCourse({
         overrides: {
           accreditedBy: Accreditors_Enum.Icm,
+          type: CourseType.OPEN,
         },
       })
       const managedOrgIds = '123'
@@ -2239,6 +2240,140 @@ describe(getACL.name, () => {
       expect(
         acl.canManageParticipantAttendance([managedOrgIds], course)
       ).toBeTruthy()
+    })
+  })
+
+  describe('canManageParticipantAttendance() CLOSED course type', () => {
+    it.each([
+      [RoleName.TT_ADMIN],
+      [RoleName.TT_OPS],
+      [RoleName.SALES_ADMIN],
+      [RoleName.BOOKING_CONTACT],
+    ])(`should return true when activeRole is %s`, activeRole => {
+      // Arrange
+      const course = buildCourse({
+        overrides: {
+          accreditedBy: Accreditors_Enum.Icm,
+          type: CourseType.CLOSED,
+        },
+      })
+      const managedOrgIds = '123'
+      const acl = getACLStub({
+        allowedRoles: new Set([
+          RoleName.TT_ADMIN,
+          RoleName.TT_OPS,
+          RoleName.SALES_ADMIN,
+          RoleName.BOOKING_CONTACT,
+          RoleName.USER,
+        ]),
+
+        activeRole: activeRole,
+        isOrgAdmin: true,
+        managedOrgIds: [managedOrgIds],
+      })
+
+      // Act & Assert
+      expect(
+        acl.canManageParticipantAttendance([managedOrgIds], course)
+      ).toBeTruthy()
+    })
+  })
+
+  describe('canManageParticipantAttendance() cannot, CLOSED course type', () => {
+    it.each([
+      [RoleName.LD],
+      [RoleName.TRAINER],
+      [RoleName.FINANCE],
+      [RoleName.USER],
+      [RoleName.ORGANIZATION_KEY_CONTACT],
+    ])(`should return true when activeRole is %s`, activeRole => {
+      // Arrange
+      const course = buildCourse({
+        overrides: {
+          accreditedBy: Accreditors_Enum.Icm,
+          type: CourseType.CLOSED,
+        },
+      })
+      const managedOrgIds = '123'
+      const acl = getACLStub({
+        activeRole: activeRole,
+        isOrgAdmin: false,
+        managedOrgIds: [managedOrgIds],
+      })
+
+      // Act & Assert
+      expect(
+        acl.canManageParticipantAttendance([managedOrgIds], course)
+      ).not.toBeTruthy()
+    })
+  })
+
+  describe('canManageParticipantAttendance() cannot INDIRECT course type', () => {
+    it.each([
+      [RoleName.TT_ADMIN],
+      [RoleName.TT_OPS],
+      [RoleName.SALES_ADMIN],
+      [RoleName.ORGANIZATION_KEY_CONTACT],
+      [RoleName.USER],
+    ])(`should return true when activeRole is %s`, activeRole => {
+      // Arrange
+      const managedOrgIds = '123'
+      const profile = buildProfile()
+
+      const acl = getACLStub({
+        allowedRoles: new Set([
+          RoleName.TT_ADMIN,
+          RoleName.TT_OPS,
+          RoleName.SALES_ADMIN,
+          RoleName.ORGANIZATION_KEY_CONTACT,
+          RoleName.USER,
+        ]),
+        profile,
+        activeRole: activeRole,
+        isOrgAdmin: true,
+        managedOrgIds: [managedOrgIds],
+      })
+
+      const course = buildCourse({
+        overrides: {
+          accreditedBy: Accreditors_Enum.Icm,
+          type: CourseType.INDIRECT,
+          organizationKeyContact: profile,
+        },
+      })
+
+      // Act & Assert
+      expect(
+        acl.canManageParticipantAttendance([managedOrgIds], course)
+      ).toBeTruthy()
+    })
+  })
+
+  describe('canManageParticipantAttendance() cannot, CLOSED course type', () => {
+    it.each([
+      [RoleName.LD],
+      [RoleName.TRAINER],
+      [RoleName.FINANCE],
+      [RoleName.USER],
+    ])(`should return true when activeRole is %s`, activeRole => {
+      // Arrange
+      const course = buildCourse({
+        overrides: {
+          accreditedBy: Accreditors_Enum.Icm,
+          type: CourseType.CLOSED,
+        },
+      })
+      const managedOrgIds = '123'
+      const acl = getACLStub({
+        activeRole: activeRole,
+        isOrgAdmin: false,
+        managedOrgIds: [managedOrgIds],
+      })
+
+      // Act & Assert
+      expect(
+        acl.canManageParticipantAttendance([managedOrgIds], course)
+      ).not.toBeTruthy()
     })
   })
 

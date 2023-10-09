@@ -14,10 +14,10 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import {
-  ConfirmDialog,
   CancelAttendeeDialog,
-  ReplaceParticipantDialog,
+  ConfirmDialog,
   Mode,
+  ReplaceParticipantDialog,
 } from '@app/components/dialogs'
 import { LinkToProfile } from '@app/components/LinkToProfile'
 import { ManageAttendanceMenu } from '@app/components/ManageAttendanceMenu'
@@ -35,18 +35,18 @@ import {
 import { Matcher } from '@app/queries/participants/get-course-participants'
 import {
   BlendedLearningStatus,
+  Course,
   CourseParticipant,
   CourseType,
   SortOrder,
-  Course,
 } from '@app/types'
 import {
   courseEnded,
   DEFAULT_PAGINATION_LIMIT,
   DEFAULT_PAGINATION_ROW_OPTIONS,
+  getParticipantOrgIds,
   LoadingStatus,
 } from '@app/util'
-import { getParticipantOrgIds } from '@app/util'
 
 type TabProperties = {
   course: Course
@@ -369,11 +369,12 @@ export const AttendingTab = ({
             <CancelAttendeeDialog
               variant={
                 [
-                  acl.isOrgAdmin(course.organization?.id),
-                  acl.isCourseLeader(course),
                   acl.isBookingContact(),
+                  acl.isCourseLeader(course),
+                  acl.isOrgAdmin(course.organization?.id),
                   acl.isOrgKeyContact(),
-                ].some(Boolean)
+                ].some(Boolean) ||
+                [CourseType.CLOSED, CourseType.INDIRECT].includes(course.type)
                   ? 'minimal'
                   : 'complete'
               }

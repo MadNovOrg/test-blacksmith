@@ -444,36 +444,61 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ])(),
 
     canTransferParticipant: (participantOrgIds: string[], _course: Course) => {
-      return (
-        anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])() ||
-        (![CourseType.INDIRECT, CourseType.CLOSED].includes(_course.type) &&
-          acl.isOrgAdminOf(participantOrgIds))
-      )
+      return anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        () => acl.isOrgAdminOf(participantOrgIds),
+      ])()
     },
 
     canReplaceParticipant: (participantOrgIds: string[], course: Course) => {
-      return (
-        anyPass([
-          acl.isTTAdmin,
-          acl.isTTOps,
-          acl.isSalesAdmin,
-          acl.isSalesRepresentative,
-        ])() ||
-        (course.accreditedBy === Accreditors_Enum.Icm &&
-          ![CourseType.INDIRECT, CourseType.CLOSED].includes(course.type) &&
-          acl.isOrgAdminOf(participantOrgIds))
-      )
+      return anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        () =>
+          course.accreditedBy === Accreditors_Enum.Icm &&
+          acl.isOrgAdminOf(participantOrgIds),
+      ])()
     },
 
     canCancelParticipant: (participantOrgIds: string[], _course: Course) => {
       return (
         anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])() ||
-        acl.isOrgAdminOf(participantOrgIds) ||
-        ([CourseType.INDIRECT].includes(_course.type) &&
-          (acl.isCourseLeader(_course) ||
-            acl.isOrganizationKeyContactOfCourse(_course))) ||
-        ([CourseType.CLOSED].includes(_course.type) && acl.isBookingContact())
+        acl.isOrgAdminOf(participantOrgIds)
       )
+    },
+
+    canCancelParticipantINDIRECT: (
+      participantOrgIds: string[],
+      course: Course
+    ) => {
+      return anyPass([
+        () => acl.isCourseLeader(course),
+        () => acl.isOrgAdminOf(participantOrgIds),
+        () => acl.isOrganizationKeyContactOfCourse(course),
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isTTAdmin,
+        acl.isTTOps,
+      ])()
+    },
+
+    canCancelParticipantCLOSED: (
+      participantOrgIds: string[],
+      course: Course
+    ) => {
+      return anyPass([
+        () => acl.isCourseLeader(course),
+        () => acl.isOrgAdminOf(participantOrgIds),
+        acl.isBookingContact,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isTTAdmin,
+        acl.isTTOps,
+      ])()
     },
 
     canSendCourseInformation: (_participantOrgIds: string[], _course: Course) =>
@@ -482,22 +507,59 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.isTTOps,
         acl.isSalesAdmin,
         acl.isTrainer,
-      ])() ||
-      acl.isOrgAdminOf(_participantOrgIds) ||
-      ([CourseType.CLOSED].includes(_course.type) && acl.isBookingContact()) ||
-      ([CourseType.INDIRECT].includes(_course.type) &&
-        acl.isOrganizationKeyContactOfCourse(_course)),
+      ])() || acl.isOrgAdminOf(_participantOrgIds),
+
+    canSendCourseInformationINDIRECT: (
+      participantOrgIds: string[],
+      course: Course
+    ) => {
+      return anyPass([
+        () => acl.isCourseLeader(course),
+        () => acl.isOrgAdminOf(participantOrgIds),
+        () => acl.isOrganizationKeyContactOfCourse(course),
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isTTAdmin,
+        acl.isTTOps,
+      ])()
+    },
+
+    canSendCourseInformationCLOSED: (
+      participantOrgIds: string[],
+      course: Course
+    ) => {
+      return anyPass([
+        () => acl.isCourseLeader(course),
+        () => acl.isOrgAdminOf(participantOrgIds),
+        acl.isBookingContact,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isTTAdmin,
+        acl.isTTOps,
+      ])()
+    },
 
     canManageParticipantAttendance: (
       participantOrgIds: string[],
       course: Course
     ) =>
-      [
-        acl.canTransferParticipant(participantOrgIds, course),
-        acl.canReplaceParticipant(participantOrgIds, course),
-        acl.canCancelParticipant(participantOrgIds, course),
-        acl.canSendCourseInformation(participantOrgIds, course),
-      ].some(Boolean),
+      (course.type === CourseType.CLOSED
+        ? [
+            acl.canCancelParticipantCLOSED(participantOrgIds, course),
+            acl.canSendCourseInformationCLOSED(participantOrgIds, course),
+          ]
+        : course.type === CourseType.INDIRECT
+        ? [
+            acl.canCancelParticipantINDIRECT(participantOrgIds, course),
+            acl.canSendCourseInformationINDIRECT(participantOrgIds, course),
+          ]
+        : [
+            acl.canTransferParticipant(participantOrgIds, course),
+            acl.canReplaceParticipant(participantOrgIds, course),
+            acl.canCancelParticipant(participantOrgIds, course),
+            acl.canSendCourseInformation(participantOrgIds, course),
+          ]
+      ).some(Boolean),
 
     canOnlySendCourseInformation: (
       participantOrgIds: string[],

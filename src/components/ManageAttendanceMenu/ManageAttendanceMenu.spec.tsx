@@ -1,7 +1,9 @@
-import { Accreditors_Enum } from '@app/generated/graphql'
-import { CourseParticipant, RoleName } from '@app/types'
+import { useTranslation } from 'react-i18next'
 
-import { chance, render, screen, userEvent } from '@test/index'
+import { Accreditors_Enum } from '@app/generated/graphql'
+import { CourseParticipant, CourseType, RoleName } from '@app/types'
+
+import { chance, render, renderHook, screen, userEvent } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { ManageAttendanceMenu } from './ManageAttendanceMenu'
@@ -15,7 +17,12 @@ describe(ManageAttendanceMenu.name, () => {
     },
   ]
 
-  it('displays correct options for an admin user', async () => {
+  const { result } = renderHook(() => useTranslation())
+  const {
+    current: { t },
+  } = result
+
+  it('displays correct options for an admin user, OPEN course type', async () => {
     const actionableItem = {
       id: chance.guid(),
       course: { accreditedBy: Accreditors_Enum.Icm },
@@ -23,7 +30,7 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse()
+    const course = buildCourse({ overrides: { type: CourseType.OPEN } })
 
     render(
       <ManageAttendanceMenu
@@ -41,15 +48,19 @@ describe(ManageAttendanceMenu.name, () => {
       }
     )
 
-    await userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
 
-    expect(screen.getByText(/cancel/i)).toBeInTheDocument()
-    expect(screen.getByText(/replace/i)).toBeInTheDocument()
-    expect(screen.getByText(/transfer/i)).toBeInTheDocument()
-    expect(screen.getByText(/resend course information/i)).toBeInTheDocument()
+    expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
+    expect(screen.getByText(t('common.replace'))).toBeInTheDocument()
+    expect(screen.getByText(t('common.transfer'))).toBeInTheDocument()
+    expect(
+      screen.getByText(t('common.resend-course-information'))
+    ).toBeInTheDocument()
   })
 
-  it('renders correct options for an ops user', async () => {
+  it('displays correct options for an admin user, CLOSED course type', async () => {
     const actionableItem = {
       id: chance.guid(),
       course: { accreditedBy: Accreditors_Enum.Icm },
@@ -57,7 +68,83 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse()
+    const course = buildCourse({ overrides: { type: CourseType.CLOSED } })
+
+    render(
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      }
+    )
+
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
+
+    expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
+    expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
+    expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
+    expect(
+      screen.getByText(t('common.resend-course-information'))
+    ).toBeInTheDocument()
+  })
+
+  it('displays correct options for an admin user, INDIRECT course type', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse({ overrides: { type: CourseType.CLOSED } })
+
+    render(
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      }
+    )
+
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
+
+    expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
+    expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
+    expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
+    expect(
+      screen.getByText(t('common.resend-course-information'))
+    ).toBeInTheDocument()
+  })
+
+  it('renders correct options for an ops user, OPEN course type', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse({ overrides: { type: CourseType.OPEN } })
 
     render(
       <ManageAttendanceMenu
@@ -75,15 +162,19 @@ describe(ManageAttendanceMenu.name, () => {
       }
     )
 
-    await userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
 
-    expect(screen.getByText(/cancel/i)).toBeInTheDocument()
-    expect(screen.getByText(/replace/i)).toBeInTheDocument()
-    expect(screen.getByText(/transfer/i)).toBeInTheDocument()
-    expect(screen.getByText(/resend course information/i)).toBeInTheDocument()
+    expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
+    expect(screen.getByText(t('common.replace'))).toBeInTheDocument()
+    expect(screen.getByText(t('common.transfer'))).toBeInTheDocument()
+    expect(
+      screen.getByText(t('common.resend-course-information'))
+    ).toBeInTheDocument()
   })
 
-  it('renders correct options for a sales admin user', async () => {
+  it('renders correct options for an ops user, CLOSED course type', async () => {
     const actionableItem = {
       id: chance.guid(),
       course: { accreditedBy: Accreditors_Enum.Icm },
@@ -91,7 +182,83 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse()
+    const course = buildCourse({ overrides: { type: CourseType.CLOSED } })
+
+    render(
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.TT_OPS,
+        },
+      }
+    )
+
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
+
+    expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
+    expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
+    expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
+    expect(
+      screen.getByText(t('common.resend-course-information'))
+    ).toBeInTheDocument()
+  })
+
+  it('renders correct options for an ops user, INDIRECT course type', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse({ overrides: { type: CourseType.INDIRECT } })
+
+    render(
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.TT_OPS,
+        },
+      }
+    )
+
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
+
+    expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
+    expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
+    expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
+    expect(
+      screen.getByText(t('common.resend-course-information'))
+    ).toBeInTheDocument()
+  })
+
+  it('renders correct options for a sales admin user, OPEN course type', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse({ overrides: { type: CourseType.OPEN } })
 
     render(
       <ManageAttendanceMenu
@@ -109,15 +276,19 @@ describe(ManageAttendanceMenu.name, () => {
       }
     )
 
-    await userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
 
-    expect(screen.getByText(/cancel/i)).toBeInTheDocument()
-    expect(screen.getByText(/replace/i)).toBeInTheDocument()
-    expect(screen.getByText(/transfer/i)).toBeInTheDocument()
-    expect(screen.getByText(/resend course information/i)).toBeInTheDocument()
+    expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
+    expect(screen.getByText(t('common.replace'))).toBeInTheDocument()
+    expect(screen.getByText(t('common.transfer'))).toBeInTheDocument()
+    expect(
+      screen.getByText(t('common.resend-course-information'))
+    ).toBeInTheDocument()
   })
 
-  it('renders correct options for a sales representative user', async () => {
+  it('renders correct options for a sales admin user, CLOSED course type', async () => {
     const actionableItem = {
       id: chance.guid(),
       course: { accreditedBy: Accreditors_Enum.Icm },
@@ -125,7 +296,83 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse()
+    const course = buildCourse({ overrides: { type: CourseType.CLOSED } })
+
+    render(
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.SALES_ADMIN,
+        },
+      }
+    )
+
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
+
+    expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
+    expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
+    expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
+    expect(
+      screen.getByText(t('common.resend-course-information'))
+    ).toBeInTheDocument()
+  })
+
+  it('renders correct options for a sales admin user, INDIRECT course type', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse({ overrides: { type: CourseType.INDIRECT } })
+
+    render(
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.SALES_ADMIN,
+        },
+      }
+    )
+
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
+
+    expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
+    expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
+    expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
+    expect(
+      screen.getByText(t('common.resend-course-information'))
+    ).toBeInTheDocument()
+  })
+
+  it('renders correct options for a sales representative user, OPEN course type', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse({ overrides: { type: CourseType.OPEN } })
 
     render(
       <ManageAttendanceMenu
@@ -143,14 +390,54 @@ describe(ManageAttendanceMenu.name, () => {
       }
     )
 
-    await userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
 
-    expect(screen.queryByText(/cancel/i)).not.toBeInTheDocument()
-    expect(screen.getByText(/replace/i)).toBeInTheDocument()
-    expect(screen.queryByText(/transfer/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(t('common.cancel'))).not.toBeInTheDocument()
+    expect(screen.getByText(t('common.replace'))).toBeInTheDocument()
+    expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
     expect(
-      screen.queryByText(/resend course information/i)
+      screen.queryByText(t('common.resend-course-information'))
     ).not.toBeInTheDocument()
+  })
+
+  it('renders correct options for a sales representative user, CLOSED course type', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Icm },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse({ overrides: { type: CourseType.CLOSED } })
+
+    render(
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.SALES_REPRESENTATIVE,
+        },
+      }
+    )
+
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
+
+    expect(screen.queryByText(t('common.cancel'))).toBeInTheDocument()
+    expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
+    expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(t('common.resend-course-information'))
+    ).toBeInTheDocument()
   })
 
   it('displays correct options for a trainer user', async () => {
@@ -161,7 +448,7 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse()
+    const course = buildCourse({ overrides: { type: CourseType.OPEN } })
 
     render(
       <ManageAttendanceMenu
@@ -179,8 +466,12 @@ describe(ManageAttendanceMenu.name, () => {
       }
     )
 
-    await userEvent.click(screen.getByText(/manage attendance/i))
-    expect(screen.getByText(/resend course information/i)).toBeInTheDocument()
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
+    expect(
+      screen.getByText(t('common.resend-course-information'))
+    ).toBeInTheDocument()
   })
 
   it('renders correct options for an org admin user', async () => {
@@ -211,12 +502,16 @@ describe(ManageAttendanceMenu.name, () => {
       }
     )
 
-    await userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
 
-    expect(screen.getByText(/cancel/i)).toBeInTheDocument()
-    expect(screen.queryByText(/replace/i)).not.toBeInTheDocument()
-    expect(screen.queryByText(/transfer/i)).not.toBeInTheDocument()
-    expect(screen.queryByText(/resend course information/i)).toBeInTheDocument()
+    expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
+    expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
+    expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(t('common.resend-course-information'))
+    ).toBeInTheDocument()
   })
 
   it('does not render correct options for an org admin of another org', async () => {
@@ -247,7 +542,9 @@ describe(ManageAttendanceMenu.name, () => {
       }
     )
 
-    expect(screen.queryByText(/manage attendance/i)).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(t('pages.course-participants.manage-attendance'))
+    ).not.toBeInTheDocument()
   })
 
   it('renders correct options for an org admin user for BILD course', async () => {
@@ -278,12 +575,16 @@ describe(ManageAttendanceMenu.name, () => {
       }
     )
 
-    await userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
 
-    expect(screen.getByText(/cancel/i)).toBeInTheDocument()
-    expect(screen.queryByText(/replace/i)).not.toBeInTheDocument()
-    expect(screen.queryByText(/transfer/i)).not.toBeInTheDocument()
-    expect(screen.queryByText(/resend course information/i)).toBeInTheDocument()
+    expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
+    expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
+    expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(t('common.resend-course-information'))
+    ).toBeInTheDocument()
   })
 
   it('calls correct callbacks when clicked on an option', async () => {
@@ -294,7 +595,7 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse()
+    const course = buildCourse({ overrides: { type: CourseType.OPEN } })
     const onRemoveMock = vi.fn()
     const onReplaceMock = vi.fn()
     const onTransferMock = vi.fn()
@@ -316,27 +617,37 @@ describe(ManageAttendanceMenu.name, () => {
       }
     )
 
-    await userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
 
-    await userEvent.click(screen.getByText(/cancel/i))
+    await userEvent.click(screen.getByText(t('common.cancel')))
     expect(onRemoveMock).toHaveBeenCalledTimes(1)
     expect(onRemoveMock).toHaveBeenCalledWith(actionableItem)
 
-    await userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
 
-    await userEvent.click(screen.getByText(/replace/i))
+    await userEvent.click(screen.getByText(t('common.replace')))
     expect(onReplaceMock).toHaveBeenCalledTimes(1)
     expect(onReplaceMock).toHaveBeenCalledWith(actionableItem)
 
-    await userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
 
-    await userEvent.click(screen.getByText(/transfer/i))
+    await userEvent.click(screen.getByText(t('common.transfer')))
     expect(onTransferMock).toHaveBeenCalledTimes(1)
     expect(onTransferMock).toHaveBeenCalledWith(actionableItem)
 
-    await userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(
+      screen.getByText(t('pages.course-participants.manage-attendance'))
+    )
 
-    await userEvent.click(screen.getByText(/resend course information/i))
+    await userEvent.click(
+      screen.getByText(t('common.resend-course-information'))
+    )
     expect(onResendCourseInformationMock).toHaveBeenCalledTimes(1)
     expect(onResendCourseInformationMock).toHaveBeenCalledWith(actionableItem)
   })
@@ -370,6 +681,8 @@ describe(ManageAttendanceMenu.name, () => {
       }
     )
 
-    expect(screen.queryByText(/manage attendance/i)).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(t('pages.course-participants.manage-attendance'))
+    ).not.toBeInTheDocument()
   })
 })

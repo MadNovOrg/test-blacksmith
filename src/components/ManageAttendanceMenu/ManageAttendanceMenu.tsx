@@ -2,12 +2,14 @@ import MoveDownIcon from '@mui/icons-material/MoveDown'
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
 import SendIcon from '@mui/icons-material/Send'
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz'
+import { matches } from 'lodash'
+import { cond, constant, stubTrue } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ActionsMenu, Action } from '@app/components/ActionsMenu'
 import { useAuth } from '@app/context/auth'
-import { Course, CourseParticipant, Profile } from '@app/types'
+import { Course, CourseParticipant, CourseType, Profile } from '@app/types'
 import { getParticipantOrgIds } from '@app/util'
 
 enum CourseAction {
@@ -80,25 +82,67 @@ export const ManageAttendanceMenu = <
     ]
   )
 
-  const actionPermissions: Record<CourseAction, boolean> = useMemo(
-    () => ({
-      [CourseAction.Replace]: acl.canReplaceParticipant(
-        participantOrgIds,
-        course
-      ),
-      [CourseAction.Transfer]: acl.canTransferParticipant(
-        participantOrgIds,
-        course
-      ),
-      [CourseAction.Cancel]: acl.canCancelParticipant(
-        participantOrgIds,
-        course
-      ),
-      [CourseAction.SendInformation]: acl.canSendCourseInformation(
-        participantOrgIds,
-        course
-      ),
-    }),
+  const actionPermissions = useMemo(
+    () =>
+      cond([
+        [
+          matches({
+            courseType: CourseType.CLOSED,
+            action: CourseAction.Cancel,
+          }),
+          constant(acl.canCancelParticipantCLOSED(participantOrgIds, course)),
+        ],
+        [
+          matches({
+            courseType: CourseType.CLOSED,
+            action: CourseAction.SendInformation,
+          }),
+          constant(acl.canCancelParticipantCLOSED(participantOrgIds, course)),
+        ],
+        [
+          matches({
+            courseType: CourseType.INDIRECT,
+            action: CourseAction.Cancel,
+          }),
+          constant(acl.canCancelParticipantINDIRECT(participantOrgIds, course)),
+        ],
+        [
+          matches({
+            courseType: CourseType.INDIRECT,
+            action: CourseAction.SendInformation,
+          }),
+          constant(acl.canCancelParticipantINDIRECT(participantOrgIds, course)),
+        ],
+        [
+          matches({
+            courseType: CourseType.OPEN,
+            action: CourseAction.Cancel,
+          }),
+          constant(acl.canCancelParticipant(participantOrgIds, course)),
+        ],
+        [
+          matches({
+            courseType: CourseType.OPEN,
+            action: CourseAction.Replace,
+          }),
+          constant(acl.canReplaceParticipant(participantOrgIds, course)),
+        ],
+        [
+          matches({
+            courseType: CourseType.OPEN,
+            action: CourseAction.SendInformation,
+          }),
+          constant(acl.canSendCourseInformation(participantOrgIds, course)),
+        ],
+        [
+          matches({
+            courseType: CourseType.OPEN,
+            action: CourseAction.Transfer,
+          }),
+          constant(acl.canSendCourseInformation(participantOrgIds, course)),
+        ],
+        [stubTrue, constant(false)],
+      ]),
     [acl, course, participantOrgIds]
   )
 
@@ -106,10 +150,17 @@ export const ManageAttendanceMenu = <
     return Object.entries(actions)
       .map(([key, action]) =>
         // TODO RMX | Types
-        actionPermissions[key as unknown as CourseAction] ? action : null
+        {
+          return actionPermissions({
+            courseType: course.type,
+            action: Number(key),
+          })
+            ? action
+            : null
+        }
       )
       .filter(Boolean)
-  }, [actionPermissions, actions])
+  }, [actionPermissions, actions, course.type])
 
   return allowedActions.length ? (
     <ActionsMenu
