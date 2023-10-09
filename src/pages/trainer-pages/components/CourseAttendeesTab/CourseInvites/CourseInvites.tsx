@@ -243,8 +243,19 @@ export const CourseInvites = ({
       XLSX.utils.book_append_sheet(wb, ws, 'Attendees')
 
       const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
+      
+      const [currentDate, currentTime] = formatDateTime(
+        new Date().toISOString()
+      ).split(',')
 
-      saveAs(new Blob([buffer]), 'attendees.xlsx')
+      const fileNameDate = currentDate.replaceAll('/', '.')
+
+      saveAs(
+        new Blob([buffer]),
+        `Blended Learning Progress Report ${fileNameDate.concat(
+          currentTime
+        )}.xlsx`
+      )
     }
   }, [data, reexecuteQuery, t])
 
