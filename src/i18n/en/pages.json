@@ -270,6 +270,7 @@
     "CLOSED-course-title": "Closed course creation",
     "INDIRECT-course-title": "Course creation",
     "step-of": "{{completed}} of {{total}}",
+    "back-all-courses-button-text": "Back to all courses",
     "back-button-text": "All courses",
     "step-navigation-course-details": "Course details",
     "step-navigation-order-details": "Order details",
