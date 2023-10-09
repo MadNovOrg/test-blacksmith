@@ -269,14 +269,20 @@ export const AttendingTab = ({
                         </LinkToProfile>
                       </TableCell>
                       <TableCell>
-                        {courseParticipant.profile.organizations.map(org => (
-                          <Link
-                            href={`/organisations/${org.organization.id}`}
-                            key={org.organization.id}
-                          >
-                            <Typography>{org.organization.name}</Typography>
-                          </Link>
-                        ))}
+                        {courseParticipant.profile.organizations.map(org =>
+                          acl.canViewOrganizations() ? (
+                            <Link
+                              href={`/organisations/${org.organization.id}`}
+                              key={org.organization.id}
+                            >
+                              <Typography>{org.organization.name}</Typography>
+                            </Link>
+                          ) : (
+                            <Typography key={org.organization.id}>
+                              {org.organization.name}
+                            </Typography>
+                          )
+                        )}
                       </TableCell>
                       {isBlendedCourse && (
                         <TableCell>

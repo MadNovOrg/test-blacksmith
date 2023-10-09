@@ -80,6 +80,45 @@ insert_permissions:
         - number
         - profile_id
 select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - certification_date
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - is_revoked
+        - legacy_course_code
+        - number
+        - profile_id
+        - updated_at
+      computed_fields:
+        - status
+      filter:
+        _and:
+          - _or:
+              - profile_id:
+                  _eq: X-Hasura-User-Id
+              - profile:
+                  organizations:
+                    organization:
+                      members:
+                        _and:
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+                          - is_admin:
+                              _eq: true
+              - profile:
+                  courses:
+                    course:
+                      booking_contact_profile_id:
+                        _eq: X-Hasura-User-Id
+          - is_revoked:
+              _eq: false
+      allow_aggregations: true
   - role: finance
     permission:
       columns:
@@ -98,6 +137,45 @@ select_permissions:
       computed_fields:
         - status
       filter: {}
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - certification_date
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - is_revoked
+        - legacy_course_code
+        - number
+        - profile_id
+        - updated_at
+      computed_fields:
+        - status
+      filter:
+        _and:
+          - _or:
+              - profile_id:
+                  _eq: X-Hasura-User-Id
+              - profile:
+                  organizations:
+                    organization:
+                      members:
+                        _and:
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+                          - is_admin:
+                              _eq: true
+              - profile:
+                  courses:
+                    course:
+                      organization_key_contact_profile_id:
+                        _eq: X-Hasura-User-Id
+          - is_revoked:
+              _eq: false
       allow_aggregations: true
   - role: sales-admin
     permission:

@@ -122,6 +122,16 @@ export const ViewProfilePage: React.FC<
     c => !c.participant || c.participant.grade !== Grade_Enum.Fail
   )
 
+  const trainerViewProfile = isMyProfile
+    ? false
+    : activeRole
+    ? [
+        RoleName.BOOKING_CONTACT,
+        RoleName.ORGANIZATION_KEY_CONTACT,
+        RoleName.TRAINER,
+      ].includes(activeRole)
+    : true
+
   return (
     <Box bgcolor="grey.100" pb={6} pt={3} flex={1}>
       <Container>
@@ -307,7 +317,7 @@ export const ViewProfilePage: React.FC<
                         value={profile.email}
                       />
 
-                      {activeRole !== RoleName.TRAINER ? (
+                      {!trainerViewProfile ? (
                         <>
                           <DetailsRow
                             data-testid="profile-phone"
@@ -402,7 +412,7 @@ export const ViewProfilePage: React.FC<
             ) : null}
             {(!isMobile ||
               selectedTab === TableMenuSelections.COURSE_ATTENDEE) &&
-            activeRole !== RoleName.TRAINER ? (
+            !trainerViewProfile ? (
               <>
                 <Typography variant="subtitle2" mb={1} mt={3}>
                   {t('course-as-attendee')}

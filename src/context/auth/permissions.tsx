@@ -172,7 +172,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ])(),
 
     canViewProfiles: () =>
-      anyPass([acl.isInternalUser, acl.isTrainer, acl.isOrgAdmin])(),
+      anyPass([
+        acl.isBookingContact,
+        acl.isInternalUser,
+        acl.isOrgAdmin,
+        acl.isOrgKeyContact,
+        acl.isTrainer,
+      ])(),
 
     canEditProfiles: () =>
       anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])(),
