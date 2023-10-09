@@ -1,8 +1,10 @@
 import { Route, Routes } from 'react-router-dom'
 import useSWR from 'swr'
 
+import { Course_Status_Enum } from '@app/generated/graphql'
+
 import { render, screen, userEvent } from '@test/index'
-import { buildProfile } from '@test/mock-data-utils'
+import { buildProfile, buildCourse } from '@test/mock-data-utils'
 
 import { EvaluationSummaryTab } from './EvaluationSummaryTab'
 
@@ -29,13 +31,22 @@ const trainers = [
   { id: '2', type: 'ASSISTANT', profile: buildProfile() },
 ]
 
+const course = buildCourse({
+  overrides: {
+    status: Course_Status_Enum.GradeMissing,
+  },
+})
+
 describe('component: EvaluationSummaryTab', () => {
   it('displays a spinner while data is loading', () => {
     useSWRMock.mockReturnValue(baseSWRMockData)
 
     render(
       <Routes>
-        <Route path="/courses/:id/details" element={<EvaluationSummaryTab />} />
+        <Route
+          path="/courses/:id/details"
+          element={<EvaluationSummaryTab course={course} />}
+        />
       </Routes>,
       {},
       { initialEntries: ['/courses/1/details'] }
@@ -44,63 +55,14 @@ describe('component: EvaluationSummaryTab', () => {
     expect(screen.queryByTestId('evaluations-fetching')).toBeInTheDocument()
   })
 
-  describe("doesn't display an alert message for any trainer to submit the course evaluation if any attendee hasn't submitted their evaluation", () => {
-    const evaluations = [
-      { id: '1', profile: attendees[0].profile },
-      { id: '2', profile: attendees[1].profile },
-    ]
-
-    it('lead trainer', () => {
-      useSWRMock.mockReturnValue({
-        ...baseSWRMockData,
-        data: { evaluations, attendees, trainers },
-      })
-
-      render(
-        <Routes>
-          <Route
-            path="/courses/:id/details"
-            element={<EvaluationSummaryTab />}
-          />
-        </Routes>,
-        { auth: { profile: { id: trainers[0].profile.id } } },
-        { initialEntries: ['/courses/1/details'] }
-      )
-      expect(
-        screen.queryByText('Complete my evaluation')
-      ).not.toBeInTheDocument()
-    })
-
-    it('assistant trainer', () => {
-      useSWRMock.mockReturnValue({
-        ...baseSWRMockData,
-        data: { evaluations, attendees, trainers },
-      })
-
-      render(
-        <Routes>
-          <Route
-            path="/courses/:id/details"
-            element={<EvaluationSummaryTab />}
-          />
-        </Routes>,
-        { auth: { profile: { id: trainers[1].profile.id } } },
-        { initialEntries: ['/courses/1/details'] }
-      )
-      expect(
-        screen.queryByText('Complete my evaluation')
-      ).not.toBeInTheDocument()
-    })
-  })
-
-  describe("doesn't display an alert message for the leader trainer to submit the course evaluation if any assistant trainer hasn't submitted their evaluation", () => {
+  describe(`doesn't display an alert message if course status is different from ${Course_Status_Enum.GradeMissing} or ${Course_Status_Enum.EvaluationMissing}`, () => {
     const evaluations = [
       { id: '1', profile: attendees[0].profile },
       { id: '2', profile: attendees[1].profile },
       { id: '3', profile: attendees[2].profile },
     ]
 
-    it('lead trainer', () => {
+    it(`lead trainer and course status is ${Course_Status_Enum.Scheduled}`, () => {
       useSWRMock.mockReturnValue({
         ...baseSWRMockData,
         data: { evaluations, attendees, trainers },
@@ -110,7 +72,7 @@ describe('component: EvaluationSummaryTab', () => {
         <Routes>
           <Route
             path="/courses/:id/details"
-            element={<EvaluationSummaryTab />}
+            element={<EvaluationSummaryTab course={buildCourse({})} />}
           />
         </Routes>,
         { auth: { profile: { id: trainers[0].profile.id } } },
@@ -120,28 +82,9 @@ describe('component: EvaluationSummaryTab', () => {
         screen.queryByText('Complete my evaluation')
       ).not.toBeInTheDocument()
     })
-
-    it('assistant trainer', () => {
-      useSWRMock.mockReturnValue({
-        ...baseSWRMockData,
-        data: { evaluations, attendees, trainers },
-      })
-
-      render(
-        <Routes>
-          <Route
-            path="/courses/:id/details"
-            element={<EvaluationSummaryTab />}
-          />
-        </Routes>,
-        { auth: { profile: { id: trainers[1].profile.id } } },
-        { initialEntries: ['/courses/1/details'] }
-      )
-      expect(screen.queryByText('Complete my evaluation')).toBeInTheDocument()
-    })
   })
 
-  describe('displays an alert message for the leader trainer to submit the course evaluation if all attendees and assistant trainers have submitted their evaluations', () => {
+  describe(`displays an alert message for the leader trainer to submit the course evaluation if course is in status ${Course_Status_Enum.GradeMissing} or ${Course_Status_Enum.EvaluationMissing}`, () => {
     const evaluations = [
       { id: '1', profile: attendees[0].profile },
       { id: '2', profile: attendees[1].profile },
@@ -149,7 +92,7 @@ describe('component: EvaluationSummaryTab', () => {
       { id: '4', profile: trainers[1].profile },
     ]
 
-    it('leader trainer', () => {
+    it(`leader trainer and course status is ${Course_Status_Enum.GradeMissing}`, () => {
       useSWRMock.mockReturnValue({
         ...baseSWRMockData,
         data: { evaluations, attendees, trainers },
@@ -159,7 +102,32 @@ describe('component: EvaluationSummaryTab', () => {
         <Routes>
           <Route
             path="/courses/:id/details"
-            element={<EvaluationSummaryTab />}
+            element={<EvaluationSummaryTab course={course} />}
+          />
+        </Routes>,
+        { auth: { profile: { id: trainers[0].profile.id } } },
+        { initialEntries: ['/courses/1/details'] }
+      )
+      expect(screen.queryByText('Complete my evaluation')).toBeInTheDocument()
+    })
+
+    it(`leader trainer and course status is ${Course_Status_Enum.EvaluationMissing}`, () => {
+      useSWRMock.mockReturnValue({
+        ...baseSWRMockData,
+        data: { evaluations, attendees, trainers },
+      })
+
+      render(
+        <Routes>
+          <Route
+            path="/courses/:id/details"
+            element={
+              <EvaluationSummaryTab
+                course={buildCourse({
+                  overrides: { status: Course_Status_Enum.EvaluationMissing },
+                })}
+              />
+            }
           />
         </Routes>,
         { auth: { profile: { id: trainers[0].profile.id } } },
@@ -178,7 +146,7 @@ describe('component: EvaluationSummaryTab', () => {
         <Routes>
           <Route
             path="/courses/:id/details"
-            element={<EvaluationSummaryTab />}
+            element={<EvaluationSummaryTab course={course} />}
           />
         </Routes>,
         { auth: { profile: { id: trainers[1].profile.id } } },
@@ -209,7 +177,7 @@ describe('component: EvaluationSummaryTab', () => {
         <Routes>
           <Route
             path="/courses/:id/details"
-            element={<EvaluationSummaryTab />}
+            element={<EvaluationSummaryTab course={course} />}
           />
         </Routes>,
         { auth: { profile: { id: trainers[0].profile.id } } },
@@ -230,7 +198,7 @@ describe('component: EvaluationSummaryTab', () => {
         <Routes>
           <Route
             path="/courses/:id/details"
-            element={<EvaluationSummaryTab />}
+            element={<EvaluationSummaryTab course={course} />}
           />
         </Routes>,
         { auth: { profile: { id: trainers[1].profile.id } } },
@@ -261,7 +229,7 @@ describe('component: EvaluationSummaryTab', () => {
         <Routes>
           <Route
             path="/courses/:id/details"
-            element={<EvaluationSummaryTab />}
+            element={<EvaluationSummaryTab course={course} />}
           />
         </Routes>,
         { auth: { profile: { id: trainers[0].profile.id } } },
@@ -291,7 +259,7 @@ describe('component: EvaluationSummaryTab', () => {
         <Routes>
           <Route
             path="/courses/:id/details"
-            element={<EvaluationSummaryTab />}
+            element={<EvaluationSummaryTab course={course} />}
           />
         </Routes>,
         { auth: { profile: { id: trainers[1].profile.id } } },
@@ -327,7 +295,10 @@ describe('component: EvaluationSummaryTab', () => {
 
     render(
       <Routes>
-        <Route path="/courses/:id/details" element={<EvaluationSummaryTab />} />
+        <Route
+          path="/courses/:id/details"
+          element={<EvaluationSummaryTab course={course} />}
+        />
         <Route path="/evaluation/submit" element={<p>Evaluation submit</p>} />
       </Routes>,
       { auth: { profile: { id: trainers[0].profile.id } } },

@@ -360,7 +360,7 @@ export const CourseDetails = () => {
               ) : null}
 
               <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.EVALUATION}>
-                <EvaluationSummaryTab />
+                <EvaluationSummaryTab course={course} />
               </TabPanel>
 
               {course.certificateCount?.aggregate.count ? (

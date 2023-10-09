@@ -28,18 +28,22 @@ import { useAuth } from '@app/context/auth'
 import {
   GetEvaluationsQuery,
   GetEvaluationsQueryVariables,
+  Course_Status_Enum,
 } from '@app/generated/graphql'
 import { QUERY as GET_EVALUATION_QUERY } from '@app/queries/course-evaluation/get-evaluations'
-import { SortOrder } from '@app/types'
+import { SortOrder, Course } from '@app/types'
 import { noop } from '@app/util'
 
 import { EvaluationSummaryPDFDownloadLink } from './EvaluationSummaryPDFDownloadLink'
 
 type Evaluation = GetEvaluationsQuery['evaluations'][number]
+type EvaluationProps = {
+  course: Course
+}
 
 export const EvaluationSummaryTab: React.FC<
-  React.PropsWithChildren<unknown>
-> = () => {
+  React.PropsWithChildren<EvaluationProps>
+> = ({ course }: EvaluationProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -99,34 +103,6 @@ export const EvaluationSummaryTab: React.FC<
     [data]
   )
 
-  const didAllParticipantsSubmitEvaluation = useMemo(() => {
-    if (
-      !data?.evaluations ||
-      data?.evaluations?.length === 0 ||
-      data?.evaluations?.length < data?.attendees?.length
-    ) {
-      return false
-    }
-
-    return data?.attendees.reduce(
-      (res, a) => res && !!findEvaluationForProfileId(a.profile.id),
-      true
-    )
-  }, [findEvaluationForProfileId, data])
-
-  const didAllAssistTrainersSubmitEvaluation = useMemo(() => {
-    if (!data?.evaluations) {
-      return false
-    }
-
-    return data?.trainers
-      .filter(t => t.type === 'ASSISTANT')
-      .reduce(
-        (res, t) => res && !!findEvaluationForProfileId(t.profile.id),
-        true
-      )
-  }, [findEvaluationForProfileId, data])
-
   const didTrainerSubmitEvaluation = useMemo(
     () => !!findEvaluationForProfileId(profileId),
     [findEvaluationForProfileId, profileId]
@@ -142,13 +118,15 @@ export const EvaluationSummaryTab: React.FC<
     [data, profileId]
   )
 
+  const isCourseCanBeEvaluetaded = [
+    Course_Status_Enum.GradeMissing,
+    Course_Status_Enum.EvaluationMissing,
+  ].includes(course?.status)
+
   const canTrainerSubmitEvaluation =
+    isCourseCanBeEvaluetaded &&
     !didTrainerSubmitEvaluation &&
-    isCourseTrainer &&
-    (leadTrainer?.profile.id === profileId
-      ? didAllParticipantsSubmitEvaluation &&
-        didAllAssistTrainersSubmitEvaluation
-      : didAllParticipantsSubmitEvaluation)
+    (isCourseTrainer || leadTrainer?.profile.id === profileId)
 
   return (
     <Container disableGutters>
