@@ -1,6 +1,7 @@
 import { subYears } from 'date-fns'
 import { TFunction } from 'i18next'
 
+import { Organization } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
 import { requiredMsg } from '@app/util'
 
@@ -13,6 +14,7 @@ export type FormInputs = {
   tcs: boolean
   jobTitle: string
   otherJobTitle: string
+  organization?: Pick<Organization, 'name' | 'id'>
 }
 
 export const getFormSchema = (t: TFunction) => {
@@ -31,6 +33,11 @@ export const getFormSchema = (t: TFunction) => {
     tcs: yup.boolean().oneOf([true], t('pages.signup.tcs-required')),
 
     jobTitle: yup.string().required(requiredMsg(t, 'job-title')),
+    organization: yup.object<Pick<Organization, 'name' | 'id'>>().required(
+      t('validation-errors.required-field', {
+        name: t('components.org-selector.placeholder'),
+      })
+    ),
     otherJobTitle: yup.string().when('jobTitle', ([jobTitle], schema) => {
       return jobTitle === 'Other'
         ? schema.required(t('validation-errors.other-job-title-required'))

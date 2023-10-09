@@ -30,15 +30,16 @@ import {
   GetShallowOrganizationsQuery,
   GetShallowOrganizationsQueryVariables,
   InsertOrgLeadMutation,
+  Organization,
+  Dfe_Establishment,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { QUERY as FindEstablishment } from '@app/queries/dfe/find-establishment'
 import { QUERY as GetOrganizations } from '@app/queries/organization/get-organizations'
 import { QUERY as GetShallowOrganizations } from '@app/queries/organization/get-shallow-organizations'
-import { Establishment, Organization } from '@app/types'
 
 import { AddOrg } from './components/AddOrg'
-type OptionToAdd = Establishment | { name: string }
+type OptionToAdd = Dfe_Establishment | { name: string }
 type Option = Organization | OptionToAdd
 export type SuggestionOption = {
   name: string
@@ -46,7 +47,7 @@ export type SuggestionOption = {
 }
 export type CallbackOption =
   | Organization
-  | Establishment
+  | Dfe_Establishment
   | SuggestionOption
   | null
 export type OrgSelectorProps = {
@@ -112,7 +113,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
 
     useEffect(() => {
       if (showTrainerNonAOLOrgs) {
-        setOptions(() => myOrg as Organization[])
+        setOptions(() => myOrg as Option[])
         if (defaultOrg) onChange(defaultOrg)
         return
       }

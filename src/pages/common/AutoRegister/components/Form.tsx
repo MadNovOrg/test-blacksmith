@@ -17,21 +17,23 @@ import {
 } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { subYears } from 'date-fns'
-import { zonedTimeToUtc } from 'date-fns-tz'
-import React, { useMemo, useState } from 'react'
+import { subYears, format } from 'date-fns'
+import React, { useCallback, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
-import { useToggle } from 'react-use'
+import { useToggle, useUpdateEffect } from 'react-use'
+import { useMutation } from 'urql'
 
+import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
+import { isHubOrg } from '@app/components/OrgSelector/utils'
 import PhoneNumberInput from '@app/components/PhoneNumberInput'
-import { useJobTitles } from '@app/hooks/useJobTitles'
-import { gqlRequest } from '@app/lib/gql-request'
 import {
-  MUTATION as CREATE_USER_MUTATION,
-  ParamsType as CreateUserParamsType,
-  ResponseType as CreateUserResponseType,
-} from '@app/queries/invites/create-user'
+  CreateUserMutation,
+  CreateUserMutationVariables,
+  Organization,
+} from '@app/generated/graphql'
+import { useJobTitles } from '@app/hooks/useJobTitles'
+import { MUTATION as CREATE_USER_MUTATION } from '@app/queries/invites/create-user'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
 import { FormInputs, getFormSchema } from './types'
@@ -48,13 +50,15 @@ type Props = {
 }
 
 export const Form: React.FC<React.PropsWithChildren<Props>> = ({
-  onSuccess,
   token,
+  onSuccess,
 }) => {
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
-  const [loading, setLoading] = useState(false)
-  const [signUpError, setError] = useState('')
+  const [{ data: userData, error, fetching: loading }, createUser] =
+    useMutation<CreateUserMutation, CreateUserMutationVariables>(
+      CREATE_USER_MUTATION
+    )
 
   const schema = useMemo(() => getFormSchema(t), [t])
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
@@ -73,7 +77,6 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     resolver: yupResolver(schema),
     defaultValues: {
       phone: '',
-      dob: null,
     },
   })
 
@@ -81,84 +84,90 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const minimalAge = subYears(new Date(), 16)
 
   const onSubmit = async (data: FormInputs) => {
-    setLoading(true)
-    setError('')
-    try {
-      const input = {
-        firstName: data.firstName,
-        lastName: data.surname,
-        password: data.password,
-        phone: data.phone,
-        dob: data.dob ? zonedTimeToUtc(data.dob, 'GMT') : null,
-        acceptTnc: data.tcs,
-        jobTitle:
-          data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
-      }
-
-      await gqlRequest<CreateUserResponseType, CreateUserParamsType>(
-        CREATE_USER_MUTATION,
-        { input },
-        { headers: { 'x-auth': `Bearer ${token}` } }
-      )
-
-      onSuccess()
-    } catch (err) {
-      console.log(err)
-      const { code = 'UnknownError' } = err as Error & { code: string }
-      const errors = 'pages.signup.form-errors.'
-      setError(t(`${errors}${code}`) || t(`${errors}UnknownError`))
-      setLoading(false)
+    const input: CreateUserMutationVariables['input'] = {
+      firstName: data.firstName,
+      lastName: data.surname,
+      password: data.password,
+      phone: data.phone,
+      dob: data.dob ? format(data.dob, 'yyyy-MM-dd') : null,
+      orgId: data.organization?.id,
+      acceptTnc: data.tcs,
+      jobTitle: data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
     }
+    await createUser(
+      { input },
+      { fetchOptions: { headers: { 'x-auth': `Bearer ${token}` } } }
+    )
   }
 
+  const handleOrganizationSelection = useCallback(
+    (org: CallbackOption) => {
+      if (!org) {
+        setValue('organization', undefined, {
+          shouldValidate: true,
+        })
+        return
+      }
+      if (isHubOrg(org)) {
+        setValue('organization', org as Pick<Organization, 'id' | 'name'>, {
+          shouldValidate: true,
+        })
+        return
+      }
+    },
+    [setValue]
+  )
+  useUpdateEffect(() => {
+    if (userData?.createUser.email) onSuccess()
+  }, [onSuccess, userData?.createUser.email])
   return (
-    <>
-      <Box
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-        autoComplete="off"
-        aria-autocomplete="none"
-        mt={3}
-      >
-        <Typography variant="body1" mb={1} fontWeight="600">
-          {t('personal-details')}
-        </Typography>
-        <Grid container spacing={3} mb={3}>
-          <Grid item md={6} xs={12}>
-            <TextField
-              id="firstName"
-              label={t('first-name')}
-              variant="filled"
-              placeholder={t('first-name-placeholder')}
-              error={!!errors.firstName}
-              helperText={errors.firstName?.message}
-              {...register('firstName')}
-              inputProps={{ 'data-testid': 'input-first-name' }}
-              sx={{ bgcolor: 'grey.100' }}
-              autoFocus
-              fullWidth
-              required
-            />
-          </Grid>
-          <Grid item md={6} xs={12}>
-            <TextField
-              id="surname"
-              label={t('surname')}
-              variant="filled"
-              placeholder={t('surname-placeholder')}
-              error={!!errors.surname}
-              helperText={errors.surname?.message}
-              {...register('surname')}
-              inputProps={{ 'data-testid': 'input-surname' }}
-              sx={{ bgcolor: 'grey.100' }}
-              fullWidth
-              required
-            />
-          </Grid>
+    <Box
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      autoComplete="off"
+      aria-autocomplete="none"
+      mt={3}
+    >
+      <Typography variant="body1" mb={1} fontWeight="600">
+        {t('personal-details')}
+      </Typography>
+      <Grid container spacing={3} mb={3}>
+        <Grid item md={6} xs={12}>
+          <TextField
+            id="firstName"
+            label={t('first-name')}
+            variant="filled"
+            placeholder={t('first-name-placeholder')}
+            error={!!errors.firstName}
+            helperText={errors.firstName?.message}
+            {...register('firstName')}
+            inputProps={{ 'data-testid': 'input-first-name' }}
+            sx={{ bgcolor: 'grey.100' }}
+            autoFocus
+            fullWidth
+            required
+          />
         </Grid>
+        <Grid item md={6} xs={12}>
+          <TextField
+            id="surname"
+            label={t('surname')}
+            variant="filled"
+            placeholder={t('surname-placeholder')}
+            error={!!errors.surname}
+            helperText={errors.surname?.message}
+            {...register('surname')}
+            inputProps={{ 'data-testid': 'input-surname' }}
+            sx={{ bgcolor: 'grey.100' }}
+            fullWidth
+            required
+          />
+        </Grid>
+      </Grid>
 
-        <Box mb={3}>
+      <Grid flexDirection={'column'} container gap={3}>
+        <Grid item>
           <TextField
             id="signup-pass"
             variant="filled"
@@ -186,9 +195,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               ),
             }}
           />
-        </Box>
-
-        <Box mb={3}>
+        </Grid>
+        <Grid item>
           <PhoneNumberInput
             label={t('phone')}
             variant="filled"
@@ -203,9 +211,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             fullWidth
             required
           />
-        </Box>
-
-        <Box sx={{ mb: 3 }}>
+        </Grid>
+        <Grid>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Controller
               name="dob"
@@ -231,12 +238,26 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               )}
             />
           </LocalizationProvider>
-        </Box>
-
-        <Box>
+        </Grid>
+        <Grid item>
+          <OrgSelector
+            {...register('organization')}
+            showTrainerOrgOnly={false}
+            error={errors.organization?.message}
+            allowAdding
+            value={values.organization ?? undefined}
+            onChange={handleOrganizationSelection}
+            textFieldProps={{
+              variant: 'filled',
+            }}
+            isShallowRetrieval
+            required
+          />
+        </Grid>
+        <Grid item>
           <TextField
             select
-            value={values.jobTitle}
+            value={values.jobTitle ?? ''}
             {...register('jobTitle')}
             variant="filled"
             fullWidth
@@ -270,78 +291,72 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               />
             ) : null}
           </Box>
-        </Box>
+        </Grid>
+      </Grid>
 
-        <Box sx={{ my: 5 }}>
-          <Box sx={{ display: 'flex' }}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  {...register('tcs')}
-                  inputProps={{ 'aria-label': `T&Cs` }}
-                />
-              }
-              label={
-                <>
-                  <Typography variant="body2">
-                    <Trans i18nKey="pages.signup.tcs-label">
-                      I accept the
-                      <a
-                        href={`${origin}/policies-procedures/terms-of-use/`}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={`${t('terms-of-use')} (${t(
-                          'opens-new-window'
-                        )})`}
-                      >
-                        Terms of Use
-                      </a>
-                      and agree to Team Teach processing my personal data in
-                      accordance with our
-                      <a
-                        href={`${origin}/policies-procedures/privacy-policy/`}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={`${t('privacy-policy')} (${t(
-                          'opens-new-window'
-                        )})`}
-                      >
-                        Privacy Policy
-                      </a>
-                    </Trans>
-                  </Typography>
-                  {errors.tcs ? (
-                    <FormHelperText error>{errors.tcs.message}</FormHelperText>
-                  ) : null}
-                </>
-              }
-            />
-          </Box>
-        </Box>
-
-        <Box display="flex" flexDirection="column" alignItems="center">
-          <LoadingButton
-            loading={loading}
-            type="submit"
-            variant="contained"
-            color="primary"
-            data-testid="signup-form-btn"
-            size="large"
-          >
-            {t('pages.signup.submit-btn')}
-          </LoadingButton>
-
-          {signUpError ? (
-            <FormHelperText
-              sx={{ mt: 2 }}
-              error
-              data-testid="signup-form-error"
-            >
-              {signUpError}
-            </FormHelperText>
-          ) : null}
+      <Box sx={{ my: 5 }}>
+        <Box sx={{ display: 'flex' }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                {...register('tcs')}
+                inputProps={{ 'aria-label': `T&Cs` }}
+              />
+            }
+            label={
+              <>
+                <Typography variant="body2">
+                  <Trans i18nKey="pages.signup.tcs-label">
+                    I accept the
+                    <a
+                      href={`${origin}/terms-of-business/`}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${t('terms-of-business')} (${t(
+                        'opens-new-window'
+                      )})`}
+                    >
+                      Terms of Business
+                    </a>
+                    and agree to Team Teach processing my personal data in
+                    accordance with our
+                    <a
+                      href={`${origin}/privacy-policy`}
+                      aria-label={`${t('privacy-policy')} (${t(
+                        'opens-new-window'
+                      )})`}
+                    >
+                      Privacy Policy
+                    </a>
+                  </Trans>
+                </Typography>
+                {errors.tcs ? (
+                  <FormHelperText error>{errors.tcs.message}</FormHelperText>
+                ) : null}
+              </>
+            }
+          />
         </Box>
       </Box>
-    </>
+
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <LoadingButton
+          loading={loading}
+          type="submit"
+          variant="contained"
+          color="primary"
+          data-testid="signup-form-btn"
+          size="large"
+        >
+          {t('pages.signup.submit-btn')}
+        </LoadingButton>
+
+        {error ? (
+          <FormHelperText sx={{ mt: 2 }} error data-testid="signup-form-error">
+            {error.message ?? t(`pages.signup.form-errors.UnknownError`)}
+          </FormHelperText>
+        ) : null}
+      </Box>
+    </Box>
   )
 }
