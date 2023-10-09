@@ -19,7 +19,7 @@ import {
   TrainerCoursesQuery,
 } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
-import { AdminOnlyCourseStatus } from '@app/types'
+import { AdminOnlyCourseStatus, RoleName } from '@app/types'
 import { findCourseTrainer } from '@app/util'
 
 type Props = {
@@ -155,11 +155,12 @@ export function CourseTitle({
 }
 
 export function CourseTitleCell({ course }: { course: TableCourse }) {
-  const { profile, acl } = useAuth()
+  const { profile, acl, activeRole } = useAuth()
 
-  const courseTrainer = profile
-    ? findCourseTrainer(course?.trainers, profile.id)
-    : undefined
+  const courseTrainer =
+    profile && activeRole === RoleName.TRAINER
+      ? findCourseTrainer(course?.trainers, profile.id)
+      : undefined
 
   const titleLink =
     (course.isDraft || course.modulesAgg.aggregate?.count === 0) &&
