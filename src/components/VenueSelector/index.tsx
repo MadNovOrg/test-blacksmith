@@ -15,7 +15,7 @@ import {
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
 import { debounce } from 'lodash-es'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useMemo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/dialogs'
@@ -44,10 +44,15 @@ export type VenueSelectorProps = {
   textFieldProps?: TextFieldProps
 }
 
-function getOptionLabel(value: AutocompletePrediction | Venue) {
+function getOptionLabel(value: AutocompletePrediction | Venue | string) {
+  if (typeof value === 'string') {
+    return ''
+  }
+
   if ('place_id' in value) {
     return value.description
   }
+
   return `${value.name}, ${value.city}`
 }
 
@@ -179,6 +184,7 @@ export const VenueSelector: React.FC<
         libraries={['places', 'visualization']}
       >
         <Autocomplete
+          freeSolo={query?.length > 3 ? false : true}
           sx={sx}
           open={open}
           openOnFocus={true}
@@ -191,7 +197,9 @@ export const VenueSelector: React.FC<
             debouncedQuery.cancel()
           }}
           onInputChange={onInputChange}
-          onChange={handleSelection}
+          onChange={(_, option) => {
+            handleSelection(_, option as Venue | AutocompletePrediction)
+          }}
           isOptionEqualToValue={() => true}
           options={options}
           loading={loading}
