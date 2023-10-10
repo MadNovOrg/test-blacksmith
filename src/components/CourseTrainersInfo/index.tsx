@@ -77,7 +77,7 @@ const ListItemWrapper: React.FC<
 
   return (
     <>
-      <Box display="flex">
+      <Box display="flex" alignItems="center">
         {enableLinks ? (
           <Link href={`/profile/${courseTrainer.profile.id}`}>
             <ListItemTranslated
