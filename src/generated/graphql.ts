@@ -51102,7 +51102,7 @@ export type OrgMembersQueryVariables = Exact<{
   limit: Scalars['Int'];
   orgId: Scalars['uuid'];
   orderBy?: InputMaybe<Array<Organization_Member_Order_By> | Organization_Member_Order_By>;
-  whereProfileCertificates?: InputMaybe<Course_Certificate_Bool_Exp>;
+  whereProfile?: InputMaybe<Profile_Bool_Exp>;
 }>;
 
 

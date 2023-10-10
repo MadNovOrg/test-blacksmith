@@ -5,7 +5,6 @@ import {
   OrgMembersQuery,
   OrgMembersQueryVariables,
   Organization_Member_Order_By,
-  Course_Certificate_Bool_Exp,
 } from '@app/generated/graphql'
 import { Sorting } from '@app/hooks/useTableSort'
 import { CertificateStatus, SortOrder } from '@app/types'
@@ -19,15 +18,12 @@ export const MEMBERS_QUERY = gql`
     $orderBy: [organization_member_order_by!] = [
       { profile: { createdAt: desc } }
     ]
-    $whereProfileCertificates: course_certificate_bool_exp = {}
+    $whereProfile: profile_bool_exp = {}
   ) {
     members: organization_member(
       limit: $limit
       offset: $offset
-      where: {
-        organization_id: { _eq: $orgId }
-        profile: { certificates: $whereProfileCertificates }
-      }
+      where: { organization_id: { _eq: $orgId }, profile: $whereProfile }
       order_by: $orderBy
     ) {
       id
@@ -39,7 +35,14 @@ export const MEMBERS_QUERY = gql`
         go1Licenses {
           expireDate
         }
-        certificates(where: { status: { _neq: "EXPIRED" } }) {
+        certificates(
+          where: {
+            _and: [
+              { status: { _neq: "EXPIRED" } }
+              { participant: { grade: { _neq: FAIL } } }
+            ]
+          }
+        ) {
           id
           courseLevel
           status
@@ -80,21 +83,9 @@ export function useOrgMembers({
 }) {
   const orderBy = getOrderBy(sort)
 
-  const whereProfileCertificates = {
-    _and: [
-      certificateFilter?.length
-        ? { _and: [{ status: { _in: certificateFilter } }] }
-        : {},
-      {
-        participant: {
-          _or: [
-            { id: { _is_null: true } },
-            { grade: { _neq: 'FAIL' } },
-          ] as Course_Certificate_Bool_Exp[],
-        },
-      },
-    ],
-  }
+  const whereProfile = certificateFilter?.length
+    ? { certificates: { _and: [{ status: { _in: certificateFilter } }] } }
+    : {}
 
   const [{ data, fetching }, refetch] = useQuery<
     OrgMembersQuery,
@@ -107,7 +98,7 @@ export function useOrgMembers({
       offset: offset,
       orgId,
       orderBy,
-      whereProfileCertificates,
+      whereProfile,
     },
   })
 
