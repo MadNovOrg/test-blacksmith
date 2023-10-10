@@ -45,7 +45,7 @@ export const CreateCoursePage = () => {
             <Sticky top={20}>
               <Box mb={2}>
                 <BackButton
-                  label={t('pages.create-course.back-all-courses-button-text')}
+                  label={t('pages.create-course.back-to-all-courses-button')}
                   to="/courses"
                 />
               </Box>

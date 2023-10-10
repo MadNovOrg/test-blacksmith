@@ -696,7 +696,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               <Sticky top={20}>
                 <Box mb={2}>
                   <BackButton
-                    label={t('pages.create-course.back-button-text', {
+                    label={t('pages.edit-course.back-to-course-button', {
                       courseName: getCourseName(),
                     })}
                     to={'/courses/' + id + '/details'}

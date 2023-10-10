@@ -270,8 +270,7 @@
     "CLOSED-course-title": "Closed course creation",
     "INDIRECT-course-title": "Course creation",
     "step-of": "{{completed}} of {{total}}",
-    "back-all-courses-button-text": "Back to all courses",
-    "back-button-text": "All courses",
+    "back-to-all-courses-button": "Back to all courses",
     "step-navigation-course-details": "Course details",
     "step-navigation-order-details": "Order details",
     "step-navigation-assign-trainer": "Assign trainer(s)",
@@ -417,6 +416,7 @@
   "edit-course": {
     "title": "Edit course",
     "course-not-found": "There was an error loading the course",
+    "back-to-course-button": "Back to course {{courseName}}",
     "save-button-text": "Save changes",
     "reset-button-text": "Reset course changes",
     "course-builder-button-text": "Course builder",
