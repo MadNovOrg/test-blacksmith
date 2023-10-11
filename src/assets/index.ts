@@ -11,8 +11,9 @@ export { ReactComponent as PodcastsIcon } from './podcasts-icon.svg'
 export { ReactComponent as PlayIcon } from './play-button.svg'
 
 import bildImage from './bild.jpg'
+import bildNewImage from './bild_new.jpeg'
 import cpdImage from './cpd.png'
 import icmImage from './icm.png'
 import ntaImage from './nta.png'
 
-export { icmImage, cpdImage, ntaImage, bildImage }
+export { icmImage, cpdImage, ntaImage, bildImage, bildNewImage }

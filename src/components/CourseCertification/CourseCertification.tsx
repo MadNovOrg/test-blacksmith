@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
 import {
-  bildImage,
+  bildNewImage,
   CertificateAssistIcon,
   CertificateObserveIcon,
   CertificatePassIcon,
@@ -367,7 +367,7 @@ const CertificateInfo: React.FC<
             Accreditors_Enum.Bild ? (
               <MUIImage
                 duration={0}
-                src={bildImage}
+                src={bildNewImage}
                 width={imageSize}
                 height={imageSize}
                 style={{ filter: 'grayscale(1' }}
