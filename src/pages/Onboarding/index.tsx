@@ -25,12 +25,12 @@ import {
   UpdateProfileMutation,
   UpdateProfileMutationVariables,
   UpdateUserProfileInput,
+  Organization,
 } from '@app/generated/graphql'
 import { useJobTitles } from '@app/hooks/useJobTitles'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { MUTATION as UPDATE_PROFILE_MUTATION } from '@app/queries/profile/update-profile'
 import { schemas, yup } from '@app/schemas'
-import { Organization } from '@app/types'
 import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
 
 export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
@@ -41,7 +41,6 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
   const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
-
   const schema = yup.object({
     givenName: yup.string().required(requiredMsg(_t, 'first-name')),
     familyName: yup.string().required(requiredMsg(_t, 'surname')),
@@ -59,7 +58,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
         : schema
     }),
     organization: yup
-      .object()
+      .object<Partial<Organization>>()
       .shape({
         id: yup.string(),
         name: yup.string(),
@@ -74,6 +73,14 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
       defaultValues: {
         givenName: profile?.givenName,
         familyName: profile?.familyName,
+        ...(profile?.organizations.length
+          ? {
+              organization: {
+                id: profile?.organizations[0].organization.id,
+                name: profile?.organizations[0].organization.name,
+              },
+            }
+          : null),
       },
     })
 
@@ -144,144 +151,144 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
         <Typography variant="body1" mb={1} fontWeight="600">
           {t('personal-details')}
         </Typography>
-        <Grid container spacing={3} mb={3}>
-          <Grid item md={6}>
-            <TextField
-              id="firstName"
-              label={_t('first-name')}
+        <Grid container gap={3} flexDirection={'column'}>
+          <Grid container spacing={3}>
+            <Grid item md={6}>
+              <TextField
+                id="firstName"
+                label={_t('first-name')}
+                variant="filled"
+                placeholder={_t('first-name-placeholder')}
+                error={Boolean(errors.givenName)}
+                helperText={errors.givenName?.message}
+                {...register('givenName')}
+                inputProps={{ 'data-testid': 'input-first-name' }}
+                fullWidth
+                required
+              />
+            </Grid>
+            <Grid item md={6}>
+              <TextField
+                id="surname"
+                label={_t('surname')}
+                variant="filled"
+                placeholder={_t('surname-placeholder')}
+                error={Boolean(errors.familyName)}
+                helperText={errors.familyName?.message}
+                {...register('familyName')}
+                inputProps={{ 'data-testid': 'input-surname' }}
+                fullWidth
+                required
+              />
+            </Grid>
+          </Grid>
+          <Grid item>
+            <PhoneNumberInput
+              label={_t('phone')}
               variant="filled"
-              placeholder={_t('first-name-placeholder')}
-              error={Boolean(errors.givenName)}
-              helperText={errors.givenName?.message}
-              {...register('givenName')}
-              inputProps={{ 'data-testid': 'input-first-name' }}
+              inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
+              error={Boolean(errors.phone)}
+              helperText={errors.phone?.message}
+              value={values.phone ?? ''}
+              onChange={p =>
+                setValue('phone', p as string, { shouldValidate: true })
+              }
+              autoFocus
               fullWidth
               required
             />
           </Grid>
-          <Grid item md={6}>
-            <TextField
-              id="surname"
-              label={_t('surname')}
-              variant="filled"
-              placeholder={_t('surname-placeholder')}
-              error={Boolean(errors.familyName)}
-              helperText={errors.familyName?.message}
-              {...register('familyName')}
-              inputProps={{ 'data-testid': 'input-surname' }}
-              fullWidth
+          <Grid>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Controller
+                name="dob"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker
+                    label={_t('dob')}
+                    format={INPUT_DATE_FORMAT}
+                    value={field.value ?? null}
+                    onChange={(d: Date | null) => {
+                      if (d) {
+                        setValue('dob', d, { shouldValidate: true })
+                      }
+                    }}
+                    slotProps={{
+                      textField: {
+                        variant: 'filled',
+                        fullWidth: true,
+                        error: Boolean(errors.dob),
+                        helperText: errors.dob?.message as string,
+                        required: true,
+                      },
+                    }}
+                  />
+                )}
+              />
+            </LocalizationProvider>
+          </Grid>
+          <Grid item>
+            <OrgSelector
               required
+              {...register('organization')}
+              autocompleteMode={false}
+              showTrainerOrgOnly={false}
+              error={errors.organization?.message}
+              allowAdding
+              value={
+                (values.organization as Pick<Organization, 'name' | 'id'>) ??
+                null
+              }
+              onChange={orgSelectorOnChange}
+              textFieldProps={{
+                variant: 'filled',
+              }}
+              isShallowRetrieval
             />
+          </Grid>
+          <Grid item>
+            <TextField
+              select
+              value={values.jobTitle ?? ''}
+              {...register('jobTitle')}
+              variant="filled"
+              fullWidth
+              label={_t('job-title')}
+            >
+              <MenuItem value="" disabled>
+                {_t('job-title')}
+              </MenuItem>
+              {jobTitles.map((option, i) => (
+                <MenuItem
+                  key={i}
+                  value={option}
+                  data-testid={`job-title-${option}`}
+                >
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+            {errors.jobTitle ? (
+              <FormHelperText error>{errors.jobTitle?.message}</FormHelperText>
+            ) : null}
+
+            <Box sx={{ my: 1 }}>
+              {values.jobTitle === 'Other' ? (
+                <TextField
+                  id="other-job-title"
+                  variant="filled"
+                  label={_t('other-job-title')}
+                  placeholder={_t('other-job-title')}
+                  error={!!errors.otherJobTitle}
+                  helperText={errors.otherJobTitle?.message || ''}
+                  {...register('otherJobTitle')}
+                  fullWidth
+                  inputProps={{ 'data-testid': 'other-job-title-input' }}
+                />
+              ) : null}
+            </Box>
           </Grid>
         </Grid>
-
-        <Box mb={3}>
-          <PhoneNumberInput
-            label={_t('phone')}
-            variant="filled"
-            inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
-            error={Boolean(errors.phone)}
-            helperText={errors.phone?.message}
-            value={values.phone ?? ''}
-            onChange={p =>
-              setValue('phone', p as string, { shouldValidate: true })
-            }
-            autoFocus
-            fullWidth
-            required
-          />
-        </Box>
-
-        <Box mb={3}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Controller
-              name="dob"
-              control={control}
-              render={({ field }) => (
-                <DatePicker
-                  label={_t('dob')}
-                  format={INPUT_DATE_FORMAT}
-                  value={field.value ?? null}
-                  onChange={(d: Date | null) => {
-                    if (d) {
-                      setValue('dob', d, { shouldValidate: true })
-                    }
-                  }}
-                  slotProps={{
-                    textField: {
-                      variant: 'filled',
-                      fullWidth: true,
-                      error: Boolean(errors.dob),
-                      helperText: errors.dob?.message as string,
-                      required: true,
-                    },
-                  }}
-                />
-              )}
-            />
-          </LocalizationProvider>
-        </Box>
-
-        <OrgSelector
-          required
-          {...register('organization')}
-          autocompleteMode={false}
-          showTrainerOrgOnly={false}
-          error={errors.organization?.message}
-          allowAdding
-          value={
-            (values.organization as Pick<Organization, 'name' | 'id'>) ?? null
-          }
-          onChange={orgSelectorOnChange}
-          textFieldProps={{
-            variant: 'filled',
-          }}
-          sx={{ mb: 3 }}
-          isShallowRetrieval
-        />
-
-        <Box>
-          <TextField
-            select
-            value={values.jobTitle}
-            {...register('jobTitle')}
-            variant="filled"
-            fullWidth
-            label={_t('job-title')}
-          >
-            <MenuItem value="" disabled>
-              {_t('job-title')}
-            </MenuItem>
-            {jobTitles.map((option, i) => (
-              <MenuItem
-                key={i}
-                value={option}
-                data-testid={`job-title-${option}`}
-              >
-                {option}
-              </MenuItem>
-            ))}
-          </TextField>
-          {errors.jobTitle ? (
-            <FormHelperText error>{errors.jobTitle?.message}</FormHelperText>
-          ) : null}
-
-          <Box sx={{ my: 1 }}>
-            {values.jobTitle === 'Other' ? (
-              <TextField
-                id="other-job-title"
-                variant="filled"
-                label={_t('other-job-title')}
-                placeholder={_t('other-job-title')}
-                error={!!errors.otherJobTitle}
-                helperText={errors.otherJobTitle?.message || ''}
-                {...register('otherJobTitle')}
-                fullWidth
-                inputProps={{ 'data-testid': 'other-job-title-input' }}
-              />
-            ) : null}
-          </Box>
-        </Box>
 
         <Box sx={{ my: 5 }}>
           <Box sx={{ display: 'flex' }}>
