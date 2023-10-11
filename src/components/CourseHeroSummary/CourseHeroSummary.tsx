@@ -263,7 +263,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 <StyledListIcon>
                   <PinDropIcon />
                 </StyledListIcon>
-                <ListItemText>
+                <ListItemText data-testid="course-venue">
                   {formatCourseVenue(
                     course.deliveryType,
                     course.schedule[0].venue

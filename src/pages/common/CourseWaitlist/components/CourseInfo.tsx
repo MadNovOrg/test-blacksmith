@@ -12,7 +12,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { WaitlistCourseQuery } from '@app/generated/graphql'
-import { CourseDeliveryType } from '@app/types'
+import { CourseDeliveryType, Venue } from '@app/types'
 import { formatCourseVenue } from '@app/util'
 
 const StyledListIcon = styled(ListItemIcon)(({ theme }) => ({
@@ -46,7 +46,7 @@ export const CourseInfo: React.FC<React.PropsWithChildren<Props>> = ({
 
   const courseVenue = formatCourseVenue(
     course.deliveryType as unknown as CourseDeliveryType,
-    course.schedule.at(0)?.venue || undefined
+    (course.schedule.at(0)?.venue as Venue) || undefined
   )
 
   return (

@@ -115,7 +115,11 @@ describe('page: Waitlist', () => {
       date: start,
     })}`
     expect(screen.getAllByText(startEndTimes)).toHaveLength(2)
-    expect(screen.getByText(`${name}, ${city}, ${country}`)).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        `${name}, ${addressLineOne}, ${city}, ${postCode}, ${country}`
+      )
+    ).toBeInTheDocument()
     expect(screen.getByText(addressLineOne)).toBeInTheDocument()
     expect(screen.getByText(`${postCode}`)).toBeInTheDocument()
   })

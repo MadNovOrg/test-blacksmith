@@ -53,7 +53,16 @@ function getOptionLabel(value: AutocompletePrediction | Venue | string) {
     return value.description
   }
 
-  return `${value.name}, ${value.city}`
+  const venueAddress = [
+    value.name,
+    value.addressLineOne,
+    value.addressLineTwo,
+    value.city,
+    value.postCode,
+    value.country,
+  ]
+
+  return venueAddress.filter(item => item).join(', ')
 }
 
 function getAddressPart(placeDetails: PlaceResult, partName: string): string {

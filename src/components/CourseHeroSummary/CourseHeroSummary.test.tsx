@@ -196,11 +196,9 @@ describe('component: CourseHeroSummary', () => {
 
     render(<CourseHeroSummary course={course} />)
 
-    expect(
-      screen.getByText(
-        `${course.schedule[0].venue?.name}, ${course.schedule[0].venue?.city}, ${course.schedule[0].venue?.country}`
-      )
-    ).toBeInTheDocument()
+    expect(screen.getByTestId('course-venue')).toHaveTextContent(
+      `${course.schedule[0].venue?.name}, ${course.schedule[0].venue?.addressLineOne}, ${course.schedule[0].venue?.city}, ${course.schedule[0].venue?.postCode}, ${course.schedule[0].venue?.country}`
+    )
   })
 
   it('displays org information', () => {
