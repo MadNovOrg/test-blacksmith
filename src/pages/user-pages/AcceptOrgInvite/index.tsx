@@ -1,44 +1,53 @@
 import { Alert, CircularProgress, Container } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import { Navigate, useParams, useSearchParams } from 'react-router-dom'
+import React, { useState, useCallback } from 'react'
+import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useUpdateEffect } from 'react-use'
 
 import { useAuth } from '@app/context/auth'
-import { useFetcher } from '@app/hooks/use-fetcher'
-import { gqlRequest } from '@app/lib/gql-request'
 import {
-  MUTATION as ACCEPT_ORG_INVITE_MUTATION,
-  ParamsType as AcceptOrgInviteParamsType,
-  ResponseType as AcceptOrgInviteResponseType,
-} from '@app/queries/invites/accept-org-invite'
+  AcceptOrgInviteMutation,
+  AcceptOrgInviteMutationVariables,
+} from '@app/generated/graphql'
+import { gqlRequest } from '@app/lib/gql-request'
+import { MUTATION as ACCEPT_ORG_INVITE_MUTATION } from '@app/queries/invites/accept-org-invite'
 
 export const AcceptOrgInvite = () => {
-  const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
-  const params = useParams()
-  const fetcher = useFetcher()
+  const navigate = useNavigate()
   const { profile, reloadCurrentProfile } = useAuth()
   const [searchParams] = useSearchParams()
 
   const token = searchParams.get('token') || ''
-  const inviteId = params.id as string
 
-  useEffect(() => {
+  const acceptOrgInvite = useCallback(async () => {
     if (profile) {
-      gqlRequest<AcceptOrgInviteResponseType, AcceptOrgInviteParamsType>(
+      gqlRequest<AcceptOrgInviteMutation, AcceptOrgInviteMutationVariables>(
         ACCEPT_ORG_INVITE_MUTATION,
         { profileId: profile.id },
         { headers: { 'x-auth': `Bearer ${token}` } }
       )
-        .then(resp => {
-          if (!resp?.invite?.id) {
+        .then(response => {
+          if (!response.invite?.id) {
+            setError(true)
             return Promise.reject()
           }
-          setSuccess(true)
-          return reloadCurrentProfile()
+
+          setError(false)
+          reloadCurrentProfile()
+          return navigate('/')
         })
-        .catch(() => setError(true))
+        .catch(() => {
+          setError(true)
+          return Promise.reject()
+        })
     }
-  }, [inviteId, fetcher, profile, token, reloadCurrentProfile])
+  }, [navigate, profile, reloadCurrentProfile, token])
+
+  useUpdateEffect(() => {
+    if (profile) {
+      acceptOrgInvite()
+    }
+  })
 
   if (error) {
     return (
@@ -52,10 +61,6 @@ export const AcceptOrgInvite = () => {
         </Alert>
       </Container>
     )
-  }
-
-  if (success) {
-    return <Navigate to={`/`} replace />
   }
 
   return <CircularProgress size={50} />
