@@ -112,6 +112,11 @@ export const filtersToWhereClause = (
       { name: { _ilike: `%${query}%` } },
       { organization: { name: { _ilike: `%${query}%` } } },
       { schedule: { venue: { name: { _ilike: `%${query}%` } } } },
+      { schedule: { venue: { city: { _ilike: `%${query}%` } } } },
+      { schedule: { venue: { addressLineOne: { _ilike: `%${query}%` } } } },
+      { schedule: { venue: { addressLineTwo: { _ilike: `%${query}%` } } } },
+      { schedule: { venue: { country: { _ilike: `%${query}%` } } } },
+      { schedule: { venue: { postCode: { _ilike: `%${query}%` } } } },
       { trainers: { profile: { fullName: { _ilike: `%${query}%` } } } },
       { course_code: { _ilike: `%${query}%` } },
     ]

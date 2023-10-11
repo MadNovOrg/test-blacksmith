@@ -28,6 +28,7 @@ export const QUERY = gql`
           addressLineTwo
           city
           postCode
+          country
           geoCoordinates
         }
       }

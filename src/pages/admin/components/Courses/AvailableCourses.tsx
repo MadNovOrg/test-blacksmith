@@ -120,6 +120,12 @@ export const AvailableCourses: React.FC<
             schedule: { venue: { addressLineTwo: { _ilike: `%${keyword}%` } } },
           },
           {
+            schedule: { venue: { country: { _ilike: `%${keyword}%` } } },
+          },
+          {
+            schedule: { venue: { postCode: { _ilike: `%${keyword}%` } } },
+          },
+          {
             course_code: { _ilike: `%${keyword}%` },
           },
         ],
