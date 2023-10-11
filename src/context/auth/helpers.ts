@@ -55,7 +55,7 @@ export async function fetchUserProfile(
     ) as Set<RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT>
 
     const defaultIndividualRole =
-      individualAllowedRoles.size > 1 ? [...individualAllowedRoles][0] : null
+      individualAllowedRoles.size > 0 ? [...individualAllowedRoles][0] : null
 
     const lsActiveRole = lsActiveRoleClient(profile)
     let desiredRole = getRequestedRole() ?? lsActiveRole.get() ?? defaultRole
