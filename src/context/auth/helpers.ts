@@ -43,6 +43,9 @@ export async function fetchUserProfile(
     const claimsRolesSet = new Set(claimsRoles)
     const allowedRoles = new Set(claimsRoles.filter(r => ActiveRoles.has(r)))
 
+    console.log('claimsRoles', claimsRoles)
+    console.log('allowedRoles', allowedRoles)
+
     const individualAllowedRoles = new Set(
       claimsRoles.filter(r =>
         Boolean(
@@ -53,6 +56,8 @@ export async function fetchUserProfile(
         )
       )
     ) as Set<RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT>
+
+    console.log('individualAllowedRoles', individualAllowedRoles)
 
     const defaultIndividualRole =
       individualAllowedRoles.size === 1 ? [...individualAllowedRoles][0] : null
@@ -69,8 +74,12 @@ export async function fetchUserProfile(
       desiredRole = defaultIndividualRole ?? desiredRole
     }
 
+    console.log('desiredRole', desiredRole)
+
     const activeRole = allowedRoles.has(desiredRole) ? desiredRole : defaultRole
     lsActiveRole.set(activeRole)
+
+    console.log('activeRole', desiredRole)
 
     const orgIdsPgLiteral = claims?.['x-hasura-tt-organizations'] ?? '{}'
 
