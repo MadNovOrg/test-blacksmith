@@ -43,9 +43,6 @@ export async function fetchUserProfile(
     const claimsRolesSet = new Set(claimsRoles)
     const allowedRoles = new Set(claimsRoles.filter(r => ActiveRoles.has(r)))
 
-    console.log('claimsRoles', claimsRoles)
-    console.log('allowedRoles', allowedRoles)
-
     const individualAllowedRoles = new Set(
       claimsRoles.filter(r =>
         Boolean(
@@ -57,10 +54,8 @@ export async function fetchUserProfile(
       )
     ) as Set<RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT>
 
-    console.log('individualAllowedRoles', individualAllowedRoles)
-
     const defaultIndividualRole =
-      individualAllowedRoles.size === 1 ? [...individualAllowedRoles][0] : null
+      individualAllowedRoles.size > 1 ? [...individualAllowedRoles][0] : null
 
     const lsActiveRole = lsActiveRoleClient(profile)
     let desiredRole = getRequestedRole() ?? lsActiveRole.get() ?? defaultRole
@@ -70,20 +65,13 @@ export async function fetchUserProfile(
      * role is saved in local storage. When an user has an individual user has a sub role and
      * isn't org admin the active role should not be RoleName.USER
      */
-    console.log('defaultIndividualRole', defaultIndividualRole)
-
-    console.log('isOrgAdmin', isOrgAdmin)
 
     if (desiredRole === RoleName.USER && !isOrgAdmin) {
       desiredRole = defaultIndividualRole ?? desiredRole
     }
 
-    console.log('desiredRole', desiredRole)
-
     const activeRole = allowedRoles.has(desiredRole) ? desiredRole : defaultRole
     lsActiveRole.set(activeRole)
-
-    console.log('activeRole', desiredRole)
 
     const orgIdsPgLiteral = claims?.['x-hasura-tt-organizations'] ?? '{}'
 
