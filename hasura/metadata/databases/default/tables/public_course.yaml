@@ -17,10 +17,6 @@ configuration:
       custom_name: bookingContactInviteData
     booking_contact_profile_id:
       custom_name: bookingContactProfileId
-    organization_key_contact_invite_data:
-      custom_name: organizationKeyContactInviteData
-    organization_key_contact_profile_id:
-      custom_name: organizationKeyContactProfileId
     cancellation_fee_percent:
       custom_name: cancellationFeePercent
     cancellation_reason:
@@ -51,6 +47,10 @@ configuration:
       custom_name: isDraft
     modules_duration:
       custom_name: modulesDuration
+    organization_key_contact_invite_data:
+      custom_name: organizationKeyContactInviteData
+    organization_key_contact_profile_id:
+      custom_name: organizationKeyContactProfileId
     price_currency:
       custom_name: priceCurrency
     updated_at:
@@ -63,8 +63,6 @@ configuration:
     aol_region: aolRegion
     booking_contact_invite_data: bookingContactInviteData
     booking_contact_profile_id: bookingContactProfileId
-    organization_key_contact_invite_data: organizationKeyContactInviteData
-    organization_key_contact_profile_id: organizationKeyContactProfileId
     cancellation_fee_percent: cancellationFeePercent
     cancellation_reason: cancellationReason
     course_delivery_type: deliveryType
@@ -80,6 +78,8 @@ configuration:
     grading_started: gradingStarted
     is_draft: isDraft
     modules_duration: modulesDuration
+    organization_key_contact_invite_data: organizationKeyContactInviteData
+    organization_key_contact_profile_id: organizationKeyContactProfileId
     price_currency: priceCurrency
     updated_at: updatedAt
   custom_root_fields: {}
@@ -87,9 +87,6 @@ object_relationships:
   - name: bookingContact
     using:
       foreign_key_constraint_on: booking_contact_profile_id
-  - name: organizationKeyContact
-    using:
-      foreign_key_constraint_on: organization_key_contact_profile_id
   - name: cancellationRequest
     using:
       foreign_key_constraint_on:
@@ -103,6 +100,9 @@ object_relationships:
   - name: organization
     using:
       foreign_key_constraint_on: organization_id
+  - name: organizationKeyContact
+    using:
+      foreign_key_constraint_on: organization_key_contact_profile_id
 array_relationships:
   - name: bildModules
     using:
@@ -483,88 +483,6 @@ select_permissions:
           - booking_contact_profile_id:
               _eq: X-Hasura-User-Id
       allow_aggregations: true
-  - role: organization-key-contact
-    permission:
-      columns:
-        - account_code
-        - accredited_by
-        - aol_cost_of_course
-        - aol_country
-        - aol_region
-        - booking_contact_invite_data
-        - organization_key_contact_invite_data
-        - booking_contact_profile_id
-        - organization_key_contact_profile_id
-        - conversion
-        - course_delivery_type
-        - course_level
-        - course_status
-        - course_type
-        - created_at
-        - created_by_id
-        - description
-        - exceptions_pending
-        - free_spaces
-        - go1_integration
-        - grading_confirmed
-        - grading_started
-        - id
-        - is_draft
-        - max_participants
-        - min_participants
-        - modules_duration
-        - name
-        - organization_id
-        - parking_instructions
-        - price
-        - price_currency
-        - reaccreditation
-        - source
-        - special_instructions
-        - updated_at
-        - start
-        - end
-      computed_fields:
-        - course_code
-        - freeSlots
-      filter:
-        _or:
-          - participants:
-              profile_id:
-                _eq: X-Hasura-User-Id
-          - _and:
-              - course_type:
-                  _eq: OPEN
-              - participants:
-                  profile:
-                    organizations:
-                      organization:
-                        members:
-                          _and:
-                            - is_admin:
-                                _eq: true
-                            - profile_id:
-                                _eq: X-Hasura-User-Id
-          - organization:
-              members:
-                _and:
-                  - is_admin:
-                      _eq: true
-                  - profile_id:
-                      _eq: X-Hasura-User-Id
-          - _and:
-              - course_type:
-                  _eq: OPEN
-              - course_status:
-                  _in:
-                    - CONFIRM_MODULES
-                    - SCHEDULED
-                    - TRAINER_MISSING
-                    - TRAINER_PENDING
-                    - TRAINER_DECLINED
-          - organization_key_contact_profile_id:
-              _eq: X-Hasura-User-Id
-      allow_aggregations: true
   - role: finance
     permission:
       columns:
@@ -679,6 +597,88 @@ select_permissions:
       computed_fields:
         - course_code
       filter: {}
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - account_code
+        - accredited_by
+        - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - booking_contact_invite_data
+        - organization_key_contact_invite_data
+        - booking_contact_profile_id
+        - organization_key_contact_profile_id
+        - conversion
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - created_at
+        - created_by_id
+        - description
+        - exceptions_pending
+        - free_spaces
+        - go1_integration
+        - grading_confirmed
+        - grading_started
+        - id
+        - is_draft
+        - max_participants
+        - min_participants
+        - modules_duration
+        - name
+        - organization_id
+        - parking_instructions
+        - price
+        - price_currency
+        - reaccreditation
+        - source
+        - special_instructions
+        - updated_at
+        - start
+        - end
+      computed_fields:
+        - course_code
+        - freeSlots
+      filter:
+        _or:
+          - participants:
+              profile_id:
+                _eq: X-Hasura-User-Id
+          - _and:
+              - course_type:
+                  _eq: OPEN
+              - participants:
+                  profile:
+                    organizations:
+                      organization:
+                        members:
+                          _and:
+                            - is_admin:
+                                _eq: true
+                            - profile_id:
+                                _eq: X-Hasura-User-Id
+          - organization:
+              members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+          - _and:
+              - course_type:
+                  _eq: OPEN
+              - course_status:
+                  _in:
+                    - CONFIRM_MODULES
+                    - SCHEDULED
+                    - TRAINER_MISSING
+                    - TRAINER_PENDING
+                    - TRAINER_DECLINED
+          - organization_key_contact_profile_id:
+              _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: sales-admin
     permission:
@@ -1330,42 +1330,43 @@ update_permissions:
   - role: tt-ops
     permission:
       columns:
-        - created_at
-        - updated_at
-        - name
-        - course_type
-        - course_delivery_type
-        - course_level
-        - organization_id
-        - reaccreditation
-        - description
-        - course_status
-        - min_participants
-        - max_participants
-        - grading_confirmed
-        - go1_integration
+        - account_code
         - aol_cost_of_course
-        - id
-        - booking_contact_profile_id
         - aol_country
         - aol_region
-        - booking_contact_profile_id
-        - organization_key_contact_profile_id
-        - cancellation_fee_percent
-        - free_spaces
-        - account_code
-        - cancellation_reason
-        - cancellation_fee_percent
-        - grading_started
-        - modules_duration
-        - special_instructions
-        - parking_instructions
-        - source
-        - conversion
-        - price
-        - is_draft
-        - exceptions_pending
         - arloReferenceId
+        - booking_contact_profile_id
+        - booking_contact_profile_id
+        - cancellation_fee_percent
+        - cancellation_fee_percent
+        - cancellation_reason
+        - conversion
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - created_at
+        - description
+        - exceptions_pending
+        - free_spaces
+        - go1_integration
+        - grading_confirmed
+        - grading_started
+        - id
+        - is_draft
+        - max_participants
+        - min_participants
+        - modules_duration
+        - name
+        - organization_id
+        - organization_key_contact_invite_data
+        - organization_key_contact_profile_id
+        - parking_instructions
+        - price
+        - reaccreditation
+        - source
+        - special_instructions
+        - updated_at
       filter: {}
       check: {}
   - role: user
