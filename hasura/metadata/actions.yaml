@@ -137,6 +137,12 @@ actions:
       - role: tt-ops
       - role: tt-admin
       - role: organization-key-contact
+      - role: user
+      - role: trainer
+      - role: sales-representative
+      - role: ld
+      - role: sales-admin
+      - role: finance
   - name: fetchPlans
     definition:
       kind: ""

@@ -84,12 +84,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canSeeExportProgressBtnOnBLCourse: (course: Course) =>
       anyPass([
-        acl.isTTAdmin,
-        acl.isTTOps,
+        acl.isInternalUser,
+        acl.isTrainer,
         acl.isOrgAdmin,
         acl.isBookingContact,
         () => acl.isOrganizationKeyContactOfCourse(course),
-      ]),
+      ])(),
 
     isCourseLeader: (course: Pick<Course, 'trainers'>) =>
       getCourseLeadTrainer(course.trainers)?.profile.id === profile?.id,

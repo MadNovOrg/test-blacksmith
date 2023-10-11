@@ -98,6 +98,8 @@ export const CourseDetails: React.FC<
     {
       id: courseId,
       withOrders: canViewOrderItem,
+      withGo1Data:
+        acl.isBookingContact() || acl.isOrgAdmin() || acl.isOrgKeyContact(),
       profileId: profile?.id || '',
     },
   ])

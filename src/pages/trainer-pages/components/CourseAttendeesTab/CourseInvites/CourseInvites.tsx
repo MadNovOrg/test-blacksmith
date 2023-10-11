@@ -243,7 +243,7 @@ export const CourseInvites = ({
       XLSX.utils.book_append_sheet(wb, ws, 'Attendees')
 
       const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
-      
+
       const [currentDate, currentTime] = formatDateTime(
         new Date().toISOString()
       ).split(',')
