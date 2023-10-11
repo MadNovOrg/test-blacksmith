@@ -70,6 +70,10 @@ export async function fetchUserProfile(
      * role is saved in local storage. When an user has an individual user has a sub role and
      * isn't org admin the active role should not be RoleName.USER
      */
+    console.log('defaultIndividualRole', defaultIndividualRole)
+
+    console.log('isOrgAdmin', isOrgAdmin)
+
     if (desiredRole === RoleName.USER && !isOrgAdmin) {
       desiredRole = defaultIndividualRole ?? desiredRole
     }
