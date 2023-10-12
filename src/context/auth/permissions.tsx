@@ -67,7 +67,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       activeRole === RoleName.ORGANIZATION_KEY_CONTACT,
 
     isUserAndHaveUpToOneSubRole: () =>
-      (individualAllowedRoles?.size ?? 0) + +acl.isOrgAdmin() <= 1,
+      (individualAllowedRoles?.size ?? 0) + +acl.hasOrgAdmin() <= 1,
 
     isInternalUser: () =>
       anyPass([

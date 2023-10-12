@@ -298,4 +298,34 @@ describe('component: RoleSwitcher', () => {
     expect(orgKeyContactContactMenuOption).toBeInTheDocument()
     expect(organisationAdminMenuOption).not.toBeInTheDocument()
   })
+
+  it('show individual role picker for org admin and one individual sub role', async () => {
+    const activeRole = RoleName.ORGANIZATION_KEY_CONTACT
+    const allowedRoles = new Set([
+      RoleName.ORGANIZATION_KEY_CONTACT,
+      RoleName.USER,
+    ])
+
+    render(<RoleSwitcher />, {
+      auth: {
+        allowedRoles,
+        activeRole,
+        individualAllowedRoles: new Set<RoleName.ORGANIZATION_KEY_CONTACT>([
+          RoleName.ORGANIZATION_KEY_CONTACT,
+        ]),
+        isOrgAdmin: true,
+      },
+    })
+
+    const roleSwitcherBtn = screen.getByTestId('RoleSwitcher-btn')
+    expect(roleSwitcherBtn).toBeInTheDocument()
+
+    await userEvent.click(roleSwitcherBtn)
+
+    const individualRolePicker = screen.getByTestId(
+      'RoleSwitcher-individual-arrow'
+    )
+
+    expect(individualRolePicker).toBeInTheDocument()
+  })
 })
