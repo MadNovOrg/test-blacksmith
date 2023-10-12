@@ -331,21 +331,14 @@ export enum Color {
   FUSCHIA = 'fuschia',
 }
 
-export enum TrustType {
-  SingleAcademyTrust = 'SINGLE_ACADEMY_TRUST',
-  SupportedByATrust = 'SUPPORTED_BY_A_TRUST',
-  NotApplicable = 'NOT_APPLICABLE',
-  MultiAcademyTrust = 'MULTI_ACADEMY_TRUST',
-}
-
 export enum OfstedRating {
   GOOD = 'GOOD',
-  INADEQUATE = 'INADEQUATE',
-  INSUFFICIENT_EVIDENCE = 'INSUFFICIENT_EVIDENCE',
   OUTSTANDING = 'OUTSTANDING',
   REQUIRES_IMPROVEMENT = 'REQUIRES_IMPROVEMENT',
+  INADEQUATE = 'INADEQUATE',
   SERIOUS_WEAKNESSES = 'SERIOUS_WEAKNESSES',
   SPECIAL_MEASURES = 'SPECIAL_MEASURES',
+  INSUFFICIENT_EVIDENCE = 'INSUFFICIENT_EVIDENCE',
 }
 
 export type Module = {
@@ -771,8 +764,6 @@ export type Establishment = {
   urn: string
   name: string
   localAuthority?: string
-  trustType?: string
-  trustName?: string
   addressLineOne?: string
   addressLineTwo?: string
   addressLineThree?: string

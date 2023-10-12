@@ -2,24 +2,7 @@ import {
   CallbackOption,
   SuggestionOption,
 } from '@app/components/OrgSelector/index'
-import {
-  Establishment,
-  OfstedRating,
-  Organization,
-  TrustType,
-} from '@app/types'
-
-export function getTrustType(dfeValue?: string) {
-  if (dfeValue === 'Supported by a multi-academy trust') {
-    return TrustType.MultiAcademyTrust
-  } else if (dfeValue === 'Supported by a single-academy trust') {
-    return TrustType.SingleAcademyTrust
-  } else if (dfeValue === 'Supported by a trust') {
-    return TrustType.SupportedByATrust
-  } else {
-    return TrustType.NotApplicable
-  }
-}
+import { Establishment, OfstedRating, Organization } from '@app/types'
 
 export function getOfstedRating(dfeValue?: string) {
   if (dfeValue === 'Outstanding') {

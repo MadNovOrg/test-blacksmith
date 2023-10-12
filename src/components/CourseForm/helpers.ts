@@ -10,8 +10,6 @@ import {
   CourseType,
 } from '@app/types'
 
-import aolRegionsByCountry from './aolRegions'
-
 function parseTime(time: string) {
   let hours = 0
   let minutes = 0
@@ -467,20 +465,6 @@ export function canBeConversion(
     CourseLevel.BildAdvancedTrainer,
     CourseLevel.BildIntermediateTrainer,
   ].includes(courseLevel)
-}
-
-export function getAOLCountries() {
-  return Object.keys(aolRegionsByCountry)
-}
-
-export function getAOLRegions(country: string | null): string[] {
-  const validCountries = getAOLCountries()
-
-  if (!country || !validCountries.includes(country)) {
-    return []
-  }
-
-  return aolRegionsByCountry[country as keyof typeof aolRegionsByCountry]
 }
 
 export function getAccountCode(d = new Date()): string {

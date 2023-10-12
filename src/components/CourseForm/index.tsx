@@ -43,13 +43,18 @@ import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 import { SchemaDescription } from 'yup'
 
+import { CountryDropdown } from '@app/components/CountryDropdown'
 import { FormPanel } from '@app/components/FormPanel'
 import { NumericTextField } from '@app/components/NumericTextField'
+import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
+import { ProfileSelector } from '@app/components/ProfileSelector'
+import { RegionDropdown } from '@app/components/RegionDropdown'
 import {
   Profile as UserSelectorProfile,
   UserSelector,
 } from '@app/components/UserSelector'
+import { VenueSelector } from '@app/components/VenueSelector'
 import { useAuth } from '@app/context/auth'
 import { Accreditors_Enum, Course_Source_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
@@ -70,13 +75,7 @@ import {
   requiredMsg,
 } from '@app/util'
 
-import { CallbackOption, OrgSelector } from '../OrgSelector'
-import { ProfileSelector } from '../ProfileSelector'
-import { VenueSelector } from '../VenueSelector'
-
 import { InstructionAccordionField } from './components/AccordionTextField'
-import { CourseAOLCountryDropdown } from './components/CourseAOLCountryDropdown'
-import { CourseAOLRegionDropdown } from './components/CourseAOLRegionDropdown'
 import { CourseDatePicker } from './components/CourseDatePicker'
 import { CourseLevelDropdown } from './components/CourseLevelDropdown'
 import { CourseTimePicker } from './components/CourseTimePicker'
@@ -847,6 +846,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     [setValue]
   )
 
+  useEffect(() => {
+    setValue('aolRegion', '')
+  }, [setValue, values.aolCountry])
+
   const showTrainerOrgOnly =
     !values.usesAOL &&
     courseType === CourseType.INDIRECT &&
@@ -936,22 +939,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                         fullWidth
                         disabled={disabledFields.has('aolCountry')}
                       >
-                        <Controller
-                          name="aolCountry"
-                          control={control}
-                          render={({ field }) => (
-                            <CourseAOLCountryDropdown
-                              required
-                              {...register('aolCountry')}
-                              value={field.value}
-                              onChange={e => {
-                                setValue('aolRegion', '')
-                                field.onChange(e)
-                              }}
-                              usesAOL={usesAOL}
-                              error={Boolean(errors.aolCountry?.message)}
-                            />
-                          )}
+                        <CountryDropdown
+                          label={t('country')}
+                          errormessage={errors.aolCountry?.message}
+                          required
+                          {...register('aolCountry')}
+                          error={Boolean(errors.aolCountry?.message)}
                         />
                       </FormControl>
                     </Grid>
@@ -966,13 +959,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                           name="aolRegion"
                           control={control}
                           render={({ field }) => (
-                            <CourseAOLRegionDropdown
+                            <RegionDropdown
                               required
                               {...register('aolRegion')}
                               value={field.value}
                               onChange={field.onChange}
                               usesAOL={usesAOL}
-                              aolCountry={aolCountry}
+                              country={aolCountry}
                               disabled={
                                 !aolCountry || disabledFields.has('aolRegion')
                               }

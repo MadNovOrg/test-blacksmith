@@ -1,5 +1,6 @@
 import { MenuItem, TextField } from '@mui/material'
-import { ChangeEvent, FC, PropsWithChildren } from 'react'
+import { FC, PropsWithChildren } from 'react'
+import { UseFormRegisterReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
 
@@ -13,22 +14,22 @@ import { GET_ORG_TYPES } from '@app/queries/organization/get-org-types'
 
 type Props = {
   sector: string
-  onChange: (orgType: Pick<Organization_Type, 'name'> | '') => void
   label?: string
   error?: string | undefined
   required?: boolean
   disabled?: boolean
-  value?: Pick<Organization_Type, 'name'> | ''
+  value?: Pick<Organization_Type, 'name'> | string
+  register?: UseFormRegisterReturn
 }
 
 export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
-  onChange,
   error,
   sector,
   disabled = false,
   required,
   label,
   value,
+  register,
 }) => {
   const { t } = useTranslation()
   const sectorMap = new Map()
@@ -43,9 +44,6 @@ export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
     },
     pause: !sector,
   })
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange(event.target.value as Pick<Organization_Type, 'name'> | '')
-  }
   return (
     <TextField
       select
@@ -54,15 +52,20 @@ export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
       label={label ?? t('org-type')}
       error={!!error}
       sx={{ bgcolor: 'grey.100' }}
-      onChange={handleChange}
       disabled={disabled}
       required={required}
       helperText={error}
       value={value}
+      defaultValue={value}
+      {...register}
     >
       {data?.organization_type.length ? (
         data?.organization_type.map(m => (
-          <MenuItem key={m.id} value={m.name} data-testid={`type-${m.name}`}>
+          <MenuItem
+            key={m.id}
+            value={m.name ?? value}
+            data-testid={`type-${m.name}`}
+          >
             {m.name}
           </MenuItem>
         ))

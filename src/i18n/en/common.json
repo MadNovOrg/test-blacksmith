@@ -511,9 +511,8 @@
     "adults-health-and-social-care": "Adults Health and Social Care",
     "childrens-health-and-social-care": "Childrens Health and Social Care"
   },
-  "trust-name": "Trust name",
-  "org-type": "Organisation Type",
   "org-email": "Organisation email",
+  "org-type": "Organisation type",
   "org-phone": "Organisation phone",
   "local-authority": "Local authority",
   "resend": "Resend",
@@ -575,12 +574,6 @@
     "can-attend-q": "Are you able to attend?",
     "goto-tt": "Go to Team Teach Connect",
     "response-sent": "Your response has been sent"
-  },
-  "trust-type": {
-    "single_academy_trust": "Single Academy Trust",
-    "supported_by_a_trust": "Supported by a trust",
-    "not_applicable": "Not applicable",
-    "multi_academy_trust": "Multi-academy Trust"
   },
   "course-evaluation": {
     "heading": "Course Summary Evaluation",

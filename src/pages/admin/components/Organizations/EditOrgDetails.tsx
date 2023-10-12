@@ -1,571 +1,94 @@
-import { yupResolver } from '@hookform/resolvers/yup'
-import InfoIcon from '@mui/icons-material/Info'
-import LoadingButton from '@mui/lab/LoadingButton'
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  MenuItem,
-  TextField as MuiTextField,
-  Tooltip,
-  Typography,
-  styled,
-} from '@mui/material'
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import React, { useEffect, useMemo, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+import { Box } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
-import * as yup from 'yup'
+import { useMutation } from 'urql'
 
-import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import {
   UpdateOrgMutation,
   UpdateOrgMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import useOrg from '@app/hooks/useOrg'
-import { sectors } from '@app/pages/common/CourseBooking/components/org-data'
 import { MUTATION as UPDATE_ORG_MUTATION } from '@app/queries/organization/update-org'
-import { OfstedRating } from '@app/types'
-import { INPUT_DATE_FORMAT, requiredMsg, isValidUKPostalCode } from '@app/util'
 
-type OrgDetailsInput = {
-  orgName: string
-  orgEmail: string
-  orgPhone: string
-  sector: string
-  localAuthority: string
-  ofstedRating: string
-  ofstedLastInspection: Date | null
-  headFirstName: string
-  headLastName: string
-  headTitle: string
-  headPreferredJobTitle: string
-  website: string
-  line1: string
-  line2: string
-  city: string
-  country: string
-  postCode: string
-}
-
-const TextField = styled(MuiTextField)(({ theme }) => ({
-  backgroundColor: theme.palette.grey[100],
-}))
+import { OrganizationForm } from './OrganizationForm'
+import { FormInputs } from './shared'
 
 export const EditOrgDetails: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
-  const { t } = useTranslation()
   const { profile, acl } = useAuth()
-  const fetcher = useFetcher()
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const [{}, updateOrganisation] = useMutation<
+    UpdateOrgMutation,
+    UpdateOrgMutationVariables
+  >(UPDATE_ORG_MUTATION)
   const { id } = useParams()
+  const navigate = useNavigate()
+  const { data } = useOrg(id ?? '', profile?.id, acl.canViewAllOrganizations())
+  const org = data?.length
+    ? Object.values(data).map(orgDetail => ({
+        name: orgDetail.name,
+        sector: orgDetail.sector,
+        orgPhone: orgDetail.attributes.phone,
+        organisationType: orgDetail.organisationType as string,
+        orgEmail: orgDetail.attributes.email,
+        website: orgDetail.attributes.website,
+        addressLine1: orgDetail.address.line1,
+        addressLine2: orgDetail.address.line2,
+        city: orgDetail.address.city,
+        postcode: orgDetail.address.postCode,
+        country: orgDetail.address.country,
+        headFirstName: orgDetail.attributes.headFirstName,
+        headSurname: orgDetail.attributes.headSurname,
+        headEmailAddress: orgDetail.attributes.headEmailAddress,
+        settingName: orgDetail.attributes.settingName,
+        localAuthority: orgDetail.attributes.localAuthority,
+        ofstedRating: orgDetail.attributes.ofstedRating,
+        ofstedLastInspection: orgDetail.attributes.ofstedLastInspection
+          ? new Date(orgDetail?.attributes.ofstedLastInspection)
+          : null,
+      }))[0]
+    : null
 
-  const { data, mutate } = useOrg(
-    id ?? '',
-    profile?.id,
-    acl.canViewAllOrganizations()
-  )
-  const org = data?.length ? data[0] : null
-
-  const schema = useMemo(() => {
-    return yup
-      .object({
-        orgName: yup
-          .string()
-          .required(
-            t('validation-errors.required-field', { name: t('org-name') })
-          ),
-        trustType: yup
-          .string()
-          .required(
-            t('validation-errors.required-field', { name: t('trust-type') })
-          ),
-        trustName: yup.string(),
-        orgEmail: yup.string(),
-        orgPhone: yup.string(),
-        sector: yup.string(),
-        localAuthority: yup.string(),
-        ofstedRating: yup.string(),
-        ofstedLastInspection: yup.date().nullable(),
-        line1: yup.string().required(requiredMsg(t, 'addr.line1')),
-        line2: yup.string(),
-        city: yup.string().required(requiredMsg(t, 'addr.city')),
-        country: yup.string().required(requiredMsg(t, 'addr.country')),
-        postCode: yup
-          .string()
-          .required(requiredMsg(t, 'addr.postCode'))
-          .test(
-            'is-uk-postcode',
-            t('common.validation-errors.invalid-postcode'),
-            isValidUKPostalCode
-          ),
-      })
-      .required()
-  }, [t])
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    control,
-    watch,
-  } = useForm<OrgDetailsInput>({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      orgName: '',
-      orgEmail: '',
-      orgPhone: '',
-      sector: '',
-      localAuthority: '',
-      ofstedRating: '',
-      ofstedLastInspection: null,
-      headFirstName: '',
-      headLastName: '',
-      headTitle: '',
-      headPreferredJobTitle: '',
-      website: '',
-      line1: '',
-      line2: '',
-      city: '',
-      country: '',
-      postCode: '',
-    },
-  })
-
-  const values = watch()
-
-  useEffect(() => {
-    if (org) {
-      setValue('orgName', org.name)
-      setValue('orgEmail', org.attributes.email)
-      setValue('orgPhone', org.attributes.phone)
-      setValue('sector', org.sector || '')
-      setValue('localAuthority', org.attributes.localAuthority)
-      setValue('ofstedRating', org.attributes.ofstedRating || '')
-      setValue(
-        'ofstedLastInspection',
-        org.attributes.ofstedLastInspection
-          ? new Date(org?.attributes.ofstedLastInspection)
-          : null
-      )
-      setValue('headFirstName', org.attributes.headFirstName)
-      setValue('headLastName', org.attributes.headLastName)
-      setValue('headTitle', org.attributes.headTitle)
-      setValue('headPreferredJobTitle', org.attributes.headPreferredJobTitle)
-      setValue('website', org.attributes.website)
-      setValue('line1', org.address.line1 || '')
-      setValue('line2', org.address.line2 || '')
-      setValue('city', org.address.city || '')
-      setValue('country', org.address.country || '')
-      setValue('postCode', org.address.postCode || '')
-    }
-  }, [org, setValue])
-
-  const onSubmit = async (data: OrgDetailsInput) => {
+  const onSubmit = async (data: FormInputs) => {
     if (!id) return
-
-    setLoading(true)
-
-    try {
-      await fetcher<UpdateOrgMutation, UpdateOrgMutationVariables>(
-        UPDATE_ORG_MUTATION,
-        {
-          id,
-          org: {
-            name: data.orgName,
-            sector: data.sector,
-            attributes: {
-              email: data.orgEmail,
-              phone: data.orgPhone,
-              localAuthority: data.localAuthority,
-              ofstedRating: data.ofstedRating,
-              ofstedLastInspection: data.ofstedLastInspection
-                ? data.ofstedLastInspection.toISOString()
-                : null,
-              headFirstName: data.headFirstName,
-              headLastName: data.headLastName,
-              headTitle: data.headTitle,
-              headPreferredJobTitle: data.headPreferredJobTitle,
-              website: data.website,
-            },
-            address: {
-              line1: data.line1,
-              line2: data.line2,
-              city: data.city,
-              country: data.country,
-              postCode: data.postCode,
-            },
-          },
-        }
-      )
-
-      setLoading(false)
-      await mutate()
-      navigate('..?tab=DETAILS')
-    } catch (err) {
-      setLoading(false)
+    const orgDataToBeUpdated = {
+      id,
+      org: {
+        name: data.name,
+        sector: data.sector,
+        organisationType: data.organisationType,
+        attributes: {
+          email: data.orgEmail,
+          phone: data.orgPhone,
+          localAuthority: data.localAuthority,
+          ofstedRating: data.ofstedRating,
+          ofstedLastInspection: data.ofstedLastInspection
+            ? data.ofstedLastInspection.toISOString()
+            : null,
+          headFirstName: data.headFirstName,
+          headSurname: data.headSurname,
+          headEmailAddress: data.headEmailAddress,
+          settingName: data.settingName,
+          website: data.website,
+        },
+        address: {
+          line1: data.addressLine1,
+          line2: data.addressLine2,
+          city: data.city,
+          country: data.country,
+          postCode: data.postcode,
+        },
+      },
     }
+    await updateOrganisation(orgDataToBeUpdated)
+    navigate('..?tab=DETAILS')
   }
 
   if (!org) return null
 
   return (
     <Box bgcolor="grey.100" pb={6} pt={3}>
-      <Container>
-        <Grid container>
-          <Grid
-            item
-            md={4}
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-          >
-            <Typography variant="h2">
-              {t('pages.edit-org-details.title')}
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            md={8}
-            component="form"
-            onSubmit={handleSubmit(onSubmit)}
-            data-testid="EditOrgForm"
-            noValidate
-            autoComplete="off"
-          >
-            <Typography variant="subtitle2" mb={1}>
-              {t('pages.edit-org-details.organization-details')}
-            </Typography>
-
-            <Box bgcolor="common.white" p={3} pb={1} mb={4} borderRadius={1}>
-              <Box mb={3}>
-                <TextField
-                  id="orgName"
-                  required
-                  label={t('pages.edit-org-details.org-name')}
-                  variant="filled"
-                  error={!!errors.orgName}
-                  helperText={errors.orgName?.message}
-                  {...register('orgName')}
-                  inputProps={{ 'data-testid': 'org-name' }}
-                  fullWidth
-                />
-              </Box>
-
-              <Box mb={3}>
-                <TextField
-                  id="orgEmail"
-                  label={t('pages.edit-org-details.org-email')}
-                  variant="filled"
-                  error={!!errors.orgEmail}
-                  helperText={errors.orgEmail?.message}
-                  {...register('orgEmail')}
-                  inputProps={{ 'data-testid': 'org-email' }}
-                  fullWidth
-                />
-              </Box>
-
-              <Box mb={3}>
-                <TextField
-                  id="orgPhone"
-                  label={t('pages.edit-org-details.org-phone')}
-                  variant="filled"
-                  error={!!errors.orgPhone}
-                  helperText={errors.orgPhone?.message}
-                  {...register('orgPhone')}
-                  inputProps={{ 'data-testid': 'org-phone' }}
-                  fullWidth
-                />
-              </Box>
-
-              <Grid container spacing={3} mb={3}>
-                <Grid item md={6}>
-                  <TextField
-                    select
-                    value={values.sector}
-                    {...register('sector')}
-                    variant="filled"
-                    fullWidth
-                    label={t('sector')}
-                    error={!!errors.sector}
-                    sx={{ bgcolor: 'grey.100' }}
-                    data-testid="sector-select"
-                  >
-                    <MenuItem value="" disabled>
-                      {t('sector')}
-                    </MenuItem>
-                    {Object.entries(sectors).map(([value, label]) => (
-                      <MenuItem
-                        key={value}
-                        value={value}
-                        data-testid={`sector-${value}`}
-                      >
-                        {label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-                <Grid item md={6}>
-                  <TextField
-                    id="localAuthority"
-                    label={t('pages.edit-org-details.local-authority')}
-                    variant="filled"
-                    error={!!errors.localAuthority}
-                    helperText={errors.localAuthority?.message}
-                    {...register('localAuthority')}
-                    inputProps={{ 'data-testid': 'local-authority' }}
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid container spacing={3} mb={3}>
-                <Grid item md={6}>
-                  <Controller
-                    name="ofstedRating"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        id="ofstedRating"
-                        select
-                        label={t('pages.edit-org-details.ofsted-rating')}
-                        variant="filled"
-                        error={!!errors.ofstedRating}
-                        helperText={errors.ofstedRating?.message}
-                        value={field.value}
-                        onChange={field.onChange}
-                        data-testid="ofsted-rating-select"
-                        fullWidth
-                      >
-                        {Object.keys(OfstedRating).map(option => (
-                          <MenuItem
-                            key={option}
-                            value={option}
-                            data-testid={`ofsted-rating-option-${option}`}
-                          >
-                            {t(`ofsted-rating.${option.toLowerCase()}`)}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    )}
-                  />
-                </Grid>
-                <Grid item md={6}>
-                  <Controller
-                    name="ofstedLastInspection"
-                    control={control}
-                    render={({ field }) => (
-                      <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                          format={INPUT_DATE_FORMAT}
-                          value={field.value}
-                          onChange={field.onChange}
-                          slotProps={{
-                            textField: {
-                              error: !!errors.ofstedRating,
-                              helperText: errors.ofstedRating?.message,
-                              label: t(
-                                'pages.edit-org-details.ofsted-last-inspection'
-                              ),
-                              variant: 'filled',
-                              fullWidth: true,
-                            },
-                          }}
-                        />
-                      </LocalizationProvider>
-                    )}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
-
-            <Typography variant="subtitle2" mb={1}>
-              {t('pages.edit-org-details.address')}
-            </Typography>
-
-            <Box bgcolor="common.white" p={3} pb={1} mb={4} borderRadius={1}>
-              <Box mb={3}>
-                <TextField
-                  id="line1"
-                  required
-                  label={t('common.addr.line1')}
-                  variant="filled"
-                  error={!!errors.line1}
-                  helperText={errors.line1?.message}
-                  {...register('line1')}
-                  inputProps={{ 'data-testid': 'line1' }}
-                  fullWidth
-                />
-              </Box>
-              <Box mb={3}>
-                <TextField
-                  id="line2"
-                  label={t('common.addr.line2')}
-                  variant="filled"
-                  error={!!errors.line2}
-                  helperText={errors.line2?.message}
-                  {...register('line2')}
-                  inputProps={{ 'data-testid': 'line2' }}
-                  fullWidth
-                />
-              </Box>
-              <Box mb={3}>
-                <TextField
-                  id="city"
-                  required
-                  label={t('common.addr.city')}
-                  variant="filled"
-                  error={!!errors.city}
-                  helperText={errors.city?.message}
-                  {...register('city')}
-                  inputProps={{ 'data-testid': 'city' }}
-                  fullWidth
-                />
-              </Box>
-              <Box mb={3}>
-                <TextField
-                  id="country"
-                  required
-                  label={t('common.addr.country')}
-                  variant="filled"
-                  error={!!errors.country}
-                  helperText={errors.country?.message}
-                  {...register('country')}
-                  inputProps={{ 'data-testid': 'country' }}
-                  fullWidth
-                />
-              </Box>
-              <Box mb={3}>
-                <TextField
-                  id="postCode"
-                  required
-                  label={t('common.addr.postCode')}
-                  variant="filled"
-                  error={!!errors.postCode}
-                  helperText={errors.postCode?.message}
-                  {...register('postCode')}
-                  inputProps={{ 'data-testid': 'postCode' }}
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <Tooltip title={t('common.post-code-tooltip')}>
-                        <InfoIcon color={'action'} />
-                      </Tooltip>
-                    ),
-                  }}
-                />
-              </Box>
-            </Box>
-
-            <Typography variant="subtitle2" mb={1}>
-              {t('pages.edit-org-details.additional-details')}
-            </Typography>
-
-            <Box bgcolor="common.white" p={3} pb={1} mb={4} borderRadius={1}>
-              <Grid container spacing={3} mb={3}>
-                <Grid item md={6}>
-                  <TextField
-                    id="headFirstName"
-                    label={t('pages.edit-org-details.head-first-name')}
-                    variant="filled"
-                    error={!!errors.headFirstName}
-                    helperText={errors.headFirstName?.message}
-                    {...register('headFirstName')}
-                    inputProps={{ 'data-testid': 'head-first-name' }}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item md={6}>
-                  <TextField
-                    id="headLastName"
-                    label={t('pages.edit-org-details.head-last-name')}
-                    variant="filled"
-                    error={!!errors.headLastName}
-                    helperText={errors.headLastName?.message}
-                    {...register('headLastName')}
-                    inputProps={{ 'data-testid': 'head-last-name' }}
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-
-              <Box mb={3}>
-                <TextField
-                  id="headTitle"
-                  label={t('pages.edit-org-details.head-title')}
-                  variant="filled"
-                  error={!!errors.headTitle}
-                  helperText={errors.headTitle?.message}
-                  {...register('headTitle')}
-                  inputProps={{ 'data-testid': 'head-title' }}
-                  fullWidth
-                />
-              </Box>
-
-              <Box mb={3}>
-                <TextField
-                  id="headPreferredJobTitle"
-                  label={t('pages.edit-org-details.head-preferred-job-title')}
-                  variant="filled"
-                  error={!!errors.headPreferredJobTitle}
-                  helperText={errors.headPreferredJobTitle?.message}
-                  {...register('headPreferredJobTitle')}
-                  inputProps={{ 'data-testid': 'head-preferred-job-title' }}
-                  fullWidth
-                />
-              </Box>
-
-              <Box mb={3}>
-                <TextField
-                  id="website"
-                  label={t('pages.edit-org-details.website')}
-                  variant="filled"
-                  error={!!errors.website}
-                  helperText={errors.website?.message}
-                  {...register('website')}
-                  inputProps={{ 'data-testid': 'website' }}
-                  fullWidth
-                />
-              </Box>
-            </Box>
-
-            <Box
-              mt={2}
-              display="flex"
-              alignItems="center"
-              justifyContent="flex-end"
-            >
-              <Button
-                variant="outlined"
-                color="primary"
-                component={LinkBehavior}
-                href="..?tab=DETAILS"
-              >
-                {t('cancel')}
-              </Button>
-
-              <LoadingButton
-                variant="contained"
-                color="primary"
-                sx={{ ml: 1 }}
-                type="submit"
-                loading={loading}
-              >
-                {t('save-changes')}
-              </LoadingButton>
-            </Box>
-          </Grid>
-        </Grid>
-      </Container>
+      <OrganizationForm onSubmit={onSubmit} isEditMode editOrgData={org} />
     </Box>
   )
 }

@@ -6,15 +6,14 @@ import { useEffect, useMemo, FC, PropsWithChildren } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation } from 'urql'
 
+import { CountryDropdown } from '@app/components/CountryDropdown'
 import { Dialog } from '@app/components/dialogs'
 import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown'
 import { isDfeSuggestion } from '@app/components/OrgSelector/utils'
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
-import CountryDropdown from '@app/components/VenueSelector/CountryDropdown'
 import {
   InsertOrgLeadMutation,
   InsertOrgLeadMutationVariables,
-  Organization_Type,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { MUTATION as INSERT_ORG_MUTATION } from '@app/queries/organization/insert-org-lead'
@@ -31,7 +30,7 @@ type Props = {
 type FormInput = {
   organisationName: string
   sector: string
-  organisationType: Pick<Organization_Type, 'name'> | ''
+  organisationType: string
   organisationEmail: string
   addressLine1: string
   addressLine2: string
@@ -167,12 +166,6 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
     }
     await insertOrganisation(vars)
   }
-  const handleOrgTypeSelection = (
-    orgType: Pick<Organization_Type, 'name'> | ''
-  ) => {
-    console.log(orgType)
-    setValue('organisationType', orgType)
-  }
   useEffect(() => {
     setValue('organisationType', '')
   }, [setValue, values.sector])
@@ -225,7 +218,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
             {values.sector !== 'other' ? (
               <OrgTypeSelector
                 sector={values.sector}
-                onChange={handleOrgTypeSelection}
+                register={{ ...register('organisationType') }}
                 label={t('fields.organisation-type')}
                 required
                 value={values.organisationType}

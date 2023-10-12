@@ -17,7 +17,7 @@ export const MUTATION = gql`
         address: $address
         attributes: $attributes
         sector: $sector
-        organisation_type: $orgType
+        organisationType: $orgType
       }
     ) {
       name

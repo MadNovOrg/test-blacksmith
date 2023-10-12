@@ -1,11 +1,10 @@
-import React from 'react'
 import { noop } from 'ts-essentials'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
-import { getAOLCountries, getAOLRegions } from '../../helpers'
+import { getAOLCountries, getAOLRegions } from './helpers'
 
-import { CourseAOLRegionDropdown } from './index'
+import { RegionDropdown } from './index'
 
 const getOption = (region: string) => {
   return screen.getByTestId(`course-aol-region-option-${region}`)
@@ -13,15 +12,15 @@ const getOption = (region: string) => {
 
 const countries = getAOLCountries()
 
-describe('component: CourseAOLRegionDropdown', () => {
+describe(RegionDropdown.name, () => {
   beforeAll(() => {
     countries.forEach(async (country: string) => {
       render(
-        <CourseAOLRegionDropdown
+        <RegionDropdown
           value=""
           onChange={noop}
           usesAOL={true}
-          aolCountry={country}
+          country={country}
         />
       )
     })

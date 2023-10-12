@@ -32,7 +32,6 @@ export const OrgDetailsTab: React.FC<
     Object.entries(sectors).find(
       ([key, value]) => key === org?.sector && value
     ) || []
-
   return (
     <Box sx={{ pt: 2, pb: 4 }}>
       {status === LoadingStatus.FETCHING ? (
@@ -71,6 +70,12 @@ export const OrgDetailsTab: React.FC<
                     'pages.org-details.tabs.details.org-details-section.sector'
                   )}
                   value={sector || ''}
+                />
+                <DetailsRow
+                  label={t(
+                    'pages.org-details.tabs.details.org-details-section.org-type'
+                  )}
+                  value={org.organisationType}
                 />
                 <DetailsRow
                   label={t(
@@ -161,21 +166,21 @@ export const OrgDetailsTab: React.FC<
             />
             <DetailsRow
               label={t(
-                'pages.org-details.tabs.details.additional-details.head-last-name'
+                'pages.org-details.tabs.details.additional-details.head-surname'
               )}
-              value={org.attributes.headLastName}
+              value={org.attributes.headSurname}
             />
             <DetailsRow
               label={t(
-                'pages.org-details.tabs.details.additional-details.head-title'
+                'pages.org-details.tabs.details.additional-details.head-email'
               )}
-              value={org.attributes.headTitle}
+              value={org.attributes.headEmailAddress}
             />
             <DetailsRow
               label={t(
-                'pages.org-details.tabs.details.additional-details.head-preferred-job-title'
+                'pages.org-details.tabs.details.additional-details.setting'
               )}
-              value={org.attributes.headPreferredJobTitle}
+              value={org.attributes.settingName}
             />
             <DetailsRow
               label={t(

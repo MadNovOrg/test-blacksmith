@@ -1,4 +1,3 @@
-import { noop } from 'ts-essentials'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
@@ -21,12 +20,7 @@ describe(OrgTypeSelector.name, () => {
   it("doesn't display options initially", async () => {
     render(
       <Provider value={urqlMockClient}>
-        <OrgTypeSelector
-          value={''}
-          disabled={false}
-          sector="edu"
-          onChange={noop}
-        />
+        <OrgTypeSelector value={''} disabled={false} sector="edu" />
       </Provider>
     )
 
@@ -40,12 +34,7 @@ describe(OrgTypeSelector.name, () => {
   it('loads options', async () => {
     render(
       <Provider value={urqlMockClient}>
-        <OrgTypeSelector
-          value={''}
-          disabled={false}
-          sector="edu"
-          onChange={noop}
-        />
+        <OrgTypeSelector value={''} disabled={false} sector="edu" />
       </Provider>
     )
     await userEvent.click(screen.getByRole('button'))

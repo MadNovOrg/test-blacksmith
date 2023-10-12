@@ -10,12 +10,14 @@ export const MUTATION = gql`
     $address: jsonb!
     $attributes: jsonb = {}
     $xeroId: String
+    $organisationType: String!
     $invites: [organization_invites_insert_input!] = []
   ) {
     org: insert_organization_one(
       object: {
         name: $name
         sector: $sector
+        organisationType: $organisationType
         address: $address
         attributes: $attributes
         xeroContactId: $xeroId

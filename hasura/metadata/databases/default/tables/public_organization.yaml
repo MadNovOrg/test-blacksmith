@@ -11,6 +11,8 @@ configuration:
       custom_name: geoCoordinates
     go1_licenses:
       custom_name: go1Licenses
+    organisation_type:
+      custom_name: organisationType
     reserved_go1_licenses:
       custom_name: reservedGo1Licenses
     updated_at:
@@ -22,6 +24,7 @@ configuration:
     created_at: createdAt
     geo_coordinates: geoCoordinates
     go1_licenses: go1Licenses
+    organisation_type: organisationType
     reserved_go1_licenses: reservedGo1Licenses
     updated_at: updatedAt
     xero_contact_id: xeroContactId

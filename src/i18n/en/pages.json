@@ -1080,9 +1080,32 @@
   },
   "create-organization": {
     "title": "Create Organisation",
+    "organization-address":  "Organisation address",
+    "additional-org-details": "Additional details",
+    "head-of-service-org-details": "Head of service",
     "fields": {
       "organization-name": "Organisation name",
-      "work-email": "Work email"
+      "work-email": "Work email",
+      "organization-type": "Organisation Type",
+      "organization-email": "Organisation email",
+      "organization-phone": "Organisation phone",
+      "organization-sector": "Sector",
+      "organization-website": "Organisation website",
+
+      "addresses": {
+        "line1": "Address Line 1",
+        "line2": "Address Line 2",
+        "city": "Town/City",
+        "postcode": "Post code",
+        "country": "Country"
+      },
+      "head-first-name": "First name",
+      "head-surname":"Surname",
+      "head-email-address":"Head of service email address",
+      "setting-name":"Setting name (if applicable)",
+      "local-authority":"Local authority (if applicable)",
+      "ofsted-rating":"Ofsted/CQC rating (if applicable)",
+      "ofsted-last-inspection-date":"Last inspection date"
     },
     "add-new-organization": "Add new organisation",
     "organization-details": "Organisation details",
@@ -1103,8 +1126,7 @@
           "address": "Address",
           "org-email": "Organisation email",
           "sector": "Sector",
-          "trust-type": "Trust type",
-          "trust": "Trust",
+          "org-type": "Organisation Type",
           "local-authority": "Local authority",
           "ofsted-rating": "Ofsted rating",
           "ofsted-last-inspection": "Ofsted last inspection"
@@ -1112,10 +1134,10 @@
         "additional-details": {
           "title": "Additional details",
           "head-first-name": "Head first name",
-          "head-last-name": "Head last name",
-          "head-title": "Head title",
+          "head-surname": "Head surname",
+          "head-email": "Head of service email address",
           "website": "Website",
-          "head-preferred-job-title": "Head preferred job title"
+          "setting": "Setting name"
         },
         "user-details": {
           "title": "User details",
@@ -1267,7 +1289,6 @@
     "org-name": "Organisation name",
     "trust-name": "Trust name",
     "org-email": "Organisation email",
-    "trust-type": "Trust type",
     "org-phone": "Organisation phone",
     "sector": "Sector",
     "local-authority": "Local authority",

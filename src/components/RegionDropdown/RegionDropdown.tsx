@@ -7,26 +7,26 @@ import useCountryRegions from '@app/hooks/useCountryRegions'
 interface Props {
   value: string | null
   onChange: (value: string | null) => void
-  usesAOL: boolean
-  aolCountry: string | null
+  usesAOL?: boolean
+  country: string | null
   disabled?: boolean
   error?: boolean
   required?: boolean
+  label?: string
 }
 
-export const CourseAOLRegionDropdown: React.FC<
-  React.PropsWithChildren<Props>
-> = ({
+export const RegionDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   value,
   onChange,
   usesAOL,
-  aolCountry,
+  country,
   disabled,
   error,
   required = false,
+  label,
 }) => {
   const { t } = useTranslation()
-  const regions = useCountryRegions(aolCountry)
+  const regions = useCountryRegions(country)
   const selected = value
 
   useEffect(() => {
@@ -58,13 +58,13 @@ export const CourseAOLRegionDropdown: React.FC<
           </Box>
         )
       }}
-      onChange={(event, value) => onChange(value)}
+      onChange={(_, value) => onChange(value)}
       disableClearable={true}
       renderInput={params => (
         <TextField
           {...params}
-          label={t('licenced-area')}
-          data-testid={`course-aol-region-select-${aolCountry}`}
+          label={!label ? t('licenced-area') : label}
+          data-testid={`course-aol-region-select-${country}`}
           fullWidth
           sx={{ bgcolor: 'grey.100' }}
           variant="filled"

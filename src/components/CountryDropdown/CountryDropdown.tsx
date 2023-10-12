@@ -20,9 +20,10 @@ interface ICountryDropdownProps {
   error: boolean
   errormessage?: string
   label?: string
+  value?: string
 }
 
-const CountryDropdown = React.forwardRef(function CountryDropdown(
+export const CountryDropdown = React.forwardRef(function CountryDropdown(
   props: ICountryDropdownProps,
   ref: React.Ref<HTMLSelectElement>
 ) {
@@ -58,5 +59,3 @@ const CountryDropdown = React.forwardRef(function CountryDropdown(
     </FormControl>
   )
 })
-
-export default CountryDropdown

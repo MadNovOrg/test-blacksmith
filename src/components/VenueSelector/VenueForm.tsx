@@ -14,6 +14,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
 
+import { CountryDropdown } from '@app/components/CountryDropdown'
 import {
   ADD_VENUE_MUTATION,
   ParamsType,
@@ -22,8 +23,6 @@ import {
 import { yup } from '@app/schemas'
 import { Venue } from '@app/types'
 import { requiredMsg, isValidUKPostalCode } from '@app/util'
-
-import CountryDropdown from './CountryDropdown'
 
 export type VenueFormProps = {
   data: Omit<Venue, 'id'> | undefined
