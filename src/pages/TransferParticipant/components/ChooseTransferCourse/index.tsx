@@ -29,7 +29,7 @@ export const ChooseTransferCourse: React.FC<
 
   const { courseChosen, mode, cancel } = useTransferParticipantContext()
 
-  const [chosenCourse, setChoosenCourse] = useState<EligibleCourse>()
+  const [chosenCourse, setChosenCourse] = useState<EligibleCourse>()
 
   const { courses, fetching } = useEligibleCourses()
 
@@ -80,7 +80,7 @@ export const ChooseTransferCourse: React.FC<
                   <TableCell>
                     <Radio
                       checked={chosenCourse?.id === course?.id}
-                      onClick={() => setChoosenCourse(course)}
+                      onClick={() => setChosenCourse(course)}
                       value={course?.id}
                       inputProps={{ 'aria-label': String(course?.id) }}
                       data-testid={`change-course-${course?.id}`}

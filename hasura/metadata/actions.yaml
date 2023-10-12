@@ -313,6 +313,7 @@ actions:
       - role: booking-contact
       - role: organization-key-contact
       - role: user
+      - role: sales-representative
     comment: Send course information to the specified course attendees
   - name: signUp
     definition:
