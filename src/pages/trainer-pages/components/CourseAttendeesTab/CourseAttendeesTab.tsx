@@ -120,9 +120,7 @@ export const CourseAttendeesTab: React.FC<
             <CourseInvites
               course={course}
               attendeesCount={courseParticipantsTotal ?? 0}
-              onExportError={() =>
-                setShowCourseInformationAlert({ success: false })
-              }
+              onExportError={showErrorAlert}
             />
           </Grid>
           <TabContext value={selectedTab}>
@@ -139,7 +137,9 @@ export const CourseAttendeesTab: React.FC<
             <TabPanel value="0" sx={{ px: 0 }}>
               <AttendingTab
                 course={course}
-                onSendingCourseInformation={showErrorAlert}
+                onSendingCourseInformation={success =>
+                  setShowCourseInformationAlert({ success })
+                }
               />
             </TabPanel>
             {!isOpenCourse ? (

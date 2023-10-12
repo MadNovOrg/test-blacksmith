@@ -76,7 +76,7 @@ export const VariantMinimal: React.FC<VariantMinimalProps> = ({
       >
         <Container>
           <Typography sx={{ mb: 2 }} variant="body1" color="grey.600">
-            {t(`individual-cancellation-minimal.description-${course.type}`)}
+            {t(`individual-cancellation-minimal.description`)}
           </Typography>
           {error && <Alert severity="error">{error.message}</Alert>}
         </Container>

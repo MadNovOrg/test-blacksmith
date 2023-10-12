@@ -1531,9 +1531,7 @@
   },
   "individual-cancellation-minimal": {
     "title": "Cancel {{ fullName }} from {{ courseCode }}?",
-    "description": "This action will immediately cancel this attendee from this course.",
-    "description-CLOSED": "The attendee will receive an email notification confirming this change.",
-    "description-INDIRECT": "This action will immediately cancel this attendee from this course. This will notify the attendee and organisation (if applicable)."
+    "description": "This action will immediately cancel this attendee from this course. This will notify the attendee and organisation (if applicable)."
   },
   "audits": {
     "title": "Cancellations, Transfers & Replacements",
