@@ -420,6 +420,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
           _course.organizationKeyContact?.id === auth.profile?.id
       ),
 
+    isBookingContactOfCourse: (_course: Course) =>
+      Boolean(
+        acl.isBookingContact() &&
+          _course.bookingContact?.id === auth.profile?.id
+      ),
+
     canParticipateInCourses: () =>
       anyPass([
         acl.isBookingContact,

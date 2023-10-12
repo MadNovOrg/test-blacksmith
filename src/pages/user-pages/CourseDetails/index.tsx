@@ -129,26 +129,25 @@ export const CourseDetails: React.FC<
   const courseParticipant: CourseParticipant | null =
     data?.course_participant?.length > 0 ? data?.course_participant[0] : null
 
-  const isBookingContact = course?.bookingContact?.id === profileId
-  const isOrgKeyContact = course?.organizationKeyContact?.id === profileId
+  const isBookingContact = Boolean(
+    course && acl.isBookingContactOfCourse(course)
+  )
+  const isOrgKeyContact = Boolean(
+    course && acl.isOrganizationKeyContactOfCourse(course)
+  )
+  const isOrgAdmin = Boolean(course && acl.isOrgAdmin(course.organization?.id))
+
   const isParticipant = !!courseParticipant
 
   useEffect(() => {
     if (course && !activeTab) {
       setActiveTab(
-        (isOrgKeyContact || isBookingContact) && bookingOnly
+        [isBookingContact, isOrgAdmin, isOrgKeyContact].includes(true)
           ? CourseDetailsTabs.ATTENDEES
           : 'checklist'
       )
     }
-  }, [
-    bookingOnly,
-    course,
-    isBookingContact,
-    isOrgKeyContact,
-    isParticipant,
-    activeTab,
-  ])
+  }, [activeTab, course, isBookingContact, isOrgAdmin, isOrgKeyContact])
 
   const { data: usersData, error } = useSWR<
     GetFeedbackUsersQuery,
