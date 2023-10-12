@@ -7,6 +7,7 @@ import {
   courseCategoryUserAttends,
   hasGotPassForTrainerCourse,
   trainerCourseProgress,
+  ICourseCategoryUserAttends,
 } from '@app/pages/Resources/utils'
 import {
   Course,
@@ -373,9 +374,15 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canViewResources: () => {
-      const attendedCourse = courseCategoryUserAttends(auth.profile?.courses)
-      const courseProgress = trainerCourseProgress(auth.profile?.courses)
-      const hasPassed = hasGotPassForTrainerCourse(auth.profile?.courses)
+      const attendedCourse = courseCategoryUserAttends(
+        auth.profile?.courses as ICourseCategoryUserAttends[]
+      )
+      const courseProgress = trainerCourseProgress(
+        auth.profile?.courses as ICourseCategoryUserAttends[]
+      )
+      const hasPassed = hasGotPassForTrainerCourse(
+        auth.profile?.courses as ICourseCategoryUserAttends[]
+      )
 
       const attendedTrainerCourse =
         attendedCourse && attendedCourse.attendsTrainer

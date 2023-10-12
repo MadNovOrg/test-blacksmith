@@ -1,28 +1,30 @@
-import { isPast, parseISO } from 'date-fns'
+import { isPast, isFuture, parseISO } from 'date-fns'
 
-import { Grade_Enum, Course_Level_Enum } from '@app/generated/graphql'
+import { Grade_Enum } from '@app/generated/graphql'
 
-enum TrainerCourses {
+export enum TrainerCoursesEnum {
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   AdvancedTrainer = 'ADVANCED_TRAINER',
   BildIntermediateTrainer = 'BILD_INTERMEDIATE_TRAINER',
   BildAdvancedTrainer = 'BILD_ADVANCED_TRAINER',
 }
 
-enum NonTrainerCourses {
+enum NonTrainerCoursesEnum {
   Level1 = 'LEVEL_1',
   Level2 = 'LEVEL_2',
   BildRegular = 'BILD_REGULAR',
   Advanced = 'ADVANCED',
 }
 
-interface ICourseCategoryUserAttends {
+type AttendedCourseData = {
+  start?: string | undefined
+  end?: string | undefined
+  level?: TrainerCoursesEnum | NonTrainerCoursesEnum
+}
+
+export interface ICourseCategoryUserAttends {
   grade?: Grade_Enum | null | undefined
-  course: {
-    start?: string | undefined
-    end?: string | undefined
-    level?: Course_Level_Enum
-  }
+  course: AttendedCourseData
 }
 
 interface ICourseCategoryUserAttendsReturnType {
@@ -35,8 +37,8 @@ interface ITrainerCourseProgress {
   ended: boolean | null
 }
 
-const trainerCoursesList = Object.values(TrainerCourses)
-const nonTrainerCoursesList = Object.values(NonTrainerCourses)
+const trainerCoursesList = Object.values(TrainerCoursesEnum)
+const nonTrainerCoursesList = Object.values(NonTrainerCoursesEnum)
 
 const courseCategoryUserAttends = (
   participantCourses?: ICourseCategoryUserAttends[]
@@ -48,13 +50,13 @@ const courseCategoryUserAttends = (
 
   const attendsNonTrainerCourse = participantCourses?.some(participantCourse =>
     nonTrainerCoursesList.includes(
-      participantCourse.course.level as unknown as NonTrainerCourses
+      participantCourse.course.level as NonTrainerCoursesEnum
     )
   )
 
   const attendsTrainerCourse = participantCourses?.some(participantCourse =>
     trainerCoursesList.includes(
-      participantCourse.course.level as unknown as TrainerCourses
+      participantCourse.course.level as TrainerCoursesEnum
     )
   )
 
@@ -64,12 +66,33 @@ const courseCategoryUserAttends = (
   }
 }
 
+const onGoingTrainerCourseLevelsUserAttends = (
+  userCourses?: ICourseCategoryUserAttends[]
+): (TrainerCoursesEnum | never[])[] | undefined => {
+  const onGoingCourses = userCourses?.map(({ course }) => {
+    const courseIsOngoing =
+      isPast(parseISO(course.start ?? '')) &&
+      isFuture(parseISO(course.end ?? ''))
+
+    if (courseIsOngoing) {
+      return course.level as TrainerCoursesEnum
+    }
+
+    return null
+  })
+
+  return (
+    (onGoingCourses?.filter(level => level) as TrainerCoursesEnum[]) ||
+    undefined
+  )
+}
+
 const trainerCourseProgress = (
   participantCourses?: ICourseCategoryUserAttends[]
 ): ITrainerCourseProgress | null => {
   const attendedTrainerCourses = participantCourses?.filter(attendedCourse =>
     trainerCoursesList.includes(
-      attendedCourse.course.level as unknown as TrainerCourses
+      attendedCourse.course.level as TrainerCoursesEnum
     )
   )
 
@@ -91,7 +114,7 @@ const hasGotPassForTrainerCourse = (
 ): boolean | undefined => {
   const attendedTrainerCourses = coursesList?.filter(attendedCourse =>
     trainerCoursesList.includes(
-      attendedCourse.course.level as unknown as TrainerCourses
+      attendedCourse.course.level as TrainerCoursesEnum
     )
   )
 
@@ -103,6 +126,7 @@ const hasGotPassForTrainerCourse = (
 
 export {
   courseCategoryUserAttends,
+  onGoingTrainerCourseLevelsUserAttends,
   hasGotPassForTrainerCourse,
   trainerCourseProgress,
 }
