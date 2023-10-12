@@ -217,7 +217,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   </Grid>
 
                   <Grid item>
-                    {values.sector.toLowerCase() !== 'other' ? (
+                    {(values.sector || '').toLowerCase() !== 'other' ? (
                       <OrgTypeSelector
                         label={t('fields.organization-type')}
                         value={values.organisationType}
