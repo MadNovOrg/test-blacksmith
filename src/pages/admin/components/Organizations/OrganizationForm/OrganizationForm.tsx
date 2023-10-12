@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import InfoIcon from '@mui/icons-material/Info'
 import { LoadingButton } from '@mui/lab'
 import {
   Container,
@@ -11,6 +12,7 @@ import {
   Button,
   FormHelperText,
   useTheme,
+  Tooltip,
 } from '@mui/material'
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
@@ -95,15 +97,15 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
           }
           switch (key) {
             case 'addressLine1':
-              return orgDataMap.set(key, org.addressLineOne)
+              return orgDataMap.set(key, org.addressLineOne ?? '')
             case 'addressLine2':
-              return orgDataMap.set(key, org.addressLineTwo)
+              return orgDataMap.set(key, org.addressLineTwo ?? '')
             case 'settingName':
-              return orgDataMap.set(key, org.headJobTitle)
+              return orgDataMap.set(key, org.headJobTitle ?? '')
             case 'country':
               return orgDataMap.set(key, _t('UK'))
             case 'city':
-              return orgDataMap.set(key, org.town)
+              return orgDataMap.set(key, org.town ?? '')
             case 'ofstedLastInspection':
               return orgDataMap.set(
                 key,
@@ -215,19 +217,33 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   </Grid>
 
                   <Grid item>
-                    <OrgTypeSelector
-                      label={t('fields.organization-type')}
-                      value={values.organisationType}
-                      register={{ ...register('organisationType') }}
-                      sector={values.sector}
-                      disabled={!values.sector}
-                      error={
-                        errors.organisationType?.message && values.sector
-                          ? errors.organisationType?.message
-                          : undefined
-                      }
-                      required
-                    />
+                    {values.sector.toLowerCase() !== 'other' ? (
+                      <OrgTypeSelector
+                        label={t('fields.organization-type')}
+                        value={values.organisationType}
+                        register={{ ...register('organisationType') }}
+                        sector={values.sector}
+                        disabled={!values.sector}
+                        error={
+                          errors.organisationType?.message && values.sector
+                            ? errors.organisationType?.message
+                            : undefined
+                        }
+                        required
+                      />
+                    ) : (
+                      <TextField
+                        id="organisationType"
+                        label={t('fields.organization-type-text-field')}
+                        variant="filled"
+                        error={!!errors.organisationType}
+                        helperText={errors.organisationType?.message}
+                        {...register('organisationType')}
+                        inputProps={{ 'data-testid': 'organisationType' }}
+                        fullWidth
+                        required
+                      />
+                    )}
                   </Grid>
                   <Grid item>
                     <TextField
@@ -343,6 +359,16 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                       inputProps={{ 'data-testid': 'postCode' }}
                       fullWidth
                       required
+                      InputProps={{
+                        endAdornment: (
+                          <Tooltip
+                            title={_t('post-code-tooltip')}
+                            data-testid="post-code-tooltip"
+                          >
+                            <InfoIcon color={'action'} />
+                          </Tooltip>
+                        ),
+                      }}
                     />
                   </Grid>
                   <Grid item>
