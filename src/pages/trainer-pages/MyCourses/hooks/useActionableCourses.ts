@@ -162,6 +162,7 @@ export default function useActionableCourses({
     requestPolicy: 'cache-and-network',
     variables: {
       where,
+      withArloRefId: acl.isInternalUser(),
       orderBy,
       limit: fetchNoCourses ? 0 : pagination.perPage,
       offset: fetchNoCourses
