@@ -264,12 +264,7 @@ select_permissions:
         - profile_id
         - registration_id
         - updated_at
-      filter:
-        course:
-          course_type:
-            _in:
-              - CLOSED
-              - OPEN
+      filter: {}
       allow_aggregations: true
   - role: trainer
     permission:
@@ -410,6 +405,14 @@ select_permissions:
                       _eq: X-Hasura-User-Id
           - profile_id:
               _eq: X-Hasura-User-Id
+          - course:
+              organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
       allow_aggregations: true
 update_permissions:
   - role: trainer
