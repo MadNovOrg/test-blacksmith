@@ -132,6 +132,8 @@ export const ViewProfilePage: React.FC<
       ].includes(activeRole)
     : true
 
+  const isOrgAdmin = isMyProfile ? false : acl.isOrgAdmin()
+
   return (
     <Box bgcolor="grey.100" pb={6} pt={3} flex={1}>
       <Container>
@@ -317,7 +319,7 @@ export const ViewProfilePage: React.FC<
                         value={profile.email}
                       />
 
-                      {!trainerViewProfile ? (
+                      {trainerViewProfile || isOrgAdmin ? null : (
                         <>
                           <DetailsRow
                             data-testid="profile-phone"
@@ -334,7 +336,7 @@ export const ViewProfilePage: React.FC<
                             }
                           />
                         </>
-                      ) : null}
+                      )}
 
                       <DetailsRow
                         data-testid="profile-job-title"
