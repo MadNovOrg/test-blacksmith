@@ -50,10 +50,11 @@
     "seed:orders": "ts-node ./scripts/seed-orders.ts",
     "graphql-codegen": "graphql-codegen --config codegen.yml",
     "graphql-codegen:watch": "graphql-codegen --config codegen.yml --watch",
-    "release:add": "npx changeset",
-    "release:version": "npx changeset version",
+    "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
-    "preinstall": "npx only-allow pnpm"
+    "release:add": "changeset",
+    "release:version": "changeset version",
+    "release:tag": "changeset tag"
   },
   "dependencies": {
     "@changesets/changelog-github": "^0.4.8",
