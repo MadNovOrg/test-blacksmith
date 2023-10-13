@@ -3,9 +3,12 @@
   "tag": "alpha.1",
   "initialVersions": {
     "@teamteach/hub-api": "1.0.0-alpha",
-    "@teamteach/hub": "1.0.0-alpha"
+    "@teamteach/hub": "1.0.0-alpha",
+    "@teamteach/hub.web-e2e": "1.0.0-alpha.1.0"
   },
   "changesets": [
-    "funny-hornets-wave"
+    "funny-hornets-wave",
+    "six-crews-happen",
+    "yellow-zebras-behave"
   ]
 }
