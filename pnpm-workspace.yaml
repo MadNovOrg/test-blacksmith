@@ -1,5 +1,6 @@
 packages:
   # executable/launchable applications & services
-  - 'apps/*'
+  - 'apps/hub-web-e2e'
+  - ./
   # all packages in shared libraries
   - 'libs/*'

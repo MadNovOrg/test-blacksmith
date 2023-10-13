@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@2.3.1/schema.json",
-  "changelog": "@changesets/cli/changelog",
+  "changelog": ["@changesets/cli/changelog", {"repo": "TeamTeach/hub"}],
   "commit": false,
   "fixed": [],
   "linked": [],
@@ -9,4 +9,5 @@
   "updateInternalDependencies": "patch",
   "ignore": [],
   "privatePackages": { "version": true, "tag": true }
+  
 }
