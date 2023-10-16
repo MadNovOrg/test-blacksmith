@@ -30,7 +30,7 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('b7cc8b4e-b567-42d2-8edf-0b359fb68171', '13a223a8-2184-42f1-ba37-b49e115e59a2', 'cognito'), -- trainer@teamteach.testinator.com
 ('966a5a92-b112-48d3-9031-31d85b5e14b4', '13a223a8-2184-42f1-ba37-b49e115e59a2', 'cognito'), -- trainer@teamteach.testinator.com staging
 
-('8f03d53a-1e16-446f-84c8-4e71a39ca79f', '5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'cognito'), -- trainer.with.org@teamteach.testinator.com
+('d0cc2f0d-4e1c-4f77-9f97-132fbe72b1d8', '5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'cognito'), -- trainer.with.org@teamteach.testinator.com
 ('42d5e858-a41e-4589-adc5-499d643c5771', '5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'cognito'), -- trainer.with.org@teamteach.testinator.com staging
 
 ('d1f28bee-86d5-44d8-a9bb-930af486656a', 'bb5526c7-198c-4be5-a53a-1177f55c1c5b', 'cognito'), -- trainer.and.user@teamteach.testinator.com
