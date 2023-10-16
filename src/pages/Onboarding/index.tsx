@@ -11,6 +11,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { subYears } from 'date-fns'
 import React, { useEffect, useMemo, useCallback } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Trans } from 'react-i18next'
@@ -38,6 +39,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { profile, reloadCurrentProfile } = useAuth()
   const navigate = useNavigate()
   const jobTitles = useJobTitles()
+  const minimalAge = subYears(new Date(), 16)
 
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
   const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
@@ -213,6 +215,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                         setValue('dob', d, { shouldValidate: true })
                       }
                     }}
+                    maxDate={minimalAge}
                     slotProps={{
                       textField: {
                         variant: 'filled',
