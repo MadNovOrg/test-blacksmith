@@ -94,7 +94,7 @@ describe('page: ChooseTransferCourse', () => {
     > = () => {
       const { toCourse } = useTransferParticipantContext()
 
-      return <p>choosen course for transfer is {toCourse?.id}</p>
+      return <p>chosen course for transfer is {toCourse?.id}</p>
     }
 
     const client = {
@@ -116,6 +116,7 @@ describe('page: ChooseTransferCourse', () => {
                     courseCode: 'course-code',
                     startDate: new Date().toISOString(),
                     endDate: new Date().toISOString(),
+                    freeSlots: 2,
                   },
                 ]
               : [],
@@ -149,7 +150,7 @@ describe('page: ChooseTransferCourse', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(`choosen course for transfer is ${TO_COURSE_ID}`)
+        screen.getByText(`chosen course for transfer is ${TO_COURSE_ID}`)
       ).toBeInTheDocument()
     })
   })

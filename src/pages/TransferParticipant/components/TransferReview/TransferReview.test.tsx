@@ -103,6 +103,7 @@ describe('page: TransferReview', () => {
       courseCode: 'course-code',
       startDate: new Date().toISOString(),
       endDate: addDays(new Date(), 1).toISOString(),
+      freeSlots: 2,
     }
 
     const participant: ChosenParticipant = {
@@ -167,6 +168,7 @@ describe('page: TransferReview', () => {
       courseCode: 'course-code',
       startDate: new Date().toISOString(),
       endDate: addDays(new Date(), 1).toISOString(),
+      freeSlots: 2,
     }
 
     const participant: ChosenParticipant = {
@@ -227,6 +229,7 @@ describe('page: TransferReview', () => {
       courseCode: 'course-code',
       startDate: new Date().toISOString(),
       endDate: addDays(new Date(), 1).toISOString(),
+      freeSlots: 2,
     }
 
     const participant: ChosenParticipant = {
@@ -293,6 +296,7 @@ describe('page: TransferReview', () => {
       courseCode: 'course-code',
       startDate: new Date().toISOString(),
       endDate: addDays(new Date(), 1).toISOString(),
+      freeSlots: 2,
     }
 
     const participant: ChosenParticipant = {
@@ -398,6 +402,7 @@ describe('page: TransferReview', () => {
       courseCode: 'course-code',
       startDate: new Date().toISOString(),
       endDate: addDays(new Date(), 1).toISOString(),
+      freeSlots: 2,
     }
 
     const participant: ChosenParticipant = {

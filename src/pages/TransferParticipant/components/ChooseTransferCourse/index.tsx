@@ -48,6 +48,11 @@ export const ChooseTransferCourse: React.FC<
         label: t('choose-course.col-end-date'),
         sorting: false,
       },
+      {
+        id: 'free-spaces',
+        label: t('choose-course.col-spaces-left'),
+        sorting: false,
+      },
     ],
     [t]
   )
@@ -121,6 +126,13 @@ export const ChooseTransferCourse: React.FC<
                     <Typography color={theme.palette.dimGrey.main}>
                       {_t('dates.time', { date: course.endDate })}
                     </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{`${course.freeSlots} ${
+                      course.freeSlots === 1
+                        ? t('choose-course.one-free-slot')
+                        : t('choose-course.free-slots')
+                    }`}</Typography>
                   </TableCell>
                 </TableRow>
               ))}

@@ -1483,11 +1483,14 @@
       "col-venue": "Venue",
       "col-start-date": "Starts",
       "col-end-date": "Ends",
+      "col-spaces-left": "Spaces left",
       "no-courses": "No eligible courses for transfer at the moment",
       "next-btn-text_ADMIN_TRANSFERS": "Transfer details",
       "next-btn-text_ORG_ADMIN_TRANSFERS": "Transfer details",
       "next-btn-text_ATTENDEE_TRANSFERS": "Review & confirm",
-      "venue-virtual": "Virtual"
+      "venue-virtual": "Virtual",
+      "free-slots": "spaces left",
+      "one-free-slot": "space left"
     },
     "transfer-details": {
       "title": "Transfer details",

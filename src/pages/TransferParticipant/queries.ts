@@ -48,6 +48,7 @@ export const TRANSFER_ELIGIBLE_COURSES = gql`
       participantId: $participantId
     ) {
       id
+      freeSlots
       courseCode
       startDate
       endDate

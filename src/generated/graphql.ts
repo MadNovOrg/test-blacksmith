@@ -9512,6 +9512,7 @@ export type TransferCourse = {
   __typename?: 'TransferCourse';
   courseCode: Scalars['String'];
   endDate: Scalars['String'];
+  freeSlots: Scalars['Int'];
   id: Scalars['Int'];
   level?: Maybe<CourseLevel>;
   startDate: Scalars['String'];
@@ -24657,6 +24658,8 @@ export type Course_Schedule_Bool_Exp = {
 
 /** unique or primary key constraints on table "course_schedule" */
 export enum Course_Schedule_Constraint {
+  /** unique or primary key constraint on columns "course_id" */
+  CourseScheduleCourseIdKey = 'course_schedule_course_id_key',
   /** unique or primary key constraint on columns "id" */
   CourseSchedulePkey = 'course_schedule_pkey'
 }
@@ -51238,7 +51241,7 @@ export type TransferEligibleCoursesQueryVariables = Exact<{
 }>;
 
 
-export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, courseCode: string, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null, level?: CourseLevel | null }> };
+export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, freeSlots: number, courseCode: string, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null, level?: CourseLevel | null }> };
 
 export type TransferParticipantMutationVariables = Exact<{
   input: TransferInput;
@@ -51660,7 +51663,7 @@ export type GetUpcomingCoursesQueryVariables = Exact<{
 }>;
 
 
-export type GetUpcomingCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null, schedules: Array<{ __typename?: 'course_schedule', start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', name: string, addressLineOne: string, addressLineTwo?: string | null, city: string, postCode: string, geoCoordinates?: any | null } | null }>, participantsCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } }> };
+export type GetUpcomingCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null, schedules: Array<{ __typename?: 'course_schedule', start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', name: string, addressLineOne: string, addressLineTwo?: string | null, city: string, postCode: string, country?: string | null, geoCoordinates?: any | null } | null }>, participantsCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } }> };
 
 export type InsertCourseAuditMutationVariables = Exact<{
   object: Course_Audit_Insert_Input;
@@ -52282,14 +52285,6 @@ export type InsertOrgLeadMutationVariables = Exact<{
 
 
 export type InsertOrgLeadMutation = { __typename?: 'mutation_root', org?: { __typename?: 'organization', name: string } | null };
-
-export type InsertOrgTypeMutationVariables = Exact<{
-  name: Scalars['String'];
-  sector?: InputMaybe<Organisation_Sector_Enum>;
-}>;
-
-
-export type InsertOrgTypeMutation = { __typename?: 'mutation_root', insert_organization_type_one?: { __typename?: 'organization_type', id: any } | null };
 
 export type InsertOrgMutationVariables = Exact<{
   name: Scalars['String'];
