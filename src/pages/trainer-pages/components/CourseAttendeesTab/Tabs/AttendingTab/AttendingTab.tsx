@@ -227,6 +227,8 @@ export const AttendingTab = ({
     [handleTransferAttendee]
   )
 
+  const isOpenTypeCourse = course.type === CourseType.OPEN
+
   return (
     <>
       {courseParticipantsLoadingStatus === LoadingStatus.SUCCESS &&
@@ -367,17 +369,7 @@ export const AttendingTab = ({
 
           {attendeeToCancel ? (
             <CancelAttendeeDialog
-              variant={
-                [
-                  acl.isBookingContact(),
-                  acl.isCourseLeader(course),
-                  acl.isOrgAdmin(course.organization?.id),
-                  acl.isOrgKeyContact(),
-                ].some(Boolean) ||
-                [CourseType.CLOSED, CourseType.INDIRECT].includes(course.type)
-                  ? 'minimal'
-                  : 'complete'
-              }
+              variant={isOpenTypeCourse ? 'complete' : 'minimal'}
               participant={attendeeToCancel}
               course={course}
               onClose={() => setAttendeeToCancel(undefined)}

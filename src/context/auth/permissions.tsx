@@ -6,8 +6,8 @@ import { Accreditors_Enum } from '@app/generated/graphql'
 import {
   courseCategoryUserAttends,
   hasGotPassForTrainerCourse,
-  trainerCourseProgress,
   ICourseCategoryUserAttends,
+  trainerCourseProgress,
 } from '@app/pages/Resources/utils'
 import {
   Course,
@@ -93,7 +93,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ])(),
 
     isCourseLeader: (course: Pick<Course, 'trainers'>) =>
-      getCourseLeadTrainer(course.trainers)?.profile.id === profile?.id,
+      getCourseLeadTrainer(course.trainers)?.profile.id === profile?.id &&
+      activeRole === RoleName.TRAINER,
 
     canSeeActionableCourseTable: () => anyPass([acl.isTTAdmin, acl.isLD])(),
 
