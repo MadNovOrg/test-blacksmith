@@ -3,7 +3,7 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import LinkIcon from '@mui/icons-material/Link'
 import SlideshowIcon from '@mui/icons-material/Slideshow'
 import { Card, Box, Typography, Link } from '@mui/material'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ResourceSummaryFragment } from '@app/generated/graphql'
@@ -28,16 +28,52 @@ function getIconByResourceType(type: ResourceType | string): ReactNode {
   }
 }
 
+interface IResourceTypeItem {
+  id: string | number
+  type: string
+  url?: string | null
+}
+
 export const ResourceItemCard = ({ resource }: Props) => {
   const { t } = useTranslation()
 
+  const [resourceItem, setResourceItem] = useState<IResourceTypeItem | null>(
+    null
+  )
+
   const resourceType = resource.resourceAttachment?.resourcetype
-  const attachmentURL =
-    resourceType === 'video'
-      ? resource.resourceAttachment?.videourl
-      : resourceType === 'link'
-      ? resource.resourceAttachment?.link?.url
-      : resource.resourceAttachment?.file?.mediaItemUrl
+  const isVideoResource = resourceType === 'video'
+  const isLinkResource = resourceType === 'link'
+
+  const extractResourceItemURL = useCallback(() => {
+    const resourceData: IResourceTypeItem = {
+      id: resource.id,
+      type: '',
+      url: '',
+    }
+    if (isVideoResource) {
+      resourceData.type = 'video'
+      resourceData.url = resource.resourceAttachment?.videourl
+    } else if (isLinkResource) {
+      resourceData.type = 'link'
+      resourceData.url = resource.resourceAttachment?.link?.url
+    } else {
+      resourceData.type = 'file'
+      resourceData.url = resource.resourceAttachment?.file?.mediaItemUrl
+    }
+    setResourceItem(resourceData)
+  }, [
+    isLinkResource,
+    isVideoResource,
+    resource.resourceAttachment?.file?.mediaItemUrl,
+    resource.resourceAttachment?.videourl,
+    resource.resourceAttachment?.link?.url,
+    resource?.id,
+  ])
+
+  useEffect(() => {
+    extractResourceItemURL()
+  }, [extractResourceItemURL])
 
   const resourceIcon = resourceType ? getIconByResourceType(resourceType) : null
 
@@ -46,7 +82,11 @@ export const ResourceItemCard = ({ resource }: Props) => {
       <Link
         target="_blank"
         component={'a'}
-        href={attachmentURL ?? ''}
+        href={
+          resourceItem?.type === 'video'
+            ? `/resources/resource-video/${resourceItem?.url}/${resourceItem?.id}`
+            : resourceItem?.url ?? ''
+        }
         aria-label={`${resource.title} (${t('opens-new-window')})`}
       >
         <Box display="flex" alignItems="center">

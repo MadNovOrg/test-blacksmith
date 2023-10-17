@@ -51,7 +51,11 @@ export const AppFooter = () => {
   ]
 
   return (
-    <Box bgcolor={theme.palette.primary.main} sx={{ minHeight: FOOTER_HEIGHT }}>
+    <Box
+      bgcolor={theme.palette.primary.main}
+      sx={{ minHeight: FOOTER_HEIGHT }}
+      className="app-footer"
+    >
       <Container
         maxWidth="lg"
         sx={{
