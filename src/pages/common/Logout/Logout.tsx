@@ -1,13 +1,6 @@
-import {
-  Box,
-  Stack,
-  CircularProgress,
-} from '@mui/material'
+import { Box, Stack, CircularProgress } from '@mui/material'
 import { useEffect } from 'react'
-import {
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
@@ -27,18 +20,15 @@ export const LogoutPage = () => {
       } else {
         navigate('/')
       }
-    };
+    }
 
-    logoutAndRedirect();
-  }, [callbackUrl, navigate, logout]);
+    logoutAndRedirect()
+  }, [callbackUrl, navigate, logout])
 
   return (
     <AppLayoutMinimal>
       <Box component="section" mt={4}>
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-        >
+        <Stack alignItems="center" justifyContent="center">
           <CircularProgress />
         </Stack>
       </Box>

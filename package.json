@@ -11,7 +11,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "echo TODO: re-enable lint see TTHP-2514",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.snap",
     "lint:fix": "eslint . --fix --ext .js,.jsx,.ts,.tsx,.snap",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
