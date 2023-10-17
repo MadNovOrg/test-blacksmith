@@ -217,6 +217,7 @@ const ExpensesDetails: React.FC<ExpensesDetailsProps> = ({
 }
 
 export const OrderDetailsReview: React.FC = () => {
+  const { t } = useTranslation()
   const {
     courseData,
     courseName,
@@ -331,7 +332,19 @@ export const OrderDetailsReview: React.FC = () => {
       ]
     }, [courseData, trainerExpensesTotal, pricing])
 
-  const { t } = useTranslation()
+  const courseVenue = courseData?.venue
+  const locationNameAddressCity = [
+    courseVenue?.name,
+    courseVenue?.addressLineOne,
+    courseVenue?.addressLineTwo,
+    courseVenue?.city,
+  ]
+    .filter(item => item)
+    .join(', ')
+  const locationPostCodeCountry = [courseVenue?.postCode, courseVenue?.country]
+    .filter(item => item)
+    .join(', ')
+
   return (
     <Stack spacing="2px">
       <InfoPanel data-testid="course-info">
@@ -349,6 +362,18 @@ export const OrderDetailsReview: React.FC = () => {
           {t('dates.withTime', { date: startDate })} -{' '}
           {t('dates.withTime', { date: endDate })}
         </Typography>
+      </InfoPanel>
+
+      <InfoPanel>
+        <Box display="flex" justifyContent="space-between" mb={3}>
+          <Typography color="grey.700">{t('location')}</Typography>
+          <Box flexDirection="column" alignItems="flex-end">
+            <Typography color="grey.700">{locationNameAddressCity}</Typography>
+            <Typography color="grey.700" textAlign="right">
+              {locationPostCodeCountry}
+            </Typography>
+          </Box>
+        </Box>
       </InfoPanel>
 
       <InfoPanel>

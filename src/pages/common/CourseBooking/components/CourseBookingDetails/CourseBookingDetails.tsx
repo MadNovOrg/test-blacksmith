@@ -461,7 +461,17 @@ export const CourseBookingDetails: React.FC<
   )
 
   const courseVenue = course.schedule[0].venue
-  const courseLocation = [courseVenue?.name, courseVenue?.city].join(', ')
+  const locationNameAddressCity = [
+    courseVenue?.name,
+    courseVenue?.addressLineOne,
+    courseVenue?.addressLineTwo,
+    courseVenue?.city,
+  ]
+    .filter(item => item)
+    .join(', ')
+  const locationPostCodeCountry = [courseVenue?.postCode, courseVenue?.country]
+    .filter(item => item)
+    .join(', ')
 
   const showRegistrantSuggestions =
     values.orgId && (acl.isAdmin() || acl.isOrgAdmin(values.orgId))
@@ -513,7 +523,14 @@ export const CourseBookingDetails: React.FC<
 
           <Box display="flex" justifyContent="space-between" mb={3}>
             <Typography color="grey.700">{t('location')}</Typography>
-            <Typography color="grey.700">{courseLocation}</Typography>
+            <Box flexDirection="column" alignItems="flex-end">
+              <Typography color="grey.700">
+                {locationNameAddressCity}
+              </Typography>
+              <Typography color="grey.700" textAlign="right">
+                {locationPostCodeCountry}
+              </Typography>
+            </Box>
           </Box>
 
           <Box display="flex" justifyContent="space-between" mb={1}>
