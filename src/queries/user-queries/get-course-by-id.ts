@@ -11,6 +11,7 @@ export type ParamsType = {
   id: string
   withOrders?: boolean
   withGo1Data?: boolean
+  withCancellationRequest?: boolean
   profileId: string
 }
 
@@ -23,6 +24,7 @@ export const QUERY = gql`
     $withOrders: Boolean = false
     $withGo1Data: Boolean = false
     $profileId: uuid!
+    $withCancellationRequest: Boolean = false
   ) {
     course: course_by_pk(id: $id) {
       id
@@ -30,6 +32,9 @@ export const QUERY = gql`
       type
       deliveryType
       go1Integration @include(if: $withGo1Data)
+      cancellationRequest @include(if: $withCancellationRequest) {
+        id
+      }
       level
       course_code
       reaccreditation

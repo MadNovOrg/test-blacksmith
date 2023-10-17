@@ -1,3 +1,4 @@
+import Cancel from '@mui/icons-material/Cancel'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import { TabContext, TabPanel } from '@mui/lab'
 import {
@@ -5,19 +6,20 @@ import {
   Box,
   Button,
   Chip,
-  Grid,
   CircularProgress,
   Container,
+  Grid,
   Stack,
-  Typography,
-  useTheme,
-  useMediaQuery,
   styled,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { CourseCertification } from '@app/components/CourseCertification'
@@ -35,11 +37,12 @@ import {
 } from '@app/generated/graphql'
 import { CourseAttendeesTab } from '@app/pages/trainer-pages/components/CourseAttendeesTab'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
+import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
 import { ModifyAttendanceModal } from '@app/pages/user-pages/CourseDetails/ModifyAttendanceModal'
 import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/queries/course-evaluation/get-feedback-users'
 import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
-  ParamsType as GetCourseParamsType,
+  ParamsType,
   QUERY as GET_COURSE_QUERY,
   ResponseType as GetCourseResponseType,
 } from '@app/queries/user-queries/get-course-by-id'
@@ -84,25 +87,28 @@ export const CourseDetails: React.FC<
     acl.isBookingContact() || acl.isOrgAdmin() || acl.isOrgKeyContact()
 
   const [pollCertificateCounter, setPollCertificateCounter] = useState(10)
+  const [showCancellationRequestModal, setShowCancellationRequestModal] =
+    useState(false)
 
-  const { data: courseData, error: courseError } = useSWR<
+  const [{ data: courseData, error: courseError }, refetch] = useQuery<
     {
       course: GetCourseResponseType['course'] & {
         organization?: Pick<Organization, 'members'>
       }
     },
-    Error,
-    [string, GetCourseParamsType]
-  >([
-    GET_COURSE_QUERY,
-    {
+    ParamsType
+  >({
+    query: GET_COURSE_QUERY,
+    variables: {
       id: courseId,
       withOrders: canViewOrderItem,
       withGo1Data:
         acl.isBookingContact() || acl.isOrgAdmin() || acl.isOrgKeyContact(),
       profileId: profile?.id || '',
+      withCancellationRequest: acl.isBookingContact() || acl.isOrgAdmin(),
     },
-  ])
+    requestPolicy: 'network-only',
+  })
   const course = courseData?.course
   const courseLoadingStatus = getSWRLoadingStatus(courseData, courseError)
 
@@ -160,13 +166,19 @@ export const CourseDetails: React.FC<
     return !!usersData?.users.find(u => u.profile.id === profileId)
   }, [usersData, profileId])
 
-  const canManageCourse = useMemo(() => {
-    return Boolean(
-      course?.organization?.members.find(
-        member => member.isAdmin && member.profile_id === profileId
-      )
-    )
-  }, [course, profileId])
+  const canRequestCancellation = useMemo(
+    () =>
+      !!course &&
+      [
+        !acl.canCancelCourses(),
+        !course.cancellationRequest,
+        acl.isBookingContactOfCourse(course),
+        bookingOnly,
+        course.status !== Course_Status_Enum.Cancelled,
+        course.type === CourseType.CLOSED,
+      ].every(el => Boolean(el)),
+    [acl, bookingOnly, course]
+  )
 
   const courseHasStarted = course && courseStarted(course)
   const courseHasEnded = course && courseEnded(course)
@@ -272,6 +284,17 @@ export const CourseDetails: React.FC<
             </Box>
           ) : null}
 
+          {course && (
+            <Container disableGutters={isMobile}>
+              <CourseCancellationRequestFeature
+                course={course}
+                open={showCancellationRequestModal}
+                onClose={() => setShowCancellationRequestModal(false)}
+                onChange={refetch}
+              />
+            </Container>
+          )}
+
           {activeTab ? (
             <TabContext value={activeTab}>
               <Box borderBottom={1} borderColor="divider">
@@ -321,7 +344,7 @@ export const CourseDetails: React.FC<
                         )}
                       </PillTabList>
                     </Box>
-                    <Box>
+                    <Box display={'flex'}>
                       {!courseHasStarted && course.type === CourseType.OPEN ? (
                         <Button variant="text">
                           <Typography
@@ -337,7 +360,7 @@ export const CourseDetails: React.FC<
                         </Button>
                       ) : null}
 
-                      {canManageCourse ? (
+                      {acl.isOrgAdmin() ? (
                         <Button
                           variant="text"
                           component={LinkBehavior}
@@ -351,6 +374,16 @@ export const CourseDetails: React.FC<
                           >
                             {t('pages.participant-course.manage-course')}
                           </Typography>
+                        </Button>
+                      ) : null}
+                      {canRequestCancellation ? (
+                        <Button
+                          data-testid="request-cancellation-button"
+                          variant="text"
+                          startIcon={<Cancel />}
+                          onClick={() => setShowCancellationRequestModal(true)}
+                        >
+                          {t('pages.edit-course.request-cancellation')}
                         </Button>
                       ) : null}
                     </Box>

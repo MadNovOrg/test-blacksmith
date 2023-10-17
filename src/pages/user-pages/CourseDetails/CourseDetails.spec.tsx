@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import useSWR from 'swr'
+import { Client, Provider } from 'urql'
+import { fromValue } from 'wonka'
 
-import { Course, CourseParticipant, CourseType } from '@app/types'
+import { Course, CourseParticipant, CourseType, RoleName } from '@app/types'
 
 import {
   chance,
@@ -24,6 +26,27 @@ import { CourseDetails } from '.'
 
 vi.mock('swr')
 const useSWRMock = vi.mocked(useSWR)
+
+type SpecCourseType = {
+  data: {
+    course: Course
+    courseParticipants?: CourseParticipant[]
+    orgMembers?: { profile_id: string; isAdmin: boolean }[]
+  }
+}
+
+const urqlMockClient = (data: SpecCourseType) =>
+  ({
+    executeQuery: () => fromValue(data),
+  } as unknown as Client)
+
+const MockedCourseDetails: FC<SpecCourseType> = ({ data }) => {
+  return (
+    <Provider value={urqlMockClient({ data })}>
+      <CourseDetails />
+    </Provider>
+  )
+}
 
 function registerMocks(
   course: Course,
@@ -77,7 +100,16 @@ describe('page: CourseDetails', () => {
 
     render(
       <Routes>
-        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+        <Route
+          path={`/courses/:id/details`}
+          element={
+            <MockedCourseDetails
+              data={{
+                course,
+              }}
+            />
+          }
+        />
       </Routes>,
       {},
       { initialEntries: [`/courses/${course.id}/details`] }
@@ -98,7 +130,16 @@ describe('page: CourseDetails', () => {
 
     render(
       <Routes>
-        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+        <Route
+          path={`/courses/:id/details`}
+          element={
+            <MockedCourseDetails
+              data={{
+                course,
+              }}
+            />
+          }
+        />
       </Routes>,
       {},
       { initialEntries: [`/courses/${course.id}/details`] }
@@ -114,7 +155,16 @@ describe('page: CourseDetails', () => {
 
     render(
       <Routes>
-        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+        <Route
+          path={`/courses/:id/details`}
+          element={
+            <MockedCourseDetails
+              data={{
+                course,
+              }}
+            />
+          }
+        />
       </Routes>,
       {},
       {
@@ -133,7 +183,16 @@ describe('page: CourseDetails', () => {
 
     render(
       <Routes>
-        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+        <Route
+          path={`/courses/:id/details`}
+          element={
+            <MockedCourseDetails
+              data={{
+                course,
+              }}
+            />
+          }
+        />
       </Routes>,
       {},
       { initialEntries: [`/courses/${course.id}/details`] }
@@ -149,7 +208,16 @@ describe('page: CourseDetails', () => {
 
     render(
       <Routes>
-        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+        <Route
+          path={`/courses/:id/details`}
+          element={
+            <MockedCourseDetails
+              data={{
+                course,
+              }}
+            />
+          }
+        />
       </Routes>,
       {},
       { initialEntries: [`/courses/${course.id}/details`] }
@@ -164,7 +232,17 @@ describe('page: CourseDetails', () => {
 
     render(
       <Routes>
-        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+        <Route
+          path={`/courses/:id/details`}
+          element={
+            <MockedCourseDetails
+              data={{
+                course,
+                courseParticipants: [{ ...buildParticipant(), attended: true }],
+              }}
+            />
+          }
+        />
       </Routes>,
       {},
       { initialEntries: [`/courses/${course.id}/details`] }
@@ -181,7 +259,19 @@ describe('page: CourseDetails', () => {
 
     render(
       <Routes>
-        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+        <Route
+          path={`/courses/:id/details`}
+          element={
+            <MockedCourseDetails
+              data={{
+                course,
+                courseParticipants: [
+                  { ...buildParticipant(), attended: false },
+                ],
+              }}
+            />
+          }
+        />
       </Routes>,
       {},
       { initialEntries: [`/courses/${course.id}/details`] }
@@ -193,6 +283,7 @@ describe('page: CourseDetails', () => {
   it('displays button to manage course if a participant is also an org admin', async () => {
     const PROFILE_ID = chance.guid()
     const course = buildCourse()
+
     registerMocks(
       course,
       [{ ...buildParticipant(), attended: false }],
@@ -201,7 +292,20 @@ describe('page: CourseDetails', () => {
 
     render(
       <Routes>
-        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+        <Route
+          path={`/courses/:id/details`}
+          element={
+            <MockedCourseDetails
+              data={{
+                course,
+                courseParticipants: [
+                  { ...buildParticipant(), attended: false },
+                ],
+                orgMembers: [{ profile_id: PROFILE_ID, isAdmin: true }],
+              }}
+            />
+          }
+        />
         <Route
           path={`/manage-courses/:orgId/:id/details`}
           element={<p>Manage course page</p>}
@@ -212,6 +316,9 @@ describe('page: CourseDetails', () => {
           profile: {
             id: PROFILE_ID,
           },
+          isOrgAdmin: true,
+          allowedRoles: new Set([RoleName.USER]),
+          activeRole: RoleName.USER,
         },
       },
       { initialEntries: [`/courses/${course.id}/details`] }
