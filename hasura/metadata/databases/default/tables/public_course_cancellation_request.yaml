@@ -9,6 +9,19 @@ object_relationships:
     using:
       foreign_key_constraint_on: requested_by
 insert_permissions:
+  - role: booking-contact
+    permission:
+      check:
+        course:
+          booking_contact_profile_id:
+            _eq: X-Hasura-User-Id
+      columns:
+        - course_id
+        - reason
+        - created_at
+        - updated_at
+        - id
+        - requested_by
   - role: user
     permission:
       check:
@@ -32,6 +45,19 @@ insert_permissions:
         - requested_by
       backend_only: false
 select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - course_id
+        - reason
+        - created_at
+        - updated_at
+        - id
+        - requested_by
+      filter:
+        course:
+          booking_contact_profile_id:
+            _eq: X-Hasura-User-Id
   - role: sales-admin
     permission:
       columns:
@@ -89,6 +115,12 @@ select_permissions:
           - requested_by:
               _eq: X-Hasura-User-Id
 delete_permissions:
+  - role: booking-contact
+    permission:
+      filter:
+        course:
+          booking_contact_profile_id:
+            _eq: X-Hasura-User-Id
   - role: sales-admin
     permission:
       filter: {}
