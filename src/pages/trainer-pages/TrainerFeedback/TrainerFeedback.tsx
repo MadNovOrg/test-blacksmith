@@ -160,7 +160,7 @@ export const TrainerFeedback = () => {
           answer,
           courseId,
         }
-      })
+      }).filter(({ questionId }) => !questionId.includes('Response'))
 
       const response = await fetcher<SaveTrainerCourseEvaluationMutation>(
         SAVE_TRAINER_COURSE_EVALUATION_ANSWERS_MUTATION,
@@ -219,7 +219,7 @@ export const TrainerFeedback = () => {
             <Grid item md={7} pt={10}>
               {ungroupedQuestions?.map(q => {
                 if (booleanQuestionTypes.includes(q.type)) {
-                  const value = (values[q.id] ?? '').split('-')
+                  const [value, reason = ''] = (values[q.id] ?? '').split('-')
 
                   return (
                     <QuestionGroup
@@ -228,8 +228,8 @@ export const TrainerFeedback = () => {
                       error={errors[q.id]?.message}
                     >
                       <BooleanQuestion
-                        value={value[0]}
-                        reason={value[1] || ''}
+                        value={value}
+                        reason={reason}
                         type={q.type}
                         onChange={(value, reason) => {
                           setValue(q.id, `${value}-${reason}`)
