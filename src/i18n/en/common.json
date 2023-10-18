@@ -330,7 +330,7 @@
     "moderator": "Moderator"
   },
   "validation-hints": {
-    "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"
+    "password-hint-message": "Password must include 8 or more characters, 1 number, 1 uppercase character and 1 special character."
   },
   "validation-errors": {
     "invalid-date": "Please enter a valid date",

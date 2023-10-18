@@ -46,7 +46,6 @@ export const ResetPasswordPage = () => {
 
   const [resetError, setResetError] = useState<string>()
   const [isLoading, setIsLoading] = useState(false)
-  const [showPasswordReqs, setShowPasswordReqs] = useState(false)
 
   const handleResend = async () => {
     await Auth.forgotPassword(email)
@@ -185,7 +184,6 @@ export const ResetPasswordPage = () => {
             </Box>
             <Box mb={1}>
               <TextField
-                onFocus={() => setShowPasswordReqs(true)}
                 id="password"
                 data-testid="first-passsword-input"
                 type="password"
@@ -198,17 +196,14 @@ export const ResetPasswordPage = () => {
                 {...register('password')}
                 fullWidth
               />
+              <Typography
+                variant="body1"
+                sx={{ fontSize: '.75rem', color: 'grey', textAlign: 'left' }}
+                data-testid="password-hint-message"
+              >
+                {t('common.validation-hints.password-hint-message')}
+              </Typography>
             </Box>
-
-            <div>
-              {showPasswordReqs ? (
-                <Box mb={2}>
-                  <FormHelperText>
-                    {t('validation-hints.pw-format')}
-                  </FormHelperText>
-                </Box>
-              ) : null}
-            </div>
 
             <Box mb={4}>
               <TextField

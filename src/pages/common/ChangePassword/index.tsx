@@ -146,6 +146,12 @@ export const ChangePasswordPage = () => {
               fullWidth
               inputProps={{ 'data-testid': 'new-password-input' }}
             />
+            <Typography
+              variant="body1"
+              sx={{ fontSize: '.75rem', color: 'grey', textAlign: 'left' }}
+            >
+              {t('common.validation-hints.password-hint-message')}
+            </Typography>
           </Box>
           <Box mb={4}>
             <TextField

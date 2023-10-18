@@ -33,7 +33,14 @@ describe('page: ResetPasswordPage', () => {
       'Please enter 6 digit passcode received in email'
     )
   })
+
+  it('should correctly display the Password Hint Message', () => {
+    render(<ResetPasswordPage />)
+
+    expect(screen.getByTestId('password-hint-message')).toBeInTheDocument()
+  })
 })
+
 async function fillCode(code: string) {
   await Promise.all(
     code.split('').map((n, i) => {

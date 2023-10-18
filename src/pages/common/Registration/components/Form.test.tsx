@@ -119,6 +119,14 @@ describe('Form', () => {
     })
   })
 
+  it('should correctly display the Password Hint Message', () => {
+    const props = { ...defaultProps }
+    render(<Form {...props} />)
+
+    const passwordHintMessage = screen.getByTestId('password-hint-message')
+    expect(passwordHintMessage).toBeInTheDocument()
+  })
+
   it('displays error message if phone number not provided', async () => {
     const props = { ...defaultProps }
     render(<Form {...props} />)
