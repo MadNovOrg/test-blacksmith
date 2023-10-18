@@ -54,13 +54,25 @@ export type Discounts = Record<
   Pick<Promo_Code, 'amount' | 'type'> & { amountCurrency: number }
 >
 
+export type Address = {
+  addressLine1: string
+  addressLine2: string
+  city: string
+  postCode: string
+  country: string
+}
+
 export type ParticipantInput = {
   firstName: string
   lastName: string
   email: string
-}
+} & Address
 
-export type BookingContact = ParticipantInput
+export type BookingContact = {
+  firstName: string
+  lastName: string
+  email: string
+}
 
 type CourseDetails = GetTempProfileResponseType['tempProfiles'][0]['course']
 
