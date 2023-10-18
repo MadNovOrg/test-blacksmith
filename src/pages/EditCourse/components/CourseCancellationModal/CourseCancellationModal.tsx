@@ -274,7 +274,7 @@ export const CourseCancellationModal: React.FC<
                 endAdornment: (
                   <React.Fragment>
                     <Typography variant="body1" color="grey.600">
-                      %
+                      £
                     </Typography>
                   </React.Fragment>
                 ),

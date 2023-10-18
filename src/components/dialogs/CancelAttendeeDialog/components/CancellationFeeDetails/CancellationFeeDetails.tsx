@@ -120,6 +120,15 @@ export const CancellationFeeDetails: React.FC<
             Boolean(errors.cancellationFeePercent) &&
             t('common.validation-errors.this-field-is-required')
           }
+          InputProps={{
+            endAdornment: (
+              <React.Fragment>
+                <Typography variant="body1" color="grey.600">
+                  £
+                </Typography>
+              </React.Fragment>
+            ),
+          }}
           sx={{ mt: 2 }}
           inputProps={{ min: 0 }}
         />
