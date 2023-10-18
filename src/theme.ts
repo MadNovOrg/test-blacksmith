@@ -537,7 +537,7 @@ export default createTheme({
     MuiChip: {
       styleOverrides: {
         filled: {
-          fontWeight: 500,
+          fontWeight: 600,
 
           '&.MuiChip-colorPerfume': {
             fontWeight: 600,
@@ -553,8 +553,11 @@ export default createTheme({
             fontWeight: 600,
           },
           '&.MuiChip-colorSuccess': {
-            color: '#394700',
-            backgroundColor: '#F3F5E6',
+            '&.Mui-focusVisible': {
+              backgroundColor: '#e3e8c5',
+            },
+            color: theme.palette.success['dark'],
+            backgroundColor: theme.palette.success['light'],
             fontWeight: 600,
           },
           '&.MuiChip-colorError': {

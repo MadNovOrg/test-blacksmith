@@ -19,6 +19,7 @@ export type SnackbarMessageKey =
   | 'waitlist-participant-remove-failed'
   | 'course-approval-message'
   | 'course-approval-error'
+  | 'attendance-toggle-error'
 export type SnackbarMessage = { label: React.ReactNode }
 
 export type SnackbarState = {

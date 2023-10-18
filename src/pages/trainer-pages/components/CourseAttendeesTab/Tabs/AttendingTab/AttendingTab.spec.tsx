@@ -1,8 +1,246 @@
+import { subDays } from 'date-fns'
+
+import { Grade_Enum } from '@app/generated/graphql'
+import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import { CourseTrainerType, RoleName } from '@app/types'
+import { LoadingStatus } from '@app/util'
+
+import { chance, render, screen, within } from '@test/index'
+import {
+  buildCourse,
+  buildCourseSchedule,
+  buildCourseTrainer,
+  buildParticipant,
+  buildProfile,
+} from '@test/mock-data-utils'
+
 import { AttendingTab } from './AttendingTab'
 
-describe(AttendingTab.name, () => {
-  it('should render component', () => {
-    // Assert
-    expect(true).toBeTruthy()
+vi.mock('@app/hooks/useCourseParticipants')
+const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
+
+;[RoleName.TT_ADMIN, RoleName.TT_OPS].forEach(role => {
+  it(`displays the attendance column if a user is ${role}`, () => {
+    const course = buildCourse({
+      overrides: {
+        schedule: [
+          buildCourseSchedule({
+            overrides: { start: new Date().toISOString() },
+          }),
+        ],
+      },
+    })
+
+    const participant = buildParticipant()
+
+    useCourseParticipantsMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: [participant],
+      mutate: vi.fn(),
+    })
+
+    render(
+      <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+      { auth: { activeRole: role } }
+    )
+
+    expect(
+      within(screen.getByRole('table')).getByText(/attendance/i)
+    ).toBeInTheDocument()
   })
+})
+
+it('displays the attendance column if user is a lead trainer on the course', () => {
+  const trainerProfileId = chance.guid()
+  const course = buildCourse({
+    overrides: {
+      trainers: [
+        buildCourseTrainer({
+          overrides: {
+            type: CourseTrainerType.Leader,
+            profile: buildProfile({ overrides: { id: trainerProfileId } }),
+          },
+        }),
+      ],
+      schedule: [
+        buildCourseSchedule({
+          overrides: { start: new Date().toISOString() },
+        }),
+      ],
+    },
+  })
+
+  const participant = buildParticipant()
+
+  useCourseParticipantsMocked.mockReturnValue({
+    status: LoadingStatus.SUCCESS,
+    data: [participant],
+    mutate: vi.fn(),
+  })
+
+  render(
+    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    {
+      auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
+    }
+  )
+
+  expect(
+    within(screen.getByRole('table')).getByText(/attendance/i)
+  ).toBeInTheDocument()
+})
+
+it('displays the attendance column if user is an assist trainer on the course', () => {
+  const trainerProfileId = chance.guid()
+  const course = buildCourse({
+    overrides: {
+      trainers: [
+        buildCourseTrainer({
+          overrides: {
+            type: CourseTrainerType.Assistant,
+            profile: buildProfile({ overrides: { id: trainerProfileId } }),
+          },
+        }),
+      ],
+      schedule: [
+        buildCourseSchedule({
+          overrides: { start: new Date().toISOString() },
+        }),
+      ],
+    },
+  })
+
+  const participant = buildParticipant()
+
+  useCourseParticipantsMocked.mockReturnValue({
+    status: LoadingStatus.SUCCESS,
+    data: [participant],
+    mutate: vi.fn(),
+  })
+
+  render(
+    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    {
+      auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
+    }
+  )
+
+  expect(
+    within(screen.getByRole('table')).getByText(/attendance/i)
+  ).toBeInTheDocument()
+})
+
+it("doesn't display the attendance column if user is a moderator on the course", () => {
+  const trainerProfileId = chance.guid()
+  const course = buildCourse({
+    overrides: {
+      trainers: [
+        buildCourseTrainer({
+          overrides: {
+            type: CourseTrainerType.Moderator,
+            profile: buildProfile({ overrides: { id: trainerProfileId } }),
+          },
+        }),
+      ],
+      schedule: [
+        buildCourseSchedule({
+          overrides: { start: new Date().toISOString() },
+        }),
+      ],
+    },
+  })
+
+  const participant = buildParticipant()
+
+  useCourseParticipantsMocked.mockReturnValue({
+    status: LoadingStatus.SUCCESS,
+    data: [participant],
+    mutate: vi.fn(),
+  })
+
+  render(
+    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    {
+      auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
+    }
+  )
+
+  expect(
+    within(screen.getByRole('table')).queryByText(/attendance/i)
+  ).not.toBeInTheDocument()
+})
+
+it('displays the attendance column if course has ended', () => {
+  const course = buildCourse({
+    overrides: {
+      schedule: [
+        buildCourseSchedule({
+          overrides: {
+            start: subDays(new Date(), 2).toISOString(),
+            end: subDays(new Date(), 1).toISOString(),
+          },
+        }),
+      ],
+    },
+  })
+
+  const participant = buildParticipant()
+
+  useCourseParticipantsMocked.mockReturnValue({
+    status: LoadingStatus.SUCCESS,
+    data: [participant],
+    mutate: vi.fn(),
+  })
+
+  render(
+    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    }
+  )
+
+  expect(
+    within(screen.getByRole('table')).getByText(/attendance/i)
+  ).toBeInTheDocument()
+})
+
+it('marks attendance chip disabled if participant has been graded', () => {
+  const course = buildCourse({
+    overrides: {
+      schedule: [
+        buildCourseSchedule({
+          overrides: {
+            start: subDays(new Date(), 2).toISOString(),
+            end: subDays(new Date(), 1).toISOString(),
+          },
+        }),
+      ],
+    },
+  })
+
+  const participant = buildParticipant({
+    overrides: {
+      grade: Grade_Enum.Pass,
+      attended: true,
+    },
+  })
+
+  useCourseParticipantsMocked.mockReturnValue({
+    status: LoadingStatus.SUCCESS,
+    data: [participant],
+    mutate: vi.fn(),
+  })
+
+  render(
+    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    }
+  )
+
+  expect(
+    within(
+      screen.getByTestId(`course-participant-row-${participant.id}`)
+    ).getByRole('button', { name: /attended/i })
+  ).toHaveAttribute('aria-disabled', 'true')
 })

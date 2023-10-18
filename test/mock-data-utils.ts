@@ -478,6 +478,7 @@ export const buildParticipant = build<CourseParticipant>({
     gradingFeedback: perBuild(() => chance.word()),
     dateGraded: new Date().toISOString(),
     order: {} as Order,
+    attended: undefined,
   },
 })
 

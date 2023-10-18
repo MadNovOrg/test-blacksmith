@@ -21,6 +21,7 @@ import {
 } from '@app/components/dialogs'
 import { LinkToProfile } from '@app/components/LinkToProfile'
 import { ManageAttendanceMenu } from '@app/components/ManageAttendanceMenu'
+import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import { Scalars } from '@app/generated/graphql'
@@ -42,11 +43,14 @@ import {
 } from '@app/types'
 import {
   courseEnded,
+  courseStarted,
   DEFAULT_PAGINATION_LIMIT,
   DEFAULT_PAGINATION_ROW_OPTIONS,
   getParticipantOrgIds,
   LoadingStatus,
 } from '@app/util'
+
+import { AttendingToggle } from './AttendingToggle/AttendingToggle'
 
 type TabProperties = {
   course: Course
@@ -70,9 +74,15 @@ export const AttendingTab = ({
     useState<CourseParticipant>()
   const isBlendedCourse = course.go1Integration
   const isOpenCourse = course.type === CourseType.OPEN
-  const isCourseEnded = courseEnded(course)
+  const hasCourseEnded = courseEnded(course)
   const navigate = useNavigate()
   const fetcher = useFetcher()
+
+  const courseInProgress = courseStarted(course) && !hasCourseEnded
+
+  const canToggleAttendance =
+    acl.canGradeParticipants(course.trainers ?? []) &&
+    (courseInProgress || courseEnded(course))
 
   const {
     data: courseParticipants,
@@ -142,6 +152,13 @@ export const AttendingTab = ({
           label: t('pages.course-participants.hs-consent'),
           sorting: false,
         },
+        canToggleAttendance
+          ? {
+              id: 'attendance',
+              label: 'Attendance',
+              sorting: false,
+            }
+          : null,
         isOpenCourse && acl.canViewOrders()
           ? {
               id: 'orders',
@@ -149,7 +166,7 @@ export const AttendingTab = ({
               sorting: false,
             }
           : null,
-        !isCourseEnded &&
+        !hasCourseEnded &&
         acl.canManageParticipantAttendance(
           courseParticipants?.reduce(
             (acc, cp) => [...acc, ...getParticipantOrgIds(cp)],
@@ -169,9 +186,10 @@ export const AttendingTab = ({
       isBlendedCourse,
       isOpenCourse,
       acl,
-      isCourseEnded,
+      hasCourseEnded,
       courseParticipants,
       course,
+      canToggleAttendance,
     ]
   )
 
@@ -185,11 +203,11 @@ export const AttendingTab = ({
   const canViewRowActions = useCallback(
     (cp: CourseParticipant) =>
       [
-        !isCourseEnded,
+        !hasCourseEnded,
         !cp.profile.archived,
         acl.canManageParticipantAttendance(getParticipantOrgIds(cp), course),
       ].every(Boolean),
-    [acl, course, isCourseEnded]
+    [acl, course, hasCourseEnded]
   )
 
   const sendCourseInfo = useCallback(
@@ -235,6 +253,12 @@ export const AttendingTab = ({
       courseParticipants?.length ? (
         <>
           <Box sx={{ overflowX: 'auto' }}>
+            <SnackbarMessage
+              messageKey="attendance-toggle-error"
+              sx={{ position: 'absolute' }}
+              severity="error"
+              autoHideDuration={5000}
+            />
             <Table data-testid="attending-table">
               <TableHead
                 cols={cols}
@@ -308,6 +332,14 @@ export const AttendingTab = ({
                           ? t('common.yes')
                           : t('common.no')}
                       </TableCell>
+                      {canToggleAttendance ? (
+                        <TableCell width={180}>
+                          <AttendingToggle
+                            participant={courseParticipant}
+                            disabled={Boolean(courseParticipant.grade)}
+                          />
+                        </TableCell>
+                      ) : null}
                       {isOpenCourse && acl.canViewOrders() ? (
                         <TableCell>
                           {courseParticipant.order ? (

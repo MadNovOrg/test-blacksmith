@@ -272,7 +272,7 @@
   },
   "add-organisation": {
     "component-title": "Add Organisation",
-    "fields":{
+    "fields": {
       "organisation-name": "Organisation name",
       "organisation-type": "Organisation type",
       "organisation-email": "Organisation email",
@@ -448,5 +448,10 @@
   },
   "get-started-modal": {
     "title": "Get started Guide"
+  },
+  "attendance-toggle": {
+    "attended": "Attended",
+    "not-attended": "Did not attend",
+    "indeterminate": "N/A"
   }
 }
