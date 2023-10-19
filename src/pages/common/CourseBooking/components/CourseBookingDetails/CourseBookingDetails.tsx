@@ -546,16 +546,12 @@ export const CourseBookingDetails: React.FC<
             </Box>
           </Box>
 
-          <Box display="flex" justifyContent="space-between" mb={3}>
-            <Typography color="grey.700">{t('location')}</Typography>
-            <Box flexDirection="column" alignItems="flex-end">
-              <Typography color="grey.700">
-                {locationNameAddressCity}
-              </Typography>
-              <Typography color="grey.700" textAlign="right">
-                {locationPostCodeCountry}
-              </Typography>
-            </Box>
+          <Typography color="grey.700" mb={1} mt={3}>
+            {t('location')}
+          </Typography>
+          <Box flexDirection="column" mb={3}>
+            <Typography color="grey.700">{locationNameAddressCity}</Typography>
+            <Typography color="grey.700">{locationPostCodeCountry}</Typography>
           </Box>
 
           <Box display="flex" justifyContent="space-between" mb={1}>

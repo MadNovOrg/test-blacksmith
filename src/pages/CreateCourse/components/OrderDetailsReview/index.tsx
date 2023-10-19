@@ -365,14 +365,12 @@ export const OrderDetailsReview: React.FC = () => {
       </InfoPanel>
 
       <InfoPanel>
-        <Box display="flex" justifyContent="space-between" mb={3}>
-          <Typography color="grey.700">{t('location')}</Typography>
-          <Box flexDirection="column" alignItems="flex-end">
-            <Typography color="grey.700">{locationNameAddressCity}</Typography>
-            <Typography color="grey.700" textAlign="right">
-              {locationPostCodeCountry}
-            </Typography>
-          </Box>
+        <Typography color="grey.700" mb={1}>
+          {t('location')}
+        </Typography>
+        <Box flexDirection="column">
+          <Typography color="grey.700">{locationNameAddressCity}</Typography>
+          <Typography color="grey.700">{locationPostCodeCountry}</Typography>
         </Box>
       </InfoPanel>
 
