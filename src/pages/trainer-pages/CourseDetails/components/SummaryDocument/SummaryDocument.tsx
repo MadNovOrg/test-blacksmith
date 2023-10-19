@@ -25,7 +25,7 @@ const { Document, Font, Page, StyleSheet, Text, View, Image } = pdf
 
 type Props = {
   course: NonNullable<GetCourseByIdQuery['course']>
-  isRestricted: Boolean
+  isRestricted: boolean
   participants: NonNullable<CourseParticipantsQuery['courseParticipants']>
   grouped: CourseEvaluationGroupedQuestion
   ungrouped: CourseEvaluationUngroupedQuestion

@@ -207,6 +207,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
     ) : null
   }, [
     course,
+    isRestricted,
     participants,
     trainerAnswers,
     grouped,
