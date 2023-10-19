@@ -12,7 +12,10 @@ function ResourcesRoutes() {
     <Routes>
       <Route index element={<ResourcesList />} />
       <Route path=":id" element={<ResourceDetails />} />
-      <Route path="/resource-video/*" element={<ResourceVideoItem />} />
+      <Route
+        path="/video-resource/:resourceName/:accessProtocol/*"
+        element={<ResourceVideoItem />}
+      />
     </Routes>
   )
 }

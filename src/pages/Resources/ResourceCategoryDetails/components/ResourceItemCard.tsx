@@ -30,6 +30,7 @@ function getIconByResourceType(type: ResourceType | string): ReactNode {
 
 interface IResourceTypeItem {
   id: string | number
+  title?: string | null
   type: string
   url?: string | null
 }
@@ -48,6 +49,7 @@ export const ResourceItemCard = ({ resource }: Props) => {
   const extractResourceItemURL = useCallback(() => {
     const resourceData: IResourceTypeItem = {
       id: resource.id,
+      title: resource.title,
       type: '',
       url: '',
     }
@@ -63,12 +65,13 @@ export const ResourceItemCard = ({ resource }: Props) => {
     }
     setResourceItem(resourceData)
   }, [
-    isLinkResource,
-    isVideoResource,
-    resource.resourceAttachment?.file?.mediaItemUrl,
+    resource.id,
+    resource.title,
     resource.resourceAttachment?.videourl,
     resource.resourceAttachment?.link?.url,
-    resource?.id,
+    resource.resourceAttachment?.file?.mediaItemUrl,
+    isVideoResource,
+    isLinkResource,
   ])
 
   useEffect(() => {
@@ -84,7 +87,7 @@ export const ResourceItemCard = ({ resource }: Props) => {
         component={'a'}
         href={
           resourceItem?.type === 'video'
-            ? `/resources/resource-video/${resourceItem?.url}/${resourceItem?.id}`
+            ? `/resources/video-resource/${resourceItem.title}/${resourceItem?.url}/${resourceItem?.id}`
             : resourceItem?.url ?? ''
         }
         aria-label={`${resource.title} (${t('opens-new-window')})`}
