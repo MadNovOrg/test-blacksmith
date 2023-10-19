@@ -20,6 +20,7 @@ export const MUTATION = gql`
         organisationType: $orgType
       }
     ) {
+      id
       name
     }
   }

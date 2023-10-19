@@ -69,6 +69,7 @@ export type OrgSelectorProps = {
 const getOptionLabel = (option: Option) => option.name ?? ''
 export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
   function ({
+    value,
     showTrainerOrgOnly = false,
     onChange,
     sx,
@@ -239,6 +240,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       <>
         <Autocomplete
           defaultValue={defaultOrg}
+          value={!value ? null : value}
           open={open}
           onOpen={() => setOpen(true)}
           onClose={() => setOpen(false)}

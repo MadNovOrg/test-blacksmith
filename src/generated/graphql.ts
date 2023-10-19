@@ -15092,6 +15092,10 @@ export type Course = {
   conversion?: Maybe<Scalars['Boolean']>;
   /** A computed field, executes function "course_code" */
   course_code?: Maybe<Scalars['String']>;
+  /** An array relationship */
+  course_course_participant_audits: Array<Course_Participant_Audit>;
+  /** An aggregate relationship */
+  course_course_participant_audits_aggregate: Course_Participant_Audit_Aggregate;
   createdAt: Scalars['timestamptz'];
   /** An object relationship */
   createdBy?: Maybe<Profile>;
@@ -15216,6 +15220,26 @@ export type CourseBildStrategies_AggregateArgs = {
 /** columns and relationships of "course" */
 export type CourseBookingContactInviteDataArgs = {
   path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "course" */
+export type CourseCourse_Course_Participant_AuditsArgs = {
+  distinct_on?: InputMaybe<Array<Course_Participant_Audit_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Participant_Audit_Order_By>>;
+  where?: InputMaybe<Course_Participant_Audit_Bool_Exp>;
+};
+
+
+/** columns and relationships of "course" */
+export type CourseCourse_Course_Participant_Audits_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Participant_Audit_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Participant_Audit_Order_By>>;
+  where?: InputMaybe<Course_Participant_Audit_Bool_Exp>;
 };
 
 
@@ -16596,6 +16620,8 @@ export type Course_Bool_Exp = {
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Bool_Exp>;
   conversion?: InputMaybe<Boolean_Comparison_Exp>;
   course_code?: InputMaybe<String_Comparison_Exp>;
+  course_course_participant_audits?: InputMaybe<Course_Participant_Audit_Bool_Exp>;
+  course_course_participant_audits_aggregate?: InputMaybe<Course_Participant_Audit_Aggregate_Bool_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   createdBy?: InputMaybe<Profile_Bool_Exp>;
   createdById?: InputMaybe<Uuid_Comparison_Exp>;
@@ -20360,6 +20386,7 @@ export type Course_Insert_Input = {
   cancellationReason?: InputMaybe<Scalars['String']>;
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Obj_Rel_Insert_Input>;
   conversion?: InputMaybe<Scalars['Boolean']>;
+  course_course_participant_audits?: InputMaybe<Course_Participant_Audit_Arr_Rel_Insert_Input>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   createdBy?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   createdById?: InputMaybe<Scalars['uuid']>;
@@ -21651,6 +21678,7 @@ export type Course_Order_By = {
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Order_By>;
   conversion?: InputMaybe<Order_By>;
   course_code?: InputMaybe<Order_By>;
+  course_course_participant_audits_aggregate?: InputMaybe<Course_Participant_Audit_Aggregate_Order_By>;
   createdAt?: InputMaybe<Order_By>;
   createdBy?: InputMaybe<Profile_Order_By>;
   createdById?: InputMaybe<Order_By>;
@@ -52311,7 +52339,7 @@ export type InsertOrgLeadMutationVariables = Exact<{
 }>;
 
 
-export type InsertOrgLeadMutation = { __typename?: 'mutation_root', org?: { __typename?: 'organization', name: string } | null };
+export type InsertOrgLeadMutation = { __typename?: 'mutation_root', org?: { __typename?: 'organization', id: any, name: string } | null };
 
 export type InsertOrgMutationVariables = Exact<{
   name: Scalars['String'];
