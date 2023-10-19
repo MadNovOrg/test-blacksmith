@@ -186,7 +186,16 @@ export function CourseTitleCell({ course }: { course: TableCourse }) {
           <Typography variant="body2" data-testid="course-code">
             Arlo reference:
           </Typography>
-          <Typography variant="body2" data-testid="course-code">
+          <Typography
+            variant="body2"
+            data-testid="course-code"
+            sx={{
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              width: '150px',
+            }}
+          >
             {course.arloReferenceId}
           </Typography>
         </>

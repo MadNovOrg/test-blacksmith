@@ -150,7 +150,11 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 <Typography variant="body2" color="secondary">
                   Arlo reference:
                 </Typography>
-                <Typography variant="body2" color="secondary">
+                <Typography
+                  variant="body2"
+                  color="secondary"
+                  sx={{ overflowWrap: 'break-word' }}
+                >
                   {course.arloReferenceId}
                 </Typography>
               </>
