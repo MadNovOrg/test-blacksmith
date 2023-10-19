@@ -11,6 +11,7 @@ import {
   CourseParticipantsQueryVariables,
   Course_Evaluation_Question_Group_Enum,
   Course_Evaluation_Question_Type_Enum,
+  Course_Type_Enum,
   GetCourseByIdQuery,
   GetCourseByIdQueryVariables,
   GetEvaluationsSummaryQuery,
@@ -177,6 +178,17 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
 
   const course = courseData?.course
 
+  //#TTHP-2016
+  const isRestricted = useMemo(
+    () =>
+      ((course?.type == Course_Type_Enum.Closed ||
+        course?.type == Course_Type_Enum.Indirect) &&
+        acl.isOrgAdmin()) ||
+      (course?.type == Course_Type_Enum.Closed && acl.isBookingContact()) ||
+      (course?.type == Course_Type_Enum.Indirect && acl.isOrgKeyContact()),
+    [acl, course]
+  )
+
   const pdfDocument = useMemo(() => {
     if (summaryResponseData?.answers.length === 0) {
       return null
@@ -185,6 +197,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
     return course ? (
       <SummaryDocument
         course={course}
+        isRestricted={isRestricted}
         grouped={grouped}
         ungrouped={ungrouped}
         injuryQuestion={injuryQuestion}

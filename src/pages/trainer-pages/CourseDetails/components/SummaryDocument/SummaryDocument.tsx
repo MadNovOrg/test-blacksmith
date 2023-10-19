@@ -25,6 +25,7 @@ const { Document, Font, Page, StyleSheet, Text, View, Image } = pdf
 
 type Props = {
   course: NonNullable<GetCourseByIdQuery['course']>
+  isRestricted: Boolean
   participants: NonNullable<CourseParticipantsQuery['courseParticipants']>
   grouped: CourseEvaluationGroupedQuestion
   ungrouped: CourseEvaluationUngroupedQuestion
@@ -292,6 +293,7 @@ const PDFRatingSummary: React.FC<
 
 export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
   course,
+  isRestricted,
   grouped,
   ungrouped,
   injuryQuestion,
@@ -539,144 +541,50 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
             ))}
           </View>
 
-          <View break style={[styles.section, styles.questionsSection]}>
-            <Text
-              style={[styles.largestText, styles.textAlignCenter, styles.bold]}
-            >
-              {t('pages.course-details.tabs.evaluation.attendee-feedback')}
-            </Text>
+          {isRestricted ? null : (
+            <View break style={[styles.section, styles.questionsSection]}>
+              <Text
+                style={[
+                  styles.largestText,
+                  styles.textAlignCenter,
+                  styles.bold,
+                ]}
+              >
+                {t('pages.course-details.tabs.evaluation.attendee-feedback')}
+              </Text>
 
-            <Text style={styles.largerText}>
-              {t(`course-evaluation.questions.ANY_INJURIES`)}
-            </Text>
+              <Text style={styles.largerText}>
+                {t(`course-evaluation.questions.ANY_INJURIES`)}
+              </Text>
 
-            <View
-              style={[styles.question, styles.centeredSection, styles.section]}
-            >
-              <PDFRatingAnswer
-                label={'yes'}
-                value={injuryQuestion.yes}
-                backgroundColor="#cfd4df"
-              />
-              <PDFRatingAnswer
-                label={'no'}
-                value={injuryQuestion.no}
-                backgroundColor="#cfd4df"
-              />
-            </View>
+              <View
+                style={[
+                  styles.question,
+                  styles.centeredSection,
+                  styles.section,
+                ]}
+              >
+                <PDFRatingAnswer
+                  label={'yes'}
+                  value={injuryQuestion.yes}
+                  backgroundColor="#cfd4df"
+                />
+                <PDFRatingAnswer
+                  label={'no'}
+                  value={injuryQuestion.no}
+                  backgroundColor="#cfd4df"
+                />
+              </View>
 
-            {Object.keys(ungrouped).map(questionKey => {
-              if (questionKey === 'SIGNATURE') return null
+              {Object.keys(ungrouped).map(questionKey => {
+                if (questionKey === 'SIGNATURE') return null
 
-              const answers = ungrouped[questionKey]
-
-              return (
-                <View wrap={false} key={questionKey}>
-                  <Text style={styles.largerText}>
-                    {t(`course-evaluation.questions.${questionKey}`)}
-                  </Text>
-
-                  <View
-                    style={[
-                      styles.question,
-                      styles.centeredSection,
-                      styles.section,
-                    ]}
-                  >
-                    {answers.map(({ id, answer }) => (
-                      <Text
-                        wrap={false}
-                        key={id}
-                        style={styles.participantAnswer}
-                      >
-                        {answer || t('course-evaluation.pdf-export.no-answer')}
-                      </Text>
-                    ))}
-                  </View>
-                </View>
-              )
-            })}
-          </View>
-
-          <View break style={[styles.section, styles.questionsSection]}>
-            <Text
-              style={[styles.largestText, styles.textAlignCenter, styles.bold]}
-            >
-              {t('pages.course-details.tabs.evaluation.trainer-feedback')}
-            </Text>
-
-            {trainerAnswers?.map(a => {
-              if (
-                a.question.type &&
-                booleanQuestionTypes.includes(a.question.type)
-              ) {
-                const answer = a.answer?.split('-') ?? []
-                const shouldHaveReason =
-                  (a.question.type ===
-                    Course_Evaluation_Question_Type_Enum.BooleanReasonY &&
-                    answer[0] === 'YES') ||
-                  (a.question.type ===
-                    Course_Evaluation_Question_Type_Enum.BooleanReasonN &&
-                    answer[0] === 'NO')
+                const answers = ungrouped[questionKey]
 
                 return (
-                  <View wrap={false} key={a.id}>
+                  <View wrap={false} key={questionKey}>
                     <Text style={styles.largerText}>
-                      {t(
-                        `course-evaluation.questions.${a.question.questionKey}`
-                      )}
-                    </Text>
-
-                    <View style={[styles.section, styles.flexRow]}>
-                      <View
-                        wrap={false}
-                        style={[
-                          styles.booleanAnswer,
-                          answer[0] === 'YES' ? styles.markedAnswer : {},
-                        ]}
-                      >
-                        <Text>{t('yes')}</Text>
-                      </View>
-
-                      <View
-                        wrap={false}
-                        style={[
-                          styles.booleanAnswer,
-                          answer[0] === 'NO' ? styles.markedAnswer : {},
-                        ]}
-                      >
-                        <Text>{t('no')}</Text>
-                      </View>
-                    </View>
-
-                    {shouldHaveReason ? (
-                      <View
-                        wrap={false}
-                        style={[
-                          styles.question,
-                          styles.centeredSection,
-                          styles.section,
-                        ]}
-                      >
-                        <Text style={styles.participantAnswer}>
-                          {answer[1] ||
-                            t('course-evaluation.pdf-export.no-answer')}
-                        </Text>
-                      </View>
-                    ) : null}
-                  </View>
-                )
-              }
-
-              if (
-                a.question?.type === Course_Evaluation_Question_Type_Enum.Text
-              ) {
-                return (
-                  <View wrap={false} key={a.id}>
-                    <Text style={styles.largerText}>
-                      {t(
-                        `course-evaluation.questions.${a.question.questionKey}`
-                      )}
+                      {t(`course-evaluation.questions.${questionKey}`)}
                     </Text>
 
                     <View
@@ -686,22 +594,133 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                         styles.section,
                       ]}
                     >
-                      <Text
-                        wrap={false}
-                        key={a.id}
-                        style={styles.participantAnswer}
-                      >
-                        {a.answer ||
-                          t('course-evaluation.pdf-export.no-answer')}
-                      </Text>
+                      {answers.map(({ id, answer }) => (
+                        <Text
+                          wrap={false}
+                          key={id}
+                          style={styles.participantAnswer}
+                        >
+                          {answer ||
+                            t('course-evaluation.pdf-export.no-answer')}
+                        </Text>
+                      ))}
                     </View>
                   </View>
                 )
-              }
+              })}
+            </View>
+          )}
 
-              return null
-            })}
-          </View>
+          {isRestricted ? null : (
+            <View break style={[styles.section, styles.questionsSection]}>
+              <Text
+                style={[
+                  styles.largestText,
+                  styles.textAlignCenter,
+                  styles.bold,
+                ]}
+              >
+                {t('pages.course-details.tabs.evaluation.trainer-feedback')}
+              </Text>
+
+              {trainerAnswers?.map(a => {
+                if (
+                  a.question.type &&
+                  booleanQuestionTypes.includes(a.question.type)
+                ) {
+                  const answer = a.answer?.split('-') ?? []
+                  const shouldHaveReason =
+                    (a.question.type ===
+                      Course_Evaluation_Question_Type_Enum.BooleanReasonY &&
+                      answer[0] === 'YES') ||
+                    (a.question.type ===
+                      Course_Evaluation_Question_Type_Enum.BooleanReasonN &&
+                      answer[0] === 'NO')
+
+                  return (
+                    <View wrap={false} key={a.id}>
+                      <Text style={styles.largerText}>
+                        {t(
+                          `course-evaluation.questions.${a.question.questionKey}`
+                        )}
+                      </Text>
+
+                      <View style={[styles.section, styles.flexRow]}>
+                        <View
+                          wrap={false}
+                          style={[
+                            styles.booleanAnswer,
+                            answer[0] === 'YES' ? styles.markedAnswer : {},
+                          ]}
+                        >
+                          <Text>{t('yes')}</Text>
+                        </View>
+
+                        <View
+                          wrap={false}
+                          style={[
+                            styles.booleanAnswer,
+                            answer[0] === 'NO' ? styles.markedAnswer : {},
+                          ]}
+                        >
+                          <Text>{t('no')}</Text>
+                        </View>
+                      </View>
+
+                      {shouldHaveReason ? (
+                        <View
+                          wrap={false}
+                          style={[
+                            styles.question,
+                            styles.centeredSection,
+                            styles.section,
+                          ]}
+                        >
+                          <Text style={styles.participantAnswer}>
+                            {answer[1] ||
+                              t('course-evaluation.pdf-export.no-answer')}
+                          </Text>
+                        </View>
+                      ) : null}
+                    </View>
+                  )
+                }
+
+                if (
+                  a.question?.type === Course_Evaluation_Question_Type_Enum.Text
+                ) {
+                  return (
+                    <View wrap={false} key={a.id}>
+                      <Text style={styles.largerText}>
+                        {t(
+                          `course-evaluation.questions.${a.question.questionKey}`
+                        )}
+                      </Text>
+
+                      <View
+                        style={[
+                          styles.question,
+                          styles.centeredSection,
+                          styles.section,
+                        ]}
+                      >
+                        <Text
+                          wrap={false}
+                          key={a.id}
+                          style={styles.participantAnswer}
+                        >
+                          {a.answer ||
+                            t('course-evaluation.pdf-export.no-answer')}
+                        </Text>
+                      </View>
+                    </View>
+                  )
+                }
+
+                return null
+              })}
+            </View>
+          )}
         </View>
       </Page>
     </Document>

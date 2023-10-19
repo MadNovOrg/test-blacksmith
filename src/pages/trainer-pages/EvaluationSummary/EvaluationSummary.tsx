@@ -31,6 +31,7 @@ import { GET_EVALUATIONS_SUMMARY_QUERY } from '@app/queries/course-evaluation/ge
 import {
   CourseEvaluationGroupedQuestion,
   CourseEvaluationQuestionGroup,
+  CourseType,
 } from '@app/types'
 
 const groups = [
@@ -174,6 +175,17 @@ export const EvaluationSummary = () => {
   const { ungrouped: trainerUngrouped, injuryQuestion: trainerInjuryQuestion } =
     useMemo(() => normalizeAnswers(trainerAnswers), [trainerAnswers])
 
+  //#TTHP-2016
+  const isRestricted = useMemo(
+    () =>
+      ((course?.type == CourseType.CLOSED ||
+        course?.type == CourseType.INDIRECT) &&
+        acl.isOrgAdmin()) ||
+      (course?.type == CourseType.CLOSED && acl.isBookingContact()) ||
+      (course?.type == CourseType.INDIRECT && acl.isOrgKeyContact()),
+    [acl, course]
+  )
+
   if (fetching) {
     return <CircularProgress />
   }
@@ -224,24 +236,28 @@ export const EvaluationSummary = () => {
                     >
                       {t('evaluation')}
                     </Button>
-                    <Button
-                      component={LinkBehavior}
-                      href="#attendee-feedback"
-                      sx={{ mb: 1 }}
-                    >
-                      {t(
-                        'pages.course-details.tabs.evaluation.attendee-feedback'
-                      )}
-                    </Button>
-                    <Button
-                      component={LinkBehavior}
-                      href="#trainer-feedback"
-                      sx={{ mb: 1 }}
-                    >
-                      {t(
-                        'pages.course-details.tabs.evaluation.trainer-feedback'
-                      )}
-                    </Button>
+                    {isRestricted ? null : (
+                      <Button
+                        component={LinkBehavior}
+                        href="#attendee-feedback"
+                        sx={{ mb: 1 }}
+                      >
+                        {t(
+                          'pages.course-details.tabs.evaluation.attendee-feedback'
+                        )}
+                      </Button>
+                    )}
+                    {isRestricted ? null : (
+                      <Button
+                        component={LinkBehavior}
+                        href="#trainer-feedback"
+                        sx={{ mb: 1 }}
+                      >
+                        {t(
+                          'pages.course-details.tabs.evaluation.trainer-feedback'
+                        )}
+                      </Button>
+                    )}
                   </Box>
                 </Box>
               </Sticky>
@@ -273,170 +289,189 @@ export const EvaluationSummary = () => {
                 })}
               </Box>
 
-              <Typography variant="h3" mt={4} mb={3} id="attendee-feedback">
-                {t('pages.course-details.tabs.evaluation.attendee-feedback')}
-              </Typography>
-
-              <Box>
-                <Box mb={2}>
-                  <Typography variant="subtitle2" mb={1}>
-                    {t(`course-evaluation.questions.ANY_INJURIES`)}
+              {isRestricted ? null : (
+                <Box>
+                  <Typography variant="h3" mt={4} mb={3} id="attendee-feedback">
+                    {t(
+                      'pages.course-details.tabs.evaluation.attendee-feedback'
+                    )}
                   </Typography>
-                  <Box bgcolor="common.white" p={2} pb={1}>
-                    <Box display="flex" alignItems="center">
-                      <Box flex={3}>
-                        <RatingProgress
-                          variant="determinate"
-                          value={injuryQuestion.yes}
-                          color="navy.100"
-                        />
-                      </Box>
-                      <Box flex={1} display="flex">
-                        <Typography sx={{ textAlign: 'right', mr: 2, flex: 1 }}>
-                          {t('yes')}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          fontWeight="600"
-                          sx={{ width: 30 }}
-                        >
-                          {injuryQuestion.yes}%
-                        </Typography>
+
+                  <Box>
+                    <Box mb={2}>
+                      <Typography variant="subtitle2" mb={1}>
+                        {t(`course-evaluation.questions.ANY_INJURIES`)}
+                      </Typography>
+                      <Box bgcolor="common.white" p={2} pb={1}>
+                        <Box display="flex" alignItems="center">
+                          <Box flex={3}>
+                            <RatingProgress
+                              variant="determinate"
+                              value={injuryQuestion.yes}
+                              color="navy.100"
+                            />
+                          </Box>
+                          <Box flex={1} display="flex">
+                            <Typography
+                              sx={{ textAlign: 'right', mr: 2, flex: 1 }}
+                            >
+                              {t('yes')}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              fontWeight="600"
+                              sx={{ width: 30 }}
+                            >
+                              {injuryQuestion.yes}%
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box display="flex" alignItems="center">
+                          <Box flex={3}>
+                            <RatingProgress
+                              variant="determinate"
+                              value={injuryQuestion.no}
+                              color="navy.100"
+                            />
+                          </Box>
+                          <Box flex={1} display="flex" alignItems="center">
+                            <Typography
+                              sx={{ textAlign: 'right', mr: 2, flex: 1 }}
+                            >
+                              {t('no')}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              fontWeight="600"
+                              sx={{ width: 30 }}
+                            >
+                              {injuryQuestion.no}%
+                            </Typography>
+                          </Box>
+                        </Box>
                       </Box>
                     </Box>
-                    <Box display="flex" alignItems="center">
-                      <Box flex={3}>
-                        <RatingProgress
-                          variant="determinate"
-                          value={injuryQuestion.no}
-                          color="navy.100"
-                        />
-                      </Box>
-                      <Box flex={1} display="flex" alignItems="center">
-                        <Typography sx={{ textAlign: 'right', mr: 2, flex: 1 }}>
-                          {t('no')}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          fontWeight="600"
-                          sx={{ width: 30 }}
-                        >
-                          {injuryQuestion.no}%
-                        </Typography>
-                      </Box>
-                    </Box>
+
+                    {map(ungrouped, (answers, questionKey) => {
+                      if (questionKey === 'SIGNATURE') return null
+
+                      return (
+                        <Box key={questionKey} mb={2}>
+                          <Typography variant="subtitle2" mb={1}>
+                            {t(`course-evaluation.questions.${questionKey}`)}
+                          </Typography>
+                          <Box
+                            display="flex"
+                            flexDirection="column"
+                            alignItems="flex-start"
+                            bgcolor="common.white"
+                            p={1}
+                            pb={0}
+                          >
+                            {answers.map(a => (
+                              <QuestionText key={a.id}>
+                                {a.answer || t('course-evaluation.no-answer')}
+                              </QuestionText>
+                            ))}
+                          </Box>
+                        </Box>
+                      )
+                    })}
                   </Box>
                 </Box>
+              )}
 
-                {map(ungrouped, (answers, questionKey) => {
-                  if (questionKey === 'SIGNATURE') return null
-
-                  return (
-                    <Box key={questionKey} mb={2}>
-                      <Typography variant="subtitle2" mb={1}>
-                        {t(`course-evaluation.questions.${questionKey}`)}
-                      </Typography>
-                      <Box
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="flex-start"
-                        bgcolor="common.white"
-                        p={1}
-                        pb={0}
-                      >
-                        {answers.map(a => (
-                          <QuestionText key={a.id}>
-                            {a.answer || t('course-evaluation.no-answer')}
-                          </QuestionText>
-                        ))}
-                      </Box>
-                    </Box>
-                  )
-                })}
-              </Box>
-
-              <Typography variant="h3" mt={4} mb={3} id="trainer-feedback">
-                {t('pages.course-details.tabs.evaluation.trainer-feedback')}
-              </Typography>
-              <Typography variant="subtitle2"></Typography>
-
-              <Box>
-                <Box mb={2}>
-                  <Typography variant="subtitle2" mb={1}>
-                    {t(`course-evaluation.questions.ANY_INJURIES`)}
+              {isRestricted ? null : (
+                <Box>
+                  <Typography variant="h3" mt={4} mb={3} id="trainer-feedback">
+                    {t('pages.course-details.tabs.evaluation.trainer-feedback')}
                   </Typography>
-                  <Box bgcolor="common.white" p={2} pb={1}>
-                    <Box display="flex" alignItems="center">
-                      <Box flex={3}>
-                        <RatingProgress
-                          variant="determinate"
-                          value={trainerInjuryQuestion.yes}
-                          color="navy.100"
-                        />
-                      </Box>
-                      <Box flex={1} display="flex">
-                        <Typography sx={{ textAlign: 'right', mr: 2, flex: 1 }}>
-                          {t('yes')}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          fontWeight="600"
-                          sx={{ width: 30 }}
-                        >
-                          {trainerInjuryQuestion.yes}%
-                        </Typography>
+
+                  <Typography variant="subtitle2"></Typography>
+
+                  <Box>
+                    <Box mb={2}>
+                      <Typography variant="subtitle2" mb={1}>
+                        {t(`course-evaluation.questions.ANY_INJURIES`)}
+                      </Typography>
+                      <Box bgcolor="common.white" p={2} pb={1}>
+                        <Box display="flex" alignItems="center">
+                          <Box flex={3}>
+                            <RatingProgress
+                              variant="determinate"
+                              value={trainerInjuryQuestion.yes}
+                              color="navy.100"
+                            />
+                          </Box>
+                          <Box flex={1} display="flex">
+                            <Typography
+                              sx={{ textAlign: 'right', mr: 2, flex: 1 }}
+                            >
+                              {t('yes')}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              fontWeight="600"
+                              sx={{ width: 30 }}
+                            >
+                              {trainerInjuryQuestion.yes}%
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box display="flex" alignItems="center">
+                          <Box flex={3}>
+                            <RatingProgress
+                              variant="determinate"
+                              value={trainerInjuryQuestion.no}
+                              color="navy.100"
+                            />
+                          </Box>
+                          <Box flex={1} display="flex" alignItems="center">
+                            <Typography
+                              sx={{ textAlign: 'right', mr: 2, flex: 1 }}
+                            >
+                              {t('no')}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              fontWeight="600"
+                              sx={{ width: 30 }}
+                            >
+                              {trainerInjuryQuestion.no}%
+                            </Typography>
+                          </Box>
+                        </Box>
                       </Box>
                     </Box>
-                    <Box display="flex" alignItems="center">
-                      <Box flex={3}>
-                        <RatingProgress
-                          variant="determinate"
-                          value={trainerInjuryQuestion.no}
-                          color="navy.100"
-                        />
-                      </Box>
-                      <Box flex={1} display="flex" alignItems="center">
-                        <Typography sx={{ textAlign: 'right', mr: 2, flex: 1 }}>
-                          {t('no')}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          fontWeight="600"
-                          sx={{ width: 30 }}
-                        >
-                          {trainerInjuryQuestion.no}%
-                        </Typography>
-                      </Box>
-                    </Box>
+
+                    {map(trainerUngrouped, (answers, questionKey) => {
+                      if (questionKey === 'SIGNATURE') return null
+
+                      return (
+                        <Box key={questionKey} mb={2}>
+                          <Typography variant="subtitle2" mb={1}>
+                            {t(`course-evaluation.questions.${questionKey}`)}
+                          </Typography>
+                          <Box
+                            display="flex"
+                            flexDirection="column"
+                            alignItems="flex-start"
+                            bgcolor="common.white"
+                            p={1}
+                            pb={0}
+                          >
+                            {answers.map(a => (
+                              <QuestionText key={a.id}>
+                                {a.answer || t('course-evaluation.no-answer')}
+                              </QuestionText>
+                            ))}
+                          </Box>
+                        </Box>
+                      )
+                    })}
                   </Box>
                 </Box>
-
-                {map(trainerUngrouped, (answers, questionKey) => {
-                  if (questionKey === 'SIGNATURE') return null
-
-                  return (
-                    <Box key={questionKey} mb={2}>
-                      <Typography variant="subtitle2" mb={1}>
-                        {t(`course-evaluation.questions.${questionKey}`)}
-                      </Typography>
-                      <Box
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="flex-start"
-                        bgcolor="common.white"
-                        p={1}
-                        pb={0}
-                      >
-                        {answers.map(a => (
-                          <QuestionText key={a.id}>
-                            {a.answer || t('course-evaluation.no-answer')}
-                          </QuestionText>
-                        ))}
-                      </Box>
-                    </Box>
-                  )
-                })}
-              </Box>
+              )}
             </Grid>
           </Grid>
         </Container>

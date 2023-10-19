@@ -99,6 +99,14 @@ export const CourseDetails = () => {
     [acl, course, courseCancelled]
   )
 
+  //#TTHP-2016
+  const canNotViewSummaryEvaluation = useMemo(
+    () =>
+      course?.type == CourseType.OPEN &&
+      (acl.isOrgAdmin() || acl.isBookingContact() || acl.isOrgKeyContact()),
+    [acl, course]
+  )
+
   const linkedOrderItem = useMemo(() => course?.orders?.[0], [course])
   const canViewLinkedOrderItem = useMemo(
     () =>
@@ -268,11 +276,13 @@ export const CourseDetails = () => {
                       disabled={isCourseInExceptionDisabledStatus}
                     />
                   ) : null}
-                  <PillTab
-                    label={t('pages.course-details.tabs.evaluation.title')}
-                    value={CourseDetailsTabs.EVALUATION}
-                    data-testid="evaluation-tab"
-                  />
+                  {canNotViewSummaryEvaluation ? null : (
+                    <PillTab
+                      label={t('pages.course-details.tabs.evaluation.title')}
+                      value={CourseDetailsTabs.EVALUATION}
+                      data-testid="evaluation-tab"
+                    />
+                  )}
                   {course.certificateCount?.aggregate.count ? (
                     <PillTab
                       label={t(

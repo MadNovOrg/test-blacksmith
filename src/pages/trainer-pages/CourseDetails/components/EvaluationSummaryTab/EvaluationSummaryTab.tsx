@@ -31,7 +31,7 @@ import {
   Course_Status_Enum,
 } from '@app/generated/graphql'
 import { QUERY as GET_EVALUATION_QUERY } from '@app/queries/course-evaluation/get-evaluations'
-import { SortOrder, Course } from '@app/types'
+import { SortOrder, Course, CourseType } from '@app/types'
 import { noop } from '@app/util'
 
 import { EvaluationSummaryPDFDownloadLink } from './EvaluationSummaryPDFDownloadLink'
@@ -55,14 +55,41 @@ export const EvaluationSummaryTab: React.FC<
   const courseId = Number.parseInt(params.id as string, 10)
   const profileId = profile?.id as string
 
+  const { data, error } = useSWR<
+    GetEvaluationsQuery,
+    Error,
+    [string, GetEvaluationsQueryVariables]
+  >([
+    GET_EVALUATION_QUERY,
+    {
+      courseId,
+      profileCondition: acl.canViewArchivedProfileData()
+        ? {}
+        : { archived: { _eq: false } },
+    },
+  ])
+
+  const isCourseTrainer = useMemo(
+    () => !!data?.trainers.find(t => t.profile.id === profileId),
+    [data, profileId]
+  )
+
+  //#TTHP-2016
+  const isCourseOpenTrainer = useMemo(
+    () => course.type === CourseType.OPEN && isCourseTrainer,
+    [course, isCourseTrainer]
+  )
   const cols = useMemo(
-    () => [
-      { id: 'name', label: t('name') },
-      { id: 'contact', label: t('email') },
-      { id: 'org', label: t('organization') },
-      { id: 'evaluation', label: t('evaluation') },
-    ],
-    [t]
+    () =>
+      [
+        { id: 'name', label: t('name') },
+        { id: 'contact', label: t('email') },
+        { id: 'org', label: t('organization') },
+        isCourseOpenTrainer
+          ? null
+          : { id: 'evaluation', label: t('evaluation') },
+      ].filter(Boolean),
+    [t, isCourseOpenTrainer]
   )
 
   const [isPDFExporting, setIsPDFExporting] = useState<boolean>(false)
@@ -82,19 +109,6 @@ export const EvaluationSummaryTab: React.FC<
   const [order] = useState<SortOrder>('asc')
   const [orderBy] = useState(cols[0].id)
 
-  const { data, error } = useSWR<
-    GetEvaluationsQuery,
-    Error,
-    [string, GetEvaluationsQueryVariables]
-  >([
-    GET_EVALUATION_QUERY,
-    {
-      courseId,
-      profileCondition: acl.canViewArchivedProfileData()
-        ? {}
-        : { archived: { _eq: false } },
-    },
-  ])
   const loading = !data && !error
 
   const findEvaluationForProfileId = useCallback(
@@ -111,11 +125,6 @@ export const EvaluationSummaryTab: React.FC<
   const leadTrainer = useMemo(
     () => data?.trainers.find(t => t.type === 'LEADER'),
     [data]
-  )
-
-  const isCourseTrainer = useMemo(
-    () => !!data?.trainers.find(t => t.profile.id === profileId),
-    [data, profileId]
   )
 
   const isCourseCanBeEvaluetaded = [
@@ -169,42 +178,44 @@ export const EvaluationSummaryTab: React.FC<
               {t('pages.course-details.tabs.evaluation.desc')}
             </Typography>
           </Grid>
-          <Grid
-            item
-            container
-            md={6}
-            sm={12}
-            display="flex"
-            justifyContent="flex-end"
-            flexDirection={isMobile ? 'column' : 'row'}
-            spacing={2}
-          >
-            <Grid item>
-              <Button
-                variant="outlined"
-                color="primary"
-                disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
-                data-testid="export-summary"
-                fullWidth={isMobile}
-                onClick={() => setIsPDFExporting(true)}
-              >
-                {PDFExportButtonContent}
-              </Button>
+          {isCourseOpenTrainer ? null : (
+            <Grid
+              item
+              container
+              md={6}
+              sm={12}
+              display="flex"
+              justifyContent="flex-end"
+              flexDirection={isMobile ? 'column' : 'row'}
+              spacing={2}
+            >
+              <Grid item>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
+                  data-testid="export-summary"
+                  fullWidth={isMobile}
+                  onClick={() => setIsPDFExporting(true)}
+                >
+                  {PDFExportButtonContent}
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  component={LinkBehavior}
+                  variant="contained"
+                  color="primary"
+                  href="../evaluation/summary"
+                  disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
+                  data-testid="view-summary-evaluation"
+                  fullWidth={isMobile}
+                >
+                  {t('pages.course-details.tabs.evaluation.button')}
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Button
-                component={LinkBehavior}
-                variant="contained"
-                color="primary"
-                href="../evaluation/summary"
-                disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
-                data-testid="view-summary-evaluation"
-                fullWidth={isMobile}
-              >
-                {t('pages.course-details.tabs.evaluation.button')}
-              </Button>
-            </Grid>
-          </Grid>
+          )}
         </Grid>
 
         <TableContainer component={Paper} elevation={0} sx={{ mt: 2 }}>
@@ -242,24 +253,26 @@ export const EvaluationSummaryTab: React.FC<
                         ?.map(o => o.organization.name)
                         .join(', ')}
                     </TableCell>
-                    <TableCell>
-                      <Link
-                        href={
-                          data?.trainers.find(
-                            t => t.profile.id === e.profile.id
-                          )
-                            ? `../evaluation/submit?profile_id=${e.profile.id}`
-                            : `../evaluation/view?profile_id=${e.profile.id}`
-                        }
-                        variant="body2"
-                        fontWeight="600"
-                        color="primary"
-                      >
-                        {t(
-                          'pages.course-details.tabs.evaluation.view-evaluation'
-                        )}
-                      </Link>
-                    </TableCell>
+                    {isCourseOpenTrainer ? null : (
+                      <TableCell>
+                        <Link
+                          href={
+                            data?.trainers.find(
+                              t => t.profile.id === e.profile.id
+                            )
+                              ? `../evaluation/submit?profile_id=${e.profile.id}`
+                              : `../evaluation/view?profile_id=${e.profile.id}`
+                          }
+                          variant="body2"
+                          fontWeight="600"
+                          color="primary"
+                        >
+                          {t(
+                            'pages.course-details.tabs.evaluation.view-evaluation'
+                          )}
+                        </Link>
+                      </TableCell>
+                    )}
                   </TableRow>
                 )
               ) ??
