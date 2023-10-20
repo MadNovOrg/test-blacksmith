@@ -51307,6 +51307,23 @@ export type ToggleAttendanceMutationVariables = Exact<{
 
 export type ToggleAttendanceMutation = { __typename?: 'mutation_root', update_course_participant_by_pk?: { __typename?: 'course_participant', attended?: boolean | null } | null };
 
+export type ToggleAllParticipantsAttendanceMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+  attended: Scalars['Boolean'];
+}>;
+
+
+export type ToggleAllParticipantsAttendanceMutation = { __typename?: 'mutation_root', update_course_participant?: { __typename?: 'course_participant_mutation_response', affected_rows: number } | null };
+
+export type ToggleSelectedParticipantsAttendanceMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+  ids: Array<Scalars['uuid']> | Scalars['uuid'];
+  attended: Scalars['Boolean'];
+}>;
+
+
+export type ToggleSelectedParticipantsAttendanceMutation = { __typename?: 'mutation_root', update_course_participant?: { __typename?: 'course_participant_mutation_response', affected_rows: number } | null };
+
 export type ArloCallbackMutationVariables = Exact<{
   input: ArloCallbackInput;
 }>;

@@ -24,10 +24,11 @@ import { ManageAttendanceMenu } from '@app/components/ManageAttendanceMenu'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
-import { Scalars } from '@app/generated/graphql'
+import { Course_Status_Enum, Scalars } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useMatchMutate } from '@app/hooks/useMatchMutate'
+import { useTableChecks } from '@app/hooks/useTableChecks'
 import {
   MUTATION as SEND_COURSE_INFO,
   ParamsType as SendCourseInfoParamType,
@@ -51,6 +52,7 @@ import {
 } from '@app/util'
 
 import { AttendingToggle } from './AttendingToggle/AttendingToggle'
+import { BulkAttendanceButton } from './BulkAttendanceButton/BulkAttendanceButton'
 
 type TabProperties = {
   course: Course
@@ -72,6 +74,7 @@ export const AttendingTab = ({
     useState<CourseParticipant>()
   const [attendeeToResendInfo, setAttendeeToResendInfo] =
     useState<CourseParticipant>()
+
   const isBlendedCourse = course.go1Integration
   const isOpenCourse = course.type === CourseType.OPEN
   const hasCourseEnded = courseEnded(course)
@@ -88,6 +91,7 @@ export const AttendingTab = ({
     data: courseParticipants,
     status: courseParticipantsLoadingStatus,
     total: courseParticipantsTotal,
+    mutate: mutateParticipants,
   } = useCourseParticipants(course?.id ?? '', {
     sortBy: sortColumn,
     order,
@@ -122,9 +126,14 @@ export const AttendingTab = ({
     [sortColumn]
   )
 
+  const { selected, checkbox, isSelected } = useTableChecks()
+
   const cols = useMemo(
     () =>
       [
+        checkbox.headCol(
+          courseParticipants?.filter(p => !p.grade).map(p => p.id) ?? []
+        ),
         {
           id: 'name',
           label: t('pages.course-participants.name'),
@@ -190,6 +199,7 @@ export const AttendingTab = ({
       courseParticipants,
       course,
       canToggleAttendance,
+      checkbox,
     ]
   )
 
@@ -259,6 +269,26 @@ export const AttendingTab = ({
               severity="error"
               autoHideDuration={5000}
             />
+            <SnackbarMessage
+              messageKey="bulk-attendance-error"
+              sx={{ position: 'absolute' }}
+              severity="error"
+              autoHideDuration={5000}
+            />
+
+            {canToggleAttendance ? (
+              <Box display="flex" justifyContent="flex-end" mb={2}>
+                <BulkAttendanceButton
+                  courseId={course.id}
+                  participantIds={Array.from(selected)}
+                  disabled={
+                    courseEnded(course) &&
+                    course.status !== Course_Status_Enum.GradeMissing
+                  }
+                  onSuccess={mutateParticipants}
+                />
+              </Box>
+            ) : null}
             <Table data-testid="attending-table">
               <TableHead
                 cols={cols}
@@ -272,7 +302,16 @@ export const AttendingTab = ({
                     <TableRow
                       key={courseParticipant.id}
                       data-testid={`course-participant-row-${courseParticipant.id}`}
+                      sx={{
+                        backgroundColor: isSelected(courseParticipant.id)
+                          ? 'grey.50'
+                          : '',
+                      }}
                     >
+                      {checkbox.rowCell(
+                        courseParticipant.id,
+                        Boolean(courseParticipant.grade)
+                      )}
                       <TableCell>
                         <LinkToProfile
                           profileId={courseParticipant.profile.id}
@@ -347,8 +386,6 @@ export const AttendingTab = ({
                               href={`/orders/${courseParticipant.order.id}`}
                               data-testid="order-item-link"
                               key="order-item-link"
-                              color="Highlight"
-                              fontWeight="600"
                             >
                               {courseParticipant.order.xeroInvoiceNumber}
                             </Link>

@@ -217,6 +217,9 @@
   "conversion": "Conversion",
   "modules": "Modules",
   "delivery": "Delivery",
+  "attended": "Attended",
+  "not-attended": "Did not attend",
+  "indeterminate": "N/A",
   "course-delivery-type": {
     "F2F": "Face to Face",
     "BLENDED": "Blended",

@@ -50,16 +50,16 @@ export const AttendingToggle: React.FC<Props> = ({
   const chipConfig: { label: string; color: 'success' | 'error' | 'gray' } =
     typeof hasAttended === 'undefined' || hasAttended === null
       ? {
-          label: t('components.attendance-toggle.indeterminate'),
+          label: t('indeterminate'),
           color: 'gray',
         }
       : hasAttended
       ? {
-          label: t('components.attendance-toggle.attended'),
+          label: t('attended'),
           color: 'success',
         }
       : {
-          label: t('components.attendance-toggle.not-attended'),
+          label: t('not-attended'),
           color: 'error',
         }
 
@@ -68,12 +68,12 @@ export const AttendingToggle: React.FC<Props> = ({
   useEffect(() => {
     if (error) {
       addSnackbarMessage('attendance-toggle-error', {
-        label: 'There was an error saving attendance.',
+        label: t('components.attendance-toggle.error'),
       })
     } else {
       removeSnackbarMessage('attendance-toggle-error')
     }
-  }, [error, addSnackbarMessage, removeSnackbarMessage])
+  }, [error, addSnackbarMessage, removeSnackbarMessage, t])
 
   return (
     <Box display="flex" alignItems="center">
