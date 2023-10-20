@@ -77,7 +77,6 @@ export const AvailableCourses: React.FC<
   const { Pagination, perPage, offset } = useTablePagination()
   const filters = useMemo(() => {
     const conditions: Course_Bool_Exp[] = [
-      { freeSlots: { _gt: 0 } },
       { type: { _eq: Course_Type_Enum.Open } },
       {
         status: {
@@ -232,7 +231,7 @@ export const AvailableCourses: React.FC<
           <Box
             display="flex"
             flexDirection={isMobile ? 'column' : 'row'}
-            gap={4}
+            gap={3}
           >
             <Box width={isMobile ? undefined : 250} px={isMobile ? 2 : 0}>
               <Typography variant="h1">

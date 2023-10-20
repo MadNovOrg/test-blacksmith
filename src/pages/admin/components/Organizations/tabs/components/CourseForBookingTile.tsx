@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import { GetUpcomingCoursesQuery } from '@app/generated/graphql'
+import { capitalize } from '@app/util/index'
 
 type CourseType = GetUpcomingCoursesQuery['courses'][0]
 
@@ -86,6 +87,9 @@ export const CourseForBookingTile: React.FC<
     return venue.city
   }, [isRow, t, venue])
 
+  const spacesLeft =
+    course.max_participants - (course.participantsCount?.aggregate?.count ?? 0)
+
   return (
     <Box bgcolor="common.white" p={2} mt={2}>
       <Grid container spacing={1}>
@@ -141,7 +145,7 @@ export const CourseForBookingTile: React.FC<
             display="flex"
             flexDirection={isRow ? 'column' : 'row'}
             justifyContent={isRow ? 'center' : undefined}
-            alignItems="center"
+            alignItems={isRow ? undefined : 'center'}
             mt={isRow ? 0 : 2}
             gap={1}
           >
@@ -149,17 +153,21 @@ export const CourseForBookingTile: React.FC<
               variant="contained"
               color="primary"
               fullWidth={isMobile}
-              onClick={() =>
-                navigate(`/registration?course_id=${course.id}&quantity=1`)
-              }
+              onClick={() => {
+                return navigate(
+                  spacesLeft === 0
+                    ? `/waitlist?course_id=${course.id}`
+                    : `/registration?course_id=${course.id}&quantity=1`
+                )
+              }}
             >
-              {t('common.book-now')}
+              {spacesLeft === 0
+                ? capitalize(t('common.join-waitlist'))
+                : t('common.book-now')}
             </Button>
             <Typography variant="caption" color="grey.900" fontWeight={600}>
               {t('common.spaces-left', {
-                number:
-                  course.max_participants -
-                  (course.participantsCount?.aggregate?.count ?? 0),
+                number: spacesLeft,
               })}
             </Typography>
           </Box>
