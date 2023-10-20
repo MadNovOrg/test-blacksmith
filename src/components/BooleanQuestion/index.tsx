@@ -84,7 +84,7 @@ export const BooleanQuestion: React.FC<
                   placeholder={infoText}
                   fullWidth
                   inputProps={{ sx: { px: 1, py: 1.5 } }}
-                  value={field.value}
+                  value={field.value ?? reason}
                   disabled={disabled}
                   data-testid="rating-boolean-reason-yes"
                   error={!!errors.yesResponse}
