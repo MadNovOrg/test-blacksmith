@@ -1557,9 +1557,14 @@ export type CreateOrderOutput = {
 };
 
 export type CreateOrderParticipantInput = {
+  addressLine1: Scalars['String'];
+  addressLine2?: InputMaybe<Scalars['String']>;
+  city: Scalars['String'];
+  country: Scalars['String'];
   email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
+  postCode: Scalars['String'];
 };
 
 /** Input for the createPage mutation */
@@ -12556,7 +12561,6 @@ export type Bild_Strategy = {
   id: Scalars['uuid'];
   modules: Scalars['jsonb'];
   name: Scalars['String'];
-  rank?: Maybe<Scalars['Int']>;
   shortName: Scalars['String'];
 };
 
@@ -12605,7 +12609,6 @@ export type Bild_Strategy_Append_Input = {
 export type Bild_Strategy_Avg_Fields = {
   __typename?: 'bild_strategy_avg_fields';
   duration?: Maybe<Scalars['Float']>;
-  rank?: Maybe<Scalars['Float']>;
 };
 
 /** Boolean expression to filter rows from the table "bild_strategy". All fields are combined with a logical 'AND'. */
@@ -12617,7 +12620,6 @@ export type Bild_Strategy_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   modules?: InputMaybe<Jsonb_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
-  rank?: InputMaybe<Int_Comparison_Exp>;
   shortName?: InputMaybe<String_Comparison_Exp>;
 };
 
@@ -12647,7 +12649,6 @@ export type Bild_Strategy_Delete_Key_Input = {
 /** input type for incrementing numeric columns in table "bild_strategy" */
 export type Bild_Strategy_Inc_Input = {
   duration?: InputMaybe<Scalars['Int']>;
-  rank?: InputMaybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "bild_strategy" */
@@ -12656,7 +12657,6 @@ export type Bild_Strategy_Insert_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
-  rank?: InputMaybe<Scalars['Int']>;
   shortName?: InputMaybe<Scalars['String']>;
 };
 
@@ -12666,7 +12666,6 @@ export type Bild_Strategy_Max_Fields = {
   duration?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
-  rank?: Maybe<Scalars['Int']>;
   shortName?: Maybe<Scalars['String']>;
 };
 
@@ -12676,7 +12675,6 @@ export type Bild_Strategy_Min_Fields = {
   duration?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
-  rank?: Maybe<Scalars['Int']>;
   shortName?: Maybe<Scalars['String']>;
 };
 
@@ -12702,7 +12700,6 @@ export type Bild_Strategy_Order_By = {
   id?: InputMaybe<Order_By>;
   modules?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
-  rank?: InputMaybe<Order_By>;
   shortName?: InputMaybe<Order_By>;
 };
 
@@ -12727,8 +12724,6 @@ export enum Bild_Strategy_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
-  Rank = 'rank',
-  /** column name */
   ShortName = 'shortName'
 }
 
@@ -12738,7 +12733,6 @@ export type Bild_Strategy_Set_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
-  rank?: InputMaybe<Scalars['Int']>;
   shortName?: InputMaybe<Scalars['String']>;
 };
 
@@ -12746,21 +12740,18 @@ export type Bild_Strategy_Set_Input = {
 export type Bild_Strategy_Stddev_Fields = {
   __typename?: 'bild_strategy_stddev_fields';
   duration?: Maybe<Scalars['Float']>;
-  rank?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Bild_Strategy_Stddev_Pop_Fields = {
   __typename?: 'bild_strategy_stddev_pop_fields';
   duration?: Maybe<Scalars['Float']>;
-  rank?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Bild_Strategy_Stddev_Samp_Fields = {
   __typename?: 'bild_strategy_stddev_samp_fields';
   duration?: Maybe<Scalars['Float']>;
-  rank?: Maybe<Scalars['Float']>;
 };
 
 /** Streaming cursor of the table "bild_strategy" */
@@ -12777,7 +12768,6 @@ export type Bild_Strategy_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
-  rank?: InputMaybe<Scalars['Int']>;
   shortName?: InputMaybe<Scalars['String']>;
 };
 
@@ -12785,7 +12775,6 @@ export type Bild_Strategy_Stream_Cursor_Value_Input = {
 export type Bild_Strategy_Sum_Fields = {
   __typename?: 'bild_strategy_sum_fields';
   duration?: Maybe<Scalars['Int']>;
-  rank?: Maybe<Scalars['Int']>;
 };
 
 /** update columns of table "bild_strategy" */
@@ -12798,8 +12787,6 @@ export enum Bild_Strategy_Update_Column {
   Modules = 'modules',
   /** column name */
   Name = 'name',
-  /** column name */
-  Rank = 'rank',
   /** column name */
   ShortName = 'shortName'
 }
@@ -12827,21 +12814,18 @@ export type Bild_Strategy_Updates = {
 export type Bild_Strategy_Var_Pop_Fields = {
   __typename?: 'bild_strategy_var_pop_fields';
   duration?: Maybe<Scalars['Float']>;
-  rank?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate var_samp on columns */
 export type Bild_Strategy_Var_Samp_Fields = {
   __typename?: 'bild_strategy_var_samp_fields';
   duration?: Maybe<Scalars['Float']>;
-  rank?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate variance on columns */
 export type Bild_Strategy_Variance_Fields = {
   __typename?: 'bild_strategy_variance_fields';
   duration?: Maybe<Scalars['Float']>;
-  rank?: Maybe<Scalars['Float']>;
 };
 
 /** status enum for go1 course/module */
@@ -15092,10 +15076,6 @@ export type Course = {
   conversion?: Maybe<Scalars['Boolean']>;
   /** A computed field, executes function "course_code" */
   course_code?: Maybe<Scalars['String']>;
-  /** An array relationship */
-  course_course_participant_audits: Array<Course_Participant_Audit>;
-  /** An aggregate relationship */
-  course_course_participant_audits_aggregate: Course_Participant_Audit_Aggregate;
   createdAt: Scalars['timestamptz'];
   /** An object relationship */
   createdBy?: Maybe<Profile>;
@@ -15220,26 +15200,6 @@ export type CourseBildStrategies_AggregateArgs = {
 /** columns and relationships of "course" */
 export type CourseBookingContactInviteDataArgs = {
   path?: InputMaybe<Scalars['String']>;
-};
-
-
-/** columns and relationships of "course" */
-export type CourseCourse_Course_Participant_AuditsArgs = {
-  distinct_on?: InputMaybe<Array<Course_Participant_Audit_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Participant_Audit_Order_By>>;
-  where?: InputMaybe<Course_Participant_Audit_Bool_Exp>;
-};
-
-
-/** columns and relationships of "course" */
-export type CourseCourse_Course_Participant_Audits_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Course_Participant_Audit_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Participant_Audit_Order_By>>;
-  where?: InputMaybe<Course_Participant_Audit_Bool_Exp>;
 };
 
 
@@ -16620,8 +16580,6 @@ export type Course_Bool_Exp = {
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Bool_Exp>;
   conversion?: InputMaybe<Boolean_Comparison_Exp>;
   course_code?: InputMaybe<String_Comparison_Exp>;
-  course_course_participant_audits?: InputMaybe<Course_Participant_Audit_Bool_Exp>;
-  course_course_participant_audits_aggregate?: InputMaybe<Course_Participant_Audit_Aggregate_Bool_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   createdBy?: InputMaybe<Profile_Bool_Exp>;
   createdById?: InputMaybe<Uuid_Comparison_Exp>;
@@ -20386,7 +20344,6 @@ export type Course_Insert_Input = {
   cancellationReason?: InputMaybe<Scalars['String']>;
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Obj_Rel_Insert_Input>;
   conversion?: InputMaybe<Scalars['Boolean']>;
-  course_course_participant_audits?: InputMaybe<Course_Participant_Audit_Arr_Rel_Insert_Input>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   createdBy?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   createdById?: InputMaybe<Scalars['uuid']>;
@@ -21678,7 +21635,6 @@ export type Course_Order_By = {
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Order_By>;
   conversion?: InputMaybe<Order_By>;
   course_code?: InputMaybe<Order_By>;
-  course_course_participant_audits_aggregate?: InputMaybe<Course_Participant_Audit_Aggregate_Order_By>;
   createdAt?: InputMaybe<Order_By>;
   createdBy?: InputMaybe<Profile_Order_By>;
   createdById?: InputMaybe<Order_By>;

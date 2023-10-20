@@ -993,6 +993,7 @@ type TransferCourse {
   venueName: String
   venueCity: String
   level: CourseLevel
+  freeSlots: Int!
 }
 
 type TransferParticipantOutput {
