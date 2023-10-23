@@ -52487,6 +52487,13 @@ export type FindProfilesQueryVariables = Exact<{
 
 export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> }> };
 
+export type GetNotDetailedProfileQueryVariables = Exact<{
+  where?: InputMaybe<Profile_Bool_Exp>;
+}>;
+
+
+export type GetNotDetailedProfileQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, email?: string | null, familyName?: string | null, givenName?: string | null, fullName?: string | null }> };
+
 export type GetProfileDetailsQueryVariables = Exact<{
   profileId: Scalars['uuid'];
   withGo1Licenses?: InputMaybe<Scalars['Boolean']>;

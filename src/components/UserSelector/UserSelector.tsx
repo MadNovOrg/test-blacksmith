@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material'
 import { debounce } from 'lodash-es'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { FocusEventHandler, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMount } from 'react-use'
 
@@ -38,6 +38,7 @@ export type UserSelectorProps = {
   value?: string
   required?: boolean
   disableSuggestions?: boolean
+  onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>
 }
 
 export const UserSelector: React.FC<
@@ -53,6 +54,7 @@ export const UserSelector: React.FC<
   value,
   required,
   disableSuggestions,
+  onBlur,
   ...props
 }) {
   const { t } = useTranslation()
@@ -156,6 +158,16 @@ export const UserSelector: React.FC<
         renderInput={params => (
           <TextField
             {...params}
+            onBlur={event => {
+              if (
+                onBlur &&
+                !options.find(opt => {
+                  return opt.profile.email === value
+                })
+              ) {
+                onBlur(event)
+              }
+            }}
             disabled={disabled}
             required={required}
             label={t('components.user-selector.placeholder')}

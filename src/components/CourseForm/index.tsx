@@ -40,7 +40,9 @@ import {
   useWatch,
 } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useUpdateEffect } from 'react-use'
 import { noop } from 'ts-essentials'
+import { useQuery } from 'urql'
 import { SchemaDescription } from 'yup'
 
 import { CountryDropdown } from '@app/components/CountryDropdown'
@@ -56,8 +58,14 @@ import {
 } from '@app/components/UserSelector'
 import { VenueSelector } from '@app/components/VenueSelector'
 import { useAuth } from '@app/context/auth'
-import { Accreditors_Enum, Course_Source_Enum } from '@app/generated/graphql'
+import {
+  Accreditors_Enum,
+  Course_Source_Enum,
+  GetNotDetailedProfileQuery,
+  GetNotDetailedProfileQueryVariables,
+} from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
+import { QUERY as GET_NOT_DETAILED_PROFILE } from '@app/queries/profile/get-not-detailed-profile'
 import { schemas, yup } from '@app/schemas'
 import theme from '@app/theme'
 import {
@@ -106,6 +114,8 @@ import {
 } from './helpers'
 
 export type DisabledFields = Partial<keyof CourseInput>
+
+type ContactType = 'bookingContact' | 'organizationKeyContact'
 
 const INDIRECT_COURSE_MIN_ALLOWED_DATE_FOR_YUP = new Date(
   new Date(INDIRECT_COURSE_MIN_ALLOWED_DATE.getTime()).setDate(
@@ -846,6 +856,61 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     [setValue]
   )
 
+  const contact = useMemo(
+    () =>
+      courseType === CourseType.CLOSED
+        ? 'bookingContact'
+        : courseType === CourseType.INDIRECT
+        ? 'organizationKeyContact'
+        : null,
+    [courseType]
+  )
+
+  const [{ data: foundProfileData }, reexecuteQuery] = useQuery<
+    GetNotDetailedProfileQuery,
+    GetNotDetailedProfileQueryVariables
+  >({
+    query: GET_NOT_DETAILED_PROFILE,
+    variables: {
+      where: { email: { _eq: values[contact as ContactType]?.email } },
+    },
+    pause: true,
+  })
+
+  useUpdateEffect(() => {
+    if (contact && foundProfileData?.profiles.length) {
+      const contactChange = handleContactChange(contact)
+      contactChange(foundProfileData?.profiles[0])
+    }
+  }, [foundProfileData])
+
+  const onBlurUserSelector = useCallback(async () => {
+    if (contact) {
+      const isValidEmail =
+        !errors[contact]?.email?.message && values[contact]?.email
+
+      const isNotAlreadyFetched = Boolean(
+        !foundProfileData?.profiles.length ||
+          (foundProfileData?.profiles.length &&
+            foundProfileData?.profiles[0].email !== values[contact]?.email)
+      )
+
+      if (isValidEmail && isNotAlreadyFetched) {
+        await reexecuteQuery({ requestPolicy: 'network-only' })
+      } else if (isValidEmail && !isNotAlreadyFetched) {
+        const contactChange = handleContactChange(contact)
+        contactChange(foundProfileData?.profiles[0] as UserSelectorProfile)
+      }
+    }
+  }, [
+    contact,
+    errors,
+    foundProfileData?.profiles,
+    handleContactChange,
+    reexecuteQuery,
+    values,
+  ])
+
   useEffect(() => {
     setValue('aolRegion', '')
   }, [setValue, values.aolCountry])
@@ -1052,6 +1117,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       !getValues('organization') ||
                       disabledFields.has('organizationKeyContact')
                     }
+                    onBlur={onBlurUserSelector}
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
@@ -1123,6 +1189,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       !getValues('organization') ||
                       disabledFields.has('bookingContact')
                     }
+                    onBlur={onBlurUserSelector}
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
