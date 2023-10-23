@@ -456,8 +456,6 @@
     "label_zero": "Bulk attendance",
     "label_one": "Bulk attendance ({{count}})",
     "label_other": "Bulk attendance ({{count}})",
-    "error": "There was an error bulk saving attendance.",
-    "modal-title": "Bulk attendance",
-    "modal-description": "You are bulk editing attendance of all attendees. Please confirm you want to continue."
+    "error": "There was an error bulk saving attendance."
   }
 }
