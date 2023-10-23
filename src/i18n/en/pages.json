@@ -1122,24 +1122,35 @@
     "tabs": {
       "details": {
         "title": "Details",
-        "org-details-section": {
+        "organization-details-section": {
           "title": "Organisation details",
-          "name": "Name",
-          "address": "Address",
-          "org-email": "Organisation email",
-          "sector": "Sector",
-          "org-type": "Organisation Type",
-          "local-authority": "Local authority",
-          "ofsted-rating": "Ofsted rating",
-          "ofsted-last-inspection": "Ofsted last inspection"
+          "organization-name": "Organisation name",
+          "organization-sector": "Sector",
+          "organization-type": "Organisation Type",
+          "organization-phone": "Organisation phone",
+          "organization-email": "Organisation email",
+          "organization-website": "Organisation website"
+
         },
+"organization-address-section":{
+  "title": "Organisation address",
+  "address-line-1": "Address Line 1",
+  "address-line-2": "Address Line 2",
+  "town-or-city": "Town/City",
+  "postcode": "Post code",
+  "country": "Country"
+},
         "additional-details": {
           "title": "Additional details",
           "head-first-name": "Head first name",
           "head-surname": "Head surname",
           "head-email": "Head of service email address",
-          "website": "Website",
-          "setting": "Setting name"
+
+          "setting": "Setting name",
+
+          "local-authority": "Local authority",
+          "ofsted-rating": "Ofsted rating",
+          "ofsted-last-inspection": "Ofsted last inspection date"
         },
         "user-details": {
           "title": "User details",
@@ -1147,9 +1158,6 @@
           "active-certifications": "Active certifications",
           "expiring-soon-certifications": "Expiring soon",
           "expired-certifications": "Expired certifications"
-        },
-        "organization-address": {
-          "title": "Organisation address"
         }
       },
       "users": {
