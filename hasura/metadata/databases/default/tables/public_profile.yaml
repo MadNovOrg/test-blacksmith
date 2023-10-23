@@ -1,163 +1,136 @@
 table:
-  schema: public
   name: profile
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    job_title:
-      custom_name: jobTitle
-    dietary_restrictions:
-      custom_name: dietaryRestrictions
-    updated_at:
-      custom_name: updatedAt
-    created_at:
-      custom_name: createdAt
     contact_details:
       custom_name: contactDetails
-    last_activity:
-      custom_name: lastActivity
+    created_at:
+      custom_name: createdAt
+    dietary_restrictions:
+      custom_name: dietaryRestrictions
     go1_id:
       custom_name: go1Id
+    job_title:
+      custom_name: jobTitle
+    last_activity:
+      custom_name: lastActivity
+    updated_at:
+      custom_name: updatedAt
   custom_column_names:
-    job_title: jobTitle
-    dietary_restrictions: dietaryRestrictions
-    updated_at: updatedAt
-    created_at: createdAt
     contact_details: contactDetails
-    last_activity: lastActivity
+    created_at: createdAt
+    dietary_restrictions: dietaryRestrictions
     go1_id: go1Id
+    job_title: jobTitle
+    last_activity: lastActivity
+    updated_at: updatedAt
+  custom_root_fields: {}
 array_relationships:
   - name: certificates
     using:
       manual_configuration:
-        remote_table:
-          schema: public
-          name: course_certificate
-        insertion_order: null
         column_mapping:
           id: profile_id
+        insertion_order: null
+        remote_table:
+          name: course_certificate
+          schema: public
   - name: course_trainer
     using:
       foreign_key_constraint_on:
         column: profile_id
         table:
-          schema: public
           name: course_trainer
+          schema: public
   - name: courses
     using:
       foreign_key_constraint_on:
         column: profile_id
         table:
-          schema: public
           name: course_participant
+          schema: public
   - name: go1Licenses
     using:
       foreign_key_constraint_on:
         column: profile_id
         table:
-          schema: public
           name: go1_licenses
+          schema: public
   - name: identities
     using:
       foreign_key_constraint_on:
         column: profile_id
         table:
-          schema: public
           name: identity
+          schema: public
   - name: organizations
     using:
       foreign_key_constraint_on:
         column: profile_id
         table:
-          schema: public
           name: organization_member
+          schema: public
   - name: participant_audits
     using:
       foreign_key_constraint_on:
         column: profile_id
         table:
-          schema: public
           name: course_participant_audit
+          schema: public
   - name: roles
     using:
       foreign_key_constraint_on:
         column: profile_id
         table:
-          schema: public
           name: profile_role
+          schema: public
   - name: trainer_role_types
     using:
       foreign_key_constraint_on:
         column: profile_id
         table:
-          schema: public
           name: profile_trainer_role_type
+          schema: public
   - name: upcomingEnrollments
     using:
       manual_configuration:
-        remote_table:
-          schema: public
-          name: upcoming_enrollments
-        insertion_order: null
         column_mapping:
           id: profile_id
+        insertion_order: null
+        remote_table:
+          name: upcoming_enrollments
+          schema: public
 computed_fields:
   - name: email
     definition:
       function:
-        schema: public
         name: profile_email
+        schema: public
       session_argument: hasura_session
   - name: familyName
     definition:
       function:
-        schema: public
         name: profile_family_name
+        schema: public
   - name: fullName
     definition:
       function:
-        schema: public
         name: profile_full_name
+        schema: public
     comment: ""
   - name: givenName
     definition:
       function:
-        schema: public
         name: profile_given_name
+        schema: public
   - name: phone
     definition:
       function:
-        schema: public
         name: profile_phone
+        schema: public
       session_argument: hasura_session
 select_permissions:
-  - role: trainer
-    permission:
-      columns:
-        - addresses
-        - archived
-        - attributes
-        - avatar
-        - contact_details
-        - created_at
-        - dietary_restrictions
-        - disabilities
-        - dob
-        - id
-        - job_title
-        - last_activity
-        - original_record
-        - preferences
-        - tags
-        - title
-        - updated_at
-      computed_fields:
-        - email
-        - familyName
-        - fullName
-        - givenName
-        - phone
-      filter: {}
   - role: finance
     permission:
       columns:
@@ -245,6 +218,33 @@ select_permissions:
         - phone
       filter: {}
       allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - addresses
+        - archived
+        - attributes
+        - avatar
+        - contact_details
+        - created_at
+        - dietary_restrictions
+        - disabilities
+        - dob
+        - id
+        - job_title
+        - last_activity
+        - original_record
+        - preferences
+        - tags
+        - title
+        - updated_at
+      computed_fields:
+        - email
+        - familyName
+        - fullName
+        - givenName
+        - phone
+      filter: {}
   - role: tt-admin
     permission:
       columns:
@@ -421,10 +421,20 @@ event_triggers:
         columns:
           - archived
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/user/archived'
+  - name: sendWelcomeEmail
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/welcome'
   - name: user-added-modified
     definition:
       enable_manual: false
@@ -436,7 +446,7 @@ event_triggers:
           - _family_name
           - _given_name
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/user-added-modified'
