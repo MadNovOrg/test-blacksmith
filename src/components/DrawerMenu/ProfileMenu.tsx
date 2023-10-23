@@ -101,7 +101,7 @@ export const ProfileMenu: React.FC<
 
           {acl.isInternalUser() ? (
             <>
-              <Link to={import.meta.env.VITE_WELCOME_PAGE_URL}>
+              <Link to={import.meta.env.VITE_KNOWLEDGE_HUB_URL}>
                 <ListItemButton>
                   <ListItemIcon>
                     <SchoolIcon fontSize="small" />

@@ -123,7 +123,7 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
                 data-testid="admin-link"
                 primaryTypographyProps={{ variant: 'body2' }}
               >
-                <Link href={import.meta.env.VITE_WELCOME_PAGE_URL}>
+                <Link href={import.meta.env.VITE_KNOWLEDGE_HUB_URL}>
                   {t('common.knowledge-hub')}
                 </Link>
               </ListItemText>

@@ -110,7 +110,7 @@ export const NavLinks: FC<INavLinksProps> = () => {
         <>
           <Link
             component={StyledNavLink}
-            to={import.meta.env.VITE_WELCOME_PAGE_URL}
+            to={import.meta.env.VITE_KNOWLEDGE_HUB_URL}
           >
             {t('common.knowledge-hub')}
           </Link>
