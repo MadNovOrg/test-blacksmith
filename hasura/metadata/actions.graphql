@@ -594,11 +594,11 @@ input CreateOrderParticipantInput {
   email: String!
   firstName: String!
   lastName: String!
-  addressLine1: String!
+  addressLine1: String
   addressLine2: String
-  city: String!
-  country: String!
-  postCode: String!
+  city: String
+  country: String
+  postCode: String
 }
 
 input CreateOrderInput {

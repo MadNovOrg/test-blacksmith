@@ -254,7 +254,7 @@ export const CourseBookingDetails: React.FC<
   }
 
   const isInternalUserBooking = acl.canInviteAttendees(CourseType.OPEN)
-
+  const isLevelOneCourse = course?.level === CourseLevel.Level_1
   const schema = useMemo(() => {
     return yup.object({
       quantity: yup.number().required(),
@@ -266,18 +266,22 @@ export const CourseBookingDetails: React.FC<
             firstName: yup.string().required(requiredMsg(t, 'first-name')),
             lastName: yup.string().required(requiredMsg(t, 'last-name')),
             email: schemas.email(t).required(requiredMsg(t, 'email')),
-            addressLine1: yup.string().required(requiredMsg(t, 'line1')),
-            addressLine2: yup.string(),
-            city: yup.string().required(requiredMsg(t, 'city')),
-            postCode: yup
-              .string()
-              .required(requiredMsg(t, 'post-code'))
-              .test(
-                'is-uk-postcode',
-                t('validation-errors.invalid-postcode'),
-                isValidUKPostalCode
-              ),
-            country: yup.string().required(requiredMsg(t, 'country')),
+            ...(isLevelOneCourse
+              ? {
+                  addressLine1: yup.string().required(requiredMsg(t, 'line1')),
+                  addressLine2: yup.string(),
+                  city: yup.string().required(requiredMsg(t, 'city')),
+                  postCode: yup
+                    .string()
+                    .required(requiredMsg(t, 'post-code'))
+                    .test(
+                      'is-uk-postcode',
+                      t('validation-errors.invalid-postcode'),
+                      isValidUKPostalCode
+                    ),
+                  country: yup.string().required(requiredMsg(t, 'country')),
+                }
+              : {}),
           })
         )
         .length(yup.ref('quantity'), t('validation-errors.max-registrants'))
@@ -362,7 +366,7 @@ export const CourseBookingDetails: React.FC<
           otherwise: schema => schema,
         }),
     })
-  }, [t])
+  }, [t, isLevelOneCourse])
 
   const methods = useForm<FormInputs>({
     resolver: yupResolver(schema),
@@ -924,127 +928,134 @@ export const CourseBookingDetails: React.FC<
                       required
                     />
                   </Grid>
-                  <Grid item md={12}>
-                    <Typography variant="subtitle1">
-                      {t('common.postal-address')}
-                    </Typography>
-                    <Box mb={3}>
-                      <TextField
-                        id="primaryAddressLine"
-                        label={t('line1')}
-                        variant="filled"
-                        sx={{ bgcolor: 'grey.100' }}
-                        {...register(`participants.${index}.addressLine1`)}
-                        error={!!getParticipantError(index, 'addressLine1')}
-                        InputLabelProps={{
-                          shrink: Boolean(
-                            values.participants[index].addressLine1
-                          ),
-                        }}
-                        helperText={
-                          getParticipantError(index, 'addressLine1')?.message ??
-                          ''
-                        }
-                        inputProps={{ 'data-testid': 'addr-line1' }}
-                        fullWidth
-                        required
-                      />
-                    </Box>
-                    <Box mb={3}>
-                      <TextField
-                        id="secondaryAddressLine"
-                        label={t('line2')}
-                        {...register(`participants.${index}.addressLine2`)}
-                        placeholder={t('common.addr.line2-placeholder')}
-                        error={!!getParticipantError(index, 'addressLine2')}
-                        InputLabelProps={{
-                          shrink: Boolean(
-                            values.participants[index].addressLine2
-                          ),
-                        }}
-                        sx={{ bgcolor: 'grey.100' }}
-                        variant="filled"
-                        helperText={
-                          getParticipantError(index, 'addressLine2')?.message ??
-                          ''
-                        }
-                        inputProps={{ 'data-testid': 'addr-line2' }}
-                        fullWidth
-                      />
-                    </Box>
-                    <Box mb={3}>
-                      <TextField
-                        id="city"
-                        label={t('city')}
-                        {...register(`participants.${index}.city`)}
-                        placeholder={t('common.addr.city')}
-                        error={!!getParticipantError(index, 'city')}
-                        InputLabelProps={{
-                          shrink: Boolean(values.participants[index].city),
-                        }}
-                        sx={{ bgcolor: 'grey.100' }}
-                        variant="filled"
-                        helperText={
-                          getParticipantError(index, 'city')?.message ?? ''
-                        }
-                        inputProps={{ 'data-testid': 'city' }}
-                        fullWidth
-                        required
-                      />
-                    </Box>
-                    <Box mb={3}>
-                      <TextField
-                        id="postCode"
-                        label={t('post-code')}
-                        {...register(`participants.${index}.postCode`)}
-                        placeholder={t('common.addr.postCode')}
-                        error={!!getParticipantError(index, 'postCode')}
-                        InputLabelProps={{
-                          shrink: Boolean(values.participants[index].postCode),
-                        }}
-                        helperText={
-                          getParticipantError(index, 'postCode')?.message ?? ''
-                        }
-                        variant="filled"
-                        sx={{ bgcolor: 'grey.100' }}
-                        inputProps={{ 'data-testid': 'postCode' }}
-                        fullWidth
-                        required
-                        InputProps={{
-                          endAdornment: (
-                            <Tooltip
-                              title={t('post-code-tooltip')}
-                              data-testid="post-code-tooltip"
-                            >
-                              <InfoIcon color={'action'} />
-                            </Tooltip>
-                          ),
-                        }}
-                      />
-                    </Box>
-                    <Box mb={3}>
-                      <CountryDropdown
-                        required
-                        {...register(`participants.${index}.country`)}
-                        error={!!getParticipantError(index, 'country')}
-                        errormessage={
-                          getParticipantError(index, 'country')?.message ?? ''
-                        }
-                        label={t('fields.country')}
-                      />
-                    </Box>
-                  </Grid>
+                  {isLevelOneCourse ? (
+                    <Grid item md={12}>
+                      <Typography variant="subtitle1">
+                        {t('common.postal-address')}
+                      </Typography>
+                      <Box mb={3}>
+                        <TextField
+                          id="primaryAddressLine"
+                          label={t('line1')}
+                          variant="filled"
+                          sx={{ bgcolor: 'grey.100' }}
+                          {...register(`participants.${index}.addressLine1`)}
+                          error={!!getParticipantError(index, 'addressLine1')}
+                          InputLabelProps={{
+                            shrink: Boolean(
+                              values.participants[index].addressLine1
+                            ),
+                          }}
+                          helperText={
+                            getParticipantError(index, 'addressLine1')
+                              ?.message ?? ''
+                          }
+                          inputProps={{ 'data-testid': 'addr-line1' }}
+                          fullWidth
+                          required
+                        />
+                      </Box>
+                      <Box mb={3}>
+                        <TextField
+                          id="secondaryAddressLine"
+                          label={t('line2')}
+                          {...register(`participants.${index}.addressLine2`)}
+                          placeholder={t('common.addr.line2-placeholder')}
+                          error={!!getParticipantError(index, 'addressLine2')}
+                          InputLabelProps={{
+                            shrink: Boolean(
+                              values.participants[index].addressLine2
+                            ),
+                          }}
+                          sx={{ bgcolor: 'grey.100' }}
+                          variant="filled"
+                          helperText={
+                            getParticipantError(index, 'addressLine2')
+                              ?.message ?? ''
+                          }
+                          inputProps={{ 'data-testid': 'addr-line2' }}
+                          fullWidth
+                        />
+                      </Box>
+                      <Box mb={3}>
+                        <TextField
+                          id="city"
+                          label={t('city')}
+                          {...register(`participants.${index}.city`)}
+                          placeholder={t('common.addr.city')}
+                          error={!!getParticipantError(index, 'city')}
+                          InputLabelProps={{
+                            shrink: Boolean(values.participants[index].city),
+                          }}
+                          sx={{ bgcolor: 'grey.100' }}
+                          variant="filled"
+                          helperText={
+                            getParticipantError(index, 'city')?.message ?? ''
+                          }
+                          inputProps={{ 'data-testid': 'city' }}
+                          fullWidth
+                          required
+                        />
+                      </Box>
+                      <Box mb={3}>
+                        <TextField
+                          id="postCode"
+                          label={t('post-code')}
+                          {...register(`participants.${index}.postCode`)}
+                          placeholder={t('common.addr.postCode')}
+                          error={!!getParticipantError(index, 'postCode')}
+                          InputLabelProps={{
+                            shrink: Boolean(
+                              values.participants[index].postCode
+                            ),
+                          }}
+                          helperText={
+                            getParticipantError(index, 'postCode')?.message ??
+                            ''
+                          }
+                          variant="filled"
+                          sx={{ bgcolor: 'grey.100' }}
+                          inputProps={{ 'data-testid': 'postCode' }}
+                          fullWidth
+                          required
+                          InputProps={{
+                            endAdornment: (
+                              <Tooltip
+                                title={t('post-code-tooltip')}
+                                data-testid="post-code-tooltip"
+                              >
+                                <InfoIcon color={'action'} />
+                              </Tooltip>
+                            ),
+                          }}
+                        />
+                      </Box>
+                      <Box mb={3}>
+                        <CountryDropdown
+                          required
+                          {...register(`participants.${index}.country`)}
+                          error={!!getParticipantError(index, 'country')}
+                          errormessage={
+                            getParticipantError(index, 'country')?.message ?? ''
+                          }
+                          label={t('fields.country')}
+                        />
+                      </Box>
+                    </Grid>
+                  ) : null}
                 </Grid>
               </Box>
             )
           })}
           <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
-            <b>{t('important')}:</b>{' '}
-            {`${t('pages.book-course.notice-participants')}`}
-          </Alert>
-          <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
             <b>{t('important')}:</b> {`${t('pages.book-course.notice')}`}
           </Alert>
+          {isLevelOneCourse ? (
+            <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
+              <b>{t('important')}:</b>{' '}
+              {`${t('pages.book-course.notice-participants')}`}
+            </Alert>
+          ) : null}
           {showAttendeeValidCertificate && (
             <AttendeeValidCertificate
               control={control}
