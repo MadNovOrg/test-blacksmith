@@ -74,27 +74,23 @@ export const OrgOverviewTab: React.FC<
     certificateStatus
   )
   const { courses: coursesForBooking, loading: coursesLoading } =
-    useUpcomingCourses(
-      profile?.id,
-      {
-        _and: [
-          { type: { _eq: Course_Type_Enum.Open } },
-          {
-            status: {
-              _nin: [
-                Course_Status_Enum.Cancelled,
-                Course_Status_Enum.Completed,
-                Course_Status_Enum.Declined,
-                Course_Status_Enum.EvaluationMissing,
-                Course_Status_Enum.GradeMissing,
-                Course_Status_Enum.Draft,
-              ],
-            },
+    useUpcomingCourses(profile?.id, {
+      _and: [
+        { type: { _eq: Course_Type_Enum.Open } },
+        {
+          status: {
+            _nin: [
+              Course_Status_Enum.Cancelled,
+              Course_Status_Enum.Completed,
+              Course_Status_Enum.Declined,
+              Course_Status_Enum.EvaluationMissing,
+              Course_Status_Enum.GradeMissing,
+              Course_Status_Enum.Draft,
+            ],
           },
-        ],
-      },
-      5
-    )
+        },
+      ],
+    })
 
   const defaultTab =
     LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level))[0] ?? 'none'
