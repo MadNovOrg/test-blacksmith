@@ -21,4 +21,7 @@ interface ImportMetaEnv {
   VITE_GTM_ID: string
   VITE_RECAPTCHA_KEY: string
   VITE_WELCOME_PAGE_URL: string
+  VITE_KNOWLEDGE_HUB_URL: string
+  VITE_EVENTS_URL: string
+  VITE_SUPPORT_URL: string
 }

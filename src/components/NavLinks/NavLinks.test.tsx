@@ -1,12 +1,18 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { CourseLevel, RoleName } from '@app/types'
 
-import { render, screen } from '@test/index'
+import { render, renderHook, screen } from '@test/index'
 
 import { NavLinks } from './NavLinks'
 
 describe('component: NavLinks', () => {
+  const { result } = renderHook(() => useTranslation())
+  const {
+    current: { t },
+  } = result
+
   it('renders USER role links', async () => {
     render(<NavLinks />, {
       auth: {
@@ -16,12 +22,31 @@ describe('component: NavLinks', () => {
       },
     })
 
-    const coursesLink = screen.getByRole('link', { name: 'My Courses' })
+    const coursesLink = screen.getByRole('link', {
+      name: t('common.my-courses'),
+    })
     expect(coursesLink).toBeInTheDocument()
-    const resourcesLink = screen.getByRole('link', { name: 'Resources' })
+
+    const resourcesLink = screen.getByRole('link', {
+      name: t('common.resources'),
+    })
     expect(resourcesLink).toBeInTheDocument()
-    const usersLink = screen.queryByRole('link', { name: 'Users' })
+
+    const usersLink = screen.queryByRole('link', { name: t('common.users') })
     expect(usersLink).not.toBeInTheDocument()
+
+    const knowledgeHubLink = screen.queryByRole('link', {
+      name: t('common.knowledge-hub'),
+    })
+    expect(knowledgeHubLink).toBeInTheDocument()
+
+    const eventsLink = screen.queryByRole('link', { name: t('common.events') })
+    expect(eventsLink).toBeInTheDocument()
+
+    const supportLink = screen.queryByRole('link', {
+      name: t('common.support'),
+    })
+    expect(supportLink).toBeInTheDocument()
   })
 
   it("does not render resource and membership if user doesn't have a valid certificate", async () => {
@@ -33,14 +58,34 @@ describe('component: NavLinks', () => {
       },
     })
 
-    const coursesLink = screen.getByRole('link', { name: 'My Courses' })
+    const coursesLink = screen.getByRole('link', {
+      name: t('common.my-courses'),
+    })
     expect(coursesLink).toBeInTheDocument()
+
     const membershipLink = screen.queryByRole('link', { name: 'Membership' })
     expect(membershipLink).not.toBeInTheDocument()
-    const resourcesLink = screen.queryByRole('link', { name: 'Resources' })
+
+    const resourcesLink = screen.queryByRole('link', {
+      name: t('common.resources'),
+    })
     expect(resourcesLink).not.toBeInTheDocument()
-    const usersLink = screen.queryByRole('link', { name: 'Users' })
+
+    const usersLink = screen.queryByRole('link', { name: t('common.users') })
     expect(usersLink).not.toBeInTheDocument()
+
+    const knowledgeHubLink = screen.queryByRole('link', {
+      name: t('common.knowledge-hub'),
+    })
+    expect(knowledgeHubLink).toBeInTheDocument()
+
+    const eventsLink = screen.queryByRole('link', { name: t('common.events') })
+    expect(eventsLink).toBeInTheDocument()
+
+    const supportLink = screen.queryByRole('link', {
+      name: t('common.support'),
+    })
+    expect(supportLink).toBeInTheDocument()
   })
 
   it("doesn't render resources link if a trainer doesn't have a valid certificate", () => {
@@ -52,7 +97,7 @@ describe('component: NavLinks', () => {
     })
 
     expect(
-      screen.queryByRole('link', { name: /resources/i })
+      screen.queryByRole('link', { name: t('common.resources') })
     ).not.toBeInTheDocument()
   })
 
@@ -64,7 +109,22 @@ describe('component: NavLinks', () => {
       },
     })
 
-    expect(screen.getByRole('link', { name: /resources/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: t('common.resources') })
+    ).toBeInTheDocument()
+
+    const knowledgeHubLink = screen.queryByRole('link', {
+      name: t('common.knowledge-hub'),
+    })
+    expect(knowledgeHubLink).toBeInTheDocument()
+
+    const eventsLink = screen.queryByRole('link', { name: t('common.events') })
+    expect(eventsLink).toBeInTheDocument()
+
+    const supportLink = screen.queryByRole('link', {
+      name: t('common.support'),
+    })
+    expect(supportLink).toBeInTheDocument()
   })
 
   it("doesn't render resources link if a user is organisation admin and doesn't have a valid certificate", () => {
@@ -77,7 +137,7 @@ describe('component: NavLinks', () => {
     })
 
     expect(
-      screen.queryByRole('link', { name: /resources/i })
+      screen.queryByRole('link', { name: t('common.resources') })
     ).not.toBeInTheDocument()
   })
 
@@ -89,21 +149,23 @@ describe('component: NavLinks', () => {
       },
     })
 
-    const coursesLink = screen.getByRole('link', { name: 'Manage Courses' })
+    const coursesLink = screen.getByRole('link', {
+      name: t('common.manage-courses'),
+    })
     expect(coursesLink).toBeInTheDocument()
     const usersLink = screen.getByRole('link', {
-      name: 'Users',
+      name: t('common.users'),
     })
     expect(usersLink).toBeInTheDocument()
     const organisationsLink = screen.getByRole('link', {
-      name: 'Organisations',
+      name: t('common.organizations'),
     })
     expect(organisationsLink).toBeInTheDocument()
     const certificationsLink = screen.getByRole('link', {
-      name: 'Certifications',
+      name: t('common.certifications'),
     })
     expect(certificationsLink).toBeInTheDocument()
-    const ordersLink = screen.getByRole('link', { name: 'Orders' })
+    const ordersLink = screen.getByRole('link', { name: t('common.orders') })
     expect(ordersLink).toBeInTheDocument()
   })
 
@@ -115,24 +177,41 @@ describe('component: NavLinks', () => {
       },
     })
 
-    const coursesLink = screen.getByRole('link', { name: 'Manage Courses' })
+    const coursesLink = screen.getByRole('link', {
+      name: t('common.manage-courses'),
+    })
     expect(coursesLink).toBeInTheDocument()
     const usersLink = screen.getByRole('link', {
-      name: 'Users',
+      name: t('common.users'),
     })
     expect(usersLink).toBeInTheDocument()
     const organisationsLink = screen.getByRole('link', {
-      name: 'Organisations',
+      name: t('common.organizations'),
     })
     expect(organisationsLink).toBeInTheDocument()
     const certificationsLink = screen.getByRole('link', {
-      name: 'Certifications',
+      name: t('common.certifications'),
     })
     expect(certificationsLink).toBeInTheDocument()
-    const ordersLink = screen.getByRole('link', { name: 'Orders' })
+    const ordersLink = screen.getByRole('link', { name: t('common.orders') })
     expect(ordersLink).toBeInTheDocument()
-    const resourcesLink = screen.getByRole('link', { name: 'Resources' })
+    const resourcesLink = screen.getByRole('link', {
+      name: t('common.resources'),
+    })
     expect(resourcesLink).toBeInTheDocument()
+
+    const knowledgeHubLink = screen.queryByRole('link', {
+      name: t('common.knowledge-hub'),
+    })
+    expect(knowledgeHubLink).not.toBeInTheDocument()
+
+    const eventsLink = screen.queryByRole('link', { name: t('common.events') })
+    expect(eventsLink).not.toBeInTheDocument()
+
+    const supportLink = screen.queryByRole('link', {
+      name: t('common.support'),
+    })
+    expect(supportLink).not.toBeInTheDocument()
   })
 
   it('renders TT OPS role links', async () => {
@@ -144,21 +223,35 @@ describe('component: NavLinks', () => {
     })
 
     const usersLink = screen.getByRole('link', {
-      name: 'Users',
+      name: t('common.users'),
     })
     expect(usersLink).toBeInTheDocument()
 
     const organisationsLink = screen.getByRole('link', {
-      name: 'Organisations',
+      name: t('common.organizations'),
     })
     expect(organisationsLink).toBeInTheDocument()
 
     const certificationsLink = screen.getByRole('link', {
-      name: 'Certifications',
+      name: t('common.certifications'),
     })
     expect(certificationsLink).toBeInTheDocument()
-    const ordersLink = screen.getByRole('link', { name: 'Orders' })
+
+    const ordersLink = screen.getByRole('link', { name: t('common.orders') })
     expect(ordersLink).toBeInTheDocument()
+
+    const knowledgeHubLink = screen.queryByRole('link', {
+      name: t('common.knowledge-hub'),
+    })
+    expect(knowledgeHubLink).not.toBeInTheDocument()
+
+    const eventsLink = screen.queryByRole('link', { name: t('common.events') })
+    expect(eventsLink).not.toBeInTheDocument()
+
+    const supportLink = screen.queryByRole('link', {
+      name: t('common.support'),
+    })
+    expect(supportLink).not.toBeInTheDocument()
   })
 
   it('renders TRAINER role links', async () => {
@@ -169,9 +262,11 @@ describe('component: NavLinks', () => {
       },
     })
 
-    const coursesLink = screen.getByRole('link', { name: 'My Courses' })
+    const coursesLink = screen.getByRole('link', {
+      name: t('common.my-courses'),
+    })
     expect(coursesLink).toBeInTheDocument()
-    const usersLink = screen.queryByRole('link', { name: 'Users' })
+    const usersLink = screen.queryByRole('link', { name: t('common.users') })
     expect(usersLink).not.toBeInTheDocument()
   })
 })

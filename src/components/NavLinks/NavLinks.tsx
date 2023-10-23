@@ -105,6 +105,25 @@ export const NavLinks: FC<INavLinksProps> = () => {
           {t('common.orders')}
         </Link>
       )}
+
+      {!acl.isInternalUser() ? (
+        <>
+          <Link
+            component={StyledNavLink}
+            to={import.meta.env.VITE_WELCOME_PAGE_URL}
+          >
+            {t('common.knowledge-hub')}
+          </Link>
+
+          <Link component={StyledNavLink} to={import.meta.env.VITE_EVENTS_URL}>
+            {t('common.events')}
+          </Link>
+
+          <Link component={StyledNavLink} to={import.meta.env.VITE_SUPPORT_URL}>
+            {t('common.support')}
+          </Link>
+        </>
+      ) : null}
     </Box>
   )
 }

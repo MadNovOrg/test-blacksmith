@@ -1,8 +1,11 @@
 import AccountIcon from '@mui/icons-material/AccountCircle'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
+import EventIcon from '@mui/icons-material/Event'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
+import HelpCenterIcon from '@mui/icons-material/HelpCenter'
+import SchoolIcon from '@mui/icons-material/School'
 import AdminIcon from '@mui/icons-material/SupervisorAccount'
 import {
   Box,
@@ -16,7 +19,7 @@ import {
 } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import type { Profile } from '@app/types'
@@ -95,6 +98,52 @@ export const ProfileMenu: React.FC<
               </ListItemText>
             </ListItemButton>
           )}
+
+          {acl.isInternalUser() ? (
+            <>
+              <Link to={import.meta.env.VITE_WELCOME_PAGE_URL}>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <SchoolIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText
+                    data-testid="admin-link"
+                    primaryTypographyProps={{ variant: 'body2' }}
+                  >
+                    {t('knowledge-hub')}
+                  </ListItemText>
+                </ListItemButton>
+              </Link>
+
+              <Link to={import.meta.env.VITE_EVENTS_URL}>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <EventIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText
+                    data-testid="admin-link"
+                    primaryTypographyProps={{ variant: 'body2' }}
+                  >
+                    {t('events')}
+                  </ListItemText>
+                </ListItemButton>
+              </Link>
+
+              <Link to={import.meta.env.VITE_SUPPORT_URL}>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <HelpCenterIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText
+                    data-testid="admin-link"
+                    primaryTypographyProps={{ variant: 'body2' }}
+                  >
+                    {t('support')}
+                  </ListItemText>
+                </ListItemButton>
+              </Link>
+            </>
+          ) : null}
 
           <ListItemButton onClick={logout}>
             <ListItemIcon>

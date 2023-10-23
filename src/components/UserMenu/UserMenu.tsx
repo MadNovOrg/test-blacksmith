@@ -1,7 +1,10 @@
 import AccountIcon from '@mui/icons-material/AccountCircle'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import EventIcon from '@mui/icons-material/Event'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
+import HelpCenterIcon from '@mui/icons-material/HelpCenter'
+import SchoolIcon from '@mui/icons-material/School'
 import AdminIcon from '@mui/icons-material/SupervisorAccount'
 import SupportIcon from '@mui/icons-material/Support'
 import { Button, Link } from '@mui/material'
@@ -109,6 +112,52 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
             </Link>
           </ListItemText>
         </MenuItem>
+
+        {acl.isInternalUser() ? (
+          <>
+            <MenuItem>
+              <ListItemIcon>
+                <SchoolIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText
+                data-testid="admin-link"
+                primaryTypographyProps={{ variant: 'body2' }}
+              >
+                <Link href={import.meta.env.VITE_WELCOME_PAGE_URL}>
+                  {t('common.knowledge-hub')}
+                </Link>
+              </ListItemText>
+            </MenuItem>
+
+            <MenuItem>
+              <ListItemIcon>
+                <EventIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText
+                data-testid="admin-link"
+                primaryTypographyProps={{ variant: 'body2' }}
+              >
+                <Link href={import.meta.env.VITE_EVENTS_URL}>
+                  {t('common.events')}
+                </Link>
+              </ListItemText>
+            </MenuItem>
+
+            <MenuItem>
+              <ListItemIcon>
+                <HelpCenterIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText
+                data-testid="admin-link"
+                primaryTypographyProps={{ variant: 'body2' }}
+              >
+                <Link href={import.meta.env.VITE_SUPPORT_URL}>
+                  {t('common.support')}
+                </Link>
+              </ListItemText>
+            </MenuItem>
+          </>
+        ) : null}
 
         <Divider />
 

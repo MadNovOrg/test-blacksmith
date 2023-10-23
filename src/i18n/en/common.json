@@ -31,6 +31,9 @@
     }
   },
   "home": "Home",
+  "knowledge-hub": "Knowledge Hub",
+  "events": "Events",
+  "support": "Support",
   "add": "Add",
   "create": "Create",
   "approve": "Approve",
