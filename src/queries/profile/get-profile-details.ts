@@ -20,7 +20,9 @@ export const QUERY = gql`
     profile: profile_by_pk(id: $profileId) {
       ...Profile
 
-      participantAudits: participant_audits @include(if: $withCourseHistory) {
+      participantAudits: participant_audits(
+        where: { type: { _nin: [ATTENDED, NOT_ATTENDED] } }
+      ) @include(if: $withCourseHistory) {
         id
         course_id
         type
@@ -63,12 +65,15 @@ export const QUERY = gql`
         }
       }
 
-      courses(where: { course: { status: { _eq: CANCELLED } } }) {
+      courses {
         id
+        attended
         course {
           id
           name
           status
+          start
+          end
         }
       }
 

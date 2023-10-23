@@ -64,15 +64,15 @@ export const ViewProfilePage: React.FC<
 
   const orgId = searchParams.get('orgId')
 
+  const isMyProfile = !id
+
   const { profile, go1Licenses, certifications, status, mutate } = useProfile(
     id ?? currentUserProfile?.id,
     undefined,
     orgId ?? undefined,
-    acl.canViewCourseHistory()
+    acl.canViewCourseHistory() || isMyProfile
   )
   const { activeRole } = useAuth()
-
-  const isMyProfile = !id
 
   if (status === LoadingStatus.FETCHING) {
     return <CircularProgress />
@@ -414,7 +414,7 @@ export const ViewProfilePage: React.FC<
             ) : null}
             {(!isMobile ||
               selectedTab === TableMenuSelections.COURSE_ATTENDEE) &&
-            !trainerViewProfile ? (
+            (acl.canViewCourseHistory() || isMyProfile) ? (
               <>
                 <Typography variant="subtitle2" mb={1} mt={3}>
                   {t('course-as-attendee')}

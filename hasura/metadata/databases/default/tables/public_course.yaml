@@ -118,6 +118,13 @@ array_relationships:
         table:
           name: course_bild_strategy
           schema: public
+  - name: course_course_participant_audits
+    using:
+      foreign_key_constraint_on:
+        column: course_id
+        table:
+          name: course_participant_audit
+          schema: public
   - name: evaluation_answers
     using:
       foreign_key_constraint_on:
@@ -482,6 +489,9 @@ select_permissions:
                     - TRAINER_DECLINED
           - booking_contact_profile_id:
               _eq: X-Hasura-User-Id
+          - course_course_participant_audits:
+              profile_id:
+                _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: finance
     permission:
@@ -679,6 +689,9 @@ select_permissions:
                     - TRAINER_DECLINED
           - organization_key_contact_profile_id:
               _eq: X-Hasura-User-Id
+          - course_course_participant_audits:
+              profile_id:
+                _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: sales-admin
     permission:
@@ -865,6 +878,9 @@ select_permissions:
                     - TRAINER_MISSING
                     - TRAINER_PENDING
                     - TRAINER_DECLINED
+          - course_course_participant_audits:
+              profile_id:
+                _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: tt-admin
     permission:
@@ -1084,6 +1100,9 @@ select_permissions:
                     - TRAINER_MISSING
                     - TRAINER_PENDING
                     - TRAINER_DECLINED
+          - course_course_participant_audits:
+              profile_id:
+                _eq: X-Hasura-User-Id
       allow_aggregations: true
 update_permissions:
   - role: ld

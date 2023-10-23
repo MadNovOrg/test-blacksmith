@@ -78,6 +78,17 @@ insert_permissions:
         - course_id
       backend_only: false
 select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - course_id
+        - id
+        - profile_id
+        - type
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
   - role: finance
     permission:
       columns:
@@ -89,6 +100,47 @@ select_permissions:
         - id
         - profile_id
         - course_id
+      computed_fields:
+        - newAttendeeEmail
+      filter: {}
+      allow_aggregations: true
+  - role: ld
+    permission:
+      columns:
+        - course_id
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - profile_id
+      computed_fields:
+        - newAttendeeEmail
+      filter: {}
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - course_id
+        - id
+        - profile_id
+        - type
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - profile_id
       computed_fields:
         - newAttendeeEmail
       filter: {}
@@ -107,6 +159,17 @@ select_permissions:
       computed_fields:
         - newAttendeeEmail
       filter: {}
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - id
+        - profile_id
+        - type
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: tt-admin
     permission:
@@ -137,6 +200,17 @@ select_permissions:
       computed_fields:
         - newAttendeeEmail
       filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - id
+        - profile_id
+        - type
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
       allow_aggregations: true
 event_triggers:
   - name: participant_audit_added

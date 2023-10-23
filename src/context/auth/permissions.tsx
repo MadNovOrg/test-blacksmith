@@ -411,7 +411,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return acl.isInternalUser()
     },
 
-    canViewCourseHistory: () => anyPass([acl.isTTAdmin])(),
+    canViewCourseHistory: () => anyPass([acl.isInternalUser])(),
 
     isOrgAdminOf: (participantOrgIds: string[]) => {
       return (
