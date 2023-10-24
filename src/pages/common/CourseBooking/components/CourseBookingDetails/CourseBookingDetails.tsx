@@ -47,7 +47,13 @@ import {
 import { useAuth } from '@app/context/auth'
 import { Course_Source_Enum, PaymentMethod } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
-import { CourseLevel, CourseType, InvoiceDetails, Profile } from '@app/types'
+import {
+  CourseLevel,
+  CourseType,
+  InvoiceDetails,
+  Profile,
+  CourseDeliveryType,
+} from '@app/types'
 import { formatCurrency, requiredMsg, isValidUKPostalCode } from '@app/util'
 
 import {
@@ -254,7 +260,11 @@ export const CourseBookingDetails: React.FC<
   }
 
   const isInternalUserBooking = acl.canInviteAttendees(CourseType.OPEN)
-  const isLevelOneCourse = course?.level === CourseLevel.Level_1
+  const isAddressInfoRequired =
+    course?.type === CourseType.OPEN &&
+    course?.level === CourseLevel.Level_1 &&
+    course?.deliveryType === CourseDeliveryType.VIRTUAL
+
   const schema = useMemo(() => {
     return yup.object({
       quantity: yup.number().required(),
@@ -266,7 +276,7 @@ export const CourseBookingDetails: React.FC<
             firstName: yup.string().required(requiredMsg(t, 'first-name')),
             lastName: yup.string().required(requiredMsg(t, 'last-name')),
             email: schemas.email(t).required(requiredMsg(t, 'email')),
-            ...(isLevelOneCourse
+            ...(isAddressInfoRequired
               ? {
                   addressLine1: yup.string().required(requiredMsg(t, 'line1')),
                   addressLine2: yup.string(),
@@ -354,7 +364,7 @@ export const CourseBookingDetails: React.FC<
           otherwise: schema => schema,
         }),
     })
-  }, [t, isLevelOneCourse])
+  }, [t, isAddressInfoRequired])
 
   const methods = useForm<FormInputs>({
     resolver: yupResolver(schema),
@@ -923,7 +933,7 @@ export const CourseBookingDetails: React.FC<
                       required
                     />
                   </Grid>
-                  {isLevelOneCourse ? (
+                  {isAddressInfoRequired ? (
                     <Grid item md={12}>
                       <Typography variant="subtitle1">
                         {t('common.postal-address')}
@@ -1045,7 +1055,7 @@ export const CourseBookingDetails: React.FC<
           <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
             <b>{t('important')}:</b> {`${t('pages.book-course.notice')}`}
           </Alert>
-          {isLevelOneCourse ? (
+          {isAddressInfoRequired ? (
             <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
               <b>{t('important')}:</b>{' '}
               {`${t('pages.book-course.notice-participants')}`}
