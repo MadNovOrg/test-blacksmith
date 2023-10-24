@@ -706,6 +706,7 @@
     "valid-identification": "Valid identification was checked",
     "passed-the-quiz": "Passed the course quiz",
     "valid-pre-requisite": "Valid pre-requisite certificate was checked",
+    "blended-resource-completed": "Completed the Blended Learning resource",
     "automatic-fail-warning": "Please note, if a course member is deselected when you proceed (automatic fail), this cannot be undone.",
     "confirm-grading": "Confirm Grading",
     "master-checkbox-label-checked": "Deselect all",

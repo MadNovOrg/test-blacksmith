@@ -60,6 +60,10 @@ export const CourseAttendance = () => {
 
   const ATTENDANCE_KEY = `course-attendance-${courseId}`
 
+  const go1Integration = participantsData?.length
+    ? participantsData[0].course.go1Integration
+    : false
+
   const participants = useMemo(() => {
     if (!participantsData) {
       return []
@@ -196,6 +200,13 @@ export const CourseAttendance = () => {
                   {t('pages.course-attendance.valid-pre-requisite')}
                 </StyledText>
               </li>
+              {go1Integration ? (
+                <li>
+                  <StyledText variant="body1">
+                    {t('pages.course-attendance.blended-resource-completed')}
+                  </StyledText>
+                </li>
+              ) : null}
             </StyledList>
             <StyledText variant="body1">
               {t('pages.course-attendance.automatic-fail-warning')}
