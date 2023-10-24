@@ -45,6 +45,7 @@ import { InferType } from 'yup'
 import { Avatar } from '@app/components/Avatar'
 import { DetailsRow } from '@app/components/DetailsRow'
 import { Dialog, ConfirmDialog } from '@app/components/dialogs'
+import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
@@ -62,6 +63,7 @@ import {
   UpdateTrainerRoleTypeMutationVariables,
 } from '@app/generated/graphql'
 import { UpdateOrgMemberMutation } from '@app/generated/graphql'
+import { useJobTitles } from '@app/hooks/useJobTitles'
 import useProfile from '@app/hooks/useProfile'
 import useRoles from '@app/hooks/useRoles'
 import useTrainerRoleTypes from '@app/hooks/useTrainerRoleTypes'
@@ -112,6 +114,7 @@ export const EditProfilePage: React.FC<
   const navigate = useNavigate()
   const { id } = useParams()
   const [searchParams] = useSearchParams()
+  const jobTitles = useJobTitles()
   const orgId = searchParams.get('orgId')
 
   const [{ fetching: updateProfileFetching }, updateProfile] = useMutation<
@@ -218,6 +221,11 @@ export const EditProfilePage: React.FC<
         phone: yup.string(),
         dob: yup.date().nullable(),
         jobTitle: yup.string(),
+        otherJobTitle: yup.string().when('jobTitle', ([jobTitle], schema) => {
+          return jobTitle === 'Other'
+            ? schema.required(t('validation-errors.other-job-title-required'))
+            : schema
+        }),
         org: yup.string(),
         disabilities: disabilitiesSchema,
         dietaryRestrictions: dietaryRestrictionsSchema,
@@ -266,6 +274,10 @@ export const EditProfilePage: React.FC<
     }
   }, [isMyProfile, mutate, reloadCurrentProfile])
 
+  const isOtherJobTitle = useMemo(() => {
+    return Boolean(profile?.jobTitle && !jobTitles.includes(profile.jobTitle))
+  }, [jobTitles, profile?.jobTitle])
+
   useEffect(() => {
     if (profile) {
       setValue('avatar', profile.avatar as string)
@@ -273,9 +285,16 @@ export const EditProfilePage: React.FC<
       setValue('surname', profile.familyName ?? '')
       setValue('phone', profile.phone ?? '')
       setValue('dob', profile.dob ? new Date(profile.dob) : null)
-      setValue('jobTitle', profile.jobTitle ?? '')
       setValue('disabilities', profile.disabilities ?? '')
       setValue('dietaryRestrictions', profile.dietaryRestrictions ?? '')
+
+      if (isOtherJobTitle) {
+        setValue('jobTitle', 'Other')
+
+        setValue('otherJobTitle', profile.jobTitle as string)
+      } else if (profile?.jobTitle) {
+        setValue('jobTitle', profile.jobTitle)
+      }
 
       if (profile.roles.length) {
         const isEmployeeRole = (roleName: EmployeeRoleName) =>
@@ -373,7 +392,7 @@ export const EditProfilePage: React.FC<
         ])
       }
     }
-  }, [profile, setValue])
+  }, [isOtherJobTitle, profile, setValue])
 
   const navigateBackPath = orgId ? `../?orgId=${orgId}` : '..'
 
@@ -393,7 +412,8 @@ export const EditProfilePage: React.FC<
               }
             : null),
           phone: data.phone,
-          jobTitle: data.jobTitle,
+          jobTitle:
+            data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
           disabilities: data.disabilities,
           dietaryRestrictions: data.dietaryRestrictions,
         },
@@ -760,16 +780,16 @@ export const EditProfilePage: React.FC<
                     </LocalizationProvider>
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <TextField
-                      id="job-title"
-                      label={t('job-title')}
-                      variant="filled"
-                      placeholder={t('job-title-placeholder')}
-                      error={!!errors.jobTitle}
-                      helperText={errors.jobTitle?.message}
-                      {...register('jobTitle')}
-                      fullWidth
-                      inputProps={{ 'data-testid': 'job-title' }}
+                    <JobTitleSelector
+                      errors={{
+                        jobTitle: errors.jobTitle?.message,
+                        otherJobTitle: errors.otherJobTitle?.message,
+                      }}
+                      register={{
+                        jobTitle: { ...register('jobTitle') },
+                        otherJobTitle: { ...register('otherJobTitle') },
+                      }}
+                      values={{ jobTitle: values.jobTitle }}
                     />
                   </Grid>
                 </Grid>

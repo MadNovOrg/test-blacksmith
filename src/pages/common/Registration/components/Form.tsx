@@ -10,7 +10,6 @@ import {
   Grid,
   IconButton,
   InputAdornment,
-  MenuItem,
   styled,
   TextField as MuiTextField,
   Typography,
@@ -25,12 +24,12 @@ import { Controller, useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { useToggle } from 'react-use'
 
+import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
 import PhoneNumberInput from '@app/components/PhoneNumberInput'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 import { SignUpMutation, SignUpMutationVariables } from '@app/generated/graphql'
-import { useJobTitles } from '@app/hooks/useJobTitles'
 import { gqlRequest } from '@app/lib/gql-request'
 import { Organization } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
@@ -65,8 +64,6 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
   const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
-
-  const jobTitles = useJobTitles()
 
   const {
     register,
@@ -313,47 +310,17 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         />
 
         <Box>
-          <TextField
-            select
-            value={values.jobTitle}
-            {...register('jobTitle')}
-            variant="filled"
-            fullWidth
-            required
-            label={t('job-title')}
-          >
-            <MenuItem value="" disabled>
-              {t('job-title')}
-            </MenuItem>
-            {jobTitles.map((option, i) => (
-              <MenuItem
-                key={i}
-                value={option}
-                data-testid={`position-${option}`}
-              >
-                {option}
-              </MenuItem>
-            ))}
-          </TextField>
-          {errors.jobTitle ? (
-            <FormHelperText error>{errors.jobTitle?.message}</FormHelperText>
-          ) : null}
-
-          <Box sx={{ my: 1 }}>
-            {values.jobTitle === 'Other' ? (
-              <TextField
-                id="other-job-title"
-                variant="filled"
-                label={t('other-job-title')}
-                placeholder={t('other-job-title')}
-                error={!!errors.otherJobTitle}
-                helperText={errors.otherJobTitle?.message || ''}
-                {...register('otherJobTitle')}
-                fullWidth
-                inputProps={{ 'data-testid': 'other-job-title-input' }}
-              />
-            ) : null}
-          </Box>
+          <JobTitleSelector
+            errors={{
+              jobTitle: errors.jobTitle?.message,
+              otherJobTitle: errors.otherJobTitle?.message,
+            }}
+            register={{
+              jobTitle: { ...register('jobTitle') },
+              otherJobTitle: { ...register('otherJobTitle') },
+            }}
+            values={{ jobTitle: values.jobTitle }}
+          />
         </Box>
 
         <Box sx={{ my: 5 }}>

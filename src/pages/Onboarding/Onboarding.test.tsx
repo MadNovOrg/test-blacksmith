@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
 import { Client, CombinedError, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
@@ -12,6 +13,7 @@ import {
 import {
   chance,
   render,
+  renderHook,
   screen,
   userEvent,
   VALID_PHONE_NUMBER,
@@ -24,6 +26,12 @@ import { Onboarding } from '.'
 const defaultProfile = profile as NonNullable<AuthContextType['profile']>
 
 describe('page: Onboarding', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+
   it('validates form data', async () => {
     const client = {
       executeMutation: () => never,
@@ -38,22 +46,33 @@ describe('page: Onboarding', () => {
       { initialEntries: ['/'] }
     )
 
-    await userEvent.clear(screen.getByLabelText(/first name/i))
-    await userEvent.clear(screen.getByLabelText(/surname/i))
-    await userEvent.clear(screen.getByLabelText(/phone/i))
-    await userEvent.clear(screen.getByLabelText(/date of birth/i))
+    await userEvent.clear(
+      screen.getByLabelText(t('first-name'), { exact: false })
+    )
+    await userEvent.clear(screen.getByLabelText(t('surname'), { exact: false }))
+    await userEvent.clear(screen.getByLabelText(t('phone'), { exact: false }))
+    await userEvent.clear(screen.getByLabelText(t('dob'), { exact: false }))
 
-    await userEvent.click(screen.getByText(/update/i))
+    await userEvent.click(
+      screen.getByText(t('pages.onboarding.submit-btn-text'))
+    )
 
     await waitFor(() => {
-      expect(screen.getByText(/first name is required/i)).toBeInTheDocument()
-      expect(screen.getByText(/surname is required/i)).toBeInTheDocument()
-      expect(screen.getByText(/phone is required/i)).toBeInTheDocument()
       expect(
-        screen.getByText(/accepting our T&C is required/i)
+        screen.getByText(
+          t('components.course-enquiry-form.required-first-name'),
+          {
+            exact: false,
+          }
+        )
+      ).toBeInTheDocument()
+      expect(screen.getByText(/Surname is required/i)).toBeInTheDocument()
+      expect(screen.getByText(/Phone is required/i)).toBeInTheDocument()
+      expect(
+        screen.getByText(t('pages.onboarding.tcs-required'))
       ).toBeInTheDocument()
       expect(
-        screen.getByText(/please enter your date of birth/i)
+        screen.getByText(t('validation-errors.date-required'))
       ).toBeInTheDocument()
     })
   })
@@ -77,22 +96,38 @@ describe('page: Onboarding', () => {
       { initialEntries: ['/'] }
     )
 
-    await userEvent.type(screen.getByLabelText(/first name/i), 'John')
-    await userEvent.type(screen.getByLabelText(/surname/i), 'Doe')
-    await userEvent.type(screen.getByLabelText(/phone/i), VALID_PHONE_NUMBER)
-    await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
+    await userEvent.type(
+      screen.getByLabelText(t('first-name'), { exact: false }),
+      'John'
+    )
+    await userEvent.type(
+      screen.getByLabelText(t('surname'), { exact: false }),
+      'Doe'
+    )
+    await userEvent.type(
+      screen.getByLabelText(t('phone'), { exact: false }),
+      VALID_PHONE_NUMBER
+    )
+    await userEvent.type(
+      screen.getByLabelText(t('dob'), { exact: false }),
+      '20/03/1990'
+    )
 
-    await userEvent.click(screen.getByLabelText('Job Title'))
-    await userEvent.click(screen.getByTestId('job-title-Other'))
+    await userEvent.click(
+      screen.getByLabelText(t('job-title'), { exact: false })
+    )
+    await userEvent.click(screen.getByTestId('position-Other'))
     await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
 
-    await userEvent.click(screen.getByLabelText(/i accept/i))
+    await userEvent.click(screen.getByLabelText(/I accept/i))
 
-    await userEvent.click(screen.getByText(/update/i))
+    await userEvent.click(
+      screen.getByText(t('pages.onboarding.submit-btn-text'))
+    )
 
     await waitFor(() => {
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-        `"We're having issue saving your personal information."`
+        `"${t('pages.onboarding.error-saving')}"`
       )
       expect(reloadProfileMock).not.toHaveBeenCalled()
     })
@@ -112,10 +147,10 @@ describe('page: Onboarding', () => {
       { initialEntries: ['/'] }
     )
     await waitFor(() => {
-      expect(screen.getByLabelText(/first name/i)).toHaveValue(
-        defaultProfile.givenName
-      )
-      expect(screen.getByLabelText(/surname/i)).toHaveValue(
+      expect(
+        screen.getByLabelText(t('first-name'), { exact: false })
+      ).toHaveValue(defaultProfile.givenName)
+      expect(screen.getByLabelText(t('surname'), { exact: false })).toHaveValue(
         defaultProfile.familyName
       )
     })
@@ -166,27 +201,37 @@ describe('page: Onboarding', () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByLabelText(/first name/i)).toHaveValue(
-        defaultProfile.givenName
-      )
-      expect(screen.getByLabelText(/surname/i)).toHaveValue(
+      expect(
+        screen.getByLabelText(t('first-name'), { exact: false })
+      ).toHaveValue(defaultProfile.givenName)
+      expect(screen.getByLabelText(t('surname'), { exact: false })).toHaveValue(
         defaultProfile.familyName
       )
     })
 
-    await userEvent.type(screen.getByLabelText(/phone/i), phone)
-    await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
+    await userEvent.type(
+      screen.getByLabelText(t('phone'), { exact: false }),
+      phone
+    )
+    await userEvent.type(
+      screen.getByLabelText(t('dob'), { exact: false }),
+      '20/03/1990'
+    )
 
-    await userEvent.click(screen.getByLabelText('Job Title'))
-    await userEvent.click(screen.getByTestId('job-title-Other'))
+    await userEvent.click(
+      screen.getByLabelText(t('job-title'), { exact: false })
+    )
+    await userEvent.click(screen.getByTestId(/position-Other/i))
     await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
 
-    await userEvent.click(screen.getByLabelText(/i accept/i))
+    await userEvent.click(screen.getByLabelText(/I accept/i))
 
-    await userEvent.click(screen.getByText(/update/i))
+    await userEvent.click(
+      screen.getByText(t('pages.onboarding.submit-btn-text'))
+    )
 
     await waitFor(() => {
-      expect(screen.getByText(/home/i)).toBeInTheDocument()
+      expect(screen.getByText(t('home'), { exact: false })).toBeInTheDocument()
       expect(reloadProfileMock).toHaveBeenCalledTimes(1)
     })
   })
