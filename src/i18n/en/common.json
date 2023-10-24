@@ -587,7 +587,7 @@
     "response-sent": "Your response has been sent"
   },
   "course-evaluation": {
-    "heading": "Course Summary Evaluation",
+    "heading": "Course Evaluation",
     "trainer-heading": "Trainer summary evaluation",
     "signature-desc": "Please enter the full name that matches with your account. Your signature confirms the information provided is an accurate representation of your experience.",
     "provide-details": "Please provide details",
@@ -600,7 +600,7 @@
     "required-field": "This is a required question",
     "required-answer": "This is a required answer",
     "complete-my-evaluation": "Complete my evaluation",
-    "trainer-evaluate": "Submit your Trainer Summary Evaluation to view summary evaluation and complete this course.",
+    "trainer-evaluate": "Please submit your course evaluation to complete this course.",
     "excellent": "Excellent",
     "no-answer": "N/A",
     "groups": {

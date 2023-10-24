@@ -525,9 +525,9 @@
         "modify-grading-details": "Modify grading details"
       },
       "evaluation": {
-        "title": "Summary Evaluation",
-        "button": "View Summary Evaluation",
-        "full-summary": "Full Summary Evaluation",
+        "title": "Course Evaluation",
+        "button": "View Course Evaluation",
+        "full-summary": "Full Course Evaluation",
         "desc": "View an attendee's or trainer's course evaluation and a summary of all evaluations.",
         "view-evaluation": "View Evaluation",
         "attendee-feedback": "Attendee Feedback",
