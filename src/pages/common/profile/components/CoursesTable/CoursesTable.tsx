@@ -12,7 +12,9 @@ import { matches } from 'lodash'
 import { cond, constant, stubTrue } from 'lodash-es'
 import { FC, PropsWithChildren, useCallback } from 'react'
 
+import { useAuth } from '@app/context/auth'
 import {
+  Course_Participant_Audit_Type_Enum as ParticipantAuditType,
   Course_Status_Enum as CourseStatus,
   GetProfileDetailsQuery,
 } from '@app/generated/graphql'
@@ -24,6 +26,8 @@ type CoursesTableProps = {
 export const CoursesTable: FC<PropsWithChildren<CoursesTableProps>> = ({
   profile,
 }) => {
+  const { acl } = useAuth()
+
   const mapCourseStatusToAction = useCallback(
     (
       course: {
@@ -49,11 +53,30 @@ export const CoursesTable: FC<PropsWithChildren<CoursesTableProps>> = ({
         : 'present'
 
       const mapCourseToAttendeeAction = cond([
-        [matches({ active: false }), constant('Cancelled')],
-        [matches({ active: true, attended: false }), constant('Not Attended')],
-        [matches({ active: true, attended: null }), constant('Attending')],
-        [matches({ active: true, attended: true }), constant('Attended')],
-        [matches({ active: true, attended: undefined }), constant('Attending')],
+        [
+          matches({ active: false, isInternal: false }),
+          constant({ label: 'Cancelled', showLink: false }),
+        ],
+        [
+          matches({ active: false, isInternal: true }),
+          constant({ label: 'Cancelled', showLink: true }),
+        ],
+        [
+          matches({ active: true, attended: false }),
+          constant({ label: 'Not Attended', showLink: true }),
+        ],
+        [
+          matches({ active: true, attended: null }),
+          constant({ label: 'Attending', showLink: true }),
+        ],
+        [
+          matches({ active: true, attended: true }),
+          constant({ label: 'Attended', showLink: true }),
+        ],
+        [
+          matches({ active: true, attended: undefined }),
+          constant({ label: 'Attending', showLink: true }),
+        ],
         [stubTrue, constant(null)],
       ])
 
@@ -79,7 +102,11 @@ export const CoursesTable: FC<PropsWithChildren<CoursesTableProps>> = ({
       )
 
       return {
-        action: mapCourseToAttendeeAction({ active, attended }),
+        course: mapCourseToAttendeeAction({
+          active,
+          attended,
+          isInternal: acl.isInternalUser(),
+        }),
         date: !active
           ? null
           : format(
@@ -88,7 +115,7 @@ export const CoursesTable: FC<PropsWithChildren<CoursesTableProps>> = ({
             ),
       }
     },
-    []
+    [acl]
   )
 
   const tableHeadCells = [t('course-name'), t('action'), t('date')]
@@ -125,9 +152,17 @@ export const CoursesTable: FC<PropsWithChildren<CoursesTableProps>> = ({
               data-testid={`course-row-${row.course_id}`}
             >
               <TableCell data-testid="course-name">
-                <Link href={`/courses/${row.course_id}/details`}>
-                  {row.course.name}
-                </Link>
+                {[
+                  ParticipantAuditType.Cancellation,
+                  ParticipantAuditType.Replacement,
+                  ParticipantAuditType.Transfer,
+                ].includes(row.type) && !acl.isInternalUser() ? (
+                  row.course.name
+                ) : (
+                  <Link href={`/courses/${row.course_id}/details`}>
+                    {row.course.name}
+                  </Link>
+                )}
               </TableCell>
               <TableCell data-testid="course-action">
                 {t(`participant-audit-types.${row.type}`)}
@@ -155,8 +190,16 @@ export const CoursesTable: FC<PropsWithChildren<CoursesTableProps>> = ({
                 },
               }}
             >
-              <TableCell>{row.course.name}</TableCell>
-              <TableCell>{attendeeAction.action}</TableCell>
+              <TableCell>
+                {attendeeAction.course?.showLink ? (
+                  <Link href={`/courses/${row.course.id}/details`}>
+                    {row.course.name}
+                  </Link>
+                ) : (
+                  row.course.name
+                )}
+              </TableCell>
+              <TableCell>{attendeeAction.course?.label}</TableCell>
               <TableCell>{attendeeAction.date}</TableCell>
             </TableRow>
           ) : null
