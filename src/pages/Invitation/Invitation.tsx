@@ -5,13 +5,13 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Alert,
   Box,
+  Button,
   Chip,
   CircularProgress,
   FormControl,
   FormControlLabel,
   FormHelperText,
   FormLabel,
-  Link,
   Radio,
   RadioGroup,
   TextField,
@@ -253,9 +253,9 @@ export const InvitationPage = () => {
               {t('invitation.response-sent')}
             </Alert>
 
-            <Link href="/" variant="body1" fontWeight="600">
+            <Button href="/" variant="contained">
               {t('invitation.goto-tt')}
-            </Link>
+            </Button>
           </Box>
         ) : (
           <>
