@@ -14,6 +14,7 @@ permissions:
 
 jobs:
   lint-and-typecheck:
+    if: ${{ ! startsWith(github.head_ref, 'changeset-release/') }}
     name: Lint & Typecheck
     env:
       NODE_OPTIONS: "--max-old-space-size=4096"
@@ -43,6 +44,7 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
   test:
+    if: ${{ ! startsWith(github.head_ref, 'changeset-release/') }}
     name: test
     env:
       NODE_OPTIONS: "--max-old-space-size=4096"
@@ -76,7 +78,8 @@ jobs:
     needs: [lint-and-typecheck, test]
     if: |
       github.ref == 'refs/heads/main' &&
-      github.event_name == 'push'
+      github.event_name == 'push' &&
+      ! startsWith(github.head_ref, 'changeset-release/')
     uses: ./.github/workflows/pipeline.yml
     with:
       mode: 'development'
