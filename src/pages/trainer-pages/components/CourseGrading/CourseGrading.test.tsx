@@ -103,7 +103,7 @@ describe('component: CourseGrading', () => {
       { initialEntries: [`/courses/${course.id}/details`] }
     )
     const button = screen.getByRole('button', {
-      name: 'Modify grading details',
+      name: 'Modify grading criteria',
     })
     expect(button).toBeInTheDocument()
     await userEvent.click(button)
@@ -131,7 +131,7 @@ describe('component: CourseGrading', () => {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
     const button = screen.getByRole('button', {
-      name: 'Modify grading details',
+      name: 'Modify grading criteria',
     })
     expect(button).toBeInTheDocument()
     expect(button).toBeDisabled()
@@ -211,7 +211,7 @@ describe('component: CourseGrading', () => {
 
     expect(
       screen.queryByRole('button', {
-        name: 'Modify grading details',
+        name: 'Modify grading criteria',
       })
     ).not.toBeInTheDocument()
   })

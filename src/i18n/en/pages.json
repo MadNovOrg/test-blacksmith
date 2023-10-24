@@ -521,8 +521,8 @@
         "attendees": "{{ number }} attendees",
         "grade-selected": "Grade selected ({{ number }})",
         "grade-all-attendees": "Grade all attendees",
-        "description": "Grade attendees individually, in multiples, or altogether as a group. Please note, grading details may not be modified once you’ve begun grading.",
-        "modify-grading-details": "Modify grading details"
+        "description": "You can select attendees individually, in multiples, or altogether as a group to confirm grade and techniques covered. <br />Please note, a grade cannot be modified once submitted. Should you need to make any amendments, please contact Team Teach at <0>{{email}}</0>",
+        "modify-grading-details": "Modify grading criteria"
       },
       "evaluation": {
         "title": "Course Evaluation",

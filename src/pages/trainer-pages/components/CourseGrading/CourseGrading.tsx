@@ -16,7 +16,7 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useEffectOnce } from 'react-use'
 import { noop } from 'ts-essentials'
@@ -195,7 +195,18 @@ export const CourseGrading: React.FC<
               </Grid>
 
               <Typography variant="body1" color="grey.800" sx={{ my: 2 }}>
-                {t('pages.course-details.tabs.grading.description')}
+                <Trans
+                  i18nKey="pages.course-details.tabs.grading.description"
+                  values={{ email: import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS }}
+                >
+                  <Link
+                    href={`mailto:${
+                      import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
+                    }`}
+                    underline="always"
+                    rel="nofollow"
+                  />
+                </Trans>
               </Typography>
 
               <Grid
