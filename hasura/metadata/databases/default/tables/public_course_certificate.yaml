@@ -58,6 +58,11 @@ object_relationships:
           name: profile
           schema: public
 computed_fields:
+  - name: grade
+    definition:
+      function:
+        name: course_certificate_grade
+        schema: public
   - name: status
     definition:
       function:
@@ -96,6 +101,7 @@ select_permissions:
         - profile_id
         - updated_at
       computed_fields:
+        - grade
         - status
       filter:
         _and:
@@ -135,6 +141,7 @@ select_permissions:
         - profile_id
         - updated_at
       computed_fields:
+        - grade
         - status
       filter: {}
       allow_aggregations: true
@@ -154,6 +161,7 @@ select_permissions:
         - profile_id
         - updated_at
       computed_fields:
+        - grade
         - status
       filter:
         _and:
@@ -193,6 +201,7 @@ select_permissions:
         - profile_id
         - updated_at
       computed_fields:
+        - grade
         - status
       filter: {}
       allow_aggregations: true
@@ -212,6 +221,7 @@ select_permissions:
         - profile_id
         - updated_at
       computed_fields:
+        - grade
         - status
       filter: {}
       allow_aggregations: true
@@ -231,6 +241,7 @@ select_permissions:
         - profile_id
         - updated_at
       computed_fields:
+        - grade
         - status
       filter:
         _and:
@@ -269,6 +280,7 @@ select_permissions:
         - profile_id
         - updated_at
       computed_fields:
+        - grade
         - status
       filter: {}
       allow_aggregations: true
@@ -307,6 +319,7 @@ select_permissions:
         - profile_id
         - updated_at
       computed_fields:
+        - grade
         - status
       filter:
         _and:
@@ -330,6 +343,7 @@ select_permissions:
         - profile_id
         - updated_at
       computed_fields:
+        - grade
         - status
       filter:
         _and:

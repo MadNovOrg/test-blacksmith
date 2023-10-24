@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import useSWR from 'swr'
 
 import {
-  Course_Certificate_Bool_Exp,
   GetOrgDetailsQuery,
   GetOrgDetailsQueryVariables,
 } from '@app/generated/graphql'
@@ -106,12 +105,7 @@ export default function useOrg(
         isRevoked: { _eq: false },
       },
       {
-        participant: {
-          _or: [
-            { id: { _is_null: true } },
-            { grade: { _neq: 'FAIL' } },
-          ] as Course_Certificate_Bool_Exp[],
-        },
+        _or: [{ grade: { _is_null: true } }, { grade: { _neq: 'FAIL' } }],
       },
     ],
   }
@@ -147,7 +141,6 @@ export default function useOrg(
           {
             where: conditions,
             whereProfileCertificates,
-            certificates: whereProfileCertificates,
           },
         ]
       : null

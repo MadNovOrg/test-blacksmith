@@ -16911,6 +16911,8 @@ export type Course_Certificate = {
   courseName: Scalars['String'];
   createdAt: Scalars['timestamptz'];
   expiryDate: Scalars['date'];
+  /** A computed field, executes function "course_certificate_grade" */
+  grade?: Maybe<Scalars['String']>;
   id: Scalars['uuid'];
   isRevoked: Scalars['Boolean'];
   legacyCourseCode?: Maybe<Scalars['String']>;
@@ -17027,6 +17029,7 @@ export type Course_Certificate_Bool_Exp = {
   courseName?: InputMaybe<String_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   expiryDate?: InputMaybe<Date_Comparison_Exp>;
+  grade?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   isRevoked?: InputMaybe<Boolean_Comparison_Exp>;
   legacyCourseCode?: InputMaybe<String_Comparison_Exp>;
@@ -17680,6 +17683,8 @@ export type Course_Certificate_Max_Fields = {
   courseName?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   expiryDate?: Maybe<Scalars['date']>;
+  /** A computed field, executes function "course_certificate_grade" */
+  grade?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   legacyCourseCode?: Maybe<Scalars['String']>;
   number?: Maybe<Scalars['String']>;
@@ -17713,6 +17718,8 @@ export type Course_Certificate_Min_Fields = {
   courseName?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   expiryDate?: Maybe<Scalars['date']>;
+  /** A computed field, executes function "course_certificate_grade" */
+  grade?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   legacyCourseCode?: Maybe<Scalars['String']>;
   number?: Maybe<Scalars['String']>;
@@ -17769,6 +17776,7 @@ export type Course_Certificate_Order_By = {
   courseName?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   expiryDate?: InputMaybe<Order_By>;
+  grade?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   isRevoked?: InputMaybe<Order_By>;
   legacyCourseCode?: InputMaybe<Order_By>;
@@ -52256,7 +52264,6 @@ export type GetOrgMembersQuery = { __typename?: 'query_root', members: Array<{ _
 export type GetOrgDetailsQueryVariables = Exact<{
   where?: InputMaybe<Organization_Bool_Exp>;
   whereProfileCertificates?: InputMaybe<Course_Certificate_Bool_Exp>;
-  certificates?: InputMaybe<Course_Certificate_Bool_Exp>;
 }>;
 
 

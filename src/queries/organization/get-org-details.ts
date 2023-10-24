@@ -10,10 +10,6 @@ export const QUERY = gql`
   query GetOrgDetails(
     $where: organization_bool_exp = {}
     $whereProfileCertificates: course_certificate_bool_exp = {}
-    $certificates: course_certificate_bool_exp = {
-      status: { _neq: "EXPIRED" }
-      isRevoked: { _eq: false }
-    }
   ) {
     orgs: organization(where: $where) {
       ...Organization
@@ -31,7 +27,7 @@ export const QUERY = gql`
       archived
       lastActivity
       createdAt
-      certificates(where: $certificates) {
+      certificates(where: $whereProfileCertificates) {
         id
         courseLevel
         expiryDate
