@@ -211,7 +211,7 @@ describe('page: CourseGrading', () => {
 
     await selectGradingOption('Pass')
 
-    await userEvent.click(screen.getByText('Submit final grade'))
+    await userEvent.click(screen.getByText('Submit'))
 
     expect(screen.getByText('Grading confirmation')).toBeVisible()
     expect(screen.getByText('Cancel')).toBeVisible()
@@ -247,7 +247,7 @@ describe('page: CourseGrading', () => {
 
     await selectGradingOption('Pass')
 
-    await userEvent.click(screen.getByText('Submit final grade'))
+    await userEvent.click(screen.getByText('Submit'))
 
     await userEvent.click(screen.getByText('Cancel'))
 
@@ -283,7 +283,7 @@ describe('page: CourseGrading', () => {
       { initialEntries: [`/${COURSE_ID}/grading`] }
     )
 
-    expect(screen.getByText('Submit final grade')).toBeDisabled()
+    expect(screen.getByText('Submit')).toBeDisabled()
   })
 
   it('saves grades for participants when an intent for saving is confirmed', async () => {
@@ -323,7 +323,7 @@ describe('page: CourseGrading', () => {
     )
 
     await userEvent.type(
-      screen.getByPlaceholderText('Any notes attendee(s) (optional)'),
+      screen.getByPlaceholderText('Please include any additional notes'),
       'Feedback'
     )
 
@@ -331,7 +331,7 @@ describe('page: CourseGrading', () => {
 
     await selectGradingOption('Non-Physical Pass')
 
-    await userEvent.click(screen.getByText('Submit final grade'))
+    await userEvent.click(screen.getByText('Submit'))
     await userEvent.click(screen.getByText('Confirm'))
 
     expect(fetcherMock).toHaveBeenCalledTimes(1)

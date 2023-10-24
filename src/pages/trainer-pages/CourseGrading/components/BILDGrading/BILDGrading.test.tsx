@@ -121,7 +121,7 @@ describe('page: BILDGrading', () => {
     )
 
     const submitButton = screen.getByRole('button', {
-      name: /submit final grade/i,
+      name: /submit/i,
     })
 
     expect(submitButton).toBeDisabled()
@@ -129,7 +129,7 @@ describe('page: BILDGrading', () => {
     await selectGradingOption('Pass')
 
     await userEvent.type(
-      screen.getByPlaceholderText('Any notes attendee(s) (optional)'),
+      screen.getByPlaceholderText('Please include any additional notes'),
       'Feedback'
     )
 
@@ -191,7 +191,7 @@ describe('page: BILDGrading', () => {
     )
 
     const submitButton = screen.getByRole('button', {
-      name: /submit final grade/i,
+      name: /submit/i,
     })
 
     expect(submitButton).toBeDisabled()
@@ -199,7 +199,7 @@ describe('page: BILDGrading', () => {
     await selectGradingOption('Pass')
 
     await userEvent.type(
-      screen.getByPlaceholderText('Any notes attendee(s) (optional)'),
+      screen.getByPlaceholderText('Please include any additional notes'),
       'Feedback'
     )
 
