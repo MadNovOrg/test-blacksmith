@@ -325,21 +325,9 @@ export const CourseBookingDetails: React.FC<
         }),
 
       bookingContact: yup.object({
-        firstName: yup.string().when('isInternalUserBooking', {
-          is: true,
-          then: s => s.required(requiredMsg(t, 'first-name')),
-          otherwise: s => s,
-        }),
-        lastName: yup.string().when('isInternalUserBooking', {
-          is: true,
-          then: s => s.required(requiredMsg(t, 'last-name')),
-          otherwise: s => s,
-        }),
-        email: schemas.email(t).when('isInternalUserBooking', {
-          is: true,
-          then: s => s.required(requiredMsg(t, 'email')),
-          otherwise: s => s,
-        }),
+        firstName: yup.string().required(requiredMsg(t, 'first-name')),
+        lastName: yup.string().required(requiredMsg(t, 'last-name')),
+        email: schemas.email(t).required(requiredMsg(t, 'email')),
       }),
 
       paymentMethod: yup
@@ -755,7 +743,6 @@ export const CourseBookingDetails: React.FC<
             ? t('booking-details')
             : t('components.course-form.source-label')}
         </Typography>
-
         <Box bgcolor="common.white" p={2} mb={4}>
           <Box mb={3}>
             <Typography fontWeight={600}>
@@ -797,75 +784,73 @@ export const CourseBookingDetails: React.FC<
             </Box>
           )}
 
-          {isInternalUserBooking ? (
-            <Box mb={3}>
-              <Grid container alignItems={'center'} gap={0.5}>
-                <Typography fontWeight={600}>
-                  {t('components.course-form.booking-contact')}
-                </Typography>
-                <Tooltip title={t('authorised-organisation-contact')}>
-                  <InfoIcon
-                    color={'info'}
-                    sx={{ cursor: 'pointer', zIndex: 1 }}
-                  />
-                </Tooltip>
-              </Grid>
+          <Box mb={3}>
+            <Grid container alignItems={'center'} gap={0.5}>
+              <Typography fontWeight={600}>
+                {t('components.course-form.booking-contact')}
+              </Typography>
+              <Tooltip title={t('authorised-organisation-contact')}>
+                <InfoIcon
+                  color={'info'}
+                  sx={{ cursor: 'pointer', zIndex: 1 }}
+                />
+              </Tooltip>
+            </Grid>
 
-              <Grid container spacing={3} mb={3}>
-                <Grid item md={12}>
-                  <UserSelector
-                    onChange={handleChangeBookingContact}
-                    onEmailChange={email => {
-                      setValue('bookingContact', {
-                        ...values.bookingContact,
-                        email,
-                      })
-                    }}
-                    textFieldProps={{ variant: 'filled' }}
-                    organisationId={values.orgId}
-                  />
-                </Grid>
-                <Grid item md={6}>
-                  <TextField
-                    label={t('first-name')}
-                    variant="filled"
-                    placeholder={t('first-name-placeholder')}
-                    {...register(`bookingContact.firstName`)}
-                    inputProps={{
-                      'data-testid': `bookingContact-input-first-name`,
-                    }}
-                    sx={{ bgcolor: 'grey.100' }}
-                    error={!!errors.bookingContact?.firstName}
-                    helperText={errors.bookingContact?.firstName?.message ?? ''}
-                    InputLabelProps={{
-                      shrink: Boolean(values.bookingContact.firstName),
-                    }}
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                <Grid item md={6}>
-                  <TextField
-                    label={t('surname')}
-                    variant="filled"
-                    placeholder={t('surname-placeholder')}
-                    {...register(`bookingContact.lastName`)}
-                    inputProps={{
-                      'data-testid': `bookingContact-input-surname`,
-                    }}
-                    sx={{ bgcolor: 'grey.100' }}
-                    error={!!errors.bookingContact?.lastName}
-                    helperText={errors.bookingContact?.lastName?.message ?? ''}
-                    InputLabelProps={{
-                      shrink: Boolean(values.bookingContact.lastName),
-                    }}
-                    fullWidth
-                    required
-                  />
-                </Grid>
+            <Grid container spacing={3} mb={3}>
+              <Grid item md={12}>
+                <UserSelector
+                  onChange={handleChangeBookingContact}
+                  onEmailChange={email => {
+                    setValue('bookingContact', {
+                      ...values.bookingContact,
+                      email,
+                    })
+                  }}
+                  textFieldProps={{ variant: 'filled' }}
+                  organisationId={values.orgId}
+                />
               </Grid>
-            </Box>
-          ) : null}
+              <Grid item md={6}>
+                <TextField
+                  label={t('first-name')}
+                  variant="filled"
+                  placeholder={t('first-name-placeholder')}
+                  {...register(`bookingContact.firstName`)}
+                  inputProps={{
+                    'data-testid': `bookingContact-input-first-name`,
+                  }}
+                  sx={{ bgcolor: 'grey.100' }}
+                  error={!!errors.bookingContact?.firstName}
+                  helperText={errors.bookingContact?.firstName?.message ?? ''}
+                  InputLabelProps={{
+                    shrink: Boolean(values.bookingContact.firstName),
+                  }}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item md={6}>
+                <TextField
+                  label={t('surname')}
+                  variant="filled"
+                  placeholder={t('surname-placeholder')}
+                  {...register(`bookingContact.lastName`)}
+                  inputProps={{
+                    'data-testid': `bookingContact-input-surname`,
+                  }}
+                  sx={{ bgcolor: 'grey.100' }}
+                  error={!!errors.bookingContact?.lastName}
+                  helperText={errors.bookingContact?.lastName?.message ?? ''}
+                  InputLabelProps={{
+                    shrink: Boolean(values.bookingContact.lastName),
+                  }}
+                  fullWidth
+                  required
+                />
+              </Grid>
+            </Grid>
+          </Box>
         </Box>
 
         <Typography variant="subtitle1" fontWeight="500">
