@@ -234,7 +234,7 @@ export const EvaluationSummary = () => {
                       href="#evaluation"
                       sx={{ mb: 1 }}
                     >
-                      {t('evaluation')}
+                      {t('pages.course-details.tabs.evaluation.evaluation')}
                     </Button>
                     {isRestricted ? null : (
                       <Button
@@ -265,7 +265,7 @@ export const EvaluationSummary = () => {
 
             <Grid item md={7} xs={12} pt={10}>
               <Typography id="evaluation" variant="h3">
-                {t('evaluation')}
+                {t('pages.course-details.tabs.evaluation.evaluation')}
               </Typography>
 
               <Box>

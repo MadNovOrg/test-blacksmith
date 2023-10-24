@@ -532,6 +532,7 @@
         "view-evaluation": "View Evaluation",
         "attendee-feedback": "Attendee Feedback",
         "trainer-feedback": "Trainer Feedback",
+        "evaluation": "Course Evaluation",
         "export-error": "Error generating document",
         "export-loading": "Generating summary...",
         "export-idle": "Export Summary",
