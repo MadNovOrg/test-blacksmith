@@ -250,7 +250,7 @@ describe('component: CreateCourseForm', () => {
       'I confirm that I will ensure all course registrants have read the Health Guidance & Training Information.',
       'I confirm that I will follow Team Teach protocols and have the correct first aid protocols in place.',
       'I confirm that I will check that all course attendees have a valid form of ID before commencing the training through either passport, driving licence or organisation verification.',
-      'My training needs analysis form has been submitted and approved.',
+      'I confirm that I have created this course in line with the approved Training Needs Analysis.',
     ]
 
     for (const label of confirmations) {

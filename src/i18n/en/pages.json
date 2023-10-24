@@ -384,7 +384,7 @@
       "health-leaflet-copy": "I confirm that I will ensure all course registrants have read the Health Guidance & Training Information. *",
       "practice-protocol-copy": "I confirm that I will follow Team Teach protocols and have the correct first aid protocols in place. *",
       "valid-id-copy": "I confirm that I will check that all course attendees have a valid form of ID before commencing the training through either passport, driving licence or organisation verification. *",
-      "needs-analysis-copy": "My training needs analysis form has been submitted and approved.",
+      "needs-analysis-copy": "I confirm that I have created this course in line with the approved Training Needs Analysis.",
       "checkboxes-missing": "Read and confirm the statements above"
     },
     "save-as-draft": "Save as draft",
@@ -1081,7 +1081,7 @@
   },
   "create-organization": {
     "title": "Create Organisation",
-    "organization-address":  "Organisation address",
+    "organization-address": "Organisation address",
     "additional-org-details": "Additional details",
     "head-of-service-org-details": "Head of service",
     "fields": {
@@ -1102,12 +1102,12 @@
         "country": "Country"
       },
       "head-first-name": "First name",
-      "head-surname":"Surname",
-      "head-email-address":"Head of service email address",
-      "setting-name":"Setting name (if applicable)",
-      "local-authority":"Local authority (if applicable)",
-      "ofsted-rating":"Ofsted/CQC rating (if applicable)",
-      "ofsted-last-inspection-date":"Last inspection date"
+      "head-surname": "Surname",
+      "head-email-address": "Head of service email address",
+      "setting-name": "Setting name (if applicable)",
+      "local-authority": "Local authority (if applicable)",
+      "ofsted-rating": "Ofsted/CQC rating (if applicable)",
+      "ofsted-last-inspection-date": "Last inspection date"
     },
     "add-new-organization": "Add new organisation",
     "organization-details": "Organisation details",
@@ -1130,16 +1130,15 @@
           "organization-phone": "Organisation phone",
           "organization-email": "Organisation email",
           "organization-website": "Organisation website"
-
         },
-"organization-address-section":{
-  "title": "Organisation address",
-  "address-line-1": "Address Line 1",
-  "address-line-2": "Address Line 2",
-  "town-or-city": "Town/City",
-  "postcode": "Post code",
-  "country": "Country"
-},
+        "organization-address-section": {
+          "title": "Organisation address",
+          "address-line-1": "Address Line 1",
+          "address-line-2": "Address Line 2",
+          "town-or-city": "Town/City",
+          "postcode": "Post code",
+          "country": "Country"
+        },
         "additional-details": {
           "title": "Additional details",
           "head-first-name": "Head first name",
