@@ -1,4 +1,192 @@
 table:
-  schema: public
   name: course_source
+  schema: public
 is_enum: true
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - name
+      filter:
+        name:
+          _in:
+            - RETURNING_CUSTOMER
+            - SEARCH_ENGINE
+            - RECOMMENDATION
+            - SOCIAL_MEDIA
+            - ONLINE_ADVERTISEMENT
+            - EMAIL
+            - EVENT
+            - WEBINAR
+            - BLOG_OR_PUBLICATION
+            - OTHER
+  - role: booking-contact
+    permission:
+      columns:
+        - name
+      filter:
+        name:
+          _in:
+            - RETURNING_CUSTOMER
+            - SEARCH_ENGINE
+            - RECOMMENDATION
+            - SOCIAL_MEDIA
+            - ONLINE_ADVERTISEMENT
+            - EMAIL
+            - EVENT
+            - WEBINAR
+            - BLOG_OR_PUBLICATION
+            - OTHER
+  - role: finance
+    permission:
+      columns:
+        - name
+      filter:
+        name:
+          _in:
+            - EMAIL_ENQUIRY
+            - EMAIL_ENQUIRY_CENTRAL
+            - EVENT
+            - EXISTING_CLIENT
+            - MARKETING_CAMPAIGN
+            - NDIS
+            - SALES_CALL
+            - SALES_MAILER
+            - TELEPHONE_ENQUIRY
+            - TENDER
+  - role: ld
+    permission:
+      columns:
+        - name
+      filter:
+        name:
+          _in:
+            - EMAIL_ENQUIRY
+            - EMAIL_ENQUIRY_CENTRAL
+            - EVENT
+            - EXISTING_CLIENT
+            - MARKETING_CAMPAIGN
+            - NDIS
+            - SALES_CALL
+            - SALES_MAILER
+            - TELEPHONE_ENQUIRY
+            - TENDER
+  - role: organization-key-contact
+    permission:
+      columns:
+        - name
+      filter:
+        name:
+          _in:
+            - RETURNING_CUSTOMER
+            - SEARCH_ENGINE
+            - RECOMMENDATION
+            - SOCIAL_MEDIA
+            - ONLINE_ADVERTISEMENT
+            - EMAIL
+            - EVENT
+            - WEBINAR
+            - BLOG_OR_PUBLICATION
+            - OTHER
+  - role: sales-admin
+    permission:
+      columns:
+        - name
+      filter:
+        name:
+          _in:
+            - EMAIL_ENQUIRY
+            - EMAIL_ENQUIRY_CENTRAL
+            - EVENT
+            - EXISTING_CLIENT
+            - MARKETING_CAMPAIGN
+            - NDIS
+            - SALES_CALL
+            - SALES_MAILER
+            - TELEPHONE_ENQUIRY
+            - TENDER
+  - role: sales-representative
+    permission:
+      columns:
+        - name
+      filter:
+        name:
+          _in:
+            - EMAIL_ENQUIRY
+            - EMAIL_ENQUIRY_CENTRAL
+            - EVENT
+            - EXISTING_CLIENT
+            - MARKETING_CAMPAIGN
+            - NDIS
+            - SALES_CALL
+            - SALES_MAILER
+            - TELEPHONE_ENQUIRY
+            - TENDER
+  - role: trainer
+    permission:
+      columns:
+        - name
+      filter:
+        name:
+          _in:
+            - RETURNING_CUSTOMER
+            - SEARCH_ENGINE
+            - RECOMMENDATION
+            - SOCIAL_MEDIA
+            - ONLINE_ADVERTISEMENT
+            - EMAIL
+            - EVENT
+            - WEBINAR
+            - BLOG_OR_PUBLICATION
+            - OTHER
+  - role: tt-admin
+    permission:
+      columns:
+        - name
+      filter:
+        name:
+          _in:
+            - EMAIL_ENQUIRY
+            - EMAIL_ENQUIRY_CENTRAL
+            - EVENT
+            - EXISTING_CLIENT
+            - MARKETING_CAMPAIGN
+            - NDIS
+            - SALES_CALL
+            - SALES_MAILER
+            - TELEPHONE_ENQUIRY
+            - TENDER
+  - role: tt-ops
+    permission:
+      columns:
+        - name
+      filter:
+        name:
+          _in:
+            - EMAIL_ENQUIRY
+            - EMAIL_ENQUIRY_CENTRAL
+            - EVENT
+            - EXISTING_CLIENT
+            - MARKETING_CAMPAIGN
+            - NDIS
+            - SALES_CALL
+            - SALES_MAILER
+            - TELEPHONE_ENQUIRY
+            - TENDER
+  - role: user
+    permission:
+      columns:
+        - name
+      filter:
+        name:
+          _in:
+            - RETURNING_CUSTOMER
+            - SEARCH_ENGINE
+            - RECOMMENDATION
+            - SOCIAL_MEDIA
+            - ONLINE_ADVERTISEMENT
+            - EMAIL
+            - EVENT
+            - WEBINAR
+            - BLOG_OR_PUBLICATION
+            - OTHER

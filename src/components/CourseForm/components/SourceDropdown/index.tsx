@@ -7,18 +7,31 @@ import {
   FormHelperText,
 } from '@mui/material'
 import React from 'react'
+import { useQuery } from 'urql'
 
-import { Course_Source_Enum } from '@app/generated/graphql'
+import {
+  Course_Source_Enum,
+  GetCoursesSourcesQuery,
+  GetCoursesSourcesQueryVariables,
+} from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { GET_COURSE_SOURCES_QUERY } from '@app/queries/courses/get-course-sources'
 
 export const SourceDropdown = React.forwardRef(function SourceDropdown(
   props: SelectProps<Course_Source_Enum | ''>,
   ref: React.Ref<HTMLSelectElement>
 ) {
   const { t, _t } = useScopedTranslation('components.course-source-dropdown')
-  const options = Object.values(Course_Source_Enum)
-
   const { required, error } = props
+
+  const [{ data: courseSourcesOptions }] = useQuery<
+    GetCoursesSourcesQuery,
+    GetCoursesSourcesQueryVariables
+  >({
+    query: GET_COURSE_SOURCES_QUERY,
+  })
+
+  const options = courseSourcesOptions?.sources.map(source => source.name)
 
   return (
     <FormControl fullWidth variant="filled" required={required} error={error}>
@@ -29,7 +42,7 @@ export const SourceDropdown = React.forwardRef(function SourceDropdown(
         {t('placeholder')}
       </InputLabel>
       <Select {...props} id="course-source-dropdown" ref={ref}>
-        {options.map(option => (
+        {options?.map(option => (
           <MenuItem
             key={option}
             value={option}

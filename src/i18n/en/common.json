@@ -667,7 +667,16 @@
     "SALES_CALL": "Sales call",
     "SALES_MAILER": "Sales mailer",
     "TELEPHONE_ENQUIRY": "Telephone enquiry",
-    "TENDER": "Tender"
+    "TENDER": "Tender",
+    "RETURNING_CUSTOMER": "Returning customer",
+    "SEARCH_ENGINE": "Search engine",
+    "RECOMMENDATION": "Recommendation",
+    "SOCIAL_MEDIA": "Social media",
+    "ONLINE_ADVERTISEMENT": "Online advertisement",
+    "EMAIL": "Email",
+    "WEBINAR": "Webinar",
+    "BLOG_OR_PUBLICATION": "Blog or publication",
+    "OTHER": "Other"
   },
   "save-details": "Save details",
   "course-category": "Course category",
