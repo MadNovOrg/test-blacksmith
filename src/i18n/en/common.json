@@ -595,7 +595,7 @@
     "signature": "Signature",
     "invalid-signature": "Signature should match first and last name of your profile",
     "submit": "Submit course evaluation",
-    "saved": "Your course evaluation feedback has been submitted",
+    "saved": "Your course evaluation has been submitted.",
     "error-submitting": "There was an error saving your feedback",
     "required-field": "This is a required question",
     "required-answer": "This is a required answer",

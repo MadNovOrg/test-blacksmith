@@ -37,7 +37,7 @@ test('course evaluation as user', async ({ browser, course }) => {
   )
   await userEvaluationPage.submitEvaluation()
   await userEvaluationPage.checkSubmission(
-    'Your course evaluation feedback has been submitted'
+    'Your course evaluation has been submitted.'
   )
 
   const trainerContext = await browser.newContext({
