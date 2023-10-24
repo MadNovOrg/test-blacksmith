@@ -755,6 +755,7 @@ export const CourseBookingDetails: React.FC<
             ? t('booking-details')
             : t('components.course-form.source-label')}
         </Typography>
+
         <Box bgcolor="common.white" p={2} mb={4}>
           <Box mb={3}>
             <Typography fontWeight={600}>
@@ -798,9 +799,18 @@ export const CourseBookingDetails: React.FC<
 
           {isInternalUserBooking ? (
             <Box mb={3}>
-              <Typography fontWeight={600}>
-                {t('components.course-form.booking-contact')}
-              </Typography>
+              <Grid container alignItems={'center'} gap={0.5}>
+                <Typography fontWeight={600}>
+                  {t('components.course-form.booking-contact')}
+                </Typography>
+                <Tooltip title={t('authorised-organisation-contact')}>
+                  <InfoIcon
+                    color={'info'}
+                    sx={{ cursor: 'pointer', zIndex: 1 }}
+                  />
+                </Tooltip>
+              </Grid>
+
               <Grid container spacing={3} mb={3}>
                 <Grid item md={12}>
                   <UserSelector
