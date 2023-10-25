@@ -39,7 +39,9 @@ export const MEMBERS_QUERY = gql`
           where: {
             _and: [
               { status: { _neq: "EXPIRED" } }
-              { participant: { grade: { _neq: FAIL } } }
+              {
+                _or: [{ grade: { _is_null: true } }, { grade: { _neq: FAIL } }]
+              }
             ]
           }
         ) {
