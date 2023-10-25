@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
 
 import { CountryDropdown } from '@app/components/CountryDropdown'
+import { useAuth } from '@app/context/auth'
 import {
   ADD_VENUE_MUTATION,
   ParamsType,
@@ -36,30 +37,34 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
   onCancel,
 }) {
   const { t } = useTranslation()
-
+  const { acl } = useAuth()
   const [{ error }, handleAddVenue] = useMutation<ResponseType, ParamsType>(
     ADD_VENUE_MUTATION
   )
 
+  const isAdminOrOperations = acl.isTTAdmin() || acl.isTTOps()
+
   const schema = useMemo(() => {
     return yup.object({
       name: yup.string().required(requiredMsg(t, 'venue-name')),
-      addressLineOne: yup
-        .string()
-        .required(requiredMsg(t, 'addr.line1-placeholder')),
+      addressLineOne: isAdminOrOperations
+        ? yup.string()
+        : yup.string().required(requiredMsg(t, 'addr.line1-placeholder')),
       addressLineTwo: yup.string(),
       city: yup.string().required(requiredMsg(t, 'addr.city')),
-      postCode: yup
-        .string()
-        .required(requiredMsg(t, 'addr.postCode'))
-        .test(
-          'is-uk-postcode',
-          t('common.validation-errors.invalid-postcode'),
-          isValidUKPostalCode
-        ),
+      postCode: isAdminOrOperations
+        ? yup.string()
+        : yup
+            .string()
+            .required(requiredMsg(t, 'addr.postCode'))
+            .test(
+              'is-uk-postcode',
+              t('common.validation-errors.invalid-postcode'),
+              isValidUKPostalCode
+            ),
       country: yup.string().required(requiredMsg(t, 'addr.country')),
     })
-  }, [t])
+  }, [t, isAdminOrOperations])
 
   const {
     control,
@@ -99,7 +104,10 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
 
   return (
     <Box p={2}>
-      <form onSubmit={handleSubmit(submitHandler)}>
+      <form
+        onSubmit={handleSubmit(submitHandler)}
+        noValidate={!isAdminOrOperations}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="body2" sx={{ marginBottom: 2 }}>
@@ -137,12 +145,12 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
             <Controller
               name="addressLineOne"
               control={control}
-              rules={{ required: true }}
+              rules={{ required: !isAdminOrOperations }}
               render={({ field, fieldState }) => (
                 <TextField
                   fullWidth
                   variant="filled"
-                  required
+                  required={!isAdminOrOperations}
                   error={fieldState.invalid}
                   label={t(
                     'components.venue-selector.modal.fields.addressLineOne'
@@ -194,12 +202,12 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
             <Controller
               name="postCode"
               control={control}
-              rules={{ required: true }}
+              rules={{ required: !isAdminOrOperations }}
               render={({ field, fieldState }) => (
                 <TextField
                   fullWidth
                   variant="filled"
-                  required
+                  required={!isAdminOrOperations}
                   error={fieldState.invalid}
                   label={t('components.venue-selector.modal.fields.postCode')}
                   helperText={errors.postCode?.message}
