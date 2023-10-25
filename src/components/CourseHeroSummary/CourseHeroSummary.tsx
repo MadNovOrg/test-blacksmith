@@ -277,21 +277,23 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
 
               {course.organizationKeyContact ? (
                 <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
-                  <ListItemText>{`${t(
-                    'components.course-form.organization-key-contact-label'
-                  )}: ${course.organizationKeyContact?.email} ${
-                    course.organizationKeyContact?.fullName
-                  }`}</ListItemText>
+                  <ListItemText>{`
+                    ${t(
+                      'components.course-form.organization-key-contact-label'
+                    )}: 
+                    ${course.organizationKeyContact?.email}
+                    ${course.organizationKeyContact?.fullName}
+                  `}</ListItemText>
                 </ListItem>
               ) : null}
 
               {course.bookingContact ? (
                 <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
-                  <ListItemText>{`${t(
-                    'components.course-form.contact-person-label'
-                  )}: ${course.bookingContact?.email} ${
-                    course.bookingContact?.fullName
-                  }`}</ListItemText>
+                  <ListItemText>{`
+                    ${t('components.course-form.contact-person-label')}: 
+                    ${course.bookingContact?.email}
+                    ${course.bookingContact?.fullName}
+                  `}</ListItemText>
                 </ListItem>
               ) : null}
 
