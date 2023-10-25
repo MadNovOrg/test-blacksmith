@@ -31,7 +31,8 @@ export const SourceDropdown = React.forwardRef(function SourceDropdown(
     query: GET_COURSE_SOURCES_QUERY,
   })
 
-  const options = courseSourcesOptions?.sources.map(source => source.name)
+  let options = courseSourcesOptions?.sources.map(source => source.name)
+  options = options?.sort((a, b) => a.localeCompare(b))
 
   return (
     <FormControl fullWidth variant="filled" required={required} error={error}>
