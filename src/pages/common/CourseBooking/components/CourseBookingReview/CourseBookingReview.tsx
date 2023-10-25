@@ -391,8 +391,8 @@ export const CourseBookingReview: React.FC<
                       'opens-new-window'
                     )})`}
                     href={`${
-                      import.meta.env.VITE_BASE_WORDPRESS_URL
-                    }/policies-procedures/terms-of-use/`}
+                      import.meta.env.VITE_BASE_TEAMTEACH
+                    }/policies-procedures/business/`}
                   />
                 ),
                 privacyPolicyLink: (
@@ -403,7 +403,7 @@ export const CourseBookingReview: React.FC<
                       'opens-new-window'
                     )})`}
                     href={`${
-                      import.meta.env.VITE_BASE_WORDPRESS_URL
+                      import.meta.env.VITE_BASE_TEAMTEACH
                     }/policies-procedures/privacy-policy/`}
                   />
                 ),

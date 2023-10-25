@@ -25,4 +25,5 @@ interface ImportMetaEnv {
   VITE_EVENTS_URL: string
   VITE_SUPPORT_URL: string
   VITE_INFO_URL: string
+  VITE_BASE_TEAMTEACH: string
 }
