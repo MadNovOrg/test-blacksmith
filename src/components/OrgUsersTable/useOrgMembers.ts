@@ -38,7 +38,7 @@ export const MEMBERS_QUERY = gql`
         certificates(
           where: {
             _and: [
-              { status: { _neq: "EXPIRED" } }
+              { status: { _neq: "EXPIRED" }, isRevoked: { _eq: false } }
               {
                 _or: [{ grade: { _is_null: true } }, { grade: { _neq: FAIL } }]
               }
