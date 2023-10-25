@@ -176,6 +176,7 @@ export const CoursesTable: FC<PropsWithChildren<CoursesTableProps>> = ({
           )
         })}
         {profile?.courses.map(row => {
+          if (!row) return null
           const attendeeAction = mapCourseStatusToAction(
             row.course,
             row.attended

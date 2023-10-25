@@ -32,7 +32,7 @@ export default function useCourseInvites(
   const orderBy = { email: order ? order : 'asc' }
 
   // Fetch course invites
-  const { data, error } = useSWR<
+  const { data, error, mutate } = useSWR<
     ResponseType,
     Error,
     [string, ParamsType] | null
@@ -44,13 +44,13 @@ export default function useCourseInvites(
     }
   }, [matchMutate])
 
-  const invitedEmails = useMemo(() => {
-    return data?.courseInvites.map(i => i.email) ?? []
-  }, [data])
-
   // Save course invites
   const send = useCallback(
     async (emails: string[]) => {
+      const recentData = await mutate()
+      const recentInvitesEmails =
+        recentData?.courseInvites.map(i => i.email) ?? []
+
       const allValid = await emailsSchema.isValid(emails)
 
       if (!allValid) {
@@ -58,7 +58,7 @@ export default function useCourseInvites(
       }
 
       const newEmails = emails.filter(
-        email => invitedEmails?.includes(email) === false
+        email => recentInvitesEmails?.includes(email) === false
       )
       if (!newEmails.length) {
         throw Error('EMAILS_ALREADY_INVITED')
@@ -68,7 +68,7 @@ export default function useCourseInvites(
       await fetcher(SaveInvites, { invites })
       await invalidateCache()
     },
-    [fetcher, invalidateCache, invitedEmails, courseId]
+    [mutate, fetcher, invalidateCache, courseId]
   )
 
   const resend = useCallback(

@@ -118,6 +118,7 @@ describe('useCourseInvites', () => {
     useSWRMock.mockReturnValue({
       ...useSWRMockDefaults,
       data: { courseInvites },
+      mutate: vi.fn().mockReturnValue({ courseInvites }),
     })
 
     const courseId = chance.integer()
@@ -136,6 +137,7 @@ describe('useCourseInvites', () => {
     useSWRMock.mockReturnValue({
       ...useSWRMockDefaults,
       data: { courseInvites },
+      mutate: vi.fn().mockReturnValue({ courseInvites }),
     })
 
     const courseId = chance.integer()
