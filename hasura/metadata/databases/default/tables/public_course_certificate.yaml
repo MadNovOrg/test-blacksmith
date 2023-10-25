@@ -300,6 +300,7 @@ select_permissions:
         - profile_id
         - updated_at
       computed_fields:
+        - grade
         - status
       filter: {}
       allow_aggregations: true
