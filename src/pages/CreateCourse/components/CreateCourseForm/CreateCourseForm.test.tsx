@@ -1,6 +1,7 @@
-import { fireEvent } from '@testing-library/react'
+import { fireEvent, renderHook } from '@testing-library/react'
 import { addDays, addHours } from 'date-fns'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
@@ -46,13 +47,17 @@ vi.mock('@app/hooks/useCourseDraft')
 const VenueSelectorMocked = vi.mocked(VenueSelector)
 const useZoomMeetingUrlMocked = vi.mocked(useZoomMeetingLink)
 const useCourseDraftMocked = vi.mocked(useCourseDraft)
-
 const mockTrainerSearch = vi.fn().mockResolvedValue({ trainers: [] })
 vi.mock('@app/components/SearchTrainers/useQueryTrainers', () => ({
   useQueryTrainers: () => ({ search: mockTrainerSearch }),
 }))
 
 describe('component: CreateCourseForm', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
   beforeAll(() => {
     VenueSelectorMocked.mockImplementation(() => <p>test</p>)
     useZoomMeetingUrlMocked.mockReturnValue({
@@ -247,10 +252,11 @@ describe('component: CreateCourseForm', () => {
     )
 
     const confirmations = [
-      'I confirm that I will ensure all course registrants have read the Health Guidance & Training Information.',
-      'I confirm that I will follow Team Teach protocols and have the correct first aid protocols in place.',
-      'I confirm that I will check that all course attendees have a valid form of ID before commencing the training through either passport, driving licence or organisation verification.',
-      'I confirm that I have created this course in line with the approved Training Needs Analysis.',
+      t('pages.create-course.form.health-leaflet-copy'),
+      t('pages.create-course.form.practice-protocol-copy'),
+      t('pages.create-course.form.valid-id-copy'),
+      t('pages.create-course.form.needs-analysis-copy'),
+      t('pages.create-course.form.connect-fee-notification'),
     ]
 
     for (const label of confirmations) {

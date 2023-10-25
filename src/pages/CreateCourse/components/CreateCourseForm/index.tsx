@@ -94,6 +94,7 @@ export const CreateCourseForm = () => {
     practiceProtocols: false,
     validID: false,
     needsAnalysis: false,
+    connectFee: false,
   })
 
   const methods = useRef<{
@@ -178,6 +179,7 @@ export const CreateCourseForm = () => {
       formSubmitted &&
       (!consentFlags.practiceProtocols ||
         !consentFlags.validID ||
+        !consentFlags.connectFee ||
         (isBild && !consentFlags.needsAnalysis)),
     [
       formSubmitted,
@@ -185,6 +187,7 @@ export const CreateCourseForm = () => {
       consentFlags.practiceProtocols,
       consentFlags.validID,
       consentFlags.needsAnalysis,
+      consentFlags.connectFee,
     ]
   )
 
@@ -367,6 +370,22 @@ export const CreateCourseForm = () => {
                   />
                 }
                 label={t('pages.create-course.form.valid-id-copy') as string}
+              />
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={consentFlags.connectFee}
+                    onChange={e =>
+                      handleConsentFlagChange('connectFee', e.target.checked)
+                    }
+                  />
+                }
+                label={
+                  t(
+                    'pages.create-course.form.connect-fee-notification'
+                  ) as string
+                }
               />
 
               {isBild && (
