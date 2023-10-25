@@ -548,6 +548,22 @@
         "contact": "Contact",
         "joined": "Joined"
       },
+      "dietary-requirements":{
+        "title": "Dietary Requirements",
+        "title-with-count": "Dietary Requirements ({{ count }})",
+        "name": "Name",
+        "email":"Email",
+        "organisation": "Organisation",
+        "dietary-requirement": "Dietary requirement"
+      },
+      "disabilities":{
+        "title": "Disabilities",
+        "title-with-count": "Disabilities ({{count}})",
+        "name": "Name",
+        "email":"Email",
+        "organisation": "Organisation",
+        "disabilities": "Disabilities"
+      },
       "course-overview": {
         "title": "Course Overview",
         "description": "Here is a list of the areas that are due to be covered during the course."

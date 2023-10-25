@@ -690,8 +690,22 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
       return anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD])()
     },
+    canViewDietaryAndDisabiltitiesDetails: (course: Course) => {
+      const isCourseTrainer = course?.trainers?.some(
+        trainer => trainer.profile.id === auth.profile?.id
+      )
+      return (
+        anyPass([
+          acl.isInternalUser,
+          acl.isBookingContact,
+          acl.isOrgKeyContact,
+        ])() ||
+        isCourseTrainer ||
+        acl.isBookingContactOfCourse(course) ||
+        acl.isOrganizationKeyContactOfCourse(course)
+      )
+    },
   })
-
   return acl
 }
 

@@ -51630,6 +51630,22 @@ export type GetCourseParticipantByInviteQueryVariables = Exact<{
 
 export type GetCourseParticipantByInviteQuery = { __typename?: 'query_root', course_participant: Array<{ __typename?: 'course_participant', id: any }> };
 
+export type GetCourseParticipantDietOrDisabilitiesDataQueryVariables = Exact<{
+  courseId: Scalars['Int'];
+  withDietaryRestrictions?: InputMaybe<Scalars['Boolean']>;
+  withDisabilities?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+
+export type GetCourseParticipantDietOrDisabilitiesDataQuery = { __typename?: 'query_root', dietaryRestrictions: Array<{ __typename?: 'course_participant', profile: { __typename?: 'profile', fullName?: string | null, dietaryRestrictions?: string | null, email?: string | null, id: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string, id: any } }> } }>, disabilities: Array<{ __typename?: 'course_participant', profile: { __typename?: 'profile', fullName?: string | null, disabilities?: string | null, email?: string | null, id: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string, id: any } }> } }> };
+
+export type GetDietaryAndDisabilitiesCountQueryVariables = Exact<{
+  courseId: Scalars['Int'];
+}>;
+
+
+export type GetDietaryAndDisabilitiesCountQuery = { __typename?: 'query_root', dietaryRestrictionsCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, disabilitiesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
+
 export type ApproveCourseMutationVariables = Exact<{
   input: ApproveCourseInput;
 }>;

@@ -16,6 +16,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
@@ -23,16 +24,23 @@ import { CourseOverview } from '@app/components/CourseOverview'
 import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
-import { Course_Status_Enum } from '@app/generated/graphql'
+import {
+  Course_Status_Enum,
+  GetDietaryAndDisabilitiesCountQuery,
+  GetDietaryAndDisabilitiesCountQueryVariables,
+} from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import usePollQuery from '@app/hooks/usePollQuery'
 import { CourseAttendeesTab } from '@app/pages/trainer-pages/components/CourseAttendeesTab'
 import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
 import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading'
 import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
+import { GET_DIETARY_AND_DISABILITIES_COUNT } from '@app/queries/course-participant/get-participant-dietary-restrictions-by-course-id'
 import { CourseType } from '@app/types'
 import { courseEnded, LoadingStatus } from '@app/util'
 
+import { DietaryRequirementsTab } from './components/DietaryRequirementsTab'
+import { DisabilitiesTab } from './components/DisabilitiesTab/DisabilitiesTab'
 import { EvaluationSummaryTab } from './components/EvaluationSummaryTab'
 import { ExceptionsApprovalAlert } from './components/ExceptionsApprovalAlert'
 import { OrderYourWorkbookAlert } from './components/OrderYourWorkbookAlert'
@@ -44,6 +52,8 @@ export enum CourseDetailsTabs {
   CERTIFICATIONS = 'CERTIFICATIONS',
   COURSE_OVERVIEW = 'COURSE_OVERVIEW',
   EDIT = 'EDIT',
+  DISABILITIES = 'DISABILITIES',
+  DIETARY_REQUIREMENTS = 'DIETARY_REQUIREMENTS',
 }
 
 export const CourseDetails = () => {
@@ -54,7 +64,6 @@ export const CourseDetails = () => {
   const { id: courseId } = useParams()
   const { acl, isOrgAdmin } = useAuth()
   const [searchParams] = useSearchParams()
-
   const initialTab = searchParams.get('tab') as CourseDetailsTabs | null
 
   const [selectedTab, setSelectedTab] = useState(
@@ -73,6 +82,14 @@ export const CourseDetails = () => {
     error: courseError,
     mutate,
   } = useCourse(courseId ?? '')
+  const [{ data: dietaryAndDisabilitiesCount }] = useQuery<
+    GetDietaryAndDisabilitiesCountQuery,
+    GetDietaryAndDisabilitiesCountQueryVariables
+  >({
+    query: GET_DIETARY_AND_DISABILITIES_COUNT,
+    variables: { courseId: Number(course?.id) },
+    pause: !course?.id,
+  })
 
   const isCourseTypeClosed = course?.type === CourseType.CLOSED
   const isCourseTypeIndirectBlended =
@@ -98,7 +115,6 @@ export const CourseDetails = () => {
       !courseCancelled,
     [acl, course, courseCancelled]
   )
-
   //#TTHP-2016
   const canNotViewSummaryEvaluation = useMemo(
     () =>
@@ -283,6 +299,41 @@ export const CourseDetails = () => {
                       data-testid="evaluation-tab"
                     />
                   )}
+                  {dietaryAndDisabilitiesCount?.dietaryRestrictionsCount
+                    .aggregate?.count &&
+                  acl.canViewDietaryAndDisabiltitiesDetails(course) ? (
+                    <PillTab
+                      label={t(
+                        'pages.course-details.tabs.dietary-requirements.title-with-count',
+                        {
+                          count: Number(
+                            dietaryAndDisabilitiesCount
+                              ?.dietaryRestrictionsCount.aggregate?.count
+                          ),
+                        }
+                      )}
+                      value={CourseDetailsTabs.DIETARY_REQUIREMENTS}
+                      data-testid="dietary-requirements-tab"
+                    />
+                  ) : null}
+                  {dietaryAndDisabilitiesCount?.disabilitiesCount.aggregate
+                    ?.count &&
+                  acl.canViewDietaryAndDisabiltitiesDetails(course) ? (
+                    <PillTab
+                      label={t(
+                        'pages.course-details.tabs.disabilities.title-with-count',
+                        {
+                          count: Number(
+                            dietaryAndDisabilitiesCount?.disabilitiesCount
+                              .aggregate?.count
+                          ),
+                        }
+                      )}
+                      value={CourseDetailsTabs.DISABILITIES}
+                      data-testid="disabilities-tab"
+                    />
+                  ) : null}
+
                   {course.certificateCount?.aggregate.count ? (
                     <PillTab
                       label={t(
@@ -371,6 +422,15 @@ export const CourseDetails = () => {
 
               <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.EVALUATION}>
                 <EvaluationSummaryTab course={course} />
+              </TabPanel>
+              <TabPanel
+                sx={{ px: 0 }}
+                value={CourseDetailsTabs.DIETARY_REQUIREMENTS}
+              >
+                <DietaryRequirementsTab courseId={course.id} />
+              </TabPanel>
+              <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.DISABILITIES}>
+                <DisabilitiesTab courseId={course.id} />
               </TabPanel>
 
               {course.certificateCount?.aggregate.count ? (
