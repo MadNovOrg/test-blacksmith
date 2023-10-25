@@ -1,8 +1,7 @@
 table:
-  schema: public
   name: course_draft
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
     course_type:
       custom_name: courseType
@@ -11,6 +10,7 @@ configuration:
   custom_column_names:
     course_type: courseType
     profile_id: profileId
+  custom_root_fields: {}
 insert_permissions:
   - role: sales-admin
     permission:
@@ -26,7 +26,6 @@ insert_permissions:
         - updated_at
         - id
         - profile_id
-      backend_only: false
   - role: trainer
     permission:
       check: {}
@@ -37,7 +36,6 @@ insert_permissions:
         - id
         - profile_id
         - updated_at
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -48,7 +46,6 @@ insert_permissions:
         - updated_at
         - id
         - profile_id
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -59,7 +56,6 @@ insert_permissions:
         - updated_at
         - id
         - profile_id
-      backend_only: false
 select_permissions:
   - role: sales-admin
     permission:

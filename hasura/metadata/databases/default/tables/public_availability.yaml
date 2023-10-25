@@ -1,19 +1,19 @@
 table:
-  schema: public
   name: availability
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    updated_at:
-      custom_name: updatedAt
     created_at:
       custom_name: createdAt
     profile_id:
       custom_name: profileId
+    updated_at:
+      custom_name: updatedAt
   custom_column_names:
-    updated_at: updatedAt
     created_at: createdAt
     profile_id: profileId
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
   - name: profile
     using:
@@ -31,7 +31,6 @@ insert_permissions:
         - end
         - start
         - profile_id
-      backend_only: false
 select_permissions:
   - role: user
     permission:

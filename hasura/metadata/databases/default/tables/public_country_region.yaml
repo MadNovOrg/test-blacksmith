@@ -14,12 +14,6 @@ select_permissions:
         - name
         - country
       filter: {}
-  - role: organization-key-contact
-    permission:
-      columns:
-        - name
-        - country
-      filter: { }
   - role: finance
     permission:
       columns:
@@ -27,6 +21,12 @@ select_permissions:
         - country
       filter: {}
   - role: ld
+    permission:
+      columns:
+        - name
+        - country
+      filter: {}
+  - role: organization-key-contact
     permission:
       columns:
         - name

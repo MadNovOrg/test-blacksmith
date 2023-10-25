@@ -208,9 +208,6 @@ export const CourseAttendance = () => {
                 </li>
               ) : null}
             </StyledList>
-            <StyledText variant="body1">
-              {t('pages.course-attendance.automatic-fail-warning')}
-            </StyledText>
           </Box>
 
           <CourseAttendanceList

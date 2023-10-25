@@ -12,17 +12,17 @@ select_permissions:
       columns:
         - title
       filter: {}
-  - role: organization-key-contact
-    permission:
-      columns:
-        - title
-      filter: {}
   - role: finance
     permission:
       columns:
         - title
       filter: {}
   - role: ld
+    permission:
+      columns:
+        - title
+      filter: {}
+  - role: organization-key-contact
     permission:
       columns:
         - title

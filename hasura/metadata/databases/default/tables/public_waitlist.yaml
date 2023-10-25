@@ -1,28 +1,28 @@
 table:
-  schema: public
   name: waitlist
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    course_id:
-      custom_name: courseId
-    org_name:
-      custom_name: orgName
-    given_name:
-      custom_name: givenName
-    family_name:
-      custom_name: familyName
     cancellation_secret:
       custom_name: cancellationSecret
+    course_id:
+      custom_name: courseId
     created_at:
       custom_name: createdAt
+    family_name:
+      custom_name: familyName
+    given_name:
+      custom_name: givenName
+    org_name:
+      custom_name: orgName
   custom_column_names:
-    course_id: courseId
-    org_name: orgName
-    given_name: givenName
-    family_name: familyName
     cancellation_secret: cancellationSecret
+    course_id: courseId
     created_at: createdAt
+    family_name: familyName
+    given_name: givenName
+    org_name: orgName
+  custom_root_fields: {}
 object_relationships:
   - name: course
     using:
@@ -41,7 +41,6 @@ insert_permissions:
         - org_name
         - phone
         - cancellation_secret
-      backend_only: false
   - role: trainer
     permission:
       check: {}
@@ -55,7 +54,6 @@ insert_permissions:
         - org_name
         - phone
         - cancellation_secret
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -69,7 +67,6 @@ insert_permissions:
         - org_name
         - phone
         - cancellation_secret
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -83,7 +80,6 @@ insert_permissions:
         - org_name
         - phone
         - cancellation_secret
-      backend_only: false
   - role: unverified
     permission:
       check: {}
@@ -97,7 +93,6 @@ insert_permissions:
         - org_name
         - phone
         - cancellation_secret
-      backend_only: false
   - role: user
     permission:
       check: {}
@@ -111,7 +106,6 @@ insert_permissions:
         - org_name
         - phone
         - cancellation_secret
-      backend_only: false
 select_permissions:
   - role: sales-admin
     permission:
@@ -203,7 +197,7 @@ event_triggers:
       insert:
         columns: '*'
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/waitlist-joined'

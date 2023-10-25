@@ -1,3 +1,3 @@
 table:
-  schema: public
   name: course_end_jobs
+  schema: public

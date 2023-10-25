@@ -1,6 +1,6 @@
 import { subDays } from 'date-fns'
 
-import { Grade_Enum } from '@app/generated/graphql'
+import { Course_Status_Enum, Grade_Enum } from '@app/generated/graphql'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { CourseTrainerType, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
@@ -242,5 +242,47 @@ it('marks attendance chip disabled if participant has been graded', () => {
     within(
       screen.getByTestId(`course-participant-row-${participant.id}`)
     ).getByRole('button', { name: /attended/i })
+  ).toHaveAttribute('aria-disabled', 'true')
+})
+
+it('marks attendance chip disabled if participant did not attend, course ended and all attended participants are graded', () => {
+  const course = buildCourse({
+    overrides: {
+      status: Course_Status_Enum.EvaluationMissing,
+      schedule: [
+        buildCourseSchedule({
+          overrides: {
+            start: subDays(new Date(), 2).toISOString(),
+            end: subDays(new Date(), 1).toISOString(),
+          },
+        }),
+      ],
+    },
+  })
+
+  const participant = buildParticipant({
+    overrides: {
+      grade: undefined,
+      attended: false,
+    },
+  })
+
+  useCourseParticipantsMocked.mockReturnValue({
+    status: LoadingStatus.SUCCESS,
+    data: [participant],
+    mutate: vi.fn(),
+  })
+
+  render(
+    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    }
+  )
+
+  expect(
+    within(
+      screen.getByTestId(`course-participant-row-${participant.id}`)
+    ).getByRole('button', { name: /did not attend/i })
   ).toHaveAttribute('aria-disabled', 'true')
 })

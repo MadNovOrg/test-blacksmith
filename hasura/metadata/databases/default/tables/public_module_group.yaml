@@ -1,34 +1,34 @@
 table:
-  schema: public
   name: module_group
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
     course_level:
       custom_name: level
-    updated_at:
-      custom_name: updatedAt
     created_at:
       custom_name: createdAt
+    updated_at:
+      custom_name: updatedAt
   custom_column_names:
     course_level: level
-    updated_at: updatedAt
     created_at: createdAt
+    updated_at: updatedAt
+  custom_root_fields: {}
 array_relationships:
   - name: durations
     using:
       foreign_key_constraint_on:
         column: module_group_id
         table:
-          schema: public
           name: module_group_duration
+          schema: public
   - name: modules
     using:
       foreign_key_constraint_on:
         column: module_group_id
         table:
-          schema: public
           name: module
+          schema: public
 select_permissions:
   - role: anonymous
     permission:

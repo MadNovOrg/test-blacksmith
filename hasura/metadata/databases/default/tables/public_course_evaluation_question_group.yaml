@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: course_evaluation_question_group
+  schema: public
 is_enum: true
 select_permissions:
   - role: tt-ops

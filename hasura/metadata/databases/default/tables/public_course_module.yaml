@@ -1,8 +1,7 @@
 table:
-  schema: public
   name: course_module
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
     course_id:
       custom_name: courseId
@@ -11,6 +10,7 @@ configuration:
   custom_column_names:
     course_id: courseId
     module_id: moduleId
+  custom_root_fields: {}
 object_relationships:
   - name: course
     using:
@@ -33,7 +33,6 @@ insert_permissions:
         - id
         - module_id
         - updated_at
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -41,7 +40,6 @@ insert_permissions:
         - course_id
         - covered
         - module_id
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -52,7 +50,6 @@ insert_permissions:
         - updated_at
         - id
         - module_id
-      backend_only: false
 select_permissions:
   - role: anonymous
     permission:

@@ -1,25 +1,25 @@
 table:
-  schema: public
   name: organization_invites
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    org_id:
-      custom_name: orgId
-    updated_at:
-      custom_name: updatedAt
-    is_admin:
-      custom_name: isAdmin
     created_at:
       custom_name: createdAt
+    is_admin:
+      custom_name: isAdmin
+    org_id:
+      custom_name: orgId
     profile_id:
       custom_name: profileId
+    updated_at:
+      custom_name: updatedAt
   custom_column_names:
-    org_id: orgId
-    updated_at: updatedAt
-    is_admin: isAdmin
     created_at: createdAt
+    is_admin: isAdmin
+    org_id: orgId
     profile_id: profileId
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
   - name: organization
     using:
@@ -40,7 +40,6 @@ insert_permissions:
         - id
         - org_id
         - profile_id
-      backend_only: false
   - role: sales-representative
     permission:
       check: {}
@@ -53,7 +52,6 @@ insert_permissions:
         - id
         - org_id
         - profile_id
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -66,7 +64,6 @@ insert_permissions:
         - profile_id
         - status
         - updated_at
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -79,7 +76,6 @@ insert_permissions:
         - id
         - org_id
         - profile_id
-      backend_only: false
   - role: user
     permission:
       check:
@@ -99,7 +95,6 @@ insert_permissions:
         - id
         - org_id
         - profile_id
-      backend_only: false
 select_permissions:
   - role: sales-admin
     permission:
@@ -274,7 +269,7 @@ event_triggers:
         columns:
           - updated_at
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/org-invite'

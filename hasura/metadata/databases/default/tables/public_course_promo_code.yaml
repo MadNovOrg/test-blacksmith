@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: course_promo_code
+  schema: public
 object_relationships:
   - name: course
     using:
@@ -16,7 +16,6 @@ insert_permissions:
         - course_id
         - id
         - promo_id
-      backend_only: false
   - role: sales-admin
     permission:
       check: {}
@@ -24,7 +23,6 @@ insert_permissions:
         - course_id
         - id
         - promo_id
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -32,7 +30,6 @@ insert_permissions:
         - course_id
         - id
         - promo_id
-      backend_only: false
 select_permissions:
   - role: finance
     permission:

@@ -1,13 +1,13 @@
 table:
-  schema: public
   name: bild_strategy
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
     short_name:
       custom_name: shortName
   custom_column_names:
     short_name: shortName
+  custom_root_fields: {}
 select_permissions:
   - role: ld
     permission:

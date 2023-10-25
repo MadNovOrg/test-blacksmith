@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: course_participant_audit
+  schema: public
 object_relationships:
   - name: authorizedBy
     using:
@@ -15,18 +15,18 @@ computed_fields:
   - name: fromCourse
     definition:
       function:
-        schema: public
         name: course_participant_audit_from_course
+        schema: public
   - name: newAttendeeEmail
     definition:
       function:
-        schema: public
         name: course_participant_audit_new_attendee
+        schema: public
   - name: toCourse
     definition:
       function:
-        schema: public
         name: course_participant_audit_to_course
+        schema: public
 insert_permissions:
   - role: trainer
     permission:
@@ -46,7 +46,6 @@ insert_permissions:
         - profile_id
         - type
         - updated_at
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -61,7 +60,6 @@ insert_permissions:
         - id
         - profile_id
         - course_id
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -76,7 +74,6 @@ insert_permissions:
         - id
         - profile_id
         - course_id
-      backend_only: false
 select_permissions:
   - role: booking-contact
     permission:
@@ -219,7 +216,7 @@ event_triggers:
       insert:
         columns: '*'
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/participant-audit-added'

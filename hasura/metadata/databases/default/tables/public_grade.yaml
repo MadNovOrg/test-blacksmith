@@ -1,4 +1,4 @@
 table:
-  schema: public
   name: grade
+  schema: public
 is_enum: true

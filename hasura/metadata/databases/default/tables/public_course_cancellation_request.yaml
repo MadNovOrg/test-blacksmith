@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: course_cancellation_request
+  schema: public
 object_relationships:
   - name: course
     using:
@@ -43,7 +43,6 @@ insert_permissions:
         - updated_at
         - id
         - requested_by
-      backend_only: false
 select_permissions:
   - role: booking-contact
     permission:
@@ -151,7 +150,7 @@ event_triggers:
       insert:
         columns: '*'
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/pending-course-cancellation'

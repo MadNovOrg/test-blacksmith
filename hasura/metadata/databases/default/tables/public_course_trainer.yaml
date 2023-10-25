@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: course_trainer
+  schema: public
 object_relationships:
   - name: course
     using:
@@ -23,7 +23,6 @@ insert_permissions:
         - type
         - id
         - profile_id
-      backend_only: false
   - role: trainer
     permission:
       check: {}
@@ -33,7 +32,6 @@ insert_permissions:
         - profile_id
         - status
         - type
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -43,7 +41,6 @@ insert_permissions:
         - profile_id
         - status
         - type
-      backend_only: false
 select_permissions:
   - role: finance
     permission:
@@ -157,8 +154,8 @@ event_triggers:
       insert:
         columns: '*'
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/course-trainer-assigned'
   - name: course_trainer_status_changed
@@ -168,8 +165,8 @@ event_triggers:
         columns:
           - status
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/course-trainer-status'
   - name: course_trainer_unassigned
@@ -191,7 +188,7 @@ event_triggers:
         columns:
           - status
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/status'

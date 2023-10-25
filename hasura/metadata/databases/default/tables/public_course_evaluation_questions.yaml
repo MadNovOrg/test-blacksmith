@@ -1,8 +1,7 @@
 table:
-  schema: public
   name: course_evaluation_questions
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
     display_order:
       custom_name: displayOrder
@@ -11,6 +10,7 @@ configuration:
   custom_column_names:
     display_order: displayOrder
     question_key: questionKey
+  custom_root_fields: {}
 select_permissions:
   - role: finance
     permission:

@@ -1,22 +1,22 @@
 table:
-  schema: public
   name: course_expenses
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
     course_id:
       custom_name: courseId
-    updated_at:
-      custom_name: updatedAt
     created_at:
       custom_name: createdAt
     trainer_id:
       custom_name: trainerId
+    updated_at:
+      custom_name: updatedAt
   custom_column_names:
     course_id: courseId
-    updated_at: updatedAt
     created_at: createdAt
     trainer_id: trainerId
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
   - name: course
     using:
@@ -35,7 +35,6 @@ insert_permissions:
         - updated_at
         - id
         - trainer_id
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -46,7 +45,6 @@ insert_permissions:
         - id
         - trainer_id
         - updated_at
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -57,7 +55,6 @@ insert_permissions:
         - id
         - trainer_id
         - updated_at
-      backend_only: false
 select_permissions:
   - role: finance
     permission:

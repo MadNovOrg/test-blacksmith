@@ -1,14 +1,14 @@
 table:
-  schema: public
   name: trainer_role_type
+  schema: public
 array_relationships:
   - name: profiles
     using:
       foreign_key_constraint_on:
         column: trainer_role_type_id
         table:
-          schema: public
           name: profile_trainer_role_type
+          schema: public
 select_permissions:
   - role: anonymous
     permission:

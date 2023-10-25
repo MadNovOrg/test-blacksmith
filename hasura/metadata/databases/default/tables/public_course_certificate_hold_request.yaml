@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: course_certificate_hold_request
+  schema: public
 object_relationships:
   - name: certificate
     using:
@@ -14,7 +14,6 @@ insert_permissions:
         - changelog_id
         - expiry_date
         - start_date
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -23,7 +22,6 @@ insert_permissions:
         - changelog_id
         - expiry_date
         - start_date
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -32,7 +30,6 @@ insert_permissions:
         - changelog_id
         - expiry_date
         - start_date
-      backend_only: false
 select_permissions:
   - role: sales-admin
     permission:
@@ -112,7 +109,7 @@ event_triggers:
         columns:
           - expiry_date
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/certificate/hold'

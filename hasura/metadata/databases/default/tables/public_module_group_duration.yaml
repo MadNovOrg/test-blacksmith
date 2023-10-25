@@ -1,22 +1,22 @@
 table:
-  schema: public
   name: module_group_duration
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    updated_at:
-      custom_name: updatedAt
+    course_delivery_type:
+      custom_name: courseDeliveryType
     created_at:
       custom_name: createdAt
     go1_integration:
       custom_name: go1Integration
-    course_delivery_type:
-      custom_name: courseDeliveryType
+    updated_at:
+      custom_name: updatedAt
   custom_column_names:
-    updated_at: updatedAt
+    course_delivery_type: courseDeliveryType
     created_at: createdAt
     go1_integration: go1Integration
-    course_delivery_type: courseDeliveryType
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
   - name: moduleGroup
     using:

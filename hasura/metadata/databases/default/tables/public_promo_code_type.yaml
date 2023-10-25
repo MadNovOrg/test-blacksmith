@@ -1,4 +1,4 @@
 table:
-  schema: public
   name: promo_code_type
+  schema: public
 is_enum: true

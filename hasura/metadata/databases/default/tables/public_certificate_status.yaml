@@ -1,4 +1,4 @@
 table:
-  schema: public
   name: certificate_status
+  schema: public
 is_enum: true

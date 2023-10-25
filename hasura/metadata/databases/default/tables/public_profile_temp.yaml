@@ -50,27 +50,6 @@ insert_permissions:
         - sector
         - created_at
         - organization_id
-      backend_only: false
-  - role: organization-key-contact
-    permission:
-      check: { }
-      set:
-        email: x-hasura-User-Email
-      columns:
-        - accept_tcs
-        - dob
-        - course_id
-        - id
-        - quantity
-        - email
-        - family_name
-        - given_name
-        - job_title
-        - phone
-        - sector
-        - created_at
-        - organization_id
-      backend_only: false
   - role: finance
     permission:
       check: {}
@@ -90,7 +69,6 @@ insert_permissions:
         - sector
         - created_at
         - organization_id
-      backend_only: false
   - role: ld
     permission:
       check: {}
@@ -110,7 +88,25 @@ insert_permissions:
         - sector
         - created_at
         - organization_id
-      backend_only: false
+  - role: organization-key-contact
+    permission:
+      check: {}
+      set:
+        email: x-hasura-User-Email
+      columns:
+        - accept_tcs
+        - dob
+        - course_id
+        - id
+        - quantity
+        - email
+        - family_name
+        - given_name
+        - job_title
+        - phone
+        - sector
+        - created_at
+        - organization_id
   - role: sales-admin
     permission:
       check: {}
@@ -130,7 +126,6 @@ insert_permissions:
         - sector
         - created_at
         - organization_id
-      backend_only: false
   - role: sales-representative
     permission:
       check: {}
@@ -150,7 +145,6 @@ insert_permissions:
         - sector
         - created_at
         - organization_id
-      backend_only: false
   - role: trainer
     permission:
       check: {}
@@ -170,7 +164,6 @@ insert_permissions:
         - sector
         - created_at
         - organization_id
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -190,7 +183,6 @@ insert_permissions:
         - sector
         - created_at
         - organization_id
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -210,7 +202,6 @@ insert_permissions:
         - sector
         - created_at
         - organization_id
-      backend_only: false
   - role: unverified
     permission:
       check: {}
@@ -230,7 +221,6 @@ insert_permissions:
         - sector
         - created_at
         - organization_id
-      backend_only: false
   - role: user
     permission:
       check: {}
@@ -250,7 +240,6 @@ insert_permissions:
         - sector
         - created_at
         - organization_id
-      backend_only: false
 select_permissions:
   - role: unverified
     permission:

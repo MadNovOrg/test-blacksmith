@@ -1,28 +1,28 @@
 table:
-  schema: public
   name: private_course_booking
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
     course_id:
       custom_name: courseId
-    org_name:
-      custom_name: orgName
-    given_name:
-      custom_name: givenName
-    family_name:
-      custom_name: familyName
     created_at:
       custom_name: createdAt
+    family_name:
+      custom_name: familyName
+    given_name:
+      custom_name: givenName
     num_participants:
       custom_name: numParticipants
+    org_name:
+      custom_name: orgName
   custom_column_names:
     course_id: courseId
-    org_name: orgName
-    given_name: givenName
-    family_name: familyName
     created_at: createdAt
+    family_name: familyName
+    given_name: givenName
     num_participants: numParticipants
+    org_name: orgName
+  custom_root_fields: {}
 insert_permissions:
   - role: anonymous
     permission:
@@ -38,4 +38,3 @@ insert_permissions:
         - phone
         - sector
         - source
-      backend_only: false

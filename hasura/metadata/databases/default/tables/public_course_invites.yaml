@@ -1,16 +1,16 @@
 table:
-  schema: public
   name: course_invites
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    updated_at:
-      custom_name: updatedAt
     created_at:
       custom_name: createdAt
+    updated_at:
+      custom_name: updatedAt
   custom_column_names:
-    updated_at: updatedAt
     created_at: createdAt
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
   - name: course
     using:
@@ -18,12 +18,12 @@ object_relationships:
   - name: participant
     using:
       manual_configuration:
-        remote_table:
-          schema: public
-          name: course_participant
-        insertion_order: null
         column_mapping:
           id: invite_id
+        insertion_order: null
+        remote_table:
+          name: course_participant
+          schema: public
 insert_permissions:
   - role: booking-contact
     permission:
@@ -43,7 +43,13 @@ insert_permissions:
         - course_id
         - email
         - status
-      backend_only: false
+  - role: ld
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - email
+        - status
   - role: organization-key-contact
     permission:
       check:
@@ -62,15 +68,6 @@ insert_permissions:
         - course_id
         - email
         - status
-      backend_only: false
-  - role: ld
-    permission:
-      check: {}
-      columns:
-        - course_id
-        - email
-        - status
-      backend_only: false
   - role: sales-admin
     permission:
       check: {}
@@ -78,7 +75,6 @@ insert_permissions:
         - course_id
         - email
         - status
-      backend_only: false
   - role: sales-representative
     permission:
       check:
@@ -91,7 +87,6 @@ insert_permissions:
         - course_id
         - email
         - status
-      backend_only: false
   - role: trainer
     permission:
       check:
@@ -103,7 +98,6 @@ insert_permissions:
         - course_id
         - email
         - status
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -111,7 +105,6 @@ insert_permissions:
         - course_id
         - email
         - status
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -119,7 +112,6 @@ insert_permissions:
         - course_id
         - email
         - status
-      backend_only: false
   - role: user
     permission:
       check:
@@ -135,7 +127,6 @@ insert_permissions:
         - course_id
         - email
         - status
-      backend_only: false
 select_permissions:
   - role: booking-contact
     permission:
@@ -158,29 +149,6 @@ select_permissions:
                     - is_admin:
                         _eq: true
             - booking_contact_profile_id:
-                _eq: X-Hasura-User-Id
-      allow_aggregations: true
-  - role: organization-key-contact
-    permission:
-      columns:
-        - course_id
-        - created_at
-        - email
-        - id
-        - note
-        - status
-        - updated_at
-      filter:
-        course:
-          _or:
-            - organization:
-                members:
-                  _and:
-                    - profile_id:
-                        _eq: X-Hasura-User-Id
-                    - is_admin:
-                        _eq: true
-            - organization_key_contact_profile_id:
                 _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: finance
@@ -206,6 +174,29 @@ select_permissions:
         - status
         - updated_at
       filter: {}
+  - role: organization-key-contact
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - id
+        - note
+        - status
+        - updated_at
+      filter:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - organization_key_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
@@ -379,6 +370,9 @@ delete_permissions:
                         _eq: true
             - booking_contact_profile_id:
                 _eq: X-Hasura-User-Id
+  - role: ld
+    permission:
+      filter: {}
   - role: organization-key-contact
     permission:
       filter:
@@ -393,9 +387,6 @@ delete_permissions:
                         _eq: true
             - organization_key_contact_profile_id:
                 _eq: X-Hasura-User-Id
-  - role: ld
-    permission:
-      filter: {}
   - role: sales-admin
     permission:
       filter: {}
@@ -438,8 +429,8 @@ event_triggers:
       update:
         columns: '*'
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/participant-added'
   - name: send_invite_email
@@ -448,7 +439,7 @@ event_triggers:
       insert:
         columns: '*'
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/course-invite'

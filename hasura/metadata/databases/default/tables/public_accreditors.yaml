@@ -1,4 +1,4 @@
 table:
-  schema: public
   name: accreditors
+  schema: public
 is_enum: true

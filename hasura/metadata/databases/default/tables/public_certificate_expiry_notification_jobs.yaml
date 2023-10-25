@@ -1,3 +1,3 @@
 table:
-  schema: public
   name: certificate_expiry_notification_jobs
+  schema: public

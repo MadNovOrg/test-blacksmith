@@ -1,37 +1,37 @@
 table:
-  schema: public
   name: promo_code
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    valid_from:
-      custom_name: validFrom
-    uses_max:
-      custom_name: usesMax
-    created_by:
-      custom_name: createdBy
     approved_by:
       custom_name: approvedBy
-    updated_at:
-      custom_name: updatedAt
     booker_single_use:
       custom_name: bookerSingleUse
-    valid_to:
-      custom_name: validTo
     created_at:
       custom_name: createdAt
+    created_by:
+      custom_name: createdBy
     denied_by:
       custom_name: deniedBy
+    updated_at:
+      custom_name: updatedAt
+    uses_max:
+      custom_name: usesMax
+    valid_from:
+      custom_name: validFrom
+    valid_to:
+      custom_name: validTo
   custom_column_names:
-    valid_from: validFrom
-    uses_max: usesMax
-    created_by: createdBy
     approved_by: approvedBy
-    updated_at: updatedAt
     booker_single_use: bookerSingleUse
-    valid_to: validTo
     created_at: createdAt
+    created_by: createdBy
     denied_by: deniedBy
+    updated_at: updatedAt
+    uses_max: usesMax
+    valid_from: validFrom
+    valid_to: validTo
+  custom_root_fields: {}
 object_relationships:
   - name: approver
     using:
@@ -45,8 +45,8 @@ array_relationships:
       foreign_key_constraint_on:
         column: promo_id
         table:
-          schema: public
           name: course_promo_code
+          schema: public
 insert_permissions:
   - role: finance
     permission:
@@ -65,12 +65,10 @@ insert_permissions:
         - uses_max
         - valid_from
         - valid_to
-      backend_only: false
   - role: ld
     permission:
       check: {}
       columns: []
-      backend_only: false
   - role: sales-admin
     permission:
       check:
@@ -93,7 +91,6 @@ insert_permissions:
         - uses_max
         - valid_from
         - valid_to
-      backend_only: false
   - role: tt-ops
     permission:
       check:
@@ -116,7 +113,6 @@ insert_permissions:
         - uses_max
         - valid_from
         - valid_to
-      backend_only: false
 select_permissions:
   - role: finance
     permission:
@@ -295,7 +291,7 @@ event_triggers:
         columns:
           - amount
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/promocode/created'

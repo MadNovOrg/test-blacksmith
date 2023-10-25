@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: course_participant_module
+  schema: public
 object_relationships:
   - name: course_participant
     using:
@@ -21,7 +21,6 @@ insert_permissions:
         - completed
         - course_participant_id
         - module_id
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -29,7 +28,6 @@ insert_permissions:
         - completed
         - course_participant_id
         - module_id
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -37,7 +35,6 @@ insert_permissions:
         - completed
         - course_participant_id
         - module_id
-      backend_only: false
 select_permissions:
   - role: finance
     permission:

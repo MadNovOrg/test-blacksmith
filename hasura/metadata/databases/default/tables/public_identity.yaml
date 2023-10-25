@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: identity
+  schema: public
 object_relationships:
   - name: identity_type
     using:

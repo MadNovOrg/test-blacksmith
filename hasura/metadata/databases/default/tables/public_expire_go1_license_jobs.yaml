@@ -1,8 +1,7 @@
 table:
-  schema: public
   name: expire_go1_license_jobs
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
     job_id:
       custom_name: jobId
@@ -11,3 +10,4 @@ configuration:
   custom_column_names:
     job_id: jobId
     license_id: licenseId
+  custom_root_fields: {}

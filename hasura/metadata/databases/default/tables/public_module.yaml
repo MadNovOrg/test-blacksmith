@@ -1,25 +1,25 @@
 table:
-  schema: public
   name: module
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    module_category:
-      custom_name: type
     course_level:
       custom_name: level
-    updated_at:
-      custom_name: updatedAt
     created_at:
       custom_name: createdAt
+    module_category:
+      custom_name: type
     module_group_id:
       custom_name: group
+    updated_at:
+      custom_name: updatedAt
   custom_column_names:
-    module_category: type
     course_level: level
-    updated_at: updatedAt
     created_at: createdAt
+    module_category: type
     module_group_id: group
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
   - name: moduleGroup
     using:

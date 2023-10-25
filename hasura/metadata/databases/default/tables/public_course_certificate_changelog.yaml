@@ -1,22 +1,22 @@
 table:
-  schema: public
   name: course_certificate_changelog
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
     author_id:
       custom_name: authorId
+    created_at:
+      custom_name: createdAt
     participant_id:
       custom_name: participantId
     updated_at:
       custom_name: updatedAt
-    created_at:
-      custom_name: createdAt
   custom_column_names:
     author_id: authorId
+    created_at: createdAt
     participant_id: participantId
     updated_at: updatedAt
-    created_at: createdAt
+  custom_root_fields: {}
 object_relationships:
   - name: author
     using:
@@ -35,7 +35,6 @@ insert_permissions:
         - participant_id
         - payload
         - type
-      backend_only: false
   - role: tt-admin
     permission:
       check:
@@ -50,7 +49,6 @@ insert_permissions:
         - participant_id
         - payload
         - type
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -62,7 +60,6 @@ insert_permissions:
         - participant_id
         - payload
         - type
-      backend_only: false
 select_permissions:
   - role: finance
     permission:

@@ -1,22 +1,22 @@
 table:
-  schema: public
   name: xero_contact
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    first_name:
-      custom_name: firstName
-    xero_id:
-      custom_name: xeroId
-    last_name:
-      custom_name: lastName
     email_address:
       custom_name: emailAddress
+    first_name:
+      custom_name: firstName
+    last_name:
+      custom_name: lastName
+    xero_id:
+      custom_name: xeroId
   custom_column_names:
-    first_name: firstName
-    xero_id: xeroId
-    last_name: lastName
     email_address: emailAddress
+    first_name: firstName
+    last_name: lastName
+    xero_id: xeroId
+  custom_root_fields: {}
 select_permissions:
   - role: finance
     permission:

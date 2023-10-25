@@ -1,22 +1,22 @@
 table:
-  schema: public
   name: go1_licenses
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    org_id:
-      custom_name: orgId
-    expire_date:
-      custom_name: expireDate
-    profile_id:
-      custom_name: profileId
     enrolled_on:
       custom_name: enrolledOn
+    expire_date:
+      custom_name: expireDate
+    org_id:
+      custom_name: orgId
+    profile_id:
+      custom_name: profileId
   custom_column_names:
-    org_id: orgId
-    expire_date: expireDate
-    profile_id: profileId
     enrolled_on: enrolledOn
+    expire_date: expireDate
+    org_id: orgId
+    profile_id: profileId
+  custom_root_fields: {}
 object_relationships:
   - name: organization
     using:
@@ -29,7 +29,6 @@ insert_permissions:
         - expire_date
         - org_id
         - profile_id
-      backend_only: false
 select_permissions:
   - role: tt-admin
     permission:
@@ -65,7 +64,7 @@ event_triggers:
         columns:
           - expire_date
     retry_conf:
-      num_retries: 0
       interval_sec: 10
+      num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/go1-licensing/schedule-expire'

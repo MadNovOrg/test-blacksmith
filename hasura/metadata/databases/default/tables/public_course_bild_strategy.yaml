@@ -1,13 +1,13 @@
 table:
-  schema: public
   name: course_bild_strategy
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
     strategy_name:
       custom_name: strategyName
   custom_column_names:
     strategy_name: strategyName
+  custom_root_fields: {}
 insert_permissions:
   - role: ld
     permission:
@@ -16,7 +16,6 @@ insert_permissions:
         - course_id
         - strategy_name
         - id
-      backend_only: false
   - role: sales-admin
     permission:
       check: {}
@@ -24,7 +23,6 @@ insert_permissions:
         - course_id
         - strategy_name
         - id
-      backend_only: false
   - role: trainer
     permission:
       check: {}
@@ -32,7 +30,6 @@ insert_permissions:
         - course_id
         - strategy_name
         - id
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -40,7 +37,6 @@ insert_permissions:
         - course_id
         - strategy_name
         - id
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -48,7 +44,6 @@ insert_permissions:
         - course_id
         - strategy_name
         - id
-      backend_only: false
 select_permissions:
   - role: ld
     permission:

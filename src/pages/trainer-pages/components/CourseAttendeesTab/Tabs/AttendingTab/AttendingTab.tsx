@@ -375,7 +375,12 @@ export const AttendingTab = ({
                         <TableCell width={180}>
                           <AttendingToggle
                             participant={courseParticipant}
-                            disabled={Boolean(courseParticipant.grade)}
+                            disabled={
+                              Boolean(courseParticipant.grade) ||
+                              (courseEnded(course) &&
+                                course.status !==
+                                  Course_Status_Enum.GradeMissing)
+                            }
                           />
                         </TableCell>
                       ) : null}

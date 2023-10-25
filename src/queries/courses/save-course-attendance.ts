@@ -2,9 +2,9 @@ import { gql } from 'graphql-request'
 
 export const MUTATION = gql`
   mutation SaveCourseAttendance(
-    $attended: [uuid!]!,
-    $notAttended: [uuid!]!,
-    $attendedAudit: [course_participant_audit_insert_input!]!,
+    $attended: [uuid!]!
+    $notAttended: [uuid!]!
+    $attendedAudit: [course_participant_audit_insert_input!]!
     $notAttendedAudit: [course_participant_audit_insert_input!]!
   ) {
     saveAttended: update_course_participant(
@@ -22,7 +22,7 @@ export const MUTATION = gql`
 
     saveNotAttended: update_course_participant(
       where: { id: { _in: $notAttended } }
-      _set: { attended: false, grade: FAIL, dateGraded: "${new Date().toISOString()}" }
+      _set: { attended: false }
     ) {
       affectedRows: affected_rows
     }

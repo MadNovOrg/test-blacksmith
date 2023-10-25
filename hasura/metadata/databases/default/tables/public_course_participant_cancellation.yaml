@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: course_participant_cancellation
+  schema: public
 insert_permissions:
   - role: tt-admin
     permission:
@@ -10,7 +10,6 @@ insert_permissions:
         - cancellation_reason
         - course_id
         - profile_id
-      backend_only: false
 select_permissions:
   - role: tt-admin
     permission:

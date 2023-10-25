@@ -1,46 +1,46 @@
 table:
-  schema: public
   name: dfe_establishment
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
-    trust_name:
-      custom_name: trustName
-    head_job_title:
-      custom_name: headJobTitle
-    ofsted_rating:
-      custom_name: ofstedRating
+    address_line_1:
+      custom_name: addressLineOne
     address_line_2:
       custom_name: addressLineTwo
     address_line_3:
       custom_name: addressLineThree
-    trust_type:
-      custom_name: trustType
-    head_title:
-      custom_name: headTitle
     head_first_name:
       custom_name: headFirstName
+    head_job_title:
+      custom_name: headJobTitle
     head_last_name:
       custom_name: headLastName
+    head_title:
+      custom_name: headTitle
     local_authority:
       custom_name: localAuthority
     ofsted_last_inspection:
       custom_name: ofstedLastInspection
-    address_line_1:
-      custom_name: addressLineOne
+    ofsted_rating:
+      custom_name: ofstedRating
+    trust_name:
+      custom_name: trustName
+    trust_type:
+      custom_name: trustType
   custom_column_names:
-    trust_name: trustName
-    head_job_title: headJobTitle
-    ofsted_rating: ofstedRating
+    address_line_1: addressLineOne
     address_line_2: addressLineTwo
     address_line_3: addressLineThree
-    trust_type: trustType
-    head_title: headTitle
     head_first_name: headFirstName
+    head_job_title: headJobTitle
     head_last_name: headLastName
+    head_title: headTitle
     local_authority: localAuthority
     ofsted_last_inspection: ofstedLastInspection
-    address_line_1: addressLineOne
+    ofsted_rating: ofstedRating
+    trust_name: trustName
+    trust_type: trustType
+  custom_root_fields: {}
 select_permissions:
   - role: anonymous
     permission:

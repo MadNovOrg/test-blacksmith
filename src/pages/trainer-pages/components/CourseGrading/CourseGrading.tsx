@@ -58,6 +58,9 @@ export const CourseGrading: React.FC<
   } = useCourseParticipants(course?.id ?? '', {
     sortBy: 'name',
     order,
+    where: {
+      attended: { _eq: true },
+    },
   })
 
   const participantsWithoutGrades = (participants ?? []).filter(

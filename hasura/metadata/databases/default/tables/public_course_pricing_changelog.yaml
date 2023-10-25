@@ -1,28 +1,28 @@
 table:
-  schema: public
   name: course_pricing_changelog
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
     author_id:
       custom_name: authorId
-    updated_at:
-      custom_name: updatedAt
-    created_at:
-      custom_name: createdAt
-    old_price:
-      custom_name: oldPrice
     course_pricing_id:
       custom_name: coursePricingId
+    created_at:
+      custom_name: createdAt
     new_price:
       custom_name: newPrice
+    old_price:
+      custom_name: oldPrice
+    updated_at:
+      custom_name: updatedAt
   custom_column_names:
     author_id: authorId
-    updated_at: updatedAt
-    created_at: createdAt
-    old_price: oldPrice
     course_pricing_id: coursePricingId
+    created_at: createdAt
     new_price: newPrice
+    old_price: oldPrice
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
   - name: author
     using:
@@ -42,7 +42,6 @@ insert_permissions:
         - author_id
         - course_pricing_id
         - id
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -54,7 +53,6 @@ insert_permissions:
         - author_id
         - created_at
         - updated_at
-      backend_only: false
 select_permissions:
   - role: finance
     permission:

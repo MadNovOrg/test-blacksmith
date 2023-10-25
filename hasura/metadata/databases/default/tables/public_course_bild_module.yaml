@@ -1,6 +1,6 @@
 table:
-  schema: public
   name: course_bild_module
+  schema: public
 insert_permissions:
   - role: sales-admin
     permission:
@@ -9,7 +9,6 @@ insert_permissions:
         - course_id
         - modules
         - id
-      backend_only: false
   - role: trainer
     permission:
       check: {}
@@ -17,7 +16,6 @@ insert_permissions:
         - course_id
         - modules
         - id
-      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -25,7 +23,6 @@ insert_permissions:
         - course_id
         - modules
         - id
-      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -33,7 +30,6 @@ insert_permissions:
         - course_id
         - modules
         - id
-      backend_only: false
 select_permissions:
   - role: sales-admin
     permission:

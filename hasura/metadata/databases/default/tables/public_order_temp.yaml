@@ -1,58 +1,58 @@
 table:
-  schema: public
   name: order_temp
+  schema: public
 configuration:
-  custom_root_fields: {}
   column_config:
+    billing_address:
+      custom_name: billingAddress
+    billing_email:
+      custom_name: billingEmail
+    billing_family_name:
+      custom_name: billingFamilyName
+    billing_given_name:
+      custom_name: billingGivenName
+    billing_phone:
+      custom_name: billingPhone
     client_purchase_order:
       custom_name: clientPurchaseOrder
     course_id:
       custom_name: courseId
-    xero_invoice_number:
-      custom_name: xeroInvoiceNumber
-    billing_family_name:
-      custom_name: billingFamilyName
-    payment_method:
-      custom_name: paymentMethod
-    billing_address:
-      custom_name: billingAddress
-    order_due:
-      custom_name: orderDue
-    sales_representative_id:
-      custom_name: salesRepresentativeId
-    promo_codes:
-      custom_name: promoCodes
-    organization_id:
-      custom_name: organizationId
-    billing_given_name:
-      custom_name: billingGivenName
     created_at:
       custom_name: createdAt
-    billing_phone:
-      custom_name: billingPhone
-    billing_email:
-      custom_name: billingEmail
+    order_due:
+      custom_name: orderDue
     order_total:
       custom_name: orderTotal
+    organization_id:
+      custom_name: organizationId
+    payment_method:
+      custom_name: paymentMethod
     profile_id:
       custom_name: profileId
+    promo_codes:
+      custom_name: promoCodes
+    sales_representative_id:
+      custom_name: salesRepresentativeId
+    xero_invoice_number:
+      custom_name: xeroInvoiceNumber
   custom_column_names:
+    billing_address: billingAddress
+    billing_email: billingEmail
+    billing_family_name: billingFamilyName
+    billing_given_name: billingGivenName
+    billing_phone: billingPhone
     client_purchase_order: clientPurchaseOrder
     course_id: courseId
-    xero_invoice_number: xeroInvoiceNumber
-    billing_family_name: billingFamilyName
-    payment_method: paymentMethod
-    billing_address: billingAddress
-    order_due: orderDue
-    sales_representative_id: salesRepresentativeId
-    promo_codes: promoCodes
-    organization_id: organizationId
-    billing_given_name: billingGivenName
     created_at: createdAt
-    billing_phone: billingPhone
-    billing_email: billingEmail
+    order_due: orderDue
     order_total: orderTotal
+    organization_id: organizationId
+    payment_method: paymentMethod
     profile_id: profileId
+    promo_codes: promoCodes
+    sales_representative_id: salesRepresentativeId
+    xero_invoice_number: xeroInvoiceNumber
+  custom_root_fields: {}
 insert_permissions:
   - role: sales-admin
     permission:
@@ -84,7 +84,6 @@ insert_permissions:
         - organization_id
         - profile_id
         - sales_representative_id
-      backend_only: false
   - role: trainer
     permission:
       check: {}
@@ -114,7 +113,6 @@ insert_permissions:
         - id
         - organization_id
         - profile_id
-      backend_only: false
 update_permissions:
   - role: sales-admin
     permission:
