@@ -1,19 +1,14 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import useSWR from 'swr'
-import { Client, Provider } from 'urql'
+import { Client, Provider, TypedDocumentNode } from 'urql'
 import { fromValue } from 'wonka'
 
+import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/queries/course-evaluation/get-feedback-users'
+import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
+import { QUERY as GET_COURSE_QUERY } from '@app/queries/user-queries/get-course-by-id'
 import { Course, CourseParticipant, CourseType, RoleName } from '@app/types'
 
-import {
-  chance,
-  render,
-  screen,
-  userEvent,
-  useSWRDefaultResponse,
-  waitFor,
-} from '@test/index'
+import { chance, render, screen, userEvent, waitFor } from '@test/index'
 import {
   buildCourse,
   buildEndedCourse,
@@ -24,63 +19,56 @@ import {
 
 import { CourseDetails } from '.'
 
-vi.mock('swr')
-const useSWRMock = vi.mocked(useSWR)
-
 type SpecCourseType = {
-  data: {
-    course: Course
-    courseParticipants?: CourseParticipant[]
-    orgMembers?: { profile_id: string; isAdmin: boolean }[]
+  course: Course
+  courseParticipants?: CourseParticipant[]
+  orgMembers?: { profile_id: string; isAdmin: boolean }[]
+}
+const getURQLMockClient: (data: SpecCourseType) => Client = ({
+  course,
+  courseParticipants,
+  orgMembers,
+}) => {
+  const client = {
+    executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+      switch (query) {
+        case GET_COURSE_QUERY:
+          return fromValue({
+            data: {
+              course: {
+                ...course,
+                organization: { members: orgMembers ?? [] },
+                participants: courseParticipants ?? [buildParticipant()],
+              },
+            },
+          })
+        case GetParticipant:
+          return fromValue({
+            data: {
+              course_participant: courseParticipants ?? [buildParticipant()],
+            },
+          })
+        case GET_FEEDBACK_USERS_QUERY:
+          return fromValue({ data: { users: [] } })
+        default:
+          fromValue({ data: {} })
+      }
+    },
   }
+  return client as unknown as Client
 }
 
-const urqlMockClient = (data: SpecCourseType) =>
-  ({
-    executeQuery: () => fromValue(data),
-  } as unknown as Client)
-
-const MockedCourseDetails: FC<SpecCourseType> = ({ data }) => {
+const MockedCourseDetails: FC<SpecCourseType> = data => {
   return (
-    <Provider value={urqlMockClient({ data })}>
+    <Provider value={getURQLMockClient(data)}>
       <CourseDetails />
     </Provider>
   )
 }
 
-function registerMocks(
-  course: Course,
-  courseParticipants?: CourseParticipant[],
-  orgMembers?: { profile_id: string; isAdmin: boolean }[]
-) {
-  useSWRMock.mockImplementation(key => {
-    if (!key || typeof key !== 'object') return useSWRDefaultResponse
-    let data = null
-    if (key[0].includes('GetUserCourseById')) {
-      data = {
-        course: {
-          ...course,
-          organization: { members: orgMembers ?? [] },
-          participants: courseParticipants,
-        },
-      }
-    } else if (key[0].includes('GetCourseParticipantId')) {
-      data = { course_participant: courseParticipants ?? [buildParticipant()] }
-    } else if (key[0].includes('GetFeedbackUsers')) {
-      data = { users: [] }
-    } else if (key[0].includes('GetProfileDetails')) {
-      data = { certificates: [], upcomingCourses: [] }
-    }
-    return {
-      ...useSWRDefaultResponse,
-      data,
-    }
-  })
-}
-
-describe('page: CourseDetails', () => {
+describe(CourseDetails.name, () => {
   it('correctly displays *Change my attendance* modal title', async () => {
-    const course = buildCourse.one({
+    const course = buildCourse({
       overrides: {
         type: CourseType.OPEN,
         schedule: [
@@ -94,21 +82,13 @@ describe('page: CourseDetails', () => {
         ],
       },
     })
-    registerMocks(course)
-
     const user = userEvent.setup()
 
     render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
-          element={
-            <MockedCourseDetails
-              data={{
-                course,
-              }}
-            />
-          }
+          element={<MockedCourseDetails course={course} />}
         />
       </Routes>,
       {},
@@ -126,19 +106,11 @@ describe('page: CourseDetails', () => {
 
   it('displays course hero info', () => {
     const course = buildCourse()
-    registerMocks(course)
-
     render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
-          element={
-            <MockedCourseDetails
-              data={{
-                course,
-              }}
-            />
-          }
+          element={<MockedCourseDetails course={course} />}
         />
       </Routes>,
       {},
@@ -151,19 +123,11 @@ describe('page: CourseDetails', () => {
 
   it('displays an alert if user has been redirected from accepting the invite', () => {
     const course = buildCourse()
-    registerMocks(course)
-
     render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
-          element={
-            <MockedCourseDetails
-              data={{
-                course,
-              }}
-            />
-          }
+          element={<MockedCourseDetails course={course} />}
         />
       </Routes>,
       {},
@@ -179,19 +143,11 @@ describe('page: CourseDetails', () => {
 
   it('displays tabs with course checklist and resources', () => {
     const course = buildCourse()
-    registerMocks(course)
-
     render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
-          element={
-            <MockedCourseDetails
-              data={{
-                course,
-              }}
-            />
-          }
+          element={<MockedCourseDetails course={course} />}
         />
       </Routes>,
       {},
@@ -204,19 +160,12 @@ describe('page: CourseDetails', () => {
 
   it('has course evaluation button disabled if course has not started yet', () => {
     const course = buildNotStartedCourse()
-    registerMocks(course)
 
     render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
-          element={
-            <MockedCourseDetails
-              data={{
-                course,
-              }}
-            />
-          }
+          element={<MockedCourseDetails course={course} />}
         />
       </Routes>,
       {},
@@ -228,18 +177,14 @@ describe('page: CourseDetails', () => {
 
   it('has course evaluation button enabled if course has started', async () => {
     const course = buildStartedCourse()
-    registerMocks(course, [{ ...buildParticipant(), attended: true }])
-
     render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
           element={
             <MockedCourseDetails
-              data={{
-                course,
-                courseParticipants: [{ ...buildParticipant(), attended: true }],
-              }}
+              course={course}
+              courseParticipants={[{ ...buildParticipant(), attended: true }]}
             />
           }
         />
@@ -255,20 +200,14 @@ describe('page: CourseDetails', () => {
 
   it("disables evaluation button if course has ended but the participant didn't attend the course", () => {
     const course = buildEndedCourse()
-    registerMocks(course, [{ ...buildParticipant(), attended: false }])
-
     render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
           element={
             <MockedCourseDetails
-              data={{
-                course,
-                courseParticipants: [
-                  { ...buildParticipant(), attended: false },
-                ],
-              }}
+              courseParticipants={[{ ...buildParticipant(), attended: false }]}
+              course={course}
             />
           }
         />
@@ -284,25 +223,15 @@ describe('page: CourseDetails', () => {
     const PROFILE_ID = chance.guid()
     const course = buildCourse()
 
-    registerMocks(
-      course,
-      [{ ...buildParticipant(), attended: false }],
-      [{ profile_id: PROFILE_ID, isAdmin: true }]
-    )
-
     render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
           element={
             <MockedCourseDetails
-              data={{
-                course,
-                courseParticipants: [
-                  { ...buildParticipant(), attended: false },
-                ],
-                orgMembers: [{ profile_id: PROFILE_ID, isAdmin: true }],
-              }}
+              course={course}
+              courseParticipants={[{ ...buildParticipant(), attended: false }]}
+              orgMembers={[{ profile_id: PROFILE_ID, isAdmin: true }]}
             />
           }
         />

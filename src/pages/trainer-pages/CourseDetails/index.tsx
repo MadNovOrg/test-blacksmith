@@ -90,7 +90,6 @@ export const CourseDetails = () => {
     variables: { courseId: Number(course?.id) },
     pause: !course?.id,
   })
-
   const isCourseTypeClosed = course?.type === CourseType.CLOSED
   const isCourseTypeIndirectBlended =
     course?.type === CourseType.INDIRECT && course?.go1Integration
@@ -182,7 +181,6 @@ export const CourseDetails = () => {
       </Stack>
     )
   }
-
   return (
     <>
       <SnackbarMessage

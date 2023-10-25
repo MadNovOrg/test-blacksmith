@@ -19,6 +19,7 @@ import {
   useSearchParams,
 } from 'react-router-dom'
 import useSWR from 'swr'
+import { useQuery } from 'urql'
 import * as yup from 'yup'
 
 import { AttendeeMenu } from '@app/components/AttendeeMenu'
@@ -105,11 +106,14 @@ export const CourseEvaluation = () => {
     [string, GetAnswersParamsType] | null
   >(profileId ? [GET_ANSWERS_QUERY, { courseId, profileId }] : null)
 
-  const { data: usersData, isValidating: usersDataLoading } = useSWR<
+  const [{ data: usersData, fetching: usersDataLoading }] = useQuery<
     GetFeedbackUsersResponseType,
-    Error,
-    [string, GetFeedbackUsersParamsType] | null
-  >(profileId ? [GET_FEEDBACK_USERS_QUERY, { courseId }] : null)
+    GetFeedbackUsersParamsType
+  >({
+    query: GET_FEEDBACK_USERS_QUERY,
+    variables: { courseId },
+    pause: !profileId,
+  })
 
   const attendees = useMemo(() => {
     return uniqBy(

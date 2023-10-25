@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 export const GET_DIETARY_OR_DISABILITIES_DATA = gql`
   query GetCourseParticipantDietOrDisabilitiesData(

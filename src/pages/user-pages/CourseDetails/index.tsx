@@ -18,7 +18,6 @@ import {
 import React, { useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import useSWR from 'swr'
 import { useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
@@ -31,15 +30,20 @@ import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Status_Enum,
+  GetDietaryAndDisabilitiesCountQuery,
+  GetDietaryAndDisabilitiesCountQueryVariables,
   GetFeedbackUsersQuery,
   GetFeedbackUsersQueryVariables,
   Organization,
 } from '@app/generated/graphql'
 import { CourseAttendeesTab } from '@app/pages/trainer-pages/components/CourseAttendeesTab'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
+import { DietaryRequirementsTab } from '@app/pages/trainer-pages/CourseDetails/components/DietaryRequirementsTab'
+import { DisabilitiesTab } from '@app/pages/trainer-pages/CourseDetails/components/DisabilitiesTab'
 import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
 import { ModifyAttendanceModal } from '@app/pages/user-pages/CourseDetails/ModifyAttendanceModal'
 import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/queries/course-evaluation/get-feedback-users'
+import { GET_DIETARY_AND_DISABILITIES_COUNT } from '@app/queries/course-participant/get-participant-dietary-restrictions-by-course-id'
 import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
   ParamsType,
@@ -47,12 +51,7 @@ import {
   ResponseType as GetCourseResponseType,
 } from '@app/queries/user-queries/get-course-by-id'
 import { CourseParticipant, CourseType } from '@app/types'
-import {
-  courseEnded,
-  courseStarted,
-  getSWRLoadingStatus,
-  LoadingStatus,
-} from '@app/util'
+import { courseEnded, courseStarted } from '@app/util'
 
 const ChecklistItem = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.grey[100],
@@ -90,7 +89,10 @@ export const CourseDetails: React.FC<
   const [showCancellationRequestModal, setShowCancellationRequestModal] =
     useState(false)
 
-  const [{ data: courseData, error: courseError }, refetch] = useQuery<
+  const [
+    { data: courseData, error: courseError, fetching: courseLoadingStatus },
+    refetch,
+  ] = useQuery<
     {
       course: GetCourseResponseType['course'] & {
         organization?: Pick<Organization, 'members'>
@@ -109,8 +111,15 @@ export const CourseDetails: React.FC<
     },
     requestPolicy: 'network-only',
   })
+  const [{ data: dietaryAndDisabilitiesCount }] = useQuery<
+    GetDietaryAndDisabilitiesCountQuery,
+    GetDietaryAndDisabilitiesCountQueryVariables
+  >({
+    query: GET_DIETARY_AND_DISABILITIES_COUNT,
+    variables: { courseId: Number(courseId) },
+    pause: !courseId,
+  })
   const course = courseData?.course
-  const courseLoadingStatus = getSWRLoadingStatus(courseData, courseError)
 
   const linkedOrderItem = useMemo(() => course?.orders?.[0], [course])
   const isCourseTypeClosed = course?.type === CourseType.CLOSED
@@ -121,7 +130,6 @@ export const CourseDetails: React.FC<
       linkedOrderItem && (isCourseTypeClosed || isCourseTypeIndirectBlended),
     [linkedOrderItem, isCourseTypeClosed, isCourseTypeIndirectBlended]
   )
-
   const [activeTab, setActiveTab] = useState('')
   const [showModifyAttendanceModal, setShowModifyAttendanceModal] =
     useState(false)
@@ -131,9 +139,14 @@ export const CourseDetails: React.FC<
   }
 
   const profileId = profile?.id
-  const { data, mutate } = useSWR([GetParticipant, { profileId, courseId }])
+  const [{ data: participantData }, reexecuteQuery] = useQuery({
+    query: GetParticipant,
+    variables: { profileId, courseId },
+  })
   const courseParticipant: CourseParticipant | null =
-    data?.course_participant?.length > 0 ? data?.course_participant[0] : null
+    participantData?.course_participant?.length > 0
+      ? participantData?.course_participant[0]
+      : null
 
   const isBookingContact = Boolean(
     course && acl.isBookingContactOfCourse(course)
@@ -155,11 +168,13 @@ export const CourseDetails: React.FC<
     }
   }, [activeTab, course, isBookingContact, isOrgAdmin, isOrgKeyContact])
 
-  const { data: usersData, error } = useSWR<
+  const [{ data: usersData, error }] = useQuery<
     GetFeedbackUsersQuery,
-    Error,
-    [string, GetFeedbackUsersQueryVariables]
-  >([GET_FEEDBACK_USERS_QUERY, { courseId: parseInt(courseId || '') }])
+    GetFeedbackUsersQueryVariables
+  >({
+    query: GET_FEEDBACK_USERS_QUERY,
+    variables: { courseId: parseInt(courseId || '') },
+  })
   const loading = !usersData && !error
 
   const didAttendeeSubmitFeedback = useMemo(() => {
@@ -202,7 +217,7 @@ export const CourseDetails: React.FC<
       } else {
         const ref = setTimeout(() => {
           setPollCertificateCounter(counter => counter - 1)
-          return mutate()
+          return reexecuteQuery()
         }, 1000)
         return () => clearTimeout(ref)
       }
@@ -211,11 +226,11 @@ export const CourseDetails: React.FC<
     courseHasEnded,
     courseParticipant,
     didAttendeeSubmitFeedback,
-    mutate,
     pollCertificateCounter,
+    reexecuteQuery,
   ])
 
-  if (courseLoadingStatus === LoadingStatus.FETCHING) {
+  if (courseLoadingStatus) {
     return (
       <Stack
         alignItems="center"
@@ -332,7 +347,40 @@ export const CourseDetails: React.FC<
                             data-testid="attendees-tab"
                           />
                         ) : null}
-
+                        {dietaryAndDisabilitiesCount?.dietaryRestrictionsCount
+                          .aggregate?.count &&
+                        acl.canViewDietaryAndDisabiltitiesDetails(course) ? (
+                          <PillTab
+                            label={t(
+                              'pages.course-details.tabs.dietary-requirements.title-with-count',
+                              {
+                                count: Number(
+                                  dietaryAndDisabilitiesCount
+                                    ?.dietaryRestrictionsCount.aggregate?.count
+                                ),
+                              }
+                            )}
+                            value={CourseDetailsTabs.DIETARY_REQUIREMENTS}
+                            data-testid="dietary-requirements-tab"
+                          />
+                        ) : null}
+                        {dietaryAndDisabilitiesCount?.disabilitiesCount
+                          .aggregate?.count &&
+                        acl.canViewDietaryAndDisabiltitiesDetails(course) ? (
+                          <PillTab
+                            label={t(
+                              'pages.course-details.tabs.disabilities.title-with-count',
+                              {
+                                count: Number(
+                                  dietaryAndDisabilitiesCount?.disabilitiesCount
+                                    .aggregate?.count
+                                ),
+                              }
+                            )}
+                            value={CourseDetailsTabs.DISABILITIES}
+                            data-testid="disabilities-tab"
+                          />
+                        ) : null}
                         {!bookingOnly && showCourseOverview && (
                           <PillTab
                             label={t(
@@ -529,7 +577,15 @@ export const CourseDetails: React.FC<
                     <CourseAttendeesTab course={course} />
                   </TabPanel>
                 ) : null}
-
+                <TabPanel
+                  sx={{ px: 0 }}
+                  value={CourseDetailsTabs.DIETARY_REQUIREMENTS}
+                >
+                  <DietaryRequirementsTab courseId={course.id} />
+                </TabPanel>
+                <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.DISABILITIES}>
+                  <DisabilitiesTab courseId={course.id} />
+                </TabPanel>
                 {showCourseOverview ? (
                   <TabPanel
                     sx={{ px: 0 }}

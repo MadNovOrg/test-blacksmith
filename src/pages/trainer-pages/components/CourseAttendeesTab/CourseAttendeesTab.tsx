@@ -42,7 +42,6 @@ export const CourseAttendeesTab: React.FC<
   >(undefined)
 
   const { t } = useTranslation()
-
   const courseId = Number(id ?? 0)
 
   const {
