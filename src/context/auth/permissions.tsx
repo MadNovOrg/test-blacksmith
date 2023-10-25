@@ -2,7 +2,10 @@ import { anyPass } from 'lodash/fp'
 import { MarkOptional } from 'ts-essentials'
 
 import { getLevels } from '@app/components/CourseForm/helpers'
-import { Accreditors_Enum } from '@app/generated/graphql'
+import {
+  Accreditors_Enum,
+  Course_Status_Enum as CourseStatus,
+} from '@app/generated/graphql'
 import {
   courseCategoryUserAttends,
   hasGotPassForTrainerCourse,
@@ -177,9 +180,38 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return can
     },
 
-    canInviteAttendees: (courseType: CourseType) => {
+    canBookingContactCancelResendInvite: (
+      courseType: CourseType,
+      courseStatus: CourseStatus
+    ) => {
+      return [
+        courseType === CourseType.CLOSED,
+        acl.isBookingContact(),
+        [
+          CourseStatus.EvaluationMissing,
+          CourseStatus.ExceptionsApprovalPending,
+          CourseStatus.GradeMissing,
+          CourseStatus.Scheduled,
+          CourseStatus.TrainerDeclined,
+          CourseStatus.TrainerMissing,
+          CourseStatus.TrainerPending,
+        ].includes(courseStatus),
+      ].every(val => Boolean(val))
+    },
+
+    canInviteAttendees: (
+      courseType: CourseType,
+      courseStatus?: CourseStatus
+    ) => {
       switch (courseType) {
         case CourseType.OPEN:
+          return anyPass([
+            acl.isTTAdmin,
+            acl.isTTOps,
+            acl.isSalesAdmin,
+            acl.isSalesRepresentative,
+            acl.isOrgAdmin,
+          ])()
         case CourseType.CLOSED:
           return anyPass([
             acl.isTTAdmin,
@@ -187,6 +219,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
             acl.isSalesAdmin,
             acl.isSalesRepresentative,
             acl.isOrgAdmin,
+            () =>
+              courseStatus
+                ? acl.canBookingContactCancelResendInvite(
+                    courseType,
+                    courseStatus
+                  )
+                : false,
           ])()
         case CourseType.INDIRECT:
           return anyPass([

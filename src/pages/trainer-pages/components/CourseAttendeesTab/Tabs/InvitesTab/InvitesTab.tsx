@@ -141,7 +141,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
                     ) : null}
                     <TableCell sx={{ textAlign: 'right' }}>
                       {invite.status === InviteStatus.PENDING &&
-                        acl.canInviteAttendees(course.type) && (
+                        acl.canInviteAttendees(course.type, course.status) && (
                           <>
                             <Button
                               variant="text"
