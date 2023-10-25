@@ -407,6 +407,17 @@ export const CourseBookingReview: React.FC<
                     }/policies-procedures/privacy-policy/`}
                   />
                 ),
+                moreInfoLink: (
+                  <Link
+                    target="_blank"
+                    rel="noreferrer"
+                    sx={{ color: 'blue' }}
+                    aria-label={`${t('more-information')} (${t(
+                      'opens-new-window'
+                    )})`}
+                    href={`${import.meta.env.VITE_INFO_URL}`}
+                  />
+                ),
               }}
             />
           </Typography>

@@ -24,4 +24,5 @@ interface ImportMetaEnv {
   VITE_KNOWLEDGE_HUB_URL: string
   VITE_EVENTS_URL: string
   VITE_SUPPORT_URL: string
+  VITE_INFO_URL: string
 }
