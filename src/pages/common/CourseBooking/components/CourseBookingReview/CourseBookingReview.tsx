@@ -392,7 +392,7 @@ export const CourseBookingReview: React.FC<
                     )})`}
                     href={`${
                       import.meta.env.VITE_BASE_TEAMTEACH
-                    }/policies-procedures/business/`}
+                    }/policies-procedures/terms-of-business/`}
                   />
                 ),
                 privacyPolicyLink: (
