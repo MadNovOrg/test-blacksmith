@@ -299,6 +299,8 @@ select_permissions:
                           _eq: true
                       - profile_id:
                           _eq: X-Hasura-User-Id
+          - profile_id:
+              _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: tt-admin
     permission:

@@ -70,7 +70,9 @@ export const ViewProfilePage: React.FC<
     id ?? currentUserProfile?.id,
     undefined,
     orgId ?? undefined,
-    acl.canViewCourseHistory() || isMyProfile
+    acl.canViewCourseHistory() ||
+      acl.canViewCourseAsAttendeeHistory() ||
+      isMyProfile
   )
   const { activeRole } = useAuth()
 
@@ -414,7 +416,7 @@ export const ViewProfilePage: React.FC<
             ) : null}
             {(!isMobile ||
               selectedTab === TableMenuSelections.COURSE_ATTENDEE) &&
-            (acl.canViewCourseHistory() || isMyProfile) ? (
+            (acl.canViewCourseAsAttendeeHistory() || isMyProfile) ? (
               <>
                 <Typography variant="subtitle2" mb={1} mt={3}>
                   {t('course-as-attendee')}

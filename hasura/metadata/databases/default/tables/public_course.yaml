@@ -896,6 +896,9 @@ select_permissions:
           - course_course_participant_audits:
               profile_id:
                 _eq: X-Hasura-User-Id
+          - participants:
+              profile_id:
+                _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: tt-admin
     permission:
