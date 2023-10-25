@@ -185,6 +185,9 @@ export function useSaveCourse(): {
               name: courseName,
               deliveryType: courseData.deliveryType,
               accreditedBy: courseData.accreditedBy,
+              ...(courseData.type === CourseType.OPEN
+                ? { displayOnWebsite: courseData.displayOnWebsite }
+                : null),
               bildStrategies: isBild
                 ? {
                     data: Object.keys(courseData.bildStrategies).flatMap(s => {

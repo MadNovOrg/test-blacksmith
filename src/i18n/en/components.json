@@ -242,7 +242,9 @@
       "modal-title": "Reset parking instructions to default value",
       "modal-message": "You are going to reset the existing instructions to the default value. Do you want to proceed?"
     },
-    "save-button-text": "Save changes"
+    "save-button-text": "Save changes",
+    "display-toggle-label": "Display on Website",
+    "settings-section-title": "Settings"
   },
   "searchTrainers": {
     "loading": "Loading...",

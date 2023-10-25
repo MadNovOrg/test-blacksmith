@@ -325,6 +325,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 ? { arloReferenceId: courseData.arloReferenceId || '' }
                 : null),
               status,
+              ...(courseData.type === CourseType.OPEN
+                ? { displayOnWebsite: courseData.displayOnWebsite }
+                : null),
               exceptionsPending:
                 status === Course_Status_Enum.ExceptionsApprovalPending,
               name: getCourseName(),

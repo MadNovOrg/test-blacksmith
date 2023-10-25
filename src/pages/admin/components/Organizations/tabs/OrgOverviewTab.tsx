@@ -77,6 +77,7 @@ export const OrgOverviewTab: React.FC<
     useUpcomingCourses(profile?.id, {
       _and: [
         { type: { _eq: Course_Type_Enum.Open } },
+        { displayOnWebsite: { _eq: true } },
         {
           status: {
             _nin: [

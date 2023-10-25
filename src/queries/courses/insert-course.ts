@@ -20,6 +20,7 @@ export type ParamsType = {
     type: CourseType
     deliveryType: CourseDeliveryType
     accreditedBy: Accreditors_Enum
+    displayOnWebsite?: boolean
     bildStrategies?: { data: Array<{ strategyName: BildStrategies }> }
     level?: CourseLevel
     organization_id?: string

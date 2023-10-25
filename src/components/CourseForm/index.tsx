@@ -187,6 +187,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 .required(t('components.course-form.organisation-required')),
             }
           : null),
+        ...(courseType === CourseType.OPEN
+          ? {
+              displayOnWebsite: yup.bool().required().default(true),
+            }
+          : null),
         ...(isClosedCourse
           ? {
               bookingContact: yup.object({
@@ -391,6 +396,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const defaultValues = useMemo<Omit<CourseInput, 'id'>>(
     () => ({
       accreditedBy: courseInput?.accreditedBy ?? Accreditors_Enum.Icm,
+      displayOnWebsite: courseInput?.displayOnWebsite ?? true,
       organization: courseInput?.organization ?? null,
       salesRepresentative: courseInput?.salesRepresentative ?? null,
       bookingContact: courseInput?.bookingContact ?? {
@@ -1311,66 +1317,99 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
           <Divider sx={{ my: 2 }} />
 
-          <Controller
-            name="blendedLearning"
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                sx={{ mr: theme.spacing(5) }}
-                disabled={!canBlended || disabledFields.has('blendedLearning')}
-                control={
-                  <Switch
-                    {...field}
-                    checked={values.blendedLearning}
-                    data-testid="blendedLearning-switch"
+          <Grid gap={2} container>
+            <Grid item>
+              <Controller
+                name="blendedLearning"
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    disabled={
+                      !canBlended || disabledFields.has('blendedLearning')
+                    }
+                    control={
+                      <Switch
+                        {...field}
+                        checked={values.blendedLearning}
+                        data-testid="blendedLearning-switch"
+                      />
+                    }
+                    label={t('components.course-form.blended-learning-label')}
                   />
-                }
-                label={t('components.course-form.blended-learning-label')}
+                )}
               />
-            )}
-          />
+            </Grid>
 
-          <Controller
-            name="reaccreditation"
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                disabled={!canReacc || disabledFields.has('reaccreditation')}
-                control={
-                  <Switch
-                    {...field}
-                    checked={values.reaccreditation}
-                    data-testid="reaccreditation-switch"
+            <Grid item>
+              <Controller
+                name="reaccreditation"
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    disabled={
+                      !canReacc || disabledFields.has('reaccreditation')
+                    }
+                    control={
+                      <Switch
+                        {...field}
+                        checked={values.reaccreditation}
+                        data-testid="reaccreditation-switch"
+                      />
+                    }
+                    label={t('components.course-form.reaccreditation-label')}
                   />
-                }
-                label={t('components.course-form.reaccreditation-label')}
+                )}
               />
-            )}
-          />
+            </Grid>
 
-          {isBild &&
-          [CourseType.CLOSED, CourseType.OPEN].includes(courseType) &&
-          values.courseLevel !== CourseLevel.BildRegular ? (
-            <Controller
-              name="conversion"
-              control={control}
-              render={({ field }) => (
-                <FormControlLabel
-                  disabled={
-                    !conversionEnabled || disabledFields.has('conversion')
-                  }
-                  control={
-                    <Switch
-                      {...field}
-                      checked={values.conversion}
-                      data-testid="conversion-switch"
+            {isBild &&
+            [CourseType.CLOSED, CourseType.OPEN].includes(courseType) &&
+            values.courseLevel !== CourseLevel.BildRegular ? (
+              <Grid item>
+                <Controller
+                  name="conversion"
+                  control={control}
+                  render={({ field }) => (
+                    <FormControlLabel
+                      disabled={
+                        !conversionEnabled || disabledFields.has('conversion')
+                      }
+                      control={
+                        <Switch
+                          {...field}
+                          checked={values.conversion}
+                          data-testid="conversion-switch"
+                        />
+                      }
+                      label={t('components.course-form.conversion-label')}
                     />
-                  }
-                  label={t('components.course-form.conversion-label')}
+                  )}
                 />
-              )}
-            />
-          ) : null}
+              </Grid>
+            ) : null}
+
+            {courseType === CourseType.OPEN ? (
+              <Grid item>
+                <Controller
+                  name="displayOnWebsite"
+                  control={control}
+                  render={({ field }) => (
+                    <FormControlLabel
+                      disabled={disabledFields.has('displayOnWebsite')}
+                      control={
+                        <Switch
+                          {...field}
+                          checked={values.displayOnWebsite}
+                          data-testid="displayOnWebsite-switch"
+                        />
+                      }
+                      label={t('components.course-form.display-toggle-label')}
+                    />
+                  )}
+                />
+              </Grid>
+            ) : null}
+          </Grid>
 
           {isBlended && courseType === CourseType.INDIRECT ? (
             <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>

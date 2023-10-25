@@ -82,6 +82,7 @@ export type Course = {
   special_instructions?: string
   parking_instructions?: string
   accreditedBy: Accreditors_Enum
+  displayOnWebsite?: boolean
   price?: number
   bildStrategies: Array<{
     strategyName: string
@@ -626,6 +627,7 @@ export type CourseInput = {
   accreditedBy: Accreditors_Enum | null
   conversion: boolean
   price: number | null
+  displayOnWebsite?: boolean
   //TODO: Delete this after Arlo migration
   arloReferenceId?: string
 }

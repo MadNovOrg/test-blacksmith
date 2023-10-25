@@ -27,6 +27,7 @@ export type ParamsType = {
     freeSpaces?: number
     special_instructions?: string
     parking_instructions?: string
+    displayOnWebsite?: boolean
     // TODO: Delete this after arlo migration
     arloReferenceId?: string
   }

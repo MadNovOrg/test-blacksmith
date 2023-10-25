@@ -354,6 +354,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     accreditedBy: course.accreditedBy,
     conversion: course.conversion,
     price: course.price ?? null,
+    displayOnWebsite: course.displayOnWebsite,
   }
 }
 

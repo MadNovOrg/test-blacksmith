@@ -30,6 +30,7 @@ export const QUERY = gql`
       isDraft
       # TODO: Delete this after Arlo migration
       arloReferenceId @include(if: $withArloRefId)
+      displayOnWebsite
       bildModules {
         id
         modules

@@ -78,6 +78,7 @@ export const AvailableCourses: React.FC<
   const filters = useMemo(() => {
     const conditions: Course_Bool_Exp[] = [
       { type: { _eq: Course_Type_Enum.Open } },
+      { displayOnWebsite: { _eq: true } },
       {
         status: {
           _nin: [

@@ -1,6 +1,7 @@
 import { gql, useQuery } from 'urql'
 
 import {
+  Grade_Enum,
   Order_By,
   OrgMembersQuery,
   OrgMembersQueryVariables,
@@ -40,7 +41,7 @@ export const MEMBERS_QUERY = gql`
             _and: [
               { status: { _neq: "EXPIRED" }, isRevoked: { _eq: false } }
               {
-                _or: [{ grade: { _is_null: true } }, { grade: { _neq: FAIL } }]
+                _or: [{ grade: { _is_null: true } }, { grade: { _neq: "${Grade_Enum.Fail}" } }]
               }
             ]
           }
