@@ -84,7 +84,6 @@ describe('page: BILDGrading', () => {
         if (
           variables.courseId === COURSE_ID &&
           variables.participantIds.includes(participant.id) &&
-          variables.feedback === 'Feedback' &&
           variables.grade === Grade_Enum.Pass &&
           query === SAVE_BILD_GRADE_MUTATION
         ) {
@@ -127,11 +126,6 @@ describe('page: BILDGrading', () => {
     expect(submitButton).toBeDisabled()
 
     await selectGradingOption('Pass')
-
-    await userEvent.type(
-      screen.getByPlaceholderText('Please include any additional notes'),
-      'Feedback'
-    )
 
     await userEvent.click(submitButton)
 
@@ -197,11 +191,6 @@ describe('page: BILDGrading', () => {
     expect(submitButton).toBeDisabled()
 
     await selectGradingOption('Pass')
-
-    await userEvent.type(
-      screen.getByPlaceholderText('Please include any additional notes'),
-      'Feedback'
-    )
 
     await userEvent.click(submitButton)
 

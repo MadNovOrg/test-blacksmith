@@ -1,14 +1,7 @@
 import { LoadingButton } from '@mui/lab'
 import { Box, Typography, Button, useTheme, useMediaQuery } from '@mui/material'
 import { t } from 'i18next'
-import React, {
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
@@ -19,14 +12,12 @@ import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Grade_Enum,
+  SaveCourseGradingMutation,
+  SaveCourseGradingMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
-import {
-  MUTATION,
-  ParamsType,
-  ResponseType,
-} from '@app/queries/grading/save-course-grading'
+import { MUTATION } from '@app/queries/grading/save-course-grading'
 import { LoadingStatus } from '@app/util'
 
 import {
@@ -36,7 +27,6 @@ import {
 import { useGradingParticipants } from '../../hooks'
 import useCourseGradingData from '../../useCourseGradingData'
 import { GradingCount } from '../GradingCount'
-import { GradingFeedbackInput } from '../GradingFeedbackInput'
 import { GradingTitle } from '../GradingTitle'
 import { ParticipantsList } from '../ParticipantsList'
 
@@ -54,7 +44,6 @@ export const ICMGrading: FC<Props> = ({ course }) => {
     LoadingStatus.IDLE
   )
   const [grade, setGrade] = useState<Grade_Enum | undefined>()
-  const feedbackRef = useRef('')
 
   const modulesSelectionRef = useRef<Record<string, boolean> | null>(null)
 
@@ -63,10 +52,6 @@ export const ICMGrading: FC<Props> = ({ course }) => {
   const STORAGE_KEY = `grading-modules-selection-${course?.id}`
 
   const filteredCourseParticipants = useGradingParticipants(course.participants)
-
-  const handleFeedbackChange = useCallback((feedback: string) => {
-    feedbackRef.current = feedback
-  }, [])
 
   const moduleGroups = useMemo(() => {
     if (!course?.modules) {
@@ -152,11 +137,13 @@ export const ICMGrading: FC<Props> = ({ course }) => {
         }
       })
 
-      await fetcher<ResponseType, ParamsType>(MUTATION, {
+      await fetcher<
+        SaveCourseGradingMutation,
+        SaveCourseGradingMutationVariables
+      >(MUTATION, {
         modules,
         participantIds: attendedParticipants,
         grade,
-        feedback: feedbackRef.current,
         courseId: course.id,
       })
 
@@ -243,13 +230,7 @@ export const ICMGrading: FC<Props> = ({ course }) => {
               onChange={handleModuleSelectionChange}
             />
 
-            <Typography variant="h6" fontWeight="500" mb={1} mt={4}>
-              {t('pages.course-grading.feedback-field-title')}
-            </Typography>
-
-            <GradingFeedbackInput onChange={handleFeedbackChange} />
-
-            <Box display="flex" justifyContent="right">
+            <Box display="flex" justifyContent="right" mt={5}>
               <LoadingButton
                 variant="contained"
                 onClick={openConfirmationModal}

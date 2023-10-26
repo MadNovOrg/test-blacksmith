@@ -28,7 +28,6 @@ import { Strategy } from '@app/types'
 import { useGradingParticipants } from '../../hooks'
 import useCourseGradingData from '../../useCourseGradingData'
 import { GradingCount } from '../GradingCount'
-import { GradingFeedbackInput } from '../GradingFeedbackInput'
 import { GradingTitle } from '../GradingTitle'
 import { ParticipantsList } from '../ParticipantsList'
 
@@ -49,7 +48,6 @@ export const BILDGrading: FC<Props> = ({ course }) => {
   const [modalOpened, setModalOpened] = useState(false)
   const navigate = useNavigate()
 
-  const feedbackRef = useRef('')
   const strategyModulesRef = useRef<Record<string, Strategy>>()
 
   const bildStrategyModules = course.bildModules.length
@@ -74,7 +72,6 @@ export const BILDGrading: FC<Props> = ({ course }) => {
           participant_id: participant.id,
           modules: strategyModulesRef.current,
         })),
-        feedback: feedbackRef.current,
         courseId: course.id,
       })
     }
@@ -139,15 +136,7 @@ export const BILDGrading: FC<Props> = ({ course }) => {
             courseType={course.type}
           />
 
-          <Typography variant="h6" fontWeight="500" mb={1} mt={4}>
-            {t('pages.course-grading.feedback-field-title')}
-          </Typography>
-
-          <GradingFeedbackInput
-            onChange={feedback => (feedbackRef.current = feedback)}
-          />
-
-          <Box display="flex" justifyContent="right">
+          <Box display="flex" justifyContent="right" mt={5}>
             <LoadingButton
               variant="contained"
               onClick={() => setModalOpened(true)}

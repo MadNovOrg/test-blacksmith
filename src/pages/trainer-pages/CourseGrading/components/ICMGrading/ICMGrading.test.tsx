@@ -322,11 +322,6 @@ describe('page: CourseGrading', () => {
       { initialEntries: [`/${COURSE_ID}/grading`] }
     )
 
-    await userEvent.type(
-      screen.getByPlaceholderText('Please include any additional notes'),
-      'Feedback'
-    )
-
     await userEvent.click(screen.getByLabelText(courseModules[0].module.name))
 
     await selectGradingOption('Non-Physical Pass')
@@ -350,7 +345,6 @@ describe('page: CourseGrading', () => {
       ],
       participantIds: [courseParticipants[1].id],
       grade: Grade.OBSERVE_ONLY,
-      feedback: 'Feedback',
       courseId: course.id,
     })
 
