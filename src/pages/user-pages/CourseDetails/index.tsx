@@ -154,7 +154,9 @@ export const CourseDetails: React.FC<
   const isOrgKeyContact = Boolean(
     course && acl.isOrganizationKeyContactOfCourse(course)
   )
-  const isOrgAdmin = Boolean(course && acl.isOrgAdmin(course.organization?.id))
+  const isOrgAdmin = Boolean(
+    course && course.organization?.id && acl.isOrgAdmin(course.organization?.id)
+  )
 
   const isParticipant = !!courseParticipant
 
