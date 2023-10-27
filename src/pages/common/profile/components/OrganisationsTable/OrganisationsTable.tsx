@@ -17,12 +17,7 @@ export const OrganisationsTable: FC<
   PropsWithChildren<OrganisationsTableProps>
 > = ({ profile }) => {
   const { t } = useTranslation()
-  const tableHeadCells = [
-    t('organization'),
-    t('group'),
-    t('position'),
-    t('permissions'),
-  ]
+  const tableHeadCells = [t('organization'), t('permissions')]
   return (
     <Table data-testid="organisations-table">
       <TableHead>
@@ -55,7 +50,6 @@ export const OrganisationsTable: FC<
               }}
             >
               <TableCell>{orgMember.organization?.name}</TableCell>
-              <TableCell>{orgMember.position}</TableCell>
               <TableCell>
                 <Chip
                   label={

@@ -24,7 +24,7 @@ describe(OrganisationsTable.name, () => {
   it('should render the component', () => {
     expect(screen.getByTestId('organisations-table')).toBeInTheDocument()
   })
-  it.each([t('organization'), t('group'), t('position'), t('permissions')])(
+  it.each([t('organization'), t('permissions')])(
     'it should render cell: %s',
     cell => {
       expect(screen.getByText(cell)).toBeInTheDocument()

@@ -1,17 +1,14 @@
 import {
   Alert,
-  Autocomplete,
   Box,
   Button,
   Container,
   FormControlLabel,
   Grid,
   Switch,
-  TextField,
   Typography,
 } from '@mui/material'
-import { uniq } from 'lodash-es'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
@@ -23,7 +20,6 @@ import {
   UpdateOrgMemberMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { positions } from '@app/pages/common/CourseBooking/components/org-data'
 import { MUTATION as RemoveOrgMemberQuery } from '@app/queries/organization/remove-org-member'
 import { MUTATION as UpdateOrgMemberQuery } from '@app/queries/organization/update-org-member'
 import theme from '@app/theme'
@@ -42,9 +38,6 @@ export const EditOrgUserModal: React.FC<
   const fetcher = useFetcher()
   const [error, setError] = useState<string>()
   const [isAdmin, setIsAdmin] = useState(orgMember.isAdmin)
-  const [position, setPosition] = useState<string | null>(
-    orgMember.position ?? null
-  )
 
   const onRemove = useCallback(async () => {
     try {
@@ -67,7 +60,7 @@ export const EditOrgUserModal: React.FC<
         UpdateOrgMemberQuery,
         {
           id: orgMember.id,
-          member: { isAdmin: !!isAdmin, position },
+          member: { isAdmin: !!isAdmin },
         }
       )
       if (onChange) onChange()
@@ -75,35 +68,10 @@ export const EditOrgUserModal: React.FC<
     } catch (e: unknown) {
       setError((e as Error).message)
     }
-  }, [fetcher, isAdmin, onChange, onClose, orgMember, position])
-
-  const allPositions = useMemo(() => {
-    return uniq([
-      ...positions.edu,
-      ...positions.hsc_child,
-      ...positions.hsc_adult,
-      ...positions.other,
-    ])
-  }, [])
+  }, [fetcher, isAdmin, onChange, onClose, orgMember])
 
   return (
     <Container>
-      <Autocomplete
-        value={position}
-        options={allPositions}
-        onChange={(_, value) => setPosition(value)}
-        renderInput={params => (
-          <TextField
-            {...params}
-            fullWidth
-            variant="filled"
-            label={t('common.position')}
-            inputProps={{ ...params.inputProps, sx: { height: 40 } }}
-            sx={{ bgcolor: 'grey.100', my: 2 }}
-          />
-        )}
-      />
-
       {acl.canSetOrgAdminRole() ? (
         <FormControlLabel
           sx={{ py: 2 }}

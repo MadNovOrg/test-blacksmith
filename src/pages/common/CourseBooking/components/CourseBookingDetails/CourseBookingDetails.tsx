@@ -10,7 +10,6 @@ import {
   FormHelperText,
   Grid,
   InputLabel,
-  MenuItem,
   NativeSelect,
   Radio,
   RadioGroup,
@@ -241,8 +240,6 @@ export const CourseBookingDetails: React.FC<
     availableSeats,
     booking,
     amounts,
-    positions,
-    sectors,
     addPromo,
     removePromo,
     setBooking,
@@ -311,14 +308,6 @@ export const CourseBookingDetails: React.FC<
         .typeError(requiredMsg(t, 'org-name')),
 
       orgName: yup.string(),
-
-      sector: yup.string().required(requiredMsg(t, 'sector')),
-      position: yup.string().required(requiredMsg(t, 'position')),
-      otherPosition: yup.string().when('position', ([position], schema) => {
-        return position === 'other'
-          ? schema.required(t('validation-errors.other-position-required'))
-          : schema
-      }),
 
       source: yup.string().when('isInternalUserBooking', {
         is: true,
@@ -418,8 +407,6 @@ export const CourseBookingDetails: React.FC<
       setBooking({ quantity: values.quantity })
     }
   }, [booking, setBooking, values.quantity])
-
-  const positionOptions = values.sector ? positions[values.sector] : []
 
   const showAttendeeValidCertificate = isAttendeeValidCertificateMandatory(
     course.level,
@@ -674,77 +661,6 @@ export const CourseBookingDetails: React.FC<
               sx={{ marginBottom: 2 }}
               error={errors.orgId?.message}
             />
-          </Box>
-
-          <Box mb={3}>
-            <TextField
-              select
-              value={values.sector}
-              {...register('sector')}
-              variant="filled"
-              fullWidth
-              label={t('sector')}
-              error={!!errors.sector}
-            >
-              <MenuItem value="" disabled>
-                {t('sector')}
-              </MenuItem>
-              {Object.entries(sectors).map(([value, label]) => (
-                <MenuItem
-                  key={value}
-                  value={value}
-                  data-testid={`sector-${value}`}
-                >
-                  {label}
-                </MenuItem>
-              ))}
-            </TextField>
-            {errors.sector ? (
-              <FormHelperText error>{errors.sector?.message}</FormHelperText>
-            ) : null}
-          </Box>
-
-          <Box mb={3}>
-            <TextField
-              select
-              value={values.position}
-              {...register('position')}
-              variant="filled"
-              fullWidth
-              label={t('position')}
-              error={!!errors.position}
-            >
-              <MenuItem value="" disabled>
-                {positionOptions.length ? t('position') : t('select-sector')}
-              </MenuItem>
-              {positionOptions.map(option => (
-                <MenuItem key={option} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
-              {positionOptions.length ? (
-                <MenuItem value="other">{t('other')}</MenuItem>
-              ) : null}
-            </TextField>
-            {errors.position ? (
-              <FormHelperText error>{errors.position?.message}</FormHelperText>
-            ) : null}
-
-            <Box mt={1}>
-              {values.position === 'other' ? (
-                <TextField
-                  id="other-position"
-                  variant="filled"
-                  label={t('position-name')}
-                  placeholder={t('position-placeholder')}
-                  error={!!errors.otherPosition}
-                  helperText={errors.otherPosition?.message || ''}
-                  {...register('otherPosition')}
-                  fullWidth
-                  inputProps={{ 'data-testid': 'other-position-input' }}
-                />
-              ) : null}
-            </Box>
           </Box>
         </Box>
 
