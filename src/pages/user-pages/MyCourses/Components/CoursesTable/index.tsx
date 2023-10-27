@@ -10,13 +10,19 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AttendeeCourseStatus } from '@app/components/AttendeeCourseStatus/AttendeeCourseStatus'
+import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { ParticipantsCount } from '@app/components/ParticipantsCount'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
-import { Course_Status_Enum, UserCoursesQuery } from '@app/generated/graphql'
+import { useAuth } from '@app/context/auth'
+import {
+  Course_Status_Enum as CourseStatuses,
+  UserCoursesQuery,
+} from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { Cols } from '@app/pages/trainer-pages/MyCourses/components/CoursesTable'
+import { AdminOnlyCourseStatus } from '@app/types'
 
 export type CoursesTableProps = {
   additionalColumns?: Set<Extract<Cols, 'type' | 'registrants'>>
@@ -25,6 +31,7 @@ export type CoursesTableProps = {
   paginationComponent?: React.ReactNode
   loading?: boolean
   filtered?: boolean
+  isManaging?: boolean
 }
 
 export const CoursesTable: React.FC<
@@ -36,8 +43,10 @@ export const CoursesTable: React.FC<
   filtered,
   paginationComponent,
   additionalColumns,
+  isManaging = false,
 }) => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
 
   const cols = useMemo(
     () => [
@@ -122,7 +131,7 @@ export const CoursesTable: React.FC<
                 data-index={index}
               >
                 <TableCell>
-                  {c.status !== Course_Status_Enum.Cancelled ? (
+                  {c.status !== CourseStatuses.Cancelled ? (
                     <Link href={`${c.id}/details`}>{nameCell}</Link>
                   ) : (
                     nameCell
@@ -216,7 +225,17 @@ export const CoursesTable: React.FC<
                   </TableCell>
                 ) : null}
                 <TableCell>
-                  <AttendeeCourseStatus course={c} />
+                  {isManaging && !acl.isUser() ? (
+                    <CourseStatusChip
+                      status={
+                        c.cancellationRequest
+                          ? AdminOnlyCourseStatus.CancellationRequested
+                          : (c.status as CourseStatuses)
+                      }
+                    />
+                  ) : (
+                    <AttendeeCourseStatus course={c} />
+                  )}
                 </TableCell>
               </TableRow>
             )

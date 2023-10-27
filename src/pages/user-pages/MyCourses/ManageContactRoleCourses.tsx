@@ -91,6 +91,7 @@ export const ManageContactRoleCourses: React.FC<
           loading={loading}
           filtered={filtered}
           paginationComponent={total ? <Pagination total={total} /> : null}
+          isManaging
         />
       </Box>
     </Container>

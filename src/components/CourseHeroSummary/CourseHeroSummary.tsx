@@ -162,7 +162,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             ) : null}
             {course.status ? (
               <Box mt={2}>
-                {!acl.isUser() ? (
+                {!acl.isUser() || (acl.isUser() && acl.isOrgAdmin()) ? (
                   <CourseStatusChip
                     status={
                       course.cancellationRequest
