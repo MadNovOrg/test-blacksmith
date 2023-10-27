@@ -241,9 +241,9 @@ export const OrgUsersTable: React.FC<
                       size="small"
                     />
                   </TableCell>
-                  {member &&
-                  acl.canEditOrgUser([orgId]) &&
-                  (acl.canSetOrgAdminRole() || !member.isAdmin) ? (
+                  {(member && member.isAdmin) ||
+                  (acl.canEditOrgUser([orgId]) &&
+                    (acl.canSetOrgAdminRole() || !member.isAdmin)) ? (
                     <TableCell>
                       <Button
                         data-testid="edit-user-button"

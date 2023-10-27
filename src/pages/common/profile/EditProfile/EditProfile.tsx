@@ -516,9 +516,9 @@ export const EditProfilePage: React.FC<
           isAdmin: isAdmin,
         },
       })
-      await refreshData()
+      await mutate()
     },
-    [refreshData, updateOrgMember]
+    [mutate, updateOrgMember]
   )
 
   const deleteOrgMember = useCallback(
@@ -953,13 +953,8 @@ export const EditProfilePage: React.FC<
                   <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
                     {profile.organizations.map(orgMember => {
                       const isAdminEditable =
-                        acl.isTTAdmin() ||
-                        profile.organizations.some(userOrgMember => {
-                          return (
-                            userOrgMember.isAdmin &&
-                            userOrgMember.organization.id === orgMember.id
-                          )
-                        })
+                        acl.isTTAdmin() || orgMember.isAdmin
+
                       const editable = !id || isAdminEditable
                       return (
                         <Box key={orgMember.id}>
