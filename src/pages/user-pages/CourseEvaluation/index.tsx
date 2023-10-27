@@ -133,9 +133,13 @@ export const CourseEvaluation = () => {
     )
   }, [usersData, profile])
 
+  const didAttendeeSubmitFeedback = useMemo(() => {
+    return !!usersData?.users.find(u => u.profile.id === profileId)
+  }, [usersData, profileId])
+
   const questions = useMemo(() => {
     if (questionsData?.questions.length) {
-      if (activeRole === RoleName.USER) {
+      if (activeRole === RoleName.USER || didAttendeeSubmitFeedback) {
         return questionsData.questions.filter(
           q =>
             ![
@@ -148,7 +152,7 @@ export const CourseEvaluation = () => {
 
       return questionsData.questions
     }
-  }, [questionsData, activeRole])
+  }, [questionsData, activeRole, didAttendeeSubmitFeedback])
 
   const { UNGROUPED: ungroupedQuestions, ...groupedQuestions } = groupBy(
     questions,
@@ -227,10 +231,6 @@ export const CourseEvaluation = () => {
   )
 
   const courseHasStarted = course && courseStarted(course)
-
-  const didAttendeeSubmitFeedback = useMemo(() => {
-    return !!usersData?.users.find(u => u.profile.id === profileId)
-  }, [usersData, profileId])
 
   const courseParticipant: CourseParticipant | null =
     participantData?.course_participant?.length > 0
