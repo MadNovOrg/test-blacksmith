@@ -30,6 +30,7 @@ import {
   GetDietaryAndDisabilitiesCountQueryVariables,
 } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
+import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import usePollQuery from '@app/hooks/usePollQuery'
 import { CourseAttendeesTab } from '@app/pages/trainer-pages/components/CourseAttendeesTab'
 import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
@@ -82,14 +83,21 @@ export const CourseDetails = () => {
     error: courseError,
     mutate,
   } = useCourse(courseId ?? '')
-  const [{ data: dietaryAndDisabilitiesCount }] = useQuery<
-    GetDietaryAndDisabilitiesCountQuery,
-    GetDietaryAndDisabilitiesCountQueryVariables
-  >({
-    query: GET_DIETARY_AND_DISABILITIES_COUNT,
-    variables: { courseId: Number(course?.id) },
-    pause: !course?.id,
-  })
+  const { total: courseParticipantsTotal } = useCourseParticipants(
+    Number(courseId),
+    { alwaysShowArchived: true }
+  )
+
+  const [{ data: dietaryAndDisabilitiesCount }, reexecuteDietaryQuery] =
+    useQuery<
+      GetDietaryAndDisabilitiesCountQuery,
+      GetDietaryAndDisabilitiesCountQueryVariables
+    >({
+      query: GET_DIETARY_AND_DISABILITIES_COUNT,
+      variables: { courseId: Number(courseId) },
+      requestPolicy: 'cache-and-network',
+      pause: !courseId,
+    })
   const isCourseTypeClosed = course?.type === CourseType.CLOSED
   const isCourseTypeIndirectBlended =
     course?.type === CourseType.INDIRECT && course?.go1Integration
@@ -169,6 +177,10 @@ export const CourseDetails = () => {
     course,
     course?.trainers ?? []
   )
+
+  useEffect(() => {
+    reexecuteDietaryQuery()
+  }, [courseParticipantsTotal, reexecuteDietaryQuery])
 
   if (courseLoadingStatus === LoadingStatus.FETCHING) {
     return (

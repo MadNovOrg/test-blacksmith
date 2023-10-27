@@ -36,6 +36,7 @@ import {
   GetFeedbackUsersQueryVariables,
   Organization,
 } from '@app/generated/graphql'
+import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { CourseAttendeesTab } from '@app/pages/trainer-pages/components/CourseAttendeesTab'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import { DietaryRequirementsTab } from '@app/pages/trainer-pages/CourseDetails/components/DietaryRequirementsTab'
@@ -88,7 +89,6 @@ export const CourseDetails: React.FC<
   const [pollCertificateCounter, setPollCertificateCounter] = useState(10)
   const [showCancellationRequestModal, setShowCancellationRequestModal] =
     useState(false)
-
   const [
     { data: courseData, error: courseError, fetching: courseLoadingStatus },
     refetch,
@@ -111,14 +111,20 @@ export const CourseDetails: React.FC<
     },
     requestPolicy: 'network-only',
   })
-  const [{ data: dietaryAndDisabilitiesCount }] = useQuery<
-    GetDietaryAndDisabilitiesCountQuery,
-    GetDietaryAndDisabilitiesCountQueryVariables
-  >({
-    query: GET_DIETARY_AND_DISABILITIES_COUNT,
-    variables: { courseId: Number(courseId) },
-    pause: !courseId,
-  })
+  const { total: courseParticipantsTotal } = useCourseParticipants(
+    Number(courseId),
+    { alwaysShowArchived: true }
+  )
+  const [{ data: dietaryAndDisabilitiesCount }, reexecuteDietaryQuery] =
+    useQuery<
+      GetDietaryAndDisabilitiesCountQuery,
+      GetDietaryAndDisabilitiesCountQueryVariables
+    >({
+      query: GET_DIETARY_AND_DISABILITIES_COUNT,
+      variables: { courseId: Number(courseId) },
+      requestPolicy: 'cache-and-network',
+      pause: !courseId,
+    })
   const course = courseData?.course
 
   const linkedOrderItem = useMemo(() => course?.orders?.[0], [course])
@@ -169,6 +175,10 @@ export const CourseDetails: React.FC<
       )
     }
   }, [activeTab, course, isBookingContact, isOrgAdmin, isOrgKeyContact])
+
+  useEffect(() => {
+    reexecuteDietaryQuery()
+  }, [courseParticipantsTotal, reexecuteDietaryQuery])
 
   const [{ data: usersData, error }] = useQuery<
     GetFeedbackUsersQuery,
