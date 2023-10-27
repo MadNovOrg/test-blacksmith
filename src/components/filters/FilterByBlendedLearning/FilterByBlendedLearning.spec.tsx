@@ -9,7 +9,7 @@ describe(FilterByBlendedLearning.name, () => {
     const onChange = vi.fn()
     render(<FilterByBlendedLearning onChange={onChange} selected />)
 
-    await userEvent.click(screen.getByLabelText('Blended learning'))
+    await userEvent.click(screen.getByLabelText('Blended Learning'))
 
     expect(onChange).toHaveBeenCalled()
   })

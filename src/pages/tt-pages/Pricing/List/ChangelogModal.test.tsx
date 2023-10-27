@@ -92,7 +92,7 @@ describe('component: ChangelogModal', () => {
       expect(screen.getByText('Level One')).toBeInTheDocument()
       expect(screen.getByText('Open')).toBeInTheDocument()
       expect(
-        screen.getByText('Reaccreditation, Blended learning')
+        screen.getByText('Reaccreditation, Blended Learning')
       ).toBeInTheDocument()
 
       const tableRows = screen.getAllByRole('row')

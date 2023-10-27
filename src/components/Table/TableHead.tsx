@@ -52,6 +52,7 @@ export const TableHead: React.FC<React.PropsWithChildren<TableHeadProps>> = ({
           },
           '&& .MuiTableCell-root': {
             color: theme.palette.secondaryGrey.main,
+            fontWeight: 'bold',
           },
         }),
       }}

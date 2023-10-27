@@ -46,6 +46,7 @@ export const OrgSummaryList: React.FC<
                 px: 2,
                 py: 1,
                 color: theme.palette.secondaryGrey.main,
+                fontWeight: 'bold',
               },
             }}
           >
