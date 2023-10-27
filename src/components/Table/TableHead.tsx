@@ -88,7 +88,7 @@ export const TableHead: React.FC<React.PropsWithChildren<TableHeadProps>> = ({
                   ) : null}
                 </TableSortLabel>
               ) : (
-                col.label ?? ''
+                <span style={{ fontWeight: 'bold' }}>{col.label ?? ''}</span>
               )}
             </TableCell>
           )

@@ -238,7 +238,7 @@
       }
     },
     "parking-instructions": {
-      "title": "Parking Instructions",
+      "title": "Parking instructions",
       "modal-title": "Reset parking instructions to default value",
       "modal-message": "You are going to reset the existing instructions to the default value. Do you want to proceed?"
     },
