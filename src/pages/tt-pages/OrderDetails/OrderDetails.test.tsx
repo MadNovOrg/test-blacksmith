@@ -314,6 +314,59 @@ describe('page: OrderDetails', () => {
     ).toBeInTheDocument()
   })
 
+  it('renders address information for each registrant', () => {
+    const order = buildOrder({
+      overrides: {
+        registrants: [
+          {
+            addressLine1: 'Times Square',
+            addressLine2: 'Apt 4B',
+            city: 'London',
+            postCode: 'E1 8GD',
+            country: 'England',
+          },
+        ],
+      },
+    })
+    const invoice = buildInvoice()
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_ORDER_QUERY) {
+          return fromValue<
+            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
+          >({
+            data: {
+              order: {
+                ...order,
+                invoice,
+              },
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
+    )
+
+    const registrantRows = screen.getAllByTestId('registrants-details')
+    expect(registrantRows).toHaveLength(order.registrants.length)
+
+    registrantRows.forEach((row, index) => {
+      const registrant = order.registrants[index]
+      const { addressLine1, addressLine2, city, postCode, country } = registrant
+      const expectedAddressText = `Address: ${addressLine1}, ${
+        addressLine2 ? addressLine2 + ', ' : ''
+      }${city}, ${postCode}, ${country}`
+
+      expect(within(row).getByText(expectedAddressText)).toBeInTheDocument()
+    })
+  })
+
   it('renders prices and taxes', () => {
     const subtotal = 100
     const vat = 25

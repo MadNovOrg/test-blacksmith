@@ -20,6 +20,7 @@ import { useAuth } from '@app/context/auth'
 import {
   Course_Type_Enum,
   CourseLevel,
+  CreateOrderParticipantInput,
   Payment_Methods_Enum,
   Xero_Invoice_Status_Enum,
   XeroLineItem,
@@ -281,7 +282,29 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                       </Stack>
                     </DetailsItemBox>
                   ) : null}
-
+                  <DetailsItemBox data-testid="registrants-details">
+                    <Stack spacing={2}>
+                      {data?.order?.registrants.map(
+                        (
+                          registrant: CreateOrderParticipantInput,
+                          index: number
+                        ) => (
+                          <ItemRow key={index}>
+                            <Typography color="grey.700">
+                              Address:{' '}
+                              {`${registrant.addressLine1}, ${
+                                registrant.addressLine2?.trim()
+                                  ? registrant.addressLine2 + ', '
+                                  : ''
+                              }${registrant.city}, ${registrant.postCode}, ${
+                                registrant.country
+                              }`}
+                            </Typography>
+                          </ItemRow>
+                        )
+                      )}
+                    </Stack>
+                  </DetailsItemBox>
                   {expensesLineItems.length ? (
                     <DetailsItemBox data-testid="expenses-row">
                       <Stack spacing={2}>
