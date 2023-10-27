@@ -306,4 +306,66 @@ describe('component: CourseForm', () => {
       expect(screen.getByText(blendedLearningInfoMessage)).toBeInTheDocument()
     })
   })
+
+  it("doesn't show course renewal cycle panel for an indirect course", async () => {
+    await waitFor(() => {
+      renderForm(CourseType.INDIRECT)
+    })
+
+    expect(
+      screen.queryByLabelText(/how long should certificate last/i)
+    ).not.toBeInTheDocument()
+  })
+
+  it.each([
+    [CourseType.OPEN, CourseLevel.Level_1],
+    [CourseType.OPEN, CourseLevel.Level_2],
+    [CourseType.CLOSED, CourseLevel.Level_1],
+    [CourseType.CLOSED, CourseLevel.Level_2],
+  ])(
+    'shows course renewal panel for %s course type for %s and when course begins from 2024',
+    async (type, courseLevel) => {
+      setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
+
+      await waitFor(() => {
+        render(<CourseForm type={type} />, {
+          auth: {
+            activeCertificates: [CourseLevel.AdvancedTrainer],
+          },
+        })
+      })
+
+      act(() => {
+        screen.getByLabelText('Start date', { exact: false }).focus()
+      })
+
+      await userEvent.paste('01/01/2024')
+      await selectLevel(courseLevel)
+
+      expect(
+        screen.getByLabelText(/how long should certificate last/i)
+      ).toBeInTheDocument()
+    }
+  )
+
+  it.each([[CourseType.OPEN], [CourseType.CLOSED]])(
+    "doesn't show course renewal panel for %s course type and when course begins in 2023",
+    async type => {
+      setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
+
+      await waitFor(() => {
+        render(<CourseForm type={type} />)
+      })
+
+      act(() => {
+        screen.getByLabelText('Start date', { exact: false }).focus()
+      })
+
+      await userEvent.paste('31/12/2023')
+
+      expect(
+        screen.queryByLabelText(/how long should certificate last/i)
+      ).not.toBeInTheDocument()
+    }
+  )
 })

@@ -355,6 +355,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     conversion: course.conversion,
     price: course.price ?? null,
     displayOnWebsite: course.displayOnWebsite,
+    renewalCycle: course.renewalCycle,
   }
 }
 

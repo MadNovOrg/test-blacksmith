@@ -24,6 +24,7 @@ import ChooseTrainers, {
   FormValues as TrainersFormValues,
 } from '@app/components/ChooseTrainers'
 import CourseForm, { DisabledFields } from '@app/components/CourseForm'
+import { hasRenewalCycle } from '@app/components/CourseForm/helpers'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { Dialog } from '@app/components/dialogs'
 import { Sticky } from '@app/components/Sticky'
@@ -337,6 +338,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               freeSpaces: courseData.freeSpaces,
               special_instructions: courseData.specialInstructions,
               parking_instructions: courseData.parkingInstructions,
+              ...(hasRenewalCycle({
+                courseType: courseData.type,
+                startDate: courseData.startDate,
+                courseLevel: courseData.courseLevel,
+              })
+                ? { renewalCycle: courseData.renewalCycle }
+                : { renewalCycle: null }),
               ...(courseData.minParticipants
                 ? { min_participants: courseData.minParticipants }
                 : null),

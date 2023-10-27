@@ -14,6 +14,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Stack,
   Switch,
   TextField,
   Typography,
@@ -46,7 +47,6 @@ import { useQuery } from 'urql'
 import { SchemaDescription } from 'yup'
 
 import { CountryDropdown } from '@app/components/CountryDropdown'
-import { FormPanel } from '@app/components/FormPanel'
 import { NumericTextField } from '@app/components/NumericTextField'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
@@ -83,10 +83,16 @@ import {
   requiredMsg,
 } from '@app/util'
 
+import { InfoPanel } from '../InfoPanel'
+
 import { InstructionAccordionField } from './components/AccordionTextField'
 import { CourseDatePicker } from './components/CourseDatePicker'
 import { CourseLevelDropdown } from './components/CourseLevelDropdown'
 import { CourseTimePicker } from './components/CourseTimePicker'
+import {
+  RenewalCycleRadios,
+  schema as renewalCycleSchema,
+} from './components/RenewalCycleRadios/RenewalCycleRadios'
 import { SourceDropdown } from './components/SourceDropdown'
 import {
   defaultStrategies,
@@ -109,6 +115,7 @@ import {
   courseNeedsManualPrice,
   getAccountCode,
   getDefaultSpecialInstructions,
+  hasRenewalCycle,
   isEndDateTimeBeforeStartDateTime,
   makeDate,
 } from './helpers'
@@ -378,6 +385,17 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               otherwise: s => s.nullable(),
             }
           ),
+        renewalCycle: renewalCycleSchema.when(['startDate', 'courseLevel'], {
+          is: (startDate: Date, courseLevel: CourseLevel) =>
+            hasRenewalCycle({
+              courseType,
+              startDate,
+              courseLevel,
+            }),
+          then: s =>
+            s.required(t('components.course-form.renewal-cycle-required')),
+          otherwise: s => s.nullable(),
+        }),
       }),
 
     [
@@ -449,6 +467,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       bildStrategies: courseInput?.bildStrategies ?? defaultStrategies,
       conversion: courseInput?.conversion ?? false,
       price: courseInput?.price ?? null,
+      renewalCycle: courseInput?.renewalCycle,
     }),
     [courseInput, courseType]
   )
@@ -902,7 +921,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       )
 
       if (isValidEmail && isNotAlreadyFetched) {
-        await reexecuteQuery({ requestPolicy: 'network-only' })
+        reexecuteQuery({ requestPolicy: 'network-only' })
       } else if (isValidEmail && !isNotAlreadyFetched) {
         const contactChange = handleContactChange(contact)
         contactChange(foundProfileData?.profiles[0] as UserSelectorProfile)
@@ -929,811 +948,878 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   return (
     <form>
       <FormProvider {...methods}>
-        <Typography variant="h5" fontWeight={500} gutterBottom>
-          {t('components.course-form.general-details-title')}
-        </Typography>
-        <FormPanel mb={2}>
-          {acl.canCreateBildCourse(courseType) ? (
-            <FormControl
-              variant="filled"
-              sx={{ mb: theme.spacing(2) }}
-              fullWidth
-            >
-              <InputLabel id="course-category-label">
-                {t('course-category')}
-              </InputLabel>
-              <Controller
-                name="accreditedBy"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    onChange={e => {
-                      setValue('usesAOL', false)
-                      setValue('aolCountry', '')
-                      setValue('aolRegion', '')
-                      setValue('price', null)
+        <Stack gap={6}>
+          <InfoPanel
+            title={t('components.course-form.general-details-title')}
+            titlePosition="outside"
+            renderContent={(content, props) => (
+              <Box {...props} p={3} pt={4}>
+                {content}
+              </Box>
+            )}
+          >
+            <Box mb={2}>
+              {acl.canCreateBildCourse(courseType) ? (
+                <FormControl
+                  variant="filled"
+                  sx={{ mb: theme.spacing(2) }}
+                  fullWidth
+                >
+                  <InputLabel id="course-category-label">
+                    {t('course-category')}
+                  </InputLabel>
+                  <Controller
+                    name="accreditedBy"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        onChange={e => {
+                          setValue('usesAOL', false)
+                          setValue('aolCountry', '')
+                          setValue('aolRegion', '')
+                          setValue('price', null)
 
-                      resetField('bildStrategies')
+                          resetField('bildStrategies')
 
-                      field.onChange(e)
-                    }}
-                    labelId="course-category-label"
-                    disabled={disabledFields.has('accreditedBy')}
-                  >
-                    <MenuItem value={`${Accreditors_Enum.Icm}`}>ICM</MenuItem>
-                    <MenuItem value={`${Accreditors_Enum.Bild}`}>BILD</MenuItem>
-                  </Select>
-                )}
-              />
-            </FormControl>
-          ) : null}
-
-          {courseType === CourseType.INDIRECT && !isBild ? (
-            <>
-              <Typography
-                mt={2}
-                fontWeight={600}
-                color={isBild ? 'text.disabled' : undefined}
-              >
-                {t('components.course-form.aol-title')}
-              </Typography>
-              <Alert severity="info" sx={{ mt: 1 }}>
-                {t('components.course-form.aol-info')}
-              </Alert>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    onChange={e => {
-                      setValue('usesAOL', e.target.checked, {
-                        shouldValidate: true,
-                      })
-                      if (!e.target.checked) {
-                        resetField('courseCost')
-                      }
-                    }}
-                    checked={usesAOL}
-                    disabled={disabledFields.has('usesAOL') || isBild}
-                    data-testid="aol-checkbox"
-                  />
-                }
-                label={t('components.course-form.aol-label')}
-              />
-
-              {usesAOL ? (
-                <>
-                  <Grid container spacing={2}>
-                    <Grid item md={6} sm={12}>
-                      <FormControl
-                        variant="filled"
-                        sx={{ mb: theme.spacing(2) }}
-                        fullWidth
-                        disabled={disabledFields.has('aolCountry')}
+                          field.onChange(e)
+                        }}
+                        labelId="course-category-label"
+                        disabled={disabledFields.has('accreditedBy')}
                       >
-                        <CountryDropdown
-                          label={t('country')}
-                          errormessage={errors.aolCountry?.message}
-                          required
-                          {...register('aolCountry')}
-                          error={Boolean(errors.aolCountry?.message)}
-                        />
-                      </FormControl>
-                    </Grid>
-
-                    <Grid item md={6} sm={12}>
-                      <FormControl
-                        variant="filled"
-                        sx={{ mb: theme.spacing(2) }}
-                        fullWidth
-                      >
-                        <Controller
-                          name="aolRegion"
-                          control={control}
-                          render={({ field }) => (
-                            <RegionDropdown
-                              required
-                              {...register('aolRegion')}
-                              value={field.value}
-                              onChange={field.onChange}
-                              usesAOL={usesAOL}
-                              country={aolCountry}
-                              disabled={
-                                !aolCountry || disabledFields.has('aolRegion')
-                              }
-                              error={Boolean(errors.aolRegion?.message)}
-                            />
-                          )}
-                        />
-                      </FormControl>
-                    </Grid>
-                  </Grid>
-
-                  <Typography mt={5} fontWeight={600}>
-                    {t('components.course-form.course-cost')}
-                  </Typography>
-                  <Typography mb={1} variant="body2">
-                    {t('components.course-form.course-cost-disclaimer')}
-                  </Typography>
-                  <TextField
-                    type={'number'}
-                    {...register('courseCost')}
-                    variant="filled"
-                    placeholder={t(
-                      'components.course-form.course-cost-placeholder'
+                        <MenuItem value={`${Accreditors_Enum.Icm}`}>
+                          ICM
+                        </MenuItem>
+                        <MenuItem value={`${Accreditors_Enum.Bild}`}>
+                          BILD
+                        </MenuItem>
+                      </Select>
                     )}
-                    fullWidth
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">£</InputAdornment>
-                      ),
+                  />
+                </FormControl>
+              ) : null}
+
+              {courseType === CourseType.INDIRECT && !isBild ? (
+                <>
+                  <Typography
+                    mt={2}
+                    fontWeight={600}
+                    color={isBild ? 'text.disabled' : undefined}
+                  >
+                    {t('components.course-form.aol-title')}
+                  </Typography>
+                  <Alert severity="info" sx={{ mt: 1 }}>
+                    {t('components.course-form.aol-info')}
+                  </Alert>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        onChange={e => {
+                          setValue('usesAOL', e.target.checked, {
+                            shouldValidate: true,
+                          })
+                          if (!e.target.checked) {
+                            resetField('courseCost')
+                          }
+                        }}
+                        checked={usesAOL}
+                        disabled={disabledFields.has('usesAOL') || isBild}
+                        data-testid="aol-checkbox"
+                      />
+                    }
+                    label={t('components.course-form.aol-label')}
+                  />
+
+                  {usesAOL ? (
+                    <>
+                      <Grid container spacing={2}>
+                        <Grid item md={6} sm={12}>
+                          <FormControl
+                            variant="filled"
+                            sx={{ mb: theme.spacing(2) }}
+                            fullWidth
+                            disabled={disabledFields.has('aolCountry')}
+                          >
+                            <CountryDropdown
+                              label={t('country')}
+                              errormessage={errors.aolCountry?.message}
+                              required
+                              {...register('aolCountry')}
+                              error={Boolean(errors.aolCountry?.message)}
+                            />
+                          </FormControl>
+                        </Grid>
+
+                        <Grid item md={6} sm={12}>
+                          <FormControl
+                            variant="filled"
+                            sx={{ mb: theme.spacing(2) }}
+                            fullWidth
+                          >
+                            <Controller
+                              name="aolRegion"
+                              control={control}
+                              render={({ field }) => (
+                                <RegionDropdown
+                                  required
+                                  {...register('aolRegion')}
+                                  value={field.value}
+                                  onChange={field.onChange}
+                                  usesAOL={usesAOL}
+                                  country={aolCountry}
+                                  disabled={
+                                    !aolCountry ||
+                                    disabledFields.has('aolRegion')
+                                  }
+                                  error={Boolean(errors.aolRegion?.message)}
+                                />
+                              )}
+                            />
+                          </FormControl>
+                        </Grid>
+                      </Grid>
+
+                      <Typography mt={5} fontWeight={600}>
+                        {t('components.course-form.course-cost')}
+                      </Typography>
+                      <Typography mb={1} variant="body2">
+                        {t('components.course-form.course-cost-disclaimer')}
+                      </Typography>
+                      <TextField
+                        type={'number'}
+                        {...register('courseCost')}
+                        variant="filled"
+                        placeholder={t(
+                          'components.course-form.course-cost-placeholder'
+                        )}
+                        fullWidth
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">£</InputAdornment>
+                          ),
+                        }}
+                        label={t('components.course-form.course-cost-title')}
+                        error={Boolean(errors.courseCost)}
+                        helperText={errors.courseCost?.message ?? ''}
+                        disabled={disabledFields.has('courseCost')}
+                      />
+                    </>
+                  ) : null}
+                </>
+              ) : null}
+
+              {hasOrg ? (
+                <>
+                  <Typography my={2} fontWeight={600}>
+                    {t('components.course-form.organization-label')}
+                  </Typography>
+                  <OrgSelector
+                    required
+                    {...register('organization')}
+                    autocompleteMode={showTrainerOrgOnly}
+                    showTrainerOrgOnly={showTrainerOrgOnly}
+                    error={errors.organization?.message}
+                    allowAdding
+                    value={values.organization ?? undefined}
+                    onChange={orgSelectorOnChange}
+                    textFieldProps={{
+                      variant: 'filled',
                     }}
-                    label={t('components.course-form.course-cost-title')}
-                    error={Boolean(errors.courseCost)}
-                    helperText={errors.courseCost?.message ?? ''}
-                    disabled={disabledFields.has('courseCost')}
+                    sx={{ marginBottom: 2 }}
+                    disabled={disabledFields.has('organization')}
                   />
                 </>
               ) : null}
-            </>
-          ) : null}
 
-          {hasOrg ? (
-            <>
-              <Typography my={2} fontWeight={600}>
-                {t('components.course-form.organization-label')}
-              </Typography>
-              <OrgSelector
-                required
-                {...register('organization')}
-                autocompleteMode={showTrainerOrgOnly}
-                showTrainerOrgOnly={showTrainerOrgOnly}
-                error={errors.organization?.message}
-                allowAdding
-                value={values.organization ?? undefined}
-                onChange={orgSelectorOnChange}
-                textFieldProps={{
-                  variant: 'filled',
-                }}
-                sx={{ marginBottom: 2 }}
-                disabled={disabledFields.has('organization')}
-              />
-            </>
-          ) : null}
+              {isIndirectCourse ? (
+                <>
+                  <Typography mb={2} fontWeight={600}>
+                    {t('components.course-form.organization-key-contact-label')}
+                  </Typography>
 
-          {isIndirectCourse ? (
-            <>
+                  <Grid container spacing={3} mb={3}>
+                    <Grid item md={12} xs={12}>
+                      <UserSelector
+                        {...register(`organizationKeyContact`)}
+                        required
+                        value={
+                          values.organizationKeyContact?.email ?? undefined
+                        }
+                        onChange={handleContactChange('organizationKeyContact')}
+                        onEmailChange={handleContactChange(
+                          'organizationKeyContact'
+                        )}
+                        organisationId={getValues('organization')?.id ?? ''}
+                        textFieldProps={{ variant: 'filled' }}
+                        error={errors.organizationKeyContact?.email?.message}
+                        disabled={
+                          !getValues('organization') ||
+                          disabledFields.has('organizationKeyContact')
+                        }
+                        onBlur={onBlurUserSelector}
+                      />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        required
+                        label={t('first-name')}
+                        variant="filled"
+                        placeholder={t('first-name-placeholder')}
+                        {...register(`organizationKeyContact.firstName`)}
+                        error={!!errors.organizationKeyContact?.firstName}
+                        helperText={
+                          errors.organizationKeyContact?.firstName?.message ??
+                          ''
+                        }
+                        disabled={
+                          !values.organization ||
+                          disabledFields.has('organizationKeyContact') ||
+                          !!values.organizationKeyContact?.profileId
+                        }
+                        InputLabelProps={{
+                          shrink: !!values.organizationKeyContact?.firstName,
+                        }}
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        required
+                        label={t('surname')}
+                        variant="filled"
+                        placeholder={t('surname-placeholder')}
+                        {...register(`organizationKeyContact.lastName`)}
+                        error={!!errors.organizationKeyContact?.lastName}
+                        helperText={
+                          errors.organizationKeyContact?.lastName?.message ?? ''
+                        }
+                        disabled={
+                          !getValues('organization') ||
+                          disabledFields.has('organizationKeyContact') ||
+                          !!getValues('organizationKeyContact')?.profileId
+                        }
+                        InputLabelProps={{
+                          shrink: !!values.organizationKeyContact?.lastName,
+                        }}
+                        fullWidth
+                      />
+                    </Grid>
+                  </Grid>
+                </>
+              ) : null}
+
+              {isClosedCourse ? (
+                <>
+                  <Typography mb={2} fontWeight={600}>
+                    {t('components.course-form.contact-person-label')}
+                  </Typography>
+
+                  <Grid container spacing={3} mb={3}>
+                    <Grid item md={12} xs={12}>
+                      <UserSelector
+                        {...register(`bookingContact`)}
+                        required
+                        value={values.bookingContact?.email ?? undefined}
+                        onChange={handleContactChange()}
+                        onEmailChange={handleContactChange()}
+                        organisationId={getValues('organization')?.id ?? ''}
+                        textFieldProps={{ variant: 'filled' }}
+                        error={errors.bookingContact?.email?.message}
+                        disabled={
+                          !getValues('organization') ||
+                          disabledFields.has('bookingContact')
+                        }
+                        onBlur={onBlurUserSelector}
+                      />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        required
+                        label={t('first-name')}
+                        variant="filled"
+                        placeholder={t('first-name-placeholder')}
+                        {...register(`bookingContact.firstName`)}
+                        error={!!errors.bookingContact?.firstName}
+                        helperText={
+                          errors.bookingContact?.firstName?.message ?? ''
+                        }
+                        disabled={
+                          !values.organization ||
+                          disabledFields.has('bookingContact') ||
+                          !!values.bookingContact?.profileId
+                        }
+                        InputLabelProps={{
+                          shrink: !!values.bookingContact?.firstName,
+                        }}
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        required
+                        label={t('surname')}
+                        variant="filled"
+                        placeholder={t('surname-placeholder')}
+                        {...register(`bookingContact.lastName`)}
+                        error={!!errors.bookingContact?.lastName}
+                        helperText={
+                          errors.bookingContact?.lastName?.message ?? ''
+                        }
+                        disabled={
+                          !getValues('organization') ||
+                          disabledFields.has('bookingContact') ||
+                          !!getValues('bookingContact')?.profileId
+                        }
+                        InputLabelProps={{
+                          shrink: !!values.bookingContact?.lastName,
+                        }}
+                        fullWidth
+                      />
+                    </Grid>
+                  </Grid>
+                </>
+              ) : null}
+
               <Typography mb={2} fontWeight={600}>
-                {t('components.course-form.organization-key-contact-label')}
+                {t('components.course-form.course-level-section-title')}
               </Typography>
+              <FormControl
+                variant="filled"
+                sx={{ mb: theme.spacing(2) }}
+                fullWidth
+              >
+                <InputLabel id="course-level-dropdown">
+                  {t('components.course-form.course-level-placeholder')}
+                </InputLabel>
+                <Controller
+                  name="courseLevel"
+                  control={control}
+                  render={({ field }) => (
+                    <CourseLevelDropdown
+                      {...register('courseLevel')}
+                      value={field.value}
+                      labelId="course-level-dropdown"
+                      onChange={event => {
+                        field.onChange(event)
 
-              <Grid container spacing={3} mb={3}>
-                <Grid item md={12} xs={12}>
-                  <UserSelector
-                    {...register(`organizationKeyContact`)}
-                    required
-                    value={values.organizationKeyContact?.email ?? undefined}
-                    onChange={handleContactChange('organizationKeyContact')}
-                    onEmailChange={handleContactChange(
-                      'organizationKeyContact'
+                        resetSpecialInstructionsToDefault(
+                          courseType,
+                          event.target.value as CourseLevel,
+                          deliveryType,
+                          values.reaccreditation,
+                          values.conversion,
+                          t
+                        )
+                      }}
+                      courseType={courseType}
+                      courseAccreditor={
+                        values.accreditedBy ?? Accreditors_Enum.Icm
+                      }
+                      disabled={disabledFields.has('courseLevel')}
+                    />
+                  )}
+                />
+                {values.courseLevel === CourseLevel.Level_1 && (
+                  <Alert severity="info" sx={{ mt: 2 }}>
+                    {t('components.course-form.course-level-one-info')}
+                  </Alert>
+                )}
+                {/* TODO: Delete this after Arlo migration to the hub - HAVENT USED THE translations file to have this easier to find by text search */}
+                {acl.isInternalUser() && courseType !== CourseType.INDIRECT ? (
+                  <>
+                    <TextField
+                      sx={{ mt: theme.spacing(2) }}
+                      label={'Arlo reference'}
+                      variant="filled"
+                      {...register(`arloReferenceId`)}
+                      fullWidth
+                    />
+                    <Alert severity="info" sx={{ mt: 2 }}>
+                      This only applies to courses that have been migrated from
+                      Arlo
+                    </Alert>
+                  </>
+                ) : null}
+                {/* TODO: REMOVE THE ABOVE after Arlo migration to the hub */}
+                {errors.courseLevel?.message ? (
+                  <FormHelperText error>
+                    {errors.courseLevel.message}
+                  </FormHelperText>
+                ) : null}
+              </FormControl>
+
+              {isBild ? (
+                <>
+                  <StrategyToggles
+                    courseLevel={values.courseLevel}
+                    disabled={disabledFields.has('bildStrategies')}
+                  />
+                  <FormHelperText
+                    error={Boolean(errors.bildStrategies?.message)}
+                  >
+                    {t('components.course-form.select-one-option')}
+                  </FormHelperText>
+                </>
+              ) : null}
+
+              <Divider sx={{ my: 2 }} />
+
+              <Grid gap={2} container>
+                <Grid item>
+                  <Controller
+                    name="blendedLearning"
+                    control={control}
+                    render={({ field }) => (
+                      <FormControlLabel
+                        disabled={
+                          !canBlended || disabledFields.has('blendedLearning')
+                        }
+                        control={
+                          <Switch
+                            {...field}
+                            checked={values.blendedLearning}
+                            data-testid="blendedLearning-switch"
+                          />
+                        }
+                        label={t(
+                          'components.course-form.blended-learning-label'
+                        )}
+                      />
                     )}
-                    organisationId={getValues('organization')?.id ?? ''}
-                    textFieldProps={{ variant: 'filled' }}
-                    error={errors.organizationKeyContact?.email?.message}
-                    disabled={
-                      !getValues('organization') ||
-                      disabledFields.has('organizationKeyContact')
-                    }
-                    onBlur={onBlurUserSelector}
                   />
                 </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    required
-                    label={t('first-name')}
-                    variant="filled"
-                    placeholder={t('first-name-placeholder')}
-                    {...register(`organizationKeyContact.firstName`)}
-                    error={!!errors.organizationKeyContact?.firstName}
-                    helperText={
-                      errors.organizationKeyContact?.firstName?.message ?? ''
-                    }
-                    disabled={
-                      !values.organization ||
-                      disabledFields.has('organizationKeyContact') ||
-                      !!values.organizationKeyContact?.profileId
-                    }
-                    InputLabelProps={{
-                      shrink: !!values.organizationKeyContact?.firstName,
-                    }}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    required
-                    label={t('surname')}
-                    variant="filled"
-                    placeholder={t('surname-placeholder')}
-                    {...register(`organizationKeyContact.lastName`)}
-                    error={!!errors.organizationKeyContact?.lastName}
-                    helperText={
-                      errors.organizationKeyContact?.lastName?.message ?? ''
-                    }
-                    disabled={
-                      !getValues('organization') ||
-                      disabledFields.has('organizationKeyContact') ||
-                      !!getValues('organizationKeyContact')?.profileId
-                    }
-                    InputLabelProps={{
-                      shrink: !!values.organizationKeyContact?.lastName,
-                    }}
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-            </>
-          ) : null}
 
-          {isClosedCourse ? (
-            <>
-              <Typography mb={2} fontWeight={600}>
-                {t('components.course-form.contact-person-label')}
+                <Grid item>
+                  <Controller
+                    name="reaccreditation"
+                    control={control}
+                    render={({ field }) => (
+                      <FormControlLabel
+                        disabled={
+                          !canReacc || disabledFields.has('reaccreditation')
+                        }
+                        control={
+                          <Switch
+                            {...field}
+                            checked={values.reaccreditation}
+                            data-testid="reaccreditation-switch"
+                          />
+                        }
+                        label={t(
+                          'components.course-form.reaccreditation-label'
+                        )}
+                      />
+                    )}
+                  />
+                </Grid>
+
+                {isBild &&
+                [CourseType.CLOSED, CourseType.OPEN].includes(courseType) &&
+                values.courseLevel !== CourseLevel.BildRegular ? (
+                  <Grid item>
+                    <Controller
+                      name="conversion"
+                      control={control}
+                      render={({ field }) => (
+                        <FormControlLabel
+                          disabled={
+                            !conversionEnabled ||
+                            disabledFields.has('conversion')
+                          }
+                          control={
+                            <Switch
+                              {...field}
+                              checked={values.conversion}
+                              data-testid="conversion-switch"
+                            />
+                          }
+                          label={t('components.course-form.conversion-label')}
+                        />
+                      )}
+                    />
+                  </Grid>
+                ) : null}
+
+                {courseType === CourseType.OPEN ? (
+                  <Grid item>
+                    <Controller
+                      name="displayOnWebsite"
+                      control={control}
+                      render={({ field }) => (
+                        <FormControlLabel
+                          disabled={disabledFields.has('displayOnWebsite')}
+                          control={
+                            <Switch
+                              {...field}
+                              checked={values.displayOnWebsite}
+                              data-testid="displayOnWebsite-switch"
+                            />
+                          }
+                          label={t(
+                            'components.course-form.display-toggle-label'
+                          )}
+                        />
+                      )}
+                    />
+                  </Grid>
+                ) : null}
+              </Grid>
+
+              {isBlended && courseType === CourseType.INDIRECT ? (
+                <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
+                  {t('components.course-form.blended-learning-price-label')}
+                </Alert>
+              ) : null}
+
+              <Typography mb={2} mt={2} fontWeight={600}>
+                {t('components.course-form.delivery-type-section-title')}
               </Typography>
+              <FormControl>
+                <RadioGroup
+                  row
+                  aria-labelledby="delivery-type-radio"
+                  name="delivery-type-radio"
+                  value={deliveryType}
+                  onChange={e => {
+                    const deliveryType = e.target.value as CourseDeliveryType
+                    setValue('deliveryType', deliveryType)
 
-              <Grid container spacing={3} mb={3}>
-                <Grid item md={12} xs={12}>
-                  <UserSelector
-                    {...register(`bookingContact`)}
-                    required
-                    value={values.bookingContact?.email ?? undefined}
-                    onChange={handleContactChange()}
-                    onEmailChange={handleContactChange()}
-                    organisationId={getValues('organization')?.id ?? ''}
-                    textFieldProps={{ variant: 'filled' }}
-                    error={errors.bookingContact?.email?.message}
-                    disabled={
-                      !getValues('organization') ||
-                      disabledFields.has('bookingContact')
+                    if (deliveryType === CourseDeliveryType.VIRTUAL) {
+                      setValue('parkingInstructions', '')
                     }
-                    onBlur={onBlurUserSelector}
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    required
-                    label={t('first-name')}
-                    variant="filled"
-                    placeholder={t('first-name-placeholder')}
-                    {...register(`bookingContact.firstName`)}
-                    error={!!errors.bookingContact?.firstName}
-                    helperText={errors.bookingContact?.firstName?.message ?? ''}
-                    disabled={
-                      !values.organization ||
-                      disabledFields.has('bookingContact') ||
-                      !!values.bookingContact?.profileId
-                    }
-                    InputLabelProps={{
-                      shrink: !!values.bookingContact?.firstName,
-                    }}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    required
-                    label={t('surname')}
-                    variant="filled"
-                    placeholder={t('surname-placeholder')}
-                    {...register(`bookingContact.lastName`)}
-                    error={!!errors.bookingContact?.lastName}
-                    helperText={errors.bookingContact?.lastName?.message ?? ''}
-                    disabled={
-                      !getValues('organization') ||
-                      disabledFields.has('bookingContact') ||
-                      !!getValues('bookingContact')?.profileId
-                    }
-                    InputLabelProps={{
-                      shrink: !!values.bookingContact?.lastName,
-                    }}
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-            </>
-          ) : null}
-
-          <Typography mb={2} fontWeight={600}>
-            {t('components.course-form.course-level-section-title')}
-          </Typography>
-          <FormControl variant="filled" sx={{ mb: theme.spacing(2) }} fullWidth>
-            <InputLabel id="course-level-dropdown">
-              {t('components.course-form.course-level-placeholder')}
-            </InputLabel>
-            <Controller
-              name="courseLevel"
-              control={control}
-              render={({ field }) => (
-                <CourseLevelDropdown
-                  {...register('courseLevel')}
-                  value={field.value}
-                  labelId="course-level-dropdown"
-                  onChange={event => {
-                    field.onChange(event)
+                    trigger(['venue'])
 
                     resetSpecialInstructionsToDefault(
                       courseType,
-                      event.target.value as CourseLevel,
+                      courseLevel,
                       deliveryType,
                       values.reaccreditation,
                       values.conversion,
                       t
                     )
                   }}
-                  courseType={courseType}
-                  courseAccreditor={values.accreditedBy ?? Accreditors_Enum.Icm}
-                  disabled={disabledFields.has('courseLevel')}
-                />
-              )}
-            />
-            {values.courseLevel === CourseLevel.Level_1 && (
-              <Alert severity="info" sx={{ mt: 2 }}>
-                {t('components.course-form.course-level-one-info')}
-              </Alert>
-            )}
-            {/* TODO: Delete this after Arlo migration to the hub - HAVENT USED THE translations file to have this easier to find by text search */}
-            {acl.isInternalUser() && courseType !== CourseType.INDIRECT ? (
-              <>
-                <TextField
-                  sx={{ mt: theme.spacing(2) }}
-                  label={'Arlo reference'}
-                  variant="filled"
-                  {...register(`arloReferenceId`)}
-                  fullWidth
-                />
-                <Alert severity="info" sx={{ mt: 2 }}>
-                  This only applies to courses that have been migrated from Arlo
-                </Alert>
-              </>
-            ) : null}
-            {/* TODO: REMOVE THE ABOVE after Arlo migration to the hub */}
-            {errors.courseLevel?.message ? (
-              <FormHelperText error>
-                {errors.courseLevel.message}
-              </FormHelperText>
-            ) : null}
-          </FormControl>
-
-          {isBild ? (
-            <>
-              <StrategyToggles
-                courseLevel={values.courseLevel}
-                disabled={disabledFields.has('bildStrategies')}
-              />
-              <FormHelperText error={Boolean(errors.bildStrategies?.message)}>
-                {t('components.course-form.select-one-option')}
-              </FormHelperText>
-            </>
-          ) : null}
-
-          <Divider sx={{ my: 2 }} />
-
-          <Grid gap={2} container>
-            <Grid item>
-              <Controller
-                name="blendedLearning"
-                control={control}
-                render={({ field }) => (
+                >
                   <FormControlLabel
-                    disabled={
-                      !canBlended || disabledFields.has('blendedLearning')
-                    }
+                    value={CourseDeliveryType.F2F}
                     control={
-                      <Switch
-                        {...field}
-                        checked={values.blendedLearning}
-                        data-testid="blendedLearning-switch"
+                      <Radio
+                        disabled={!canF2F || disabledFields.has('deliveryType')}
                       />
                     }
-                    label={t('components.course-form.blended-learning-label')}
+                    label={t('components.course-form.f2f-option-label')}
+                    data-testid={`delivery-${CourseDeliveryType.F2F}`}
                   />
-                )}
-              />
-            </Grid>
-
-            <Grid item>
-              <Controller
-                name="reaccreditation"
-                control={control}
-                render={({ field }) => (
                   <FormControlLabel
-                    disabled={
-                      !canReacc || disabledFields.has('reaccreditation')
-                    }
+                    value={CourseDeliveryType.VIRTUAL}
                     control={
-                      <Switch
-                        {...field}
-                        checked={values.reaccreditation}
-                        data-testid="reaccreditation-switch"
+                      <Radio
+                        disabled={
+                          !canVirtual || disabledFields.has('deliveryType')
+                        }
                       />
                     }
-                    label={t('components.course-form.reaccreditation-label')}
+                    label={t('components.course-form.virtual-option-label')}
+                    data-testid={`delivery-${CourseDeliveryType.VIRTUAL}`}
                   />
-                )}
-              />
-            </Grid>
-
-            {isBild &&
-            [CourseType.CLOSED, CourseType.OPEN].includes(courseType) &&
-            values.courseLevel !== CourseLevel.BildRegular ? (
-              <Grid item>
-                <Controller
-                  name="conversion"
-                  control={control}
-                  render={({ field }) => (
-                    <FormControlLabel
-                      disabled={
-                        !conversionEnabled || disabledFields.has('conversion')
-                      }
-                      control={
-                        <Switch
-                          {...field}
-                          checked={values.conversion}
-                          data-testid="conversion-switch"
-                        />
-                      }
-                      label={t('components.course-form.conversion-label')}
-                    />
-                  )}
-                />
-              </Grid>
-            ) : null}
-
-            {courseType === CourseType.OPEN ? (
-              <Grid item>
-                <Controller
-                  name="displayOnWebsite"
-                  control={control}
-                  render={({ field }) => (
-                    <FormControlLabel
-                      disabled={disabledFields.has('displayOnWebsite')}
-                      control={
-                        <Switch
-                          {...field}
-                          checked={values.displayOnWebsite}
-                          data-testid="displayOnWebsite-switch"
-                        />
-                      }
-                      label={t('components.course-form.display-toggle-label')}
-                    />
-                  )}
-                />
-              </Grid>
-            ) : null}
-          </Grid>
-
-          {isBlended && courseType === CourseType.INDIRECT ? (
-            <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
-              {t('components.course-form.blended-learning-price-label')}
-            </Alert>
-          ) : null}
-
-          <Typography mb={2} mt={2} fontWeight={600}>
-            {t('components.course-form.delivery-type-section-title')}
-          </Typography>
-          <FormControl>
-            <RadioGroup
-              row
-              aria-labelledby="delivery-type-radio"
-              name="delivery-type-radio"
-              value={deliveryType}
-              onChange={e => {
-                const deliveryType = e.target.value as CourseDeliveryType
-                setValue('deliveryType', deliveryType)
-
-                if (deliveryType === CourseDeliveryType.VIRTUAL) {
-                  setValue('parkingInstructions', '')
-                }
-                trigger(['venue'])
-
-                resetSpecialInstructionsToDefault(
-                  courseType,
-                  courseLevel,
-                  deliveryType,
-                  values.reaccreditation,
-                  values.conversion,
-                  t
-                )
-              }}
-            >
-              <FormControlLabel
-                value={CourseDeliveryType.F2F}
-                control={
-                  <Radio
-                    disabled={!canF2F || disabledFields.has('deliveryType')}
+                  <FormControlLabel
+                    value={CourseDeliveryType.MIXED}
+                    control={
+                      <Radio
+                        disabled={
+                          !canMixed || disabledFields.has('deliveryType')
+                        }
+                      />
+                    }
+                    label={t('components.course-form.mixed-option-label')}
+                    data-testid={`delivery-${CourseDeliveryType.MIXED}`}
                   />
-                }
-                label={t('components.course-form.f2f-option-label')}
-                data-testid={`delivery-${CourseDeliveryType.F2F}`}
-              />
-              <FormControlLabel
-                value={CourseDeliveryType.VIRTUAL}
-                control={
-                  <Radio
-                    disabled={!canVirtual || disabledFields.has('deliveryType')}
-                  />
-                }
-                label={t('components.course-form.virtual-option-label')}
-                data-testid={`delivery-${CourseDeliveryType.VIRTUAL}`}
-              />
-              <FormControlLabel
-                value={CourseDeliveryType.MIXED}
-                control={
-                  <Radio
-                    disabled={!canMixed || disabledFields.has('deliveryType')}
-                  />
-                }
-                label={t('components.course-form.mixed-option-label')}
-                data-testid={`delivery-${CourseDeliveryType.MIXED}`}
-              />
-            </RadioGroup>
-          </FormControl>
+                </RadioGroup>
+              </FormControl>
 
-          {hasVenue ? (
-            <VenueSelector
-              {...register('venue')}
-              onChange={venue => {
-                return setValue('venue', venue ?? null, {
-                  shouldValidate: true,
-                })
-              }}
-              value={values.venue ?? undefined}
-              textFieldProps={{
-                variant: 'filled',
-                error: Boolean(errors.venue),
-                required: Boolean(
-                  !(schema.describe().fields.venue as SchemaDescription)
-                    .optional
-                ),
-              }}
-            />
-          ) : null}
-
-          <Controller
-            name="specialInstructions"
-            control={control}
-            render={({ field }) => (
-              <InstructionAccordionField
-                title={t('components.course-form.special-instructions.title')}
-                subtitle={
-                  <Alert
-                    severity="info"
-                    sx={{
-                      mt: 2,
-                    }}
-                  >
-                    {t('components.course-form.special-instructions.subtitle')}
-                  </Alert>
-                }
-                confirmResetTitle={t(
-                  'components.course-form.special-instructions.modal-title'
-                )}
-                confirmResetMessage={t(
-                  'components.course-form.special-instructions.modal-message'
-                )}
-                data-testid="course-form-special-instructions"
-                defaultValue={retrieveDefaultSpecialInstructions()}
-                value={field.value}
-                onSave={field.onChange}
-                editMode={false}
-                maxLength={2000}
-              />
-            )}
-          />
-          {deliveryType === CourseDeliveryType.F2F ||
-          deliveryType === CourseDeliveryType.MIXED ? (
-            <Controller
-              name="parkingInstructions"
-              control={control}
-              render={({ field }) => (
-                <InstructionAccordionField
-                  title={t('components.course-form.parking-instructions.title')}
-                  confirmResetTitle={t(
-                    'components.course-form.parking-instructions.modal-title'
-                  )}
-                  confirmResetMessage={t(
-                    'components.course-form.parking-instructions.modal-message'
-                  )}
-                  data-testid="course-form-parking-instructions"
-                  value={field.value}
-                  onSave={field.onChange}
-                  editMode={false}
-                  maxLength={1000}
+              {hasVenue ? (
+                <VenueSelector
+                  {...register('venue')}
+                  onChange={venue => {
+                    return setValue('venue', venue ?? null, {
+                      shouldValidate: true,
+                    })
+                  }}
+                  value={values.venue ?? undefined}
+                  textFieldProps={{
+                    variant: 'filled',
+                    error: Boolean(errors.venue),
+                    required: Boolean(
+                      !(schema.describe().fields.venue as SchemaDescription)
+                        .optional
+                    ),
+                  }}
                 />
-              )}
-            />
-          ) : null}
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Typography mb={2} mt={2} fontWeight={600}>
-              {t('components.course-form.start-datepicker-section-title')}
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item md={6} sm={12}>
-                <Controller
-                  name="startDate"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <CourseDatePicker
-                      required
-                      name={field.name}
-                      label={t('components.course-form.start-date-placeholder')}
-                      value={field.value}
-                      minDate={
-                        minStartDateRestriction
-                          ? INDIRECT_COURSE_MIN_ALLOWED_DATE
-                          : minCourseStartDate
-                      }
-                      maxDate={values.endDate || undefined}
-                      onChange={newStartDate => {
-                        field.onChange(newStartDate)
-                        setValue(
-                          'startDateTime',
-                          makeDate(newStartDate, startTime)
-                        )
-                        trigger('endDate')
-                      }}
-                      onBlur={field.onBlur}
-                      error={fieldState.error}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item md={6} sm={12}>
-                <Controller
-                  name="startTime"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <CourseTimePicker
-                      required
-                      name={field.name}
-                      id="start"
-                      label={t('components.course-form.start-time-placeholder')}
-                      value={field.value}
-                      onChange={newStartTime => {
-                        field.onChange(newStartTime)
-                        setValue(
-                          'startDateTime',
-                          makeDate(startDate, newStartTime)
-                        )
-                      }}
-                      error={fieldState.error}
-                    />
-                  )}
-                />
-              </Grid>
-            </Grid>
-
-            <Typography mb={2} mt={2} fontWeight={600}>
-              {t('components.course-form.end-datepicker-section-title')}
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item md={6} sm={12}>
-                <Controller
-                  name="endDate"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <CourseDatePicker
-                      required
-                      name={field.name}
-                      label={t('components.course-form.end-date-placeholder')}
-                      value={field.value}
-                      minDate={
-                        values.startDate ??
-                        (minStartDateRestriction
-                          ? INDIRECT_COURSE_MIN_ALLOWED_DATE
-                          : minCourseStartDate)
-                      }
-                      onChange={newEndDate => {
-                        field.onChange(newEndDate)
-                        setValue('endDateTime', makeDate(newEndDate, endTime))
-                      }}
-                      onBlur={field.onBlur}
-                      error={
-                        fieldState.error || errors.endDateTime
-                          ? { ...fieldState.error, ...errors.endDateTime }
-                          : undefined
-                      }
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item md={6} sm={12}>
-                <Controller
-                  name="endTime"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <CourseTimePicker
-                      required
-                      name={field.name}
-                      id="end"
-                      label={t('components.course-form.end-time-placeholder')}
-                      value={field.value}
-                      onChange={newEndTime => {
-                        field.onChange(newEndTime)
-                        setValue('endDateTime', makeDate(endDate, newEndTime))
-                      }}
-                      error={fieldState.error}
-                    />
-                  )}
-                />
-              </Grid>
-            </Grid>
-          </LocalizationProvider>
-        </FormPanel>
-        <Typography variant="h5" fontWeight={500} gutterBottom>
-          {t('components.course-form.attendees-section-title')}
-        </Typography>
-        <FormPanel>
-          <Typography fontWeight={600}>
-            {t('components.course-form.attendees-number-title')}
-          </Typography>
-          <Typography variant="body2" mb={2}>
-            {t('components.course-form.attendees-description')}
-          </Typography>
-
-          <Grid container spacing={2}>
-            {hasMinParticipants ? (
-              <Grid item md={6} sm={12}>
-                <NumericTextField
-                  required
-                  {...register('minParticipants', { valueAsNumber: true })}
-                  label={t('components.course-form.min-attendees-placeholder')}
-                  variant="filled"
-                  fullWidth
-                  error={Boolean(errors.minParticipants)}
-                  helperText={errors.minParticipants?.message}
-                  inputProps={{ min: 1 }}
-                  data-testid="min-attendees"
-                  disabled={disabledFields.has('minParticipants')}
-                />
-              </Grid>
-            ) : null}
-
-            <Grid item md={6} sm={12}>
-              <NumericTextField
-                required
-                {...register('maxParticipants', {
-                  deps: ['minParticipants'],
-                  valueAsNumber: true,
-                })}
-                id="filled-basic"
-                label={t(
-                  courseType === CourseType.OPEN
-                    ? 'components.course-form.max-attendees-placeholder'
-                    : 'components.course-form.num-attendees-placeholder'
-                )}
-                variant="filled"
-                fullWidth
-                error={Boolean(errors.maxParticipants)}
-                helperText={errors.maxParticipants?.message}
-                inputProps={{ min: 1 }}
-                data-testid="max-attendees"
-                disabled={disabledFields.has('maxParticipants')}
-              />
-            </Grid>
-            <Grid item>
-              {!isCreation && courseType === CourseType.INDIRECT ? (
-                <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
-                  {t('components.course-form.attendees-edit-label')}
-                </Alert>
               ) : null}
-            </Grid>
-          </Grid>
-        </FormPanel>
 
-        {isClosedCourse || (isBild && courseType === CourseType.OPEN) ? (
-          <>
+              <Controller
+                name="specialInstructions"
+                control={control}
+                render={({ field }) => (
+                  <InstructionAccordionField
+                    title={t(
+                      'components.course-form.special-instructions.title'
+                    )}
+                    subtitle={
+                      <Alert
+                        severity="info"
+                        sx={{
+                          mt: 2,
+                        }}
+                      >
+                        {t(
+                          'components.course-form.special-instructions.subtitle'
+                        )}
+                      </Alert>
+                    }
+                    confirmResetTitle={t(
+                      'components.course-form.special-instructions.modal-title'
+                    )}
+                    confirmResetMessage={t(
+                      'components.course-form.special-instructions.modal-message'
+                    )}
+                    data-testid="course-form-special-instructions"
+                    defaultValue={retrieveDefaultSpecialInstructions()}
+                    value={field.value}
+                    onSave={field.onChange}
+                    editMode={false}
+                    maxLength={2000}
+                  />
+                )}
+              />
+              {deliveryType === CourseDeliveryType.F2F ||
+              deliveryType === CourseDeliveryType.MIXED ? (
+                <Controller
+                  name="parkingInstructions"
+                  control={control}
+                  render={({ field }) => (
+                    <InstructionAccordionField
+                      title={t(
+                        'components.course-form.parking-instructions.title'
+                      )}
+                      confirmResetTitle={t(
+                        'components.course-form.parking-instructions.modal-title'
+                      )}
+                      confirmResetMessage={t(
+                        'components.course-form.parking-instructions.modal-message'
+                      )}
+                      data-testid="course-form-parking-instructions"
+                      value={field.value}
+                      onSave={field.onChange}
+                      editMode={false}
+                      maxLength={1000}
+                    />
+                  )}
+                />
+              ) : null}
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <Typography mb={2} mt={2} fontWeight={600}>
+                  {t('components.course-form.start-datepicker-section-title')}
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid item md={6} sm={12}>
+                    <Controller
+                      name="startDate"
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <CourseDatePicker
+                          required
+                          name={field.name}
+                          label={t(
+                            'components.course-form.start-date-placeholder'
+                          )}
+                          value={field.value}
+                          minDate={
+                            minStartDateRestriction
+                              ? INDIRECT_COURSE_MIN_ALLOWED_DATE
+                              : minCourseStartDate
+                          }
+                          maxDate={values.endDate || undefined}
+                          onChange={newStartDate => {
+                            field.onChange(newStartDate)
+                            setValue(
+                              'startDateTime',
+                              makeDate(newStartDate, startTime)
+                            )
+                            trigger('endDate')
+                          }}
+                          onBlur={field.onBlur}
+                          error={fieldState.error}
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item md={6} sm={12}>
+                    <Controller
+                      name="startTime"
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <CourseTimePicker
+                          required
+                          name={field.name}
+                          id="start"
+                          label={t(
+                            'components.course-form.start-time-placeholder'
+                          )}
+                          value={field.value}
+                          onChange={newStartTime => {
+                            field.onChange(newStartTime)
+                            setValue(
+                              'startDateTime',
+                              makeDate(startDate, newStartTime)
+                            )
+                          }}
+                          error={fieldState.error}
+                        />
+                      )}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Typography mb={2} mt={2} fontWeight={600}>
+                  {t('components.course-form.end-datepicker-section-title')}
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid item md={6} sm={12}>
+                    <Controller
+                      name="endDate"
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <CourseDatePicker
+                          required
+                          name={field.name}
+                          label={t(
+                            'components.course-form.end-date-placeholder'
+                          )}
+                          value={field.value}
+                          minDate={
+                            values.startDate ??
+                            (minStartDateRestriction
+                              ? INDIRECT_COURSE_MIN_ALLOWED_DATE
+                              : minCourseStartDate)
+                          }
+                          onChange={newEndDate => {
+                            field.onChange(newEndDate)
+                            setValue(
+                              'endDateTime',
+                              makeDate(newEndDate, endTime)
+                            )
+                          }}
+                          onBlur={field.onBlur}
+                          error={
+                            fieldState.error || errors.endDateTime
+                              ? { ...fieldState.error, ...errors.endDateTime }
+                              : undefined
+                          }
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item md={6} sm={12}>
+                    <Controller
+                      name="endTime"
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <CourseTimePicker
+                          required
+                          name={field.name}
+                          id="end"
+                          label={t(
+                            'components.course-form.end-time-placeholder'
+                          )}
+                          value={field.value}
+                          onChange={newEndTime => {
+                            field.onChange(newEndTime)
+                            setValue(
+                              'endDateTime',
+                              makeDate(endDate, newEndTime)
+                            )
+                          }}
+                          error={fieldState.error}
+                        />
+                      )}
+                    />
+                  </Grid>
+                </Grid>
+              </LocalizationProvider>
+            </Box>
+          </InfoPanel>
+
+          <InfoPanel
+            title={t('components.course-form.attendees-section-title')}
+            titlePosition="outside"
+            renderContent={(content, props) => (
+              <Box {...props} p={3} pt={4}>
+                {content}
+              </Box>
+            )}
+          >
+            <Box>
+              <Typography fontWeight={600}>
+                {t('components.course-form.attendees-number-title')}
+              </Typography>
+              <Typography variant="body2" mb={2}>
+                {t('components.course-form.attendees-description')}
+              </Typography>
+
+              <Grid container spacing={2}>
+                {hasMinParticipants ? (
+                  <Grid item md={6} sm={12}>
+                    <NumericTextField
+                      required
+                      {...register('minParticipants', { valueAsNumber: true })}
+                      label={t(
+                        'components.course-form.min-attendees-placeholder'
+                      )}
+                      variant="filled"
+                      fullWidth
+                      error={Boolean(errors.minParticipants)}
+                      helperText={errors.minParticipants?.message}
+                      inputProps={{ min: 1 }}
+                      data-testid="min-attendees"
+                      disabled={disabledFields.has('minParticipants')}
+                    />
+                  </Grid>
+                ) : null}
+
+                <Grid item md={6} sm={12}>
+                  <NumericTextField
+                    required
+                    {...register('maxParticipants', {
+                      deps: ['minParticipants'],
+                      valueAsNumber: true,
+                    })}
+                    id="filled-basic"
+                    label={t(
+                      courseType === CourseType.OPEN
+                        ? 'components.course-form.max-attendees-placeholder'
+                        : 'components.course-form.num-attendees-placeholder'
+                    )}
+                    variant="filled"
+                    fullWidth
+                    error={Boolean(errors.maxParticipants)}
+                    helperText={errors.maxParticipants?.message}
+                    inputProps={{ min: 1 }}
+                    data-testid="max-attendees"
+                    disabled={disabledFields.has('maxParticipants')}
+                  />
+                </Grid>
+                <Grid item>
+                  {!isCreation && courseType === CourseType.INDIRECT ? (
+                    <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
+                      {t('components.course-form.attendees-edit-label')}
+                    </Alert>
+                  ) : null}
+                </Grid>
+              </Grid>
+            </Box>
+
             {isClosedCourse ? (
-              <FormPanel mb={2}>
+              <Box mt={2}>
                 <Typography fontWeight={600}>
                   {t('components.course-form.free-spaces-title')}
                 </Typography>
@@ -1759,104 +1845,134 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     />
                   </Grid>
                 </Grid>
-              </FormPanel>
-            ) : null}
-
-            <Typography variant="h5" fontWeight={500} gutterBottom>
-              {t('components.course-form.finance-section-title')}
-            </Typography>
-            <FormPanel>
-              {isClosedCourse ? (
-                <Grid container spacing={2}>
-                  <Grid item md={6} sm={12}>
-                    <Typography fontWeight={600}>
-                      {t('components.course-form.sales-rep-title')}
-                    </Typography>
-
-                    <ProfileSelector
-                      {...register('salesRepresentative')}
-                      value={values.salesRepresentative ?? undefined}
-                      onChange={profile => {
-                        setValue('salesRepresentative', profile ?? null, {
-                          shouldValidate: true,
-                        })
-                      }}
-                      textFieldProps={{
-                        variant: 'filled',
-                        label: t(
-                          'components.course-form.sales-rep-placeholder'
-                        ),
-                        required: true,
-                        error: Boolean(errors.salesRepresentative?.message),
-                        helperText:
-                          Boolean(errors.salesRepresentative?.message) &&
-                          t('components.course-form.sales-rep-error'),
-                      }}
-                      placeholder={t(
-                        'components.course-form.sales-rep-placeholder'
-                      )}
-                      testId="profile-selector-sales-representative"
-                      disabled={disabledFields.has('salesRepresentative')}
-                    />
-                  </Grid>
-                  <Grid item md={6} sm={12}>
-                    <Typography fontWeight={600}>
-                      {t('components.course-form.source-title')}
-                    </Typography>
-                    <Controller
-                      name="source"
-                      control={control}
-                      render={({ field }) => (
-                        <SourceDropdown
-                          {...field}
-                          required
-                          {...register('source')}
-                          error={Boolean(errors.source?.message)}
-                          data-testid="source-dropdown"
-                          disabled={disabledFields.has('source')}
-                        />
-                      )}
-                    />
-                  </Grid>
-                </Grid>
-              ) : null}
-
-              <Box>
-                {needsManualPrice ? (
-                  <TextField
-                    required
-                    {...register('price')}
-                    label={t('components.course-form.price')}
-                    variant="filled"
-                    placeholder={t('components.course-form.price-placeholder')}
-                    fullWidth
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">£</InputAdornment>
-                      ),
-                    }}
-                    error={Boolean(errors.price)}
-                    helperText={errors.price?.message ?? ''}
-                    disabled={disabledFields.has('price')}
-                    sx={{ mt: 2 }}
-                  />
-                ) : null}
-
-                {isClosedCourse ? (
-                  <>
-                    <Typography fontWeight={600} mb={1} mt={2}>
-                      {t('components.course-form.account-code-title')}
-                    </Typography>
-
-                    <Typography color="dimGrey.main">
-                      {values.accountCode}
-                    </Typography>
-                  </>
-                ) : null}
               </Box>
-            </FormPanel>
-          </>
-        ) : null}
+            ) : null}
+          </InfoPanel>
+
+          {startDate &&
+          values.courseLevel &&
+          hasRenewalCycle({
+            courseType,
+            startDate,
+            courseLevel: values.courseLevel,
+          }) ? (
+            <Controller
+              control={control}
+              name="renewalCycle"
+              render={({ field }) => (
+                <RenewalCycleRadios
+                  {...field}
+                  error={errors.renewalCycle?.message}
+                />
+              )}
+            />
+          ) : null}
+
+          {isClosedCourse || (isBild && courseType === CourseType.OPEN) ? (
+            <InfoPanel
+              title={t('components.course-form.finance-section-title')}
+              titlePosition="outside"
+              renderContent={(content, props) => (
+                <Box {...props} p={3} pt={4}>
+                  {content}
+                </Box>
+              )}
+            >
+              <Box>
+                {isClosedCourse ? (
+                  <Grid container spacing={2}>
+                    <Grid item md={6} sm={12}>
+                      <Typography fontWeight={600}>
+                        {t('components.course-form.sales-rep-title')}
+                      </Typography>
+
+                      <ProfileSelector
+                        {...register('salesRepresentative')}
+                        value={values.salesRepresentative ?? undefined}
+                        onChange={profile => {
+                          setValue('salesRepresentative', profile ?? null, {
+                            shouldValidate: true,
+                          })
+                        }}
+                        textFieldProps={{
+                          variant: 'filled',
+                          label: t(
+                            'components.course-form.sales-rep-placeholder'
+                          ),
+                          required: true,
+                          error: Boolean(errors.salesRepresentative?.message),
+                          helperText:
+                            Boolean(errors.salesRepresentative?.message) &&
+                            t('components.course-form.sales-rep-error'),
+                        }}
+                        placeholder={t(
+                          'components.course-form.sales-rep-placeholder'
+                        )}
+                        testId="profile-selector-sales-representative"
+                        disabled={disabledFields.has('salesRepresentative')}
+                      />
+                    </Grid>
+                    <Grid item md={6} sm={12}>
+                      <Typography fontWeight={600}>
+                        {t('components.course-form.source-title')}
+                      </Typography>
+                      <Controller
+                        name="source"
+                        control={control}
+                        render={({ field }) => (
+                          <SourceDropdown
+                            {...field}
+                            required
+                            {...register('source')}
+                            error={Boolean(errors.source?.message)}
+                            data-testid="source-dropdown"
+                            disabled={disabledFields.has('source')}
+                          />
+                        )}
+                      />
+                    </Grid>
+                  </Grid>
+                ) : null}
+
+                <Box>
+                  {needsManualPrice ? (
+                    <TextField
+                      required
+                      {...register('price')}
+                      label={t('components.course-form.price')}
+                      variant="filled"
+                      placeholder={t(
+                        'components.course-form.price-placeholder'
+                      )}
+                      fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">£</InputAdornment>
+                        ),
+                      }}
+                      error={Boolean(errors.price)}
+                      helperText={errors.price?.message ?? ''}
+                      disabled={disabledFields.has('price')}
+                      sx={{ mt: 2 }}
+                    />
+                  ) : null}
+
+                  {isClosedCourse ? (
+                    <>
+                      <Typography fontWeight={600} mb={1} mt={2}>
+                        {t('components.course-form.account-code-title')}
+                      </Typography>
+
+                      <Typography color="dimGrey.main">
+                        {values.accountCode}
+                      </Typography>
+                    </>
+                  ) : null}
+                </Box>
+              </Box>
+            </InfoPanel>
+          ) : null}
+        </Stack>
       </FormProvider>
     </form>
   )

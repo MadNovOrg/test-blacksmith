@@ -48,6 +48,7 @@ export const QUERY = gql`
       accreditedBy
       price
       exceptionsPending
+      renewalCycle
       cancellationRequest {
         id
         reason

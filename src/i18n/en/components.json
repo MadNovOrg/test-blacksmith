@@ -175,6 +175,7 @@
     "select-one-option": "Please mark at least one of the options above",
     "reset-instructions-button": "Reset to default",
     "bild-strategies-required": "At least one BILD strategy should be selected",
+    "renewal-cycle-required": "Course renewal cycle is a required field",
     "special-instructions": {
       "title": "Special instructions",
       "subtitle": "Please ensure you include all applicable course information i.e. twilight dates, online training links, and any other relevant details.",
@@ -244,7 +245,13 @@
     },
     "save-button-text": "Save changes",
     "display-toggle-label": "Display on Website",
-    "settings-section-title": "Settings"
+    "settings-section-title": "Settings",
+    "renewal-cycle": {
+      "panel-title": "Course renewal cycle",
+      "label": "How long should certificate last?",
+      "radio-label_one": "{{count}} year",
+      "radio-label_other": "{{count}} years"
+    }
   },
   "searchTrainers": {
     "loading": "Loading...",

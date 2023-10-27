@@ -5,6 +5,7 @@ import {
   Course_Bild_Module,
   Course_Evaluation_Question_Group_Enum,
   Course_Level_Enum,
+  Course_Renewal_Cycle_Enum,
   Course_Source_Enum,
   Course_Status_Enum,
   GetEvaluationsSummaryQuery,
@@ -53,6 +54,7 @@ export type Course = {
   aolRegion?: string
   go1Integration: boolean
   conversion: boolean
+  renewalCycle?: Course_Renewal_Cycle_Enum
   dates: {
     aggregate: {
       start: { date: string }
@@ -628,6 +630,7 @@ export type CourseInput = {
   conversion: boolean
   price: number | null
   displayOnWebsite?: boolean
+  renewalCycle?: Course_Renewal_Cycle_Enum
   //TODO: Delete this after Arlo migration
   arloReferenceId?: string
 }

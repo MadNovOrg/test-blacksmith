@@ -55,6 +55,8 @@ configuration:
       custom_name: organizationKeyContactProfileId
     price_currency:
       custom_name: priceCurrency
+    renewal_cycle:
+      custom_name: renewalCycle
     updated_at:
       custom_name: updatedAt
   custom_column_names:
@@ -84,6 +86,7 @@ configuration:
     organization_key_contact_invite_data: organizationKeyContactInviteData
     organization_key_contact_profile_id: organizationKeyContactProfileId
     price_currency: priceCurrency
+    renewal_cycle: renewalCycle
     updated_at: updatedAt
   custom_root_fields: {}
 object_relationships:
@@ -255,6 +258,7 @@ insert_permissions:
         - parking_instructions
         - price
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - updated_at
@@ -334,6 +338,7 @@ insert_permissions:
         - parking_instructions
         - price
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - updated_at
@@ -375,6 +380,7 @@ insert_permissions:
         - parking_instructions
         - price
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - updated_at
@@ -390,6 +396,7 @@ select_permissions:
         - course_type
         - created_at
         - description
+        - end
         - id
         - max_participants
         - min_participants
@@ -397,9 +404,9 @@ select_permissions:
         - price
         - price_currency
         - reaccreditation
-        - updated_at
+        - renewal_cycle
         - start
-        - end
+        - updated_at
       computed_fields:
         - course_code
         - freeSlots
@@ -454,6 +461,7 @@ select_permissions:
         - price
         - price_currency
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - start
@@ -552,6 +560,7 @@ select_permissions:
         - price
         - price_currency
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - start
@@ -611,6 +620,7 @@ select_permissions:
         - price
         - price_currency
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - start
@@ -657,6 +667,7 @@ select_permissions:
         - price
         - price_currency
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - start
@@ -746,6 +757,7 @@ select_permissions:
         - price
         - price_currency
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - start
@@ -805,6 +817,7 @@ select_permissions:
         - price
         - price_currency
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - start
@@ -851,6 +864,7 @@ select_permissions:
         - price
         - price_currency
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - start
@@ -940,6 +954,7 @@ select_permissions:
         - price
         - price_currency
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - start
@@ -989,6 +1004,7 @@ select_permissions:
         - price
         - price_currency
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - start
@@ -1028,6 +1044,7 @@ select_permissions:
         - price
         - price_currency
         - reaccreditation
+        - renewal_cycle
         - start
         - updated_at
       computed_fields:
@@ -1080,6 +1097,7 @@ select_permissions:
         - price
         - price_currency
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - start
@@ -1167,6 +1185,7 @@ update_permissions:
         - parking_instructions
         - price
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - updated_at
@@ -1222,6 +1241,7 @@ update_permissions:
         - parking_instructions
         - price
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - updated_at
@@ -1239,9 +1259,7 @@ update_permissions:
         - aol_country
         - aol_region
         - booking_contact_invite_data
-        - organization_key_contact_invite_data
         - booking_contact_profile_id
-        - organization_key_contact_profile_id
         - cancellation_fee_percent
         - cancellation_reason
         - conversion
@@ -1262,9 +1280,12 @@ update_permissions:
         - modules_duration
         - name
         - organization_id
+        - organization_key_contact_invite_data
+        - organization_key_contact_profile_id
         - parking_instructions
         - price
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - updated_at
@@ -1281,8 +1302,6 @@ update_permissions:
         - aol_country
         - aol_region
         - booking_contact_profile_id
-        - organization_key_contact_profile_id
-        - organization_key_contact_invite_data
         - cancellation_reason
         - course_delivery_type
         - course_status
@@ -1300,8 +1319,11 @@ update_permissions:
         - modules_duration
         - name
         - organization_id
+        - organization_key_contact_invite_data
+        - organization_key_contact_profile_id
         - parking_instructions
         - reaccreditation
+        - renewal_cycle
         - special_instructions
         - updated_at
       filter:
@@ -1366,6 +1388,7 @@ update_permissions:
         - parking_instructions
         - price
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - updated_at
@@ -1409,6 +1432,7 @@ update_permissions:
         - parking_instructions
         - price
         - reaccreditation
+        - renewal_cycle
         - source
         - special_instructions
         - updated_at

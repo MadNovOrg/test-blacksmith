@@ -3,6 +3,7 @@ import { gql } from 'graphql-request'
 import {
   Accreditors_Enum,
   Course_Expenses_Insert_Input,
+  Course_Renewal_Cycle_Enum,
   Course_Status_Enum,
   Order_Insert_Input,
 } from '@app/generated/graphql'
@@ -67,6 +68,7 @@ export type ParamsType = {
     }
     conversion?: boolean
     price?: number | null
+    renewalCycle?: Course_Renewal_Cycle_Enum
     /// TODO: Delete this after Arlo migration
     arloReferenceId?: string
   }

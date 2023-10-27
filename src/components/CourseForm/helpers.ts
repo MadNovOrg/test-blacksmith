@@ -1,4 +1,4 @@
-import { format, isValid, isBefore, isEqual } from 'date-fns'
+import { format, isValid, isBefore, isEqual, getYear } from 'date-fns'
 import { TFunction } from 'i18next'
 
 import { Accreditors_Enum } from '@app/generated/graphql'
@@ -528,5 +528,21 @@ export function courseNeedsManualPrice({
   return (
     [CourseType.OPEN, CourseType.CLOSED].includes(courseType) &&
     accreditedBy === Accreditors_Enum.Bild
+  )
+}
+
+export function hasRenewalCycle({
+  courseType,
+  startDate,
+  courseLevel,
+}: {
+  courseType: CourseType
+  startDate: Date
+  courseLevel: CourseLevel
+}) {
+  return (
+    [CourseType.OPEN, CourseType.CLOSED].includes(courseType) &&
+    [CourseLevel.Level_1, CourseLevel.Level_2].includes(courseLevel) &&
+    getYear(startDate) > 2023
   )
 }

@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 
+import { hasRenewalCycle } from '@app/components/CourseForm/helpers'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
@@ -241,7 +242,15 @@ export function useSaveCourse(): {
                       courseData.organizationKeyContact,
                   }
                 : null),
-
+              ...(hasRenewalCycle({
+                courseType: courseData.type,
+                startDate: courseData.startDate,
+                courseLevel: courseData.courseLevel,
+              })
+                ? {
+                    renewalCycle: courseData.renewalCycle,
+                  }
+                : null),
               ...(courseData.usesAOL
                 ? {
                     aolCostOfCourse: courseData.courseCost,
