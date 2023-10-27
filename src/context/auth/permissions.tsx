@@ -736,7 +736,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         trainer => trainer.profile.id === auth.profile?.id
       )
       return (
-        acl.isInternalUser ||
+        acl.isInternalUser() ||
         isCourseTrainer ||
         acl.isBookingContactOfCourse(course) ||
         acl.isOrganizationKeyContactOfCourse(course)

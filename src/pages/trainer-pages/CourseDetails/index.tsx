@@ -309,16 +309,22 @@ export const CourseDetails = () => {
                       data-testid="evaluation-tab"
                     />
                   )}
-                  {dietaryAndDisabilitiesCount?.dietaryRestrictionsCount
-                    .aggregate?.count &&
+                  {(dietaryAndDisabilitiesCount
+                    ?.participantDietaryRestrictionsCount.aggregate?.count ||
+                    dietaryAndDisabilitiesCount?.trainerDietaryRestrictionsCount
+                      .aggregate?.count) &&
                   acl.canViewDietaryAndDisabiltitiesDetails(course) ? (
                     <PillTab
                       label={t(
                         'pages.course-details.tabs.dietary-requirements.title-with-count',
                         {
                           count: Number(
-                            dietaryAndDisabilitiesCount
-                              ?.dietaryRestrictionsCount.aggregate?.count
+                            (dietaryAndDisabilitiesCount
+                              ?.participantDietaryRestrictionsCount.aggregate
+                              ?.count ?? 0) +
+                              (dietaryAndDisabilitiesCount
+                                .trainerDietaryRestrictionsCount.aggregate
+                                ?.count ?? 0)
                           ),
                         }
                       )}
@@ -326,16 +332,21 @@ export const CourseDetails = () => {
                       data-testid="dietary-requirements-tab"
                     />
                   ) : null}
-                  {dietaryAndDisabilitiesCount?.disabilitiesCount.aggregate
-                    ?.count &&
+                  {(dietaryAndDisabilitiesCount?.participantDisabilitiesCount
+                    .aggregate?.count ||
+                    dietaryAndDisabilitiesCount?.trainerDisabilitiesCount
+                      .aggregate?.count) &&
                   acl.canViewDietaryAndDisabiltitiesDetails(course) ? (
                     <PillTab
                       label={t(
                         'pages.course-details.tabs.disabilities.title-with-count',
                         {
                           count: Number(
-                            dietaryAndDisabilitiesCount?.disabilitiesCount
-                              .aggregate?.count
+                            (dietaryAndDisabilitiesCount
+                              ?.participantDisabilitiesCount.aggregate?.count ??
+                              0) +
+                              (dietaryAndDisabilitiesCount
+                                .trainerDisabilitiesCount.aggregate?.count ?? 0)
                           ),
                         }
                       )}

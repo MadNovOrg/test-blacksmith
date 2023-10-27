@@ -45,12 +45,13 @@ select_permissions:
   - role: finance
     permission:
       columns:
-        - course_id
         - id
         - profile_id
-        - status
         - type
+        - course_id
+        - status
       filter: {}
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
@@ -65,42 +66,47 @@ select_permissions:
             _in:
               - CLOSED
               - OPEN
+      allow_aggregations: true
   - role: sales-representative
     permission:
       columns:
-        - course_id
         - id
         - profile_id
-        - status
         - type
+        - course_id
+        - status
       filter: {}
+      allow_aggregations: true
   - role: trainer
     permission:
       columns:
-        - course_id
-        - status
-        - type
         - id
         - profile_id
+        - type
+        - course_id
+        - status
       filter: {}
+      allow_aggregations: true
   - role: tt-ops
     permission:
       columns:
-        - course_id
         - id
         - profile_id
-        - status
         - type
+        - course_id
+        - status
       filter: {}
+      allow_aggregations: true
   - role: user
     permission:
       columns:
-        - course_id
         - id
         - profile_id
-        - status
         - type
+        - course_id
+        - status
       filter: {}
+      allow_aggregations: true
 update_permissions:
   - role: sales-admin
     permission:

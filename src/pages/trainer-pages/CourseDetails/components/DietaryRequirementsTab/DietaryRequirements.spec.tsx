@@ -24,7 +24,12 @@ const client = {
     fromValue<{
       data: GetCourseParticipantDietOrDisabilitiesDataQuery
     }>({
-      data: { dietaryRestrictions: [{ profile }], disabilities: [] },
+      data: {
+        dietaryRestrictions: [{ profile }],
+        disabilities: [],
+        trainerDietaryRestrictions: [],
+        trainerDisabilities: [],
+      },
     }),
 } as unknown as Client
 

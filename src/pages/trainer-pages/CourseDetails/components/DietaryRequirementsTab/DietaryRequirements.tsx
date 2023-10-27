@@ -67,7 +67,10 @@ export const DietaryRequirementsTab: FC<
       <Table sx={{ mt: 2 }}>
         <TableHead cols={cols} />
         <TableBody>
-          {dietaryData?.dietaryRestrictions.map(({ profile }) => (
+          {[
+            ...(dietaryData?.dietaryRestrictions ?? []),
+            ...(dietaryData?.trainerDietaryRestrictions ?? []),
+          ].map(({ profile }) => (
             <TableRow key={profile.fullName}>
               <TableCell>
                 <LinkToProfile profileId={profile.id}>

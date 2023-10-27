@@ -65,7 +65,10 @@ export const DisabilitiesTab: FC<PropsWithChildren<{ courseId: number }>> = ({
       <Table sx={{ mt: 2 }}>
         <TableHead cols={cols} />
         <TableBody>
-          {disabilitiesData?.disabilities.map(({ profile }) => (
+          {[
+            ...(disabilitiesData?.disabilities ?? []),
+            ...(disabilitiesData?.trainerDisabilities ?? []),
+          ].map(({ profile }) => (
             <TableRow key={profile.fullName}>
               <TableCell>
                 <LinkToProfile profileId={profile.id}>
