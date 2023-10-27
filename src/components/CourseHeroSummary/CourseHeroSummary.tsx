@@ -9,6 +9,7 @@ import {
   Button,
   Container,
   Grid,
+  Link,
   List,
   ListItem,
   ListItemIcon,
@@ -263,6 +264,55 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   )}
                 </List>
               </ListItem>
+
+              {course.organizationKeyContact ? (
+                <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
+                  <ListItemText>
+                    {`${t(
+                      'components.course-form.organization-key-contact-label'
+                    )}:`}
+
+                    {acl.isInternalUser() ? (
+                      <Link
+                        href={`/profile/${course.organizationKeyContact?.id}`}
+                      >
+                        {`
+                        ${course.organizationKeyContact?.email}
+                        ${course.organizationKeyContact?.fullName}
+                      `}
+                      </Link>
+                    ) : (
+                      `
+                        ${course.organizationKeyContact?.email}
+                        ${course.organizationKeyContact?.fullName}
+                      `
+                    )}
+                  </ListItemText>
+                </ListItem>
+              ) : null}
+
+              {course.bookingContact ? (
+                <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
+                  <ListItemText>
+                    {`${t('components.course-form.contact-person-label')}:`}
+
+                    {acl.isInternalUser() ? (
+                      <Link href={`/profile/${course.bookingContact?.id}`}>
+                        {`
+                        ${course.bookingContact?.email}
+                        ${course.bookingContact?.fullName}
+                      `}
+                      </Link>
+                    ) : (
+                      `
+                        ${course.bookingContact?.email}
+                        ${course.bookingContact?.fullName}
+                      `
+                    )}
+                  </ListItemText>
+                </ListItem>
+              ) : null}
+
               <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
                 <StyledListIcon>
                   <PinDropIcon />
@@ -274,28 +324,6 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   )}
                 </ListItemText>
               </ListItem>
-
-              {course.organizationKeyContact ? (
-                <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
-                  <ListItemText>{`
-                    ${t(
-                      'components.course-form.organization-key-contact-label'
-                    )}: 
-                    ${course.organizationKeyContact?.email}
-                    ${course.organizationKeyContact?.fullName}
-                  `}</ListItemText>
-                </ListItem>
-              ) : null}
-
-              {course.bookingContact ? (
-                <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
-                  <ListItemText>{`
-                    ${t('components.course-form.contact-person-label')}: 
-                    ${course.bookingContact?.email}
-                    ${course.bookingContact?.fullName}
-                  `}</ListItemText>
-                </ListItem>
-              ) : null}
 
               {course.special_instructions || course.parking_instructions ? (
                 <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
