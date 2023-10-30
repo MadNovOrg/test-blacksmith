@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Outlet, useLocation } from 'react-router-dom'
@@ -22,6 +22,8 @@ export const CourseBookingLayout: React.FC<
   const { t } = useTranslation()
   const location = useLocation()
   const { error, booking } = useBooking()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const steps = useMemo(() => {
     return [
@@ -44,7 +46,7 @@ export const CourseBookingLayout: React.FC<
   }, [location])
 
   return (
-    <Box flex={1} display="flex">
+    <Box flex={1} display="flex" flexDirection={isMobile ? 'column' : 'row'}>
       <Box width={300} display="flex" flexDirection="column" pr={4}>
         <Sticky top={20}>
           <Box mb={7}>
