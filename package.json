@@ -249,6 +249,13 @@
     "overrides": {
       "semver@>=7.0.0 <7.5.2": ">=7.5.2",
       "@babel/traverse@<7.23.2": ">=7.23.2"
+    },
+    "packageExtensions": {
+      "posix": {
+        "optionalDependencies": {
+          "node-gyp-build": "*"
+        }
+      }
     }
   }
 }
