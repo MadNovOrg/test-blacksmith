@@ -200,6 +200,11 @@ export const CourseAttendance = () => {
                   {t('pages.course-attendance.valid-pre-requisite')}
                 </StyledText>
               </li>
+              <li>
+                <StyledText variant="body1">
+                  {t('pages.course-attendance.participant-attendance')}
+                </StyledText>
+              </li>
               {go1Integration ? (
                 <li>
                   <StyledText variant="body1">

@@ -725,6 +725,7 @@
     "passed-the-quiz": "Passed the course quiz",
     "valid-pre-requisite": "Valid pre-requisite certificate was checked",
     "blended-resource-completed": "Completed the Blended Learning resource",
+    "participant-attendance": "Participants must be marked as attended in order to award a grade",
     "confirm-grading": "Confirm Grading",
     "master-checkbox-label-checked": "Deselect all",
     "master-checkbox-label-unchecked": "Select all",
