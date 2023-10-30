@@ -93,7 +93,6 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
     },
     [geoCoordinates]
   )
-
   return (
     <Box
       data-testid="course-hero-summary"
@@ -270,23 +269,17 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   <ListItemText>
                     {`${t(
                       'components.course-form.organization-key-contact-label'
-                    )}:`}
-
+                    )}: `}
                     {acl.isInternalUser() ? (
                       <Link
                         href={`/profile/${course.organizationKeyContact?.id}`}
                       >
-                        {`
-                        ${course.organizationKeyContact?.email}
-                        ${course.organizationKeyContact?.fullName}
-                      `}
+                        {`\n${course.organizationKeyContact?.fullName}`}
                       </Link>
                     ) : (
-                      `
-                        ${course.organizationKeyContact?.email}
-                        ${course.organizationKeyContact?.fullName}
-                      `
+                      `\n${course.organizationKeyContact?.fullName}`
                     )}
+                    {course.organizationKeyContact?.email}
                   </ListItemText>
                 </ListItem>
               ) : null}
@@ -294,21 +287,17 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
               {course.bookingContact ? (
                 <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
                   <ListItemText>
-                    {`${t('components.course-form.contact-person-label')}:`}
+                    {`${t('components.course-form.contact-person-label')}: `}
 
                     {acl.isInternalUser() ? (
                       <Link href={`/profile/${course.bookingContact?.id}`}>
-                        {`
-                        ${course.bookingContact?.email}
-                        ${course.bookingContact?.fullName}
-                      `}
+                        {`\n${course.bookingContact?.fullName}`}
                       </Link>
                     ) : (
-                      `
-                        ${course.bookingContact?.email}
-                        ${course.bookingContact?.fullName}
-                      `
+                      `\n${course.bookingContact?.fullName}`
                     )}
+                    <br />
+                    {course.bookingContact?.email}
                   </ListItemText>
                 </ListItem>
               ) : null}

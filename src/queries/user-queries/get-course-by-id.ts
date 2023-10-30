@@ -94,10 +94,14 @@ export const QUERY = gql`
       }
       bookingContact {
         id
+        email
+        fullName
       }
 
       organizationKeyContact {
         id
+        email
+        fullName
       }
 
       status
