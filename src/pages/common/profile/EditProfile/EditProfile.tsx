@@ -517,8 +517,9 @@ export const EditProfilePage: React.FC<
         },
       })
       await mutate()
+      await refreshData()
     },
-    [mutate, updateOrgMember]
+    [mutate, updateOrgMember, refreshData]
   )
 
   const deleteOrgMember = useCallback(

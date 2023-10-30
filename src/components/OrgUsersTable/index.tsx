@@ -44,7 +44,7 @@ export const OrgUsersTable: React.FC<
   React.PropsWithChildren<OrgUsersTableParams>
 > = ({ orgId, onChange, certificateStatus }) => {
   const { t } = useTranslation()
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
 
   const sorting = useTableSort('fullName', 'asc')
 
@@ -241,7 +241,9 @@ export const OrgUsersTable: React.FC<
                       size="small"
                     />
                   </TableCell>
-                  {(member && member.isAdmin) ||
+                  {(member &&
+                    member.isAdmin &&
+                    profile?.id === member.profile.id) ||
                   (acl.canEditOrgUser([orgId]) &&
                     (acl.canSetOrgAdminRole() || !member.isAdmin)) ? (
                     <TableCell>
