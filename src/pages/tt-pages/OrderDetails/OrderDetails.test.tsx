@@ -193,7 +193,7 @@ describe('page: OrderDetails', () => {
   })
 
   it('renders blended learning licenses information if purchased', () => {
-    const unitPrice = 25
+    const unitPrice = 50
 
     const order = buildOrder({
       overrides: {

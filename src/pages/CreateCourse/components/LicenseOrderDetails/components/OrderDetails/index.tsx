@@ -5,7 +5,7 @@ import { DetailsItemBox, ItemRow } from '@app/components/DetailsItemRow'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import theme from '@app/theme'
 
-const PRICE_PER_LICENSE = 25
+const PRICE_PER_LICENSE = 50
 
 type Props = {
   numberOfLicenses: number

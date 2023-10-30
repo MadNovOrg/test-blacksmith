@@ -25,10 +25,10 @@ describe('component: OrderDetails', () => {
 
     render(<OrderDetails licensesBalance={1} numberOfLicenses={2} {...costs} />)
 
-    expect(screen.getByTestId('amount-allowance')).toHaveTextContent('-£25.00')
-    expect(screen.getByTestId('amount-subtotal')).toHaveTextContent('£50.00')
-    expect(screen.getByTestId('amount-vat')).toHaveTextContent('£5.00')
-    expect(screen.getByTestId('amount-due')).toHaveTextContent('£30.00')
+    expect(screen.getByTestId('amount-allowance')).toHaveTextContent('-£50.00')
+    expect(screen.getByTestId('amount-subtotal')).toHaveTextContent('£100.00')
+    expect(screen.getByTestId('amount-vat')).toHaveTextContent('£10.00')
+    expect(screen.getByTestId('amount-due')).toHaveTextContent('£60.00')
   })
 
   it('calculates correctly if there is no license allowance', () => {
@@ -36,8 +36,8 @@ describe('component: OrderDetails', () => {
     render(<OrderDetails licensesBalance={0} numberOfLicenses={2} {...costs} />)
 
     expect(screen.queryByTestId('amount-allowance')).not.toBeInTheDocument()
-    expect(screen.getByTestId('amount-subtotal')).toHaveTextContent('£50.00')
-    expect(screen.getByTestId('amount-vat')).toHaveTextContent('£10.00')
-    expect(screen.getByTestId('amount-due')).toHaveTextContent('£60.00')
+    expect(screen.getByTestId('amount-subtotal')).toHaveTextContent('£100.00')
+    expect(screen.getByTestId('amount-vat')).toHaveTextContent('£20.00')
+    expect(screen.getByTestId('amount-due')).toHaveTextContent('£120.00')
   })
 })
