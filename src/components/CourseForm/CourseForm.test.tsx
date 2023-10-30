@@ -313,7 +313,7 @@ describe('component: CourseForm', () => {
     })
 
     expect(
-      screen.queryByLabelText(/how long should certificate last/i)
+      screen.queryByLabelText(/certificate duration/i)
     ).not.toBeInTheDocument()
   })
 
@@ -342,9 +342,7 @@ describe('component: CourseForm', () => {
       await userEvent.paste('01/01/2024')
       await selectLevel(courseLevel)
 
-      expect(
-        screen.getByLabelText(/how long should certificate last/i)
-      ).toBeInTheDocument()
+      expect(screen.getByLabelText(/certificate duration/i)).toBeInTheDocument()
     }
   )
 
@@ -364,7 +362,7 @@ describe('component: CourseForm', () => {
       await userEvent.paste('31/12/2023')
 
       expect(
-        screen.queryByLabelText(/how long should certificate last/i)
+        screen.queryByLabelText(/certificate duration/i)
       ).not.toBeInTheDocument()
     }
   )

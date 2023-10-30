@@ -248,7 +248,7 @@
     "settings-section-title": "Settings",
     "renewal-cycle": {
       "panel-title": "Course renewal cycle",
-      "label": "How long should certificate last?",
+      "label": "Certificate duration",
       "radio-label_one": "{{count}} year",
       "radio-label_other": "{{count}} years"
     }
