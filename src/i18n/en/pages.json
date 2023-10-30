@@ -255,6 +255,17 @@
     "actionable-courses-title": "Action required",
     "courses-title": "All courses"
   },
+  "draft-courses": {
+    "h1": "Drafts",
+    "col-name": "Name",
+    "col-type": "Type",
+    "col-org": "Organisation",
+    "col-venue": "Venue",
+    "col-start": "Start",
+    "col-end": "End",
+    "col-created-at": "Created at",
+    "col-created-by": "Created by"
+  },
   "resources": {
     "title": "Resources",
     "additional-resources": {
@@ -272,6 +283,7 @@
     "INDIRECT-course-title": "Course creation",
     "step-of": "{{completed}} of {{total}}",
     "back-to-all-courses-button": "Back to all courses",
+    "back-to-all-drafts-button": "Back to all drafts",
     "step-navigation-course-details": "Course details",
     "step-navigation-order-details": "Order details",
     "step-navigation-assign-trainer": "Assign trainer(s)",
@@ -389,6 +401,17 @@
       "checkboxes-missing": "Read and confirm the statements above"
     },
     "save-as-draft": "Save as draft",
+    "save-as-draft-dialog": {
+      "title": "Save as draft",
+      "description": "This course will be saved as a Draft. Do you wish to proceed?",
+      "label": "Enter a name for your draft:",
+      "name": "Name",
+      "confirm-btn": "Yes",
+      "cancel-btn": "No",
+      "no-draft-name": "Please enter a name for your draft",
+      "save-error-message": "There was an error saving your draft. Please try again later",
+      "draft-saved": "Draft <0><1>{{name}}</1></0> successfully saved"
+    },
     "submitted-course": "<0><1>{{code}}</1></0> has been created.",
     "submitted-closed": "Your course has been created {{code}} and an order has been approved ",
     "link-to-order": "click here to view it",

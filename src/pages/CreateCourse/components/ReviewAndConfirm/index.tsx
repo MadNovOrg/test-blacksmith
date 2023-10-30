@@ -24,6 +24,7 @@ import {
 } from '@app/generated/graphql'
 import usePollQuery from '@app/hooks/usePollQuery'
 import { GET_ORDER_REDUCED } from '@app/queries/order/get-order-reduced'
+import { CourseType } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { StepsEnum } from '../../types'
@@ -45,9 +46,9 @@ export const ReviewAndConfirm = () => {
     completeStep,
     courseData,
     expenses,
-    saveDraft,
     setCurrentStepKey,
     trainers,
+    setShowDraftConfirmationDialog,
   } = useCreateCourse()
   const { acl } = useAuth()
 
@@ -212,14 +213,16 @@ export const ReviewAndConfirm = () => {
         </Box>
 
         <Box mb={2}>
-          <Button
-            variant="text"
-            sx={{ marginRight: 4 }}
-            onClick={saveDraft}
-            fullWidth={isMobile}
-          >
-            {t('pages.create-course.save-as-draft')}
-          </Button>
+          {acl.isTrainer() && courseData.type === CourseType.INDIRECT && (
+            <Button
+              variant="text"
+              sx={{ marginRight: 4 }}
+              onClick={() => setShowDraftConfirmationDialog(true)}
+              fullWidth={isMobile}
+            >
+              {t('pages.create-course.save-as-draft')}
+            </Button>
+          )}
 
           <LoadingButton
             type="submit"

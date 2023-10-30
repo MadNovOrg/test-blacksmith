@@ -55,6 +55,8 @@
   "waitlist-cancellation-error-CANCELLATION_SECRET_INVALID": "You are not part of this course’s waiting list.",
   "users": "Users",
   "courses": "Courses",
+  "drafts": "Drafts",
+  "draft": "Draft",
   "manage-courses": "Manage Courses",
   "contacts": "Contacts",
   "community": "Community",

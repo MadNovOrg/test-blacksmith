@@ -25,9 +25,13 @@ function createFetchingClient() {
 describe('page: CreateCourse', () => {
   beforeAll(() => {
     useCourseDraftMocked.mockReturnValue({
-      fetchDraft: vi.fn(() => ({ data: {}, status: LoadingStatus.SUCCESS })),
-      removeDraft: vi.fn(),
-      setDraft: vi.fn(),
+      id: 'random-id',
+      data: {},
+      error: {
+        name: 'errorName',
+        message: 'errorMessage',
+      },
+      status: LoadingStatus.SUCCESS,
     })
   })
 

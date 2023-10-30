@@ -3,8 +3,8 @@ import {
   CircularProgress,
   Container,
   Stack,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
@@ -221,14 +221,21 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
           )}
         </Box>
 
-        <Box flex={1} sx={{ overflowX: 'auto' }}>
+        <Box flex={1}>
           <Box
             display="flex"
             alignItems="right"
-            justifyContent="end"
+            justifyContent="space-between"
             alignContent="right"
             mb={2}
           >
+            <Box display="flex" gap={1}>
+              {acl.isTrainer() && !isMobile ? (
+                <Button variant="contained" onClick={() => navigate(`/drafts`)}>
+                  {t('pages.draft-courses.h1')}
+                </Button>
+              ) : null}
+            </Box>
             <Box display="flex" gap={1}>
               {acl.canCreateCourses() && !isMobile ? (
                 <CreateCourseMenu />

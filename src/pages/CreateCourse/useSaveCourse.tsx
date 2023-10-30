@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 import { hasRenewalCycle } from '@app/components/CourseForm/helpers'
 import { useAuth } from '@app/context/auth'
@@ -7,15 +8,17 @@ import {
   Course_Expenses_Insert_Input,
   Course_Status_Enum,
   Payment_Methods_Enum,
+  RemoveCourseDraftMutation,
+  RemoveCourseDraftMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import { shouldGoIntoExceptionApproval } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
   MUTATION as INSERT_COURSE_MUTATION,
   ParamsType,
   ResponseType,
 } from '@app/queries/courses/insert-course'
+import { QUERY as REMOVE_COURSE_DRAFT } from '@app/queries/courses/remove-course-draft'
 import { isModeratorNeeded } from '@app/rules/trainers'
 import {
   BildStrategies,
@@ -132,10 +135,7 @@ export function useSaveCourse(): {
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const fetcher = useFetcher()
   const { profile, acl } = useAuth()
-  const { removeDraft } = useCourseDraft(
-    profile?.id ?? '',
-    courseData?.type ?? CourseType.OPEN
-  )
+  const { id: draftId } = useParams()
 
   const saveCourse = useCallback<SaveCourse>(async () => {
     const isBild = courseData?.accreditedBy === Accreditors_Enum.Bild
@@ -339,13 +339,18 @@ export function useSaveCourse(): {
         if (response.insertCourse.inserted.length === 1) {
           setSavingStatus(LoadingStatus.SUCCESS)
 
-          try {
-            await removeDraft()
-          } catch (error) {
-            console.log({
-              message: 'Error removing course draft',
-              error,
-            })
+          if (draftId) {
+            try {
+              await fetcher<
+                RemoveCourseDraftMutation,
+                RemoveCourseDraftMutationVariables
+              >(REMOVE_COURSE_DRAFT, { draftId })
+            } catch (error) {
+              console.log({
+                message: 'Error removing course draft',
+                error,
+              })
+            }
           }
 
           const insertedCourse = response.insertCourse.inserted[0]
@@ -377,7 +382,7 @@ export function useSaveCourse(): {
     profile?.fullName,
     profile?.email,
     profile?.phone,
-    removeDraft,
+    draftId,
   ])
 
   return {

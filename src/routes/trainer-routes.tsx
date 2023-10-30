@@ -25,6 +25,7 @@ import { CourseAttendance } from '@app/pages/trainer-pages/CourseGradingDetails/
 import { ModulesSelection } from '@app/pages/trainer-pages/CourseGradingDetails/ModulesSelection'
 import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
+import { DraftCourses } from '@app/pages/trainer-pages/MyCourses/DraftCourses'
 import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
@@ -77,6 +78,19 @@ const TrainerBaseRoutes = () => {
             <Route element={<CourseAttendance />} index />
             <Route path="modules" element={<ModulesSelection />} />
           </Route>
+        </Route>
+      </Route>
+
+      <Route path="drafts">
+        <Route index element={<DraftCourses />} />
+        <Route path=":id" element={<CreateCourse />}>
+          <Route index element={<CreateCourseForm />} />
+          <Route path="assign-trainers" element={<AssignTrainers />} />
+          <Route
+            path="license-order-details"
+            element={<LicenseOrderDetails />}
+          />
+          <Route path="review-license-order" element={<ReviewLicenseOrder />} />
         </Route>
       </Route>
 

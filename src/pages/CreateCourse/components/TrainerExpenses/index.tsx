@@ -26,7 +26,6 @@ export const TrainerExpenses = () => {
     completeStep,
     courseData,
     expenses,
-    saveDraft,
     setCurrentStepKey,
     setExpenses,
     trainers,
@@ -91,15 +90,6 @@ export const TrainerExpenses = () => {
           </Button>
         </Box>
         <Box mb={2}>
-          <Button
-            variant="text"
-            sx={{ marginRight: 4 }}
-            onClick={saveDraft}
-            fullWidth={isMobile}
-          >
-            {t('pages.create-course.save-as-draft')}
-          </Button>
-
           <LoadingButton
             type="submit"
             variant="contained"

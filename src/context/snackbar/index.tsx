@@ -21,6 +21,7 @@ export type SnackbarMessageKey =
   | 'course-approval-error'
   | 'attendance-toggle-error'
   | 'bulk-attendance-error'
+  | 'draft-saved'
 export type SnackbarMessage = { label: React.ReactNode }
 
 export type SnackbarState = {

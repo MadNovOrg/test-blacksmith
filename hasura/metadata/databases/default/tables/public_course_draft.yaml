@@ -5,12 +5,22 @@ configuration:
   column_config:
     course_type:
       custom_name: courseType
+    created_at:
+      custom_name: createdAt
     profile_id:
       custom_name: profileId
+    updated_at:
+      custom_name: updatedAt
   custom_column_names:
     course_type: courseType
+    created_at: createdAt
     profile_id: profileId
+    updated_at: updatedAt
   custom_root_fields: {}
+object_relationships:
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
 insert_permissions:
   - role: sales-admin
     permission:
@@ -29,23 +39,24 @@ insert_permissions:
   - role: trainer
     permission:
       check: {}
+      set:
+        profile_id: x-hasura-User-Id
       columns:
         - course_type
-        - created_at
         - data
         - id
-        - profile_id
-        - updated_at
+        - name
   - role: tt-admin
     permission:
       check: {}
       columns:
-        - data
         - course_type
         - created_at
-        - updated_at
+        - data
         - id
+        - name
         - profile_id
+        - updated_at
   - role: tt-ops
     permission:
       check: {}
@@ -74,12 +85,13 @@ select_permissions:
   - role: trainer
     permission:
       columns:
-        - course_type
-        - created_at
         - data
+        - course_type
+        - name
+        - created_at
+        - updated_at
         - id
         - profile_id
-        - updated_at
       filter:
         profile_id:
           _eq: X-Hasura-User-Id
@@ -127,9 +139,9 @@ update_permissions:
   - role: trainer
     permission:
       columns:
-        - created_at
+        - course_type
         - data
-        - updated_at
+        - name
       filter:
         profile_id:
           _eq: X-Hasura-User-Id

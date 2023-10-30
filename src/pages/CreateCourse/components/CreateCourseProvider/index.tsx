@@ -1,11 +1,17 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useParams } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
-import { Accreditors_Enum } from '@app/generated/graphql'
+import {
+  Accreditors_Enum,
+  SetCourseDraftMutation,
+  SetCourseDraftMutationVariables,
+} from '@app/generated/graphql'
+import { useFetcher } from '@app/hooks/use-fetcher'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
-import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
+import { QUERY as SET_COURSE_DRAFT } from '@app/queries/courses/set-course-draft'
 import {
   CourseType,
   Draft,
@@ -27,17 +33,30 @@ const CreateCourseContext = React.createContext<ContextValue | undefined>(
   undefined
 )
 
+export enum SaveDraftError {
+  NO_USER_PROFILE,
+  DRAFT_SAVE_FAILURE,
+}
+
+export type SaveDraftResult = {
+  id?: string
+  name?: string
+  error?: SaveDraftError
+}
+
 export type CreateCourseProviderProps = {
   initialValue?: Draft
   courseType: CourseType
+  draftName?: string | null
 }
 
 export const CreateCourseProvider: React.FC<
   React.PropsWithChildren<CreateCourseProviderProps>
-> = ({ children, initialValue, courseType }) => {
+> = ({ children, initialValue, courseType, draftName }) => {
   const { t } = useTranslation()
   const { profile } = useAuth()
-  const { setDraft } = useCourseDraft(profile?.id ?? '', courseType)
+  const { id: draftId } = useParams()
+  const fetcher = useFetcher()
 
   const [courseData, setCourseData] = useState<ValidCourseInput | undefined>(
     initialValue?.courseData
@@ -57,6 +76,9 @@ export const CreateCourseProvider: React.FC<
   const [go1Licensing, setGo1Licensing] = useState<Draft['go1Licensing']>(
     initialValue?.go1Licensing ?? undefined
   )
+
+  const [showDraftConfirmationDialog, setShowDraftConfirmationDialog] =
+    useState(false)
 
   const [invoiceDetails, setInvoiceDetails] = useState<
     ContextValue['invoiceDetails']
@@ -123,33 +145,75 @@ export const CreateCourseProvider: React.FC<
     )
   }, [courseData, strategies, t])
 
-  const saveDraft = useCallback(async () => {
-    if (!profile?.id) {
-      return
-    }
+  const saveDraft = useCallback(
+    async (name?: string): Promise<SaveDraftResult> => {
+      if (!profile?.id) {
+        return {
+          error: SaveDraftError.NO_USER_PROFILE,
+        }
+      }
 
-    const draft: Draft = {
-      courseData,
-      trainers,
-      expenses,
-      currentStepKey,
+      const draft: Draft = {
+        courseData,
+        trainers,
+        expenses,
+        currentStepKey,
+        completedSteps,
+        go1Licensing,
+        invoiceDetails,
+      }
+
+      const normalizedDraft = draft
+      if (normalizedDraft.expenses) {
+        for (const key in normalizedDraft.expenses) {
+          normalizedDraft.expenses[key].transport =
+            normalizedDraft.expenses[key].transport?.filter(Boolean) ?? []
+          normalizedDraft.expenses[key].miscellaneous =
+            normalizedDraft.expenses[key].miscellaneous?.filter(Boolean) ?? []
+        }
+      }
+
+      try {
+        const response = await fetcher<
+          SetCourseDraftMutation,
+          SetCourseDraftMutationVariables
+        >(SET_COURSE_DRAFT, {
+          object: {
+            courseType: courseType ?? draft.courseData?.type,
+            data: normalizedDraft,
+            name,
+            id: draftId,
+          },
+        })
+
+        return {
+          id: response.insert_course_draft_one?.id,
+          name,
+        }
+      } catch (error) {
+        console.log({
+          message: 'Error saving draft',
+          error,
+        })
+        return {
+          error: SaveDraftError.DRAFT_SAVE_FAILURE,
+        }
+      }
+    },
+    [
       completedSteps,
+      courseData,
+      currentStepKey,
+      expenses,
+      profile,
+      trainers,
       go1Licensing,
       invoiceDetails,
-    }
-
-    setDraft(draft)
-  }, [
-    completedSteps,
-    courseData,
-    currentStepKey,
-    expenses,
-    profile,
-    setDraft,
-    trainers,
-    go1Licensing,
-    invoiceDetails,
-  ])
+      courseType,
+      draftId,
+      fetcher,
+    ]
+  )
 
   const value: ContextValue = useMemo(() => {
     return {
@@ -159,6 +223,7 @@ export const CreateCourseProvider: React.FC<
       courseType,
       currentStepKey,
       expenses,
+      draftName,
       saveDraft,
       setCourseData,
       setCurrentStepKey,
@@ -166,6 +231,8 @@ export const CreateCourseProvider: React.FC<
       setTrainers,
       trainers,
       go1Licensing,
+      showDraftConfirmationDialog,
+      setShowDraftConfirmationDialog,
       setGo1Licensing,
       exceptions,
       courseName,
@@ -183,6 +250,7 @@ export const CreateCourseProvider: React.FC<
     courseType,
     currentStepKey,
     expenses,
+    draftName,
     saveDraft,
     trainers,
     go1Licensing,
@@ -191,6 +259,7 @@ export const CreateCourseProvider: React.FC<
     pricing.price,
     pricing.error,
     invoiceDetails,
+    showDraftConfirmationDialog,
   ])
 
   return (

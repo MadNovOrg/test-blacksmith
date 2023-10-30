@@ -1,13 +1,18 @@
 import {
   Box,
-  Typography,
   Container,
-  useTheme,
+  Typography,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import { t } from 'i18next'
-import React, { useMemo } from 'react'
-import { Outlet, useSearchParams } from 'react-router-dom'
+import { useMemo } from 'react'
+import {
+  Outlet,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { Sticky } from '@app/components/Sticky'
@@ -16,17 +21,29 @@ import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { CourseType } from '@app/types'
 
 import { NotFound } from '../common/NotFound'
+import { DraftConfirmationDialog } from '../trainer-pages/MyCourses/components/DraftConfirmationDialog'
 
 import { useCreateCourse } from './components/CreateCourseProvider'
 import { CreateCourseSteps } from './components/CreateCourseSteps'
 
 export const CreateCoursePage = () => {
   const [searchParams] = useSearchParams()
+  const location = useLocation()
+
   const { acl } = useAuth()
-  const { completedSteps, courseData, currentStepKey } = useCreateCourse()
+  const navigate = useNavigate()
+  const {
+    draftName,
+    completedSteps,
+    courseData,
+    currentStepKey,
+    showDraftConfirmationDialog,
+    setShowDraftConfirmationDialog,
+  } = useCreateCourse()
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const isDraft = location.pathname.indexOf('draft') > -1
 
   const courseType = useMemo(() => {
     const qsType = (searchParams.get('type') as CourseType) ?? CourseType.OPEN
@@ -45,8 +62,12 @@ export const CreateCoursePage = () => {
             <Sticky top={20}>
               <Box mb={2}>
                 <BackButton
-                  label={t('pages.create-course.back-to-all-courses-button')}
-                  to="/courses"
+                  label={
+                    isDraft
+                      ? t('pages.create-course.back-to-all-drafts-button')
+                      : t('pages.create-course.back-to-all-courses-button')
+                  }
+                  to={isDraft ? '/drafts' : '/courses'}
                 />
               </Box>
               <Box mb={isMobile ? 2 : 7}>
@@ -71,6 +92,20 @@ export const CreateCoursePage = () => {
           </Box>
         </Box>
       </Container>
+
+      {showDraftConfirmationDialog && (
+        <DraftConfirmationDialog
+          open={showDraftConfirmationDialog}
+          name={draftName}
+          onCancel={() => {
+            setShowDraftConfirmationDialog(false)
+          }}
+          onSubmit={() => {
+            navigate('/drafts')
+            setShowDraftConfirmationDialog(false)
+          }}
+        />
+      )}
     </FullHeightPageLayout>
   )
 }

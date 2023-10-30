@@ -8,6 +8,7 @@ import {
 } from '@app/types'
 
 import { CourseException } from './components/CourseExceptionsConfirmation/utils'
+import { SaveDraftResult } from './components/CreateCourseProvider'
 
 export enum StepsEnum {
   COURSE_DETAILS = 'course-details',
@@ -30,8 +31,9 @@ export type ContextValue = {
   }
   courseType: CourseType
   currentStepKey: StepsEnum | null
+  draftName?: string | null
   expenses: Record<string, ExpensesInput>
-  saveDraft: () => Promise<void>
+  saveDraft: (name?: string) => Promise<SaveDraftResult>
   setCourseData: (courseData: ValidCourseInput) => void
   setCurrentStepKey: (step: StepsEnum) => void
   setExpenses: (expenses: Record<string, ExpensesInput>) => void
@@ -42,4 +44,6 @@ export type ContextValue = {
   go1Licensing: Draft['go1Licensing']
   exceptions: CourseException[]
   invoiceDetails?: InvoiceDetails
+  showDraftConfirmationDialog: boolean
+  setShowDraftConfirmationDialog: (value: boolean) => void
 }

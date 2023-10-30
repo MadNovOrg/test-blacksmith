@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react'
-import { useLocation, useSearchParams } from 'react-router-dom'
+import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
+import { CourseType } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import {
@@ -21,29 +22,36 @@ export const CreateCourse = ({ initialContextValue }: Props) => {
   const [searchParams] = useSearchParams()
   const { profile } = useAuth()
   const { pathname } = useLocation()
+  const { id: draftId } = useParams()
 
-  const courseType = useMemo(
+  const {
+    data: draftData,
+    name: draftName,
+    status: fetchDraftStatus,
+    updatedAt: draftUpdatedAt,
+  } = useCourseDraft(draftId)
+
+  const courseType: CourseType = useMemo(
     () =>
+      draftData.courseData?.type ??
       getCourseType(
         profile?.id ?? 'unknown',
         searchParams.get('type'),
         pathname === '/courses/new'
       ),
-    [pathname, profile, searchParams]
+    [draftData, pathname, profile, searchParams]
   )
 
-  const { fetchDraft } = useCourseDraft(profile?.id ?? '', courseType)
-
-  const { data: draft, status: fetchDraftStatus } = fetchDraft()
-
-  if (fetchDraftStatus === LoadingStatus.FETCHING) {
+  if (fetchDraftStatus === LoadingStatus.FETCHING && draftId) {
     return <SuspenseLoading />
   }
 
   return (
     <CreateCourseProvider
-      initialValue={initialContextValue ?? draft}
+      key={draftUpdatedAt}
+      initialValue={initialContextValue ?? draftData}
       courseType={courseType}
+      draftName={draftName}
     >
       <CreateCoursePage />
     </CreateCourseProvider>

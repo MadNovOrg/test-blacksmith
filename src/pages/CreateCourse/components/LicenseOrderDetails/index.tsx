@@ -9,7 +9,7 @@ import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import React, { useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from 'urql'
@@ -45,7 +45,7 @@ export const LicenseOrderDetails = () => {
     go1Licensing,
     setGo1Licensing,
     completeStep,
-    saveDraft,
+    setShowDraftConfirmationDialog,
   } = useCreateCourse()
   const { t, _t } = useScopedTranslation(
     'pages.create-course.license-order-details'
@@ -96,7 +96,7 @@ export const LicenseOrderDetails = () => {
     const values = methods.getValues()
 
     setGo1Licensing({ prices, invoiceDetails: values.invoiceDetails })
-    saveDraft()
+    setShowDraftConfirmationDialog(true)
   }
 
   if (!courseData) {

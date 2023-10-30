@@ -110,14 +110,8 @@ const trainerInputToCourseTrainer = (
 export const AssignTrainers = () => {
   const { t } = useTranslation()
   const { acl } = useAuth()
-  const {
-    completeStep,
-    courseData,
-    saveDraft,
-    setCurrentStepKey,
-    setTrainers,
-    trainers,
-  } = useCreateCourse()
+  const { completeStep, courseData, setCurrentStepKey, setTrainers, trainers } =
+    useCreateCourse()
   const { addSnackbarMessage } = useSnackbar()
 
   const theme = useTheme()
@@ -308,15 +302,6 @@ export const AssignTrainers = () => {
             </Button>
           </Box>
           <Box mb={2}>
-            <Button
-              variant="text"
-              sx={{ marginRight: 4 }}
-              onClick={saveDraft}
-              fullWidth={isMobile}
-            >
-              {t('pages.create-course.save-as-draft')}
-            </Button>
-
             <LoadingButton
               type="submit"
               variant="contained"

@@ -48,7 +48,6 @@ export const OrderDetails: React.FC = () => {
     setInvoiceDetails,
     completeStep,
     invoiceDetails,
-    saveDraft,
   } = useCreateCourse()
 
   useEffect(() => {
@@ -65,13 +64,6 @@ export const OrderDetails: React.FC = () => {
     setInvoiceDetails(data.invoiceDetails)
     completeStep(StepsEnum.ORDER_DETAILS)
     navigate('../review-and-confirm')
-  }
-
-  const handleDraftClick = () => {
-    const values = methods.getValues()
-
-    setInvoiceDetails(values.invoiceDetails)
-    saveDraft()
   }
 
   if (!courseData) {
@@ -118,15 +110,6 @@ export const OrderDetails: React.FC = () => {
               </Button>
             </Box>
             <Box mb={2}>
-              <Button
-                variant="text"
-                sx={{ marginRight: 4 }}
-                fullWidth={isMobile}
-                onClick={handleDraftClick}
-              >
-                {_t('pages.create-course.save-as-draft')}
-              </Button>
-
               <LoadingButton
                 type="submit"
                 variant="contained"

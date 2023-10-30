@@ -68,9 +68,13 @@ describe('component: CreateCourseForm', () => {
       status: LoadingStatus.SUCCESS,
     })
     useCourseDraftMocked.mockReturnValue({
-      fetchDraft: vi.fn(),
-      removeDraft: vi.fn(),
-      setDraft: vi.fn(),
+      id: 'random-id',
+      data: {},
+      error: {
+        name: 'errorName',
+        message: 'errorMessage',
+      },
+      status: LoadingStatus.SUCCESS,
     })
   })
 

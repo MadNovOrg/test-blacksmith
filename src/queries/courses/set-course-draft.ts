@@ -1,16 +1,12 @@
 import { gql } from 'graphql-request'
 
 export const QUERY = gql`
-  mutation SetCourseDraft(
-    $courseType: String!
-    $profileId: uuid!
-    $data: jsonb!
-  ) {
+  mutation SetCourseDraft($object: course_draft_insert_input!) {
     insert_course_draft_one(
-      object: { profileId: $profileId, courseType: $courseType, data: $data }
+      object: $object
       on_conflict: {
-        constraint: course_draft_profile_id_course_type_key
-        update_columns: data
+        constraint: course_draft_pkey
+        update_columns: [data, name]
       }
     ) {
       id

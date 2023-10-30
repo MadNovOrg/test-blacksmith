@@ -18335,11 +18335,14 @@ export type Course_Delivery_Type_Updates = {
 export type Course_Draft = {
   __typename?: 'course_draft';
   courseType: Scalars['String'];
-  created_at: Scalars['timestamp'];
+  createdAt: Scalars['timestamp'];
   data?: Maybe<Scalars['jsonb']>;
   id: Scalars['uuid'];
+  name?: Maybe<Scalars['String']>;
+  /** An object relationship */
+  profile: Profile;
   profileId: Scalars['uuid'];
-  updated_at: Scalars['timestamp'];
+  updatedAt: Scalars['timestamp'];
 };
 
 
@@ -18381,19 +18384,19 @@ export type Course_Draft_Bool_Exp = {
   _not?: InputMaybe<Course_Draft_Bool_Exp>;
   _or?: InputMaybe<Array<Course_Draft_Bool_Exp>>;
   courseType?: InputMaybe<String_Comparison_Exp>;
-  created_at?: InputMaybe<Timestamp_Comparison_Exp>;
+  createdAt?: InputMaybe<Timestamp_Comparison_Exp>;
   data?: InputMaybe<Jsonb_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  profile?: InputMaybe<Profile_Bool_Exp>;
   profileId?: InputMaybe<Uuid_Comparison_Exp>;
-  updated_at?: InputMaybe<Timestamp_Comparison_Exp>;
+  updatedAt?: InputMaybe<Timestamp_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "course_draft" */
 export enum Course_Draft_Constraint {
   /** unique or primary key constraint on columns "id" */
-  CourseDraftPkey = 'course_draft_pkey',
-  /** unique or primary key constraint on columns "course_type", "profile_id" */
-  CourseDraftProfileIdCourseTypeKey = 'course_draft_profile_id_course_type_key'
+  CourseDraftPkey = 'course_draft_pkey'
 }
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
@@ -18414,31 +18417,35 @@ export type Course_Draft_Delete_Key_Input = {
 /** input type for inserting data into table "course_draft" */
 export type Course_Draft_Insert_Input = {
   courseType?: InputMaybe<Scalars['String']>;
-  created_at?: InputMaybe<Scalars['timestamp']>;
+  createdAt?: InputMaybe<Scalars['timestamp']>;
   data?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   profileId?: InputMaybe<Scalars['uuid']>;
-  updated_at?: InputMaybe<Scalars['timestamp']>;
+  updatedAt?: InputMaybe<Scalars['timestamp']>;
 };
 
 /** aggregate max on columns */
 export type Course_Draft_Max_Fields = {
   __typename?: 'course_draft_max_fields';
   courseType?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamp']>;
+  createdAt?: Maybe<Scalars['timestamp']>;
   id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
   profileId?: Maybe<Scalars['uuid']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
+  updatedAt?: Maybe<Scalars['timestamp']>;
 };
 
 /** aggregate min on columns */
 export type Course_Draft_Min_Fields = {
   __typename?: 'course_draft_min_fields';
   courseType?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamp']>;
+  createdAt?: Maybe<Scalars['timestamp']>;
   id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
   profileId?: Maybe<Scalars['uuid']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
+  updatedAt?: Maybe<Scalars['timestamp']>;
 };
 
 /** response of any mutation on the table "course_draft" */
@@ -18460,11 +18467,13 @@ export type Course_Draft_On_Conflict = {
 /** Ordering options when selecting data from "course_draft". */
 export type Course_Draft_Order_By = {
   courseType?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
   data?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  profile?: InputMaybe<Profile_Order_By>;
   profileId?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: course_draft */
@@ -18482,25 +18491,28 @@ export enum Course_Draft_Select_Column {
   /** column name */
   CourseType = 'courseType',
   /** column name */
-  CreatedAt = 'created_at',
+  CreatedAt = 'createdAt',
   /** column name */
   Data = 'data',
   /** column name */
   Id = 'id',
   /** column name */
+  Name = 'name',
+  /** column name */
   ProfileId = 'profileId',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updatedAt'
 }
 
 /** input type for updating data in table "course_draft" */
 export type Course_Draft_Set_Input = {
   courseType?: InputMaybe<Scalars['String']>;
-  created_at?: InputMaybe<Scalars['timestamp']>;
+  createdAt?: InputMaybe<Scalars['timestamp']>;
   data?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
   profileId?: InputMaybe<Scalars['uuid']>;
-  updated_at?: InputMaybe<Scalars['timestamp']>;
+  updatedAt?: InputMaybe<Scalars['timestamp']>;
 };
 
 /** Streaming cursor of the table "course_draft" */
@@ -18514,11 +18526,12 @@ export type Course_Draft_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Course_Draft_Stream_Cursor_Value_Input = {
   courseType?: InputMaybe<Scalars['String']>;
-  created_at?: InputMaybe<Scalars['timestamp']>;
+  createdAt?: InputMaybe<Scalars['timestamp']>;
   data?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
   profileId?: InputMaybe<Scalars['uuid']>;
-  updated_at?: InputMaybe<Scalars['timestamp']>;
+  updatedAt?: InputMaybe<Scalars['timestamp']>;
 };
 
 /** update columns of table "course_draft" */
@@ -18526,15 +18539,17 @@ export enum Course_Draft_Update_Column {
   /** column name */
   CourseType = 'courseType',
   /** column name */
-  CreatedAt = 'created_at',
+  CreatedAt = 'createdAt',
   /** column name */
   Data = 'data',
   /** column name */
   Id = 'id',
   /** column name */
+  Name = 'name',
+  /** column name */
   ProfileId = 'profileId',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updatedAt'
 }
 
 export type Course_Draft_Updates = {
@@ -52004,12 +52019,20 @@ export type GetCourseByIdQueryVariables = Exact<{
 export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, arloReferenceId?: string | null, displayOnWebsite?: boolean | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, renewalCycle?: Course_Renewal_Cycle_Enum | null, bookingContactInviteData?: any | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, modules?: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
 
 export type GetCourseDraftQueryVariables = Exact<{
-  profileId: Scalars['uuid'];
-  courseType: Scalars['String'];
+  draftId: Scalars['uuid'];
 }>;
 
 
-export type GetCourseDraftQuery = { __typename?: 'query_root', course_draft: Array<{ __typename?: 'course_draft', data?: any | null }> };
+export type GetCourseDraftQuery = { __typename?: 'query_root', course_draft_by_pk?: { __typename?: 'course_draft', id: any, name?: string | null, data?: any | null, updatedAt: any } | null };
+
+export type GetCourseDraftsQueryVariables = Exact<{
+  orderBy?: InputMaybe<Array<Course_Draft_Order_By> | Course_Draft_Order_By>;
+  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetCourseDraftsQuery = { __typename?: 'query_root', course_draft: Array<{ __typename?: 'course_draft', id: any, name?: string | null, data?: any | null, createdAt: any, updatedAt: any, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null } }>, course_draft_aggregate: { __typename?: 'course_draft_aggregate', aggregate?: { __typename?: 'course_draft_aggregate_fields', count: number } | null } };
 
 export type CourseModulesQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -52081,12 +52104,11 @@ export type RejectCourseMutationVariables = Exact<{
 export type RejectCourseMutation = { __typename?: 'mutation_root', rejectCourse?: { __typename?: 'RejectCourseOutput', success: boolean } | null };
 
 export type RemoveCourseDraftMutationVariables = Exact<{
-  courseType: Scalars['String'];
-  profileId: Scalars['uuid'];
+  draftId: Scalars['uuid'];
 }>;
 
 
-export type RemoveCourseDraftMutation = { __typename?: 'mutation_root', delete_course_draft?: { __typename?: 'course_draft_mutation_response', returning: Array<{ __typename?: 'course_draft', id: any }> } | null };
+export type RemoveCourseDraftMutation = { __typename?: 'mutation_root', delete_course_draft_by_pk?: { __typename?: 'course_draft', id: any } | null };
 
 export type RequestCourseCancellationMutationVariables = Exact<{
   cancellationRequest: Course_Cancellation_Request_Insert_Input;
@@ -52141,9 +52163,7 @@ export type SendCourseInformationMutationVariables = Exact<{
 export type SendCourseInformationMutation = { __typename?: 'mutation_root', sendCourseInformation: { __typename?: 'SendCourseInformationOutput', success: boolean, error?: SendCourseInformationError | null } };
 
 export type SetCourseDraftMutationVariables = Exact<{
-  courseType: Scalars['String'];
-  profileId: Scalars['uuid'];
-  data: Scalars['jsonb'];
+  object: Course_Draft_Insert_Input;
 }>;
 
 

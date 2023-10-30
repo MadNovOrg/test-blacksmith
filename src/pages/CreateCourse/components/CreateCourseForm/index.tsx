@@ -32,8 +32,8 @@ import {
 import useProfile from '@app/hooks/useProfile'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
-  checkCourseDetailsForExceptions,
   CourseException,
+  checkCourseDetailsForExceptions,
   isTrainersRatioNotMet,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
@@ -45,7 +45,7 @@ import {
   TrainerRoleTypeName,
   ValidCourseInput,
 } from '@app/types'
-import { bildStrategiesToArray, LoadingStatus } from '@app/util'
+import { LoadingStatus, bildStrategiesToArray } from '@app/util'
 
 import { StepsEnum } from '../../types'
 import { useSaveCourse } from '../../useSaveCourse'
@@ -66,10 +66,10 @@ export const CreateCourseForm = () => {
     completeStep,
     courseData,
     courseType,
-    saveDraft,
     setCourseData,
     setCurrentStepKey,
     setTrainers,
+    setShowDraftConfirmationDialog,
   } = useCreateCourse()
 
   const theme = useTheme()
@@ -424,9 +424,15 @@ export const CreateCourseForm = () => {
         justifyContent="flex-end"
         sx={{ marginTop: 4 }}
       >
-        <Button variant="text" sx={{ marginRight: 4 }} onClick={saveDraft}>
-          {t('pages.create-course.save-as-draft')}
-        </Button>
+        {acl.isTrainer() && courseData?.type === CourseType.INDIRECT && (
+          <Button
+            variant="text"
+            sx={{ marginRight: 4 }}
+            onClick={() => setShowDraftConfirmationDialog(true)}
+          >
+            {t('pages.create-course.save-as-draft')}
+          </Button>
+        )}
 
         <LoadingButton
           variant="contained"
