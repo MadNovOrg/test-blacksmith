@@ -22,7 +22,7 @@ vi.mock('@app/hooks/useCourseParticipants')
 const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
 
 ;[RoleName.TT_ADMIN, RoleName.TT_OPS].forEach(role => {
-  it(`displays the bulk attendance button if a user is ${role}`, () => {
+  it(`displays the mark attendance button if a user is ${role}`, () => {
     const course = buildCourse({
       overrides: {
         schedule: [
@@ -47,12 +47,12 @@ const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
     )
 
     expect(
-      screen.getByRole('button', { name: /bulk attendance/i })
+      screen.getByRole('button', { name: /mark attendance/i })
     ).toBeInTheDocument()
   })
 })
 
-it('displays the bulk attendance button if user is a lead trainer on the course', () => {
+it('displays the mark attendance button if user is a lead trainer on the course', () => {
   const trainerProfileId = chance.guid()
   const course = buildCourse({
     overrides: {
@@ -88,11 +88,11 @@ it('displays the bulk attendance button if user is a lead trainer on the course'
   )
 
   expect(
-    screen.getByRole('button', { name: /bulk attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i })
   ).toBeInTheDocument()
 })
 
-it('displays the bulk attendance button if user is an assist trainer on the course', () => {
+it('displays the mark attendance button if user is an assist trainer on the course', () => {
   const trainerProfileId = chance.guid()
   const course = buildCourse({
     overrides: {
@@ -128,11 +128,11 @@ it('displays the bulk attendance button if user is an assist trainer on the cour
   )
 
   expect(
-    screen.getByRole('button', { name: /bulk attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i })
   ).toBeInTheDocument()
 })
 
-it("doesn't display the bulk attendance button if user is a moderator on the course", () => {
+it("doesn't display the mark attendance button if user is a moderator on the course", () => {
   const trainerProfileId = chance.guid()
   const course = buildCourse({
     overrides: {
@@ -172,11 +172,11 @@ it("doesn't display the bulk attendance button if user is a moderator on the cou
   ).not.toBeInTheDocument()
 
   expect(
-    screen.queryByRole('button', { name: /bulk attendance/i })
+    screen.queryByRole('button', { name: /mark attendance/i })
   ).not.toBeInTheDocument()
 })
 
-it('displays the bulk attendance button if course has ended', () => {
+it('displays the mark attendance button if course has ended', () => {
   const course = buildCourse({
     overrides: {
       schedule: [
@@ -206,11 +206,11 @@ it('displays the bulk attendance button if course has ended', () => {
   )
 
   expect(
-    screen.getByRole('button', { name: /bulk attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i })
   ).toBeInTheDocument()
 })
 
-it('marks the bulk attendance button disabled if course ended and course status is not grade missing', () => {
+it('marks the mark attendance button disabled if course ended and course status is not grade missing', () => {
   const client = {
     executeMutation: () => never,
   } as unknown as Client
@@ -249,7 +249,7 @@ it('marks the bulk attendance button disabled if course ended and course status 
   )
 
   expect(
-    screen.getByRole('button', { name: /bulk attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i })
   ).toBeDisabled()
 })
 

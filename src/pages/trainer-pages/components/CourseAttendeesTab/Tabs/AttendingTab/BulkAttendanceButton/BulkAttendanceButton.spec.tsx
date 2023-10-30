@@ -29,7 +29,7 @@ it('disables button if prop is passed', () => {
   )
 
   expect(
-    screen.getByRole('button', { name: /bulk attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i })
   ).toBeDisabled()
 })
 
@@ -45,7 +45,7 @@ it('disables button if no participants are selected', () => {
   )
 
   expect(
-    screen.getByRole('button', { name: /bulk attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i })
   ).toBeDisabled()
 })
 
@@ -61,7 +61,7 @@ it('renders correct menu items', async () => {
   )
 
   await userEvent.click(
-    screen.getByRole('button', { name: /bulk attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i })
   )
 
   expect(screen.getByRole('menuitem', { name: /attended/i }))
@@ -108,7 +108,7 @@ it('marks selected participants as attended when option is selected', async () =
   )
 
   await userEvent.click(
-    screen.getByRole('button', { name: /bulk attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i })
   )
   await userEvent.click(screen.getByRole('menuitem', { name: /attended/i }))
 
@@ -155,7 +155,7 @@ it('marks selected participants as did not attend when option is selected', asyn
   )
 
   await userEvent.click(
-    screen.getByRole('button', { name: /bulk attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i })
   )
   await userEvent.click(
     screen.getByRole('menuitem', { name: /did not attend/i })

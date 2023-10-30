@@ -462,9 +462,9 @@
     "error": "There was an error saving attendance."
   },
   "bulk-attendance-button": {
-    "label_zero": "Bulk attendance",
-    "label_one": "Bulk attendance ({{count}})",
-    "label_other": "Bulk attendance ({{count}})",
-    "error": "There was an error bulk saving attendance."
+    "label_zero": "Mark attendance",
+    "label_one": "Mark attendance ({{count}})",
+    "label_other": "Mark attendance ({{count}})",
+    "error": "There was an error marking attendance."
   }
 }
