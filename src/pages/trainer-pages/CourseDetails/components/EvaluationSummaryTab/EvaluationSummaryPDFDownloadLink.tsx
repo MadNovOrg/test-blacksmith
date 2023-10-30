@@ -1,5 +1,6 @@
 import { CircularProgress, Typography } from '@mui/material'
 import pdf from '@react-pdf/renderer'
+import { anyPass } from 'lodash/fp'
 import { groupBy } from 'lodash-es'
 import React, { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -11,7 +12,6 @@ import {
   CourseParticipantsQueryVariables,
   Course_Evaluation_Question_Group_Enum,
   Course_Evaluation_Question_Type_Enum,
-  Course_Type_Enum,
   GetCourseByIdQuery,
   GetCourseByIdQueryVariables,
   GetEvaluationsSummaryQuery,
@@ -179,15 +179,11 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
   const course = courseData?.course
 
   //#TTHP-2016
-  const isRestricted = useMemo(
-    () =>
-      ((course?.type == Course_Type_Enum.Closed ||
-        course?.type == Course_Type_Enum.Indirect) &&
-        acl.isOrgAdmin()) ||
-      (course?.type == Course_Type_Enum.Closed && acl.isBookingContact()) ||
-      (course?.type == Course_Type_Enum.Indirect && acl.isOrgKeyContact()),
-    [acl, course]
-  )
+  const isRestricted = anyPass([
+    acl.isBookingContact,
+    acl.isOrgAdmin,
+    acl.isOrgKeyContact,
+  ])()
 
   const pdfDocument = useMemo(() => {
     if (summaryResponseData?.answers.length === 0) {

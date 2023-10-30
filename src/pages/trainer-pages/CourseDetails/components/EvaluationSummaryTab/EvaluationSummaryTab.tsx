@@ -75,21 +75,26 @@ export const EvaluationSummaryTab: React.FC<
   )
 
   //#TTHP-2016
-  const isCourseOpenTrainer = useMemo(
+  const isOpenCourseTrainer = useMemo(
     () => course.type === CourseType.OPEN && isCourseTrainer,
     [course, isCourseTrainer]
   )
+
+  const displayEvaluationColumn =
+    acl.isInternalUser() ||
+    (isCourseTrainer && !(course.type === CourseType.OPEN))
+
   const cols = useMemo(
     () =>
       [
         { id: 'name', label: t('name') },
         { id: 'contact', label: t('email') },
         { id: 'org', label: t('organization') },
-        isCourseOpenTrainer
-          ? null
-          : { id: 'evaluation', label: t('evaluation') },
+        displayEvaluationColumn
+          ? { id: 'evaluation', label: t('evaluation') }
+          : null,
       ].filter(Boolean),
-    [t, isCourseOpenTrainer]
+    [displayEvaluationColumn, t]
   )
 
   const [isPDFExporting, setIsPDFExporting] = useState<boolean>(false)
@@ -127,13 +132,13 @@ export const EvaluationSummaryTab: React.FC<
     [data]
   )
 
-  const isCourseCanBeEvaluetaded = [
+  const isCourseCanBeEvaluated = [
     Course_Status_Enum.GradeMissing,
     Course_Status_Enum.EvaluationMissing,
   ].includes(course?.status)
 
   const canTrainerSubmitEvaluation =
-    isCourseCanBeEvaluetaded &&
+    isCourseCanBeEvaluated &&
     !didTrainerSubmitEvaluation &&
     (isCourseTrainer || leadTrainer?.profile.id === profileId)
 
@@ -178,7 +183,7 @@ export const EvaluationSummaryTab: React.FC<
               {t('pages.course-details.tabs.evaluation.desc')}
             </Typography>
           </Grid>
-          {isCourseOpenTrainer ? null : (
+          {!isOpenCourseTrainer ? (
             <Grid
               item
               container
@@ -215,7 +220,7 @@ export const EvaluationSummaryTab: React.FC<
                 </Button>
               </Grid>
             </Grid>
-          )}
+          ) : null}
         </Grid>
 
         <TableContainer component={Paper} elevation={0} sx={{ mt: 2 }}>
@@ -253,7 +258,7 @@ export const EvaluationSummaryTab: React.FC<
                         ?.map(o => o.organization.name)
                         .join(', ')}
                     </TableCell>
-                    {isCourseOpenTrainer ? null : (
+                    {displayEvaluationColumn ? (
                       <TableCell>
                         <Link
                           href={
@@ -272,7 +277,7 @@ export const EvaluationSummaryTab: React.FC<
                           )}
                         </Link>
                       </TableCell>
-                    )}
+                    ) : null}
                   </TableRow>
                 )
               ) ??

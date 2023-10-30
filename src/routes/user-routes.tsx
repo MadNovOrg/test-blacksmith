@@ -16,7 +16,6 @@ import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashb
 import { NotFound } from '@app/pages/common/NotFound'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
-import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
 import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
 import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
@@ -26,6 +25,7 @@ import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 import { CourseDetails } from '@app/pages/user-pages/CourseDetails'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 import { CourseHealthAndSafetyForm } from '@app/pages/user-pages/CourseHealthAndSafetyForm'
+import { EvaluationSummary } from '@app/pages/user-pages/EvaluationSummary'
 import { AttendeeCourses } from '@app/pages/user-pages/MyCourses'
 import { GET_USER_CAN_ACCESS_RESOURCES } from '@app/queries/certificate/get-user-can-access-resources'
 
@@ -99,10 +99,15 @@ const UserRoutes = () => {
       {acl.isBookingContact() || acl.isOrgKeyContact() ? (
         <Route path="manage-courses">
           <Route index element={<ManageCourses />} />
-          <Route
-            path=":id/details"
-            element={<CourseDetails bookingOnly={true} />}
-          />
+          <Route path=":id">
+            <Route
+              path="details"
+              element={<CourseDetails bookingOnly={true} />}
+            />
+            <Route path="evaluation">
+              <Route path="summary" element={<EvaluationSummary />} />
+            </Route>
+          </Route>
         </Route>
       ) : null}
 

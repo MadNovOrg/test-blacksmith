@@ -122,13 +122,6 @@ export const CourseDetails = () => {
       !courseCancelled,
     [acl, course, courseCancelled]
   )
-  //#TTHP-2016
-  const canNotViewSummaryEvaluation = useMemo(
-    () =>
-      course?.type == CourseType.OPEN &&
-      (acl.isOrgAdmin() || acl.isBookingContact() || acl.isOrgKeyContact()),
-    [acl, course]
-  )
 
   const linkedOrderItem = useMemo(() => course?.orders?.[0], [course])
   const canViewLinkedOrderItem = useMemo(
@@ -271,6 +264,7 @@ export const CourseDetails = () => {
             {exceptionsApprovalPending ? <ExceptionsApprovalAlert /> : null}
             <OrderYourWorkbookAlert course={course} />
           </Container>
+
           <TabContext value={selectedTab}>
             <Box borderBottom={1} borderColor="divider">
               <Container
@@ -302,13 +296,12 @@ export const CourseDetails = () => {
                       disabled={isCourseInExceptionDisabledStatus}
                     />
                   ) : null}
-                  {canNotViewSummaryEvaluation ? null : (
-                    <PillTab
-                      label={t('pages.course-details.tabs.evaluation.title')}
-                      value={CourseDetailsTabs.EVALUATION}
-                      data-testid="evaluation-tab"
-                    />
-                  )}
+                  <PillTab
+                    label={t('pages.course-details.tabs.evaluation.title')}
+                    value={CourseDetailsTabs.EVALUATION}
+                    data-testid="evaluation-tab"
+                  />
+
                   {(dietaryAndDisabilitiesCount
                     ?.participantDietaryRestrictionsCount.aggregate?.count ||
                     dietaryAndDisabilitiesCount?.trainerDietaryRestrictionsCount
@@ -354,7 +347,6 @@ export const CourseDetails = () => {
                       data-testid="disabilities-tab"
                     />
                   ) : null}
-
                   {course.certificateCount?.aggregate.count ? (
                     <PillTab
                       label={t(
@@ -373,7 +365,6 @@ export const CourseDetails = () => {
                       data-testid="course-overview-tab"
                     />
                   ) : null}
-
                   {showCourseBuilderOnEditPage ? (
                     <EditIcon
                       sx={{ ml: 2, cursor: 'pointer' }}

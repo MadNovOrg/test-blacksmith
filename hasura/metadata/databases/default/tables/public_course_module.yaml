@@ -73,6 +73,23 @@ select_permissions:
                   - TRAINER_PENDING
                   - TRAINER_DECLINED
       allow_aggregations: true
+  - role: booking-contact
+    permission:
+      columns:
+        - course_id
+        - covered
+        - id
+        - module_id
+      filter:
+        _or:
+          - course:
+              participants:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - course:
+              booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
   - role: finance
     permission:
       columns:
@@ -83,6 +100,23 @@ select_permissions:
         - id
         - module_id
       filter: {}
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - course_id
+        - covered
+        - id
+        - module_id
+      filter:
+        _or:
+          - course:
+              participants:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - course:
+              organization_key_contact_profile_id:
+                _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: sales-admin
     permission:
@@ -146,13 +180,24 @@ select_permissions:
   - role: user
     permission:
       columns:
+        - course_id
+        - covered
         - id
         - module_id
       filter:
-        course:
-          participants:
-            profile_id:
-              _eq: X-Hasura-User-Id
+        _or:
+          - course:
+              participants:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - course:
+              organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
       allow_aggregations: true
 update_permissions:
   - role: trainer

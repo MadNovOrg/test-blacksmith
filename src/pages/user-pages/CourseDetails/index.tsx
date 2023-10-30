@@ -41,6 +41,7 @@ import { CourseAttendeesTab } from '@app/pages/trainer-pages/components/CourseAt
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import { DietaryRequirementsTab } from '@app/pages/trainer-pages/CourseDetails/components/DietaryRequirementsTab'
 import { DisabilitiesTab } from '@app/pages/trainer-pages/CourseDetails/components/DisabilitiesTab'
+import { EvaluationSummaryTab } from '@app/pages/trainer-pages/CourseDetails/components/EvaluationSummaryTab'
 import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
 import { ModifyAttendanceModal } from '@app/pages/user-pages/CourseDetails/ModifyAttendanceModal'
 import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/queries/course-evaluation/get-feedback-users'
@@ -258,13 +259,15 @@ export const CourseDetails: React.FC<
     (course?.moduleGroupIds?.length || course?.bildModules?.length) &&
     course.status !== Course_Status_Enum.Draft
 
+  const isCourseContact = isBookingContact || isOrgKeyContact
+
   return (
     <>
       {courseError ? (
         <Alert severity="error">There was an error loading a course.</Alert>
       ) : null}
 
-      {course && (isParticipant || isBookingContact || isOrgKeyContact) ? (
+      {course && (isParticipant || isCourseContact) ? (
         <>
           <CourseHeroSummary
             course={course}
@@ -350,13 +353,22 @@ export const CourseDetails: React.FC<
                             value="certification"
                           />
                         ) : null}
-                        {isBookingContact || isOrgKeyContact ? (
+                        {isCourseContact ? (
                           <PillTab
                             label={t(
                               'pages.course-details.tabs.attendees.title'
                             )}
                             value={CourseDetailsTabs.ATTENDEES}
                             data-testid="attendees-tab"
+                          />
+                        ) : null}
+                        {isCourseContact ? (
+                          <PillTab
+                            label={t(
+                              'pages.course-details.tabs.evaluation.title'
+                            )}
+                            value={CourseDetailsTabs.EVALUATION}
+                            data-testid="evaluation-tab"
                           />
                         ) : null}
                         {(dietaryAndDisabilitiesCount
@@ -598,10 +610,21 @@ export const CourseDetails: React.FC<
                     )}
                   </TabPanel>
                 ) : null}
-                {isBookingContact || isOrgKeyContact ? (
-                  <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.ATTENDEES}>
-                    <CourseAttendeesTab course={course} />
-                  </TabPanel>
+                {isCourseContact ? (
+                  <>
+                    <TabPanel
+                      sx={{ px: 0 }}
+                      value={CourseDetailsTabs.ATTENDEES}
+                    >
+                      <CourseAttendeesTab course={course} />
+                    </TabPanel>
+                    <TabPanel
+                      sx={{ px: 0 }}
+                      value={CourseDetailsTabs.EVALUATION}
+                    >
+                      <EvaluationSummaryTab course={course} />
+                    </TabPanel>
+                  </>
                 ) : null}
                 <TabPanel
                   sx={{ px: 0 }}

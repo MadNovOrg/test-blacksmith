@@ -51862,6 +51862,14 @@ export type GetEvaluationQueryVariables = Exact<{
 
 export type GetEvaluationQuery = { __typename?: 'query_root', answers: Array<{ __typename?: 'course_evaluation_answers', id: any, answer?: string | null, question: { __typename?: 'course_evaluation_questions', id: any, type?: Course_Evaluation_Question_Type_Enum | null }, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> };
 
+export type GetEvaluationsSummaryRestrictedQueryVariables = Exact<{
+  courseId: Scalars['Int'];
+  profileCondition?: InputMaybe<Profile_Bool_Exp>;
+}>;
+
+
+export type GetEvaluationsSummaryRestrictedQuery = { __typename?: 'query_root', answers: Array<{ __typename?: 'course_evaluation_answers', id: any, answer?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null }, question: { __typename?: 'course_evaluation_questions', questionKey?: string | null, type?: Course_Evaluation_Question_Type_Enum | null, group?: Course_Evaluation_Question_Group_Enum | null } }> };
+
 export type GetEvaluationsSummaryQueryVariables = Exact<{
   courseId: Scalars['Int'];
   profileCondition?: InputMaybe<Profile_Bool_Exp>;
