@@ -46,18 +46,52 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         domain: '.teamteach.com',
         sameSite: 'Strict',
       })
+
+      // delete the "signout" cookie if it exists
+      TTCookies.deleteCookie('tt_logout', {
+        secure: true,
+        path: '/',
+        domain: '.teamteach.com',
+        sameSite: 'Strict',
+      })
     }
   }, [])
+
+  const onUserNotLoggedIn = () => {
+    // delete cookie if exists
+    TTCookies.deleteCookie('mo_jwt_token', {
+      secure: true,
+      path: '/',
+      domain: '.teamteach.com',
+      sameSite: 'Strict',
+    })
+
+    // raise a cookie to tell other team teach sites to logout
+    TTCookies.setCookie('tt_logout', 'true', {
+      secure: true,
+      expires: 30 * 24 * 60 * 60 * 1000, // 30 days
+      path: '/',
+      domain: '.teamteach.com',
+      sameSite: 'Strict',
+    })
+  };
 
   // On initial load, check if user is logged in and load the profile
   useEffect(() => {
     Auth.currentAuthenticatedUser()
       .then(loadProfile)
-      .catch(() => setLoading(false))
+      .catch(() => {
+        onUserNotLoggedIn()
+        setLoading(false)
+      })
   }, [loadProfile])
 
   const reloadCurrentProfile = useCallback(() => {
-    return Auth.currentAuthenticatedUser().then(loadProfile)
+    return Auth.currentAuthenticatedUser()
+      .then(loadProfile)
+      .catch(() => {
+        onUserNotLoggedIn()
+      })
   }, [loadProfile])
 
   const login = useCallback(
@@ -75,13 +109,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
 
   const logout = useCallback(async () => {
     await Auth.signOut()
-    // delete cookie if exists
-    TTCookies.deleteCookie('mo_jwt_token', {
-      secure: true,
-      path: '/',
-      domain: '.teamteach.com',
-      sameSite: 'Strict',
-    })
+    onUserNotLoggedIn();
     setState({ loggedOut: true })
   }, [])
 
