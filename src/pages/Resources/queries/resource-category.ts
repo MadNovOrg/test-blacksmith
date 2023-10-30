@@ -13,7 +13,10 @@ export const RESOURCE_CATEGORY_SUMMARY = gql`
       certificateLevels
       principalTrainer
     }
-    resources(where: { search: $term, orderby: { field: SLUG, order: ASC } }) {
+    resources(
+      first: 100
+      where: { search: $term, orderby: { field: SLUG, order: ASC } }
+    ) {
       nodes {
         ...ResourceSummary
       }
