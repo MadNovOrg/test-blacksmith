@@ -17,7 +17,7 @@ import {
 } from '@app/generated/graphql'
 import { ALL_ORGS } from '@app/hooks/useOrg'
 import { QUERY as GetTrainerCourses } from '@app/queries/courses/get-trainer-courses'
-import { AdminOnlyCourseStatus, RoleName } from '@app/types'
+import { AdminOnlyCourseStatus, CourseState, RoleName } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { Sorting } from './useTableSort'
@@ -27,6 +27,7 @@ export type CoursesFilters = {
   levels?: Course_Level_Enum[]
   types?: Course_Type_Enum[]
   statuses?: string[]
+  states?: CourseState[]
   excludedCourses?: number[]
   go1Integration?: boolean
   creation?: {
@@ -101,6 +102,10 @@ export const filtersToWhereClause = (
 
   if (filters?.deliveryTypes?.length) {
     where.deliveryType = { _in: filters.deliveryTypes }
+  }
+
+  if (filters?.states?.length) {
+    where.state = { _in: filters.states }
   }
 
   const query = filters?.keyword?.trim()

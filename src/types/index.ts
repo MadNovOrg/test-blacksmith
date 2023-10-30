@@ -256,6 +256,12 @@ export enum TrainerRoleTypeName {
   ASSISTANT = 'assistant',
 }
 
+export enum CourseState {
+  SCHEDULED = 'SCHEDULED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+}
+
 export enum CourseType {
   /**
    * @summary Organised by `Team Teach` (incl. venue, refreshments, and lunch) and delivered by `Team Teach`

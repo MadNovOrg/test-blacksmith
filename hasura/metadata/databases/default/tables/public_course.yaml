@@ -212,6 +212,11 @@ computed_fields:
       function:
         name: course_free_slots
         schema: public
+  - name: state
+    definition:
+      function:
+        name: course_state
+        schema: public
 insert_permissions:
   - role: sales-admin
     permission:
@@ -410,6 +415,7 @@ select_permissions:
       computed_fields:
         - course_code
         - freeSlots
+        - state
       filter:
         _and:
           - course_type:
@@ -469,6 +475,7 @@ select_permissions:
       computed_fields:
         - course_code
         - freeSlots
+        - state
       filter:
         _or:
           - participants:
@@ -568,6 +575,7 @@ select_permissions:
       computed_fields:
         - course_code
         - freeSlots
+        - state
       filter: {}
       allow_aggregations: true
   - role: ld
@@ -627,6 +635,7 @@ select_permissions:
         - updated_at
       computed_fields:
         - course_code
+        - state
       filter: {}
       allow_aggregations: true
   - role: organization-key-contact
@@ -675,6 +684,7 @@ select_permissions:
       computed_fields:
         - course_code
         - freeSlots
+        - state
       filter:
         _or:
           - participants:
@@ -825,6 +835,7 @@ select_permissions:
       computed_fields:
         - course_code
         - freeSlots
+        - state
       filter: {}
       allow_aggregations: true
   - role: trainer
@@ -872,6 +883,7 @@ select_permissions:
       computed_fields:
         - course_code
         - freeSlots
+        - state
       filter:
         _or:
           - trainers:
@@ -962,6 +974,7 @@ select_permissions:
       computed_fields:
         - course_code
         - freeSlots
+        - state
       filter: {}
       allow_aggregations: true
   - role: tt-ops
@@ -1011,6 +1024,7 @@ select_permissions:
         - updated_at
       computed_fields:
         - course_code
+        - state
       filter: {}
       allow_aggregations: true
   - role: unverified
@@ -1049,6 +1063,7 @@ select_permissions:
         - updated_at
       computed_fields:
         - course_code
+        - state
       filter:
         _and:
           - course_type:
@@ -1105,6 +1120,7 @@ select_permissions:
       computed_fields:
         - course_code
         - freeSlots
+        - state
       filter:
         _or:
           - participants:

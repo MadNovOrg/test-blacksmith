@@ -180,6 +180,7 @@
   "trainer-type": "Trainer Type",
   "course-type": "Course Type",
   "course-status": "Course Status",
+  "course-state": "Course State",
   "training-level": "Training Level",
   "bl-status": "Blended Learning status",
   "bl-progress": "Blended Learning Progress",
@@ -278,6 +279,11 @@
     "AWAITING_GRADE": "Awaiting grade",
     "CANCELLATION_REQUESTED": "Cancellation requested",
     "TRAINER_MISSING": "Trainer missing"
+  },
+  "course-states": {
+    "SCHEDULED": "Scheduled",
+    "IN_PROGRESS": "In Progress",
+    "COMPLETED": "Completed"
   },
   "participant-audit-types": {
     "ATTENDED": "Attended",
@@ -494,6 +500,7 @@
     "course-date-range": "Filter by Course Date",
     "created-range": "Filter by Creation Date",
     "date-obtained": "Filter by date obtained",
+    "state": "Filter by Course State",
     "payment-method": "Payment Method",
     "warning-statuses": "Show all warning statuses",
     "status": "Status",

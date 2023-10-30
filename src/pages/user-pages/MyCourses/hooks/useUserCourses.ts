@@ -16,7 +16,7 @@ import {
 import { ALL_ORGS } from '@app/hooks/useOrg'
 import { Sorting } from '@app/hooks/useTableSort'
 import { QUERY } from '@app/queries/user-queries/get-user-courses'
-import { AttendeeOnlyCourseStatus } from '@app/types'
+import { AttendeeOnlyCourseStatus, CourseState } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { useUnevaluatedUserCourses } from './useUnevaluatedUserCourses'
@@ -31,6 +31,7 @@ export type CoursesFilters = {
   keyword?: string
   levels?: Course_Level_Enum[]
   types?: Course_Type_Enum[]
+  states?: CourseState[]
   statuses?: UserCourseStatus[]
   creation?: { start?: Date; end?: Date }
   schedule?: {
@@ -199,6 +200,10 @@ export function useUserCourses(
         filterConditions,
         courseStatusConditionsMap.AWAITING_GRADE
       )
+    }
+
+    if (filters?.states?.length) {
+      filterConditions.state = { _in: filters.states }
     }
 
     if (filters?.levels?.length) {

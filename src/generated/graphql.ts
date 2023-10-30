@@ -15145,6 +15145,8 @@ export type Course = {
   source?: Maybe<Course_Source_Enum>;
   special_instructions?: Maybe<Scalars['String']>;
   start?: Maybe<Scalars['timestamptz']>;
+  /** A computed field, executes function "course_state" */
+  state?: Maybe<Scalars['String']>;
   status?: Maybe<Course_Status_Enum>;
   /** An array relationship */
   tempOrders: Array<Order_Temp>;
@@ -16655,6 +16657,7 @@ export type Course_Bool_Exp = {
   source?: InputMaybe<Course_Source_Enum_Comparison_Exp>;
   special_instructions?: InputMaybe<String_Comparison_Exp>;
   start?: InputMaybe<Timestamptz_Comparison_Exp>;
+  state?: InputMaybe<String_Comparison_Exp>;
   status?: InputMaybe<Course_Status_Enum_Comparison_Exp>;
   tempOrders?: InputMaybe<Order_Temp_Bool_Exp>;
   tempOrders_aggregate?: InputMaybe<Order_Temp_Aggregate_Bool_Exp>;
@@ -21165,6 +21168,8 @@ export type Course_Max_Fields = {
   priceCurrency?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
   start?: Maybe<Scalars['timestamptz']>;
+  /** A computed field, executes function "course_state" */
+  state?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -21230,6 +21235,8 @@ export type Course_Min_Fields = {
   priceCurrency?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
   start?: Maybe<Scalars['timestamptz']>;
+  /** A computed field, executes function "course_state" */
+  state?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -21717,6 +21724,7 @@ export type Course_Order_By = {
   source?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
   start?: InputMaybe<Order_By>;
+  state?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
   tempOrders_aggregate?: InputMaybe<Order_Temp_Aggregate_Order_By>;
   trainers_aggregate?: InputMaybe<Course_Trainer_Aggregate_Order_By>;
@@ -52022,7 +52030,7 @@ export type GetCoursesSourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCoursesSourcesQuery = { __typename?: 'query_root', sources: Array<{ __typename?: 'course_source', name: string }> };
 
-export type TrainerCourseFragment = { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, status?: Course_Status_Enum | null, createdAt: any, course_code?: string | null, go1Integration: boolean, max_participants: number, isDraft?: boolean | null, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null };
+export type TrainerCourseFragment = { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, state?: string | null, status?: Course_Status_Enum | null, createdAt: any, course_code?: string | null, go1Integration: boolean, max_participants: number, isDraft?: boolean | null, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null };
 
 export type TrainerCoursesQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Course_Order_By> | Course_Order_By>;
@@ -52033,7 +52041,7 @@ export type TrainerCoursesQueryVariables = Exact<{
 }>;
 
 
-export type TrainerCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', arloReferenceId?: string | null, id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, status?: Course_Status_Enum | null, createdAt: any, course_code?: string | null, go1Integration: boolean, max_participants: number, isDraft?: boolean | null, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null }>, course_aggregate: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null } };
+export type TrainerCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', arloReferenceId?: string | null, id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, state?: string | null, status?: Course_Status_Enum | null, createdAt: any, course_code?: string | null, go1Integration: boolean, max_participants: number, isDraft?: boolean | null, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null }>, course_aggregate: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null } };
 
 export type GetUpcomingCoursesQueryVariables = Exact<{
   courseFilter?: InputMaybe<Course_Bool_Exp>;

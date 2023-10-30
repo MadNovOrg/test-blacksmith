@@ -14,6 +14,7 @@ import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterByBlendedLearning } from '@app/components/filters/FilterByBlendedLearning'
 import { FilterByCourseDeliveryType } from '@app/components/filters/FilterByCourseDeliveryType'
 import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
+import { FilterByCourseState } from '@app/components/filters/FilterByCourseState'
 import { FilterByCourseStatus } from '@app/components/filters/FilterByCourseStatus'
 import { FilterByCourseStatusWarnings } from '@app/components/filters/FilterByCourseStatusWarnings'
 import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
@@ -28,7 +29,7 @@ import {
   Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
 import { CoursesFilters } from '@app/hooks/useCourses'
-import { AdminOnlyCourseStatus } from '@app/types'
+import { AdminOnlyCourseStatus, CourseState } from '@app/types'
 
 import { getActionableStatuses } from '../../utils'
 
@@ -53,6 +54,7 @@ export function Filters({ onChange }: Props) {
   const [keyword, setKeyword] = useState(searchParams.get('q') ?? '')
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
   const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
+  const [filterState, setFilterState] = useState<CourseState[]>([])
   const [filterStatus, setFilterStatus] = useState<string[]>([])
   const [dateFilters, setDateFilters] = useState<DateFilters>()
   const [filterWarningStatuses, setFilterWarningStatuses] = useState<
@@ -144,6 +146,7 @@ export function Filters({ onChange }: Props) {
     }
 
     const filters = {
+      states: filterState,
       statuses: [...filterStatus, ...filterWarningStatuses],
       levels: filterLevel,
       types: filterType,
@@ -162,6 +165,7 @@ export function Filters({ onChange }: Props) {
     dateFilters,
     filterBlendedLearning,
     filterLevel,
+    filterState,
     filterStatus,
     filterType,
     keyword,
@@ -173,6 +177,7 @@ export function Filters({ onChange }: Props) {
   return (
     <>
       <FilterSearch value={keyword} onChange={setKeyword} />
+      <FilterByCourseState onChange={setFilterState} />
       <FilterByDates
         onChange={onDatesChange}
         title={t('filters.course-date-range')}

@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next'
 
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
+import { FilterByCourseState } from '@app/components/filters/FilterByCourseState'
 import { FilterByDates } from '@app/components/filters/FilterByDates'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { Course_Level_Enum, Course_Status_Enum } from '@app/generated/graphql'
-import { AttendeeOnlyCourseStatus } from '@app/types'
+import { AttendeeOnlyCourseStatus, CourseState } from '@app/types'
 
 import { UserCourseStatus, CoursesFilters } from '../../hooks/useUserCourses'
 
@@ -26,6 +27,7 @@ export function Filters({ onChange }: Props) {
   const { t } = useTranslation()
   const [keyword, setKeyword] = useState('')
 
+  const [filterState, setFilterState] = useState<CourseState[]>([])
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
   const [dateFilters, setDateFilters] = useState<DateFilters>()
 
@@ -98,6 +100,7 @@ export function Filters({ onChange }: Props) {
     }
 
     const filters = {
+      states: filterState,
       statuses: filterStatus,
       levels: filterLevel,
       keyword,
@@ -105,7 +108,7 @@ export function Filters({ onChange }: Props) {
       schedule: { start: startDate, end: endDate },
     }
     onChange(filters)
-  }, [onChange, dateFilters, filterLevel, filterStatus, keyword])
+  }, [onChange, dateFilters, filterLevel, filterState, filterStatus, keyword])
 
   const onDatesChange = useCallback((from?: Date, to?: Date) => {
     setDateFilters(prev => {
@@ -122,6 +125,7 @@ export function Filters({ onChange }: Props) {
   return (
     <>
       <FilterSearch value={keyword} onChange={setKeyword} />
+      <FilterByCourseState onChange={setFilterState} />
       <FilterByDates
         onChange={onDatesChange}
         title={t('filters.course-date-range')}
