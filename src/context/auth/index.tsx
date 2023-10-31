@@ -74,7 +74,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
       domain: '.teamteach.com',
       sameSite: 'Strict',
     })
-  };
+  }
 
   // On initial load, check if user is logged in and load the profile
   useEffect(() => {
@@ -109,7 +109,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
 
   const logout = useCallback(async () => {
     await Auth.signOut()
-    onUserNotLoggedIn();
+    onUserNotLoggedIn()
     setState({ loggedOut: true })
   }, [])
 
