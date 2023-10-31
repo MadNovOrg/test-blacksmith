@@ -17,7 +17,7 @@ import {
 import { t } from 'i18next'
 import { memo } from 'react'
 import React, { useEffect, useMemo, useState } from 'react'
-import { usePrevious } from 'react-use'
+import { usePrevious, useEffectOnce } from 'react-use'
 
 import {
   Color_Enum,
@@ -102,8 +102,26 @@ const GroupsSelection: React.FC<Props> = ({
     )
   }, [selectedIds, availableGroupsMap])
 
+  const [dynamicMandatoryIds, setDynamicMandatoryIds] = useState<string[]>([])
+
+  useEffectOnce(() => {
+    const initialDynamicMandatoryIdsSet = new Set<string>()
+
+    selectedIds.forEach(id => {
+      const group = availableGroupsMap.get(id)
+      if (group?.requires) {
+        group.requires.forEach((requiredId: string) =>
+          initialDynamicMandatoryIdsSet.add(requiredId)
+        )
+      }
+    })
+
+    setDynamicMandatoryIds(Array.from(initialDynamicMandatoryIdsSet))
+  })
+
   const handleGroupClick = (groupId: string) => {
     const selectedIdsSet = new Set(selectedIds)
+    const dynamicMandatoryIdsSet = new Set(dynamicMandatoryIds)
 
     if (selectedIdsSet.has(groupId)) {
       selectedIdsSet.delete(groupId)
@@ -111,7 +129,31 @@ const GroupsSelection: React.FC<Props> = ({
       selectedIdsSet.add(groupId)
     }
 
+    dynamicMandatoryIdsSet.clear()
+
+    selectedIdsSet.forEach(id => {
+      const group = availableGroupsMap.get(id)
+      if (group?.requires) {
+        group.requires.forEach((requiredId: string) => {
+          dynamicMandatoryIdsSet.add(requiredId)
+          selectedIdsSet.add(requiredId)
+        })
+      }
+    })
+
+    dynamicMandatoryIdsSet.forEach(id => {
+      const isStillRequired = Array.from(selectedIdsSet).some(selectedId => {
+        const group = availableGroupsMap.get(selectedId)
+        return group?.requires?.includes(id)
+      })
+
+      if (!isStillRequired) {
+        dynamicMandatoryIdsSet.delete(id)
+      }
+    })
+
     setSelectedIds(Array.from(selectedIdsSet))
+    setDynamicMandatoryIds(Array.from(dynamicMandatoryIdsSet))
   }
 
   const submitButtonHandler = () => {
@@ -146,6 +188,10 @@ const GroupsSelection: React.FC<Props> = ({
         </Typography>
 
         {availableGroups.map(moduleGroup => {
+          const isMandatory =
+            mandatoryGroups.includes(moduleGroup) ||
+            dynamicMandatoryIds.includes(moduleGroup.id)
+
           return (
             <Accordion
               key={moduleGroup.id}
@@ -159,15 +205,14 @@ const GroupsSelection: React.FC<Props> = ({
                 sx={{
                   backgroundColor: getModuleCardColor(moduleGroup.color),
                   opacity:
-                    selectedIds.includes(moduleGroup.id) ||
-                    moduleGroup.mandatory
+                    selectedIds.includes(moduleGroup.id) || isMandatory
                       ? 0.6
                       : 1,
                 }}
               >
                 <FormGroup>
                   <FormControlLabel
-                    disabled={mandatoryGroups.includes(moduleGroup)}
+                    disabled={isMandatory}
                     control={
                       <Checkbox
                         id={moduleGroup.id}
@@ -187,7 +232,7 @@ const GroupsSelection: React.FC<Props> = ({
                       <>
                         <Typography color="white" data-testid="module-name">
                           <span>{moduleGroup.name}</span>
-                          {moduleGroup.mandatory ? <span> *</span> : null}
+                          {isMandatory ? <span> *</span> : null}
                         </Typography>
                         {moduleGroup.duration.aggregate?.sum?.duration && (
                           <Typography variant="body2" color="white">
@@ -289,7 +334,10 @@ const GroupsSelection: React.FC<Props> = ({
                       <Typography data-testid="module-name">
                         <span>{selectedGroup.name}</span>
                         <span>
-                          {selectedGroup.mandatory ? <span> *</span> : null}
+                          {selectedGroup.mandatory ||
+                          dynamicMandatoryIds.includes(selectedGroup.id) ? (
+                            <span> *</span>
+                          ) : null}
                         </span>
                       </Typography>
                       {selectedGroup.duration.aggregate?.sum?.duration && (

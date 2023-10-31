@@ -91,6 +91,7 @@ export const MODULE_GROUP = gql`
     level
     color
     mandatory
+    requires
     createdAt
     updatedAt
   }

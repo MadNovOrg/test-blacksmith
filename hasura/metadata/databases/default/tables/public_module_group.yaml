@@ -33,13 +33,14 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
-        - mandatory
         - color
         - course_level
-        - name
         - created_at
-        - updated_at
         - id
+        - mandatory
+        - name
+        - requires
+        - updated_at
       filter: {}
   - role: finance
     permission:
@@ -50,19 +51,21 @@ select_permissions:
         - id
         - mandatory
         - name
+        - requires
         - updated_at
       filter: {}
       allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
-        - mandatory
         - color
         - course_level
-        - name
         - created_at
-        - updated_at
         - id
+        - mandatory
+        - name
+        - requires
+        - updated_at
       filter: {}
   - role: sales-representative
     permission:
@@ -73,6 +76,7 @@ select_permissions:
         - id
         - mandatory
         - name
+        - requires
         - updated_at
       filter: {}
       allow_aggregations: true
@@ -85,6 +89,7 @@ select_permissions:
         - id
         - mandatory
         - name
+        - requires
         - updated_at
       filter: {}
       allow_aggregations: true

@@ -29362,6 +29362,7 @@ export type Module_Group = {
   /** An aggregate relationship */
   modules_aggregate: Module_Aggregate;
   name: Scalars['String'];
+  requires?: Maybe<Scalars['jsonb']>;
   updatedAt: Scalars['timestamptz'];
 };
 
@@ -29405,6 +29406,12 @@ export type Module_GroupModules_AggregateArgs = {
   where?: InputMaybe<Module_Bool_Exp>;
 };
 
+
+/** columns and relationships of "module_group" */
+export type Module_GroupRequiresArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
 /** aggregated selection of "module_group" */
 export type Module_Group_Aggregate = {
   __typename?: 'module_group_aggregate';
@@ -29427,6 +29434,11 @@ export type Module_Group_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Module_Group_Append_Input = {
+  requires?: InputMaybe<Scalars['jsonb']>;
+};
+
 /** Boolean expression to filter rows from the table "module_group". All fields are combined with a logical 'AND'. */
 export type Module_Group_Bool_Exp = {
   _and?: InputMaybe<Array<Module_Group_Bool_Exp>>;
@@ -29442,6 +29454,7 @@ export type Module_Group_Bool_Exp = {
   modules?: InputMaybe<Module_Bool_Exp>;
   modules_aggregate?: InputMaybe<Module_Aggregate_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
+  requires?: InputMaybe<Jsonb_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
@@ -29450,6 +29463,21 @@ export enum Module_Group_Constraint {
   /** unique or primary key constraint on columns "id" */
   ModuleGroupPkey = 'module_group_pkey'
 }
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Module_Group_Delete_At_Path_Input = {
+  requires?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Module_Group_Delete_Elem_Input = {
+  requires?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Module_Group_Delete_Key_Input = {
+  requires?: InputMaybe<Scalars['String']>;
+};
 
 /** columns and relationships of "module_group_duration" */
 export type Module_Group_Duration = {
@@ -29852,6 +29880,7 @@ export type Module_Group_Insert_Input = {
   mandatory?: InputMaybe<Scalars['Boolean']>;
   modules?: InputMaybe<Module_Arr_Rel_Insert_Input>;
   name?: InputMaybe<Scalars['String']>;
+  requires?: InputMaybe<Scalars['jsonb']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -29906,12 +29935,18 @@ export type Module_Group_Order_By = {
   mandatory?: InputMaybe<Order_By>;
   modules_aggregate?: InputMaybe<Module_Aggregate_Order_By>;
   name?: InputMaybe<Order_By>;
+  requires?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: module_group */
 export type Module_Group_Pk_Columns_Input = {
   id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Module_Group_Prepend_Input = {
+  requires?: InputMaybe<Scalars['jsonb']>;
 };
 
 /** select columns of table "module_group" */
@@ -29929,6 +29964,8 @@ export enum Module_Group_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
+  Requires = 'requires',
+  /** column name */
   UpdatedAt = 'updatedAt'
 }
 
@@ -29940,6 +29977,7 @@ export type Module_Group_Set_Input = {
   level?: InputMaybe<Course_Level_Enum>;
   mandatory?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
+  requires?: InputMaybe<Scalars['jsonb']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -29959,6 +29997,7 @@ export type Module_Group_Stream_Cursor_Value_Input = {
   level?: InputMaybe<Course_Level_Enum>;
   mandatory?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
+  requires?: InputMaybe<Scalars['jsonb']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -29977,10 +30016,22 @@ export enum Module_Group_Update_Column {
   /** column name */
   Name = 'name',
   /** column name */
+  Requires = 'requires',
+  /** column name */
   UpdatedAt = 'updatedAt'
 }
 
 export type Module_Group_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Module_Group_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Module_Group_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Module_Group_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Module_Group_Delete_Key_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Module_Group_Prepend_Input>;
   /** sets the columns of the filtered rows to the given values */
   _set?: InputMaybe<Module_Group_Set_Input>;
   /** filter the rows which have to be updated */
@@ -35549,6 +35600,11 @@ export type Mutation_RootUpdate_Module_Category_ManyArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Module_GroupArgs = {
+  _append?: InputMaybe<Module_Group_Append_Input>;
+  _delete_at_path?: InputMaybe<Module_Group_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Module_Group_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Module_Group_Delete_Key_Input>;
+  _prepend?: InputMaybe<Module_Group_Prepend_Input>;
   _set?: InputMaybe<Module_Group_Set_Input>;
   where: Module_Group_Bool_Exp;
 };
@@ -35556,6 +35612,11 @@ export type Mutation_RootUpdate_Module_GroupArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Module_Group_By_PkArgs = {
+  _append?: InputMaybe<Module_Group_Append_Input>;
+  _delete_at_path?: InputMaybe<Module_Group_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Module_Group_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Module_Group_Delete_Key_Input>;
+  _prepend?: InputMaybe<Module_Group_Prepend_Input>;
   _set?: InputMaybe<Module_Group_Set_Input>;
   pk_columns: Module_Group_Pk_Columns_Input;
 };
@@ -52212,7 +52273,7 @@ export type ProfileFragment = { __typename?: 'profile', id: any, givenName?: str
 
 export type ModuleFragment = { __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any };
 
-export type ModuleGroupFragment = { __typename?: 'module_group', id: any, name: string, level: Course_Level_Enum, color: Color_Enum, mandatory: boolean, createdAt: any, updatedAt: any };
+export type ModuleGroupFragment = { __typename?: 'module_group', id: any, name: string, level: Course_Level_Enum, color: Color_Enum, mandatory: boolean, requires?: any | null, createdAt: any, updatedAt: any };
 
 export type CourseFragment = { __typename?: 'course', id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null };
 
@@ -52594,7 +52655,7 @@ export type ModuleGroupsQueryVariables = Exact<{
 }>;
 
 
-export type ModuleGroupsQuery = { __typename?: 'query_root', groups: Array<{ __typename?: 'module_group', id: any, name: string, level: Course_Level_Enum, color: Color_Enum, mandatory: boolean, createdAt: any, updatedAt: any, modules: Array<{ __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any }>, duration: { __typename?: 'module_group_duration_aggregate', aggregate?: { __typename?: 'module_group_duration_aggregate_fields', sum?: { __typename?: 'module_group_duration_sum_fields', duration?: number | null } | null } | null } }> };
+export type ModuleGroupsQuery = { __typename?: 'query_root', groups: Array<{ __typename?: 'module_group', id: any, name: string, level: Course_Level_Enum, color: Color_Enum, mandatory: boolean, requires?: any | null, createdAt: any, updatedAt: any, modules: Array<{ __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any }>, duration: { __typename?: 'module_group_duration_aggregate', aggregate?: { __typename?: 'module_group_duration_aggregate_fields', sum?: { __typename?: 'module_group_duration_sum_fields', duration?: number | null } | null } | null } }> };
 
 export type CreateOrderMutationVariables = Exact<{
   input: CreateOrderInput;
@@ -52984,7 +53045,7 @@ export type GetUserCourseByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetUserCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, go1Integration?: boolean, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, special_instructions?: string | null, parking_instructions?: string | null, status?: Course_Status_Enum | null, accreditedBy: Accreditors_Enum, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null, organization?: { __typename?: 'organization', id: any, name: string, members: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, profile_id: any }> } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', id: any } | null, organizationKeyContact?: { __typename?: 'profile', id: any } | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null }> } | null };
+export type GetUserCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, go1Integration?: boolean, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, special_instructions?: string | null, parking_instructions?: string | null, status?: Course_Status_Enum | null, accreditedBy: Accreditors_Enum, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null, organization?: { __typename?: 'organization', id: any, name: string, members: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, profile_id: any }> } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null }> } | null };
 
 export type GetUserByMailQueryVariables = Exact<{
   email?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;

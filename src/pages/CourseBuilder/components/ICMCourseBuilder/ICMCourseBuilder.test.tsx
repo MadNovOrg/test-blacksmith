@@ -19,7 +19,14 @@ import { FinalizeCourseBuilderMutation } from '@app/generated/graphql'
 import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/queries/courses/finalize-course-builder'
 import { MUTATION as SAVE_COURSE_MODULES } from '@app/queries/courses/save-course-modules'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import {
+  fireEvent,
+  render,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
 
 import { buildCourse, buildModuleGroup } from '../../test-utils'
 
@@ -484,6 +491,76 @@ describe('component: CourseBuilder', () => {
     expect(
       within(selectedModules).queryByTestId(
         `selected-module-group-${moduleGroup.id}`
+      )
+    ).toBeInTheDocument()
+  })
+
+  it('handles the selection of module groups that require others', () => {
+    const personalSafetyGroup = buildModuleGroup({
+      id: 'personal-safety',
+      name: 'Personal Safety',
+      requires: ['physical-warm-up'],
+    })
+
+    const physicalWarmUpGroup = buildModuleGroup({
+      id: 'physical-warm-up',
+      name: 'Physical Warm Up',
+    })
+
+    const course = buildCourse({ level: Course_Level_Enum.Level_1 })
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === COURSE_QUERY) {
+          return fromValue({
+            data: {
+              course,
+            },
+          })
+        }
+
+        return fromValue({
+          data: {
+            groups: [personalSafetyGroup, physicalWarmUpGroup],
+          },
+        })
+      },
+      executeMutation: () => {
+        return never
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <ICMCourseBuilder />
+      </Provider>,
+      {},
+      { initialEntries: [`/courses/${course.id}/modules`] }
+    )
+
+    const availableModules = screen.getByTestId('available-modules')
+    const selectedModules = screen.getByTestId('selected-modules')
+
+    const personalSafetyLabel = within(availableModules).getByLabelText(
+      'Personal Safety',
+      {
+        exact: false,
+      }
+    )
+    fireEvent.click(personalSafetyLabel)
+
+    const physicalWarmUpLabel = within(availableModules).getByLabelText(
+      'Physical Warm Up',
+      {
+        exact: false,
+      }
+    )
+    expect(physicalWarmUpLabel).toBeChecked()
+    expect(physicalWarmUpLabel).toBeDisabled()
+
+    expect(
+      within(selectedModules).queryByTestId(
+        `selected-module-group-physical-warm-up`
       )
     ).toBeInTheDocument()
   })

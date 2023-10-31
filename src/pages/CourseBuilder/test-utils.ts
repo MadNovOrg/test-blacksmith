@@ -20,6 +20,7 @@ export function buildModuleGroup(
     level: Course_Level_Enum.Level_1,
     color: Color_Enum.Navy,
     mandatory: false,
+    requires: null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     modules: [buildModule()],
