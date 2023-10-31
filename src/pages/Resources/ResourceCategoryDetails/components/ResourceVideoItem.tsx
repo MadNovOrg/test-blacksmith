@@ -40,8 +40,20 @@ export const ResourceVideoItem = () => {
   videoURL = videoURL?.substring(0, videoURL?.lastIndexOf('/'))
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="center">
-      <video controls controlsList="nodownload">
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100vh',
+      }}
+    >
+      <video
+        controls
+        controlsList="nodownload"
+        style={{ width: '100%', height: '100%' }}
+      >
         <source src={`${accessProtocol}//${videoURL}`} />
       </video>
     </Box>

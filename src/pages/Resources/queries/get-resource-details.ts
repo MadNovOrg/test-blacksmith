@@ -9,10 +9,10 @@ export const RESOURCE_DETAILS_QUERY = gql`
     content {
       resourceCategory(id: $id) {
         ...ResourceCategorySummary
-        children {
+        children(first: 100) {
           nodes {
             ...ResourceCategorySummary
-            children {
+            children(first: 100) {
               nodes {
                 ...ResourceCategorySummary
               }
