@@ -1,6 +1,6 @@
 {
   "name": "@teamteach/hub.web-e2e",
-  "version": "1.0.0-alpha.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Hub application web portal's E2E tests",
   "authors": [
