@@ -64,6 +64,42 @@ insert_permissions:
         - profile_id
         - question_id
 select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - answer
+        - course_id
+        - id
+        - profile_id
+        - question_id
+      filter:
+        _or:
+          - course:
+              participants:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - course:
+              booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - answer
+        - course_id
+        - id
+        - profile_id
+        - question_id
+      filter:
+        _or:
+          - course:
+              participants:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - course:
+              organization_key_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
