@@ -265,39 +265,49 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
               </ListItem>
 
               {course.organizationKeyContact ? (
-                <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
+                <ListItem
+                  disableGutters
+                  sx={{ ...backgroundList, mt: 3, ml: 4 }}
+                >
                   <ListItemText>
-                    {`${t(
-                      'components.course-form.organization-key-contact-label'
-                    )}: `}
-                    {acl.isInternalUser() ? (
-                      <Link
-                        href={`/profile/${course.organizationKeyContact?.id}`}
-                      >
-                        {`\n${course.organizationKeyContact?.fullName}`}
-                      </Link>
-                    ) : (
-                      `\n${course.organizationKeyContact?.fullName}`
-                    )}
-                    {course.organizationKeyContact?.email}
+                    <ListItemText>
+                      {`${t(
+                        'components.course-form.organization-key-contact-label'
+                      )}: `}
+                      {acl.isInternalUser() ? (
+                        <Link
+                          href={`/profile/${course.organizationKeyContact?.id}`}
+                        >
+                          {`${course.organizationKeyContact?.fullName} `}
+                        </Link>
+                      ) : (
+                        `${course.organizationKeyContact?.fullName} `
+                      )}
+                    </ListItemText>
+                    <ListItemText>
+                      {course.organizationKeyContact?.email}
+                    </ListItemText>
                   </ListItemText>
                 </ListItem>
               ) : null}
 
               {course.bookingContact ? (
-                <ListItem disableGutters sx={{ ...backgroundList, mt: 3 }}>
+                <ListItem
+                  disableGutters
+                  sx={{ ...backgroundList, mt: 3, ml: 4 }}
+                >
                   <ListItemText>
                     {`${t('components.course-form.contact-person-label')}: `}
-
-                    {acl.isInternalUser() ? (
-                      <Link href={`/profile/${course.bookingContact?.id}`}>
-                        {`\n${course.bookingContact?.fullName}`}
-                      </Link>
-                    ) : (
-                      `\n${course.bookingContact?.fullName}`
-                    )}
-                    <br />
-                    {course.bookingContact?.email}
+                    <ListItemText>
+                      {acl.isInternalUser() ? (
+                        <Link href={`/profile/${course.bookingContact?.id}`}>
+                          {`${course.bookingContact?.fullName} `}
+                        </Link>
+                      ) : (
+                        `${course.bookingContact?.fullName} `
+                      )}
+                    </ListItemText>
+                    <ListItemText>{course.bookingContact?.email}</ListItemText>
                   </ListItemText>
                 </ListItem>
               ) : null}
