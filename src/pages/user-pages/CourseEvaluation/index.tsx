@@ -87,8 +87,6 @@ export const CourseEvaluation = () => {
   const courseId = params.id as string
   const profileId = searchParams.get('profile_id') as string
   const readOnly = !!profileId
-  const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
-  const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
 
   const { data: course, status: courseStatus } = useCourse(courseId ?? '')
   const [loading, setLoading] = useState(false)
@@ -479,7 +477,7 @@ export const CourseEvaluation = () => {
                 <Trans i18nKey="course-evaluation.disclaimer">
                   <a
                     target="_blank"
-                    href={`${origin}/privacy-policy`}
+                    href={`https://www.teamteach.co.uk/policies-procedures/privacy-policy/`}
                     aria-label={`${t('privacy-policy')} (${t(
                       'opens-new-window'
                     )})`}
