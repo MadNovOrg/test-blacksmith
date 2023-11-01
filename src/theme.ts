@@ -373,7 +373,7 @@ export default createTheme({
           color: theme.palette.dimGrey.main,
           fontWeight: 500,
           '.MuiTableRow-root': {
-            backgroundColor: theme.palette.grey[100],
+            backgroundColor: theme.palette.grey[200],
           },
           '.MuiTableCell-root': {
             fontSize: 13,
