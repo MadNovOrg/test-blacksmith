@@ -270,10 +270,10 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   sx={{ ...backgroundList, mt: 3, ml: 4 }}
                 >
                   <ListItemText>
+                    {`${t(
+                      'components.course-form.organization-key-contact-label'
+                    )}: `}
                     <ListItemText>
-                      {`${t(
-                        'components.course-form.organization-key-contact-label'
-                      )}: `}
                       {acl.isInternalUser() ? (
                         <Link
                           href={`/profile/${course.organizationKeyContact?.id}`}
