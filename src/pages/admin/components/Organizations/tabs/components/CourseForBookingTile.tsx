@@ -11,6 +11,7 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useLocation } from 'react-router-dom'
 
+import { useAuth } from '@app/context/auth'
 import { GetUpcomingCoursesQuery } from '@app/generated/graphql'
 import { capitalize } from '@app/util/index'
 
@@ -26,6 +27,7 @@ type CourseForBookingTileParams = {
 export const CourseForBookingTile: React.FC<
   React.PropsWithChildren<CourseForBookingTileParams>
 > = ({ course, variant = 'default', showDistance, distance }) => {
+  const { acl } = useAuth()
   const { t } = useTranslation()
   const { pathname } = useLocation()
   const theme = useTheme()
@@ -90,6 +92,23 @@ export const CourseForBookingTile: React.FC<
   const spacesLeft =
     course.max_participants - (course.participantsCount?.aggregate?.count ?? 0)
 
+  const handleBookClick = () => {
+    if (acl.isOrgAdmin()) {
+      window.location.href =
+        import.meta.env.VITE_BILD_ENQUIRY_EXTERNAL_USERS_URL
+
+      return
+    }
+
+    return navigate(
+      spacesLeft === 0
+        ? `/waitlist?course_id=${course.id}`
+        : `/registration?course_id=${course.id}&quantity=1${
+            acl.isInternalUser() ? '&internal=true' : ''
+          }`
+    )
+  }
+
   return (
     <Box bgcolor="common.white" p={2} mt={2}>
       <Grid container spacing={1}>
@@ -153,13 +172,7 @@ export const CourseForBookingTile: React.FC<
               variant="contained"
               color="primary"
               fullWidth={isMobile}
-              onClick={() => {
-                return navigate(
-                  spacesLeft === 0
-                    ? `/waitlist?course_id=${course.id}`
-                    : `/registration?course_id=${course.id}&quantity=1`
-                )
-              }}
+              onClick={handleBookClick}
             >
               {spacesLeft === 0
                 ? capitalize(t('common.join-waitlist'))
