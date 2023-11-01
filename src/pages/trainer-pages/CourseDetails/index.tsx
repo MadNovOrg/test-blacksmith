@@ -296,11 +296,15 @@ export const CourseDetails = () => {
                       disabled={isCourseInExceptionDisabledStatus}
                     />
                   ) : null}
-                  <PillTab
-                    label={t('pages.course-details.tabs.evaluation.title')}
-                    value={CourseDetailsTabs.EVALUATION}
-                    data-testid="evaluation-tab"
-                  />
+
+                  {acl.isOrgAdmin() &&
+                  course.type === CourseType.OPEN ? null : (
+                    <PillTab
+                      label={t('pages.course-details.tabs.evaluation.title')}
+                      value={CourseDetailsTabs.EVALUATION}
+                      data-testid="evaluation-tab"
+                    />
+                  )}
 
                   {(dietaryAndDisabilitiesCount
                     ?.participantDietaryRestrictionsCount.aggregate?.count ||
@@ -432,9 +436,12 @@ export const CourseDetails = () => {
                 </TabPanel>
               ) : null}
 
-              <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.EVALUATION}>
-                <EvaluationSummaryTab course={course} />
-              </TabPanel>
+              {acl.isOrgAdmin() && course.type === CourseType.OPEN ? null : (
+                <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.EVALUATION}>
+                  <EvaluationSummaryTab course={course} />
+                </TabPanel>
+              )}
+
               <TabPanel
                 sx={{ px: 0 }}
                 value={CourseDetailsTabs.DIETARY_REQUIREMENTS}

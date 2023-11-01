@@ -362,7 +362,7 @@ export const CourseDetails: React.FC<
                             data-testid="attendees-tab"
                           />
                         ) : null}
-                        {isCourseContact ? (
+                        {isCourseContact && course.type !== CourseType.OPEN ? (
                           <PillTab
                             label={t(
                               'pages.course-details.tabs.evaluation.title'
@@ -618,12 +618,14 @@ export const CourseDetails: React.FC<
                     >
                       <CourseAttendeesTab course={course} />
                     </TabPanel>
-                    <TabPanel
-                      sx={{ px: 0 }}
-                      value={CourseDetailsTabs.EVALUATION}
-                    >
-                      <EvaluationSummaryTab course={course} />
-                    </TabPanel>
+                    {course.type !== CourseType.OPEN ? (
+                      <TabPanel
+                        sx={{ px: 0 }}
+                        value={CourseDetailsTabs.EVALUATION}
+                      >
+                        <EvaluationSummaryTab course={course} />
+                      </TabPanel>
+                    ) : null}
                   </>
                 ) : null}
                 <TabPanel
