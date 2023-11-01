@@ -775,6 +775,7 @@ select_permissions:
       computed_fields:
         - course_code
         - freeSlots
+        - state
       filter: {}
       allow_aggregations: true
   - role: sales-representative
