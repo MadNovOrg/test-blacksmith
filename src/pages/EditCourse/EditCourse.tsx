@@ -554,10 +554,12 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const cancellableCourse =
     course &&
     [
-      Course_Status_Enum.TrainerDeclined,
       Course_Status_Enum.TrainerPending,
+      Course_Status_Enum.TrainerMissing,
+      Course_Status_Enum.TrainerDeclined,
       Course_Status_Enum.Scheduled,
       Course_Status_Enum.ConfirmModules,
+      Course_Status_Enum.ExceptionsApprovalPending,
     ].indexOf(course.status) !== -1
   const canCancelCourse =
     acl.canCancelCourses() ||
