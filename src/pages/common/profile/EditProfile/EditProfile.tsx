@@ -110,6 +110,12 @@ export const EditProfilePage: React.FC<
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [avatarError, setAvatarError] = useState('')
+  const [isOrgAdmin, setIsOrgAdmin] = useState<null | {
+    id: string
+    member: {
+      isAdmin: boolean
+    }
+  }>(null)
   const { profile: currentUserProfile, reloadCurrentProfile, acl } = useAuth()
   const navigate = useNavigate()
   const { id } = useParams()
@@ -396,6 +402,20 @@ export const EditProfilePage: React.FC<
 
   const navigateBackPath = orgId ? `../?orgId=${orgId}` : '..'
 
+  const updateIsAdmin = useCallback(
+    async (orgAdmin: {
+      id: string
+      member: {
+        isAdmin: boolean
+      }
+    }) => {
+      await updateOrgMember(orgAdmin)
+      await mutate()
+      await refreshData()
+    },
+    [mutate, updateOrgMember, refreshData]
+  )
+
   const onSubmit = async (data: InferType<typeof formSchema>) => {
     if (!profile) return
 
@@ -418,6 +438,10 @@ export const EditProfilePage: React.FC<
           dietaryRestrictions: data.dietaryRestrictions,
         },
       })
+
+      if (isOrgAdmin) {
+        await updateIsAdmin(isOrgAdmin)
+      }
 
       if (canEditRoles) {
         const updatedRoles: string[] = []
@@ -506,20 +530,6 @@ export const EditProfilePage: React.FC<
       await refreshData()
     },
     [refreshData, updateOrgMember]
-  )
-
-  const updateIsAdmin = useCallback(
-    async (orgMember: OrgMemberType, isAdmin: boolean) => {
-      await updateOrgMember({
-        id: orgMember.id,
-        member: {
-          isAdmin: isAdmin,
-        },
-      })
-      await mutate()
-      await refreshData()
-    },
-    [mutate, updateOrgMember, refreshData]
   )
 
   const deleteOrgMember = useCallback(
@@ -1001,15 +1011,27 @@ export const EditProfilePage: React.FC<
                               />
                             )}
                           />
-
                           <FormControlLabel
                             sx={{ py: 2 }}
                             control={
                               <Switch
-                                checked={Boolean(orgMember.isAdmin)}
-                                onChange={(_, checked) =>
-                                  updateIsAdmin(orgMember, checked)
+                                checked={
+                                  isOrgAdmin !== null
+                                    ? isOrgAdmin?.member?.isAdmin
+                                    : Boolean(orgMember?.isAdmin)
                                 }
+                                onChange={() => {
+                                  const updateMemberModel = {
+                                    id: orgMember.id,
+                                    member: {
+                                      isAdmin:
+                                        isOrgAdmin === null
+                                          ? !orgMember.isAdmin
+                                          : !isOrgAdmin.member.isAdmin,
+                                    },
+                                  }
+                                  setIsOrgAdmin(updateMemberModel)
+                                }}
                                 disabled={!isAdminEditable}
                                 sx={{ px: 2 }}
                               />
