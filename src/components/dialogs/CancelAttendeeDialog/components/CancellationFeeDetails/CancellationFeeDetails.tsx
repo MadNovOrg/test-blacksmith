@@ -3,6 +3,7 @@ import {
   Box,
   FormControlLabel,
   FormHelperText,
+  Link,
   Radio,
   RadioGroup,
   Typography,
@@ -13,7 +14,7 @@ import {
   RegisterOptions,
   UseFormRegisterReturn,
 } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { NumericTextField } from '@app/components/NumericTextField'
 import { CancellationTermsTable } from '@app/pages/EditCourse/components/CancellationTermsTable'
@@ -100,7 +101,20 @@ export const CancellationFeeDetails: React.FC<
         </>
       ) : (
         <Alert severity="warning" variant="outlined" sx={{ mt: 4 }}>
-          {t('pages.course-details.request-cancellation-modal.warning')}
+          <Trans
+            i18nKey="pages.course-details.request-cancellation-modal.warning"
+            components={{
+              termsOfBusinessLink: (
+                <Link
+                  target="_blank"
+                  rel="noreferrer"
+                  href={`${
+                    import.meta.env.VITE_BASE_WORDPRESS_URL
+                  }/terms-of-business/`}
+                />
+              ),
+            }}
+          />
         </Alert>
       )}
 
