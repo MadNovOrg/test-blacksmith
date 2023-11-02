@@ -381,57 +381,63 @@ export const EditRoles = () => {
                   )}
                 </FormGroup>
               )}
-              {selectedEmployeeRoles.includes(salesRole.name) && (
-                <FormControl>
-                  <FormLabel id="sales-permissions-label">
-                    {t(`pages.view-profile.sales-permissions`)}
-                  </FormLabel>
-                  <List>
-                    <Controller
-                      name={`roles.${index}.salesRoles` as 'roles.0.salesRoles'}
-                      control={control}
-                      render={({ field }) => (
-                        <>
-                          {salesRolesNames.map(roleName => (
-                            <FormControlLabel
-                              key={roleName}
-                              label={t(`pages.view-profile.roles.${roleName}`)}
-                              control={
-                                <Checkbox
-                                  {...field}
-                                  checked={field.value.includes(roleName)}
-                                  value={roleName}
-                                  onChange={e => {
-                                    if (e.target.checked) {
-                                      field.onChange([
-                                        ...field.value,
-                                        e.target.value as RoleName,
-                                      ])
-                                    } else {
-                                      field.onChange(
-                                        field.value.filter(
-                                          value =>
-                                            value !==
-                                            (e.target.value as RoleName)
+              {selectedEmployeeRoles &&
+                Array.isArray(selectedEmployeeRoles) &&
+                selectedEmployeeRoles.includes(salesRole.name) && (
+                  <FormControl>
+                    <FormLabel id="sales-permissions-label">
+                      {t(`pages.view-profile.sales-permissions`)}
+                    </FormLabel>
+                    <List>
+                      <Controller
+                        name={
+                          `roles.${index}.salesRoles` as 'roles.0.salesRoles'
+                        }
+                        control={control}
+                        render={({ field }) => (
+                          <>
+                            {salesRolesNames.map(roleName => (
+                              <FormControlLabel
+                                key={roleName}
+                                label={t(
+                                  `pages.view-profile.roles.${roleName}`
+                                )}
+                                control={
+                                  <Checkbox
+                                    {...field}
+                                    checked={field.value.includes(roleName)}
+                                    value={roleName}
+                                    onChange={e => {
+                                      if (e.target.checked) {
+                                        field.onChange([
+                                          ...field.value,
+                                          e.target.value as RoleName,
+                                        ])
+                                      } else {
+                                        field.onChange(
+                                          field.value.filter(
+                                            value =>
+                                              value !==
+                                              (e.target.value as RoleName)
+                                          )
                                         )
-                                      )
-                                    }
-                                  }}
-                                />
-                              }
-                            />
-                          ))}
-                        </>
-                      )}
-                    />
-                  </List>
-                  {errors?.roles?.[index]?.salesRoles && (
-                    <FormHelperText error sx={{ marginLeft: 0 }}>
-                      {t(`pages.view-profile.sales-role-error`)}
-                    </FormHelperText>
-                  )}
-                </FormControl>
-              )}
+                                      }
+                                    }}
+                                  />
+                                }
+                              />
+                            ))}
+                          </>
+                        )}
+                      />
+                    </List>
+                    {errors?.roles?.[index]?.salesRoles && (
+                      <FormHelperText error sx={{ marginLeft: 0 }}>
+                        {t(`pages.view-profile.sales-role-error`)}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+                )}
             </Box>
             {showAddRoleButton && (
               <Button
