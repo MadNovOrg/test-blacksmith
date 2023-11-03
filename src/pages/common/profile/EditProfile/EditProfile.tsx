@@ -110,12 +110,6 @@ export const EditProfilePage: React.FC<
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [avatarError, setAvatarError] = useState('')
-  const [isOrgAdmin, setIsOrgAdmin] = useState<null | {
-    id: string
-    member: {
-      isAdmin: boolean
-    }
-  }>(null)
   const { profile: currentUserProfile, reloadCurrentProfile, acl } = useAuth()
   const navigate = useNavigate()
   const { id } = useParams()
@@ -232,7 +226,12 @@ export const EditProfilePage: React.FC<
             ? schema.required(t('validation-errors.other-job-title-required'))
             : schema
         }),
-        org: yup.string(),
+        org: yup.array().of(
+          yup.object({
+            isAdmin: yup.boolean().required(),
+            id: yup.string().required(),
+          })
+        ),
         disabilities: disabilitiesSchema,
         dietaryRestrictions: dietaryRestrictionsSchema,
         roles: rolesFormSchema(),
@@ -293,6 +292,7 @@ export const EditProfilePage: React.FC<
       setValue('dob', profile.dob ? new Date(profile.dob) : null)
       setValue('disabilities', profile.disabilities ?? '')
       setValue('dietaryRestrictions', profile.dietaryRestrictions ?? '')
+      setValue('org', [])
 
       if (isOtherJobTitle) {
         setValue('jobTitle', 'Other')
@@ -439,8 +439,17 @@ export const EditProfilePage: React.FC<
         },
       })
 
-      if (isOrgAdmin) {
-        await updateIsAdmin(isOrgAdmin)
+      if (values.org?.length) {
+        await Promise.all(
+          values?.org.map(({ isAdmin, id }) =>
+            updateIsAdmin({
+              id,
+              member: {
+                isAdmin,
+              },
+            })
+          )
+        )
       }
 
       if (canEditRoles) {
@@ -962,11 +971,12 @@ export const EditProfilePage: React.FC<
                   </Typography>
 
                   <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
-                    {profile.organizations.map(orgMember => {
+                    {profile.organizations.map((orgMember, index) => {
                       const isAdminEditable =
                         acl.isTTAdmin() || orgMember.isAdmin
 
                       const editable = !id || isAdminEditable
+
                       return (
                         <Box key={orgMember.id}>
                           <Grid
@@ -1015,24 +1025,19 @@ export const EditProfilePage: React.FC<
                             sx={{ py: 2 }}
                             control={
                               <Switch
-                                checked={
-                                  isOrgAdmin !== null
-                                    ? isOrgAdmin?.member?.isAdmin
-                                    : Boolean(orgMember?.isAdmin)
-                                }
-                                onChange={() => {
-                                  const updateMemberModel = {
-                                    id: orgMember.id,
-                                    member: {
-                                      isAdmin:
-                                        isOrgAdmin === null
-                                          ? !orgMember.isAdmin
-                                          : !isOrgAdmin.member.isAdmin,
-                                    },
-                                  }
-                                  setIsOrgAdmin(updateMemberModel)
-                                }}
                                 disabled={!isAdminEditable}
+                                checked={
+                                  values?.org && values?.org[index]
+                                    ? values?.org[index].isAdmin
+                                    : Boolean(orgMember.isAdmin)
+                                }
+                                onChange={e => {
+                                  setValue(
+                                    `org.${index}.isAdmin`,
+                                    e.target.checked
+                                  )
+                                  setValue(`org.${index}.id`, orgMember.id)
+                                }}
                                 sx={{ px: 2 }}
                               />
                             }
