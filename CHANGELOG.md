@@ -1,12 +1,5 @@
 # @teamteach/hub
 
-## 1.0.1
-
-### Patch Changes
-
-- 3a71d83b: altered the render conditions for course cancellation button
-- 53553614: Fix "Page not found" on BILD course booking
-
 ## 1.0.0
 
 ### Minor Changes
