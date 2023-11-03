@@ -638,7 +638,7 @@ export type CourseInput = {
   displayOnWebsite?: boolean
   renewalCycle?: Course_Renewal_Cycle_Enum
   //TODO: Delete this after Arlo migration
-  arloReferenceId?: string
+  arloReferenceId: string | null
 }
 
 export type ValidCourseInput = DeepNonNullable<

@@ -304,6 +304,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     type: course.type,
     deliveryType: course.deliveryType,
     organization: course.organization ?? null,
+    arloReferenceId: course.arloReferenceId ?? null,
     bookingContact: course.bookingContact
       ? {
           profileId: course.bookingContact.id,
