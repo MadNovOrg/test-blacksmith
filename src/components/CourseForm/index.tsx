@@ -414,7 +414,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const defaultValues = useMemo<Omit<CourseInput, 'id'>>(
     () => ({
       accreditedBy: courseInput?.accreditedBy ?? Accreditors_Enum.Icm,
-      arloReferenceId: courseInput?.arloReferenceId ?? null,
+      arloReferenceId: courseInput?.arloReferenceId ?? undefined,
       displayOnWebsite: courseInput?.displayOnWebsite ?? true,
       organization: courseInput?.organization ?? null,
       salesRepresentative: courseInput?.salesRepresentative ?? null,
