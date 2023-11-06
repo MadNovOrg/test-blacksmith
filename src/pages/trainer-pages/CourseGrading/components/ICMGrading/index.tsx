@@ -230,6 +230,10 @@ export const ICMGrading: FC<Props> = ({ course }) => {
               onChange={handleModuleSelectionChange}
             />
 
+            <Typography mt={3} color={theme.palette.dimGrey.main}>
+              {t('pages.course-grading.submit-description')}
+            </Typography>
+
             <Box display="flex" justifyContent="right" mt={5}>
               <LoadingButton
                 variant="contained"
