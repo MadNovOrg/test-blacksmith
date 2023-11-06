@@ -552,7 +552,7 @@
         "title": "Course Evaluation",
         "button": "View Course Evaluation",
         "full-summary": "Full Course Evaluation",
-        "desc": "View an attendee's or trainer's course evaluation and a summary of all evaluations.",
+        "desc": "View a summary of all course evaluations.",
         "view-evaluation": "View Evaluation",
         "attendee-feedback": "Attendee Feedback",
         "trainer-feedback": "Trainer Feedback",
