@@ -1,6 +1,7 @@
 
 alter table "public"."course_certificate" alter column "blended_learning" drop not null;
 alter table "public"."course_certificate" alter column "reaccreditation" drop not null;
+alter table "public"."course_certificate" alter column "course_accredited_by" drop not null;
 
 -- populate fields for existing certificates
 UPDATE course_certificate
