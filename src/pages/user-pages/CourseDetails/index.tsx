@@ -149,6 +149,7 @@ export const CourseDetails: React.FC<
   const [{ data: participantData }, reexecuteQuery] = useQuery({
     query: GetParticipant,
     variables: { profileId, courseId },
+    requestPolicy: 'network-only',
   })
   const courseParticipant: CourseParticipant | null =
     participantData?.course_participant?.length > 0
