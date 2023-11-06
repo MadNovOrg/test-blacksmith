@@ -546,8 +546,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     acl.canRescheduleWithoutWarning()
 
   const courseRescheduleConfirmation =
-    (activeRole === RoleName.TT_OPS && course?.type === CourseType.INDIRECT) ||
-    (activeRole === RoleName.TRAINER && course?.type === CourseType.INDIRECT)
+    activeRole === RoleName.TT_OPS && course?.type === CourseType.INDIRECT
 
   const hasError = updatingError || auditError
   const fetching = updatingCourse || insertingAudit
