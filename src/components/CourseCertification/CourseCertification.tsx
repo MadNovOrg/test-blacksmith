@@ -25,6 +25,7 @@ import { ManageCertificateMenu } from '@app/components/ManageCertificateMenu'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
 import {
+  Accreditors_Enum,
   Course_Certificate_Changelog_Type_Enum,
   GetCertificateQuery,
   GetCertificateQueryVariables,
@@ -190,9 +191,11 @@ export const CourseCertification: React.FC<
                         grade={grade as Grade_Enum}
                         certificationNumber={certificationNumber}
                         expiryDate={certificate.expiryDate}
-                        accreditedBy={certificate.courseAccreditedBy}
-                        blendedLearning={certificate.blendedLearning}
-                        reaccreditation={certificate.reaccreditation}
+                        accreditedBy={
+                          certificate.courseAccreditedBy ?? Accreditors_Enum.Icm
+                        }
+                        blendedLearning={certificate.blendedLearning ?? false}
+                        reaccreditation={certificate.reaccreditation ?? false}
                       />
                     }
                     fileName="certificate.pdf"
