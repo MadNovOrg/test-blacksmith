@@ -2,8 +2,11 @@ import { Container, Stack, useTheme, useMediaQuery } from '@mui/material'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import React, { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 
+import { SnackbarMessage } from '@app/components/SnackbarMessage'
+import { useSnackbar } from '@app/context/snackbar'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { CoursesTable } from '@app/pages/user-pages/MyCourses/Components/CoursesTable'
@@ -19,6 +22,25 @@ export const AttendeeCourses: React.FC<
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const { addSnackbarMessage } = useSnackbar()
+  const { state } = useLocation()
+
+  useEffect(() => {
+    if (state as { courseCode: string }) {
+      const { courseCode } = state
+
+      addSnackbarMessage('course-canceled', {
+        label: (
+          <Trans
+            i18nKey="pages.course-details.change-my-attendance.cancel-my-attendance-success"
+            values={{
+              code: courseCode,
+            }}
+          />
+        ),
+      })
+    }
+  }, [addSnackbarMessage, state])
 
   const [filters, setFilters] = useState<CoursesFilters | undefined>()
 
@@ -53,6 +75,11 @@ export const AttendeeCourses: React.FC<
 
   return (
     <Container maxWidth="lg" sx={{ py: 5, px: 0 }} disableGutters={!isMobile}>
+      <SnackbarMessage
+        messageKey="course-canceled"
+        sx={{ position: 'absolute' }}
+      />
+
       <Box flexDirection={isMobile ? 'column' : 'row'} display="flex" gap={4}>
         <Box width={isMobile ? undefined : 250}>
           <Typography variant="h1">{t('my-courses')}</Typography>

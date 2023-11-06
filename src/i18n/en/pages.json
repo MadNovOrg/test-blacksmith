@@ -611,6 +611,7 @@
       "description": "Please select one of the following options.",
       "cancel-my-attendance": "Cancel course",
       "transfer-to-another-course": "Transfer course",
+      "cancel-my-attendance-success": "Your registration to attend <strong>{{ code }}</strong> has been cancelled",
       "transfer-info": {
         "alert-message": "Transfer terms apply based on the course start date in line with Team Teach <strong><termsOfBusinessLink>Terms of Business.</termsOfBusinessLink></strong>",
         "terms-notice": "I understand and agree to the change.",

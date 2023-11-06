@@ -84,9 +84,13 @@ export const ModifyAttendanceModal: React.FC<
 
   useEffect(() => {
     if (data && !error) {
-      navigate('/courses')
+      navigate('/courses', {
+        state: {
+          courseCode: course.course_code,
+        },
+      })
     }
-  }, [data, error, navigate])
+  }, [course.course_code, data, error, navigate, t])
 
   return (
     <Container>
