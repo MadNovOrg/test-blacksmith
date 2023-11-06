@@ -2,7 +2,7 @@ import React from 'react'
 
 import { render, screen } from '@test/index'
 
-import { CourseCertificationDetails } from './index'
+import { CourseCertificationDetails } from './CourseCertificationDetails'
 
 describe('page: CourseCertificationDetails', () => {
   it('renders page as expected', async () => {

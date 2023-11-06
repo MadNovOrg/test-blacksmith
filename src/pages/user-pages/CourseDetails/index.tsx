@@ -21,7 +21,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
-import { CourseCertification } from '@app/components/CourseCertification'
+import { CourseCertification } from '@app/components/CourseCertification/CourseCertification'
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { CourseOverview } from '@app/components/CourseOverview'
 import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAlert'

@@ -4,7 +4,7 @@ import { useFetcher } from '@app/hooks/use-fetcher'
 
 import { chance, render, screen, userEvent } from '@test/index'
 
-import RevokeCertModal from './RevokeCertModal'
+import RevokeCertModal from './RevokeModal'
 
 vi.mock('@app/hooks/useProfile')
 vi.mock('@app/hooks/use-fetcher')

@@ -31,7 +31,7 @@ import { INSERT_CERTIFICATE_HOLD_MUTATION } from '@app/queries/certificate/inser
 import theme from '@app/theme'
 import { NonNullish } from '@app/types'
 
-import ConfirmDatesModal from './ConfirmDatesModal'
+import ConfirmDatesModal from '../ConfirmDatesModal/ConfirmDatesModal'
 
 const MINUTES_IN_FUTURE = 10
 

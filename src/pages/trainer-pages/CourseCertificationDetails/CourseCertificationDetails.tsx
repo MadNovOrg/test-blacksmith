@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
-import { CourseCertification } from '@app/components/CourseCertification'
+import { CourseCertification } from '@app/components/CourseCertification/CourseCertification'
 
 export const CourseCertificationDetails = () => {
   const params = useParams()

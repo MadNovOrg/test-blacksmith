@@ -16,7 +16,7 @@ import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCours
 import { LicenseOrderDetails } from '@app/pages/CreateCourse/components/LicenseOrderDetails'
 import { ReviewLicenseOrder } from '@app/pages/CreateCourse/components/ReviewLicenseOrder'
 import { EditCourse } from '@app/pages/EditCourse'
-import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
+import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'

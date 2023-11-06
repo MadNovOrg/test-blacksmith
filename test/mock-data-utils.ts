@@ -496,6 +496,9 @@ export const buildCertificate = build<CourseCertificate>({
     certificationDate: new Date().toISOString(),
     courseLevel: CourseLevel.Level_1,
     status: CertificateStatus.ACTIVE,
+    blendedLearning: false,
+    reaccreditation: false,
+    courseAccreditedBy: Accreditors_Enum.Icm,
   },
 })
 

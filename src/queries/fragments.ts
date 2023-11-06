@@ -175,6 +175,9 @@ export const CERTIFICATE = gql`
     courseLevel
     status
     legacyCourseCode
+    blendedLearning
+    reaccreditation
+    courseAccreditedBy
   }
 `
 

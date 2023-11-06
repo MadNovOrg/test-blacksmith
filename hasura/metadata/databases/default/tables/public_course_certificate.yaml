@@ -3,8 +3,12 @@ table:
   schema: public
 configuration:
   column_config:
+    blended_learning:
+      custom_name: blendedLearning
     certification_date:
       custom_name: certificationDate
+    course_accredited_by:
+      custom_name: courseAccreditedBy
     course_id:
       custom_name: courseId
     course_level:
@@ -24,7 +28,9 @@ configuration:
     updated_at:
       custom_name: updatedAt
   custom_column_names:
+    blended_learning: blendedLearning
     certification_date: certificationDate
+    course_accredited_by: courseAccreditedBy
     course_id: courseId
     course_level: courseLevel
     course_name: courseName
@@ -88,7 +94,9 @@ select_permissions:
   - role: booking-contact
     permission:
       columns:
+        - blended_learning
         - certification_date
+        - course_accredited_by
         - course_id
         - course_level
         - course_name
@@ -99,6 +107,7 @@ select_permissions:
         - legacy_course_code
         - number
         - profile_id
+        - reaccreditation
         - updated_at
       computed_fields:
         - grade
@@ -128,7 +137,9 @@ select_permissions:
   - role: finance
     permission:
       columns:
+        - blended_learning
         - certification_date
+        - course_accredited_by
         - course_id
         - course_level
         - course_name
@@ -139,6 +150,7 @@ select_permissions:
         - legacy_course_code
         - number
         - profile_id
+        - reaccreditation
         - updated_at
       computed_fields:
         - grade
@@ -148,7 +160,9 @@ select_permissions:
   - role: organization-key-contact
     permission:
       columns:
+        - blended_learning
         - certification_date
+        - course_accredited_by
         - course_id
         - course_level
         - course_name
@@ -159,6 +173,7 @@ select_permissions:
         - legacy_course_code
         - number
         - profile_id
+        - reaccreditation
         - updated_at
       computed_fields:
         - grade
@@ -188,7 +203,9 @@ select_permissions:
   - role: sales-admin
     permission:
       columns:
+        - blended_learning
         - certification_date
+        - course_accredited_by
         - course_id
         - course_level
         - course_name
@@ -199,6 +216,7 @@ select_permissions:
         - legacy_course_code
         - number
         - profile_id
+        - reaccreditation
         - updated_at
       computed_fields:
         - grade
@@ -208,7 +226,9 @@ select_permissions:
   - role: sales-representative
     permission:
       columns:
+        - blended_learning
         - certification_date
+        - course_accredited_by
         - course_id
         - course_level
         - course_name
@@ -219,6 +239,7 @@ select_permissions:
         - legacy_course_code
         - number
         - profile_id
+        - reaccreditation
         - updated_at
       computed_fields:
         - grade
@@ -228,7 +249,9 @@ select_permissions:
   - role: trainer
     permission:
       columns:
+        - blended_learning
         - certification_date
+        - course_accredited_by
         - course_id
         - course_level
         - course_name
@@ -239,6 +262,7 @@ select_permissions:
         - legacy_course_code
         - number
         - profile_id
+        - reaccreditation
         - updated_at
       computed_fields:
         - grade
@@ -267,7 +291,9 @@ select_permissions:
   - role: tt-admin
     permission:
       columns:
+        - blended_learning
         - certification_date
+        - course_accredited_by
         - course_id
         - course_level
         - course_name
@@ -278,6 +304,7 @@ select_permissions:
         - legacy_course_code
         - number
         - profile_id
+        - reaccreditation
         - updated_at
       computed_fields:
         - grade
@@ -287,7 +314,9 @@ select_permissions:
   - role: tt-ops
     permission:
       columns:
+        - blended_learning
         - certification_date
+        - course_accredited_by
         - course_id
         - course_level
         - course_name
@@ -298,6 +327,7 @@ select_permissions:
         - legacy_course_code
         - number
         - profile_id
+        - reaccreditation
         - updated_at
       computed_fields:
         - grade
@@ -307,7 +337,9 @@ select_permissions:
   - role: unverified
     permission:
       columns:
+        - blended_learning
         - certification_date
+        - course_accredited_by
         - course_id
         - course_level
         - course_name
@@ -318,6 +350,7 @@ select_permissions:
         - legacy_course_code
         - number
         - profile_id
+        - reaccreditation
         - updated_at
       computed_fields:
         - grade
@@ -331,7 +364,9 @@ select_permissions:
   - role: user
     permission:
       columns:
+        - blended_learning
         - certification_date
+        - course_accredited_by
         - course_id
         - course_level
         - course_name
@@ -342,6 +377,7 @@ select_permissions:
         - legacy_course_code
         - number
         - profile_id
+        - reaccreditation
         - updated_at
       computed_fields:
         - grade

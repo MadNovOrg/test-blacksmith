@@ -8,6 +8,8 @@ import {
   Venue,
 } from '@app/types'
 
+import { Accreditors_Enum } from '@qa/generated/graphql'
+
 export type User = {
   givenName: string
   familyName: string
@@ -63,6 +65,7 @@ export type Course = {
       count: number
     }
   }
+  accreditedBy: Accreditors_Enum
 }
 
 export type CourseSchedule = {

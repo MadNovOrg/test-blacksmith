@@ -14,7 +14,7 @@ import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashb
 import { Contacts } from '@app/pages/admin/Contacts'
 import { Users } from '@app/pages/admin/Users'
 import { OrderDetails as CourseOrderDetails } from '@app/pages/CreateCourse/components/OrderDetails'
-import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
+import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
 import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'

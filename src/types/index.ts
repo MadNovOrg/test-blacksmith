@@ -125,6 +125,9 @@ export type CourseCertificate = {
   profileId: string
   profile: Profile
   status: CertificateStatus
+  blendedLearning: boolean
+  reaccreditation: boolean
+  courseAccreditedBy: Accreditors_Enum
 } & Base
 
 export type Address = {

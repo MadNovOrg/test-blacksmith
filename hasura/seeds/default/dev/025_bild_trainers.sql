@@ -90,19 +90,19 @@ INSERT INTO public.course_invites (id, email, status, course_id) VALUES
 ('a8c4542a-2d7c-4e26-ba66-cd372f462248', 'bild.certified2@teamteach.testinator.com', 'ACCEPTED', 10033),
 ('95b96976-c985-40d9-91fc-bdf10a7e3089', 'bild.certified3@teamteach.testinator.com', 'ACCEPTED', 10033);
 
-INSERT INTO public.course_certificate (id, course_id, number, expiry_date, profile_id, course_name, course_level, certification_date, is_revoked) VALUES
-('0413cb5f-c04d-403c-b76f-23025c91de25', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', '5bc30260-04fb-41a4-bd29-07c5f433d904', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false),
-('cdce5101-331a-449b-95f2-73f5863caf34', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', '9b236919-918d-45ad-84e4-fb063c1938f0', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false),
-('fa53e9c5-63c2-41fd-85fa-8529a7794fb2', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', '082d778c-7b78-4cd8-ac24-ec78c0e8b4ed', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false),
-('1a98205a-e742-49d5-a852-0a148d74bb16', 10034, 'B.ADV.F.OP.A.10034', '2025-05-05', '1b37b4d3-0dcc-4f17-96d5-bc27c029010f', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
-('da8ef2ec-a7b4-41ad-8008-b74448cc7bac', 10034, 'B.ADV.F.OP.A.10034', '2025-05-05', '00d14fc3-7fa6-4d52-9ae4-f3bcb26baade', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
-('a5adb1b9-3bc8-45e3-ae29-7372b47310f1', 10034, 'B.ADV.F.OP.A.10034', '2025-05-05', '98920ae3-ab16-424f-a0cd-302136c7b413', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
-('039cb50a-6fc9-4ba1-9373-a6a2e1317cd9', 10034, 'B.ADV.F.OP.A.10034', '2025-05-05', '2be41d95-40ee-49d5-810c-fae16135cccc', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
-('9bd03085-6448-4870-8da3-7ec1eea5fe9f', 10034, 'B.ADV.F.OP.A.10034', '2025-05-05', 'd1c5fa19-30da-4512-88f6-dc9ef6a26958', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
-('970ff9d0-5a99-4eb1-b021-d815ab8a938a', 10034, 'B.ADV.F.OP.A.10034', '2025-05-05', '4c6194ad-6dd3-461e-b4da-d3562b1007d1', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false),
-('5beb390c-450b-40b2-905e-d79d54b9daca', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', '2c4b16db-bfba-4a21-a092-55ef9010ca2f', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false),
-('4fff750b-ef54-461c-806e-0f087a7efae0', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', 'c15a4b34-bb98-4096-ae2e-ea280fb14e05', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false),
-('b76ec0ea-7f48-4a91-9806-e517d97df17d', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', '729e3ed4-f86e-41a7-9e29-c6387b9fbaa6', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false);
+INSERT INTO public.course_certificate (id, course_id, number, expiry_date, profile_id, course_name, course_level, certification_date, is_revoked, blended_learning, reaccreditation, course_accredited_by) VALUES
+('0413cb5f-c04d-403c-b76f-23025c91de25', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', '5bc30260-04fb-41a4-bd29-07c5f433d904', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false, false, false, 'BILD'),
+('cdce5101-331a-449b-95f2-73f5863caf34', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', '9b236919-918d-45ad-84e4-fb063c1938f0', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false, false, false, 'BILD'),
+('fa53e9c5-63c2-41fd-85fa-8529a7794fb2', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', '082d778c-7b78-4cd8-ac24-ec78c0e8b4ed', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false, false, false, 'BILD'),
+('1a98205a-e742-49d5-a852-0a148d74bb16', 10034, 'B.ADV.F.OP.A.10034', '2025-05-05', '1b37b4d3-0dcc-4f17-96d5-bc27c029010f', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false, false, false, 'BILD'),
+('da8ef2ec-a7b4-41ad-8008-b74448cc7bac', 10034, 'B.ADV.F.OP.A.10034', '2025-05-05', '00d14fc3-7fa6-4d52-9ae4-f3bcb26baade', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false, false, false, 'BILD'),
+('a5adb1b9-3bc8-45e3-ae29-7372b47310f1', 10034, 'B.ADV.F.OP.A.10034', '2025-05-05', '98920ae3-ab16-424f-a0cd-302136c7b413', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false, false, false, 'BILD'),
+('039cb50a-6fc9-4ba1-9373-a6a2e1317cd9', 10034, 'B.ADV.F.OP.A.10034', '2025-05-05', '2be41d95-40ee-49d5-810c-fae16135cccc', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false, false, false, 'BILD'),
+('9bd03085-6448-4870-8da3-7ec1eea5fe9f', 10034, 'B.ADV.F.OP.A.10034', '2025-05-05', 'd1c5fa19-30da-4512-88f6-dc9ef6a26958', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false, false, false, 'BILD'),
+('970ff9d0-5a99-4eb1-b021-d815ab8a938a', 10034, 'B.ADV.F.OP.A.10034', '2025-05-05', '4c6194ad-6dd3-461e-b4da-d3562b1007d1', 'BILD Certified Course: A', 'BILD_ADVANCED_TRAINER', '2022-03-03', false, false, false, 'BILD'),
+('5beb390c-450b-40b2-905e-d79d54b9daca', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', '2c4b16db-bfba-4a21-a092-55ef9010ca2f', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false, false, false, 'BILD'),
+('4fff750b-ef54-461c-806e-0f087a7efae0', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', 'c15a4b34-bb98-4096-ae2e-ea280fb14e05', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false, false, false, 'BILD'),
+('b76ec0ea-7f48-4a91-9806-e517d97df17d', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', '729e3ed4-f86e-41a7-9e29-c6387b9fbaa6', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false, false, false, 'BILD');
 
 INSERT INTO public.course_participant (id, course_id, profile_id, invite_id, certificate_id, grade) VALUES
 ('0af7536e-b396-490a-b7e8-eb4c5152c84e', 10033, '5bc30260-04fb-41a4-bd29-07c5f433d904', '2b70862b-9ef7-412f-b742-d9a159c46151', '0413cb5f-c04d-403c-b76f-23025c91de25', 'PASS'),

@@ -73,20 +73,20 @@ insert into public.course_cancellation_request (course_id, requested_by, reason)
 values (10026, '467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 'Wrong venue.');
 
 insert into public.course_certificate (id, course_id, number, expiry_date, profile_id, course_name, course_level,
-                                       certification_date, is_revoked)
-values ('1e345ec4-f99f-4ce7-b765-ee2d36d7f338', 10019, 'L1.F.INDR.10019', '2025-12-06', '2e06729d-7436-427a-a5cf-ff7c9496b85c', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
-       ('1fc58c17-0eae-40ff-81fb-b33daaf474c8', 10019, 'L1.F.INDR.10019', '2025-12-06', 'b5702c04-35a6-4c55-b24a-592dc0a05142', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
-       ('c10eee83-dc6d-426d-af21-cf46a6202751', 10019, 'L1.F.INDR.10019', '2025-12-06', 'ae8f617c-2411-42aa-9501-f2f08b16a76e', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
-       ('919645da-1eb0-4862-a1f4-6cf06558f61f', 10019, 'L1.F.INDR.10019', '2025-12-06', '47b5b128-0a47-4094-86f6-87005eb12d71', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
-       ('df5b8cab-f132-4936-bb66-9219b3f0a6b9', 10019, 'L1.F.INDR.10019', '2025-12-06', 'fbe6eb48-ad58-40f9-9388-07e743240ce3', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
-       ('54eba8c3-6355-4d96-8649-fe793f7f0983', 10085, 'F.L1.OP.10085', '2022-12-06', 'fbe6eb48-ad58-40f9-9388-07e743240ce3',   'Positive Behaviour Training: Level One ', 'LEVEL_1', '2019-12-06', false),
-       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f331', 10086, 'ADV.F.CL.10086',  NOW() + interval '12 months', '5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
-       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f332', 10086, 'ADV.F.CL.10086',  NOW() + interval '12 months', '6ea4e91b-9856-4533-9544-949caba236fb', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
-       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f333', 10086, 'ADV.F.CL.10086',  NOW() + interval '12 months', '88072bb2-10e0-4417-b9ce-ec05265b8b56', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
-       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f334', 10086, 'ADV.F.CL.10086',  NOW() + interval '12 months', 'dccd780a-9745-4972-a43e-95ec3ef361df', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
-       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f335', 10087, 'INT.F.CL.10087',  NOW() - interval '5 days', '749791ef-e4c4-4a5f-881a-461e4724138d', 'Positive Behaviour Training: Intermediate Trainer', 'INTERMEDIATE_TRAINER', NOW() - interval '12 months', false),
-       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f336', 10087, 'INT.F.CL.10087',  NOW() + interval '12 months', '6ea4e91b-9856-4533-9544-949caba236fb', 'Positive Behaviour Training: Intermediate Trainer', 'INTERMEDIATE_TRAINER', NOW() - interval '12 months', false),
-       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f337', 10087, 'INT.F.CL.10087',  NOW() + interval '12 months', '30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', 'Positive Behaviour Training: Intermediate Trainer', 'INTERMEDIATE_TRAINER', NOW() - interval '12 months', false);
+                                       certification_date, is_revoked, blended_learning, reaccreditation, course_accredited_by)
+values ('1e345ec4-f99f-4ce7-b765-ee2d36d7f338', 10019, 'L1.F.INDR.10019', '2025-12-06', '2e06729d-7436-427a-a5cf-ff7c9496b85c', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false, false, false, 'ICM'),
+       ('1fc58c17-0eae-40ff-81fb-b33daaf474c8', 10019, 'L1.F.INDR.10019', '2025-12-06', 'b5702c04-35a6-4c55-b24a-592dc0a05142', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false, false, false, 'ICM'),
+       ('c10eee83-dc6d-426d-af21-cf46a6202751', 10019, 'L1.F.INDR.10019', '2025-12-06', 'ae8f617c-2411-42aa-9501-f2f08b16a76e', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false, false, false, 'ICM'),
+       ('919645da-1eb0-4862-a1f4-6cf06558f61f', 10019, 'L1.F.INDR.10019', '2025-12-06', '47b5b128-0a47-4094-86f6-87005eb12d71', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false, false, false, 'ICM'),
+       ('df5b8cab-f132-4936-bb66-9219b3f0a6b9', 10019, 'L1.F.INDR.10019', '2025-12-06', 'fbe6eb48-ad58-40f9-9388-07e743240ce3', 'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false, false, false, 'ICM'),
+       ('54eba8c3-6355-4d96-8649-fe793f7f0983', 10085, 'F.L1.OP.10085', '2022-12-06', 'fbe6eb48-ad58-40f9-9388-07e743240ce3',   'Positive Behaviour Training: Level One ', 'LEVEL_1', '2019-12-06', false, false, false, 'ICM'),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f331', 10086, 'ADV.F.CL.10086',  NOW() + interval '12 months', '5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false, false, false, 'ICM'),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f332', 10086, 'ADV.F.CL.10086',  NOW() + interval '12 months', '6ea4e91b-9856-4533-9544-949caba236fb', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false, false, false, 'ICM'),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f333', 10086, 'ADV.F.CL.10086',  NOW() + interval '12 months', '88072bb2-10e0-4417-b9ce-ec05265b8b56', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false, false, false, 'ICM'),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f334', 10086, 'ADV.F.CL.10086',  NOW() + interval '12 months', 'dccd780a-9745-4972-a43e-95ec3ef361df', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false, false, false, 'ICM'),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f335', 10087, 'INT.F.CL.10087',  NOW() - interval '5 days', '749791ef-e4c4-4a5f-881a-461e4724138d', 'Positive Behaviour Training: Intermediate Trainer', 'INTERMEDIATE_TRAINER', NOW() - interval '12 months', false, false, false, 'ICM'),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f336', 10087, 'INT.F.CL.10087',  NOW() + interval '12 months', '6ea4e91b-9856-4533-9544-949caba236fb', 'Positive Behaviour Training: Intermediate Trainer', 'INTERMEDIATE_TRAINER', NOW() - interval '12 months', false, false, false, 'ICM'),
+       ('1e345ec4-f99f-4ce7-b765-ee2d36d7f337', 10087, 'INT.F.CL.10087',  NOW() + interval '12 months', '30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', 'Positive Behaviour Training: Intermediate Trainer', 'INTERMEDIATE_TRAINER', NOW() - interval '12 months', false, false, false, 'ICM');
 
 insert into public.course_invites (status, email, course_id)
 values ('PENDING', 'rosemary12@teamteach.testinator.com', 10014),

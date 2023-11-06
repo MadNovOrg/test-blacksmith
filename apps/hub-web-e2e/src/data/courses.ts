@@ -3,6 +3,8 @@ import { addMonths, subDays } from 'date-fns'
 import { Course_Status_Enum, Course_Source_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
+import { Accreditors_Enum } from '@qa/generated/graphql'
+
 import { buildVenue } from '@test/mock-data-utils'
 
 import { Course } from './types'
@@ -29,6 +31,7 @@ export const COURSES_TO_VIEW: Course[] = [
     min_participants: 6,
     max_participants: 11,
     gradingConfirmed: false,
+    accreditedBy: Accreditors_Enum.Icm,
   },
   {
     id: 0,
@@ -53,6 +56,7 @@ export const COURSES_TO_VIEW: Course[] = [
     min_participants: 6,
     max_participants: 11,
     gradingConfirmed: false,
+    accreditedBy: Accreditors_Enum.Icm,
   },
   {
     id: 0,
@@ -64,6 +68,7 @@ export const COURSES_TO_VIEW: Course[] = [
     type: CourseType.CLOSED,
     reaccreditation: false,
     organization: { name: 'London First School' },
+    accreditedBy: Accreditors_Enum.Icm,
     schedule: [
       {
         start: addMonths(new Date(), 2),
@@ -88,6 +93,7 @@ export const UNIQUE_COURSE: () => Course = () => ({
   type: CourseType.OPEN,
   reaccreditation: false,
   go1Integration: false,
+  accreditedBy: Accreditors_Enum.Icm,
   schedule: [
     {
       start: addMonths(new Date(new Date().setHours(8, 0)), 2),

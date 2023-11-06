@@ -1,1 +1,0 @@
-export { CourseCertification } from './CourseCertification'

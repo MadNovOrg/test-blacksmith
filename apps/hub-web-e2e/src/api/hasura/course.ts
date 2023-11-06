@@ -17,6 +17,7 @@ import {
 
 import { getModulesByLevel } from '@qa/data/modules'
 import { Course, OrderCreation, User } from '@qa/data/types'
+import { Course_Certificate_Insert_Input } from '@qa/generated/graphql'
 
 import { getClient } from './client'
 import { getOrganizationId } from './organization'
@@ -398,15 +399,20 @@ export async function insertCourseGradingForParticipants(
 }
 
 export async function insertCertificate(course: Course, users: User[]) {
-  const variables = users.map(async user => ({
-    certificationDate: new Date().toISOString(),
-    courseId: course.id,
-    expiryDate: addYears(new Date(), 1).toISOString(),
-    profileId: await getProfileId(user.email),
-    courseName: course.name,
-    courseLevel: course.level,
-    number: `${course.id}-1`,
-  }))
+  const variables: Promise<Course_Certificate_Insert_Input>[] = users.map(
+    async user => ({
+      certificationDate: new Date().toISOString(),
+      courseId: course.id,
+      expiryDate: addYears(new Date(), 1).toISOString(),
+      profileId: await getProfileId(user.email),
+      courseName: course.name,
+      courseLevel: course.level,
+      number: `${course.id}-1`,
+      blendedLearning: course.go1Integration,
+      reaccreditation: course.reaccreditation,
+      courseAccreditedBy: course.accreditedBy,
+    })
+  )
   const certificateQuery = gql`
     mutation insertCertificate($objects: [course_certificate_insert_input!]!) {
       insert_course_certificate(objects: $objects) {

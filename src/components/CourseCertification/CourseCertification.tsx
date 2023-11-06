@@ -1,7 +1,4 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
 import {
-  Accordion,
   Alert,
   Box,
   Button,
@@ -13,465 +10,48 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import Divider from '@mui/material/Divider'
 import pdf from '@react-pdf/renderer'
-import MUIImage from 'mui-image'
 import React, { useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
 import {
-  bildNewImage,
   CertificateAssistIcon,
   CertificateObserveIcon,
   CertificatePassIcon,
-  cpdImage,
-  icmImage,
-  ntaImage,
 } from '@app/assets'
 import { CertificateDocument } from '@app/components/CertificatePDF'
-import ChangelogModal from '@app/components/CourseCertification/ChangelogModal'
-import ModifyGradeModal from '@app/components/CourseCertification/ModifyGradeModal'
-import PutOnHoldModal from '@app/components/CourseCertification/PutOnHoldModal'
-import RevokeCertModal from '@app/components/CourseCertification/RevokeCertModal'
 import { Dialog } from '@app/components/dialogs'
 import { ManageCertificateMenu } from '@app/components/ManageCertificateMenu'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
 import {
-  Accreditors_Enum,
   Course_Certificate_Changelog_Type_Enum,
-  Course_Participant_Module,
   GetCertificateQuery,
   GetCertificateQueryVariables,
   Grade_Enum,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { QUERY } from '@app/queries/certificate/get-certificate'
-import {
-  CertificateStatus,
-  CourseLevel,
-  NonNullish,
-  Strategy,
-} from '@app/types'
-import {
-  getSWRLoadingStatus,
-  LoadingStatus,
-  transformModulesToGroups,
-} from '@app/util'
+import { CertificateStatus, CourseLevel } from '@app/types'
+import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
-import { CertificateStatusChip } from '../CertificateStatusChip'
-
-import CertificateHoldHistoryModal from './CertificateHoldHistoryModal'
-import HoldHeaderAlert from './HoldHeaderAlert'
-import UndoRevokeModal from './UndoRevokeModal'
+import CertificateHoldHistoryModal from './components/CertificateHoldHistoryModal/CertificateHoldHistoryModal'
+import { CertificateInfo } from './components/CertificateInfo/CertificateInfo'
+import ChangelogModal from './components/ChangelogModal/ChangelogModal'
+import HoldHeaderAlert from './components/HoldHeaderAlert/HoldHeaderAlert'
+import ModifyGradeModal from './components/ModifyGradeModal/ModifyGradeModal'
+import PutOnHoldModal from './components/PutOnHoldModal/PutOnHoldModal'
+import RevokeCertModal from './components/RevokeModal/RevokeModal'
+import UndoRevokeModal from './components/UndoRevokeModal/UndoRevokeModal'
 
 // workaround for using recat-pdf with vite
 const { PDFDownloadLink } = pdf
-
-type ModuleObject = {
-  name: string
-  completed: boolean
-}
 
 const gradesToCertificateIconMapping = {
   PASS: <CertificatePassIcon width={200} height={200} />,
   OBSERVE_ONLY: <CertificateObserveIcon width={200} height={200} />,
   ASSIST_ONLY: <CertificateAssistIcon width={200} height={200} />,
   FAIL: null,
-}
-
-type UncompletedListProps = {
-  uncompletedModules: ModuleObject[]
-}
-
-const UncompletedList: React.FC<
-  React.PropsWithChildren<UncompletedListProps>
-> = ({ uncompletedModules }) => {
-  const { t } = useTranslation()
-  return (
-    <Box>
-      <Typography variant="body2" color="grey.600" gutterBottom>
-        {t('incomplete')}
-      </Typography>
-      {uncompletedModules.map(module => {
-        return (
-          <Typography
-            key={module.name}
-            color="grey.600"
-            variant="body1"
-            gutterBottom
-          >
-            {module.name}
-          </Typography>
-        )
-      })}
-    </Box>
-  )
-}
-
-type ModuleGroupAccordionProps = {
-  moduleGroupName: string
-  completedModules: ModuleObject[]
-  uncompletedModules: ModuleObject[]
-}
-
-const ModuleGroupAccordion: React.FC<
-  React.PropsWithChildren<ModuleGroupAccordionProps>
-> = ({ moduleGroupName, completedModules, uncompletedModules }) => {
-  const [expanded, setExpanded] = React.useState<string | false>(false)
-
-  const totalModules = completedModules.length + uncompletedModules.length
-
-  const handleChange =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false)
-    }
-
-  return (
-    <>
-      <Accordion
-        expanded={expanded === 'panel1'}
-        onChange={handleChange('panel1')}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-        >
-          <Typography
-            variant="subtitle2"
-            sx={{ width: { sm: '60%', md: '70%' }, flexShrink: 0, mt: -0.5 }}
-          >
-            {moduleGroupName}
-          </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
-            {`${completedModules.length} of ${totalModules} completed`}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {completedModules.map(module => (
-            <Typography key={module.name} variant="body1" gutterBottom>
-              {module.name}
-            </Typography>
-          ))}
-          {uncompletedModules.length ? (
-            <UncompletedList uncompletedModules={uncompletedModules} />
-          ) : null}
-        </AccordionDetails>
-      </Accordion>
-      <Divider />
-    </>
-  )
-}
-
-type Participant = Pick<
-  NonNullish<GetCertificateQuery['certificate']>,
-  'participant'
->
-
-type CertificateInfoProps = {
-  courseParticipant?: Participant['participant']
-  courseName: string
-  grade: Grade_Enum
-  revokedDate: string
-  expiryDate: string
-  certificationNumber: string
-  dateIssued: string
-  status: CertificateStatus
-  statusTooltip?: string
-  expireHoldDate?: string
-  onShowChangelogModal: VoidFunction
-}
-
-const CertificateInfo: React.FC<
-  React.PropsWithChildren<CertificateInfoProps>
-> = ({
-  courseParticipant,
-  courseName,
-  grade,
-  revokedDate,
-  expiryDate,
-  certificationNumber,
-  dateIssued,
-  status,
-  statusTooltip,
-  expireHoldDate,
-  onShowChangelogModal,
-}) => {
-  const imageSize = '10%'
-  const { t, _t } = useScopedTranslation('common.course-certificate')
-  const { acl } = useAuth()
-
-  const moduleGroupsWithModules = courseParticipant
-    ? transformModulesToGroups(
-        courseParticipant.gradingModules as unknown as Course_Participant_Module[]
-      )
-    : null
-
-  const isRevoked = status === CertificateStatus.REVOKED
-  const isOnHold = status === CertificateStatus.ON_HOLD
-
-  const strategyModules: Record<string, Strategy> =
-    courseParticipant?.bildGradingModules?.modules
-
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-
-  return (
-    <Box mt={isMobile ? 8 : 0}>
-      {!courseParticipant && (
-        <Alert severity="warning" variant="outlined" sx={{ mb: 2 }}>
-          {t('completed-modules-unavailable')}
-        </Alert>
-      )}
-
-      {isRevoked ? (
-        <Alert
-          severity="warning"
-          sx={{
-            mb: 2,
-            '&& .MuiAlert-message': {
-              width: '100%',
-            },
-          }}
-          variant="outlined"
-          data-testid="revoked-cert-alert"
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}
-          >
-            {t('revoked-warning', { date: revokedDate })}
-            {acl.isTTAdmin() ? (
-              <Box>
-                <Button
-                  variant="text"
-                  color="primary"
-                  sx={{ ml: 1, py: 0 }}
-                  size="small"
-                  onClick={onShowChangelogModal}
-                  startIcon={<RemoveRedEyeIcon />}
-                >
-                  {_t('view-details')}
-                </Button>
-              </Box>
-            ) : null}
-          </Box>
-        </Alert>
-      ) : null}
-
-      <Typography
-        color={theme.palette.dimGrey.main}
-        variant="subtitle2"
-        sx={{ mb: 2 }}
-      >
-        {t('certified-message')}
-      </Typography>
-
-      <Typography data-testid="certificate-grade" variant="h2" gutterBottom>
-        {t(`${grade.toLowerCase()}-title`)}
-      </Typography>
-
-      <Typography variant="subtitle1" gutterBottom>
-        {courseName}
-      </Typography>
-
-      {grade !== Grade_Enum.Fail ? (
-        <>
-          <Grid container spacing={2} mt={4}>
-            <Grid item md={3} xs={12}>
-              <Typography
-                data-testid="certificate-issue-date"
-                variant="body2"
-                sx={{ mb: 1 }}
-                color="grey.600"
-              >
-                {t('issue-date')}
-              </Typography>
-              <Typography variant="body1">
-                {_t('dates.default', { date: dateIssued })}
-              </Typography>
-            </Grid>
-
-            <Grid item md={3} xs={12}>
-              <Typography variant="body2" sx={{ mb: 1 }} color="grey.600">
-                {t('number')}
-              </Typography>
-              <Typography data-testid="certificate-number" variant="body1">
-                {certificationNumber}
-              </Typography>
-            </Grid>
-
-            {isRevoked ? (
-              <Grid item md={3} xs={12}>
-                <Typography variant="body2" sx={{ mb: 1 }} color="grey.600">
-                  {t('revoked-on')}
-                </Typography>
-                <Typography variant="body1">
-                  {_t('dates.default', { date: revokedDate })}
-                </Typography>
-              </Grid>
-            ) : (
-              <Grid item md={3} xs={12}>
-                <Typography
-                  data-testid="certificate-valid-until"
-                  variant="body2"
-                  sx={{ mb: 1 }}
-                  color="grey.600"
-                >
-                  {t('valid-until')}
-                </Typography>
-                <Typography variant="body1">
-                  {_t('dates.default', { date: expiryDate })}
-                </Typography>
-              </Grid>
-            )}
-            <Grid item xs={3}>
-              <Typography variant="body2" sx={{ mb: 1 }} color="grey.600">
-                {_t('status')}
-              </Typography>
-              <Box display="flex" alignItems="center">
-                <CertificateStatusChip
-                  status={status}
-                  tooltip={statusTooltip}
-                />
-                {isOnHold ? (
-                  <Typography variant="body2" sx={{ ml: 1 }}>
-                    {t(`on-hold-until`, {
-                      expireDate: expireHoldDate,
-                    })}
-                  </Typography>
-                ) : null}
-              </Box>
-            </Grid>
-          </Grid>
-
-          <Box mt={8} gap={6} display="flex" mb={9} alignItems="center">
-            {courseParticipant?.course.accreditedBy === Accreditors_Enum.Icm ? (
-              <MUIImage
-                duration={0}
-                src={icmImage}
-                width={imageSize}
-                height={imageSize}
-              />
-            ) : null}
-
-            {courseParticipant?.course.accreditedBy ===
-            Accreditors_Enum.Bild ? (
-              <MUIImage
-                duration={0}
-                src={bildNewImage}
-                width={imageSize}
-                height={imageSize}
-                style={{ filter: 'grayscale(1' }}
-              />
-            ) : null}
-
-            <MUIImage
-              duration={0}
-              src={cpdImage}
-              width={imageSize}
-              height={imageSize}
-            />
-            <MUIImage
-              duration={0}
-              src={ntaImage}
-              width={imageSize}
-              height={imageSize}
-            />
-          </Box>
-        </>
-      ) : null}
-
-      {moduleGroupsWithModules?.length ? (
-        <>
-          <Typography variant="h3" gutterBottom>
-            {t('modules-list-title')}
-          </Typography>
-          {moduleGroupsWithModules.map(moduleGroupWithModules => {
-            return (
-              <ModuleGroupAccordion
-                key={moduleGroupWithModules.id}
-                moduleGroupName={moduleGroupWithModules.name}
-                completedModules={moduleGroupWithModules.modules.filter(
-                  module => module.completed
-                )}
-                uncompletedModules={moduleGroupWithModules.modules.filter(
-                  module => !module.completed
-                )}
-              />
-            )
-          })}
-        </>
-      ) : null}
-
-      {courseParticipant?.bildGradingModules?.modules ? (
-        <>
-          <Typography variant="h3" gutterBottom>
-            {t('modules-list-title')}
-          </Typography>
-          {Object.keys(strategyModules).map(strategyName => (
-            <>
-              <Accordion
-                key={strategyName}
-                data-testid={`strategy-accordion-${strategyName}`}
-              >
-                <AccordionSummary
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  expandIcon={<ExpandMoreIcon />}
-                >
-                  <Typography variant="subtitle2">
-                    {_t(`common.bild-strategies.${strategyName}`)}
-                  </Typography>
-                </AccordionSummary>
-
-                <AccordionDetails sx={{ pt: 0, pb: 3 }}>
-                  <Stack spacing={1.5}>
-                    {strategyModules[strategyName].modules?.length
-                      ? strategyModules[strategyName].modules?.map(module => (
-                          <Typography key={module.name}>
-                            {module.name}
-                          </Typography>
-                        ))
-                      : null}
-                  </Stack>
-
-                  {strategyModules[strategyName].groups?.length
-                    ? strategyModules[strategyName].groups?.map(group => (
-                        <Box key={group.name}>
-                          <Typography fontWeight="500" mb={1}>
-                            {group.name}
-                          </Typography>
-
-                          <Stack spacing={1.5} sx={{ pl: 2 }}>
-                            {group.modules?.length
-                              ? group.modules.map(module => (
-                                  <Typography key={module.name}>
-                                    {module.name}
-                                  </Typography>
-                                ))
-                              : null}
-                          </Stack>
-                        </Box>
-                      ))
-                    : null}
-                </AccordionDetails>
-              </Accordion>
-              <Divider />
-            </>
-          ))}
-        </>
-      ) : null}
-    </Box>
-  )
 }
 
 type CourseCertificationProps = {
@@ -589,7 +169,7 @@ export const CourseCertification: React.FC<
                 </Box>
               ) : null}
 
-              {grade !== Grade_Enum.Fail && courseParticipant ? (
+              {grade !== Grade_Enum.Fail ? (
                 <Button
                   fullWidth
                   data-testid="download-certificate-button"
@@ -610,13 +190,9 @@ export const CourseCertification: React.FC<
                         grade={grade as Grade_Enum}
                         certificationNumber={certificationNumber}
                         expiryDate={certificate.expiryDate}
-                        accreditedBy={courseParticipant.course.accreditedBy}
-                        blendedLearning={
-                          courseParticipant.course.go1Integration
-                        }
-                        reaccreditation={
-                          courseParticipant.course.reaccreditation ?? false
-                        }
+                        accreditedBy={certificate.courseAccreditedBy}
+                        blendedLearning={certificate.blendedLearning}
+                        reaccreditation={certificate.reaccreditation}
                       />
                     }
                     fileName="certificate.pdf"
