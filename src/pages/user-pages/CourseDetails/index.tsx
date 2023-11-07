@@ -85,7 +85,7 @@ export const CourseDetails: React.FC<
   const alertMessage = alertType ? successAlerts[alertType] : null
   const courseId = params.id as string
   const canViewOrderItem =
-    acl.isBookingContact() || acl.isOrgAdmin() || acl.isOrgKeyContact()
+    (acl.isBookingContact() || acl.isOrgKeyContact()) && bookingOnly
 
   const [pollCertificateCounter, setPollCertificateCounter] = useState(10)
   const [showCancellationRequestModal, setShowCancellationRequestModal] =
@@ -105,10 +105,9 @@ export const CourseDetails: React.FC<
     variables: {
       id: courseId,
       withOrders: canViewOrderItem,
-      withGo1Data:
-        acl.isBookingContact() || acl.isOrgAdmin() || acl.isOrgKeyContact(),
+      withGo1Data: canViewOrderItem,
       profileId: profile?.id || '',
-      withCancellationRequest: acl.isBookingContact() || acl.isOrgAdmin(),
+      withCancellationRequest: acl.isBookingContact() && bookingOnly,
     },
     requestPolicy: 'network-only',
   })
@@ -157,10 +156,10 @@ export const CourseDetails: React.FC<
       : null
 
   const isBookingContact = Boolean(
-    course && acl.isBookingContactOfCourse(course)
+    course && acl.isBookingContactOfCourse(course) && bookingOnly
   )
   const isOrgKeyContact = Boolean(
-    course && acl.isOrganizationKeyContactOfCourse(course)
+    course && acl.isOrganizationKeyContactOfCourse(course) && bookingOnly
   )
   const isOrgAdmin = Boolean(
     course && course.organization?.id && acl.isOrgAdmin(course.organization?.id)
@@ -171,7 +170,7 @@ export const CourseDetails: React.FC<
   useEffect(() => {
     if (course && !activeTab) {
       setActiveTab(
-        [isBookingContact, isOrgAdmin, isOrgKeyContact].includes(true)
+        [isBookingContact, isOrgKeyContact].includes(true)
           ? CourseDetailsTabs.ATTENDEES
           : 'checklist'
       )
