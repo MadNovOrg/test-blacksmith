@@ -272,7 +272,9 @@ export const CourseBookingReview: React.FC<
             </Typography>
             <Typography color="grey.700">
               {formatCurrency(
-                { amount: new Big(amounts.trainerExpenses).round().toNumber() },
+                {
+                  amount: new Big(amounts.trainerExpenses).round(2).toNumber(),
+                },
                 t
               )}
             </Typography>
@@ -302,7 +304,7 @@ export const CourseBookingReview: React.FC<
                 {
                   amount: new Big(amounts.freeSpacesDiscount)
                     .neg()
-                    .round()
+                    .round(2)
                     .toNumber(),
                 },
                 t
@@ -315,7 +317,7 @@ export const CourseBookingReview: React.FC<
           <Typography color="grey.700">
             {formatCurrency(
               {
-                amount: new Big(amounts.subtotalDiscounted).round().toNumber(),
+                amount: new Big(amounts.subtotalDiscounted).round(2).toNumber(),
               },
               t
             )}
@@ -328,7 +330,7 @@ export const CourseBookingReview: React.FC<
           </Typography>
           <Typography color="grey.700">
             {formatCurrency(
-              { amount: new Big(amounts.vat).round().toNumber() },
+              { amount: new Big(amounts.vat).round(2).toNumber() },
               t
             )}
           </Typography>
@@ -342,7 +344,7 @@ export const CourseBookingReview: React.FC<
               {formatCurrency(
                 {
                   amount: new Big(amounts.paymentProcessingFee)
-                    .round()
+                    .round(2)
                     .toNumber(),
                 },
                 t
@@ -357,7 +359,7 @@ export const CourseBookingReview: React.FC<
           </Typography>
           <Typography fontWeight="500">
             {formatCurrency(
-              { amount: new Big(amounts.total).round().toNumber() },
+              { amount: new Big(amounts.total).round(2).toNumber() },
               t
             )}
           </Typography>
