@@ -1,16 +1,5 @@
 # @teamteach/hub
 
-## 1.0.1
-
-### Patch Changes
-
-- 0c37d352: Restrict access to OPEN courses evaluation for org admin and booking contact
-- 4c8dde80: Fix manage permissions for multipe organisations
-- 14a93ebe: altered the render conditions for course cancellation button
-- 0e09055d: Fix terms of business link on attendee cancellation modal
-- 14a93ebe: Fix "Page not found" on BILD course booking
-- 0d9f2546: Connect accesss in Edit profile page fix
-
 ## 1.0.0
 
 ### Minor Changes
