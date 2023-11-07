@@ -55,7 +55,6 @@ import {
   CourseEvaluationQuestionGroup,
   CourseEvaluationQuestionType,
   CourseParticipant,
-  RoleName,
 } from '@app/types'
 import { courseStarted, LoadingStatus } from '@app/util'
 
@@ -83,7 +82,7 @@ export const CourseEvaluation = () => {
   const [error, setError] = useState<string | null>(null)
   const params = useParams()
   const [searchParams] = useSearchParams()
-  const { profile, activeRole } = useAuth()
+  const { acl, profile } = useAuth()
   const courseId = params.id as string
   const profileId = searchParams.get('profile_id') as string
   const readOnly = !!profileId
@@ -137,7 +136,7 @@ export const CourseEvaluation = () => {
 
   const questions = useMemo(() => {
     if (questionsData?.questions.length) {
-      if (activeRole === RoleName.USER || didAttendeeSubmitFeedback) {
+      if (acl.isIndividual()) {
         return questionsData.questions.filter(
           q =>
             ![
@@ -150,7 +149,7 @@ export const CourseEvaluation = () => {
 
       return questionsData.questions
     }
-  }, [questionsData, activeRole, didAttendeeSubmitFeedback])
+  }, [questionsData?.questions, acl])
 
   const { UNGROUPED: ungroupedQuestions, ...groupedQuestions } = groupBy(
     questions,

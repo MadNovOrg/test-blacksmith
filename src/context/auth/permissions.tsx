@@ -50,6 +50,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     isUser: () => activeRole === RoleName.USER,
 
+    isIndividual: () =>
+      anyPass([
+        () => activeRole === RoleName.BOOKING_CONTACT,
+        () => activeRole === RoleName.ORGANIZATION_KEY_CONTACT,
+        () => activeRole === RoleName.USER,
+      ])(),
+
     isLD: () => activeRole === RoleName.LD,
 
     isAdmin: () => acl.isTTAdmin() || acl.isTTOps() || acl.isLD(),
