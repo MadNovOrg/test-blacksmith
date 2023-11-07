@@ -136,7 +136,7 @@ export const CourseEvaluation = () => {
 
   const questions = useMemo(() => {
     if (questionsData?.questions.length) {
-      if (acl.isIndividual()) {
+      if (acl.isIndividual() || didAttendeeSubmitFeedback) {
         return questionsData.questions.filter(
           q =>
             ![
@@ -149,7 +149,7 @@ export const CourseEvaluation = () => {
 
       return questionsData.questions
     }
-  }, [questionsData?.questions, acl])
+  }, [questionsData?.questions, acl, didAttendeeSubmitFeedback])
 
   const { UNGROUPED: ungroupedQuestions, ...groupedQuestions } = groupBy(
     questions,
