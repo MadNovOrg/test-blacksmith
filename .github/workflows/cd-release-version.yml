@@ -1,78 +1,25 @@
 name: RELEASE PROD VERSION
 
+# This workflow is designed to be run after the changesets PR has been closed and
+# merged. It should not run for any other PR closure, and should not run if the changesets
+# PR is closed and dismissed without merging. This workflow fetches the version number
+# in package.json and creates a tag using it, then creates a release using that tag. This
+# release should then trigger `cd-prod.yml`
+
 on:
   pull_request:
     branches:
       - main
+    types:
+      - closed
 
 permissions:
   id-token: write
   contents: write
 
 jobs:
-  lint-and-typecheck:
-    if: startsWith(github.head_ref, 'changeset-release/')
-    name: Lint & Typecheck
-    env:
-      NODE_OPTIONS: "--max-old-space-size=4096"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - name: Build
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18.14.2'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Typecheck
-        run: pnpm typecheck
-  test:
-    if: startsWith(github.head_ref, 'changeset-release/')
-    name: test
-    env:
-      NODE_OPTIONS: "--max-old-space-size=4096"
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        shard: [ 1, 2, 3, 4 ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - name: Build
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18.14.2'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i
-
-      - name: Test
-        run: pnpm test -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
-
   fetch-version:
-    if: startsWith(github.head_ref, 'changeset-release/')
-    needs: [lint-and-typecheck, test]
+    if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) }}
     name: Fetch Version
     runs-on: ubuntu-latest
     steps:
@@ -80,12 +27,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Fetch Version
         run: |
-          export RELEASE_VERSION=$(cat ../../package.json | grep '"version":' | tr -d '"' | tr -d 'version: ' | tr -d ',')
+          export RELEASE_VERSION=$(cat package.json | grep '"version":' | tr -d '"' | tr -d 'version: ' | tr -d ',')
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
 
   create-tag:
-    if: startsWith(github.head_ref, 'changeset-release/')
-    needs: [ lint-and-typecheck, test, fetch-version ]
+    if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) }}
+    needs: [ fetch-version ]
     name: Create Tag
     runs-on: ubuntu-latest
     steps:
@@ -94,13 +41,13 @@ jobs:
       - name: Create Tag
         run: |
           git fetch
-          git checkout changeset-release/main
+          git checkout main
           git tag v${{ env.RELEASE_VERSION }}
           git push origin --tags
 
   create-release:
-    if: startsWith(github.head_ref, 'changeset-release/')
-    needs: [lint-and-typecheck, test, fetch-version, create-tag]
+    if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) }}
+    needs: [ fetch-version, create-tag ]
     name: Create Release
     runs-on: ubuntu-latest
     steps:

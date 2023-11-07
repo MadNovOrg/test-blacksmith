@@ -1,23 +1,22 @@
-name: RELEASE-PROD
+name: CHANGESETS TESTS
 
-# This workflow is manually triggered and will call changesets to collect up all
-# changes ready for release and open a PR for approval. The newly opened PR will
-# need to be closed and opened to trigger `cd-changesets-tests.yml`
+# This workflow triggers after the changesets PR has been opened. Due to limitations
+# in the way GitHub handles tokens, the PR must be opened and closed before this workflow
+# will run. The purpose of this workflow is to re-run the tests to satisfy the branch
+# protection rules on the repository.
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 
 permissions:
-  pull-requests: write
-  deployments: write
-  statuses: write
+  id-token: write
   contents: write
-  actions: write
-
-concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   lint-and-typecheck:
+    if: startsWith(github.head_ref, 'changeset-release/')
     name: Lint & Typecheck
     env:
       NODE_OPTIONS: "--max-old-space-size=4096"
@@ -47,6 +46,7 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
   test:
+    if: startsWith(github.head_ref, 'changeset-release/')
     name: test
     env:
       NODE_OPTIONS: "--max-old-space-size=4096"
@@ -74,30 +74,3 @@ jobs:
 
       - name: Test
         run: pnpm test -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
-
-  release:
-    name: Release
-    needs: [lint-and-typecheck, test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - name: Setup Node.js 18.x
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18.x
-          cache: 'pnpm'
-      - name: Install Dependencies
-        run: pnpm i
-      - name: Create Release Pull Request
-        uses: changesets/action@v1
-        with:
-          version: npm run release:version
-          publish: npm run release:tag
-          createGithubReleases: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
