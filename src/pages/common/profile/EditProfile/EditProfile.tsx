@@ -6,7 +6,6 @@ import {
   Autocomplete,
   Box,
   Button,
-  Chip,
   Container,
   Grid,
   Switch,
@@ -43,7 +42,6 @@ import * as yup from 'yup'
 import { InferType } from 'yup'
 
 import { Avatar } from '@app/components/Avatar'
-import { DetailsRow } from '@app/components/DetailsRow'
 import { Dialog, ConfirmDialog } from '@app/components/dialogs'
 import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
@@ -87,7 +85,6 @@ import {
   defaultTrainerRoles,
   employeeRole,
   employeeRolesNames,
-  getRoleColor,
   maxAvatarFileSizeBytes,
   salesRole,
   salesRolesNames,
@@ -929,41 +926,14 @@ export const EditProfilePage: React.FC<
                 </Grid>
               </Box>
 
-              {acl.canSeeProfileRoles() && (
+              {acl.canSeeProfileRoles() && canEditRoles ? (
                 <>
                   <Typography variant="subtitle2" mb={1} mt={3}>
                     {t('pages.view-profile.connect-access')}
                   </Typography>
-
-                  {canEditRoles ? (
-                    <EditRoles />
-                  ) : (
-                    <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
-                      <DetailsRow label={t('pages.view-profile.user-roles')}>
-                        <Box flex={1}>
-                          {profile.roles.length > 0 ? (
-                            profile.roles.map(({ role }) => (
-                              <Chip
-                                key={role.name}
-                                label={t(
-                                  `pages.view-profile.roles.${role?.name}`
-                                )}
-                                color={getRoleColor(role.name)}
-                              />
-                            ))
-                          ) : (
-                            <Chip
-                              label={t(`pages.view-profile.roles.user`)}
-                              color="success"
-                            />
-                          )}
-                        </Box>
-                      </DetailsRow>
-                    </Box>
-                  )}
+                  <EditRoles />
                 </>
-              )}
-
+              ) : null}
               {profile.organizations.length > 0 ? (
                 <>
                   <Typography variant="subtitle2" my={2}>

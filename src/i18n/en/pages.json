@@ -1489,6 +1489,9 @@
     "employee-role-error": " Please select an employee role",
     "sales-role-error": "Please select a sales role",
     "roles": {
+      "booking-contact": "Booking Contact",
+      "anonymous": "Anonymous",
+      "organization-key-contact": "Organisation Key Contact",
       "tt-employee": "TT Employee",
       "sales": "Sales",
       "unverified": "Unverified user",
