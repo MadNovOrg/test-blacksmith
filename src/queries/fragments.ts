@@ -22,6 +22,7 @@ export const SHALLOW_ORGANIZATION = gql`
   fragment ShallowOrganization on organization {
     id
     name
+    address
   }
 `
 
