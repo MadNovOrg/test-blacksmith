@@ -1,5 +1,31 @@
 # @teamteach/hub
 
+## 1.1.0
+
+### Minor Changes
+
+- ff0de1a2: Add support for downloading a certificate imported from Arlo
+
+### Patch Changes
+
+- e5938407: Restrict access to OPEN courses evaluation for org admin and booking contact
+- bdb548b5: Populate Arlo reference field on course edit form
+- 3b60aab7: Restrict trainer to edit course start date earlier than 2 weeks from the current date
+- e5938407: Fix manage permissions for multipe organisations
+- a37da3cd: update xero_code value for level ADVANCED_TRAINER type OPEN and reacreditation fase
+- 34797069: Fix VAT charged at 0% on OPEN courses booking
+- e5938407: altered the render conditions for course cancellation button
+- d740e668: Hide trainer evaluation questions for individual user
+- e5938407: Fix terms of business link on attendee cancellation modal
+- 504367df: Restrict manage attendance on my courses' course details page
+- e5938407: Fix "Page not found" on BILD course booking
+- e5938407: Connect accesss in Edit profile page fix
+- 50fa001e: Add address next to organisations on org selector for anonymous
+- 6baf585d: Unset mandatory Arlo refrence id on course form
+- b8c66a0c: Chip for user view/edit profile
+- 3de96211: Add snackbar notification when an attendee cancelled the course
+- a0ab9b98: Added VAT wording to the Terms and Conditions
+
 ## 1.0.0
 
 ### Minor Changes
