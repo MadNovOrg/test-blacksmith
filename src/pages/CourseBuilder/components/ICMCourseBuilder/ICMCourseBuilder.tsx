@@ -139,7 +139,7 @@ export const ICMCourseBuilder: React.FC<
         courseData.course.level
       )
     ) {
-      return modulesData
+      return modulesData.map(group => ({ ...group, mandatory: true }))
     }
 
     return modulesData.filter(group => group.mandatory)
@@ -171,11 +171,85 @@ export const ICMCourseBuilder: React.FC<
       : 0
   }, [courseData])
 
-  const courseDescription = t(
-    `pages.trainer-base.create-course.new-course.description-${
-      courseData?.course?.level
-    }${courseData?.course?.reaccreditation ? '-reaccreditation' : ''}`
-  )
+  const courseDescription = useMemo(() => {
+    const courseLevel = courseData?.course?.level
+    const reaccreditation = courseData?.course?.reaccreditation
+    const conversion = courseData?.course?.conversion
+    const type = courseData?.course?.type
+
+    switch (courseLevel) {
+      case Course_Level_Enum.Level_1:
+        return t(
+          type === Course_Type_Enum.Open
+            ? 'pages.trainer-base.create-course.new-course.description.level-one.open'
+            : 'pages.trainer-base.create-course.new-course.description.level-one.default'
+        )
+
+      case Course_Level_Enum.Level_2:
+        return t(
+          type === Course_Type_Enum.Open
+            ? 'pages.trainer-base.create-course.new-course.description.level-two.open'
+            : 'pages.trainer-base.create-course.new-course.description.level-two.default'
+        )
+
+      case Course_Level_Enum.Advanced:
+        return t(
+          'pages.trainer-base.create-course.new-course.description.advanced'
+        )
+
+      case Course_Level_Enum.IntermediateTrainer:
+        return t(
+          reaccreditation
+            ? 'pages.trainer-base.create-course.new-course.description.intermediate-trainer.reaccreditation'
+            : 'pages.trainer-base.create-course.new-course.description.intermediate-trainer.default'
+        )
+
+      case Course_Level_Enum.AdvancedTrainer:
+        return t(
+          reaccreditation
+            ? 'pages.trainer-base.create-course.new-course.description.advanced-trainer.reaccreditation'
+            : 'pages.trainer-base.create-course.new-course.description.advanced-trainer.default'
+        )
+
+      case Course_Level_Enum.BildRegular:
+        return t(
+          'pages.trainer-base.create-course.new-course.description.bild-regular'
+        )
+
+      case Course_Level_Enum.BildIntermediateTrainer:
+        return t(
+          reaccreditation
+            ? 'pages.trainer-base.create-course.new-course.description.bild-intermediate-trainer.reaccreditation'
+            : conversion
+            ? 'pages.trainer-base.create-course.new-course.description.bild-intermediate-trainer.conversion'
+            : 'pages.trainer-base.create-course.new-course.description.bild-intermediate-trainer.default'
+        )
+
+      case Course_Level_Enum.BildAdvancedTrainer:
+        return t(
+          reaccreditation
+            ? 'pages.trainer-base.create-course.new-course.description.bild-advanced-trainer.reaccreditation'
+            : conversion
+            ? 'pages.trainer-base.create-course.new-course.description.bild-advanced-trainer.conversion'
+            : 'pages.trainer-base.create-course.new-course.description.bild-advanced-trainer.default'
+        )
+    }
+  }, [courseData?.course, t])
+
+  const showMandatoryNotice = useMemo(() => {
+    const courseLevel = courseData?.course?.level
+    const type = courseData?.course?.type
+
+    return (
+      (courseLevel === Course_Level_Enum.Level_1 &&
+        (type === Course_Type_Enum.Closed ||
+          type === Course_Type_Enum.Indirect)) ||
+      (courseLevel === Course_Level_Enum.Level_2 &&
+        (type === Course_Type_Enum.Closed ||
+          type === Course_Type_Enum.Indirect)) ||
+      courseLevel === Course_Level_Enum.Advanced
+    )
+  }, [courseData?.course])
 
   const [, saveDraft] = useMutation<
     SetCourseAsDraftMutation,
@@ -251,6 +325,7 @@ export const ICMCourseBuilder: React.FC<
 
   const hasEstimatedDuration =
     courseData?.course?.level &&
+    courseData?.course?.type !== Course_Type_Enum.Open &&
     ![
       Course_Level_Enum.IntermediateTrainer,
       Course_Level_Enum.AdvancedTrainer,
@@ -348,14 +423,14 @@ export const ICMCourseBuilder: React.FC<
               course={courseData.course}
               slots={{
                 afterTitle:
-                  courseDescription !== ''
-                    ? courseDescription
-                    : t(
-                        'pages.trainer-base.create-course.new-course.description',
-                        {
-                          duration: maxDuration ? maxDuration / 60 : 0,
-                        }
-                      ),
+                  courseDescription ||
+                  t(
+                    'pages.trainer-base.create-course.new-course.description.default',
+                    {
+                      duration: maxDuration ? maxDuration / 60 : 0,
+                    }
+                  ),
+                showMandatoryNotice: showMandatoryNotice,
               }}
             />
           ) : null}
@@ -366,6 +441,7 @@ export const ICMCourseBuilder: React.FC<
             mandatoryGroups={mandatoryGroups}
             maxDuration={maxDuration}
             purpleModuleIds={purpleModuleIds}
+            type={courseData.course.type}
             level={courseData.course.level}
             onSubmit={submitButtonHandler}
             onChange={handleSelectionChange}

@@ -207,14 +207,40 @@
   "trainer-base": {
     "create-course": {
       "new-course": {
-        "description": "To submit a course, choose from the modules available to create a course {{duration}} hours in duration. Times indicated on the modules are the minimum recommended duration for each.",
         "BILD-description": "To submit your course, choose from the modules available to create a course to be delivered over the approved minimum duration of hours confirmed for your Training Needs Analysis. Please be aware, the times indicated are the minimum recommended duration for each module. ",
         "BILD-generic-description": "To submit this course, please accept that you will deliver all modules and techniques highlighted below within a {{ days }} day duration.",
-        "description-ADVANCED": "To submit your course, choose from the modules available to create a course to be delivered over a minimum duration of 6 hours. Please be aware, the times indicated are the minimum recommended duration for each module.",
-        "description-INTERMEDIATE_TRAINER": "To submit this course, please accept that you will deliver all modules and techniques highlighted below within a 5 day duration.",
-        "description-INTERMEDIATE_TRAINER-reaccreditation": "To submit this course, please accept that you will deliver all modules and techniques highlighted below within a 2 day duration.",
-        "description-ADVANCED_TRAINER": "To submit this course, please accept that you will deliver all modules and techniques highlighted below within a 4 day duration.",
-        "description-ADVANCED_TRAINER-reaccreditation": "To submit this course, please accept that you will deliver all modules and techniques highlighted below within a 3 day duration.",
+        "description": {
+          "level-one": {
+            "open": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 6 hour duration.",
+            "default": "To submit your course, choose from the modules available to create a course to be delivered over a minimum duration of 6 hours. Times indicated on the modules are the minimum recommended duration for each module."
+          },
+          "level-two": {
+            "open": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 12 hour duration.",
+            "default": "To submit your course, choose from the modules available to create a course to be delivered over a minimum duration of 12 hours. Times indicated on the modules are the minimum recommended duration for each module."
+          },
+          "advanced": "To submit your course, choose from the modules available to create a course to be delivered over a minimum duration of 6 hours. Please be aware, the times indicated are the minimum recommended duration for each module.",
+          "intermediate-trainer": {
+            "reaccreditation": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 2 day duration.",
+            "default": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 5 day duration."
+          },
+          "advanced-trainer": {
+            "reaccreditation": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 3 day duration.",
+            "default": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 4 day duration."
+          },
+          "bild-regular": "bild-regular",
+          "bild-intermediate-trainer": {
+            "reaccreditation": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 2 day duration.",
+            "conversion": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 2 hour duration.",
+            "default": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 5 day duration."
+          },
+          "bild-advanced-trainer": {
+            "reaccreditation": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 3 day duration.",
+            "conversion": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 2 hour duration.",
+            "default": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 4 day duration."
+          },
+          "default": "To submit a course, choose from the modules available to create a course {{duration}} hours in duration. Times indicated on the modules are the minimum recommended duration for each."
+        },
+        "mandatory-modules-notice": "*Please note, modules that cannot be deselected must be delivered as part of the core programme.",
         "location": "Location",
         "starts": "Starts",
         "ends": "Ends",

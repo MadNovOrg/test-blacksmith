@@ -22,6 +22,7 @@ import { usePrevious, useEffectOnce } from 'react-use'
 import {
   Color_Enum,
   Course_Level_Enum,
+  Course_Type_Enum,
   ModuleGroupsQuery,
 } from '@app/generated/graphql'
 import { getPercentage, formatDurationShort, isNotNullish } from '@app/util'
@@ -43,6 +44,7 @@ type Props = {
   showDuration?: boolean
   purpleModuleIds?: string[]
   level?: Course_Level_Enum
+  type?: Course_Type_Enum
   maxDuration?: number
   slots?: {
     afterChosenModulesTitle?: React.ReactNode
@@ -57,6 +59,7 @@ const GroupsSelection: React.FC<Props> = ({
   mandatoryGroups,
   purpleModuleIds,
   level,
+  type,
   showDuration = true,
   maxDuration = 0,
   slots,
@@ -70,6 +73,10 @@ const GroupsSelection: React.FC<Props> = ({
       ? mandatoryGroups.map(group => group.id)
       : initialGroups.map(group => group.id)
   )
+
+  const hideAsterisk = useMemo(() => {
+    return type === Course_Type_Enum.Open
+  }, [type])
 
   const previousIds = usePrevious(
     selectedIds.length ? selectedIds : mandatoryGroups.map(group => group.id)
@@ -190,7 +197,8 @@ const GroupsSelection: React.FC<Props> = ({
         {availableGroups.map(moduleGroup => {
           const isMandatory =
             mandatoryGroups.includes(moduleGroup) ||
-            dynamicMandatoryIds.includes(moduleGroup.id)
+            dynamicMandatoryIds.includes(moduleGroup.id) ||
+            type === Course_Type_Enum.Open
 
           return (
             <Accordion
@@ -232,7 +240,9 @@ const GroupsSelection: React.FC<Props> = ({
                       <>
                         <Typography color="white" data-testid="module-name">
                           <span>{moduleGroup.name}</span>
-                          {isMandatory ? <span> *</span> : null}
+                          {!hideAsterisk && isMandatory ? (
+                            <span> *</span>
+                          ) : null}
                         </Typography>
                         {moduleGroup.duration.aggregate?.sum?.duration && (
                           <Typography variant="body2" color="white">
@@ -334,8 +344,10 @@ const GroupsSelection: React.FC<Props> = ({
                       <Typography data-testid="module-name">
                         <span>{selectedGroup.name}</span>
                         <span>
-                          {selectedGroup.mandatory ||
-                          dynamicMandatoryIds.includes(selectedGroup.id) ? (
+                          {!hideAsterisk &&
+                          (selectedGroup.mandatory ||
+                            dynamicMandatoryIds.includes(selectedGroup.id) ||
+                            mandatoryGroups.includes(selectedGroup.id)) ? (
                             <span> *</span>
                           ) : null}
                         </span>

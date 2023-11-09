@@ -13,6 +13,7 @@ type Props = {
   course: CourseHeroFragment
   slots?: {
     afterTitle?: React.ReactNode
+    showMandatoryNotice?: boolean
   }
 }
 
@@ -49,6 +50,13 @@ export const Hero: React.FC<Props> = ({ course, slots }) => {
             {slots.afterTitle}
           </Typography>
         ) : null}
+        {slots?.showMandatoryNotice ? (
+          <Typography variant="body2" mt={1} data-testid="mandatory-notice">
+            {t(
+              'pages.trainer-base.create-course.new-course.mandatory-modules-notice'
+            )}
+          </Typography>
+        ) : null}
       </Grid>
 
       <Grid item xs={12} md={5}>
@@ -69,6 +77,7 @@ export const COURSE_FRAGMENT = gql`
     level
     type
     reaccreditation
+    conversion
 
     ...CourseInfo
   }

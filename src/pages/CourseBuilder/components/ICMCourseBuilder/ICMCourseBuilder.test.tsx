@@ -256,7 +256,10 @@ describe('component: CourseBuilder', () => {
   })
 
   it('saves course as draft and saves chosen modules when a module group is clicked', async () => {
-    const course = buildCourse()
+    const course = buildCourse({
+      level: Course_Level_Enum.Advanced,
+      type: Course_Type_Enum.Indirect,
+    })
     const moduleGroup = buildModuleGroup()
 
     let draftSaved = false
@@ -351,7 +354,10 @@ describe('component: CourseBuilder', () => {
   })
 
   it('submits the course with module groups and navigates to the course details page', async () => {
-    const course = buildCourse({ level: Course_Level_Enum.Advanced })
+    const course = buildCourse({
+      level: Course_Level_Enum.Advanced,
+      type: Course_Type_Enum.Indirect,
+    })
     const moduleGroup = buildModuleGroup()
 
     const client = {
