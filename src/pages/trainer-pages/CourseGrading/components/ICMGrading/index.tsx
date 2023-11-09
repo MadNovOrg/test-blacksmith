@@ -196,7 +196,7 @@ export const ICMGrading: FC<Props> = ({ course }) => {
             <ParticipantsList participants={filteredCourseParticipants} />
 
             <Typography color={theme.palette.grey[700]} fontWeight={600} mb={1}>
-              {t('pages.course-grading.grading-menu-title')}
+              {t('pages.course-details.tabs.grading.title')}
             </Typography>
             <Typography mb={2}>
               {t('pages.course-grading.grading-menu-description')}
