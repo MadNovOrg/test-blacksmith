@@ -84,6 +84,7 @@ import {
   generateCourseName,
   LoadingStatus,
   profileToInput,
+  courseStarted,
 } from '@app/util'
 
 import { NotFound } from '../common/NotFound'
@@ -558,8 +559,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       differenceInCalendarDays(courseData.startDateTime, new Date()) > 14) ||
     acl.canRescheduleWithoutWarning()
 
-  const courseRescheduleConfirmation =
-    activeRole === RoleName.TT_OPS && course?.type === CourseType.INDIRECT
+  const canRescheduleCourseEndDate =
+    activeRole === RoleName.TRAINER &&
+    course?.type === CourseType.INDIRECT &&
+    courseStarted(course)
 
   const hasError = updatingError || auditError
   const fetching = updatingCourse || insertingAudit
@@ -609,7 +612,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
         }))
       )
       if (
-        courseRescheduleConfirmation ||
+        canRescheduleCourseEndDate ||
         (!autoapproved && !alignedWithProtocol)
       ) {
         setShowReviewModal(true)
@@ -632,7 +635,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     seniorOrPrincipalLead,
     autoapproved,
     alignedWithProtocol,
-    courseRescheduleConfirmation,
+    canRescheduleCourseEndDate,
   ])
 
   const showTrainerRatioWarning = useMemo(() => {
@@ -928,7 +931,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             }}
             withFees={course.type === CourseType.CLOSED}
             alignedWithProtocol={
-              alignedWithProtocol || courseRescheduleConfirmation
+              canRescheduleCourseEndDate || Boolean(alignedWithProtocol)
             }
             level={course.level as unknown as Course_Level_Enum}
           />
