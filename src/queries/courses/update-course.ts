@@ -47,6 +47,7 @@ export type ParamsType = {
     type: CourseTrainerType
     course_id: number
   }>
+  trainersToDelete: string[]
 }
 
 export type ResponseType = {
@@ -63,6 +64,7 @@ export const UPDATE_COURSE_MUTATION = gql`
     $scheduleId: uuid!
     $scheduleInput: course_schedule_set_input!
     $trainers: [course_trainer_insert_input!]!
+    $trainersToDelete: [uuid!]
   ) {
     updateCourse: update_course_by_pk(
       pk_columns: { id: $courseId }
@@ -87,7 +89,10 @@ export const UPDATE_COURSE_MUTATION = gql`
     }
 
     deleteCourseTrainers: delete_course_trainer(
-      where: { course_id: { _eq: $courseId } }
+      where: {
+        course_id: { _eq: $courseId }
+        profile_id: { _in: $trainersToDelete }
+      }
     ) {
       returning {
         id

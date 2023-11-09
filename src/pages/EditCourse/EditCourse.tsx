@@ -89,7 +89,7 @@ import {
 import { NotFound } from '../common/NotFound'
 
 import { FormValues, ReviewChangesModal } from './components/ReviewChangesModal'
-import type { CourseDiff } from './shared'
+import { getChangedTrainers, type CourseDiff } from './shared'
 
 function assertCourseDataValid(
   data: CourseInput,
@@ -296,6 +296,15 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             )
           }
 
+          const [trainersToAdd, trainersToDelete] = getChangedTrainers(
+            course.trainers?.map(t => ({
+              profile_id: t.profile.id,
+              type: t.type,
+              status: t.status,
+            })) ?? [],
+            trainers.map(t => ({ profile_id: t.profile_id, type: t.type }))
+          )
+
           const newVenueId =
             [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(
               courseData.deliveryType
@@ -385,7 +394,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               ...(courseData.price ? { price: courseData.price } : null),
             },
             orderInput: orderToUpdate,
-            trainers,
+            trainers: trainersToAdd.map(t => ({
+              ...t,
+              course_id: course.id,
+            })),
+            trainersToDelete,
             scheduleId: course?.schedule[0].id,
             scheduleInput: {
               venue_id: newVenueId,

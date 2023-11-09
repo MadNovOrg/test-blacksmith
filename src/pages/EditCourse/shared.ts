@@ -1,7 +1,8 @@
 import { differenceInDays, differenceInWeeks } from 'date-fns'
-import { isDate } from 'lodash-es'
+import { difference, isDate } from 'lodash-es'
 
 import { Course_Level_Enum } from '@app/generated/graphql'
+import { InviteStatus, SetCourseTrainerInput } from '@app/types'
 
 export const getCancellationTermsFee = (
   courseStartDate: Date | string
@@ -70,4 +71,35 @@ export type CourseDiff = {
   type: 'date' | 'venue'
   oldValue: string | Date[]
   newValue: string | Date[]
+}
+
+export function getChangedTrainers(
+  currentTrainers: Omit<SetCourseTrainerInput, 'course_id'>[],
+  newTrainers: Pick<SetCourseTrainerInput, 'profile_id' | 'type'>[]
+): [Omit<SetCourseTrainerInput, 'course_id'>[], string[]] {
+  const trainersToDelete = difference(
+    currentTrainers.map(t => t.profile_id),
+    newTrainers.map(t => t.profile_id)
+  )
+  const trainersToAdd: Omit<SetCourseTrainerInput, 'course_id'>[] = []
+
+  const currentTrainersMap = new Map(
+    currentTrainers.map(t => [t.profile_id, t])
+  )
+
+  newTrainers.forEach(t => {
+    const existingTrainer = currentTrainersMap.get(t.profile_id)
+
+    if (!existingTrainer) {
+      trainersToAdd.push({ ...t, status: InviteStatus.PENDING })
+    }
+
+    if (existingTrainer && existingTrainer.type !== t.type) {
+      trainersToDelete.push(t.profile_id)
+
+      trainersToAdd.push({ ...t, status: InviteStatus.PENDING })
+    }
+  })
+
+  return [trainersToAdd, trainersToDelete]
 }
