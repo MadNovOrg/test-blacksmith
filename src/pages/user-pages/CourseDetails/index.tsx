@@ -187,6 +187,7 @@ export const CourseDetails: React.FC<
   >({
     query: GET_FEEDBACK_USERS_QUERY,
     variables: { courseId: parseInt(courseId || '') },
+    requestPolicy: 'cache-and-network',
   })
   const loading = !usersData && !error
 
