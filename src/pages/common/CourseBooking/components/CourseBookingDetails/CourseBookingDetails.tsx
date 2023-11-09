@@ -547,7 +547,7 @@ export const CourseBookingDetails: React.FC<
             <Typography color="grey.700">{t('course-cost')}</Typography>
             <Typography color="grey.700">
               {formatCurrency(
-                { amount: new Big(amounts.courseCost).round().toNumber() },
+                { amount: new Big(amounts.courseCost).round(2).toNumber() },
                 t
               )}
             </Typography>
@@ -561,7 +561,9 @@ export const CourseBookingDetails: React.FC<
               <Typography color="grey.700">
                 {formatCurrency(
                   {
-                    amount: new Big(amounts.trainerExpenses).round().toNumber(),
+                    amount: new Big(amounts.trainerExpenses)
+                      .round(2)
+                      .toNumber(),
                   },
                   t
                 )}
@@ -591,7 +593,7 @@ export const CourseBookingDetails: React.FC<
                   {
                     amount: new Big(amounts.freeSpacesDiscount)
                       .neg()
-                      .round()
+                      .round(2)
                       .toNumber(),
                   },
                   t
@@ -606,7 +608,7 @@ export const CourseBookingDetails: React.FC<
               {formatCurrency(
                 {
                   amount: new Big(amounts.subtotalDiscounted)
-                    .round()
+                    .round(2)
                     .toNumber(),
                 },
                 t
@@ -620,7 +622,7 @@ export const CourseBookingDetails: React.FC<
             </Typography>
             <Typography color="grey.700">
               {formatCurrency(
-                { amount: new Big(amounts.vat).round().toNumber() },
+                { amount: new Big(amounts.vat).round(2).toNumber() },
                 t
               )}
             </Typography>
@@ -632,7 +634,7 @@ export const CourseBookingDetails: React.FC<
             </Typography>
             <Typography fontWeight="500" color="primary">
               {formatCurrency(
-                { amount: new Big(amounts.total).round().toNumber() },
+                { amount: new Big(amounts.total).round(2).toNumber() },
                 t
               )}
             </Typography>
