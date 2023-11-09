@@ -118,5 +118,6 @@ export const useTablePagination = ({
     currentPage: currentPage + 1, // page 0 doesn't make sense
     limit: perPage,
     offset: perPage * currentPage,
+    setCurrentPage,
   }
 }

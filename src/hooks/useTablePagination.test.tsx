@@ -51,6 +51,7 @@ describe('useTablePagination', () => {
       'currentPage',
       'limit',
       'offset',
+      'setCurrentPage',
     ])
 
     expect(result.current.perPage).toBe(12)

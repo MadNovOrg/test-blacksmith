@@ -89,6 +89,11 @@ export const Users = () => {
 
   const merging = location.pathname.includes('/merge')
 
+  const { Pagination, perPage, currentPage, setCurrentPage } =
+    useTablePagination({
+      initialPerPage: 20,
+    })
+
   const [where, filtered] = useMemo(() => {
     let isFiltered = false
     const obj: Record<string, object> = {}
@@ -174,20 +179,19 @@ export const Users = () => {
       }
     }
 
+    setCurrentPage(0)
+
     return [obj, isFiltered]
   }, [
     roleFilter,
     trainerTypeFilter,
     filterByCertificateLevel,
+    certificateStatus,
     keywordDebounced,
     filterByModerator,
     filterByArchived,
-    certificateStatus,
+    setCurrentPage,
   ])
-
-  const { Pagination, perPage, currentPage } = useTablePagination({
-    initialPerPage: 20,
-  })
 
   const {
     profiles: users,
