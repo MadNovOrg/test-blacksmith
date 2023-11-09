@@ -172,19 +172,13 @@ export const VenueSelector: React.FC<
     setVenue(undefined)
   }
 
-  const noOptionsText =
-    query?.length < 3 ? (
-      t('components.venue-selector.min-chars-label')
-    ) : (
-      <Grid container gap={2} alignItems="center">
-        <Typography display="inline" variant="body1">
-          {t('components.venue-selector.no-results')}
-        </Typography>
-        <Button variant="text" onClick={() => setShowNewVenueModal(true)}>
-          {t('components.venue-selector.add-new-venue')}
-        </Button>
-      </Grid>
-    )
+  const noOptionsText = (
+    <Grid container gap={2} alignItems="center" justifyContent="flex-end">
+      <Button variant="text" onClick={() => setShowNewVenueModal(true)}>
+        {t('components.venue-selector.add-new-venue')}
+      </Button>
+    </Grid>
+  )
 
   return (
     <>
