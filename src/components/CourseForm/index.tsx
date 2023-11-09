@@ -21,7 +21,7 @@ import {
 } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { isDate, isValid as isValidDate } from 'date-fns'
+import { isPast, isDate, isValid as isValidDate } from 'date-fns'
 import { TFunction } from 'i18next'
 import React, {
   memo,
@@ -266,6 +266,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .date()
           .nullable()
           .typeError(t('components.course-form.start-date-format'))
+          .test(
+            'not-in-the-past',
+            t('components.course-form.start-date-in-the-past'),
+            value => {
+              if (value) return !isPast(value)
+            }
+          )
           .when([], {
             is: () => minStartDateRestriction,
 
@@ -283,6 +290,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .date()
           .nullable()
           .typeError(t('components.course-form.end-date-format'))
+          .test(
+            'not-in-the-past',
+            t('components.course-form.end-date-in-the-past'),
+            value => {
+              if (value) return !isPast(value)
+            }
+          )
           .when([], {
             is: () => minStartDateRestriction,
 
