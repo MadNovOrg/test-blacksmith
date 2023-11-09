@@ -1,4 +1,5 @@
 import {
+  Badge,
   Button,
   CircularProgress,
   Container,
@@ -21,6 +22,7 @@ import {
   Course_Invite_Status_Enum,
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
+import { useCourseDrafts } from '@app/hooks/useCourseDrafts'
 import { CoursesFilters, useCourses } from '@app/hooks/useCourses'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -101,6 +103,8 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
     orgId,
     filters,
   })
+
+  const { total: totalDrafts } = useCourseDrafts({ sorting })
 
   const { courses, loading, mutate, total } = useCourses(
     activeRole ?? RoleName.USER,
@@ -231,9 +235,14 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
           >
             <Box display="flex" gap={1}>
               {acl.isTrainer() && !isMobile ? (
-                <Button variant="contained" onClick={() => navigate(`/drafts`)}>
-                  {t('pages.draft-courses.h1')}
-                </Button>
+                <Badge badgeContent={totalDrafts} color="warning">
+                  <Button
+                    variant="contained"
+                    onClick={() => navigate(`/drafts`)}
+                  >
+                    {t('pages.draft-courses.h1')}
+                  </Button>
+                </Badge>
               ) : null}
             </Box>
             <Box display="flex" gap={1}>
