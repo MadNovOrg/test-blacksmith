@@ -344,8 +344,12 @@ export const ICMCourseBuilder: React.FC<
   )
 
   const submitButtonHandler = useCallback(() => {
-    if (minimumTimeCommitment) setIsTimeCommitmentModalOpen(true)
-  }, [minimumTimeCommitment])
+    if (minimumTimeCommitment) {
+      setIsTimeCommitmentModalOpen(true)
+    } else {
+      submitCourse()
+    }
+  }, [minimumTimeCommitment, submitCourse])
 
   const hasEstimatedDuration =
     courseData?.course?.level &&
@@ -374,7 +378,6 @@ export const ICMCourseBuilder: React.FC<
           ),
         })
       }
-
       navigate('../details')
     }
   }, [
