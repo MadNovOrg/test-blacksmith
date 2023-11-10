@@ -25,10 +25,9 @@ function App() {
     }),
     [fetcher]
   )
-
   return (
     <>
-      {import.meta.env.PROD && pathname === '/' ? (
+      {import.meta.env.MODE === 'production' && pathname === '/' ? (
         <>{window.location.replace(import.meta.env.VITE_KNOWLEDGE_HUB_HOME)}</>
       ) : (
         <GQLProvider>
