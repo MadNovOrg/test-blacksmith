@@ -42,8 +42,18 @@ jobs:
         run: |
           git fetch
           git checkout main
-          git tag v${{ env.RELEASE_VERSION }}
+          git tag RC-${{ env.RELEASE_VERSION }}
           git push origin --tags
+
+#  create-release-notes:
+#    if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) }}
+#    needs: [ fetch-version, create-tag ]
+#    name: Create Release Notes
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#
 
   create-release:
     if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) }}
@@ -56,4 +66,4 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ env.RELEASE_VERSION }}
+          tag_name: 'RC-${{ env.RELEASE_VERSION }}'

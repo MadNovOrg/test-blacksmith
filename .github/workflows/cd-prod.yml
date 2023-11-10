@@ -3,8 +3,6 @@ name: CD-PROD
 on:
   release:
     types: [released]
-    tags: 
-      - v*
 
 permissions:
   id-token: write
@@ -13,7 +11,7 @@ permissions:
 jobs:
   version:
     name: VERSION
-    if: contains( github.ref, 'v' )
+    if: contains( github.ref, 'RC' )
     runs-on: ubuntu-latest
 
     outputs:
@@ -23,7 +21,7 @@ jobs:
       - name: Gets Version
         id: get
         run: |
-          ref=$(echo "${{ github.ref }}" | awk -F/v '{print $NF}')
+          ref=$(echo "${{ github.ref }}" | awk -F/RC- '{print $NF}')
           echo "ref=${ref}" >> $GITHUB_OUTPUT
 
   prod-cd:
