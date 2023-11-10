@@ -27,4 +27,5 @@ interface ImportMetaEnv {
   VITE_INFO_URL: string
   VITE_BASE_TEAMTEACH: string
   VITE_BILD_ENQUIRY_EXTERNAL_USERS_URL: string
+  VITE_KNOWLEDGE_HUB_HOME: string
 }

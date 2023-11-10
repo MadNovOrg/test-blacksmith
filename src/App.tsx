@@ -1,5 +1,6 @@
 import { CssBaseline } from '@mui/material'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 import { SWRConfig } from 'swr'
 
 import { GQLProvider } from './components/GQLProvider'
@@ -7,10 +8,12 @@ import { ScrollToTop } from './components/ScrollToTop'
 import { SnackbarProvider } from './context/snackbar'
 import { useSWRFetcher } from './hooks/use-fetcher'
 import { AppRoutes } from './routes'
+
 import './style.css'
 
 function App() {
   const fetcher = useSWRFetcher()
+  const { pathname } = useLocation()
 
   const config = useMemo(
     () => ({
@@ -24,15 +27,21 @@ function App() {
   )
 
   return (
-    <GQLProvider>
-      <SWRConfig value={config}>
-        <CssBaseline />
-        <SnackbarProvider>
-          <ScrollToTop />
-          <AppRoutes />
-        </SnackbarProvider>
-      </SWRConfig>
-    </GQLProvider>
+    <>
+      {import.meta.env.PROD && pathname === '/' ? (
+        <>{window.location.replace(import.meta.env.VITE_KNOWLEDGE_HUB_HOME)}</>
+      ) : (
+        <GQLProvider>
+          <SWRConfig value={config}>
+            <CssBaseline />
+            <SnackbarProvider>
+              <ScrollToTop />
+              <AppRoutes />
+            </SnackbarProvider>
+          </SWRConfig>
+        </GQLProvider>
+      )}
+    </>
   )
 }
 
