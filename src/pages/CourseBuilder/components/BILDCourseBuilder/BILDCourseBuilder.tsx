@@ -16,6 +16,7 @@ import { useMutation, useQuery } from 'urql'
 import { BackButton } from '@app/components/BackButton'
 import { useSnackbar } from '@app/context/snackbar'
 import {
+  Course_Level_Enum,
   CourseToBuildQuery,
   CourseToBuildQueryVariables,
   SaveCourseModulesBildMutation,
@@ -181,6 +182,11 @@ export const BILDCourseBuilder: React.FC<
       { days }
     )
   }, [courseData, t])
+
+  const showMandatoryNotice = useMemo(() => {
+    const courseLevel = courseData?.course?.level
+    return courseLevel === Course_Level_Enum.BildRegular
+  }, [courseData?.course])
 
   const courseLoadingStatus = getSWRLoadingStatus(courseData, courseDataError)
 
@@ -397,7 +403,10 @@ export const BILDCourseBuilder: React.FC<
           {courseData.course ? (
             <Hero
               course={courseData.course}
-              slots={{ afterTitle: courseDescription }}
+              slots={{
+                afterTitle: courseDescription,
+                showMandatoryNotice: showMandatoryNotice,
+              }}
             />
           ) : null}
 
@@ -426,6 +435,10 @@ export const BILDCourseBuilder: React.FC<
                     state={selectedModules}
                     onChange={o => setSelectedModules(s => ({ ...s, ...o }))}
                     disabled={disabledStrategies[s.name] || false}
+                    showAsterisk={
+                      (showMandatoryNotice && disabledStrategies[s.name]) ||
+                      false
+                    }
                   />
                 ))}
               </Box>
@@ -469,6 +482,10 @@ export const BILDCourseBuilder: React.FC<
                       name={s.name}
                       modules={s.modules}
                       state={selectedModules}
+                      showAsterisk={
+                        (showMandatoryNotice && disabledStrategies[s.name]) ||
+                        false
+                      }
                     />
                   ) : null
                 )}

@@ -1,4 +1,5 @@
 import { Alert, Box, CircularProgress, Container, Link } from '@mui/material'
+import { cond, constant, matches, stubTrue } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -171,70 +172,93 @@ export const ICMCourseBuilder: React.FC<
       : 0
   }, [courseData])
 
-  const courseDescription = useMemo(() => {
-    const courseLevel = courseData?.course?.level
-    const reaccreditation = courseData?.course?.reaccreditation
-    const conversion = courseData?.course?.conversion
-    const type = courseData?.course?.type
+  const mapCourseLevelToDescription = cond([
+    [
+      matches({
+        level: CourseLevel.Level_1,
+        type: Course_Type_Enum.Open,
+      }),
+      constant({ duration: '6 hour', translationKey: 'ICM-description' }),
+    ],
+    [
+      matches({
+        level: CourseLevel.Level_1,
+      }),
+      constant({
+        duration: '6 hours',
+        translationKey: 'ICM-description-choose-modules',
+      }),
+    ],
+    [
+      matches({
+        level: CourseLevel.Level_2,
+        type: Course_Type_Enum.Open,
+      }),
+      constant({ duration: '12 hour', translationKey: 'ICM-description' }),
+    ],
+    [
+      matches({
+        level: CourseLevel.Level_2,
+      }),
+      constant({
+        duration: '12 hours',
+        translationKey: 'ICM-description-choose-modules',
+      }),
+    ],
+    [
+      matches({
+        level: CourseLevel.Advanced,
+      }),
+      constant({
+        duration: '6 hours',
+        translationKey: 'ICM-description-choose-modules',
+      }),
+    ],
+    [
+      matches({
+        level: CourseLevel.IntermediateTrainer,
+        reaccreditation: true,
+      }),
+      constant({ duration: '2 day', translationKey: 'ICM-description' }),
+    ],
+    [
+      matches({
+        level: CourseLevel.IntermediateTrainer,
+      }),
+      constant({ duration: '5 day', translationKey: 'ICM-description' }),
+    ],
+    [
+      matches({
+        level: CourseLevel.AdvancedTrainer,
+        reaccreditation: true,
+      }),
+      constant({ duration: '3 day', translationKey: 'ICM-description' }),
+    ],
+    [
+      matches({
+        level: CourseLevel.AdvancedTrainer,
+      }),
+      constant({ duration: '4 day', translationKey: 'ICM-description' }),
+    ],
+    [stubTrue, constant(null)],
+  ])
 
-    switch (courseLevel) {
-      case Course_Level_Enum.Level_1:
-        return t(
-          type === Course_Type_Enum.Open
-            ? 'pages.trainer-base.create-course.new-course.description.level-one.open'
-            : 'pages.trainer-base.create-course.new-course.description.level-one.default'
-        )
+  const courseDescription = useMemo<string>(() => {
+    if (!courseData?.course) return ''
 
-      case Course_Level_Enum.Level_2:
-        return t(
-          type === Course_Type_Enum.Open
-            ? 'pages.trainer-base.create-course.new-course.description.level-two.open'
-            : 'pages.trainer-base.create-course.new-course.description.level-two.default'
-        )
+    const mappedCourseDescription = mapCourseLevelToDescription(
+      courseData.course
+    )
 
-      case Course_Level_Enum.Advanced:
-        return t(
-          'pages.trainer-base.create-course.new-course.description.advanced'
-        )
+    if (!mappedCourseDescription) return ''
 
-      case Course_Level_Enum.IntermediateTrainer:
-        return t(
-          reaccreditation
-            ? 'pages.trainer-base.create-course.new-course.description.intermediate-trainer.reaccreditation'
-            : 'pages.trainer-base.create-course.new-course.description.intermediate-trainer.default'
-        )
-
-      case Course_Level_Enum.AdvancedTrainer:
-        return t(
-          reaccreditation
-            ? 'pages.trainer-base.create-course.new-course.description.advanced-trainer.reaccreditation'
-            : 'pages.trainer-base.create-course.new-course.description.advanced-trainer.default'
-        )
-
-      case Course_Level_Enum.BildRegular:
-        return t(
-          'pages.trainer-base.create-course.new-course.description.bild-regular'
-        )
-
-      case Course_Level_Enum.BildIntermediateTrainer:
-        return t(
-          reaccreditation
-            ? 'pages.trainer-base.create-course.new-course.description.bild-intermediate-trainer.reaccreditation'
-            : conversion
-            ? 'pages.trainer-base.create-course.new-course.description.bild-intermediate-trainer.conversion'
-            : 'pages.trainer-base.create-course.new-course.description.bild-intermediate-trainer.default'
-        )
-
-      case Course_Level_Enum.BildAdvancedTrainer:
-        return t(
-          reaccreditation
-            ? 'pages.trainer-base.create-course.new-course.description.bild-advanced-trainer.reaccreditation'
-            : conversion
-            ? 'pages.trainer-base.create-course.new-course.description.bild-advanced-trainer.conversion'
-            : 'pages.trainer-base.create-course.new-course.description.bild-advanced-trainer.default'
-        )
-    }
-  }, [courseData?.course, t])
+    return t(
+      `pages.trainer-base.create-course.new-course.${mappedCourseDescription.translationKey}`,
+      {
+        duration: mappedCourseDescription.duration,
+      }
+    )
+  }, [courseData, t, mapCourseLevelToDescription])
 
   const showMandatoryNotice = useMemo(() => {
     const courseLevel = courseData?.course?.level
@@ -425,9 +449,11 @@ export const ICMCourseBuilder: React.FC<
                 afterTitle:
                   courseDescription ||
                   t(
-                    'pages.trainer-base.create-course.new-course.description.default',
+                    'pages.trainer-base.create-course.new-course.ICM-description-default',
                     {
-                      duration: maxDuration ? maxDuration / 60 : 0,
+                      duration: maxDuration
+                        ? `${maxDuration / 60} hours`
+                        : '0 hours',
                     }
                   ),
                 showMandatoryNotice: showMandatoryNotice,

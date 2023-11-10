@@ -20,11 +20,12 @@ type StrategyAccordionSummaryProps = {
     groups?: Array<{ name: string; modules: Array<BILDModule> }>
   }
   state: Record<string, boolean>
+  showAsterisk: boolean
 }
 
 export const StrategyAccordionSummary: React.FC<
   React.PropsWithChildren<StrategyAccordionSummaryProps>
-> = ({ name, modules, state }) => {
+> = ({ name, modules, state, showAsterisk }) => {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
@@ -50,7 +51,8 @@ export const StrategyAccordionSummary: React.FC<
           <CheckedAllIcon color="inherit" />
 
           <Typography sx={{ ml: 1 }}>
-            {t(`common.bild-strategies.${name}`)}
+            <span>{t(`common.bild-strategies.${name}`)}</span>
+            {showAsterisk ? <span> *</span> : null}
           </Typography>
         </Box>
       </AccordionSummary>

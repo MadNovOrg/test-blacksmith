@@ -26,6 +26,7 @@ type StrategyAccordionProps = {
   state: Record<string, boolean>
   onChange: (state: Record<string, boolean>) => void
   disabled: boolean
+  showAsterisk: boolean
 }
 
 export const StrategyAccordion: React.FC<
@@ -40,6 +41,7 @@ export const StrategyAccordion: React.FC<
   state,
   onChange,
   disabled,
+  showAsterisk,
 }) => {
   const { t } = useTranslation()
   const handleToggle = (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -93,7 +95,8 @@ export const StrategyAccordion: React.FC<
 
           <Box>
             <Typography sx={{ ml: 1 }}>
-              {t(`common.bild-strategies.${name}`)}
+              <span>{t(`common.bild-strategies.${name}`)}</span>
+              {showAsterisk ? <span> *</span> : null}
             </Typography>
             {duration && (
               <Typography variant="body2" color="white" sx={{ ml: 1 }}>
