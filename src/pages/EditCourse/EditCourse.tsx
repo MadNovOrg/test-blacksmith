@@ -793,6 +793,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     onChange={handleTrainersDataChange}
                     autoFocus={false}
                     isReAccreditation={courseData.reaccreditation}
+                    isConversion={courseData.conversion}
                     bildStrategies={
                       courseData.bildStrategies
                         ? (bildStrategiesToArray(

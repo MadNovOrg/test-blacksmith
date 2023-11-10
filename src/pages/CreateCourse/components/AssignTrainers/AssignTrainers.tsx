@@ -113,7 +113,6 @@ export const AssignTrainers = () => {
   const { completeStep, courseData, setCurrentStepKey, setTrainers, trainers } =
     useCreateCourse()
   const { addSnackbarMessage } = useSnackbar()
-
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -271,6 +270,7 @@ export const AssignTrainers = () => {
           onChange={handleTrainersDataChange}
           trainers={trainerInputToCourseTrainer(trainers)}
           isReAccreditation={courseData.reaccreditation}
+          isConversion={courseData.conversion}
           requiredLeaders={requiredLeaders}
           bildStrategies={
             bildStrategiesToArray(

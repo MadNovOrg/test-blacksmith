@@ -49,6 +49,7 @@ type Props = {
   disabled?: boolean
   showAssistHint?: boolean
   isReAccreditation: boolean
+  isConversion?: boolean
   requiredLeaders?: RequiredTrainers
   methodsRef?: RefObject<{
     reset: UseFormReset<FormValues>
@@ -87,6 +88,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
   autoFocus = true,
   disabled = false,
   isReAccreditation = false,
+  isConversion = false,
   showAssistHint = true,
   requiredLeaders = { min: 0, max: 1 },
   methodsRef,
@@ -100,8 +102,9 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
         courseLevel,
         courseType,
         isReaccreditation: isReAccreditation,
+        isConversion,
       }),
-    [isReAccreditation, courseType, courseLevel]
+    [courseLevel, courseType, isReAccreditation, isConversion]
   )
 
   const mandatoryModerator = useMemo(
@@ -110,8 +113,9 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
         courseType,
         courseLevel,
         isReaccreditation: isReAccreditation,
+        isConversion,
       }),
-    [isReAccreditation, courseType, courseLevel]
+    [courseType, courseLevel, isReAccreditation, isConversion]
   )
 
   const schema = useMemo(() => {
