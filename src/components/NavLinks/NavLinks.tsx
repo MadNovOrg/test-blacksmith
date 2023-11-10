@@ -1,4 +1,3 @@
-import { useTheme, useMediaQuery } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import { FC } from 'react'
@@ -16,15 +15,12 @@ export const NavLinks: FC<INavLinksProps> = () => {
   const { t } = useTranslation()
   const { acl } = useAuth()
 
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.between('md', 'lg'))
-
   return (
     <Box
       sx={{
         display: 'flex',
-        flexDirection: isMobile ? 'column' : 'row',
-        alignItems: isMobile ? 'flex-start' : 'center',
+        flexDirection: { xs: 'column', lg: 'row' },
+        alignItems: { xs: 'center', lg: 'flex-start' },
       }}
     >
       <Link
