@@ -12,11 +12,18 @@ export type Props = {
 export const ResourcesList = ({ resources }: Props) => {
   return resources?.length ? (
     <Stack spacing={2}>
-      {resources?.map(resource =>
-        resource ? (
-          <ResourceItemCard resource={resource} key={resource.id} />
-        ) : null
-      )}
+      {resources
+        ?.sort((resourceA, resourceB) => {
+          if (resourceA && resourceB && resourceA.title && resourceB.title) {
+            return resourceA.title.localeCompare(resourceB.title)
+          }
+          return 0
+        })
+        .map(resource =>
+          resource ? (
+            <ResourceItemCard resource={resource} key={resource.id} />
+          ) : null
+        )}
     </Stack>
   ) : null
 }
