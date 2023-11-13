@@ -23,6 +23,7 @@ import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
 import { PricingList } from '@app/pages/tt-pages/Pricing'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
+import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 import ResourcesRoutes from './resources'
@@ -91,6 +92,8 @@ const FinanceRoute = () => {
   return (
     <Routes>
       <Route index element={<Navigate replace to="manage-courses" />} />
+
+      <Route path="accept-org-invite/:id" element={<AcceptOrgInvite />} />
 
       <Route path="manage-courses">
         <Route index element={<Navigate replace to="all" />} />

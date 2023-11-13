@@ -28,6 +28,7 @@ import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { DraftCourses } from '@app/pages/trainer-pages/MyCourses/DraftCourses'
 import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
+import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 const ResourcesRoutes = React.lazy(() => import('./resources'))
@@ -38,6 +39,8 @@ const TrainerBaseRoutes = () => {
   return (
     <Routes>
       <Route index element={<Navigate replace to="courses" />} />
+
+      <Route path="accept-org-invite/:id" element={<AcceptOrgInvite />} />
 
       <Route
         path="certification/:certificateId"

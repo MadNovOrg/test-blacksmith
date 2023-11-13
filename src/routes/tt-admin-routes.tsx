@@ -47,6 +47,7 @@ import { Orders } from '@app/pages/tt-pages/Orders'
 import { PricingList } from '@app/pages/tt-pages/Pricing'
 import { XeroConnect } from '@app/pages/tt-pages/Xero'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
+import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 const ResourcesRoutes = React.lazy(() => import('./resources'))
@@ -62,6 +63,8 @@ const TTAdminRoutes = () => {
         path="certification/:certificateId"
         element={<CourseCertificationDetails />}
       />
+
+      <Route path="accept-org-invite/:id" element={<AcceptOrgInvite />} />
 
       <Route path="courses">
         <Route index element={<TrainerCourses />} />

@@ -1,53 +1,53 @@
 import { Alert, CircularProgress, Container } from '@mui/material'
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { useUpdateEffect } from 'react-use'
+import { useMutation } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import {
   AcceptOrgInviteMutation,
   AcceptOrgInviteMutationVariables,
 } from '@app/generated/graphql'
-import { gqlRequest } from '@app/lib/gql-request'
 import { MUTATION as ACCEPT_ORG_INVITE_MUTATION } from '@app/queries/invites/accept-org-invite'
 
 export const AcceptOrgInvite = () => {
-  const [error, setError] = useState(false)
   const navigate = useNavigate()
   const { profile, reloadCurrentProfile } = useAuth()
   const [searchParams] = useSearchParams()
 
+  const accepted = useRef<boolean>(false)
+
   const token = searchParams.get('token') || ''
 
-  const acceptOrgInvite = useCallback(async () => {
-    if (profile) {
-      gqlRequest<AcceptOrgInviteMutation, AcceptOrgInviteMutationVariables>(
-        ACCEPT_ORG_INVITE_MUTATION,
+  const [{ error }, acceptOrgInvite] = useMutation<
+    AcceptOrgInviteMutation,
+    AcceptOrgInviteMutationVariables
+  >(ACCEPT_ORG_INVITE_MUTATION)
+
+  const accept = useCallback(async () => {
+    if (profile && !accepted.current) {
+      const resp = await acceptOrgInvite(
         { profileId: profile.id },
-        { headers: { 'x-auth': `Bearer ${token}` } }
+        {
+          fetchOptions: {
+            headers: { 'x-auth': `Bearer ${token}` },
+          },
+        }
       )
-        .then(response => {
-          if (!response.invite?.id) {
-            setError(true)
-            return Promise.reject()
-          }
 
-          setError(false)
-          reloadCurrentProfile()
-          return navigate('/')
-        })
-        .catch(() => {
-          setError(true)
-          return Promise.reject()
-        })
+      if (resp.data?.invite?.id) {
+        accepted.current = true
+        await reloadCurrentProfile()
+        return navigate('/')
+      }
     }
-  }, [navigate, profile, reloadCurrentProfile, token])
+  }, [acceptOrgInvite, navigate, profile, reloadCurrentProfile, token])
 
-  useUpdateEffect(() => {
-    if (profile) {
-      acceptOrgInvite()
+  useEffect(() => {
+    if (profile && !accepted.current) {
+      accept().then()
     }
-  })
+  }, [accept, profile])
 
   if (error) {
     return (

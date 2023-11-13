@@ -5,7 +5,17 @@ actions:
       handler: '{{ACTIONS_HOST}}/organization/invite/accept'
       forward_client_headers: true
     permissions:
+      - role: sales-representative
+      - role: organization-key-contact
+      - role: finance
+      - role: booking-contact
+      - role: tt-ops
+      - role: trainer
+      - role: ld
+      - role: user
       - role: anonymous
+      - role: tt-admin
+      - role: sales-admin
   - name: approveCourse
     definition:
       kind: synchronous

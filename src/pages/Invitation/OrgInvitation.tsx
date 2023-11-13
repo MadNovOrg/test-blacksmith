@@ -77,7 +77,7 @@ export const OrgInvitationPage = () => {
       const continueUrl = `/accept-org-invite/${inviteId}?token=${token}`
       const qs = new URLSearchParams({ token, continue: continueUrl })
 
-      return navigate(`${isUserLoggedIn ? continueUrl : nextUrl}?${qs}`, {
+      return navigate(`${isUserLoggedIn ? continueUrl : `${nextUrl}?${qs}`}`, {
         replace: true,
       })
     }

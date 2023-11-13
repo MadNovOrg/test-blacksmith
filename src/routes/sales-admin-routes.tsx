@@ -28,6 +28,7 @@ import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
+import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 const NotFound = React.lazy(() =>
@@ -96,6 +97,8 @@ const SalesAdminRoutes = () => {
   return (
     <Routes>
       <Route index element={<Navigate replace to="manage-courses" />} />
+
+      <Route path="accept-org-invite/:id" element={<AcceptOrgInvite />} />
 
       <Route path="manage-courses">
         <Route index element={<Navigate replace to="all" />} />
