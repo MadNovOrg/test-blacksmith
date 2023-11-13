@@ -731,7 +731,11 @@
     "modal-confirm-btn-text": "Confirm",
     "no-modules": "There are no modules for this course.",
     "grading-error": "There was an error when grading.",
-    "submit-description": "Please note, a grade cannot be modified once submitted."
+    "submit-description": "Please note, a grade cannot be modified once submitted.",
+    "module-group-note-input": {
+      "label": "Notes",
+      "placeholder": "Please include notes if any techniques were observed or incomplete in this module."
+    }
   },
   "participant-grading": {
     "title": "View grade",

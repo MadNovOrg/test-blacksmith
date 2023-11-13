@@ -3,9 +3,11 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Checkbox,
   FormControlLabel,
   FormGroup,
+  Stack,
   Typography,
 } from '@mui/material'
 import React, { useMemo, useState } from 'react'
@@ -27,11 +29,15 @@ export interface Props {
     }>
   }>
   onChange?: (holds: HoldsRecord) => void
+  slots?: {
+    afterModuleGroup: (groupId: string) => React.ReactNode
+  }
 }
 
 export const ModulesSelectionList: React.FC<React.PropsWithChildren<Props>> = ({
   moduleGroups,
   onChange = noop,
+  slots,
 }) => {
   const [holds, setHolds] = useState<HoldsRecord>(() => {
     const holds: HoldsRecord = {}
@@ -93,7 +99,7 @@ export const ModulesSelectionList: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   return (
-    <>
+    <Stack spacing={1}>
       {moduleGroups.map(group => {
         const groupIsMandatory = group.mandatory
         const groupIsChecked = checkedGroups.includes(group.id)
@@ -102,77 +108,80 @@ export const ModulesSelectionList: React.FC<React.PropsWithChildren<Props>> = ({
           group.modules.findIndex(module => holds[module.id] === true) >= 0
 
         return (
-          <Accordion
-            key={group.id}
-            disableGutters
-            sx={{ marginBottom: 1 }}
-            data-testid={`module-group-${group.id}`}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-              sx={{ display: 'flex', alignItems: 'center' }}
-            >
-              <FormGroup key={group.id}>
-                <FormControlLabel
-                  onClick={e => e.stopPropagation()}
-                  control={
-                    <Checkbox
-                      checked={groupIsChecked || groupIsMandatory || false}
-                      indeterminate={isIndeterminate}
-                      onChange={() => {
-                        toggleModuleGroupChange(group.id)
-                      }}
-                      disabled={groupIsMandatory}
-                    />
-                  }
-                  label={
-                    <Typography
-                      component="span"
-                      color={
-                        groupIsChecked
-                          ? theme.palette.text.primary
-                          : theme.palette.text.secondary
-                      }
-                      fontWeight={600}
-                    >
-                      {group.name}
-                    </Typography>
-                  }
-                />
-              </FormGroup>
-            </AccordionSummary>
-            <AccordionDetails sx={{ paddingLeft: 4 }}>
-              {group.modules.map(module => (
-                <FormGroup key={module.id} sx={{ marginBottom: 2 }}>
+          <Box key={group.id}>
+            <Accordion disableGutters data-testid={`module-group-${group.id}`}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                sx={{ display: 'flex', alignItems: 'center' }}
+              >
+                <FormGroup key={group.id}>
                   <FormControlLabel
+                    onClick={e => e.stopPropagation()}
                     control={
                       <Checkbox
-                        onChange={() => toggleModuleHold(module.id)}
-                        onClick={e => e.stopPropagation()}
-                        checked={holds[module.id] || groupIsMandatory || false}
+                        checked={groupIsChecked || groupIsMandatory || false}
+                        indeterminate={isIndeterminate}
+                        onChange={() => {
+                          toggleModuleGroupChange(group.id)
+                        }}
                         disabled={groupIsMandatory}
                       />
                     }
                     label={
                       <Typography
+                        component="span"
                         color={
-                          holds[module.id]
+                          groupIsChecked
                             ? theme.palette.text.primary
                             : theme.palette.text.secondary
                         }
+                        fontWeight={600}
                       >
-                        {module.name}
+                        {group.name}
                       </Typography>
                     }
                   />
                 </FormGroup>
-              ))}
-            </AccordionDetails>
-          </Accordion>
+              </AccordionSummary>
+              <AccordionDetails sx={{ paddingLeft: 4 }}>
+                {group.modules.map(module => (
+                  <FormGroup key={module.id} sx={{ marginBottom: 2 }}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          onChange={() => toggleModuleHold(module.id)}
+                          onClick={e => e.stopPropagation()}
+                          checked={
+                            holds[module.id] || groupIsMandatory || false
+                          }
+                          disabled={groupIsMandatory}
+                        />
+                      }
+                      label={
+                        <Typography
+                          color={
+                            holds[module.id]
+                              ? theme.palette.text.primary
+                              : theme.palette.text.secondary
+                          }
+                        >
+                          {module.name}
+                        </Typography>
+                      }
+                    />
+                  </FormGroup>
+                ))}
+              </AccordionDetails>
+            </Accordion>
+
+            {typeof slots?.afterModuleGroup === 'function'
+              ? slots.afterModuleGroup(group.id)
+              : null}
+          </Box>
         )
       })}
-    </>
+    </Stack>
   )
 }

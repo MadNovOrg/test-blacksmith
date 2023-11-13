@@ -16,8 +16,10 @@ import { BackButton } from '@app/components/BackButton'
 import { CourseGradingMenu } from '@app/components/CourseGradingMenu/CourseGradingMenu'
 import { Dialog } from '@app/components/dialogs'
 import { Sticky } from '@app/components/Sticky'
+import { useAuth } from '@app/context/auth'
 import {
   Course_Level_Enum,
+  Course_Trainer_Type_Enum,
   Grade_Enum,
   SaveBildGradeMutation,
   SaveBildGradeMutationVariables,
@@ -29,6 +31,7 @@ import { useGradingParticipants } from '../../hooks'
 import useCourseGradingData from '../../useCourseGradingData'
 import { GradingCount } from '../GradingCount'
 import { GradingTitle } from '../GradingTitle'
+import { ModuleGroupNoteInput } from '../ModuleGroupNoteInput/ModuleGroupNoteInput'
 import { ParticipantsList } from '../ParticipantsList'
 
 import { BILDModulesSelection } from './components/BILDModulesSelection'
@@ -42,13 +45,16 @@ export const BILDGrading: FC<Props> = ({ course }) => {
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const { acl } = useAuth()
 
   const filteredCourseParticipants = useGradingParticipants(course.participants)
   const [grade, setGrade] = useState<Grade_Enum | undefined>()
   const [modalOpened, setModalOpened] = useState(false)
   const navigate = useNavigate()
+  const notesRef = useRef<Map<string, string>>(new Map())
 
-  const strategyModulesRef = useRef<Record<string, Strategy>>()
+  const strategyModulesRef =
+    useRef<Record<string, Strategy & { note?: string }>>()
 
   const bildStrategyModules = course.bildModules.length
     ? course.bildModules[0].modules
@@ -63,6 +69,16 @@ export const BILDGrading: FC<Props> = ({ course }) => {
     setModalOpened(false)
 
     if (grade) {
+      if (strategyModulesRef.current) {
+        Object.keys(strategyModulesRef.current).forEach(strategyName => {
+          const strategyNotes = notesRef.current.get(strategyName)
+
+          if (strategyNotes && strategyModulesRef.current) {
+            strategyModulesRef.current[strategyName].note = strategyNotes
+          }
+        })
+      }
+
       saveBildGrades({
         participantIds: filteredCourseParticipants.map(
           participant => participant.id
@@ -82,6 +98,12 @@ export const BILDGrading: FC<Props> = ({ course }) => {
       navigate(`../details?tab=${CourseDetailsTabs.GRADING}`)
     }
   }, [savingData, navigate])
+
+  const canAddModuleNotes = acl.canAddModuleNotes(
+    course.trainers
+      .filter(t => t.type === Course_Trainer_Type_Enum.Leader)
+      .map(t => t.profile_id)
+  )
 
   return (
     <>
@@ -134,6 +156,17 @@ export const BILDGrading: FC<Props> = ({ course }) => {
             strategyModules={bildStrategyModules}
             onChange={selection => (strategyModulesRef.current = selection)}
             courseType={course.type}
+            slots={{
+              afterStrategyAccordion: strategyName =>
+                filteredCourseParticipants.length === 1 && canAddModuleNotes ? (
+                  <ModuleGroupNoteInput
+                    groupId={strategyName}
+                    onChange={e =>
+                      notesRef.current.set(strategyName, e.target.value)
+                    }
+                  />
+                ) : null,
+            }}
           />
 
           <Typography mt={3} color={theme.palette.dimGrey.main}>

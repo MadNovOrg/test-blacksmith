@@ -49,6 +49,10 @@ export const QUERY = gql`
       certificate {
         ...Certificate
       }
+      notes {
+        moduleGroupId
+        note
+      }
     }
   }
 `

@@ -5,6 +5,7 @@ import {
   CourseGradingDataQuery,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
+  Course_Trainer_Type_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
 
@@ -31,6 +32,9 @@ export const buildGradingCourse = build<
     ],
     modules: [],
     bildModules: [],
+    trainers: [
+      { type: Course_Trainer_Type_Enum.Leader, profile_id: chance.guid() },
+    ],
   },
 })
 

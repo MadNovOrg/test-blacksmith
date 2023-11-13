@@ -45,6 +45,10 @@ const QUERY = gql`
         id
         modules
       }
+      trainers {
+        profile_id
+        type
+      }
     }
   }
 `

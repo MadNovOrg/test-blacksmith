@@ -1,20 +1,24 @@
+import { TypedQueryDocumentNode } from 'graphql'
+import { matches } from 'lodash'
 import { Routes, Route } from 'react-router-dom'
+import { Client, CombinedError, Provider } from 'urql'
+import { fromValue, never } from 'wonka'
 
-import { Grade_Enum } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
-import { MUTATION } from '@app/queries/grading/save-course-grading'
-import { Grade } from '@app/types'
+import {
+  Course_Trainer_Type_Enum,
+  Grade_Enum,
+  SaveCourseGradingMutation,
+  SaveGradingDetailsMutationVariables,
+} from '@app/generated/graphql'
+import { Grade, RoleName } from '@app/types'
 
-import { render, screen, within, userEvent, waitForText } from '@test/index'
+import { render, screen, within, userEvent, chance } from '@test/index'
 import { buildCourseModule, buildParticipant } from '@test/mock-data-utils'
 
+import { SAVE_COURSE_GRADING_MUTATION } from '../../queries/save-course-grading'
 import { buildGradingCourse, selectGradingOption } from '../../test-utils'
 
 import { ICMGrading } from '.'
-
-vi.mock('@app/hooks/use-fetcher')
-
-const useFetcherMock = vi.mocked(useFetcher)
 
 describe('page: CourseGrading', () => {
   afterEach(() => {
@@ -40,10 +44,16 @@ describe('page: CourseGrading', () => {
       },
     })
 
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
     render(
-      <Routes>
-        <Route path="/:id/grading" element={<ICMGrading course={course} />} />
-      </Routes>,
+      <Provider value={client}>
+        <Routes>
+          <Route path="/:id/grading" element={<ICMGrading course={course} />} />
+        </Routes>
+      </Provider>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading`] }
     )
@@ -97,10 +107,16 @@ describe('page: CourseGrading', () => {
       },
     })
 
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
     render(
-      <Routes>
-        <Route path="/:id/grading" element={<ICMGrading course={course} />} />
-      </Routes>,
+      <Provider value={client}>
+        <Routes>
+          <Route path="/:id/grading" element={<ICMGrading course={course} />} />
+        </Routes>
+      </Provider>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading`] }
     )
@@ -154,10 +170,16 @@ describe('page: CourseGrading', () => {
       },
     })
 
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
     render(
-      <Routes>
-        <Route path="/:id/grading" element={<ICMGrading course={course} />} />
-      </Routes>,
+      <Provider value={client}>
+        <Routes>
+          <Route path="/:id/grading" element={<ICMGrading course={course} />} />
+        </Routes>
+      </Provider>,
       {},
       {
         initialEntries: [
@@ -201,10 +223,16 @@ describe('page: CourseGrading', () => {
       },
     })
 
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
     render(
-      <Routes>
-        <Route path="/:id/grading" element={<ICMGrading course={course} />} />
-      </Routes>,
+      <Provider value={client}>
+        <Routes>
+          <Route path="/:id/grading" element={<ICMGrading course={course} />} />
+        </Routes>
+      </Provider>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading`] }
     )
@@ -237,10 +265,16 @@ describe('page: CourseGrading', () => {
       },
     })
 
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
     render(
-      <Routes>
-        <Route path="/:id/grading" element={<ICMGrading course={course} />} />
-      </Routes>,
+      <Provider value={client}>
+        <Routes>
+          <Route path="/:id/grading" element={<ICMGrading course={course} />} />
+        </Routes>
+      </Provider>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading`] }
     )
@@ -274,11 +308,20 @@ describe('page: CourseGrading', () => {
       },
     })
 
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
     render(
-      <Routes>
-        <Route path=":id/grading" element={<ICMGrading course={course} />} />
-        <Route path="/courses/:id/details" element={<h1>Course details</h1>} />
-      </Routes>,
+      <Provider value={client}>
+        <Routes>
+          <Route path=":id/grading" element={<ICMGrading course={course} />} />
+          <Route
+            path="/courses/:id/details"
+            element={<h1>Course details</h1>}
+          />
+        </Routes>
+      </Provider>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading`] }
     )
@@ -288,13 +331,6 @@ describe('page: CourseGrading', () => {
 
   it('saves grades for participants when an intent for saving is confirmed', async () => {
     const COURSE_ID = 'course-id'
-    const fetcherMock = vi.fn()
-
-    useFetcherMock.mockReturnValue(fetcherMock)
-    fetcherMock.mockResolvedValue({
-      saveModules: { affectedRows: 2 },
-      saveParticipantsGrade: { affectedRows: 2 },
-    })
 
     const courseModules = [
       { ...buildCourseModule(), covered: true },
@@ -313,11 +349,65 @@ describe('page: CourseGrading', () => {
       },
     })
 
+    const client = {
+      executeMutation: ({
+        variables,
+        query,
+      }: {
+        variables: SaveGradingDetailsMutationVariables
+        query: TypedQueryDocumentNode
+      }) => {
+        const mutationMatches = matches({
+          query: SAVE_COURSE_GRADING_MUTATION,
+          variables: {
+            modules: [
+              {
+                course_participant_id: courseParticipants[1].id,
+                module_id: courseModules[0].module.id,
+                completed: false,
+              },
+              {
+                course_participant_id: courseParticipants[1].id,
+                module_id: courseModules[1].module.id,
+                completed: true,
+              },
+            ],
+            participantIds: [courseParticipants[1].id],
+            grade: Grade.OBSERVE_ONLY,
+            courseId: course.id,
+            notes: [],
+          },
+        })
+
+        if (mutationMatches({ query, variables })) {
+          return fromValue<SaveCourseGradingMutation>({
+            saveModules: {
+              affectedRows: 2,
+            },
+            saveParticipantsGrade: {
+              affectedRows: 2,
+            },
+          })
+        }
+
+        return fromValue<{ error: CombinedError }>({
+          error: new CombinedError({
+            networkError: Error('something went wrong!'),
+          }),
+        })
+      },
+    } as unknown as Client
+
     render(
-      <Routes>
-        <Route path=":id/grading" element={<ICMGrading course={course} />} />
-        <Route path="/courses/:id/details" element={<h1>Course details</h1>} />
-      </Routes>,
+      <Provider value={client}>
+        <Routes>
+          <Route path=":id/grading" element={<ICMGrading course={course} />} />
+          <Route
+            path="/courses/:id/details"
+            element={<h1>Course details</h1>}
+          />
+        </Routes>
+      </Provider>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading`] }
     )
@@ -329,25 +419,291 @@ describe('page: CourseGrading', () => {
     await userEvent.click(screen.getByText('Submit'))
     await userEvent.click(screen.getByText('Confirm'))
 
-    expect(fetcherMock).toHaveBeenCalledTimes(1)
-    expect(fetcherMock).toHaveBeenCalledWith(MUTATION, {
-      modules: [
-        {
-          course_participant_id: courseParticipants[1].id,
-          module_id: courseModules[0].module.id,
-          completed: false,
-        },
-        {
-          course_participant_id: courseParticipants[1].id,
-          module_id: courseModules[1].module.id,
-          completed: true,
-        },
-      ],
-      participantIds: [courseParticipants[1].id],
-      grade: Grade.OBSERVE_ONLY,
-      courseId: course.id,
+    expect(screen.getByText(/course details/i)).toBeInTheDocument()
+  })
+
+  it('displays loading state while saving grades', async () => {
+    const COURSE_ID = 'course-id'
+
+    const courseModules = [
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: false },
+    ]
+    const courseParticipants = [
+      { ...buildParticipant(), attended: false },
+      { ...buildParticipant(), attended: true },
+    ]
+
+    const course = buildGradingCourse({
+      overrides: {
+        modules: courseModules,
+        participants: courseParticipants,
+      },
     })
 
-    await waitForText('Course details')
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path=":id/grading" element={<ICMGrading course={course} />} />
+          <Route
+            path="/courses/:id/details"
+            element={<h1>Course details</h1>}
+          />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading`] }
+    )
+
+    await userEvent.click(screen.getByLabelText(courseModules[0].module.name))
+
+    await selectGradingOption('Non-Physical Pass')
+
+    await userEvent.click(screen.getByText('Submit'))
+    await userEvent.click(screen.getByText('Confirm'))
+
+    expect(screen.getByRole('progressbar')).toBeInTheDocument()
+  })
+
+  it('displays an alert if there was an error saving grades', async () => {
+    const COURSE_ID = 'course-id'
+
+    const courseModules = [
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: false },
+    ]
+    const courseParticipants = [
+      { ...buildParticipant(), attended: false },
+      { ...buildParticipant(), attended: true },
+    ]
+
+    const course = buildGradingCourse({
+      overrides: {
+        modules: courseModules,
+        participants: courseParticipants,
+      },
+    })
+
+    const client = {
+      executeMutation: () =>
+        fromValue<{ error: CombinedError }>({
+          error: new CombinedError({
+            networkError: Error('Something went wrong'),
+          }),
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path=":id/grading" element={<ICMGrading course={course} />} />
+          <Route
+            path="/courses/:id/details"
+            element={<h1>Course details</h1>}
+          />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading`] }
+    )
+
+    await userEvent.click(screen.getByLabelText(courseModules[0].module.name))
+
+    await selectGradingOption('Non-Physical Pass')
+
+    await userEvent.click(screen.getByText('Submit'))
+    await userEvent.click(screen.getByText('Confirm'))
+
+    expect(
+      screen.getByTestId('saving-grading-error-alert').textContent
+    ).toMatchInlineSnapshot('"There was an error when grading."')
+  })
+
+  it('displays module notes field when grading an individual participant as an admin', () => {
+    const COURSE_ID = 'course-id'
+
+    const courseModules = [
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: false },
+    ]
+
+    const participant = { ...buildParticipant(), attended: true }
+
+    const course = buildGradingCourse({
+      overrides: {
+        modules: courseModules,
+        participants: [participant],
+      },
+    })
+
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path=":id/grading" element={<ICMGrading course={course} />} />
+          <Route
+            path="/courses/:id/details"
+            element={<h1>Course details</h1>}
+          />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      {
+        initialEntries: [
+          `/${COURSE_ID}/grading?participants=${participant.id}`,
+        ],
+      }
+    )
+
+    expect(screen.getAllByLabelText(/notes/i)).toBeTruthy()
+  })
+
+  it('displays module notes field when grading an individual participant as a lead trainer', () => {
+    const COURSE_ID = 'course-id'
+    const PROFILE_ID = chance.guid()
+
+    const courseModules = [
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: false },
+    ]
+
+    const participant = { ...buildParticipant(), attended: true }
+
+    const course = buildGradingCourse({
+      overrides: {
+        modules: courseModules,
+        participants: [participant],
+        trainers: [
+          { type: Course_Trainer_Type_Enum.Leader, profile_id: PROFILE_ID },
+        ],
+      },
+    })
+
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path=":id/grading" element={<ICMGrading course={course} />} />
+          <Route
+            path="/courses/:id/details"
+            element={<h1>Course details</h1>}
+          />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TRAINER, profile: { id: PROFILE_ID } } },
+      {
+        initialEntries: [
+          `/${COURSE_ID}/grading?participants=${participant.id}`,
+        ],
+      }
+    )
+
+    expect(screen.getAllByLabelText(/notes/i)).toBeTruthy()
+  })
+
+  it("doesn't display module notes field when grading in bulk", () => {
+    const COURSE_ID = 'course-id'
+
+    const courseModules = [
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: false },
+    ]
+
+    const participants = [
+      { ...buildParticipant(), attended: true },
+      { ...buildParticipant(), attended: true },
+    ]
+
+    const course = buildGradingCourse({
+      overrides: {
+        modules: courseModules,
+        participants,
+      },
+    })
+
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path=":id/grading" element={<ICMGrading course={course} />} />
+          <Route
+            path="/courses/:id/details"
+            element={<h1>Course details</h1>}
+          />
+        </Routes>
+      </Provider>,
+      {},
+      {
+        initialEntries: [`/${COURSE_ID}/grading`],
+      }
+    )
+
+    expect(screen.queryAllByLabelText(/notes/i)).toHaveLength(0)
+  })
+
+  it("doesn't display module notes field when grading as an assistant trainer", () => {
+    const COURSE_ID = 'course-id'
+    const PROFILE_ID = chance.guid()
+
+    const courseModules = [
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: false },
+    ]
+
+    const participant = { ...buildParticipant(), attended: true }
+
+    const course = buildGradingCourse({
+      overrides: {
+        modules: courseModules,
+        participants: [participant],
+        trainers: [
+          { type: Course_Trainer_Type_Enum.Leader, profile_id: chance.guid() },
+          { type: Course_Trainer_Type_Enum.Assistant, profile_id: PROFILE_ID },
+        ],
+      },
+    })
+
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path=":id/grading" element={<ICMGrading course={course} />} />
+          <Route
+            path="/courses/:id/details"
+            element={<h1>Course details</h1>}
+          />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TRAINER, profile: { id: PROFILE_ID } } },
+      {
+        initialEntries: [
+          `/${COURSE_ID}/grading?participants=${participant.id}`,
+        ],
+      }
+    )
+
+    expect(screen.queryAllByLabelText(/notes/i)).toHaveLength(0)
   })
 })

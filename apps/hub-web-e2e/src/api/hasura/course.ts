@@ -2,10 +2,10 @@ import { addYears } from 'date-fns'
 import { gql } from 'graphql-request'
 
 import { Grade_Enum, TransferFeeType } from '@app/generated/graphql'
+import { SAVE_COURSE_GRADING_MUTATION } from '@app/pages/trainer-pages/CourseGrading/queries/save-course-grading'
 import { TRANSFER_PARTICIPANT } from '@app/pages/TransferParticipant/queries'
 import { CANCEL_COURSE_MUTATION } from '@app/queries/courses/cancel-course'
 import { QUERY as TRAINER_COURSES } from '@app/queries/courses/get-trainer-courses'
-import { MUTATION as SAVE_COURSE_GRADING } from '@app/queries/grading/save-course-grading'
 import { GetParticipant as GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
   CourseLevel,
@@ -380,11 +380,12 @@ export async function insertCourseGradingForParticipants(
   try {
     await getClient().request<{
       update_course_participant: { affected_rows: number }
-    }>(SAVE_COURSE_GRADING, {
+    }>(SAVE_COURSE_GRADING_MUTATION, {
       modules,
       participantIds,
       grade,
       courseId,
+      notes: [],
     })
     console.log(`
       Updated the grade to "${grade}" for the following users on course "${courseId}":

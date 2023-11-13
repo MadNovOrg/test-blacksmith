@@ -12,6 +12,8 @@ import { useTranslation } from 'react-i18next'
 import { CourseParticipantQuery } from '@app/generated/graphql'
 import { Strategy } from '@app/types'
 
+import { ModuleGroupNote } from '../../../ModuleGroupNote/ModuleGroupNote'
+
 type Props = {
   participant: NonNullable<CourseParticipantQuery['participant']>
 }
@@ -19,59 +21,64 @@ type Props = {
 export const BILDParticipantGrading: React.FC<Props> = ({ participant }) => {
   const { t } = useTranslation()
 
-  const strategyModules: Record<string, Strategy> =
+  const strategyModules: Record<string, Strategy & { note?: string }> =
     participant.bildGradingModules?.modules
   return (
-    <>
-      {Object.keys(strategyModules).map(strategyName => (
-        <Accordion
-          key={strategyName}
-          disableGutters
-          sx={{ marginBottom: 0.5 }}
-          data-testid={`strategy-accordion-${strategyName}`}
-          defaultExpanded
-        >
-          <AccordionSummary
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-            sx={{ display: 'flex', alignItems: 'center' }}
-          >
-            <Typography fontWeight={600}>
-              {t(`common.bild-strategies.${strategyName}`)}
-            </Typography>
-          </AccordionSummary>
+    <Stack spacing={0.5}>
+      {Object.keys(strategyModules).map(strategyName => {
+        const note = strategyModules[strategyName].note
 
-          <AccordionDetails sx={{ pt: 0, pb: 3 }}>
-            <Stack spacing={1.5}>
-              {strategyModules[strategyName].modules?.length
-                ? strategyModules[strategyName].modules?.map(module => (
-                    <Typography key={module.name}>{module.name}</Typography>
-                  ))
-                : null}
-            </Stack>
+        return (
+          <Box key={strategyName}>
+            <Accordion
+              disableGutters
+              data-testid={`strategy-accordion-${strategyName}`}
+              defaultExpanded
+            >
+              <AccordionSummary
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                sx={{ display: 'flex', alignItems: 'center' }}
+              >
+                <Typography fontWeight={600}>
+                  {t(`common.bild-strategies.${strategyName}`)}
+                </Typography>
+              </AccordionSummary>
 
-            {strategyModules[strategyName].groups?.length
-              ? strategyModules[strategyName].groups?.map(group => (
-                  <Box key={group.name}>
-                    <Typography fontWeight="500" mb={1}>
-                      {group.name}
-                    </Typography>
+              <AccordionDetails sx={{ pt: 0, pb: 3 }}>
+                <Stack spacing={1.5}>
+                  {strategyModules[strategyName].modules?.length
+                    ? strategyModules[strategyName].modules?.map(module => (
+                        <Typography key={module.name}>{module.name}</Typography>
+                      ))
+                    : null}
+                </Stack>
 
-                    <Stack spacing={1.5} sx={{ pl: 2 }}>
-                      {group.modules?.length
-                        ? group.modules.map(module => (
-                            <Typography key={module.name}>
-                              {module.name}
-                            </Typography>
-                          ))
-                        : null}
-                    </Stack>
-                  </Box>
-                ))
-              : null}
-          </AccordionDetails>
-        </Accordion>
-      ))}
-    </>
+                {strategyModules[strategyName].groups?.length
+                  ? strategyModules[strategyName].groups?.map(group => (
+                      <Box key={group.name}>
+                        <Typography fontWeight="500" mb={1}>
+                          {group.name}
+                        </Typography>
+
+                        <Stack spacing={1.5} sx={{ pl: 2 }}>
+                          {group.modules?.length
+                            ? group.modules.map(module => (
+                                <Typography key={module.name}>
+                                  {module.name}
+                                </Typography>
+                              ))
+                            : null}
+                        </Stack>
+                      </Box>
+                    ))
+                  : null}
+              </AccordionDetails>
+            </Accordion>
+            {note ? <ModuleGroupNote note={note} /> : null}
+          </Box>
+        )
+      })}
+    </Stack>
   )
 }

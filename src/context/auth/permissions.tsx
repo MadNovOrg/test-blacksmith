@@ -749,6 +749,14 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.isOrganizationKeyContactOfCourse(course)
       )
     },
+    canAddModuleNotes: (leadTrainerIds: string[]) => {
+      return (
+        acl.isTTAdmin() ||
+        (auth.profile?.id &&
+          leadTrainerIds.includes(auth.profile.id) &&
+          activeRole === RoleName.TRAINER)
+      )
+    },
   })
   return acl
 }

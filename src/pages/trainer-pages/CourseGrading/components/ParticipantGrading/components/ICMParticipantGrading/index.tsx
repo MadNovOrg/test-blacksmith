@@ -3,6 +3,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Stack,
   Typography,
 } from '@mui/material'
 import { groupBy } from 'lodash-es'
@@ -15,6 +16,8 @@ import {
 } from '@app/generated/graphql'
 import theme from '@app/theme'
 import { transformModulesToGroups } from '@app/util'
+
+import { ModuleGroupNote } from '../../../ModuleGroupNote/ModuleGroupNote'
 
 type Props = {
   participant: NonNullable<CourseParticipantQuery['participant']>
@@ -32,66 +35,80 @@ export const ICMParticipantGrading: React.FC<Props> = ({ participant }) => {
     return []
   }, [participant])
 
+  const moduleGroupNotes: Map<string, string> = useMemo(() => {
+    const notes = new Map()
+
+    participant.notes?.forEach(note => {
+      notes.set(note.moduleGroupId, note.note)
+    })
+
+    return notes
+  }, [participant])
+
   return (
-    <>
+    <Stack spacing={0.5}>
       {moduleGroups.map(group => {
         const groupedModules = groupBy(
           group.modules,
           module => module.completed
         )
 
+        const note = moduleGroupNotes.get(group.id)
+
         return (
-          <Accordion
-            key={group.id}
-            defaultExpanded
-            disableGutters
-            sx={{ marginBottom: 0.5 }}
-            data-testid={`graded-module-group-${group.id}`}
-          >
-            <AccordionSummary>
-              <Typography fontWeight={600}>
-                {group.name}{' '}
-                <Typography variant="body2" component="span">
-                  {t('pages.participant-grading.completed-modules-subtitle', {
-                    completedNum: groupedModules['true']?.length,
-                    totalNum: group.modules.length,
-                  })}
-                </Typography>
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {groupedModules['true']?.map(module => (
-                <Typography key={module.id} mb={2}>
-                  {module.name}
-                </Typography>
-              ))}
-
-              {groupedModules['false']?.length ? (
-                <Box data-testid="incomplete-modules">
-                  <Typography
-                    fontWeight={600}
-                    color={theme.palette.grey[700]}
-                    mb={2}
-                    ml={-1}
-                  >
-                    {t('pages.participant-grading.incomplete-list-subtitle')}
+          <Box key={group.id}>
+            <Accordion
+              defaultExpanded
+              disableGutters
+              data-testid={`graded-module-group-${group.id}`}
+            >
+              <AccordionSummary>
+                <Typography fontWeight={600}>
+                  {group.name}{' '}
+                  <Typography variant="body2" component="span">
+                    {t('pages.participant-grading.completed-modules-subtitle', {
+                      completedNum: groupedModules['true']?.length,
+                      totalNum: group.modules.length,
+                    })}
                   </Typography>
-
-                  {groupedModules['false'].map(module => (
-                    <Typography
-                      key={module.id}
-                      mb={2}
-                      color={theme.palette.grey[700]}
-                    >
-                      {module.name}
-                    </Typography>
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Stack spacing={2}>
+                  {groupedModules['true']?.map(module => (
+                    <Typography key={module.id}>{module.name}</Typography>
                   ))}
-                </Box>
-              ) : null}
-            </AccordionDetails>
-          </Accordion>
+                </Stack>
+
+                {groupedModules['false']?.length ? (
+                  <Box data-testid="incomplete-modules">
+                    <Typography
+                      fontWeight={600}
+                      color={theme.palette.grey[700]}
+                      mb={2}
+                      ml={-1}
+                    >
+                      {t('pages.participant-grading.incomplete-list-subtitle')}
+                    </Typography>
+
+                    <Stack spacing={2}>
+                      {groupedModules['false'].map(module => (
+                        <Typography
+                          key={module.id}
+                          color={theme.palette.grey[700]}
+                        >
+                          {module.name}
+                        </Typography>
+                      ))}
+                    </Stack>
+                  </Box>
+                ) : null}
+              </AccordionDetails>
+            </Accordion>
+            {note ? <ModuleGroupNote note={note} /> : null}
+          </Box>
         )
       })}
-    </>
+    </Stack>
   )
 }

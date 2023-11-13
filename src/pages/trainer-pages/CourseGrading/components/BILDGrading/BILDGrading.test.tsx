@@ -6,10 +6,12 @@ import { never, fromValue } from 'wonka'
 
 import {
   Course_Level_Enum,
+  Course_Trainer_Type_Enum,
   Grade_Enum,
   SaveBildGradeMutation,
   SaveBildGradeMutationVariables,
 } from '@app/generated/graphql'
+import { RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildParticipant } from '@test/mock-data-utils'
@@ -207,5 +209,193 @@ describe('page: BILDGrading', () => {
         `"There was an error when grading."`
       )
     })
+  })
+
+  it('displays module notes field when grading an individual participant as a TT admin', () => {
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
+    const participants = [
+      { ...buildParticipant(), attended: true },
+      { ...buildParticipant(), attended: true },
+    ]
+
+    const course = buildGradingCourse({
+      overrides: {
+        participants,
+        bildModules: [
+          {
+            id: chance.guid(),
+            modules: {
+              PRIMARY: {
+                modules: [{ name: 'Module' }],
+              },
+            },
+          },
+        ],
+      },
+    })
+
+    render(
+      <Provider value={client}>
+        <BILDGrading course={course} />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      {
+        initialEntries: [
+          `/${course.id}/grading?participants=${participants[0].id}`,
+        ],
+      }
+    )
+
+    expect(screen.getByLabelText(/notes/i)).toBeInTheDocument()
+  })
+
+  it('displays module notes field when grading an individual participant as a lead trainer', () => {
+    const PROFILE_ID = chance.guid()
+
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
+    const participants = [
+      { ...buildParticipant(), attended: true },
+      { ...buildParticipant(), attended: true },
+    ]
+
+    const course = buildGradingCourse({
+      overrides: {
+        participants,
+        trainers: [
+          { type: Course_Trainer_Type_Enum.Leader, profile_id: PROFILE_ID },
+        ],
+        bildModules: [
+          {
+            id: chance.guid(),
+            modules: {
+              PRIMARY: {
+                modules: [{ name: 'Module' }],
+              },
+            },
+          },
+        ],
+      },
+    })
+
+    render(
+      <Provider value={client}>
+        <BILDGrading course={course} />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+          profile: { id: PROFILE_ID },
+        },
+      },
+      {
+        initialEntries: [
+          `/${course.id}/grading?participants=${participants[0].id}`,
+        ],
+      }
+    )
+
+    expect(screen.getByLabelText(/notes/i)).toBeInTheDocument()
+  })
+
+  it("doesn't display module notes field when grading in bulk", () => {
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
+    const participants = [
+      { ...buildParticipant(), attended: true },
+      { ...buildParticipant(), attended: true },
+    ]
+
+    const course = buildGradingCourse({
+      overrides: {
+        participants,
+        bildModules: [
+          {
+            id: chance.guid(),
+            modules: {
+              PRIMARY: {
+                modules: [{ name: 'Module' }],
+              },
+            },
+          },
+        ],
+      },
+    })
+
+    render(
+      <Provider value={client}>
+        <BILDGrading course={course} />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: [`/${course.id}/grading`] }
+    )
+
+    expect(screen.queryByLabelText(/notes/i)).not.toBeInTheDocument()
+  })
+
+  it("doesn't display module notes field when grading as an assistant trainer", () => {
+    const PROFILE_ID = chance.guid()
+
+    const client = {
+      executeMutation: () => never,
+    } as unknown as Client
+
+    const participants = [
+      { ...buildParticipant(), attended: true },
+      { ...buildParticipant(), attended: true },
+    ]
+
+    const course = buildGradingCourse({
+      overrides: {
+        participants,
+        trainers: [
+          { type: Course_Trainer_Type_Enum.Assistant, profile_id: PROFILE_ID },
+        ],
+        bildModules: [
+          {
+            id: chance.guid(),
+            modules: {
+              PRIMARY: {
+                modules: [{ name: 'Module' }],
+              },
+            },
+          },
+        ],
+      },
+    })
+
+    render(
+      <Provider value={client}>
+        <BILDGrading course={course} />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+          profile: { id: PROFILE_ID },
+        },
+      },
+      {
+        initialEntries: [
+          `/${course.id}/grading?participants=${participants[0].id}`,
+        ],
+      }
+    )
+
+    expect(screen.queryByLabelText(/notes/i)).not.toBeInTheDocument()
   })
 })

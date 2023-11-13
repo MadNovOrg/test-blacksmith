@@ -1,33 +1,42 @@
 import { LoadingButton } from '@mui/lab'
-import { Box, Typography, Button, useTheme, useMediaQuery } from '@mui/material'
-import { t } from 'i18next'
+import {
+  Box,
+  Typography,
+  Button,
+  useTheme,
+  useMediaQuery,
+  Alert,
+} from '@mui/material'
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useMutation } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { CourseGradingMenu } from '@app/components/CourseGradingMenu/CourseGradingMenu'
 import { Dialog } from '@app/components/dialogs'
 import { Sticky } from '@app/components/Sticky'
+import { useAuth } from '@app/context/auth'
 import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
+  Course_Trainer_Type_Enum,
   Grade_Enum,
   SaveCourseGradingMutation,
   SaveCourseGradingMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
-import { MUTATION } from '@app/queries/grading/save-course-grading'
-import { LoadingStatus } from '@app/util'
 
 import {
   HoldsRecord,
   ModulesSelectionList,
 } from '../../../CourseGradingDetails/ModulesSelectionList'
 import { useGradingParticipants } from '../../hooks'
+import { SAVE_COURSE_GRADING_MUTATION } from '../../queries/save-course-grading'
 import useCourseGradingData from '../../useCourseGradingData'
 import { GradingCount } from '../GradingCount'
 import { GradingTitle } from '../GradingTitle'
+import { ModuleGroupNoteInput } from '../ModuleGroupNoteInput/ModuleGroupNoteInput'
 import { ParticipantsList } from '../ParticipantsList'
 
 type Props = {
@@ -38,16 +47,26 @@ export const ICMGrading: FC<Props> = ({ course }) => {
   const navigate = useNavigate()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const notesRef = useRef(new Map<string, string>())
+  const { acl } = useAuth()
+  const { t } = useTranslation()
 
   const [modalOpened, setModalOpened] = useState(false)
-  const [savingGradesStatus, setSavingGradesStatus] = useState(
-    LoadingStatus.IDLE
-  )
   const [grade, setGrade] = useState<Grade_Enum | undefined>()
 
-  const modulesSelectionRef = useRef<Record<string, boolean> | null>(null)
+  const [
+    {
+      data: savingCourseGradingData,
+      fetching: savingCourseGrading,
+      error: savingCourseGradingError,
+    },
+    saveCourseGrading,
+  ] = useMutation<
+    SaveCourseGradingMutation,
+    SaveCourseGradingMutationVariables
+  >(SAVE_COURSE_GRADING_MUTATION)
 
-  const fetcher = useFetcher()
+  const modulesSelectionRef = useRef<Record<string, boolean> | null>(null)
 
   const STORAGE_KEY = `grading-modules-selection-${course?.id}`
 
@@ -107,51 +126,47 @@ export const ICMGrading: FC<Props> = ({ course }) => {
     setModalOpened(false)
   }
 
-  const saveGrades = async () => {
+  const saveGrades = () => {
     if (!course || !grade) return
 
-    try {
-      setSavingGradesStatus(LoadingStatus.FETCHING)
+    const modules: Array<{
+      course_participant_id: string
+      module_id: string
+      completed: boolean
+    }> = []
 
-      const modules: Array<{
-        course_participant_id: string
-        module_id: string
-        completed: boolean
-      }> = []
+    const attendedParticipants: string[] = []
 
-      const attendedParticipants: string[] = []
+    filteredCourseParticipants?.forEach(participant => {
+      if (!participant.attended || participant.grade) {
+        return
+      }
 
-      filteredCourseParticipants?.forEach(participant => {
-        if (!participant.attended || participant.grade) {
-          return
-        }
+      attendedParticipants.push(participant.id)
 
-        attendedParticipants.push(participant.id)
+      for (const id in modulesSelectionRef.current) {
+        modules.push({
+          course_participant_id: participant.id,
+          module_id: id,
+          completed: modulesSelectionRef.current[id],
+        })
+      }
+    })
 
-        for (const id in modulesSelectionRef.current) {
-          modules.push({
-            course_participant_id: participant.id,
-            module_id: id,
-            completed: modulesSelectionRef.current[id],
-          })
-        }
-      })
-
-      await fetcher<
-        SaveCourseGradingMutation,
-        SaveCourseGradingMutationVariables
-      >(MUTATION, {
-        modules,
-        participantIds: attendedParticipants,
-        grade,
-        courseId: course.id,
-      })
-
-      localStorage.removeItem(STORAGE_KEY)
-      navigate(`/courses/${course.id}/details?tab=${CourseDetailsTabs.GRADING}`)
-    } catch (err) {
-      setSavingGradesStatus(LoadingStatus.ERROR)
-    }
+    saveCourseGrading({
+      modules,
+      participantIds: attendedParticipants,
+      grade,
+      courseId: course.id,
+      notes:
+        attendedParticipants.length === 1
+          ? Array.from(notesRef.current).map(([moduleGroupId, note]) => ({
+              moduleGroupId,
+              note,
+              participantId: attendedParticipants[0],
+            }))
+          : [],
+    })
   }
 
   useEffect(() => {
@@ -168,10 +183,29 @@ export const ICMGrading: FC<Props> = ({ course }) => {
     modulesSelectionRef.current = initialSelection
   }, [moduleGroups])
 
+  useEffect(() => {
+    if (savingCourseGradingData && !savingCourseGradingError) {
+      localStorage.removeItem(STORAGE_KEY)
+      navigate(`/courses/${course.id}/details?tab=${CourseDetailsTabs.GRADING}`)
+    }
+  }, [
+    STORAGE_KEY,
+    course.id,
+    navigate,
+    savingCourseGradingData,
+    savingCourseGradingError,
+  ])
+
   const handleModuleSelectionChange = (selection: HoldsRecord) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(selection))
     modulesSelectionRef.current = selection
   }
+
+  const canAddModuleNotes = acl.canAddModuleNotes(
+    course.trainers
+      .filter(t => t.type === Course_Trainer_Type_Enum.Leader)
+      .map(t => t.profile_id)
+  )
 
   return (
     <>
@@ -225,9 +259,31 @@ export const ICMGrading: FC<Props> = ({ course }) => {
               {t('pages.course-grading.modules-selection-description')}
             </Typography>
 
+            {savingCourseGradingError ? (
+              <Alert
+                severity="error"
+                sx={{ mb: 2 }}
+                data-testid="saving-grading-error-alert"
+              >
+                {t('pages.course-grading.grading-error')}
+              </Alert>
+            ) : null}
+
             <ModulesSelectionList
               moduleGroups={moduleGroups}
               onChange={handleModuleSelectionChange}
+              slots={{
+                afterModuleGroup: groupId =>
+                  filteredCourseParticipants.length === 1 &&
+                  canAddModuleNotes ? (
+                    <ModuleGroupNoteInput
+                      groupId={groupId}
+                      onChange={e =>
+                        notesRef.current.set(groupId, e.target.value)
+                      }
+                    />
+                  ) : null,
+              }}
             />
 
             <Typography mt={3} color={theme.palette.dimGrey.main}>
@@ -264,7 +320,7 @@ export const ICMGrading: FC<Props> = ({ course }) => {
           </Button>
           <LoadingButton
             variant="contained"
-            loading={savingGradesStatus === LoadingStatus.FETCHING}
+            loading={savingCourseGrading}
             onClick={() => saveGrades()}
           >
             {t('pages.course-grading.modal-confirm-btn-text')}

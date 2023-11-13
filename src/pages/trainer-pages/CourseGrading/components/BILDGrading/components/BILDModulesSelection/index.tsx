@@ -9,6 +9,7 @@ import {
   Checkbox,
   FormGroup,
   Box,
+  Stack,
 } from '@mui/material'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,11 +22,15 @@ type Props = {
   strategyModules: Record<string, Partial<Strategy>> // all optional since it's from jsonb field
   onChange: (selection: Record<string, Strategy>) => void
   courseType: Course_Type_Enum
+  slots?: {
+    afterStrategyAccordion: (strategyName: string) => React.ReactNode
+  }
 }
 export const BILDModulesSelection: FC<Props> = ({
   strategyModules,
   onChange,
   courseType,
+  slots,
 }) => {
   const { t } = useTranslation()
   const mandatoryStrategies: string[] =
@@ -132,135 +137,146 @@ export const BILDModulesSelection: FC<Props> = ({
   }
 
   return (
-    <>
+    <Stack spacing={0.5}>
       {Object.keys(strategyModules).map(strategyName => (
-        <Accordion
-          key={strategyName}
-          disableGutters
-          sx={{ marginBottom: 1 }}
-          data-testid={`strategy-accordion-${strategyName}`}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-            sx={{ display: 'flex', alignItems: 'center' }}
+        <Box key={strategyName}>
+          <Accordion
+            disableGutters
+            data-testid={`strategy-accordion-${strategyName}`}
           >
-            <FormControlLabel
-              onClick={e => e.stopPropagation()}
-              control={
-                <Checkbox
-                  checked={Boolean(selectedStrategyModules.has(strategyName))}
-                  disabled={mandatoryStrategies.includes(strategyName)}
-                  indeterminate={partiallySelectedStrategies.has(strategyName)}
-                  onChange={(_, checked) => {
-                    if (
-                      checked ||
-                      partiallySelectedStrategies.has(strategyName)
-                    ) {
-                      selectStrategy(strategyName)
-                    } else {
-                      unselectStrategy(strategyName)
-                    }
-                  }}
-                  inputProps={{
-                    // @ts-expect-error valid custom attribute
-                    'data-testid': `strategy-checkbox-${strategyName}`,
-                  }}
-                />
-              }
-              label={
-                <Typography>
-                  {t(`common.bild-strategies.${strategyName}`)}
-                </Typography>
-              }
-            />
-          </AccordionSummary>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+              sx={{ display: 'flex', alignItems: 'center' }}
+            >
+              <FormControlLabel
+                onClick={e => e.stopPropagation()}
+                control={
+                  <Checkbox
+                    checked={Boolean(selectedStrategyModules.has(strategyName))}
+                    disabled={mandatoryStrategies.includes(strategyName)}
+                    indeterminate={partiallySelectedStrategies.has(
+                      strategyName
+                    )}
+                    onChange={(_, checked) => {
+                      if (
+                        checked ||
+                        partiallySelectedStrategies.has(strategyName)
+                      ) {
+                        selectStrategy(strategyName)
+                      } else {
+                        unselectStrategy(strategyName)
+                      }
+                    }}
+                    inputProps={{
+                      // @ts-expect-error valid custom attribute
+                      'data-testid': `strategy-checkbox-${strategyName}`,
+                    }}
+                  />
+                }
+                label={
+                  <Typography>
+                    {t(`common.bild-strategies.${strategyName}`)}
+                  </Typography>
+                }
+              />
+            </AccordionSummary>
 
-          <AccordionDetails sx={{ paddingLeft: 6 }}>
-            {strategyModules[strategyName].modules?.length
-              ? strategyModules[strategyName].modules?.map((module, index) => {
-                  const moduleKey = getModuleKey({
-                    strategyName,
-                    moduleName: module.name,
-                  })
+            <AccordionDetails sx={{ paddingLeft: 6 }}>
+              {strategyModules[strategyName].modules?.length
+                ? strategyModules[strategyName].modules?.map(
+                    (module, index) => {
+                      const moduleKey = getModuleKey({
+                        strategyName,
+                        moduleName: module.name,
+                      })
 
-                  return (
-                    <FormGroup key={index} sx={{ marginBottom: 2 }}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={selectedStrategyModules.has(moduleKey)}
-                            onChange={(_, checked) => {
-                              if (checked) {
-                                selectModule(moduleKey)
-                              } else {
-                                unselectModule(moduleKey)
-                              }
-                            }}
-                            disabled={
-                              mandatoryStrategies.includes(strategyName) ||
-                              module.mandatory
-                            }
-                          />
-                        }
-                        label={<Typography>{module.name}</Typography>}
-                      />
-                    </FormGroup>
-                  )
-                })
-              : null}
-
-            {strategyModules[strategyName].groups?.length
-              ? strategyModules[strategyName].groups?.map(group => (
-                  <Box key={group.name}>
-                    <Typography fontWeight="500" mb={2}>
-                      {group.name}
-                    </Typography>
-
-                    {group.modules?.length
-                      ? group.modules.map(module => {
-                          const moduleKey = getModuleKey({
-                            strategyName,
-                            groupName: group.name,
-                            moduleName: module.name,
-                          })
-
-                          return (
-                            <FormGroup key={moduleKey} sx={{ marginBottom: 2 }}>
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    onChange={(_, checked) => {
-                                      if (checked) {
-                                        selectModule(moduleKey)
-                                      } else {
-                                        unselectModule(moduleKey)
-                                      }
-                                    }}
-                                    checked={Boolean(
-                                      selectedStrategyModules.has(moduleKey)
-                                    )}
-                                    disabled={
-                                      mandatoryStrategies.includes(
-                                        strategyName
-                                      ) || module.mandatory
-                                    }
-                                  />
+                      return (
+                        <FormGroup key={index} sx={{ marginBottom: 2 }}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={selectedStrategyModules.has(moduleKey)}
+                                onChange={(_, checked) => {
+                                  if (checked) {
+                                    selectModule(moduleKey)
+                                  } else {
+                                    unselectModule(moduleKey)
+                                  }
+                                }}
+                                disabled={
+                                  mandatoryStrategies.includes(strategyName) ||
+                                  module.mandatory
                                 }
-                                label={<Typography>{module.name}</Typography>}
                               />
-                            </FormGroup>
-                          )
-                        })
-                      : null}
-                  </Box>
-                ))
-              : null}
-          </AccordionDetails>
-        </Accordion>
+                            }
+                            label={<Typography>{module.name}</Typography>}
+                          />
+                        </FormGroup>
+                      )
+                    }
+                  )
+                : null}
+
+              {strategyModules[strategyName].groups?.length
+                ? strategyModules[strategyName].groups?.map(group => (
+                    <Box key={group.name}>
+                      <Typography fontWeight="500" mb={2}>
+                        {group.name}
+                      </Typography>
+
+                      {group.modules?.length
+                        ? group.modules.map(module => {
+                            const moduleKey = getModuleKey({
+                              strategyName,
+                              groupName: group.name,
+                              moduleName: module.name,
+                            })
+
+                            return (
+                              <FormGroup
+                                key={moduleKey}
+                                sx={{ marginBottom: 2 }}
+                              >
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      onChange={(_, checked) => {
+                                        if (checked) {
+                                          selectModule(moduleKey)
+                                        } else {
+                                          unselectModule(moduleKey)
+                                        }
+                                      }}
+                                      checked={Boolean(
+                                        selectedStrategyModules.has(moduleKey)
+                                      )}
+                                      disabled={
+                                        mandatoryStrategies.includes(
+                                          strategyName
+                                        ) || module.mandatory
+                                      }
+                                    />
+                                  }
+                                  label={<Typography>{module.name}</Typography>}
+                                />
+                              </FormGroup>
+                            )
+                          })
+                        : null}
+                    </Box>
+                  ))
+                : null}
+            </AccordionDetails>
+          </Accordion>
+
+          {typeof slots?.afterStrategyAccordion === 'function'
+            ? slots.afterStrategyAccordion(strategyName)
+            : null}
+        </Box>
       ))}
-    </>
+    </Stack>
   )
 }
 

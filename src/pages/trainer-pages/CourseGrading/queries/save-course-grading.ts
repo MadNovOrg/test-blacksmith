@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 import { Grade_Enum } from '@app/generated/graphql'
 
@@ -20,13 +20,14 @@ export type ResponseType = {
   gradingStarted: { id: string }
 }
 
-export const MUTATION = gql`
+export const SAVE_COURSE_GRADING_MUTATION = gql`
   mutation SaveCourseGrading(
     $modules: [course_participant_module_insert_input!]!
     $participantIds: [uuid!]
     $grade: grade_enum!
     $feedback: String
     $courseId: Int!
+    $notes: [course_participant_note_insert_input!]!
   ) {
     saveModules: insert_course_participant_module(objects: $modules) {
       affectedRows: affected_rows
@@ -39,11 +40,15 @@ export const MUTATION = gql`
       affectedRows: affected_rows
     }
 
-  gradingStarted: update_course_by_pk(
-    pk_columns: { id: $courseId }
-    _set: { gradingStarted: true }
-  ) {
-    id
+    gradingStarted: update_course_by_pk(
+      pk_columns: { id: $courseId }
+      _set: { gradingStarted: true }
+    ) {
+      id
+    }
+
+    insert_course_participant_note(objects: $notes) {
+      affected_rows
+    }
   }
-}
 `

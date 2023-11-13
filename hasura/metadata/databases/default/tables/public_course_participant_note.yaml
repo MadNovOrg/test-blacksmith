@@ -1,0 +1,138 @@
+table:
+  name: course_participant_note
+  schema: public
+configuration:
+  column_config:
+    created_at:
+      custom_name: createdAt
+    module_group_id:
+      custom_name: moduleGroupId
+    participant_id:
+      custom_name: participantId
+    updated_at:
+      custom_name: updatedAt
+  custom_column_names:
+    created_at: createdAt
+    module_group_id: moduleGroupId
+    participant_id: participantId
+    updated_at: updatedAt
+  custom_root_fields: {}
+object_relationships:
+  - name: participant
+    using:
+      foreign_key_constraint_on: participant_id
+insert_permissions:
+  - role: trainer
+    permission:
+      check:
+        participant:
+          course:
+            trainers:
+              _and:
+                - type:
+                    _eq: LEADER
+                - profile_id:
+                    _eq: X-Hasura-User-Id
+      columns:
+        - note
+        - created_at
+        - updated_at
+        - id
+        - module_group_id
+        - participant_id
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - note
+        - created_at
+        - updated_at
+        - id
+        - module_group_id
+        - participant_id
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - note
+        - created_at
+        - updated_at
+        - id
+        - module_group_id
+        - participant_id
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - note
+        - created_at
+        - updated_at
+        - id
+        - module_group_id
+        - participant_id
+      filter: {}
+  - role: ld
+    permission:
+      columns:
+        - note
+        - created_at
+        - updated_at
+        - id
+        - module_group_id
+        - participant_id
+      filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - note
+        - created_at
+        - updated_at
+        - id
+        - module_group_id
+        - participant_id
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - note
+        - created_at
+        - updated_at
+        - id
+        - module_group_id
+        - participant_id
+      filter: {}
+  - role: trainer
+    permission:
+      columns:
+        - note
+        - created_at
+        - updated_at
+        - id
+        - module_group_id
+        - participant_id
+      filter:
+        participant:
+          course:
+            trainers:
+              profile_id:
+                _eq: X-Hasura-User-Id
+  - role: tt-admin
+    permission:
+      columns:
+        - note
+        - created_at
+        - updated_at
+        - id
+        - module_group_id
+        - participant_id
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - note
+        - created_at
+        - updated_at
+        - id
+        - module_group_id
+        - participant_id
+      filter: {}

@@ -40,6 +40,7 @@
 - "!include public_course_participant_bild_module.yaml"
 - "!include public_course_participant_cancellation.yaml"
 - "!include public_course_participant_module.yaml"
+- "!include public_course_participant_note.yaml"
 - "!include public_course_pricing.yaml"
 - "!include public_course_pricing_changelog.yaml"
 - "!include public_course_promo_code.yaml"

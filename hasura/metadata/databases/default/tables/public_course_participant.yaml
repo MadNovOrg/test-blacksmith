@@ -73,6 +73,13 @@ array_relationships:
         table:
           name: course_participant_module
           schema: public
+  - name: notes
+    using:
+      foreign_key_constraint_on:
+        column: participant_id
+        table:
+          name: course_participant_note
+          schema: public
 insert_permissions:
   - role: tt-admin
     permission:
