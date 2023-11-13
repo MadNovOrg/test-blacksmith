@@ -15,6 +15,7 @@ import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel
 import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
 import { FilterByDates } from '@app/components/filters/FilterByDates'
 import { FilterSearch } from '@app/components/FilterSearch'
+import { useAuth } from '@app/context/auth'
 import {
   Course_Level_Enum,
   Course_Type_Enum,
@@ -27,8 +28,6 @@ import { useTableSort } from '@app/hooks/useTableSort'
 import { CertificationsTable } from '@app/pages/tt-pages/Certifications/CertificationsTable'
 import { CertificateStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
-
-import { useAuth } from '../../../context/auth'
 
 type CertificationsProps = unknown
 

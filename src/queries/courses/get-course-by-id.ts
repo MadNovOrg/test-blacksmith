@@ -150,9 +150,7 @@ export const QUERY = gql`
         }
       }
 
-      certificateCount: participants_aggregate(
-        where: { grade: { _in: [PASS, OBSERVE_ONLY, ASSIST_ONLY] } }
-      ) {
+      certificateCount: certificates_aggregate {
         aggregate {
           count
         }
