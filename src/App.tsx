@@ -5,6 +5,7 @@ import { SWRConfig } from 'swr'
 
 import { GQLProvider } from './components/GQLProvider'
 import { ScrollToTop } from './components/ScrollToTop'
+import { useAuth } from './context/auth'
 import { SnackbarProvider } from './context/snackbar'
 import { useSWRFetcher } from './hooks/use-fetcher'
 import { AppRoutes } from './routes'
@@ -14,6 +15,7 @@ import './style.css'
 function App() {
   const fetcher = useSWRFetcher()
   const { pathname } = useLocation()
+  const { profile } = useAuth()
 
   const config = useMemo(
     () => ({
@@ -27,7 +29,9 @@ function App() {
   )
   return (
     <>
-      {import.meta.env.MODE === 'production' && pathname === '/' ? (
+      {import.meta.env.MODE === 'production' &&
+      pathname === '/' &&
+      !!profile ? (
         <>{window.location.replace(import.meta.env.VITE_KNOWLEDGE_HUB_HOME)}</>
       ) : (
         <GQLProvider>
