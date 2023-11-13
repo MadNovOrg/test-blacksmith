@@ -70,7 +70,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
 
   const geoCoordinates = useMemo(() => {
     const coordinates = course.schedule[0].venue?.geoCoordinates
-      .replace(/[()]/g, '')
+      ?.replace(/[()]/g, '')
       .split(',')
 
     return {

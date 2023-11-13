@@ -405,7 +405,7 @@ export type Venue = {
   city: string
   postCode: string
   country?: string
-  geoCoordinates: string
+  geoCoordinates?: string | null
   googlePlacesId?: string
 }
 
