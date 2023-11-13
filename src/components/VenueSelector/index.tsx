@@ -211,7 +211,6 @@ export const VenueSelector: React.FC<
               ? t('components.venue-selector.suggestions')
               : t('components.venue-selector.venues')
           }
-          noOptionsText={noOptionsText}
           getOptionLabel={getOptionLabel}
           value={value ?? null}
           renderGroup={params => (
@@ -319,6 +318,7 @@ export const VenueSelector: React.FC<
           onCancel={onDialogClose}
         />
       </Dialog>
+      {noOptionsText}
     </>
   )
 }
