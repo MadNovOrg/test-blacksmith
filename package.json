@@ -168,7 +168,7 @@
     "@testing-library/dom": "^9.3.1",
     "@testing-library/jest-dom": "^6.1.2",
     "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.4.3",
+    "@testing-library/user-event": "^14.5.1",
     "@types/autosuggest-highlight": "^3.2.0",
     "@types/big.js": "^6.1.6",
     "@types/convert-units": "^2.3.6",
