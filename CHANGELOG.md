@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 1.2.1
+
+### Patch Changes
+
+- a8da11ef: Fix redirect for unauthenticated users
+
 ## 1.2.0
 
 ### Minor Changes
