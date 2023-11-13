@@ -1,5 +1,30 @@
 # @teamteach/hub
 
+## 1.2.0
+
+### Minor Changes
+
+- 7630cdac: add module notes when grading for BILD and ICM courses
+
+### Patch Changes
+
+- d1ea03cf: Sorting Resources alphabetically
+- f83ccbb9: Sort Ofsted rating options
+- d87023d3: Set current page the first one after applying filters on users page
+- 4a00ef95: Fix certification count on get course details
+- 86a789d0: finald grade wording change
+- 4f3ed23f: Fix trainers unable to submit modules for Advanced trainer and Intermediate trainer courses
+- bde87639: Fix incorrect VAT on booking details page
+- 3b68fd48: Fix: TTHP-3033 add env production GTM id
+- 95bc6bfc: Fix accept org member invite
+- 7f16c63e: Fix navigation menu mobile issues
+- 78437d1d: Enhancing schema validation for Course Form
+- 75abc637: Fix course reschedule end date for lead trainer indirect course
+- 05c14ebc: TTHP-3025 Fix: update evaluation status for course participants
+- 0c5224fd: If in production, redirect trafic from hub's home page to knowledge hub's home page
+- 98de613e: Disabled the moderator requirement for BILD conversions courses
+- 51ddcee5: always displaying "add new venue" in open course creation
+
 ## 1.1.0
 
 ### Minor Changes
