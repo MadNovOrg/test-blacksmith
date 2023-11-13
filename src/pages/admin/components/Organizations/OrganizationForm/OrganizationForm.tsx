@@ -49,6 +49,19 @@ type Props = {
   loading?: boolean
   editOrgData?: Partial<Organization>
 }
+
+const OfstedRatingOrder = {
+  0: OfstedRating.OUTSTANDING,
+  1: OfstedRating.GOOD,
+  2: OfstedRating.REQUIRES_IMPROVEMENT,
+  3: OfstedRating.INADEQUATE,
+  4: OfstedRating.SERIOUS_WEAKNESSES,
+  5: OfstedRating.SPECIAL_MEASURES,
+  6: OfstedRating.INSUFFICIENT_EVIDENCE,
+}
+
+type OfstedRatingOrderKey = keyof typeof OfstedRatingOrder
+
 export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   isEditMode = false,
   onSubmit,
@@ -498,15 +511,21 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                             data-testid="ofsted-rating-select"
                             fullWidth
                           >
-                            {Object.keys(OfstedRating).map(option => (
-                              <MenuItem
-                                key={option}
-                                value={option}
-                                data-testid={`ofsted-rating-option-${option}`}
-                              >
-                                {_t(`ofsted-rating.${option.toLowerCase()}`)}
-                              </MenuItem>
-                            ))}
+                            {Object.keys(OfstedRating).map((val, i) => {
+                              const option = OfstedRatingOrder[
+                                i as OfstedRatingOrderKey
+                              ] as OfstedRating
+
+                              return (
+                                <MenuItem
+                                  key={option}
+                                  value={option}
+                                  data-testid={`ofsted-rating-option-${option}`}
+                                >
+                                  {_t(`ofsted-rating.${option.toLowerCase()}`)}
+                                </MenuItem>
+                              )
+                            })}
                           </TextField>
                         )}
                       />
