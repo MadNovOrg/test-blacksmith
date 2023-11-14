@@ -18,7 +18,7 @@ import { buildCourseModule, buildParticipant } from '@test/mock-data-utils'
 import { SAVE_COURSE_GRADING_MUTATION } from '../../queries/save-course-grading'
 import { buildGradingCourse, selectGradingOption } from '../../test-utils'
 
-import { ICMGrading } from '.'
+import { ICMGrading } from './ICMGrading'
 
 describe('page: CourseGrading', () => {
   afterEach(() => {

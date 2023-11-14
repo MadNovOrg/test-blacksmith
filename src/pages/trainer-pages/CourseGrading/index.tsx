@@ -8,7 +8,7 @@ import theme from '@app/theme'
 import { LoadingStatus } from '@app/util'
 
 import { BILDGrading } from './components/BILDGrading'
-import { ICMGrading } from './components/ICMGrading'
+import { ICMGrading } from './components/ICMGrading/ICMGrading'
 import useCourseGradingData from './useCourseGradingData'
 
 export const CourseGrading = () => {

@@ -28,7 +28,7 @@ const QUERY = gql`
         attended
         grade
       }
-      modules {
+      modules(order_by: { module: { moduleGroup: { mandatory: desc } } }) {
         id
         covered
         module {
