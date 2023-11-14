@@ -94,7 +94,10 @@ export const CourseDetails = () => {
       GetDietaryAndDisabilitiesCountQueryVariables
     >({
       query: GET_DIETARY_AND_DISABILITIES_COUNT,
-      variables: { courseId: Number(courseId) },
+      variables: {
+        courseId: Number(courseId),
+        withTrainerData: !acl.canViewTrainerDietaryAndDisabilities(),
+      },
       requestPolicy: 'cache-and-network',
       pause: !courseId,
     })

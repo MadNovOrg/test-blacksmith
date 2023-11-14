@@ -31,7 +31,11 @@ export const DietaryRequirementsTab: FC<
     GetCourseParticipantDietOrDisabilitiesDataQueryVariables
   >({
     query: GET_DIETARY_OR_DISABILITIES_DATA,
-    variables: { courseId, withDietaryRestrictions: true },
+    variables: {
+      courseId,
+      withDietaryRestrictions: true,
+      withTrainerData: !acl.canViewTrainerDietaryAndDisabilities(),
+    },
   })
   const cols = useMemo(
     () =>

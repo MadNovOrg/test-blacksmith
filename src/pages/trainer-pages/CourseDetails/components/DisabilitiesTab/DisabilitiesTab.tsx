@@ -29,7 +29,11 @@ export const DisabilitiesTab: FC<PropsWithChildren<{ courseId: number }>> = ({
     GetCourseParticipantDietOrDisabilitiesDataQueryVariables
   >({
     query: GET_DIETARY_OR_DISABILITIES_DATA,
-    variables: { courseId, withDisabilities: true },
+    variables: {
+      courseId,
+      withDisabilities: true,
+      withTrainerData: !acl.canViewTrainerDietaryAndDisabilities(),
+    },
   })
   const cols = useMemo(
     () =>

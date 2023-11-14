@@ -749,6 +749,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.isOrganizationKeyContactOfCourse(course)
       )
     },
+    canViewTrainerDietaryAndDisabilities: () =>
+      anyPass([acl.isOrgAdmin, acl.isBookingContact, acl.isOrgKeyContact])(),
     canAddModuleNotes: (leadTrainerIds: string[]) => {
       return (
         acl.isTTAdmin() ||

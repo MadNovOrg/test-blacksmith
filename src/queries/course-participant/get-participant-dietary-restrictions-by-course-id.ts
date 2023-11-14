@@ -4,6 +4,7 @@ export const GET_DIETARY_OR_DISABILITIES_DATA = gql`
   query GetCourseParticipantDietOrDisabilitiesData(
     $courseId: Int!
     $withDietaryRestrictions: Boolean = false
+    $withTrainerData: Boolean = false
     $withDisabilities: Boolean = false
   ) {
     dietaryRestrictions: course_participant(
@@ -30,7 +31,7 @@ export const GET_DIETARY_OR_DISABILITIES_DATA = gql`
         course_id: { _eq: $courseId }
         profile: { dietaryRestrictions: { _neq: "null", _nilike: "" } }
       }
-    ) @include(if: $withDietaryRestrictions) {
+    ) @include(if: $withTrainerData) {
       profile {
         fullName
         dietaryRestrictions
@@ -68,7 +69,7 @@ export const GET_DIETARY_OR_DISABILITIES_DATA = gql`
         course_id: { _eq: $courseId }
         profile: { disabilities: { _neq: "null", _nilike: "" } }
       }
-    ) @include(if: $withDisabilities) {
+    ) @include(if: $withTrainerData) {
       profile {
         fullName
         disabilities
@@ -86,7 +87,10 @@ export const GET_DIETARY_OR_DISABILITIES_DATA = gql`
 `
 
 export const GET_DIETARY_AND_DISABILITIES_COUNT = gql`
-  query GetDietaryAndDisabilitiesCount($courseId: Int!) {
+  query GetDietaryAndDisabilitiesCount(
+    $courseId: Int!
+    $withTrainerData: Boolean = false
+  ) {
     participantDietaryRestrictionsCount: course_participant_aggregate(
       where: {
         course_id: { _eq: $courseId }
@@ -103,7 +107,7 @@ export const GET_DIETARY_AND_DISABILITIES_COUNT = gql`
         profile: { dietaryRestrictions: { _neq: "null", _nilike: "" } }
       }
     ) {
-      aggregate {
+      aggregate @include(if: $withTrainerData) {
         count
       }
     }
@@ -123,7 +127,7 @@ export const GET_DIETARY_AND_DISABILITIES_COUNT = gql`
         profile: { disabilities: { _neq: "null", _nilike: "" } }
       }
     ) {
-      aggregate {
+      aggregate @include(if: $withTrainerData) {
         count
       }
     }
