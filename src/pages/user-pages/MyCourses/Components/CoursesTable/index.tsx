@@ -131,18 +131,23 @@ export const CoursesTable: React.FC<
                 data-index={index}
               >
                 <TableCell>
-                  {c.status !== CourseStatuses.Cancelled ? (
+                  {c.status !== CourseStatuses.Cancelled &&
+                  c.schedule?.length > 0 ? (
                     <Link href={`${c.id}/details`}>{nameCell}</Link>
                   ) : (
                     nameCell
                   )}
                 </TableCell>
                 <TableCell>
-                  <Typography mb={1}>{c.schedule[0].venue?.name}</Typography>
+                  <Typography mb={1}>
+                    {c.schedule?.length > 0 && c.schedule[0].venue
+                      ? c.schedule[0].venue?.name
+                      : 'N/A'}
+                  </Typography>
                   <Typography variant="body2">
-                    {!c.schedule[0].venue?.id
-                      ? 'Online'
-                      : c.schedule[0].venue?.city}
+                    {c.schedule?.length > 0 && c.schedule[0].venue?.id
+                      ? c.schedule[0].venue?.city
+                      : 'Online'}
                   </Typography>
                 </TableCell>
                 {additionalColumns?.has('type') ? (

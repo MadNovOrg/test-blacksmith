@@ -19,7 +19,7 @@ export const AttendeeCourseStatus: React.FC<
   React.PropsWithChildren<AttendeeCourseStatusProps>
 > = ({ course }) => {
   const status = useMemo(() => {
-    const courseEnded = isPast(new Date(course.schedule[0].end))
+    const courseEnded = isPast(new Date(course.schedule[0]?.end))
     const participant = course.participants?.at(0)
     const evaluated = Boolean(
       course.evaluation_answers_aggregate?.aggregate?.count
