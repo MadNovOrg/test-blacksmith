@@ -51,7 +51,7 @@ export const CourseExceptionsLogTabs: FC<PropsWithChildren<unknown>> = () => {
     Course_Audit_Type_Enum.Approved
   )
   const { Pagination, limit, offset } = useTablePagination()
-  const sorting = useTableSort('created_at', 'desc')
+  const sorting = useTableSort('created_at', 'asc')
 
   const { logs, count, loading } = useCourseAuditLogs({
     type: activeTab,

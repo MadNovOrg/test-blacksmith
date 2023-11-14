@@ -67,8 +67,8 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
   const { activeRole, acl } = useAuth()
   const isTrainer = activeRole === RoleName.TRAINER
 
-  const sorting = useTableSort('start', 'desc')
-  const actionableSorting = useTableSort('start', 'desc', 'act-tbl')
+  const sorting = useTableSort('start', 'asc')
+  const actionableSorting = useTableSort('start', 'asc', 'act-tbl')
 
   const actionableStatuses = useMemo(() => {
     if (activeRole) {
