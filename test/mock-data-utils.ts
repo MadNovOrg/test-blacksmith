@@ -479,6 +479,7 @@ export const buildParticipant = build<CourseParticipant>({
     dateGraded: new Date().toISOString(),
     order: {} as Order,
     attended: undefined,
+    completed_evaluation: false,
   },
 })
 

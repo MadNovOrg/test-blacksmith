@@ -454,7 +454,7 @@ export async function insertCertificateForParticipants(
     mutation updateParticipant($id: uuid!, $certificateId: uuid!) {
       update_course_participant(
         where: { id: { _eq: $id } }
-        _set: { certificate_id: $certificateId }
+        _set: { certificate_id: $certificateId, completed_evaluation: true }
       ) {
         affected_rows
       }

@@ -348,7 +348,9 @@ export const CourseDetails: React.FC<
                             value="checklist"
                           />
                         ) : null}
-                        {!bookingOnly && courseParticipant?.certificate ? (
+                        {!bookingOnly &&
+                        courseParticipant?.completed_evaluation &&
+                        courseParticipant?.certificate ? (
                           <PillTab
                             data-testid="participant-course-certification"
                             label={t(

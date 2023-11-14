@@ -14,6 +14,7 @@ export const GetParticipant = gql`
         archived
       }
       id
+      completed_evaluation
       grade
       dateGraded
       attended

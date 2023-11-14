@@ -451,6 +451,7 @@ export type CourseParticipant = {
   certificate?: CourseCertificate
   certificateChanges?: CourseCertificateChangelog[]
   healthSafetyConsent?: boolean
+  completed_evaluation: boolean
 } & Base
 
 export enum BlendedLearningStatus {
