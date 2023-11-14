@@ -79,7 +79,7 @@ export const CertificationsTable: React.FC<
   const downloadCertificates = useCallback(
     async (certificates: GetCertificationsQuery['certifications']) => {
       const tuples: [string, JSX.Element][] = certificates.map(c => [
-        `${c.profile?.fullName} - ${c.courseName ?? ''}.pdf`,
+        `${c.profile?.fullName} - ${c.courseName.replace(':', '') ?? ''}.pdf`,
         <CertificateDocument
           key={c.id}
           participantName={c.profile?.fullName ?? ''}
