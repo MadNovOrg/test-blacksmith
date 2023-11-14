@@ -144,6 +144,7 @@ select_permissions:
         - booking_date
         - certificate_id
         - course_id
+        - completed_evaluation
         - created_at
         - date_graded
         - go1_enrolment_id
@@ -197,6 +198,7 @@ select_permissions:
         - attended
         - booking_date
         - certificate_id
+        - completed_evaluation
         - course_id
         - created_at
         - date_graded
