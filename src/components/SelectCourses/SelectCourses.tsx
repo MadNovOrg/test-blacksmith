@@ -38,8 +38,6 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
   const [showModal, setShowModal] = useState(false)
   const [levels, setLevels] = useState<CourseLevel[]>([])
 
-  const selectedIds = useMemo(() => new Set(value), [value])
-
   const levelFilter = useMemo(() => {
     if (levels.length === 0) return {}
     return { _in: levels }
@@ -47,19 +45,22 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
 
   const [searchResult] = useQuery<QueryResult>({
     query: SEARCH_COURSES,
-    variables: { where: { ...where, level: levelFilter } },
+    variables: { where: { ...where, level: levelFilter }, selectedIds: value },
   })
 
+  const selectedIds = useMemo(() => new Set(value), [value])
+
   const searched = useMemo(
-    () => searchResult.data?.courses ?? [],
+    () => [
+      ...(searchResult.data?.courses ?? []),
+      ...(searchResult.data?.selectedCourses ?? []),
+    ],
     [searchResult.data]
   )
 
   const selected = useMemo(
-    () =>
-      searchResult.data?.courses.filter(course => selectedIds.has(course.id)) ??
-      [],
-    [searchResult, selectedIds]
+    () => searchResult.data?.selectedCourses ?? [],
+    [searchResult]
   )
 
   const courses = useMemo(() => {
