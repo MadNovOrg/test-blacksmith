@@ -104,7 +104,9 @@ export const CertificationList: React.FC<
   const downloadCertificates = useCallback(
     async (participants: CourseParticipant[]) => {
       const tuples: [string, JSX.Element][] = participants.map(p => [
-        `${p.profile?.fullName} - ${p.certificate?.courseName ?? ''}.pdf`,
+        `${p.profile?.fullName} - ${
+          p.certificate?.courseName.replace(':', '') ?? ''
+        }.pdf`,
         <CertificateDocument
           key={p.id}
           participantName={p.profile?.fullName}
