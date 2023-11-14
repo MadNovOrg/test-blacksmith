@@ -175,7 +175,6 @@ export const AttendingTab = ({
               sorting: false,
             }
           : null,
-        !hasCourseEnded &&
         acl.canManageParticipantAttendance(
           courseParticipants?.reduce(
             (acc, cp) => [...acc, ...getParticipantOrgIds(cp)],
@@ -195,7 +194,6 @@ export const AttendingTab = ({
       isBlendedCourse,
       isOpenCourse,
       acl,
-      hasCourseEnded,
       courseParticipants,
       course,
       canToggleAttendance,
@@ -213,11 +211,10 @@ export const AttendingTab = ({
   const canViewRowActions = useCallback(
     (cp: CourseParticipant) =>
       [
-        !hasCourseEnded,
         !cp.profile.archived,
         acl.canManageParticipantAttendance(getParticipantOrgIds(cp), course),
       ].every(Boolean),
-    [acl, course, hasCourseEnded]
+    [acl, course]
   )
 
   const sendCourseInfo = useCallback(

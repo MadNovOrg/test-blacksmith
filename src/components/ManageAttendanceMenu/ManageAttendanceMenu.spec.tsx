@@ -1,10 +1,18 @@
+import { addDays, subDays } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 
 import { Accreditors_Enum } from '@app/generated/graphql'
 import { CourseParticipant, CourseType, RoleName } from '@app/types'
 
-import { chance, render, renderHook, screen, userEvent } from '@test/index'
-import { buildCourse } from '@test/mock-data-utils'
+import {
+  chance,
+  render,
+  renderHook,
+  screen,
+  userEvent,
+  within,
+} from '@test/index'
+import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
 
 import { ManageAttendanceMenu } from './ManageAttendanceMenu'
 
@@ -30,7 +38,16 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse({ overrides: { type: CourseType.OPEN } })
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.OPEN,
+        schedule: [
+          buildCourseSchedule({
+            overrides: { end: addDays(new Date(), 1).toISOString() },
+          }),
+        ],
+      },
+    })
 
     render(
       <ManageAttendanceMenu
@@ -106,7 +123,16 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse({ overrides: { type: CourseType.CLOSED } })
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.CLOSED,
+        schedule: [
+          buildCourseSchedule({
+            overrides: { end: addDays(new Date(), 1).toISOString() },
+          }),
+        ],
+      },
+    })
 
     render(
       <ManageAttendanceMenu
@@ -144,7 +170,16 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse({ overrides: { type: CourseType.OPEN } })
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.OPEN,
+        schedule: [
+          buildCourseSchedule({
+            overrides: { end: addDays(new Date(), 1).toISOString() },
+          }),
+        ],
+      },
+    })
 
     render(
       <ManageAttendanceMenu
@@ -182,7 +217,16 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse({ overrides: { type: CourseType.CLOSED } })
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.CLOSED,
+        schedule: [
+          buildCourseSchedule({
+            overrides: { end: addDays(new Date(), 1).toISOString() },
+          }),
+        ],
+      },
+    })
 
     render(
       <ManageAttendanceMenu
@@ -220,7 +264,16 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse({ overrides: { type: CourseType.INDIRECT } })
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.INDIRECT,
+        schedule: [
+          buildCourseSchedule({
+            overrides: { end: addDays(new Date(), 1).toISOString() },
+          }),
+        ],
+      },
+    })
 
     render(
       <ManageAttendanceMenu
@@ -258,7 +311,16 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse({ overrides: { type: CourseType.OPEN } })
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.OPEN,
+        schedule: [
+          buildCourseSchedule({
+            overrides: { end: addDays(new Date(), 1).toISOString() },
+          }),
+        ],
+      },
+    })
 
     render(
       <ManageAttendanceMenu
@@ -296,7 +358,16 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse({ overrides: { type: CourseType.CLOSED } })
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.CLOSED,
+        schedule: [
+          buildCourseSchedule({
+            overrides: { end: addDays(new Date(), 1).toISOString() },
+          }),
+        ],
+      },
+    })
 
     render(
       <ManageAttendanceMenu
@@ -334,7 +405,16 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse({ overrides: { type: CourseType.INDIRECT } })
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.INDIRECT,
+        schedule: [
+          buildCourseSchedule({
+            overrides: { end: addDays(new Date(), 1).toISOString() },
+          }),
+        ],
+      },
+    })
 
     render(
       <ManageAttendanceMenu
@@ -372,7 +452,16 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse({ overrides: { type: CourseType.OPEN } })
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.OPEN,
+        schedule: [
+          buildCourseSchedule({
+            overrides: { end: addDays(new Date(), 1).toISOString() },
+          }),
+        ],
+      },
+    })
 
     render(
       <ManageAttendanceMenu
@@ -448,7 +537,16 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse({ overrides: { type: CourseType.OPEN } })
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.OPEN,
+        schedule: [
+          buildCourseSchedule({
+            overrides: { end: addDays(new Date(), 1).toISOString() },
+          }),
+        ],
+      },
+    })
 
     render(
       <ManageAttendanceMenu
@@ -595,7 +693,16 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse({ overrides: { type: CourseType.OPEN } })
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.OPEN,
+        schedule: [
+          buildCourseSchedule({
+            overrides: { end: addDays(new Date(), 1).toISOString() },
+          }),
+        ],
+      },
+    })
     const onRemoveMock = vi.fn()
     const onReplaceMock = vi.fn()
     const onTransferMock = vi.fn()
@@ -650,6 +757,69 @@ describe(ManageAttendanceMenu.name, () => {
     )
     expect(onResendCourseInformationMock).toHaveBeenCalledTimes(1)
     expect(onResendCourseInformationMock).toHaveBeenCalledWith(actionableItem)
+  })
+
+  it('displays only transfer and cancel options if a course has ended', async () => {
+    const actionableItem = {
+      id: chance.guid(),
+      course: { accreditedBy: Accreditors_Enum.Bild },
+      profile: {
+        organizations: defaultOrganizations,
+      },
+    } as CourseParticipant
+    const course = buildCourse({
+      overrides: {
+        type: CourseType.OPEN,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              end: subDays(new Date(), 1).toISOString(),
+              start: subDays(new Date(), 2).toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    render(
+      <ManageAttendanceMenu
+        course={course}
+        courseParticipant={actionableItem}
+        onCancelClick={vi.fn()}
+        onReplaceClick={vi.fn()}
+        onTransferClick={vi.fn()}
+        onResendInformationClick={vi.fn()}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      }
+    )
+
+    await userEvent.click(
+      screen.getByRole('button', { name: /manage attendance/i })
+    )
+
+    const actionsMenu = screen.getByRole('menu')
+
+    expect(
+      within(actionsMenu).getByRole('menuitem', { name: /cancel/i })
+    ).toBeInTheDocument()
+
+    expect(
+      within(actionsMenu).getByRole('menuitem', { name: /transfer/i })
+    ).toBeInTheDocument()
+
+    expect(
+      within(actionsMenu).queryByRole('menuitem', {
+        name: /resent course instructions/i,
+      })
+    ).not.toBeInTheDocument()
+
+    expect(
+      within(actionsMenu).queryByRole('button', { name: /replace/i })
+    ).not.toBeInTheDocument()
   })
 
   it("doesn't display anything if a user doesn't have a permission to manage attendance", () => {

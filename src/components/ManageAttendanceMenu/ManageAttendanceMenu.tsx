@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { ActionsMenu, Action } from '@app/components/ActionsMenu'
 import { useAuth } from '@app/context/auth'
 import { Course, CourseParticipant, CourseType, Profile } from '@app/types'
-import { getParticipantOrgIds } from '@app/util'
+import { courseEnded, getParticipantOrgIds } from '@app/util'
 
 enum CourseAction {
   Cancel,
@@ -125,14 +125,20 @@ export const ManageAttendanceMenu = <
             courseType: CourseType.OPEN,
             action: CourseAction.Replace,
           }),
-          constant(acl.canReplaceParticipant(participantOrgIds, course)),
+          constant(
+            acl.canReplaceParticipant(participantOrgIds, course) &&
+              !courseEnded(course)
+          ),
         ],
         [
           matches({
             courseType: CourseType.OPEN,
             action: CourseAction.SendInformation,
           }),
-          constant(acl.canSendCourseInformation(participantOrgIds, course)),
+          constant(
+            acl.canSendCourseInformation(participantOrgIds, course) &&
+              !courseEnded(course)
+          ),
         ],
         [
           matches({

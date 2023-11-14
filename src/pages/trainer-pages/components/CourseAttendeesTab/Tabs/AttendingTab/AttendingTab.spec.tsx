@@ -45,7 +45,7 @@ const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
     )
 
     expect(
-      within(screen.getByRole('table')).getByText(/attendance/i)
+      within(screen.getByRole('table')).getByText('Attendance')
     ).toBeInTheDocument()
   })
 })
@@ -86,7 +86,7 @@ it('displays the attendance column if user is a lead trainer on the course', () 
   )
 
   expect(
-    within(screen.getByRole('table')).getByText(/attendance/i)
+    within(screen.getByRole('table')).getByText('Attendance')
   ).toBeInTheDocument()
 })
 
@@ -126,7 +126,7 @@ it('displays the attendance column if user is an assist trainer on the course', 
   )
 
   expect(
-    within(screen.getByRole('table')).getByText(/attendance/i)
+    within(screen.getByRole('table')).getByText('Attendance')
   ).toBeInTheDocument()
 })
 
@@ -166,7 +166,7 @@ it("doesn't display the attendance column if user is a moderator on the course",
   )
 
   expect(
-    within(screen.getByRole('table')).queryByText(/attendance/i)
+    within(screen.getByRole('table')).queryByText('Attendance')
   ).not.toBeInTheDocument()
 })
 
@@ -200,7 +200,7 @@ it('displays the attendance column if course has ended', () => {
   )
 
   expect(
-    within(screen.getByRole('table')).getByText(/attendance/i)
+    within(screen.getByRole('table')).getByText('Attendance')
   ).toBeInTheDocument()
 })
 
