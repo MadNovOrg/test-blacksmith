@@ -1033,16 +1033,23 @@ export const EditProfilePage: React.FC<
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Typography variant="subtitle2">
-                  {t('certifications')}
-                </Typography>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => setShowImportModal(true)}
-                >
-                  {t('pages.my-profile.add-certificate')}
-                </Button>
+                <Grid item xs={9}>
+                  <Typography variant="subtitle2">
+                    {t('certifications')}
+                  </Typography>
+                  <Typography variant="body1" color="grey.700">
+                    {t('course-certificate.import-certificate-description')}
+                  </Typography>
+                </Grid>
+                <Grid item alignSelf={'end'}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => setShowImportModal(true)}
+                  >
+                    {t('pages.my-profile.add-certificate')}
+                  </Button>
+                </Grid>
               </Grid>
 
               {(

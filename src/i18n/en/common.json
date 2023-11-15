@@ -481,7 +481,7 @@
     "active-until": "Active until {{date, date_default}}",
     "expires-in": "expires in",
     "update-certification-details": "Add a certificate",
-    "import-certificate-description": "Please enter your Team Teach certificate number below. This will only add a certificate that is not currently displayed on your profile and is active with a future expiration date.",
+    "import-certificate-description": "Please enter your Team Teach certificate number below including all letters, numbers and special characters. This will only add a certificate that is not currently displayed on your profile and is active with a future expiration date.",
     "enter-certificate-number": "Enter certificate number",
     "update-certification": "Update certification",
     "add-certificate": "Add certificate",
