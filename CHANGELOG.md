@@ -1,5 +1,27 @@
 # @teamteach/hub
 
+## 1.3.0
+
+### Minor Changes
+
+- 0beceefb: allow org admins to invite other org admins
+
+### Patch Changes
+
+- f22614ee: fix certificate bulk download on Windows with filenames
+- 2c8db471: Restrict Organisation Key Contact and Booking Contacts from seeing trainer disabilities and dietary data
+- 4a9a0a78: Fix Course tables sorting order [ ascending
+- 37897b74: Fix Firefox and Safari wordpress homepage redirects
+- fc0e3904: Profile certifications area wording updates
+- 1e0649fd: Create certificate after attendee's grading
+- f611d97b: Fix (TTHP-3025) permissions participans_evaluation
+- 88cfc87c: Fix: (TTHP-2974) edit startDate in past error
+- d50c2a6d: Add "Add new venue" button in the venue selector
+- bb86c8eb: displaying add new venue btn
+- d332712c: Updating base URL on staging for Health and Safety data
+- 941c1b75: fix redirect issue on the courses page for BILD courses
+- 38635631: Fix missing courses on discount view page
+
 ## 1.2.1
 
 ### Patch Changes
