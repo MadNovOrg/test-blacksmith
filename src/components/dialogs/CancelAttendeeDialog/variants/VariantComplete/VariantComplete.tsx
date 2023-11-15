@@ -171,7 +171,7 @@ export const VariantComplete = ({
             register={register}
             errors={errors}
             feeType={feeType}
-            showEditFeePercent={acl.isTTAdmin()}
+            showEditFeePercent={acl.isTTAdmin() || acl.isTTOps()}
             onSetFeeType={setFeeType}
           />
 
