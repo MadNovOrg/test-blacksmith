@@ -162,9 +162,13 @@ export function CourseTitleCell({ course }: { course: TableCourse }) {
       ? findCourseTrainer(course?.trainers, profile.id)
       : undefined
 
+  const courseHasModules =
+    (course.modulesAgg.aggregate?.count &&
+      course.modulesAgg.aggregate?.count > 0) ||
+    course.bildModules.length
+
   const titleLink =
-    (course.isDraft || course.modulesAgg.aggregate?.count === 0) &&
-    acl.canBuildCourse()
+    (course.isDraft || !courseHasModules) && acl.canBuildCourse()
       ? `${course.id}/modules`
       : `${course.id}/details`
 

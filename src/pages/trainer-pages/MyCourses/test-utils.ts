@@ -67,6 +67,7 @@ export const buildTrainerCourse = build<TrainerCourseFragment>({
         count: 5,
       },
     },
+    bildModules: [],
     dates: {
       aggregate: {
         start: {

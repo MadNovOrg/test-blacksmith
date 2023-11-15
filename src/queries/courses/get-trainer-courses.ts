@@ -60,6 +60,9 @@ export const QUERY = gql`
         count
       }
     }
+    bildModules {
+      id
+    }
     isDraft
     schedule {
       id
