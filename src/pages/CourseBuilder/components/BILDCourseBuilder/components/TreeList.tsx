@@ -148,6 +148,7 @@ export const TreeList: React.FC<React.PropsWithChildren<TreeListProps>> = ({
               label={
                 <Typography>
                   {m.name}
+                  {m.mandatory && !disabled && <span> *</span>}
                   {m.duration && (
                     <Typography
                       component="span"
