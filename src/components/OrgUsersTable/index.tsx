@@ -245,7 +245,7 @@ export const OrgUsersTable: React.FC<
                     member.isAdmin &&
                     profile?.id === member.profile.id) ||
                   (acl.canEditOrgUser([orgId]) &&
-                    (acl.canSetOrgAdminRole() || !member.isAdmin)) ? (
+                    (acl.canSetOrgAdminRole(orgId) || !member.isAdmin)) ? (
                     <TableCell>
                       <Button
                         data-testid="edit-user-button"
@@ -291,6 +291,7 @@ export const OrgUsersTable: React.FC<
               refetch()
               if (onChange) onChange()
             }}
+            orgId={orgId}
           />
         </Dialog>
       ) : null}

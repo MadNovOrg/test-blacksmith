@@ -28,13 +28,14 @@ export type EditOrgUserModalProps = {
   orgMember: OrgMembersQuery['members'][0]
   onClose: () => void
   onChange?: () => void
+  orgId: string
 }
 
 export const EditOrgUserModal: React.FC<
   React.PropsWithChildren<EditOrgUserModalProps>
-> = function ({ orgMember, onClose, onChange }) {
+> = function ({ orgMember, onClose, onChange, orgId }) {
   const { t } = useTranslation()
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
   const fetcher = useFetcher()
   const [error, setError] = useState<string>()
   const [isAdmin, setIsAdmin] = useState(orgMember.isAdmin)
@@ -72,7 +73,7 @@ export const EditOrgUserModal: React.FC<
 
   return (
     <Container>
-      {acl.canSetOrgAdminRole() ? (
+      {acl.canSetOrgAdminRole(orgId) && profile?.id !== orgMember.profile.id ? (
         <FormControlLabel
           sx={{ py: 2 }}
           control={
