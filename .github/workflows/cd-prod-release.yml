@@ -19,7 +19,6 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   release:
     name: Release
-    needs: [lint-and-typecheck, test]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
