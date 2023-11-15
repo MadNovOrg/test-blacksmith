@@ -270,12 +270,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.isOrgAdmin,
       ])(),
 
-    canSetOrgAdminRole: () =>
+    canSetOrgAdminRole: (orgId?: string): boolean =>
       anyPass([
         acl.isTTAdmin,
         acl.isTTOps,
         acl.isSalesAdmin,
         acl.isSalesRepresentative,
+        () => (orgId ? acl.isOrgAdminOf([orgId]) : false),
       ])(),
 
     canCreateCourses: () =>
@@ -461,10 +462,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canViewCourseAsAttendeeHistory: () => anyPass([acl.isInternalUser])(),
 
-    isOrgAdminOf: (participantOrgIds: string[]) => {
+    isOrgAdminOf: (orgIds: string[]) => {
       return (
         acl.isOrgAdmin() &&
-        participantOrgIds.some(participantOrgId =>
+        orgIds.some(participantOrgId =>
           managedOrgIds.some(managedOrgId => managedOrgId === participantOrgId)
         )
       )

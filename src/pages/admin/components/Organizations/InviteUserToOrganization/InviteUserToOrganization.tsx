@@ -25,6 +25,7 @@ import { useMutation } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { FormPanel } from '@app/components/FormPanel'
+import { InfoPanel } from '@app/components/InfoPanel'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import {
@@ -155,14 +156,14 @@ export const InviteUserToOrganization = () => {
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
         <Box
-          display="flex"
+          display={{ md: 'flex' }}
           component="form"
           onSubmit={handleSubmit(onSubmit)}
           noValidate
           autoComplete="off"
           aria-autocomplete="none"
         >
-          <Box width={400} display="flex" flexDirection="column" px={6}>
+          <Box width={400} display="flex" flexDirection="column" pr={{ md: 6 }}>
             <Sticky top={20}>
               <Box mb={2}>
                 <BackButton />
@@ -181,139 +182,148 @@ export const InviteUserToOrganization = () => {
 
           <Box flex={1} paddingBottom={5}>
             <Box display="flex" flexDirection="column" gap={2} mt={8}>
-              <Typography variant="subtitle1">{t('organization')}</Typography>
-
-              <FormPanel>
-                <Autocomplete
-                  value={selectedOrg}
-                  isOptionEqualToValue={(o, v) => o.id === v.id}
-                  getOptionLabel={o => o.name}
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      required
-                      variant="filled"
-                      label={t('organization')}
-                      inputProps={{ ...params.inputProps, sx: { height: 40 } }}
-                      sx={{ bgcolor: 'grey.100' }}
+              <Stack spacing={4} mb={6}>
+                <InfoPanel title={t('organization')} titlePosition="outside">
+                  <FormPanel>
+                    <Autocomplete
+                      value={selectedOrg}
+                      isOptionEqualToValue={(o, v) => o.id === v.id}
+                      getOptionLabel={o => o.name}
+                      renderInput={params => (
+                        <TextField
+                          {...params}
+                          required
+                          variant="filled"
+                          label={t('organization')}
+                          inputProps={{
+                            ...params.inputProps,
+                            sx: { height: 40 },
+                          }}
+                          sx={{ bgcolor: 'grey.100' }}
+                        />
+                      )}
+                      options={orgs}
+                      onChange={(e, v) => setSelectedOrg(v)}
                     />
-                  )}
-                  options={orgs}
-                  onChange={(e, v) => setSelectedOrg(v)}
-                />
-              </FormPanel>
+                  </FormPanel>
+                </InfoPanel>
 
-              <Typography variant="subtitle1">
-                {t('pages.invite-to-org.user-details')}
-              </Typography>
-
-              <FormPanel>
-                {errorMessage ? (
-                  <Alert
-                    variant="outlined"
-                    severity="error"
-                    data-testid="error-alert"
-                    sx={{ mb: 4 }}
-                  >
-                    {errorMessage}
-                  </Alert>
-                ) : null}
-
-                <Autocomplete
-                  multiple
-                  id="emails"
-                  options={[] as string[]}
-                  value={values.emails}
-                  freeSolo
-                  autoSelect
-                  onChange={(_, v) =>
-                    setValue('emails', v, { shouldValidate: isSubmitted })
-                  }
-                  renderTags={(value, getTagProps) =>
-                    value.map((option, index) => (
-                      // disable key rule because getTagProps already sets correct key
-                      // eslint-disable-next-line react/jsx-key
-                      <Chip
-                        variant="filled"
-                        label={option}
-                        {...getTagProps({ index })}
-                      />
-                    ))
-                  }
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      required
-                      variant="filled"
-                      label={t('pages.invite-to-org.work-email')}
-                      inputProps={{
-                        ...params.inputProps,
-                        sx: { height: 40 },
-                        'data-testid': 'work-email-input',
-                      }}
-                      sx={{ bgcolor: 'grey.100' }}
-                      error={!!errors.emails}
-                      helperText={
-                        errors.emails ? (
-                          <Typography variant="caption">
-                            {getFieldError(errors.emails)}
-                          </Typography>
-                        ) : null
-                      }
-                    />
-                  )}
-                />
-
-                <FormHelperText>
-                  {t('pages.invite-to-org.work-email-hint')}
-                </FormHelperText>
-
-                <Alert
-                  variant="filled"
-                  color="info"
-                  severity="info"
-                  sx={{ mt: 2 }}
+                <InfoPanel
+                  titlePosition="outside"
+                  title={t('pages.invite-to-org.user-details')}
                 >
-                  <b>{t('important')}:</b> {t('pages.invite-to-org.notice')}
-                </Alert>
-              </FormPanel>
+                  <FormPanel>
+                    {errorMessage ? (
+                      <Alert
+                        variant="outlined"
+                        severity="error"
+                        data-testid="error-alert"
+                        sx={{ mb: 4 }}
+                      >
+                        {errorMessage}
+                      </Alert>
+                    ) : null}
 
-              <Typography variant="subtitle1">
-                {t('pages.invite-to-org.permissions')}
-              </Typography>
-
-              {acl.canSetOrgAdminRole() ? (
-                <Controller
-                  name="isOrgAdmin"
-                  control={control}
-                  render={({ field }) => (
-                    <FormPanel>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            {...field}
-                            checked={field.value === true}
-                            sx={{ px: 2 }}
+                    <Autocomplete
+                      multiple
+                      id="emails"
+                      options={[] as string[]}
+                      value={values.emails}
+                      freeSolo
+                      autoSelect
+                      onChange={(_, v) =>
+                        setValue('emails', v, { shouldValidate: isSubmitted })
+                      }
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index) => (
+                          // disable key rule because getTagProps already sets correct key
+                          // eslint-disable-next-line react/jsx-key
+                          <Chip
+                            variant="filled"
+                            label={option}
+                            {...getTagProps({ index })}
                           />
-                        }
-                        label={
-                          <Box>
-                            <Typography variant="body1">
-                              {t('pages.invite-to-org.organization-admin')}
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              color={theme.palette.grey[700]}
-                            >
-                              {t('pages.invite-to-org.organization-admin-hint')}
-                            </Typography>
-                          </Box>
-                        }
-                      />
-                    </FormPanel>
-                  )}
-                />
-              ) : undefined}
+                        ))
+                      }
+                      renderInput={params => (
+                        <TextField
+                          {...params}
+                          required
+                          variant="filled"
+                          label={t('pages.invite-to-org.work-email')}
+                          inputProps={{
+                            ...params.inputProps,
+                            sx: { height: 40 },
+                            'data-testid': 'work-email-input',
+                          }}
+                          sx={{ bgcolor: 'grey.100' }}
+                          error={!!errors.emails}
+                          helperText={
+                            errors.emails ? (
+                              <Typography variant="caption">
+                                {getFieldError(errors.emails)}
+                              </Typography>
+                            ) : null
+                          }
+                        />
+                      )}
+                    />
+
+                    <FormHelperText>
+                      {t('pages.invite-to-org.work-email-hint')}
+                    </FormHelperText>
+
+                    <Alert
+                      variant="filled"
+                      color="info"
+                      severity="info"
+                      sx={{ mt: 2 }}
+                    >
+                      <b>{t('important')}:</b> {t('pages.invite-to-org.notice')}
+                    </Alert>
+                  </FormPanel>
+                </InfoPanel>
+
+                {acl.canSetOrgAdminRole(selectedOrg?.id) ? (
+                  <InfoPanel
+                    title={t('pages.invite-to-org.permissions')}
+                    titlePosition="outside"
+                  >
+                    <Controller
+                      name="isOrgAdmin"
+                      control={control}
+                      render={({ field }) => (
+                        <FormPanel>
+                          <FormControlLabel
+                            control={
+                              <Switch
+                                {...field}
+                                checked={field.value === true}
+                                sx={{ px: 2 }}
+                              />
+                            }
+                            label={
+                              <Box>
+                                <Typography variant="body1">
+                                  {t('pages.invite-to-org.organization-admin')}
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  color={theme.palette.grey[700]}
+                                >
+                                  {t(
+                                    'pages.invite-to-org.organization-admin-hint'
+                                  )}
+                                </Typography>
+                              </Box>
+                            }
+                          />
+                        </FormPanel>
+                      )}
+                    />
+                  </InfoPanel>
+                ) : null}
+              </Stack>
 
               <Grid
                 container

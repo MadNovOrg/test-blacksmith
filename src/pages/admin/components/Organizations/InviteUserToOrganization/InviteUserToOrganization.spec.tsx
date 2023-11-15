@@ -188,6 +188,44 @@ it('saves org invites and redirects back to the organization individuals tab', a
   expect(screen.getByText(/org individuals/i)).toBeInTheDocument()
 })
 
+it('allows an org admin to invite another org admin', async () => {
+  const orgId = chance.guid()
+
+  const client = {
+    executeMutation: () => never,
+  } as unknown as Client
+
+  useOrganizationsMock.mockReturnValue({
+    loading: false,
+    orgs: [buildOrganization({ overrides: { id: orgId } })],
+    status: LoadingStatus.SUCCESS,
+    mutate: vi.fn(),
+    error: undefined,
+  })
+
+  render(
+    <Provider value={client}>
+      <Routes>
+        <Route path="organisations/:id">
+          <Route path="invite" element={<InviteUserToOrganization />} />
+        </Route>
+      </Routes>
+    </Provider>,
+    {
+      auth: {
+        activeRole: RoleName.USER,
+        isOrgAdmin: true,
+        managedOrgIds: [orgId],
+      },
+    },
+    { initialEntries: [`/organisations/${orgId}/invite`] }
+  )
+
+  expect(
+    screen.getByLabelText(/organisation admin/i, { exact: false })
+  ).toBeInTheDocument()
+})
+
 function IndividualsTabMock() {
   const [searchParams] = useSearchParams()
   const tab = searchParams.get('tab')
