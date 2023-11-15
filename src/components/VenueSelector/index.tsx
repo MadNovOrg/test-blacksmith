@@ -5,6 +5,7 @@ import {
   Button,
   CircularProgress,
   Grid,
+  InputAdornment,
   List,
   SxProps,
   TextField,
@@ -172,14 +173,6 @@ export const VenueSelector: React.FC<
     setVenue(undefined)
   }
 
-  const noOptionsText = (
-    <Grid container gap={2} alignItems="center" justifyContent="flex-end">
-      <Button variant="text" onClick={() => setShowNewVenueModal(true)}>
-        {t('components.venue-selector.add-new-venue')}
-      </Button>
-    </Grid>
-  )
-
   return (
     <>
       <Wrapper
@@ -211,7 +204,6 @@ export const VenueSelector: React.FC<
               ? t('components.venue-selector.suggestions')
               : t('components.venue-selector.venues')
           }
-          noOptionsText={noOptionsText}
           getOptionLabel={getOptionLabel}
           value={value ?? null}
           renderGroup={params => (
@@ -234,34 +226,45 @@ export const VenueSelector: React.FC<
             </li>
           )}
           renderInput={params => (
-            <TextField
-              {...textFieldProps}
-              {...params}
-              label={t('components.venue-selector.title')}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              placeholder={t('components.venue-selector.placeholder')}
-              helperText={
-                error || textFieldProps?.error
-                  ? t('components.course-form.venue-required')
-                  : ''
-              }
-              error={Boolean(error || textFieldProps?.error)}
-              onChange={event => setQuery(event.target.value)}
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <React.Fragment>
-                    {loading ? (
-                      <CircularProgress color="inherit" size={20} />
-                    ) : null}
-                    {params.InputProps.endAdornment}
-                  </React.Fragment>
-                ),
-              }}
-              data-testid="venue-selector"
-            />
+            <Grid>
+              <TextField
+                {...textFieldProps}
+                {...params}
+                label={t('components.venue-selector.title')}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                placeholder={t('components.venue-selector.placeholder')}
+                helperText={
+                  error || textFieldProps?.error
+                    ? t('components.course-form.venue-required')
+                    : ''
+                }
+                error={Boolean(error || textFieldProps?.error)}
+                onChange={event => setQuery(event.target.value)}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <React.Fragment>
+                      {loading ? (
+                        <CircularProgress color="inherit" size={20} />
+                      ) : (
+                        <InputAdornment position="end">
+                          <Button
+                            variant="text"
+                            onClick={() => setShowNewVenueModal(true)}
+                          >
+                            {t('components.venue-selector.add-new-venue')}
+                          </Button>
+                        </InputAdornment>
+                      )}
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
+                }}
+                data-testid="venue-selector"
+              />
+            </Grid>
           )}
           renderOption={(props, option, { inputValue }) => {
             const label = getOptionLabel(option)
@@ -319,7 +322,6 @@ export const VenueSelector: React.FC<
           onCancel={onDialogClose}
         />
       </Dialog>
-      {noOptionsText}
     </>
   )
 }
