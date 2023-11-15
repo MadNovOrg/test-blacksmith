@@ -29,21 +29,33 @@ function App() {
   )
   return (
     <>
-      {import.meta.env.MODE === 'production' &&
-      pathname === '/' &&
-      !!profile ? (
-        <>{window.location.replace(import.meta.env.VITE_KNOWLEDGE_HUB_HOME)}</>
-      ) : (
-        <GQLProvider>
-          <SWRConfig value={config}>
-            <CssBaseline />
-            <SnackbarProvider>
-              <ScrollToTop />
-              <AppRoutes />
-            </SnackbarProvider>
-          </SWRConfig>
-        </GQLProvider>
-      )}
+      <GQLProvider>
+        <SWRConfig value={config}>
+          {' '}
+          {import.meta.env.MODE === 'production' &&
+          pathname === '/' &&
+          Boolean(profile) ? (
+            // setting a short time out as the token doesnt get the chance to be set before the redirect happens
+            <>
+              {setTimeout(
+                () =>
+                  window.location.replace(
+                    import.meta.env.VITE_KNOWLEDGE_HUB_HOME
+                  ),
+                10
+              )}
+            </>
+          ) : (
+            <>
+              <CssBaseline />
+              <SnackbarProvider>
+                <ScrollToTop />
+                <AppRoutes />
+              </SnackbarProvider>
+            </>
+          )}
+        </SWRConfig>
+      </GQLProvider>
     </>
   )
 }
