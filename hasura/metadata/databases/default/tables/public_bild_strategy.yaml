@@ -13,53 +13,59 @@ select_permissions:
     permission:
       columns:
         - duration
+        - id
         - modules
         - name
         - short_name
-        - id
+        - sort
       filter: {}
   - role: sales-admin
     permission:
       columns:
-        - id
-        - name
-        - modules
-        - short_name
         - duration
+        - id
+        - modules
+        - name
+        - short_name
+        - sort
       filter: {}
   - role: trainer
     permission:
       columns:
         - duration
+        - id
         - modules
         - name
         - short_name
-        - id
+        - sort
       filter: {}
   - role: tt-admin
     permission:
       columns:
         - duration
+        - id
         - modules
         - name
         - short_name
-        - id
+        - sort
       filter: {}
   - role: tt-ops
     permission:
       columns:
         - duration
+        - id
         - modules
         - name
         - short_name
-        - id
+        - sort
       filter: {}
   - role: user
     permission:
       columns:
         - duration
+        - id
         - modules
         - name
         - short_name
-        - id
+        - sort
       filter: {}

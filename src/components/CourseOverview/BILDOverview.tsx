@@ -25,10 +25,11 @@ export const BILDOverview: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   const { modules } = course.bildModules[0]
+  const strategies = course.bildStrategies
 
   return (
     <>
-      {Object.keys(modules).map(strategyName => {
+      {strategies.map(({ strategyName }) => {
         const numberOfModules: number =
           modules[strategyName].modules?.length ?? 0
 
