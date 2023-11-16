@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography'
 import React from 'react'
 
 import { BannerBox } from '@app/components/BannerBox'
+import { useAuth } from '@app/context/auth'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 import jnImage from './assets/jn-image.jpg'
@@ -11,8 +12,16 @@ import signature from './assets/signature.png'
 
 export const Welcome: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useScopedTranslation('pages.welcome')
+  const { profile } = useAuth()
 
-  return (
+  return import.meta.env.MODE === 'production' && Boolean(profile) ? (
+    <>
+      {setTimeout(
+        () => window.location.replace(import.meta.env.VITE_KNOWLEDGE_HUB_HOME),
+        10
+      )}
+    </>
+  ) : (
     <Box
       sx={{
         display: 'grid',
