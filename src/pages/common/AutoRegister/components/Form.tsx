@@ -192,6 +192,13 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               ),
             }}
           />
+          <Typography
+            variant="body1"
+            sx={{ fontSize: '.75rem', color: 'grey' }}
+            data-testid="password-hint-message"
+          >
+            {t('common.validation-hints.password-hint-message')}
+          </Typography>
         </Grid>
         <Grid item>
           <PhoneNumberInput
