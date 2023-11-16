@@ -112,6 +112,16 @@ function LoggedOutRoutes() {
 function LoggedInRoutes() {
   const { activeRole, profile } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  /**
+   * The pathname is used for redirect to invitations links,
+   * being not authenticated and prevent home page redirect to
+   * knowledgehub app
+   */
+  const redirectFromLogin =
+    import.meta.env.MODE === 'production' &&
+    Boolean(location.state?.from?.pathname && location.state?.from?.fromLogin)
 
   const [showGettingStartedDialog, setShowGettingStartedDialog] =
     useState(false) // initial state should be firstTimeLogin || longTimeSinceLastLogin
@@ -203,7 +213,10 @@ function LoggedInRoutes() {
           }
         />
 
-        <Route path="login/*" element={<Navigate replace to="/" />} />
+        {!redirectFromLogin ? (
+          <Route path="login/*" element={<Navigate replace to="/" />} />
+        ) : null}
+
         <Route path="logout" element={<LogoutPage />} />
       </Routes>
     </>
@@ -218,7 +231,11 @@ function RedirectToLogin() {
     <Navigate
       replace
       to="login"
-      state={auth.loggedOut ? undefined : { from: { pathname, search } }}
+      state={
+        auth.loggedOut
+          ? undefined
+          : { from: { pathname, search, fromLogin: true } }
+      }
     />
   )
 }
