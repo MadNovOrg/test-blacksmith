@@ -116,7 +116,16 @@ export default function useActionableCourses({
       }
     }
 
-    if (acl.canSeeActionableCourseTable()) {
+    const filterStatusIsActionable: boolean | undefined =
+      filters?.statuses?.some(status =>
+        Object.values(statuses).includes(status as Course_Status_Enum)
+      )
+
+    if (
+      (filters?.statuses?.includes('CANCELLATION_REQUESTED') ||
+        !filterStatusIsActionable) &&
+      acl.canSeeActionableCourseTable()
+    ) {
       const cancellationPendingCondition = {
         cancellationRequest: {
           id: { _is_null: false },
