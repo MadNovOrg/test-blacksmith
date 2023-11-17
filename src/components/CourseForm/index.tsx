@@ -167,19 +167,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   minCourseStartDate.setDate(minCourseStartDate.getDate() + 1)
 
   /**
-   * TODO Remove after October 1 the PRODUCTION mode condition
-   * @description PRODUCTION mode condition for minimal start date on
-   * indirect course creation by trainer was added to be tested
-   * the changes regarding rescheduling indirect course under
-   * 2 weeks
-   * @see https://behaviourhub.atlassian.net/jira/software/projects/TTHP/issues/TTHP-2410
-   * @see https://behaviourhub.atlassian.net/jira/software/projects/TTHP/issues/TTHP-1484
-   * @author ion.mereuta@amdaris.com
+   * @todo delete post 4th of December
    */
   const minStartDateRestriction =
-    courseType === CourseType.INDIRECT &&
-    activeRole === RoleName.TRAINER &&
-    import.meta.env.MODE === 'production'
+    courseType === CourseType.INDIRECT && activeRole === RoleName.TRAINER
 
   const schema = useMemo(
     () =>
