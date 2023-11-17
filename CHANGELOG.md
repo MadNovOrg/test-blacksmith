@@ -1,5 +1,14 @@
 # @teamteach/hub
 
+## 1.3.1
+
+### Patch Changes
+
+- b1c06af9: Redirect to invitation links without redirect to knowledge hub app
+- f42184aa: Redirect to knowledge app on home page
+- a75ea9bb: sort BILD strategies on the course builder and course overview
+- 9b982865: Add password rules wording on auto register
+
 ## 1.3.0
 
 ### Minor Changes
