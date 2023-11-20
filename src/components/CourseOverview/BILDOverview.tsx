@@ -67,16 +67,6 @@ export const BILDOverview: React.FC<React.PropsWithChildren<Props>> = ({
             </AccordionSummary>
 
             <AccordionDetails sx={{ ml: 1 }}>
-              {modules[strategyName].modules?.length
-                ? modules[strategyName].modules.map(
-                    (module: { name: string }, index: number) => (
-                      <Typography mb={2} key={index}>
-                        {module.name}
-                      </Typography>
-                    )
-                  )
-                : null}
-
               {modules[strategyName].groups?.length
                 ? modules[strategyName].groups.map(
                     (group: { name: string; modules: [{ name: string }] }) => (
