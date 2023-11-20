@@ -22,10 +22,13 @@ jobs:
     if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) }}
     name: Fetch Version
     runs-on: ubuntu-latest
+    outputs:
+      RELEASE_VERSION: ${{ steps.get.outputs.RELEASE_VERSION }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Fetch Version
+        id: get
         run: |
           export RELEASE_VERSION=$(cat package.json | grep '"version":' | tr -d '"' | tr -d 'version: ' | tr -d ',')
           echo $RELEASE_VERSION
@@ -40,3 +43,23 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: 'RC-${{ env.RELEASE_VERSION }}'
+
+  prod-cd:
+    name: PROD
+    needs: fetch-version
+    if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) }}
+    uses: ./.github/workflows/pipeline.yml
+    with:
+      version: ${{ needs.fetch-version.outputs.RELEASE_VERSION }}
+    secrets:
+      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_PROD }}
+      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_PROD }}
+      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_PROD }}
+      wp_host: ${{ secrets.WP_HOST_PROD }}
+      s3_bucket: ${{ secrets.S3_BUCKET_PROD }}
+      service_role_arn: ${{ secrets.IAM_SERVICE_PROD }}
+      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_PROD }}
+      gmaps_key: ${{ secrets.GMAPS_KEY }}
+      recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
+      stripe_key: ${{ secrets.STRIPE_KEY }}
+      request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
