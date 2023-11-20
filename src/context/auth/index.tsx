@@ -21,22 +21,12 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
 
   const loadProfile = useCallback(async (user: CognitoUser) => {
     const data = await fetchUserProfile(user)
-    setState({ ...data })
-    setLoading(false)
+    let token = ''
 
     if (data?.profile) {
       const idToken = (await Auth.currentSession()).getIdToken()
       const expiryUnixSeconds = idToken.getExpiration()
-      const token = idToken.getJwtToken()
-
-      await gqlRequest(
-        UPDATE_PROFILE_ACTIVITY_QUERY,
-        { profileId: data.profile.id },
-        {
-          token,
-          role: data.activeRole,
-        }
-      )
+      token = idToken.getJwtToken()
 
       // write to cookie
       TTCookies.setCookie('mo_jwt_token', token, {
@@ -54,6 +44,20 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         domain: '.teamteach.com',
         sameSite: 'Strict',
       })
+    }
+
+    setState({ ...data })
+    setLoading(false)
+
+    if (data?.profile && token) {
+      await gqlRequest(
+        UPDATE_PROFILE_ACTIVITY_QUERY,
+        { profileId: data.profile.id },
+        {
+          token,
+          role: data.activeRole,
+        }
+      )
     }
   }, [])
 

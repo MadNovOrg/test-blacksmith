@@ -14,14 +14,12 @@ export const Welcome: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useScopedTranslation('pages.welcome')
   const { profile } = useAuth()
 
-  return import.meta.env.MODE === 'production' && Boolean(profile) ? (
-    <>
-      {setTimeout(
-        () => window.location.replace(import.meta.env.VITE_KNOWLEDGE_HUB_HOME),
-        10
-      )}
-    </>
-  ) : (
+  if (import.meta.env.MODE === 'production' && Boolean(profile)) {
+    window.location.replace(import.meta.env.VITE_KNOWLEDGE_HUB_HOME)
+    return <></>
+  }
+
+  return (
     <Box
       sx={{
         display: 'grid',
