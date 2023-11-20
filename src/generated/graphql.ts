@@ -9342,13 +9342,6 @@ export type Template_Contact = ContentTemplate & {
   templateName?: Maybe<Scalars['String']>;
 };
 
-/** The template assigned to the node */
-export type Template_SideNavigation = ContentTemplate & {
-  __typename?: 'Template_SideNavigation';
-  /** The name of the template */
-  templateName?: Maybe<Scalars['String']>;
-};
-
 /** Terms are nodes within a Taxonomy, used to group and relate other nodes. */
 export type TermNode = {
   /** The number of objects connected to the object */
@@ -12562,6 +12555,7 @@ export type Bild_Strategy = {
   modules: Scalars['jsonb'];
   name: Scalars['String'];
   shortName: Scalars['String'];
+  sort?: Maybe<Scalars['Int']>;
 };
 
 
@@ -12609,6 +12603,7 @@ export type Bild_Strategy_Append_Input = {
 export type Bild_Strategy_Avg_Fields = {
   __typename?: 'bild_strategy_avg_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** Boolean expression to filter rows from the table "bild_strategy". All fields are combined with a logical 'AND'. */
@@ -12621,6 +12616,7 @@ export type Bild_Strategy_Bool_Exp = {
   modules?: InputMaybe<Jsonb_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   shortName?: InputMaybe<String_Comparison_Exp>;
+  sort?: InputMaybe<Int_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "bild_strategy" */
@@ -12649,6 +12645,7 @@ export type Bild_Strategy_Delete_Key_Input = {
 /** input type for incrementing numeric columns in table "bild_strategy" */
 export type Bild_Strategy_Inc_Input = {
   duration?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "bild_strategy" */
@@ -12658,6 +12655,7 @@ export type Bild_Strategy_Insert_Input = {
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
   shortName?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Scalars['Int']>;
 };
 
 /** aggregate max on columns */
@@ -12667,6 +12665,7 @@ export type Bild_Strategy_Max_Fields = {
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
   shortName?: Maybe<Scalars['String']>;
+  sort?: Maybe<Scalars['Int']>;
 };
 
 /** aggregate min on columns */
@@ -12676,6 +12675,7 @@ export type Bild_Strategy_Min_Fields = {
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
   shortName?: Maybe<Scalars['String']>;
+  sort?: Maybe<Scalars['Int']>;
 };
 
 /** response of any mutation on the table "bild_strategy" */
@@ -12701,6 +12701,7 @@ export type Bild_Strategy_Order_By = {
   modules?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
   shortName?: InputMaybe<Order_By>;
+  sort?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: bild_strategy */
@@ -12724,7 +12725,9 @@ export enum Bild_Strategy_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
-  ShortName = 'shortName'
+  ShortName = 'shortName',
+  /** column name */
+  Sort = 'sort'
 }
 
 /** input type for updating data in table "bild_strategy" */
@@ -12734,24 +12737,28 @@ export type Bild_Strategy_Set_Input = {
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
   shortName?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Scalars['Int']>;
 };
 
 /** aggregate stddev on columns */
 export type Bild_Strategy_Stddev_Fields = {
   __typename?: 'bild_strategy_stddev_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Bild_Strategy_Stddev_Pop_Fields = {
   __typename?: 'bild_strategy_stddev_pop_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Bild_Strategy_Stddev_Samp_Fields = {
   __typename?: 'bild_strategy_stddev_samp_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** Streaming cursor of the table "bild_strategy" */
@@ -12769,12 +12776,14 @@ export type Bild_Strategy_Stream_Cursor_Value_Input = {
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
   shortName?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Scalars['Int']>;
 };
 
 /** aggregate sum on columns */
 export type Bild_Strategy_Sum_Fields = {
   __typename?: 'bild_strategy_sum_fields';
   duration?: Maybe<Scalars['Int']>;
+  sort?: Maybe<Scalars['Int']>;
 };
 
 /** update columns of table "bild_strategy" */
@@ -12788,7 +12797,9 @@ export enum Bild_Strategy_Update_Column {
   /** column name */
   Name = 'name',
   /** column name */
-  ShortName = 'shortName'
+  ShortName = 'shortName',
+  /** column name */
+  Sort = 'sort'
 }
 
 export type Bild_Strategy_Updates = {
@@ -12814,18 +12825,21 @@ export type Bild_Strategy_Updates = {
 export type Bild_Strategy_Var_Pop_Fields = {
   __typename?: 'bild_strategy_var_pop_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate var_samp on columns */
 export type Bild_Strategy_Var_Samp_Fields = {
   __typename?: 'bild_strategy_var_samp_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate variance on columns */
 export type Bild_Strategy_Variance_Fields = {
   __typename?: 'bild_strategy_variance_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** status enum for go1 course/module */

@@ -44,33 +44,6 @@ export default function useCourseInvites(
     }
   }, [matchMutate])
 
-  // Save course invites
-  const send = useCallback(
-    async (emails: string[]) => {
-      const recentData = await mutate()
-      const recentInvitesEmails =
-        recentData?.courseInvites.map(i => i.email) ?? []
-
-      const allValid = await emailsSchema.isValid(emails)
-
-      if (!allValid) {
-        throw Error('INVALID_EMAILS')
-      }
-
-      const newEmails = emails.filter(
-        email => recentInvitesEmails?.includes(email) === false
-      )
-      if (!newEmails.length) {
-        throw Error('EMAILS_ALREADY_INVITED')
-      }
-
-      const invites = newEmails.map(email => ({ course_id: courseId, email }))
-      await fetcher(SaveInvites, { invites })
-      await invalidateCache()
-    },
-    [mutate, fetcher, invalidateCache, courseId]
-  )
-
   const resend = useCallback(
     async (invite: CourseInvite) => {
       await fetcher(RecreateInvite, {
@@ -81,6 +54,45 @@ export default function useCourseInvites(
       await invalidateCache()
     },
     [fetcher, courseId, invalidateCache]
+  )
+
+  // Save course invites
+  const send = useCallback(
+    async (emails: string[]) => {
+      const recentData = await mutate()
+
+      const declinedInvites =
+        recentData?.courseInvites.filter(
+          i => i.status === InviteStatus.DECLINED && emails.includes(i.email)
+        ) ?? []
+
+      const recentInvitesEmails =
+        recentData?.courseInvites.map(i => i.email) ?? []
+
+      const allValid = await emailsSchema.isValid(emails)
+
+      if (!allValid) {
+        throw Error('INVALID_EMAILS')
+      }
+
+      const newEmails = emails.filter(
+        email =>
+          recentInvitesEmails?.includes(email) === false &&
+          !declinedInvites.some(i => i.email === email)
+      )
+
+      if (!newEmails.length && !declinedInvites?.length) {
+        throw Error('EMAILS_ALREADY_INVITED')
+      }
+
+      await Promise.all(declinedInvites.map(i => resend(i)))
+
+      const invites = newEmails.map(email => ({ course_id: courseId, email }))
+      await fetcher(SaveInvites, { invites })
+
+      await invalidateCache()
+    },
+    [mutate, fetcher, invalidateCache, resend, courseId]
   )
 
   const cancel = useCallback(
