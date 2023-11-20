@@ -132,9 +132,11 @@ export function SearchTrainers({
           </Typography>
         )}
 
-        <TrainerAvailabilityStatus
-          availability={option.availability ?? undefined}
-        />
+        {courseType === CourseType.INDIRECT && !acl.isInternalUser() ? null : (
+          <TrainerAvailabilityStatus
+            availability={option.availability ?? undefined}
+          />
+        )}
       </Box>
     )
   }
