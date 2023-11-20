@@ -14,6 +14,7 @@
 - "!include public_course_audit_type.yaml"
 - "!include public_course_bild_module.yaml"
 - "!include public_course_bild_strategy.yaml"
+- "!include public_course_cancellation_fee_type.yaml"
 - "!include public_course_cancellation_request.yaml"
 - "!include public_course_certificate.yaml"
 - "!include public_course_certificate_changelog.yaml"

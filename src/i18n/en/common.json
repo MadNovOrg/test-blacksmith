@@ -382,7 +382,8 @@
     "other-job-title-required": "Please enter your job title",
     "maximum-chars-limit": "Maximum {{ number }} characters exceeded",
     "recaptcha-required": "Recaptcha is required",
-    "invalid-postcode": "Invalid Postcode"
+    "invalid-postcode": "Invalid Postcode",
+    "min-max-num-value": "The value must be between {{ min }} and {{ max }}"
   },
   "validation-notice": "All fields are mandatory.",
   "create-free-account": "Create your free Team Teach Connect account",

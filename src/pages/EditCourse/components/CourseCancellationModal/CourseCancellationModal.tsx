@@ -18,43 +18,37 @@ import { isNumber } from 'lodash-es'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useMutation } from 'urql'
 
 import { NumericTextField } from '@app/components/NumericTextField'
 import {
   CancelCourseMutation,
   CancelCourseMutationVariables,
-  CancelIndirectCourseMutation,
-  CancelIndirectCourseMutationVariables,
+  CancellationFeeType,
+  Course_Cancellation_Fee_Type_Enum as CourseCancelFeeTypes,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { CancellationTermsTable } from '@app/pages/EditCourse/components/CancellationTermsTable'
 import { getCancellationTermsFee } from '@app/pages/EditCourse/shared'
 import { CANCEL_COURSE_MUTATION } from '@app/queries/courses/cancel-course'
-import { CANCEL_INDIRECT_COURSE_MUTATION } from '@app/queries/courses/cancel-indirect-course'
 import { yup } from '@app/schemas'
 import { Course, CourseType } from '@app/types' // 🙃 TODO: replace with generated type
 
 type FormInput = {
   cancellationFeePercent?: number
+  cancellationFee?: number
   cancellationReason: string
-}
-
-export enum FeesRadioValue {
-  APPLY_CANCELLATION_TERMS = 'apply-cancellation-terms',
-  CUSTOM_FEE = 'custom-fee',
-  NO_FEES = 'no-fees',
 }
 
 enum OpenCourseCancellationReasons {
   BOOKING_AMENDMENTS_MADE_BY_VENUE = 'booking-amendments-made-by-venue',
   BOOKING_AMENDMENTS_MADE_BY_TEAM_TEACH = 'booking-amendments-made-by-team-teach',
-  TRAINER_AVAILABLITY = 'trainer-availability',
+  TRAINER_AVAILABILITY = 'trainer-availability',
   OTHER = 'other',
 }
 
 enum CloseCourseCancellationReasons {
   BOOKING_AMENDMENTS_MADE_BY_ORGANIZATION = 'booking-amendments-made-by-organization',
-  TRAINER_AVAILABLITY = 'trainer-availability',
+  TRAINER_AVAILABILITY = 'trainer-availability',
   OTHER = 'other',
 }
 
@@ -68,12 +62,9 @@ export const CourseCancellationModal: React.FC<
   React.PropsWithChildren<CourseCancellationModalProps>
 > = function ({ course, onClose, onSubmit }) {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
 
-  const [loading, setLoading] = useState(false)
-  const [feeType, setFeeType] = useState<FeesRadioValue | null>(null)
+  const [feeType, setFeeType] = useState<CourseCancelFeeTypes | null>(null)
   const [reasonType, setReasonType] = useState('')
-  const [error, setError] = useState('')
   const [confirmed, setConfirmed] = useState(false)
 
   const isIndirect = course.type === CourseType.INDIRECT
@@ -83,17 +74,47 @@ export const CourseCancellationModal: React.FC<
   const showConfirmationCheck =
     course.type === CourseType.OPEN || isIndirectBlendedLearning
 
+  const [{ error, fetching }, cancelCourse] = useMutation<
+    CancelCourseMutation,
+    CancelCourseMutationVariables
+  >(CANCEL_COURSE_MUTATION)
+
   const schema = useMemo(() => {
     const cancellationFeePercent = yup.number().required()
     const cancellationReason = yup.string().required()
-    return yup
-      .object(
-        course.type === CourseType.CLOSED
-          ? { cancellationFeePercent, cancellationReason }
-          : { cancellationReason }
+    const cancellationFee = yup
+      .number()
+      .nullable()
+      .transform(v => (isNaN(v) ? null : v))
+      .min(
+        0,
+        t('common.validation-errors.min-max-num-value', {
+          min: 0,
+          max: 9999.99,
+        })
       )
+      .max(
+        9999.99,
+        t('common.validation-errors.min-max-num-value', {
+          min: 0,
+          max: 9999.99,
+        })
+      )
+      .required(t('common.validation-errors.this-field-is-required'))
+
+    return yup
+      .object({
+        ...(course.type === CourseType.CLOSED
+          ? {
+              cancellationReason,
+              ...(feeType === CourseCancelFeeTypes.CustomFee
+                ? { cancellationFee }
+                : { cancellationFeePercent }),
+            }
+          : { cancellationReason }),
+      })
       .required()
-  }, [course])
+  }, [course.type, feeType, t])
 
   const cancellationReasons = useMemo((): string[] => {
     if (course.type === CourseType.OPEN) {
@@ -129,9 +150,9 @@ export const CourseCancellationModal: React.FC<
   }, [course.cancellationRequest, setValue])
 
   useEffect(() => {
-    if (feeType === FeesRadioValue.APPLY_CANCELLATION_TERMS) {
+    if (feeType === CourseCancelFeeTypes.ApplyCancellationTerms) {
       setValue('cancellationFeePercent', getCancellationTermsFee(startDate))
-    } else if (feeType === FeesRadioValue.NO_FEES) {
+    } else if (feeType === CourseCancelFeeTypes.NoFees) {
       setValue('cancellationFeePercent', 0)
     }
   }, [feeType, setValue, startDate])
@@ -147,35 +168,34 @@ export const CourseCancellationModal: React.FC<
     }
   }, [setValue, values.cancellationFeePercent])
 
-  const onFormSubmit = async (data: FormInput) => {
-    setLoading(true)
+  useEffect(() => {
+    if (isNumber(values.cancellationFee)) {
+      setValue('cancellationFee', +values.cancellationFee.toFixed(2))
+    }
+  }, [setValue, values.cancellationFee, values.cancellationFeePercent])
 
-    try {
-      if (course.type === CourseType.INDIRECT) {
-        await fetcher<
-          CancelIndirectCourseMutation,
-          CancelIndirectCourseMutationVariables
-        >(CANCEL_INDIRECT_COURSE_MUTATION, {
-          courseId: course.id,
-          cancellationReason: data.cancellationReason,
-        })
-      } else {
-        await fetcher<CancelCourseMutation, CancelCourseMutationVariables>(
-          CANCEL_COURSE_MUTATION,
-          {
-            courseId: course.id,
-            cancellationFeePercent: data.cancellationFeePercent,
-            cancellationReason: data.cancellationReason,
-          }
-        )
-      }
-      if (onSubmit) {
-        onSubmit()
-      }
-    } catch (e: unknown) {
-      setError((e as Error).message)
-    } finally {
-      setLoading(false)
+  const onFormSubmit = async (data: FormInput) => {
+    const { cancellationFee, cancellationFeePercent, cancellationReason } = data
+    const isCourseTypeIndirect = course.type === CourseType.INDIRECT
+
+    const input = {
+      courseId: course.id,
+      cancellationReason,
+      ...(isCourseTypeIndirect
+        ? null
+        : {
+            cancellationFeeType: feeType,
+            cancellationFee:
+              feeType === CourseCancelFeeTypes.CustomFee
+                ? cancellationFee
+                : cancellationFeePercent,
+          }),
+    }
+
+    await cancelCourse(input)
+
+    if (onSubmit) {
+      onSubmit()
     }
   }
 
@@ -218,12 +238,12 @@ export const CourseCancellationModal: React.FC<
           </Typography>
 
           <RadioGroup
-            onChange={(_, v: string) => setFeeType(v as FeesRadioValue)}
+            onChange={(_, v: string) => setFeeType(v as CourseCancelFeeTypes)}
             row
             value={feeType}
             sx={{ mt: 1 }}
           >
-            {Object.values(FeesRadioValue).map(value => (
+            {Object.values(CancellationFeeType).map(value => (
               <FormControlLabel
                 key={value}
                 value={value}
@@ -251,22 +271,22 @@ export const CourseCancellationModal: React.FC<
             ) : null}
           </RadioGroup>
 
-          {feeType === FeesRadioValue.APPLY_CANCELLATION_TERMS ? (
+          {feeType === CourseCancelFeeTypes.ApplyCancellationTerms ? (
             <CancellationTermsTable
               courseStartDate={new Date(startDate)}
               sx={{ mt: 2 }}
             />
           ) : null}
 
-          {feeType === FeesRadioValue.CUSTOM_FEE ? (
+          {feeType === CourseCancelFeeTypes.CustomFee ? (
             <NumericTextField
               required
               label={t('pages.edit-course.cancellation-modal.fee')}
-              {...register('cancellationFeePercent', { valueAsNumber: true })}
-              error={Boolean(errors.cancellationFeePercent)}
+              {...register('cancellationFee', { valueAsNumber: true })}
+              error={Boolean(errors.cancellationFee)}
               helperText={
-                Boolean(errors.cancellationFeePercent) &&
-                t('common.validation-errors.this-field-is-required')
+                Boolean(errors.cancellationFee) &&
+                errors.cancellationFee?.message
               }
               sx={{ mt: 2 }}
               inputProps={{ min: 0, max: 100 }}
@@ -362,13 +382,13 @@ export const CourseCancellationModal: React.FC<
           />
         </Box>
       ) : null}
-      {error && <Alert severity="error">{error}</Alert>}
+      {error && <Alert severity="error">{error.message}</Alert>}
       <Box display="flex" justifyContent="space-between" mt={4}>
         <Button type="button" variant="text" color="primary" onClick={onClose}>
           {t('pages.edit-course.cancellation-modal.close-modal')}
         </Button>
         <LoadingButton
-          loading={loading}
+          loading={fetching}
           disabled={showConfirmationCheck && !confirmed}
           onClick={handleSubmit(onFormSubmit)}
           type="button"

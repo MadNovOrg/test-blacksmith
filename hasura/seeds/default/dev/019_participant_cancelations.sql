@@ -11,4 +11,4 @@ INSERT INTO public.course_participant (course_id, profile_id) VALUES
 (10027, 'ab528bc4-0d66-417f-8a34-eed6b949ea27');
 
 INSERT INTO public.course_participant_audit(authorized_by, type, payload, course_id, profile_id) VALUES
-('1054214f-1f5b-4d94-a381-ab6fba404f41', 'CANCELLATION', '{"cancellation_fee_percent": "100", "cancellation_reason": "Attendee self-cancelled his attendance."}'::jsonb, 10027, '1054214f-1f5b-4d94-a381-ab6fba404f41');
+('1054214f-1f5b-4d94-a381-ab6fba404f41', 'CANCELLATION', '{"cancellation_fee": "100", "cancellation_reason": "Attendee self-cancelled his attendance."}'::jsonb, 10027, '1054214f-1f5b-4d94-a381-ab6fba404f41');

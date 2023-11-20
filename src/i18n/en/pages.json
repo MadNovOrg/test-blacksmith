@@ -457,9 +457,9 @@
       "finance-invoice-changes": "Finance will make changes on the invoice(s), where necessary. ",
       "attendees-will-not-incur-cancellation-charges": "Registered attendees will not incur cancellation charges. ",
       "cancellation-fees-apply": "Cancellation fees",
-      "apply-cancellation-terms": "Apply cancellation fee",
-      "custom-fee": "Custom fee",
-      "no-fees": "No fee",
+      "APPLY_CANCELLATION_TERMS": "Apply cancellation fee",
+      "CUSTOM_FEE": "Custom fee",
+      "NO_FEES": "No fee",
       "reason-for-cancellation": "Reason for cancellation",
       "reasons": {
         "booking-amendments-made-by-venue": "Booking amendments made by venue",

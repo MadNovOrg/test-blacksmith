@@ -19,7 +19,6 @@ import { Dialog } from '@app/components/dialogs'
 import {
   Actions,
   CancellationFeeDetails,
-  CancellationFeeType,
   Title,
 } from '@app/components/dialogs/CancelAttendeeDialog/components'
 import { FormInput } from '@app/components/dialogs/CancelAttendeeDialog/types'
@@ -27,6 +26,7 @@ import { useAuth } from '@app/context/auth'
 import {
   CancelIndividualFromCourseMutation,
   CancelIndividualFromCourseMutationVariables,
+  CancellationFeeType,
 } from '@app/generated/graphql'
 import { getCancellationTermsFee } from '@app/pages/EditCourse/shared'
 import { CANCEL_INDIVIDUAL_FROM_COURSE_MUTATION } from '@app/queries/participants/cancel-individual-from-course'
@@ -51,14 +51,47 @@ export const VariantComplete = ({
 
   const { acl } = useAuth()
   const [feeType, setFeeType] = useState<CancellationFeeType>(
-    CancellationFeeType.APPLY_CANCELLATION_TERMS
+    CancellationFeeType.ApplyCancellationTerms
   )
   const [confirmed, setConfirmed] = useState(false)
 
   const schema = useMemo(() => {
     return yup
       .object({
-        cancellationFeePercent: yup.number().required(),
+        cancellationFee: yup
+          .number()
+          .nullable()
+          .transform(v => (isNaN(v) ? null : v))
+          .min(
+            0,
+            t('common.validation-errors.min-max-num-value', {
+              min: 0,
+              max: 9999.99,
+            })
+          )
+          .max(
+            9999.99,
+            t('common.validation-errors.min-max-num-value', {
+              min: 0,
+              max: 9999.99,
+            })
+          )
+          .when('feeType', ([feeType], schema) => {
+            return feeType === CancellationFeeType.CustomFee
+              ? schema.required(
+                  t('common.validation-errors.this-field-is-required')
+                )
+              : schema
+          }),
+
+        cancellationFeePercent: yup
+          .number()
+          .when('feeType', ([feeType], schema) => {
+            return feeType !== CancellationFeeType.CustomFee
+              ? schema.required('required')
+              : schema
+          }),
+
         cancellationReason: yup
           .string()
           .required(
@@ -70,6 +103,10 @@ export const VariantComplete = ({
             300,
             t('common.validation-errors.maximum-chars-limit', { number: 300 })
           ),
+        feeType: yup
+          .mixed<CancellationFeeType>()
+          .oneOf(Object.values(CancellationFeeType))
+          .required(),
       })
       .required()
   }, [t])
@@ -83,31 +120,29 @@ export const VariantComplete = ({
   } = useForm<FormInput>({
     resolver: yupResolver(schema),
     defaultValues: {
-      cancellationReason: '',
+      cancellationFee: 0,
       cancellationFeePercent: 0,
+      cancellationReason: '',
     },
   })
   const values = watch()
   const startDate = course.schedule?.[0]?.start
 
   useEffect(() => {
-    if (feeType === CancellationFeeType.APPLY_CANCELLATION_TERMS) {
+    setValue('feeType', feeType)
+
+    if (feeType === CancellationFeeType.ApplyCancellationTerms) {
       setValue('cancellationFeePercent', getCancellationTermsFee(startDate))
-    } else if (feeType === CancellationFeeType.NO_FEES) {
+    } else if (feeType === CancellationFeeType.NoFees) {
       setValue('cancellationFeePercent', 0)
     }
   }, [feeType, setValue, startDate])
 
   useEffect(() => {
-    if (isNumber(values.cancellationFeePercent)) {
-      if (values.cancellationFeePercent < 0) {
-        setValue('cancellationFeePercent', 0)
-      }
-      if (values.cancellationFeePercent > 100) {
-        setValue('cancellationFeePercent', 100)
-      }
+    if (isNumber(values.cancellationFee)) {
+      setValue('cancellationFee', +values.cancellationFee.toFixed(2))
     }
-  }, [setValue, values.cancellationFeePercent])
+  }, [setValue, values.cancellationFee, values.cancellationFeePercent])
 
   const [{ fetching, error }, cancelIndividualFromCourse] = useMutation<
     CancelIndividualFromCourseMutation,
@@ -119,7 +154,11 @@ export const VariantComplete = ({
       courseId: course.id,
       profileId: participant.profile.id,
       reason: capitalize(data.cancellationReason),
-      fee: Number(data.cancellationFeePercent),
+      fee:
+        feeType === CancellationFeeType.CustomFee
+          ? data.cancellationFee
+          : Number(data.cancellationFeePercent),
+      feeType,
     })
 
     onSubmit?.()

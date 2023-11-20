@@ -6,8 +6,8 @@ import FormLabel from '@mui/material/FormLabel'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import TextField from '@mui/material/TextField'
-import { merge } from 'lodash-es'
-import React from 'react'
+import { isNumber, merge } from 'lodash-es'
+import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
 import { TransferFeeType } from '@app/generated/graphql'
@@ -23,6 +23,8 @@ export const schema = yup.object({
     .required(),
   customFee: yup
     .number()
+    .min(0)
+    .max(9999.99)
     .nullable()
     .transform(v => (isNaN(v) ? null : v))
     .when('feeType', {
@@ -42,7 +44,7 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   optionLabels,
 }) => {
-  const { t } = useScopedTranslation('components.fees-form')
+  const { t, _t } = useScopedTranslation('components.fees-form')
 
   const defaultLabels: Record<TransferFeeType, string> = {
     [TransferFeeType.ApplyTerms]: t('apply-terms-option'),
@@ -54,9 +56,16 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const orgAdminMode = mode === TransferModeEnum.ORG_ADMIN_TRANSFERS
 
-  const { watch, control, register, formState } = useFormContext<FormValues>()
+  const { watch, control, register, formState, setValue } =
+    useFormContext<FormValues>()
 
   const formValues = watch()
+
+  useEffect(() => {
+    if (isNumber(formValues.customFee)) {
+      setValue('customFee', Number(formValues.customFee.toFixed(2)))
+    }
+  }, [setValue, formValues.customFee])
 
   return (
     <>
@@ -112,16 +121,24 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
       {formValues.feeType === TransferFeeType.CustomFee ? (
         <Box mt={2}>
           <TextField
+            type={'number'}
             fullWidth
             variant="filled"
             label={t('custom-fee-label')}
             error={Boolean(formState.errors.customFee?.message)}
+            helperText={
+              Boolean(formState.errors.customFee?.message) &&
+              _t('common.validation-errors.min-max-num-value', {
+                min: 0,
+                max: 9999.99,
+              })
+            }
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">£</InputAdornment>
               ),
             }}
-            {...register('customFee')}
+            {...register('customFee', { valueAsNumber: true })}
           />
         </Box>
       ) : null}

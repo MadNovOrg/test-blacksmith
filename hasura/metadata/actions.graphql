@@ -28,6 +28,7 @@ type Mutation {
     profileId: uuid!
     reason: String!
     fee: Float!
+    feeType: CancellationFeeType!
   ): Boolean
 }
 
@@ -493,6 +494,12 @@ enum CourseApprovalError {
   INVALID_COURSE_ID
   INVALID_STATUS
   NO_AUDIT_FOUND
+}
+
+enum CancellationFeeType {
+  APPLY_CANCELLATION_TERMS
+  CUSTOM_FEE
+  NO_FEES
 }
 
 input PlansCreateInput {

@@ -117,7 +117,7 @@ model course {
   free_spaces                                                            Int?                         @default(0)
   account_code                                                           String?
   cancellation_reason                                                    String?
-  cancellation_fee_percent                                               Int?
+  cancellation_fee                                                       Int?
   grading_started                                                        Boolean                      @default(false)
   modules_duration                                                       Int                          @default(0)
   created_by_id                                                          String?                      @db.Uuid
@@ -483,13 +483,13 @@ model course_participant_bild_module {
 }
 
 model course_participant_cancellation {
-  id                       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  created_at               DateTime @default(now()) @db.Timestamptz(6)
-  updated_at               DateTime @default(now()) @db.Timestamptz(6)
-  profile_id               String   @db.Uuid
-  course_id                Int
-  cancellation_reason      String
-  cancellation_fee_percent Int
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at          DateTime @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime @default(now()) @db.Timestamptz(6)
+  profile_id          String   @db.Uuid
+  course_id           Int
+  cancellation_reason String
+  cancellation_fee    Int
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments

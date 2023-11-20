@@ -5,12 +5,13 @@ import { useMutation } from 'urql'
 
 import { Dialog } from '@app/components/dialogs'
 import {
-  Title,
   Actions,
+  Title,
 } from '@app/components/dialogs/CancelAttendeeDialog/components'
 import {
   CancelIndividualFromCourseMutation,
   CancelIndividualFromCourseMutationVariables,
+  CancellationFeeType,
 } from '@app/generated/graphql'
 import { CANCEL_INDIVIDUAL_FROM_COURSE_MUTATION } from '@app/queries/participants/cancel-individual-from-course'
 import { Course, CourseParticipant } from '@app/types'
@@ -41,6 +42,7 @@ export const VariantMinimal: React.FC<VariantMinimalProps> = ({
       profileId: participant.profile.id,
       reason: 'N/A',
       fee: 0,
+      feeType: CancellationFeeType.NoFees,
     })
 
     onSubmit?.()

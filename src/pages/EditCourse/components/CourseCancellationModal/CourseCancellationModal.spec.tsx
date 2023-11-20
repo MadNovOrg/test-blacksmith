@@ -1,12 +1,15 @@
 import { useTranslation } from 'react-i18next'
 
-import { Course_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Cancellation_Fee_Type_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import { CourseType } from '@app/types'
 
 import { render, renderHook, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
-import { CourseCancellationModal, FeesRadioValue } from '.'
+import { CourseCancellationModal } from '.'
 
 describe(CourseCancellationModal.name, () => {
   const onClose = vi.fn()
@@ -54,7 +57,7 @@ describe(CourseCancellationModal.name, () => {
     //Assert
     expect(radioGroup).toHaveLength(3)
   })
-  it.each(Object.values(FeesRadioValue))(
+  it.each(Object.values(Course_Cancellation_Fee_Type_Enum))(
     'should render radio box message for %s',
     radioValue => {
       setup(Course_Type_Enum.Closed)

@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { noop } from 'ts-essentials'
 
-import {
-  CancellationFeeDetails,
-  CancellationFeeType,
-} from './CancellationFeeDetails'
+import { CancellationFeeType } from '@app/generated/graphql'
+
+import { CancellationFeeDetails } from './CancellationFeeDetails'
 
 import '@app/i18n/config'
 
@@ -18,7 +17,7 @@ type Story = StoryObj<typeof CancellationFeeDetails>
 
 export const Default: Story = {
   args: {
-    feeType: CancellationFeeType.APPLY_CANCELLATION_TERMS,
+    feeType: CancellationFeeType.ApplyCancellationTerms,
     errors: {},
     showEditFeePercent: true,
     register: noop as never,

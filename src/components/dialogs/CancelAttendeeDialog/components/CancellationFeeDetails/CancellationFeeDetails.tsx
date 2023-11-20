@@ -16,25 +16,22 @@ import {
 } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 
+import { FormInput } from '@app/components/dialogs/CancelAttendeeDialog/types'
 import { NumericTextField } from '@app/components/NumericTextField'
+import { CancellationFeeType } from '@app/generated/graphql'
 import { CancellationTermsTable } from '@app/pages/EditCourse/components/CancellationTermsTable'
-
-import { FormInput } from '../../types'
-
-export enum CancellationFeeType {
-  APPLY_CANCELLATION_TERMS = 'apply-cancellation-terms',
-  CUSTOM_FEE = 'custom-fee',
-  NO_FEES = 'no-fees',
-}
 
 type CancellationFeeDetailsProps = {
   feeType: CancellationFeeType
   startDate: string
   errors: FieldErrors<FormInput>
   register: (
-    name: 'cancellationFeePercent',
-    options?: RegisterOptions<FormInput, 'cancellationFeePercent'> | undefined
-  ) => UseFormRegisterReturn<'cancellationFeePercent'>
+    name: 'cancellationFeePercent' | 'cancellationFee',
+    options?:
+      | RegisterOptions<FormInput, 'cancellationFeePercent' | 'cancellationFee'>
+      | undefined
+  ) => UseFormRegisterReturn<'cancellationFeePercent' | 'cancellationFee'>
+
   showEditFeePercent?: boolean
   onSetFeeType?: (value: CancellationFeeType) => void
 }
@@ -118,21 +115,20 @@ export const CancellationFeeDetails: React.FC<
         </Alert>
       )}
 
-      {feeType === CancellationFeeType.APPLY_CANCELLATION_TERMS ? (
+      {feeType === CancellationFeeType.ApplyCancellationTerms ? (
         <CancellationTermsTable
           courseStartDate={new Date(startDate)}
           sx={{ mt: 2 }}
         />
       ) : null}
-      {feeType === CancellationFeeType.CUSTOM_FEE ? (
+      {feeType === CancellationFeeType.CustomFee ? (
         <NumericTextField
           required
           label={t('pages.edit-course.cancellation-modal.fee')}
-          {...register('cancellationFeePercent', { valueAsNumber: true })}
-          error={Boolean(errors.cancellationFeePercent)}
+          {...register('cancellationFee', { valueAsNumber: true })}
+          error={Boolean(errors.cancellationFee)}
           helperText={
-            Boolean(errors.cancellationFeePercent) &&
-            t('common.validation-errors.this-field-is-required')
+            Boolean(errors.cancellationFee) && errors?.cancellationFee?.message
           }
           InputProps={{
             endAdornment: (

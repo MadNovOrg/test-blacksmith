@@ -205,6 +205,12 @@ export type CancelMyselfFromCourseWaitlistOutput = {
   success: Scalars['Boolean'];
 };
 
+export enum CancellationFeeType {
+  ApplyCancellationTerms = 'APPLY_CANCELLATION_TERMS',
+  CustomFee = 'CUSTOM_FEE',
+  NoFees = 'NO_FEES'
+}
+
 /** The category type */
 export type Category = DatabaseIdentifier & HierarchicalTermNode & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
   __typename?: 'Category';
@@ -3006,6 +3012,19 @@ export type EnqueuedStylesheet = EnqueuedAsset & Node & {
   version?: Maybe<Scalars['String']>;
 };
 
+/** Boolean expression to compare columns of type "Float". All fields are combined with logical 'AND'. */
+export type Float_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['Float']>;
+  _gt?: InputMaybe<Scalars['Float']>;
+  _gte?: InputMaybe<Scalars['Float']>;
+  _in?: InputMaybe<Array<Scalars['Float']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _lt?: InputMaybe<Scalars['Float']>;
+  _lte?: InputMaybe<Scalars['Float']>;
+  _neq?: InputMaybe<Scalars['Float']>;
+  _nin?: InputMaybe<Array<Scalars['Float']>>;
+};
+
 /** The general setting type */
 export type GeneralSettings = {
   __typename?: 'GeneralSettings';
@@ -5339,8 +5358,6 @@ export enum PostStatusEnum {
   RequestFailed = 'REQUEST_FAILED',
   /** Objects with the request-pending status */
   RequestPending = 'REQUEST_PENDING',
-  /** Objects with the spam status */
-  Spam = 'SPAM',
   /** Objects with the trash status */
   Trash = 'TRASH'
 }
@@ -12557,6 +12574,7 @@ export type Bild_Strategy = {
   modules: Scalars['jsonb'];
   name: Scalars['String'];
   shortName: Scalars['String'];
+  sort?: Maybe<Scalars['Int']>;
 };
 
 
@@ -12604,6 +12622,7 @@ export type Bild_Strategy_Append_Input = {
 export type Bild_Strategy_Avg_Fields = {
   __typename?: 'bild_strategy_avg_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** Boolean expression to filter rows from the table "bild_strategy". All fields are combined with a logical 'AND'. */
@@ -12616,6 +12635,7 @@ export type Bild_Strategy_Bool_Exp = {
   modules?: InputMaybe<Jsonb_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   shortName?: InputMaybe<String_Comparison_Exp>;
+  sort?: InputMaybe<Int_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "bild_strategy" */
@@ -12644,6 +12664,7 @@ export type Bild_Strategy_Delete_Key_Input = {
 /** input type for incrementing numeric columns in table "bild_strategy" */
 export type Bild_Strategy_Inc_Input = {
   duration?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "bild_strategy" */
@@ -12653,6 +12674,7 @@ export type Bild_Strategy_Insert_Input = {
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
   shortName?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Scalars['Int']>;
 };
 
 /** aggregate max on columns */
@@ -12662,6 +12684,7 @@ export type Bild_Strategy_Max_Fields = {
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
   shortName?: Maybe<Scalars['String']>;
+  sort?: Maybe<Scalars['Int']>;
 };
 
 /** aggregate min on columns */
@@ -12671,6 +12694,7 @@ export type Bild_Strategy_Min_Fields = {
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
   shortName?: Maybe<Scalars['String']>;
+  sort?: Maybe<Scalars['Int']>;
 };
 
 /** response of any mutation on the table "bild_strategy" */
@@ -12696,6 +12720,7 @@ export type Bild_Strategy_Order_By = {
   modules?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
   shortName?: InputMaybe<Order_By>;
+  sort?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: bild_strategy */
@@ -12719,7 +12744,9 @@ export enum Bild_Strategy_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
-  ShortName = 'shortName'
+  ShortName = 'shortName',
+  /** column name */
+  Sort = 'sort'
 }
 
 /** input type for updating data in table "bild_strategy" */
@@ -12729,24 +12756,28 @@ export type Bild_Strategy_Set_Input = {
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
   shortName?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Scalars['Int']>;
 };
 
 /** aggregate stddev on columns */
 export type Bild_Strategy_Stddev_Fields = {
   __typename?: 'bild_strategy_stddev_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Bild_Strategy_Stddev_Pop_Fields = {
   __typename?: 'bild_strategy_stddev_pop_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Bild_Strategy_Stddev_Samp_Fields = {
   __typename?: 'bild_strategy_stddev_samp_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** Streaming cursor of the table "bild_strategy" */
@@ -12764,12 +12795,14 @@ export type Bild_Strategy_Stream_Cursor_Value_Input = {
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
   shortName?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Scalars['Int']>;
 };
 
 /** aggregate sum on columns */
 export type Bild_Strategy_Sum_Fields = {
   __typename?: 'bild_strategy_sum_fields';
   duration?: Maybe<Scalars['Int']>;
+  sort?: Maybe<Scalars['Int']>;
 };
 
 /** update columns of table "bild_strategy" */
@@ -12783,7 +12816,9 @@ export enum Bild_Strategy_Update_Column {
   /** column name */
   Name = 'name',
   /** column name */
-  ShortName = 'shortName'
+  ShortName = 'shortName',
+  /** column name */
+  Sort = 'sort'
 }
 
 export type Bild_Strategy_Updates = {
@@ -12809,18 +12844,21 @@ export type Bild_Strategy_Updates = {
 export type Bild_Strategy_Var_Pop_Fields = {
   __typename?: 'bild_strategy_var_pop_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate var_samp on columns */
 export type Bild_Strategy_Var_Samp_Fields = {
   __typename?: 'bild_strategy_var_samp_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate variance on columns */
 export type Bild_Strategy_Variance_Fields = {
   __typename?: 'bild_strategy_variance_fields';
   duration?: Maybe<Scalars['Float']>;
+  sort?: Maybe<Scalars['Float']>;
 };
 
 /** status enum for go1 course/module */
@@ -15064,7 +15102,8 @@ export type Course = {
   bookingContact?: Maybe<Profile>;
   bookingContactInviteData?: Maybe<Scalars['jsonb']>;
   bookingContactProfileId?: Maybe<Scalars['uuid']>;
-  cancellationFeePercent?: Maybe<Scalars['Int']>;
+  cancellationFee?: Maybe<Scalars['Float']>;
+  cancellationFeeType?: Maybe<Course_Cancellation_Fee_Type_Enum>;
   cancellationReason?: Maybe<Scalars['String']>;
   /** An object relationship */
   cancellationRequest?: Maybe<Course_Cancellation_Request>;
@@ -15952,7 +15991,7 @@ export type Course_Audit_Variance_Fields = {
 export type Course_Avg_Fields = {
   __typename?: 'course_avg_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
-  cancellationFeePercent?: Maybe<Scalars['Float']>;
+  cancellationFee?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
@@ -15966,7 +16005,7 @@ export type Course_Avg_Fields = {
 /** order by avg() on columns of table "course" */
 export type Course_Avg_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
-  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
@@ -16622,7 +16661,8 @@ export type Course_Bool_Exp = {
   bookingContact?: InputMaybe<Profile_Bool_Exp>;
   bookingContactInviteData?: InputMaybe<Jsonb_Comparison_Exp>;
   bookingContactProfileId?: InputMaybe<Uuid_Comparison_Exp>;
-  cancellationFeePercent?: InputMaybe<Int_Comparison_Exp>;
+  cancellationFee?: InputMaybe<Float_Comparison_Exp>;
+  cancellationFeeType?: InputMaybe<Course_Cancellation_Fee_Type_Enum_Comparison_Exp>;
   cancellationReason?: InputMaybe<String_Comparison_Exp>;
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Bool_Exp>;
   certificates?: InputMaybe<Course_Certificate_Bool_Exp>;
@@ -16688,6 +16728,143 @@ export type Course_Bool_Exp = {
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   waitlists?: InputMaybe<Waitlist_Bool_Exp>;
   waitlists_aggregate?: InputMaybe<Waitlist_Aggregate_Bool_Exp>;
+};
+
+/** columns and relationships of "course_cancellation_fee_type" */
+export type Course_Cancellation_Fee_Type = {
+  __typename?: 'course_cancellation_fee_type';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "course_cancellation_fee_type" */
+export type Course_Cancellation_Fee_Type_Aggregate = {
+  __typename?: 'course_cancellation_fee_type_aggregate';
+  aggregate?: Maybe<Course_Cancellation_Fee_Type_Aggregate_Fields>;
+  nodes: Array<Course_Cancellation_Fee_Type>;
+};
+
+/** aggregate fields of "course_cancellation_fee_type" */
+export type Course_Cancellation_Fee_Type_Aggregate_Fields = {
+  __typename?: 'course_cancellation_fee_type_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Course_Cancellation_Fee_Type_Max_Fields>;
+  min?: Maybe<Course_Cancellation_Fee_Type_Min_Fields>;
+};
+
+
+/** aggregate fields of "course_cancellation_fee_type" */
+export type Course_Cancellation_Fee_Type_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Cancellation_Fee_Type_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "course_cancellation_fee_type". All fields are combined with a logical 'AND'. */
+export type Course_Cancellation_Fee_Type_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Cancellation_Fee_Type_Bool_Exp>>;
+  _not?: InputMaybe<Course_Cancellation_Fee_Type_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Cancellation_Fee_Type_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_cancellation_fee_type" */
+export enum Course_Cancellation_Fee_Type_Constraint {
+  /** unique or primary key constraint on columns "name" */
+  CourseCancellationFeeTypePkey = 'course_cancellation_fee_type_pkey'
+}
+
+export enum Course_Cancellation_Fee_Type_Enum {
+  ApplyCancellationTerms = 'APPLY_CANCELLATION_TERMS',
+  CustomFee = 'CUSTOM_FEE',
+  NoFees = 'NO_FEES'
+}
+
+/** Boolean expression to compare columns of type "course_cancellation_fee_type_enum". All fields are combined with logical 'AND'. */
+export type Course_Cancellation_Fee_Type_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Course_Cancellation_Fee_Type_Enum>;
+  _in?: InputMaybe<Array<Course_Cancellation_Fee_Type_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<Course_Cancellation_Fee_Type_Enum>;
+  _nin?: InputMaybe<Array<Course_Cancellation_Fee_Type_Enum>>;
+};
+
+/** input type for inserting data into table "course_cancellation_fee_type" */
+export type Course_Cancellation_Fee_Type_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Course_Cancellation_Fee_Type_Max_Fields = {
+  __typename?: 'course_cancellation_fee_type_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Course_Cancellation_Fee_Type_Min_Fields = {
+  __typename?: 'course_cancellation_fee_type_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "course_cancellation_fee_type" */
+export type Course_Cancellation_Fee_Type_Mutation_Response = {
+  __typename?: 'course_cancellation_fee_type_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Cancellation_Fee_Type>;
+};
+
+/** on_conflict condition type for table "course_cancellation_fee_type" */
+export type Course_Cancellation_Fee_Type_On_Conflict = {
+  constraint: Course_Cancellation_Fee_Type_Constraint;
+  update_columns?: Array<Course_Cancellation_Fee_Type_Update_Column>;
+  where?: InputMaybe<Course_Cancellation_Fee_Type_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_cancellation_fee_type". */
+export type Course_Cancellation_Fee_Type_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_cancellation_fee_type */
+export type Course_Cancellation_Fee_Type_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** select columns of table "course_cancellation_fee_type" */
+export enum Course_Cancellation_Fee_Type_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "course_cancellation_fee_type" */
+export type Course_Cancellation_Fee_Type_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "course_cancellation_fee_type" */
+export type Course_Cancellation_Fee_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Cancellation_Fee_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Cancellation_Fee_Type_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "course_cancellation_fee_type" */
+export enum Course_Cancellation_Fee_Type_Update_Column {
+  /** column name */
+  Name = 'name'
+}
+
+export type Course_Cancellation_Fee_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Cancellation_Fee_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Cancellation_Fee_Type_Bool_Exp;
 };
 
 /** columns and relationships of "course_cancellation_request" */
@@ -16961,7 +17138,7 @@ export type Course_Certificate = {
   certificationDate: Scalars['date'];
   /** An object relationship */
   course?: Maybe<Course>;
-  courseAccreditedBy: Accreditors_Enum;
+  courseAccreditedBy?: Maybe<Accreditors_Enum>;
   courseId?: Maybe<Scalars['Int']>;
   courseLevel: Scalars['String'];
   courseName: Scalars['String'];
@@ -20433,7 +20610,7 @@ export type Course_Expenses_Variance_Order_By = {
 /** input type for incrementing numeric columns in table "course" */
 export type Course_Inc_Input = {
   aolCostOfCourse?: InputMaybe<Scalars['numeric']>;
-  cancellationFeePercent?: InputMaybe<Scalars['Int']>;
+  cancellationFee?: InputMaybe<Scalars['Float']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['Int']>;
   max_participants?: InputMaybe<Scalars['Int']>;
@@ -20455,7 +20632,8 @@ export type Course_Insert_Input = {
   bookingContact?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   bookingContactInviteData?: InputMaybe<Scalars['jsonb']>;
   bookingContactProfileId?: InputMaybe<Scalars['uuid']>;
-  cancellationFeePercent?: InputMaybe<Scalars['Int']>;
+  cancellationFee?: InputMaybe<Scalars['Float']>;
+  cancellationFeeType?: InputMaybe<Course_Cancellation_Fee_Type_Enum>;
   cancellationReason?: InputMaybe<Scalars['String']>;
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Obj_Rel_Insert_Input>;
   certificates?: InputMaybe<Course_Certificate_Arr_Rel_Insert_Input>;
@@ -21220,7 +21398,7 @@ export type Course_Max_Fields = {
   aolRegion?: Maybe<Scalars['String']>;
   arloReferenceId?: Maybe<Scalars['String']>;
   bookingContactProfileId?: Maybe<Scalars['uuid']>;
-  cancellationFeePercent?: Maybe<Scalars['Int']>;
+  cancellationFee?: Maybe<Scalars['Float']>;
   cancellationReason?: Maybe<Scalars['String']>;
   /** A computed field, executes function "course_code" */
   course_code?: Maybe<Scalars['String']>;
@@ -21256,7 +21434,7 @@ export type Course_Max_Order_By = {
   aolRegion?: InputMaybe<Order_By>;
   arloReferenceId?: InputMaybe<Order_By>;
   bookingContactProfileId?: InputMaybe<Order_By>;
-  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationFee?: InputMaybe<Order_By>;
   cancellationReason?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   createdById?: InputMaybe<Order_By>;
@@ -21287,7 +21465,7 @@ export type Course_Min_Fields = {
   aolRegion?: Maybe<Scalars['String']>;
   arloReferenceId?: Maybe<Scalars['String']>;
   bookingContactProfileId?: Maybe<Scalars['uuid']>;
-  cancellationFeePercent?: Maybe<Scalars['Int']>;
+  cancellationFee?: Maybe<Scalars['Float']>;
   cancellationReason?: Maybe<Scalars['String']>;
   /** A computed field, executes function "course_code" */
   course_code?: Maybe<Scalars['String']>;
@@ -21323,7 +21501,7 @@ export type Course_Min_Order_By = {
   aolRegion?: InputMaybe<Order_By>;
   arloReferenceId?: InputMaybe<Order_By>;
   bookingContactProfileId?: InputMaybe<Order_By>;
-  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationFee?: InputMaybe<Order_By>;
   cancellationReason?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   createdById?: InputMaybe<Order_By>;
@@ -21753,7 +21931,8 @@ export type Course_Order_By = {
   bookingContact?: InputMaybe<Profile_Order_By>;
   bookingContactInviteData?: InputMaybe<Order_By>;
   bookingContactProfileId?: InputMaybe<Order_By>;
-  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationFee?: InputMaybe<Order_By>;
+  cancellationFeeType?: InputMaybe<Order_By>;
   cancellationReason?: InputMaybe<Order_By>;
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Order_By>;
   certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Order_By>;
@@ -25487,7 +25666,9 @@ export enum Course_Select_Column {
   /** column name */
   BookingContactProfileId = 'bookingContactProfileId',
   /** column name */
-  CancellationFeePercent = 'cancellationFeePercent',
+  CancellationFee = 'cancellationFee',
+  /** column name */
+  CancellationFeeType = 'cancellationFeeType',
   /** column name */
   CancellationReason = 'cancellationReason',
   /** column name */
@@ -25568,7 +25749,8 @@ export type Course_Set_Input = {
   arloReferenceId?: InputMaybe<Scalars['String']>;
   bookingContactInviteData?: InputMaybe<Scalars['jsonb']>;
   bookingContactProfileId?: InputMaybe<Scalars['uuid']>;
-  cancellationFeePercent?: InputMaybe<Scalars['Int']>;
+  cancellationFee?: InputMaybe<Scalars['Float']>;
+  cancellationFeeType?: InputMaybe<Course_Cancellation_Fee_Type_Enum>;
   cancellationReason?: InputMaybe<Scalars['String']>;
   conversion?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -25909,7 +26091,7 @@ export type Course_Status_Updates = {
 export type Course_Stddev_Fields = {
   __typename?: 'course_stddev_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
-  cancellationFeePercent?: Maybe<Scalars['Float']>;
+  cancellationFee?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
@@ -25923,7 +26105,7 @@ export type Course_Stddev_Fields = {
 /** order by stddev() on columns of table "course" */
 export type Course_Stddev_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
-  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
@@ -25936,7 +26118,7 @@ export type Course_Stddev_Order_By = {
 export type Course_Stddev_Pop_Fields = {
   __typename?: 'course_stddev_pop_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
-  cancellationFeePercent?: Maybe<Scalars['Float']>;
+  cancellationFee?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
@@ -25950,7 +26132,7 @@ export type Course_Stddev_Pop_Fields = {
 /** order by stddev_pop() on columns of table "course" */
 export type Course_Stddev_Pop_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
-  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
@@ -25963,7 +26145,7 @@ export type Course_Stddev_Pop_Order_By = {
 export type Course_Stddev_Samp_Fields = {
   __typename?: 'course_stddev_samp_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
-  cancellationFeePercent?: Maybe<Scalars['Float']>;
+  cancellationFee?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
@@ -25977,7 +26159,7 @@ export type Course_Stddev_Samp_Fields = {
 /** order by stddev_samp() on columns of table "course" */
 export type Course_Stddev_Samp_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
-  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
@@ -26004,7 +26186,8 @@ export type Course_Stream_Cursor_Value_Input = {
   arloReferenceId?: InputMaybe<Scalars['String']>;
   bookingContactInviteData?: InputMaybe<Scalars['jsonb']>;
   bookingContactProfileId?: InputMaybe<Scalars['uuid']>;
-  cancellationFeePercent?: InputMaybe<Scalars['Int']>;
+  cancellationFee?: InputMaybe<Scalars['Float']>;
+  cancellationFeeType?: InputMaybe<Course_Cancellation_Fee_Type_Enum>;
   cancellationReason?: InputMaybe<Scalars['String']>;
   conversion?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -26045,7 +26228,7 @@ export type Course_Stream_Cursor_Value_Input = {
 export type Course_Sum_Fields = {
   __typename?: 'course_sum_fields';
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
-  cancellationFeePercent?: Maybe<Scalars['Int']>;
+  cancellationFee?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
@@ -26059,7 +26242,7 @@ export type Course_Sum_Fields = {
 /** order by sum() on columns of table "course" */
 export type Course_Sum_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
-  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
@@ -26841,7 +27024,9 @@ export enum Course_Update_Column {
   /** column name */
   BookingContactProfileId = 'bookingContactProfileId',
   /** column name */
-  CancellationFeePercent = 'cancellationFeePercent',
+  CancellationFee = 'cancellationFee',
+  /** column name */
+  CancellationFeeType = 'cancellationFeeType',
   /** column name */
   CancellationReason = 'cancellationReason',
   /** column name */
@@ -26935,7 +27120,7 @@ export type Course_Updates = {
 export type Course_Var_Pop_Fields = {
   __typename?: 'course_var_pop_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
-  cancellationFeePercent?: Maybe<Scalars['Float']>;
+  cancellationFee?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
@@ -26949,7 +27134,7 @@ export type Course_Var_Pop_Fields = {
 /** order by var_pop() on columns of table "course" */
 export type Course_Var_Pop_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
-  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
@@ -26962,7 +27147,7 @@ export type Course_Var_Pop_Order_By = {
 export type Course_Var_Samp_Fields = {
   __typename?: 'course_var_samp_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
-  cancellationFeePercent?: Maybe<Scalars['Float']>;
+  cancellationFee?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
@@ -26976,7 +27161,7 @@ export type Course_Var_Samp_Fields = {
 /** order by var_samp() on columns of table "course" */
 export type Course_Var_Samp_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
-  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
@@ -26989,7 +27174,7 @@ export type Course_Var_Samp_Order_By = {
 export type Course_Variance_Fields = {
   __typename?: 'course_variance_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
-  cancellationFeePercent?: Maybe<Scalars['Float']>;
+  cancellationFee?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
@@ -27003,7 +27188,7 @@ export type Course_Variance_Fields = {
 /** order by variance() on columns of table "course" */
 export type Course_Variance_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
-  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
@@ -30625,6 +30810,10 @@ export type Mutation_Root = {
   delete_course_bild_strategy_by_pk?: Maybe<Course_Bild_Strategy>;
   /** delete single row from the table: "course" */
   delete_course_by_pk?: Maybe<Course>;
+  /** delete data from the table: "course_cancellation_fee_type" */
+  delete_course_cancellation_fee_type?: Maybe<Course_Cancellation_Fee_Type_Mutation_Response>;
+  /** delete single row from the table: "course_cancellation_fee_type" */
+  delete_course_cancellation_fee_type_by_pk?: Maybe<Course_Cancellation_Fee_Type>;
   /** delete data from the table: "course_cancellation_request" */
   delete_course_cancellation_request?: Maybe<Course_Cancellation_Request_Mutation_Response>;
   /** delete single row from the table: "course_cancellation_request" */
@@ -30999,6 +31188,10 @@ export type Mutation_Root = {
   insert_course_bild_strategy?: Maybe<Course_Bild_Strategy_Mutation_Response>;
   /** insert a single row into the table: "course_bild_strategy" */
   insert_course_bild_strategy_one?: Maybe<Course_Bild_Strategy>;
+  /** insert data into the table: "course_cancellation_fee_type" */
+  insert_course_cancellation_fee_type?: Maybe<Course_Cancellation_Fee_Type_Mutation_Response>;
+  /** insert a single row into the table: "course_cancellation_fee_type" */
+  insert_course_cancellation_fee_type_one?: Maybe<Course_Cancellation_Fee_Type>;
   /** insert data into the table: "course_cancellation_request" */
   insert_course_cancellation_request?: Maybe<Course_Cancellation_Request_Mutation_Response>;
   /** insert a single row into the table: "course_cancellation_request" */
@@ -31425,6 +31618,12 @@ export type Mutation_Root = {
   update_course_bild_strategy_many?: Maybe<Array<Maybe<Course_Bild_Strategy_Mutation_Response>>>;
   /** update single row of the table: "course" */
   update_course_by_pk?: Maybe<Course>;
+  /** update data of the table: "course_cancellation_fee_type" */
+  update_course_cancellation_fee_type?: Maybe<Course_Cancellation_Fee_Type_Mutation_Response>;
+  /** update single row of the table: "course_cancellation_fee_type" */
+  update_course_cancellation_fee_type_by_pk?: Maybe<Course_Cancellation_Fee_Type>;
+  /** update multiples rows of table: "course_cancellation_fee_type" */
+  update_course_cancellation_fee_type_many?: Maybe<Array<Maybe<Course_Cancellation_Fee_Type_Mutation_Response>>>;
   /** update data of the table: "course_cancellation_request" */
   update_course_cancellation_request?: Maybe<Course_Cancellation_Request_Mutation_Response>;
   /** update single row of the table: "course_cancellation_request" */
@@ -31919,6 +32118,7 @@ export type Mutation_RootArloCallbackArgs = {
 export type Mutation_RootCancelIndividualFromCourseArgs = {
   courseId: Scalars['Int'];
   fee: Scalars['Float'];
+  feeType: CancellationFeeType;
   profileId: Scalars['uuid'];
   reason: Scalars['String'];
 };
@@ -32181,6 +32381,18 @@ export type Mutation_RootDelete_Course_Bild_Strategy_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Course_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Cancellation_Fee_TypeArgs = {
+  where: Course_Cancellation_Fee_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Cancellation_Fee_Type_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -33340,6 +33552,20 @@ export type Mutation_RootInsert_Course_Bild_StrategyArgs = {
 export type Mutation_RootInsert_Course_Bild_Strategy_OneArgs = {
   object: Course_Bild_Strategy_Insert_Input;
   on_conflict?: InputMaybe<Course_Bild_Strategy_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Cancellation_Fee_TypeArgs = {
+  objects: Array<Course_Cancellation_Fee_Type_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Cancellation_Fee_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Cancellation_Fee_Type_OneArgs = {
+  object: Course_Cancellation_Fee_Type_Insert_Input;
+  on_conflict?: InputMaybe<Course_Cancellation_Fee_Type_On_Conflict>;
 };
 
 
@@ -34870,6 +35096,26 @@ export type Mutation_RootUpdate_Course_By_PkArgs = {
   _prepend?: InputMaybe<Course_Prepend_Input>;
   _set?: InputMaybe<Course_Set_Input>;
   pk_columns: Course_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Cancellation_Fee_TypeArgs = {
+  _set?: InputMaybe<Course_Cancellation_Fee_Type_Set_Input>;
+  where: Course_Cancellation_Fee_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Cancellation_Fee_Type_By_PkArgs = {
+  _set?: InputMaybe<Course_Cancellation_Fee_Type_Set_Input>;
+  pk_columns: Course_Cancellation_Fee_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Cancellation_Fee_Type_ManyArgs = {
+  updates: Array<Course_Cancellation_Fee_Type_Updates>;
 };
 
 
@@ -42862,6 +43108,12 @@ export type Query_Root = {
   course_bild_strategy_by_pk?: Maybe<Course_Bild_Strategy>;
   /** fetch data from the table: "course" using primary key columns */
   course_by_pk?: Maybe<Course>;
+  /** fetch data from the table: "course_cancellation_fee_type" */
+  course_cancellation_fee_type: Array<Course_Cancellation_Fee_Type>;
+  /** fetch aggregated fields from the table: "course_cancellation_fee_type" */
+  course_cancellation_fee_type_aggregate: Course_Cancellation_Fee_Type_Aggregate;
+  /** fetch data from the table: "course_cancellation_fee_type" using primary key columns */
+  course_cancellation_fee_type_by_pk?: Maybe<Course_Cancellation_Fee_Type>;
   /** fetch data from the table: "course_cancellation_request" */
   course_cancellation_request: Array<Course_Cancellation_Request>;
   /** fetch aggregated fields from the table: "course_cancellation_request" */
@@ -43727,6 +43979,29 @@ export type Query_RootCourse_Bild_Strategy_By_PkArgs = {
 
 export type Query_RootCourse_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+export type Query_RootCourse_Cancellation_Fee_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Course_Cancellation_Fee_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Cancellation_Fee_Type_Order_By>>;
+  where?: InputMaybe<Course_Cancellation_Fee_Type_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Cancellation_Fee_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Cancellation_Fee_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Cancellation_Fee_Type_Order_By>>;
+  where?: InputMaybe<Course_Cancellation_Fee_Type_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Cancellation_Fee_Type_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -45999,6 +46274,14 @@ export type Subscription_Root = {
   course_bild_strategy_stream: Array<Course_Bild_Strategy>;
   /** fetch data from the table: "course" using primary key columns */
   course_by_pk?: Maybe<Course>;
+  /** fetch data from the table: "course_cancellation_fee_type" */
+  course_cancellation_fee_type: Array<Course_Cancellation_Fee_Type>;
+  /** fetch aggregated fields from the table: "course_cancellation_fee_type" */
+  course_cancellation_fee_type_aggregate: Course_Cancellation_Fee_Type_Aggregate;
+  /** fetch data from the table: "course_cancellation_fee_type" using primary key columns */
+  course_cancellation_fee_type_by_pk?: Maybe<Course_Cancellation_Fee_Type>;
+  /** fetch data from the table in a streaming manner: "course_cancellation_fee_type" */
+  course_cancellation_fee_type_stream: Array<Course_Cancellation_Fee_Type>;
   /** fetch data from the table: "course_cancellation_request" */
   course_cancellation_request: Array<Course_Cancellation_Request>;
   /** fetch aggregated fields from the table: "course_cancellation_request" */
@@ -47097,6 +47380,36 @@ export type Subscription_RootCourse_Bild_Strategy_StreamArgs = {
 
 export type Subscription_RootCourse_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+export type Subscription_RootCourse_Cancellation_Fee_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Course_Cancellation_Fee_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Cancellation_Fee_Type_Order_By>>;
+  where?: InputMaybe<Course_Cancellation_Fee_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Cancellation_Fee_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Cancellation_Fee_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Cancellation_Fee_Type_Order_By>>;
+  where?: InputMaybe<Course_Cancellation_Fee_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Cancellation_Fee_Type_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Subscription_RootCourse_Cancellation_Fee_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Cancellation_Fee_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Cancellation_Fee_Type_Bool_Exp>;
 };
 
 
@@ -52271,7 +52584,7 @@ export type AdminCourseQueryVariables = Exact<{
 }>;
 
 
-export type AdminCourseQuery = { __typename?: 'query_root', course_by_pk?: { __typename?: 'course', id: number, accountCode?: string | null, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, cancellationFeePercent?: number | null, cancellationReason?: string | null, bookingContactProfileId?: any | null, course_code?: string | null, createdAt: any, createdById?: any | null, deliveryType: Course_Delivery_Type_Enum, description?: string | null, end?: any | null, freeSlots?: number | null, freeSpaces?: number | null, go1Integration: boolean, gradingConfirmed: boolean, gradingStarted: boolean, level: Course_Level_Enum, max_participants: number, min_participants: number, modulesDuration: number, name: string, organization_id?: any | null, parking_instructions?: string | null, reaccreditation?: boolean | null, source?: Course_Source_Enum | null, special_instructions?: string | null, status?: Course_Status_Enum | null, type: Course_Type_Enum, updatedAt: any } | null };
+export type AdminCourseQuery = { __typename?: 'query_root', course_by_pk?: { __typename?: 'course', id: number, accountCode?: string | null, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, cancellationFee?: number | null, cancellationReason?: string | null, bookingContactProfileId?: any | null, course_code?: string | null, createdAt: any, createdById?: any | null, deliveryType: Course_Delivery_Type_Enum, description?: string | null, end?: any | null, freeSlots?: number | null, freeSpaces?: number | null, go1Integration: boolean, gradingConfirmed: boolean, gradingStarted: boolean, level: Course_Level_Enum, max_participants: number, min_participants: number, modulesDuration: number, name: string, organization_id?: any | null, parking_instructions?: string | null, reaccreditation?: boolean | null, source?: Course_Source_Enum | null, special_instructions?: string | null, status?: Course_Status_Enum | null, type: Course_Type_Enum, updatedAt: any } | null };
 
 export type TrainerCourseQueryVariables = Exact<{
   id: Scalars['Int'];
