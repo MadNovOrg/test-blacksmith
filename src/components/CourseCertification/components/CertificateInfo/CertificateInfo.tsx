@@ -298,16 +298,6 @@ export const CertificateInfo: React.FC<
                 </AccordionSummary>
 
                 <AccordionDetails sx={{ pt: 0, pb: 3 }}>
-                  <Stack spacing={1.5}>
-                    {strategyModules[strategyName].modules?.length
-                      ? strategyModules[strategyName].modules?.map(module => (
-                          <Typography key={module.name}>
-                            {module.name}
-                          </Typography>
-                        ))
-                      : null}
-                  </Stack>
-
                   {strategyModules[strategyName].groups?.length
                     ? strategyModules[strategyName].groups?.map(group => (
                         <Box key={group.name}>
