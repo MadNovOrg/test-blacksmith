@@ -147,7 +147,7 @@
     "@mermaid-js/mermaid-cli": "^10.3.0",
     "@nx/devkit": "^16.7.4",
     "@nx/esbuild": "16.7.4",
-    "@nx/eslint-plugin": "^16.7.4",
+    "@nx/eslint-plugin": "^16.10.0",
     "@nx/jest": "16.7.4",
     "@nx/js": "16.7.4",
     "@nx/node": "^16.7.4",
