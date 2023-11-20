@@ -25,7 +25,11 @@ export const NavLinks: FC<INavLinksProps> = () => {
     >
       <Link
         component={StyledNavLink}
-        to="/"
+        to={
+          import.meta.env.MODE === 'production'
+            ? import.meta.env.VITE_KNOWLEDGE_HUB_HOME
+            : '/'
+        }
         sx={{ px: 2, textAlign: 'center' }}
       >
         {t('home')}
