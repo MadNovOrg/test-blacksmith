@@ -7,7 +7,7 @@ import { OrganisationSectorDropdown, Props } from '.'
 import withMuiThemeProvider from '@storybook-decorators/withMuiThemeProvider'
 
 export default {
-  title: 'components/NumericTextField',
+  title: 'components/OrganisationSectorDropdown',
   component: OrganisationSectorDropdown,
   decorators: [withMuiThemeProvider],
 }

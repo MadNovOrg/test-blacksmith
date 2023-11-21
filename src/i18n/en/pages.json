@@ -1639,6 +1639,41 @@
     "signature-alt": "Jonathan Newport Signature",
     "photo-alt": "Jonathan Newport Photo"
   },
+  "welcome-v2": {
+    "trainers-title": "Trainers",
+    "trainers-description": "If you’re a Team Teach trainer, register your certificate to book and manage all your ongoing training courses.",
+    "trainers-button": "My courses",
+    "teams-title": "Manage your teams more efficiently",
+    "teams-description": "Did you know that if you manage training for your organisation, you can easily view and manage your entire team’s training? Tell us who to assign for your setting.",
+    "teams-button": "Nominate",
+    "hero": {
+      "title": "Welcome to Team Teach Connect",
+      "subtitle": "Share Knowledge. Create Connections. Reduce Risk",
+      "view-courses-label": "View Courses",
+      "view-profile-label": "View Profile",
+      "register-certificate-label": "Register Certificate"
+    },
+    "register-certificate-panel": {
+      "title": "Register your certificate",
+      "description": "Access is available upon successful completion of a Team Teach course and the registration of a valid certificate in your profile.",
+      "description-line-two-title": "Have you already attended training?",
+      "description-line-two": "Attach your certificate now.",
+      "button-label": "Register Certificate"
+    },
+    "membership-grid": {
+      "title": "Your Connect Membership",
+      "description": "Team Teach Connect combines our award-winning training with a comprehensive package of pre and post-training support, practical resources, and the latest insights in behaviour support.",
+      "knowledge-hub-title": "Knowledge hub",
+      "knowledge-hub-description": "Access a wealth of behaviour support resources.",
+      "knowledge-hub-button": "Access Knowledge Hub",
+      "courses-title": "Courses",
+      "courses-description": "View, manage and book courses and access course resources.",
+      "courses-button": "View Courses",
+      "account-title": "Account",
+      "account-description": "Manage your personal account or organisation, including certificates.",
+      "account-button": "Manage account"
+    }
+  },
   "getting-started": {
     "back-to-homepage": "Back to Welcome Page",
     "tutorials": "Tutorials",

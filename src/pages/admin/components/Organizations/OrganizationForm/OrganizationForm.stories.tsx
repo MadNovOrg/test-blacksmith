@@ -5,7 +5,7 @@ import { OrganizationForm } from './OrganizationForm'
 import '@app/i18n/config'
 
 export default {
-  title: 'components/CancelAttendeeDialog/Title',
+  title: 'components/OrganizationForm',
   component: OrganizationForm,
   decorators: [],
 } as Meta<typeof OrganizationForm>

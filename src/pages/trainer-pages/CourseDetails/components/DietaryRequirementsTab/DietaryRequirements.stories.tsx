@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { DietaryRequirementsTab } from '.'
 
 export default {
-  title: 'CourseDetails/components/DisabilitiesTab',
+  title: 'CourseDetails/components/DietaryRequirementsTab',
   component: DietaryRequirementsTab,
 } as Meta<typeof DietaryRequirementsTab>
 

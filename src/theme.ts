@@ -50,6 +50,7 @@ declare module '@mui/material/styles' {
     perfume: PaletteOptions['primary']
     neonBlue: PaletteOptions['primary']
     critical: PaletteOptions['primary']
+    lime: PaletteOptions['primary']
   }
 }
 
@@ -72,6 +73,7 @@ declare module '@mui/material/Chip' {
 declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
     gray: true
+    lime: true
   }
 }
 
@@ -211,6 +213,11 @@ const theme = createTheme({
     neonBlue: {
       main: '#523FF5',
       contrastText: '#FFFFFF',
+    },
+    lime: {
+      main: '#9EB934',
+      dark: '#7E9329',
+      contrastText: '#fff',
     },
   },
 })

@@ -6,7 +6,7 @@ import { CountryDropdown } from './CountryDropdown'
 import '@app/i18n/config'
 
 export default {
-  title: 'components/CancelAttendeeDialog/Title',
+  title: 'components/CountryDropdown',
   component: CountryDropdown,
   decorators: [],
 } as Meta<typeof CountryDropdown>
