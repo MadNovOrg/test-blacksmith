@@ -1,6 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close'
 import {
   AvatarGroup,
+  Box,
   Chip,
   Table,
   TableBody,
@@ -34,7 +35,7 @@ export const OrgSummaryList: React.FC<
   )
 
   return (
-    <>
+    <Box sx={{ overflowX: 'auto' }}>
       <Table data-testid="organisation-summary-table">
         <TableHead>
           <TableRow
@@ -151,6 +152,6 @@ export const OrgSummaryList: React.FC<
           ))}
         </TableBody>
       </Table>
-    </>
+    </Box>
   )
 }

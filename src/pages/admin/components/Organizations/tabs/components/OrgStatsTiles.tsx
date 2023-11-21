@@ -37,7 +37,7 @@ export const OrgStatsTiles: React.FC<
         />
       </Grid>
 
-      <Grid item xs={3} md={3} p={1} borderRadius={1}>
+      <Grid item xs={12} md={6} lg={3} p={1} borderRadius={1}>
         <SelectableCountPanel
           count={stats[orgId]?.certificates.active.count}
           chip={{
@@ -55,7 +55,7 @@ export const OrgStatsTiles: React.FC<
         />
       </Grid>
 
-      <Grid item xs={3} md={3} p={1} borderRadius={1}>
+      <Grid item xs={12} md={6} lg={3} p={1} borderRadius={1}>
         <SelectableCountPanel
           count={stats[orgId]?.certificates.hold.count}
           chip={{
@@ -69,7 +69,7 @@ export const OrgStatsTiles: React.FC<
           selected={selected.includes(CertificateStatus.ON_HOLD)}
         />
       </Grid>
-      <Grid item xs={3} md={3} p={1} borderRadius={1}>
+      <Grid item xs={12} md={6} lg={3} p={1} borderRadius={1}>
         <SelectableCountPanel
           count={stats[orgId]?.certificates.expiringSoon.count}
           chip={{
@@ -86,7 +86,7 @@ export const OrgStatsTiles: React.FC<
           selected={selected.includes(CertificateStatus.EXPIRING_SOON)}
         />
       </Grid>
-      <Grid item xs={3} md={3} p={1} borderRadius={1}>
+      <Grid item xs={12} md={6} lg={3} p={1} borderRadius={1}>
         <SelectableCountPanel
           count={stats[orgId]?.certificates.expired.count}
           chip={{

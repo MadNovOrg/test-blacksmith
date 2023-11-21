@@ -201,13 +201,12 @@ export const OrgOverviewTab: React.FC<
                 )
               )}
             </TabList>
-
             {LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level)).map(
               courseLevel => (
                 <TabPanel
                   value={courseLevel ?? 'none'}
                   key={courseLevel}
-                  sx={{ p: 0 }}
+                  sx={{ p: 0, overflowX: 'auto' }}
                 >
                   <IndividualsByLevelList
                     orgId={orgId}
