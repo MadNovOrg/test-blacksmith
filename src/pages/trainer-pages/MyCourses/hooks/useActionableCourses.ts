@@ -124,7 +124,7 @@ export default function useActionableCourses({
     if (
       (filters?.statuses?.includes('CANCELLATION_REQUESTED') ||
         !filterStatusIsActionable) &&
-      acl.canSeeActionableCourseTable()
+      acl.isTTAdmin()
     ) {
       const cancellationPendingCondition = {
         cancellationRequest: {
