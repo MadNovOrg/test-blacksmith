@@ -277,7 +277,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             then: sd =>
               sd.min(
                 INDIRECT_COURSE_MIN_ALLOWED_DATE_FOR_YUP,
-                t('components.course-form.min-start-date')
+                t('components.course-form.min-start-date', {
+                  date: INDIRECT_COURSE_MIN_ALLOWED_DATE,
+                })
               ),
           })
           .required(t('components.course-form.start-date-required')),
