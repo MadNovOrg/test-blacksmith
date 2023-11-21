@@ -1,5 +1,17 @@
 # @teamteach/hub
 
+## 1.3.2
+
+### Patch Changes
+
+- 7e36881c: Custom fee cash value for course cancel and attendee transfer and cancel
+- 918f0c44: Fix: (TTHP-2441) remove duplications certifications
+- 79c447f9: Changed the OrgStatsTiles RegularBreakpoints sizes and made both the individuals and organisation tables scrollable.
+- 47025cfa: Allow resend declined course invites
+- e00ce364: not showing traners availability if you are in external role
+- ff9aca84: Update `Home` link navigation url
+- b4e59e6a: Fix: TTHP-2441 remove list modules on course overview accordion view
+
 ## 1.3.1
 
 ### Patch Changes
