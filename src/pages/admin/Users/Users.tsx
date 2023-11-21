@@ -155,7 +155,18 @@ export const Users = () => {
           },
         },
         {
-          fullName: { _ilike: `%${keywordDebounced}%` },
+          _and: [
+            {
+              givenName: {
+                _ilike: `%${keywordDebounced.trim().split(' ')[0] ?? ''}%`,
+              },
+            },
+            {
+              familyName: {
+                _ilike: `%${keywordDebounced.trim().split(' ')[1] ?? ''}%`,
+              },
+            },
+          ],
         },
         {
           email: { _ilike: `%${keywordDebounced}%` },
