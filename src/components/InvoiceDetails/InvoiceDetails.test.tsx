@@ -8,6 +8,7 @@ describe('InvoiceDetails component', () => {
   it('renders InvoiceDetails', async () => {
     const details = {
       orgId: '1',
+      orgName: 'Test Organisation',
       billingAddress: '11 Baker Street',
       firstName: 'Jill',
       surname: 'Dunn',
@@ -17,6 +18,7 @@ describe('InvoiceDetails component', () => {
     }
 
     render(<InvoiceDetails details={details} />)
+    expect(screen.getByText('Test Organisation')).toBeInTheDocument()
     expect(screen.getByText('11 Baker Street')).toBeInTheDocument()
     expect(screen.getByText('Jill')).toBeInTheDocument()
     expect(screen.getByText('Dunn')).toBeInTheDocument()

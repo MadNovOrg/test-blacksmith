@@ -19,6 +19,7 @@ export const Default = Template.bind({})
 Default.args = {
   details: {
     orgId: '',
+    orgName: '',
     billingAddress: 'Pebbles Care Limited, Dunfermline, UK',
     firstName: 'Richard',
     surname: 'Whitelam',

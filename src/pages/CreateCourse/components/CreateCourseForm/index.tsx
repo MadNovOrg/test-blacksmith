@@ -342,6 +342,7 @@ export const CreateCourseForm = () => {
                 label={
                   t('pages.create-course.form.health-leaflet-copy') as string
                 }
+                sx={{ mb: 1 }}
               />
               <FormControlLabel
                 control={
@@ -358,6 +359,7 @@ export const CreateCourseForm = () => {
                 label={
                   t('pages.create-course.form.practice-protocol-copy') as string
                 }
+                sx={{ mb: 2 }}
               />
 
               <FormControlLabel
@@ -370,6 +372,7 @@ export const CreateCourseForm = () => {
                   />
                 }
                 label={t('pages.create-course.form.valid-id-copy') as string}
+                sx={{ mb: 2 }}
               />
 
               <FormControlLabel

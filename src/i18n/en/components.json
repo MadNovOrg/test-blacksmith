@@ -409,7 +409,8 @@
   },
   "invoice-details": {
     "title": "Invoice contact details",
-    "billing-address": "Billing address"
+    "billing-address": "Billing address",
+    "organization-name": "Organisation name"
   },
   "audit-filtering-sidebar": {
     "filter-by-date": "Filter by date"

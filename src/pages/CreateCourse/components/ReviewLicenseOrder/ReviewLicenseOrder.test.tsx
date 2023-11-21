@@ -82,6 +82,7 @@ describe('component: ReviewLicenseOrder', () => {
       invoiceDetails: {
         billingAddress: chance.address(),
         orgId: 'org-id',
+        orgName: chance.name(),
         firstName: chance.first(),
         surname: chance.last(),
         phone: chance.phone(),
@@ -184,6 +185,7 @@ describe('component: ReviewLicenseOrder', () => {
       invoiceDetails: {
         billingAddress: 'Billing address',
         orgId: 'org-id',
+        orgName: chance.name(),
         firstName: 'John',
         surname: 'Doe',
         phone: 'phone',

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import useSWR from 'swr'
 
+import { useAuth } from '@app/context/auth'
 import {
   Course_Draft_Order_By,
   GetCourseDraftsQuery,
@@ -19,23 +20,28 @@ type Props = {
 }
 
 export function useCourseDrafts({ sorting, pagination }: Props) {
+  const { acl } = useAuth()
   const orderBy = getOrderBy(sorting)
   const { data, error } = useSWR<
     GetCourseDraftsQuery,
     Error,
-    [string, GetCourseDraftsQueryVariables]
-  >([
-    GET_COURSE_DRAFTS,
-    {
-      orderBy,
-      ...(pagination
-        ? {
-            limit: pagination.perPage,
-            offset: pagination.perPage * (pagination?.currentPage - 1),
-          }
-        : null),
-    },
-  ])
+    [string, GetCourseDraftsQueryVariables] | null
+  >(
+    acl.isTrainer()
+      ? [
+          GET_COURSE_DRAFTS,
+          {
+            orderBy,
+            ...(pagination
+              ? {
+                  limit: pagination.perPage,
+                  offset: pagination.perPage * (pagination?.currentPage - 1),
+                }
+              : null),
+          },
+        ]
+      : null
+  )
 
   const mapDraftData = (
     dataFromResponse?: GetCourseDraftsQuery['course_draft']

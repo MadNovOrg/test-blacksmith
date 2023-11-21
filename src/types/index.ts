@@ -845,6 +845,7 @@ export type Go1LicensingPrices = {
 
 export type InvoiceDetails = {
   orgId: string
+  orgName: string
   billingAddress: string
   firstName: string
   surname: string

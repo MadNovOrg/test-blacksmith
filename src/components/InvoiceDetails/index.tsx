@@ -24,6 +24,7 @@ export const InvoiceDetails: React.FC<React.PropsWithChildren<Props>> = ({
   const { t, _t } = useScopedTranslation('components.invoice-details')
 
   const infoRows: Record<string, string> = {
+    [t('organization-name')]: details.orgName,
     [t('billing-address')]: details.billingAddress,
     [_t('first-name')]: details.firstName,
     [_t('surname')]: details.surname,
