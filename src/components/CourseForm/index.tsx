@@ -1905,6 +1905,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
                       <ProfileSelector
                         {...register('salesRepresentative')}
+                        roleName={RoleName.SALES_REPRESENTATIVE}
                         value={values.salesRepresentative ?? undefined}
                         onChange={profile => {
                           setValue('salesRepresentative', profile ?? null, {
