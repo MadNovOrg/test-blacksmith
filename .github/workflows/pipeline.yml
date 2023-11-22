@@ -85,7 +85,7 @@ jobs:
           VITE_STRIPE_KEY: ${{ secrets.stripe_key }}
           VITE_APP_VERSION: ${{ inputs.version }}
           REQUEST_QUOTE_URL: ${{ secrets.request_quote_url }}
-          SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
+          SENTRY_AUTH_TOKEN: ${{secrets.sentry_auth_token}}
 
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/ ${{ secrets.s3_bucket }} --delete
@@ -94,9 +94,9 @@ jobs:
         uses: getsentry/action-release@v1.4.1
         continue-on-error: true
         env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.sentry_auth_token }}
+          SENTRY_ORG: 'team-teach-ltd'
+          SENTRY_PROJECT: 'team-teach-hub'
         with:
           environment: ${{ inputs.mode }}
 
