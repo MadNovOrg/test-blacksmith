@@ -4,6 +4,7 @@ import { Box, Button, CircularProgress, Grid, Stack, Tab } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useWindowSize } from 'react-use'
 import {
   createEnumArrayParam,
   useQueryParam,
@@ -63,6 +64,8 @@ export const OrgIndividualsTab: React.FC<
   const { total: totalMembers, refetch: refetchOrgMembers } = useOrgMembers({
     orgId,
   })
+  const { width } = useWindowSize()
+  const isMobile = width <= 425
 
   const org = data?.length ? data[0] : null
 
@@ -108,7 +111,10 @@ export const OrgIndividualsTab: React.FC<
           <Grid item xs={12} mt={2}>
             <TabContext value={selectedTab}>
               <Box display="flex" justifyContent="space-between" my={2}>
-                <TabList onChange={(_, value) => setSelectedTab(value)}>
+                <TabList
+                  onChange={(_, value) => setSelectedTab(value)}
+                  variant="scrollable"
+                >
                   <Tab
                     label={t('pages.org-details.tabs.users.tabs.individuals', {
                       number: totalMembers,
@@ -128,6 +134,12 @@ export const OrgIndividualsTab: React.FC<
                   <Button
                     variant="contained"
                     startIcon={<PersonAddIcon />}
+                    size={isMobile ? 'small' : 'large'}
+                    sx={{
+                      fontSize: isMobile ? '10px' : '15px',
+                      padding: isMobile ? 0.5 : 2,
+                      paddingLeft: isMobile ? 0.7 : 2,
+                    }}
                     onClick={() => navigate(`/organisations/${orgId}/invite`)}
                     data-testid="invite-user-to-org"
                   >

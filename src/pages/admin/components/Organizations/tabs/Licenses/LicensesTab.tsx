@@ -87,7 +87,7 @@ export const LicensesTab: React.FC<React.PropsWithChildren<Props>> = ({
       {!fetching && data ? (
         <>
           <Grid container spacing={2} mb={2}>
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6} lg={6}>
               <Tile justifyContent="space-between">
                 <Box>
                   <Typography
@@ -113,7 +113,7 @@ export const LicensesTab: React.FC<React.PropsWithChildren<Props>> = ({
                 ) : null}
               </Tile>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6} lg={6}>
               <Tile>
                 <Box>
                   <Typography variant="h2" mb={2}>

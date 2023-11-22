@@ -115,7 +115,10 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
 
                 {id && id !== ALL_ORGS ? (
                   <TabContext value={selectedTab}>
-                    <TabList onChange={(_, value) => setSelectedTab(value)}>
+                    <TabList
+                      onChange={(_, value) => setSelectedTab(value)}
+                      variant="scrollable"
+                    >
                       <Tab
                         label={t('pages.org-details.tabs.overview.title')}
                         value={OrgDashboardTabs.OVERVIEW}

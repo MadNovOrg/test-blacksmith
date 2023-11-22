@@ -4,6 +4,7 @@ import { isValid } from 'date-fns'
 import { format } from 'date-fns-tz'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useWindowSize } from 'react-use'
 
 import { DetailsRow } from '@app/components/DetailsRow'
 import { useAuth } from '@app/context/auth'
@@ -29,6 +30,9 @@ export const OrgDetailsTab: React.FC<
     acl.canViewAllOrganizations()
   )
 
+  const { width } = useWindowSize()
+  const isMobile = width <= 425
+
   const org = data?.length ? data[0] : null
   const [, sector = org?.sector] =
     Object.entries(sectors).find(
@@ -52,7 +56,12 @@ export const OrgDetailsTab: React.FC<
             {t('organization-details-section.title')}
           </Typography>
 
-          <Box bgcolor="common.white" p={3} mb={4} borderRadius={1}>
+          <Box
+            bgcolor="common.white"
+            p={isMobile ? 1 : 3}
+            mb={4}
+            borderRadius={1}
+          >
             <Grid container>
               <Grid item xs={8}>
                 <DetailsRow
@@ -87,7 +96,10 @@ export const OrgDetailsTab: React.FC<
                     <Button
                       variant="outlined"
                       color="primary"
-                      size="large"
+                      size={isMobile ? 'medium' : 'large'}
+                      sx={{
+                        fontSize: isMobile ? '10px' : '12px',
+                      }}
                       onClick={() => navigate('./edit')}
                     >
                       {_t('pages.org-details.edit-organization')}
@@ -102,7 +114,12 @@ export const OrgDetailsTab: React.FC<
             {t('organization-address-section.title')}
           </Typography>
 
-          <Box bgcolor="common.white" p={3} mb={4} borderRadius={1}>
+          <Box
+            bgcolor="common.white"
+            p={isMobile ? 1 : 3}
+            mb={4}
+            borderRadius={1}
+          >
             <DetailsRow
               label={t('organization-address-section.address-line-1')}
               value={org.address.line1}
@@ -129,7 +146,12 @@ export const OrgDetailsTab: React.FC<
             {t('additional-details.title')}
           </Typography>
 
-          <Box bgcolor="common.white" p={3} mb={4} borderRadius={1}>
+          <Box
+            bgcolor="common.white"
+            p={isMobile ? 1 : 3}
+            mb={4}
+            borderRadius={1}
+          >
             <DetailsRow
               label={t('additional-details.head-first-name')}
               value={org.attributes.headFirstName}
