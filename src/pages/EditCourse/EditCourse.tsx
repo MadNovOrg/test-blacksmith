@@ -442,7 +442,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           }
 
           if (editResponse.data?.updateCourse.id) {
-            notifyCourseEdit(
+            await notifyCourseEdit(
               {
                 courseId: course.id,
                 level: course.level,
@@ -458,7 +458,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 type: trainer.type,
               })) || []
             )
-            mutateCourse()
+            await mutateCourse()
             canGoToCourseBuilder
               ? navigate(`/courses/${courseInput?.id}/modules`, {
                   state: { editMode: true },

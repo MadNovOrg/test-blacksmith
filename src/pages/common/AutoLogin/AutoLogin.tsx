@@ -1,6 +1,6 @@
 import { CircularProgress } from '@mui/material'
 import { Auth } from 'aws-amplify'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMount } from 'react-use'
 
@@ -13,6 +13,7 @@ import {
 } from '@app/queries/invites/init-auth'
 
 export const AutoLogin = () => {
+  const [calledLogout, setCalledLogout] = useState<boolean>(false)
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { profile, loadProfile, logout } = useAuth()
@@ -29,6 +30,8 @@ export const AutoLogin = () => {
     })
 
     await logout()
+    setCalledLogout(true)
+
     const user = await Auth.signIn(initAuth.email)
     await Auth.sendCustomChallengeAnswer(user, initAuth.authChallenge)
 
@@ -39,8 +42,11 @@ export const AutoLogin = () => {
   useEffect(() => {
     if (!profile || !continueUrl) return
 
-    navigate(continueUrl, { replace: true })
-  }, [profile, navigate, continueUrl])
+    if (calledLogout) {
+      setCalledLogout(false)
+      navigate(continueUrl, { replace: true })
+    }
+  }, [profile, navigate, continueUrl, calledLogout])
 
   return <CircularProgress size={50} />
 }
