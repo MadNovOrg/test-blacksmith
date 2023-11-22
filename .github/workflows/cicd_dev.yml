@@ -17,7 +17,7 @@ jobs:
     if: ${{ ! startsWith(github.head_ref, 'changeset-release/') }}
     name: Lint & Typecheck
     env:
-      NODE_OPTIONS: "--max-old-space-size=4096"
+      NODE_OPTIONS: '--max-old-space-size=4096'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,7 +27,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-            version: 8
+          version: 8
 
       - name: Build
         uses: actions/setup-node@v4
@@ -47,7 +47,7 @@ jobs:
     if: ${{ ! startsWith(github.head_ref, 'changeset-release/') }}
     name: test
     env:
-      NODE_OPTIONS: "--max-old-space-size=4096"
+      NODE_OPTIONS: '--max-old-space-size=4096'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -60,7 +60,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-            version: 8
+          version: 8
       - name: Build
         uses: actions/setup-node@v4
         with:
@@ -95,3 +95,4 @@ jobs:
       recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
       stripe_key: ${{ secrets.STRIPE_KEY_DEV }}
       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
+      sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}

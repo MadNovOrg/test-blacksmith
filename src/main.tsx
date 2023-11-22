@@ -1,7 +1,6 @@
 import { ThemeProvider } from '@mui/material/styles'
 import { ExtraErrorData as ExtraErrorDataIntegration } from '@sentry/integrations'
 import * as Sentry from '@sentry/react'
-import { BrowserTracing } from '@sentry/tracing'
 import { Amplify } from 'aws-amplify'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
@@ -24,7 +23,7 @@ import.meta.env.VITE_APP_VERSION
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
-  integrations: [new BrowserTracing(), new ExtraErrorDataIntegration()],
+  integrations: [new Sentry.BrowserTracing(), new ExtraErrorDataIntegration()],
   tracesSampleRate: Number(import.meta.env.VITE_SENTRY_TRACING_SAMPLE_RATE),
   environment: import.meta.env.VITE_SENTRY_ENVIRONMENT,
   denyUrls: [/localhost/i, /127.0.0.1/],

@@ -18,7 +18,7 @@ jobs:
     uses: ./.github/workflows/pipeline.yml
     with:
       mode: 'staging'
-      checkout_ref:  ${{ inputs.tag && format('refs/tags/{0}', inputs.tag) || 'refs/heads/main' }}
+      checkout_ref: ${{ inputs.tag && format('refs/tags/{0}', inputs.tag) || 'refs/heads/main' }}
     secrets:
       cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG }}
       cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG }}
@@ -31,3 +31,4 @@ jobs:
       recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
       stripe_key: ${{ secrets.STRIPE_KEY_STG }}
       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
+      sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}

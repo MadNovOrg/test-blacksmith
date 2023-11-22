@@ -28,3 +28,4 @@ jobs:
       recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
       stripe_key: ${{ secrets.STRIPE_KEY }}
       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
+      sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}

@@ -37,12 +37,14 @@ on:
         required: true
       request_quote_url:
         required: true
+      sentry_auth_token:
+        required: false
 
 jobs:
   build-deploy:
     name: CD
     env:
-      NODE_OPTIONS: "--max-old-space-size=6656"
+      NODE_OPTIONS: '--max-old-space-size=6656'
     runs-on: ubuntu-latest
 
     steps:
@@ -53,7 +55,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-            version: 8
+          version: 8
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -83,9 +85,19 @@ jobs:
           VITE_STRIPE_KEY: ${{ secrets.stripe_key }}
           VITE_APP_VERSION: ${{ inputs.version }}
           REQUEST_QUOTE_URL: ${{ secrets.request_quote_url }}
+          SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
 
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/ ${{ secrets.s3_bucket }} --delete
+
+      - name: Sentry Release
+        uses: getsentry/action-release@v1.4.1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        with:
+          environment: ${{ inputs.mode }}
 
   hasura_migrations:
     name: Hasura migrations

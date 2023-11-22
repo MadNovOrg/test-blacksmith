@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import react from '@vitejs/plugin-react'
 import svgrPlugin from 'vite-plugin-svgr'
 import { defineConfig } from 'vitest/config'
@@ -33,6 +34,10 @@ export default defineConfig({
       svgrOptions: {
         icon: true,
       },
+    }),
+    sentryVitePlugin({
+      org: 'team-teach-ltd',
+      project: 'team-teach-hub',
     }),
   ],
   test: {
