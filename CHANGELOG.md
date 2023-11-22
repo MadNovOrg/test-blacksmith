@@ -1,5 +1,24 @@
 # @teamteach/hub
 
+## 1.4.0
+
+### Minor Changes
+
+- 49943fa6: allow internal users to import certificates for other users
+- f4677d3f: welcome page v2
+
+### Patch Changes
+
+- 08ec29b2: Allow users with Operations role to update the booking contact invite data for a course.
+- 709532c5: Allow L&D to see only courses with ExceptionsApprovalPending status , in the Action Required Table.
+- 4a26b0eb: Fix Sales Representative dropdown values on Closed course creation
+- 2bc6c4d8: Add auto login on view course on trainer invite
+- 3691b085: Allow searching users by given name and family name, separated by whitespace.
+- f08d929f: Displaying the Organization name on Course creation Review step for Indirect Course with Blended L.
+- 01022866: Fix invalid time range error and fix the organisation details page error
+- f08d929f: redesign indirect course checkboxes
+- 5c01e582: fix min start date message for indirect courses
+
 ## 1.3.2
 
 ### Patch Changes
