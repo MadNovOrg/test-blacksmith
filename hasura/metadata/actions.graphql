@@ -151,8 +151,8 @@ type Mutation {
 
 type Mutation {
   importLegacyCertificate(
-    code: String!
-  ): Boolean
+    input: ImportLegacyCertificateInput!
+  ): ImportLegacyCertificateOutput
 }
 
 type Query {
@@ -502,6 +502,14 @@ enum CancellationFeeType {
   NO_FEES
 }
 
+enum ImportLegacyCertificateError {
+  ALREADY_IMPORTED
+  UNSUPPORTED_LEVEL
+  PROFILE_NO_MATCH
+  GENERIC_ERROR
+  CERTIFICATE_NOT_FOUND
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -731,6 +739,11 @@ input ApproveCourseInput {
 
 input BlendedLearningExportDataInput {
   courseId: Int!
+}
+
+input ImportLegacyCertificateInput {
+  code: String!
+  profileId: uuid
 }
 
 type LinkProfileResult {
@@ -1178,6 +1191,11 @@ type BlendedLearningAttendeeExportData {
   blendedLearningPass: String!
   blendedLearningStartDate: String!
   blendedLearningEndDate: String
+}
+
+type ImportLegacyCertificateOutput {
+  success: Boolean!
+  error: ImportLegacyCertificateError
 }
 
 scalar Date

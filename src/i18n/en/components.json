@@ -469,5 +469,14 @@
     "label_one": "Mark attendance ({{count}})",
     "label_other": "Mark attendance ({{count}})",
     "error": "There was an error marking attendance."
+  },
+  "import-certificate-dialog": {
+    "code-input-label": "Enter certificate number",
+    "submit-button-text": "Add certificate",
+    "ALREADY_IMPORTED-error": "This certificate has already been imported",
+    "UNSUPPORTED_LEVEL-error": "This certificate level isn't supported via Connect, please contact Team Teach",
+    "PROFILE_NO_MATCH-error": "Personal information on the certificate doesn't match profile's personal information",
+    "CERTIFICATE_NOT_FOUND-error": "We could not locate this certificate, please contact Team Teach.",
+    "generic-error": "There was an error importing certificate"
   }
 }

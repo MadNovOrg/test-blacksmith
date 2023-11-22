@@ -1105,24 +1105,16 @@ export const EditProfilePage: React.FC<
         </FormProvider>
       </Container>
 
-      <Dialog
+      <ImportCertificateModal
+        onCancel={() => setShowImportModal(false)}
+        onSubmit={async () => {
+          await mutate()
+          setShowImportModal(false)
+        }}
         open={showImportModal}
         onClose={() => setShowImportModal(false)}
-        slots={{
-          Title: () => (
-            <>{t('common.course-certificate.update-certification-details')}</>
-          ),
-        }}
-        maxWidth={600}
-      >
-        <ImportCertificateModal
-          onCancel={() => setShowImportModal(false)}
-          onSubmit={async () => {
-            await mutate()
-            setShowImportModal(false)
-          }}
-        />
-      </Dialog>
+        profileId={id}
+      />
 
       <Dialog
         open={showInviteOrgModal}

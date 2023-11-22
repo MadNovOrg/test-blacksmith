@@ -1,89 +1,104 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
-import React, { useCallback, useState } from 'react'
+import { LoadingButton } from '@mui/lab'
+import { Alert, Box, Button, TextField, Typography } from '@mui/material'
+import React, { ComponentProps, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useMutation, gql } from 'urql'
 
-import { useAuth } from '@app/context/auth'
+import { Dialog } from '@app/components/dialogs'
 import {
   ImportLegacyCertificateMutation,
   ImportLegacyCertificateMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
-import { MUTATION as ImportLegacyCertificateMutationQuery } from '@app/queries/certificate/import-legacy-certificate'
+
+export const MUTATION = gql`
+  mutation ImportLegacyCertificate($input: ImportLegacyCertificateInput!) {
+    importLegacyCertificate(input: $input) {
+      success
+      error
+    }
+  }
+`
 
 export type ImportCertificateModalProps = {
   onCancel: () => void
   onSubmit: () => void
-}
+  profileId?: string
+} & ComponentProps<typeof Dialog>
 
 export const ImportCertificateModal: React.FC<
   React.PropsWithChildren<ImportCertificateModalProps>
-> = function ({ onCancel, onSubmit }) {
+> = function ({ onCancel, onSubmit, profileId, ...props }) {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
-  const { profile } = useAuth()
 
   const [code, setCode] = useState('')
-  const [error, setError] = useState<string>()
 
-  const submitHandler = useCallback(async () => {
-    const errorMessage = t(
-      'common.course-certificate.certification-code-incorrect'
-    )
-    if (!profile || !code) {
-      return
-    }
-    setError(undefined)
-    try {
-      await fetcher<
-        ImportLegacyCertificateMutation,
-        ImportLegacyCertificateMutationVariables
-      >(ImportLegacyCertificateMutationQuery, {
-        code,
-      })
+  const [{ data, error, fetching }, importCertificate] = useMutation<
+    ImportLegacyCertificateMutation,
+    ImportLegacyCertificateMutationVariables
+  >(MUTATION)
+
+  useEffect(() => {
+    if (data?.importLegacyCertificate?.success) {
       onSubmit()
-    } catch (e) {
-      setError(errorMessage)
     }
-  }, [code, t, fetcher, onSubmit, profile])
+  }, [data, onSubmit])
 
   return (
-    <Box>
-      <Typography variant="body1" color="grey.700">
-        {t('common.course-certificate.import-certificate-description')}
-      </Typography>
+    <Dialog
+      {...props}
+      slots={{
+        Title: () => (
+          <>{t('common.course-certificate.update-certification-details')}</>
+        ),
+      }}
+      maxWidth={600}
+    >
+      <Box>
+        <Typography variant="body1" color="grey.700">
+          {t('common.course-certificate.import-certificate-description')}
+        </Typography>
 
-      <TextField
-        sx={{ my: 3 }}
-        onChange={event => setCode(event.target.value)}
-        variant="filled"
-        label={t('common.course-certificate.enter-certificate-number')}
-        error={Boolean(error)}
-        helperText={error}
-        fullWidth
-        value={code}
-      />
+        {error || data?.importLegacyCertificate?.error ? (
+          <Alert severity="error" variant="outlined" sx={{ mt: 2 }}>
+            {t([
+              `components.import-certificate-dialog.${data?.importLegacyCertificate?.error}-error`,
+              'components.import-certificate-dialog.generic-error',
+            ])}
+          </Alert>
+        ) : null}
 
-      <Box display="flex" justifyContent="flex-end" gap={2}>
-        <Button
-          type="button"
-          variant="outlined"
-          color="secondary"
-          size="large"
-          onClick={onCancel}
-        >
-          {t('common.cancel')}
-        </Button>
-        <Button
-          type="button"
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={submitHandler}
-          disabled={!code}
-        >
-          {t('common.course-certificate.add-certificate')}
-        </Button>
+        <TextField
+          sx={{ my: 3 }}
+          onChange={event => setCode(event.target.value)}
+          variant="filled"
+          label={t('common.course-certificate.enter-certificate-number')}
+          fullWidth
+          value={code}
+        />
+
+        <Box display="flex" justifyContent="flex-end" gap={2}>
+          <Button
+            type="button"
+            variant="outlined"
+            color="secondary"
+            size="large"
+            onClick={onCancel}
+          >
+            {t('common.cancel')}
+          </Button>
+          <LoadingButton
+            type="button"
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={() => importCertificate({ input: { code, profileId } })}
+            disabled={!code}
+            loading={fetching}
+          >
+            {t('common.course-certificate.add-certificate')}
+          </LoadingButton>
+        </Box>
       </Box>
-    </Box>
+    </Dialog>
   )
 }
