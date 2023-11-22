@@ -1433,6 +1433,7 @@ update_permissions:
         - aol_country
         - aol_region
         - arloReferenceId
+        - booking_contact_invite_data
         - booking_contact_profile_id
         - booking_contact_profile_id
         - cancellation_fee
