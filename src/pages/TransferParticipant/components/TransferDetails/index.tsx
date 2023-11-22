@@ -166,6 +166,7 @@ export const TransferDetails: React.FC<
           disabled={!formData.isValid}
           onClick={handleSubmit(onSubmit)}
           data-testid="review-and-confirm"
+          sx={{ margin: '10px' }}
         >
           {t('next-btn-label')}
         </Button>
