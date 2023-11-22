@@ -785,4 +785,16 @@ export const REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL = {
   [CourseLevel.BildAdvancedTrainer]: [CourseLevel.BildAdvancedTrainer],
 }
 
+export const customFeeFormat = (num: number) => {
+  let [integerPart, fractionalPart] = num.toString().split('.')
+
+  if (integerPart.length > 4) integerPart = integerPart.slice(0, 4)
+  if (fractionalPart && fractionalPart.length > 2)
+    fractionalPart = fractionalPart.slice(0, 2)
+
+  return Number(
+    fractionalPart ? integerPart.concat('.', fractionalPart) : integerPart
+  )
+}
+
 export const INDIRECT_COURSE_MIN_ALLOWED_DATE = new Date('2023-12-04')

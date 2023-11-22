@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { isNumber } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -32,7 +31,7 @@ import { getCancellationTermsFee } from '@app/pages/EditCourse/shared'
 import { CANCEL_INDIVIDUAL_FROM_COURSE_MUTATION } from '@app/queries/participants/cancel-individual-from-course'
 import { yup } from '@app/schemas'
 import { Course, CourseParticipant } from '@app/types'
-import { capitalize } from '@app/util'
+import { capitalize, customFeeFormat } from '@app/util'
 
 export type VariantCompleteProps = {
   participant: CourseParticipant
@@ -139,9 +138,7 @@ export const VariantComplete = ({
   }, [feeType, setValue, startDate])
 
   useEffect(() => {
-    if (isNumber(values.cancellationFee)) {
-      setValue('cancellationFee', +values.cancellationFee.toFixed(2))
-    }
+    setValue('cancellationFee', customFeeFormat(values.cancellationFee))
   }, [setValue, values.cancellationFee, values.cancellationFeePercent])
 
   const [{ fetching, error }, cancelIndividualFromCourse] = useMutation<

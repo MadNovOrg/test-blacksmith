@@ -6,7 +6,7 @@ import FormLabel from '@mui/material/FormLabel'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import TextField from '@mui/material/TextField'
-import { isNumber, merge } from 'lodash-es'
+import { merge } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
@@ -15,6 +15,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { TransferModeEnum } from '@app/pages/TransferParticipant/components/TransferParticipantProvider'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
+import { customFeeFormat } from '@app/util'
 
 export const schema = yup.object({
   feeType: yup
@@ -62,9 +63,8 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
   const formValues = watch()
 
   useEffect(() => {
-    if (isNumber(formValues.customFee)) {
-      setValue('customFee', Number(formValues.customFee.toFixed(2)))
-    }
+    if (formValues.customFee)
+      setValue('customFee', customFeeFormat(formValues.customFee))
   }, [setValue, formValues.customFee])
 
   return (

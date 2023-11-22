@@ -31,7 +31,8 @@ import { CancellationTermsTable } from '@app/pages/EditCourse/components/Cancell
 import { getCancellationTermsFee } from '@app/pages/EditCourse/shared'
 import { CANCEL_COURSE_MUTATION } from '@app/queries/courses/cancel-course'
 import { yup } from '@app/schemas'
-import { Course, CourseType } from '@app/types' // 🙃 TODO: replace with generated type
+import { Course, CourseType } from '@app/types'
+import { customFeeFormat } from '@app/util' // 🙃 TODO: replace with generated type
 
 type FormInput = {
   cancellationFeePercent?: number
@@ -169,9 +170,8 @@ export const CourseCancellationModal: React.FC<
   }, [setValue, values.cancellationFeePercent])
 
   useEffect(() => {
-    if (isNumber(values.cancellationFee)) {
-      setValue('cancellationFee', +values.cancellationFee.toFixed(2))
-    }
+    if (values.cancellationFee)
+      setValue('cancellationFee', customFeeFormat(values.cancellationFee))
   }, [setValue, values.cancellationFee, values.cancellationFeePercent])
 
   const onFormSubmit = async (data: FormInput) => {
