@@ -1,5 +1,6 @@
 import { Box, Button, CircularProgress, Grid, Stack } from '@mui/material'
 import Typography from '@mui/material/Typography'
+import { isValid } from 'date-fns'
 import { format } from 'date-fns-tz'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -156,12 +157,12 @@ export const OrgDetailsTab: React.FC<
             <DetailsRow
               label={t('additional-details.ofsted-last-inspection')}
               value={
-                org.attributes.ofstedLastInspection
+                isValid(new Date(org.attributes.ofstedLastInspection))
                   ? format(
                       new Date(org.attributes.ofstedLastInspection),
                       'd MMMM yyyy'
                     )
-                  : null
+                  : org.attributes.ofstedLastInspection || ''
               }
             />
           </Box>
