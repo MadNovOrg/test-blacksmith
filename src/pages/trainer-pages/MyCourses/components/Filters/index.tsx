@@ -29,9 +29,14 @@ import {
   Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
 import { CoursesFilters } from '@app/hooks/useCourses'
-import { AdminOnlyCourseStatus, CourseState } from '@app/types'
-
-import { getActionableStatuses } from '../../utils'
+import { getActionableStatuses } from '@app/pages/trainer-pages/MyCourses/utils'
+import { CourseStatusFilters } from '@app/pages/user-pages/MyCourses/Components/Filters/Filters'
+import { UserCourseStatus } from '@app/pages/user-pages/MyCourses/hooks/useUserCourses'
+import {
+  AdminOnlyCourseStatus,
+  AttendeeOnlyCourseStatus,
+  CourseState,
+} from '@app/types'
 
 const allAccreditors = Object.values(Accreditors_Enum)
 
@@ -50,6 +55,40 @@ export function Filters({ onChange }: Props) {
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
   const { acl, isOrgAdmin, activeRole } = useAuth()
+
+  const [orgAdminStatusOptions, setOrgAdminStatusOptions] = useState<
+    FilterOption<CourseStatusFilters>[]
+  >(() => {
+    return [
+      {
+        id: AttendeeOnlyCourseStatus.AwaitingGrade,
+        title: t(`course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`),
+        selected: false,
+      },
+      {
+        id: Course_Status_Enum.Scheduled,
+        title: t(`course-statuses.${Course_Status_Enum.Scheduled}`),
+        selected: false,
+      },
+      {
+        id: Course_Status_Enum.Completed,
+        title: t(`course-statuses.${Course_Status_Enum.Completed}`),
+        selected: false,
+      },
+      {
+        id: AdminOnlyCourseStatus.CancellationRequested,
+        title: t(
+          `course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`
+        ),
+        selected: false,
+      },
+      {
+        id: Course_Status_Enum.Cancelled,
+        title: t(`course-statuses.${Course_Status_Enum.Cancelled}`),
+        selected: false,
+      },
+    ]
+  })
 
   const [keyword, setKeyword] = useState(searchParams.get('q') ?? '')
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
@@ -121,6 +160,18 @@ export function Filters({ onChange }: Props) {
     },
     [setAccreditedBy]
   )
+
+  const orgAdminFilterStatus = useMemo(
+    () =>
+      orgAdminStatusOptions.flatMap(statusOption =>
+        statusOption.selected ? statusOption.id : []
+      ) as UserCourseStatus[],
+    [orgAdminStatusOptions]
+  )
+
+  useEffect(() => {
+    setFilterStatus(orgAdminFilterStatus)
+  }, [orgAdminFilterStatus])
 
   useEffect(() => {
     let startDate = undefined
@@ -204,14 +255,26 @@ export function Filters({ onChange }: Props) {
             onChange={setFilterLevel}
           />
           <FilterByCourseType onChange={setFilterType} />
-          <FilterByCourseStatus
-            onChange={setFilterStatus}
-            customStatuses={
-              acl.isTTAdmin() || isOrgAdmin
-                ? new Set([AdminOnlyCourseStatus.CancellationRequested])
-                : undefined
-            }
-          />
+          {acl.isOrgAdmin() ? (
+            <FilterAccordion
+              options={orgAdminStatusOptions}
+              onChange={opts => {
+                setOrgAdminStatusOptions(opts)
+              }}
+              title={t('course-status')}
+              data-testid="FilterByCourseStatus"
+            />
+          ) : (
+            <FilterByCourseStatus
+              onChange={setFilterStatus}
+              customStatuses={
+                acl.isTTAdmin() || isOrgAdmin
+                  ? new Set([AdminOnlyCourseStatus.CancellationRequested])
+                  : undefined
+              }
+            />
+          )}
+
           <FilterByCourseStatusWarnings onChange={onStatusWarningChange} />
           <FilterAccordion
             title={t('filters.accredited-by')}

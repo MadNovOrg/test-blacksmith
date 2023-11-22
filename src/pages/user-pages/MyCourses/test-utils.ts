@@ -60,6 +60,7 @@ export const buildUserCourse = build<
     participants: [
       { healthSafetyConsent: true, grade: Grade_Enum.Pass, attended: true },
     ],
+
     evaluation_answers_aggregate: {
       aggregate: {
         count: 5,

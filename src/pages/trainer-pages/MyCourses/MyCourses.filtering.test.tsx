@@ -3,9 +3,12 @@
  * @author Alexei.Gaidulean <Alexei.Gaidulean@teamteach.co.uk>
  */
 /* eslint-disable vitest/expect-expect */
+import { addHours } from 'date-fns/esm'
 import { setMedia } from 'mock-match-media'
+import React from 'react'
 import { getI18n } from 'react-i18next'
 import { Client, Provider } from 'urql'
+import { beforeAll, describe } from 'vitest'
 import { fromValue } from 'wonka'
 
 import {
@@ -18,7 +21,11 @@ import {
   TrainerCoursesQuery,
   TrainerCoursesQueryVariables,
 } from '@app/generated/graphql'
-import { RoleName } from '@app/types'
+import {
+  AdminOnlyCourseStatus,
+  AttendeeOnlyCourseStatus,
+  RoleName,
+} from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities } from '@test/mock-data-utils'
@@ -601,7 +608,7 @@ describe('trainers-pages/MyCourses', () => {
       </Provider>,
       {
         auth: {
-          isOrgAdmin: true,
+          activeRole: RoleName.TT_ADMIN,
         },
       }
     )
@@ -829,5 +836,307 @@ describe('trainers-pages/MyCourses', () => {
     const participantsCell = within(table).getByTestId('participants-cell')
     expect(participantsCell).toBeInTheDocument()
     expect(participantsCell).toHaveTextContent(/^12\/12$/)
+  })
+
+  it.each([
+    AdminOnlyCourseStatus.CancellationRequested,
+    AttendeeOnlyCourseStatus.AwaitingGrade,
+    Course_Status_Enum.Cancelled,
+    Course_Status_Enum.Completed,
+    Course_Status_Enum.Scheduled,
+  ])('display status filter %s for org admin', async status => {
+    render(<TrainerCourses />, {
+      auth: {
+        activeRole: RoleName.USER,
+        isOrgAdmin: true,
+      },
+    })
+
+    const statusFilter = screen.getByTestId('FilterByCourseStatus')
+    await userEvent.click(statusFilter)
+
+    expect(
+      within(statusFilter).getByText(t(`course-statuses.${status}`))
+    ).toBeInTheDocument()
+  })
+
+  it('display cancel requested courses for org admin', async () => {
+    const course = buildTrainerCourse()
+    course.cancellationRequest = { id: 'id' }
+
+    const client = {
+      executeQuery: ({
+        variables,
+      }: {
+        variables: TrainerCoursesQueryVariables
+      }) => {
+        const mainCondition = variables.where?._and
+        const orCondition = mainCondition ? mainCondition[1]?._or ?? [{}] : [{}]
+
+        const cancelRequestCondition =
+          orCondition[0]?.cancellationRequest?.id?._is_null === false
+
+        const courses = cancelRequestCondition ? [course] : []
+
+        return fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses,
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        })
+      },
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <TrainerCourses />
+      </Provider>,
+      { auth: { activeRole: RoleName.USER, isOrgAdmin: true } }
+    )
+
+    const statusFilter = screen.getByTestId('FilterByCourseStatus')
+    await userEvent.click(statusFilter)
+
+    await userEvent.click(
+      within(statusFilter).getByText(
+        t(`course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`)
+      )
+    )
+
+    expect(screen.getByTestId(`course-row-${course.id}`)).toBeInTheDocument()
+
+    expect(
+      within(screen.getByTestId(`course-row-${course.id}`)).getByText(
+        t(`course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`)
+      )
+    ).toBeInTheDocument()
+  })
+
+  it('display cancelled courses for org admin', async () => {
+    const courses = [
+      buildTrainerCourse({
+        overrides: { status: Course_Status_Enum.Cancelled },
+      }),
+      buildTrainerCourse({
+        overrides: { status: Course_Status_Enum.Declined },
+      }),
+    ]
+
+    const client = {
+      executeQuery: ({
+        variables,
+      }: {
+        variables: TrainerCoursesQueryVariables
+      }) => {
+        const mainCondition = variables.where?._and
+        const orCondition = mainCondition ? mainCondition[1]?._or ?? [{}] : [{}]
+
+        const cancelledCondition =
+          orCondition[0]?.status?._in?.includes(Course_Status_Enum.Cancelled) &&
+          orCondition[0]?.status?._in?.includes(Course_Status_Enum.Declined)
+
+        return fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses: cancelledCondition ? courses : [],
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        })
+      },
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <TrainerCourses />
+      </Provider>,
+      { auth: { activeRole: RoleName.USER, isOrgAdmin: true } }
+    )
+
+    const statusFilter = screen.getByTestId('FilterByCourseStatus')
+    await userEvent.click(statusFilter)
+
+    await userEvent.click(
+      within(statusFilter).getByText(
+        t(`course-statuses.${Course_Status_Enum.Cancelled}`)
+      )
+    )
+
+    expect(
+      screen.getByTestId(`course-row-${courses[0].id}`)
+    ).toBeInTheDocument()
+
+    expect(
+      within(screen.getByTestId(`course-row-${courses[0].id}`)).getByText(
+        t(`course-statuses.${Course_Status_Enum.Cancelled}`)
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByTestId(`course-row-${courses[1].id}`)
+    ).toBeInTheDocument()
+
+    expect(
+      within(screen.getByTestId(`course-row-${courses[1].id}`)).getByText(
+        t(`course-statuses.${Course_Status_Enum.Cancelled}`)
+      )
+    ).toBeInTheDocument()
+  })
+
+  it('display scheduled status for course in progress and in future and NOT cancelled for org admin', async () => {
+    const courses = [
+      buildTrainerCourse({
+        overrides: {
+          schedule: [
+            {
+              id: 'id1',
+              start: addHours(new Date(), 1),
+              end: addHours(new Date(), 1),
+            },
+          ],
+        },
+      }),
+      buildTrainerCourse({
+        overrides: {
+          schedule: [
+            {
+              id: 'id2',
+              start: addHours(new Date(), -1),
+              end: addHours(new Date(), 1),
+            },
+          ],
+        },
+      }),
+    ]
+
+    const client = {
+      executeQuery: ({
+        variables,
+      }: {
+        variables: TrainerCoursesQueryVariables
+      }) => {
+        const mainCondition = variables.where?._and
+        const orCondition = mainCondition ? mainCondition[1]?._or ?? [{}] : [{}]
+
+        const scheduledCondition =
+          orCondition[0]?.status?._nin?.includes(
+            Course_Status_Enum.Cancelled
+          ) &&
+          orCondition[0]?.status?._nin?.includes(Course_Status_Enum.Declined) &&
+          Boolean(orCondition[0]?.schedule?.end?._gt)
+
+        return fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses: scheduledCondition ? courses : [],
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        })
+      },
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <TrainerCourses />
+      </Provider>,
+      { auth: { activeRole: RoleName.USER, isOrgAdmin: true } }
+    )
+
+    const statusFilter = screen.getByTestId('FilterByCourseStatus')
+    await userEvent.click(statusFilter)
+
+    await userEvent.click(
+      within(statusFilter).getByText(
+        t(`course-statuses.${Course_Status_Enum.Scheduled}`)
+      )
+    )
+
+    expect(
+      within(screen.getByTestId(`course-row-${courses[0].id}`)).getByText(
+        t(`course-statuses.${Course_Status_Enum.Scheduled}`)
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      within(screen.getByTestId(`course-row-${courses[1].id}`)).getByText(
+        t(`course-statuses.${Course_Status_Enum.Scheduled}`)
+      )
+    ).toBeInTheDocument()
+  })
+
+  it('display awaiting grade courses for org amdin', async () => {
+    const course = buildTrainerCourse({
+      overrides: {
+        schedule: [
+          {
+            id: 'id1',
+            start: addHours(new Date(), -2),
+            end: addHours(new Date(), -1),
+          },
+        ],
+        status: Course_Status_Enum.GradeMissing,
+      },
+    })
+
+    const client = {
+      executeQuery: ({
+        variables,
+      }: {
+        variables: TrainerCoursesQueryVariables
+      }) => {
+        const mainCondition = variables.where?._and
+        const orCondition = mainCondition ? mainCondition[1]?._or ?? [{}] : [{}]
+
+        const awaitGradeCondition =
+          orCondition[0]?.participants?.grade?._is_null === true &&
+          Boolean(orCondition[0].schedule?.end?._lt)
+
+        const courses = awaitGradeCondition ? [course] : []
+
+        return fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses,
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        })
+      },
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <TrainerCourses />
+      </Provider>,
+      { auth: { activeRole: RoleName.USER, isOrgAdmin: true } }
+    )
+
+    const statusFilter = screen.getByTestId('FilterByCourseStatus')
+    await userEvent.click(statusFilter)
+
+    await userEvent.click(
+      within(statusFilter).getByText(
+        t(`course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`)
+      )
+    )
+
+    expect(screen.getByTestId(`course-row-${course.id}`)).toBeInTheDocument()
+
+    expect(
+      within(screen.getByTestId(`course-row-${course.id}`)).getByText(
+        t(`course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`)
+      )
+    ).toBeInTheDocument()
   })
 })

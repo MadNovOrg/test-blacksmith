@@ -207,6 +207,7 @@ export const CourseDetails = () => {
         <>
           <CourseHeroSummary
             course={course}
+            isManaged={acl.isOrgAdmin()}
             slots={{
               BackButton: () => (
                 <BackButton label={t('back')} to="/manage-courses/all" />

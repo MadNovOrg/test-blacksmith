@@ -1,12 +1,13 @@
-import { useMemo } from 'react'
+import { deepmerge } from 'deepmerge-ts'
+import { useMemo, useRef } from 'react'
 import { useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   Course_Bool_Exp,
-  Course_Invite_Status_Enum,
   Course_Delivery_Type_Enum,
+  Course_Invite_Status_Enum,
   Course_Level_Enum,
   Course_Order_By,
   Course_Status_Enum,
@@ -17,10 +18,22 @@ import {
 } from '@app/generated/graphql'
 import { ALL_ORGS } from '@app/hooks/useOrg'
 import { QUERY as GetTrainerCourses } from '@app/queries/courses/get-trainer-courses'
-import { AdminOnlyCourseStatus, CourseState, RoleName } from '@app/types'
+import {
+  AdminOnlyCourseStatus,
+  AttendeeOnlyCourseStatus,
+  CourseState,
+  RoleName,
+} from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { Sorting } from './useTableSort'
+
+export type OrgAdminCourseStatus =
+  | AdminOnlyCourseStatus.CancellationRequested
+  | AttendeeOnlyCourseStatus.AwaitingGrade
+  | Course_Status_Enum.Cancelled
+  | Course_Status_Enum.Completed
+  | Course_Status_Enum.Scheduled
 
 export type CoursesFilters = {
   keyword?: string
@@ -141,7 +154,67 @@ export const useCourses = (
   { sorting, filters, pagination, orgId }: Props
 ) => {
   const { acl, organizationIds, profile } = useAuth()
+  const dateRef = useRef(new Date().toISOString())
   const orderBy = getOrderBy(sorting)
+
+  const orgAdminCourseStatusConditionsMap: Record<
+    OrgAdminCourseStatus,
+    Course_Bool_Exp
+  > = useMemo(
+    () => ({
+      [Course_Status_Enum.Scheduled]: {
+        _or: [
+          {
+            schedule: {
+              end: { _gt: dateRef.current },
+            },
+            status: {
+              _nin: [Course_Status_Enum.Cancelled, Course_Status_Enum.Declined],
+            },
+          },
+        ],
+      },
+      [Course_Status_Enum.Completed]: {
+        _or: [
+          {
+            participants: { grade: { _is_null: false } },
+            schedule: {
+              end: { _lt: dateRef.current },
+            },
+          },
+        ],
+      },
+      [AttendeeOnlyCourseStatus.AwaitingGrade]: {
+        _or: [
+          {
+            participants: {
+              grade: { _is_null: true },
+            },
+            schedule: {
+              end: { _lt: dateRef.current },
+            },
+          },
+        ],
+      },
+      [AdminOnlyCourseStatus.CancellationRequested]: {
+        _or: [
+          {
+            cancellationRequest: { id: { _is_null: false } },
+          },
+        ],
+      },
+      [Course_Status_Enum.Cancelled]: {
+        _or: [
+          {
+            status: {
+              _in: [Course_Status_Enum.Cancelled, Course_Status_Enum.Declined],
+            },
+          },
+        ],
+      },
+    }),
+    []
+  )
 
   const where = useMemo(() => {
     let obj: Course_Bool_Exp = {}
@@ -206,19 +279,65 @@ export const useCourses = (
 
     obj = filtersToWhereClause(obj, filters)
 
-    const regularStatuses = filters?.statuses?.filter(s =>
-      Object.values(Course_Status_Enum).includes(s as Course_Status_Enum)
-    )
-    if (regularStatuses?.length) {
-      obj.status = {
-        _in: regularStatuses as Course_Status_Enum[],
-      }
-    }
+    let orgAdminStatusCondition: Course_Bool_Exp = {}
 
-    if (
-      filters?.statuses?.includes(AdminOnlyCourseStatus.CancellationRequested)
-    ) {
-      obj.cancellationRequest = { id: { _is_null: false } }
+    if (acl.isOrgAdmin()) {
+      if (filters?.statuses?.includes(Course_Status_Enum.Scheduled)) {
+        orgAdminStatusCondition = deepmerge(
+          orgAdminStatusCondition,
+          orgAdminCourseStatusConditionsMap.SCHEDULED
+        )
+      }
+
+      if (filters?.statuses?.includes(Course_Status_Enum.Completed)) {
+        orgAdminStatusCondition = deepmerge(
+          orgAdminStatusCondition,
+          orgAdminCourseStatusConditionsMap.COMPLETED
+        )
+      }
+
+      if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.AwaitingGrade)) {
+        orgAdminStatusCondition = deepmerge(
+          orgAdminStatusCondition,
+          orgAdminCourseStatusConditionsMap.AWAITING_GRADE
+        )
+      }
+
+      if (
+        filters?.statuses?.includes(AdminOnlyCourseStatus.CancellationRequested)
+      ) {
+        orgAdminStatusCondition = deepmerge(
+          orgAdminStatusCondition,
+          orgAdminCourseStatusConditionsMap.CANCELLATION_REQUESTED
+        )
+      }
+
+      if (filters?.statuses?.includes(Course_Status_Enum.Cancelled)) {
+        orgAdminStatusCondition = deepmerge(
+          orgAdminStatusCondition,
+          orgAdminCourseStatusConditionsMap.CANCELLED
+        )
+      }
+
+      if (Object.keys(orgAdminStatusCondition).length > 0) {
+        if (obj._and) obj._and.push(orgAdminStatusCondition)
+        else obj = { _and: [{ _or: obj._or }, orgAdminStatusCondition] }
+      }
+    } else {
+      const regularStatuses = filters?.statuses?.filter(s =>
+        Object.values(Course_Status_Enum).includes(s as Course_Status_Enum)
+      )
+      if (regularStatuses?.length) {
+        obj.status = {
+          _in: regularStatuses as Course_Status_Enum[],
+        }
+      }
+
+      if (
+        filters?.statuses?.includes(AdminOnlyCourseStatus.CancellationRequested)
+      ) {
+        obj.cancellationRequest = { id: { _is_null: false } }
+      }
     }
 
     if (role === RoleName.TRAINER) {
@@ -229,7 +348,19 @@ export const useCourses = (
     }
 
     return obj
-  }, [acl, filters, orgId, organizationIds, profile?.id, role])
+  }, [
+    acl,
+    filters,
+    orgAdminCourseStatusConditionsMap.AWAITING_GRADE,
+    orgAdminCourseStatusConditionsMap.CANCELLATION_REQUESTED,
+    orgAdminCourseStatusConditionsMap.CANCELLED,
+    orgAdminCourseStatusConditionsMap.COMPLETED,
+    orgAdminCourseStatusConditionsMap.SCHEDULED,
+    orgId,
+    organizationIds,
+    profile?.id,
+    role,
+  ])
 
   const [{ data, error }, refetch] = useQuery<
     TrainerCoursesQuery,

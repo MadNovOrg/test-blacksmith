@@ -16,16 +16,22 @@ import {
 import { ALL_ORGS } from '@app/hooks/useOrg'
 import { Sorting } from '@app/hooks/useTableSort'
 import { QUERY } from '@app/queries/user-queries/get-user-courses'
-import { AttendeeOnlyCourseStatus, CourseState } from '@app/types'
+import {
+  AdminOnlyCourseStatus,
+  AttendeeOnlyCourseStatus,
+  CourseState,
+} from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { useUnevaluatedUserCourses } from './useUnevaluatedUserCourses'
 
 export type UserCourseStatus =
+  | AdminOnlyCourseStatus.CancellationRequested
   | AttendeeOnlyCourseStatus
+  | Course_Status_Enum.Cancelled
+  | Course_Status_Enum.Completed
   | Course_Status_Enum.EvaluationMissing
   | Course_Status_Enum.Scheduled
-  | Course_Status_Enum.Completed
 
 export type CoursesFilters = {
   keyword?: string
@@ -55,6 +61,8 @@ export function useUserCourses(
 } {
   const { acl, profile, organizationIds } = useAuth()
   const dateRef = useRef(new Date().toISOString())
+
+  const forContactRole = bookingContactOnly || orgKeyContactOnly
 
   const { courses: unevaluatedCourses } = useUnevaluatedUserCourses()
   const unevaluatedIds = unevaluatedCourses?.map(c => c.id)
@@ -98,12 +106,26 @@ export function useUserCourses(
         [Course_Status_Enum.Scheduled]: {
           _or: [
             {
-              participants: {
-                healthSafetyConsent: { _eq: true },
-              },
+              ...(forContactRole
+                ? null
+                : {
+                    participants: {
+                      healthSafetyConsent: { _eq: true },
+                    },
+                  }),
               schedule: {
                 end: { _gt: dateRef.current },
               },
+              ...(forContactRole
+                ? {
+                    status: {
+                      _nin: [
+                        Course_Status_Enum.Cancelled,
+                        Course_Status_Enum.Declined,
+                      ],
+                    },
+                  }
+                : null),
             },
           ],
         },
@@ -111,7 +133,7 @@ export function useUserCourses(
           _or: [
             {
               participants: { grade: { _is_null: false } },
-              id: { _nin: unevaluatedIds },
+              ...(forContactRole ? null : { id: { _nin: unevaluatedIds } }),
               schedule: {
                 end: { _lt: dateRef.current },
               },
@@ -130,8 +152,27 @@ export function useUserCourses(
             },
           ],
         },
+        [AdminOnlyCourseStatus.CancellationRequested]: {
+          _or: [
+            {
+              cancellationRequest: { id: { _is_null: false } },
+            },
+          ],
+        },
+        [Course_Status_Enum.Cancelled]: {
+          _or: [
+            {
+              status: {
+                _in: [
+                  Course_Status_Enum.Cancelled,
+                  Course_Status_Enum.Declined,
+                ],
+              },
+            },
+          ],
+        },
       }),
-      [unevaluatedIds]
+      [forContactRole, unevaluatedIds]
     )
 
   const where = useMemo(() => {
@@ -199,6 +240,22 @@ export function useUserCourses(
       filterConditions = deepmerge(
         filterConditions,
         courseStatusConditionsMap.AWAITING_GRADE
+      )
+    }
+
+    if (
+      filters?.statuses?.includes(AdminOnlyCourseStatus.CancellationRequested)
+    ) {
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.CANCELLATION_REQUESTED
+      )
+    }
+
+    if (filters?.statuses?.includes(Course_Status_Enum.Cancelled)) {
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.CANCELLED
       )
     }
 

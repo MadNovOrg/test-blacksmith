@@ -275,6 +275,7 @@ export const CourseDetails: React.FC<
         <>
           <CourseHeroSummary
             course={course}
+            isManaged={bookingOnly}
             slots={{
               BackButton: () => (
                 <BackButton

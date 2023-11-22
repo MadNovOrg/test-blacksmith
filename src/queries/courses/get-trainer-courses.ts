@@ -66,6 +66,8 @@ export const QUERY = gql`
     isDraft
     schedule {
       id
+      start
+      end
       venue {
         id
         name

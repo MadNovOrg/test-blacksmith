@@ -8,9 +8,17 @@ import { FilterByCourseState } from '@app/components/filters/FilterByCourseState
 import { FilterByDates } from '@app/components/filters/FilterByDates'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { Course_Level_Enum, Course_Status_Enum } from '@app/generated/graphql'
-import { AttendeeOnlyCourseStatus, CourseState } from '@app/types'
+import {
+  UserCourseStatus,
+  CoursesFilters,
+} from '@app/pages/user-pages/MyCourses/hooks/useUserCourses'
+import {
+  AdminOnlyCourseStatus,
+  AttendeeOnlyCourseStatus,
+  CourseState,
+} from '@app/types'
 
-import { UserCourseStatus, CoursesFilters } from '../../hooks/useUserCourses'
+export type CourseStatusFilters = UserCourseStatus
 
 type DateFilters = {
   filterStartDate?: Date | undefined
@@ -20,10 +28,11 @@ type DateFilters = {
 }
 
 type Props = {
+  forManaging?: boolean
   onChange: (filters: CoursesFilters) => void
 }
 
-export function Filters({ onChange }: Props) {
+export function Filters({ forManaging = false, onChange }: Props) {
   const { t } = useTranslation()
   const [keyword, setKeyword] = useState('')
 
@@ -32,46 +41,82 @@ export function Filters({ onChange }: Props) {
   const [dateFilters, setDateFilters] = useState<DateFilters>()
 
   const [statusOptions, setStatusOptions] = useState<
-    FilterOption<UserCourseStatus>[]
+    FilterOption<CourseStatusFilters>[]
   >(() => {
-    return [
-      {
-        id: AttendeeOnlyCourseStatus.InfoRequired,
-        title: t(`course-statuses.${AttendeeOnlyCourseStatus.InfoRequired}`),
-        selected: false,
-      },
-      {
-        id: Course_Status_Enum.EvaluationMissing,
-        title: t(`course-statuses.${Course_Status_Enum.EvaluationMissing}`),
-        selected: false,
-      },
-      {
-        id: Course_Status_Enum.Completed,
-        title: t(`course-statuses.${Course_Status_Enum.Completed}`),
-        selected: false,
-      },
-      {
-        id: AttendeeOnlyCourseStatus.NotAttended,
-        title: t(`course-statuses.${AttendeeOnlyCourseStatus.NotAttended}`),
-        selected: false,
-      },
-      {
-        id: AttendeeOnlyCourseStatus.AwaitingGrade,
-        title: t(`course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`),
-        selected: false,
-      },
-      {
-        id: Course_Status_Enum.Scheduled,
-        title: t(`course-statuses.${Course_Status_Enum.Scheduled}`),
-        selected: false,
-      },
-    ]
+    return forManaging
+      ? [
+          {
+            id: AttendeeOnlyCourseStatus.AwaitingGrade,
+            title: t(
+              `course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`
+            ),
+            selected: false,
+          },
+          {
+            id: Course_Status_Enum.Scheduled,
+            title: t(`course-statuses.${Course_Status_Enum.Scheduled}`),
+            selected: false,
+          },
+          {
+            id: Course_Status_Enum.Completed,
+            title: t(`course-statuses.${Course_Status_Enum.Completed}`),
+            selected: false,
+          },
+          {
+            id: AdminOnlyCourseStatus.CancellationRequested,
+            title: t(
+              `course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`
+            ),
+            selected: false,
+          },
+          {
+            id: Course_Status_Enum.Cancelled,
+            title: t(`course-statuses.${Course_Status_Enum.Cancelled}`),
+            selected: false,
+          },
+        ]
+      : [
+          {
+            id: AttendeeOnlyCourseStatus.InfoRequired,
+            title: t(
+              `course-statuses.${AttendeeOnlyCourseStatus.InfoRequired}`
+            ),
+            selected: false,
+          },
+          {
+            id: Course_Status_Enum.EvaluationMissing,
+            title: t(`course-statuses.${Course_Status_Enum.EvaluationMissing}`),
+            selected: false,
+          },
+          {
+            id: Course_Status_Enum.Completed,
+            title: t(`course-statuses.${Course_Status_Enum.Completed}`),
+            selected: false,
+          },
+          {
+            id: AttendeeOnlyCourseStatus.NotAttended,
+            title: t(`course-statuses.${AttendeeOnlyCourseStatus.NotAttended}`),
+            selected: false,
+          },
+          {
+            id: AttendeeOnlyCourseStatus.AwaitingGrade,
+            title: t(
+              `course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`
+            ),
+            selected: false,
+          },
+          {
+            id: Course_Status_Enum.Scheduled,
+            title: t(`course-statuses.${Course_Status_Enum.Scheduled}`),
+            selected: false,
+          },
+        ]
   })
 
   const filterStatus = useMemo(
     () =>
-      statusOptions.flatMap(o =>
-        o.selected ? o.id : []
+      statusOptions.flatMap(statusOption =>
+        statusOption.selected ? statusOption.id : []
       ) as UserCourseStatus[],
     [statusOptions]
   )

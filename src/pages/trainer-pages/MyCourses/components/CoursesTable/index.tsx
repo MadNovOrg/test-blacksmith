@@ -9,6 +9,7 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
+import { IndividualCourseStatusChip } from '@app/components/IndividualCourseStatus'
 import { ParticipantsCount } from '@app/components/ParticipantsCount'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
@@ -268,16 +269,22 @@ export function DateCell({ date }: { date: Date }) {
 }
 
 export function StatusCell({ course }: { course: TableCourse }) {
+  const { acl } = useAuth()
+
   return (
     <TableCell>
       {course.status ? (
-        <CourseStatusChip
-          status={
-            course.cancellationRequest
-              ? AdminOnlyCourseStatus.CancellationRequested
-              : course.status
-          }
-        />
+        acl.isOrgAdmin() ? (
+          <IndividualCourseStatusChip course={course} />
+        ) : (
+          <CourseStatusChip
+            status={
+              course.cancellationRequest
+                ? AdminOnlyCourseStatus.CancellationRequested
+                : course.status
+            }
+          />
+        )
       ) : null}
     </TableCell>
   )

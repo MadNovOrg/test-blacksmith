@@ -28,6 +28,10 @@ import {
 } from '@app/components/AttendeeCourseStatus/AttendeeCourseStatus'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { CourseInstructionsDialog } from '@app/components/dialogs'
+import {
+  CourseStatusDetails,
+  IndividualCourseStatusChip,
+} from '@app/components/IndividualCourseStatus'
 import { useAuth } from '@app/context/auth'
 import { AdminOnlyCourseStatus, Course, CourseDeliveryType } from '@app/types'
 import { getCourseBeginsForMessage, formatCourseVenue } from '@app/util'
@@ -48,11 +52,13 @@ interface Props {
     EditButton: React.Factory<unknown>
     OrderItem: React.Factory<unknown>
   }>
+  isManaged?: boolean
 }
 
 export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   course,
   slots,
+  isManaged = false,
 }) => {
   const { t } = useTranslation()
   const [isInstructionsDialogOpen, setIsInstructionsDialogOpen] =
@@ -161,13 +167,17 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             ) : null}
             {course.status ? (
               <Box mt={2}>
-                {!acl.isUser() || (acl.isUser() && acl.isOrgAdmin()) ? (
+                {acl.isInternalUser() || acl.isTrainer() ? (
                   <CourseStatusChip
                     status={
                       course.cancellationRequest
                         ? AdminOnlyCourseStatus.CancellationRequested
                         : course.status
                     }
+                  />
+                ) : isManaged ? (
+                  <IndividualCourseStatusChip
+                    course={course as CourseStatusDetails}
                   />
                 ) : (
                   <AttendeeCourseStatus

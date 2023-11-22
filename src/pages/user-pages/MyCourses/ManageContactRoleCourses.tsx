@@ -77,7 +77,7 @@ export const ManageContactRoleCourses: React.FC<
             </Box>
           ) : (
             <Stack gap={4} mt={4}>
-              <Filters onChange={setFilters} />
+              <Filters onChange={setFilters} forManaging />
             </Stack>
           )}
         </Box>

@@ -10,7 +10,7 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AttendeeCourseStatus } from '@app/components/AttendeeCourseStatus/AttendeeCourseStatus'
-import { CourseStatusChip } from '@app/components/CourseStatusChip'
+import { IndividualCourseStatusChip } from '@app/components/IndividualCourseStatus'
 import { ParticipantsCount } from '@app/components/ParticipantsCount'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
@@ -22,7 +22,6 @@ import {
 } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { Cols } from '@app/pages/trainer-pages/MyCourses/components/CoursesTable'
-import { AdminOnlyCourseStatus } from '@app/types'
 
 export type CoursesTableProps = {
   additionalColumns?: Set<Extract<Cols, 'type' | 'registrants'>>
@@ -113,56 +112,56 @@ export const CoursesTable: React.FC<
             itemsName={t('courses').toLowerCase()}
           />
 
-          {courses?.map((c, index) => {
+          {courses?.map((course, index) => {
             const nameCell = (
               <>
-                <Typography mb={1}>{c.name}</Typography>
+                <Typography mb={1}>{course.name}</Typography>
                 <Typography variant="body2" data-testid="course-code">
-                  {c.course_code}
+                  {course.course_code}
                 </Typography>
               </>
             )
 
             return (
               <TableRow
-                key={c.id}
+                key={course.id}
                 className="MyCoursesRow"
-                data-testid={`course-row-${c.id}`}
+                data-testid={`course-row-${course.id}`}
                 data-index={index}
               >
                 <TableCell>
-                  {c.status !== CourseStatuses.Cancelled &&
-                  c.schedule?.length > 0 ? (
-                    <Link href={`${c.id}/details`}>{nameCell}</Link>
+                  {course.status !== CourseStatuses.Cancelled &&
+                  course.schedule?.length > 0 ? (
+                    <Link href={`${course.id}/details`}>{nameCell}</Link>
                   ) : (
                     nameCell
                   )}
                 </TableCell>
                 <TableCell>
                   <Typography mb={1}>
-                    {c.schedule?.length > 0 && c.schedule[0].venue
-                      ? c.schedule[0].venue?.name
+                    {course.schedule?.length > 0 && course.schedule[0].venue
+                      ? course.schedule[0].venue?.name
                       : 'N/A'}
                   </Typography>
                   <Typography variant="body2">
-                    {c.schedule?.length > 0 && c.schedule[0].venue?.id
-                      ? c.schedule[0].venue?.city
+                    {course.schedule?.length > 0 && course.schedule[0].venue?.id
+                      ? course.schedule[0].venue?.city
                       : 'Online'}
                   </Typography>
                 </TableCell>
                 {additionalColumns?.has('type') ? (
                   <TableCell>
                     <Typography variant="body2" sx={{ color: 'inherit' }}>
-                      {t(`course-types.${c.type}`)}
+                      {t(`course-types.${course.type}`)}
                     </Typography>
                   </TableCell>
                 ) : null}
                 <TableCell>
-                  {c.dates?.aggregate?.start?.date && (
+                  {course.dates?.aggregate?.start?.date && (
                     <Box>
                       <Typography variant="body2" gutterBottom>
                         {t('dates.defaultShort', {
-                          date: c.dates.aggregate.start.date,
+                          date: course.dates.aggregate.start.date,
                         })}
                       </Typography>
                       <Typography
@@ -171,18 +170,18 @@ export const CoursesTable: React.FC<
                         whiteSpace="nowrap"
                       >
                         {t('dates.time', {
-                          date: c.dates.aggregate.start.date,
+                          date: course.dates.aggregate.start.date,
                         })}
                       </Typography>
                     </Box>
                   )}
                 </TableCell>
                 <TableCell>
-                  {c.dates?.aggregate?.end?.date && (
+                  {course.dates?.aggregate?.end?.date && (
                     <Box>
                       <Typography variant="body2" gutterBottom>
                         {t('dates.defaultShort', {
-                          date: c.dates.aggregate.end.date,
+                          date: course.dates.aggregate.end.date,
                         })}
                       </Typography>
                       <Typography
@@ -191,18 +190,18 @@ export const CoursesTable: React.FC<
                         whiteSpace="nowrap"
                       >
                         {t('dates.time', {
-                          date: c.dates.aggregate.end.date,
+                          date: course.dates.aggregate.end.date,
                         })}
                       </Typography>
                     </Box>
                   )}
                 </TableCell>
                 <TableCell>
-                  {c.createdAt && (
+                  {course.createdAt && (
                     <Box>
                       <Typography variant="body2" gutterBottom>
                         {t('dates.defaultShort', {
-                          date: c.createdAt,
+                          date: course.createdAt,
                         })}
                       </Typography>
                       <Typography
@@ -211,35 +210,31 @@ export const CoursesTable: React.FC<
                         whiteSpace="nowrap"
                       >
                         {t('dates.time', {
-                          date: c.createdAt,
+                          date: course.createdAt,
                         })}
                       </Typography>
                     </Box>
                   )}
                 </TableCell>
                 <TableCell>
-                  <TrainerAvatarGroup trainers={c.trainers ?? []} />
+                  <TrainerAvatarGroup trainers={course.trainers ?? []} />
                 </TableCell>
                 {additionalColumns?.has('registrants') ? (
                   <TableCell data-testid="participants-cell">
                     <ParticipantsCount
-                      participating={c.participantsAgg?.aggregate?.count ?? 0}
-                      capacity={c.max_participants}
-                      waitlist={c.waitlistAgg?.aggregate?.count}
+                      participating={
+                        course.participantsAgg?.aggregate?.count ?? 0
+                      }
+                      capacity={course.max_participants}
+                      waitlist={course.waitlistAgg?.aggregate?.count}
                     />
                   </TableCell>
                 ) : null}
                 <TableCell>
                   {isManaging && !acl.isUser() ? (
-                    <CourseStatusChip
-                      status={
-                        c.cancellationRequest
-                          ? AdminOnlyCourseStatus.CancellationRequested
-                          : (c.status as CourseStatuses)
-                      }
-                    />
+                    <IndividualCourseStatusChip course={course} />
                   ) : (
-                    <AttendeeCourseStatus course={c} />
+                    <AttendeeCourseStatus course={course} />
                   )}
                 </TableCell>
               </TableRow>

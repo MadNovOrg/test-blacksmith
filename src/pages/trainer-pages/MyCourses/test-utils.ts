@@ -59,6 +59,8 @@ export const buildTrainerCourse = build<TrainerCourseFragment>({
           name: perBuild(() => chance.word()),
           city: perBuild(() => chance.city()),
         },
+        end: new Date().toISOString(),
+        start: new Date().toISOString(),
         virtualLink: null,
       },
     ],
