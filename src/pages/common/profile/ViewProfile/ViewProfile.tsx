@@ -18,7 +18,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
@@ -31,7 +31,7 @@ import { useAuth } from '@app/context/auth'
 import { GetProfileDetailsQuery, Grade_Enum } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 import { ProfileArchiveDialog } from '@app/pages/common/profile/components/ProfileArchiveDialog'
-import { RoleName } from '@app/types'
+import { RoleName, TrainerRoleTypeName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { CertificationsTable } from '../components/CertificationsTable'
@@ -75,6 +75,20 @@ export const ViewProfilePage: React.FC<
       isMyProfile
   )
   const { activeRole } = useAuth()
+
+  const allTrainerRoles = Object.values(TrainerRoleTypeName)
+  const profileHasTrainerRole = useMemo(() => {
+    return (
+      profile?.roles.some(({ role }) => role.name === RoleName.TRAINER) ||
+      profile?.trainer_role_types.some(({ trainer_role_type: trainerRole }) =>
+        allTrainerRoles.includes(trainerRole.name as TrainerRoleTypeName)
+      )
+    )
+  }, [allTrainerRoles, profile?.roles, profile?.trainer_role_types])
+  const cannotViewDietaryAndDisabilities =
+    !isMyProfile &&
+    (acl.isOrgAdmin() || acl.isOrgKeyContact() || acl.isBookingContact()) &&
+    profileHasTrainerRole
 
   if (status === LoadingStatus.FETCHING) {
     return <CircularProgress />
@@ -349,7 +363,8 @@ export const ViewProfilePage: React.FC<
                         data-testid="profile-dietary-restrictions"
                         label={t('dietary-restrictions')}
                         value={
-                          profile.dietaryRestrictions === ''
+                          profile.dietaryRestrictions === '' ||
+                          cannotViewDietaryAndDisabilities
                             ? '--'
                             : profile.dietaryRestrictions
                         }
@@ -358,7 +373,8 @@ export const ViewProfilePage: React.FC<
                         data-testid="profile-disabilities"
                         label={t('disabilities')}
                         value={
-                          profile.disabilities === ''
+                          profile.disabilities === '' ||
+                          cannotViewDietaryAndDisabilities
                             ? '--'
                             : profile.disabilities
                         }
