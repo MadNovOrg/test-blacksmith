@@ -24,6 +24,18 @@ export const BILDOverview: React.FC<React.PropsWithChildren<Props>> = ({
     return null
   }
 
+  type Module = {
+    modules: { name: string; duration: number }[]
+    groups: { name: string; modules: string[] }[]
+  }
+
+  const filterModules = (module: Module): Module => {
+    const filteredModules = module.modules.filter(
+      obj1 => !module.groups?.some(obj2 => obj2.name === obj1.name)
+    )
+    return { modules: filteredModules, groups: module.groups }
+  }
+
   const { modules } = course.bildModules[0]
   const strategies = course.bildStrategies
 
@@ -67,6 +79,16 @@ export const BILDOverview: React.FC<React.PropsWithChildren<Props>> = ({
             </AccordionSummary>
 
             <AccordionDetails sx={{ ml: 1 }}>
+              {modules[strategyName].modules?.length
+                ? filterModules(modules[strategyName] as Module).modules.map(
+                    (module: { name: string }, index: number) => (
+                      <Typography mb={2} key={index}>
+                        {module.name}
+                      </Typography>
+                    )
+                  )
+                : null}
+
               {modules[strategyName].groups?.length
                 ? modules[strategyName].groups.map(
                     (group: { name: string; modules: [{ name: string }] }) => (
@@ -77,7 +99,7 @@ export const BILDOverview: React.FC<React.PropsWithChildren<Props>> = ({
 
                         {group.modules?.length
                           ? group.modules.map((module, index) => (
-                              <Typography key={index} mb={2} ml={1}>
+                              <Typography key={index} mb={2} ml={3}>
                                 {module.name}
                               </Typography>
                             ))

@@ -69,6 +69,13 @@ export const CertificateInfo: React.FC<
   const { t, _t } = useScopedTranslation('common.course-certificate')
   const { acl } = useAuth()
 
+  const filterModules = (strategy: Strategy): Strategy => {
+    const filteredModules = strategy.modules?.filter(
+      obj1 => !strategy.groups?.some(obj2 => obj2.name === obj1.name)
+    )
+    return { modules: filteredModules, groups: strategy.groups }
+  }
+
   const moduleGroupsWithModules = courseParticipant
     ? transformModulesToGroups(
         courseParticipant.gradingModules as unknown as Course_Participant_Module[]
@@ -298,6 +305,20 @@ export const CertificateInfo: React.FC<
                 </AccordionSummary>
 
                 <AccordionDetails sx={{ pt: 0, pb: 3 }}>
+                  <Stack spacing={1.5} mb={2}>
+                    {strategyModules[strategyName].modules?.length
+                      ? filterModules(
+                          strategyModules[strategyName] as Strategy
+                        ).modules?.map(
+                          (bildModule: { name: string }, index: number) => (
+                            <Typography mb={2} key={index}>
+                              {bildModule.name}
+                            </Typography>
+                          )
+                        )
+                      : null}
+                  </Stack>
+
                   {strategyModules[strategyName].groups?.length
                     ? strategyModules[strategyName].groups?.map(group => (
                         <Box key={group.name}>
@@ -305,7 +326,7 @@ export const CertificateInfo: React.FC<
                             {group.name}
                           </Typography>
 
-                          <Stack spacing={1.5} sx={{ pl: 2 }}>
+                          <Stack spacing={1.5} sx={{ pl: 2 }} ml={2}>
                             {group.modules?.length
                               ? group.modules.map(module => (
                                   <Typography key={module.name}>
