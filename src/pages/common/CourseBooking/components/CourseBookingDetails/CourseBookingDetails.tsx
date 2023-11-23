@@ -962,7 +962,7 @@ export const CourseBookingDetails: React.FC<
                           errormessage={
                             getParticipantError(index, 'country')?.message ?? ''
                           }
-                          label={t('fields.country')}
+                          label={t('country')}
                         />
                       </Box>
                     </Grid>
