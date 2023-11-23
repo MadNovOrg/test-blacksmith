@@ -305,7 +305,11 @@ export const Users = () => {
         <Box display="flex" gap={4}>
           <Box width={250}>
             <Typography variant="body2" color="grey.600" mt={1}>
-              {isLoading ? <>&nbsp;</> : t('x-items', { count: users?.length })}
+              {isLoading ? (
+                <>&nbsp;</>
+              ) : (
+                t('x-items', { count: usersTotalCount })
+              )}
             </Typography>
 
             <Stack gap={4} mt={4}>

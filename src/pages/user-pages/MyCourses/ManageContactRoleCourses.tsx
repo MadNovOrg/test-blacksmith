@@ -68,7 +68,7 @@ export const ManageContactRoleCourses: React.FC<
         <Box width={isMobile ? undefined : 250}>
           <Typography variant="h1">{t('courses')}</Typography>
           <Typography variant="body2" color="grey.600" mt={1}>
-            {loading ? <>&nbsp;</> : t('x-items', { count: courses.length })}
+            {loading ? <>&nbsp;</> : t('x-items', { count: total })}
           </Typography>
 
           {isMobile ? (

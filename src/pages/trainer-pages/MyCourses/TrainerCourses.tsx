@@ -153,8 +153,6 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
     window.scrollTo(0, 0)
   }, [currentPage])
 
-  const count = courses.length
-
   const onAcceptedOrDeclined = useCallback(
     (
       course: { id: number },
@@ -206,7 +204,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
             {title ?? t(isTrainer ? 'courses' : 'pages.my-courses.h1')}
           </Typography>
           <Typography variant="body2" color="grey.600" mt={1}>
-            {fetchingCourses ? <>&nbsp;</> : t('x-items', { count })}
+            {fetchingCourses ? <>&nbsp;</> : t('x-items', { count: total })}
           </Typography>
 
           {isMobile ? (

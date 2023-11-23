@@ -143,7 +143,6 @@ export const Certifications: React.FC<
     !!filterType.length ||
     !!filterLevel.length ||
     archived
-  const count = certificates?.length ?? 0
 
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
@@ -151,7 +150,7 @@ export const Certifications: React.FC<
         <Box width={250}>
           <Typography variant="h1">{t('common.certifications')}</Typography>
           <Typography variant="body2" color="grey.600" mt={1}>
-            {loading ? <>&nbsp;</> : t('x-items', { count })}
+            {loading ? <>&nbsp;</> : t('x-items', { count: total })}
           </Typography>
 
           <Stack gap={4} mt={4}>
