@@ -7,19 +7,23 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import { useMutation } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import {
+  Course_Invite_Status_Enum,
   Course_Trainer,
   Course_Trainer_Type_Enum,
-  Course_Invite_Status_Enum,
+  ReInviteTrainerMutation,
+  ReInviteTrainerMutationVariables,
 } from '@app/generated/graphql'
+import { RE_INVITE_COURSE_TRAINER_MUTATION } from '@app/queries/courses/re-invite-course-trainer'
 import { CourseTrainer } from '@app/types'
 import {
-  getCourseLeadTrainer,
   getCourseAssistants,
+  getCourseLeadTrainer,
   getCourseModerator,
 } from '@app/util'
 
@@ -44,11 +48,37 @@ const ListItemTranslated: React.FC<React.PropsWithChildren<ItemProps>> = ({
 interface ListItemWrapperProps {
   courseTrainer: Course_Trainer
   enableLinks: boolean | undefined
+  canReInviteTrainer?: boolean
 }
 
 const ListItemWrapper: React.FC<
   React.PropsWithChildren<ListItemWrapperProps>
-> = ({ courseTrainer, enableLinks }) => {
+> = ({ canReInviteTrainer, courseTrainer, enableLinks }) => {
+  const [reInvited, setReInvited] = useState<boolean>(false)
+  const { course_id, profile, type } = courseTrainer
+
+  const [{ data, fetching }, reInviteTrainer] = useMutation<
+    ReInviteTrainerMutation,
+    ReInviteTrainerMutationVariables
+  >(RE_INVITE_COURSE_TRAINER_MUTATION)
+
+  useEffect(() => {
+    if (data && data.deleteCourseTrainer?.id && data.insertCourseTrainer?.id)
+      setReInvited(true)
+  }, [data])
+
+  const reInvite = useCallback(async () => {
+    await reInviteTrainer({
+      courseTrainerToDelete: courseTrainer.id,
+      courseTrainer: {
+        course_id,
+        profile_id: profile.id,
+        status: Course_Invite_Status_Enum.Pending,
+        type,
+      },
+    })
+  }, [courseTrainer.id, course_id, profile.id, reInviteTrainer, type])
+
   const i18nKey = useMemo(() => {
     switch (courseTrainer.type) {
       case Course_Trainer_Type_Enum.Leader:
@@ -63,6 +93,8 @@ const ListItemWrapper: React.FC<
   }, [courseTrainer])
 
   const statusColor = useMemo(() => {
+    if (reInvited) return STATUS_COLORS.pending_orange
+
     switch (courseTrainer.status) {
       case Course_Invite_Status_Enum.Accepted:
         return STATUS_COLORS.accepted_green
@@ -73,7 +105,7 @@ const ListItemWrapper: React.FC<
       default:
         return STATUS_COLORS.default
     }
-  }, [courseTrainer])
+  }, [courseTrainer.status, reInvited])
 
   return (
     <>
@@ -91,9 +123,33 @@ const ListItemWrapper: React.FC<
             fullName={courseTrainer.profile.fullName || ''}
           />
         )}
-        <Tooltip title={courseTrainer.status}>
-          <CircleIcon sx={{ color: statusColor, height: 18, width: 18 }} />
+        <Tooltip
+          title={
+            reInvited ? Course_Invite_Status_Enum.Pending : courseTrainer.status
+          }
+        >
+          <CircleIcon
+            sx={{
+              color: statusColor,
+              height: 18,
+              width: 18,
+            }}
+          />
         </Tooltip>
+        {courseTrainer.status === Course_Invite_Status_Enum.Declined &&
+        canReInviteTrainer &&
+        !reInvited ? (
+          <Button
+            disabled={fetching}
+            variant="text"
+            color="primary"
+            onClick={reInvite}
+          >
+            <Trans
+              i18nKey={'pages.course-participants.resend-trainer-invite'}
+            />
+          </Button>
+        ) : null}
       </Box>
     </>
   )
@@ -101,11 +157,13 @@ const ListItemWrapper: React.FC<
 
 interface Props {
   trainers: CourseTrainer[] | undefined
+  canReInviteTrainer?: boolean
 }
 
 const MAX_ASSISTANT_TO_SHOW = 2
 
 export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
+  canReInviteTrainer,
   trainers,
 }) => {
   const { profile, acl } = useAuth()
@@ -149,8 +207,9 @@ export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
             t('pages.course-participants.trainer')
           ) : (
             <ListItemWrapper
-              enableLinks={canEnableLinks(courseLeadTrainer)}
+              canReInviteTrainer={canReInviteTrainer}
               courseTrainer={courseLeadTrainer}
+              enableLinks={canEnableLinks(courseLeadTrainer)}
             />
           )}
         </ListItemText>
@@ -162,8 +221,9 @@ export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
               t('pages.course-participants.assistant')
             ) : (
               <ListItemWrapper
-                enableLinks={canEnableLinks(assistant)}
+                canReInviteTrainer={canReInviteTrainer}
                 courseTrainer={assistant}
+                enableLinks={canEnableLinks(assistant)}
               />
             )}
           </ListItemText>
@@ -187,8 +247,9 @@ export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
             t('pages.course-participants.moderator')
           ) : (
             <ListItemWrapper
-              enableLinks={canEnableLinks(courseModerator)}
+              canReInviteTrainer={canReInviteTrainer}
               courseTrainer={courseModerator}
+              enableLinks={canEnableLinks(courseModerator)}
             />
           )}
         </ListItemText>

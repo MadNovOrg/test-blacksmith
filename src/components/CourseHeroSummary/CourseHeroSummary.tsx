@@ -33,8 +33,13 @@ import {
   IndividualCourseStatusChip,
 } from '@app/components/IndividualCourseStatus'
 import { useAuth } from '@app/context/auth'
+import { Course_Status_Enum } from '@app/generated/graphql'
 import { AdminOnlyCourseStatus, Course, CourseDeliveryType } from '@app/types'
-import { getCourseBeginsForMessage, formatCourseVenue } from '@app/util'
+import {
+  getCourseBeginsForMessage,
+  formatCourseVenue,
+  courseEnded,
+} from '@app/util'
 
 import { CourseHostInfo } from '../CourseHostInfo'
 import { CourseTrainersInfo } from '../CourseTrainersInfo'
@@ -65,6 +70,20 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
     useState(false)
 
   const { acl } = useAuth()
+
+  const courseCancelled =
+    course &&
+    (course.status === Course_Status_Enum.Cancelled ||
+      course.status === Course_Status_Enum.Declined)
+
+  const canReInviteTrainers = useMemo(
+    () =>
+      course &&
+      acl.canEditCourses(course) &&
+      !courseEnded(course) &&
+      !courseCancelled,
+    [acl, course, courseCancelled]
+  )
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -264,7 +283,10 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   <PersonOutlineIcon />
                 </StyledListIcon>
                 <List sx={{ paddingTop: 0.5 }}>
-                  <CourseTrainersInfo trainers={course.trainers} />
+                  <CourseTrainersInfo
+                    canReInviteTrainer={canReInviteTrainers}
+                    trainers={course.trainers}
+                  />
                   {course.organization && (
                     <CourseHostInfo
                       courseType={course.type}

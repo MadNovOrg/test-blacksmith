@@ -1,8 +1,13 @@
+import userEvent from '@testing-library/user-event'
 import React from 'react'
+import { Client, Provider } from 'urql'
+import { fromValue } from 'wonka'
 
-import { RoleName } from '@app/types'
+import { ReInviteTrainerMutation } from '@app/generated/graphql'
+import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { InviteStatus, RoleName } from '@app/types'
 
-import { render, screen, providers } from '@test/index'
+import { providers, render, renderHook, screen } from '@test/index'
 import {
   buildCourseAssistant,
   buildCourseLeader,
@@ -12,6 +17,22 @@ import {
 import { CourseTrainersInfo } from '.'
 
 describe('component: CourseTrainersInfo', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useScopedTranslation('pages.course-participants'))
+
+  const client = {
+    executeMutation: () =>
+      fromValue<{ data: ReInviteTrainerMutation }>({
+        data: {
+          insertCourseTrainer: { id: 'id' },
+          deleteCourseTrainer: { id: 'id' },
+        },
+      }),
+  } as unknown as Client
+
   it('displays show more button', () => {
     const trainers = [
       buildCourseLeader(),
@@ -22,7 +43,7 @@ describe('component: CourseTrainersInfo', () => {
 
     render(<CourseTrainersInfo trainers={trainers} />)
 
-    expect(screen.getByText('Show more')).toBeInTheDocument()
+    expect(screen.getByText(t('show-more'))).toBeInTheDocument()
   })
 
   it('does not displays show more button', () => {
@@ -34,7 +55,7 @@ describe('component: CourseTrainersInfo', () => {
 
     render(<CourseTrainersInfo trainers={trainers} />)
 
-    expect(screen.queryByText('Show more')).toBeNull()
+    expect(screen.queryByText(t('show-more'))).toBeNull()
   })
 
   it('href is referenced correctly when Admin', async () => {
@@ -113,7 +134,7 @@ describe('component: CourseTrainersInfo', () => {
     ]
 
     render(<CourseTrainersInfo trainers={trainers} />)
-    expect(screen.getByText('You are the trainer')).toBeInTheDocument()
+    expect(screen.getByText(t('trainer'))).toBeInTheDocument()
   })
 
   it('display you are assist trainer text if id match', () => {
@@ -134,6 +155,31 @@ describe('component: CourseTrainersInfo', () => {
     ]
 
     render(<CourseTrainersInfo trainers={trainers} />)
-    expect(screen.getByText('You are the assist trainer')).toBeInTheDocument()
+    expect(screen.getByText(t('assistant'))).toBeInTheDocument()
+  })
+
+  it('display resend trainer invite button and remove after invite', async () => {
+    const profile = buildProfile()
+
+    const trainers = [
+      buildCourseLeader({
+        profile: { ...profile, fullName: 'Leader', id: '1' },
+        status: InviteStatus.DECLINED,
+      }),
+    ]
+
+    render(
+      <Provider value={client}>
+        <CourseTrainersInfo canReInviteTrainer={true} trainers={trainers} />
+      </Provider>
+    )
+
+    const resendTrainerInviteBtn = screen.getByText(t('resend-trainer-invite'))
+
+    expect(resendTrainerInviteBtn).toBeInTheDocument()
+
+    await userEvent.click(resendTrainerInviteBtn)
+
+    expect(resendTrainerInviteBtn).not.toBeInTheDocument()
   })
 })

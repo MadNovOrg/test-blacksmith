@@ -57,6 +57,7 @@ export const QUERY = gql`
         id
         type
         status
+        course_id
         profile {
           id
           givenName

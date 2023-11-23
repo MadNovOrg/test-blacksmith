@@ -689,6 +689,7 @@
       "waitlist": "Waitlist ({{number}})"
     },
     "resend-invite": "Resend invite",
+    "resend-trainer-invite": "Resend Invitation",
     "cancel-invite": "Cancel invite",
     "invite-sent": "Invite sent.",
     "invite-cancelled": "Invite cancelled.",
