@@ -108,7 +108,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canSeeActionableCourseTable: () => anyPass([acl.isTTAdmin, acl.isLD])(),
 
-    canApproveCourseExceptions: () => anyPass([acl.isAdmin, acl.isLD])(),
+    canApproveCourseExceptions: () => anyPass([acl.isTTAdmin, acl.isLD])(),
 
     /**
      * @deprecated Will be removed in the near future
