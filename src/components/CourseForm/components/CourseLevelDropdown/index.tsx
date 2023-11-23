@@ -3,12 +3,12 @@ import React, { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
-import { Accreditors_Enum } from '@app/generated/graphql'
-import { CourseLevel, CourseType } from '@app/types'
+import { Accreditors_Enum, Course_Level_Enum } from '@app/generated/graphql'
+import { CourseType } from '@app/types'
 
 import { getLevels } from '../../helpers'
 
-type SelectValue = CourseLevel | ''
+type SelectValue = Course_Level_Enum | ''
 
 interface Props {
   value: SelectValue
@@ -45,7 +45,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     if (levels.length > 0 && value !== selected) {
       const ev = { target: { value: selected } }
-      onChange(ev as SelectChangeEvent<CourseLevel>)
+      onChange(ev as SelectChangeEvent<Course_Level_Enum>)
     }
   }, [levels, onChange, value, selected])
 
@@ -53,7 +53,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
     if (onChangeRef.current) {
       onChangeRef.current({
         target: { value: selected },
-      } as SelectChangeEvent<CourseLevel>)
+      } as SelectChangeEvent<Course_Level_Enum>)
     }
   }, [courseAccreditor, selected])
 
@@ -66,15 +66,25 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
       disabled={disabled}
       labelId={labelId}
     >
-      {levels.map(level => (
-        <MenuItem
-          key={level}
-          value={level}
-          data-testid={`course-level-option-${level}`}
-        >
-          {t(`common.course-levels.${level}`)}
-        </MenuItem>
-      ))}
+      {levels.map(level => {
+        // TODO: @ionel.vidrighin - remove this condition when back to regular sprints
+        if (
+          import.meta.env.MODE === 'production' &&
+          level === Course_Level_Enum.ThreeDaySafetyResponseTrainer
+        ) {
+          return null
+        }
+
+        return (
+          <MenuItem
+            key={level}
+            value={level}
+            data-testid={`course-level-option-${level}`}
+          >
+            {t(`common.course-levels.${level}`)}
+          </MenuItem>
+        )
+      })}
     </Select>
   )
 }

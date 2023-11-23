@@ -5,14 +5,14 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import React from 'react'
 
-import { CourseLevel } from '@app/generated/graphql'
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 import { getTransferTermsFee, isTrainTheTrainerCourse } from '../../utils'
 
 type Props = {
   startDate: Date
-  courseLevel: CourseLevel
+  courseLevel: Course_Level_Enum
 }
 
 export const TERMS = {

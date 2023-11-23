@@ -7,6 +7,7 @@ import { never } from 'wonka'
 import {
   Accreditors_Enum,
   Course_Status_Enum,
+  Course_Level_Enum,
   Currency,
   Payment_Methods_Enum,
 } from '@app/generated/graphql'
@@ -15,7 +16,6 @@ import { dateFormats } from '@app/i18n/config'
 import { MUTATION } from '@app/queries/courses/insert-course'
 import {
   CourseDeliveryType,
-  CourseLevel,
   CourseTrainerType,
   CourseType,
   Draft,
@@ -66,7 +66,7 @@ describe('component: ReviewLicenseOrder', () => {
     const endDate = addHours(startDate, 8)
 
     const courseData: Partial<Draft['courseData']> = {
-      courseLevel: CourseLevel.Level_1,
+      courseLevel: Course_Level_Enum.Level_1,
       startDateTime: startDate,
       endDateTime: endDate,
       maxParticipants: 2,
@@ -154,7 +154,7 @@ describe('component: ReviewLicenseOrder', () => {
       type: CourseTrainerType.Leader,
       levels: [
         {
-          courseLevel: CourseLevel.AdvancedTrainer,
+          courseLevel: Course_Level_Enum.AdvancedTrainer,
           expiryDate: addMonths(new Date(), 6).toISOString(),
         },
       ],
@@ -162,7 +162,7 @@ describe('component: ReviewLicenseOrder', () => {
 
     const courseData: Partial<Draft['courseData']> = {
       accreditedBy: Accreditors_Enum.Icm,
-      courseLevel: CourseLevel.Level_1,
+      courseLevel: Course_Level_Enum.Level_1,
       startDateTime: startDate,
       endDateTime: endDate,
       type: CourseType.INDIRECT,

@@ -1,7 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CourseLevel, RoleName } from '@app/types'
+import { Course_Level_Enum } from '@app/generated/graphql'
+import { RoleName } from '@app/types'
 
 import { render, renderHook, screen } from '@test/index'
 
@@ -18,7 +19,7 @@ describe('component: NavLinks', () => {
       auth: {
         activeRole: RoleName.USER,
         allowedRoles: new Set([RoleName.USER]),
-        activeCertificates: [CourseLevel.Level_1],
+        activeCertificates: [Course_Level_Enum.Level_1],
       },
     })
 
@@ -105,7 +106,7 @@ describe('component: NavLinks', () => {
     render(<NavLinks />, {
       auth: {
         activeRole: RoleName.TRAINER,
-        activeCertificates: [CourseLevel.AdvancedTrainer],
+        activeCertificates: [Course_Level_Enum.AdvancedTrainer],
       },
     })
 

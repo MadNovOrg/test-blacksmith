@@ -1,8 +1,8 @@
 import { expect, Locator, Page } from '@playwright/test'
 import { format } from 'date-fns'
 
-import { Course_Source_Enum } from '@app/generated/graphql'
-import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
+import { Course_Source_Enum, Course_Level_Enum } from '@app/generated/graphql'
+import { CourseDeliveryType, CourseType } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
 import { User } from '@qa/data/types'
@@ -121,7 +121,7 @@ export class CreateCoursePage extends BasePage {
     await super.goto(`courses/new?type=${courseType}`)
   }
 
-  async selectCourseLevel(level: CourseLevel) {
+  async selectCourseLevel(level: Course_Level_Enum) {
     await this.levelDropDown.click()
     await this.levelOption(level).click()
   }

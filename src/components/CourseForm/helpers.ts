@@ -1,12 +1,11 @@
 import { format, isValid, isBefore, isEqual, getYear } from 'date-fns'
 import { TFunction } from 'i18next'
 
-import { Accreditors_Enum } from '@app/generated/graphql'
+import { Accreditors_Enum, Course_Level_Enum } from '@app/generated/graphql'
 import {
   BildStrategies,
   CourseDeliveryType,
   CourseInput,
-  CourseLevel,
   CourseType,
 } from '@app/types'
 
@@ -59,42 +58,47 @@ export function getLevels(
   const types = {
     [`${Accreditors_Enum.Icm}-${CourseType.OPEN}`]: () => {
       return [
-        CourseLevel.Level_1,
-        CourseLevel.Level_2,
-        CourseLevel.IntermediateTrainer,
-        CourseLevel.AdvancedTrainer,
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.IntermediateTrainer,
+        Course_Level_Enum.AdvancedTrainer,
+        Course_Level_Enum.ThreeDaySafetyResponseTrainer,
       ]
     },
 
     [`${Accreditors_Enum.Icm}-${CourseType.CLOSED}`]: () => {
       return [
-        CourseLevel.Level_1,
-        CourseLevel.Level_2,
-        CourseLevel.Advanced,
-        CourseLevel.IntermediateTrainer,
-        CourseLevel.AdvancedTrainer,
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.Advanced,
+        Course_Level_Enum.IntermediateTrainer,
+        Course_Level_Enum.AdvancedTrainer,
       ]
     },
 
     [`${Accreditors_Enum.Icm}-${CourseType.INDIRECT}`]: () => {
-      return [CourseLevel.Level_1, CourseLevel.Level_2, CourseLevel.Advanced]
+      return [
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.Advanced,
+      ]
     },
 
     [`${Accreditors_Enum.Bild}-${CourseType.INDIRECT}`]: () => {
-      return [CourseLevel.BildRegular]
+      return [Course_Level_Enum.BildRegular]
     },
 
     [`${Accreditors_Enum.Bild}-${CourseType.OPEN}`]: () => {
       return [
-        CourseLevel.BildIntermediateTrainer,
-        CourseLevel.BildAdvancedTrainer,
+        Course_Level_Enum.BildIntermediateTrainer,
+        Course_Level_Enum.BildAdvancedTrainer,
       ]
     },
     [`${Accreditors_Enum.Bild}-${CourseType.CLOSED}`]: () => {
       return [
-        CourseLevel.BildRegular,
-        CourseLevel.BildIntermediateTrainer,
-        CourseLevel.BildAdvancedTrainer,
+        Course_Level_Enum.BildRegular,
+        Course_Level_Enum.BildIntermediateTrainer,
+        Course_Level_Enum.BildAdvancedTrainer,
       ]
     },
   }
@@ -126,7 +130,7 @@ export function canBeBlendedBild(
 
 export function canBeBlended(
   courseType: CourseType,
-  courseLevel: CourseLevel | '',
+  courseLevel: Course_Level_Enum | '',
   deliveryType: CourseDeliveryType
 ) {
   const isF2F = deliveryType === CourseDeliveryType.F2F
@@ -148,19 +152,19 @@ export function canBeBlended(
       if (!courseLevel) return false
 
       if (isF2F) {
-        const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
+        const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]
         return levels.includes(courseLevel)
       }
 
       if (isMixed) {
-        if (courseLevel === CourseLevel.Level_2) {
+        if (courseLevel === Course_Level_Enum.Level_2) {
           return true
         }
         return false
       }
 
       if (isVirtual) {
-        const levels = [CourseLevel.Level_1]
+        const levels = [Course_Level_Enum.Level_1]
         return levels.includes(courseLevel)
       }
 
@@ -171,7 +175,7 @@ export function canBeBlended(
       if (!courseLevel) return false
 
       if (isF2F) {
-        const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
+        const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]
         return levels.includes(courseLevel)
       }
 
@@ -180,7 +184,7 @@ export function canBeBlended(
       }
 
       if (isVirtual) {
-        const levels = [CourseLevel.Level_1]
+        const levels = [Course_Level_Enum.Level_1]
         return levels.includes(courseLevel)
       }
 
@@ -222,7 +226,7 @@ export function canBeReaccBild(
 
 export function canBeReacc(
   courseType: CourseType,
-  courseLevel: CourseLevel | '',
+  courseLevel: Course_Level_Enum | '',
   deliveryType: CourseDeliveryType,
   blended: boolean
 ) {
@@ -236,16 +240,21 @@ export function canBeReacc(
 
       if (isF2F) {
         const levels = [
-          CourseLevel.Level_2,
-          CourseLevel.IntermediateTrainer,
-          CourseLevel.AdvancedTrainer,
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.IntermediateTrainer,
+          Course_Level_Enum.AdvancedTrainer,
+          Course_Level_Enum.ThreeDaySafetyResponseTrainer,
         ]
         if (levels.includes(courseLevel)) return !blended
       }
 
-      if (isMixed && courseLevel === CourseLevel.Level_2) {
-        return !blended
-        // OPEN + Mixed can only be Level 2
+      if (isMixed) {
+        // OPEN + Mixed can only be Level 2 or 3-Day Safety Responses Trainer
+        const levels = [
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+        ]
+        if (levels.includes(courseLevel)) return !blended
       }
 
       if (isVirtual) {
@@ -260,21 +269,21 @@ export function canBeReacc(
 
       if (isF2F) {
         const levels = [
-          CourseLevel.Level_1,
-          CourseLevel.Level_2,
-          CourseLevel.IntermediateTrainer,
-          CourseLevel.AdvancedTrainer,
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.IntermediateTrainer,
+          Course_Level_Enum.AdvancedTrainer,
         ]
         return levels.includes(courseLevel)
       }
 
       if (isMixed) {
-        const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
+        const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]
         return levels.includes(courseLevel)
       }
 
       if (isVirtual) {
-        const levels = [CourseLevel.Level_1]
+        const levels = [Course_Level_Enum.Level_1]
         return levels.includes(courseLevel)
       }
 
@@ -285,17 +294,17 @@ export function canBeReacc(
       if (!courseLevel) return false
 
       if (isF2F) {
-        const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
+        const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]
         return levels.includes(courseLevel)
       }
 
       if (isMixed) {
-        const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
+        const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]
         return levels.includes(courseLevel)
       }
 
       if (isVirtual) {
-        const levels = [CourseLevel.Level_1]
+        const levels = [Course_Level_Enum.Level_1]
         return levels.includes(courseLevel)
       }
 
@@ -312,14 +321,14 @@ export function canBeF2FBild() {
 
 export function canBeMixedBild(
   courseType: CourseType,
-  courseLevel: CourseLevel | '',
+  courseLevel: Course_Level_Enum | '',
   selectedStrategies: BildStrategies[]
 ): boolean {
-  if (courseLevel === CourseLevel.BildRegular) {
+  if (courseLevel === Course_Level_Enum.BildRegular) {
     return selectedStrategies.includes(BildStrategies.Primary)
   }
 
-  return courseLevel === CourseLevel.BildIntermediateTrainer
+  return courseLevel === Course_Level_Enum.BildIntermediateTrainer
 }
 
 export function canBeVirtualBild(
@@ -350,17 +359,18 @@ export function canBeVirtualBild(
 
 export function canBeF2F(
   courseType: CourseType,
-  courseLevel: CourseLevel | ''
+  courseLevel: Course_Level_Enum | ''
 ) {
   const types = {
     [CourseType.OPEN]: () => {
       if (!courseLevel) return false
 
       const levels = [
-        CourseLevel.Level_1,
-        CourseLevel.Level_2,
-        CourseLevel.IntermediateTrainer,
-        CourseLevel.AdvancedTrainer,
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.IntermediateTrainer,
+        Course_Level_Enum.AdvancedTrainer,
+        Course_Level_Enum.ThreeDaySafetyResponseTrainer,
       ]
       return levels.includes(courseLevel)
     },
@@ -369,11 +379,11 @@ export function canBeF2F(
       if (!courseLevel) return false
 
       const levels = [
-        CourseLevel.Level_1,
-        CourseLevel.Level_2,
-        CourseLevel.Advanced,
-        CourseLevel.IntermediateTrainer,
-        CourseLevel.AdvancedTrainer,
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.Advanced,
+        Course_Level_Enum.IntermediateTrainer,
+        Course_Level_Enum.AdvancedTrainer,
       ]
       return levels.includes(courseLevel)
     },
@@ -382,9 +392,9 @@ export function canBeF2F(
       if (!courseLevel) return false
 
       const levels = [
-        CourseLevel.Level_1,
-        CourseLevel.Level_2,
-        CourseLevel.Advanced,
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.Advanced,
       ]
       return levels.includes(courseLevel)
     },
@@ -395,27 +405,30 @@ export function canBeF2F(
 
 export function canBeMixed(
   courseType: CourseType,
-  courseLevel: CourseLevel | ''
+  courseLevel: Course_Level_Enum | ''
 ) {
   const types = {
     [CourseType.OPEN]: () => {
       if (!courseLevel) return false
 
-      const levels = [CourseLevel.Level_2]
+      const levels = [
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+      ]
       return levels.includes(courseLevel)
     },
 
     [CourseType.CLOSED]: () => {
       if (!courseLevel) return false
 
-      const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
+      const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]
       return levels.includes(courseLevel)
     },
 
     [CourseType.INDIRECT]: () => {
       if (!courseLevel) return false
 
-      const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
+      const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]
       return levels.includes(courseLevel)
     },
   }
@@ -425,27 +438,27 @@ export function canBeMixed(
 
 export function canBeVirtual(
   courseType: CourseType,
-  courseLevel: CourseLevel | ''
+  courseLevel: Course_Level_Enum | ''
 ) {
   const types = {
     [CourseType.OPEN]: () => {
       if (!courseLevel) return false
 
-      const levels = [CourseLevel.Level_1]
+      const levels = [Course_Level_Enum.Level_1]
       return levels.includes(courseLevel)
     },
 
     [CourseType.CLOSED]: () => {
       if (!courseLevel) return false
 
-      const levels = [CourseLevel.Level_1]
+      const levels = [Course_Level_Enum.Level_1]
       return levels.includes(courseLevel)
     },
 
     [CourseType.INDIRECT]: () => {
       if (!courseLevel) return false
 
-      const levels = [] as CourseLevel[]
+      const levels = [] as Course_Level_Enum[]
       return levels.includes(courseLevel)
     },
   }
@@ -462,8 +475,8 @@ export function canBeConversion(
   }
 
   return [
-    CourseLevel.BildAdvancedTrainer,
-    CourseLevel.BildIntermediateTrainer,
+    Course_Level_Enum.BildAdvancedTrainer,
+    Course_Level_Enum.BildIntermediateTrainer,
   ].includes(courseLevel)
 }
 
@@ -476,7 +489,7 @@ export function getAccountCode(d = new Date()): string {
 
 export function getDefaultSpecialInstructions(
   type: CourseType,
-  level: CourseLevel | '',
+  level: Course_Level_Enum | '',
   deliveryType: CourseDeliveryType,
   reaccreditation: boolean,
   conversion: boolean,
@@ -486,9 +499,9 @@ export function getDefaultSpecialInstructions(
     'components.course-form.special-instructions.instructions'
   let key = `${keyPrefixPath}.${type}.${level}`
 
-  if (level === CourseLevel.Level_1) {
+  if (level === Course_Level_Enum.Level_1) {
     key = `${key}.${deliveryType}`
-  } else if (level === CourseLevel.Level_2) {
+  } else if (level === Course_Level_Enum.Level_2) {
     key = `${key}.default`
   } else if (reaccreditation) {
     key = `${key}.reaccreditation`
@@ -513,12 +526,12 @@ export function courseNeedsManualPrice({
   blendedLearning: boolean
   maxParticipants: number
   courseType: CourseType
-  courseLevel: CourseLevel
+  courseLevel: Course_Level_Enum
 }) {
   if (
     accreditedBy === Accreditors_Enum.Icm &&
     courseType === CourseType.CLOSED &&
-    courseLevel === CourseLevel.Level_2 &&
+    courseLevel === Course_Level_Enum.Level_2 &&
     blendedLearning &&
     maxParticipants <= 8
   ) {
@@ -538,11 +551,13 @@ export function hasRenewalCycle({
 }: {
   courseType: CourseType
   startDate: Date
-  courseLevel: CourseLevel
+  courseLevel: Course_Level_Enum
 }) {
   return (
     [CourseType.OPEN, CourseType.CLOSED].includes(courseType) &&
-    [CourseLevel.Level_1, CourseLevel.Level_2].includes(courseLevel) &&
+    [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2].includes(
+      courseLevel
+    ) &&
     getYear(startDate) > 2023
   )
 }

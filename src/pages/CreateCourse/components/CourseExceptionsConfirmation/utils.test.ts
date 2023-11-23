@@ -4,6 +4,7 @@ import {
   Accreditors_Enum,
   Course_Delivery_Type_Enum,
   Course_Type_Enum,
+  Course_Level_Enum,
 } from '@app/generated/graphql'
 import {
   CourseData,
@@ -11,7 +12,7 @@ import {
   isLeadTrainerInGracePeriod,
   isOutsideOfNoticePeriod,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
-import { CourseLevel, CourseTrainerType } from '@app/types'
+import { CourseTrainerType } from '@app/types'
 
 describe('course exception utils', () => {
   const defaultCourseData: CourseData = {
@@ -21,7 +22,7 @@ describe('course exception utils', () => {
     reaccreditation: false,
     type: Course_Type_Enum.Open,
     startDateTime: new Date('2022-03-01 10:00'),
-    courseLevel: CourseLevel.Level_1,
+    courseLevel: Course_Level_Enum.Level_1,
     maxParticipants: 0,
     modulesDuration: 0,
     hasSeniorOrPrincipalLeader: false,
@@ -31,7 +32,7 @@ describe('course exception utils', () => {
     trainer_role_types: [],
     levels: [
       {
-        courseLevel: CourseLevel.IntermediateTrainer,
+        courseLevel: Course_Level_Enum.IntermediateTrainer,
         expiryDate: new Date('2022-05-01 10:00').toISOString(),
       },
     ],
@@ -87,7 +88,7 @@ describe('course exception utils', () => {
           extend({}, defaultTrainerData, {
             levels: [
               {
-                courseLevel: CourseLevel.IntermediateTrainer,
+                courseLevel: Course_Level_Enum.IntermediateTrainer,
                 expiryDate: new Date('2020-12-30 10:00').toISOString(),
               },
             ],

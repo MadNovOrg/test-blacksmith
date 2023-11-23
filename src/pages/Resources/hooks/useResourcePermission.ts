@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { useAuth } from '@app/context/auth'
 import {
-  CourseLevel,
+  Course_Level_Enum,
   Resource_Resourcepermissions,
 } from '@app/generated/graphql'
 import {
@@ -55,7 +55,7 @@ export function useResourcePermission() {
 
       const hasPermissionByCourseCertificateLevel =
         listOfCertificatesNeededForAccess?.some(certificate =>
-          currentUserCertificates?.includes(certificate as CourseLevel)
+          currentUserCertificates?.includes(certificate as Course_Level_Enum)
         )
       const hasPermissionByPrincipalTrainer =
         resourcePermissions.principalTrainer &&

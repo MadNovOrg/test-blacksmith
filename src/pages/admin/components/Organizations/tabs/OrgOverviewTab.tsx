@@ -21,28 +21,33 @@ import {
 
 import { RequestAQuoteBanner } from '@app/components/RequestAQuoteBanner'
 import { useAuth } from '@app/context/auth'
-import { Course_Status_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Status_Enum,
+  Course_Type_Enum,
+  Course_Level_Enum,
+} from '@app/generated/graphql'
 import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
 import { CourseForBookingTile } from '@app/pages/admin/components/Organizations/tabs/components/CourseForBookingTile'
 import { IndividualsByLevelList } from '@app/pages/admin/components/Organizations/tabs/components/IndividualsByLevelList'
 import { OrgStatsTiles } from '@app/pages/admin/components/Organizations/tabs/components/OrgStatsTiles'
 import { OrgSummaryList } from '@app/pages/admin/components/Organizations/tabs/components/OrgSummaryList'
-import { CertificateStatus, CourseLevel } from '@app/types'
+import { CertificateStatus } from '@app/types'
 
 type OrgOverviewTabParams = {
   orgId: string
 }
 
 const LEVELS_IN_ORDER = [
-  CourseLevel.Level_1,
-  CourseLevel.Level_2,
-  CourseLevel.IntermediateTrainer,
-  CourseLevel.Advanced,
-  CourseLevel.AdvancedTrainer,
-  CourseLevel.BildAdvancedTrainer,
-  CourseLevel.BildIntermediateTrainer,
-  CourseLevel.BildRegular,
+  Course_Level_Enum.Level_1,
+  Course_Level_Enum.Level_2,
+  Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+  Course_Level_Enum.IntermediateTrainer,
+  Course_Level_Enum.Advanced,
+  Course_Level_Enum.AdvancedTrainer,
+  Course_Level_Enum.BildAdvancedTrainer,
+  Course_Level_Enum.BildIntermediateTrainer,
+  Course_Level_Enum.BildRegular,
   null,
 ]
 
@@ -107,7 +112,7 @@ export const OrgOverviewTab: React.FC<
     const value =
       userByLevelSelectedTab === 'none'
         ? null
-        : (userByLevelSelectedTab as CourseLevel)
+        : (userByLevelSelectedTab as Course_Level_Enum)
     selectedTab = profilesByLevel.get(value)
       ? userByLevelSelectedTab
       : defaultTab

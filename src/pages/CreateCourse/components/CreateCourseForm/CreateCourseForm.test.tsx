@@ -8,15 +8,11 @@ import { never } from 'wonka'
 
 import { VenueSelector } from '@app/components/VenueSelector'
 import { Accreditors_Enum } from '@app/generated/graphql'
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
-import {
-  BildStrategies,
-  CourseLevel,
-  CourseType,
-  ValidCourseInput,
-} from '@app/types'
+import { BildStrategies, CourseType, ValidCourseInput } from '@app/types'
 import { courseToCourseInput, LoadingStatus } from '@app/util'
 
 import {
@@ -205,7 +201,7 @@ describe('component: CreateCourseForm', () => {
     const course = buildCourse({
       overrides: {
         accreditedBy: Accreditors_Enum.Bild,
-        level: CourseLevel.BildRegular,
+        level: Course_Level_Enum.BildRegular,
         bildStrategies: [{ strategyName: BildStrategies.Primary }],
         max_participants: 10,
         schedule: [
@@ -249,7 +245,7 @@ describe('component: CreateCourseForm', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
         },
       },
       { initialEntries: ['/?type=INDIRECT'] }

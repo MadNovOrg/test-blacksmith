@@ -19,7 +19,7 @@ import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Type_Enum,
-  CourseLevel,
+  Course_Level_Enum,
   CreateOrderParticipantInput,
   Payment_Methods_Enum,
   Xero_Invoice_Status_Enum,
@@ -240,7 +240,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                             course_code: course.course_code,
                             start: course.start,
                             end: course.end,
-                            level: course.level as unknown as CourseLevel,
+                            level: course.level as unknown as Course_Level_Enum,
                           }}
                         />
                       )}

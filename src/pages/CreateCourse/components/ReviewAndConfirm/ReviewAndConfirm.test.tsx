@@ -4,9 +4,8 @@ import useSWR from 'swr'
 import { Client, CombinedError, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
-import { CoursePriceQuery } from '@app/generated/graphql'
+import { CoursePriceQuery, Course_Level_Enum } from '@app/generated/graphql'
 import {
-  CourseLevel,
   CourseType,
   ExpensesInput,
   RoleName,
@@ -144,7 +143,7 @@ describe('component: ReviewAndConfirm', () => {
         overrides: {
           max_participants: 100,
           schedule: [schedule],
-          level: CourseLevel.Level_1,
+          level: Course_Level_Enum.Level_1,
         },
       })
     ) as ValidCourseInput
@@ -213,7 +212,7 @@ describe('component: ReviewAndConfirm', () => {
         overrides: {
           max_participants: NUM_OF_PARTICIPANTS,
           schedule: [schedule],
-          level: CourseLevel.Level_1,
+          level: Course_Level_Enum.Level_1,
           freeSpaces: 2,
         },
       })

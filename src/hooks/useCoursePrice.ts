@@ -7,7 +7,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { CourseLevel, CourseType } from '@app/types'
+import { CourseType } from '@app/types'
 
 export const COURSE_PRICE_QUERY = gql`
   query CoursePrice(
@@ -32,7 +32,7 @@ export const COURSE_PRICE_QUERY = gql`
 
 export function useCoursePrice(courseData?: {
   type: CourseType
-  courseLevel: CourseLevel
+  courseLevel: Course_Level_Enum
   blendedLearning: boolean
   reaccreditation: boolean
   accreditedBy: Accreditors_Enum

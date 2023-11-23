@@ -7,13 +7,14 @@ import { Dialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Status_Enum,
+  Course_Level_Enum,
   CourseTrainerType,
   Course_Audit_Type_Enum,
 } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import { checkCourseDetailsForExceptions } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import theme from '@app/theme'
-import { CourseLevel, TrainerRoleTypeName } from '@app/types'
+import { TrainerRoleTypeName } from '@app/types'
 import { bildStrategiesToRecord } from '@app/util'
 
 import { ExceptionsApprovalModalContent } from './ExceptionsApprovalModalContent'
@@ -69,7 +70,7 @@ export const ExceptionsApprovalAlert: FC = () => {
         type: t.type,
         trainer_role_types: t.profile.trainer_role_types,
         levels: (t.profile.certificates ?? []).map(c => ({
-          courseLevel: c.courseLevel as CourseLevel,
+          courseLevel: c.courseLevel as Course_Level_Enum,
           expiryDate: c.expiryDate,
         })),
       }))

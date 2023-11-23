@@ -1,6 +1,6 @@
 import { test as base } from '@playwright/test'
 
-import { CourseLevel } from '@app/types'
+import { Course_Level_Enum } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
 import { COURSES_TO_VIEW } from '@qa/data/courses'
@@ -43,11 +43,11 @@ test('my courses filter', async ({ page, courses }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.filterCourses('FilterByCourseLevel', [
-    CourseLevel.Level_1,
-    CourseLevel.Level_2,
+    Course_Level_Enum.Level_1,
+    Course_Level_Enum.Level_2,
   ])
   await myCoursesPage.checkCourseLevelInRows([
-    CourseLevel.Level_1,
-    CourseLevel.Level_2,
+    Course_Level_Enum.Level_1,
+    Course_Level_Enum.Level_2,
   ])
 })

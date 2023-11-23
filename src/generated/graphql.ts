@@ -1322,7 +1322,7 @@ export enum CourseApprovalError {
 
 export type CourseCertificateLevel = {
   __typename?: 'CourseCertificateLevel';
-  courseLevel: CourseLevel;
+  courseLevel: Course_Level_Enum;
   expiryDate: Scalars['date'];
 };
 
@@ -1356,7 +1356,8 @@ export enum CourseLevel {
   BildRegular = 'BILD_REGULAR',
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   Level_1 = 'LEVEL_1',
-  Level_2 = 'LEVEL_2'
+  Level_2 = 'LEVEL_2',
+  ThreeDaySafetyResponseTrainer = 'THREE_DAY_SAFETY_RESPONSE_TRAINER'
 }
 
 export enum CourseTrainerType {
@@ -3055,7 +3056,7 @@ export type GetCoursePricingInput = {
 export type GetCoursePricingOutput = {
   __typename?: 'GetCoursePricingOutput';
   blended?: Maybe<Scalars['Boolean']>;
-  level?: Maybe<CourseLevel>;
+  level?: Maybe<Course_Level_Enum>;
   priceAmount: Scalars['Float'];
   priceCurrency: Currency;
   reaccreditation?: Maybe<Scalars['Boolean']>;
@@ -4312,7 +4313,7 @@ export type NotifyCourseEditOutput = {
 export type NotifyCourseInput = {
   courseId: Scalars['Int'];
   endDate: Scalars['date'];
-  level: CourseLevel;
+  level: Course_Level_Enum;
   parkingInstructions: Scalars['String'];
   specialInstructions: Scalars['String'];
   startDate: Scalars['date'];
@@ -8864,7 +8865,7 @@ export enum SearchTrainerAvailability {
 export type SearchTrainersInput = {
   bildStrategies?: InputMaybe<Array<BildStrategy>>;
   courseEnd?: InputMaybe<Scalars['date']>;
-  courseLevel?: InputMaybe<CourseLevel>;
+  courseLevel?: InputMaybe<Course_Level_Enum>;
   courseStart?: InputMaybe<Scalars['date']>;
   courseType?: InputMaybe<CourseType>;
   query?: InputMaybe<Scalars['String']>;
@@ -9380,13 +9381,6 @@ export type Template_Contact = ContentTemplate & {
   templateName?: Maybe<Scalars['String']>;
 };
 
-/** The template assigned to the node */
-export type Template_SideNavigation = ContentTemplate & {
-  __typename?: 'Template_SideNavigation';
-  /** The name of the template */
-  templateName?: Maybe<Scalars['String']>;
-};
-
 /** Terms are nodes within a Taxonomy, used to group and relate other nodes. */
 export type TermNode = {
   /** The number of objects connected to the object */
@@ -9557,7 +9551,7 @@ export type TransferCourse = {
   endDate: Scalars['String'];
   freeSlots: Scalars['Int'];
   id: Scalars['Int'];
-  level?: Maybe<CourseLevel>;
+  level?: Maybe<Course_Level_Enum>;
   startDate: Scalars['String'];
   venue?: Maybe<Scalars['String']>;
   venueCity?: Maybe<Scalars['String']>;
@@ -21173,7 +21167,8 @@ export enum Course_Level_Enum {
   BildRegular = 'BILD_REGULAR',
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   Level_1 = 'LEVEL_1',
-  Level_2 = 'LEVEL_2'
+  Level_2 = 'LEVEL_2',
+  ThreeDaySafetyResponseTrainer = 'THREE_DAY_SAFETY_RESPONSE_TRAINER'
 }
 
 /** Boolean expression to compare columns of type "course_level_enum". All fields are combined with logical 'AND'. */
@@ -52320,14 +52315,14 @@ export type OrgMembersQueryVariables = Exact<{
 
 export type OrgMembersQuery = { __typename?: 'query_root', members: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, lastActivity: any, createdAt: any, go1Licenses: Array<{ __typename?: 'go1_licenses', expireDate: any }>, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', payload?: any | null }> } | null }> } }>, organization_member_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
 
-export type SearchTrainerDetailsFragment = { __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> };
+export type SearchTrainerDetailsFragment = { __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: Course_Level_Enum, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> };
 
 export type SearchTrainersQueryVariables = Exact<{
   input: SearchTrainersInput;
 }>;
 
 
-export type SearchTrainersQuery = { __typename?: 'query_root', trainers?: Array<{ __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> } | null> | null };
+export type SearchTrainersQuery = { __typename?: 'query_root', trainers?: Array<{ __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: Course_Level_Enum, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> } | null> | null };
 
 export type SearchCourseFragment = { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> };
 
@@ -52447,7 +52442,7 @@ export type TransferEligibleCoursesQueryVariables = Exact<{
 }>;
 
 
-export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, freeSlots: number, courseCode: string, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null, level?: CourseLevel | null }> };
+export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, freeSlots: number, courseCode: string, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null, level?: Course_Level_Enum | null }> };
 
 export type TransferParticipantMutationVariables = Exact<{
   input: TransferInput;

@@ -1,8 +1,8 @@
 import { formatInTimeZone } from 'date-fns-tz'
 
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { dateFormats } from '@app/i18n/config'
 import common from '@app/i18n/en/common.json'
-import { CourseLevel } from '@app/types'
 import { getInitialsFromName } from '@app/util'
 
 import { Course_Level_Enum_Short } from './enums'
@@ -61,11 +61,11 @@ export function toAttendeesTableRow({
 }
 
 export function mapCourseTypesToShort(): Partial<
-  Record<CourseLevel, Course_Level_Enum_Short>
+  Record<Course_Level_Enum, Course_Level_Enum_Short>
 > {
   return {
-    [CourseLevel.Level_1]: Course_Level_Enum_Short.Level_1,
-    [CourseLevel.Level_2]: Course_Level_Enum_Short.Level_2,
-    [CourseLevel.Advanced]: Course_Level_Enum_Short.Advanced,
+    [Course_Level_Enum.Level_1]: Course_Level_Enum_Short.Level_1,
+    [Course_Level_Enum.Level_2]: Course_Level_Enum_Short.Level_2,
+    [Course_Level_Enum.Advanced]: Course_Level_Enum_Short.Advanced,
   }
 }

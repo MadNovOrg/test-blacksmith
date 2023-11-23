@@ -1,7 +1,8 @@
 import React from 'react'
 
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
-import { CourseLevel, CourseType, RoleName } from '@app/types'
+import { CourseType, RoleName } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
@@ -56,18 +57,20 @@ describe('CourseForm - open BILD', () => {
 
     expect(
       screen.getByTestId(
-        `course-level-option-${CourseLevel.BildAdvancedTrainer}`
+        `course-level-option-${Course_Level_Enum.BildAdvancedTrainer}`
       )
     ).toBeInTheDocument()
 
     expect(
       screen.getByTestId(
-        `course-level-option-${CourseLevel.BildIntermediateTrainer}`
+        `course-level-option-${Course_Level_Enum.BildIntermediateTrainer}`
       )
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`course-level-option-${CourseLevel.BildRegular}`)
+      screen.queryByTestId(
+        `course-level-option-${Course_Level_Enum.BildRegular}`
+      )
     ).not.toBeInTheDocument()
   })
 
@@ -79,7 +82,7 @@ describe('CourseForm - open BILD', () => {
     })
 
     await selectBildCategory()
-    await selectLevel(CourseLevel.BildIntermediateTrainer)
+    await selectLevel(Course_Level_Enum.BildIntermediateTrainer)
 
     expect(screen.getByLabelText(/face to face/i)).toBeEnabled()
     expect(screen.getByLabelText(/both/i)).toBeEnabled()
@@ -94,7 +97,7 @@ describe('CourseForm - open BILD', () => {
     })
 
     await selectBildCategory()
-    await selectLevel(CourseLevel.BildAdvancedTrainer)
+    await selectLevel(Course_Level_Enum.BildAdvancedTrainer)
 
     expect(screen.getByLabelText(/face to face/i)).toBeEnabled()
     expect(screen.getByLabelText(/both/i)).toBeDisabled()

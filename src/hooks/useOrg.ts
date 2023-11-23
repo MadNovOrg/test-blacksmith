@@ -4,9 +4,10 @@ import useSWR from 'swr'
 import {
   GetOrgDetailsQuery,
   GetOrgDetailsQueryVariables,
+  Course_Level_Enum,
 } from '@app/generated/graphql'
 import { QUERY } from '@app/queries/organization/get-org-details'
-import { CertificateStatus, CourseLevel } from '@app/types'
+import { CertificateStatus } from '@app/types'
 import {
   getProfileCertificationLevels,
   getSWRLoadingStatus,
@@ -71,7 +72,7 @@ function getCountByStatus(
       const certs = profile.certificates.filter(
         c =>
           c.status === status &&
-          levels.indexOf(c.courseLevel as CourseLevel) !== -1
+          levels.indexOf(c.courseLevel as Course_Level_Enum) !== -1
       )
       const enrolled = certs.filter(c =>
         profile.upcomingEnrollments.some(
@@ -148,9 +149,9 @@ export default function useOrg(
 
   const status = getSWRLoadingStatus(data, error)
 
-  const profilesByLevel: Map<CourseLevel | null, ProfileType[]> =
+  const profilesByLevel: Map<Course_Level_Enum | null, ProfileType[]> =
     useMemo(() => {
-      const map = new Map<CourseLevel | null, ProfileType[]>()
+      const map = new Map<Course_Level_Enum | null, ProfileType[]>()
       if (data) {
         for (const profile of data.profiles) {
           const levels = getProfileCertificationLevels(

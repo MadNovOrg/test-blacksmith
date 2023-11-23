@@ -5,12 +5,7 @@ import {
   Course_Level_Enum,
   Grade_Enum,
 } from '@app/generated/graphql'
-import {
-  CourseLevel,
-  CourseTrainerType,
-  CourseType,
-  RoleName,
-} from '@app/types'
+import { CourseTrainerType, CourseType, RoleName } from '@app/types'
 import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 
 import {
@@ -1226,7 +1221,7 @@ describe(getACL.name, () => {
       // Arrange
       const acl = getACLStub({
         activeRole: RoleName.TRAINER,
-        activeCertificates: [CourseLevel.IntermediateTrainer],
+        activeCertificates: [Course_Level_Enum.IntermediateTrainer],
       })
 
       // Act & Assert
@@ -1792,7 +1787,7 @@ describe(getACL.name, () => {
         // Arrange
         const acl = getACLStub({
           activeRole,
-          activeCertificates: [CourseLevel.Level_1],
+          activeCertificates: [Course_Level_Enum.Level_1],
         })
 
         // Act & Assert
@@ -2544,13 +2539,13 @@ describe(getACL.name, () => {
 
     describe(`when the courseType is ${CourseType.INDIRECT}`, () => {
       it(`should return true when the ${RoleName.TRAINER}
-         has ${CourseLevel.BildIntermediateTrainer} or ${CourseLevel.BildAdvancedTrainer} certificates`, () => {
+         has ${Course_Level_Enum.BildIntermediateTrainer} or ${Course_Level_Enum.BildAdvancedTrainer} certificates`, () => {
         // Arrange
         const acl = getACLStub({
           activeRole: RoleName.TRAINER,
           activeCertificates: [
-            CourseLevel.BildIntermediateTrainer,
-            CourseLevel.BildAdvancedTrainer,
+            Course_Level_Enum.BildIntermediateTrainer,
+            Course_Level_Enum.BildAdvancedTrainer,
           ],
         })
 
@@ -2591,8 +2586,8 @@ describe(getACL.name, () => {
           const acl = getACLStub({
             activeRole: activeRole,
             activeCertificates: [
-              CourseLevel.BildIntermediateTrainer,
-              CourseLevel.BildAdvancedTrainer,
+              Course_Level_Enum.BildIntermediateTrainer,
+              Course_Level_Enum.BildAdvancedTrainer,
             ],
           })
 
@@ -2604,10 +2599,10 @@ describe(getACL.name, () => {
   })
 
   describe('canDeliveryTertiaryAdvancedStrategy()', () => {
-    it(`should return true for a ${RoleName.TRAINER} role with ${CourseLevel.BildAdvancedTrainer} active certificate`, () => {
+    it(`should return true for a ${RoleName.TRAINER} role with ${Course_Level_Enum.BildAdvancedTrainer} active certificate`, () => {
       const acl = getACLStub({
         activeRole: RoleName.TRAINER,
-        activeCertificates: [CourseLevel.BildAdvancedTrainer],
+        activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
       })
 
       // Act & Assert
@@ -2798,7 +2793,7 @@ describe(getACL.name, () => {
     })
   })
   describe('allowedCourseLevels', () => {
-    const allLevels = Object.values(CourseLevel)
+    const allLevels = Object.values(Course_Level_Enum)
 
     it('should return an empty array when there is no active role', () => {
       const acl = getACLStub({
@@ -2819,7 +2814,7 @@ describe(getACL.name, () => {
       }
     )
 
-    it.each(Object.values(CourseLevel))(
+    it.each(Object.values(Course_Level_Enum))(
       'should allow only specific levels when trainer holds %s certificate',
       activeCertificate => {
         const acl = getACLStub({
@@ -2830,7 +2825,7 @@ describe(getACL.name, () => {
           REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL
         ).filter(courseLevel =>
           REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[
-            courseLevel as CourseLevel
+            courseLevel as Course_Level_Enum
           ].includes(activeCertificate)
         )
 

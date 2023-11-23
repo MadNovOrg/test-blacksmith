@@ -1,13 +1,14 @@
 import { gql } from 'graphql-request'
 
-import { CourseDeliveryType, CourseLevel, ModuleGroup } from '@app/types'
+import { Course_Level_Enum } from '@app/generated/graphql'
+import { CourseDeliveryType, ModuleGroup } from '@app/types'
 
 import { MODULE, MODULE_GROUP } from '../fragments'
 
 export type ResponseType = { groups: ModuleGroup[] }
 
 export type ParamsType = {
-  level: CourseLevel
+  level: Course_Level_Enum
   courseDeliveryType: CourseDeliveryType
   reaccreditation: boolean
   go1Integration: boolean

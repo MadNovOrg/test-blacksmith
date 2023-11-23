@@ -4,7 +4,7 @@ import { addHours, addDays } from 'date-fns/esm'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
-import { CourseLevel } from '@app/generated/graphql'
+import { Course_Level_Enum } from '@app/generated/graphql'
 
 import { CourseTitleAndDuration, CourseTitleAndDurationProps } from '.'
 
@@ -32,7 +32,7 @@ OneDayCourse.args = {
   course: {
     id: 10030,
     course_code: 'OP.L1.10000',
-    level: CourseLevel.Level_1,
+    level: Course_Level_Enum.Level_1,
     start: new Date().toISOString(),
     end: addHours(new Date(), 8).toISOString(),
   },
@@ -44,7 +44,7 @@ TwoDaysCourse.args = {
   course: {
     id: 10040,
     course_code: 'OP.L1.10022',
-    level: CourseLevel.Level_2,
+    level: Course_Level_Enum.Level_2,
     start: new Date().toISOString(),
     end: addDays(new Date(), 1).toISOString(),
   },

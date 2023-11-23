@@ -6,7 +6,7 @@ import Link from '@mui/material/Link'
 import React, { useState } from 'react'
 import { Trans } from 'react-i18next'
 
-import { CourseLevel } from '@app/generated/graphql'
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { TransferTermsTable } from '@app/pages/TransferParticipant/components/TransferTermsTable'
 
@@ -15,7 +15,7 @@ import { ACTION_TYPE } from './ModifyAttendanceModal'
 export const ParticipantTransferInfo: React.FC<
   React.PropsWithChildren<{
     startDate: Date
-    courseLevel: CourseLevel
+    courseLevel: Course_Level_Enum
     onAgreeTerms: (actionType: ACTION_TYPE, state: boolean) => void
   }>
 > = ({ startDate, courseLevel, onAgreeTerms }) => {

@@ -1322,7 +1322,7 @@ export enum CourseApprovalError {
 
 export type CourseCertificateLevel = {
   __typename?: 'CourseCertificateLevel';
-  courseLevel: CourseLevel;
+  courseLevel: Course_Level_Enum;
   expiryDate: Scalars['date'];
 };
 
@@ -3055,7 +3055,7 @@ export type GetCoursePricingInput = {
 export type GetCoursePricingOutput = {
   __typename?: 'GetCoursePricingOutput';
   blended?: Maybe<Scalars['Boolean']>;
-  level?: Maybe<CourseLevel>;
+  level?: Maybe<Course_Level_Enum>;
   priceAmount: Scalars['Float'];
   priceCurrency: Currency;
   reaccreditation?: Maybe<Scalars['Boolean']>;
@@ -4293,7 +4293,7 @@ export type NotifyCourseEditOutput = {
 export type NotifyCourseInput = {
   courseId: Scalars['Int'];
   endDate: Scalars['date'];
-  level: CourseLevel;
+  level: Course_Level_Enum;
   parkingInstructions: Scalars['String'];
   specialInstructions: Scalars['String'];
   startDate: Scalars['date'];
@@ -8845,7 +8845,7 @@ export enum SearchTrainerAvailability {
 export type SearchTrainersInput = {
   bildStrategies?: InputMaybe<Array<BildStrategy>>;
   courseEnd?: InputMaybe<Scalars['date']>;
-  courseLevel?: InputMaybe<CourseLevel>;
+  courseLevel?: InputMaybe<Course_Level_Enum>;
   courseStart?: InputMaybe<Scalars['date']>;
   courseType?: InputMaybe<CourseType>;
   query?: InputMaybe<Scalars['String']>;
@@ -9531,7 +9531,7 @@ export type TransferCourse = {
   endDate: Scalars['String'];
   freeSlots: Scalars['Int'];
   id: Scalars['Int'];
-  level?: Maybe<CourseLevel>;
+  level?: Maybe<Course_Level_Enum>;
   startDate: Scalars['String'];
   venue?: Maybe<Scalars['String']>;
   venueCity?: Maybe<Scalars['String']>;

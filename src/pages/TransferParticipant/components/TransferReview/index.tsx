@@ -13,7 +13,7 @@ import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useSnackbar } from '@app/context/snackbar'
 import {
-  CourseLevel,
+  Course_Level_Enum,
   TransferFeeType,
   TransferParticipantMutation,
   TransferParticipantMutationVariables,
@@ -100,7 +100,7 @@ export const TransferReview: React.FC<
     return <Navigate to={'../'} replace />
   }
 
-  const courseLevel = fromCourse.level as unknown as CourseLevel
+  const courseLevel = fromCourse.level as unknown as Course_Level_Enum
 
   return (
     <Box>

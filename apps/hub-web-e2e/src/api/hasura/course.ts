@@ -1,14 +1,17 @@
 import { addYears } from 'date-fns'
 import { gql } from 'graphql-request'
 
-import { Grade_Enum, TransferFeeType } from '@app/generated/graphql'
+import {
+  Grade_Enum,
+  TransferFeeType,
+  Course_Level_Enum,
+} from '@app/generated/graphql'
 import { SAVE_COURSE_GRADING_MUTATION } from '@app/pages/trainer-pages/CourseGrading/queries/save-course-grading'
 import { TRANSFER_PARTICIPANT } from '@app/pages/TransferParticipant/queries'
 import { CANCEL_COURSE_MUTATION } from '@app/queries/courses/cancel-course'
 import { QUERY as TRAINER_COURSES } from '@app/queries/courses/get-trainer-courses'
 import { GetParticipant as GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
-  CourseLevel,
   CourseParticipant,
   CourseTrainerType,
   InviteStatus,
@@ -90,7 +93,7 @@ export const setCourseDates = async (
 
 export const getModuleIds = async (
   moduleGroups: string[],
-  level: CourseLevel
+  level: Course_Level_Enum
 ): Promise<string[]> => {
   const query = gql`
     query ModuleGroupsByLevel {

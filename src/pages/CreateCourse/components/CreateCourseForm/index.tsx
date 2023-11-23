@@ -25,7 +25,7 @@ import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   BildStrategy,
-  CourseLevel,
+  Course_Level_Enum,
   CourseTrainerType,
   SearchTrainer,
 } from '@app/generated/graphql'
@@ -300,7 +300,7 @@ export const CreateCourseForm = () => {
 
           <SearchTrainers
             trainerType={CourseTrainerType.Assistant}
-            courseLevel={courseData?.courseLevel || CourseLevel.Level_1}
+            courseLevel={courseData?.courseLevel || Course_Level_Enum.Level_1}
             courseSchedule={{
               start: courseData?.startDateTime ?? undefined,
               end: courseData?.endDateTime ?? undefined,

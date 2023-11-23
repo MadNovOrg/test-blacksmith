@@ -1,7 +1,8 @@
 import React from 'react'
 
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
-import { CourseLevel, CourseType, RoleName } from '@app/types'
+import { CourseType, RoleName } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
@@ -57,18 +58,18 @@ describe('CourseForm - closed BILD', () => {
 
     expect(
       screen.getByTestId(
-        `course-level-option-${CourseLevel.BildAdvancedTrainer}`
+        `course-level-option-${Course_Level_Enum.BildAdvancedTrainer}`
       )
     ).toBeInTheDocument()
 
     expect(
       screen.getByTestId(
-        `course-level-option-${CourseLevel.BildIntermediateTrainer}`
+        `course-level-option-${Course_Level_Enum.BildIntermediateTrainer}`
       )
     ).toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`course-level-option-${CourseLevel.BildRegular}`)
+      screen.getByTestId(`course-level-option-${Course_Level_Enum.BildRegular}`)
     ).toBeInTheDocument()
   })
 
@@ -80,7 +81,7 @@ describe('CourseForm - closed BILD', () => {
     })
 
     await selectBildCategory()
-    await selectLevel(CourseLevel.BildIntermediateTrainer)
+    await selectLevel(Course_Level_Enum.BildIntermediateTrainer)
 
     await waitFor(() => {
       expect(screen.getByLabelText(/primary/i)).toBeChecked()
@@ -116,7 +117,7 @@ describe('CourseForm - closed BILD', () => {
     })
 
     await selectBildCategory()
-    await selectLevel(CourseLevel.BildAdvancedTrainer)
+    await selectLevel(Course_Level_Enum.BildAdvancedTrainer)
 
     await waitFor(() => {
       expect(screen.getByLabelText(/primary/i)).toBeChecked()
@@ -155,12 +156,12 @@ describe('CourseForm - closed BILD', () => {
 
     expect(screen.queryByLabelText(/conversion/i)).not.toBeInTheDocument()
 
-    await selectLevel(CourseLevel.BildIntermediateTrainer)
+    await selectLevel(Course_Level_Enum.BildIntermediateTrainer)
 
     const conversionToggle = screen.getByLabelText(/conversion course/i)
     expect(conversionToggle).toBeEnabled()
 
-    await selectLevel(CourseLevel.BildAdvancedTrainer)
+    await selectLevel(Course_Level_Enum.BildAdvancedTrainer)
     expect(conversionToggle).toBeEnabled()
   })
 
@@ -172,7 +173,7 @@ describe('CourseForm - closed BILD', () => {
     })
 
     await selectBildCategory()
-    await selectLevel(CourseLevel.BildIntermediateTrainer)
+    await selectLevel(Course_Level_Enum.BildIntermediateTrainer)
 
     const conversionToggle = screen.getByLabelText(/conversion course/i)
     const reaccredToggle = screen.getByLabelText(/reaccreditation/i)
@@ -190,7 +191,7 @@ describe('CourseForm - closed BILD', () => {
     })
 
     await selectBildCategory()
-    await selectLevel(CourseLevel.BildIntermediateTrainer)
+    await selectLevel(Course_Level_Enum.BildIntermediateTrainer)
 
     const conversionToggle = screen.getByLabelText(/conversion course/i)
     const reaccredToggle = screen.getByLabelText(/reaccreditation/i)
@@ -238,7 +239,7 @@ describe('CourseForm - closed BILD', () => {
     })
 
     await selectBildCategory()
-    await selectLevel(CourseLevel.BildAdvancedTrainer)
+    await selectLevel(Course_Level_Enum.BildAdvancedTrainer)
 
     expect(screen.getByLabelText(/virtual/i)).toBeDisabled()
     expect(screen.getByLabelText(/face to face/i)).toBeEnabled()
@@ -253,7 +254,7 @@ describe('CourseForm - closed BILD', () => {
     })
 
     await selectBildCategory()
-    await selectLevel(CourseLevel.BildIntermediateTrainer)
+    await selectLevel(Course_Level_Enum.BildIntermediateTrainer)
 
     expect(screen.getByLabelText(/virtual/i)).toBeDisabled()
     expect(screen.getByLabelText(/face to face/i)).toBeEnabled()
@@ -299,7 +300,7 @@ describe('CourseForm - closed BILD', () => {
 
     expect(screen.queryByLabelText(/conversion/i)).not.toBeInTheDocument()
 
-    await selectLevel(CourseLevel.BildIntermediateTrainer)
+    await selectLevel(Course_Level_Enum.BildIntermediateTrainer)
 
     expect(screen.getByLabelText(/conversion/i)).toBeInTheDocument()
   })

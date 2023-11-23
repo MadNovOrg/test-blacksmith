@@ -26,12 +26,13 @@ import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
+  Course_Level_Enum,
   GetCertificationsQuery,
   Grade_Enum,
 } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
-import { CertificateStatus, CourseLevel, Profile } from '@app/types'
+import { CertificateStatus, Profile } from '@app/types'
 
 type CertificationsTableProps = {
   certificates: GetCertificationsQuery['certifications']
@@ -83,7 +84,7 @@ export const CertificationsTable: React.FC<
         <CertificateDocument
           key={c.id}
           participantName={c.profile?.fullName ?? ''}
-          courseLevel={c.courseLevel as CourseLevel}
+          courseLevel={c.courseLevel as Course_Level_Enum}
           grade={c.participant?.grade ?? Grade_Enum.Pass}
           certificationNumber={c.number}
           expiryDate={c.expiryDate}

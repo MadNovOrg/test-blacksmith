@@ -44,10 +44,13 @@ import {
   Profile as UserSelectorProfile,
 } from '@app/components/UserSelector'
 import { useAuth } from '@app/context/auth'
-import { Course_Source_Enum, PaymentMethod } from '@app/generated/graphql'
+import {
+  Course_Source_Enum,
+  PaymentMethod,
+  Course_Level_Enum,
+} from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
 import {
-  CourseLevel,
   CourseType,
   InvoiceDetails,
   Profile,
@@ -66,7 +69,7 @@ import { PromoCode } from '../PromoCode'
 export type AttendeeValidCertificateProps = {
   control: Control<FormInputs>
   errors: FieldErrors
-  courseLevel: CourseLevel
+  courseLevel: Course_Level_Enum
   reaccreditation: boolean
   conversion: boolean
   totalAttendees: number
@@ -85,13 +88,13 @@ const AttendeeValidCertificate: React.FC<
   const { t } = useTranslation()
   const showAttendeeTranslationOptions = useCallback(
     (
-      courseLevel: CourseLevel,
+      courseLevel: Course_Level_Enum,
       reaccreditation: boolean,
       conversion: boolean,
       attendees: number
     ) => {
       switch (courseLevel) {
-        case CourseLevel.Advanced:
+        case Course_Level_Enum.Advanced:
           return {
             attendees,
             levels: reaccreditation
@@ -102,7 +105,7 @@ const AttendeeValidCertificate: React.FC<
                   'pages.book-course.attendee-with-valid-certificate.levels.advanced.default'
                 ),
           }
-        case CourseLevel.IntermediateTrainer:
+        case Course_Level_Enum.IntermediateTrainer:
           return {
             attendees,
             levels: reaccreditation
@@ -113,7 +116,7 @@ const AttendeeValidCertificate: React.FC<
                   'pages.book-course.attendee-with-valid-certificate.levels.intermediate-trainer.default'
                 ),
           }
-        case CourseLevel.AdvancedTrainer:
+        case Course_Level_Enum.AdvancedTrainer:
           return {
             attendees,
             levels: reaccreditation
@@ -124,7 +127,7 @@ const AttendeeValidCertificate: React.FC<
                   'pages.book-course.attendee-with-valid-certificate.levels.advanced-trainer.default'
                 ),
           }
-        case CourseLevel.BildIntermediateTrainer:
+        case Course_Level_Enum.BildIntermediateTrainer:
           return {
             attendees,
             levels: reaccreditation
@@ -139,7 +142,7 @@ const AttendeeValidCertificate: React.FC<
                   'pages.book-course.attendee-with-valid-certificate.levels.bild-intermediate-trainer.default'
                 ),
           }
-        case CourseLevel.BildAdvancedTrainer:
+        case Course_Level_Enum.BildAdvancedTrainer:
           return {
             attendees,
             levels: reaccreditation
@@ -196,16 +199,16 @@ const AttendeeValidCertificate: React.FC<
 }
 
 const isAttendeeValidCertificateMandatory = (
-  courseLevel: CourseLevel,
+  courseLevel: Course_Level_Enum,
   courseType: CourseType
 ) =>
   courseType === CourseType.OPEN &&
   [
-    CourseLevel.Advanced,
-    CourseLevel.IntermediateTrainer,
-    CourseLevel.AdvancedTrainer,
-    CourseLevel.BildIntermediateTrainer,
-    CourseLevel.BildAdvancedTrainer,
+    Course_Level_Enum.Advanced,
+    Course_Level_Enum.IntermediateTrainer,
+    Course_Level_Enum.AdvancedTrainer,
+    Course_Level_Enum.BildIntermediateTrainer,
+    Course_Level_Enum.BildAdvancedTrainer,
   ].includes(courseLevel)
 
 type FormInputs = {
@@ -224,7 +227,7 @@ type FormInputs = {
 
   invoiceDetails?: InvoiceDetails
 
-  courseLevel: CourseLevel
+  courseLevel: Course_Level_Enum
   courseType: CourseType
   attendeeValidCertificate?: boolean
 }
@@ -259,7 +262,7 @@ export const CourseBookingDetails: React.FC<
   const isInternalUserBooking = acl.canInviteAttendees(CourseType.OPEN)
   const isAddressInfoRequired =
     course?.type === CourseType.OPEN &&
-    course?.level === CourseLevel.Level_1 &&
+    course?.level === Course_Level_Enum.Level_1 &&
     course?.deliveryType === CourseDeliveryType.VIRTUAL
 
   const schema = useMemo(() => {

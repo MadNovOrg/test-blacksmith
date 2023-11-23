@@ -19,7 +19,7 @@ import { Avatar } from '@app/components/Avatar'
 import { useAuth } from '@app/context/auth'
 import {
   BildStrategy,
-  CourseLevel,
+  Course_Level_Enum,
   CourseTrainerType,
   CourseType as CourseTypeEnum,
   SearchTrainer,
@@ -33,7 +33,7 @@ import { useQueryTrainers } from './useQueryTrainers'
 
 type Props = {
   trainerType: CourseTrainerType
-  courseLevel: CourseLevel
+  courseLevel: Course_Level_Enum
   courseSchedule: SearchTrainersSchedule
   bildStrategies?: BildStrategy[]
   courseType: CourseType

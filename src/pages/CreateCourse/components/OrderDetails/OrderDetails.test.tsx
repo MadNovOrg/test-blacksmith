@@ -5,18 +5,14 @@ import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
 import {
+  Course_Level_Enum,
   Accreditors_Enum,
   CoursePriceQuery,
   GetBildStrategiesQuery,
 } from '@app/generated/graphql'
 import { COURSE_PRICE_QUERY } from '@app/hooks/useCoursePrice'
 import { QUERY as BILD_STRATEGIES_QUERY } from '@app/queries/bild/get-bild-strategies'
-import {
-  BildStrategies,
-  CourseLevel,
-  CourseType,
-  ValidCourseInput,
-} from '@app/types'
+import { BildStrategies, CourseType, ValidCourseInput } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
 
@@ -72,7 +68,7 @@ describe('component: OrderDetails', () => {
               maxParticipants: 10,
               organization: { id: 'org-id' },
               minParticipants: 10,
-              courseLevel: CourseLevel.Level_1,
+              courseLevel: Course_Level_Enum.Level_1,
               reaccreditation: false,
               blendedLearning: false,
               startDateTime: courseDate,
@@ -161,7 +157,7 @@ describe('component: OrderDetails', () => {
               maxParticipants: 10,
               organization: { id: 'org-id' },
               minParticipants: 10,
-              courseLevel: CourseLevel.Level_1,
+              courseLevel: Course_Level_Enum.Level_1,
               reaccreditation: false,
               blendedLearning: false,
               startDateTime: courseDate,

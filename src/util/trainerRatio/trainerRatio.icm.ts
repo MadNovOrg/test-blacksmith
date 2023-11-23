@@ -3,7 +3,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
+import { CourseDeliveryType, CourseType } from '@app/types'
 
 import { RequiredTrainers } from './types'
 
@@ -14,7 +14,7 @@ type TrainerRatio = {
 }
 
 export type TrainerRatioCriteria = {
-  courseLevel: Course_Level_Enum | CourseLevel
+  courseLevel: Course_Level_Enum | Course_Level_Enum
   type: Course_Type_Enum | CourseType
   deliveryType: Course_Delivery_Type_Enum | CourseDeliveryType
   reaccreditation: boolean

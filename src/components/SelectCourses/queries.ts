@@ -1,6 +1,7 @@
 import { gql } from 'graphql-request'
 
-import { CourseDeliveryType, CourseLevel } from '@app/types'
+import { Course_Level_Enum } from '@app/generated/graphql'
+import { CourseDeliveryType } from '@app/types'
 
 export type QueryResult = {
   courses: SearchCourse[]
@@ -10,7 +11,7 @@ export type QueryResult = {
 export type SearchCourse = {
   id: number
   name: string
-  level: CourseLevel
+  level: Course_Level_Enum
   deliveryType: CourseDeliveryType
   schedule: {
     start: string

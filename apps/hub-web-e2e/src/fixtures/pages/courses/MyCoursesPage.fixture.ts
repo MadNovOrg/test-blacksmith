@@ -1,6 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { InviteStatus, CourseLevel } from '@app/types'
+import { Course_Level_Enum } from '@app/generated/graphql'
+import { InviteStatus } from '@app/types'
 
 import { waitForGraphQLResponse } from '@qa/commands'
 import { mapCourseTypesToShort, toCourseTableRow } from '@qa/data/mappings'
@@ -74,10 +75,10 @@ export class MyCoursesPage extends BasePage {
   }
 
   async checkCourseLevelInRows(
-    courseTypes: CourseLevel[] = [
-      CourseLevel.Level_1,
-      CourseLevel.Level_2,
-      CourseLevel.Advanced,
+    courseTypes: Course_Level_Enum[] = [
+      Course_Level_Enum.Level_1,
+      Course_Level_Enum.Level_2,
+      Course_Level_Enum.Advanced,
     ]
   ) {
     const tableRows = await this.coursesTable.getRows()

@@ -4,9 +4,12 @@ import { useTranslation } from 'react-i18next'
 
 import BILDOutlineImage from '@app/assets/bild-outline.jpg'
 import ICMOutlineImage from '@app/assets/outline_icm.jpg'
-import { Accreditors_Enum, Grade_Enum } from '@app/generated/graphql'
+import {
+  Accreditors_Enum,
+  Grade_Enum,
+  Course_Level_Enum,
+} from '@app/generated/graphql'
 import theme from '@app/theme'
-import { CourseLevel } from '@app/types'
 
 // workaround for using react-pdf with vite
 const { Document, Image, Page, StyleSheet, Text, Font } = pdf
@@ -100,7 +103,7 @@ const styles = StyleSheet.create({
 
 type CertificateDocumentProps = {
   participantName: string
-  courseLevel: CourseLevel
+  courseLevel: Course_Level_Enum
   grade: Grade_Enum
   certificationNumber: string
   expiryDate: string
@@ -189,10 +192,10 @@ export const CertificateDocument: React.FC<
         </Text>
 
         {[
-          CourseLevel.Level_1,
-          CourseLevel.Level_2,
-          CourseLevel.Advanced,
-          CourseLevel.BildRegular,
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.Advanced,
+          Course_Level_Enum.BildRegular,
         ].includes(courseLevel) ? (
           <Text
             style={{
@@ -220,10 +223,10 @@ export const CertificateDocument: React.FC<
         ) : null}
 
         {[
-          CourseLevel.IntermediateTrainer,
-          CourseLevel.AdvancedTrainer,
-          CourseLevel.BildIntermediateTrainer,
-          CourseLevel.BildAdvancedTrainer,
+          Course_Level_Enum.IntermediateTrainer,
+          Course_Level_Enum.AdvancedTrainer,
+          Course_Level_Enum.BildIntermediateTrainer,
+          Course_Level_Enum.BildAdvancedTrainer,
         ].includes(courseLevel) && grade === Grade_Enum.AssistOnly ? (
           <Text
             style={{

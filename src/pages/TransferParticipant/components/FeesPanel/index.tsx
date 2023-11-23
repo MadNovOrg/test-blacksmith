@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 
 import { FeesForm, schema as feesFormSchema } from '@app/components/FeesForm'
 import { InfoPanel } from '@app/components/InfoPanel'
-import { CourseLevel, TransferFeeType } from '@app/generated/graphql'
+import { Course_Level_Enum, TransferFeeType } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { yup } from '@app/schemas'
 
@@ -15,7 +15,7 @@ import { TransferTermsTable } from '../TransferTermsTable'
 export type FormValues = yup.InferType<typeof feesFormSchema>
 type Props = {
   courseStartDate: Date
-  courseLevel: CourseLevel
+  courseLevel: Course_Level_Enum
   onChange?: (values: FormValues, isValid: boolean) => void
   mode?: TransferModeEnum
   termsTable?: React.ReactElement

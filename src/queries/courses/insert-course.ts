@@ -6,11 +6,11 @@ import {
   Course_Renewal_Cycle_Enum,
   Course_Status_Enum,
   Order_Insert_Input,
+  Course_Level_Enum,
 } from '@app/generated/graphql'
 import {
   BildStrategies,
   CourseDeliveryType,
-  CourseLevel,
   CourseTrainerType,
   CourseType,
 } from '@app/types'
@@ -23,7 +23,7 @@ export type ParamsType = {
     accreditedBy: Accreditors_Enum
     displayOnWebsite?: boolean
     bildStrategies?: { data: Array<{ strategyName: BildStrategies }> }
-    level?: CourseLevel
+    level?: Course_Level_Enum
     organization_id?: string
     bookingContactProfileId?: string
     reaccreditation?: boolean

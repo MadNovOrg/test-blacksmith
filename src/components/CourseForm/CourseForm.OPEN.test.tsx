@@ -1,7 +1,8 @@
 import React from 'react'
 
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
-import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
+import { CourseDeliveryType, CourseType } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
@@ -31,7 +32,7 @@ describe('component: CourseForm - OPEN', () => {
   it('restricts OPEN+LEVEL_1 to be F2F or VIRTUAL', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_1)
+    await selectLevel(Course_Level_Enum.Level_1)
 
     expect(screen.getByLabelText('Face to face')).toBeEnabled()
     expect(screen.getByLabelText('Virtual')).toBeEnabled()
@@ -41,7 +42,7 @@ describe('component: CourseForm - OPEN', () => {
   it('restricts OPEN+INTERMEDIATE_TRAINER to be F2F', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.IntermediateTrainer)
+    await selectLevel(Course_Level_Enum.IntermediateTrainer)
 
     expect(screen.getByLabelText('Face to face')).toBeEnabled()
     expect(screen.getByLabelText('Virtual')).toBeDisabled()
@@ -52,12 +53,12 @@ describe('component: CourseForm - OPEN', () => {
     await waitFor(() =>
       render(<CourseForm type={type} />, {
         auth: {
-          activeCertificates: [CourseLevel.AdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
         },
       })
     )
 
-    await selectLevel(CourseLevel.AdvancedTrainer)
+    await selectLevel(Course_Level_Enum.AdvancedTrainer)
 
     expect(screen.getByLabelText('Face to face')).toBeEnabled()
     expect(screen.getByLabelText('Virtual')).toBeDisabled()
@@ -68,7 +69,7 @@ describe('component: CourseForm - OPEN', () => {
   it('restricts OPEN+LEVEL_1+F2F to Non-blended', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_1)
+    await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -79,7 +80,7 @@ describe('component: CourseForm - OPEN', () => {
   it('restricts OPEN+LEVEL_1+VIRTUAL to Non-blended', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_1)
+    await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -90,7 +91,7 @@ describe('component: CourseForm - OPEN', () => {
   it('restricts OPEN+INTERMEDIATE_TRAINER+F2F to Non-blended', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.IntermediateTrainer)
+    await selectLevel(Course_Level_Enum.IntermediateTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -102,12 +103,12 @@ describe('component: CourseForm - OPEN', () => {
     await waitFor(() =>
       render(<CourseForm type={type} />, {
         auth: {
-          activeCertificates: [CourseLevel.AdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
         },
       })
     )
 
-    await selectLevel(CourseLevel.AdvancedTrainer)
+    await selectLevel(Course_Level_Enum.AdvancedTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -119,7 +120,7 @@ describe('component: CourseForm - OPEN', () => {
   it('restricts OPEN+LEVEL_1+F2F to New Certificate', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_1)
+    await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const reacc = screen.getByLabelText('Reaccreditation')
@@ -130,7 +131,7 @@ describe('component: CourseForm - OPEN', () => {
   it('restricts OPEN+LEVEL_1+VIRTUAL to New Certificate', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_1)
+    await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const reacc = screen.getByLabelText('Reaccreditation')
@@ -141,7 +142,7 @@ describe('component: CourseForm - OPEN', () => {
   it('allows OPEN+INTERMEDIATE_TRAINER+F2F to New Certificate and Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.IntermediateTrainer)
+    await selectLevel(Course_Level_Enum.IntermediateTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const reacc = screen.getByLabelText('Reaccreditation')
@@ -156,12 +157,12 @@ describe('component: CourseForm - OPEN', () => {
     await waitFor(() =>
       render(<CourseForm type={type} />, {
         auth: {
-          activeCertificates: [CourseLevel.AdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
         },
       })
     )
 
-    await selectLevel(CourseLevel.AdvancedTrainer)
+    await selectLevel(Course_Level_Enum.AdvancedTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const reacc = screen.getByLabelText('Reaccreditation')

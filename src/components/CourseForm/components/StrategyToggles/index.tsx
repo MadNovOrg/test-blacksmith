@@ -6,8 +6,9 @@ import { useTranslation } from 'react-i18next'
 import { InferType } from 'yup'
 
 import { useAuth } from '@app/context/auth'
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { yup } from '@app/schemas'
-import { BildStrategies, CourseInput, CourseLevel } from '@app/types'
+import { BildStrategies, CourseInput } from '@app/types'
 
 export const schema = yup.object({
   [BildStrategies.Primary]: yup.bool(),
@@ -61,8 +62,8 @@ export const StrategyToggles: React.FC<Props> = ({
   const isTrainerLevel = Boolean(
     courseLevel &&
       [
-        CourseLevel.BildIntermediateTrainer,
-        CourseLevel.BildAdvancedTrainer,
+        Course_Level_Enum.BildIntermediateTrainer,
+        Course_Level_Enum.BildAdvancedTrainer,
       ].includes(courseLevel)
   )
 
@@ -78,7 +79,7 @@ export const StrategyToggles: React.FC<Props> = ({
         NON_RESTRICTIVE_TERTIARY: true,
         RESTRICTIVE_TERTIARY_INTERMEDIATE: true,
         RESTRICTIVE_TERTIARY_ADVANCED:
-          courseLevel === CourseLevel.BildAdvancedTrainer,
+          courseLevel === Course_Level_Enum.BildAdvancedTrainer,
       })
     } else {
       resetField('bildStrategies')

@@ -1,6 +1,7 @@
 import { CognitoUser } from 'amazon-cognito-identity-js'
 
-import { CourseLevel, Profile, RoleName } from '@app/types'
+import { Course_Level_Enum } from '@app/generated/graphql'
+import { Profile, RoleName } from '@app/types'
 
 import { getACL } from './permissions'
 
@@ -25,10 +26,10 @@ export type AuthState = {
   loggedOut?: boolean
   trainerRoles?: string[]
   certificates?: {
-    courseLevel: CourseLevel
+    courseLevel: Course_Level_Enum
     expiryDate: string
   }[]
-  activeCertificates?: CourseLevel[]
+  activeCertificates?: Course_Level_Enum[]
   individualAllowedRoles?: Set<
     RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT
   >

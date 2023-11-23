@@ -2,8 +2,9 @@ import { format } from 'date-fns'
 import { setMedia } from 'mock-match-media'
 import { getI18n } from 'react-i18next'
 
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
-import { CourseLevel, CourseType } from '@app/types'
+import { CourseType } from '@app/types'
 import {
   courseToCourseInput,
   INPUT_DATE_FORMAT,
@@ -157,7 +158,7 @@ describe('component: CourseForm', () => {
 
   it('displays AOL checkbox for indirect course type', async () => {
     await waitFor(() => renderForm(CourseType.INDIRECT))
-    await selectLevel(CourseLevel.Level_2)
+    await selectLevel(Course_Level_Enum.Level_2)
 
     expect(screen.queryByTestId('aol-checkbox')).toBeInTheDocument()
   })
@@ -201,7 +202,7 @@ describe('component: CourseForm', () => {
         <CourseForm courseInput={courseToCourseInput(course)} type={type} />,
         {
           auth: {
-            activeCertificates: [CourseLevel.IntermediateTrainer],
+            activeCertificates: [Course_Level_Enum.IntermediateTrainer],
           },
         }
       )
@@ -261,7 +262,7 @@ describe('component: CourseForm', () => {
     })
 
     const level = screen.getByTestId('course-level-select')
-    expect(level.querySelector('input')).toHaveValue(CourseLevel.Level_1)
+    expect(level.querySelector('input')).toHaveValue(Course_Level_Enum.Level_1)
 
     await waitFor(() => {
       expect(screen.getByText(levelOneInfoMessage)).toBeInTheDocument()
@@ -270,14 +271,14 @@ describe('component: CourseForm', () => {
 
   it('hides the info alert for level 2 course', async () => {
     await waitFor(() => renderForm(CourseType.CLOSED))
-    await selectLevel(CourseLevel.Level_2)
+    await selectLevel(Course_Level_Enum.Level_2)
 
     expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
   })
 
   it('hides the info alert for intermediate trainer course', async () => {
     await waitFor(() => renderForm(CourseType.CLOSED))
-    await selectLevel(CourseLevel.IntermediateTrainer)
+    await selectLevel(Course_Level_Enum.IntermediateTrainer)
 
     expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
   })
@@ -286,11 +287,11 @@ describe('component: CourseForm', () => {
     await waitFor(() =>
       render(<CourseForm type={CourseType.CLOSED} />, {
         auth: {
-          activeCertificates: [CourseLevel.AdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
         },
       })
     )
-    await selectLevel(CourseLevel.AdvancedTrainer)
+    await selectLevel(Course_Level_Enum.AdvancedTrainer)
 
     expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
   })
@@ -318,10 +319,10 @@ describe('component: CourseForm', () => {
   })
 
   it.each([
-    [CourseType.OPEN, CourseLevel.Level_1],
-    [CourseType.OPEN, CourseLevel.Level_2],
-    [CourseType.CLOSED, CourseLevel.Level_1],
-    [CourseType.CLOSED, CourseLevel.Level_2],
+    [CourseType.OPEN, Course_Level_Enum.Level_1],
+    [CourseType.OPEN, Course_Level_Enum.Level_2],
+    [CourseType.CLOSED, Course_Level_Enum.Level_1],
+    [CourseType.CLOSED, Course_Level_Enum.Level_2],
   ])(
     'shows course renewal panel for %s course type for %s and when course begins from 2024',
     async (type, courseLevel) => {
@@ -330,7 +331,7 @@ describe('component: CourseForm', () => {
       await waitFor(() => {
         render(<CourseForm type={type} />, {
           auth: {
-            activeCertificates: [CourseLevel.AdvancedTrainer],
+            activeCertificates: [Course_Level_Enum.AdvancedTrainer],
           },
         })
       })

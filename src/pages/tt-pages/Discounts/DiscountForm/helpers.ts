@@ -1,8 +1,8 @@
 import { TFunction } from 'i18next'
 
-import { Promo_Code_Type_Enum } from '@app/generated/graphql'
+import { Promo_Code_Type_Enum, Course_Level_Enum } from '@app/generated/graphql'
 import { yup } from '@app/schemas'
-import { CourseLevel, RoleName } from '@app/types'
+import { RoleName } from '@app/types'
 
 export type FormInputs = {
   code: string
@@ -10,7 +10,7 @@ export type FormInputs = {
   type: Promo_Code_Type_Enum
   amount: number
   appliesTo: APPLIES_TO // Frontend only. Needed for yup schema
-  levels: CourseLevel[]
+  levels: Course_Level_Enum[]
   courses: number[]
   validFrom: Date | null
   validTo: Date | null

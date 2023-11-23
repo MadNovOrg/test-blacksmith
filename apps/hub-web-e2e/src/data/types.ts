@@ -1,7 +1,10 @@
-import { Course_Source_Enum, Course_Status_Enum } from '@app/generated/graphql'
+import {
+  Course_Source_Enum,
+  Course_Status_Enum,
+  Course_Level_Enum,
+} from '@app/generated/graphql'
 import {
   CourseDeliveryType,
-  CourseLevel,
   CourseTrainer,
   CourseType,
   PaymentMethod,
@@ -35,7 +38,7 @@ export type Course = {
   course_code?: string
   description: string
   organization?: Organization
-  level: CourseLevel
+  level: Course_Level_Enum
   deliveryType: CourseDeliveryType
   type: CourseType
   status: Course_Status_Enum

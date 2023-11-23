@@ -1,6 +1,7 @@
 import { test as base } from '@playwright/test'
 
-import { CourseDeliveryType, CourseLevel } from '@app/types'
+import { Course_Level_Enum } from '@app/generated/graphql'
+import { CourseDeliveryType } from '@app/types'
 
 import * as API from '@qa/api'
 import { UNIQUE_COURSE } from '@qa/data/courses'
@@ -42,7 +43,7 @@ const dataSet = [
     user: 'admin',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.Level_2
+      course.level = Course_Level_Enum.Level_2
       course.deliveryType = CourseDeliveryType.MIXED
       return course
     })(),

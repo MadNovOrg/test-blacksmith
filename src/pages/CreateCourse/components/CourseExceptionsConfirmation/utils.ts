@@ -10,7 +10,6 @@ import {
 } from '@app/generated/graphql'
 import {
   CourseDeliveryType,
-  CourseLevel,
   CourseTrainerType,
   CourseType,
   TrainerInput,
@@ -35,7 +34,7 @@ const MIN_DURATION_FOR_TIME_COMMITMENT = 6 * 60 // 6h
 
 export type CourseData = {
   startDateTime: Date
-  courseLevel: CourseLevel | Course_Level_Enum
+  courseLevel: Course_Level_Enum | Course_Level_Enum
   type: CourseType | Course_Type_Enum
   deliveryType: CourseDeliveryType | Course_Delivery_Type_Enum
   reaccreditation: boolean
@@ -50,7 +49,7 @@ export type TrainerData = {
   type: Course_Trainer_Type_Enum | CourseTrainerType
   trainer_role_types: TrainerInput['trainer_role_types']
   levels: {
-    courseLevel: CourseLevel
+    courseLevel: Course_Level_Enum
     expiryDate: string
   }[]
 }[]
@@ -130,7 +129,7 @@ export function checkCourseDetailsForExceptions(
   if (
     isTrainersRatioNotMet(
       {
-        level: courseData.courseLevel as CourseLevel,
+        level: courseData.courseLevel as Course_Level_Enum,
         reaccreditation: courseData.reaccreditation,
         conversion: courseData.conversion,
         accreditedBy: courseData.accreditedBy,

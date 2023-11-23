@@ -1,11 +1,10 @@
 import { gql } from 'graphql-request'
 
-import { Accreditors_Enum } from '@app/generated/graphql'
+import { Accreditors_Enum, Course_Level_Enum } from '@app/generated/graphql'
 import {
   Course,
   CourseDeliveryType,
   CourseExpenseData,
-  CourseLevel,
   CourseType,
   Venue,
 } from '@app/types'
@@ -21,7 +20,7 @@ export type ResponseType = {
       accreditedBy: Accreditors_Enum
       dates: Course['dates']
       deliveryType: CourseDeliveryType
-      level: CourseLevel
+      level: Course_Level_Enum
       reaccreditation: boolean
       conversion: boolean
       maxParticipants: number

@@ -25,7 +25,7 @@ import {
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import { NotFound } from '@app/pages/common/NotFound'
 import { MUTATION as SAVE_COURSE_MODULES_BILD_MUTATION } from '@app/queries/courses/save-course-modules-bild'
-import { CourseLevel, Strategy } from '@app/types'
+import { Strategy } from '@app/types'
 import {
   LoadingStatus,
   formatDurationShort,
@@ -92,41 +92,41 @@ type BILDCourseBuilderProps = unknown
 const mapCourseLevelToDescriptionDays = cond([
   [
     matches({
-      level: CourseLevel.BildAdvancedTrainer,
+      level: Course_Level_Enum.BildAdvancedTrainer,
       reaccreditation: true,
     }),
     constant(3),
   ],
   [
     matches({
-      level: CourseLevel.BildAdvancedTrainer,
+      level: Course_Level_Enum.BildAdvancedTrainer,
       conversion: true,
     }),
     constant(2),
   ],
   [
     matches({
-      level: CourseLevel.BildAdvancedTrainer,
+      level: Course_Level_Enum.BildAdvancedTrainer,
     }),
     constant(4),
   ],
   [
     matches({
-      level: CourseLevel.BildIntermediateTrainer,
+      level: Course_Level_Enum.BildIntermediateTrainer,
       reaccreditation: true,
     }),
     constant(2),
   ],
   [
     matches({
-      level: CourseLevel.BildIntermediateTrainer,
+      level: Course_Level_Enum.BildIntermediateTrainer,
       conversion: true,
     }),
     constant(2),
   ],
   [
     matches({
-      level: CourseLevel.BildIntermediateTrainer,
+      level: Course_Level_Enum.BildIntermediateTrainer,
     }),
     constant(5),
   ],

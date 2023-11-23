@@ -1,0 +1,1 @@
+INSERT INTO "public"."course_level"("name") VALUES (E'THREE_DAY_SAFETY_RESPONSE_TRAINER');

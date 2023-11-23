@@ -1,10 +1,6 @@
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
-import {
-  CourseDeliveryType,
-  CourseLevel,
-  CourseType,
-  RoleName,
-} from '@app/types'
+import { CourseDeliveryType, CourseType, RoleName } from '@app/types'
 
 import { screen, userEvent, waitFor } from '@test/index'
 
@@ -32,7 +28,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('allows CLOSED+LEVEL_1 to be F2F, VIRTUAL or MIXED', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_1)
+    await selectLevel(Course_Level_Enum.Level_1)
 
     expect(screen.getByLabelText('Face to face')).toBeEnabled()
     expect(screen.getByLabelText('Virtual')).toBeEnabled()
@@ -42,7 +38,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('restricts CLOSED+LEVEL_2 to be F2F or MIXED', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_2)
+    await selectLevel(Course_Level_Enum.Level_2)
 
     expect(screen.getByLabelText('Face to face')).toBeEnabled()
     expect(screen.getByLabelText('Virtual')).toBeDisabled()
@@ -51,10 +47,10 @@ describe('component: CourseForm - CLOSED', () => {
 
   it('restricts CLOSED+ADVANCED to be F2F', async () => {
     await waitFor(() =>
-      renderForm(type, CourseLevel.IntermediateTrainer, RoleName.TT_ADMIN)
+      renderForm(type, Course_Level_Enum.IntermediateTrainer, RoleName.TT_ADMIN)
     )
 
-    await selectLevel(CourseLevel.Advanced)
+    await selectLevel(Course_Level_Enum.Advanced)
 
     expect(screen.getByLabelText('Face to face')).toBeEnabled()
     expect(screen.getByLabelText('Virtual')).toBeDisabled()
@@ -64,7 +60,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('restricts CLOSED+INTERMEDIATE_TRAINER to be F2F', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.IntermediateTrainer)
+    await selectLevel(Course_Level_Enum.IntermediateTrainer)
 
     expect(screen.getByLabelText('Face to face')).toBeEnabled()
     expect(screen.getByLabelText('Virtual')).toBeDisabled()
@@ -72,9 +68,9 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+ADVANCED_TRAINER to be F2F', async () => {
-    await waitFor(() => renderForm(type, CourseLevel.AdvancedTrainer))
+    await waitFor(() => renderForm(type, Course_Level_Enum.AdvancedTrainer))
 
-    await selectLevel(CourseLevel.AdvancedTrainer)
+    await selectLevel(Course_Level_Enum.AdvancedTrainer)
 
     expect(screen.getByLabelText('Face to face')).toBeEnabled()
     expect(screen.getByLabelText('Virtual')).toBeDisabled()
@@ -85,7 +81,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('allows CLOSED+LEVEL_1+F2F to be Blended', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_1)
+    await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -99,7 +95,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('restricts CLOSED+LEVEL_1+MIXED to be Blended', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_1)
+    await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(CourseDeliveryType.MIXED)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -110,7 +106,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('allows CLOSED+LEVEL_1+VIRTUAL to be Blended', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_1)
+    await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -124,7 +120,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('allows CLOSED+LEVEL_2+F2F to be Blended', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_2)
+    await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -138,7 +134,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('allows CLOSED+LEVEL_2+MIXED to be Blended', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_2)
+    await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(CourseDeliveryType.MIXED)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -151,10 +147,10 @@ describe('component: CourseForm - CLOSED', () => {
 
   it('restricts CLOSED+ADVANCED+F2F to be Blended', async () => {
     await waitFor(() =>
-      renderForm(type, CourseLevel.IntermediateTrainer, RoleName.TT_ADMIN)
+      renderForm(type, Course_Level_Enum.IntermediateTrainer, RoleName.TT_ADMIN)
     )
 
-    await selectLevel(CourseLevel.Advanced)
+    await selectLevel(Course_Level_Enum.Advanced)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -165,7 +161,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('restricts CLOSED+INTERMEDIATE_TRAINER+F2F to be Blended', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.IntermediateTrainer)
+    await selectLevel(Course_Level_Enum.IntermediateTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -174,9 +170,9 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+ADVANCED_TRAINER+F2F to be Blended', async () => {
-    await waitFor(() => renderForm(type, CourseLevel.AdvancedTrainer))
+    await waitFor(() => renderForm(type, Course_Level_Enum.AdvancedTrainer))
 
-    await selectLevel(CourseLevel.AdvancedTrainer)
+    await selectLevel(Course_Level_Enum.AdvancedTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -188,7 +184,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('allows CLOSED+LEVEL_1+F2F to be Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_1)
+    await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const reacc = screen.getByLabelText('Reaccreditation')
@@ -201,7 +197,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('allows CLOSED+LEVEL_1+MIXED to be Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_1)
+    await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(CourseDeliveryType.MIXED)
 
     const reacc = screen.getByLabelText('Reaccreditation')
@@ -214,7 +210,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('allows CLOSED+LEVEL_1+VIRTUAL to be Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_1)
+    await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
 
     const reacc = screen.getByLabelText('Reaccreditation')
@@ -227,7 +223,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('allows CLOSED+LEVEL_2+F2F to be Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_2)
+    await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const reacc = screen.getByLabelText('Reaccreditation')
@@ -240,7 +236,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('allows CLOSED+LEVEL_2+MIXED to be Reaccreditation', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.Level_2)
+    await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(CourseDeliveryType.MIXED)
 
     const reacc = screen.getByLabelText('Reaccreditation')
@@ -253,7 +249,7 @@ describe('component: CourseForm - CLOSED', () => {
   it('allows CLOSED+INTERMEDIATE_TRAINER+F2F to be Reaccreditation but not Blended', async () => {
     await waitFor(() => renderForm(type))
 
-    await selectLevel(CourseLevel.IntermediateTrainer)
+    await selectLevel(Course_Level_Enum.IntermediateTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -267,9 +263,9 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+ADVANCED_TRAINER+F2F to be Reaccreditation but not Blended', async () => {
-    await waitFor(() => renderForm(type, CourseLevel.AdvancedTrainer))
+    await waitFor(() => renderForm(type, Course_Level_Enum.AdvancedTrainer))
 
-    await selectLevel(CourseLevel.AdvancedTrainer)
+    await selectLevel(Course_Level_Enum.AdvancedTrainer)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -284,10 +280,10 @@ describe('component: CourseForm - CLOSED', () => {
 
   it('displays price field for a Level two blended closed course that has 8 or less participants', async () => {
     await waitFor(() =>
-      renderForm(type, CourseLevel.IntermediateTrainer, RoleName.TT_ADMIN)
+      renderForm(type, Course_Level_Enum.IntermediateTrainer, RoleName.TT_ADMIN)
     )
 
-    await selectLevel(CourseLevel.Level_2)
+    await selectLevel(Course_Level_Enum.Level_2)
     await userEvent.type(screen.getByLabelText(/number of attendees/i), '8')
     await userEvent.click(screen.getByLabelText(/blended learning/i))
 
@@ -305,10 +301,10 @@ describe('component: CourseForm - CLOSED', () => {
     })
 
     await waitFor(() => {
-      renderForm(type, CourseLevel.IntermediateTrainer, RoleName.TT_ADMIN)
+      renderForm(type, Course_Level_Enum.IntermediateTrainer, RoleName.TT_ADMIN)
     })
 
-    await selectLevel(CourseLevel.Level_2)
+    await selectLevel(Course_Level_Enum.Level_2)
     await userEvent.type(screen.getByLabelText(/number of attendees/i), '8')
     await userEvent.click(screen.getByLabelText(/blended learning/i))
 

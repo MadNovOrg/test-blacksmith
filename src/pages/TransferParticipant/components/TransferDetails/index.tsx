@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
 import { MarkOptional } from 'ts-essentials'
 
-import { CourseLevel } from '@app/generated/graphql'
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import {
   TransferFormInput,
@@ -131,7 +131,7 @@ export const TransferDetails: React.FC<
 
       <FeesPanel
         courseStartDate={courseStartDate}
-        courseLevel={fromCourse.level as unknown as CourseLevel}
+        courseLevel={fromCourse.level as unknown as Course_Level_Enum}
         onChange={handleFeesChange}
         mode={mode}
       />

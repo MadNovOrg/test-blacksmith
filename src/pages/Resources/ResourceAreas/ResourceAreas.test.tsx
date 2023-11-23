@@ -2,8 +2,11 @@ import React from 'react'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
-import { AllResourceCategoriesQuery } from '@app/generated/graphql'
-import { CourseLevel, RoleName } from '@app/types'
+import {
+  AllResourceCategoriesQuery,
+  Course_Level_Enum,
+} from '@app/generated/graphql'
+import { RoleName } from '@app/types'
 
 import { render, screen } from '@test/index'
 import { buildResourceCategory } from '@test/mock-data-utils'
@@ -34,13 +37,17 @@ describe('page: ResourcesList', () => {
       buildResourceCategory({
         overrides: {
           resourceArea: { resourcearea: 'basic' },
-          resourcePermissions: { certificateLevels: [CourseLevel.Level_1] },
+          resourcePermissions: {
+            certificateLevels: [Course_Level_Enum.Level_1],
+          },
         },
       }),
       buildResourceCategory({
         overrides: {
           resourceArea: { resourcearea: 'basic' },
-          resourcePermissions: { certificateLevels: [CourseLevel.Level_1] },
+          resourcePermissions: {
+            certificateLevels: [Course_Level_Enum.Level_1],
+          },
         },
       }),
     ]
@@ -49,13 +56,17 @@ describe('page: ResourcesList', () => {
       buildResourceCategory({
         overrides: {
           resourceArea: { resourcearea: 'additional' },
-          resourcePermissions: { certificateLevels: [CourseLevel.Level_1] },
+          resourcePermissions: {
+            certificateLevels: [Course_Level_Enum.Level_1],
+          },
         },
       }),
       buildResourceCategory({
         overrides: {
           resourceArea: { resourcearea: 'additional' },
-          resourcePermissions: { certificateLevels: [CourseLevel.Level_1] },
+          resourcePermissions: {
+            certificateLevels: [Course_Level_Enum.Level_1],
+          },
         },
       }),
     ]
@@ -81,7 +92,7 @@ describe('page: ResourcesList', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [CourseLevel.Level_1],
+          activeCertificates: [Course_Level_Enum.Level_1],
           activeRole: RoleName.USER,
         },
       }
@@ -102,14 +113,14 @@ describe('page: ResourcesList', () => {
     const level1Category = buildResourceCategory({
       overrides: {
         resourceArea: { resourcearea: 'basic' },
-        resourcePermissions: { certificateLevels: [CourseLevel.Level_1] },
+        resourcePermissions: { certificateLevels: [Course_Level_Enum.Level_1] },
       },
     })
 
     const level2Category = buildResourceCategory({
       overrides: {
         resourceArea: { resourcearea: 'basic' },
-        resourcePermissions: { certificateLevels: [CourseLevel.Level_2] },
+        resourcePermissions: { certificateLevels: [Course_Level_Enum.Level_2] },
       },
     })
 
@@ -132,7 +143,7 @@ describe('page: ResourcesList', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [CourseLevel.Level_1],
+          activeCertificates: [Course_Level_Enum.Level_1],
           activeRole: RoleName.USER,
         },
       }
@@ -159,13 +170,17 @@ describe('page: ResourcesList', () => {
         buildResourceCategory({
           overrides: {
             resourceArea: { resourcearea: 'basic' },
-            resourcePermissions: { certificateLevels: [CourseLevel.Level_1] },
+            resourcePermissions: {
+              certificateLevels: [Course_Level_Enum.Level_1],
+            },
           },
         }),
         buildResourceCategory({
           overrides: {
             resourceArea: { resourcearea: 'basic' },
-            resourcePermissions: { certificateLevels: [CourseLevel.Level_1] },
+            resourcePermissions: {
+              certificateLevels: [Course_Level_Enum.Level_1],
+            },
           },
         }),
       ]
@@ -174,13 +189,17 @@ describe('page: ResourcesList', () => {
         buildResourceCategory({
           overrides: {
             resourceArea: { resourcearea: 'additional' },
-            resourcePermissions: { certificateLevels: [CourseLevel.Level_1] },
+            resourcePermissions: {
+              certificateLevels: [Course_Level_Enum.Level_1],
+            },
           },
         }),
         buildResourceCategory({
           overrides: {
             resourceArea: { resourcearea: 'additional' },
-            resourcePermissions: { certificateLevels: [CourseLevel.Level_1] },
+            resourcePermissions: {
+              certificateLevels: [Course_Level_Enum.Level_1],
+            },
           },
         }),
       ]

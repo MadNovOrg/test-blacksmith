@@ -23,11 +23,11 @@ import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
-import { OrgMembersQuery } from '@app/generated/graphql'
+import { OrgMembersQuery, Course_Level_Enum } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import theme from '@app/theme'
-import { CertificateStatus, CourseLevel } from '@app/types'
+import { CertificateStatus } from '@app/types'
 import { getProfileCertificationLevels } from '@app/util'
 
 import { CertificateStatusChip } from '../CertificateStatusChip'
@@ -155,7 +155,7 @@ export const OrgUsersTable: React.FC<
               const filteredCerts = member.profile.certificates.filter(
                 cert =>
                   certificateLevelsToDisplay.indexOf(
-                    cert.courseLevel as CourseLevel
+                    cert.courseLevel as Course_Level_Enum
                   ) >= 0
               )
               return (

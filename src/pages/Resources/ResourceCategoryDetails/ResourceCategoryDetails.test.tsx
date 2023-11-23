@@ -4,8 +4,9 @@ import { never, fromValue } from 'wonka'
 import {
   ResourceDetailsQuery,
   ResourceSummaryFragment,
+  Course_Level_Enum,
 } from '@app/generated/graphql'
-import { CourseLevel, RoleName, TrainerRoleTypeName } from '@app/types'
+import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 import { chance, render, screen } from '@test/index'
 
@@ -32,7 +33,7 @@ describe('page: ResourceCategoryDetails', () => {
   it('displays resource category title and description', () => {
     const resourceCategory = buildResourceCategory({
       resourcePermissions: {
-        certificateLevels: [CourseLevel.Level_1],
+        certificateLevels: [Course_Level_Enum.Level_1],
       },
     })
 
@@ -51,7 +52,7 @@ describe('page: ResourceCategoryDetails', () => {
       <Provider value={client}>
         <ResourceCategoryDetails />
       </Provider>,
-      { auth: { activeCertificates: [CourseLevel.Level_1] } }
+      { auth: { activeCertificates: [Course_Level_Enum.Level_1] } }
     )
 
     expect(
@@ -70,29 +71,29 @@ describe('page: ResourceCategoryDetails', () => {
   it('filters resources by active certificate levels', () => {
     const level1Resource = buildResource({
       resourcePermissions: {
-        certificateLevels: [CourseLevel.Level_1],
+        certificateLevels: [Course_Level_Enum.Level_1],
       },
     })
 
     const advancedModulesResource = buildResource({
       resourcePermissions: {
         certificateLevels: [
-          CourseLevel.Level_1,
-          CourseLevel.Level_2,
-          CourseLevel.Advanced,
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.Advanced,
         ],
       },
     })
 
     const intermediateTrainerResource = buildResource({
       resourcePermissions: {
-        certificateLevels: [CourseLevel.IntermediateTrainer],
+        certificateLevels: [Course_Level_Enum.IntermediateTrainer],
       },
     })
 
     const resourceCategory = buildResourceCategory({
       resourcePermissions: {
-        certificateLevels: [CourseLevel.Advanced],
+        certificateLevels: [Course_Level_Enum.Advanced],
       },
       resources: {
         nodes: [
@@ -120,8 +121,8 @@ describe('page: ResourceCategoryDetails', () => {
       {
         auth: {
           activeCertificates: [
-            CourseLevel.Advanced,
-            CourseLevel.IntermediateTrainer,
+            Course_Level_Enum.Advanced,
+            Course_Level_Enum.IntermediateTrainer,
           ],
         },
       }
@@ -141,7 +142,7 @@ describe('page: ResourceCategoryDetails', () => {
   it('filters by resources available to principal trainers', () => {
     const level1Resource = buildResource({
       resourcePermissions: {
-        certificateLevels: [CourseLevel.Level_1],
+        certificateLevels: [Course_Level_Enum.Level_1],
       },
     })
 
@@ -193,7 +194,7 @@ describe('page: ResourceCategoryDetails', () => {
   it("displays not found page if a user doesn't have an appropriate certificate level", () => {
     const level2Resource = buildResource({
       resourcePermissions: {
-        certificateLevels: [CourseLevel.Level_2],
+        certificateLevels: [Course_Level_Enum.Level_2],
       },
     })
 
@@ -219,7 +220,7 @@ describe('page: ResourceCategoryDetails', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [CourseLevel.Level_1],
+          activeCertificates: [Course_Level_Enum.Level_1],
         },
       }
     )
@@ -237,7 +238,7 @@ describe('page: ResourceCategoryDetails', () => {
     it(`displays all resources to internal users`, () => {
       const level1Resource = buildResource({
         resourcePermissions: {
-          certificateLevels: [CourseLevel.Level_1],
+          certificateLevels: [Course_Level_Enum.Level_1],
         },
       })
 
@@ -291,7 +292,7 @@ describe('page: ResourceCategoryDetails', () => {
     const level1Resource = buildResource({
       title: 'Level 1 resource',
       resourcePermissions: {
-        certificateLevels: [CourseLevel.Level_1],
+        certificateLevels: [Course_Level_Enum.Level_1],
       },
     })
 

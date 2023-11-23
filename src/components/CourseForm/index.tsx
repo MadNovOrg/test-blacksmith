@@ -60,6 +60,7 @@ import { VenueSelector } from '@app/components/VenueSelector'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
+  Course_Level_Enum,
   Course_Source_Enum,
   GetNotDetailedProfileQuery,
   GetNotDetailedProfileQueryVariables,
@@ -71,7 +72,6 @@ import theme from '@app/theme'
 import {
   CourseDeliveryType,
   CourseInput,
-  CourseLevel,
   CourseType,
   Organization,
   RoleName,
@@ -386,7 +386,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 accreditedBy: Accreditors_Enum,
                 blendedLearning: boolean,
                 maxParticipants: number,
-                courseLevel: CourseLevel
+                courseLevel: Course_Level_Enum
               ) =>
                 courseNeedsManualPrice({
                   accreditedBy,
@@ -400,7 +400,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             }
           ),
         renewalCycle: renewalCycleSchema.when(['startDate', 'courseLevel'], {
-          is: (startDate: Date, courseLevel: CourseLevel) =>
+          is: (startDate: Date, courseLevel: Course_Level_Enum) =>
             hasRenewalCycle({
               courseType,
               startDate,
@@ -633,7 +633,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const resetSpecialInstructionsToDefault = useCallback(
     (
       type: CourseType,
-      level: CourseLevel | '',
+      level: Course_Level_Enum | '',
       deliveryType: CourseDeliveryType,
       reaccreditation: boolean,
       conversion: boolean,
@@ -866,7 +866,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   })
 
   useEffect(() => {
-    if (values.courseLevel === CourseLevel.BildRegular) {
+    if (values.courseLevel === Course_Level_Enum.BildRegular) {
       setValue('conversion', false)
     }
   }, [values.courseLevel, setValue])
@@ -1318,7 +1318,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
                         resetSpecialInstructionsToDefault(
                           courseType,
-                          event.target.value as CourseLevel,
+                          event.target.value as Course_Level_Enum,
                           deliveryType,
                           values.reaccreditation,
                           values.conversion,
@@ -1333,7 +1333,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     />
                   )}
                 />
-                {values.courseLevel === CourseLevel.Level_1 && (
+                {values.courseLevel === Course_Level_Enum.Level_1 && (
                   <Alert severity="info" sx={{ mt: 2 }}>
                     {t('components.course-form.course-level-one-info')}
                   </Alert>
@@ -1429,7 +1429,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
                 {isBild &&
                 [CourseType.CLOSED, CourseType.OPEN].includes(courseType) &&
-                values.courseLevel !== CourseLevel.BildRegular ? (
+                values.courseLevel !== Course_Level_Enum.BildRegular ? (
                   <Grid item>
                     <Controller
                       name="conversion"

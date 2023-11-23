@@ -8,11 +8,11 @@ import {
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CourseLevel } from '@app/types'
+import { Course_Level_Enum } from '@app/generated/graphql'
 
 type Props = {
-  value: CourseLevel[]
-  onChange: (ev: { target: { value: CourseLevel[] } }) => void
+  value: Course_Level_Enum[]
+  onChange: (ev: { target: { value: Course_Level_Enum[] } }) => void
 }
 
 export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
@@ -24,9 +24,12 @@ export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
     ? ''
     : t('components.selectLevels.placeholder')
 
-  const levels = Object.values(CourseLevel)
+  const levels = Object.values(Course_Level_Enum)
 
-  const onSelected = (ev: React.SyntheticEvent, selected: CourseLevel[]) => {
+  const onSelected = (
+    ev: React.SyntheticEvent,
+    selected: Course_Level_Enum[]
+  ) => {
     onChange({ target: { value: selected } })
   }
 

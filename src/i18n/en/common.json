@@ -245,7 +245,8 @@
     "ADVANCED_TRAINER": "Advanced Trainer",
     "BILD_REGULAR": "BILD Certified",
     "BILD_INTERMEDIATE_TRAINER": "BILD Intermediate Trainer",
-    "BILD_ADVANCED_TRAINER": "BILD Advanced Trainer"
+    "BILD_ADVANCED_TRAINER": "BILD Advanced Trainer",
+    "THREE_DAY_SAFETY_RESPONSE_TRAINER": "3-Day Safety Responses Trainer"
   },
   "bild-strategies": {
     "PRIMARY": "Primary",

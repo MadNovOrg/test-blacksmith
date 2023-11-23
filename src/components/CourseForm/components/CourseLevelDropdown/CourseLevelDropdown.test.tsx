@@ -1,8 +1,8 @@
 import React from 'react'
 import { noop } from 'ts-essentials'
 
-import { Accreditors_Enum } from '@app/generated/graphql'
-import { CourseLevel, CourseType, RoleName } from '@app/types'
+import { Accreditors_Enum, Course_Level_Enum } from '@app/generated/graphql'
+import { CourseType, RoleName } from '@app/types'
 
 import { render, screen, userEvent, within } from '@test/index'
 
@@ -32,11 +32,12 @@ describe('component: CourseLevelDropdown', () => {
 
     await userEvent.click(screen.getByRole('button'))
 
-    expect(screen.queryAllByRole('option').length).toBe(4)
+    expect(screen.queryAllByRole('option').length).toBe(5)
 
     expect(getOption(/level one/i)).toBeInTheDocument()
     expect(getOption(/level two/i)).toBeInTheDocument()
     expect(getOption(/intermediate trainer/i)).toBeInTheDocument()
+    expect(getOption(/3-day safety responses trainer/i)).toBeInTheDocument()
     expect(getOption(/advanced trainer/i)).toBeInTheDocument()
   })
 
@@ -96,10 +97,10 @@ describe('component: CourseLevelDropdown', () => {
           certificates: [
             {
               expiryDate: new Date().toISOString(),
-              courseLevel: CourseLevel.IntermediateTrainer,
+              courseLevel: Course_Level_Enum.IntermediateTrainer,
             },
           ],
-          activeCertificates: [CourseLevel.IntermediateTrainer],
+          activeCertificates: [Course_Level_Enum.IntermediateTrainer],
         },
       }
     )
@@ -124,7 +125,7 @@ describe('component: CourseLevelDropdown', () => {
       {
         auth: {
           activeRole: RoleName.TRAINER,
-          activeCertificates: [CourseLevel.AdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
         },
       }
     )
@@ -149,7 +150,7 @@ describe('component: CourseLevelDropdown', () => {
       {
         auth: {
           activeRole: RoleName.TRAINER,
-          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
         },
       }
     )

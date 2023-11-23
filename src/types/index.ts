@@ -26,7 +26,7 @@ export type Course = {
   createdAt: string
   updatedAt?: string
   name: string
-  level: CourseLevel
+  level: Course_Level_Enum
   deliveryType: CourseDeliveryType
   type: CourseType
   course_code: string
@@ -120,7 +120,7 @@ export type CourseCertificate = {
   expiryDate: string
   certificationDate: string
   courseName: string
-  courseLevel: CourseLevel
+  courseLevel: Course_Level_Enum
   participant?: CourseParticipant
   profileId: string
   profile: Profile
@@ -323,7 +323,7 @@ export type CourseTrainer = {
   status: InviteStatus
   profile: Profile
   levels: {
-    courseLevel: CourseLevel
+    courseLevel: Course_Level_Enum
     expiryDate: string
   }[]
 }
@@ -356,7 +356,7 @@ export enum OfstedRating {
 export type Module = {
   name: string
   description: string
-  level: CourseLevel
+  level: Course_Level_Enum
   type: string
   moduleGroup: ModuleGroup
 } & Base
@@ -369,7 +369,7 @@ export type ModuleGroupDuration = {
 
 export type ModuleGroup = {
   name: string
-  level: CourseLevel
+  level: Course_Level_Enum
   mandatory: boolean
   modules: Module[]
   duration: {
@@ -579,7 +579,7 @@ export enum SearchTrainerAvailability {
 export type SearchTrainer = {
   availability?: SearchTrainerAvailability
   levels: {
-    courseLevel: CourseLevel
+    courseLevel: Course_Level_Enum
     expiryDate: string
   }[]
 } & Pick<Profile, 'id' | 'fullName' | 'avatar' | 'trainer_role_types'>
@@ -611,7 +611,7 @@ export type CourseInput = {
   } | null
 
   salesRepresentative: Profile | null
-  courseLevel: CourseLevel | ''
+  courseLevel: Course_Level_Enum | ''
   blendedLearning: boolean
   reaccreditation: boolean
   deliveryType: CourseDeliveryType
@@ -647,7 +647,7 @@ export type CourseInput = {
 
 export type ValidCourseInput = DeepNonNullable<
   Omit<CourseInput, 'courseLevel' | 'source'> & {
-    courseLevel: CourseLevel
+    courseLevel: Course_Level_Enum
     source: Course_Source_Enum
   }
 >
@@ -736,7 +736,7 @@ export type TrainerInput = {
   status?: InviteStatus
   trainer_role_types: { trainer_role_type?: { name?: string } | null }[]
   levels: {
-    courseLevel: CourseLevel
+    courseLevel: Course_Level_Enum
     expiryDate: string
   }[]
 }

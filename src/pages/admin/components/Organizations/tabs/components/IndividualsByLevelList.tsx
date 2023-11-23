@@ -18,14 +18,15 @@ import { CertificateStatusChip } from '@app/components/CertificateStatusChip'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
+import { Course_Level_Enum } from '@app/generated/graphql'
 import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 import { useTableSort } from '@app/hooks/useTableSort'
 import theme from '@app/theme'
-import { CertificateStatus, CourseLevel } from '@app/types'
+import { CertificateStatus } from '@app/types'
 
 type IndividualsByLevelListParams = {
   orgId: string
-  courseLevel: CourseLevel | null
+  courseLevel: Course_Level_Enum | null
   certificateStatus: CertificateStatus[]
 }
 

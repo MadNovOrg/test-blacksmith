@@ -1,5 +1,5 @@
 import { Course_Level_Enum } from '@app/generated/graphql'
-import { BildStrategies, CourseLevel, CourseType } from '@app/types'
+import { BildStrategies, CourseType } from '@app/types'
 
 import {
   BildRatioCriteria,
@@ -14,7 +14,7 @@ describe('Bild trainer ratios', () => {
       getRequiredLeadsBild({
         type: CourseType.OPEN,
         numberParticipants: 12,
-        level: CourseLevel.BildIntermediateTrainer,
+        level: Course_Level_Enum.BildIntermediateTrainer,
         strategies: [],
         isReaccreditation: false,
         isConversion: false,
@@ -26,7 +26,7 @@ describe('Bild trainer ratios', () => {
     const criteria: BildRatioCriteria = {
       isConversion: true,
       numberParticipants: 11,
-      level: CourseLevel.BildIntermediateTrainer,
+      level: Course_Level_Enum.BildIntermediateTrainer,
       isReaccreditation: false,
       strategies: [],
       type: CourseType.CLOSED,
@@ -48,7 +48,7 @@ describe('Bild trainer ratios', () => {
     const criteria: BildRatioCriteria = {
       isConversion: false,
       numberParticipants: 25,
-      level: CourseLevel.BildIntermediateTrainer,
+      level: Course_Level_Enum.BildIntermediateTrainer,
       isReaccreditation: false,
       strategies: [],
       type: CourseType.CLOSED,
@@ -101,7 +101,7 @@ describe('Bild trainer ratios', () => {
     const criteria: BildRatioCriteria = {
       isConversion: false,
       numberParticipants: 25,
-      level: CourseLevel.BildIntermediateTrainer,
+      level: Course_Level_Enum.BildIntermediateTrainer,
       isReaccreditation: true,
       strategies: [],
       type: CourseType.CLOSED,
@@ -154,7 +154,7 @@ describe('Bild trainer ratios', () => {
     const criteria: BildRatioCriteria = {
       isConversion: false,
       numberParticipants: 25,
-      level: CourseLevel.BildAdvancedTrainer,
+      level: Course_Level_Enum.BildAdvancedTrainer,
       isReaccreditation: true,
       strategies: [],
       type: CourseType.CLOSED,
@@ -225,7 +225,7 @@ describe('Bild trainer ratios', () => {
     const criteria: BildRatioCriteria = {
       isConversion: false,
       numberParticipants: 25,
-      level: CourseLevel.BildRegular,
+      level: Course_Level_Enum.BildRegular,
       isReaccreditation: false,
       strategies: [BildStrategies.Primary],
       type: CourseType.CLOSED,
@@ -278,7 +278,7 @@ describe('Bild trainer ratios', () => {
     const criteria: BildRatioCriteria = {
       isConversion: false,
       numberParticipants: 25,
-      level: CourseLevel.BildRegular,
+      level: Course_Level_Enum.BildRegular,
       isReaccreditation: false,
       type: CourseType.INDIRECT,
       strategies: [
@@ -336,7 +336,7 @@ describe('Bild trainer ratios', () => {
     const criteria: BildRatioCriteria = {
       isConversion: false,
       numberParticipants: 25,
-      level: CourseLevel.BildRegular,
+      level: Course_Level_Enum.BildRegular,
       isReaccreditation: false,
       type: CourseType.INDIRECT,
       strategies: [BildStrategies.RestrictiveTertiaryAdvanced],

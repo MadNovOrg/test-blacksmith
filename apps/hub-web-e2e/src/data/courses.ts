@@ -1,7 +1,11 @@
 import { addMonths, subDays } from 'date-fns'
 
-import { Course_Status_Enum, Course_Source_Enum } from '@app/generated/graphql'
-import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
+import {
+  Course_Status_Enum,
+  Course_Source_Enum,
+  Course_Level_Enum,
+} from '@app/generated/graphql'
+import { CourseDeliveryType, CourseType } from '@app/types'
 
 import { Accreditors_Enum } from '@qa/generated/graphql'
 
@@ -14,7 +18,7 @@ export const COURSES_TO_VIEW: Course[] = [
     id: 0,
     name: 'Positive Behaviour Training: Level One',
     description: 'Some description 1 F2F',
-    level: CourseLevel.Level_1,
+    level: Course_Level_Enum.Level_1,
     status: Course_Status_Enum.ConfirmModules,
     deliveryType: CourseDeliveryType.F2F,
     type: CourseType.OPEN,
@@ -37,7 +41,7 @@ export const COURSES_TO_VIEW: Course[] = [
     id: 0,
     name: 'Positive Behaviour Training: Level Two',
     description: 'Some description 2 Mixed',
-    level: CourseLevel.Level_2,
+    level: Course_Level_Enum.Level_2,
     status: Course_Status_Enum.ConfirmModules,
     deliveryType: CourseDeliveryType.MIXED,
     type: CourseType.CLOSED,
@@ -62,7 +66,7 @@ export const COURSES_TO_VIEW: Course[] = [
     id: 0,
     name: 'Positive Behaviour Training: Advanced Modules',
     description: 'Some description 3 Virtual',
-    level: CourseLevel.Advanced,
+    level: Course_Level_Enum.Advanced,
     status: Course_Status_Enum.ConfirmModules,
     deliveryType: CourseDeliveryType.VIRTUAL,
     type: CourseType.CLOSED,
@@ -86,7 +90,7 @@ export const UNIQUE_COURSE: () => Course = () => ({
   id: 0,
   name: 'Positive Behaviour Training: Level One',
   description: `Some description ${Date.now()}`,
-  level: CourseLevel.Level_1,
+  level: Course_Level_Enum.Level_1,
   status: Course_Status_Enum.Scheduled,
   source: Course_Source_Enum.EmailEnquiry,
   deliveryType: CourseDeliveryType.F2F,

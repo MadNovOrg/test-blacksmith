@@ -1,10 +1,11 @@
-import { BildStrategies, CourseLevel, CourseType } from '@app/types'
+import { Course_Level_Enum } from '@app/generated/graphql'
+import { BildStrategies, CourseType } from '@app/types'
 
 export type BildRatioCriteria = {
   isConversion: boolean
   isReaccreditation: boolean
   strategies: BildStrategies[]
-  level: CourseLevel
+  level: Course_Level_Enum
   numberParticipants: number
   type: CourseType
 }
@@ -21,12 +22,12 @@ export function getRequiredAssistantsBild(criteria: BildRatioCriteria): {
   max: number
 } {
   const withoutAdvanced =
-    criteria.level === CourseLevel.BildRegular &&
+    criteria.level === Course_Level_Enum.BildRegular &&
     criteria.strategies.length >= 1 &&
     !criteria.strategies.includes(BildStrategies.RestrictiveTertiaryAdvanced)
 
   const advancedSelected =
-    criteria.level === CourseLevel.BildRegular &&
+    criteria.level === Course_Level_Enum.BildRegular &&
     criteria.strategies.includes(BildStrategies.RestrictiveTertiaryAdvanced)
 
   if (criteria.isConversion) {
@@ -36,8 +37,8 @@ export function getRequiredAssistantsBild(criteria: BildRatioCriteria): {
   if (
     (withoutAdvanced ||
       [
-        CourseLevel.BildIntermediateTrainer,
-        CourseLevel.BildAdvancedTrainer,
+        Course_Level_Enum.BildIntermediateTrainer,
+        Course_Level_Enum.BildAdvancedTrainer,
       ].includes(criteria.level)) &&
     criteria.numberParticipants > 12
   ) {
@@ -46,7 +47,7 @@ export function getRequiredAssistantsBild(criteria: BildRatioCriteria): {
 
   if (
     advancedSelected &&
-    criteria.level === CourseLevel.BildRegular &&
+    criteria.level === Course_Level_Enum.BildRegular &&
     criteria.numberParticipants > 8
   ) {
     return toRange(Math.abs(Math.ceil((criteria.numberParticipants - 8) / 8)))

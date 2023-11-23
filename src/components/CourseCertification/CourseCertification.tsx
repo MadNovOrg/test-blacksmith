@@ -30,10 +30,11 @@ import {
   GetCertificateQuery,
   GetCertificateQueryVariables,
   Grade_Enum,
+  Course_Level_Enum,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { QUERY } from '@app/queries/certificate/get-certificate'
-import { CertificateStatus, CourseLevel } from '@app/types'
+import { CertificateStatus } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import CertificateHoldHistoryModal from './components/CertificateHoldHistoryModal/CertificateHoldHistoryModal'
@@ -187,7 +188,9 @@ export const CourseCertification: React.FC<
                     document={
                       <CertificateDocument
                         participantName={certificate.profile.fullName ?? ''}
-                        courseLevel={certificate.courseLevel as CourseLevel}
+                        courseLevel={
+                          certificate.courseLevel as Course_Level_Enum
+                        }
                         grade={grade as Grade_Enum}
                         certificationNumber={certificationNumber}
                         expiryDate={certificate.expiryDate}

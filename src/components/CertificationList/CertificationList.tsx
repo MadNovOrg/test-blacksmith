@@ -24,10 +24,10 @@ import { LinkToProfile } from '@app/components/LinkToProfile'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
-import { Grade_Enum } from '@app/generated/graphql'
+import { Grade_Enum, Course_Level_Enum } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
-import { CertificateStatus, CourseLevel, CourseParticipant } from '@app/types'
+import { CertificateStatus, CourseParticipant } from '@app/types'
 
 import { CertificateStatusChip } from '../CertificateStatusChip'
 import { TableNoRows } from '../Table/TableNoRows'
@@ -110,7 +110,7 @@ export const CertificationList: React.FC<
         <CertificateDocument
           key={p.id}
           participantName={p.profile?.fullName}
-          courseLevel={p.certificate?.courseLevel ?? CourseLevel.Level_1}
+          courseLevel={p.certificate?.courseLevel ?? Course_Level_Enum.Level_1}
           grade={p.grade ?? Grade_Enum.Pass}
           certificationNumber={p.certificate?.number ?? ''}
           expiryDate={p.certificate?.expiryDate ?? ''}

@@ -10,34 +10,38 @@ import {
   UpdateAvatarMutation,
   UpdateAvatarMutationVariables,
 } from '@app/generated/graphql'
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { MUTATION as ARCHIVE_PROFILE_MUTATION } from '@app/queries/profile/archive-profile'
 import { QUERY } from '@app/queries/profile/get-profile-details'
 import { MUTATION as UPDATE_AVATAR_MUTATION } from '@app/queries/profile/update-profile-avatar'
-import { CourseLevel } from '@app/types'
 import { getSWRLoadingStatus } from '@app/util'
 
 const isValidCertificate = (certificate: { expiryDate: string }) =>
   !isPast(new Date(certificate.expiryDate))
 
 const requiredCertificateLevel = {
-  [CourseLevel.Level_1]: [],
-  [CourseLevel.Level_2]: [],
-  [CourseLevel.Advanced]: [CourseLevel.Level_2],
-  [CourseLevel.BildRegular]: [],
-  [CourseLevel.IntermediateTrainer]: [CourseLevel.Level_1, CourseLevel.Level_2],
-  [CourseLevel.AdvancedTrainer]: [CourseLevel.IntermediateTrainer],
-  [CourseLevel.BildIntermediateTrainer]: [CourseLevel.BildRegular],
-  [CourseLevel.BildAdvancedTrainer]: [
-    CourseLevel.BildRegular,
-    CourseLevel.BildIntermediateTrainer,
+  [Course_Level_Enum.Level_1]: [],
+  [Course_Level_Enum.Level_2]: [],
+  [Course_Level_Enum.ThreeDaySafetyResponseTrainer]: [],
+  [Course_Level_Enum.Advanced]: [Course_Level_Enum.Level_2],
+  [Course_Level_Enum.BildRegular]: [],
+  [Course_Level_Enum.IntermediateTrainer]: [
+    Course_Level_Enum.Level_1,
+    Course_Level_Enum.Level_2,
+  ],
+  [Course_Level_Enum.AdvancedTrainer]: [Course_Level_Enum.IntermediateTrainer],
+  [Course_Level_Enum.BildIntermediateTrainer]: [Course_Level_Enum.BildRegular],
+  [Course_Level_Enum.BildAdvancedTrainer]: [
+    Course_Level_Enum.BildRegular,
+    Course_Level_Enum.BildIntermediateTrainer,
   ],
 }
 
 export type MissingCertificateInfo = {
   courseId: number
   courseCode: string
-  requiredCertificate: CourseLevel[] // ie. Level 1 or Level 2 required
+  requiredCertificate: Course_Level_Enum[] // ie. Level 1 or Level 2 required
 }
 
 export default function useProfile(
@@ -77,7 +81,7 @@ export default function useProfile(
       return courses
         .map(c => {
           const requiredCertificate =
-            requiredCertificateLevel[c.level || CourseLevel.Level_1]
+            requiredCertificateLevel[c.level || Course_Level_Enum.Level_1]
           if (requiredCertificate.length === 0) {
             return false
           }

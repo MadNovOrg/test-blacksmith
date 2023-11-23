@@ -3,6 +3,7 @@ import { MarkOptional } from 'ts-essentials'
 
 import { getLevels } from '@app/components/CourseForm/helpers'
 import {
+  Course_Level_Enum,
   Accreditors_Enum,
   Course_Status_Enum as CourseStatus,
 } from '@app/generated/graphql'
@@ -15,7 +16,6 @@ import {
 import {
   Course,
   CourseInput,
-  CourseLevel,
   CourseTrainerType,
   CourseType,
   RoleName,
@@ -301,7 +301,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     // TODO RMX | Too chonky, revise this later
-    allowedCourseLevels: (levels: CourseLevel[]) => {
+    allowedCourseLevels: (levels: Course_Level_Enum[]) => {
       if (!activeRole) {
         return []
       }
@@ -680,8 +680,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         case CourseType.INDIRECT: {
           if (activeRole === RoleName.TRAINER) {
             return [
-              CourseLevel.BildIntermediateTrainer,
-              CourseLevel.BildAdvancedTrainer,
+              Course_Level_Enum.BildIntermediateTrainer,
+              Course_Level_Enum.BildAdvancedTrainer,
             ].some(level => activeCertificates.includes(level))
           }
 
@@ -700,7 +700,9 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canDeliveryTertiaryAdvancedStrategy: () => {
       if (activeRole === RoleName.TRAINER) {
-        return activeCertificates.includes(CourseLevel.BildAdvancedTrainer)
+        return activeCertificates.includes(
+          Course_Level_Enum.BildAdvancedTrainer
+        )
       }
 
       return true

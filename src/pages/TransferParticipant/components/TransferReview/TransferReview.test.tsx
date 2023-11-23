@@ -7,7 +7,6 @@ import { fromValue } from 'wonka'
 
 import { useSnackbar } from '@app/context/snackbar'
 import {
-  CourseLevel,
   Course_Level_Enum,
   Course_Type_Enum,
   TransferFeeType,
@@ -138,7 +137,7 @@ describe('page: TransferReview', () => {
       within(screen.getByTestId('fee-type-panel')).getByText(
         `${getTransferTermsFee(
           new Date(fromCourse?.start ?? ''),
-          CourseLevel.Level_1
+          Course_Level_Enum.Level_1
         )}% of payment due`
       )
     ).toBeInTheDocument()

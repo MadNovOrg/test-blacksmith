@@ -16,8 +16,8 @@ import { Ellipsize } from '@app/components/Ellipsize'
 import {
   GetPromoCodesQuery,
   Promo_Code_Type_Enum,
+  Course_Level_Enum,
 } from '@app/generated/graphql'
-import { CourseLevel } from '@app/types'
 
 import { DISCOUNT_STATUS_COLOR, getPromoCodeStatus } from '../helpers'
 
@@ -77,7 +77,7 @@ export const Row: React.FC<React.PropsWithChildren<Props>> = ({
           <>
             <Ellipsize
               text={promo.levels
-                .map((l: CourseLevel) => t(`course-levels.${l}`))
+                .map((l: Course_Level_Enum) => t(`course-levels.${l}`))
                 .join(', ')}
               len={25}
             />

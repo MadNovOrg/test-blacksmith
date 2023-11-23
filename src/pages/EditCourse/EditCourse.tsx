@@ -69,7 +69,6 @@ import {
   BildStrategies,
   CourseDeliveryType,
   CourseInput,
-  CourseLevel,
   CourseTrainerType,
   CourseType,
   InviteStatus,
@@ -243,7 +242,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       ? generateBildCourseName(
           strategies,
           {
-            level: courseData.courseLevel as CourseLevel,
+            level: courseData.courseLevel as Course_Level_Enum,
             reaccreditation: courseData.reaccreditation,
             conversion: courseData.conversion,
             bildStrategies: courseData.bildStrategies as Record<
@@ -255,7 +254,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
         )
       : generateCourseName(
           {
-            level: courseData?.courseLevel as CourseLevel,
+            level: courseData?.courseLevel as Course_Level_Enum,
             reaccreditation: courseData?.reaccreditation as boolean,
           },
           t
@@ -599,7 +598,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           ...courseData,
           accreditedBy: courseData.accreditedBy ?? Accreditors_Enum.Icm,
           bildStrategies: courseData.bildStrategies ?? {},
-          courseLevel: courseData.courseLevel ?? CourseLevel.Level_1,
+          courseLevel: courseData.courseLevel ?? Course_Level_Enum.Level_1,
           type: Course_Type_Enum.Indirect,
           maxParticipants: courseData.maxParticipants ?? 0,
           startDateTime: courseData.startDateTime ?? new Date(),
@@ -652,7 +651,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
         ...courseData,
         accreditedBy: courseData.accreditedBy ?? Accreditors_Enum.Icm,
         bildStrategies: courseData.bildStrategies ?? {},
-        level: courseData.courseLevel as unknown as CourseLevel,
+        level: courseData.courseLevel as unknown as Course_Level_Enum,
         type: courseData.type as unknown as CourseType,
         max_participants: courseData.maxParticipants as unknown as number,
         hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
@@ -784,7 +783,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 courseData.type ? (
                   <ChooseTrainers
                     courseType={courseData.type}
-                    courseLevel={courseData.courseLevel || CourseLevel.Level_1}
+                    courseLevel={
+                      courseData.courseLevel || Course_Level_Enum.Level_1
+                    }
                     courseSchedule={{
                       start: courseData.startDateTime,
                       end: courseData.endDateTime,

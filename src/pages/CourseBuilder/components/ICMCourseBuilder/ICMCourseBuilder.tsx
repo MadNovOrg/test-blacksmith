@@ -28,7 +28,6 @@ import { NotFound } from '@app/pages/common/NotFound'
 import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/queries/courses/finalize-course-builder'
 import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-modules'
 import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups'
-import { CourseLevel } from '@app/types'
 import { isNotNullish } from '@app/util'
 
 import { Hero } from '../Hero/Hero'
@@ -49,24 +48,26 @@ const courseBuilderWarning: Partial<Record<Course_Level_Enum, string>> = {
 
 export const MAX_COURSE_DURATION_MAP = {
   normal: {
-    [CourseLevel.Level_1]: 6 * 60, // 1 training day
-    [CourseLevel.Level_2]: 2 * 6 * 60, // 2 training days
-    [CourseLevel.IntermediateTrainer]: 5 * 6 * 60, // 5 training days
-    [CourseLevel.BildRegular]: 5 * 6 * 60, // 5 training days
-    [CourseLevel.AdvancedTrainer]: 5 * 6 * 60, // 5 training days
-    [CourseLevel.Advanced]: 6 * 60, // 1 training day
-    [CourseLevel.BildIntermediateTrainer]: 4 * 6 * 60, // 4 training days -  TODO change when we get clarity
-    [CourseLevel.BildAdvancedTrainer]: 4 * 6 * 60, // 4 training days -  TODO change when we get clarity
+    [Course_Level_Enum.Level_1]: 6 * 60, // 1 training day
+    [Course_Level_Enum.Level_2]: 2 * 6 * 60, // 2 training days
+    [Course_Level_Enum.ThreeDaySafetyResponseTrainer]: 3 * 6 * 60, // 3 training days
+    [Course_Level_Enum.IntermediateTrainer]: 5 * 6 * 60, // 5 training days
+    [Course_Level_Enum.BildRegular]: 5 * 6 * 60, // 5 training days
+    [Course_Level_Enum.AdvancedTrainer]: 5 * 6 * 60, // 5 training days
+    [Course_Level_Enum.Advanced]: 6 * 60, // 1 training day
+    [Course_Level_Enum.BildIntermediateTrainer]: 4 * 6 * 60, // 4 training days -  TODO change when we get clarity
+    [Course_Level_Enum.BildAdvancedTrainer]: 4 * 6 * 60, // 4 training days -  TODO change when we get clarity
   },
   reaccreditation: {
-    [CourseLevel.Level_1]: 6 * 60, // 1 training day
-    [CourseLevel.Level_2]: 6 * 60, // 1 training day
-    [CourseLevel.IntermediateTrainer]: 2 * 6 * 60, // 2 training days
-    [CourseLevel.BildRegular]: 2 * 6 * 60, // 2 training days
-    [CourseLevel.AdvancedTrainer]: 2 * 6 * 60, // 2 training days
-    [CourseLevel.Advanced]: 3 * 6 * 60, // 3 training days
-    [CourseLevel.BildIntermediateTrainer]: 4 * 6 * 60, // 4 training days - TODO change when we get clarity
-    [CourseLevel.BildAdvancedTrainer]: 4 * 6 * 60, // 4 training days - TODO change when we get clarity
+    [Course_Level_Enum.Level_1]: 6 * 60, // 1 training day
+    [Course_Level_Enum.Level_2]: 6 * 60, // 1 training day
+    [Course_Level_Enum.ThreeDaySafetyResponseTrainer]: 6 * 60, // 1 training day
+    [Course_Level_Enum.IntermediateTrainer]: 2 * 6 * 60, // 2 training days
+    [Course_Level_Enum.BildRegular]: 2 * 6 * 60, // 2 training days
+    [Course_Level_Enum.AdvancedTrainer]: 2 * 6 * 60, // 2 training days
+    [Course_Level_Enum.Advanced]: 3 * 6 * 60, // 3 training days
+    [Course_Level_Enum.BildIntermediateTrainer]: 4 * 6 * 60, // 4 training days - TODO change when we get clarity
+    [Course_Level_Enum.BildAdvancedTrainer]: 4 * 6 * 60, // 4 training days - TODO change when we get clarity
   },
 }
 
@@ -175,14 +176,14 @@ export const ICMCourseBuilder: React.FC<
   const mapCourseLevelToDescription = cond([
     [
       matches({
-        level: CourseLevel.Level_1,
+        level: Course_Level_Enum.Level_1,
         type: Course_Type_Enum.Open,
       }),
       constant({ duration: '6 hour', translationKey: 'ICM-description' }),
     ],
     [
       matches({
-        level: CourseLevel.Level_1,
+        level: Course_Level_Enum.Level_1,
       }),
       constant({
         duration: '6 hours',
@@ -191,14 +192,14 @@ export const ICMCourseBuilder: React.FC<
     ],
     [
       matches({
-        level: CourseLevel.Level_2,
+        level: Course_Level_Enum.Level_2,
         type: Course_Type_Enum.Open,
       }),
       constant({ duration: '12 hour', translationKey: 'ICM-description' }),
     ],
     [
       matches({
-        level: CourseLevel.Level_2,
+        level: Course_Level_Enum.Level_2,
       }),
       constant({
         duration: '12 hours',
@@ -207,7 +208,7 @@ export const ICMCourseBuilder: React.FC<
     ],
     [
       matches({
-        level: CourseLevel.Advanced,
+        level: Course_Level_Enum.Advanced,
       }),
       constant({
         duration: '6 hours',
@@ -216,27 +217,27 @@ export const ICMCourseBuilder: React.FC<
     ],
     [
       matches({
-        level: CourseLevel.IntermediateTrainer,
+        level: Course_Level_Enum.IntermediateTrainer,
         reaccreditation: true,
       }),
       constant({ duration: '2 day', translationKey: 'ICM-description' }),
     ],
     [
       matches({
-        level: CourseLevel.IntermediateTrainer,
+        level: Course_Level_Enum.IntermediateTrainer,
       }),
       constant({ duration: '5 day', translationKey: 'ICM-description' }),
     ],
     [
       matches({
-        level: CourseLevel.AdvancedTrainer,
+        level: Course_Level_Enum.AdvancedTrainer,
         reaccreditation: true,
       }),
       constant({ duration: '3 day', translationKey: 'ICM-description' }),
     ],
     [
       matches({
-        level: CourseLevel.AdvancedTrainer,
+        level: Course_Level_Enum.AdvancedTrainer,
       }),
       constant({ duration: '4 day', translationKey: 'ICM-description' }),
     ],

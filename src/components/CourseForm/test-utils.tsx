@@ -1,13 +1,9 @@
 import React from 'react'
 
 import CourseForm from '@app/components/CourseForm/index'
+import { Course_Level_Enum } from '@app/generated/graphql'
 import useZoomMeetingUrl from '@app/hooks/useZoomMeetingLink'
-import {
-  CourseDeliveryType,
-  CourseLevel,
-  CourseType,
-  RoleName,
-} from '@app/types'
+import { CourseDeliveryType, CourseType, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
@@ -43,7 +39,7 @@ beforeEach(() => {
   })
 })
 
-export async function selectLevel(lvl: CourseLevel) {
+export async function selectLevel(lvl: Course_Level_Enum) {
   const select = screen.getByTestId('course-level-select')
   await userEvent.click(within(select).getByRole('button'))
 
@@ -68,7 +64,7 @@ export async function selectBildCategory() {
 
 export const renderForm = (
   type: CourseType,
-  certificateLevel: CourseLevel = CourseLevel.IntermediateTrainer,
+  certificateLevel: Course_Level_Enum = Course_Level_Enum.IntermediateTrainer,
   role: RoleName = RoleName.USER
 ) => {
   return render(<CourseForm type={type} />, {

@@ -18,12 +18,11 @@ import {
   Course_Participant,
   Course_Participant_Module,
   Course_Status_Enum,
+  Course_Level_Enum,
   Currency,
   Grade_Enum,
   Profile,
   Xero_Invoice_Status_Enum,
-} from '@app/generated/graphql'
-import {
   Course_Trainer,
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
@@ -37,7 +36,6 @@ import {
   CertificateStatus,
   Course,
   CourseInput,
-  CourseLevel,
   CourseParticipant,
   CourseTrainerType,
   CourseType,
@@ -227,8 +225,8 @@ export const generateBildCourseName = (
   t: TFunction
 ) => {
   if (
-    courseData.level === CourseLevel.BildIntermediateTrainer ||
-    courseData.level === CourseLevel.BildAdvancedTrainer
+    courseData.level === Course_Level_Enum.BildIntermediateTrainer ||
+    courseData.level === Course_Level_Enum.BildAdvancedTrainer
   ) {
     const bildTrainerCourseName = t(`common.course-levels.${courseData.level}`)
     let suffix = ''
@@ -472,33 +470,35 @@ export const INVOICE_STATUS_COLOR: Record<
 // more on this logic [here](https://github.com/TeamTeach/hub/wiki/Organisations)
 export function getProfileCertificationLevels(
   certificates: { courseLevel: string; status: CertificateStatus }[]
-): (CourseLevel | null)[] {
+): (Course_Level_Enum | null)[] {
   const levels = []
 
   const advancedTrainer = certificates.find(
-    c => c.courseLevel === CourseLevel.AdvancedTrainer
+    c => c.courseLevel === Course_Level_Enum.AdvancedTrainer
   )
   if (advancedTrainer) {
-    levels.push(CourseLevel.AdvancedTrainer)
+    levels.push(Course_Level_Enum.AdvancedTrainer)
     if (advancedTrainer.status !== CertificateStatus.EXPIRED_RECENTLY) {
       return levels
     }
   }
 
-  if (certificates.find(c => c.courseLevel === CourseLevel.Advanced)) {
-    levels.push(CourseLevel.Advanced)
+  if (certificates.find(c => c.courseLevel === Course_Level_Enum.Advanced)) {
+    levels.push(Course_Level_Enum.Advanced)
   }
 
   // There is no specification on how the rule should be for BILD.
   //So here is just a logic to show the higher one treating BILD as separate certification
   if (
-    certificates.find(c => c.courseLevel === CourseLevel.BildAdvancedTrainer)
+    certificates.find(
+      c => c.courseLevel === Course_Level_Enum.BildAdvancedTrainer
+    )
   ) {
-    levels.push(CourseLevel.BildAdvancedTrainer)
+    levels.push(Course_Level_Enum.BildAdvancedTrainer)
   } else {
     const bildHierarchy = [
-      CourseLevel.BildIntermediateTrainer,
-      CourseLevel.BildRegular,
+      Course_Level_Enum.BildIntermediateTrainer,
+      Course_Level_Enum.BildRegular,
     ]
 
     for (const level of bildHierarchy) {
@@ -513,9 +513,9 @@ export function getProfileCertificationLevels(
   }
 
   const hierarchy = [
-    CourseLevel.IntermediateTrainer,
-    CourseLevel.Level_2,
-    CourseLevel.Level_1,
+    Course_Level_Enum.IntermediateTrainer,
+    Course_Level_Enum.Level_2,
+    Course_Level_Enum.Level_1,
   ]
   for (const level of hierarchy) {
     const certificate = certificates.find(c => c.courseLevel === level)
@@ -719,18 +719,19 @@ export function formatCurrency(
 }
 
 export const GRACE_PERIOD_PER_LEVEL = {
-  [CourseLevel.Level_1]: 0,
-  [CourseLevel.Level_2]: 0,
-  [CourseLevel.Advanced]: 0,
-  [CourseLevel.BildRegular]: 0,
-  [CourseLevel.IntermediateTrainer]: 3,
-  [CourseLevel.AdvancedTrainer]: 1,
-  [CourseLevel.BildIntermediateTrainer]: 0,
-  [CourseLevel.BildAdvancedTrainer]: 0,
+  [Course_Level_Enum.Level_1]: 0,
+  [Course_Level_Enum.Level_2]: 0,
+  [Course_Level_Enum.ThreeDaySafetyResponseTrainer]: 0,
+  [Course_Level_Enum.Advanced]: 0,
+  [Course_Level_Enum.BildRegular]: 0,
+  [Course_Level_Enum.IntermediateTrainer]: 3,
+  [Course_Level_Enum.AdvancedTrainer]: 1,
+  [Course_Level_Enum.BildIntermediateTrainer]: 0,
+  [Course_Level_Enum.BildAdvancedTrainer]: 0,
 }
 
 export function expiryDateWithGracePeriod(
-  level: CourseLevel,
+  level: Course_Level_Enum,
   expiryDate: Date
 ) {
   return addMonths(expiryDate, GRACE_PERIOD_PER_LEVEL[level])
@@ -748,41 +749,47 @@ export const DEFAULT_PAGINATION_ROW_OPTIONS = [12, 24, 50, 100]
  *          Advanced Trainer certificate OR BILD Advanced Trainer.
  */
 export const REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL = {
-  [CourseLevel.Level_1]: [
-    CourseLevel.IntermediateTrainer,
-    CourseLevel.BildIntermediateTrainer,
-    CourseLevel.AdvancedTrainer,
-    CourseLevel.BildAdvancedTrainer,
+  [Course_Level_Enum.Advanced]: [
+    Course_Level_Enum.AdvancedTrainer,
+    Course_Level_Enum.BildAdvancedTrainer,
   ],
-  [CourseLevel.Level_2]: [
-    CourseLevel.IntermediateTrainer,
-    CourseLevel.BildIntermediateTrainer,
-    CourseLevel.AdvancedTrainer,
-    CourseLevel.BildAdvancedTrainer,
+  [Course_Level_Enum.AdvancedTrainer]: [
+    Course_Level_Enum.AdvancedTrainer,
+    Course_Level_Enum.BildAdvancedTrainer,
   ],
-  [CourseLevel.Advanced]: [
-    CourseLevel.AdvancedTrainer,
-    CourseLevel.BildAdvancedTrainer,
+  [Course_Level_Enum.BildAdvancedTrainer]: [
+    Course_Level_Enum.BildAdvancedTrainer,
   ],
-  [CourseLevel.BildRegular]: [
-    CourseLevel.BildIntermediateTrainer,
-    CourseLevel.BildAdvancedTrainer,
+  [Course_Level_Enum.BildIntermediateTrainer]: [
+    Course_Level_Enum.BildIntermediateTrainer,
+    Course_Level_Enum.BildAdvancedTrainer,
   ],
-  [CourseLevel.IntermediateTrainer]: [
-    CourseLevel.IntermediateTrainer,
-    CourseLevel.BildIntermediateTrainer,
-    CourseLevel.AdvancedTrainer,
-    CourseLevel.BildAdvancedTrainer,
+  [Course_Level_Enum.BildRegular]: [
+    Course_Level_Enum.BildIntermediateTrainer,
+    Course_Level_Enum.BildAdvancedTrainer,
   ],
-  [CourseLevel.AdvancedTrainer]: [
-    CourseLevel.AdvancedTrainer,
-    CourseLevel.BildAdvancedTrainer,
+  [Course_Level_Enum.IntermediateTrainer]: [
+    Course_Level_Enum.IntermediateTrainer,
+    Course_Level_Enum.BildIntermediateTrainer,
+    Course_Level_Enum.AdvancedTrainer,
+    Course_Level_Enum.BildAdvancedTrainer,
   ],
-  [CourseLevel.BildIntermediateTrainer]: [
-    CourseLevel.BildIntermediateTrainer,
-    CourseLevel.BildAdvancedTrainer,
+  [Course_Level_Enum.Level_1]: [
+    Course_Level_Enum.IntermediateTrainer,
+    Course_Level_Enum.BildIntermediateTrainer,
+    Course_Level_Enum.AdvancedTrainer,
+    Course_Level_Enum.BildAdvancedTrainer,
   ],
-  [CourseLevel.BildAdvancedTrainer]: [CourseLevel.BildAdvancedTrainer],
+  [Course_Level_Enum.Level_2]: [
+    Course_Level_Enum.IntermediateTrainer,
+    Course_Level_Enum.BildIntermediateTrainer,
+    Course_Level_Enum.AdvancedTrainer,
+    Course_Level_Enum.BildAdvancedTrainer,
+  ],
+  [Course_Level_Enum.ThreeDaySafetyResponseTrainer]: [
+    Course_Level_Enum.IntermediateTrainer,
+    Course_Level_Enum.AdvancedTrainer,
+  ],
 }
 
 export const customFeeFormat = (num: number) => {

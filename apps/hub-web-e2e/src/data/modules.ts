@@ -1,5 +1,5 @@
-import { Course_Status_Enum } from '@app/generated/graphql'
-import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
+import { Course_Status_Enum, Course_Level_Enum } from '@app/generated/graphql'
+import { CourseDeliveryType, CourseType } from '@app/types'
 
 import { UNIQUE_COURSE } from './courses'
 import { Course, ModuleGroup } from './types'
@@ -19,7 +19,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 1 f2f',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.Level_1
+      course.level = Course_Level_Enum.Level_1
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
@@ -86,7 +86,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 1 f2f reaccred',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.Level_1
+      course.level = Course_Level_Enum.Level_1
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
@@ -154,7 +154,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.deliveryType = CourseDeliveryType.MIXED
-      course.level = CourseLevel.Level_1
+      course.level = Course_Level_Enum.Level_1
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
@@ -222,7 +222,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.deliveryType = CourseDeliveryType.VIRTUAL
-      course.level = CourseLevel.Level_1
+      course.level = Course_Level_Enum.Level_1
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
@@ -289,7 +289,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 1 f2f blended',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.Level_1
+      course.level = Course_Level_Enum.Level_1
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
@@ -358,7 +358,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.deliveryType = CourseDeliveryType.MIXED
-      course.level = CourseLevel.Level_1
+      course.level = Course_Level_Enum.Level_1
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
@@ -426,7 +426,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 2 f2f',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.Level_2
+      course.level = Course_Level_Enum.Level_2
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
@@ -502,7 +502,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.deliveryType = CourseDeliveryType.MIXED
-      course.level = CourseLevel.Level_2
+      course.level = Course_Level_Enum.Level_2
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
@@ -577,7 +577,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 2 f2f reaccred',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.Level_2
+      course.level = Course_Level_Enum.Level_2
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
@@ -652,7 +652,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 2 mixed reaccred',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.Level_2
+      course.level = Course_Level_Enum.Level_2
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
@@ -727,7 +727,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 2 f2f blended',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.Level_2
+      course.level = Course_Level_Enum.Level_2
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
@@ -803,7 +803,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 2 f2f blended reaccred',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.Level_2
+      course.level = Course_Level_Enum.Level_2
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
@@ -880,7 +880,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'advanced f2f @smoke',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.Advanced
+      course.level = Course_Level_Enum.Advanced
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
@@ -924,22 +924,22 @@ export const MODULES_SETUP: ModuleSetup[] = [
   },
 ]
 
-const MODULES_BY_LEVEL: Map<CourseLevel, string[]> = new Map()
-  .set(CourseLevel.Level_1, [
+const MODULES_BY_LEVEL: Map<Course_Level_Enum, string[]> = new Map()
+  .set(Course_Level_Enum.Level_1, [
     'Theory',
     'Personal Space & Body Language',
     'Elevated Risks',
     'Physical Warm Up',
     'Personal Safety',
   ])
-  .set(CourseLevel.Level_2, [
+  .set(Course_Level_Enum.Level_2, [
     'Theory',
     'Personal Space & Body Language',
     'Elevated Risks',
     'Physical Warm Up',
     'Personal Safety',
   ])
-  .set(CourseLevel.Advanced, [
+  .set(Course_Level_Enum.Advanced, [
     'Theory',
     'Personal Space & Body Language',
     'Elevated Risks',
@@ -947,8 +947,8 @@ const MODULES_BY_LEVEL: Map<CourseLevel, string[]> = new Map()
     'Personal Safety',
   ])
 
-export const getModulesByLevel: (level: CourseLevel) => string[] = (
-  level: CourseLevel
+export const getModulesByLevel: (level: Course_Level_Enum) => string[] = (
+  level: Course_Level_Enum
 ) => {
   const moduleNames = MODULES_BY_LEVEL.get(level)
   if (!moduleNames) {

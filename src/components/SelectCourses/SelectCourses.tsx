@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
 
 import { Dialog } from '@app/components/dialogs'
-import { CourseLevel } from '@app/types'
+import { Course_Level_Enum } from '@app/generated/graphql'
 
 import { SelectLevels } from '../SelectLevels'
 
@@ -36,7 +36,7 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation()
   const [showModal, setShowModal] = useState(false)
-  const [levels, setLevels] = useState<CourseLevel[]>([])
+  const [levels, setLevels] = useState<Course_Level_Enum[]>([])
 
   const levelFilter = useMemo(() => {
     if (levels.length === 0) return {}

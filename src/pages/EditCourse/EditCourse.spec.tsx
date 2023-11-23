@@ -3,10 +3,10 @@ import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
 import { VenueSelector } from '@app/components/VenueSelector'
-import { Accreditors_Enum } from '@app/generated/graphql'
+import { Accreditors_Enum, Course_Level_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
-import { BildStrategies, CourseLevel, CourseType, RoleName } from '@app/types'
+import { BildStrategies, CourseType, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, screen, waitFor } from '@test/index'
@@ -297,7 +297,7 @@ describe(EditCourse.name, () => {
           { strategyName: BildStrategies.Primary },
           { strategyName: BildStrategies.Secondary },
         ],
-        level: CourseLevel.BildRegular,
+        level: Course_Level_Enum.BildRegular,
       },
     })
 
@@ -358,7 +358,7 @@ describe(EditCourse.name, () => {
       overrides: {
         accreditedBy: Accreditors_Enum.Icm,
         type: CourseType.CLOSED,
-        level: CourseLevel.Level_1,
+        level: Course_Level_Enum.Level_1,
         go1Integration: true,
         reaccreditation: false,
       },
@@ -401,7 +401,7 @@ describe(EditCourse.name, () => {
       overrides: {
         accreditedBy: Accreditors_Enum.Bild,
         type: CourseType.OPEN,
-        level: CourseLevel.BildIntermediateTrainer,
+        level: Course_Level_Enum.BildIntermediateTrainer,
         go1Integration: false,
         reaccreditation: false,
         conversion: true,

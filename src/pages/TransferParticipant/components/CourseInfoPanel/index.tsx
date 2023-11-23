@@ -3,14 +3,14 @@ import React from 'react'
 
 import { CourseTitleAndDuration } from '@app/components/CourseTitleAndDuration'
 import { InfoPanel } from '@app/components/InfoPanel'
-import { Course_Schedule, CourseLevel } from '@app/generated/graphql'
+import { Course_Schedule, Course_Level_Enum } from '@app/generated/graphql'
 import theme from '@app/theme'
 
 export type CourseInfoPanelProps = {
   course: {
     id: number
     courseCode: string
-    level?: CourseLevel | null
+    level?: Course_Level_Enum | null
     startDate: Course_Schedule['start']
     endDate: Course_Schedule['end']
     venue?: string

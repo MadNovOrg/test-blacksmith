@@ -5,8 +5,8 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { noop } from 'ts-essentials'
 import { InferType } from 'yup'
 
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { yup } from '@app/schemas'
-import { CourseLevel } from '@app/types'
 
 import { render, screen, userEvent } from '@test/index'
 
@@ -46,7 +46,7 @@ describe('component: StrategyToggles', () => {
   it('validates at least one strategy is selected', async () => {
     render(
       <FormWrapper>
-        <StrategyToggles courseLevel={CourseLevel.BildRegular} />
+        <StrategyToggles courseLevel={Course_Level_Enum.BildRegular} />
       </FormWrapper>
     )
 

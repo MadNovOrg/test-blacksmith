@@ -1,7 +1,8 @@
 import React from 'react'
 
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
-import { CourseLevel, CourseType, RoleName } from '@app/types'
+import { CourseType, RoleName } from '@app/types'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 
@@ -37,7 +38,7 @@ describe('CourseForm - indirect BILD', () => {
       await waitFor(() => {
         render(<CourseForm type={CourseType.INDIRECT} />, {
           auth: {
-            activeCertificates: [CourseLevel.BildIntermediateTrainer],
+            activeCertificates: [Course_Level_Enum.BildIntermediateTrainer],
             activeRole: role,
           },
         })
@@ -55,7 +56,7 @@ describe('CourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
-          activeCertificates: [CourseLevel.BildIntermediateTrainer],
+          activeCertificates: [Course_Level_Enum.BildIntermediateTrainer],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -72,7 +73,7 @@ describe('CourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
-          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -85,11 +86,11 @@ describe('CourseForm - indirect BILD', () => {
     ).toBeInTheDocument()
   })
 
-  it(`displays only ${CourseLevel.BildRegular} course level`, async () => {
+  it(`displays only ${Course_Level_Enum.BildRegular} course level`, async () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
-          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -101,18 +102,18 @@ describe('CourseForm - indirect BILD', () => {
 
     expect(
       screen.queryByTestId(
-        `course-level-option-${CourseLevel.BildAdvancedTrainer}`
+        `course-level-option-${Course_Level_Enum.BildAdvancedTrainer}`
       )
     ).not.toBeInTheDocument()
 
     expect(
       screen.queryByTestId(
-        `course-level-option-${CourseLevel.BildIntermediateTrainer}`
+        `course-level-option-${Course_Level_Enum.BildIntermediateTrainer}`
       )
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`course-level-option-${CourseLevel.BildRegular}`)
+      screen.getByTestId(`course-level-option-${Course_Level_Enum.BildRegular}`)
     ).toBeInTheDocument()
   })
 
@@ -120,7 +121,7 @@ describe('CourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
-          activeCertificates: [CourseLevel.BildIntermediateTrainer],
+          activeCertificates: [Course_Level_Enum.BildIntermediateTrainer],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -137,7 +138,7 @@ describe('CourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
-          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -154,7 +155,7 @@ describe('CourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
-          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -178,7 +179,7 @@ describe('CourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
-          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -199,7 +200,7 @@ describe('CourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
-          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -224,14 +225,14 @@ describe('CourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
-          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
         },
       })
     })
 
     await selectBildCategory()
-    await selectLevel(CourseLevel.BildRegular)
+    await selectLevel(Course_Level_Enum.BildRegular)
 
     const mixedDeliveryToggle = screen.getByLabelText(/both/i)
 
@@ -246,14 +247,14 @@ describe('CourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.INDIRECT} />, {
         auth: {
-          activeCertificates: [CourseLevel.BildAdvancedTrainer],
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
         },
       })
     })
 
     await selectBildCategory()
-    await selectLevel(CourseLevel.BildRegular)
+    await selectLevel(Course_Level_Enum.BildRegular)
 
     expect(screen.queryByTestId('aol-checkbox')).not.toBeInTheDocument()
   })
