@@ -1,4 +1,5 @@
 import { Auth } from 'aws-amplify'
+import posthog from 'posthog-js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { gqlRequest } from '@app/lib/gql-request'
@@ -44,6 +45,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         domain: '.teamteach.com',
         sameSite: 'Strict',
       })
+
+      posthog.identify(data.profile.id, { email: data.profile.email })
     }
 
     setState({ ...data })
@@ -115,6 +118,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     await Auth.signOut()
     onUserNotLoggedIn()
     setState({ loggedOut: true })
+
+    posthog.reset()
   }, [])
 
   const getJWT = useCallback(async () => {

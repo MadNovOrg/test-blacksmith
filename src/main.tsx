@@ -2,6 +2,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import { ExtraErrorData as ExtraErrorDataIntegration } from '@sentry/integrations'
 import * as Sentry from '@sentry/react'
 import { Amplify } from 'aws-amplify'
+import { PostHogProvider } from 'posthog-js/react'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import TagManager from 'react-gtm-module'
@@ -44,28 +45,35 @@ const root = createRoot(document.getElementById('app')!)
 
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <QueryParamProvider
-          adapter={ReactRouter6Adapter}
-          options={{ updateType: 'replaceIn' }}
-        >
-          <Sentry.ErrorBoundary
-            fallback={errorData => (
-              <ErrorPage
-                errorData={errorData}
-                debug={
-                  import.meta.env.VITE_SENTRY_ENVIRONMENT === 'development'
-                }
-              />
-            )}
+    <PostHogProvider
+      apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
+      options={{
+        api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+      }}
+    >
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <QueryParamProvider
+            adapter={ReactRouter6Adapter}
+            options={{ updateType: 'replaceIn' }}
           >
-            <AuthProvider>
-              <App />
-            </AuthProvider>
-          </Sentry.ErrorBoundary>
-        </QueryParamProvider>
-      </BrowserRouter>
-    </ThemeProvider>
+            <Sentry.ErrorBoundary
+              fallback={errorData => (
+                <ErrorPage
+                  errorData={errorData}
+                  debug={
+                    import.meta.env.VITE_SENTRY_ENVIRONMENT === 'development'
+                  }
+                />
+              )}
+            >
+              <AuthProvider>
+                <App />
+              </AuthProvider>
+            </Sentry.ErrorBoundary>
+          </QueryParamProvider>
+        </BrowserRouter>
+      </ThemeProvider>
+    </PostHogProvider>
   </React.StrictMode>
 )

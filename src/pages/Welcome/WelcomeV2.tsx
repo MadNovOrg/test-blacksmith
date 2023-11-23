@@ -10,7 +10,7 @@ import { Hero } from './components/Hero/Hero'
 import { MembershipGrid } from './components/MembershipGrid/MembershipGrid'
 import { SplitImage } from './components/SplitImage/SplitImage'
 
-export const Welcome = () => {
+export const WelcomeV2 = () => {
   const { t } = useTranslation('pages', { keyPrefix: 'welcome-v2' })
 
   return (
