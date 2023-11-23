@@ -388,7 +388,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                     <CountryDropdown
                       error={Boolean(errors.country)}
                       errormessage={errors.country?.message}
-                      {...register('country')}
+                      register={register('country')}
                       required
                       value={values.country ?? ''}
                       label={t('fields.addresses.country')}

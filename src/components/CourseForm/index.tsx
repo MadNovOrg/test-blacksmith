@@ -488,7 +488,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     }),
     [courseInput, courseType]
   )
-
   const methods = useForm<CourseInput>({
     resolver: yupResolver(schema),
     mode: 'all',
@@ -725,11 +724,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     const s = watch(data => {
       onChange({
-        data: {
-          ...data,
-          courseCost:
-            typeof data.courseCost !== 'number' ? null : data.courseCost,
-        } as CourseInput,
+        data: data as CourseInput,
         isValid: formState.isValid,
       })
     })
@@ -1061,7 +1056,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                               label={t('country')}
                               errormessage={errors.aolCountry?.message}
                               required
-                              {...register('aolCountry')}
+                              register={register('aolCountry')}
+                              value={
+                                isCreation
+                                  ? values.aolCountry
+                                  : defaultValues.aolCountry
+                              }
                               error={Boolean(errors.aolCountry?.message)}
                             />
                           </FormControl>
@@ -1073,24 +1073,21 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                             sx={{ mb: theme.spacing(2) }}
                             fullWidth
                           >
-                            <Controller
-                              name="aolRegion"
-                              control={control}
-                              render={({ field }) => (
-                                <RegionDropdown
-                                  required
-                                  {...register('aolRegion')}
-                                  value={field.value}
-                                  onChange={field.onChange}
-                                  usesAOL={usesAOL}
-                                  country={aolCountry}
-                                  disabled={
-                                    !aolCountry ||
-                                    disabledFields.has('aolRegion')
-                                  }
-                                  error={Boolean(errors.aolRegion?.message)}
-                                />
-                              )}
+                            <RegionDropdown
+                              required
+                              {...register('aolRegion')}
+                              value={
+                                isCreation
+                                  ? values.aolRegion
+                                  : defaultValues.aolRegion
+                              }
+                              onChange={value => setValue('aolRegion', value)}
+                              usesAOL={usesAOL}
+                              country={aolCountry}
+                              disabled={
+                                !aolCountry || disabledFields.has('aolRegion')
+                              }
+                              error={Boolean(errors.aolRegion?.message)}
                             />
                           </FormControl>
                         </Grid>

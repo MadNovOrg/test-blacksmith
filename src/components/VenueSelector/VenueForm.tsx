@@ -71,6 +71,8 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
     handleSubmit,
     trigger,
     formState: { errors },
+    register,
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
     mode: 'all',
@@ -83,7 +85,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
       country: '',
     },
   })
-
+  const values = watch()
   const submitHandler = useCallback(
     async (formData: VenueFormProps['data']) => {
       const validationResult = await trigger()
@@ -225,24 +227,13 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
           </Grid>
 
           <Grid item xs={12}>
-            <Controller
-              name="country"
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => {
-                return (
-                  <CountryDropdown
-                    {...field}
-                    required
-                    error={Object.prototype.hasOwnProperty.call(
-                      errors,
-                      'country'
-                    )}
-                    errormessage={errors.country?.message}
-                    data-testid="country-dropdown"
-                  />
-                )
-              }}
+            <CountryDropdown
+              register={register('country')}
+              required
+              error={Object.prototype.hasOwnProperty.call(errors, 'country')}
+              errormessage={errors.country?.message}
+              data-testid="country-dropdown"
+              value={values.country ?? null}
             />
           </Grid>
 

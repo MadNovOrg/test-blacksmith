@@ -956,8 +956,9 @@ export const CourseBookingDetails: React.FC<
                       <Box mb={3}>
                         <CountryDropdown
                           required
-                          {...register(`participants.${index}.country`)}
+                          register={register(`participants.${index}.country`)}
                           error={!!getParticipantError(index, 'country')}
+                          value={values.participants[index].country}
                           errormessage={
                             getParticipantError(index, 'country')?.message ?? ''
                           }

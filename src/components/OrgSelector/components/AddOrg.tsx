@@ -320,10 +320,11 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
 
           <Grid item>
             <CountryDropdown
-              {...register('country')}
+              register={register('country')}
               required
               error={Boolean(errors.country)}
               errormessage={errors.country?.message}
+              value={values.country}
               label={t('fields.country')}
             />
           </Grid>

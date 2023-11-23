@@ -1,11 +1,6 @@
-import {
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  FormHelperText,
-} from '@mui/material'
+import { MenuItem, TextField } from '@mui/material'
 import React, { useMemo } from 'react'
+import { UseFormRegisterReturn } from 'react-hook-form'
 import { useQuery } from 'urql'
 
 import {
@@ -20,12 +15,12 @@ interface ICountryDropdownProps {
   error: boolean
   errormessage?: string
   label?: string
-  value?: string
+  value: string | null
+  register: UseFormRegisterReturn
 }
 
 export const CountryDropdown = React.forwardRef(function CountryDropdown(
-  props: ICountryDropdownProps,
-  ref: React.Ref<HTMLSelectElement>
+  props: ICountryDropdownProps
 ) {
   const { t } = useScopedTranslation('components.venue-selector.modal.fields')
   const { required, error, errormessage, label } = props
@@ -39,23 +34,34 @@ export const CountryDropdown = React.forwardRef(function CountryDropdown(
   }, [data])
 
   return (
-    <FormControl fullWidth variant="filled" required={required} error={error}>
-      <InputLabel id="country-dropdown" data-testid="country-dropdown">
-        {!label ? t('country') : label}
-      </InputLabel>
-      <Select {...props} id="country-dropdown" ref={ref}>
-        {options?.length &&
-          options.map(option => (
-            <MenuItem
-              key={option}
-              value={option}
-              data-testid={`country-option-${option}`}
-            >
-              {option}
-            </MenuItem>
-          ))}
-      </Select>
-      {error && <FormHelperText>{errormessage}</FormHelperText>}
-    </FormControl>
+    <TextField
+      sx={{ bgcolor: 'grey.100' }}
+      select
+      fullWidth
+      variant="filled"
+      required={required}
+      error={error}
+      helperText={errormessage}
+      label={label}
+      {...props.register}
+      value={props.value}
+      defaultValue={props.value}
+    >
+      {options?.length ? (
+        options.map(option => (
+          <MenuItem
+            key={option}
+            value={option}
+            data-testid={`country-option-${option}`}
+          >
+            {option}
+          </MenuItem>
+        ))
+      ) : (
+        <MenuItem value="" disabled>
+          {t('fields.organization-sector')}
+        </MenuItem>
+      )}
+    </TextField>
   )
 })
