@@ -603,6 +603,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           maxParticipants: courseData.maxParticipants ?? 0,
           startDateTime: courseData.startDateTime ?? new Date(),
           hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+          usesAOL: courseData.usesAOL,
         },
         trainersData.assist.map(assistant => ({
           type: CourseTrainerType.Assistant,
@@ -655,6 +656,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
         type: courseData.type as unknown as CourseType,
         max_participants: courseData.maxParticipants as unknown as number,
         hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+        usesAOL: courseData.usesAOL,
       },
       [
         ...(trainersData?.assist ?? []).map(assistant => ({

@@ -200,7 +200,11 @@ export const CreateCourseForm = () => {
 
     if (courseType === CourseType.INDIRECT && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
-        { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
+        {
+          ...courseData,
+          hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+          usesAOL: courseData.usesAOL,
+        },
         [
           ...assistants.map(assistant => ({
             type: CourseTrainerType.Assistant,
@@ -267,6 +271,7 @@ export const CreateCourseForm = () => {
           level: courseData.courseLevel,
           max_participants: courseData.maxParticipants,
           hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+          usesAOL: courseData.usesAOL,
         },
         assistants.map(assistant => ({
           type: CourseTrainerType.Assistant,

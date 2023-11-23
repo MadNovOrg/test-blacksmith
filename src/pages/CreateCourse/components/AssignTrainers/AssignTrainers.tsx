@@ -197,7 +197,11 @@ export const AssignTrainers = () => {
   const handleSubmitButtonClick = useCallback(async () => {
     if (courseData) {
       const exceptions = checkCourseDetailsForExceptions(
-        { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
+        {
+          ...courseData,
+          hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+          usesAOL: courseData.usesAOL,
+        },
         trainers
       )
       if (courseData.type === CourseType.CLOSED && exceptions.length > 0) {
@@ -231,6 +235,7 @@ export const AssignTrainers = () => {
           level: courseData.courseLevel,
           max_participants: courseData.maxParticipants,
           hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+          usesAOL: courseData.usesAOL,
         },
         trainers.map(trainer => ({
           type: trainer.type,

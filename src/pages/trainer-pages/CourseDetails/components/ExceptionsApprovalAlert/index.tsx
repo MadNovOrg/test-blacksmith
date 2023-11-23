@@ -56,6 +56,7 @@ export const ExceptionsApprovalAlert: FC = () => {
         reaccreditation: course.reaccreditation ?? false,
         conversion: course.conversion,
         accreditedBy: course.accreditedBy,
+        usesAOL: Boolean(course.aolCostOfCourse),
         bildStrategies: bildStrategiesToRecord(course.bildStrategies),
         hasSeniorOrPrincipalLeader:
           (leader &&

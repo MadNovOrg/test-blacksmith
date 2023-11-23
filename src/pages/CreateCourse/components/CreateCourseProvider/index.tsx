@@ -104,7 +104,11 @@ export const CreateCourseProvider: React.FC<
     if (!courseData) return []
 
     return checkCourseDetailsForExceptions(
-      { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
+      {
+        ...courseData,
+        hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+        usesAOL: courseData.usesAOL,
+      },
       trainers
     )
   }, [courseData, trainers, seniorOrPrincipalLead])

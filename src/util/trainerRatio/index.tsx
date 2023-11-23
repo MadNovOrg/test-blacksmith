@@ -20,6 +20,7 @@ export type RatioCourseData = Pick<
 > & {
   bildStrategies?: Record<string, boolean>
   hasSeniorOrPrincipalLeader: boolean
+  usesAOL?: boolean
 }
 
 export type RatioTrainerData = Pick<
@@ -37,6 +38,7 @@ export function getRequiredAssistants(
       deliveryType: courseData.deliveryType,
       reaccreditation: courseData.reaccreditation,
       maxParticipants: courseData.max_participants,
+      usesAOL: courseData.usesAOL ?? false,
       hasSeniorOrPrincipalLeader:
         courseData.hasSeniorOrPrincipalLeader ?? false,
     })

@@ -20,6 +20,7 @@ export type TrainerRatioCriteria = {
   reaccreditation: boolean
   maxParticipants: number
   hasSeniorOrPrincipalLeader: boolean
+  usesAOL?: boolean
 }
 
 const ratio = (
@@ -33,6 +34,9 @@ const ratio = (
 })
 
 const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
+  if (criteria.usesAOL) {
+    return ratio(0, 12, 12)
+  }
   if (criteria.courseLevel === Course_Level_Enum.Level_1) {
     if (criteria.reaccreditation || criteria.hasSeniorOrPrincipalLeader) {
       return ratio(0, 12, 12)

@@ -44,6 +44,7 @@ export type CourseData = {
   hasSeniorOrPrincipalLeader: boolean
   accreditedBy: Accreditors_Enum
   bildStrategies?: Record<string, boolean>
+  usesAOL?: boolean
 }
 export type TrainerData = {
   type: Course_Trainer_Type_Enum | CourseTrainerType
@@ -138,6 +139,7 @@ export function checkCourseDetailsForExceptions(
         deliveryType: courseData.deliveryType as CourseDeliveryType,
         bildStrategies: courseData.bildStrategies,
         hasSeniorOrPrincipalLeader: courseData.hasSeniorOrPrincipalLeader,
+        usesAOL: courseData.usesAOL,
       },
       trainerData.map(t => ({
         type: t.type as CourseTrainerType,
