@@ -99,7 +99,7 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('1ed2466b-8faa-4a2e-aadf-db4c81906f9b', 'b414536d-29dd-4902-81f9-e808503428ee', 'cognito'), -- trainer10@teamteach.testinator.com
 ('34559459-91f6-4fc8-b9c4-0daab3215a70', 'b414536d-29dd-4902-81f9-e808503428ee', 'cognito'), -- trainer10@teamteach.testinator.com staging
 
-('a289e6fc-8502-4906-8160-b1123d754ec6', '7a35d3ce-cc02-4a66-9446-16b6740bfb23', 'cognito'), -- sales.adm@teamteach.testinator.com
+('d3377622-5655-4075-8d72-51f4ce2e1b8b', '7a35d3ce-cc02-4a66-9446-16b6740bfb23', 'cognito'), -- sales.adm@teamteach.testinator.com
 ('99707aa6-356e-421b-99b3-aecda469fa7c', '7a35d3ce-cc02-4a66-9446-16b6740bfb23', 'cognito'), -- sales.adm@teamteach.testinator.com staging
 
 ('c42c2f47-a9db-49cb-89fd-9033b8219ebc', '6987feba-0877-4a2a-b7da-982de1977eb3', 'cognito'), -- ld@teamteach.testinator.com
