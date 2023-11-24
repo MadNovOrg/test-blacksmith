@@ -33,6 +33,7 @@ import { useAuth } from '@app/context/auth'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import useProfiles from '@app/hooks/useProfiles'
 import { useTablePagination } from '@app/hooks/useTablePagination'
+import { useTableSort } from '@app/hooks/useTableSort'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import theme from '@app/theme'
 import { CertificateStatus, RoleName, TrainerRoleTypeName } from '@app/types'
@@ -43,6 +44,7 @@ export const Users = () => {
   const navigate = useNavigate()
   const [showMergeDialog, setShowMergeDialog] = useState(false)
   const { acl } = useAuth()
+  const sorting = useTableSort('fullName', 'asc')
 
   const roleOptions = useMemo<FilterOption[]>(() => {
     return Object.values([
@@ -211,6 +213,7 @@ export const Users = () => {
     mutate,
   } = useProfiles({
     where,
+    sorting,
     limit: perPage,
     offset: perPage * (currentPage - 1),
   })
@@ -221,27 +224,31 @@ export const Users = () => {
       {
         id: ' ',
         label: ' ',
-        sorting: false,
       },
       {
-        id: 'name',
+        id: 'fullName',
         label: _t('name'),
+        sorting: true,
       },
       {
         id: 'email',
         label: _t('email'),
+        sorting: true,
       },
       {
         id: 'organisation',
         label: _t('organization'),
+        sorting: false,
       },
       {
         id: 'role',
         label: _t('role'),
+        sorting: false,
       },
       {
         id: 'trainer-type',
         label: _t('trainer-type'),
+        sorting: false,
       },
     ] as Col[]
   }, [t])
@@ -374,7 +381,12 @@ export const Users = () => {
             ) : (
               <TableContainer component={Paper} elevation={0}>
                 <Table>
-                  <TableHead cols={cols}></TableHead>
+                  <TableHead
+                    cols={cols}
+                    order={sorting.dir}
+                    orderBy={sorting.by}
+                    onRequestSort={sorting.onSort}
+                  ></TableHead>
                   <TableBody data-testid={'table-body'}>
                     <TableNoRows
                       noRecords={!users.length}

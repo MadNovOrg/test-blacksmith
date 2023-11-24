@@ -1,8 +1,18 @@
 import { gql } from 'graphql-request'
 
 export const getProfiles = gql`
-  query GetProfiles($limit: Int, $offset: Int, $where: profile_bool_exp) {
-    profiles: profile(limit: $limit, offset: $offset, where: $where) {
+  query GetProfiles(
+    $limit: Int
+    $offset: Int
+    $orderBy: [profile_order_by!]
+    $where: profile_bool_exp
+  ) {
+    profiles: profile(
+      limit: $limit
+      offset: $offset
+      where: $where
+      order_by: $orderBy
+    ) {
       id
       fullName
       avatar
