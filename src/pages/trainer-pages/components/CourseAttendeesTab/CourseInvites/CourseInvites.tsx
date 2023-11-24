@@ -29,7 +29,7 @@ import {
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import { EXPORT_BLENDED_LEARNING_ATTENDEES } from '@app/queries/blended-learning-attendees/blended-learning-attendees-data'
 import { Course, CourseType, InviteStatus } from '@app/types'
-import { courseStarted } from '@app/util'
+import { courseEnded } from '@app/util'
 
 type Props = {
   course: Course
@@ -162,7 +162,7 @@ export const CourseInvites = ({
     return t('pages.course-participants.invite-error-UNKNOWN')
   }, [error, t])
 
-  const courseHasStarted = course && courseStarted(course)
+  const courseHasEnded = course && courseEnded(course)
   const isOpenCourse = course && course.type === CourseType.OPEN
 
   const renderInput = useCallback(
@@ -259,8 +259,7 @@ export const CourseInvites = ({
     }
   }, [data, reexecuteQuery, t])
 
-  const displayInviteTools =
-    !courseHasStarted && !courseCancelled && allowInvites
+  const displayInviteTools = !courseHasEnded && !courseCancelled && allowInvites
 
   return (
     <>

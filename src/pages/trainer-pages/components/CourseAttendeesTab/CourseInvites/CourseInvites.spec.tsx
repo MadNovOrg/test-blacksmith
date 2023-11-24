@@ -71,7 +71,7 @@ describe(CourseInvites.name, () => {
     expect(screen.getByTestId('course-invite-btn')).toBeInTheDocument()
   })
 
-  it('does not render after course started', async () => {
+  it('does render after course started but not ended', async () => {
     course = buildCourse({
       overrides: {
         schedule: [
@@ -79,6 +79,27 @@ describe(CourseInvites.name, () => {
             overrides: {
               start: sub(new Date(), { days: 2 }).toISOString(),
               end: add(new Date(), { days: 4 }).toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+    useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
+
+    render(<CourseInvites course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
+    expect(screen.queryByTestId('course-invite-btn')).toBeInTheDocument()
+  })
+
+  it('does not render after course ended', async () => {
+    course = buildCourse({
+      overrides: {
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: sub(new Date(), { days: -4 }).toISOString(),
+              end: add(new Date(), { days: -2 }).toISOString(),
             },
           }),
         ],
