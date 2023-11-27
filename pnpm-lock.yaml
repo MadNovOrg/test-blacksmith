@@ -373,8 +373,8 @@ importers:
         specifier: ^2.0.5
         version: 2.0.5
       '@types/mui-image':
-        specifier: ^1.0.1
-        version: 1.0.1
+        specifier: ^1.0.5
+        version: 1.0.5
       '@types/node':
         specifier: ^20.3.1
         version: 20.8.7
@@ -10209,8 +10209,8 @@ packages:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
     dev: true
 
-  /@types/mui-image@1.0.1:
-    resolution: {integrity: sha512-HE+irW/EbADq6LrObWQIzpYu7sFHcTZTzp0K4JuKp2IUYGTkQhw2cVsJP2tk5h26Ex/MzDAMOXtmw71Z3SOTaQ==}
+  /@types/mui-image@1.0.5:
+    resolution: {integrity: sha512-xbOpuowqvMyRiiM3U39AApyVj2xIoNH6egvMCWQ+d9AzILs0cT688x33AfPnQrnMqmJBclo4hRyUzpxGQwTqkQ==}
     dependencies:
       '@types/react': 18.2.14
     dev: true
