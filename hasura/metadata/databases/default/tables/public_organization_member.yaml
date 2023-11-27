@@ -90,6 +90,7 @@ select_permissions:
         - organization_id
         - profile_id
       filter: {}
+      allow_aggregations: true
   - role: sales-representative
     permission:
       columns:
