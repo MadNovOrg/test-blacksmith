@@ -53,11 +53,6 @@ export const Organizations: React.FC<
         sorting: true,
       },
       {
-        id: 'trustName',
-        label: t('pages.admin.organizations.columns.group'),
-        sorting: true,
-      },
-      {
         id: 'country',
         label: t('pages.admin.organizations.columns.country'),
       },
