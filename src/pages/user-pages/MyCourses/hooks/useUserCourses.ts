@@ -141,7 +141,9 @@ export function useUserCourses(
         [Course_Status_Enum.Completed]: {
           _or: [
             {
-              participants: { grade: { _is_null: false } },
+              participants: forContactRole
+                ? { _not: { grade: { _is_null: true } } }
+                : { grade: { _is_null: false } },
               ...(forContactRole
                 ? { ...notCancelRequested, ...notCancelCondition }
                 : { id: { _nin: unevaluatedIds } }),

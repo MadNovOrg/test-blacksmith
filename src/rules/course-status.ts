@@ -97,7 +97,7 @@ export const getIndividualCourseStatuses = (
   if (
     [
       Course_Status_Enum.EvaluationMissing,
-      Course_Status_Enum.Cancelled,
+      Course_Status_Enum.Completed,
     ].includes(status)
   )
     return Course_Status_Enum.Completed
