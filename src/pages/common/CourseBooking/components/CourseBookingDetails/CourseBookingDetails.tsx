@@ -295,15 +295,7 @@ export const CourseBookingDetails: React.FC<
           })
         )
         .length(yup.ref('quantity'), t('validation-errors.max-registrants'))
-        .required(requiredMsg(t, 'emails'))
-        .test(
-          'unique-email',
-          t('pages.book-course.duplicated-email-addresses'),
-          values => {
-            const emails = values.map(v => v.email)
-            return emails.length === new Set(emails).size
-          }
-        ),
+        .required(requiredMsg(t, 'emails')),
 
       orgId: yup
         .string()
@@ -420,24 +412,32 @@ export const CourseBookingDetails: React.FC<
     profile: UserSelectorProfile,
     index: number
   ) => {
-    setValue(`participants.${index}`, {
-      email: profile?.email || '',
-      firstName: profile?.givenName || '',
-      lastName: profile?.familyName || '',
-      addressLine1: '',
-      addressLine2: '',
-      city: '',
-      postCode: '',
-      country: '',
-    })
+    setValue(
+      `participants.${index}`,
+      {
+        email: profile?.email || '',
+        firstName: profile?.givenName || '',
+        lastName: profile?.familyName || '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        postCode: '',
+        country: '',
+      },
+      { shouldValidate: true }
+    )
   }
 
   const handleChangeBookingContact = async (profile: UserSelectorProfile) => {
-    setValue('bookingContact', {
-      email: profile?.email || '',
-      firstName: profile?.givenName || '',
-      lastName: profile?.familyName || '',
-    })
+    setValue(
+      'bookingContact',
+      {
+        email: profile?.email || '',
+        firstName: profile?.givenName || '',
+        lastName: profile?.familyName || '',
+      },
+      { shouldValidate: true }
+    )
   }
 
   const handleEmailChange = async (email: string, index: number) => {
@@ -686,7 +686,9 @@ export const CourseBookingDetails: React.FC<
                 <SourceDropdown
                   {...field}
                   data-testid="source-dropdown"
+                  required
                   disabled={false}
+                  error={!!errors.source?.message}
                 />
               )}
             />
@@ -738,6 +740,8 @@ export const CourseBookingDetails: React.FC<
                       email,
                     })
                   }}
+                  required
+                  error={errors.bookingContact?.email?.message}
                   textFieldProps={{ variant: 'filled' }}
                   organisationId={values.orgId}
                 />
