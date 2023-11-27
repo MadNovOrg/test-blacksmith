@@ -67,6 +67,22 @@ export function useUserCourses(
   const { courses: unevaluatedCourses } = useUnevaluatedUserCourses()
   const unevaluatedIds = unevaluatedCourses?.map(c => c.id)
 
+  const notCancelRequested = useMemo<Course_Bool_Exp>(
+    () => ({
+      _not: { cancellationRequest: { id: { _is_null: false } } },
+    }),
+    []
+  )
+
+  const notCancelCondition = useMemo<Course_Bool_Exp>(
+    () => ({
+      status: {
+        _nin: [Course_Status_Enum.Cancelled, Course_Status_Enum.Declined],
+      },
+    }),
+    []
+  )
+
   const courseStatusConditionsMap: Record<UserCourseStatus, Course_Bool_Exp> =
     useMemo(
       () => ({
@@ -117,14 +133,7 @@ export function useUserCourses(
                 end: { _gt: dateRef.current },
               },
               ...(forContactRole
-                ? {
-                    status: {
-                      _nin: [
-                        Course_Status_Enum.Cancelled,
-                        Course_Status_Enum.Declined,
-                      ],
-                    },
-                  }
+                ? { ...notCancelRequested, ...notCancelCondition }
                 : null),
             },
           ],
@@ -133,11 +142,26 @@ export function useUserCourses(
           _or: [
             {
               participants: { grade: { _is_null: false } },
-              ...(forContactRole ? null : { id: { _nin: unevaluatedIds } }),
+              ...(forContactRole
+                ? { ...notCancelRequested, ...notCancelCondition }
+                : { id: { _nin: unevaluatedIds } }),
               schedule: {
                 end: { _lt: dateRef.current },
               },
             },
+            ...(forContactRole
+              ? [
+                  {
+                    status: {
+                      _in: [
+                        Course_Status_Enum.EvaluationMissing,
+                        Course_Status_Enum.Completed,
+                      ],
+                    },
+                    ...notCancelRequested,
+                  },
+                ]
+              : []),
           ],
         },
         [AttendeeOnlyCourseStatus.AwaitingGrade]: {
@@ -149,13 +173,33 @@ export function useUserCourses(
               schedule: {
                 end: { _lt: dateRef.current },
               },
+              ...(forContactRole
+                ? {
+                    ...notCancelCondition,
+                    status: {
+                      _nin: [
+                        Course_Status_Enum.EvaluationMissing,
+                        Course_Status_Enum.Completed,
+                      ],
+                    },
+                  }
+                : null),
             },
+            ...(forContactRole
+              ? [
+                  {
+                    ...notCancelCondition,
+                    status: { _eq: Course_Status_Enum.GradeMissing },
+                  },
+                ]
+              : []),
           ],
         },
         [AdminOnlyCourseStatus.CancellationRequested]: {
           _or: [
             {
               cancellationRequest: { id: { _is_null: false } },
+              ...notCancelCondition,
             },
           ],
         },
@@ -172,7 +216,7 @@ export function useUserCourses(
           ],
         },
       }),
-      [forContactRole, unevaluatedIds]
+      [forContactRole, notCancelCondition, notCancelRequested, unevaluatedIds]
     )
 
   const where = useMemo(() => {

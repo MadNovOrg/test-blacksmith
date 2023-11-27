@@ -157,6 +157,22 @@ export const useCourses = (
   const dateRef = useRef(new Date().toISOString())
   const orderBy = getOrderBy(sorting)
 
+  const notCancelRequested = useMemo<Course_Bool_Exp>(
+    () => ({
+      _not: { cancellationRequest: { id: { _is_null: false } } },
+    }),
+    []
+  )
+
+  const notCancelCondition = useMemo<Course_Bool_Exp>(
+    () => ({
+      status: {
+        _nin: [Course_Status_Enum.Cancelled, Course_Status_Enum.Declined],
+      },
+    }),
+    []
+  )
+
   const orgAdminCourseStatusConditionsMap: Record<
     OrgAdminCourseStatus,
     Course_Bool_Exp
@@ -168,19 +184,29 @@ export const useCourses = (
             schedule: {
               end: { _gt: dateRef.current },
             },
-            status: {
-              _nin: [Course_Status_Enum.Cancelled, Course_Status_Enum.Declined],
-            },
+            ...notCancelCondition,
+            ...notCancelRequested,
           },
         ],
       },
       [Course_Status_Enum.Completed]: {
         _or: [
           {
-            participants: { grade: { _is_null: false } },
+            participants: { _not: { grade: { _is_null: true } } },
             schedule: {
               end: { _lt: dateRef.current },
             },
+            ...notCancelRequested,
+            ...notCancelCondition,
+          },
+          {
+            status: {
+              _in: [
+                Course_Status_Enum.EvaluationMissing,
+                Course_Status_Enum.Completed,
+              ],
+            },
+            ...notCancelRequested,
           },
         ],
       },
@@ -193,6 +219,13 @@ export const useCourses = (
             schedule: {
               end: { _lt: dateRef.current },
             },
+            ...notCancelCondition,
+            status: {
+              _nin: [
+                Course_Status_Enum.EvaluationMissing,
+                Course_Status_Enum.Completed,
+              ],
+            },
           },
         ],
       },
@@ -200,6 +233,7 @@ export const useCourses = (
         _or: [
           {
             cancellationRequest: { id: { _is_null: false } },
+            ...notCancelCondition,
           },
         ],
       },
@@ -213,7 +247,7 @@ export const useCourses = (
         ],
       },
     }),
-    []
+    [notCancelCondition, notCancelRequested]
   )
 
   const where = useMemo(() => {

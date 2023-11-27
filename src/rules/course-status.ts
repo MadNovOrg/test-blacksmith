@@ -92,7 +92,14 @@ export const getIndividualCourseStatuses = (
   )
     return Course_Status_Enum.Cancelled
 
-  if (status === Course_Status_Enum.EvaluationMissing)
+  if (cancellationRequested) return AdminOnlyCourseStatus.CancellationRequested
+
+  if (
+    [
+      Course_Status_Enum.EvaluationMissing,
+      Course_Status_Enum.Cancelled,
+    ].includes(status)
+  )
     return Course_Status_Enum.Completed
 
   return condIndividualCourseStatuses({ ended, graded, cancellationRequested })
