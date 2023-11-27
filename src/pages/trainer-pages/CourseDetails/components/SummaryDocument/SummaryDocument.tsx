@@ -6,8 +6,9 @@ import { useTranslation } from 'react-i18next'
 import TTLogoImage from '@app/assets/TT-Colour-Logo.png'
 import {
   Accreditors_Enum,
-  CourseParticipantsQuery,
   Course_Evaluation_Question_Type_Enum,
+  Course_Trainer_Type_Enum as CourseTrainerTypes,
+  CourseParticipantsQuery,
   GetCourseByIdQuery,
   GetEvaluationsSummaryQuery,
 } from '@app/generated/graphql'
@@ -326,7 +327,14 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
     id: null,
     profile: { fullName: '' },
   }
-  const trainers = course?.trainers?.filter(t => t.id !== leadTrainer.id) ?? []
+
+  const assistTrainers = course?.trainers?.filter(
+    t => t.type === CourseTrainerTypes.Assistant
+  )
+
+  const moderators = course?.trainers?.filter(
+    t => t.type === CourseTrainerTypes.Moderator
+  )
 
   return (
     <Document>
@@ -358,7 +366,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
             >
               <Text style={[styles.largestText, styles.bold]}>
                 {t('course-evaluation.pdf-export.trainers', {
-                  count: trainers.length + 1,
+                  count: course?.trainers?.length ?? 0,
                 })}
               </Text>
 
@@ -367,14 +375,19 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                 {leadTrainer?.profile.fullName}
               </Text>
 
-              <FlexGroup
-                type="column"
-                data={trainers.map(t => (
-                  <Text key={t.id} style={styles.text}>
-                    {t.profile.fullName}
-                  </Text>
-                ))}
-              />
+              {assistTrainers.map(assistant => (
+                <Text key={assistant.id} style={styles.largerText}>
+                  {t('course-evaluation.pdf-export.assist-trainer')}:{' '}
+                  {assistant?.profile.fullName}
+                </Text>
+              ))}
+
+              {moderators.map(moderator => (
+                <Text key={moderator.id} style={styles.largerText}>
+                  {t('course-evaluation.pdf-export.moderator')}:{' '}
+                  {moderator?.profile.fullName}
+                </Text>
+              ))}
             </View>
 
             <View style={styles.section}>

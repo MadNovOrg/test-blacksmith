@@ -651,7 +651,9 @@
       "venue": "Venue",
       "course-modules": "Course Modules",
       "course-participants": "Course Participants (Total: {{count}})",
-      "no-answer": "N/A"
+      "no-answer": "N/A",
+      "assist-trainer": "Assist trainer",
+      "moderator": "Moderator"
     }
   },
   "ofsted-rating": {
