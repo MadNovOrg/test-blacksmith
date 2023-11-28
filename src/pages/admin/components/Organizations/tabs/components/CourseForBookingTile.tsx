@@ -103,7 +103,7 @@ export const CourseForBookingTile: React.FC<
     return navigate(
       spacesLeft === 0
         ? `/waitlist?course_id=${course.id}`
-        : `/course-registration?course_id=${course.id}&quantity=1${
+        : `/registration?course_id=${course.id}&quantity=1${
             acl.isInternalUser() ? '&internal=true' : ''
           }`
     )

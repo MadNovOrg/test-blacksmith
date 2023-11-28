@@ -287,7 +287,7 @@ export const CourseInvites = ({
                 sx={{ ml: 2 }}
                 onClick={() => {
                   navigate(
-                    `/course-registration?course_id=${course.id}&quantity=1&internal=true`
+                    `/registration?course_id=${course.id}&quantity=1&internal=true`
                   )
                 }}
                 disabled={invitesLeft === 0}

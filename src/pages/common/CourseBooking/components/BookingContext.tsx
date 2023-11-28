@@ -11,24 +11,19 @@ import React, {
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import { useMount } from 'react-use'
-import { useQuery } from 'urql'
 
 import {
   Course_Source_Enum,
   Course_Type_Enum,
-  GetCoursePricingQuery,
-  GetCoursePricingQueryVariables,
   GetTempProfileQuery,
-  GetTempProfileQueryVariables,
   PaymentMethod,
   Promo_Code,
   Promo_Code_Type_Enum,
   PromoCodeOutput,
-  Currency,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { stripeProcessingFeeRate } from '@app/lib/stripe'
-import { GET_COURSE_PRICING_QUERY } from '@app/queries/courses/get-course-pricing'
+import { GetCoursePricing } from '@app/queries/courses/get-course-pricing'
 import {
   MUTATION as CREATE_ORDER,
   ParamsType as CreateOrderParamsType,
@@ -37,6 +32,7 @@ import {
 import { QUERY as GET_TEMP_PROFILE } from '@app/queries/profile/get-temp-profile'
 import {
   CourseExpenseType,
+  Currency,
   InvoiceDetails,
   Profile,
   TransportMethod,
@@ -98,7 +94,6 @@ type State = {
   freeSpaces: number
   trainerExpenses: number
   courseType: Course_Type_Enum
-
   invoiceDetails?: InvoiceDetails
 }
 
@@ -148,7 +143,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation()
   const location = useLocation()
-  const fetcher = useFetcher()
+  const fetcher = useFetcher() // TODO: migrate to urql
   const [orderId, setOrderId] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -159,22 +154,9 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
 
   const isBooked = location.pathname.startsWith('/booking/payment/')
   const internalBooking = useRef(location.state?.internalBooking)
-  const [{ data: coursePricingData, error: coursePricingError }] = useQuery<
-    GetCoursePricingQuery,
-    GetCoursePricingQueryVariables
-  >({
-    query: GET_COURSE_PRICING_QUERY,
-    variables: { courseId: course?.id ?? 0 },
-  })
-
-  const [{ data }] = useQuery<
-    GetTempProfileQuery,
-    GetTempProfileQueryVariables
-  >({
-    query: GET_TEMP_PROFILE,
-  })
 
   useMount(async () => {
+    const data = await fetcher<GetTempProfileQuery>(GET_TEMP_PROFILE) // TODO: refactor to use urql
     const [profile] = data?.tempProfiles || []
 
     if (!profile || !profile.course) {
@@ -183,7 +165,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       return
     }
 
-    let pricing: GetCoursePricingQuery['pricing']
+    let pricing: Awaited<ReturnType<typeof GetCoursePricing>>['pricing']
 
     // course has custom pricing (e.g BILD)
     if (profile.course.price && profile.course.priceCurrency) {
@@ -193,10 +175,12 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         xeroCode: '',
       }
     } else {
-      if (!coursePricingError) {
+      const pricingResponse = await GetCoursePricing(fetcher, profile.course.id)
+
+      if (!pricingResponse) {
         setError(t('error-no-pricing'))
       } else {
-        pricing = coursePricingData?.pricing
+        pricing = pricingResponse.pricing
       }
     }
 
@@ -231,7 +215,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
 
     setAvailableSeats(
       profile.course.maxParticipants -
-        (profile.course.participants.aggregate?.count ?? 0)
+        (profile?.course?.participants?.aggregate?.count ?? 0)
     )
     setCourse(profile.course)
 
@@ -355,32 +339,34 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
   const placeOrder = useCallback(async () => {
     const promoCodes =
       booking.courseType !== Course_Type_Enum.Closed ? booking.promoCodes : []
+    if (course && course.id) {
+      const response = await fetcher<
+        // TODO: refactor to use urql
+        CreateOrderResponseType,
+        CreateOrderParamsType
+      >(CREATE_ORDER, {
+        input: {
+          courseId: course.id,
+          quantity: booking.quantity,
+          paymentMethod: booking.paymentMethod,
+          billingAddress: booking.invoiceDetails?.billingAddress ?? '',
+          billingGivenName: booking.invoiceDetails?.firstName ?? '',
+          billingFamilyName: booking.invoiceDetails?.surname ?? '',
+          billingEmail: booking.invoiceDetails?.email ?? '',
+          billingPhone: booking.invoiceDetails?.phone ?? '',
+          clientPurchaseOrder: booking.invoiceDetails?.purchaseOrder ?? '',
+          registrants: booking.participants,
+          organizationId: booking.orgId,
+          promoCodes,
+          source: booking.source,
+          salesRepresentativeId: booking.salesRepresentative?.id,
+          bookingContact: booking.bookingContact,
+        },
+      })
 
-    const response = await fetcher<
-      CreateOrderResponseType,
-      CreateOrderParamsType
-    >(CREATE_ORDER, {
-      input: {
-        courseId: course?.id ?? 0,
-        quantity: booking.quantity,
-        paymentMethod: booking.paymentMethod,
-        billingAddress: booking.invoiceDetails?.billingAddress ?? '',
-        billingGivenName: booking.invoiceDetails?.firstName ?? '',
-        billingFamilyName: booking.invoiceDetails?.surname ?? '',
-        billingEmail: booking.invoiceDetails?.email ?? '',
-        billingPhone: booking.invoiceDetails?.phone ?? '',
-        clientPurchaseOrder: booking.invoiceDetails?.purchaseOrder ?? '',
-        registrants: booking.participants,
-        organizationId: booking.orgId,
-        promoCodes,
-        source: booking.source,
-        salesRepresentativeId: booking.salesRepresentative?.id,
-        bookingContact: booking.bookingContact,
-      },
-    })
-
-    setOrderId(response.order?.id)
-    return response.order
+      setOrderId(response.order?.id)
+      return response.order
+    }
   }, [booking, fetcher, course])
 
   const value = useMemo<ContextType>(
