@@ -1,3 +1,5 @@
+DELETE FROM "public"."organization_type" WHERE "id" = '8efd06ec-3aef-4e56-933c-4ea332192885';
+
 
 DELETE FROM "public"."organization_type" WHERE "id" = '4c8059fa-cb6a-443e-92ee-7204a8aa274b';
 
