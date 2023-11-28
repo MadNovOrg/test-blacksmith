@@ -60,7 +60,7 @@ export const ArloConnect: React.FC<React.PropsWithChildren<unknown>> = () => {
     )
     url.searchParams.set(
       'redirect_uri',
-      'https://web.dev.teamteachhub.co.uk/admin/arlo/connect'
+      'https://web.dev.teamteachhub.com/admin/arlo/connect'
     )
     url.searchParams.set('state', 'abc')
 

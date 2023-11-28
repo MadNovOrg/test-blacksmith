@@ -476,7 +476,7 @@ export const CourseEvaluation = () => {
                 <Trans i18nKey="course-evaluation.disclaimer">
                   <a
                     target="_blank"
-                    href={`https://www.teamteach.co.uk/policies-procedures/privacy-policy/`}
+                    href={`https://www.teamteach.com/policies-procedures/privacy-policy/`}
                     aria-label={`${t('privacy-policy')} (${t(
                       'opens-new-window'
                     )})`}
