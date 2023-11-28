@@ -3,8 +3,11 @@ import React, { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
-import { Accreditors_Enum, Course_Level_Enum } from '@app/generated/graphql'
-import { CourseType } from '@app/types'
+import {
+  Accreditors_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 
 import { getLevels } from '../../helpers'
 
@@ -13,7 +16,7 @@ type SelectValue = Course_Level_Enum | ''
 interface Props {
   value: SelectValue
   onChange: (event: SelectChangeEvent<SelectValue>) => void
-  courseType: CourseType
+  courseType: Course_Type_Enum
   courseAccreditor: Accreditors_Enum
   disabled?: boolean
   labelId?: string

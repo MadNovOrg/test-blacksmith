@@ -38,7 +38,7 @@ import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/O
 import { CourseForBookingTile } from '@app/pages/admin/components/Organizations/tabs/components/CourseForBookingTile'
 import { geoDistance } from '@app/util/geo'
 
-type CourseType = GetUpcomingCoursesQuery['courses'][0]
+type UpcomingCourse = GetUpcomingCoursesQuery['courses'][0]
 
 export const ALL_ORGS = 'all'
 
@@ -154,7 +154,7 @@ export const AvailableCourses: React.FC<
   }, [coursesForBooking, id, orgs])
 
   const sortByDistance = useCallback(
-    (a: CourseType, b: CourseType) => {
+    (a: UpcomingCourse, b: UpcomingCourse) => {
       if (!distances) return 0
       const aDistance = distances.get(a.id)
       const bDistance = distances.get(b.id)

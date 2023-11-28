@@ -10,15 +10,14 @@ import {
   Course_Trainer_Type_Enum as CourseTrainerTypes,
   CourseParticipantsQuery,
   GetCourseByIdQuery,
+  Venue,
   GetEvaluationsSummaryQuery,
 } from '@app/generated/graphql'
 import {
-  CourseDeliveryType,
   CourseEvaluationGroupedQuestion,
   CourseEvaluationInjuryQuestion,
   CourseEvaluationQuestionGroup,
   CourseEvaluationUngroupedQuestion,
-  Venue,
 } from '@app/types'
 import { formatCourseVenue } from '@app/util'
 
@@ -408,8 +407,8 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                 {t('course-evaluation.pdf-export.venue')}:{' '}
                 {course.schedule[0].venue
                   ? formatCourseVenue(
-                      course.deliveryType as unknown as CourseDeliveryType,
-                      course.schedule[0].venue as Venue // Random TS error came up here
+                      course.deliveryType,
+                      course.schedule[0].venue as Venue
                     )
                   : null}
               </Text>

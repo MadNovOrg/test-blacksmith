@@ -1,19 +1,13 @@
 import { getByTestId } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
 
-import { GetWaitlistQuery } from '@app/generated/graphql'
+import { Course_Type_Enum, GetWaitlistQuery } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useWaitlist } from '@app/hooks/useWaitlist'
 import { buildOrder } from '@app/pages/tt-pages/OrderDetails/mock-utils'
-import {
-  Course,
-  CourseInvite,
-  CourseParticipant,
-  CourseType,
-  RoleName,
-} from '@app/types'
+import { Course, CourseInvite, CourseParticipant, RoleName } from '@app/types'
 import { DEFAULT_PAGINATION_LIMIT, LoadingStatus } from '@app/util'
 
 import { render, screen, within } from '@test/index'
@@ -106,7 +100,7 @@ describe(CourseAttendeesTab.name, () => {
       ],
     }
 
-    const setup = (role?: RoleName, courseType?: CourseType) => {
+    const setup = (role?: RoleName, courseType?: Course_Type_Enum) => {
       // Arrange
       useCourseParticipantsMock.mockReturnValue({
         status: LoadingStatus.SUCCESS,
@@ -120,7 +114,7 @@ describe(CourseAttendeesTab.name, () => {
 
       const tableCourse = buildCourse({
         overrides: {
-          type: courseType ?? CourseType.OPEN,
+          type: courseType ?? Course_Type_Enum.Open,
         },
       })
 
@@ -223,7 +217,7 @@ describe(CourseAttendeesTab.name, () => {
     })
 
     it('should not display "Orders" column only when the course type is not OPEN', () => {
-      setup(RoleName.TT_OPS, CourseType.CLOSED)
+      setup(RoleName.TT_OPS, Course_Type_Enum.Closed)
       const { participants } = testData
       const participantRow = screen.getByTestId(
         `course-participant-row-${participants[0].id}`
@@ -400,7 +394,7 @@ describe(CourseAttendeesTab.name, () => {
     })
 
     const openCourse = buildCourse()
-    openCourse.type = CourseType.OPEN
+    openCourse.type = Course_Type_Enum.Open
 
     useCourseMock.mockReturnValue({
       mutate: vi.fn(),
@@ -475,7 +469,7 @@ describe(CourseAttendeesTab.name, () => {
     })
 
     const openCourse = buildCourse()
-    openCourse.type = CourseType.OPEN
+    openCourse.type = Course_Type_Enum.Open
 
     useCourseMock.mockReturnValue({
       mutate: vi.fn(),

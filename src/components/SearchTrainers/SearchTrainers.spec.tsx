@@ -1,9 +1,8 @@
 import React from 'react'
 
-import { Course_Level_Enum } from '@app/generated/graphql'
+import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import {
   CourseTrainerType,
-  CourseType,
   SearchTrainer,
   TrainerRoleTypeName,
 } from '@app/types'
@@ -37,7 +36,7 @@ describe(SearchTrainers.name, () => {
         trainerType={CourseTrainerType.Leader}
         courseLevel={Course_Level_Enum.Level_1}
         courseSchedule={course.schedule[0]}
-        courseType={CourseType.OPEN}
+        courseType={Course_Type_Enum.Open}
       />
     )
 
@@ -67,7 +66,7 @@ describe(SearchTrainers.name, () => {
         courseLevel={Course_Level_Enum.Level_1}
         courseSchedule={course.schedule[0]}
         placeholder={placeholder}
-        courseType={CourseType.OPEN}
+        courseType={Course_Type_Enum.Open}
       />
     )
 
@@ -87,7 +86,7 @@ describe(SearchTrainers.name, () => {
         trainerType={CourseTrainerType.Leader}
         courseLevel={Course_Level_Enum.Level_1}
         courseSchedule={course.schedule[0]}
-        courseType={CourseType.OPEN}
+        courseType={Course_Type_Enum.Open}
       />
     )
 
@@ -159,7 +158,7 @@ describe(SearchTrainers.name, () => {
         trainerType={CourseTrainerType.Leader}
         courseLevel={Course_Level_Enum.Level_1}
         courseSchedule={course.schedule[0]}
-        courseType={CourseType.OPEN}
+        courseType={Course_Type_Enum.Open}
       />
     )
 
@@ -199,7 +198,7 @@ describe(SearchTrainers.name, () => {
         courseLevel={Course_Level_Enum.Level_1}
         courseSchedule={course.schedule[0]}
         matchesFilter={matchesFilter}
-        courseType={CourseType.OPEN}
+        courseType={Course_Type_Enum.Open}
       />
     )
 
@@ -258,7 +257,7 @@ describe(SearchTrainers.name, () => {
         courseLevel={Course_Level_Enum.Level_1}
         courseSchedule={course.schedule[0]}
         max={1}
-        courseType={CourseType.OPEN}
+        courseType={Course_Type_Enum.Open}
       />
     )
 
@@ -292,7 +291,7 @@ describe(SearchTrainers.name, () => {
         courseLevel={Course_Level_Enum.Level_1}
         courseSchedule={course.schedule[0]}
         onChange={onChange}
-        courseType={CourseType.OPEN}
+        courseType={Course_Type_Enum.Open}
       />
     )
 
@@ -328,7 +327,7 @@ describe(SearchTrainers.name, () => {
         trainerType={CourseTrainerType.Leader}
         courseLevel={Course_Level_Enum.Level_1}
         courseSchedule={course.schedule[0]}
-        courseType={CourseType.OPEN}
+        courseType={Course_Type_Enum.Open}
       />
     )
 

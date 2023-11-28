@@ -3,12 +3,13 @@ import useSWR from 'swr'
 import { KeyedMutator } from 'swr'
 
 import { useAuth } from '@app/context/auth'
+import { Course_Type_Enum } from '@app/generated/graphql'
 import {
   ParamsType,
   QUERY,
   ResponseType,
 } from '@app/queries/courses/get-course-by-id'
-import { CourseType, InviteStatus, RoleName } from '@app/types'
+import { InviteStatus, RoleName } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export default function useCourse(courseId: string): {
@@ -28,7 +29,8 @@ export default function useCourse(courseId: string): {
     {
       id: courseId,
       withOrders:
-        acl.canInviteAttendees(CourseType.OPEN) || acl.canViewCourseOrder(),
+        acl.canInviteAttendees(Course_Type_Enum.Open) ||
+        acl.canViewCourseOrder(),
       withArloRefId: acl.isInternalUser(),
     },
   ])

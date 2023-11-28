@@ -17,7 +17,11 @@ import { useNavigate } from 'react-router-dom'
 import ChooseTrainers, { FormValues } from '@app/components/ChooseTrainers'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
-import { Accreditors_Enum, BildStrategy } from '@app/generated/graphql'
+import {
+  Accreditors_Enum,
+  BildStrategy,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
   CourseException,
@@ -27,7 +31,6 @@ import {
 import {
   CourseTrainer,
   CourseTrainerType,
-  CourseType,
   InviteStatus,
   TrainerInput,
   TrainerRoleTypeName,
@@ -147,7 +150,7 @@ export const AssignTrainers = () => {
 
   const submit = useCallback(async () => {
     if (courseData && trainers) {
-      const isClosedCourse = courseData.type === CourseType.CLOSED
+      const isClosedCourse = courseData.type === Course_Type_Enum.Closed
 
       let nextPage: string
       if (isClosedCourse) {
@@ -204,7 +207,10 @@ export const AssignTrainers = () => {
         },
         trainers
       )
-      if (courseData.type === CourseType.CLOSED && exceptions.length > 0) {
+      if (
+        courseData.type === Course_Type_Enum.Closed &&
+        exceptions.length > 0
+      ) {
         setCourseExceptions(exceptions)
       } else {
         await submit()
@@ -317,7 +323,7 @@ export const AssignTrainers = () => {
               data-testid="AssignTrainers-submit"
               onClick={handleSubmitButtonClick}
             >
-              {courseData.type === CourseType.CLOSED
+              {courseData.type === Course_Type_Enum.Closed
                 ? t('pages.create-course.step-navigation-trainer-expenses')
                 : t('pages.create-course.assign-trainers.submit-btn')}
             </LoadingButton>

@@ -30,6 +30,7 @@ import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Status_Enum,
+  Course_Type_Enum,
   GetDietaryAndDisabilitiesCountQuery,
   GetDietaryAndDisabilitiesCountQueryVariables,
   GetFeedbackUsersQuery,
@@ -52,7 +53,7 @@ import {
   QUERY as GET_COURSE_QUERY,
   ResponseType as GetCourseResponseType,
 } from '@app/queries/user-queries/get-course-by-id'
-import { CourseParticipant, CourseType } from '@app/types'
+import { CourseParticipant } from '@app/types'
 import { courseEnded, courseStarted } from '@app/util'
 
 const ChecklistItem = styled(Box)(({ theme }) => ({
@@ -131,9 +132,9 @@ export const CourseDetails: React.FC<
   const course = courseData?.course
 
   const linkedOrderItem = useMemo(() => course?.orders?.[0], [course])
-  const isCourseTypeClosed = course?.type === CourseType.CLOSED
+  const isCourseTypeClosed = course?.type === Course_Type_Enum.Closed
   const isCourseTypeIndirectBlended =
-    course?.type === CourseType.INDIRECT && course?.go1Integration
+    course?.type === Course_Type_Enum.Indirect && course?.go1Integration
   const canViewLinkedOrderItem = useMemo(
     () =>
       linkedOrderItem && (isCourseTypeClosed || isCourseTypeIndirectBlended),
@@ -207,7 +208,7 @@ export const CourseDetails: React.FC<
         acl.isBookingContactOfCourse(course),
         bookingOnly,
         course.status !== Course_Status_Enum.Cancelled,
-        course.type === CourseType.CLOSED,
+        course.type === Course_Type_Enum.Closed,
       ].every(el => Boolean(el)),
     [acl, bookingOnly, course]
   )
@@ -369,7 +370,8 @@ export const CourseDetails: React.FC<
                             data-testid="attendees-tab"
                           />
                         ) : null}
-                        {isCourseContact && course.type !== CourseType.OPEN ? (
+                        {isCourseContact &&
+                        course.type !== Course_Type_Enum.Open ? (
                           <PillTab
                             label={t(
                               'pages.course-details.tabs.evaluation.title'
@@ -438,7 +440,8 @@ export const CourseDetails: React.FC<
                       </PillTabList>
                     </Box>
                     <Box display={'flex'}>
-                      {!courseHasStarted && course.type === CourseType.OPEN ? (
+                      {!courseHasStarted &&
+                      course.type === Course_Type_Enum.Open ? (
                         <Button variant="text">
                           <Typography
                             variant="body2"
@@ -625,7 +628,7 @@ export const CourseDetails: React.FC<
                     >
                       <CourseAttendeesTab course={course} />
                     </TabPanel>
-                    {course.type !== CourseType.OPEN ? (
+                    {course.type !== Course_Type_Enum.Open ? (
                       <TabPanel
                         sx={{ px: 0 }}
                         value={CourseDetailsTabs.EVALUATION}
@@ -655,7 +658,8 @@ export const CourseDetails: React.FC<
               </Container>
             </TabContext>
           ) : null}
-          {course.type === CourseType.OPEN && showModifyAttendanceModal ? (
+          {course.type === Course_Type_Enum.Open &&
+          showModifyAttendanceModal ? (
             <ModifyAttendanceModal
               course={course}
               onClose={() => setShowModifyAttendanceModal(false)}

@@ -26,6 +26,7 @@ import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Status_Enum,
+  Course_Type_Enum,
   GetDietaryAndDisabilitiesCountQuery,
   GetDietaryAndDisabilitiesCountQueryVariables,
 } from '@app/generated/graphql'
@@ -37,7 +38,6 @@ import { CourseCertifications } from '@app/pages/trainer-pages/components/Course
 import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading'
 import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
 import { GET_DIETARY_AND_DISABILITIES_COUNT } from '@app/queries/course-participant/get-participant-dietary-restrictions-by-course-id'
-import { CourseType } from '@app/types'
 import { courseEnded, LoadingStatus } from '@app/util'
 
 import { DietaryRequirementsTab } from './components/DietaryRequirementsTab'
@@ -101,9 +101,9 @@ export const CourseDetails = () => {
       requestPolicy: 'cache-and-network',
       pause: !courseId,
     })
-  const isCourseTypeClosed = course?.type === CourseType.CLOSED
+  const isCourseTypeClosed = course?.type === Course_Type_Enum.Closed
   const isCourseTypeIndirectBlended =
-    course?.type === CourseType.INDIRECT && course?.go1Integration
+    course?.type === Course_Type_Enum.Indirect && course?.go1Integration
 
   const courseHasEnded = course && courseEnded(course)
   const courseCancelled =
@@ -302,7 +302,7 @@ export const CourseDetails = () => {
                   ) : null}
 
                   {acl.isOrgAdmin() &&
-                  course.type === CourseType.OPEN ? null : (
+                  course.type === Course_Type_Enum.Open ? null : (
                     <PillTab
                       label={t('pages.course-details.tabs.evaluation.title')}
                       value={CourseDetailsTabs.EVALUATION}
@@ -383,7 +383,7 @@ export const CourseDetails = () => {
                 </PillTabList>
                 <Box>
                   {!course.cancellationRequest &&
-                  course.type === CourseType.CLOSED &&
+                  course.type === Course_Type_Enum.Closed &&
                   isOrgAdmin &&
                   course.status !== Course_Status_Enum.Cancelled &&
                   !acl.canCancelCourses() ? (
@@ -440,7 +440,8 @@ export const CourseDetails = () => {
                 </TabPanel>
               ) : null}
 
-              {acl.isOrgAdmin() && course.type === CourseType.OPEN ? null : (
+              {acl.isOrgAdmin() &&
+              course.type === Course_Type_Enum.Open ? null : (
                 <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.EVALUATION}>
                   <EvaluationSummaryTab course={course} />
                 </TabPanel>

@@ -1,6 +1,6 @@
 import { test as base } from '@playwright/test'
 
-import { CourseType } from '@app/types'
+import { Course_Type_Enum } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
 import { FINISHED_COURSE } from '@qa/data/courses'
@@ -12,7 +12,7 @@ import { stateFilePath } from '@qa/util'
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = FINISHED_COURSE()
-    course.type = CourseType.CLOSED
+    course.type = Course_Type_Enum.Closed
     course.id = await API.course.insertCourse(course, users.trainer.email)
     await API.course.insertCourseParticipants(course.id, [users.user1])
     await use(course)

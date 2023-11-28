@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test'
 
-import { CourseType } from '@app/types'
+import { Course_Type_Enum } from '@app/generated/graphql'
 
 import { BasePage } from '../BasePage.fixture'
 
@@ -30,9 +30,9 @@ export class ConfirmRescheduleModal extends BasePage {
     )
   }
 
-  async confirmChange(reason: string, courseType = CourseType.OPEN) {
+  async confirmChange(reason: string, courseType = Course_Type_Enum.Open) {
     await this.reasonInput.type(reason)
-    if (courseType === CourseType.CLOSED) {
+    if (courseType === Course_Type_Enum.Closed) {
       await this.noFeesCheckbox.click()
     }
     await this.confirmButton.click()

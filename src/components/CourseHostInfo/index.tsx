@@ -2,10 +2,11 @@ import { ListItemText } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CourseType, Organization } from '@app/types'
+import { Course_Type_Enum } from '@app/generated/graphql'
+import { Organization } from '@app/types'
 
 interface Props {
-  courseType: CourseType
+  courseType: Course_Type_Enum
   organization: Organization
 }
 
@@ -16,7 +17,7 @@ export const CourseHostInfo: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
 
   const showOrganizationName = useMemo(
-    () => courseType !== CourseType.OPEN,
+    () => courseType !== Course_Type_Enum.Open,
     [courseType]
   )
 

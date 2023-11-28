@@ -17,14 +17,9 @@ import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
+import { Course_Type_Enum } from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
-import {
-  Course,
-  CourseInvite,
-  CourseType,
-  InviteStatus,
-  SortOrder,
-} from '@app/types'
+import { Course, CourseInvite, InviteStatus, SortOrder } from '@app/types'
 import {
   DEFAULT_PAGINATION_LIMIT,
   DEFAULT_PAGINATION_ROW_OPTIONS,
@@ -49,7 +44,8 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
   const [messageSnackbarOpen, setMessageSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const isClosedIndirectCourse =
-    course.type === CourseType.CLOSED || course.type === CourseType.INDIRECT
+    course.type === Course_Type_Enum.Closed ||
+    course.type === Course_Type_Enum.Indirect
 
   const { data, status, total, resend, cancel } = useCourseInvites(
     course?.id,

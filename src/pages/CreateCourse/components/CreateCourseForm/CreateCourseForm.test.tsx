@@ -1,18 +1,17 @@
 import { fireEvent, renderHook } from '@testing-library/react'
 import { addDays, addHours } from 'date-fns'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
 import { VenueSelector } from '@app/components/VenueSelector'
-import { Accreditors_Enum } from '@app/generated/graphql'
+import { Accreditors_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
-import { BildStrategies, CourseType, ValidCourseInput } from '@app/types'
+import { BildStrategies, ValidCourseInput } from '@app/types'
 import { courseToCourseInput, LoadingStatus } from '@app/util'
 
 import {
@@ -85,7 +84,7 @@ describe('component: CreateCourseForm', () => {
           <Route
             path="/"
             element={
-              <CreateCourseProvider courseType={CourseType.INDIRECT}>
+              <CreateCourseProvider courseType={Course_Type_Enum.Indirect}>
                 <CreateCourseForm />
               </CreateCourseProvider>
             }
@@ -148,7 +147,7 @@ describe('component: CreateCourseForm', () => {
                 initialValue={{
                   courseData: courseToCourseInput(course) as ValidCourseInput,
                 }}
-                courseType={CourseType.INDIRECT}
+                courseType={Course_Type_Enum.Indirect}
               >
                 <CreateCourseForm />
               </CreateCourseProvider>
@@ -235,7 +234,7 @@ describe('component: CreateCourseForm', () => {
                 initialValue={{
                   courseData: courseToCourseInput(course) as ValidCourseInput,
                 }}
-                courseType={CourseType.INDIRECT}
+                courseType={Course_Type_Enum.Indirect}
               >
                 <CreateCourseForm />
               </CreateCourseProvider>

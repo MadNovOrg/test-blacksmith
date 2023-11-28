@@ -1,6 +1,6 @@
 import { test as base } from '@playwright/test'
 
-import { CourseType } from '@app/types'
+import { Course_Type_Enum } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
 import { UNIQUE_COURSE } from '@qa/data/courses'
@@ -17,7 +17,7 @@ const testData = [
     attendee: users.user1WithOrg,
     course: async () => {
       const course = UNIQUE_COURSE()
-      course.type = CourseType.INDIRECT
+      course.type = Course_Type_Enum.Indirect
       course.id = await API.course.insertCourse(course, users.trainer.email)
       return course
     },
@@ -28,7 +28,7 @@ const testData = [
     attendee: users.user1WithOrg,
     course: async () => {
       const course = UNIQUE_COURSE()
-      course.type = CourseType.INDIRECT
+      course.type = Course_Type_Enum.Indirect
       course.id = await API.course.insertCourse(course, users.trainer.email)
       return course
     },
@@ -39,7 +39,7 @@ const testData = [
     attendee: users.user1WithOrg,
     course: async () => {
       const course = UNIQUE_COURSE()
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.id = await API.course.insertCourse(course, users.trainer.email)
       return course
     },
@@ -50,7 +50,7 @@ const testData = [
     attendee: users.user1WithOrg,
     course: async () => {
       const course = UNIQUE_COURSE()
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.id = await API.course.insertCourse(course, users.trainer.email)
       return course
     },

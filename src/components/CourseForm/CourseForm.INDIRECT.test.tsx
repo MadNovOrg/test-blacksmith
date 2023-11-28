@@ -1,6 +1,9 @@
-import { Course_Level_Enum } from '@app/generated/graphql'
+import {
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
-import { CourseDeliveryType, CourseType } from '@app/types'
 
 import { screen, userEvent, waitFor } from '@test/index'
 
@@ -13,7 +16,7 @@ vi.mock('@app/hooks/useCoursePrice', () => ({
 const useCoursePriceMock = vi.mocked(useCoursePrice)
 
 describe('component: CourseForm - INDIRECT', () => {
-  const type = CourseType.INDIRECT
+  const type = Course_Type_Enum.Indirect
 
   beforeEach(() => {
     useCoursePriceMock.mockReturnValue({
@@ -60,7 +63,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_1)
-    await selectDelivery(CourseDeliveryType.F2F)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeEnabled()
@@ -74,7 +77,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_1)
-    await selectDelivery(CourseDeliveryType.MIXED)
+    await selectDelivery(Course_Delivery_Type_Enum.Mixed)
 
     const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeDisabled()
@@ -85,7 +88,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_1)
-    await selectDelivery(CourseDeliveryType.VIRTUAL)
+    await selectDelivery(Course_Delivery_Type_Enum.Virtual)
 
     const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeEnabled()
@@ -99,7 +102,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_2)
-    await selectDelivery(CourseDeliveryType.F2F)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeEnabled()
@@ -113,7 +116,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_2)
-    await selectDelivery(CourseDeliveryType.MIXED)
+    await selectDelivery(Course_Delivery_Type_Enum.Mixed)
 
     const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeDisabled()
@@ -124,7 +127,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await waitFor(() => renderForm(type, Course_Level_Enum.AdvancedTrainer))
 
     await selectLevel(Course_Level_Enum.Advanced)
-    await selectDelivery(CourseDeliveryType.F2F)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeDisabled()
@@ -136,7 +139,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_1)
-    await selectDelivery(CourseDeliveryType.F2F)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const reacc = screen.getByLabelText('Reaccreditation')
 
@@ -149,7 +152,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_1)
-    await selectDelivery(CourseDeliveryType.MIXED)
+    await selectDelivery(Course_Delivery_Type_Enum.Mixed)
 
     const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
@@ -166,7 +169,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_1)
-    await selectDelivery(CourseDeliveryType.VIRTUAL)
+    await selectDelivery(Course_Delivery_Type_Enum.Virtual)
 
     const reacc = screen.getByLabelText('Reaccreditation')
 
@@ -179,7 +182,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_2)
-    await selectDelivery(CourseDeliveryType.F2F)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const reacc = screen.getByLabelText('Reaccreditation')
 
@@ -192,7 +195,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_2)
-    await selectDelivery(CourseDeliveryType.MIXED)
+    await selectDelivery(Course_Delivery_Type_Enum.Mixed)
 
     const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')

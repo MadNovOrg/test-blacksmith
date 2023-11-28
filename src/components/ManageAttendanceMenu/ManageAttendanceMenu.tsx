@@ -9,7 +9,8 @@ import { useTranslation } from 'react-i18next'
 
 import { ActionsMenu, Action } from '@app/components/ActionsMenu'
 import { useAuth } from '@app/context/auth'
-import { Course, CourseParticipant, CourseType, Profile } from '@app/types'
+import { Course_Type_Enum } from '@app/generated/graphql'
+import { Course, CourseParticipant, Profile } from '@app/types'
 import { courseEnded, getParticipantOrgIds } from '@app/util'
 
 enum CourseAction {
@@ -87,42 +88,42 @@ export const ManageAttendanceMenu = <
       cond([
         [
           matches({
-            courseType: CourseType.CLOSED,
+            courseType: Course_Type_Enum.Closed,
             action: CourseAction.Cancel,
           }),
           constant(acl.canCancelParticipantCLOSED(participantOrgIds, course)),
         ],
         [
           matches({
-            courseType: CourseType.CLOSED,
+            courseType: Course_Type_Enum.Closed,
             action: CourseAction.SendInformation,
           }),
           constant(acl.canCancelParticipantCLOSED(participantOrgIds, course)),
         ],
         [
           matches({
-            courseType: CourseType.INDIRECT,
+            courseType: Course_Type_Enum.Indirect,
             action: CourseAction.Cancel,
           }),
           constant(acl.canCancelParticipantINDIRECT(participantOrgIds, course)),
         ],
         [
           matches({
-            courseType: CourseType.INDIRECT,
+            courseType: Course_Type_Enum.Indirect,
             action: CourseAction.SendInformation,
           }),
           constant(acl.canCancelParticipantINDIRECT(participantOrgIds, course)),
         ],
         [
           matches({
-            courseType: CourseType.OPEN,
+            courseType: Course_Type_Enum.Open,
             action: CourseAction.Cancel,
           }),
           constant(acl.canCancelParticipant(participantOrgIds, course)),
         ],
         [
           matches({
-            courseType: CourseType.OPEN,
+            courseType: Course_Type_Enum.Open,
             action: CourseAction.Replace,
           }),
           constant(
@@ -132,7 +133,7 @@ export const ManageAttendanceMenu = <
         ],
         [
           matches({
-            courseType: CourseType.OPEN,
+            courseType: Course_Type_Enum.Open,
             action: CourseAction.SendInformation,
           }),
           constant(
@@ -142,7 +143,7 @@ export const ManageAttendanceMenu = <
         ],
         [
           matches({
-            courseType: CourseType.OPEN,
+            courseType: Course_Type_Enum.Open,
             action: CourseAction.Transfer,
           }),
           constant(acl.canSendCourseInformation(participantOrgIds, course)),

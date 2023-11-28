@@ -1,6 +1,9 @@
 import { test as base } from '@playwright/test'
 
-import { CourseDeliveryType, CourseType } from '@app/types'
+import {
+  Course_Delivery_Type_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 
 import * as API from '@qa/api'
 import { UNIQUE_COURSE } from '@qa/data/courses'
@@ -14,13 +17,13 @@ import { stateFilePath } from '@qa/util'
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
-    course.type = CourseType.CLOSED
+    course.type = Course_Type_Enum.Closed
     course.organization = { name: 'London First School' }
     course.bookingContactProfile = users.userOrgAdmin
     course.freeSpaces = 1
     course.salesRepresentative = users.salesAdmin
     course.go1Integration = true
-    course.deliveryType = CourseDeliveryType.VIRTUAL
+    course.deliveryType = Course_Delivery_Type_Enum.Virtual
     await use(course)
     await API.course.deleteCourse(course.id)
   },

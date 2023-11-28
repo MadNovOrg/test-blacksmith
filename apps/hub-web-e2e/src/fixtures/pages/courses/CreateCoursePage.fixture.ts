@@ -1,8 +1,12 @@
 import { expect, Locator, Page } from '@playwright/test'
 import { format } from 'date-fns'
 
-import { Course_Source_Enum, Course_Level_Enum } from '@app/generated/graphql'
-import { CourseDeliveryType, CourseType } from '@app/types'
+import {
+  Course_Source_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
+  Course_Delivery_Type_Enum,
+} from '@app/generated/graphql'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
 import { User } from '@qa/data/types'
@@ -134,7 +138,7 @@ export class CreateCoursePage extends BasePage {
     await this.reaccreditationCheckbox.check()
   }
 
-  async selectDeliveryType(type: CourseDeliveryType) {
+  async selectDeliveryType(type: Course_Delivery_Type_Enum) {
     await this.deliveryTypeRadioButton(type).check()
   }
 
@@ -249,43 +253,46 @@ export class CreateCoursePage extends BasePage {
   }
 
   async fillCourseDetails(course: Course) {
-    if (course.type !== CourseType.OPEN && course.organization) {
+    if (course.type !== Course_Type_Enum.Open && course.organization) {
       await this.selectOrganisation(course.organization.name)
     }
-    if (course.type === CourseType.CLOSED && course.bookingContactProfile) {
+    if (
+      course.type === Course_Type_Enum.Closed &&
+      course.bookingContactProfile
+    ) {
       await this.selectContact(course.bookingContactProfile)
     }
     await this.selectCourseLevel(course.level)
     if (course.go1Integration) await this.selectGo1()
     if (course.reaccreditation) await this.selectReaccreditation()
     await this.selectDeliveryType(course.deliveryType)
-    if (course.deliveryType !== CourseDeliveryType.VIRTUAL) {
+    if (course.deliveryType !== Course_Delivery_Type_Enum.Virtual) {
       await this.selectVenue(course.schedule[0].venue?.name as string)
     }
     // TODO workaround - remove this if after fixing /TTHP-1216
     if (
-      course.deliveryType === CourseDeliveryType.VIRTUAL ||
-      course.deliveryType === CourseDeliveryType.MIXED
+      course.deliveryType === Course_Delivery_Type_Enum.Virtual ||
+      course.deliveryType === Course_Delivery_Type_Enum.Mixed
     )
       await this.setSpecialInstructions()
-    if (course.deliveryType != CourseDeliveryType.VIRTUAL) {
+    if (course.deliveryType != Course_Delivery_Type_Enum.Virtual) {
       await this.setParkingInstructions()
     }
     await this.setStartDateTime(course.schedule[0].start)
     await this.setEndDateTime(course.schedule[0].end)
-    if (course.type === CourseType.OPEN) {
+    if (course.type === Course_Type_Enum.Open) {
       await this.setMinAttendees(course.min_participants)
     }
 
     await this.setMaxAttendees(course.max_participants)
-    if (course.type === CourseType.INDIRECT) {
+    if (course.type === Course_Type_Enum.Indirect) {
       await this.checkAcknowledgeCheckboxes()
     }
 
     if (
       course.freeSpaces &&
       course.salesRepresentative &&
-      course.type === CourseType.CLOSED &&
+      course.type === Course_Type_Enum.Closed &&
       course.source
     ) {
       await this.freeSpacesInput.type(course.freeSpaces.toString())

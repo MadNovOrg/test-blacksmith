@@ -1,8 +1,11 @@
 import { Meta, StoryObj } from '@storybook/react'
 
 import { SearchTrainers } from '@app/components/SearchTrainers/SearchTrainers'
-import { Course_Level_Enum, CourseTrainerType } from '@app/generated/graphql'
-import { CourseType } from '@app/types'
+import {
+  Course_Level_Enum,
+  Course_Type_Enum,
+  CourseTrainerType,
+} from '@app/generated/graphql'
 
 export default {
   title: 'components/SearchTrainers',
@@ -19,6 +22,6 @@ export const Default: Story = {
       start: '2024-01-01',
       end: '2024-01-01',
     },
-    courseType: CourseType.OPEN,
+    courseType: Course_Type_Enum.Open,
   },
 }

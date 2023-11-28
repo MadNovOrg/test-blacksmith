@@ -1,5 +1,9 @@
-import { Course_Status_Enum, Course_Level_Enum } from '@app/generated/graphql'
-import { CourseDeliveryType, CourseType } from '@app/types'
+import {
+  Course_Status_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
+  Course_Delivery_Type_Enum,
+} from '@app/generated/graphql'
 
 import { UNIQUE_COURSE } from './courses'
 import { Course, ModuleGroup } from './types'
@@ -20,7 +24,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = Course_Level_Enum.Level_1
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
       course.reaccreditation = false
@@ -87,7 +91,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = Course_Level_Enum.Level_1
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
@@ -153,9 +157,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 1 mixed reaccred',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.deliveryType = CourseDeliveryType.MIXED
+      course.deliveryType = Course_Delivery_Type_Enum.Mixed
       course.level = Course_Level_Enum.Level_1
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
@@ -221,9 +225,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 1 virtual reaccred',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.deliveryType = CourseDeliveryType.VIRTUAL
+      course.deliveryType = Course_Delivery_Type_Enum.Virtual
       course.level = Course_Level_Enum.Level_1
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
@@ -290,10 +294,10 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = Course_Level_Enum.Level_1
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
-      course.deliveryType = CourseDeliveryType.F2F
+      course.deliveryType = Course_Delivery_Type_Enum.F2F
       course.go1Integration = true
       return course
     })(),
@@ -357,12 +361,12 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 1 virtual blended',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.deliveryType = CourseDeliveryType.MIXED
+      course.deliveryType = Course_Delivery_Type_Enum.Mixed
       course.level = Course_Level_Enum.Level_1
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
-      course.deliveryType = CourseDeliveryType.F2F
+      course.deliveryType = Course_Delivery_Type_Enum.F2F
       course.go1Integration = true
       return course
     })(),
@@ -427,7 +431,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = Course_Level_Enum.Level_2
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
       course.reaccreditation = false
@@ -501,9 +505,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 2 mixed',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.deliveryType = CourseDeliveryType.MIXED
+      course.deliveryType = Course_Delivery_Type_Enum.Mixed
       course.level = Course_Level_Enum.Level_2
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
       course.reaccreditation = false
@@ -578,7 +582,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = Course_Level_Enum.Level_2
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
@@ -653,7 +657,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = Course_Level_Enum.Level_2
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
@@ -728,10 +732,10 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = Course_Level_Enum.Level_2
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
-      course.deliveryType = CourseDeliveryType.F2F
+      course.deliveryType = Course_Delivery_Type_Enum.F2F
       course.go1Integration = true
       return course
     })(),
@@ -804,10 +808,10 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = Course_Level_Enum.Level_2
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
-      course.deliveryType = CourseDeliveryType.F2F
+      course.deliveryType = Course_Delivery_Type_Enum.F2F
       course.reaccreditation = true
       course.go1Integration = true
       return course
@@ -881,7 +885,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = Course_Level_Enum.Advanced
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.ConfirmModules
       course.organization = { name: 'London First School' }
       return course

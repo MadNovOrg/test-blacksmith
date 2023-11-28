@@ -4,9 +4,12 @@ import useSWR from 'swr'
 import { Client, CombinedError, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
-import { CoursePriceQuery, Course_Level_Enum } from '@app/generated/graphql'
 import {
-  CourseType,
+  CoursePriceQuery,
+  Course_Level_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
+import {
   ExpensesInput,
   RoleName,
   TransportMethod,
@@ -81,7 +84,7 @@ describe('component: ReviewAndConfirm', () => {
 
     render(
       <Provider value={client}>
-        <CreateCourseProvider courseType={CourseType.CLOSED}>
+        <CreateCourseProvider courseType={Course_Type_Enum.Closed}>
           <ReviewAndConfirm />
         </CreateCourseProvider>
       </Provider>,
@@ -111,7 +114,7 @@ describe('component: ReviewAndConfirm', () => {
       <Provider value={client}>
         <CreateCourseProvider
           initialValue={{ courseData, expenses, trainers }}
-          courseType={CourseType.CLOSED}
+          courseType={Course_Type_Enum.Closed}
         >
           <ReviewAndConfirm />
         </CreateCourseProvider>
@@ -161,7 +164,7 @@ describe('component: ReviewAndConfirm', () => {
       <Provider value={client}>
         <CreateCourseProvider
           initialValue={{ courseData, expenses, trainers }}
-          courseType={CourseType.CLOSED}
+          courseType={Course_Type_Enum.Closed}
         >
           <ReviewAndConfirm />
         </CreateCourseProvider>
@@ -273,7 +276,7 @@ describe('component: ReviewAndConfirm', () => {
             expenses,
             trainers,
           }}
-          courseType={CourseType.CLOSED}
+          courseType={Course_Type_Enum.Closed}
         >
           <ReviewAndConfirm />
         </CreateCourseProvider>

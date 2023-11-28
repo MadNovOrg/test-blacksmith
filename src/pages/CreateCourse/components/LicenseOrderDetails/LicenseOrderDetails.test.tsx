@@ -3,8 +3,11 @@ import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
-import { OrgLicensesWithHistoryQuery } from '@app/generated/graphql'
-import { CourseType, ValidCourseInput } from '@app/types'
+import {
+  Course_Type_Enum,
+  OrgLicensesWithHistoryQuery,
+} from '@app/generated/graphql'
+import { ValidCourseInput } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 import { buildOrganization } from '@test/mock-data-utils'
@@ -54,7 +57,7 @@ describe('component: LicenseOrderDetails', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <CreateCourseProvider courseType={CourseType.INDIRECT}>
+        <CreateCourseProvider courseType={Course_Type_Enum.Indirect}>
           <LicenseOrderDetails />
         </CreateCourseProvider>
       </Provider>
@@ -78,7 +81,7 @@ describe('component: LicenseOrderDetails', () => {
     render(
       <Provider value={client as unknown as Client}>
         <CreateCourseProvider
-          courseType={CourseType.INDIRECT}
+          courseType={Course_Type_Enum.Indirect}
           initialValue={{
             courseData: {
               organization: { id: 'org-id' },
@@ -110,7 +113,7 @@ describe('component: LicenseOrderDetails', () => {
     render(
       <Provider value={client as unknown as Client}>
         <CreateCourseProvider
-          courseType={CourseType.INDIRECT}
+          courseType={Course_Type_Enum.Indirect}
           initialValue={{
             courseData: {
               maxParticipants: 10,
@@ -147,7 +150,7 @@ describe('component: LicenseOrderDetails', () => {
     render(
       <Provider value={client as unknown as Client}>
         <CreateCourseProvider
-          courseType={CourseType.INDIRECT}
+          courseType={Course_Type_Enum.Indirect}
           initialValue={{
             courseData: {
               maxParticipants: 10,
@@ -193,7 +196,7 @@ describe('component: LicenseOrderDetails', () => {
     render(
       <Provider value={client as unknown as Client}>
         <CreateCourseProvider
-          courseType={CourseType.INDIRECT}
+          courseType={Course_Type_Enum.Indirect}
           initialValue={{
             courseData: {
               maxParticipants: 10,

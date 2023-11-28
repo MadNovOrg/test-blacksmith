@@ -22,6 +22,7 @@ import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Evaluation_Question_Type_Enum,
+  Course_Type_Enum,
   GetEvaluationsSummaryQuery,
   GetEvaluationsSummaryQueryVariables,
 } from '@app/generated/graphql'
@@ -31,7 +32,6 @@ import { GET_EVALUATIONS_SUMMARY_QUERY } from '@app/queries/course-evaluation/ge
 import {
   CourseEvaluationGroupedQuestion,
   CourseEvaluationQuestionGroup,
-  CourseType,
 } from '@app/types'
 
 const groups = [
@@ -178,11 +178,11 @@ export const EvaluationSummary = () => {
   //#TTHP-2016
   const isRestricted = useMemo(
     () =>
-      ((course?.type == CourseType.CLOSED ||
-        course?.type == CourseType.INDIRECT) &&
+      ((course?.type == Course_Type_Enum.Closed ||
+        course?.type == Course_Type_Enum.Indirect) &&
         acl.isOrgAdmin()) ||
-      (course?.type == CourseType.CLOSED && acl.isBookingContact()) ||
-      (course?.type == CourseType.INDIRECT && acl.isOrgKeyContact()),
+      (course?.type == Course_Type_Enum.Closed && acl.isBookingContact()) ||
+      (course?.type == Course_Type_Enum.Indirect && acl.isOrgKeyContact()),
     [acl, course]
   )
 

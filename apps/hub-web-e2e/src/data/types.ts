@@ -2,14 +2,10 @@ import {
   Course_Source_Enum,
   Course_Status_Enum,
   Course_Level_Enum,
+  Course_Type_Enum,
+  Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
-import {
-  CourseDeliveryType,
-  CourseTrainer,
-  CourseType,
-  PaymentMethod,
-  Venue,
-} from '@app/types'
+import { CourseTrainer, PaymentMethod, Venue } from '@app/types'
 
 import { Accreditors_Enum } from '@qa/generated/graphql'
 
@@ -39,8 +35,8 @@ export type Course = {
   description: string
   organization?: Organization
   level: Course_Level_Enum
-  deliveryType: CourseDeliveryType
-  type: CourseType
+  deliveryType: Course_Delivery_Type_Enum
+  type: Course_Type_Enum
   status: Course_Status_Enum
   reaccreditation: boolean
   schedule: CourseSchedule[]

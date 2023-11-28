@@ -1,5 +1,5 @@
+import { Course_Type_Enum } from '@app/generated/graphql'
 import {
-  CourseType,
   Draft,
   ExpensesInput,
   InvoiceDetails,
@@ -29,7 +29,7 @@ export type ContextValue = {
     amount?: number
     error?: boolean
   }
-  courseType: CourseType
+  courseType: Course_Type_Enum
   currentStepKey: StepsEnum | null
   draftName?: string | null
   expenses: Record<string, ExpensesInput>

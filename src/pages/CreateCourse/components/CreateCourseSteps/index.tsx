@@ -1,14 +1,13 @@
 import React, { useMemo } from 'react'
 
 import { StepsNavigation } from '@app/components/StepsNavigation'
+import { Course_Type_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { CourseType } from '@app/types'
-
-import { StepsEnum } from '../../types'
+import { StepsEnum } from '@app/pages/CreateCourse/types'
 
 interface Props {
   completedSteps: string[]
-  type: CourseType
+  type: Course_Type_Enum
   currentStepKey?: string
   blendedLearning?: boolean
 }
@@ -59,16 +58,16 @@ export const CreateCourseSteps: React.FC<React.PropsWithChildren<Props>> = ({
 
     const steps = [courseDetailsStep]
 
-    if (type !== CourseType.INDIRECT) {
+    if (type !== Course_Type_Enum.Indirect) {
       steps.push(assignTrainerStep)
     }
 
-    if (blendedLearning && type === CourseType.INDIRECT) {
+    if (blendedLearning && type === Course_Type_Enum.Indirect) {
       steps.push(licenseOrderDetailsStep)
       steps.push(reviewAndConfirmStep)
     }
 
-    if (type === CourseType.CLOSED) {
+    if (type === Course_Type_Enum.Closed) {
       steps.push(trainerExpensesStep)
       steps.push(orderDetailsStep)
       steps.push(reviewAndConfirmStep)

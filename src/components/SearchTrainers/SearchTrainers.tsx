@@ -20,12 +20,11 @@ import { useAuth } from '@app/context/auth'
 import {
   BildStrategy,
   Course_Level_Enum,
+  Course_Type_Enum,
   CourseTrainerType,
-  CourseType as CourseTypeEnum,
   SearchTrainer,
   SearchTrainerAvailability,
 } from '@app/generated/graphql'
-import { CourseType } from '@app/types'
 import { noop } from '@app/util'
 
 import { SearchTrainersSchedule } from './helpers'
@@ -36,7 +35,7 @@ type Props = {
   courseLevel: Course_Level_Enum
   courseSchedule: SearchTrainersSchedule
   bildStrategies?: BildStrategy[]
-  courseType: CourseType
+  courseType: Course_Type_Enum
   placeholder?: string
   max?: number
   maxReachedPlaceholder?: string
@@ -76,7 +75,7 @@ export function SearchTrainers({
     courseLevel,
     schedule: courseSchedule,
     bildStrategies,
-    courseType: courseType as unknown as CourseTypeEnum,
+    courseType,
   })
 
   const isControlled = value != null
@@ -120,19 +119,21 @@ export function SearchTrainers({
         <Avatar size={32} src={option.avatar ?? ''} name={option.fullName} />
         <Box>
           <Typography variant="body1">{option.fullName}</Typography>
-          {courseType === CourseType.INDIRECT &&
+          {courseType === Course_Type_Enum.Indirect &&
           !acl.isInternalUser() ? null : (
             <Typography variant="body2">{trainerRoles}</Typography>
           )}
         </Box>
 
-        {courseType === CourseType.INDIRECT && !acl.isInternalUser() ? null : (
+        {courseType === Course_Type_Enum.Indirect &&
+        !acl.isInternalUser() ? null : (
           <Typography sx={{ flex: 1 }} variant="body2">
             {option.email}
           </Typography>
         )}
 
-        {courseType === CourseType.INDIRECT && !acl.isInternalUser() ? null : (
+        {courseType === Course_Type_Enum.Indirect &&
+        !acl.isInternalUser() ? null : (
           <TrainerAvailabilityStatus
             availability={option.availability ?? undefined}
           />

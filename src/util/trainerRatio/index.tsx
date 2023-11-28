@@ -1,5 +1,10 @@
-import { Accreditors_Enum, Course_Level_Enum } from '@app/generated/graphql'
-import { BildStrategies, Course, CourseType, TrainerInput } from '@app/types'
+import {
+  Accreditors_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
+  Course,
+} from '@app/generated/graphql'
+import { BildStrategies, TrainerInput } from '@app/types'
 
 import {
   getRequiredAssistantsBild,
@@ -29,14 +34,14 @@ export type RatioTrainerData = Pick<
 >[]
 
 export function getRequiredAssistants(
-  courseData: RatioCourseData
+  courseData: RatioCourseData & { type: Course_Type_Enum }
 ): RequiredTrainers {
   if (courseData.accreditedBy === Accreditors_Enum.Icm) {
     return getRequiredAssistantsIcm({
       courseLevel: courseData.level,
       type: courseData.type,
       deliveryType: courseData.deliveryType,
-      reaccreditation: courseData.reaccreditation,
+      reaccreditation: courseData.reaccreditation ?? false,
       maxParticipants: courseData.max_participants,
       usesAOL: courseData.usesAOL ?? false,
       hasSeniorOrPrincipalLeader:
@@ -47,8 +52,8 @@ export function getRequiredAssistants(
 
     return getRequiredAssistantsBild({
       level: courseData.level,
-      isReaccreditation: courseData.reaccreditation,
-      isConversion: courseData.conversion,
+      isReaccreditation: courseData.reaccreditation ?? false,
+      isConversion: courseData.conversion ?? false,
       strategies: Object.keys(strategies).filter(
         strategy => strategies[strategy]
       ) as BildStrategies[],
@@ -62,13 +67,13 @@ export function getRequiredLeads(
   courseData: RatioCourseData
 ): RequiredTrainers {
   if (courseData.accreditedBy === Accreditors_Enum.Icm) {
-    return { min: courseData.type === CourseType.OPEN ? 0 : 1, max: 1 }
+    return { min: courseData.type === Course_Type_Enum.Open ? 0 : 1, max: 1 }
   } else if (courseData.accreditedBy === Accreditors_Enum.Bild) {
     const strategies = courseData.bildStrategies ?? {}
     return getRequiredLeadsBild({
       level: courseData.level,
-      isReaccreditation: courseData.reaccreditation,
-      isConversion: courseData.conversion,
+      isReaccreditation: courseData.reaccreditation ?? false,
+      isConversion: courseData.conversion ?? false,
       strategies: Object.keys(strategies).filter(
         strategy => strategies[strategy]
       ) as BildStrategies[],

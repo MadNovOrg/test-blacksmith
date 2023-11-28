@@ -1,8 +1,9 @@
-import React from 'react'
-
-import { Course_Level_Enum } from '@app/generated/graphql'
+import {
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
-import { CourseDeliveryType, CourseType } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
@@ -17,7 +18,7 @@ vi.mock('@app/hooks/useCoursePrice', () => ({
 const useCoursePriceMock = vi.mocked(useCoursePrice)
 
 describe('component: CourseForm - OPEN', () => {
-  const type = CourseType.OPEN
+  const type = Course_Type_Enum.Open
 
   beforeEach(() => {
     useCoursePriceMock.mockReturnValue({
@@ -70,7 +71,7 @@ describe('component: CourseForm - OPEN', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_1)
-    await selectDelivery(CourseDeliveryType.F2F)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeDisabled()
@@ -81,7 +82,7 @@ describe('component: CourseForm - OPEN', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_1)
-    await selectDelivery(CourseDeliveryType.VIRTUAL)
+    await selectDelivery(Course_Delivery_Type_Enum.Virtual)
 
     const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeDisabled()
@@ -92,7 +93,7 @@ describe('component: CourseForm - OPEN', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
-    await selectDelivery(CourseDeliveryType.F2F)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeDisabled()
@@ -109,7 +110,7 @@ describe('component: CourseForm - OPEN', () => {
     )
 
     await selectLevel(Course_Level_Enum.AdvancedTrainer)
-    await selectDelivery(CourseDeliveryType.F2F)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeDisabled()
@@ -121,7 +122,7 @@ describe('component: CourseForm - OPEN', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_1)
-    await selectDelivery(CourseDeliveryType.F2F)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const reacc = screen.getByLabelText('Reaccreditation')
     expect(reacc).toBeDisabled()
@@ -132,7 +133,7 @@ describe('component: CourseForm - OPEN', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.Level_1)
-    await selectDelivery(CourseDeliveryType.F2F)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const reacc = screen.getByLabelText('Reaccreditation')
     expect(reacc).toBeDisabled()
@@ -143,7 +144,7 @@ describe('component: CourseForm - OPEN', () => {
     await waitFor(() => renderForm(type))
 
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
-    await selectDelivery(CourseDeliveryType.F2F)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const reacc = screen.getByLabelText('Reaccreditation')
     expect(reacc).toBeEnabled()
@@ -163,7 +164,7 @@ describe('component: CourseForm - OPEN', () => {
     )
 
     await selectLevel(Course_Level_Enum.AdvancedTrainer)
-    await selectDelivery(CourseDeliveryType.F2F)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const reacc = screen.getByLabelText('Reaccreditation')
     expect(reacc).toBeEnabled()

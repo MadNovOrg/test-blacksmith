@@ -17,8 +17,12 @@ import { useNavigate } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { useAuth } from '@app/context/auth'
-import { PaymentMethod } from '@app/generated/graphql'
-import { CourseType } from '@app/types'
+import {
+  Course_Delivery_Type_Enum,
+  Course_Type_Enum,
+  PaymentMethod,
+  Venue,
+} from '@app/generated/graphql'
 import {
   formatCourseVenue,
   formatCurrency,
@@ -97,7 +101,7 @@ export const CourseBookingReview: React.FC<
           key: 'pages.book-course.user-already-registered',
           values: {
             emails,
-            courseCode: course.courseCode,
+            courseCode: course?.courseCode ?? '',
           },
         }
       }
@@ -151,24 +155,27 @@ export const CourseBookingReview: React.FC<
         <Box display="flex" justifyContent="space-between">
           <Box>
             <Typography gutterBottom fontWeight="600">
-              {course.name}
+              {course?.name ?? ''}
             </Typography>
             <Typography gutterBottom color="grey.700">
               {t('start')}:{' '}
               {t('dates.withTime', {
-                date: course.dates.aggregate.start.date,
+                date: course?.dates?.aggregate?.start?.date,
               })}
             </Typography>
             <Typography gutterBottom color="grey.700">
               {t('end')}:{' '}
               {t('dates.withTime', {
-                date: course.dates.aggregate.end.date,
+                date: course?.dates?.aggregate?.end?.date,
               })}
             </Typography>
 
             <Typography color="grey.700">
               {t('pages.book-course.venue')}:{' '}
-              {formatCourseVenue(course.deliveryType, course.schedule[0].venue)}
+              {formatCourseVenue(
+                course?.deliveryType as Course_Delivery_Type_Enum,
+                course?.schedule[0].venue as Venue
+              )}
             </Typography>
           </Box>
           <Stack alignItems="flex-end">
@@ -178,7 +185,7 @@ export const CourseBookingReview: React.FC<
             <Typography>{booking.quantity}</Typography>
           </Stack>
         </Box>
-        {acl.canInviteAttendees(CourseType.OPEN) && (
+        {acl.canInviteAttendees(Course_Type_Enum.Open) && (
           <>
             <Divider sx={{ my: 2 }} />
             <Typography gutterBottom fontWeight="600">
@@ -365,7 +372,7 @@ export const CourseBookingReview: React.FC<
           </Typography>
         </Box>
         <Typography color="grey.700">
-          {calculateDueDate(new Date(course.dates.aggregate.start.date))}
+          {calculateDueDate(new Date(course?.dates?.aggregate?.start?.date))}
         </Typography>
       </Box>
 

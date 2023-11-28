@@ -1,5 +1,5 @@
-import { Course_Level_Enum } from '@app/generated/graphql'
-import { BildStrategies, CourseType } from '@app/types'
+import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import { BildStrategies } from '@app/types'
 
 export type BildRatioCriteria = {
   isConversion: boolean
@@ -7,14 +7,16 @@ export type BildRatioCriteria = {
   strategies: BildStrategies[]
   level: Course_Level_Enum
   numberParticipants: number
-  type: CourseType
+  type: Course_Type_Enum
 }
 
 export function getRequiredLeadsBild(criteria: BildRatioCriteria): {
   min: number
   max: number
 } {
-  return criteria.type === CourseType.OPEN ? { min: 0, max: 1 } : toRange(1)
+  return criteria.type === Course_Type_Enum.Open
+    ? { min: 0, max: 1 }
+    : toRange(1)
 }
 
 export function getRequiredAssistantsBild(criteria: BildRatioCriteria): {

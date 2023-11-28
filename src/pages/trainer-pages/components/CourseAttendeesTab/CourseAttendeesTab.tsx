@@ -12,10 +12,11 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
+import { Course_Type_Enum } from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useWaitlist } from '@app/hooks/useWaitlist'
-import { Course, CourseType, InviteStatus } from '@app/types'
+import { Course, InviteStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { CourseInvites } from './CourseInvites'
@@ -62,7 +63,7 @@ export const CourseAttendeesTab: React.FC<
     sort: { by: 'createdAt', dir: 'asc' },
   })
 
-  const isOpenCourse = course?.type === CourseType.OPEN
+  const isOpenCourse = course?.type === Course_Type_Enum.Open
 
   const showErrorAlert = useCallback(() => {
     setShowCourseInformationAlert({ success: false })

@@ -25,10 +25,11 @@ import {
   SearchTrainer,
   SearchTrainerDetailsFragment,
   Course_Level_Enum,
+  Course_Type_Enum,
 } from '@app/generated/graphql'
 import { isModeratorMandatory, isModeratorNeeded } from '@app/rules/trainers'
 import { yup } from '@app/schemas'
-import { CourseTrainer, CourseType } from '@app/types'
+import { CourseTrainer } from '@app/types'
 import { RequiredTrainers } from '@app/util/trainerRatio/types'
 
 import { SearchTrainers } from '../SearchTrainers'
@@ -41,7 +42,7 @@ export type FormValues = {
 
 type Props = {
   trainers?: CourseTrainer[]
-  courseType: CourseType
+  courseType: Course_Type_Enum
   courseLevel: Course_Level_Enum
   bildStrategies?: BildStrategy[]
   courseSchedule: { start: Date; end: Date }

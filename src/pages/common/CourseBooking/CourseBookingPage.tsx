@@ -18,7 +18,7 @@ const BookingRoutes: React.FC<React.PropsWithChildren<unknown>> = () => {
     useBooking()
 
   if (
-    (course.accreditedBy === Accreditors_Enum.Bild && !internalBooking) ||
+    (course?.accreditedBy === Accreditors_Enum.Bild && !internalBooking) ||
     error
   ) {
     return <NotFound />
@@ -27,7 +27,7 @@ const BookingRoutes: React.FC<React.PropsWithChildren<unknown>> = () => {
   if (!isBooked && !availableSeats) {
     return (
       <BookingContainer>
-        <CourseFull courseId={course.id} />
+        <CourseFull courseId={course?.id || 0} />
       </BookingContainer>
     )
   }

@@ -1,6 +1,9 @@
 import { test as base } from '@playwright/test'
 
-import { CourseDeliveryType, CourseType } from '@app/types'
+import {
+  Course_Delivery_Type_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 
 import * as API from '@qa/api'
 import { UNIQUE_COURSE } from '@qa/data/courses'
@@ -15,7 +18,7 @@ const dataSet = [
     user: 'admin',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.organization = { name: 'London First School' }
       course.bookingContactProfile = users.userOrgAdmin
       course.freeSpaces = 1
@@ -28,12 +31,12 @@ const dataSet = [
     user: 'ops',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.organization = { name: 'London First School' }
       course.bookingContactProfile = users.userOrgAdmin
       course.reaccreditation = true
       course.freeSpaces = 1
-      course.deliveryType = CourseDeliveryType.MIXED
+      course.deliveryType = Course_Delivery_Type_Enum.Mixed
       course.salesRepresentative = users.salesAdmin
       return course
     })(),

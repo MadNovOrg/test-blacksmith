@@ -37,12 +37,7 @@ import {
   QUERY as GET_INVITE_QUERY,
   ResponseType as GetInviteResponseType,
 } from '@app/queries/invites/get-invite'
-import {
-  CourseDeliveryType,
-  GqlError,
-  InviteStatus,
-  TimeDifferenceAndContext,
-} from '@app/types'
+import { GqlError, InviteStatus, TimeDifferenceAndContext } from '@app/types'
 import {
   formatCourseVenueName,
   getTimeDifferenceAndContext,
@@ -80,6 +75,7 @@ export const InvitationPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
+  // TODO: migrate to useQuery from URQL
   const { data, error, mutate } = useSWR<GetInviteResponseType, GqlError>(
     token ? GET_INVITE_QUERY : null,
     (query, variables) =>
@@ -230,10 +226,7 @@ export const InvitationPage = () => {
             </Box>
             <Box>
               <Typography variant="body2" fontWeight="600">
-                {formatCourseVenueName(
-                  invite.deliveryType as unknown as CourseDeliveryType,
-                  invite.venueName
-                )}
+                {formatCourseVenueName(invite.deliveryType, invite.venueName)}
               </Typography>
               <Typography variant="body2">
                 {address?.addressLineOne || ''}

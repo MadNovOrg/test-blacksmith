@@ -1,5 +1,5 @@
-import { Course_Level_Enum } from '@app/generated/graphql'
-import { BildStrategies, CourseType } from '@app/types'
+import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import { BildStrategies } from '@app/types'
 
 import {
   BildRatioCriteria,
@@ -12,7 +12,7 @@ describe('Bild trainer ratios', () => {
   it("doesn't require a lead trainer if BILD open course", () => {
     expect(
       getRequiredLeadsBild({
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
         numberParticipants: 12,
         level: Course_Level_Enum.BildIntermediateTrainer,
         strategies: [],
@@ -29,7 +29,7 @@ describe('Bild trainer ratios', () => {
       level: Course_Level_Enum.BildIntermediateTrainer,
       isReaccreditation: false,
       strategies: [],
-      type: CourseType.CLOSED,
+      type: Course_Type_Enum.Closed,
     }
 
     expect(getRequiredLeadsBild(criteria)).toEqual(toRange(1))
@@ -51,7 +51,7 @@ describe('Bild trainer ratios', () => {
       level: Course_Level_Enum.BildIntermediateTrainer,
       isReaccreditation: false,
       strategies: [],
-      type: CourseType.CLOSED,
+      type: Course_Type_Enum.Closed,
     }
 
     expect(
@@ -104,7 +104,7 @@ describe('Bild trainer ratios', () => {
       level: Course_Level_Enum.BildIntermediateTrainer,
       isReaccreditation: true,
       strategies: [],
-      type: CourseType.CLOSED,
+      type: Course_Type_Enum.Closed,
     }
 
     expect(
@@ -157,7 +157,7 @@ describe('Bild trainer ratios', () => {
       level: Course_Level_Enum.BildAdvancedTrainer,
       isReaccreditation: true,
       strategies: [],
-      type: CourseType.CLOSED,
+      type: Course_Type_Enum.Closed,
     }
 
     expect(
@@ -228,7 +228,7 @@ describe('Bild trainer ratios', () => {
       level: Course_Level_Enum.BildRegular,
       isReaccreditation: false,
       strategies: [BildStrategies.Primary],
-      type: CourseType.CLOSED,
+      type: Course_Type_Enum.Closed,
     }
 
     expect(
@@ -280,7 +280,7 @@ describe('Bild trainer ratios', () => {
       numberParticipants: 25,
       level: Course_Level_Enum.BildRegular,
       isReaccreditation: false,
-      type: CourseType.INDIRECT,
+      type: Course_Type_Enum.Indirect,
       strategies: [
         BildStrategies.Primary,
         BildStrategies.Secondary,
@@ -338,7 +338,7 @@ describe('Bild trainer ratios', () => {
       numberParticipants: 25,
       level: Course_Level_Enum.BildRegular,
       isReaccreditation: false,
-      type: CourseType.INDIRECT,
+      type: Course_Type_Enum.Indirect,
       strategies: [BildStrategies.RestrictiveTertiaryAdvanced],
     }
 

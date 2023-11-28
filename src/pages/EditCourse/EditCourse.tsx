@@ -34,12 +34,14 @@ import {
   Accreditors_Enum,
   BildStrategy,
   Course_Audit_Type_Enum,
+  Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Status_Enum,
   Course_Type_Enum,
   GetCourseByIdQuery,
   InsertCourseAuditMutation,
   InsertCourseAuditMutationVariables,
+  UpdateCourseMutation,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
@@ -61,16 +63,13 @@ import {
   ResponseType as NotifyCourseEditResponseType,
 } from '@app/queries/courses/notify-course-edit'
 import {
-  ParamsType,
-  ResponseType,
+  ParamsType, // TODO: delete this and use generated type
   UPDATE_COURSE_MUTATION,
 } from '@app/queries/courses/update-course'
 import {
   BildStrategies,
-  CourseDeliveryType,
   CourseInput,
   CourseTrainerType,
-  CourseType,
   InviteStatus,
   RoleName,
   TrainerRoleTypeName,
@@ -141,7 +140,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const canGoToCourseBuilder =
     activeRole === RoleName.TRAINER &&
     course?.accreditedBy === Accreditors_Enum.Icm &&
-    course?.type === CourseType.INDIRECT
+    course?.type === Course_Type_Enum.Indirect
 
   const courseMethods = useRef<{
     trigger: UseFormTrigger<CourseInput>
@@ -156,7 +155,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { addSnackbarMessage } = useSnackbar()
 
   const [{ error: updatingError, fetching: updatingCourse }, updateCourse] =
-    useMutation<ResponseType, ParamsType>(UPDATE_COURSE_MUTATION)
+    useMutation<UpdateCourseMutation, ParamsType>(UPDATE_COURSE_MUTATION)
   const [{ error: auditError, fetching: insertingAudit }, insertAudit] =
     useMutation<InsertCourseAuditMutation, InsertCourseAuditMutationVariables>(
       INSERT_COURSE_AUDIT
@@ -306,13 +305,14 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           )
 
           const newVenueId =
-            [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(
-              courseData.deliveryType
-            ) && courseData.venue
+            [
+              Course_Delivery_Type_Enum.F2F,
+              Course_Delivery_Type_Enum.Mixed,
+            ].includes(courseData.deliveryType) && courseData.venue
               ? courseData.venue.id
               : null
           const newVirtualLink =
-            courseData.deliveryType === CourseDeliveryType.F2F
+            courseData.deliveryType === Course_Delivery_Type_Enum.F2F
               ? ''
               : courseData.zoomMeetingUrl
 
@@ -335,7 +335,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 ? { arloReferenceId: courseData.arloReferenceId || '' }
                 : null),
               status,
-              ...(courseData.type === CourseType.OPEN
+              ...(courseData.type === Course_Type_Enum.Open
                 ? { displayOnWebsite: courseData.displayOnWebsite }
                 : null),
               exceptionsPending:
@@ -409,7 +409,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             },
           })
 
-          if (editResponse.data?.updateCourse.id && courseDiffs.length) {
+          if (editResponse.data?.updateCourse?.id && courseDiffs.length) {
             const dateChanged = courseDiffs.find(d => d.type === 'date')
 
             if (!dateChanged) {
@@ -422,7 +422,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               newStartDate: courseData.startDateTime.toISOString(),
               newEndDate: courseData.endDateTime.toISOString(),
               reason: reviewInput?.reason ?? '',
-              ...(course.type === CourseType.CLOSED && reviewInput
+              ...(course.type === Course_Type_Enum.Closed && reviewInput
                 ? {
                     feeType: reviewInput.feeType,
                     customFee: reviewInput.customFee,
@@ -440,7 +440,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             })
           }
 
-          if (editResponse.data?.updateCourse.id) {
+          if (editResponse.data?.updateCourse?.id) {
             await notifyCourseEdit(
               {
                 courseId: course.id,
@@ -505,7 +505,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [autoapproved, saveChanges])
 
   const canEditAttendees =
-    course?.type === CourseType.INDIRECT &&
+    course?.type === Course_Type_Enum.Indirect &&
     !editAttendeesForbiddenStatuses.includes(course?.status)
 
   const disabledFields = useMemo(() => {
@@ -560,7 +560,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const canRescheduleCourseEndDate =
     activeRole === RoleName.TRAINER &&
-    course?.type === CourseType.INDIRECT &&
+    course?.type === Course_Type_Enum.Indirect &&
     courseStarted(course)
 
   const hasError = updatingError || auditError
@@ -592,7 +592,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     )
       return
 
-    if (courseData.type !== CourseType.OPEN && !acl.isTTAdmin()) {
+    if (courseData.type !== Course_Type_Enum.Open && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
         {
           ...courseData,
@@ -653,7 +653,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
         accreditedBy: courseData.accreditedBy ?? Accreditors_Enum.Icm,
         bildStrategies: courseData.bildStrategies ?? {},
         level: courseData.courseLevel as unknown as Course_Level_Enum,
-        type: courseData.type as unknown as CourseType,
+        type: courseData.type,
         max_participants: courseData.maxParticipants as unknown as number,
         hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
         usesAOL: courseData.usesAOL,
@@ -685,8 +685,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   ])
 
   const submitDisabled =
-    (courseData?.type === CourseType.CLOSED ||
-      courseData?.type === CourseType.INDIRECT) &&
+    (courseData?.type === Course_Type_Enum.Closed ||
+      courseData?.type === Course_Type_Enum.Indirect) &&
     !trainersData?.lead.length
 
   if (
@@ -833,7 +833,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                       variant="outlined"
                       onClick={() => {
                         if (
-                          course.type === CourseType.OPEN &&
+                          course.type === Course_Type_Enum.Open &&
                           participantsCount
                         ) {
                           setShowRegistrantsCancellationModal(true)
@@ -933,7 +933,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             onConfirm={reviewInput => {
               saveChanges(reviewInput)
             }}
-            withFees={course.type === CourseType.CLOSED}
+            withFees={course.type === Course_Type_Enum.Closed}
             alignedWithProtocol={
               canRescheduleCourseEndDate || Boolean(alignedWithProtocol)
             }

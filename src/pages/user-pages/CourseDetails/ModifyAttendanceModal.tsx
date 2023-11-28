@@ -21,10 +21,11 @@ import { LinkBehavior } from '@app/components/LinkBehavior'
 import {
   CancelMyselfFromCourseMutation,
   CancelMyselfFromCourseMutationVariables,
+  Course_Type_Enum,
 } from '@app/generated/graphql'
 import { CancelAttendanceForm } from '@app/pages/user-pages/CourseDetails/CancelAttendanceForm'
 import { CANCEL_MYSELF_FROM_COURSE_MUTATION } from '@app/queries/courses/cancel-myself-from-course'
-import { Course, CourseType } from '@app/types'
+import { Course } from '@app/types'
 
 import { ParticipantTransferInfo } from './ParticipantTransferInfo'
 
@@ -182,7 +183,7 @@ export const ModifyAttendanceModal: React.FC<
             <LoadingButton
               loading={fetching}
               disabled={
-                course.type === CourseType.OPEN &&
+                course.type === Course_Type_Enum.Open &&
                 !courseAction.agreeCancellation
               }
               onClick={onCancelCourseSubmit}

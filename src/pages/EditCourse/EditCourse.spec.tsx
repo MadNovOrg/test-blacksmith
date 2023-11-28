@@ -3,10 +3,14 @@ import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
 import { VenueSelector } from '@app/components/VenueSelector'
-import { Accreditors_Enum, Course_Level_Enum } from '@app/generated/graphql'
+import {
+  Accreditors_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
-import { BildStrategies, CourseType, RoleName } from '@app/types'
+import { BildStrategies, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, screen, waitFor } from '@test/index'
@@ -111,7 +115,7 @@ describe(EditCourse.name, () => {
   it("doesn't allow trainer to edit open course", () => {
     const openCourse = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
       },
     })
 
@@ -141,7 +145,7 @@ describe(EditCourse.name, () => {
   it("doesn't allow attendee user to edit open course", () => {
     const openCourse = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
       },
     })
 
@@ -171,7 +175,7 @@ describe(EditCourse.name, () => {
   it("doesn't allow trainer to edit closed course", () => {
     const openCourse = buildCourse({
       overrides: {
-        type: CourseType.CLOSED,
+        type: Course_Type_Enum.Closed,
       },
     })
 
@@ -201,7 +205,7 @@ describe(EditCourse.name, () => {
   it("doesn't allow attendee user to edit closed course", () => {
     const openCourse = buildCourse({
       overrides: {
-        type: CourseType.CLOSED,
+        type: Course_Type_Enum.Closed,
       },
     })
 
@@ -231,7 +235,7 @@ describe(EditCourse.name, () => {
   it("doesn't allow Sales admin role to edit indirect course", () => {
     const openCourse = buildCourse({
       overrides: {
-        type: CourseType.INDIRECT,
+        type: Course_Type_Enum.Indirect,
       },
     })
 
@@ -261,7 +265,7 @@ describe(EditCourse.name, () => {
   it("doesn't allow attendee user to edit indirect course", () => {
     const openCourse = buildCourse({
       overrides: {
-        type: CourseType.INDIRECT,
+        type: Course_Type_Enum.Indirect,
       },
     })
 
@@ -292,7 +296,7 @@ describe(EditCourse.name, () => {
     const openCourse = buildCourse({
       overrides: {
         accreditedBy: Accreditors_Enum.Bild,
-        type: CourseType.CLOSED,
+        type: Course_Type_Enum.Closed,
         bildStrategies: [
           { strategyName: BildStrategies.Primary },
           { strategyName: BildStrategies.Secondary },
@@ -357,7 +361,7 @@ describe(EditCourse.name, () => {
     const closedCourse = buildCourse({
       overrides: {
         accreditedBy: Accreditors_Enum.Icm,
-        type: CourseType.CLOSED,
+        type: Course_Type_Enum.Closed,
         level: Course_Level_Enum.Level_1,
         go1Integration: true,
         reaccreditation: false,
@@ -400,7 +404,7 @@ describe(EditCourse.name, () => {
     const openCourse = buildCourse({
       overrides: {
         accreditedBy: Accreditors_Enum.Bild,
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
         level: Course_Level_Enum.BildIntermediateTrainer,
         go1Integration: false,
         reaccreditation: false,

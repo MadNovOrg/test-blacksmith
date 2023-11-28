@@ -33,8 +33,12 @@ import {
   IndividualCourseStatusChip,
 } from '@app/components/IndividualCourseStatus'
 import { useAuth } from '@app/context/auth'
-import { Course_Status_Enum } from '@app/generated/graphql'
-import { AdminOnlyCourseStatus, Course, CourseDeliveryType } from '@app/types'
+import {
+  Course_Delivery_Type_Enum,
+  Course_Status_Enum,
+  Venue,
+} from '@app/generated/graphql'
+import { AdminOnlyCourseStatus, Course } from '@app/types'
 import {
   getCourseBeginsForMessage,
   formatCourseVenue,
@@ -351,7 +355,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 <ListItemText data-testid="course-venue">
                   {formatCourseVenue(
                     course.deliveryType,
-                    course.schedule[0].venue
+                    course.schedule[0].venue as Venue
                   )}
                 </ListItemText>
               </ListItem>
@@ -396,7 +400,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
           specialInstructions={course.special_instructions}
           parkingInstructions={course.parking_instructions}
           showParkingInstructions={
-            course.deliveryType !== CourseDeliveryType.VIRTUAL
+            course.deliveryType !== Course_Delivery_Type_Enum.Virtual
           }
         />
       ) : null}

@@ -25,7 +25,9 @@ import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   BildStrategy,
+  Course_Delivery_Type_Enum,
   Course_Level_Enum,
+  Course_Type_Enum,
   CourseTrainerType,
   SearchTrainer,
 } from '@app/generated/graphql'
@@ -37,9 +39,7 @@ import {
   isTrainersRatioNotMet,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
-  CourseDeliveryType,
   CourseInput,
-  CourseType,
   InviteStatus,
   TrainerInput,
   TrainerRoleTypeName,
@@ -104,7 +104,7 @@ export const CreateCourseForm = () => {
   }>(null)
 
   useEffect(() => {
-    if (courseType === CourseType.INDIRECT && profile && certifications) {
+    if (courseType === Course_Type_Enum.Indirect && profile && certifications) {
       setTrainers([
         {
           profile_id: profile.id,
@@ -139,7 +139,7 @@ export const CreateCourseForm = () => {
   }, [profile])
 
   const nextStepEnabled = useMemo(() => {
-    if (courseType !== CourseType.INDIRECT) {
+    if (courseType !== Course_Type_Enum.Indirect) {
       return courseDataValid
     }
 
@@ -157,10 +157,13 @@ export const CreateCourseForm = () => {
   const submit = useCallback(async () => {
     if (!courseData || !profile) return
 
-    if (courseData.blendedLearning && courseData.type === CourseType.INDIRECT) {
+    if (
+      courseData.blendedLearning &&
+      courseData.type === Course_Type_Enum.Indirect
+    ) {
       completeStep(StepsEnum.COURSE_DETAILS)
       navigate('./license-order-details')
-    } else if (courseType === CourseType.INDIRECT) {
+    } else if (courseType === Course_Type_Enum.Indirect) {
       const savedCourse = await saveCourse()
 
       if (savedCourse?.id) {
@@ -198,7 +201,7 @@ export const CreateCourseForm = () => {
     if (!courseData || !profile || !nextStepEnabled) return
     assertCourseDataValid(courseData, courseDataValid)
 
-    if (courseType === CourseType.INDIRECT && !acl.isTTAdmin()) {
+    if (courseType === Course_Type_Enum.Indirect && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
         {
           ...courseData,
@@ -243,7 +246,7 @@ export const CreateCourseForm = () => {
         const newData = {
           ...data,
           venue:
-            data.deliveryType === CourseDeliveryType.VIRTUAL
+            data.deliveryType === Course_Delivery_Type_Enum.Virtual
               ? null
               : data.venue,
         }
@@ -256,9 +259,9 @@ export const CreateCourseForm = () => {
   )
 
   const nextStepButtonLabel =
-    courseData?.blendedLearning && courseData.type === CourseType.INDIRECT
+    courseData?.blendedLearning && courseData.type === Course_Type_Enum.Indirect
       ? 'order-details-button-text'
-      : courseType === CourseType.INDIRECT
+      : courseType === Course_Type_Enum.Indirect
       ? 'course-builder-button-text'
       : 'select-trainers-button-text'
 
@@ -297,7 +300,7 @@ export const CreateCourseForm = () => {
         methodsRef={methods}
       />
 
-      {courseType === CourseType.INDIRECT ? (
+      {courseType === Course_Type_Enum.Indirect ? (
         <>
           <Typography mt={2} mb={2} variant="h5" fontWeight={500}>
             {t('pages.create-course.assign-trainers-title')}
@@ -432,7 +435,7 @@ export const CreateCourseForm = () => {
         justifyContent="flex-end"
         sx={{ marginTop: 4 }}
       >
-        {acl.isTrainer() && courseData?.type === CourseType.INDIRECT && (
+        {acl.isTrainer() && courseData?.type === Course_Type_Enum.Indirect && (
           <Button
             variant="text"
             sx={{ marginRight: 4 }}
@@ -453,7 +456,7 @@ export const CreateCourseForm = () => {
         </LoadingButton>
       </Box>
 
-      {isBild && courseData.type === CourseType.INDIRECT ? (
+      {isBild && courseData.type === Course_Type_Enum.Indirect ? (
         <NoExceptionsDialog
           open={courseExceptions.length > 0}
           onClose={() => setCourseExceptions([])}

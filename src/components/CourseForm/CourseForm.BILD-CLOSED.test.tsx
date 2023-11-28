@@ -1,8 +1,6 @@
-import React from 'react'
-
-import { Course_Level_Enum } from '@app/generated/graphql'
+import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
-import { CourseType, RoleName } from '@app/types'
+import { RoleName } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
@@ -36,7 +34,7 @@ describe('CourseForm - closed BILD', () => {
   ;[RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].forEach(role => {
     it(`allows ${role} user to select BILD in the dropdown`, async () => {
       await waitFor(() => {
-        render(<CourseForm type={CourseType.CLOSED} />, {
+        render(<CourseForm type={Course_Type_Enum.Closed} />, {
           auth: { activeRole: role },
         })
       })
@@ -47,7 +45,7 @@ describe('CourseForm - closed BILD', () => {
 
   it('displays all BILD course levels in the dropdown', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -75,7 +73,7 @@ describe('CourseForm - closed BILD', () => {
 
   it('preselects and disables all strategies except Advanced for BILD Intermediate Trainer', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -111,7 +109,7 @@ describe('CourseForm - closed BILD', () => {
 
   it('preselects and disables all strategies for BILD Advanced Trainer', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -147,7 +145,7 @@ describe('CourseForm - closed BILD', () => {
 
   it('enables a conversion course toggle if BILD Intermediate or BILD Advanced Trainer level is selected', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -167,7 +165,7 @@ describe('CourseForm - closed BILD', () => {
 
   it('disables reaccreditation toggle if the conversion course is toggled', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -185,7 +183,7 @@ describe('CourseForm - closed BILD', () => {
 
   it('disables the conversion course toggle if the reaccreditation toggle is selected', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -203,7 +201,7 @@ describe('CourseForm - closed BILD', () => {
 
   it('disables virtual and mixed delivery type for BILD Certified level', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -217,7 +215,7 @@ describe('CourseForm - closed BILD', () => {
 
   it('enables virtual delivery type for BILD Certified if only Primary strategy is selected', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -233,7 +231,7 @@ describe('CourseForm - closed BILD', () => {
 
   it('disables mixed delivery type for BILD Advanced Trainer level', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -248,7 +246,7 @@ describe('CourseForm - closed BILD', () => {
 
   it('disables virtual delivery type for BILD Intermediate level', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -263,7 +261,7 @@ describe('CourseForm - closed BILD', () => {
 
   it('toggles blended learning flag', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -279,7 +277,7 @@ describe('CourseForm - closed BILD', () => {
 
   it('displays price field', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -291,7 +289,7 @@ describe('CourseForm - closed BILD', () => {
 
   it("doesn't display a conversion toggle if a Bild Certified level is selected", async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })

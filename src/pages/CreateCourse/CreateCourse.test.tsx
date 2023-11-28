@@ -3,8 +3,9 @@ import { Routes, Route } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
+import { Course_Type_Enum } from '@app/generated/graphql'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
-import { CourseType, RoleName } from '@app/types'
+import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, within, screen } from '@test/index'
@@ -135,7 +136,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/courses/new?type=${CourseType.OPEN}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Open}`] }
     )
 
     expect(screen.getByText('Open course creation')).toBeInTheDocument()
@@ -155,7 +156,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/courses/new?type=${CourseType.CLOSED}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Closed}`] }
     )
 
     expect(screen.getByText('Closed course creation')).toBeInTheDocument()
@@ -175,7 +176,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/courses/new?type=${CourseType.INDIRECT}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] }
     )
 
     expect(screen.getByText('Course creation')).toBeInTheDocument()
@@ -195,7 +196,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/courses/new?type=${CourseType.INDIRECT}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] }
     )
 
     const nav = screen.getByTestId('create-course-nav')
@@ -217,7 +218,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TT_OPS,
         },
       },
-      { initialEntries: [`/courses/new?type=${CourseType.INDIRECT}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] }
     )
 
     const nav = screen.getByTestId('create-course-nav')
@@ -239,7 +240,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TRAINER,
         },
       },
-      { initialEntries: [`/courses/new?type=${CourseType.OPEN}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Open}`] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -259,7 +260,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.USER,
         },
       },
-      { initialEntries: [`/courses/new?type=${CourseType.OPEN}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Open}`] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -279,7 +280,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TRAINER,
         },
       },
-      { initialEntries: [`/courses/new?type=${CourseType.CLOSED}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Closed}`] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -299,7 +300,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.USER,
         },
       },
-      { initialEntries: [`/courses/new?type=${CourseType.CLOSED}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Closed}`] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -319,7 +320,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.SALES_ADMIN,
         },
       },
-      { initialEntries: [`/courses/new?type=${CourseType.INDIRECT}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -339,7 +340,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.USER,
         },
       },
-      { initialEntries: [`/courses/new?type=${CourseType.INDIRECT}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()

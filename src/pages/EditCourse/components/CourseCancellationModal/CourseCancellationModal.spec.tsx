@@ -4,7 +4,6 @@ import {
   Course_Cancellation_Fee_Type_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { CourseType } from '@app/types'
 
 import { render, renderHook, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
@@ -21,7 +20,7 @@ describe(CourseCancellationModal.name, () => {
   const setup = (courseType?: Course_Type_Enum) => {
     const courseMock = buildCourse({
       overrides: {
-        type: courseType as unknown as CourseType, // buildCourse uses @app/types 😢 hence the type casting as I'm trying to not use types from @app/types unles strictly necessary
+        type: courseType, // buildCourse uses @app/types 😢 hence the type casting as I'm trying to not use types from @app/types unles strictly necessary
       },
     })
     render(<CourseCancellationModal course={courseMock} onClose={onClose} />)

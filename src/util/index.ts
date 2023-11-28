@@ -25,6 +25,7 @@ import {
   Xero_Invoice_Status_Enum,
   Course_Trainer,
   Course_Trainer_Type_Enum,
+  Course_Type_Enum,
 } from '@app/generated/graphql'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import {
@@ -38,7 +39,6 @@ import {
   CourseInput,
   CourseParticipant,
   CourseTrainerType,
-  CourseType,
   NonNullish,
   Organization,
   SearchTrainer,
@@ -253,9 +253,9 @@ export const generateBildCourseName = (
 }
 
 export const COURSE_TYPE_TO_PREFIX = {
-  [CourseType.OPEN]: 'OP',
-  [CourseType.CLOSED]: 'CL',
-  [CourseType.INDIRECT]: 'INDR',
+  [Course_Type_Enum.Open]: 'OP',
+  [Course_Type_Enum.Closed]: 'CL',
+  [Course_Type_Enum.Indirect]: 'INDR',
 }
 
 export const requiredMsg = (t: TFunction, name: string) => {

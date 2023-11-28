@@ -3,9 +3,10 @@
 import {
   Accreditors_Enum,
   Course_Level_Enum,
+  Course_Type_Enum,
   Grade_Enum,
 } from '@app/generated/graphql'
-import { CourseTrainerType, CourseType, RoleName } from '@app/types'
+import { CourseTrainerType, RoleName } from '@app/types'
 import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 
 import {
@@ -819,20 +820,20 @@ describe(getACL.name, () => {
       })
 
       // Act & Assert
-      expect(acl.canViewEmailContacts(CourseType.INDIRECT)).toBeTruthy()
+      expect(acl.canViewEmailContacts(Course_Type_Enum.Indirect)).toBeTruthy()
     })
 
-    it(`should return true when the courseType is ${CourseType.INDIRECT}`, () => {
+    it(`should return true when the courseType is ${Course_Type_Enum.Indirect}`, () => {
       // Arrange
       const acl = getACLStub({
         activeRole: RoleName.TRAINER,
       })
 
       // Act & Assert
-      expect(acl.canViewEmailContacts(CourseType.INDIRECT)).toBeTruthy()
+      expect(acl.canViewEmailContacts(Course_Type_Enum.Indirect)).toBeTruthy()
     })
 
-    it.each([[CourseType.OPEN], [CourseType.CLOSED]])(
+    it.each([[Course_Type_Enum.Open], [Course_Type_Enum.Closed]])(
       `should return false when the courseType is %s`,
       courseType => {
         // Arrange
@@ -847,7 +848,7 @@ describe(getACL.name, () => {
   })
 
   describe('canInviteAttendees()', () => {
-    describe(`when courseType is ${CourseType.OPEN}`, () => {
+    describe(`when courseType is ${Course_Type_Enum.Open}`, () => {
       it.each([
         [RoleName.TT_ADMIN],
         [RoleName.TT_OPS],
@@ -860,7 +861,7 @@ describe(getACL.name, () => {
         })
 
         // Act & Assert
-        expect(acl.canInviteAttendees(CourseType.OPEN)).toBeTruthy()
+        expect(acl.canInviteAttendees(Course_Type_Enum.Open)).toBeTruthy()
       })
 
       it(`should return true when the the user is an org admin`, () => {
@@ -871,7 +872,7 @@ describe(getACL.name, () => {
         })
 
         // Act & Assert
-        expect(acl.canInviteAttendees(CourseType.OPEN)).toBeTruthy()
+        expect(acl.canInviteAttendees(Course_Type_Enum.Open)).toBeTruthy()
       })
 
       it(`should return false when the activeRole is just a user and not an org admin`, () => {
@@ -881,11 +882,11 @@ describe(getACL.name, () => {
         })
 
         // Act & Assert
-        expect(acl.canInviteAttendees(CourseType.OPEN)).toBeFalsy()
+        expect(acl.canInviteAttendees(Course_Type_Enum.Open)).toBeFalsy()
       })
     })
 
-    describe(`when courseType is ${CourseType.CLOSED}`, () => {
+    describe(`when courseType is ${Course_Type_Enum.Closed}`, () => {
       it.each([
         [RoleName.TT_ADMIN],
         [RoleName.TT_OPS],
@@ -898,7 +899,7 @@ describe(getACL.name, () => {
         })
 
         // Act & Assert
-        expect(acl.canInviteAttendees(CourseType.CLOSED)).toBeTruthy()
+        expect(acl.canInviteAttendees(Course_Type_Enum.Closed)).toBeTruthy()
       })
 
       it(`should return true when the the user is an org admin`, () => {
@@ -909,7 +910,7 @@ describe(getACL.name, () => {
         })
 
         // Act & Assert
-        expect(acl.canInviteAttendees(CourseType.CLOSED)).toBeTruthy()
+        expect(acl.canInviteAttendees(Course_Type_Enum.Closed)).toBeTruthy()
       })
 
       it(`should return false when the activeRole is just a user and not an org admin`, () => {
@@ -919,11 +920,11 @@ describe(getACL.name, () => {
         })
 
         // Act & Assert
-        expect(acl.canInviteAttendees(CourseType.CLOSED)).toBeFalsy()
+        expect(acl.canInviteAttendees(Course_Type_Enum.Closed)).toBeFalsy()
       })
     })
 
-    describe(`when courseType is ${CourseType.INDIRECT}`, () => {
+    describe(`when courseType is ${Course_Type_Enum.Indirect}`, () => {
       it.each([
         [RoleName.TT_ADMIN],
         [RoleName.TT_OPS],
@@ -936,7 +937,7 @@ describe(getACL.name, () => {
         })
 
         // Act & Assert
-        expect(acl.canInviteAttendees(CourseType.INDIRECT)).toBeTruthy()
+        expect(acl.canInviteAttendees(Course_Type_Enum.Indirect)).toBeTruthy()
       })
 
       it(`should return true when the the user is an org admin`, () => {
@@ -947,7 +948,7 @@ describe(getACL.name, () => {
         })
 
         // Act & Assert
-        expect(acl.canInviteAttendees(CourseType.INDIRECT)).toBeTruthy()
+        expect(acl.canInviteAttendees(Course_Type_Enum.Indirect)).toBeTruthy()
       })
 
       it(`should return false when the activeRole is just a user and not an org admin`, () => {
@@ -957,7 +958,7 @@ describe(getACL.name, () => {
         })
 
         // Act & Assert
-        expect(acl.canInviteAttendees(CourseType.INDIRECT)).toBeFalsy()
+        expect(acl.canInviteAttendees(Course_Type_Enum.Indirect)).toBeFalsy()
       })
     })
   })
@@ -1200,11 +1201,11 @@ describe(getACL.name, () => {
         })
 
         // Act & Assert
-        expect(acl.canCreateCourse(CourseType.CLOSED)).toBeTruthy()
+        expect(acl.canCreateCourse(Course_Type_Enum.Closed)).toBeTruthy()
       }
     )
 
-    it.each([[CourseType.CLOSED], [CourseType.OPEN]])(
+    it.each([[Course_Type_Enum.Closed], [Course_Type_Enum.Open]])(
       `should return true when activeRole is ${RoleName.SALES_ADMIN} and the courseType is %s`,
       courseType => {
         // Arrange
@@ -1217,7 +1218,7 @@ describe(getACL.name, () => {
       }
     )
 
-    it(`should return true when the activeRole is ${RoleName.TRAINER} and the course type is ${CourseType.INDIRECT}`, () => {
+    it(`should return true when the activeRole is ${RoleName.TRAINER} and the course type is ${Course_Type_Enum.Indirect}`, () => {
       // Arrange
       const acl = getACLStub({
         activeRole: RoleName.TRAINER,
@@ -1225,7 +1226,7 @@ describe(getACL.name, () => {
       })
 
       // Act & Assert
-      expect(acl.canCreateCourse(CourseType.INDIRECT)).toBeTruthy()
+      expect(acl.canCreateCourse(Course_Type_Enum.Indirect)).toBeTruthy()
     })
 
     it.each([
@@ -1240,7 +1241,7 @@ describe(getACL.name, () => {
       })
 
       // Act & Assert
-      expect(acl.canCreateCourse(CourseType.CLOSED)).toBeFalsy()
+      expect(acl.canCreateCourse(Course_Type_Enum.Closed)).toBeFalsy()
     })
   })
 
@@ -1251,7 +1252,7 @@ describe(getACL.name, () => {
         // Arrange
         const course = buildCourse({
           overrides: {
-            type: CourseType.CLOSED,
+            type: Course_Type_Enum.Closed,
           },
         })
         const acl = getACLStub({
@@ -1263,7 +1264,7 @@ describe(getACL.name, () => {
       }
     )
 
-    it.each([[CourseType.CLOSED], [CourseType.OPEN]])(
+    it.each([[Course_Type_Enum.Closed], [Course_Type_Enum.Open]])(
       `should return true when activeRole is ${RoleName.SALES_ADMIN} and the courseType is %s`,
       courseType => {
         // Arrange
@@ -1281,7 +1282,7 @@ describe(getACL.name, () => {
       }
     )
 
-    it(`should return true when the activeRole is ${RoleName.TRAINER}, course type is ${CourseType.INDIRECT} and active user is leader on a course`, () => {
+    it(`should return true when the activeRole is ${RoleName.TRAINER}, course type is ${Course_Type_Enum.Indirect} and active user is leader on a course`, () => {
       // Arrange
       const profile = buildProfile()
       const profileId = '100'
@@ -1300,7 +1301,7 @@ describe(getACL.name, () => {
               }),
             }),
           ],
-          type: CourseType.INDIRECT,
+          type: Course_Type_Enum.Indirect,
         }),
       })
       const acl = getACLStub({
@@ -1324,7 +1325,7 @@ describe(getACL.name, () => {
       })
 
       // Act & Assert
-      expect(acl.canCreateCourse(CourseType.CLOSED)).toBeFalsy()
+      expect(acl.canCreateCourse(Course_Type_Enum.Closed)).toBeFalsy()
     })
   })
 
@@ -1733,7 +1734,9 @@ describe(getACL.name, () => {
       })
 
       // Act & Assert
-      expect(acl.canEditWithoutRestrictions(CourseType.INDIRECT)).toBeFalsy()
+      expect(
+        acl.canEditWithoutRestrictions(Course_Type_Enum.Indirect)
+      ).toBeFalsy()
     })
 
     it(`should return true when the activeRole is ${RoleName.TT_ADMIN}`, () => {
@@ -1743,31 +1746,37 @@ describe(getACL.name, () => {
       })
 
       // Act & Assert
-      expect(acl.canEditWithoutRestrictions(CourseType.INDIRECT)).toBeFalsy()
+      expect(
+        acl.canEditWithoutRestrictions(Course_Type_Enum.Indirect)
+      ).toBeFalsy()
     })
 
-    it(`should return false when courseType is ${CourseType.INDIRECT}`, () => {
+    it(`should return false when courseType is ${Course_Type_Enum.Indirect}`, () => {
       // Arrange
       const acl = getACLStub({
         activeRole: undefined,
       })
 
       // Act & Assert
-      expect(acl.canEditWithoutRestrictions(CourseType.INDIRECT)).toBeFalsy()
+      expect(
+        acl.canEditWithoutRestrictions(Course_Type_Enum.Indirect)
+      ).toBeFalsy()
     })
 
-    it(`should return true when courseType is ${CourseType.CLOSED} and the active role is ${RoleName.TT_OPS}`, () => {
+    it(`should return true when courseType is ${Course_Type_Enum.Closed} and the active role is ${RoleName.TT_OPS}`, () => {
       // Arrange
       const acl = getACLStub({
         activeRole: RoleName.TT_OPS,
       })
 
       // Act & Assert
-      expect(acl.canEditWithoutRestrictions(CourseType.INDIRECT)).toBeFalsy()
+      expect(
+        acl.canEditWithoutRestrictions(Course_Type_Enum.Indirect)
+      ).toBeFalsy()
     })
 
     it.each([[RoleName.TT_OPS], [RoleName.SALES_ADMIN]])(
-      `should return true when the courseType is ${CourseType.OPEN} and the activeRole is %s`,
+      `should return true when the courseType is ${Course_Type_Enum.Open} and the activeRole is %s`,
       activeRole => {
         // Arrange
         const acl = getACLStub({
@@ -1775,7 +1784,9 @@ describe(getACL.name, () => {
         })
 
         // Act & Assert
-        expect(acl.canEditWithoutRestrictions(CourseType.OPEN)).toBeTruthy()
+        expect(
+          acl.canEditWithoutRestrictions(Course_Type_Enum.Open)
+        ).toBeTruthy()
       }
     )
   })
@@ -2052,7 +2063,7 @@ describe(getACL.name, () => {
       const managedOrgIds = '123'
       const course = buildCourse({
         overrides: {
-          type: CourseType.OPEN,
+          type: Course_Type_Enum.Open,
         },
       })
       const acl = getACLStub({
@@ -2087,7 +2098,7 @@ describe(getACL.name, () => {
       // Arrange
       const course = buildCourse({
         overrides: {
-          type: CourseType.OPEN,
+          type: Course_Type_Enum.Open,
           accreditedBy: Accreditors_Enum.Bild,
         },
       })
@@ -2103,7 +2114,7 @@ describe(getACL.name, () => {
       // Arrange
       const course = buildCourse({
         overrides: {
-          type: CourseType.OPEN,
+          type: Course_Type_Enum.Open,
           accreditedBy: Accreditors_Enum.Icm,
         },
       })
@@ -2122,7 +2133,7 @@ describe(getACL.name, () => {
       // Arrange
       const course = buildCourse({
         overrides: {
-          type: CourseType.OPEN,
+          type: Course_Type_Enum.Open,
           accreditedBy: Accreditors_Enum.Bild,
         },
       })
@@ -2142,7 +2153,7 @@ describe(getACL.name, () => {
         // Arrange
         const course = buildCourse({
           overrides: {
-            type: CourseType.CLOSED,
+            type: Course_Type_Enum.Closed,
             accreditedBy: Accreditors_Enum.Bild,
           },
         })
@@ -2221,7 +2232,7 @@ describe(getACL.name, () => {
       const course = buildCourse({
         overrides: {
           accreditedBy: Accreditors_Enum.Icm,
-          type: CourseType.OPEN,
+          type: Course_Type_Enum.Open,
         },
       })
       const managedOrgIds = '123'
@@ -2249,7 +2260,7 @@ describe(getACL.name, () => {
       const course = buildCourse({
         overrides: {
           accreditedBy: Accreditors_Enum.Icm,
-          type: CourseType.CLOSED,
+          type: Course_Type_Enum.Closed,
         },
       })
       const managedOrgIds = '123'
@@ -2286,7 +2297,7 @@ describe(getACL.name, () => {
       const course = buildCourse({
         overrides: {
           accreditedBy: Accreditors_Enum.Icm,
-          type: CourseType.CLOSED,
+          type: Course_Type_Enum.Closed,
         },
       })
       const managedOrgIds = '123'
@@ -2332,7 +2343,7 @@ describe(getACL.name, () => {
       const course = buildCourse({
         overrides: {
           accreditedBy: Accreditors_Enum.Icm,
-          type: CourseType.INDIRECT,
+          type: Course_Type_Enum.Indirect,
           organizationKeyContact: profile,
         },
       })
@@ -2355,7 +2366,7 @@ describe(getACL.name, () => {
       const course = buildCourse({
         overrides: {
           accreditedBy: Accreditors_Enum.Icm,
-          type: CourseType.CLOSED,
+          type: Course_Type_Enum.Closed,
         },
       })
       const managedOrgIds = '123'
@@ -2534,10 +2545,10 @@ describe(getACL.name, () => {
       })
 
       // Act & Assert
-      expect(acl.canCreateBildCourse(CourseType.CLOSED)).toBeFalsy()
+      expect(acl.canCreateBildCourse(Course_Type_Enum.Closed)).toBeFalsy()
     })
 
-    describe(`when the courseType is ${CourseType.INDIRECT}`, () => {
+    describe(`when the courseType is ${Course_Type_Enum.Indirect}`, () => {
       it(`should return true when the ${RoleName.TRAINER}
          has ${Course_Level_Enum.BildIntermediateTrainer} or ${Course_Level_Enum.BildAdvancedTrainer} certificates`, () => {
         // Arrange
@@ -2550,7 +2561,7 @@ describe(getACL.name, () => {
         })
 
         // Act & Assert
-        expect(acl.canCreateBildCourse(CourseType.CLOSED)).toBeTruthy()
+        expect(acl.canCreateBildCourse(Course_Type_Enum.Closed)).toBeTruthy()
       })
 
       it.each([[RoleName.TT_ADMIN], [RoleName.TT_OPS]])(
@@ -2562,12 +2573,12 @@ describe(getACL.name, () => {
           })
 
           // Act & Assert
-          expect(acl.canCreateBildCourse(CourseType.CLOSED)).toBeTruthy()
+          expect(acl.canCreateBildCourse(Course_Type_Enum.Closed)).toBeTruthy()
         }
       )
     })
 
-    describe.each([[CourseType.OPEN], [CourseType.CLOSED]])(
+    describe.each([[Course_Type_Enum.Open], [Course_Type_Enum.Closed]])(
       `when the courseType is %s`,
       () => {
         it.each([
@@ -2592,7 +2603,7 @@ describe(getACL.name, () => {
           })
 
           // Act & Assert
-          expect(acl.canCreateBildCourse(CourseType.CLOSED)).toBeTruthy()
+          expect(acl.canCreateBildCourse(Course_Type_Enum.Closed)).toBeTruthy()
         })
       }
     )
@@ -2672,7 +2683,7 @@ describe(getACL.name, () => {
         const course = buildCourse({
           overrides: {
             accreditedBy: Accreditors_Enum.Icm,
-            type: CourseType.CLOSED,
+            type: Course_Type_Enum.Closed,
           },
         })
 
@@ -2697,7 +2708,7 @@ describe(getACL.name, () => {
       const course = buildCourse({
         overrides: {
           accreditedBy: Accreditors_Enum.Icm,
-          type: CourseType.CLOSED,
+          type: Course_Type_Enum.Closed,
         },
       })
 
@@ -2726,7 +2737,7 @@ describe(getACL.name, () => {
       const course = buildCourse({
         overrides: {
           accreditedBy: Accreditors_Enum.Icm,
-          type: CourseType.CLOSED,
+          type: Course_Type_Enum.Closed,
         },
       })
 
@@ -2746,7 +2757,7 @@ describe(getACL.name, () => {
       const course = buildCourse({
         overrides: {
           accreditedBy: Accreditors_Enum.Bild,
-          type: CourseType.CLOSED,
+          type: Course_Type_Enum.Closed,
         },
       })
 
@@ -2759,7 +2770,7 @@ describe(getACL.name, () => {
       const course = buildCourse({
         overrides: {
           accreditedBy: Accreditors_Enum.Icm,
-          type: CourseType.OPEN,
+          type: Course_Type_Enum.Open,
         },
       })
 

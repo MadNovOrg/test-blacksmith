@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { CourseType } from '@app/types'
+import { Course_Type_Enum } from '@app/generated/graphql'
 
 import { render, screen } from '@test/index'
 
@@ -8,7 +6,9 @@ import { CreateCourseSteps } from '.'
 
 describe('component: CreateCourseSteps', () => {
   it('displays correct steps for OPEN course type', () => {
-    render(<CreateCourseSteps type={CourseType.OPEN} completedSteps={[]} />)
+    render(
+      <CreateCourseSteps type={Course_Type_Enum.Open} completedSteps={[]} />
+    )
 
     expect(screen.getByText('Course details')).toBeInTheDocument()
     expect(screen.getByText('Assign trainer(s)')).toBeInTheDocument()
@@ -20,7 +20,9 @@ describe('component: CreateCourseSteps', () => {
   })
 
   it('displays correct steps for CLOSED course type', () => {
-    render(<CreateCourseSteps type={CourseType.CLOSED} completedSteps={[]} />)
+    render(
+      <CreateCourseSteps type={Course_Type_Enum.Closed} completedSteps={[]} />
+    )
 
     expect(screen.getByText('Course details')).toBeInTheDocument()
     expect(screen.getByText('Assign trainer(s)')).toBeInTheDocument()
@@ -32,7 +34,9 @@ describe('component: CreateCourseSteps', () => {
   })
 
   it('displays correct steps for INDIRECT course type', () => {
-    render(<CreateCourseSteps type={CourseType.INDIRECT} completedSteps={[]} />)
+    render(
+      <CreateCourseSteps type={Course_Type_Enum.Indirect} completedSteps={[]} />
+    )
 
     expect(screen.getByText('Course details')).toBeInTheDocument()
     expect(screen.getByText('Course builder')).toBeInTheDocument()
@@ -46,7 +50,7 @@ describe('component: CreateCourseSteps', () => {
   it('adds correct steps when a course has Go1 integration', () => {
     render(
       <CreateCourseSteps
-        type={CourseType.INDIRECT}
+        type={Course_Type_Enum.Indirect}
         completedSteps={[]}
         blendedLearning
       />

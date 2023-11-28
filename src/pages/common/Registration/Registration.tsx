@@ -50,8 +50,10 @@ export const RegistrationPage: React.FC<
   // router sets in the available routes and we navigate to verify
   useEffect(() => {
     if (!profile) return
-    navigate('/verify', { replace: true, state: { from } })
-  }, [profile, navigate, from])
+    if (profile && !courseId && !quantity) {
+      navigate('/verify', { replace: true, state: { from } })
+    }
+  }, [profile, navigate, from, courseId, quantity])
 
   // This page loads for logged in as well as logged out users. When it loads
   // for logged in user, it will have a profile for sure, in which case we need to

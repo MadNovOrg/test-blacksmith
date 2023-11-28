@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
+  Course_Type_Enum,
   SetCourseDraftMutation,
   SetCourseDraftMutationVariables,
 } from '@app/generated/graphql'
@@ -13,7 +14,6 @@ import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
 import { QUERY as SET_COURSE_DRAFT } from '@app/queries/courses/set-course-draft'
 import {
-  CourseType,
   Draft,
   ExpensesInput,
   TrainerInput,
@@ -46,7 +46,7 @@ export type SaveDraftResult = {
 
 export type CreateCourseProviderProps = {
   initialValue?: Draft
-  courseType: CourseType
+  courseType: Course_Type_Enum
   draftName?: string | null
 }
 

@@ -17,14 +17,13 @@ import {
   CourseException,
   shouldGoIntoExceptionApproval,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
-import { CourseType } from '@app/types'
 
 type Props = {
   open: boolean
   onCancel: () => void
   onSubmit: () => void
   exceptions: CourseException[]
-  courseType?: Course_Type_Enum | CourseType
+  courseType?: Course_Type_Enum
   submitLabel?: string
 }
 

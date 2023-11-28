@@ -1,7 +1,8 @@
 import { Route, Routes } from 'react-router-dom'
 
+import { Course_Type_Enum } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
-import { Course, CourseType, RoleName } from '@app/types'
+import { Course, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, screen } from '@test/index'
@@ -78,7 +79,7 @@ describe('page: CourseDetails', () => {
 
     it('should render order item when it has an order and is of CLOSED type', () => {
       setup({
-        type: CourseType.CLOSED,
+        type: Course_Type_Enum.Closed,
         go1Integration: false,
       })
 
@@ -94,7 +95,7 @@ describe('page: CourseDetails', () => {
 
     it('should render order item when it has an order and is of INDIRECT type with blended learning', () => {
       setup({
-        type: CourseType.INDIRECT,
+        type: Course_Type_Enum.Indirect,
         go1Integration: true,
       })
 
@@ -110,7 +111,7 @@ describe('page: CourseDetails', () => {
 
     it('should not render order item when it has an order and is of OPEN type', () => {
       setup({
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
         go1Integration: false,
       })
 

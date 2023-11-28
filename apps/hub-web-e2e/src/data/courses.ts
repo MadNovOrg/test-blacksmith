@@ -4,8 +4,9 @@ import {
   Course_Status_Enum,
   Course_Source_Enum,
   Course_Level_Enum,
+  Course_Type_Enum,
+  Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
-import { CourseDeliveryType, CourseType } from '@app/types'
 
 import { Accreditors_Enum } from '@qa/generated/graphql'
 
@@ -20,8 +21,8 @@ export const COURSES_TO_VIEW: Course[] = [
     description: 'Some description 1 F2F',
     level: Course_Level_Enum.Level_1,
     status: Course_Status_Enum.ConfirmModules,
-    deliveryType: CourseDeliveryType.F2F,
-    type: CourseType.OPEN,
+    deliveryType: Course_Delivery_Type_Enum.F2F,
+    type: Course_Type_Enum.Open,
     reaccreditation: false,
     schedule: [
       {
@@ -43,8 +44,8 @@ export const COURSES_TO_VIEW: Course[] = [
     description: 'Some description 2 Mixed',
     level: Course_Level_Enum.Level_2,
     status: Course_Status_Enum.ConfirmModules,
-    deliveryType: CourseDeliveryType.MIXED,
-    type: CourseType.CLOSED,
+    deliveryType: Course_Delivery_Type_Enum.Mixed,
+    type: Course_Type_Enum.Closed,
     reaccreditation: false,
     organization: { name: 'London First School' },
     schedule: [
@@ -68,8 +69,8 @@ export const COURSES_TO_VIEW: Course[] = [
     description: 'Some description 3 Virtual',
     level: Course_Level_Enum.Advanced,
     status: Course_Status_Enum.ConfirmModules,
-    deliveryType: CourseDeliveryType.VIRTUAL,
-    type: CourseType.CLOSED,
+    deliveryType: Course_Delivery_Type_Enum.Virtual,
+    type: Course_Type_Enum.Closed,
     reaccreditation: false,
     organization: { name: 'London First School' },
     accreditedBy: Accreditors_Enum.Icm,
@@ -93,8 +94,8 @@ export const UNIQUE_COURSE: () => Course = () => ({
   level: Course_Level_Enum.Level_1,
   status: Course_Status_Enum.Scheduled,
   source: Course_Source_Enum.EmailEnquiry,
-  deliveryType: CourseDeliveryType.F2F,
-  type: CourseType.OPEN,
+  deliveryType: Course_Delivery_Type_Enum.F2F,
+  type: Course_Type_Enum.Open,
   reaccreditation: false,
   go1Integration: false,
   accreditedBy: Accreditors_Enum.Icm,

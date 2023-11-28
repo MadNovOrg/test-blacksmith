@@ -17,8 +17,8 @@ import {
 import { BackButton } from '@app/components/BackButton'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
+import { Course_Type_Enum } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { CourseType } from '@app/types'
 
 import { NotFound } from '../common/NotFound'
 import { DraftConfirmationDialog } from '../trainer-pages/MyCourses/components/DraftConfirmationDialog'
@@ -46,7 +46,8 @@ export const CreateCoursePage = () => {
   const isDraft = location.pathname.indexOf('draft') > -1
 
   const courseType = useMemo(() => {
-    const qsType = (searchParams.get('type') as CourseType) ?? CourseType.OPEN
+    const qsType =
+      (searchParams.get('type') as Course_Type_Enum) ?? Course_Type_Enum.Open
     return courseData?.type ?? qsType
   }, [courseData, searchParams])
 

@@ -1,8 +1,11 @@
-import React from 'react'
 import { noop } from 'ts-essentials'
 
-import { Accreditors_Enum, Course_Level_Enum } from '@app/generated/graphql'
-import { CourseType, RoleName } from '@app/types'
+import {
+  Accreditors_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
+import { RoleName } from '@app/types'
 
 import { render, screen, userEvent, within } from '@test/index'
 
@@ -24,7 +27,7 @@ describe('component: CourseLevelDropdown', () => {
       <CourseLevelDropdown
         value=""
         onChange={noop}
-        courseType={CourseType.OPEN}
+        courseType={Course_Type_Enum.Open}
         courseAccreditor={Accreditors_Enum.Icm}
       />,
       { auth: { activeRole: RoleName.TT_ADMIN } }
@@ -46,7 +49,7 @@ describe('component: CourseLevelDropdown', () => {
       <CourseLevelDropdown
         value=""
         onChange={noop}
-        courseType={CourseType.CLOSED}
+        courseType={Course_Type_Enum.Closed}
         courseAccreditor={Accreditors_Enum.Icm}
       />,
       { auth: { activeRole: RoleName.TT_ADMIN } }
@@ -68,7 +71,7 @@ describe('component: CourseLevelDropdown', () => {
       <CourseLevelDropdown
         value=""
         onChange={noop}
-        courseType={CourseType.INDIRECT}
+        courseType={Course_Type_Enum.Indirect}
         courseAccreditor={Accreditors_Enum.Icm}
       />,
       { auth: { activeRole: RoleName.TT_ADMIN } }
@@ -88,7 +91,7 @@ describe('component: CourseLevelDropdown', () => {
       <CourseLevelDropdown
         value=""
         onChange={noop}
-        courseType={CourseType.INDIRECT}
+        courseType={Course_Type_Enum.Indirect}
         courseAccreditor={Accreditors_Enum.Icm}
       />,
       {
@@ -119,7 +122,7 @@ describe('component: CourseLevelDropdown', () => {
       <CourseLevelDropdown
         value=""
         onChange={noop}
-        courseType={CourseType.INDIRECT}
+        courseType={Course_Type_Enum.Indirect}
         courseAccreditor={Accreditors_Enum.Icm}
       />,
       {
@@ -144,7 +147,7 @@ describe('component: CourseLevelDropdown', () => {
       <CourseLevelDropdown
         value=""
         onChange={noop}
-        courseType={CourseType.INDIRECT}
+        courseType={Course_Type_Enum.Indirect}
         courseAccreditor={Accreditors_Enum.Icm}
       />,
       {

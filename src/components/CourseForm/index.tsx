@@ -60,8 +60,10 @@ import { VenueSelector } from '@app/components/VenueSelector'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
+  Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Source_Enum,
+  Course_Type_Enum,
   GetNotDetailedProfileQuery,
   GetNotDetailedProfileQueryVariables,
 } from '@app/generated/graphql'
@@ -69,13 +71,7 @@ import { useCoursePrice } from '@app/hooks/useCoursePrice'
 import { QUERY as GET_NOT_DETAILED_PROFILE } from '@app/queries/profile/get-not-detailed-profile'
 import { schemas, yup } from '@app/schemas'
 import theme from '@app/theme'
-import {
-  CourseDeliveryType,
-  CourseInput,
-  CourseType,
-  Organization,
-  RoleName,
-} from '@app/types'
+import { CourseInput, Organization, RoleName } from '@app/types'
 import {
   bildStrategiesToArray,
   extractTime,
@@ -131,7 +127,7 @@ const INDIRECT_COURSE_MIN_ALLOWED_DATE_FOR_YUP = new Date(
 )
 
 interface Props {
-  type?: CourseType
+  type?: Course_Type_Enum
   courseInput?: CourseInput
   disabledFields?: Set<DisabledFields>
   isCreation?: boolean
@@ -148,7 +144,7 @@ const accountCodeValue = getAccountCode()
 
 const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
-  type: courseType = CourseType.OPEN,
+  type: courseType = Course_Type_Enum.Open,
   courseInput,
   isCreation = true,
   disabledFields = new Set(),
@@ -158,10 +154,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
   const { activeRole, acl } = useAuth()
 
-  const hasOrg = [CourseType.CLOSED, CourseType.INDIRECT].includes(courseType)
-  const isClosedCourse = courseType === CourseType.CLOSED
-  const isIndirectCourse = courseType === CourseType.INDIRECT
-  const hasMinParticipants = courseType === CourseType.OPEN
+  const hasOrg = [Course_Type_Enum.Closed, Course_Type_Enum.Indirect].includes(
+    courseType
+  )
+  const isClosedCourse = courseType === Course_Type_Enum.Closed
+  const isIndirectCourse = courseType === Course_Type_Enum.Indirect
+  const hasMinParticipants = courseType === Course_Type_Enum.Open
 
   const minCourseStartDate = new Date()
   minCourseStartDate.setDate(minCourseStartDate.getDate() + 1)
@@ -170,7 +168,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
    * @todo delete post 4th of December
    */
   const minStartDateRestriction =
-    courseType === CourseType.INDIRECT && activeRole === RoleName.TRAINER
+    courseType === Course_Type_Enum.Indirect && activeRole === RoleName.TRAINER
 
   const schema = useMemo(
     () =>
@@ -185,7 +183,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 .required(t('components.course-form.organisation-required')),
             }
           : null),
-        ...(courseType === CourseType.OPEN
+        ...(courseType === Course_Type_Enum.Open
           ? {
               displayOnWebsite: yup.bool().required().default(true),
             }
@@ -216,7 +214,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             }
           : null),
         //TODO: Delete this after Arlo migration ------ search for Delete this after Arlo migration to find every occurence that needs to be deleted //
-        ...(courseType !== CourseType.INDIRECT
+        ...(courseType !== Course_Type_Enum.Indirect
           ? {
               arloReferenceId: yup.string(),
             }
@@ -239,17 +237,17 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         deliveryType: yup
           .mixed()
           .oneOf([
-            CourseDeliveryType.F2F,
-            CourseDeliveryType.VIRTUAL,
-            CourseDeliveryType.MIXED,
+            Course_Delivery_Type_Enum.F2F,
+            Course_Delivery_Type_Enum.Virtual,
+            Course_Delivery_Type_Enum.Mixed,
           ]),
         venue: yup
           .object()
           .nullable()
           .when('deliveryType', {
-            is: (deliveryType: CourseDeliveryType) =>
-              deliveryType === CourseDeliveryType.F2F ||
-              deliveryType === CourseDeliveryType.MIXED,
+            is: (deliveryType: Course_Delivery_Type_Enum) =>
+              deliveryType === Course_Delivery_Type_Enum.F2F ||
+              deliveryType === Course_Delivery_Type_Enum.Mixed,
             then: schema =>
               schema.required(t('components.course-form.venue-required')),
           }),
@@ -447,7 +445,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       courseLevel: courseInput?.courseLevel ?? '',
       blendedLearning: courseInput?.blendedLearning ?? false,
       reaccreditation: courseInput?.reaccreditation ?? false,
-      deliveryType: courseInput?.deliveryType ?? CourseDeliveryType.F2F,
+      deliveryType: courseInput?.deliveryType ?? Course_Delivery_Type_Enum.F2F,
       venue: courseInput?.venue ?? null,
       zoomMeetingUrl: courseInput?.zoomMeetingUrl ?? null,
       zoomProfileId: courseInput?.zoomProfileId ?? null, // need to be schedule [0]
@@ -574,7 +572,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     values.accreditedBy === Accreditors_Enum.Icm
       ? canBeMixed(courseType, courseLevel)
       : canBeMixedBild(
-          courseType,
           values.courseLevel,
           values.bildStrategies
             ? bildStrategiesToArray(values.bildStrategies)
@@ -584,11 +581,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const conversionEnabled =
     isBild && canBeConversion(values.reaccreditation, values.courseLevel)
 
-  const hasVenue = [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(
-    deliveryType
-  )
+  const hasVenue = [
+    Course_Delivery_Type_Enum.F2F,
+    Course_Delivery_Type_Enum.Mixed,
+  ].includes(deliveryType)
   const usesAOL =
-    courseType === CourseType.INDIRECT && !isBild ? values.usesAOL : false
+    courseType === Course_Type_Enum.Indirect && !isBild ? values.usesAOL : false
   const aolCountry = values.aolCountry
   const startDate = useWatch({ control, name: 'startDate' })
   const startTime = useWatch({ control, name: 'startTime' })
@@ -632,9 +630,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const resetSpecialInstructionsToDefault = useCallback(
     (
-      type: CourseType,
+      type: Course_Type_Enum,
       level: Course_Level_Enum | '',
-      deliveryType: CourseDeliveryType,
+      deliveryType: Course_Delivery_Type_Enum,
       reaccreditation: boolean,
       conversion: boolean,
       t: TFunction
@@ -750,7 +748,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       resetSpecialInstructionsToDefault(
         courseType,
         courseLevel,
-        CourseDeliveryType.F2F,
+        Course_Delivery_Type_Enum.F2F,
         newReaccreditationValue,
         values.conversion,
         t
@@ -768,14 +766,14 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   ])
 
   useEffect(() => {
-    const isVirtual = values.deliveryType === CourseDeliveryType.VIRTUAL
+    const isVirtual = values.deliveryType === Course_Delivery_Type_Enum.Virtual
     const mustChange = !canVirtual && isVirtual
     if (mustChange) {
-      setValue('deliveryType', CourseDeliveryType.F2F)
+      setValue('deliveryType', Course_Delivery_Type_Enum.F2F)
       resetSpecialInstructionsToDefault(
         courseType,
         courseLevel,
-        CourseDeliveryType.F2F,
+        Course_Delivery_Type_Enum.F2F,
         values.reaccreditation,
         values.conversion,
         t
@@ -794,14 +792,14 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   ])
 
   useEffect(() => {
-    const isMixed = values.deliveryType === CourseDeliveryType.MIXED
+    const isMixed = values.deliveryType === Course_Delivery_Type_Enum.Mixed
     const mustChange = !canMixed && isMixed
     if (mustChange) {
-      setValue('deliveryType', CourseDeliveryType.F2F)
+      setValue('deliveryType', Course_Delivery_Type_Enum.F2F)
       resetSpecialInstructionsToDefault(
         courseType,
         courseLevel,
-        CourseDeliveryType.F2F,
+        Course_Delivery_Type_Enum.F2F,
         values.reaccreditation,
         values.conversion,
         t
@@ -895,9 +893,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const contact = useMemo(
     () =>
-      courseType === CourseType.CLOSED
+      courseType === Course_Type_Enum.Closed
         ? 'bookingContact'
-        : courseType === CourseType.INDIRECT
+        : courseType === Course_Type_Enum.Indirect
         ? 'organizationKeyContact'
         : null,
     [courseType]
@@ -954,7 +952,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const showTrainerOrgOnly =
     !values.usesAOL &&
-    courseType === CourseType.INDIRECT &&
+    courseType === Course_Type_Enum.Indirect &&
     activeRole === RoleName.TRAINER
 
   return (
@@ -1011,7 +1009,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 </FormControl>
               ) : null}
 
-              {courseType === CourseType.INDIRECT && !isBild ? (
+              {courseType === Course_Type_Enum.Indirect && !isBild ? (
                 <>
                   <Typography
                     mt={2}
@@ -1339,7 +1337,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   </Alert>
                 )}
                 {/* TODO: Delete this after Arlo migration to the hub - HAVENT USED THE translations file to have this easier to find by text search */}
-                {acl.isInternalUser() && courseType !== CourseType.INDIRECT ? (
+                {acl.isInternalUser() &&
+                courseType !== Course_Type_Enum.Indirect ? (
                   <>
                     <TextField
                       sx={{ mt: theme.spacing(2) }}
@@ -1428,7 +1427,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 </Grid>
 
                 {isBild &&
-                [CourseType.CLOSED, CourseType.OPEN].includes(courseType) &&
+                [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
+                  courseType
+                ) &&
                 values.courseLevel !== Course_Level_Enum.BildRegular ? (
                   <Grid item>
                     <Controller
@@ -1454,7 +1455,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   </Grid>
                 ) : null}
 
-                {courseType === CourseType.OPEN ? (
+                {courseType === Course_Type_Enum.Open ? (
                   <Grid item>
                     <Controller
                       name="displayOnWebsite"
@@ -1479,7 +1480,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 ) : null}
               </Grid>
 
-              {isBlended && courseType === CourseType.INDIRECT ? (
+              {isBlended && courseType === Course_Type_Enum.Indirect ? (
                 <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
                   {t('components.course-form.blended-learning-price-label')}
                 </Alert>
@@ -1495,10 +1496,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   name="delivery-type-radio"
                   value={deliveryType}
                   onChange={e => {
-                    const deliveryType = e.target.value as CourseDeliveryType
+                    const deliveryType = e.target
+                      .value as Course_Delivery_Type_Enum
                     setValue('deliveryType', deliveryType)
 
-                    if (deliveryType === CourseDeliveryType.VIRTUAL) {
+                    if (deliveryType === Course_Delivery_Type_Enum.Virtual) {
                       setValue('parkingInstructions', '')
                     }
                     trigger(['venue'])
@@ -1514,17 +1516,17 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   }}
                 >
                   <FormControlLabel
-                    value={CourseDeliveryType.F2F}
+                    value={Course_Delivery_Type_Enum.F2F}
                     control={
                       <Radio
                         disabled={!canF2F || disabledFields.has('deliveryType')}
                       />
                     }
                     label={t('components.course-form.f2f-option-label')}
-                    data-testid={`delivery-${CourseDeliveryType.F2F}`}
+                    data-testid={`delivery-${Course_Delivery_Type_Enum.F2F}`}
                   />
                   <FormControlLabel
-                    value={CourseDeliveryType.VIRTUAL}
+                    value={Course_Delivery_Type_Enum.Virtual}
                     control={
                       <Radio
                         disabled={
@@ -1533,10 +1535,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       />
                     }
                     label={t('components.course-form.virtual-option-label')}
-                    data-testid={`delivery-${CourseDeliveryType.VIRTUAL}`}
+                    data-testid={`delivery-${Course_Delivery_Type_Enum.Virtual}`}
                   />
                   <FormControlLabel
-                    value={CourseDeliveryType.MIXED}
+                    value={Course_Delivery_Type_Enum.Mixed}
                     control={
                       <Radio
                         disabled={
@@ -1545,7 +1547,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       />
                     }
                     label={t('components.course-form.mixed-option-label')}
-                    data-testid={`delivery-${CourseDeliveryType.MIXED}`}
+                    data-testid={`delivery-${Course_Delivery_Type_Enum.Mixed}`}
                   />
                 </RadioGroup>
               </FormControl>
@@ -1605,8 +1607,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   />
                 )}
               />
-              {deliveryType === CourseDeliveryType.F2F ||
-              deliveryType === CourseDeliveryType.MIXED ? (
+              {deliveryType === Course_Delivery_Type_Enum.F2F ||
+              deliveryType === Course_Delivery_Type_Enum.Mixed ? (
                 <Controller
                   name="parkingInstructions"
                   control={control}
@@ -1809,7 +1811,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     })}
                     id="filled-basic"
                     label={t(
-                      courseType === CourseType.OPEN
+                      courseType === Course_Type_Enum.Open
                         ? 'components.course-form.max-attendees-placeholder'
                         : 'components.course-form.num-attendees-placeholder'
                     )}
@@ -1823,7 +1825,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   />
                 </Grid>
                 <Grid item>
-                  {!isCreation && courseType === CourseType.INDIRECT ? (
+                  {!isCreation && courseType === Course_Type_Enum.Indirect ? (
                     <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
                       {t('components.course-form.attendees-edit-label')}
                     </Alert>
@@ -1882,7 +1884,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             />
           ) : null}
 
-          {isClosedCourse || (isBild && courseType === CourseType.OPEN) ? (
+          {isClosedCourse ||
+          (isBild && courseType === Course_Type_Enum.Open) ? (
             <InfoPanel
               title={t('components.course-form.finance-section-title')}
               titlePosition="outside"

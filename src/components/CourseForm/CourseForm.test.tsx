@@ -2,9 +2,8 @@ import { format } from 'date-fns'
 import { setMedia } from 'mock-match-media'
 import { getI18n } from 'react-i18next'
 
-import { Course_Level_Enum } from '@app/generated/graphql'
+import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/hooks/useCoursePrice'
-import { CourseType } from '@app/types'
 import {
   courseToCourseInput,
   INPUT_DATE_FORMAT,
@@ -44,7 +43,7 @@ describe('component: CourseForm', () => {
 
   it('displays venue selector if F2F delivery type', async () => {
     await waitFor(() => {
-      renderForm(CourseType.CLOSED)
+      renderForm(Course_Type_Enum.Closed)
     })
 
     await userEvent.click(screen.getByLabelText('Face to face'))
@@ -54,7 +53,7 @@ describe('component: CourseForm', () => {
 
   it('displays venue selector if VIRTUAL delivery type', async () => {
     await waitFor(() => {
-      renderForm(CourseType.CLOSED)
+      renderForm(Course_Type_Enum.Closed)
     })
 
     await userEvent.click(screen.getByLabelText('Virtual'))
@@ -64,7 +63,7 @@ describe('component: CourseForm', () => {
 
   it('displays venue selector if MIXED delivery type', async () => {
     await waitFor(() => {
-      renderForm(CourseType.CLOSED)
+      renderForm(Course_Type_Enum.Closed)
     })
 
     await userEvent.click(screen.getByLabelText('Both'))
@@ -76,7 +75,7 @@ describe('component: CourseForm', () => {
     setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
 
     await waitFor(() => {
-      render(<CourseForm type={CourseType.OPEN} />)
+      render(<CourseForm type={Course_Type_Enum.Open} />)
     })
 
     act(() => {
@@ -107,7 +106,7 @@ describe('component: CourseForm', () => {
 
   it('validates that min participants is smaller than max participants', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.OPEN} />)
+      render(<CourseForm type={Course_Type_Enum.Open} />)
     })
 
     await waitFor(async () => {
@@ -130,7 +129,7 @@ describe('component: CourseForm', () => {
 
   it('validates that minimum participants has to be positive number', async () => {
     await waitFor(() => {
-      render(<CourseForm type={CourseType.OPEN} />)
+      render(<CourseForm type={Course_Type_Enum.Open} />)
     })
 
     await userEvent.type(
@@ -149,7 +148,7 @@ describe('component: CourseForm', () => {
 
   it('displays organisation selector and booking contact user selector if course type is closed', async () => {
     await waitFor(() => {
-      renderForm(CourseType.CLOSED)
+      renderForm(Course_Type_Enum.Closed)
     })
 
     expect(screen.getByText('Org Selector')).toBeInTheDocument()
@@ -157,7 +156,7 @@ describe('component: CourseForm', () => {
   })
 
   it('displays AOL checkbox for indirect course type', async () => {
-    await waitFor(() => renderForm(CourseType.INDIRECT))
+    await waitFor(() => renderForm(Course_Type_Enum.Indirect))
     await selectLevel(Course_Level_Enum.Level_2)
 
     expect(screen.queryByTestId('aol-checkbox')).toBeInTheDocument()
@@ -165,7 +164,7 @@ describe('component: CourseForm', () => {
 
   it('renders correct organisation fields for indirect course type', async () => {
     await waitFor(() => {
-      renderForm(CourseType.INDIRECT)
+      renderForm(Course_Type_Enum.Indirect)
     })
 
     expect(screen.getByText('Org Selector')).toBeInTheDocument()
@@ -174,7 +173,7 @@ describe('component: CourseForm', () => {
 
   it('does not render minimum participants for closed course type', async () => {
     await waitFor(() => {
-      renderForm(CourseType.CLOSED)
+      renderForm(Course_Type_Enum.Closed)
     })
 
     expect(
@@ -184,7 +183,7 @@ describe('component: CourseForm', () => {
 
   it('does not render minimum participants for indirect course type', async () => {
     await waitFor(() => {
-      renderForm(CourseType.INDIRECT)
+      renderForm(Course_Type_Enum.Indirect)
     })
 
     expect(
@@ -193,7 +192,7 @@ describe('component: CourseForm', () => {
   })
 
   it('displays course values if passed as prop', async () => {
-    const type = CourseType.OPEN
+    const type = Course_Type_Enum.Open
     const course = buildCourse({ overrides: { type } })
     const [schedule] = course.schedule
 
@@ -236,7 +235,7 @@ describe('component: CourseForm', () => {
     setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
 
     await waitFor(() => {
-      renderForm(CourseType.CLOSED)
+      renderForm(Course_Type_Enum.Closed)
     })
 
     act(() => {
@@ -258,7 +257,7 @@ describe('component: CourseForm', () => {
 
   it('shows an info alert for level 1 course', async () => {
     await waitFor(() => {
-      renderForm(CourseType.CLOSED)
+      renderForm(Course_Type_Enum.Closed)
     })
 
     const level = screen.getByTestId('course-level-select')
@@ -270,14 +269,14 @@ describe('component: CourseForm', () => {
   })
 
   it('hides the info alert for level 2 course', async () => {
-    await waitFor(() => renderForm(CourseType.CLOSED))
+    await waitFor(() => renderForm(Course_Type_Enum.Closed))
     await selectLevel(Course_Level_Enum.Level_2)
 
     expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
   })
 
   it('hides the info alert for intermediate trainer course', async () => {
-    await waitFor(() => renderForm(CourseType.CLOSED))
+    await waitFor(() => renderForm(Course_Type_Enum.Closed))
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
 
     expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
@@ -285,7 +284,7 @@ describe('component: CourseForm', () => {
 
   it('hides the info alert for advanced trainer course', async () => {
     await waitFor(() =>
-      render(<CourseForm type={CourseType.CLOSED} />, {
+      render(<CourseForm type={Course_Type_Enum.Closed} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.AdvancedTrainer],
         },
@@ -298,7 +297,7 @@ describe('component: CourseForm', () => {
 
   it('shows an info alert for blended learning for indirect courses', async () => {
     await waitFor(() => {
-      renderForm(CourseType.INDIRECT)
+      renderForm(Course_Type_Enum.Indirect)
     })
 
     await userEvent.click(screen.getByLabelText('Blended learning'))
@@ -310,7 +309,7 @@ describe('component: CourseForm', () => {
 
   it("doesn't show course renewal cycle panel for an indirect course", async () => {
     await waitFor(() => {
-      renderForm(CourseType.INDIRECT)
+      renderForm(Course_Type_Enum.Indirect)
     })
 
     expect(
@@ -319,10 +318,10 @@ describe('component: CourseForm', () => {
   })
 
   it.each([
-    [CourseType.OPEN, Course_Level_Enum.Level_1],
-    [CourseType.OPEN, Course_Level_Enum.Level_2],
-    [CourseType.CLOSED, Course_Level_Enum.Level_1],
-    [CourseType.CLOSED, Course_Level_Enum.Level_2],
+    [Course_Type_Enum.Open, Course_Level_Enum.Level_1],
+    [Course_Type_Enum.Open, Course_Level_Enum.Level_2],
+    [Course_Type_Enum.Closed, Course_Level_Enum.Level_1],
+    [Course_Type_Enum.Closed, Course_Level_Enum.Level_2],
   ])(
     'shows course renewal panel for %s course type for %s and when course begins from 2024',
     async (type, courseLevel) => {
@@ -347,7 +346,7 @@ describe('component: CourseForm', () => {
     }
   )
 
-  it.each([[CourseType.OPEN], [CourseType.CLOSED]])(
+  it.each([[Course_Type_Enum.Open], [Course_Type_Enum.Closed]])(
     "doesn't show course renewal panel for %s course type and when course begins in 2023",
     async type => {
       setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode

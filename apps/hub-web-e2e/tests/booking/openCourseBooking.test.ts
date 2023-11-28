@@ -1,6 +1,6 @@
 import { test as base } from '@playwright/test'
 
-import { CourseType } from '@app/types'
+import { Course_Type_Enum } from '@app/generated/graphql'
 
 import { deleteCourse, insertCourse } from '@qa/api/hasura/course'
 import { UNIQUE_COURSE } from '@qa/data/courses'
@@ -10,7 +10,7 @@ import { stateFilePath } from '@qa/util'
 const test = base.extend<{ courseId: number }>({
   courseId: async ({}, use) => {
     const openCourse = UNIQUE_COURSE()
-    openCourse.type = CourseType.OPEN
+    openCourse.type = Course_Type_Enum.Open
 
     const id = await insertCourse(
       openCourse,

@@ -9,10 +9,11 @@ import {
   Accreditors_Enum,
   CoursePriceQuery,
   GetBildStrategiesQuery,
+  Course_Type_Enum,
 } from '@app/generated/graphql'
 import { COURSE_PRICE_QUERY } from '@app/hooks/useCoursePrice'
 import { QUERY as BILD_STRATEGIES_QUERY } from '@app/queries/bild/get-bild-strategies'
-import { BildStrategies, CourseType, ValidCourseInput } from '@app/types'
+import { BildStrategies, ValidCourseInput } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
 
@@ -62,7 +63,7 @@ describe('component: OrderDetails', () => {
     render(
       <Provider value={client}>
         <CreateCourseProvider
-          courseType={CourseType.CLOSED}
+          courseType={Course_Type_Enum.Closed}
           initialValue={{
             courseData: {
               maxParticipants: 10,
@@ -146,7 +147,7 @@ describe('component: OrderDetails', () => {
     render(
       <Provider value={client}>
         <CreateCourseProvider
-          courseType={CourseType.CLOSED}
+          courseType={Course_Type_Enum.Closed}
           initialValue={{
             courseData: {
               accreditedBy: Accreditors_Enum.Bild,
@@ -206,7 +207,7 @@ describe('component: OrderDetails', () => {
     render(
       <Provider value={client}>
         <CreateCourseProvider
-          courseType={CourseType.INDIRECT}
+          courseType={Course_Type_Enum.Indirect}
           initialValue={{
             courseData: {
               maxParticipants: 10,

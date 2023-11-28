@@ -1,53 +1,6 @@
 import { gql } from 'graphql-request'
 
-import { Accreditors_Enum, Course_Level_Enum } from '@app/generated/graphql'
-import {
-  Course,
-  CourseDeliveryType,
-  CourseExpenseData,
-  CourseType,
-  Venue,
-} from '@app/types'
-
 import { COURSE_DATES, VENUE } from '../fragments'
-
-export type ResponseType = {
-  tempProfiles: {
-    course: {
-      id: number
-      courseCode: string
-      name: string
-      accreditedBy: Accreditors_Enum
-      dates: Course['dates']
-      deliveryType: CourseDeliveryType
-      level: Course_Level_Enum
-      reaccreditation: boolean
-      conversion: boolean
-      maxParticipants: number
-      price?: number
-      priceCurrency?: string
-      participants: {
-        aggregate: {
-          count: number
-        }
-      }
-      type: CourseType
-      freeSpaces?: number
-      expenses?: Array<{
-        id: string
-        data: CourseExpenseData
-        trainer: {
-          id: string
-          fullName: string
-        }
-      }>
-      schedule: Array<{
-        venue: Venue
-      }>
-    }
-    quantity: number
-  }[]
-}
 
 export const QUERY = gql`
   ${COURSE_DATES}

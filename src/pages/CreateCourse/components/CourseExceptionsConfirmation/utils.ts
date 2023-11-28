@@ -8,12 +8,7 @@ import {
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import {
-  CourseDeliveryType,
-  CourseTrainerType,
-  CourseType,
-  TrainerInput,
-} from '@app/types'
+import { CourseTrainerType, TrainerInput } from '@app/types'
 import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 import {
   getRequiredAssistants,
@@ -35,8 +30,8 @@ const MIN_DURATION_FOR_TIME_COMMITMENT = 6 * 60 // 6h
 export type CourseData = {
   startDateTime: Date
   courseLevel: Course_Level_Enum | Course_Level_Enum
-  type: CourseType | Course_Type_Enum
-  deliveryType: CourseDeliveryType | Course_Delivery_Type_Enum
+  type: Course_Type_Enum
+  deliveryType: Course_Delivery_Type_Enum
   reaccreditation: boolean
   conversion: boolean
   maxParticipants: number
@@ -92,13 +87,13 @@ export const isTrainersRatioNotMet = (
     trainers.filter(t => t.type === CourseTrainerType.Assistant).length < min
 
   const missingLeads =
-    courseData.type !== CourseType.INDIRECT
+    courseData.type !== Course_Type_Enum.Indirect
       ? trainers.filter(t => t.type === CourseTrainerType.Leader).length <
         minLead
       : false
 
   const missingModerators =
-    courseData.type === CourseType.OPEN
+    courseData.type === Course_Type_Enum.Open
       ? trainers.filter(t => t.type === CourseTrainerType.Moderator).length <
         minModerator
       : false
@@ -135,8 +130,8 @@ export function checkCourseDetailsForExceptions(
         conversion: courseData.conversion,
         accreditedBy: courseData.accreditedBy,
         max_participants: courseData.maxParticipants,
-        type: courseData.type as CourseType,
-        deliveryType: courseData.deliveryType as CourseDeliveryType,
+        type: courseData.type,
+        deliveryType: courseData.deliveryType,
         bildStrategies: courseData.bildStrategies,
         hasSeniorOrPrincipalLeader: courseData.hasSeniorOrPrincipalLeader,
         usesAOL: courseData.usesAOL,
@@ -160,7 +155,7 @@ export function checkCourseDetailsForExceptions(
 
 export function shouldGoIntoExceptionApproval(
   acl: ReturnType<typeof getACL>,
-  type: Course_Type_Enum | CourseType
+  type: Course_Type_Enum
 ) {
   if (type === Course_Type_Enum.Open) return false
   if (type === Course_Type_Enum.Closed) return true

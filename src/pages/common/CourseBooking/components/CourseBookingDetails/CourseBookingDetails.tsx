@@ -48,14 +48,11 @@ import {
   Course_Source_Enum,
   PaymentMethod,
   Course_Level_Enum,
+  Course_Type_Enum,
+  Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
-import {
-  CourseType,
-  InvoiceDetails,
-  Profile,
-  CourseDeliveryType,
-} from '@app/types'
+import { InvoiceDetails, Profile } from '@app/types'
 import { formatCurrency, requiredMsg, isValidUKPostalCode } from '@app/util'
 
 import {
@@ -69,7 +66,7 @@ import { PromoCode } from '../PromoCode'
 export type AttendeeValidCertificateProps = {
   control: Control<FormInputs>
   errors: FieldErrors
-  courseLevel: Course_Level_Enum
+  courseLevel?: Course_Level_Enum
   reaccreditation: boolean
   conversion: boolean
   totalAttendees: number
@@ -80,18 +77,18 @@ const AttendeeValidCertificate: React.FC<
 > = ({
   control,
   courseLevel,
-  reaccreditation,
-  conversion,
+  reaccreditation = false,
+  conversion = false,
   totalAttendees,
   errors,
 }) => {
   const { t } = useTranslation()
   const showAttendeeTranslationOptions = useCallback(
     (
-      courseLevel: Course_Level_Enum,
       reaccreditation: boolean,
       conversion: boolean,
-      attendees: number
+      attendees: number,
+      courseLevel?: Course_Level_Enum
     ) => {
       switch (courseLevel) {
         case Course_Level_Enum.Advanced:
@@ -178,10 +175,10 @@ const AttendeeValidCertificate: React.FC<
                 {t(
                   'pages.book-course.attendee-with-valid-certificate.message',
                   showAttendeeTranslationOptions(
-                    courseLevel,
                     reaccreditation,
                     conversion,
-                    totalAttendees
+                    totalAttendees,
+                    courseLevel
                   )
                 )}
               </Typography>
@@ -199,10 +196,11 @@ const AttendeeValidCertificate: React.FC<
 }
 
 const isAttendeeValidCertificateMandatory = (
-  courseLevel: Course_Level_Enum,
-  courseType: CourseType
+  courseLevel?: Course_Level_Enum,
+  courseType?: Course_Type_Enum
 ) =>
-  courseType === CourseType.OPEN &&
+  courseType === Course_Type_Enum.Open &&
+  courseLevel &&
   [
     Course_Level_Enum.Advanced,
     Course_Level_Enum.IntermediateTrainer,
@@ -228,7 +226,7 @@ type FormInputs = {
   invoiceDetails?: InvoiceDetails
 
   courseLevel: Course_Level_Enum
-  courseType: CourseType
+  courseType: Course_Type_Enum
   attendeeValidCertificate?: boolean
 }
 
@@ -259,11 +257,11 @@ export const CourseBookingDetails: React.FC<
     navigate('../review')
   }
 
-  const isInternalUserBooking = acl.canInviteAttendees(CourseType.OPEN)
+  const isInternalUserBooking = acl.canInviteAttendees(Course_Type_Enum.Open)
   const isAddressInfoRequired =
-    course?.type === CourseType.OPEN &&
+    course?.type === Course_Type_Enum.Open &&
     course?.level === Course_Level_Enum.Level_1 &&
-    course?.deliveryType === CourseDeliveryType.VIRTUAL
+    course?.deliveryType === Course_Delivery_Type_Enum.Virtual
 
   const schema = useMemo(() => {
     return yup.object({
@@ -370,8 +368,8 @@ export const CourseBookingDetails: React.FC<
       },
       paymentMethod: PaymentMethod.Invoice,
       invoiceDetails: booking.invoiceDetails,
-      courseLevel: course.level,
-      courseType: course.type,
+      courseLevel: course?.level,
+      courseType: course?.type,
       attendeeValidCertificate: false,
     },
   })
@@ -404,8 +402,8 @@ export const CourseBookingDetails: React.FC<
   }, [booking, setBooking, values.quantity])
 
   const showAttendeeValidCertificate = isAttendeeValidCertificateMandatory(
-    course.level,
-    course.type
+    course?.level,
+    course?.type
   )
 
   const handleEmailSelector = async (
@@ -477,7 +475,7 @@ export const CourseBookingDetails: React.FC<
     [errors.participants]
   )
 
-  const courseVenue = course.schedule[0].venue
+  const courseVenue = course?.schedule[0].venue
   const locationNameAddressCity = [
     courseVenue?.name,
     courseVenue?.addressLineOne,
@@ -511,11 +509,11 @@ export const CourseBookingDetails: React.FC<
           <Box display="flex" justifyContent="space-between" mb={1}>
             <Box>
               <Typography gutterBottom fontWeight="600">
-                {course.name}
+                {course?.name}
               </Typography>
               <CourseDuration
-                start={new Date(course.dates.aggregate.start.date)}
-                end={new Date(course.dates.aggregate.end.date)}
+                start={new Date(course?.dates.aggregate?.start?.date)}
+                end={new Date(course?.dates.aggregate?.end?.date)}
               />
             </Box>
             <Box minWidth={100} display="flex" alignItems="center">
@@ -525,7 +523,7 @@ export const CourseBookingDetails: React.FC<
                 </InputLabel>
                 <NativeSelect
                   inputProps={{ id: 'qty-select' }}
-                  disabled={booking.courseType === CourseType.CLOSED}
+                  disabled={booking.courseType === Course_Type_Enum.Closed}
                   {...register('quantity', { valueAsNumber: true })}
                 >
                   {qtyOptions.map(o => (
@@ -574,12 +572,12 @@ export const CourseBookingDetails: React.FC<
             </Box>
           ) : null}
 
-          {booking.courseType !== CourseType.CLOSED ? (
+          {booking.courseType !== Course_Type_Enum.Closed ? (
             <Box>
               <PromoCode
                 codes={booking.promoCodes}
                 discounts={booking.discounts}
-                courseId={course.id}
+                courseId={course?.id ?? 0}
                 onAdd={addPromo}
                 onRemove={removePromo}
               />
@@ -991,9 +989,9 @@ export const CourseBookingDetails: React.FC<
             <AttendeeValidCertificate
               control={control}
               errors={errors}
-              courseLevel={course.level}
-              reaccreditation={course.reaccreditation}
-              conversion={course.conversion}
+              courseLevel={course?.level}
+              reaccreditation={course?.reaccreditation ?? false}
+              conversion={course?.conversion ?? false}
               totalAttendees={values.quantity}
             />
           )}
@@ -1019,7 +1017,7 @@ export const CourseBookingDetails: React.FC<
               render={({ field }) => {
                 return (
                   <RadioGroup aria-labelledby="payment-method" {...field}>
-                    {acl.canInviteAttendees(CourseType.OPEN) &&
+                    {acl.canInviteAttendees(Course_Type_Enum.Open) &&
                     internalBooking ? null : (
                       <FormControlLabel
                         // Internal TT users can create booking for open courses

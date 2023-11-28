@@ -24,7 +24,11 @@ import { ManageAttendanceMenu } from '@app/components/ManageAttendanceMenu'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
-import { Course_Status_Enum, Scalars } from '@app/generated/graphql'
+import {
+  Course_Status_Enum,
+  Course_Type_Enum,
+  Scalars,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useMatchMutate } from '@app/hooks/useMatchMutate'
@@ -39,7 +43,6 @@ import {
   BlendedLearningStatus,
   Course,
   CourseParticipant,
-  CourseType,
   SortOrder,
 } from '@app/types'
 import {
@@ -76,7 +79,7 @@ export const AttendingTab = ({
     useState<CourseParticipant>()
 
   const isBlendedCourse = course.go1Integration
-  const isOpenCourse = course.type === CourseType.OPEN
+  const isOpenCourse = course.type === Course_Type_Enum.Open
   const hasCourseEnded = courseEnded(course)
   const navigate = useNavigate()
   const fetcher = useFetcher()
@@ -252,7 +255,7 @@ export const AttendingTab = ({
     [handleTransferAttendee]
   )
 
-  const isOpenTypeCourse = course.type === CourseType.OPEN
+  const isOpenTypeCourse = course.type === Course_Type_Enum.Open
 
   return (
     <>
@@ -486,7 +489,7 @@ export const AttendingTab = ({
           data-testid="course-participants-zero-message"
         >
           <Typography variant="body1" color="grey.600">
-            {course?.type === CourseType.OPEN
+            {course?.type === Course_Type_Enum.Open
               ? t('pages.course-participants.no-attendees')
               : t('pages.course-participants.none-registered-message')}
           </Typography>

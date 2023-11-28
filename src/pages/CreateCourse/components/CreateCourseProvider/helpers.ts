@@ -1,23 +1,22 @@
-import { Accreditors_Enum } from '@app/generated/graphql'
-import { CourseType } from '@app/types'
+import { Accreditors_Enum, Course_Type_Enum } from '@app/generated/graphql'
 
 export const getCourseType = (
   profileId: string,
   queryType: string | null,
   isFirstPage = true
-): CourseType => {
+): Course_Type_Enum => {
   if (queryType) {
-    return queryType as CourseType
+    return queryType as Course_Type_Enum
   }
 
   const lastCourseType = localStorage.getItem(
     `${profileId}-last-draft-course-type`
   )
   if (lastCourseType && !isFirstPage) {
-    return lastCourseType as CourseType
+    return lastCourseType as Course_Type_Enum
   }
 
-  return CourseType.OPEN
+  return Course_Type_Enum.Open
 }
 
 export const getCourseAccreditor = (

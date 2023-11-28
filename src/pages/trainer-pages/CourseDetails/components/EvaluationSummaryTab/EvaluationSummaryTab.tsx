@@ -29,9 +29,10 @@ import {
   GetEvaluationsQuery,
   GetEvaluationsQueryVariables,
   Course_Status_Enum,
+  Course_Type_Enum,
 } from '@app/generated/graphql'
 import { QUERY as GET_EVALUATION_QUERY } from '@app/queries/course-evaluation/get-evaluations'
-import { SortOrder, Course, CourseType } from '@app/types'
+import { SortOrder, Course } from '@app/types'
 import { noop } from '@app/util'
 
 import { EvaluationSummaryPDFDownloadLink } from './EvaluationSummaryPDFDownloadLink'
@@ -76,13 +77,13 @@ export const EvaluationSummaryTab: React.FC<
 
   //#TTHP-2016
   const isOpenCourseTrainer = useMemo(
-    () => course.type === CourseType.OPEN && isCourseTrainer,
+    () => course.type === Course_Type_Enum.Open && isCourseTrainer,
     [course, isCourseTrainer]
   )
 
   const displayEvaluationColumn =
     acl.isInternalUser() ||
-    (isCourseTrainer && !(course.type === CourseType.OPEN))
+    (isCourseTrainer && !(course.type === Course_Type_Enum.Open))
 
   const cols = useMemo(
     () =>

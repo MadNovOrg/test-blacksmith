@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { CourseType } from '@app/types'
+import { Course_Type_Enum } from '@app/generated/graphql'
 
 import { waitForGraphQLResponse } from '@qa/commands'
 import { Course } from '@qa/data/types'
@@ -24,7 +24,7 @@ export class CourseInvitationPage extends BasePage {
   }
 
   async acceptInvitation(course: Course): Promise<CourseDetailsPage> {
-    if (course.type === CourseType.OPEN) {
+    if (course.type === Course_Type_Enum.Open) {
       await Promise.all([
         waitForGraphQLResponse(this.page, 'invite', '"status": "ACCEPTED"'),
         expect(this.page.locator('.MuiAlert-message')).toContainText(

@@ -34,6 +34,7 @@ import { SelectLevels } from '@app/components/SelectLevels'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
+  Course_Type_Enum,
   DisablePromoCodeMutation,
   DisablePromoCodeMutationVariables,
   GetPromoCodesQuery,
@@ -49,7 +50,7 @@ import {
   ResponseType,
 } from '@app/queries/promo-codes/get-promo-codes'
 import UPSERT_PROMO_CODE from '@app/queries/promo-codes/upsert-promo-code'
-import { CourseType, Profile } from '@app/types'
+import { Profile } from '@app/types'
 import {
   getSWRLoadingStatus,
   INPUT_DATE_FORMAT,
@@ -567,7 +568,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
                 onChange={ev => setValue('courses', ev.target.value)}
                 titleHint={t('pages.promoCodes.selectCourses-titleHint')}
                 where={{
-                  type: { _eq: CourseType.OPEN },
+                  type: { _eq: Course_Type_Enum.Open },
                   schedule: {
                     start: {
                       _gte: isEdit ? undefined : startOfDay(new Date()),

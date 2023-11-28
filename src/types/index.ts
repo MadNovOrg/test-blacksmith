@@ -3,11 +3,13 @@ import { DeepNonNullable } from 'ts-essentials'
 import {
   Accreditors_Enum,
   Course_Bild_Module,
+  Course_Delivery_Type_Enum,
   Course_Evaluation_Question_Group_Enum,
   Course_Level_Enum,
   Course_Renewal_Cycle_Enum,
   Course_Source_Enum,
   Course_Status_Enum,
+  Course_Type_Enum,
   GetEvaluationsSummaryQuery,
   Grade_Enum,
 } from '@app/generated/graphql'
@@ -27,8 +29,8 @@ export type Course = {
   updatedAt?: string
   name: string
   level: Course_Level_Enum
-  deliveryType: CourseDeliveryType
-  type: CourseType
+  deliveryType: Course_Delivery_Type_Enum
+  type: Course_Type_Enum
   course_code: string
   min_participants: number
   max_participants: number
@@ -265,33 +267,6 @@ export enum CourseState {
   COMPLETED = 'COMPLETED',
 }
 
-export enum CourseType {
-  /**
-   * @summary Organised by `Team Teach` (incl. venue, refreshments, and lunch) and delivered by `Team Teach`
-   * self-employed trainer. It is available to book via `Team Teach` website.
-   * @description #### Relation: Orders
-   * An open course does not have orders related to the whole course.
-   * Orders are created when people are booked onto it.
-   */
-  OPEN = 'OPEN',
-  /**
-   * @summary Organised by `Team Teach` (excl. venue, refreshments, and lunch) for a specific organisation
-   * and delivered by Team Teach self-employed trainer. It is booked by contacting a salesperson
-   * @description #### Relation: Orders
-   * A closed course does have orders related to the whole course itself.
-   */
-  CLOSED = 'CLOSED',
-  /**
-   * @summary Organised by `external organisations` and delivered by qualified trainer.
-   * It is available for members of this external organisation.
-   * Team Teach needs to be notified so it can validate the quality of the course curriculum.
-   * @description #### Relation: Orders
-   * An indirect course does have orders related to the whole course itself.
-   * Applied only for (blended learning indirect courses)
-   */
-  INDIRECT = 'INDIRECT',
-}
-
 export enum CourseLevel {
   Level_1 = 'LEVEL_1',
   Level_2 = 'LEVEL_2',
@@ -309,12 +284,6 @@ export enum BildStrategies {
   NonRestrictiveTertiary = 'NON_RESTRICTIVE_TERTIARY',
   RestrictiveTertiaryIntermediate = 'RESTRICTIVE_TERTIARY_INTERMEDIATE',
   RestrictiveTertiaryAdvanced = 'RESTRICTIVE_TERTIARY_ADVANCED',
-}
-
-export enum CourseDeliveryType {
-  F2F = 'F2F',
-  VIRTUAL = 'VIRTUAL',
-  MIXED = 'MIXED',
 }
 
 export type CourseTrainer = {
@@ -362,7 +331,7 @@ export type Module = {
 } & Base
 
 export type ModuleGroupDuration = {
-  courseDeliveryType: CourseDeliveryType
+  courseDeliveryType: Course_Delivery_Type_Enum
   reaccreditation: boolean
   duration: number
 } & Base
@@ -593,7 +562,7 @@ export type CourseCertificateChangelog = {
 } & Base
 
 export type CourseInput = {
-  type: CourseType | null
+  type: Course_Type_Enum | null
   id: number
   organization: Organization | null
   bookingContact: {
@@ -614,7 +583,7 @@ export type CourseInput = {
   courseLevel: Course_Level_Enum | ''
   blendedLearning: boolean
   reaccreditation: boolean
-  deliveryType: CourseDeliveryType
+  deliveryType: Course_Delivery_Type_Enum
   startDateTime: Date | null
   startDate: Date | null
   startTime: string

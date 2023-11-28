@@ -1,8 +1,8 @@
 import { addDays, subDays } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 
-import { Accreditors_Enum } from '@app/generated/graphql'
-import { CourseParticipant, CourseType, RoleName } from '@app/types'
+import { Accreditors_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import { CourseParticipant, RoleName } from '@app/types'
 
 import {
   chance,
@@ -40,7 +40,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
         schedule: [
           buildCourseSchedule({
             overrides: { end: addDays(new Date(), 1).toISOString() },
@@ -85,7 +85,7 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse({ overrides: { type: CourseType.CLOSED } })
+    const course = buildCourse({ overrides: { type: Course_Type_Enum.Closed } })
 
     render(
       <ManageAttendanceMenu
@@ -125,7 +125,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({
       overrides: {
-        type: CourseType.CLOSED,
+        type: Course_Type_Enum.Closed,
         schedule: [
           buildCourseSchedule({
             overrides: { end: addDays(new Date(), 1).toISOString() },
@@ -172,7 +172,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
         schedule: [
           buildCourseSchedule({
             overrides: { end: addDays(new Date(), 1).toISOString() },
@@ -219,7 +219,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({
       overrides: {
-        type: CourseType.CLOSED,
+        type: Course_Type_Enum.Closed,
         schedule: [
           buildCourseSchedule({
             overrides: { end: addDays(new Date(), 1).toISOString() },
@@ -266,7 +266,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({
       overrides: {
-        type: CourseType.INDIRECT,
+        type: Course_Type_Enum.Indirect,
         schedule: [
           buildCourseSchedule({
             overrides: { end: addDays(new Date(), 1).toISOString() },
@@ -313,7 +313,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
         schedule: [
           buildCourseSchedule({
             overrides: { end: addDays(new Date(), 1).toISOString() },
@@ -360,7 +360,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({
       overrides: {
-        type: CourseType.CLOSED,
+        type: Course_Type_Enum.Closed,
         schedule: [
           buildCourseSchedule({
             overrides: { end: addDays(new Date(), 1).toISOString() },
@@ -407,7 +407,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({
       overrides: {
-        type: CourseType.INDIRECT,
+        type: Course_Type_Enum.Indirect,
         schedule: [
           buildCourseSchedule({
             overrides: { end: addDays(new Date(), 1).toISOString() },
@@ -454,7 +454,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
         schedule: [
           buildCourseSchedule({
             overrides: { end: addDays(new Date(), 1).toISOString() },
@@ -499,7 +499,7 @@ describe(ManageAttendanceMenu.name, () => {
         organizations: defaultOrganizations,
       },
     } as CourseParticipant
-    const course = buildCourse({ overrides: { type: CourseType.CLOSED } })
+    const course = buildCourse({ overrides: { type: Course_Type_Enum.Closed } })
 
     render(
       <ManageAttendanceMenu
@@ -539,7 +539,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
         schedule: [
           buildCourseSchedule({
             overrides: { end: addDays(new Date(), 1).toISOString() },
@@ -695,7 +695,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
         schedule: [
           buildCourseSchedule({
             overrides: { end: addDays(new Date(), 1).toISOString() },
@@ -769,7 +769,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
         schedule: [
           buildCourseSchedule({
             overrides: {

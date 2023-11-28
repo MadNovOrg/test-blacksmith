@@ -1,7 +1,11 @@
 import { expect, test as base } from '@playwright/test'
 
-import { Course_Source_Enum, Course_Status_Enum } from '@app/generated/graphql'
-import { CourseType, RoleName } from '@app/types'
+import {
+  Course_Source_Enum,
+  Course_Status_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
+import { RoleName } from '@app/types'
 
 import * as API from '@qa/api'
 import { UNIQUE_COURSE } from '@qa/data/courses'
@@ -50,14 +54,14 @@ const test = base.extend<{
       API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
-          type: CourseType.OPEN,
+          type: Course_Type_Enum.Open,
         },
         users.trainer.email
       ),
       API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
-          type: CourseType.CLOSED,
+          type: Course_Type_Enum.Closed,
           source: Course_Source_Enum.EmailEnquiryCentral,
         },
         users.trainer.email
@@ -65,21 +69,21 @@ const test = base.extend<{
       API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
-          type: CourseType.INDIRECT,
+          type: Course_Type_Enum.Indirect,
         },
         users.trainer.email
       ),
       API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
-          type: CourseType.OPEN,
+          type: Course_Type_Enum.Open,
         },
         users.trainer.email
       ),
       API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
-          type: CourseType.CLOSED,
+          type: Course_Type_Enum.Closed,
           source: Course_Source_Enum.EmailEnquiryCentral,
         },
         users.trainerWithOrg.email
@@ -87,7 +91,7 @@ const test = base.extend<{
       API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
-          type: CourseType.OPEN,
+          type: Course_Type_Enum.Open,
           status: Course_Status_Enum.ConfirmModules,
         },
         users.trainer.email
@@ -95,7 +99,7 @@ const test = base.extend<{
       API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
-          type: CourseType.OPEN,
+          type: Course_Type_Enum.Open,
           status: Course_Status_Enum.Scheduled,
         },
         users.trainer.email
@@ -103,7 +107,7 @@ const test = base.extend<{
       API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
-          type: CourseType.OPEN,
+          type: Course_Type_Enum.Open,
           status: Course_Status_Enum.TrainerMissing,
         },
         users.trainer.email
@@ -111,7 +115,7 @@ const test = base.extend<{
       API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
-          type: CourseType.OPEN,
+          type: Course_Type_Enum.Open,
           status: Course_Status_Enum.TrainerPending,
         },
         users.trainer.email
@@ -119,7 +123,7 @@ const test = base.extend<{
       API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
-          type: CourseType.OPEN,
+          type: Course_Type_Enum.Open,
           status: Course_Status_Enum.TrainerDeclined,
         },
         users.trainer.email

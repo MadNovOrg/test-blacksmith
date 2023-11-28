@@ -6,6 +6,7 @@ import {
   Course_Level_Enum,
   Accreditors_Enum,
   Course_Status_Enum as CourseStatus,
+  Course_Type_Enum,
 } from '@app/generated/graphql'
 import {
   courseCategoryUserAttends,
@@ -13,13 +14,7 @@ import {
   ICourseCategoryUserAttends,
   trainerCourseProgress,
 } from '@app/pages/Resources/utils'
-import {
-  Course,
-  CourseInput,
-  CourseTrainerType,
-  CourseType,
-  RoleName,
-} from '@app/types'
+import { Course, CourseInput, CourseTrainerType, RoleName } from '@app/types'
 import {
   getCourseLeadTrainer,
   REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL,
@@ -180,19 +175,20 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canEditProfiles: () =>
       anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])(),
 
-    canViewEmailContacts: (courseType: CourseType) => {
+    canViewEmailContacts: (courseType: Course_Type_Enum) => {
       const can =
-        activeRole !== RoleName.TRAINER || courseType === CourseType.INDIRECT
+        activeRole !== RoleName.TRAINER ||
+        courseType === Course_Type_Enum.Indirect
 
       return can
     },
 
     canBookingContactCancelResendInvite: (
-      courseType: CourseType,
+      courseType: Course_Type_Enum,
       courseStatus: CourseStatus
     ) => {
       return [
-        courseType === CourseType.CLOSED,
+        courseType === Course_Type_Enum.Closed,
         acl.isBookingContact(),
         [
           CourseStatus.EvaluationMissing,
@@ -207,11 +203,11 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canInviteAttendees: (
-      courseType: CourseType,
+      courseType: Course_Type_Enum,
       courseStatus?: CourseStatus
     ) => {
       switch (courseType) {
-        case CourseType.OPEN:
+        case Course_Type_Enum.Open:
           return anyPass([
             acl.isTTAdmin,
             acl.isTTOps,
@@ -219,7 +215,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
             acl.isSalesRepresentative,
             acl.isOrgAdmin,
           ])()
-        case CourseType.CLOSED:
+        case Course_Type_Enum.Closed:
           return anyPass([
             acl.isTTAdmin,
             acl.isTTOps,
@@ -234,7 +230,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
                   )
                 : false,
           ])()
-        case CourseType.INDIRECT:
+        case Course_Type_Enum.Indirect:
           return anyPass([
             acl.isTTAdmin,
             acl.isTTOps,
@@ -282,17 +278,17 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canCreateCourses: () =>
       anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin, acl.isTrainer])(),
 
-    canCreateCourse: (type: CourseType) => {
+    canCreateCourse: (type: Course_Type_Enum) => {
       switch (activeRole) {
         case RoleName.TT_ADMIN:
         case RoleName.TT_OPS:
           return true
         case RoleName.SALES_ADMIN: {
-          return [CourseType.CLOSED, CourseType.OPEN].includes(type)
+          return [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(type)
         }
         case RoleName.TRAINER:
           return (
-            [CourseType.INDIRECT].includes(type) &&
+            [Course_Type_Enum.Indirect].includes(type) &&
             acl.canCreateSomeCourseLevel()
           )
       }
@@ -322,11 +318,11 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canCreateSomeCourseLevel: () => {
       const allowedICMLevels =
         acl.allowedCourseLevels(
-          getLevels(CourseType.INDIRECT, Accreditors_Enum.Icm)
+          getLevels(Course_Type_Enum.Indirect, Accreditors_Enum.Icm)
         ).length > 0
       const allowedBILDLevels =
         acl.allowedCourseLevels(
-          getLevels(CourseType.INDIRECT, Accreditors_Enum.Bild)
+          getLevels(Course_Type_Enum.Indirect, Accreditors_Enum.Bild)
         ).length > 0
 
       return allowedBILDLevels || allowedICMLevels
@@ -338,11 +334,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         case RoleName.TT_OPS:
           return true
         case RoleName.SALES_ADMIN: {
-          return [CourseType.CLOSED, CourseType.OPEN].includes(course.type)
+          return [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
+            course.type
+          )
         }
         case RoleName.TRAINER:
           return (
-            [CourseType.INDIRECT].includes(course.type) &&
+            [Course_Type_Enum.Indirect].includes(course.type) &&
             acl.isCourseLeader(course)
           )
       }
@@ -397,7 +395,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canRescheduleWithoutWarning: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
 
-    canEditWithoutRestrictions: (courseType: CourseType) => {
+    canEditWithoutRestrictions: (courseType: Course_Type_Enum) => {
       if (!activeRole) {
         return false
       }
@@ -407,15 +405,15 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       }
 
       switch (courseType) {
-        case CourseType.INDIRECT: {
+        case Course_Type_Enum.Indirect: {
           return false
         }
 
-        case CourseType.CLOSED: {
+        case Course_Type_Enum.Closed: {
           return anyPass([acl.isTTOps])()
         }
 
-        case CourseType.OPEN: {
+        case Course_Type_Enum.Open: {
           return anyPass([acl.isTTOps, acl.isSalesAdmin])()
         }
       }
@@ -591,12 +589,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       participantOrgIds: string[],
       course: Course
     ) =>
-      (course.type === CourseType.CLOSED
+      (course.type === Course_Type_Enum.Closed
         ? [
             acl.canCancelParticipantCLOSED(participantOrgIds, course),
             acl.canSendCourseInformationCLOSED(participantOrgIds, course),
           ]
-        : course.type === CourseType.INDIRECT
+        : course.type === Course_Type_Enum.Indirect
         ? [
             acl.canCancelParticipantINDIRECT(participantOrgIds, course),
             acl.canSendCourseInformationINDIRECT(participantOrgIds, course),
@@ -671,13 +669,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.canOverrideGrades,
       ])(),
 
-    canCreateBildCourse: (type: CourseType) => {
+    canCreateBildCourse: (type: Course_Type_Enum) => {
       if (!activeRole) {
         return false
       }
 
       switch (type) {
-        case CourseType.INDIRECT: {
+        case Course_Type_Enum.Indirect: {
           if (activeRole === RoleName.TRAINER) {
             return [
               Course_Level_Enum.BildIntermediateTrainer,
@@ -687,8 +685,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
           return [RoleName.TT_OPS, RoleName.TT_ADMIN].includes(activeRole)
         }
-        case CourseType.OPEN:
-        case CourseType.CLOSED: {
+        case Course_Type_Enum.Open:
+        case Course_Type_Enum.Closed: {
           /**
            * TODO: Patch this bug.
            * @see https://behaviourhub.atlassian.net/browse/TTHP-761
@@ -721,8 +719,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       if (
         !(
           course?.accreditedBy === Accreditors_Enum.Icm &&
-          (course?.type === CourseType.CLOSED ||
-            course?.type === CourseType.INDIRECT)
+          (course?.type === Course_Type_Enum.Closed ||
+            course?.type === Course_Type_Enum.Indirect)
         )
       ) {
         return false

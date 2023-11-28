@@ -11,30 +11,32 @@ import React, {
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import { useMount } from 'react-use'
+import { useQuery } from 'urql'
 
 import {
   Course_Source_Enum,
+  Course_Type_Enum,
+  GetCoursePricingQuery,
+  GetCoursePricingQueryVariables,
+  GetTempProfileQuery,
+  GetTempProfileQueryVariables,
   PaymentMethod,
   Promo_Code,
   Promo_Code_Type_Enum,
   PromoCodeOutput,
+  Currency,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { stripeProcessingFeeRate } from '@app/lib/stripe'
-import { GetCoursePricing } from '@app/queries/courses/get-course-pricing'
+import { GET_COURSE_PRICING_QUERY } from '@app/queries/courses/get-course-pricing'
 import {
   MUTATION as CREATE_ORDER,
   ParamsType as CreateOrderParamsType,
   ResponseType as CreateOrderResponseType,
 } from '@app/queries/order/create-order'
-import {
-  QUERY as GET_TEMP_PROFILE,
-  ResponseType as GetTempProfileResponseType,
-} from '@app/queries/profile/get-temp-profile'
+import { QUERY as GET_TEMP_PROFILE } from '@app/queries/profile/get-temp-profile'
 import {
   CourseExpenseType,
-  CourseType,
-  Currency,
   InvoiceDetails,
   Profile,
   TransportMethod,
@@ -74,7 +76,7 @@ export type BookingContact = {
   email: string
 }
 
-type CourseDetails = GetTempProfileResponseType['tempProfiles'][0]['course']
+type CourseDetails = GetTempProfileQuery['tempProfiles'][0]['course']
 
 type State = {
   participants: ParticipantInput[]
@@ -95,7 +97,7 @@ type State = {
   paymentMethod: PaymentMethod
   freeSpaces: number
   trainerExpenses: number
-  courseType: CourseType
+  courseType: Course_Type_Enum
 
   invoiceDetails?: InvoiceDetails
 }
@@ -157,9 +159,22 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
 
   const isBooked = location.pathname.startsWith('/booking/payment/')
   const internalBooking = useRef(location.state?.internalBooking)
+  const [{ data: coursePricingData, error: coursePricingError }] = useQuery<
+    GetCoursePricingQuery,
+    GetCoursePricingQueryVariables
+  >({
+    query: GET_COURSE_PRICING_QUERY,
+    variables: { courseId: course?.id ?? 0 },
+  })
+
+  const [{ data }] = useQuery<
+    GetTempProfileQuery,
+    GetTempProfileQueryVariables
+  >({
+    query: GET_TEMP_PROFILE,
+  })
 
   useMount(async () => {
-    const data = await fetcher<GetTempProfileResponseType>(GET_TEMP_PROFILE)
     const [profile] = data?.tempProfiles || []
 
     if (!profile || !profile.course) {
@@ -168,7 +183,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       return
     }
 
-    let pricing: Awaited<ReturnType<typeof GetCoursePricing>>['pricing']
+    let pricing: GetCoursePricingQuery['pricing']
 
     // course has custom pricing (e.g BILD)
     if (profile.course.price && profile.course.priceCurrency) {
@@ -178,12 +193,10 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         xeroCode: '',
       }
     } else {
-      const pricingResponse = await GetCoursePricing(fetcher, profile.course.id)
-
-      if (!pricingResponse) {
+      if (!coursePricingError) {
         setError(t('error-no-pricing'))
       } else {
-        pricing = pricingResponse.pricing
+        pricing = coursePricingData?.pricing
       }
     }
 
@@ -218,13 +231,13 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
 
     setAvailableSeats(
       profile.course.maxParticipants -
-        profile.course.participants.aggregate.count
+        (profile.course.participants.aggregate?.count ?? 0)
     )
     setCourse(profile.course)
 
     if (pricing) {
       setBooking({
-        quantity: profile.quantity,
+        quantity: profile.quantity ?? 0,
         participants: [],
         price: pricing.priceAmount,
         currency: pricing.priceCurrency,
@@ -341,14 +354,14 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
 
   const placeOrder = useCallback(async () => {
     const promoCodes =
-      booking.courseType !== CourseType.CLOSED ? booking.promoCodes : []
+      booking.courseType !== Course_Type_Enum.Closed ? booking.promoCodes : []
 
     const response = await fetcher<
       CreateOrderResponseType,
       CreateOrderParamsType
     >(CREATE_ORDER, {
       input: {
-        courseId: course.id,
+        courseId: course?.id ?? 0,
         quantity: booking.quantity,
         paymentMethod: booking.paymentMethod,
         billingAddress: booking.invoiceDetails?.billingAddress ?? '',

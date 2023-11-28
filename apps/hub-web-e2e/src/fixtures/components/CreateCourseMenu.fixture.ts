@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { CourseType } from '@app/types'
+import { Course_Type_Enum } from '@app/generated/graphql'
 
 import { CreateCoursePage } from '@qa/fixtures/pages/courses/CreateCoursePage.fixture'
 
@@ -22,7 +22,9 @@ export class CreateCourseMenu {
     return new CreateCoursePage(this.page)
   }
 
-  async selectCreateCourseOption(type: CourseType): Promise<CreateCoursePage> {
+  async selectCreateCourseOption(
+    type: Course_Type_Enum
+  ): Promise<CreateCoursePage> {
     await this.createCourseButton.click()
     await this.option(`create-course-${type}`).click()
     return new CreateCoursePage(this.page)

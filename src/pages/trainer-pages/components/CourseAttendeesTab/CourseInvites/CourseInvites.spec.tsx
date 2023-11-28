@@ -3,9 +3,12 @@ import { saveAs } from 'file-saver'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
-import { ExportBlendedLearningCourseDataQuery } from '@app/generated/graphql'
+import {
+  Course_Type_Enum,
+  ExportBlendedLearningCourseDataQuery,
+} from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
-import { Course, CourseType, InviteStatus, RoleName } from '@app/types'
+import { Course, InviteStatus, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { chance, render, screen, userEvent, waitForCalls } from '@test/index'
@@ -116,7 +119,7 @@ describe(CourseInvites.name, () => {
   it('does not render if it is an open course', async () => {
     course = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
       },
     })
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
@@ -370,7 +373,7 @@ describe(CourseInvites.name, () => {
   it("doesn't display the invite attendees button for trainers on a closed course", () => {
     const course = buildCourse({
       overrides: {
-        type: CourseType.CLOSED,
+        type: Course_Type_Enum.Closed,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -394,7 +397,7 @@ describe(CourseInvites.name, () => {
   it("doesn't display the invite attendees button for booking contact from different course", () => {
     const course = buildCourse({
       overrides: {
-        type: CourseType.CLOSED,
+        type: Course_Type_Enum.Closed,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -421,7 +424,7 @@ describe(CourseInvites.name, () => {
   it('display the invite attendees button for booking contact of the course', () => {
     const course = buildCourse({
       overrides: {
-        type: CourseType.CLOSED,
+        type: Course_Type_Enum.Closed,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -453,7 +456,7 @@ describe(CourseInvites.name, () => {
   it('should render progress export button for blended learning', () => {
     const course = buildCourse({
       overrides: {
-        type: CourseType.INDIRECT,
+        type: Course_Type_Enum.Indirect,
         go1Integration: true,
       },
     })
@@ -471,7 +474,7 @@ describe(CourseInvites.name, () => {
 
     const course2 = buildCourse({
       overrides: {
-        type: CourseType.INDIRECT,
+        type: Course_Type_Enum.Indirect,
         go1Integration: false,
       },
     })
@@ -489,7 +492,7 @@ describe(CourseInvites.name, () => {
   it('should not render progress export button for non blended learning course', () => {
     const course = buildCourse({
       overrides: {
-        type: CourseType.INDIRECT,
+        type: Course_Type_Enum.Indirect,
         go1Integration: false,
       },
     })
@@ -509,7 +512,7 @@ describe(CourseInvites.name, () => {
   it('should not render progress export button if number of attendances is 0', () => {
     const course = buildCourse({
       overrides: {
-        type: CourseType.INDIRECT,
+        type: Course_Type_Enum.Indirect,
         go1Integration: true,
       },
     })
@@ -533,7 +536,7 @@ describe(CourseInvites.name, () => {
   it('should be called saveAs on progress button clicked', async () => {
     const course = buildCourse({
       overrides: {
-        type: CourseType.INDIRECT,
+        type: Course_Type_Enum.Indirect,
         go1Integration: true,
       },
     })

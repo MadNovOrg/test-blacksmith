@@ -1,8 +1,7 @@
-import { Course_Level_Enum } from '@app/generated/graphql'
-import { CourseType } from '@app/types'
+import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 
 type ModeratorCriteria = {
-  courseType: CourseType
+  courseType: Course_Type_Enum
   courseLevel: Course_Level_Enum
   isReaccreditation: boolean
   isConversion?: boolean
@@ -14,7 +13,7 @@ export function isModeratorNeeded({
   isReaccreditation,
   isConversion = false,
 }: ModeratorCriteria): boolean {
-  if (courseType === CourseType.INDIRECT) return false
+  if (courseType === Course_Type_Enum.Indirect) return false
 
   if (
     [
@@ -33,12 +32,12 @@ export function isModeratorNeeded({
 }
 
 export function isModeratorMandatory(criteria: {
-  courseType: CourseType
+  courseType: Course_Type_Enum
   courseLevel: Course_Level_Enum
   isReaccreditation: boolean
   isConversion?: boolean
 }): boolean {
   const needsModerator = isModeratorNeeded(criteria)
 
-  return criteria.courseType == CourseType.OPEN ? false : needsModerator
+  return criteria.courseType == Course_Type_Enum.Open ? false : needsModerator
 }

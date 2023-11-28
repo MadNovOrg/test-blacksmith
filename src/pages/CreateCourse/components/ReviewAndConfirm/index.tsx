@@ -19,16 +19,16 @@ import useSWR from 'swr'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
+  Course_Type_Enum,
   GetOrderReducedQuery,
   GetOrderReducedQueryVariables,
 } from '@app/generated/graphql'
 import usePollQuery from '@app/hooks/usePollQuery'
+import { StepsEnum } from '@app/pages/CreateCourse/types'
+import { useSaveCourse } from '@app/pages/CreateCourse/useSaveCourse'
 import { GET_ORDER_REDUCED } from '@app/queries/order/get-order-reduced'
-import { CourseType } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { StepsEnum } from '../../types'
-import { useSaveCourse } from '../../useSaveCourse'
 import { useCreateCourse } from '../CreateCourseProvider'
 
 import { PageContent } from './PageContent'
@@ -213,7 +213,7 @@ export const ReviewAndConfirm = () => {
         </Box>
 
         <Box mb={2}>
-          {acl.isTrainer() && courseData.type === CourseType.INDIRECT && (
+          {acl.isTrainer() && courseData.type === Course_Type_Enum.Indirect && (
             <Button
               variant="text"
               sx={{ marginRight: 4 }}

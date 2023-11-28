@@ -15,10 +15,10 @@ import { useAuth } from '@app/context/auth'
 import { GetUpcomingCoursesQuery } from '@app/generated/graphql'
 import { capitalize } from '@app/util/index'
 
-type CourseType = GetUpcomingCoursesQuery['courses'][0]
+type UpcomingCourse = GetUpcomingCoursesQuery['courses'][0]
 
 type CourseForBookingTileParams = {
-  course: CourseType
+  course: UpcomingCourse
   variant?: 'default' | 'row'
   showDistance?: boolean
   distance?: number | null
@@ -103,7 +103,7 @@ export const CourseForBookingTile: React.FC<
     return navigate(
       spacesLeft === 0
         ? `/waitlist?course_id=${course.id}`
-        : `/registration?course_id=${course.id}&quantity=1${
+        : `/course-registration?course_id=${course.id}&quantity=1${
             acl.isInternalUser() ? '&internal=true' : ''
           }`
     )

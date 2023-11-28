@@ -5,8 +5,10 @@ import { hasRenewalCycle } from '@app/components/CourseForm/helpers'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
+  Course_Delivery_Type_Enum,
   Course_Expenses_Insert_Input,
   Course_Status_Enum,
+  Course_Type_Enum,
   Payment_Methods_Enum,
   RemoveCourseDraftMutation,
   RemoveCourseDraftMutationVariables,
@@ -22,10 +24,8 @@ import { QUERY as REMOVE_COURSE_DRAFT } from '@app/queries/courses/remove-course
 import { isModeratorNeeded } from '@app/rules/trainers'
 import {
   BildStrategies,
-  CourseDeliveryType,
   CourseExpenseType,
   CourseTrainerType,
-  CourseType,
   Currency,
   ExpensesInput,
   TrainerInput,
@@ -157,7 +157,7 @@ export function useSaveCourse(): {
         const leadTrainerMissing =
           trainers.filter(t => t.type === CourseTrainerType.Leader).length === 0
         const approveExceptions =
-          !(isBild && courseData.type === CourseType.INDIRECT) &&
+          !(isBild && courseData.type === Course_Type_Enum.Indirect) &&
           exceptions.length > 0 &&
           shouldGoIntoExceptionApproval(acl, courseData.type)
 
@@ -168,12 +168,12 @@ export function useSaveCourse(): {
           : Course_Status_Enum.TrainerPending
 
         const shouldInsertOrder =
-          (courseData.type === CourseType.INDIRECT &&
+          (courseData.type === Course_Type_Enum.Indirect &&
             courseData.blendedLearning) ||
-          courseData.type === CourseType.CLOSED
+          courseData.type === Course_Type_Enum.Closed
 
         const invoiceData =
-          courseData.type === CourseType.INDIRECT
+          courseData.type === Course_Type_Enum.Indirect
             ? go1Licensing?.invoiceDetails
             : invoiceDetails
 
@@ -186,7 +186,7 @@ export function useSaveCourse(): {
               name: courseName,
               deliveryType: courseData.deliveryType,
               accreditedBy: courseData.accreditedBy,
-              ...(courseData.type === CourseType.OPEN
+              ...(courseData.type === Course_Type_Enum.Open
                 ? { displayOnWebsite: courseData.displayOnWebsite }
                 : null),
               bildStrategies: isBild
@@ -204,7 +204,9 @@ export function useSaveCourse(): {
               reaccreditation: courseData.reaccreditation,
               go1Integration: courseData.blendedLearning,
               ...(isBild &&
-              [CourseType.CLOSED, CourseType.OPEN].includes(courseData.type)
+              [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
+                courseData.type
+              )
                 ? { price: courseData.price, conversion: courseData.conversion }
                 : null),
               status,
@@ -271,8 +273,8 @@ export function useSaveCourse(): {
                     start: courseData.startDateTime,
                     end: courseData.endDateTime,
                     virtualLink: [
-                      CourseDeliveryType.VIRTUAL,
-                      CourseDeliveryType.MIXED,
+                      Course_Delivery_Type_Enum.Virtual,
+                      Course_Delivery_Type_Enum.Mixed,
                     ].includes(courseData.deliveryType)
                       ? courseData.zoomMeetingUrl
                       : undefined,
@@ -281,13 +283,13 @@ export function useSaveCourse(): {
                   },
                 ],
               },
-              ...(courseData.type !== CourseType.INDIRECT
+              ...(courseData.type !== Course_Type_Enum.Indirect
                 ? {
                     accountCode: courseData.accountCode,
                     freeSpaces: courseData.freeSpaces,
                   }
                 : null),
-              ...(courseData.type === CourseType.CLOSED
+              ...(courseData.type === Course_Type_Enum.Closed
                 ? {
                     expenses: { data: prepareExpensesData(expenses) },
                   }
@@ -309,7 +311,7 @@ export function useSaveCourse(): {
                           clientPurchaseOrder: invoiceData.purchaseOrder,
                           paymentMethod: Payment_Methods_Enum.Invoice,
                           quantity:
-                            courseData.type === CourseType.CLOSED
+                            courseData.type === Course_Type_Enum.Closed
                               ? courseData.maxParticipants
                               : 0,
                           currency: Currency.GBP,

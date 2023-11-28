@@ -25,10 +25,11 @@ import {
   Course_Status_Enum,
   ExportBlendedLearningCourseDataQuery,
   ExportBlendedLearningCourseDataQueryVariables,
+  Course_Type_Enum,
 } from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import { EXPORT_BLENDED_LEARNING_ATTENDEES } from '@app/queries/blended-learning-attendees/blended-learning-attendees-data'
-import { Course, CourseType, InviteStatus } from '@app/types'
+import { Course, InviteStatus } from '@app/types'
 import { courseEnded } from '@app/util'
 
 type Props = {
@@ -162,8 +163,8 @@ export const CourseInvites = ({
     return t('pages.course-participants.invite-error-UNKNOWN')
   }, [error, t])
 
-  const courseHasEnded = course && courseEnded(course)
-  const isOpenCourse = course && course.type === CourseType.OPEN
+  const courseHasEnded = course && courseEnded(course as Course)
+  const isOpenCourse = course && course.type === Course_Type_Enum.Open
 
   const renderInput = useCallback(
     (params: TextFieldProps) => (
@@ -190,7 +191,7 @@ export const CourseInvites = ({
 
   const allowInvites =
     acl.canInviteAttendees(course.type) ||
-    (course.type === CourseType.CLOSED &&
+    (course.type === Course_Type_Enum.Closed &&
       course.bookingContact?.id === profile?.id)
 
   useUpdateEffect(() => {
@@ -286,7 +287,7 @@ export const CourseInvites = ({
                 sx={{ ml: 2 }}
                 onClick={() => {
                   navigate(
-                    `/registration?course_id=${course.id}&quantity=1&internal=true`
+                    `/course-registration?course_id=${course.id}&quantity=1&internal=true`
                   )
                 }}
                 disabled={invitesLeft === 0}

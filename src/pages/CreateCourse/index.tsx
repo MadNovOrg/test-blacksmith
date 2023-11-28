@@ -3,8 +3,8 @@ import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
+import { Course_Type_Enum } from '@app/generated/graphql'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
-import { CourseType } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import {
@@ -31,7 +31,7 @@ export const CreateCourse = ({ initialContextValue }: Props) => {
     updatedAt: draftUpdatedAt,
   } = useCourseDraft(draftId)
 
-  const courseType: CourseType = useMemo(
+  const courseType: Course_Type_Enum = useMemo(
     () =>
       draftData.courseData?.type ??
       getCourseType(

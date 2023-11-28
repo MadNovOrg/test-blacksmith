@@ -3,11 +3,12 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {
   Course_Invite_Status_Enum,
+  Course_Type_Enum,
   SaveCourseInvitesMutation,
   SaveCourseInvitesMutationVariables,
 } from '@app/generated/graphql'
 import { MUTATION as SaveInvites } from '@app/queries/invites/save-course-invites'
-import { CourseType, RoleName } from '@app/types'
+import { RoleName } from '@app/types'
 
 import * as API from '@qa/api'
 import { getProfileId } from '@qa/api/hasura/profile'
@@ -46,7 +47,7 @@ function buildMutationInput(
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
-    course.type = CourseType.OPEN
+    course.type = Course_Type_Enum.Open
     course.id = await API.course.insertCourse(course, users.trainer.email)
     await use(course)
     await API.course.deleteCourse(course.id)

@@ -10,14 +10,14 @@ import {
   Course_Level_Enum,
   Currency,
   Payment_Methods_Enum,
+  Course_Type_Enum,
+  Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { dateFormats } from '@app/i18n/config'
 import { MUTATION } from '@app/queries/courses/insert-course'
 import {
-  CourseDeliveryType,
   CourseTrainerType,
-  CourseType,
   Draft,
   Organization,
   TrainerInput,
@@ -50,7 +50,7 @@ describe('component: ReviewLicenseOrder', () => {
   it('displays an alert if there is no course or pricing data in the context', () => {
     render(
       <Provider value={createFetchingClient()}>
-        <CreateCourseProvider courseType={CourseType.INDIRECT}>
+        <CreateCourseProvider courseType={Course_Type_Enum.Indirect}>
           <ReviewLicenseOrder />
         </CreateCourseProvider>
       </Provider>
@@ -94,7 +94,7 @@ describe('component: ReviewLicenseOrder', () => {
     render(
       <Provider value={createFetchingClient()}>
         <CreateCourseProvider
-          courseType={CourseType.INDIRECT}
+          courseType={Course_Type_Enum.Indirect}
           initialValue={{ courseData, go1Licensing } as Draft}
         >
           <ReviewLicenseOrder />
@@ -165,11 +165,11 @@ describe('component: ReviewLicenseOrder', () => {
       courseLevel: Course_Level_Enum.Level_1,
       startDateTime: startDate,
       endDateTime: endDate,
-      type: CourseType.INDIRECT,
+      type: Course_Type_Enum.Indirect,
       reaccreditation: false,
       blendedLearning: true,
       maxParticipants: 12,
-      deliveryType: CourseDeliveryType.F2F,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
       organization: {
         id: 'org-id',
       } as Organization,
@@ -204,7 +204,7 @@ describe('component: ReviewLicenseOrder', () => {
     render(
       <Provider value={createFetchingClient()}>
         <CreateCourseProvider
-          courseType={CourseType.INDIRECT}
+          courseType={Course_Type_Enum.Indirect}
           initialValue={
             {
               courseData,

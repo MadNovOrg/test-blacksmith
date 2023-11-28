@@ -1,6 +1,7 @@
 import { test as base } from '@playwright/test'
 
-import { CourseType, InviteStatus } from '@app/types'
+import { Course_Type_Enum } from '@app/generated/graphql'
+import { InviteStatus } from '@app/types'
 
 import * as API from '@qa/api'
 import { UNIQUE_COURSE } from '@qa/data/courses'
@@ -26,7 +27,7 @@ const testData = [
     name: 'accept indirect course as trainer',
     course: async () => {
       const course = UNIQUE_COURSE()
-      course.type = CourseType.INDIRECT
+      course.type = Course_Type_Enum.Indirect
       course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
@@ -39,7 +40,7 @@ const testData = [
     name: 'accept closed course as trainer',
     course: async () => {
       const course = UNIQUE_COURSE()
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.id = await API.course.insertCourse(
         course,
         users.trainer.email,

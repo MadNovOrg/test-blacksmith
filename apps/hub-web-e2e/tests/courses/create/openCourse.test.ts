@@ -1,7 +1,9 @@
 import { test as base } from '@playwright/test'
 
-import { Course_Level_Enum } from '@app/generated/graphql'
-import { CourseDeliveryType } from '@app/types'
+import {
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+} from '@app/generated/graphql'
 
 import * as API from '@qa/api'
 import { UNIQUE_COURSE } from '@qa/data/courses'
@@ -16,7 +18,7 @@ const dataSet = [
     user: 'admin',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.deliveryType = CourseDeliveryType.VIRTUAL
+      course.deliveryType = Course_Delivery_Type_Enum.Virtual
       return course
     })(),
   },
@@ -25,7 +27,7 @@ const dataSet = [
     user: 'ops',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.deliveryType = CourseDeliveryType.VIRTUAL
+      course.deliveryType = Course_Delivery_Type_Enum.Virtual
       return course
     })(),
   },
@@ -34,7 +36,7 @@ const dataSet = [
     user: 'ops',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.deliveryType = CourseDeliveryType.F2F
+      course.deliveryType = Course_Delivery_Type_Enum.F2F
       return course
     })(),
   },
@@ -44,22 +46,10 @@ const dataSet = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = Course_Level_Enum.Level_2
-      course.deliveryType = CourseDeliveryType.MIXED
+      course.deliveryType = Course_Delivery_Type_Enum.Mixed
       return course
     })(),
   },
-
-  //TODO uncomment after TTHP-575 will be moved to done
-  // {
-  //   name: 'open L2 F2F as sales admin',
-  //   user: 'salesAdmin',
-  //   course: (() => {
-  //     const course = UNIQUE_COURSE()
-  //     course.level = CourseLevel.Level_2
-  //     course.deliveryType = CourseDeliveryType.F2F
-  //     return course
-  //   })(),
-  // },
 ]
 
 for (const data of dataSet) {

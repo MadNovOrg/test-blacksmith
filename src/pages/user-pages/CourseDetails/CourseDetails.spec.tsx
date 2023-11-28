@@ -3,10 +3,11 @@ import { Route, Routes } from 'react-router-dom'
 import { Client, Provider, TypedDocumentNode } from 'urql'
 import { fromValue } from 'wonka'
 
+import { Course_Type_Enum } from '@app/generated/graphql'
 import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/queries/course-evaluation/get-feedback-users'
 import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
 import { QUERY as GET_COURSE_QUERY } from '@app/queries/user-queries/get-course-by-id'
-import { Course, CourseParticipant, CourseType, RoleName } from '@app/types'
+import { Course, CourseParticipant, RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
 import {
@@ -70,7 +71,7 @@ describe(CourseDetails.name, () => {
   it('correctly displays *Change my attendance* modal title', async () => {
     const course = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: Course_Type_Enum.Open,
         schedule: [
           {
             id: chance.guid(),

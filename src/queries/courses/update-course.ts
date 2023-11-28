@@ -4,8 +4,9 @@ import {
   Course_Source_Enum,
   Course_Status_Enum,
   Course_Level_Enum,
+  Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
-import { CourseDeliveryType, CourseTrainerType } from '@app/types'
+import { CourseTrainerType } from '@app/types'
 
 // TODO: Scrap these custom types 🥲 and use UpdateCourseMutation and UpdateCourseMutation variables from graphql.ts
 export type ParamsType = {
@@ -15,7 +16,7 @@ export type ParamsType = {
     status: Course_Status_Enum | null
     exceptionsPending?: boolean
     name: string
-    deliveryType: CourseDeliveryType
+    deliveryType: Course_Delivery_Type_Enum
     level?: Course_Level_Enum
     organization_id?: string
     bookingContactProfileId?: string | null

@@ -1,20 +1,15 @@
 import { t } from 'i18next'
 
-import { CourseDeliveryType } from '@app/types'
+import { Course_Delivery_Type_Enum, Venue } from '@app/generated/graphql'
 
 export function formatCourseVenue(
-  deliveryType: CourseDeliveryType,
-  venue?: {
-    name?: string
-    addressLineOne?: string
-    addressLineTwo?: string
-    city?: string
-    postCode?: string
-    country?: string | null
-  }
+  deliveryType: Course_Delivery_Type_Enum,
+  venue?: Venue
 ): string {
   if (
-    [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(deliveryType)
+    [Course_Delivery_Type_Enum.F2F, Course_Delivery_Type_Enum.Mixed].includes(
+      deliveryType
+    )
   ) {
     if (venue?.name || venue?.city || venue?.country) {
       return [
@@ -30,21 +25,23 @@ export function formatCourseVenue(
     } else {
       return t('common.tbc')
     }
-  } else if (deliveryType === CourseDeliveryType.VIRTUAL) {
+  } else if (deliveryType === Course_Delivery_Type_Enum.Virtual) {
     return t('common.course-delivery-type.VIRTUAL')
   }
   return ''
 }
 
 export function formatCourseVenueName(
-  deliveryType: CourseDeliveryType,
+  deliveryType: Course_Delivery_Type_Enum,
   venueName?: string
 ): string {
   if (
-    [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(deliveryType)
+    [Course_Delivery_Type_Enum.F2F, Course_Delivery_Type_Enum.Mixed].includes(
+      deliveryType
+    )
   ) {
     return venueName || t('common.tbc')
-  } else if (deliveryType === CourseDeliveryType.VIRTUAL) {
+  } else if (deliveryType === Course_Delivery_Type_Enum.Virtual) {
     return t('common.course-delivery-type.VIRTUAL')
   }
   return ''

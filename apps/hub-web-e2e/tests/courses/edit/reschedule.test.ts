@@ -1,8 +1,12 @@
 import { expect, test as base } from '@playwright/test'
 import { addMonths, format } from 'date-fns'
 
-import { Course_Source_Enum, Course_Status_Enum } from '@app/generated/graphql'
-import { CourseType, InviteStatus } from '@app/types'
+import {
+  Course_Source_Enum,
+  Course_Status_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
+import { InviteStatus } from '@app/types'
 
 import * as API from '@qa/api'
 import { UNIQUE_COURSE } from '@qa/data/courses'
@@ -43,7 +47,7 @@ const testDataMovingEarlier = [
     course: async () => {
       const course = UNIQUE_COURSE()
       const order = await UNIQUE_ORDER(users.salesAdmin, [])
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.Scheduled
       course.organization = { name: 'London First School' }
       course.assistTrainer = users.assistant
@@ -72,7 +76,7 @@ const testDataMovingEarlier = [
     newEndDate: addMonths(new Date().setHours(17, 0), 2),
     course: async () => {
       const course = UNIQUE_COURSE()
-      course.type = CourseType.INDIRECT
+      course.type = Course_Type_Enum.Indirect
       course.status = Course_Status_Enum.Scheduled
       course.schedule[0].start = addMonths(new Date().setHours(9, 0), 3)
       course.schedule[0].end = addMonths(new Date().setHours(17, 0), 3)
@@ -181,7 +185,7 @@ const testDataMovingLater = [
     course: async () => {
       const course = UNIQUE_COURSE()
       const order = await UNIQUE_ORDER(users.salesAdmin, [])
-      course.type = CourseType.CLOSED
+      course.type = Course_Type_Enum.Closed
       course.status = Course_Status_Enum.Scheduled
       course.organization = { name: 'London First School' }
       course.assistTrainer = users.assistant
@@ -210,7 +214,7 @@ const testDataMovingLater = [
     newEndDate: addMonths(new Date().setHours(17, 0), 4),
     course: async () => {
       const course = UNIQUE_COURSE()
-      course.type = CourseType.INDIRECT
+      course.type = Course_Type_Enum.Indirect
       course.status = Course_Status_Enum.Scheduled
       course.schedule[0].start = addMonths(new Date().setHours(9, 0), 3)
       course.schedule[0].end = addMonths(new Date().setHours(17, 0), 3)

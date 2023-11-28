@@ -2,7 +2,8 @@ import React from 'react'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
-import { CourseType, RoleName, ValidCourseInput } from '@app/types'
+import { Course_Type_Enum } from '@app/generated/graphql'
+import { RoleName, ValidCourseInput } from '@app/types'
 import { courseToCourseInput } from '@app/util'
 
 import { render, screen, within, waitFor } from '@test/index'
@@ -36,7 +37,7 @@ describe('component: AssignTrainers', () => {
   it('renders alert if course is not found', async () => {
     render(
       <Provider value={createFetchingClient()}>
-        <CreateCourseProvider courseType={CourseType.OPEN}>
+        <CreateCourseProvider courseType={Course_Type_Enum.Open}>
           <AssignTrainers />
         </CreateCourseProvider>
       </Provider>,
@@ -61,7 +62,7 @@ describe('component: AssignTrainers', () => {
           initialValue={{
             courseData: courseToCourseInput(course) as ValidCourseInput,
           }}
-          courseType={CourseType.OPEN}
+          courseType={Course_Type_Enum.Open}
         >
           <AssignTrainers />
         </CreateCourseProvider>
@@ -87,7 +88,7 @@ describe('component: AssignTrainers', () => {
           initialValue={{
             courseData: courseToCourseInput(course) as ValidCourseInput,
           }}
-          courseType={CourseType.OPEN}
+          courseType={Course_Type_Enum.Open}
         >
           <AssignTrainers />
         </CreateCourseProvider>

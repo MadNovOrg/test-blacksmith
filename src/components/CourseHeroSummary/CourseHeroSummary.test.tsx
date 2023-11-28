@@ -1,7 +1,8 @@
 import { add, sub } from 'date-fns'
 import React from 'react'
 
-import { CourseDeliveryType, RoleName } from '@app/types'
+import { Course_Delivery_Type_Enum } from '@app/generated/graphql'
+import { RoleName } from '@app/types'
 
 import { render, screen } from '@test/index'
 import {
@@ -222,7 +223,7 @@ describe('component: CourseHeroSummary', () => {
   it('displays Virtual if course is online', () => {
     const course = buildCourse({
       overrides: {
-        deliveryType: CourseDeliveryType.VIRTUAL,
+        deliveryType: Course_Delivery_Type_Enum.Virtual,
       },
     })
 

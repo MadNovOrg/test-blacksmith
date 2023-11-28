@@ -7,19 +7,16 @@ import {
   Course_Status_Enum,
   Order_Insert_Input,
   Course_Level_Enum,
+  Course_Delivery_Type_Enum,
+  Course_Type_Enum,
 } from '@app/generated/graphql'
-import {
-  BildStrategies,
-  CourseDeliveryType,
-  CourseTrainerType,
-  CourseType,
-} from '@app/types'
+import { BildStrategies, CourseTrainerType } from '@app/types'
 
 export type ParamsType = {
   course: {
     name: string
-    type: CourseType
-    deliveryType: CourseDeliveryType
+    type: Course_Type_Enum
+    deliveryType: Course_Delivery_Type_Enum
     accreditedBy: Accreditors_Enum
     displayOnWebsite?: boolean
     bildStrategies?: { data: Array<{ strategyName: BildStrategies }> }

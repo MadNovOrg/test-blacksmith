@@ -11,7 +11,7 @@ export type ResponseType = {
   }
 }
 
-export const QUERY = gql`
+export const GET_COURSE_PRICING_QUERY = gql`
   query GetCoursePricing($courseId: Int!) {
     pricing: getCoursePricing(input: { courseId: $courseId }) {
       priceAmount
@@ -26,7 +26,7 @@ export const GetCoursePricing = async (
   courseId: number
 ): Promise<ResponseType> => {
   try {
-    return await fetcher(QUERY, { courseId })
+    return await fetcher(GET_COURSE_PRICING_QUERY, { courseId })
   } catch (err) {
     return {}
   }

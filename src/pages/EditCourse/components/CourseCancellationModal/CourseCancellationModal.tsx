@@ -26,12 +26,13 @@ import {
   CancelCourseMutationVariables,
   CancellationFeeType,
   Course_Cancellation_Fee_Type_Enum as CourseCancelFeeTypes,
+  Course_Type_Enum,
 } from '@app/generated/graphql'
 import { CancellationTermsTable } from '@app/pages/EditCourse/components/CancellationTermsTable'
 import { getCancellationTermsFee } from '@app/pages/EditCourse/shared'
 import { CANCEL_COURSE_MUTATION } from '@app/queries/courses/cancel-course'
 import { yup } from '@app/schemas'
-import { Course, CourseType } from '@app/types'
+import { Course } from '@app/types'
 import { customFeeFormat } from '@app/util' // 🙃 TODO: replace with generated type
 
 type FormInput = {
@@ -68,12 +69,12 @@ export const CourseCancellationModal: React.FC<
   const [reasonType, setReasonType] = useState('')
   const [confirmed, setConfirmed] = useState(false)
 
-  const isIndirect = course.type === CourseType.INDIRECT
+  const isIndirect = course.type === Course_Type_Enum.Indirect
   const isIndirectBlendedLearning =
-    course.type === CourseType.INDIRECT && course.go1Integration
+    course.type === Course_Type_Enum.Indirect && course.go1Integration
 
   const showConfirmationCheck =
-    course.type === CourseType.OPEN || isIndirectBlendedLearning
+    course.type === Course_Type_Enum.Open || isIndirectBlendedLearning
 
   const [{ error, fetching }, cancelCourse] = useMutation<
     CancelCourseMutation,
@@ -105,7 +106,7 @@ export const CourseCancellationModal: React.FC<
 
     return yup
       .object({
-        ...(course.type === CourseType.CLOSED
+        ...(course.type === Course_Type_Enum.Closed
           ? {
               cancellationReason,
               ...(feeType === CourseCancelFeeTypes.CustomFee
@@ -118,7 +119,7 @@ export const CourseCancellationModal: React.FC<
   }, [course.type, feeType, t])
 
   const cancellationReasons = useMemo((): string[] => {
-    if (course.type === CourseType.OPEN) {
+    if (course.type === Course_Type_Enum.Open) {
       return Object.values(OpenCourseCancellationReasons)
     } else {
       return Object.values(CloseCourseCancellationReasons)
@@ -176,7 +177,7 @@ export const CourseCancellationModal: React.FC<
 
   const onFormSubmit = async (data: FormInput) => {
     const { cancellationFee, cancellationFeePercent, cancellationReason } = data
-    const isCourseTypeIndirect = course.type === CourseType.INDIRECT
+    const isCourseTypeIndirect = course.type === Course_Type_Enum.Indirect
 
     const input = {
       courseId: course.id,
@@ -224,14 +225,14 @@ export const CourseCancellationModal: React.FC<
       {!isIndirect ? (
         <Typography variant="body1" color="grey.600" mt={1}>
           {t('pages.edit-course.cancellation-modal.finance-invoice-changes')}
-          {course.type === CourseType.OPEN
+          {course.type === Course_Type_Enum.Open
             ? t(
                 'pages.edit-course.cancellation-modal.attendees-will-not-incur-cancellation-charges'
               )
             : null}
         </Typography>
       ) : null}
-      {course.type === CourseType.CLOSED ? (
+      {course.type === Course_Type_Enum.Closed ? (
         <>
           <Typography variant="h4" fontWeight={600} mt={4}>
             {t('pages.edit-course.cancellation-modal.cancellation-fees-apply')}

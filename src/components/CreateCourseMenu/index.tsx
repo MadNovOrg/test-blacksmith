@@ -5,12 +5,12 @@ import React, { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
+import { Course_Type_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { CourseType } from '@app/types'
 
 const CREATE_COURSE_PATH = '/courses/new'
 
-type Options = Array<{ key: CourseType; label: string }>
+type Options = Array<{ key: Course_Type_Enum; label: string }>
 
 export const CreateCourseMenu = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -20,7 +20,7 @@ export const CreateCourseMenu = () => {
   const { t } = useScopedTranslation('components.create-course-menu')
 
   const options: Options = useMemo(() => {
-    return Object.values(CourseType).flatMap(type =>
+    return Object.values(Course_Type_Enum).flatMap(type =>
       acl.canCreateCourse(type)
         ? [
             {
