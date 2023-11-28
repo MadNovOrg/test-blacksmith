@@ -209,9 +209,7 @@ export const CourseDetails = () => {
             course={course}
             isManaged={acl.isOrgAdmin()}
             slots={{
-              BackButton: () => (
-                <BackButton label={t('back')} to="/manage-courses/all" />
-              ),
+              BackButton: () => <BackButton label={t('back')} to="../../" />,
               EditButton: canEditCourse
                 ? () => (
                     <Button
