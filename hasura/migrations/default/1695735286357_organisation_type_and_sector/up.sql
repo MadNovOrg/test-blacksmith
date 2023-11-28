@@ -1,3 +1,4 @@
+
 CREATE TABLE "public"."organisation_sector" ("name" text NOT NULL, PRIMARY KEY ("name") , UNIQUE ("name"));
 
 INSERT INTO "public"."organisation_sector"("name") VALUES (E'EDU');
@@ -8,8 +9,6 @@ CREATE TABLE "public"."organization_type" ("id" uuid NOT NULL DEFAULT gen_random
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 INSERT INTO "public"."organization_type"("name", "sector", "id") VALUES (E'Local Authority non-maintained', E'EDU', E'28ed5fa6-603c-4aed-9de0-1f2fcdd850ba');
-
-INSERT INTO "public"."organization_type"("id", "name", "sector") VALUES (E'8efd06ec-3aef-4e56-933c-4ea332192885', E'Local Authority maintained', E'EDU');
 
 INSERT INTO "public"."organization_type"("name", "sector", "id") VALUES (E'Academy', E'EDU', E'b4c98a22-be8e-466a-b899-4fce8ae7652d');
 
