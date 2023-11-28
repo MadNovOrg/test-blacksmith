@@ -293,7 +293,7 @@ export type CourseTrainer = {
   status: InviteStatus
   profile: Profile
   levels: {
-    courseLevel: Course_Level | Course_Level_Enum
+    courseLevel: Course_Level
     expiryDate: string
   }[]
 }
@@ -581,7 +581,7 @@ export type CourseInput = {
   } | null
 
   salesRepresentative: Profile | null
-  courseLevel: Course_Level_Enum | ''
+  courseLevel: Course_Level_Enum | Course_Level | ''
   blendedLearning: boolean
   reaccreditation: boolean
   deliveryType: Course_Delivery_Type_Enum
@@ -706,7 +706,7 @@ export type TrainerInput = {
   status?: InviteStatus
   trainer_role_types: { trainer_role_type?: { name?: string } | null }[]
   levels: {
-    courseLevel: Course_Level | Course_Level_Enum
+    courseLevel: Course_Level
     expiryDate: string
   }[]
 }

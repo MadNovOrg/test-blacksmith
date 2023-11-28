@@ -24,9 +24,9 @@ import {
   CourseTrainerType,
   SearchTrainer,
   SearchTrainerDetailsFragment,
-  Course_Level_Enum,
   CourseLevel,
   Course_Type_Enum,
+  Course_Level_Enum,
 } from '@app/generated/graphql'
 import { isModeratorMandatory, isModeratorNeeded } from '@app/rules/trainers'
 import { yup } from '@app/schemas'
@@ -62,15 +62,17 @@ type Props = {
 const courseTrainerToFormValues = (
   trainers: CourseTrainer[] = []
 ): FormValues => {
-  const mappedTrainers = trainers.map(t => ({
-    id: t.profile.id,
-    fullName: t.profile.fullName ?? '',
-    email: t.profile.email,
-    trainer_role_types: t.profile.trainer_role_types ?? [],
-    avatar: t.profile.avatar,
-    type: t.type,
-    levels: t.levels,
-  }))
+  const mappedTrainers = trainers.map(t => {
+    return {
+      id: t.profile.id,
+      fullName: t.profile.fullName ?? '',
+      email: t.profile.email,
+      trainer_role_types: t.profile.trainer_role_types ?? [],
+      avatar: t.profile.avatar,
+      type: t.type,
+      levels: t.levels,
+    }
+  })
 
   return {
     lead: mappedTrainers.filter(t => t.type === CourseTrainerType.Leader),
@@ -190,7 +192,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
       const _trainers = possibleValues.flatMap(v =>
         form.getValues(v as keyof FormValues)
       )
-      const ids = new Set(_trainers.map(t => (t as SearchTrainer).id))
+      const ids = new Set(_trainers.map(t => t.id))
       return matches.filter(m => !ids.has(m.id))
     },
     [form]

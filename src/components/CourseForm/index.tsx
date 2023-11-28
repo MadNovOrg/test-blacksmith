@@ -545,12 +545,17 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const canBlended =
     values.accreditedBy === Accreditors_Enum.Icm
-      ? canBeBlended(courseType, courseLevel, deliveryType)
+      ? canBeBlended(courseType, courseLevel as Course_Level_Enum, deliveryType)
       : canBeBlendedBild(courseType, values.bildStrategies)
 
   const canReacc =
     values.accreditedBy === Accreditors_Enum.Icm
-      ? canBeReacc(courseType, courseLevel, deliveryType, isBlended)
+      ? canBeReacc(
+          courseType,
+          courseLevel as Course_Level_Enum,
+          deliveryType,
+          isBlended
+        )
       : canBeReaccBild(
           courseType,
           values.bildStrategies,
@@ -560,19 +565,19 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const canF2F =
     values.accreditedBy === Accreditors_Enum.Icm
-      ? canBeF2F(courseType, courseLevel)
+      ? canBeF2F(courseType, courseLevel as Course_Level_Enum)
       : canBeF2FBild()
 
   const canVirtual =
     values.accreditedBy === Accreditors_Enum.Icm
-      ? canBeVirtual(courseType, courseLevel)
+      ? canBeVirtual(courseType, courseLevel as Course_Level_Enum)
       : canBeVirtualBild(courseType, values.bildStrategies)
 
   const canMixed =
     values.accreditedBy === Accreditors_Enum.Icm
-      ? canBeMixed(courseType, courseLevel)
+      ? canBeMixed(courseType, courseLevel as Course_Level_Enum)
       : canBeMixedBild(
-          values.courseLevel,
+          values.courseLevel as Course_Level_Enum,
           values.bildStrategies
             ? bildStrategiesToArray(values.bildStrategies)
             : []
@@ -599,7 +604,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         ? undefined
         : {
             type: courseType,
-            courseLevel: values.courseLevel,
+            courseLevel: values.courseLevel as Course_Level_Enum,
             reaccreditation: values.reaccreditation,
             blendedLearning: values.blendedLearning,
             accreditedBy: values.accreditedBy,
@@ -623,7 +628,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           accreditedBy: values.accreditedBy,
           blendedLearning: values.blendedLearning,
           courseType,
-          courseLevel: values.courseLevel,
+          courseLevel: values.courseLevel as Course_Level_Enum,
           maxParticipants: values.maxParticipants ?? 0,
         })
       : false
@@ -687,7 +692,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     if (isCreation) {
       const instructions = getDefaultSpecialInstructions(
         courseType,
-        courseLevel,
+        courseLevel as Course_Level_Enum,
         deliveryType,
         values.reaccreditation,
         values.conversion,
@@ -747,7 +752,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       setValue('reaccreditation', newReaccreditationValue)
       resetSpecialInstructionsToDefault(
         courseType,
-        courseLevel,
+        courseLevel as Course_Level_Enum,
         Course_Delivery_Type_Enum.F2F,
         newReaccreditationValue,
         values.conversion,
@@ -772,7 +777,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       setValue('deliveryType', Course_Delivery_Type_Enum.F2F)
       resetSpecialInstructionsToDefault(
         courseType,
-        courseLevel,
+        courseLevel as Course_Level_Enum,
         Course_Delivery_Type_Enum.F2F,
         values.reaccreditation,
         values.conversion,
@@ -798,7 +803,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       setValue('deliveryType', Course_Delivery_Type_Enum.F2F)
       resetSpecialInstructionsToDefault(
         courseType,
-        courseLevel,
+        courseLevel as Course_Level_Enum,
         Course_Delivery_Type_Enum.F2F,
         values.reaccreditation,
         values.conversion,
@@ -831,7 +836,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     () =>
       getDefaultSpecialInstructions(
         courseType,
-        courseLevel,
+        courseLevel as Course_Level_Enum,
         deliveryType,
         values.reaccreditation,
         values.conversion,
@@ -1309,7 +1314,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   render={({ field }) => (
                     <CourseLevelDropdown
                       {...register('courseLevel')}
-                      value={field.value}
+                      value={field.value as Course_Level_Enum}
                       labelId="course-level-dropdown"
                       onChange={event => {
                         field.onChange(event)
@@ -1507,7 +1512,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
                     resetSpecialInstructionsToDefault(
                       courseType,
-                      courseLevel,
+                      courseLevel as Course_Level_Enum,
                       deliveryType,
                       values.reaccreditation,
                       values.conversion,
@@ -1870,7 +1875,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           hasRenewalCycle({
             courseType,
             startDate,
-            courseLevel: values.courseLevel,
+            courseLevel: values.courseLevel as Course_Level_Enum,
           }) ? (
             <Controller
               control={control}

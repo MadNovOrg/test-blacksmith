@@ -36,6 +36,7 @@ import {
   Course_Audit_Type_Enum,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
+  CourseLevel,
   Course_Status_Enum,
   Course_Type_Enum,
   GetCourseByIdQuery,
@@ -444,7 +445,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             await notifyCourseEdit(
               {
                 courseId: course.id,
-                level: course.level as unknown as Course_Level_Enum,
+                level: course.level as unknown as CourseLevel,
                 venueId: course.schedule[0].venue?.id || null,
                 virtualLink: course.schedule[0].virtualLink || null,
                 startDate: course.dates.aggregate.start.date,
@@ -786,7 +787,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                   <ChooseTrainers
                     courseType={courseData.type}
                     courseLevel={
-                      courseData.courseLevel || Course_Level_Enum.Level_1
+                      courseData.courseLevel ||
+                      (Course_Level_Enum.Level_1 as unknown as CourseLevel)
                     }
                     courseSchedule={{
                       start: courseData.startDateTime,

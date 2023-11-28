@@ -476,7 +476,7 @@ export function canBeConversion(
   return [
     Course_Level_Enum.BildAdvancedTrainer,
     Course_Level_Enum.BildIntermediateTrainer,
-  ].includes(courseLevel)
+  ].includes(courseLevel as Course_Level_Enum)
 }
 
 export function getAccountCode(d = new Date()): string {

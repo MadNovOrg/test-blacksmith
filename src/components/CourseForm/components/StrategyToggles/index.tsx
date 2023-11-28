@@ -64,7 +64,7 @@ export const StrategyToggles: React.FC<Props> = ({
       [
         Course_Level_Enum.BildIntermediateTrainer,
         Course_Level_Enum.BildAdvancedTrainer,
-      ].includes(courseLevel)
+      ].includes(courseLevel as Course_Level_Enum)
   )
 
   useEffect(() => {
