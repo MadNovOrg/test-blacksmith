@@ -1322,7 +1322,7 @@ export enum CourseApprovalError {
 
 export type CourseCertificateLevel = {
   __typename?: 'CourseCertificateLevel';
-  courseLevel: Course_Level_Enum;
+  courseLevel: Course_Level_Enum | CourseLevel;
   expiryDate: Scalars['date'];
 };
 
@@ -8865,7 +8865,7 @@ export enum SearchTrainerAvailability {
 export type SearchTrainersInput = {
   bildStrategies?: InputMaybe<Array<BildStrategy>>;
   courseEnd?: InputMaybe<Scalars['date']>;
-  courseLevel?: InputMaybe<Course_Level_Enum>;
+  courseLevel?: InputMaybe<Course_Level_Enum | CourseLevel>;
   courseStart?: InputMaybe<Scalars['date']>;
   courseType?: InputMaybe<CourseType>;
   query?: InputMaybe<Scalars['String']>;
@@ -52315,14 +52315,14 @@ export type OrgMembersQueryVariables = Exact<{
 
 export type OrgMembersQuery = { __typename?: 'query_root', members: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, lastActivity: any, createdAt: any, go1Licenses: Array<{ __typename?: 'go1_licenses', expireDate: any }>, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', payload?: any | null }> } | null }> } }>, organization_member_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
 
-export type SearchTrainerDetailsFragment = { __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: Course_Level_Enum, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> };
+export type SearchTrainerDetailsFragment = { __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel | Course_Level_Enum, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> };
 
 export type SearchTrainersQueryVariables = Exact<{
   input: SearchTrainersInput;
 }>;
 
 
-export type SearchTrainersQuery = { __typename?: 'query_root', trainers?: Array<{ __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: Course_Level_Enum, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> } | null> | null };
+export type SearchTrainersQuery = { __typename?: 'query_root', trainers?: Array<{ __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel | Course_Level_Enum, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> } | null> | null };
 
 export type SearchCourseFragment = { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> };
 

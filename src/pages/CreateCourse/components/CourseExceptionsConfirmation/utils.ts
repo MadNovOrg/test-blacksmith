@@ -5,6 +5,7 @@ import {
   Accreditors_Enum,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
+  CourseLevel,
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
@@ -29,7 +30,7 @@ const MIN_DURATION_FOR_TIME_COMMITMENT = 6 * 60 // 6h
 
 export type CourseData = {
   startDateTime: Date
-  courseLevel: Course_Level_Enum | Course_Level_Enum
+  courseLevel: Course_Level_Enum | CourseLevel
   type: Course_Type_Enum
   deliveryType: Course_Delivery_Type_Enum
   reaccreditation: boolean
@@ -45,7 +46,7 @@ export type TrainerData = {
   type: Course_Trainer_Type_Enum | CourseTrainerType
   trainer_role_types: TrainerInput['trainer_role_types']
   levels: {
-    courseLevel: Course_Level_Enum
+    courseLevel: Course_Level_Enum | CourseLevel
     expiryDate: string
   }[]
 }[]
@@ -67,7 +68,7 @@ export const isLeadTrainerInGracePeriod = (
   const allowedLevels =
     REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[courseData.courseLevel]
   const matchingLevels = (leader.levels ?? []).filter(
-    l => allowedLevels.indexOf(l.courseLevel) != -1
+    l => allowedLevels.indexOf(l.courseLevel as Course_Level_Enum) != -1
   )
   const result = !matchingLevels.some(level =>
     isFuture(new Date(level.expiryDate))

@@ -1,8 +1,12 @@
-import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import {
+  CourseLevel,
+  Course_Level_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 
 type ModeratorCriteria = {
   courseType: Course_Type_Enum
-  courseLevel: Course_Level_Enum
+  courseLevel: Course_Level_Enum | CourseLevel
   isReaccreditation: boolean
   isConversion?: boolean
 }
@@ -21,7 +25,7 @@ export function isModeratorNeeded({
       Course_Level_Enum.IntermediateTrainer,
       Course_Level_Enum.BildIntermediateTrainer,
       Course_Level_Enum.BildAdvancedTrainer,
-    ].includes(courseLevel) &&
+    ].includes(courseLevel as Course_Level_Enum) &&
     !isReaccreditation &&
     !isConversion
   ) {
@@ -33,7 +37,7 @@ export function isModeratorNeeded({
 
 export function isModeratorMandatory(criteria: {
   courseType: Course_Type_Enum
-  courseLevel: Course_Level_Enum
+  courseLevel: Course_Level_Enum | CourseLevel
   isReaccreditation: boolean
   isConversion?: boolean
 }): boolean {

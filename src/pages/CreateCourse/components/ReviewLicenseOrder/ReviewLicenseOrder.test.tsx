@@ -8,6 +8,7 @@ import {
   Accreditors_Enum,
   Course_Status_Enum,
   Course_Level_Enum,
+  CourseLevel,
   Currency,
   Payment_Methods_Enum,
   Course_Type_Enum,
@@ -154,7 +155,8 @@ describe('component: ReviewLicenseOrder', () => {
       type: CourseTrainerType.Leader,
       levels: [
         {
-          courseLevel: Course_Level_Enum.AdvancedTrainer,
+          courseLevel:
+            Course_Level_Enum.AdvancedTrainer as unknown as CourseLevel,
           expiryDate: addMonths(new Date(), 6).toISOString(),
         },
       ],

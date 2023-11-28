@@ -25,6 +25,7 @@ import {
   SearchTrainer,
   SearchTrainerDetailsFragment,
   Course_Level_Enum,
+  CourseLevel,
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { isModeratorMandatory, isModeratorNeeded } from '@app/rules/trainers'
@@ -42,8 +43,8 @@ export type FormValues = {
 
 type Props = {
   trainers?: CourseTrainer[]
+  courseLevel: CourseLevel | Course_Level_Enum
   courseType: Course_Type_Enum
-  courseLevel: Course_Level_Enum
   bildStrategies?: BildStrategy[]
   courseSchedule: { start: Date; end: Date }
   onChange?: (data: FormValues, isValid: boolean) => void

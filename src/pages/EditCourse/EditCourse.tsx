@@ -444,7 +444,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             await notifyCourseEdit(
               {
                 courseId: course.id,
-                level: course.level,
+                level: course.level as unknown as Course_Level_Enum,
                 venueId: course.schedule[0].venue?.id || null,
                 virtualLink: course.schedule[0].virtualLink || null,
                 startDate: course.dates.aggregate.start.date,

@@ -6,6 +6,7 @@ import {
   Course_Delivery_Type_Enum,
   Course_Evaluation_Question_Group_Enum,
   Course_Level_Enum,
+  CourseLevel as Course_Level,
   Course_Renewal_Cycle_Enum,
   Course_Source_Enum,
   Course_Status_Enum,
@@ -292,7 +293,7 @@ export type CourseTrainer = {
   status: InviteStatus
   profile: Profile
   levels: {
-    courseLevel: Course_Level_Enum
+    courseLevel: Course_Level | Course_Level_Enum
     expiryDate: string
   }[]
 }
@@ -705,7 +706,7 @@ export type TrainerInput = {
   status?: InviteStatus
   trainer_role_types: { trainer_role_type?: { name?: string } | null }[]
   levels: {
-    courseLevel: Course_Level_Enum
+    courseLevel: Course_Level | Course_Level_Enum
     expiryDate: string
   }[]
 }

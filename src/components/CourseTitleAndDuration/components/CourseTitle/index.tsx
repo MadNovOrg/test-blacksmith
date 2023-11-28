@@ -2,14 +2,14 @@ import { Link, Typography, TypographyProps } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Course, Course_Level_Enum } from '@app/generated/graphql'
+import { Course, Course_Level_Enum, CourseLevel } from '@app/generated/graphql'
 import { getTimeDifferenceAndContext } from '@app/util'
 
 export type CourseSubset = Pick<
   Course,
   'id' | 'course_code' | 'start' | 'end'
 > & {
-  level?: Course_Level_Enum | null
+  level?: Course_Level_Enum | CourseLevel | null
 }
 
 type CourseTitleProps = {
