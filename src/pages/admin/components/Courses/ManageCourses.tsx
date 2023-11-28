@@ -70,7 +70,7 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
 
             {data && status === LoadingStatus.SUCCESS ? (
               acl.isBookingContact() ? (
-                <ManageContactRoleCourses />
+                <ManageContactRoleCourses isBookingContact={true} />
               ) : acl.isOrgKeyContact() ? (
                 <ManageContactRoleCourses isOrgKeyContact={true} />
               ) : (

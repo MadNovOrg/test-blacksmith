@@ -15,11 +15,12 @@ import { useUserCourses, CoursesFilters } from './hooks/useUserCourses'
 
 type ManageContactRoleCoursesProps = {
   isOrgKeyContact?: boolean
+  isBookingContact?: boolean
 }
 
 export const ManageContactRoleCourses: React.FC<
   React.PropsWithChildren<ManageContactRoleCoursesProps>
-> = ({ isOrgKeyContact }) => {
+> = ({ isOrgKeyContact, isBookingContact }) => {
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -41,7 +42,7 @@ export const ManageContactRoleCourses: React.FC<
       currentPage,
     },
     undefined,
-    !isOrgKeyContact,
+    isBookingContact,
     isOrgKeyContact
   )
 
@@ -83,9 +84,6 @@ export const ManageContactRoleCourses: React.FC<
         </Box>
 
         <CoursesTable
-          additionalColumns={
-            isOrgKeyContact ? new Set(['type', 'registrants']) : undefined
-          }
           courses={courses}
           sorting={sorting}
           loading={loading}

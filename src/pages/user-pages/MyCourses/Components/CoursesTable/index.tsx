@@ -21,10 +21,8 @@ import {
   UserCoursesQuery,
 } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
-import { Cols } from '@app/pages/trainer-pages/MyCourses/components/CoursesTable'
 
 export type CoursesTableProps = {
-  additionalColumns?: Set<Extract<Cols, 'type' | 'registrants'>>
   courses: UserCoursesQuery['courses']
   sorting: ReturnType<typeof useTableSort>
   paginationComponent?: React.ReactNode
@@ -41,7 +39,6 @@ export const CoursesTable: React.FC<
   loading,
   filtered,
   paginationComponent,
-  additionalColumns,
   isManaging = false,
 }) => {
   const { t } = useTranslation()
@@ -51,15 +48,11 @@ export const CoursesTable: React.FC<
     () => [
       { id: 'name', label: t('pages.my-courses.col-name'), sorting: true },
       { id: 'venue', label: t('pages.my-courses.col-venue'), sorting: false },
-      ...(additionalColumns?.has('type')
-        ? [
-            {
-              id: 'type',
-              label: t('pages.my-courses.col-type'),
-              sorting: false,
-            },
-          ]
-        : []),
+      {
+        id: 'type',
+        label: t('pages.my-courses.col-type'),
+        sorting: false,
+      },
       { id: 'start', label: t('pages.my-courses.col-start'), sorting: true },
       { id: 'end', label: t('pages.my-courses.col-end'), sorting: true },
       {
@@ -72,19 +65,15 @@ export const CoursesTable: React.FC<
         label: t('pages.my-courses.col-trainers'),
         sorting: false,
       },
-      ...(additionalColumns?.has('registrants')
-        ? [
-            {
-              id: 'registrants',
-              label: t('pages.my-courses.col-registrations'),
-              sorting: false,
-            },
-          ]
-        : []),
+      {
+        id: 'registrants',
+        label: t('pages.my-courses.col-registrations'),
+        sorting: false,
+      },
       { id: 'status', label: t('pages.my-courses.col-status'), sorting: false },
     ],
 
-    [additionalColumns, t]
+    [t]
   )
 
   return (
@@ -149,13 +138,11 @@ export const CoursesTable: React.FC<
                       : 'Online'}
                   </Typography>
                 </TableCell>
-                {additionalColumns?.has('type') ? (
-                  <TableCell>
-                    <Typography variant="body2" sx={{ color: 'inherit' }}>
-                      {t(`course-types.${course.type}`)}
-                    </Typography>
-                  </TableCell>
-                ) : null}
+                <TableCell>
+                  <Typography variant="body2" sx={{ color: 'inherit' }}>
+                    {t(`course-types.${course.type}`)}
+                  </Typography>
+                </TableCell>
                 <TableCell>
                   {course.dates?.aggregate?.start?.date && (
                     <Box>
@@ -219,17 +206,15 @@ export const CoursesTable: React.FC<
                 <TableCell>
                   <TrainerAvatarGroup trainers={course.trainers ?? []} />
                 </TableCell>
-                {additionalColumns?.has('registrants') ? (
-                  <TableCell data-testid="participants-cell">
-                    <ParticipantsCount
-                      participating={
-                        course.participantsAgg?.aggregate?.count ?? 0
-                      }
-                      capacity={course.max_participants}
-                      waitlist={course.waitlistAgg?.aggregate?.count}
-                    />
-                  </TableCell>
-                ) : null}
+                <TableCell data-testid="participants-cell">
+                  <ParticipantsCount
+                    participating={
+                      course.participantsAgg?.aggregate?.count ?? 0
+                    }
+                    capacity={course.max_participants}
+                    waitlist={course.waitlistAgg?.aggregate?.count}
+                  />
+                </TableCell>
                 <TableCell>
                   {isManaging && !acl.isUser() ? (
                     <IndividualCourseStatusChip course={course} />

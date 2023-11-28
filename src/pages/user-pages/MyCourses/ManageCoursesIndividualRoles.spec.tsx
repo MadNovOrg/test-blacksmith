@@ -229,7 +229,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <ManageContactRoleCourses />
+        <ManageContactRoleCourses isBookingContact={true} />
       </Provider>,
       { auth: { activeRole: RoleName.BOOKING_CONTACT } }
     )
