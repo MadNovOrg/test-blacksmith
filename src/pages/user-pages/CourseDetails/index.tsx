@@ -280,7 +280,7 @@ export const CourseDetails: React.FC<
             slots={{
               BackButton: () => (
                 <BackButton
-                  to="/courses"
+                  to={'../../'}
                   label={t('pages.course-participants.back-button')}
                 />
               ),
