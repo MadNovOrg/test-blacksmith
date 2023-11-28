@@ -5,6 +5,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import Big from 'big.js'
 import React, { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useMutation } from 'urql'
@@ -150,13 +151,29 @@ export const TransferReview: React.FC<
                     value={_t('currency', { amount: fees.customFee })}
                   />
                 </InfoPanel>
+                <InfoPanel data-testid="fee-vat-type-panel">
+                  <InfoRow
+                    label={t('review-transfer.vat')}
+                    value={_t('currency', {
+                      amount: new Big((fees.customFee * 20) / 100)
+                        .round(2)
+                        .toNumber(),
+                    })}
+                  />
+                </InfoPanel>
                 <InfoPanel data-testid="amount-due-panel">
                   <InfoRow>
                     <Typography fontWeight={600}>
                       {_t('amount-due-currency')}
                     </Typography>
                     <Typography fontWeight={600}>
-                      {_t('currency', { amount: fees.customFee })}
+                      {_t('currency', {
+                        amount:
+                          fees.customFee +
+                          new Big((fees.customFee * 20) / 100)
+                            .round(2)
+                            .toNumber(),
+                      })}
                     </Typography>
                   </InfoRow>
                 </InfoPanel>

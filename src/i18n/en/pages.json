@@ -1574,6 +1574,7 @@
     "review-transfer": {
       "title": "Review & confirm",
       "custom-fee": "Custom fee",
+      "vat": "VAT (20%)",
       "back-btn-text_ADMIN_TRANSFERS": "Back to transfer details",
       "back-btn-text_ORG_ADMIN_TRANSFERS": "Back to transfer details",
       "back-btn-text_ATTENDEE_TRANSFERS": "Select courses",
