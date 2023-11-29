@@ -166,6 +166,13 @@ export const QUERY = gql`
           count
         }
       }
+      participantSubmitedEvaluationCount: participants_aggregate(
+        where: { completed_evaluation: { _eq: true } }
+      ) {
+        aggregate {
+          count
+        }
+      }
       attendeesCount: participants_aggregate {
         aggregate {
           count

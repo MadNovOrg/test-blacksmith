@@ -357,7 +357,8 @@ export const CourseDetails = () => {
                       data-testid="disabilities-tab"
                     />
                   ) : null}
-                  {course.certificateCount?.aggregate.count ? (
+                  {course.certificateCount?.aggregate.count &&
+                  course.participantSubmitedEvaluationCount?.aggregate.count ? (
                     <PillTab
                       label={t(
                         'pages.course-details.tabs.certifications.title'

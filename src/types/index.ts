@@ -77,6 +77,7 @@ export type Course = {
   }
   moduleGroupIds: { module: { moduleGroup: { id: string } } }[]
   certificateCount?: { aggregate: { count: number } }
+  participantSubmitedEvaluationCount?: { aggregate: { count: number } }
   description?: string
   freeSpaces?: number
   accountCode?: string

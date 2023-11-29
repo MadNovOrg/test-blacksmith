@@ -21,7 +21,12 @@ export const CourseCertifications: React.FC<
     {
       sortBy: sorting.by,
       order: sorting.dir,
-      where: { certificate: { id: { _is_null: false } } },
+      where: {
+        certificate: {
+          id: { _is_null: false },
+          participant: { completed_evaluation: { _eq: true } },
+        },
+      },
     }
   )
 
