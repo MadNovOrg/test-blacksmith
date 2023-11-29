@@ -330,7 +330,8 @@
     "finance": "Finance",
     "booking-contact": "Booking Contact",
     "anonymous": "Anonymous",
-    "organization-key-contact": "Organisation Key Contact"
+    "organization-key-contact": "Organisation Key Contact",
+    "organization-admin": "Organisation Administrator"
   },
   "trainer-role-types": {
     "assistant": "Assistant",

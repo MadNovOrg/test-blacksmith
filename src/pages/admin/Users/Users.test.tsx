@@ -47,6 +47,7 @@ const mockProfile = build<
     ],
     organizations: [
       {
+        isAdmin: perBuild(() => chance.bool()),
         organization: {
           id: perBuild(() => chance.guid()),
           name: perBuild(() => chance.word()),
@@ -191,6 +192,46 @@ describe('page: Users', () => {
     )
     await userEvent.click(
       within(screen.getByTestId('FilterTrainerType')).getByText('Principal')
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(`${filteredProfile.fullName}`)
+      ).toBeInTheDocument()
+      expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
+    })
+  })
+
+  it('filters users by *Organisation Administrator* role', async () => {
+    const profile = mockProfile()
+    const filteredProfile = mockProfile()
+
+    useProfilesMocked.mockImplementation(
+      ({ where }: GetProfilesQueryVariables) => {
+        const profiles =
+          where?.roles?.role?.name?._in?.includes(RoleName.TRAINER) &&
+          where?.organizations?.isAdmin
+            ? [filteredProfile]
+            : [profile]
+        return {
+          profiles,
+          isLoading: false,
+          count: 0,
+          error: undefined,
+          mutate: vi.fn(),
+        }
+      }
+    )
+
+    render(<Users />)
+
+    await userEvent.click(
+      within(screen.getByTestId('FilterUserRole')).getByText('Trainer')
+    )
+    await userEvent.click(
+      within(screen.getByTestId('FilterUserRole')).getByText(
+        'Organisation Administrator'
+      )
     )
 
     await waitFor(() => {

@@ -19,6 +19,7 @@ export const getProfiles = gql`
       archived
       email
       organizations {
+        isAdmin
         organization {
           id
           name

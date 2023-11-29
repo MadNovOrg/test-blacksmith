@@ -38,6 +38,8 @@ import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import theme from '@app/theme'
 import { CertificateStatus, RoleName, TrainerRoleTypeName } from '@app/types'
 
+import UserRole from './UserRole'
+
 export const Users = () => {
   const { t } = useTranslation()
   const location = useLocation()
@@ -47,19 +49,24 @@ export const Users = () => {
   const sorting = useTableSort('fullName', 'asc')
 
   const roleOptions = useMemo<FilterOption[]>(() => {
-    return Object.values([
-      RoleName.USER,
-      RoleName.TRAINER,
-      RoleName.TT_OPS,
-      RoleName.SALES_REPRESENTATIVE,
-      RoleName.SALES_ADMIN,
-      RoleName.LD,
-      RoleName.FINANCE,
-      RoleName.TT_ADMIN,
-      RoleName.BOOKING_CONTACT,
-      RoleName.ORGANIZATION_KEY_CONTACT,
-      RoleName.UNVERIFIED,
-    ]).map<FilterOption>(role => ({
+    const rolesToFilterBy = [
+      ...Object.values([
+        RoleName.USER,
+        RoleName.TRAINER,
+        RoleName.TT_OPS,
+        RoleName.SALES_REPRESENTATIVE,
+        RoleName.SALES_ADMIN,
+        RoleName.LD,
+        RoleName.FINANCE,
+        RoleName.TT_ADMIN,
+        RoleName.BOOKING_CONTACT,
+        RoleName.ORGANIZATION_KEY_CONTACT,
+        RoleName.UNVERIFIED,
+      ]),
+      'organization-admin',
+    ]
+
+    return rolesToFilterBy.map<FilterOption>(role => ({
       id: role,
       title: t(`role-names.${role}`),
       selected: false,
@@ -98,7 +105,7 @@ export const Users = () => {
 
   const [where, filtered] = useMemo(() => {
     let isFiltered = false
-    const obj: Record<string, object> = {}
+    const filterConditions: Record<string, object> = {}
 
     const selectedRoles = roleFilter.flatMap(item =>
       item.selected ? item.id : []
@@ -109,12 +116,41 @@ export const Users = () => {
     )
 
     if (selectedRoles.length) {
-      obj.roles = {
-        role: {
-          name: { _in: selectedRoles },
+      Object.assign(filterConditions, {
+        roles: {
+          role: { name: { _in: selectedRoles } },
         },
-      }
+      })
       isFiltered = true
+    }
+
+    if (
+      selectedRoles.length === 1 &&
+      selectedRoles.includes('organization-admin')
+    ) {
+      delete filterConditions['roles']
+      Object.assign(filterConditions, {
+        organizations: {
+          isAdmin: { _eq: true },
+        },
+      })
+    } else if (
+      selectedRoles.length > 1 &&
+      selectedRoles.includes('organization-admin')
+    ) {
+      let rolesList = (
+        filterConditions.roles as { role?: { name?: { _in?: string[] } } }
+      )?.role?.name?._in
+      rolesList = rolesList?.filter(role => role !== 'organization-admin')
+
+      Object.assign(filterConditions, {
+        roles: {
+          role: { name: { _in: rolesList } },
+        },
+        organizations: {
+          isAdmin: { _eq: true },
+        },
+      })
     }
 
     if (filterByCertificateLevel.length || certificateStatus.length) {
@@ -130,71 +166,72 @@ export const Users = () => {
             }
           : undefined
 
-      obj.certificates = {
-        _and: [
-          { courseLevel },
-          {
-            status,
-          },
-        ],
-      }
+      Object.assign(filterConditions, {
+        certificates: {
+          _and: [{ courseLevel }, { status }],
+        },
+      })
     }
 
     if (selectedTrainerTypes.length) {
-      obj.trainer_role_types = {
-        trainer_role_type: {
-          name: { _in: selectedTrainerTypes },
+      Object.assign(filterConditions, {
+        trainer_role_types: {
+          trainer_role_type: {
+            name: { _in: selectedTrainerTypes },
+          },
         },
-      }
+      })
       isFiltered = true
     }
 
     if (keywordDebounced.trim().length) {
-      obj._or = [
-        {
-          organizations: {
-            organization: { name: { _ilike: `%${keywordDebounced}%` } },
+      Object.assign(filterConditions, {
+        _or: [
+          {
+            organizations: {
+              organization: { name: { _ilike: `%${keywordDebounced}%` } },
+            },
           },
-        },
-        {
-          _and: [
-            {
-              givenName: {
-                _ilike: `%${keywordDebounced.trim().split(' ')[0] ?? ''}%`,
+          {
+            _and: [
+              {
+                givenName: {
+                  _ilike: `%${keywordDebounced.trim().split(' ')[0] ?? ''}%`,
+                },
               },
-            },
-            {
-              familyName: {
-                _ilike: `%${keywordDebounced.trim().split(' ')[1] ?? ''}%`,
+              {
+                familyName: {
+                  _ilike: `%${keywordDebounced.trim().split(' ')[1] ?? ''}%`,
+                },
               },
-            },
-          ],
-        },
-        {
-          email: { _ilike: `%${keywordDebounced}%` },
-        },
-      ]
+            ],
+          },
+          { email: { _ilike: `%${keywordDebounced}%` } },
+        ],
+      })
       isFiltered = true
     }
 
     if (filterByModerator) {
-      obj.trainer_role_types = {
-        trainer_role_type: {
-          name: { _eq: TrainerRoleTypeName.MODERATOR },
+      Object.assign(filterConditions, {
+        trainer_role_types: {
+          trainer_role_type: {
+            name: { _eq: TrainerRoleTypeName.MODERATOR },
+          },
         },
-      }
+      })
       isFiltered = true
     }
 
     if (filterByArchived) {
-      obj.archived = {
-        _eq: true,
-      }
+      Object.assign(filterConditions, {
+        archived: { _eq: true },
+      })
     }
 
     setCurrentPage(0)
 
-    return [obj, isFiltered]
+    return [filterConditions, isFiltered]
   }, [
     roleFilter,
     trainerTypeFilter,
@@ -252,9 +289,6 @@ export const Users = () => {
       },
     ] as Col[]
   }, [t])
-
-  const isExternalRole = (role: string) =>
-    [RoleName.TRAINER, RoleName.USER].some(r => r === role)
 
   const handleMergeCancel = () => {
     setShowMergeDialog(false)
@@ -439,23 +473,7 @@ export const Users = () => {
 
                           <TableCell>
                             <Box display="flex" flexWrap="wrap">
-                              {user.roles.map(obj => (
-                                <Chip
-                                  key={obj.role.id}
-                                  sx={{
-                                    fontSize: '12px',
-                                    margin: '0 4px 4px 0',
-                                  }}
-                                  size="small"
-                                  color={
-                                    isExternalRole(obj.role.name)
-                                      ? 'success'
-                                      : 'info'
-                                  }
-                                  label={t(`role-names.${obj.role.name}`)}
-                                  data-testid="user-role-chip"
-                                />
-                              ))}
+                              <UserRole user={user} />
                             </Box>
                           </TableCell>
                           <TableCell>
