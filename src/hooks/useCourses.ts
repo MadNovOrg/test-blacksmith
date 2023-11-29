@@ -137,7 +137,7 @@ export const getIndividualsCourseStatusesConditions = (
           ...notCancelledOrDeclinedCond,
           ...notCancelRequestedCond,
           _and: [
-            { participants: { _not: { grade: { _is_null: true } } } },
+            { _not: { participants: { grade: { _is_null: true } } } },
             { gradingStarted: { _eq: true } },
           ],
           schedule: {
