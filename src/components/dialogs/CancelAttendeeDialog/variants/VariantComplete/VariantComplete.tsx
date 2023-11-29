@@ -8,7 +8,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useEffect, useMemo, useState } from 'react'
+import Big from 'big.js'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
@@ -21,6 +22,7 @@ import {
   Title,
 } from '@app/components/dialogs/CancelAttendeeDialog/components'
 import { FormInput } from '@app/components/dialogs/CancelAttendeeDialog/types'
+import { InfoRow } from '@app/components/InfoPanel'
 import { useAuth } from '@app/context/auth'
 import {
   CancelIndividualFromCourseMutation,
@@ -210,6 +212,37 @@ export const VariantComplete = ({
             showEditFeePercent={acl.isTTAdmin() || acl.isTTOps()}
             onSetFeeType={setFeeType}
           />
+
+          {feeType === CancellationFeeType.CustomFee ? (
+            <Box sx={{ mt: 2 }}>
+              <InfoRow
+                label={t('common.vat')}
+                value={t('currency', {
+                  amount: values.cancellationFee
+                    ? new Big((values.cancellationFee * 20) / 100)
+                        .round(2)
+                        .toNumber()
+                    : '0',
+                })}
+              />
+
+              <InfoRow>
+                <Typography fontWeight={600}>
+                  {t('amount-due-currency')}
+                </Typography>
+                <Typography fontWeight={600}>
+                  {t('currency', {
+                    amount: values.cancellationFee
+                      ? values.cancellationFee +
+                        new Big((values.cancellationFee * 20) / 100)
+                          .round(2)
+                          .toNumber()
+                      : 0,
+                  })}
+                </Typography>
+              </InfoRow>
+            </Box>
+          ) : null}
 
           <TextField
             data-testid="reasonForCancellation-input"
