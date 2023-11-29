@@ -1,13 +1,3 @@
-- name: knowledge-hub-wp-graphql
-  definition:
-    url: https://knowledgehub.teamteach.com/graphql
-    timeout_seconds: 60
-    customization:
-      root_fields_namespace: knowledgehub
-      type_names:
-        mapping: {}
-        prefix: KH
-  comment: Knowledge Hub WordPress GraphQL
 - name: wp-graphql
   definition:
     url_from_env: WP_GRAPHQL_ENDPOINT
