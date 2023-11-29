@@ -39,9 +39,10 @@ import { QUERY as GetOrganizations } from '@app/queries/organization/get-organiz
 import { QUERY as GetShallowOrganizations } from '@app/queries/organization/get-shallow-organizations'
 
 import { AddOrg } from './components/AddOrg'
-type OptionToAdd = Dfe_Establishment | { name: string }
+type OptionToAdd = Dfe_Establishment | { id?: string; name: string }
 type Option = Organization | OptionToAdd
 export type SuggestionOption = {
+  id?: string
   name: string
   xeroId?: string
 }
@@ -63,6 +64,8 @@ export type OrgSelectorProps = {
   showHubResults?: boolean
   showDfeResults?: boolean
   autocompleteMode?: boolean
+  isEditProfile?: boolean
+  userOrgIds?: string[]
   showTrainerOrgOnly?: boolean
   isShallowRetrieval?: boolean
 }
@@ -83,6 +86,8 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     disabled = false,
     required = false,
     isShallowRetrieval = false,
+    isEditProfile,
+    userOrgIds,
     ...props
   }) {
     const { t } = useTranslation()
@@ -97,7 +102,8 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     const [loading, setLoading] = useState(false)
     const [q, setQ] = useState('')
 
-    const myOrgIds = profile?.organizations.map(org => org.organization.id)
+    const orgIds =
+      userOrgIds ?? profile?.organizations.map(org => org.organization.id)
 
     const myOrg = useMemo(
       () => profile?.organizations.map(org => org.organization),
@@ -251,7 +257,14 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           onInputChange={!showTrainerOrgOnly ? onInputChange : undefined}
           onChange={handleChange}
           options={options}
-          filterOptions={!showTrainerOrgOnly ? options => options : undefined}
+          filterOptions={
+            !showTrainerOrgOnly
+              ? options =>
+                  isEditProfile
+                    ? options.filter(option => !orgIds?.includes(option.id))
+                    : options
+              : undefined
+          }
           getOptionLabel={getOptionLabel}
           noOptionsText={noOptionsText}
           isOptionEqualToValue={(o, v) => {
@@ -268,7 +281,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
               return t('components.org-selector.tt-suggestions')
             }
             if (isHubOrg(value)) {
-              return myOrgIds?.includes(value.id)
+              return orgIds?.includes(value.id)
                 ? t('components.org-selector.my-organizations')
                 : t('components.org-selector.existing-organizations')
             } else {

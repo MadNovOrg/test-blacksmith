@@ -44,6 +44,7 @@ import { InferType } from 'yup'
 import { Avatar } from '@app/components/Avatar'
 import { Dialog, ConfirmDialog } from '@app/components/dialogs'
 import { JobTitleSelector } from '@app/components/JobTitleSelector'
+import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
@@ -60,7 +61,7 @@ import {
   UpdateTrainerRoleTypeMutation,
   UpdateTrainerRoleTypeMutationVariables,
 } from '@app/generated/graphql'
-import { UpdateOrgMemberMutation } from '@app/generated/graphql'
+import { Organization, UpdateOrgMemberMutation } from '@app/generated/graphql'
 import { useJobTitles } from '@app/hooks/useJobTitles'
 import useProfile from '@app/hooks/useProfile'
 import useRoles from '@app/hooks/useRoles'
@@ -113,6 +114,7 @@ export const EditProfilePage: React.FC<
   const [searchParams] = useSearchParams()
   const jobTitles = useJobTitles()
   const orgId = searchParams.get('orgId')
+  const [displayOrgSelector, setDisplayOrgSelector] = useState(false)
 
   const [{ fetching: updateProfileFetching }, updateProfile] = useMutation<
     UpdateProfileMutation,
@@ -229,6 +231,14 @@ export const EditProfilePage: React.FC<
             id: yup.string().required(),
           })
         ),
+        organization: yup
+          .object<Partial<Organization>>()
+          .shape({
+            id: yup.string(),
+            name: yup.string(),
+            moderatorRole: yup.boolean(),
+          })
+          .required(t('components.course-form.organisation-required')),
         disabilities: disabilitiesSchema,
         dietaryRestrictions: dietaryRestrictionsSchema,
         roles: rolesFormSchema(),
@@ -267,6 +277,18 @@ export const EditProfilePage: React.FC<
   } = methods
 
   const values = watch()
+
+  const orgSelectorOnChange = useCallback(
+    (organization: CallbackOption) => {
+      if (organization) {
+        setValue('organization', organization as Organization, {
+          shouldValidate: true,
+        })
+        return
+      }
+    },
+    [setValue]
+  )
 
   const refreshData = useCallback(async () => {
     if (isMyProfile) {
@@ -429,6 +451,7 @@ export const EditProfilePage: React.FC<
               }
             : null),
           phone: data.phone,
+          orgId: data.organization.id,
           jobTitle:
             data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
           disabilities: data.disabilities,
@@ -934,98 +957,170 @@ export const EditProfilePage: React.FC<
                   <EditRoles />
                 </>
               ) : null}
-              {profile.organizations.length > 0 ? (
-                <>
-                  <Typography variant="subtitle2" my={2}>
-                    {t('pages.my-profile.organization-details')}
-                  </Typography>
 
-                  <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
-                    {profile.organizations.map((orgMember, index) => {
-                      const isAdminEditable =
-                        acl.isTTAdmin() || orgMember.isAdmin
+              <Grid item my={3}>
+                <Grid
+                  container
+                  display={'flex'}
+                  alignItems={'center'}
+                  justifyContent={'space-between'}
+                  my={2}
+                >
+                  <Grid
+                    item
+                    xs={12}
+                    sm={12}
+                    md={displayOrgSelector ? 12 : 5}
+                    lg={5}
+                    mx={2}
+                  >
+                    <Typography variant="subtitle2" my={2}>
+                      {t('pages.my-profile.organization-details')}
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={12}
+                    md={displayOrgSelector ? 12 : 5}
+                    lg={5}
+                    mx={2}
+                    display={displayOrgSelector ? '' : 'flex'}
+                    justifyContent={
+                      displayOrgSelector
+                        ? ''
+                        : isMobile
+                        ? 'flex-start'
+                        : 'flex-end'
+                    }
+                  >
+                    {displayOrgSelector ? (
+                      <OrgSelector
+                        required
+                        {...register('organization')}
+                        autocompleteMode={false}
+                        showTrainerOrgOnly={false}
+                        error={errors.organization?.message}
+                        isEditProfile={true}
+                        userOrgIds={profile?.organizations.map(
+                          org => org.organization.id
+                        )}
+                        allowAdding
+                        value={
+                          (values.organization as unknown as Pick<
+                            Organization,
+                            'name' | 'id'
+                          >) ?? null
+                        }
+                        onChange={orgSelectorOnChange}
+                        textFieldProps={{
+                          variant: 'filled',
+                        }}
+                        isShallowRetrieval
+                      />
+                    ) : (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="large"
+                        onClick={() => {
+                          setDisplayOrgSelector(true)
+                        }}
+                      >
+                        {t('pages.my-profile.add-new-organization-button')}
+                      </Button>
+                    )}
+                  </Grid>
+                </Grid>
 
-                      const editable = !id || isAdminEditable
+                {profile.organizations.length > 0 ? (
+                  <>
+                    <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
+                      {profile.organizations.map((orgMember, index) => {
+                        const isAdminEditable =
+                          acl.isTTAdmin() || orgMember.isAdmin
 
-                      return (
-                        <Box key={orgMember.id}>
-                          <Grid
-                            container
-                            direction="row"
-                            justifyContent="space-between"
-                            align-items="stretch"
-                          >
-                            <Box>
-                              <Typography variant="body1" fontWeight="600">
-                                {orgMember.organization.name}
-                              </Typography>
-                            </Box>
-                            <Button
-                              variant="outlined"
-                              color="primary"
-                              disabled={!editable}
-                              onClick={() => setOrgToLeave(orgMember)}
+                        const editable = !id || isAdminEditable
+
+                        return (
+                          <Box key={orgMember.id}>
+                            <Grid
+                              container
+                              direction="row"
+                              justifyContent="space-between"
+                              align-items="stretch"
                             >
-                              {t('common.leave')}
-                            </Button>
-                          </Grid>
+                              <Box>
+                                <Typography variant="body1" fontWeight="600">
+                                  {orgMember.organization.name}
+                                </Typography>
+                              </Box>
+                              <Button
+                                variant="outlined"
+                                color="primary"
+                                disabled={!editable}
+                                onClick={() => setOrgToLeave(orgMember)}
+                              >
+                                {t('common.leave')}
+                              </Button>
+                            </Grid>
 
-                          <Autocomplete
-                            value={orgMember.position}
-                            disabled={!editable}
-                            options={allPositions}
-                            onChange={(_, value) =>
-                              updatePosition(orgMember, value ?? '')
-                            }
-                            renderInput={params => (
-                              <TextField
-                                {...params}
-                                fullWidth
-                                variant="filled"
-                                label={t('common.position')}
-                                inputProps={{
-                                  ...params.inputProps,
-                                  sx: { height: 40 },
-                                }}
-                                sx={{ bgcolor: 'grey.100', my: 2 }}
-                              />
-                            )}
-                          />
-                          <FormControlLabel
-                            sx={{ py: 2 }}
-                            control={
-                              <Switch
-                                disabled={!isAdminEditable}
-                                checked={
-                                  values?.org && values?.org[index]
-                                    ? values?.org[index].isAdmin
-                                    : Boolean(orgMember.isAdmin)
-                                }
-                                onChange={e => {
-                                  setValue(
-                                    `org.${index}.isAdmin`,
-                                    e.target.checked
-                                  )
-                                  setValue(`org.${index}.id`, orgMember.id)
-                                }}
-                                sx={{ px: 2 }}
-                              />
-                            }
-                            label={
-                              <Typography variant="body1">
-                                {t(
-                                  'pages.org-details.tabs.users.edit-user-modal.organization-admin'
-                                )}
-                              </Typography>
-                            }
-                          />
-                        </Box>
-                      )
-                    })}
-                  </Box>
-                </>
-              ) : null}
-
+                            <Autocomplete
+                              value={orgMember.position}
+                              disabled={!editable}
+                              options={allPositions}
+                              onChange={(_, value) =>
+                                updatePosition(orgMember, value ?? '')
+                              }
+                              renderInput={params => (
+                                <TextField
+                                  {...params}
+                                  fullWidth
+                                  variant="filled"
+                                  label={t('common.position')}
+                                  inputProps={{
+                                    ...params.inputProps,
+                                    sx: { height: 40 },
+                                  }}
+                                  sx={{ bgcolor: 'grey.100', my: 2 }}
+                                />
+                              )}
+                            />
+                            <FormControlLabel
+                              sx={{ py: 2 }}
+                              control={
+                                <Switch
+                                  disabled={!isAdminEditable}
+                                  checked={
+                                    values?.org && values?.org[index]
+                                      ? values?.org[index].isAdmin
+                                      : Boolean(orgMember.isAdmin)
+                                  }
+                                  onChange={e => {
+                                    setValue(
+                                      `org.${index}.isAdmin`,
+                                      e.target.checked
+                                    )
+                                    setValue(`org.${index}.id`, orgMember.id)
+                                  }}
+                                  sx={{ px: 2 }}
+                                />
+                              }
+                              label={
+                                <Typography variant="body1">
+                                  {t(
+                                    'pages.org-details.tabs.users.edit-user-modal.organization-admin'
+                                  )}
+                                </Typography>
+                              }
+                            />
+                          </Box>
+                        )
+                      })}
+                    </Box>
+                  </>
+                ) : null}
+              </Grid>
               <Grid
                 mt={3}
                 container

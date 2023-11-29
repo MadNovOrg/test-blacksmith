@@ -1054,6 +1054,7 @@
     "user-is-not-assigned-to-org": "User is not assigned to any organisation.",
     "no-course-history": "User does not have any past courses.",
     "organization-details": "Organisation Details",
+    "add-new-organization-button": "Add new organisation",
     "org-leave-confirm-message": "Are you sure you want to leave {{ name }} organisation?",
     "bl-license-title": "Blended learning licence",
     "bl-license-enrolled-on": "Enrolled on {{date}}",
