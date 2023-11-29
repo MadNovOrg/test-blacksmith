@@ -84,9 +84,22 @@ export const getIndividualsCourseStatusesConditions = (
     [AttendeeOnlyCourseStatus.AwaitingGrade]: {
       _or: [
         {
-          participants: {
-            grade: { _is_null: true },
-          },
+          _or: [
+            {
+              participants: {
+                grade: { _is_null: true },
+              },
+            },
+            {
+              _and: [
+                {
+                  _not: { participants: { grade: { _is_null: true } } },
+                },
+                { _not: { participants: { grade: { _is_null: false } } } },
+              ],
+            },
+          ],
+
           schedule: {
             end: { _lt: currentDate },
           },

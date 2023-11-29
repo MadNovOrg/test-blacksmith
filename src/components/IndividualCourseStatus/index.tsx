@@ -31,7 +31,8 @@ export const IndividualCourseStatusChip: React.FC<
     return getIndividualCourseStatuses(
       status as CourseStatuses,
       ended,
-      !participants?.some(participant => !participant.grade),
+      Boolean(participants.length) &&
+        !participants?.some(participant => !participant.grade),
       Boolean(course.cancellationRequest)
     )
   }, [course, ended, participants])

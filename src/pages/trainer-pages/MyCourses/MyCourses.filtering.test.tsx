@@ -1096,10 +1096,13 @@ describe('trainers-pages/MyCourses', () => {
       }) => {
         const mainCondition = variables.where?._and
         const orCondition = mainCondition ? mainCondition[1]?._or ?? [{}] : [{}]
+        const gradesCondition = orCondition[0]
+          ? orCondition[0]?._or ?? [{}, {}]
+          : [{}, {}]
 
         const awaitGradeCondition =
-          orCondition[0]?.participants?.grade?._is_null === true &&
-          Boolean(orCondition[0].schedule?.end?._lt)
+          Boolean(orCondition[0].schedule?.end?._lt) &&
+          gradesCondition[0].participants?.grade?._is_null === true
 
         const courses = awaitGradeCondition ? [course] : []
 
