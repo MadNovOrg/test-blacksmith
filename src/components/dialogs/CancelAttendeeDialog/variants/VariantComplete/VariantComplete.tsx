@@ -176,7 +176,7 @@ export const VariantComplete = ({
           ),
           Actions: () => (
             <Actions
-              disabled={!confirmed && !acl.isTTAdmin()}
+              disabled={!confirmed && !(acl.isTTAdmin() || acl.isTTOps())}
               loading={fetching}
               onClose={onClose}
               onSubmit={handleSubmit(onFormSubmit)}
@@ -228,7 +228,7 @@ export const VariantComplete = ({
             {...register('cancellationReason')}
           />
 
-          {!acl.isTTAdmin() ? (
+          {!(acl.isTTAdmin() || acl.isTTOps()) ? (
             <Box mt={2}>
               <FormControlLabel
                 data-testid="confirmation-checkbox"
