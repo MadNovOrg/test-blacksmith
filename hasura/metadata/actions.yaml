@@ -346,6 +346,7 @@ actions:
     permissions:
       - role: sales-admin
       - role: user
+      - role: trainer
     comment: transferParticipant
   - name: updateAvatar
     definition:

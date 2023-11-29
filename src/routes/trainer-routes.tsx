@@ -27,6 +27,10 @@ import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { DraftCourses } from '@app/pages/trainer-pages/MyCourses/DraftCourses'
 import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
+import { AdminTransferParticipantPage } from '@app/pages/TransferParticipant/AdminTransferParticipant'
+import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
+import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
+import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
@@ -67,10 +71,21 @@ const TrainerBaseRoutes = () => {
           <Route path="modules" element={<CourseBuilder />} />
           <Route path="details" element={<TrainerCourseDetails />} />
           <Route path="grading" element={<CourseGrading />} />
+
           <Route
             path="grading/:participantId"
             element={<ParticipantGrading />}
           />
+
+          <Route
+            path="transfer/:participantId"
+            element={<AdminTransferParticipantPage />}
+          >
+            <Route index element={<ChooseTransferCourse />} />
+            <Route path="details" element={<TransferDetails />} />
+            <Route path="review" element={<TransferReview />} />
+          </Route>
+
           <Route path="evaluation">
             <Route path="submit" element={<TrainerFeedback />} />
             <Route path="view" element={<CourseEvaluation />} />
