@@ -82,6 +82,7 @@ export const QUERY = gql`
     $offset: Int
     $limit: Int
     $withParticipantAggregates: Boolean = false
+    $withParticipants: Boolean = false
   ) {
     courses: course(
       where: $where
@@ -95,6 +96,11 @@ export const QUERY = gql`
         aggregate {
           count
         }
+      }
+      courseParticipants: participants @include(if: $withParticipants) {
+        healthSafetyConsent
+        grade
+        attended
       }
       waitlistAgg: waitlists_aggregate
         @include(if: $withParticipantAggregates) {

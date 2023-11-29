@@ -9,13 +9,18 @@ import {
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
   TrainerCourseFragment,
+  TrainerCoursesQuery,
 } from '@app/generated/graphql'
 
 import { waitFor, within } from '@test/index'
 
 const chance = new Chance()
 
-export const buildTrainerCourse = build<TrainerCourseFragment>({
+export type TrainerCourseQueryFragment = TrainerCourseFragment & {
+  courseParticipants: TrainerCoursesQuery['courses'][0]['courseParticipants']
+}
+
+export const buildTrainerCourse = build<TrainerCourseQueryFragment>({
   fields: {
     id: perBuild(() => chance.integer()),
     name: perBuild(() => chance.word({ length: 3 })),
@@ -80,13 +85,14 @@ export const buildTrainerCourse = build<TrainerCourseFragment>({
         },
       },
     },
+    courseParticipants: [],
   },
 })
 
 export const buildTrainerCourseWithDates = (
   start: Date,
   end: Date
-): TrainerCourseFragment =>
+): TrainerCourseQueryFragment =>
   buildTrainerCourse({
     overrides: {
       dates: {
@@ -114,7 +120,7 @@ export const buildCourseTrainer = (
 }
 
 export const buildActionableTrainerCourse = (
-  overrides?: Partial<TrainerCourseFragment>
+  overrides?: Partial<TrainerCourseQueryFragment>
 ) =>
   buildTrainerCourse({
     overrides: {
@@ -127,7 +133,7 @@ export const buildActionableTrainerCourse = (
 export const buildActionableTrainerCourseWithDates = (
   start: Date,
   end: Date
-): TrainerCourseFragment =>
+): TrainerCourseQueryFragment =>
   buildActionableTrainerCourse({
     dates: {
       aggregate: {

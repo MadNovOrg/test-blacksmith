@@ -25,6 +25,11 @@ export const buildUserCourse = build<
         count: number
       } | null
     }
+  } & {
+    courseParticipants: {
+      grade: Grade_Enum | null
+      healthSafetyConsent: boolean
+    }[]
   }
 >({
   fields: {
@@ -80,5 +85,6 @@ export const buildUserCourse = build<
         },
       },
     },
+    courseParticipants: [],
   },
 })

@@ -275,7 +275,10 @@ export function StatusCell({ course }: { course: TableCourse }) {
     <TableCell>
       {course.status ? (
         acl.isOrgAdmin() ? (
-          <IndividualCourseStatusChip course={course} />
+          <IndividualCourseStatusChip
+            course={course}
+            participants={course.courseParticipants ?? []}
+          />
         ) : (
           <CourseStatusChip
             status={

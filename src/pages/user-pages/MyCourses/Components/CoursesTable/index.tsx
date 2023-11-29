@@ -217,7 +217,10 @@ export const CoursesTable: React.FC<
                 </TableCell>
                 <TableCell>
                   {isManaging && !acl.isUser() ? (
-                    <IndividualCourseStatusChip course={course} />
+                    <IndividualCourseStatusChip
+                      course={course}
+                      participants={course.courseParticipants ?? []}
+                    />
                   ) : (
                     <AttendeeCourseStatus course={course} />
                   )}

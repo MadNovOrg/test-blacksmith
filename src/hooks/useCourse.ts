@@ -32,6 +32,7 @@ export default function useCourse(courseId: string): {
         acl.canInviteAttendees(Course_Type_Enum.Open) ||
         acl.canViewCourseOrder(),
       withArloRefId: acl.isInternalUser(),
+      withParticipants: acl.isOrgAdmin(),
     },
   ])
 

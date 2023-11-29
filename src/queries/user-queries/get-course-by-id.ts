@@ -12,6 +12,7 @@ export type ParamsType = {
   withOrders?: boolean
   withGo1Data?: boolean
   withCancellationRequest?: boolean
+  withParticipants?: boolean
   profileId: string
 }
 
@@ -25,6 +26,7 @@ export const QUERY = gql`
     $withGo1Data: Boolean = false
     $profileId: uuid!
     $withCancellationRequest: Boolean = false
+    $withParticipants: Boolean = false
   ) {
     course: course_by_pk(id: $id) {
       id
@@ -68,6 +70,13 @@ export const QUERY = gql`
         grade
         attended
       }
+
+      courseParticipants: participants @include(if: $withParticipants) {
+        healthSafetyConsent
+        grade
+        attended
+      }
+
       evaluation_answers_aggregate(
         distinct_on: profileId
         where: { profileId: { _eq: $profileId } }

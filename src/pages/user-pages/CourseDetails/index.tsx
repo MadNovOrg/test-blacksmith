@@ -109,6 +109,8 @@ export const CourseDetails: React.FC<
       withGo1Data: canViewOrderItem,
       profileId: profile?.id || '',
       withCancellationRequest: acl.isBookingContact() && bookingOnly,
+      withParticipants:
+        (acl.isBookingContact() || acl.isOrgKeyContact()) && bookingOnly,
     },
     requestPolicy: 'network-only',
   })

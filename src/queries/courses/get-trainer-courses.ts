@@ -86,6 +86,7 @@ export const QUERY = gql`
     $offset: Int
     $limit: Int
     $withArloRefId: Boolean = false
+    $withParticipants: Boolean = false
   ) {
     courses: course(
       where: $where
@@ -96,6 +97,12 @@ export const QUERY = gql`
       ...TrainerCourse
       # TODO: Delete this after Arlo migration
       arloReferenceId @include(if: $withArloRefId)
+
+      courseParticipants: participants @include(if: $withParticipants) {
+        healthSafetyConsent
+        grade
+        attended
+      }
     }
     course_aggregate(where: $where) {
       aggregate {

@@ -12,6 +12,7 @@ export type ParamsType = {
   id: string
   withOrders?: boolean
   withArloRefId: boolean
+  withParticipants?: boolean
 }
 
 export const QUERY = gql`
@@ -24,6 +25,7 @@ export const QUERY = gql`
     $withOrders: Boolean = false
     $withModules: Boolean = false
     $withArloRefId: Boolean = false
+    $withParticipants: Boolean = false
   ) {
     course: course_by_pk(id: $id) {
       ...Course
@@ -149,6 +151,12 @@ export const QUERY = gql`
             mandatory
           }
         }
+      }
+
+      courseParticipants: participants @include(if: $withParticipants) {
+        healthSafetyConsent
+        grade
+        attended
       }
 
       certificateCount: participants_aggregate(

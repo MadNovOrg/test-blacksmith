@@ -28,7 +28,7 @@ import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { Sorting } from './useTableSort'
 
-export type OrgAdminCourseStatus =
+export type OrgAdminCourseStatuses =
   | AdminOnlyCourseStatus.CancellationRequested
   | AttendeeOnlyCourseStatus.AwaitingGrade
   | Course_Status_Enum.Cancelled
@@ -60,6 +60,106 @@ type Props = {
   filters?: CoursesFilters
   pagination?: { perPage: number; currentPage: number }
   orgId?: string
+}
+
+export const getIndividualsCourseStatusesConditions = (
+  currentDate: string
+): Record<OrgAdminCourseStatuses, Course_Bool_Exp> => {
+  const cancelledStatuses = [
+    Course_Status_Enum.Cancelled,
+    Course_Status_Enum.Declined,
+  ]
+
+  const notCancelRequestedCond = {
+    _not: { cancellationRequest: { id: { _is_null: false } } },
+  }
+
+  const notCancelledOrDeclinedCond = {
+    status: {
+      _nin: cancelledStatuses,
+    },
+  }
+
+  return {
+    [AttendeeOnlyCourseStatus.AwaitingGrade]: {
+      _or: [
+        {
+          participants: {
+            grade: { _is_null: true },
+          },
+          schedule: {
+            end: { _lt: currentDate },
+          },
+          status: {
+            _nin: [
+              ...cancelledStatuses,
+              Course_Status_Enum.Completed,
+              Course_Status_Enum.EvaluationMissing,
+            ],
+          },
+          ...notCancelRequestedCond,
+        },
+      ],
+    },
+    [AdminOnlyCourseStatus.CancellationRequested]: {
+      _or: [
+        {
+          ...notCancelledOrDeclinedCond,
+          cancellationRequest: { id: { _is_null: false } },
+        },
+      ],
+    },
+    [Course_Status_Enum.Cancelled]: {
+      _or: [
+        {
+          status: {
+            _in: [Course_Status_Enum.Cancelled, Course_Status_Enum.Declined],
+          },
+        },
+      ],
+    },
+    [Course_Status_Enum.Completed]: {
+      _or: [
+        {
+          ...notCancelledOrDeclinedCond,
+          ...notCancelRequestedCond,
+          _and: [
+            { participants: { _not: { grade: { _is_null: true } } } },
+            { gradingStarted: { _eq: true } },
+          ],
+          schedule: {
+            end: { _lt: currentDate },
+          },
+        },
+        {
+          ...notCancelRequestedCond,
+          status: {
+            _in: [
+              Course_Status_Enum.Completed,
+              Course_Status_Enum.EvaluationMissing,
+            ],
+          },
+        },
+      ],
+    },
+    [Course_Status_Enum.Scheduled]: {
+      _or: [
+        {
+          ...notCancelRequestedCond,
+          schedule: {
+            end: { _gt: currentDate },
+          },
+          status: {
+            _nin: [
+              ...cancelledStatuses,
+              Course_Status_Enum.Completed,
+              Course_Status_Enum.EvaluationMissing,
+            ],
+          },
+        },
+      ],
+    },
+  }
 }
 
 export const filtersToWhereClause = (
@@ -157,98 +257,10 @@ export const useCourses = (
   const dateRef = useRef(new Date().toISOString())
   const orderBy = getOrderBy(sorting)
 
-  const notCancelRequested = useMemo<Course_Bool_Exp>(
-    () => ({
-      _not: { cancellationRequest: { id: { _is_null: false } } },
-    }),
-    []
-  )
-
-  const notCancelCondition = useMemo<Course_Bool_Exp>(
-    () => ({
-      status: {
-        _nin: [Course_Status_Enum.Cancelled, Course_Status_Enum.Declined],
-      },
-    }),
-    []
-  )
-
   const orgAdminCourseStatusConditionsMap: Record<
-    OrgAdminCourseStatus,
+    OrgAdminCourseStatuses,
     Course_Bool_Exp
-  > = useMemo(
-    () => ({
-      [Course_Status_Enum.Scheduled]: {
-        _or: [
-          {
-            schedule: {
-              end: { _gt: dateRef.current },
-            },
-            ...notCancelCondition,
-            ...notCancelRequested,
-          },
-        ],
-      },
-      [Course_Status_Enum.Completed]: {
-        _or: [
-          {
-            participants: { _not: { grade: { _is_null: true } } },
-            schedule: {
-              end: { _lt: dateRef.current },
-            },
-            ...notCancelRequested,
-            ...notCancelCondition,
-          },
-          {
-            status: {
-              _in: [
-                Course_Status_Enum.EvaluationMissing,
-                Course_Status_Enum.Completed,
-              ],
-            },
-            ...notCancelRequested,
-          },
-        ],
-      },
-      [AttendeeOnlyCourseStatus.AwaitingGrade]: {
-        _or: [
-          {
-            participants: {
-              grade: { _is_null: true },
-            },
-            schedule: {
-              end: { _lt: dateRef.current },
-            },
-            ...notCancelCondition,
-            status: {
-              _nin: [
-                Course_Status_Enum.EvaluationMissing,
-                Course_Status_Enum.Completed,
-              ],
-            },
-          },
-        ],
-      },
-      [AdminOnlyCourseStatus.CancellationRequested]: {
-        _or: [
-          {
-            cancellationRequest: { id: { _is_null: false } },
-            ...notCancelCondition,
-          },
-        ],
-      },
-      [Course_Status_Enum.Cancelled]: {
-        _or: [
-          {
-            status: {
-              _in: [Course_Status_Enum.Cancelled, Course_Status_Enum.Declined],
-            },
-          },
-        ],
-      },
-    }),
-    [notCancelCondition, notCancelRequested]
-  )
+  > = useMemo(() => getIndividualsCourseStatusesConditions(dateRef.current), [])
 
   const where = useMemo(() => {
     let obj: Course_Bool_Exp = {}
@@ -412,6 +424,7 @@ export const useCourses = (
           }
         : null),
       withArloRefId: acl.isInternalUser(),
+      withParticipants: acl.isOrgAdmin(),
     },
   })
 

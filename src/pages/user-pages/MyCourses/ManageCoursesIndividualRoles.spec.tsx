@@ -268,6 +268,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
         status: Course_Status_Enum.GradeMissing,
       },
     })
+    course.courseParticipants = [{ grade: null, healthSafetyConsent: true }]
 
     const client = {
       executeQuery: ({

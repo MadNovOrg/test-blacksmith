@@ -38,7 +38,7 @@ test.each([[CourseStatuses.Cancelled], [CourseStatuses.Declined]])(
   status => {
     const course = buildCourseForIndividualStatusChip({ status })
 
-    render(<IndividualCourseStatusChip course={course} />)
+    render(<IndividualCourseStatusChip course={course} participants={[]} />)
 
     expect(screen.getByText(/Cancelled/i)).toBeInTheDocument()
   }
@@ -52,7 +52,7 @@ test.each(statusesExceptCancelledAndDeclined)(
       status: status as CourseStatuses,
     })
 
-    render(<IndividualCourseStatusChip course={course} />)
+    render(<IndividualCourseStatusChip course={course} participants={[]} />)
 
     expect(screen.getByText(/Cancellation requested/i)).toBeInTheDocument()
   }
@@ -63,7 +63,7 @@ it('shows completed status if course has missing evaluation', () => {
     status: CourseStatuses.EvaluationMissing,
   })
 
-  render(<IndividualCourseStatusChip course={course} />)
+  render(<IndividualCourseStatusChip course={course} participants={[]} />)
 
   expect(screen.getByText(/Completed/i)).toBeInTheDocument()
 })
@@ -80,7 +80,12 @@ it('shows awaiting grade status if course has missing graduation', () => {
     ],
   })
 
-  render(<IndividualCourseStatusChip course={course} />)
+  render(
+    <IndividualCourseStatusChip
+      course={course}
+      participants={[{ grade: null, healthSafetyConsent: true }]}
+    />
+  )
 
   expect(screen.getByText(/Awaiting grade/i)).toBeInTheDocument()
 })

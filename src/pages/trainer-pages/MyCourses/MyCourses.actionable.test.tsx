@@ -20,7 +20,6 @@ import {
   Course_Type_Enum,
   Order_By,
   SetCourseTrainerStatusMutation,
-  TrainerCourseFragment,
   TrainerCoursesQuery,
   TrainerCoursesQueryVariables,
 } from '@app/generated/graphql'
@@ -35,6 +34,7 @@ import {
   expectActionableTableTo,
   expectCourseTableTo,
   buildCourseTrainer,
+  TrainerCourseQueryFragment,
 } from './test-utils'
 import { TrainerCourses } from './TrainerCourses'
 
@@ -517,10 +517,10 @@ describe('trainers-pages/MyCourses', () => {
     describe('Start and end dates filter', () => {
       setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
 
-      let course_from_15_01_23_to_27_11_23: TrainerCourseFragment
-      let course_from_13_03_23_to_25_07_23: TrainerCourseFragment
-      let course_from_22_03_23_to_20_12_23: TrainerCourseFragment
-      let allCourses: TrainerCourseFragment[]
+      let course_from_15_01_23_to_27_11_23: TrainerCourseQueryFragment
+      let course_from_13_03_23_to_25_07_23: TrainerCourseQueryFragment
+      let course_from_22_03_23_to_20_12_23: TrainerCourseQueryFragment
+      let allCourses: TrainerCourseQueryFragment[]
       beforeAll(() => {
         // 15/01/2023 - 27/11/2023
         course_from_15_01_23_to_27_11_23 =

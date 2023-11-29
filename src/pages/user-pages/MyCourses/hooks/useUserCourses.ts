@@ -13,6 +13,7 @@ import {
   UserCoursesQuery,
   UserCoursesQueryVariables,
 } from '@app/generated/graphql'
+import { getIndividualsCourseStatusesConditions } from '@app/hooks/useCourses'
 import { ALL_ORGS } from '@app/hooks/useOrg'
 import { Sorting } from '@app/hooks/useTableSort'
 import { QUERY } from '@app/queries/user-queries/get-user-courses'
@@ -67,25 +68,12 @@ export function useUserCourses(
   const { courses: unevaluatedCourses } = useUnevaluatedUserCourses()
   const unevaluatedIds = unevaluatedCourses?.map(c => c.id)
 
-  const notCancelRequested = useMemo<Course_Bool_Exp>(
-    () => ({
-      _not: { cancellationRequest: { id: { _is_null: false } } },
-    }),
-    []
-  )
-
-  const notCancelCondition = useMemo<Course_Bool_Exp>(
-    () => ({
-      status: {
-        _nin: [Course_Status_Enum.Cancelled, Course_Status_Enum.Declined],
-      },
-    }),
-    []
-  )
-
   const courseStatusConditionsMap: Record<UserCourseStatus, Course_Bool_Exp> =
-    useMemo(
-      () => ({
+    useMemo(() => {
+      const individualsStatusesConditions =
+        getIndividualsCourseStatusesConditions(dateRef.current)
+
+      return {
         [AttendeeOnlyCourseStatus.InfoRequired]: {
           _or: [
             {
@@ -119,107 +107,53 @@ export function useUserCourses(
             },
           ],
         },
-        [Course_Status_Enum.Scheduled]: {
-          _or: [
-            {
-              ...(forContactRole
-                ? null
-                : {
-                    participants: {
-                      healthSafetyConsent: { _eq: true },
-                    },
-                  }),
-              schedule: {
-                end: { _gt: dateRef.current },
-              },
-              ...(forContactRole
-                ? { ...notCancelRequested, ...notCancelCondition }
-                : null),
-            },
-          ],
-        },
-        [Course_Status_Enum.Completed]: {
-          _or: [
-            {
-              participants: forContactRole
-                ? { _not: { grade: { _is_null: true } } }
-                : { grade: { _is_null: false } },
-              ...(forContactRole
-                ? { ...notCancelRequested, ...notCancelCondition }
-                : { id: { _nin: unevaluatedIds } }),
-              schedule: {
-                end: { _lt: dateRef.current },
-              },
-            },
-            ...(forContactRole
-              ? [
-                  {
-                    status: {
-                      _in: [
-                        Course_Status_Enum.EvaluationMissing,
-                        Course_Status_Enum.Completed,
-                      ],
-                    },
-                    ...notCancelRequested,
+        [Course_Status_Enum.Scheduled]: forContactRole
+          ? individualsStatusesConditions.SCHEDULED
+          : {
+              _or: [
+                {
+                  participants: {
+                    healthSafetyConsent: { _eq: true },
                   },
-                ]
-              : []),
-          ],
-        },
-        [AttendeeOnlyCourseStatus.AwaitingGrade]: {
-          _or: [
-            {
-              participants: {
-                grade: { _is_null: true },
-              },
-              schedule: {
-                end: { _lt: dateRef.current },
-              },
-              ...(forContactRole
-                ? {
-                    ...notCancelCondition,
-                    status: {
-                      _nin: [
-                        Course_Status_Enum.EvaluationMissing,
-                        Course_Status_Enum.Completed,
-                      ],
-                    },
-                  }
-                : null),
-            },
-            ...(forContactRole
-              ? [
-                  {
-                    ...notCancelCondition,
-                    status: { _eq: Course_Status_Enum.GradeMissing },
+                  schedule: {
+                    end: { _gt: dateRef.current },
                   },
-                ]
-              : []),
-          ],
-        },
-        [AdminOnlyCourseStatus.CancellationRequested]: {
-          _or: [
-            {
-              cancellationRequest: { id: { _is_null: false } },
-              ...notCancelCondition,
+                },
+              ],
             },
-          ],
-        },
-        [Course_Status_Enum.Cancelled]: {
-          _or: [
-            {
-              status: {
-                _in: [
-                  Course_Status_Enum.Cancelled,
-                  Course_Status_Enum.Declined,
-                ],
-              },
+        [Course_Status_Enum.Completed]: forContactRole
+          ? individualsStatusesConditions.COMPLETED
+          : {
+              _or: [
+                {
+                  participants: { grade: { _is_null: false } },
+                  id: { _nin: unevaluatedIds },
+                  schedule: {
+                    end: { _lt: dateRef.current },
+                  },
+                },
+              ],
             },
-          ],
-        },
-      }),
-      [forContactRole, notCancelCondition, notCancelRequested, unevaluatedIds]
-    )
+        [AttendeeOnlyCourseStatus.AwaitingGrade]: forContactRole
+          ? individualsStatusesConditions.AWAITING_GRADE
+          : {
+              _or: [
+                {
+                  participants: {
+                    grade: { _is_null: true },
+                  },
+                  schedule: {
+                    end: { _lt: dateRef.current },
+                  },
+                },
+              ],
+            },
+        [AdminOnlyCourseStatus.CancellationRequested]:
+          individualsStatusesConditions.CANCELLATION_REQUESTED,
+
+        [Course_Status_Enum.Cancelled]: individualsStatusesConditions.CANCELLED,
+      }
+    }, [forContactRole, unevaluatedIds])
 
   const where = useMemo(() => {
     let userConditions: Course_Bool_Exp = bookingContactOnly
@@ -397,6 +331,7 @@ export function useUserCourses(
             offset: pagination.perPage * (pagination?.currentPage - 1),
           }
         : null),
+      withParticipants: forContactRole,
     },
   })
 

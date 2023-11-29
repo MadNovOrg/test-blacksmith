@@ -13,6 +13,7 @@ import {
   Course_Type_Enum,
   GetEvaluationsSummaryQuery,
   Grade_Enum,
+  UserCoursesQuery,
 } from '@app/generated/graphql'
 import { StepsEnum } from '@app/pages/CreateCourse/types'
 
@@ -99,6 +100,7 @@ export type Course = {
     salesRepresentative?: Profile
     source?: Course_Source_Enum
   }>
+  courseParticipants?: UserCoursesQuery['courses'][0]['courseParticipants']
 } & Omit<Base, 'id'>
 
 export type CourseModule = {

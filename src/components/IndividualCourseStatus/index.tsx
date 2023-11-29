@@ -15,11 +15,12 @@ export type CourseStatusDetails = Pick<
 
 type IndividualCourseStatusProps = {
   course: CourseStatusDetails
+  participants: UserCoursesQuery['courses'][0]['courseParticipants']
 }
 
 export const IndividualCourseStatusChip: React.FC<
   React.PropsWithChildren<IndividualCourseStatusProps>
-> = ({ course }) => {
+> = ({ course, participants }) => {
   const ended = isPast(new Date(course.schedule[0].end))
 
   const mappedStatus = useMemo(() => {
@@ -30,9 +31,9 @@ export const IndividualCourseStatusChip: React.FC<
     return getIndividualCourseStatuses(
       status as CourseStatuses,
       ended,
-      status === CourseStatuses.EvaluationMissing,
+      !participants?.some(participant => !participant.grade),
       Boolean(course.cancellationRequest)
     )
-  }, [course, ended])
+  }, [course, ended, participants])
   return <CourseStatusChip status={mappedStatus} />
 }

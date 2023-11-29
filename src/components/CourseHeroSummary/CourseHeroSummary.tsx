@@ -28,10 +28,7 @@ import {
 } from '@app/components/AttendeeCourseStatus/AttendeeCourseStatus'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { CourseInstructionsDialog } from '@app/components/dialogs'
-import {
-  CourseStatusDetails,
-  IndividualCourseStatusChip,
-} from '@app/components/IndividualCourseStatus'
+import { IndividualCourseStatusChip } from '@app/components/IndividualCourseStatus'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Delivery_Type_Enum,
@@ -200,7 +197,8 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   />
                 ) : isManaged ? (
                   <IndividualCourseStatusChip
-                    course={course as CourseStatusDetails}
+                    course={course}
+                    participants={course.courseParticipants ?? []}
                   />
                 ) : (
                   <AttendeeCourseStatus
