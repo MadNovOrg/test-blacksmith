@@ -1,5 +1,6 @@
 import { Container, Box } from '@mui/material'
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -13,6 +14,11 @@ export const CourseCertificationDetails = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>
+          {t('pages.browser-tab-titles.user-profile.certifications')}
+        </title>
+      </Helmet>
       <Box mt={1}>
         <BackButton label={t('common.back')} />
       </Box>

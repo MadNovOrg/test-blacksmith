@@ -15,6 +15,7 @@ import { pdf } from '@react-pdf/renderer'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 import React, { useCallback, useMemo } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -136,6 +137,9 @@ export const CertificationList: React.FC<
 
   return (
     <>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.users.certifications')}</title>
+      </Helmet>
       <Grid
         container
         justifyContent={hideTitle ? 'end' : 'space-between'}

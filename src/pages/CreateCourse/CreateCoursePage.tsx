@@ -6,7 +6,9 @@ import {
   useTheme,
 } from '@mui/material'
 import { t } from 'i18next'
+import { capitalize } from 'lodash'
 import { useMemo } from 'react'
+import { Helmet } from 'react-helmet'
 import {
   Outlet,
   useLocation,
@@ -57,6 +59,15 @@ export const CreateCoursePage = () => {
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
+      <Helmet>
+        <title>
+          {location.pathname.includes('drafts')
+            ? t('pages.browser-tab-titles.my-courses.drafts')
+            : t('pages.browser-tab-titles.manage-courses.creating-course', {
+                courseType: capitalize(courseType),
+              })}
+        </title>
+      </Helmet>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
         <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
           <Box width={400} display="flex" flexDirection="column" pr={4}>

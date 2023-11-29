@@ -1,4 +1,57 @@
 {
+  "browser-tab-titles":{
+    "main-title": "Team Teach Connect",
+    "home": "Home",
+    "resources": {
+      "title": "Resources",
+      "best-practice": "Best Practice",
+      "legislation-and-guidance": "Legislation & Guidance",
+      "trainer-roles-and-responsibilities": "Trainer Roles",
+      "technique-videos": "Technique Videos",
+      "templates-and-documents": "Templates",
+      "bild-act-certified-resources": "BILD ACT Certified Resources",
+      "blended-learning": "Blended Learning",
+      "course-materials": "Course Materials"
+    },
+    "my-courses": {
+      "title":"My Courses",
+      "drafts":"Drafts",
+      "draft-course":"Draft Course"
+    },
+    "manage-courses":{
+      "title": "Manage Courses",
+      "course": "Course",
+      "creating-course": "{{courseType}} Course Creation",
+      "course-builder": "Course Builder"
+    },
+    "organisations": {
+      "title": "Organisations",
+      "new-organisation": "New Organisation"
+    },
+    "users": {
+      "title": "Users"
+    },
+    "user-profile":{
+      "title": "User profile",
+      "certifications": "Certifications"
+
+    },
+    "orders":{
+      "title": "Orders"
+    },
+    "book-a-course":{
+      "title": "All courses",
+      "book-a-course":"Book a course"
+    },
+    "admin":{
+      "title":"Administrator",
+      "audit": "Audit",
+      "discounts":"Discounts",
+      "new-discount":"New Discount",
+      "course-exceptions":"Course Exceptions",
+      "audit-attendee-action":"{{item}} {{action}}"
+    }
+  },
   "onboarding": {
     "title": "We need a bit more information",
     "submit-btn-text": "Update information",

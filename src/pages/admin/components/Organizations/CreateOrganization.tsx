@@ -1,5 +1,7 @@
 import { useTheme } from '@mui/material'
 import { useState } from 'react'
+import { Helmet } from 'react-helmet'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'urql'
 
@@ -17,6 +19,7 @@ import { FormInputs } from './shared'
 export const CreateOrganization = () => {
   const theme = useTheme()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [
     { data: organisationData, fetching: loading, error },
     executeMutation,
@@ -65,6 +68,11 @@ export const CreateOrganization = () => {
   }
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
+      <Helmet>
+        <title>
+          {t('pages.browser-tab-titles.organisations.new-organisation')}
+        </title>
+      </Helmet>
       <OrganizationForm
         onSubmit={handleSubmit}
         setXeroId={setXeroId}

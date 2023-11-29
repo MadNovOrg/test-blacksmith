@@ -1,5 +1,6 @@
 import { Box, Button, Container, Stack, Typography } from '@mui/material'
 import React, { useCallback, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -54,6 +55,9 @@ export const DiscountsList: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   return (
     <FullHeightPageLayout>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.admin.discounts')}</title>
+      </Helmet>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
           <BackButton label={t('pages.admin.back-to-settings')} />

@@ -5,6 +5,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
@@ -49,6 +50,9 @@ export const DraftCourses: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.my-courses.drafts')}</title>
+      </Helmet>
       <SnackbarMessage messageKey="draft-saved" sx={{ position: 'absolute' }} />
       <Container
         maxWidth="lg"

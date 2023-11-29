@@ -19,6 +19,7 @@ import {
 } from '@mui/material'
 import Big from 'big.js'
 import React, { useCallback, useEffect, useMemo } from 'react'
+import { Helmet } from 'react-helmet'
 import {
   Control,
   Controller,
@@ -493,6 +494,9 @@ export const CourseBookingDetails: React.FC<
 
   return (
     <FormProvider {...methods}>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.book-a-course.title')}</title>
+      </Helmet>
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}

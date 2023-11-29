@@ -9,6 +9,7 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useMemo } from 'react'
+import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
@@ -180,6 +181,9 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
+      <Helmet>
+        <title>{_t('pages.browser-tab-titles.orders.title')}</title>
+      </Helmet>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
         {fetching ? (
           <Stack

@@ -1,5 +1,6 @@
 import { Alert, Box, CircularProgress } from '@mui/material'
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useParams } from 'react-router-dom'
 import useSWR from 'swr'
@@ -56,7 +57,16 @@ export const CourseBuilder: React.FC<React.PropsWithChildren> = () => {
   }
 
   if (courseData?.course?.accreditedBy === Accreditors_Enum.Icm) {
-    return <ICMCourseBuilder editMode={editMode ?? false} />
+    return (
+      <>
+        <Helmet>
+          <title>
+            {t('pages.browser-tab-titles.manage-courses.course-builder')}
+          </title>
+        </Helmet>
+        <ICMCourseBuilder editMode={editMode ?? false} />
+      </>
+    )
   }
 
   if (courseData?.course?.accreditedBy === Accreditors_Enum.Bild) {

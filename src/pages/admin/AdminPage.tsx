@@ -1,5 +1,6 @@
 import { Box, Link, List, ListItem, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 
 import { Tile } from '@app/components/Tile'
@@ -45,6 +46,9 @@ export const AdminPage: React.FC<
       pb={3}
       sx={{ display: 'flex', justifyContent: 'center' }}
     >
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.admin.title')}</title>
+      </Helmet>
       <Box sx={{ width: '80%', maxWidth: '628px' }}>
         <Typography variant="h1" pt={3} pb={2} fontWeight={600}>
           {t(`pages.admin.connect-settings.title`)}

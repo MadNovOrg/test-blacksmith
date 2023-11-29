@@ -14,6 +14,7 @@ import {
 import { saveAs } from 'file-saver'
 import { t } from 'i18next'
 import React, { useMemo, useCallback } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import * as XLSX from 'xlsx'
 
@@ -132,6 +133,9 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <Box>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.orders.title')}</title>
+      </Helmet>
       <Stack
         direction="row"
         gap={2}

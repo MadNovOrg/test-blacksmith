@@ -19,6 +19,7 @@ import {
   useTheme,
 } from '@mui/material'
 import React, { useState, useMemo } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
@@ -152,6 +153,13 @@ export const ViewProfilePage: React.FC<
 
   return (
     <Box bgcolor="grey.100" pb={6} pt={3} flex={1}>
+      <Helmet>
+        <title>
+          {id
+            ? t('pages.browser-tab-titles.users.title')
+            : t('pages.browser-tab-titles.user-profile.title')}
+        </title>
+      </Helmet>
       <Container>
         <Grid container flexDirection={isMobile ? 'column' : 'row'}>
           <Grid item sm={12}>

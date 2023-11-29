@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 
 import { SuspenseLoading } from '@app/components/SuspenseLoading'

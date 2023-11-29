@@ -14,6 +14,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import enLocale from 'date-fns/locale/en-GB'
 import { isNumber, orderBy } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useParams, useSearchParams } from 'react-router-dom'
 
@@ -223,6 +224,9 @@ export const AvailableCourses: React.FC<
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enLocale}>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.book-a-course.title')}</title>
+      </Helmet>
       <FullHeightPageLayout bgcolor={theme.palette.grey[100]} pb={3}>
         {orgs && orgs.length > 1 ? (
           <OrgSelectionToolbar prefix="/organisations" postfix="/courses" />

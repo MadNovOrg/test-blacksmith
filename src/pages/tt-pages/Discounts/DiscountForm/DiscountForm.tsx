@@ -21,6 +21,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { endOfDay, startOfDay } from 'date-fns'
 import { omit } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -364,6 +365,9 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
           : t(`pages.promoCodes.new-title`)
       }
     >
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.admin.new-discount')}</title>
+      </Helmet>
       <Typography variant="body1" fontWeight="bold">
         {t('pages.promoCodes.new-section-general')}
       </Typography>

@@ -7,6 +7,7 @@ import {
   Box,
 } from '@mui/material'
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink } from 'react-router-dom'
 
@@ -25,6 +26,9 @@ export const ResourceAreas = () => {
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]} pb={3}>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.resources.title')}</title>
+      </Helmet>
       <Container maxWidth="lg" sx={{ py: 5 }}>
         {fetching ? (
           <Box data-testid="resources-list-skeleton">

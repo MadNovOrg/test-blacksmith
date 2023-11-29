@@ -8,6 +8,7 @@ import {
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import React, { useCallback, useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 
 import { FilterByCertificateValidity } from '@app/components/filters/FilterByCertificateValidity'
@@ -146,6 +147,11 @@ export const Certifications: React.FC<
 
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
+      <Helmet>
+        <title>
+          {t('pages.browser-tab-titles.user-profile.certifications')}
+        </title>
+      </Helmet>
       <Box display="flex" gap={4}>
         <Box width={250}>
           <Typography variant="h1">{t('common.certifications')}</Typography>

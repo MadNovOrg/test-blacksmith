@@ -1,5 +1,7 @@
 import { CssBaseline } from '@mui/material'
 import { useMemo } from 'react'
+import { Helmet } from 'react-helmet'
+import { useTranslation } from 'react-i18next'
 import { SWRConfig } from 'swr'
 
 import { GQLProvider } from './components/GQLProvider'
@@ -12,6 +14,7 @@ import './style.css'
 
 function App() {
   const fetcher = useSWRFetcher()
+  const { t } = useTranslation()
 
   const config = useMemo(
     () => ({
@@ -31,6 +34,12 @@ function App() {
             <CssBaseline />
             <SnackbarProvider>
               <ScrollToTop />
+              <Helmet
+                defaultTitle={t('pages.browser-tab-titles.main-title')}
+                titleTemplate={`%s - ${t(
+                  'pages.browser-tab-titles.main-title'
+                )}`}
+              />
               <AppRoutes />
             </SnackbarProvider>
           </>

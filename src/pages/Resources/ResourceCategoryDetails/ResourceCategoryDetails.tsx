@@ -6,6 +6,7 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import React, { useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -32,7 +33,6 @@ export const ResourceCategoryDetails = () => {
   const [{ data, fetching }] = useResourceCategory(id, searchTerm)
 
   const resourceCategory = data?.content?.resourceCategory
-
   const numberOfResources = useMemo(() => {
     function countResources(category: typeof resourceCategory): number {
       const resourceNum = category?.resources?.nodes?.length ?? 0
@@ -53,9 +53,18 @@ export const ResourceCategoryDetails = () => {
   if (!fetching && !resourceCategory) {
     return <NotFound />
   }
-
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]} pb={3}>
+      <Helmet>
+        <title>
+          {t(
+            `pages.browser-tab-titles.resources.${resourceCategory?.name
+              ?.toLowerCase()
+              .replace('&', 'and')
+              .replaceAll(' ', '-')}`
+          )}
+        </title>
+      </Helmet>
       <Container maxWidth="lg" sx={{ py: 5 }}>
         <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
           <Box width={isMobile ? undefined : 400}>

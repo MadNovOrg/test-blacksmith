@@ -1,6 +1,7 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Container, Tab, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
@@ -12,6 +13,7 @@ import { AttendeeTransferTable } from '@app/pages/admin/Audits/AttendeeTransferT
 import { CourseCancellationTable } from '@app/pages/admin/Audits/CourseCancellationTable'
 import { CourseReschedulingTable } from '@app/pages/admin/Audits/CourseReschedulingTable'
 import theme from '@app/theme'
+import { capitalize } from '@app/util'
 
 enum PageTab {
   ATTENDEE_CANCELLATION = 'attendee-cancellation',
@@ -30,12 +32,27 @@ export const AuditsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
     (searchParams.get('tab') as PageTab) ?? PageTab.ATTENDEE_CANCELLATION
   const [activeTab, setActiveTab] = useState<PageTab>(initialTab)
 
+  const [item, action] = [
+    capitalize(initialTab.slice(0, initialTab.indexOf('-'))),
+    capitalize(initialTab.replace('attendee-', '').replace('course-', '')),
+  ]
+
   useEffect(() => {
     if (initialTab) setActiveTab(initialTab)
   }, [initialTab])
 
   return (
     <FullHeightPageLayout>
+      <Helmet>
+        <title>
+          {!searchParams.get('tab')
+            ? t('pages.browser-tab-titles.admin.audit')
+            : t('pages.browser-tab-titles.admin.audit-attendee-action', {
+                item,
+                action,
+              })}
+        </title>
+      </Helmet>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
           <BackButton label={t('pages.admin.back-to-settings')} />

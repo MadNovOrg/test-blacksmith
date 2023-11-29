@@ -11,6 +11,7 @@ import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { Trans, useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -56,7 +57,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
   showAvailableCoursesButton,
 }) => {
   const navigate = useNavigate()
-  const { state: locationState } = useLocation()
+  const { state: locationState, pathname } = useLocation()
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -188,6 +189,13 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
       sx={{ py: 5, position: 'relative' }}
       disableGutters={!isMobile}
     >
+      <Helmet>
+        <title>
+          {pathname.includes('manage')
+            ? t('pages.browser-tab-titles.manage-courses.title')
+            : t('pages.browser-tab-titles.my-courses.title')}
+        </title>
+      </Helmet>
       <SnackbarMessage
         messageKey="course-created"
         sx={{ position: 'absolute' }}

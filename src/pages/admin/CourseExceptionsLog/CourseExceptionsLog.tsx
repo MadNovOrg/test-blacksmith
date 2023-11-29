@@ -1,5 +1,6 @@
 import { Box, Container, Typography } from '@mui/material'
 import { FC, PropsWithChildren } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 
 import { BackButton } from '@app/components/BackButton'
@@ -13,6 +14,9 @@ export const CourseExceptionsLog: FC<PropsWithChildren<unknown>> = () => {
 
   return (
     <FullHeightPageLayout data-testid="course-exceptions-log" sx={{ mb: 10 }}>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.admin.course-exceptions')}</title>
+      </Helmet>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
           <BackButton label={t('pages.admin.back-to-settings')} />

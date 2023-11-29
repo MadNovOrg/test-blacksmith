@@ -13,6 +13,7 @@ import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { maxBy } from 'lodash-es'
 import React, { useCallback, useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -136,6 +137,9 @@ export const Organizations: React.FC<
 
   return (
     <FullHeightPageLayout>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.organisations.title')}</title>
+      </Helmet>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
           <BackButton label={t('pages.admin.back-to-settings')} />

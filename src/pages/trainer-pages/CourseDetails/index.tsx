@@ -14,6 +14,7 @@ import {
   useTheme,
 } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from 'urql'
@@ -191,6 +192,9 @@ export const CourseDetails = () => {
   }
   return (
     <>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.manage-courses.course')}</title>
+      </Helmet>
       <SnackbarMessage
         messageKey="course-approval-message"
         sx={{ position: 'absolute' }}

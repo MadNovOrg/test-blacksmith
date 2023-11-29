@@ -9,6 +9,7 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useEffect, useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
@@ -70,6 +71,9 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]} pb={3}>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.organisations.title')}</title>
+      </Helmet>
       {status === LoadingStatus.FETCHING ? (
         <Stack
           alignItems="center"

@@ -2,6 +2,7 @@ import { Container, Stack, useTheme, useMediaQuery } from '@mui/material'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import React, { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { Trans, useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 
@@ -75,6 +76,9 @@ export const AttendeeCourses: React.FC<
 
   return (
     <Container maxWidth="lg" sx={{ py: 5, px: 0 }} disableGutters={!isMobile}>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.my-courses.title')}</title>
+      </Helmet>
       <SnackbarMessage
         messageKey="course-canceled"
         sx={{ position: 'absolute' }}
