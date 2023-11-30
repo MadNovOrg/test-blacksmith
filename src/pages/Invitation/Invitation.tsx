@@ -19,6 +19,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
+import { differenceInSeconds } from 'date-fns'
 import jwtDecode from 'jwt-decode'
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -87,9 +88,16 @@ export const InvitationPage = () => {
   const isSubmitted = invite.status !== InviteStatus.PENDING
 
   const startDate = new Date(invite.startDate)
+  const endDate = new Date(invite.endDate)
+
+  const courseHasBegun = differenceInSeconds(startDate, now()) < 0
 
   const startsIn: TimeDifferenceAndContext = getTimeDifferenceAndContext(
     startDate,
+    now()
+  )
+  const endsIn: TimeDifferenceAndContext = getTimeDifferenceAndContext(
+    endDate,
     now()
   )
 
@@ -188,7 +196,11 @@ export const InvitationPage = () => {
 
         <Box mt={3} mb={4}>
           <Chip
-            label={t('pages.course-participants.until-course-begins', startsIn)}
+            label={
+              courseHasBegun
+                ? t('pages.course-participants.until-course-ends', endsIn)
+                : t('pages.course-participants.until-course-begins', startsIn)
+            }
             size="small"
             sx={{ borderRadius: 2, mb: 1 }}
           />

@@ -682,17 +682,24 @@
     "course-duration_days_one": "Duration 1 day",
     "course-duration_days_other": "Duration {{count}} days",
     "until-course-begins_days_one": "1 day until course begins",
+    "until-course-ends_days_one": "1 day until course ends",
     "until-course-begins_days_other": "{{count}} days until course begins",
+    "until-course-ends_days_other": "{{count}} days until course ends",
     "course-duration_hours_one": "Duration {{count}} hour",
     "course-duration_hours_other": "Duration {{count}} hours",
     "until-course-begins_hours_one": "{{count}} hour until course begins",
+    "until-course-ends_hours_one": "{{count}} hour until course ends",
     "until-course-begins_hours_other": "{{count}} hours until course begins",
+    "until-course-ends_hours_other": "{{count}} hours until course ends",
     "course-duration_minutes_one": "Duration {{count}} minute",
     "course-duration_minutes_other": "Duration {{count}} minutes",
     "until-course-begins_minutes_one": "{{count}} minute until course begins",
+    "until-course-ends_minutes_one": "{{count}} minute until course ends",
     "until-course-begins_minutes_other": "{{count}} minutes until course begins",
+    "until-course-ends_minutes_other": "{{count}} minutes until course ends",
     "course-duration_none": "No duration",
     "until-course-begins_none": "Course has already begun",
+    "until-course-ends_none": "Course has already ended",
     "no-participants-registered": "No participants registered yet for this course.",
     "course-began": "Course has begun.",
     "course-begins-today": "Course begins today.",
@@ -1195,7 +1202,6 @@
       "organization-phone": "Organisation phone",
       "organization-sector": "Sector",
       "organization-website": "Organisation website",
-
       "addresses": {
         "line1": "Address Line 1",
         "line2": "Address Line 2",
@@ -1246,9 +1252,7 @@
           "head-first-name": "Head first name",
           "head-surname": "Head surname",
           "head-email": "Head of service email address",
-
           "setting": "Setting name",
-
           "local-authority": "Local authority",
           "ofsted-rating": "Ofsted rating",
           "ofsted-last-inspection": "Ofsted last inspection date"
