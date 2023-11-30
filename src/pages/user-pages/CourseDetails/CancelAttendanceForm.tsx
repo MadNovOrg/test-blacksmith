@@ -39,7 +39,7 @@ export const CancelAttendanceForm: React.FC<
                 rel="noreferrer"
                 href={`${
                   import.meta.env.VITE_BASE_WORDPRESS_URL
-                }/terms-of-business/`}
+                }/policies-procedures/terms-of-business/`}
               />
             ),
           }}
