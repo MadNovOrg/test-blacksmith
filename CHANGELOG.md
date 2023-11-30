@@ -1,5 +1,48 @@
 # @teamteach/hub
 
+## 1.5.0
+
+### Minor Changes
+
+- 9fe483da: integrate Posthog for feature flags
+- 24039436: Adds browser tab titles to specific pages
+- 812bd7fd: Allow users to add organisations or join them from the edit profile page. Allow admin to add users to organisations from those user's edit profile page.
+- 130ea84a: Added a new Course Level for Open courses type
+
+### Patch Changes
+
+- dcee83e3: Map course statuses for individual roles, such as booking contact, org admin and org key contact
+- 25c67f5d: Page not found rendered when booking or adding a new registrant onto a course
+  Refactor some manually created types
+- 46323d17: Add: TTHP-3135 certificates are only visible if attendee compleated evaluation
+- 22745108: Remove Group column from the Organisations table.
+- b89511fe: Add re-invite trainer button
+- cb33163e: Modify trainer list in course evaluation summary pdf
+- 108feee9: Add new organisation type
+- fb7ffee4: Make booking contact required and fix yup validation for multiple participants.
+- 6811895a: Allow access to all certificate's courses of org admin courses' participants
+- 39342417: Add participant transfer page for trainer
+- d4a2f57e: Fix lead trainer blended learning invite emails
+- 25c86146: Fixes the indirect course editing issue regarding to AOL data not being preserved / rendered
+- ae58897c: Display type and registrants columns in courses table, for both organization key contact and booking contact.
+- 49fb5d7a: in user management ordered user profiles alphabetically by first name
+- f68c294a: Course invites are available until the course ends.
+- 83209cca: Fix incorrect trainer ratio on indirect AOL courses
+- 242237e0: Fix `Back` button on course details for trainer roles
+- 1fe33040: Validate organisation field on the onboarding page
+- 395f9f83: Changed the OrgStatsTiles RegularBreakpoints sizes and made both the individuals and organisation tables scrollable.
+- 528662bc: Change co.uk urls redirects to com
+- 40864fe2: Allow sales-admin role to make aggregations on organization_member table.
+- 727fcf0e: Allow only admin and LD to approve or reject a course with status 'Exceptions approval pending'.
+- 16f45e2f: Booking contact and organisation key contact `All courses` button navigation fix
+- 395f9f83: Improved responisiveness of the organizations page for mobile devices.
+- 0c7055c2: Fix table items count
+- bee66775: fix cancellation checkbox for operations
+- 9e579e2f: Add Organisation Administrator to the Roles filter list
+- 030164cd: Display techniques for primary module and don't show duplicates.
+- 7b0d4eed: Hiding Dietary and Disabilities information for trainers
+- 4a4c9a90: Display custom fee VAT in transfer review form
+
 ## 1.4.0
 
 ### Minor Changes
