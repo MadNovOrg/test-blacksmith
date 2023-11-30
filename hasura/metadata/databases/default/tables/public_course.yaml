@@ -1170,6 +1170,17 @@ select_permissions:
           - course_course_participant_audits:
               profile_id:
                 _eq: X-Hasura-User-Id
+          - participants:
+              profile:
+                courses:
+                  course:
+                    organization:
+                      members:
+                        _and:
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+                          - is_admin:
+                              _eq: true
       allow_aggregations: true
 update_permissions:
   - role: ld
