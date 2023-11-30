@@ -448,13 +448,13 @@ event_triggers:
     webhook: '{{EVENTS_HOST}}/participant/role'
   - name: course_certificate_expiry_date_changed
     definition:
-      enable_manual: false
+      enable_manual: true
       insert:
         columns: '*'
       update:
         columns:
-          - is_revoked
           - expiry_date
+          - is_revoked
     retry_conf:
       interval_sec: 10
       num_retries: 0
