@@ -29,7 +29,7 @@ import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
 import options from '@app/pages/GettingStarted/options'
 import { InvitationPage } from '@app/pages/Invitation'
 import { OrgInvitationPage } from '@app/pages/Invitation/OrgInvitation'
-import { Onboarding } from '@app/pages/Onboarding'
+import { Onboarding } from '@app/pages/Onboarding/Onboarding'
 import { Welcome } from '@app/pages/Welcome'
 import { RoleName } from '@app/types'
 

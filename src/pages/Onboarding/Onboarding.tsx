@@ -60,11 +60,11 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
     organization: yup
       .object<Partial<Organization>>()
       .shape({
-        id: yup.string(),
-        name: yup.string(),
+        id: yup.string().required(t('organisation-required-error')),
+        name: yup.string().required(t('organisation-required-error')),
         moderatorRole: yup.boolean(),
       })
-      .required(t('components.course-form.organisation-required')),
+      .required(t('organisation-required-error')),
   })
 
   const { register, handleSubmit, formState, watch, setValue, control } =
@@ -234,12 +234,12 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               {...register('organization')}
               autocompleteMode={false}
               showTrainerOrgOnly={false}
-              error={errors.organization?.message}
-              allowAdding
-              value={
-                (values.organization as Pick<Organization, 'name' | 'id'>) ??
-                null
+              error={
+                errors.organization?.id?.message ||
+                errors.organization?.name?.message
               }
+              allowAdding
+              value={values.organization ?? null}
               onChange={orgSelectorOnChange}
               textFieldProps={{
                 variant: 'filled',

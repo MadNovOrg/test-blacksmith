@@ -1,9 +1,11 @@
-import React from 'react'
+import { TextField } from '@mui/material'
+import React, { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
 import { Client, CombinedError, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
+import { OrgSelector } from '@app/components/OrgSelector'
 import { AuthContextType } from '@app/context/auth/types'
 import {
   UpdateProfileMutation,
@@ -21,9 +23,28 @@ import {
 } from '@test/index'
 import { profile } from '@test/providers'
 
-import { Onboarding } from '.'
+import { Onboarding } from './Onboarding'
 
 const defaultProfile = profile as NonNullable<AuthContextType['profile']>
+
+const OrgSelectorMock: React.FC<ComponentProps<typeof OrgSelector>> = props => {
+  return (
+    <TextField
+      error={Boolean(props.error)}
+      helperText={props.error}
+      onChange={() =>
+        props.onChange({ id: chance.guid(), name: chance.name() })
+      }
+      label="Start typing organisation name"
+    />
+  )
+}
+
+vi.mock('@app/components/OrgSelector', () => ({
+  OrgSelector: vi.fn(),
+}))
+
+const MockedOrgSelector = vi.mocked(OrgSelector)
 
 describe('page: Onboarding', () => {
   const {
@@ -33,6 +54,8 @@ describe('page: Onboarding', () => {
   } = renderHook(() => useTranslation())
 
   it('validates form data', async () => {
+    MockedOrgSelector.mockImplementation(OrgSelectorMock)
+
     const client = {
       executeMutation: () => never,
       executeQuery: () => never,
@@ -54,7 +77,7 @@ describe('page: Onboarding', () => {
     await userEvent.clear(screen.getByLabelText(t('dob'), { exact: false }))
 
     await userEvent.click(
-      screen.getByText(t('pages.onboarding.submit-btn-text'))
+      screen.getByRole('button', { name: /update information/i })
     )
 
     await waitFor(() => {
@@ -69,6 +92,10 @@ describe('page: Onboarding', () => {
       expect(screen.getByText(/Surname is required/i)).toBeInTheDocument()
       expect(screen.getByText(/Phone is required/i)).toBeInTheDocument()
       expect(
+        screen.getByText(/organisation is a required field/i)
+      ).toBeInTheDocument()
+
+      expect(
         screen.getByText(t('pages.onboarding.tcs-required'))
       ).toBeInTheDocument()
       expect(
@@ -79,6 +106,8 @@ describe('page: Onboarding', () => {
 
   it('displays an alert if there is an error updating profile', async () => {
     const reloadProfileMock = vi.fn().mockResolvedValue(undefined)
+
+    MockedOrgSelector.mockImplementation(OrgSelectorMock)
 
     const client = {
       executeMutation: () =>
@@ -108,9 +137,15 @@ describe('page: Onboarding', () => {
       screen.getByLabelText(t('phone'), { exact: false }),
       VALID_PHONE_NUMBER
     )
+
     await userEvent.type(
       screen.getByLabelText(t('dob'), { exact: false }),
       '20/03/1990'
+    )
+
+    await userEvent.type(
+      screen.getByLabelText(/organisation name/i, { exact: false }),
+      'Organisation'
     )
 
     await userEvent.click(
@@ -216,6 +251,11 @@ describe('page: Onboarding', () => {
     await userEvent.type(
       screen.getByLabelText(t('dob'), { exact: false }),
       '20/03/1990'
+    )
+
+    await userEvent.type(
+      screen.getByLabelText(/organisation name/i, { exact: false }),
+      'Organisation'
     )
 
     await userEvent.click(

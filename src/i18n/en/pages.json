@@ -57,7 +57,8 @@
     "submit-btn-text": "Update information",
     "tcs-label": "I accept the <1>Terms of Use</1> and agree to Team Teach processing my personal data in accordance with our <3>Privacy Policy</3>",
     "tcs-required": "Accepting our T&C is required",
-    "error-saving": "We're having issue saving your personal information."
+    "error-saving": "We're having issue saving your personal information.",
+    "organisation-required-error": "Organisation is a required field"
   },
   "waitlist": {
     "course-full": "Course fully booked",
