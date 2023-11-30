@@ -5,10 +5,12 @@ import {
   TableCell,
   TableBody,
   Chip,
+  Link,
 } from '@mui/material'
 import { FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
 import { GetProfileDetailsQuery } from '@app/generated/graphql'
 type OrganisationsTableProps = {
   profile: GetProfileDetailsQuery['profile']
@@ -16,6 +18,7 @@ type OrganisationsTableProps = {
 export const OrganisationsTable: FC<
   PropsWithChildren<OrganisationsTableProps>
 > = ({ profile }) => {
+  const { acl } = useAuth()
   const { t } = useTranslation()
   const tableHeadCells = [t('organization'), t('permissions')]
   return (
@@ -49,7 +52,15 @@ export const OrganisationsTable: FC<
                 },
               }}
             >
-              <TableCell>{orgMember.organization?.name}</TableCell>
+              <TableCell>
+                {acl.isInternalUser() ? (
+                  <Link href={`/organisations/${orgMember.organization.id}`}>
+                    {orgMember.organization?.name}
+                  </Link>
+                ) : (
+                  orgMember.organization?.name
+                )}
+              </TableCell>
               <TableCell>
                 <Chip
                   label={
