@@ -24,10 +24,20 @@ import.meta.env.VITE_APP_VERSION
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
-  integrations: [new Sentry.BrowserTracing(), new ExtraErrorDataIntegration()],
+  integrations: [
+    new Sentry.BrowserTracing(),
+    new ExtraErrorDataIntegration(),
+    new Sentry.Replay(),
+  ],
   tracesSampleRate: Number(import.meta.env.VITE_SENTRY_TRACING_SAMPLE_RATE),
   environment: import.meta.env.VITE_SENTRY_ENVIRONMENT,
   denyUrls: [/localhost/i, /127.0.0.1/],
+  replaysSessionSampleRate: Number(
+    import.meta.env.VITE_SENTRY_REPLAYS_SESSION_SAMPLE_RATE
+  ),
+  replaysOnErrorSampleRate: Number(
+    import.meta.env.VITE_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE
+  ),
 })
 
 Amplify.configure({
