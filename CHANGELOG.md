@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 1.5.1
+
+### Patch Changes
+
+- df4798f0: Organisation link in organisation details table on profile
+
 ## 1.5.0
 
 ### Minor Changes
