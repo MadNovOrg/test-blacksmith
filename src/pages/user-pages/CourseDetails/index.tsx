@@ -39,6 +39,7 @@ import {
 } from '@app/generated/graphql'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { CourseAttendeesTab } from '@app/pages/trainer-pages/components/CourseAttendeesTab'
+import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import { DietaryRequirementsTab } from '@app/pages/trainer-pages/CourseDetails/components/DietaryRequirementsTab'
 import { DisabilitiesTab } from '@app/pages/trainer-pages/CourseDetails/components/DisabilitiesTab'
@@ -172,6 +173,11 @@ export const CourseDetails: React.FC<
   )
 
   const isParticipant = !!courseParticipant
+  const showCertificationsTab = [
+    isBookingContact,
+    isOrgAdmin,
+    isOrgKeyContact,
+  ].some(Boolean)
 
   useEffect(() => {
     if (course && !activeTab) {
@@ -430,6 +436,18 @@ export const CourseDetails: React.FC<
                             data-testid="disabilities-tab"
                           />
                         ) : null}
+                        {showCertificationsTab &&
+                        course.certificateCount?.aggregate.count &&
+                        course.participantSubmitedEvaluationCount?.aggregate
+                          .count ? (
+                          <PillTab
+                            label={t(
+                              'pages.course-details.tabs.certifications.title'
+                            )}
+                            value={CourseDetailsTabs.CERTIFICATIONS}
+                            data-testid="certifications-tab"
+                          />
+                        ) : null}
                         {!bookingOnly && showCourseOverview && (
                           <PillTab
                             label={t(
@@ -649,6 +667,16 @@ export const CourseDetails: React.FC<
                 <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.DISABILITIES}>
                   <DisabilitiesTab courseId={course.id} />
                 </TabPanel>
+                {showCertificationsTab &&
+                course.certificateCount?.aggregate.count &&
+                course.certificateCount?.aggregate.count ? (
+                  <TabPanel
+                    sx={{ px: 0 }}
+                    value={CourseDetailsTabs.CERTIFICATIONS}
+                  >
+                    <CourseCertifications course={course} />
+                  </TabPanel>
+                ) : null}
                 {showCourseOverview ? (
                   <TabPanel
                     sx={{ px: 0 }}

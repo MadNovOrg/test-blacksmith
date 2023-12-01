@@ -129,6 +129,20 @@ export const QUERY = gql`
           }
         }
       }
+      participantSubmitedEvaluationCount: participants_aggregate(
+        where: { completed_evaluation: { _eq: true } }
+      ) {
+        aggregate {
+          count
+        }
+      }
+      certificateCount: participants_aggregate(
+        where: { grade: { _in: [PASS, OBSERVE_ONLY, ASSIST_ONLY] } }
+      ) {
+        aggregate {
+          count
+        }
+      }
       orders @include(if: $withOrders) {
         id
         xeroInvoiceNumber
