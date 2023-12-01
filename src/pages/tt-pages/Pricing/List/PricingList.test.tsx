@@ -4,7 +4,7 @@ import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { useCoursePricing } from '@app/hooks/useCoursePricing'
 import { LoadingStatus } from '@app/util'
 
-import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+import { chance, render, screen } from '@test/index'
 
 import { PricingList } from './PricingList'
 
@@ -25,6 +25,13 @@ describe('component: PricingList', () => {
           blended: true,
           reaccreditation: true,
           xeroCode: 'LEVEL1.OP',
+          pricingSchedules: [],
+          pricingSchedules_aggregate: {
+            aggregate: {
+              count: 0,
+            },
+            nodes: [],
+          },
         },
       ],
       total: 1,
@@ -43,22 +50,5 @@ describe('component: PricingList', () => {
     expect(screen.getByTestId('FilterByCourseType')).toBeInTheDocument()
     expect(screen.getByTestId('FilterByBlendedLearning')).toBeInTheDocument()
     expect(screen.getByTestId('FilterByReaccreditation')).toBeInTheDocument()
-    const bulkEditButton = screen.getByText('Bulk edit prices')
-    expect(bulkEditButton).toBeDisabled()
-  })
-
-  it('enables the bulk edit button', async () => {
-    setup()
-    const bulkEditButton = screen.getByText('Bulk edit prices')
-    expect(bulkEditButton).toBeDisabled()
-
-    const table = screen.getByRole('table')
-    const checkbox = within(table).getAllByRole('checkbox')
-    await userEvent.click(checkbox[0])
-
-    await waitFor(() => {
-      const updatedBulkEditButton = screen.getByText('Bulk edit prices')
-      expect(updatedBulkEditButton).toBeEnabled()
-    })
   })
 })

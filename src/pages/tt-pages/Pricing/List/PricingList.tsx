@@ -24,7 +24,6 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { useCoursePricing } from '@app/hooks/useCoursePricing'
-import { useTableChecks } from '@app/hooks/useTableChecks'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import theme from '@app/theme'
@@ -33,7 +32,6 @@ import { getCourseAttributes } from '../utils'
 
 import { ChangelogModal } from './ChangelogModal'
 import { EditPriceModal } from './EditPriceModal'
-import { EditPricesModal } from './EditPricesModal'
 import { Filters } from './Filters'
 
 type Filters = {
@@ -66,20 +64,10 @@ export const PricingList: React.FC = () => {
     !!filters.reaccreditation
   const count = total
 
-  const { checkbox, selected, isSelected } = useTableChecks()
-
   const [selectedEditPrice, setSelectedEditPrice] =
     useState<Course_Pricing | null>(null)
 
   const showEditPriceModal = Boolean(selectedEditPrice)
-
-  const [showEditPricesModal, setShowEditPricesModal] = useState(false)
-  const [selectedEditPrices, setSelectedEditPrices] = useState(null)
-
-  const selectedPricings = useMemo(
-    () => coursePricing.filter(pricing => isSelected(pricing.id)),
-    [coursePricing, isSelected]
-  )
 
   const [selectedChangeLog, setSelectedChangeLog] =
     useState<Course_Pricing | null>(null)
@@ -101,15 +89,12 @@ export const PricingList: React.FC = () => {
     }
 
     return [
-      checkbox.headCol(coursePricing.map(p => p.id)),
       ...col('course'),
       ...col('type'),
       ...col('attributes'),
-      ...col('modified'),
-      ...col('price'),
       ...col('actions', {}, false),
     ] as Col[]
-  }, [coursePricing, t, checkbox, showCol])
+  }, [t, showCol])
 
   return (
     <FullHeightPageLayout>
@@ -135,25 +120,6 @@ export const PricingList: React.FC = () => {
             </Stack>
           </Box>
           <Box flex={1}>
-            <Box
-              display="flex"
-              alignItems="center"
-              gap={2}
-              justifyContent="end"
-              mb={2}
-            >
-              <Button
-                disabled={selected.size === 0}
-                variant="contained"
-                onClick={() => {
-                  setSelectedEditPrices(selectedEditPrices)
-                  setShowEditPricesModal(true)
-                }}
-              >
-                {t('pages.course-pricing.bulk-edit-btn')}
-              </Button>
-            </Box>
-
             <Table>
               <TableHead cols={cols} />
               <TableBody>
@@ -176,21 +142,11 @@ export const PricingList: React.FC = () => {
 
                 {coursePricing.map(pricing => (
                   <TableRow key={pricing?.id}>
-                    {checkbox.rowCell(pricing.id)}
                     <TableCell>
                       {t(`course-levels.${pricing?.level}`)}
                     </TableCell>
                     <TableCell>{t(`course-types.${pricing?.type}`)}</TableCell>
                     <TableCell>{getCourseAttributes(t, pricing)}</TableCell>
-                    <TableCell>
-                      {t('dates.default', { date: pricing.updatedAt })}
-                    </TableCell>
-                    <TableCell width="auto" align="left">
-                      {t('currency', {
-                        amount: pricing?.priceAmount,
-                        currency: pricing?.priceCurrency,
-                      })}
-                    </TableCell>
                     <TableCell>
                       <Box
                         display="flex"
@@ -236,17 +192,6 @@ export const PricingList: React.FC = () => {
                 onClose={() => setSelectedEditPrice(null)}
                 onSave={() => {
                   setSelectedEditPrice(null)
-                  mutate()
-                }}
-              />
-            ) : null}
-
-            {showEditPricesModal ? (
-              <EditPricesModal
-                pricings={selectedPricings}
-                onClose={() => setShowEditPricesModal(false)}
-                onSave={() => {
-                  setShowEditPricesModal(false)
                   mutate()
                 }}
               />

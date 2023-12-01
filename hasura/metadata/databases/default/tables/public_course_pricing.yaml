@@ -20,6 +20,14 @@ configuration:
     updated_at: updatedAt
     xero_code: xeroCode
   custom_root_fields: {}
+array_relationships:
+  - name: pricingSchedules
+    using:
+      foreign_key_constraint_on:
+        column: course_pricing_id
+        table:
+          name: course_pricing_schedule
+          schema: public
 select_permissions:
   - role: anonymous
     permission:

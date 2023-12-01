@@ -26,6 +26,27 @@ export const QUERY = gql`
       xeroCode
       blended
       updatedAt
+      pricingSchedules(order_by: { effectiveFrom: asc }) {
+        id
+        coursePricingId
+        effectiveFrom
+        effectiveTo
+        priceAmount
+        priceCurrency
+      }
+      pricingSchedules_aggregate {
+        aggregate {
+          count
+        }
+        nodes {
+          id
+          coursePricingId
+          effectiveFrom
+          effectiveTo
+          priceAmount
+          priceCurrency
+        }
+      }
     }
     course_pricing_aggregate(where: $where) {
       aggregate {

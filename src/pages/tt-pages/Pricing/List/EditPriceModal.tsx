@@ -1,32 +1,51 @@
-import { yupResolver } from '@hookform/resolvers/yup'
-import { LoadingButton } from '@mui/lab'
+import AddIcon from '@mui/icons-material/Add'
+import CancelIcon from '@mui/icons-material/Close'
+import DeleteIcon from '@mui/icons-material/DeleteOutlined'
+import EditIcon from '@mui/icons-material/Edit'
+import SaveIcon from '@mui/icons-material/Save'
 import {
   Alert,
   Box,
-  Button,
+  IconButton,
   Container,
-  TextField,
   Typography,
-  InputAdornment,
   List,
   ListItem,
   ListItemText,
 } from '@mui/material'
-import React, { useMemo, useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import {
+  GridRowsProp,
+  GridRowModesModel,
+  GridRowModes,
+  DataGrid,
+  GridColDef,
+  GridToolbarContainer,
+  GridActionsCellItem,
+  GridEventListener,
+  GridRowId,
+  GridRowModel,
+  GridRowEditStopReasons,
+  GridValueFormatterParams,
+} from '@mui/x-data-grid'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { InferType } from 'yup'
+import { v4 as uuidv4 } from 'uuid'
 
 import { Dialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Pricing,
-  SetCoursePricingMutation,
-  SetCoursePricingMutationVariables,
+  SetCoursePricingScheduleMutation,
+  SetCoursePricingScheduleMutationVariables,
+  InsertCoursePricingScheduleMutation,
+  InsertCoursePricingScheduleMutationVariables,
+  DeleteCoursePricingScheduleMutation,
+  DeleteCoursePricingScheduleMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { MUTATION } from '@app/queries/pricing/set-course-pricing'
-import { yup } from '@app/schemas'
+import { MUTATION as DELETE_MUTATION } from '@app/queries/pricing/delete-course-pricing-schedule'
+import { MUTATION as INSERT_MUTATION } from '@app/queries/pricing/insert-course-pricing-schedule'
+import { MUTATION as UPDATE_MUTATION } from '@app/queries/pricing/set-course-pricing-schedule'
 import theme from '@app/theme'
 
 import { getCourseAttributes } from '../utils'
@@ -35,6 +54,43 @@ export type EditPriceModalProps = {
   pricing: Course_Pricing | null
   onClose: () => void
   onSave: () => void
+}
+
+interface EditToolbarProps {
+  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
+  setRowModesModel: (
+    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
+  ) => void
+}
+
+function EditToolbar(props: EditToolbarProps) {
+  const { setRows, setRowModesModel } = props
+
+  const handleClick = () => {
+    const id = uuidv4()
+    setRows(oldRows => [
+      ...oldRows,
+      {
+        id,
+        effectiveFrom: '',
+        effectiveTo: '',
+        priceAmount: null,
+        isNew: true,
+      },
+    ])
+    setRowModesModel(oldModel => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'effectiveFrom' },
+    }))
+  }
+
+  return (
+    <GridToolbarContainer>
+      <IconButton color="primary" onClick={handleClick}>
+        <AddIcon />
+      </IconButton>
+    </GridToolbarContainer>
+  )
 }
 
 export const EditPriceModal = ({
@@ -46,53 +102,213 @@ export const EditPriceModal = ({
   const fetcher = useFetcher()
   const { profile } = useAuth()
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
 
-  const schema = useMemo(() => {
-    return yup
-      .object({
-        priceAmount: yup
-          .number()
-          .positive()
-          .transform(value => (Number.isNaN(value) ? undefined : value))
-          .required(
-            t('common.validation-errors.required-field', {
-              name: t('pages.course-pricing.cols-price'),
-            })
-          ),
-      })
-      .required()
-  }, [t])
+  const initialRows: GridRowsProp = (pricing?.pricingSchedules || []).map(
+    schedule => {
+      return {
+        id: schedule.id,
+        effectiveFrom: schedule.effectiveFrom,
+        effectiveTo: schedule.effectiveTo,
+        priceAmount: schedule.priceAmount,
+        isNew: false,
+      }
+    }
+  )
+  const [rows, setRows] = React.useState(initialRows)
 
-  const { register, handleSubmit, formState } = useForm<
-    InferType<typeof schema>
-  >({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      priceAmount: pricing?.priceAmount,
-    },
-  })
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
+    {}
+  )
 
-  const onFormSubmit: SubmitHandler<InferType<typeof schema>> = async data => {
-    setLoading(true)
+  const handleRowEditStop: GridEventListener<'rowEditStop'> = (
+    params,
+    event
+  ) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true
+    }
+  }
 
+  const handleEditClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
+  }
+
+  const handleSaveClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
+  }
+
+  const handleDeleteClick = (id: GridRowId) => async () => {
     try {
       await fetcher<
-        SetCoursePricingMutation,
-        SetCoursePricingMutationVariables
-      >(MUTATION, {
-        id: pricing?.id,
-        oldPrice: pricing?.priceAmount,
-        priceAmount: data.priceAmount,
-        authorId: profile?.id,
+        DeleteCoursePricingScheduleMutation,
+        DeleteCoursePricingScheduleMutationVariables
+      >(DELETE_MUTATION, {
+        id: id,
       })
+      setRows(rows.filter(row => row.id !== id))
+
       onSave()
     } catch (e: unknown) {
       setError((e as Error).message)
-    } finally {
-      setLoading(false)
     }
   }
+
+  const handleCancelClick = (id: GridRowId) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    })
+
+    const editedRow = rows.find(row => row.id === id)
+    if (editedRow && editedRow.isNew) {
+      setRows(rows.filter(row => row.id !== id))
+    }
+  }
+
+  const processRowUpdate = async (
+    rowAfterChange: GridRowModel,
+    rowBeforeChange: GridRowModel
+  ) => {
+    if (rowBeforeChange.isNew) {
+      try {
+        const createdCPS = await fetcher<
+          InsertCoursePricingScheduleMutation,
+          InsertCoursePricingScheduleMutationVariables
+        >(INSERT_MUTATION, {
+          id: rowAfterChange.id,
+          coursePricingId: pricing?.id,
+          priceAmount: rowAfterChange.priceAmount,
+          authorId: profile?.id,
+          effectiveFrom: rowAfterChange.effectiveFrom,
+          effectiveTo: rowAfterChange.effectiveTo,
+        })
+        const updatedRow = {
+          ...rowAfterChange,
+          isNew: false,
+          id: createdCPS?.course_pricing_schedule?.id,
+        }
+        setRows(
+          rows.map(row => (row.id === rowAfterChange.id ? updatedRow : row))
+        )
+        onSave()
+        return updatedRow
+      } catch (e: unknown) {
+        setError((e as Error).message)
+      }
+    } else {
+      try {
+        await fetcher<
+          SetCoursePricingScheduleMutation,
+          SetCoursePricingScheduleMutationVariables
+        >(UPDATE_MUTATION, {
+          id: rowAfterChange.id,
+          coursePricingId: pricing?.id,
+          oldPrice: rowBeforeChange.priceAmount,
+          priceAmount: rowAfterChange.priceAmount,
+          authorId: profile?.id,
+          effectiveFrom: rowAfterChange.effectiveFrom,
+          effectiveTo: rowAfterChange.effectiveTo,
+        })
+        onSave()
+        const updatedRow = { ...rowAfterChange, isNew: false }
+        setRows(
+          rows.map(row => (row.id === rowAfterChange.id ? updatedRow : row))
+        )
+        return updatedRow
+      } catch (e: unknown) {
+        setError((e as Error).message)
+      }
+    }
+  }
+  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
+    setRowModesModel(newRowModesModel)
+  }
+
+  const columns: GridColDef[] = [
+    {
+      field: 'effectiveFrom',
+      headerName: t('pages.course-pricing.modal-cols-effective-from'),
+      width: 180,
+      editable: true,
+      type: 'date',
+      valueGetter: params => new Date(params.value),
+      sortable: false,
+    },
+    {
+      field: 'effectiveTo',
+      headerName: t('pages.course-pricing.modal-cols-effective-to'),
+      width: 180,
+      editable: true,
+      type: 'date',
+      valueGetter: params => new Date(params.value),
+      sortable: false,
+    },
+    {
+      field: 'priceAmount',
+      headerName: t('pages.course-pricing.cols-price'),
+      type: 'number',
+      editable: true,
+      align: 'left',
+      headerAlign: 'left',
+      sortable: false,
+      valueFormatter: (params: GridValueFormatterParams<number>) => {
+        if (params.value == null) {
+          return ''
+        }
+        return t('currency', { amount: params.value.toFixed(2) })
+      },
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: t('pages.course-pricing.modal-cols-actions'),
+      width: 100,
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              key="save"
+              icon={<SaveIcon />}
+              label={t('pages.course-pricing.modal-save')}
+              sx={{
+                color: 'primary.main',
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              key="cancel"
+              icon={<CancelIcon />}
+              label={t('pages.course-pricing.modal-cancel')}
+              className="textPrimary"
+              onClick={handleCancelClick(id)}
+              color="inherit"
+            />,
+          ]
+        }
+
+        return [
+          <GridActionsCellItem
+            key="edit"
+            icon={<EditIcon />}
+            label={t('pages.course-pricing.modal-edit')}
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            key="delete"
+            icon={<DeleteIcon />}
+            label={t('pages.course-pricing.modal-delete')}
+            onClick={handleDeleteClick(id)}
+            color="inherit"
+          />,
+        ]
+      },
+    },
+  ]
 
   return (
     <Container>
@@ -104,10 +320,10 @@ export const EditPriceModal = ({
             {t('pages.course-pricing.modal-individual-edit-title')}
           </Typography>
         }
-        maxWidth={628}
+        maxWidth={800}
       >
         <Container>
-          <form onSubmit={handleSubmit(onFormSubmit)}>
+          <form>
             <Typography sx={{ mb: 2 }} variant="body1" color="dimGrey.main">
               {t('pages.course-pricing.modal-individual-edit-description')}
             </Typography>
@@ -116,30 +332,31 @@ export const EditPriceModal = ({
               {t('pages.course-pricing.modal-price-label')}
             </Typography>
 
-            <TextField
-              required
-              hiddenLabel
-              variant="filled"
-              error={!!formState.errors.priceAmount}
-              helperText={formState.errors.priceAmount?.message}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">£</InputAdornment>
-                ),
-              }}
-              inputProps={{
-                'data-testid': 'field-price-amount',
-              }}
-              sx={{ bgcolor: 'grey.100', my: 2 }}
-              {...register('priceAmount')}
-            />
+            <Box height={350} mt={3}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                editMode="row"
+                disableColumnMenu
+                rowModesModel={rowModesModel}
+                onRowModesModelChange={handleRowModesModelChange}
+                onRowEditStop={handleRowEditStop}
+                processRowUpdate={processRowUpdate}
+                slots={{
+                  toolbar: EditToolbar,
+                }}
+                slotProps={{
+                  toolbar: { setRows, setRowModesModel },
+                }}
+              />
+            </Box>
 
             {error && <Alert severity="error">{error}</Alert>}
 
             <Typography
               variant="h4"
               fontWeight={500}
-              mt={3}
+              mt={4}
               mb={1}
               color="secondary"
             >
@@ -184,27 +401,6 @@ export const EditPriceModal = ({
                 </ListItemText>
               </ListItem>
             </List>
-
-            <Box display="flex" justifyContent="end" mt={3}>
-              <Button
-                type="button"
-                variant="text"
-                color="primary"
-                onClick={onClose}
-              >
-                {t('pages.course-pricing.modal-cancel')}
-              </Button>
-              <LoadingButton
-                loading={loading}
-                disabled={!formState.isValid}
-                type="submit"
-                variant="contained"
-                color="primary"
-                sx={{ ml: 1 }}
-              >
-                {t('pages.course-pricing.modal-save')}
-              </LoadingButton>
-            </Box>
           </form>
         </Container>
       </Dialog>

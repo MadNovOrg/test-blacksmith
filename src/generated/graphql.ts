@@ -24284,10 +24284,34 @@ export type Course_Pricing = {
   /** Price per participant without any discounts */
   priceAmount: Scalars['numeric'];
   priceCurrency: Scalars['String'];
+  /** An array relationship */
+  pricingSchedules: Array<Course_Pricing_Schedule>;
+  /** An aggregate relationship */
+  pricingSchedules_aggregate: Course_Pricing_Schedule_Aggregate;
   reaccreditation: Scalars['Boolean'];
   type: Course_Type_Enum;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   xeroCode: Scalars['String'];
+};
+
+
+/** Prices per participant for various course variants */
+export type Course_PricingPricingSchedulesArgs = {
+  distinct_on?: InputMaybe<Array<Course_Pricing_Schedule_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Pricing_Schedule_Order_By>>;
+  where?: InputMaybe<Course_Pricing_Schedule_Bool_Exp>;
+};
+
+
+/** Prices per participant for various course variants */
+export type Course_PricingPricingSchedules_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Pricing_Schedule_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Pricing_Schedule_Order_By>>;
+  where?: InputMaybe<Course_Pricing_Schedule_Bool_Exp>;
 };
 
 /** aggregated selection of "course_pricing" */
@@ -24338,6 +24362,8 @@ export type Course_Pricing_Bool_Exp = {
   level?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
   priceAmount?: InputMaybe<Numeric_Comparison_Exp>;
   priceCurrency?: InputMaybe<String_Comparison_Exp>;
+  pricingSchedules?: InputMaybe<Course_Pricing_Schedule_Bool_Exp>;
+  pricingSchedules_aggregate?: InputMaybe<Course_Pricing_Schedule_Aggregate_Bool_Exp>;
   reaccreditation?: InputMaybe<Boolean_Comparison_Exp>;
   type?: InputMaybe<Course_Type_Enum_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -24353,6 +24379,7 @@ export type Course_Pricing_Changelog = {
   /** An object relationship */
   coursePricing: Course_Pricing;
   coursePricingId: Scalars['uuid'];
+  coursePricingScheduleId?: Maybe<Scalars['uuid']>;
   createdAt: Scalars['timestamptz'];
   id: Scalars['uuid'];
   newPrice: Scalars['numeric'];
@@ -24406,6 +24433,7 @@ export type Course_Pricing_Changelog_Bool_Exp = {
   authorId?: InputMaybe<Uuid_Comparison_Exp>;
   coursePricing?: InputMaybe<Course_Pricing_Bool_Exp>;
   coursePricingId?: InputMaybe<Uuid_Comparison_Exp>;
+  coursePricingScheduleId?: InputMaybe<Uuid_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   newPrice?: InputMaybe<Numeric_Comparison_Exp>;
@@ -24431,6 +24459,7 @@ export type Course_Pricing_Changelog_Insert_Input = {
   authorId?: InputMaybe<Scalars['uuid']>;
   coursePricing?: InputMaybe<Course_Pricing_Obj_Rel_Insert_Input>;
   coursePricingId?: InputMaybe<Scalars['uuid']>;
+  coursePricingScheduleId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   newPrice?: InputMaybe<Scalars['numeric']>;
@@ -24443,6 +24472,7 @@ export type Course_Pricing_Changelog_Max_Fields = {
   __typename?: 'course_pricing_changelog_max_fields';
   authorId?: Maybe<Scalars['uuid']>;
   coursePricingId?: Maybe<Scalars['uuid']>;
+  coursePricingScheduleId?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
   newPrice?: Maybe<Scalars['numeric']>;
@@ -24455,6 +24485,7 @@ export type Course_Pricing_Changelog_Min_Fields = {
   __typename?: 'course_pricing_changelog_min_fields';
   authorId?: Maybe<Scalars['uuid']>;
   coursePricingId?: Maybe<Scalars['uuid']>;
+  coursePricingScheduleId?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
   newPrice?: Maybe<Scalars['numeric']>;
@@ -24484,6 +24515,7 @@ export type Course_Pricing_Changelog_Order_By = {
   authorId?: InputMaybe<Order_By>;
   coursePricing?: InputMaybe<Course_Pricing_Order_By>;
   coursePricingId?: InputMaybe<Order_By>;
+  coursePricingScheduleId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   newPrice?: InputMaybe<Order_By>;
@@ -24503,6 +24535,8 @@ export enum Course_Pricing_Changelog_Select_Column {
   /** column name */
   CoursePricingId = 'coursePricingId',
   /** column name */
+  CoursePricingScheduleId = 'coursePricingScheduleId',
+  /** column name */
   CreatedAt = 'createdAt',
   /** column name */
   Id = 'id',
@@ -24518,6 +24552,7 @@ export enum Course_Pricing_Changelog_Select_Column {
 export type Course_Pricing_Changelog_Set_Input = {
   authorId?: InputMaybe<Scalars['uuid']>;
   coursePricingId?: InputMaybe<Scalars['uuid']>;
+  coursePricingScheduleId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   newPrice?: InputMaybe<Scalars['numeric']>;
@@ -24558,6 +24593,7 @@ export type Course_Pricing_Changelog_Stream_Cursor_Input = {
 export type Course_Pricing_Changelog_Stream_Cursor_Value_Input = {
   authorId?: InputMaybe<Scalars['uuid']>;
   coursePricingId?: InputMaybe<Scalars['uuid']>;
+  coursePricingScheduleId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   newPrice?: InputMaybe<Scalars['numeric']>;
@@ -24578,6 +24614,8 @@ export enum Course_Pricing_Changelog_Update_Column {
   AuthorId = 'authorId',
   /** column name */
   CoursePricingId = 'coursePricingId',
+  /** column name */
+  CoursePricingScheduleId = 'coursePricingScheduleId',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
@@ -24643,6 +24681,7 @@ export type Course_Pricing_Insert_Input = {
   /** Price per participant without any discounts */
   priceAmount?: InputMaybe<Scalars['numeric']>;
   priceCurrency?: InputMaybe<Scalars['String']>;
+  pricingSchedules?: InputMaybe<Course_Pricing_Schedule_Arr_Rel_Insert_Input>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<Course_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -24704,6 +24743,7 @@ export type Course_Pricing_Order_By = {
   level?: InputMaybe<Order_By>;
   priceAmount?: InputMaybe<Order_By>;
   priceCurrency?: InputMaybe<Order_By>;
+  pricingSchedules_aggregate?: InputMaybe<Course_Pricing_Schedule_Aggregate_Order_By>;
   reaccreditation?: InputMaybe<Order_By>;
   type?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
@@ -24713,6 +24753,397 @@ export type Course_Pricing_Order_By = {
 /** primary key columns input for table: course_pricing */
 export type Course_Pricing_Pk_Columns_Input = {
   id: Scalars['uuid'];
+};
+
+/** Schedules for course pricing per participant */
+export type Course_Pricing_Schedule = {
+  __typename?: 'course_pricing_schedule';
+  coursePricingId: Scalars['uuid'];
+  created_at?: Maybe<Scalars['timestamptz']>;
+  effectiveFrom: Scalars['date'];
+  effectiveTo: Scalars['date'];
+  id: Scalars['uuid'];
+  /** Price per participant without any discounts */
+  priceAmount: Scalars['numeric'];
+  priceCurrency: Scalars['String'];
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregated selection of "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Aggregate = {
+  __typename?: 'course_pricing_schedule_aggregate';
+  aggregate?: Maybe<Course_Pricing_Schedule_Aggregate_Fields>;
+  nodes: Array<Course_Pricing_Schedule>;
+};
+
+export type Course_Pricing_Schedule_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Course_Pricing_Schedule_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Pricing_Schedule_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Pricing_Schedule_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Pricing_Schedule_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Aggregate_Fields = {
+  __typename?: 'course_pricing_schedule_aggregate_fields';
+  avg?: Maybe<Course_Pricing_Schedule_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Course_Pricing_Schedule_Max_Fields>;
+  min?: Maybe<Course_Pricing_Schedule_Min_Fields>;
+  stddev?: Maybe<Course_Pricing_Schedule_Stddev_Fields>;
+  stddev_pop?: Maybe<Course_Pricing_Schedule_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Course_Pricing_Schedule_Stddev_Samp_Fields>;
+  sum?: Maybe<Course_Pricing_Schedule_Sum_Fields>;
+  var_pop?: Maybe<Course_Pricing_Schedule_Var_Pop_Fields>;
+  var_samp?: Maybe<Course_Pricing_Schedule_Var_Samp_Fields>;
+  variance?: Maybe<Course_Pricing_Schedule_Variance_Fields>;
+};
+
+
+/** aggregate fields of "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Pricing_Schedule_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Aggregate_Order_By = {
+  avg?: InputMaybe<Course_Pricing_Schedule_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Course_Pricing_Schedule_Max_Order_By>;
+  min?: InputMaybe<Course_Pricing_Schedule_Min_Order_By>;
+  stddev?: InputMaybe<Course_Pricing_Schedule_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Course_Pricing_Schedule_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Course_Pricing_Schedule_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Course_Pricing_Schedule_Sum_Order_By>;
+  var_pop?: InputMaybe<Course_Pricing_Schedule_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Course_Pricing_Schedule_Var_Samp_Order_By>;
+  variance?: InputMaybe<Course_Pricing_Schedule_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Arr_Rel_Insert_Input = {
+  data: Array<Course_Pricing_Schedule_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Course_Pricing_Schedule_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Course_Pricing_Schedule_Avg_Fields = {
+  __typename?: 'course_pricing_schedule_avg_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Avg_Order_By = {
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "course_pricing_schedule". All fields are combined with a logical 'AND'. */
+export type Course_Pricing_Schedule_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Pricing_Schedule_Bool_Exp>>;
+  _not?: InputMaybe<Course_Pricing_Schedule_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Pricing_Schedule_Bool_Exp>>;
+  coursePricingId?: InputMaybe<Uuid_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  effectiveFrom?: InputMaybe<Date_Comparison_Exp>;
+  effectiveTo?: InputMaybe<Date_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  priceAmount?: InputMaybe<Numeric_Comparison_Exp>;
+  priceCurrency?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_pricing_schedule" */
+export enum Course_Pricing_Schedule_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  CoursePricingSchedulePkey = 'course_pricing_schedule_pkey'
+}
+
+/** input type for incrementing numeric columns in table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Inc_Input = {
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Scalars['numeric']>;
+};
+
+/** input type for inserting data into table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Insert_Input = {
+  coursePricingId?: InputMaybe<Scalars['uuid']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  effectiveFrom?: InputMaybe<Scalars['date']>;
+  effectiveTo?: InputMaybe<Scalars['date']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Scalars['numeric']>;
+  priceCurrency?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Course_Pricing_Schedule_Max_Fields = {
+  __typename?: 'course_pricing_schedule_max_fields';
+  coursePricingId?: Maybe<Scalars['uuid']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  effectiveFrom?: Maybe<Scalars['date']>;
+  effectiveTo?: Maybe<Scalars['date']>;
+  id?: Maybe<Scalars['uuid']>;
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['numeric']>;
+  priceCurrency?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by max() on columns of table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Max_Order_By = {
+  coursePricingId?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  effectiveFrom?: InputMaybe<Order_By>;
+  effectiveTo?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Order_By>;
+  priceCurrency?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Course_Pricing_Schedule_Min_Fields = {
+  __typename?: 'course_pricing_schedule_min_fields';
+  coursePricingId?: Maybe<Scalars['uuid']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  effectiveFrom?: Maybe<Scalars['date']>;
+  effectiveTo?: Maybe<Scalars['date']>;
+  id?: Maybe<Scalars['uuid']>;
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['numeric']>;
+  priceCurrency?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by min() on columns of table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Min_Order_By = {
+  coursePricingId?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  effectiveFrom?: InputMaybe<Order_By>;
+  effectiveTo?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Order_By>;
+  priceCurrency?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Mutation_Response = {
+  __typename?: 'course_pricing_schedule_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Pricing_Schedule>;
+};
+
+/** on_conflict condition type for table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_On_Conflict = {
+  constraint: Course_Pricing_Schedule_Constraint;
+  update_columns?: Array<Course_Pricing_Schedule_Update_Column>;
+  where?: InputMaybe<Course_Pricing_Schedule_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_pricing_schedule". */
+export type Course_Pricing_Schedule_Order_By = {
+  coursePricingId?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  effectiveFrom?: InputMaybe<Order_By>;
+  effectiveTo?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  priceAmount?: InputMaybe<Order_By>;
+  priceCurrency?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_pricing_schedule */
+export type Course_Pricing_Schedule_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "course_pricing_schedule" */
+export enum Course_Pricing_Schedule_Select_Column {
+  /** column name */
+  CoursePricingId = 'coursePricingId',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  EffectiveFrom = 'effectiveFrom',
+  /** column name */
+  EffectiveTo = 'effectiveTo',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  PriceAmount = 'priceAmount',
+  /** column name */
+  PriceCurrency = 'priceCurrency',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Set_Input = {
+  coursePricingId?: InputMaybe<Scalars['uuid']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  effectiveFrom?: InputMaybe<Scalars['date']>;
+  effectiveTo?: InputMaybe<Scalars['date']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Scalars['numeric']>;
+  priceCurrency?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate stddev on columns */
+export type Course_Pricing_Schedule_Stddev_Fields = {
+  __typename?: 'course_pricing_schedule_stddev_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Stddev_Order_By = {
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Course_Pricing_Schedule_Stddev_Pop_Fields = {
+  __typename?: 'course_pricing_schedule_stddev_pop_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Stddev_Pop_Order_By = {
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Course_Pricing_Schedule_Stddev_Samp_Fields = {
+  __typename?: 'course_pricing_schedule_stddev_samp_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Stddev_Samp_Order_By = {
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Pricing_Schedule_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Pricing_Schedule_Stream_Cursor_Value_Input = {
+  coursePricingId?: InputMaybe<Scalars['uuid']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  effectiveFrom?: InputMaybe<Scalars['date']>;
+  effectiveTo?: InputMaybe<Scalars['date']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Scalars['numeric']>;
+  priceCurrency?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate sum on columns */
+export type Course_Pricing_Schedule_Sum_Fields = {
+  __typename?: 'course_pricing_schedule_sum_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['numeric']>;
+};
+
+/** order by sum() on columns of table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Sum_Order_By = {
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "course_pricing_schedule" */
+export enum Course_Pricing_Schedule_Update_Column {
+  /** column name */
+  CoursePricingId = 'coursePricingId',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  EffectiveFrom = 'effectiveFrom',
+  /** column name */
+  EffectiveTo = 'effectiveTo',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  PriceAmount = 'priceAmount',
+  /** column name */
+  PriceCurrency = 'priceCurrency',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+export type Course_Pricing_Schedule_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Pricing_Schedule_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Pricing_Schedule_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Pricing_Schedule_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Course_Pricing_Schedule_Var_Pop_Fields = {
+  __typename?: 'course_pricing_schedule_var_pop_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Var_Pop_Order_By = {
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Course_Pricing_Schedule_Var_Samp_Fields = {
+  __typename?: 'course_pricing_schedule_var_samp_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Var_Samp_Order_By = {
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Course_Pricing_Schedule_Variance_Fields = {
+  __typename?: 'course_pricing_schedule_variance_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Variance_Order_By = {
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Order_By>;
 };
 
 /** select columns of table "course_pricing" */
@@ -30975,6 +31406,10 @@ export type Mutation_Root = {
   delete_course_pricing_changelog?: Maybe<Course_Pricing_Changelog_Mutation_Response>;
   /** delete single row from the table: "course_pricing_changelog" */
   delete_course_pricing_changelog_by_pk?: Maybe<Course_Pricing_Changelog>;
+  /** delete data from the table: "course_pricing_schedule" */
+  delete_course_pricing_schedule?: Maybe<Course_Pricing_Schedule_Mutation_Response>;
+  /** delete single row from the table: "course_pricing_schedule" */
+  delete_course_pricing_schedule_by_pk?: Maybe<Course_Pricing_Schedule>;
   /** delete data from the table: "course_promo_code" */
   delete_course_promo_code?: Maybe<Course_Promo_Code_Mutation_Response>;
   /** delete single row from the table: "course_promo_code" */
@@ -31355,6 +31790,10 @@ export type Mutation_Root = {
   insert_course_pricing_changelog_one?: Maybe<Course_Pricing_Changelog>;
   /** insert a single row into the table: "course_pricing" */
   insert_course_pricing_one?: Maybe<Course_Pricing>;
+  /** insert data into the table: "course_pricing_schedule" */
+  insert_course_pricing_schedule?: Maybe<Course_Pricing_Schedule_Mutation_Response>;
+  /** insert a single row into the table: "course_pricing_schedule" */
+  insert_course_pricing_schedule_one?: Maybe<Course_Pricing_Schedule>;
   /** insert data into the table: "course_promo_code" */
   insert_course_promo_code?: Maybe<Course_Promo_Code_Mutation_Response>;
   /** insert a single row into the table: "course_promo_code" */
@@ -31845,6 +32284,12 @@ export type Mutation_Root = {
   update_course_pricing_changelog_many?: Maybe<Array<Maybe<Course_Pricing_Changelog_Mutation_Response>>>;
   /** update multiples rows of table: "course_pricing" */
   update_course_pricing_many?: Maybe<Array<Maybe<Course_Pricing_Mutation_Response>>>;
+  /** update data of the table: "course_pricing_schedule" */
+  update_course_pricing_schedule?: Maybe<Course_Pricing_Schedule_Mutation_Response>;
+  /** update single row of the table: "course_pricing_schedule" */
+  update_course_pricing_schedule_by_pk?: Maybe<Course_Pricing_Schedule>;
+  /** update multiples rows of table: "course_pricing_schedule" */
+  update_course_pricing_schedule_many?: Maybe<Array<Maybe<Course_Pricing_Schedule_Mutation_Response>>>;
   /** update data of the table: "course_promo_code" */
   update_course_promo_code?: Maybe<Course_Promo_Code_Mutation_Response>;
   /** update single row of the table: "course_promo_code" */
@@ -32785,6 +33230,18 @@ export type Mutation_RootDelete_Course_Pricing_ChangelogArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Course_Pricing_Changelog_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Pricing_ScheduleArgs = {
+  where: Course_Pricing_Schedule_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Pricing_Schedule_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -34024,6 +34481,20 @@ export type Mutation_RootInsert_Course_Pricing_Changelog_OneArgs = {
 export type Mutation_RootInsert_Course_Pricing_OneArgs = {
   object: Course_Pricing_Insert_Input;
   on_conflict?: InputMaybe<Course_Pricing_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Pricing_ScheduleArgs = {
+  objects: Array<Course_Pricing_Schedule_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Pricing_Schedule_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Pricing_Schedule_OneArgs = {
+  object: Course_Pricing_Schedule_Insert_Input;
+  on_conflict?: InputMaybe<Course_Pricing_Schedule_On_Conflict>;
 };
 
 
@@ -35825,6 +36296,28 @@ export type Mutation_RootUpdate_Course_Pricing_Changelog_ManyArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Course_Pricing_ManyArgs = {
   updates: Array<Course_Pricing_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Pricing_ScheduleArgs = {
+  _inc?: InputMaybe<Course_Pricing_Schedule_Inc_Input>;
+  _set?: InputMaybe<Course_Pricing_Schedule_Set_Input>;
+  where: Course_Pricing_Schedule_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Pricing_Schedule_By_PkArgs = {
+  _inc?: InputMaybe<Course_Pricing_Schedule_Inc_Input>;
+  _set?: InputMaybe<Course_Pricing_Schedule_Set_Input>;
+  pk_columns: Course_Pricing_Schedule_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Pricing_Schedule_ManyArgs = {
+  updates: Array<Course_Pricing_Schedule_Updates>;
 };
 
 
@@ -43333,6 +43826,12 @@ export type Query_Root = {
   course_pricing_changelog_aggregate: Course_Pricing_Changelog_Aggregate;
   /** fetch data from the table: "course_pricing_changelog" using primary key columns */
   course_pricing_changelog_by_pk?: Maybe<Course_Pricing_Changelog>;
+  /** fetch data from the table: "course_pricing_schedule" */
+  course_pricing_schedule: Array<Course_Pricing_Schedule>;
+  /** fetch aggregated fields from the table: "course_pricing_schedule" */
+  course_pricing_schedule_aggregate: Course_Pricing_Schedule_Aggregate;
+  /** fetch data from the table: "course_pricing_schedule" using primary key columns */
+  course_pricing_schedule_by_pk?: Maybe<Course_Pricing_Schedule>;
   /** fetch data from the table: "course_promo_code" */
   course_promo_code: Array<Course_Promo_Code>;
   /** fetch aggregated fields from the table: "course_promo_code" */
@@ -44715,6 +45214,29 @@ export type Query_RootCourse_Pricing_Changelog_AggregateArgs = {
 
 
 export type Query_RootCourse_Pricing_Changelog_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootCourse_Pricing_ScheduleArgs = {
+  distinct_on?: InputMaybe<Array<Course_Pricing_Schedule_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Pricing_Schedule_Order_By>>;
+  where?: InputMaybe<Course_Pricing_Schedule_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Pricing_Schedule_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Pricing_Schedule_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Pricing_Schedule_Order_By>>;
+  where?: InputMaybe<Course_Pricing_Schedule_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Pricing_Schedule_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -46559,6 +47081,14 @@ export type Subscription_Root = {
   course_pricing_changelog_by_pk?: Maybe<Course_Pricing_Changelog>;
   /** fetch data from the table in a streaming manner: "course_pricing_changelog" */
   course_pricing_changelog_stream: Array<Course_Pricing_Changelog>;
+  /** fetch data from the table: "course_pricing_schedule" */
+  course_pricing_schedule: Array<Course_Pricing_Schedule>;
+  /** fetch aggregated fields from the table: "course_pricing_schedule" */
+  course_pricing_schedule_aggregate: Course_Pricing_Schedule_Aggregate;
+  /** fetch data from the table: "course_pricing_schedule" using primary key columns */
+  course_pricing_schedule_by_pk?: Maybe<Course_Pricing_Schedule>;
+  /** fetch data from the table in a streaming manner: "course_pricing_schedule" */
+  course_pricing_schedule_stream: Array<Course_Pricing_Schedule>;
   /** fetch data from the table in a streaming manner: "course_pricing" */
   course_pricing_stream: Array<Course_Pricing>;
   /** fetch data from the table: "course_promo_code" */
@@ -48320,6 +48850,36 @@ export type Subscription_RootCourse_Pricing_Changelog_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Course_Pricing_Changelog_Stream_Cursor_Input>>;
   where?: InputMaybe<Course_Pricing_Changelog_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Pricing_ScheduleArgs = {
+  distinct_on?: InputMaybe<Array<Course_Pricing_Schedule_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Pricing_Schedule_Order_By>>;
+  where?: InputMaybe<Course_Pricing_Schedule_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Pricing_Schedule_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Pricing_Schedule_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Pricing_Schedule_Order_By>>;
+  where?: InputMaybe<Course_Pricing_Schedule_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Pricing_Schedule_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Pricing_Schedule_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Pricing_Schedule_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Pricing_Schedule_Bool_Exp>;
 };
 
 
@@ -53665,6 +54225,13 @@ export type CourseParticipantsQueryVariables = Exact<{
 
 export type CourseParticipantsQuery = { __typename?: 'query_root', courseParticipants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, invoiceID?: any | null, bookingDate?: any | null, go1EnrolmentStatus?: Blended_Learning_Status_Enum | null, go1EnrolmentProgress?: any | null, grade?: Grade_Enum | null, healthSafetyConsent: boolean, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null } | null, order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null, course: { __typename?: 'course', accreditedBy: Accreditors_Enum, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null, bildStrategies: Array<{ __typename?: 'course_bild_strategy', id: any, strategyName: string }>, organization?: { __typename?: 'organization', name: string, id: any } | null }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> }>, courseParticipantsAggregation: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
 
+export type DeleteCoursePricingScheduleMutationVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type DeleteCoursePricingScheduleMutation = { __typename?: 'mutation_root', delete_course_pricing_schedule_by_pk?: { __typename?: 'course_pricing_schedule', id: any } | null };
+
 export type PricingChangelogQueryVariables = Exact<{
   where?: InputMaybe<Course_Pricing_Changelog_Bool_Exp>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -53681,7 +54248,32 @@ export type PricingQueryVariables = Exact<{
 }>;
 
 
-export type PricingQuery = { __typename?: 'query_root', course_pricing: Array<{ __typename?: 'course_pricing', id: any, level: Course_Level_Enum, priceAmount: any, priceCurrency: string, reaccreditation: boolean, type: Course_Type_Enum, xeroCode: string, blended: boolean, updatedAt?: any | null }>, course_pricing_aggregate: { __typename?: 'course_pricing_aggregate', aggregate?: { __typename?: 'course_pricing_aggregate_fields', count: number } | null } };
+export type PricingQuery = { __typename?: 'query_root', course_pricing: Array<{ __typename?: 'course_pricing', id: any, level: Course_Level_Enum, priceAmount: any, priceCurrency: string, reaccreditation: boolean, type: Course_Type_Enum, xeroCode: string, blended: boolean, updatedAt?: any | null, pricingSchedules: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId: any, effectiveFrom: any, effectiveTo: any, priceAmount: any, priceCurrency: string }>, pricingSchedules_aggregate: { __typename?: 'course_pricing_schedule_aggregate', aggregate?: { __typename?: 'course_pricing_schedule_aggregate_fields', count: number } | null, nodes: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId: any, effectiveFrom: any, effectiveTo: any, priceAmount: any, priceCurrency: string }> } }>, course_pricing_aggregate: { __typename?: 'course_pricing_aggregate', aggregate?: { __typename?: 'course_pricing_aggregate_fields', count: number } | null } };
+
+export type InsertCoursePricingScheduleMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  coursePricingId: Scalars['uuid'];
+  priceAmount: Scalars['numeric'];
+  authorId: Scalars['uuid'];
+  effectiveFrom: Scalars['date'];
+  effectiveTo: Scalars['date'];
+}>;
+
+
+export type InsertCoursePricingScheduleMutation = { __typename?: 'mutation_root', course_pricing_schedule?: { __typename?: 'course_pricing_schedule', id: any } | null, course_pricing_changelog?: { __typename?: 'course_pricing_changelog', id: any } | null };
+
+export type SetCoursePricingScheduleMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  coursePricingId: Scalars['uuid'];
+  oldPrice: Scalars['numeric'];
+  priceAmount: Scalars['numeric'];
+  authorId: Scalars['uuid'];
+  effectiveFrom: Scalars['date'];
+  effectiveTo: Scalars['date'];
+}>;
+
+
+export type SetCoursePricingScheduleMutation = { __typename?: 'mutation_root', update_course_pricing_schedule_by_pk?: { __typename?: 'course_pricing_schedule', id: any } | null, course_pricing_changelog?: { __typename?: 'course_pricing_changelog', id: any } | null };
 
 export type SetCoursePricingMutationVariables = Exact<{
   id: Scalars['uuid'];
