@@ -142,9 +142,9 @@ export function getSWRLoadingStatus(
 }
 
 export const courseStarted = (course: Course) =>
-  isPast(new Date(course.schedule[0].start))
+  isPast(new Date(course.schedule[0]?.start))
 export const courseEnded = (course: Course) =>
-  isPast(new Date(course.schedule[0].end))
+  isPast(new Date(course.schedule[0]?.end))
 
 export const getCourseLeadTrainer = find<Course_Trainer>(
   propEq('type', Course_Trainer_Type_Enum.Leader)
