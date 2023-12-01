@@ -32,4 +32,5 @@ interface ImportMetaEnv {
   VITE_KNOWLEDGE_HUB_HOME: string
   VITE_PUBLIC_POSTHOG_KEY: string
   VITE_PUBLIC_POSTHOG_HOST: string
+  VITE_HUBSPOT_WELCOME_FORM_LINK: string
 }

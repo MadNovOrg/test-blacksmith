@@ -63,7 +63,7 @@ export const MembershipGrid = () => {
     <Container>
       <Box sx={{ md: { width: '60%' } }} mb={5} mt={8}>
         <Typography
-          variant="h2"
+          variant="h4"
           fontWeight={500}
           color="primary"
           fontFamily="Poppins"
@@ -71,7 +71,9 @@ export const MembershipGrid = () => {
         >
           {t('title')}
         </Typography>
-        <Typography lineHeight={1.75}>{t('description')}</Typography>
+        <Typography lineHeight={1.75} sx={{ width: { md: '70%' } }}>
+          {t('description')}
+        </Typography>
       </Box>
 
       <Grid container spacing={4}>

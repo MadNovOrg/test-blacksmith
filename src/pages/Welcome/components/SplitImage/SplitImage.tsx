@@ -34,7 +34,7 @@ export const SplitImage: React.FC<
         }}
       >
         <Typography
-          variant="h3"
+          variant="h4"
           color="primary"
           fontWeight={500}
           fontFamily="Poppins"

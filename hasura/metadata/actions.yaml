@@ -241,6 +241,13 @@ actions:
       - role: ld
       - role: user
     comment: joinWaitlist
+  - name: knowledgeHubResources
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/knowledge-hub/resources'
+    permissions:
+      - role: user
+    comment: knowledgeHubResources
   - name: mergeUser
     definition:
       kind: synchronous
@@ -831,6 +838,20 @@ custom_types:
         - description: null
           is_deprecated: null
           value: CERTIFICATE_NOT_FOUND
+    - name: KnowledgeHubResourceType
+      values:
+        - description: null
+          is_deprecated: null
+          value: ARTICLE
+        - description: null
+          is_deprecated: null
+          value: DOWNLOAD
+        - description: null
+          is_deprecated: null
+          value: PODCAST
+        - description: null
+          is_deprecated: null
+          value: VIDEO
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -939,5 +960,7 @@ custom_types:
     - name: BlendedLearningExportDataOutput
     - name: BlendedLearningAttendeeExportData
     - name: ImportLegacyCertificateOutput
+    - name: KnowledgeHubResource
+    - name: KnowledgeHubResourcesOutput
   scalars:
     - name: Date

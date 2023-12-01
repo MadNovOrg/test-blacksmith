@@ -1,5 +1,9 @@
 import type { Preview } from '@storybook/react'
+import { urqlDecorator } from '@urql/storybook-addon'
 import withMuiThemeProvider from './decorators/withMuiThemeProvider'
+import withRouterProvider from './decorators/withRouterProvider'
+import withI18Provider from './decorators/withi18nProvider'
+
 import DocumentationTemplate from './templates/documentation.mdx'
 
 const preview: Preview = {
@@ -15,7 +19,12 @@ const preview: Preview = {
       page: DocumentationTemplate,
     },
   },
-  decorators: [withMuiThemeProvider],
+  decorators: [
+    withMuiThemeProvider,
+    withI18Provider,
+    withRouterProvider,
+    urqlDecorator,
+  ],
 }
 
 export default preview

@@ -1,5 +1,5 @@
 {
-  "browser-tab-titles":{
+  "browser-tab-titles": {
     "main-title": "Team Teach Connect",
     "home": "Home",
     "resources": {
@@ -14,11 +14,11 @@
       "course-materials": "Course Materials"
     },
     "my-courses": {
-      "title":"My Courses",
-      "drafts":"Drafts",
-      "draft-course":"Draft Course"
+      "title": "My Courses",
+      "drafts": "Drafts",
+      "draft-course": "Draft Course"
     },
-    "manage-courses":{
+    "manage-courses": {
       "title": "Manage Courses",
       "course": "Course",
       "creating-course": "{{courseType}} Course Creation",
@@ -31,25 +31,24 @@
     "users": {
       "title": "Users"
     },
-    "user-profile":{
+    "user-profile": {
       "title": "User profile",
       "certifications": "Certifications"
-
     },
-    "orders":{
+    "orders": {
       "title": "Orders"
     },
-    "book-a-course":{
+    "book-a-course": {
       "title": "All courses",
-      "book-a-course":"Book a course"
+      "book-a-course": "Book a course"
     },
-    "admin":{
-      "title":"Administrator",
+    "admin": {
+      "title": "Administrator",
       "audit": "Audit",
-      "discounts":"Discounts",
-      "new-discount":"New Discount",
-      "course-exceptions":"Course Exceptions",
-      "audit-attendee-action":"{{item}} {{action}}"
+      "discounts": "Discounts",
+      "new-discount": "New Discount",
+      "course-exceptions": "Course Exceptions",
+      "audit-attendee-action": "{{item}} {{action}}"
     }
   },
   "onboarding": {
@@ -1722,7 +1721,7 @@
       "button-label": "Register Certificate"
     },
     "membership-grid": {
-      "title": "Your Connect Membership",
+      "title": "We're here to support you every step of the way",
       "description": "Team Teach Connect combines our award-winning training with a comprehensive package of pre and post-training support, practical resources, and the latest insights in behaviour support.",
       "knowledge-hub-title": "Knowledge hub",
       "knowledge-hub-description": "Access a wealth of behaviour support resources.",
@@ -1733,6 +1732,16 @@
       "account-title": "Account",
       "account-description": "Manage your personal account or organisation, including certificates.",
       "account-button": "Manage account"
+    },
+    "resource-card": {
+      "type-ARTICLE": "Article",
+      "type-DOWNLOAD": "Download",
+      "type-VIDEO": "Video",
+      "type-PODCAST": "Podcast"
+    },
+    "resources-carousel": {
+      "title": "Latest Resources",
+      "view-all-button-text": "View All"
     }
   },
   "getting-started": {

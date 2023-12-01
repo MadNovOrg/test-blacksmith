@@ -8,6 +8,7 @@ import teamsImg from './assets/teams.png'
 import trainersImg from './assets/trainers.png'
 import { Hero } from './components/Hero/Hero'
 import { MembershipGrid } from './components/MembershipGrid/MembershipGrid'
+import { ResourcesCarousel } from './components/ResourcesCarousel/ResourcesCarousel'
 import { SplitImage } from './components/SplitImage/SplitImage'
 
 export const WelcomeV2 = () => {
@@ -17,6 +18,8 @@ export const WelcomeV2 = () => {
     <FullHeightPageLayout bgcolor="grey.100" pb={10}>
       <Hero />
       <MembershipGrid />
+
+      <ResourcesCarousel />
 
       <Container sx={{ mt: 20 }}>
         <Stack spacing={5}>
@@ -44,7 +47,7 @@ export const WelcomeV2 = () => {
             <Button
               variant="contained"
               color="lime"
-              href="https://share-eu1.hsforms.com/1H2yWCbnASRiXtrJAIt_ECAfdx9c"
+              href={import.meta.env.VITE_HUBSPOT_WELCOME_FORM_LINK}
             >
               {t('teams-button')}
             </Button>

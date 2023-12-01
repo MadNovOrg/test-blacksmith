@@ -3326,6 +3326,30 @@ export type JoinWaitlistOutput = {
   success: Scalars['Boolean'];
 };
 
+export type KnowledgeHubResource = {
+  __typename?: 'KnowledgeHubResource';
+  authors?: Maybe<Array<Scalars['String']>>;
+  description: Scalars['String'];
+  id: Scalars['String'];
+  imageUrl: Scalars['String'];
+  publishedDate: Scalars['String'];
+  title: Scalars['String'];
+  type: KnowledgeHubResourceType;
+  url: Scalars['String'];
+};
+
+export enum KnowledgeHubResourceType {
+  Article = 'ARTICLE',
+  Download = 'DOWNLOAD',
+  Podcast = 'PODCAST',
+  Video = 'VIDEO'
+}
+
+export type KnowledgeHubResourcesOutput = {
+  __typename?: 'KnowledgeHubResourcesOutput';
+  resources: Array<KnowledgeHubResource>;
+};
+
 /** File details for a Media Item */
 export type MediaDetails = {
   __typename?: 'MediaDetails';
@@ -43431,6 +43455,8 @@ export type Query_Root = {
   job_title_aggregate: Job_Title_Aggregate;
   /** fetch data from the table: "job_title" using primary key columns */
   job_title_by_pk?: Maybe<Job_Title>;
+  /** knowledgeHubResources */
+  knowledgeHubResources?: Maybe<KnowledgeHubResourcesOutput>;
   /** fetch data from the table: "legacy_certificate" */
   legacy_certificate: Array<Legacy_Certificate>;
   /** fetch aggregated fields from the table: "legacy_certificate" */
@@ -52451,6 +52477,13 @@ export type TransferParticipantMutationVariables = Exact<{
 
 export type TransferParticipantMutation = { __typename?: 'mutation_root', transferParticipant?: { __typename?: 'TransferParticipantOutput', success: boolean, error?: TransferParticipantError | null } | null };
 
+export type KnowledgeHubResourceDetailsFragment = { __typename?: 'KnowledgeHubResource', id: string, title: string, description: string, imageUrl: string, url: string, publishedDate: string, type: KnowledgeHubResourceType, authors?: Array<string> | null };
+
+export type KnowledgeHubResourcesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type KnowledgeHubResourcesQuery = { __typename?: 'query_root', knowledgeHubResources?: { __typename?: 'KnowledgeHubResourcesOutput', resources: Array<{ __typename?: 'KnowledgeHubResource', id: string, title: string, description: string, imageUrl: string, url: string, publishedDate: string, type: KnowledgeHubResourceType, authors?: Array<string> | null }> } | null };
+
 export type WaitlistCourseQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -53724,7 +53757,7 @@ export type GetProfilesQueryVariables = Exact<{
 }>;
 
 
-export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, organizations: Array<{ __typename?: 'organization_member', isAdmin: boolean, organization: { __typename?: 'organization', id: any, name: string } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', name: string, id: any } }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, organizations: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, organization: { __typename?: 'organization', id: any, name: string } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', name: string, id: any } }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type GetTempProfileQueryVariables = Exact<{ [key: string]: never; }>;
 

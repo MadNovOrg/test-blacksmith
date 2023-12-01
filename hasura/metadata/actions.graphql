@@ -171,6 +171,10 @@ type Mutation {
   ): JoinWaitlistOutput!
 }
 
+type Query {
+  knowledgeHubResources: KnowledgeHubResourcesOutput
+}
+
 type Mutation {
   mergeUser(
     primaryUser: uuid!
@@ -509,6 +513,13 @@ enum ImportLegacyCertificateError {
   PROFILE_NO_MATCH
   GENERIC_ERROR
   CERTIFICATE_NOT_FOUND
+}
+
+enum KnowledgeHubResourceType {
+  ARTICLE
+  DOWNLOAD
+  PODCAST
+  VIDEO
 }
 
 input PlansCreateInput {
@@ -1197,6 +1208,21 @@ type BlendedLearningAttendeeExportData {
 type ImportLegacyCertificateOutput {
   success: Boolean!
   error: ImportLegacyCertificateError
+}
+
+type KnowledgeHubResource {
+  id: String!
+  title: String!
+  description: String!
+  imageUrl: String!
+  url: String!
+  publishedDate: String!
+  type: KnowledgeHubResourceType!
+  authors: [String!]
+}
+
+type KnowledgeHubResourcesOutput {
+  resources: [KnowledgeHubResource!]!
 }
 
 scalar Date
