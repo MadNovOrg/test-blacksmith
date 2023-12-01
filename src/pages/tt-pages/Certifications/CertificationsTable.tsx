@@ -70,8 +70,8 @@ export const CertificationsTable: React.FC<
       { id: 'certificate', label: _t('certificate') },
       { id: 'course-code', label: _t('course-code') },
       { id: 'status', label: _t('status') },
-      { id: 'date-expired', label: _t('date-expired') },
       { id: 'date-obtained', label: _t('date-obtained') },
+      { id: 'date-expired', label: _t('date-expired') },
       { id: 'organisation', label: _t('organisation') },
       { id: 'actions', label: _t('actions') },
     ] as Col[]
