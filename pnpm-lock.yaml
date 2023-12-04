@@ -517,8 +517,8 @@ importers:
         specifier: ^5.1.0
         version: 5.1.0
       prisma-erd-generator:
-        specifier: ^1.8.0
-        version: 1.8.0(@prisma/client@4.16.2)(typescript@4.9.5)
+        specifier: ^1.11.2
+        version: 1.11.2(@prisma/client@4.16.2)(typescript@4.9.5)
       remark-gfm:
         specifier: ^3.0.1
         version: 3.0.1
@@ -5918,6 +5918,22 @@ packages:
 
   /@mermaid-js/mermaid-cli@10.3.0(typescript@4.9.5):
     resolution: {integrity: sha512-pbLhEJL99HHKDPUTnswotqfy+Zm/TsX9oseSNikrz07e47jq+UpVBJ22e9Co5qxPlP/E9VKoZHxkIz/A6M/2Ng==}
+    engines: {node: ^14.13 || >=16.0}
+    hasBin: true
+    dependencies:
+      chalk: 5.2.0
+      commander: 10.0.0
+      puppeteer: 19.11.1(typescript@4.9.5)
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - supports-color
+      - typescript
+      - utf-8-validate
+    dev: true
+
+  /@mermaid-js/mermaid-cli@10.6.1(typescript@4.9.5):
+    resolution: {integrity: sha512-OH2uOXW3/GBaMGagVF7Fzu/9TJrGge+Bu/+Tm8OyIaRBaKa2NN+3SggJOmr5s51oTPaGKu/X1XBDoauvtlXAPg==}
     engines: {node: ^14.13 || >=16.0}
     hasBin: true
     dependencies:
@@ -19304,14 +19320,14 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /prisma-erd-generator@1.8.0(@prisma/client@4.16.2)(typescript@4.9.5):
-    resolution: {integrity: sha512-ATl9OOKCjqnU7dpYyTaVVNzFE7JtkFKoaJaxjQ+yQRrSGReTe6l7SQQAmZIZAvtcE2sfBl0fsYoubSwptWQNFA==}
+  /prisma-erd-generator@1.11.2(@prisma/client@4.16.2)(typescript@4.9.5):
+    resolution: {integrity: sha512-abo2EBIjqJALfjm8p+uOsQk38DlU3rlLJA9/cOvcLLt8A9bjMkRwlqaZDAD/iXVZcXJRJPgJ98fEviTa+w8oTQ==}
     engines: {node: '>=14'}
     hasBin: true
     peerDependencies:
-      '@prisma/client': ^4.0.0
+      '@prisma/client': ^4.0.0 || ^5.0.0
     dependencies:
-      '@mermaid-js/mermaid-cli': 10.3.0(typescript@4.9.5)
+      '@mermaid-js/mermaid-cli': 10.6.1(typescript@4.9.5)
       '@prisma/client': 4.16.2(prisma@5.1.0)
       '@prisma/generator-helper': 4.16.2
       dotenv: 16.3.1
