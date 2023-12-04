@@ -15,6 +15,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
+import { isFuture, isPast } from 'date-fns'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Trans, useTranslation } from 'react-i18next'
@@ -55,6 +56,7 @@ import {
   QUERY as GET_COURSE_QUERY,
   ResponseType as GetCourseResponseType,
 } from '@app/queries/user-queries/get-course-by-id'
+import { getIndividualCourseStatuses } from '@app/rules/course-status'
 import { CourseParticipant } from '@app/types'
 import { courseEnded, courseStarted } from '@app/util'
 
@@ -208,19 +210,39 @@ export const CourseDetails: React.FC<
     return !!usersData?.users.find(u => u.profile.id === profileId)
   }, [usersData, profileId])
 
-  const canRequestCancellation = useMemo(
-    () =>
-      !!course &&
-      [
-        !acl.canCancelCourses(),
-        !course.cancellationRequest,
-        acl.isBookingContactOfCourse(course),
-        bookingOnly,
-        course.status !== Course_Status_Enum.Cancelled,
-        course.type === Course_Type_Enum.Closed,
-      ].every(el => Boolean(el)),
-    [acl, bookingOnly, course]
-  )
+  const canRequestCancellation = useMemo(() => {
+    if (!course) return false
+
+    const courseEnded =
+      Boolean(course?.schedule.length) &&
+      isPast(new Date(course?.schedule[0].end as string))
+
+    const graduationFinished = !course?.courseParticipants?.some(
+      participant => !participant.grade
+    )
+    const cancelRequested = Boolean(course?.cancellationRequest)
+
+    const mappedStatus = getIndividualCourseStatuses(
+      course?.status as Course_Status_Enum,
+      courseEnded,
+      graduationFinished,
+      cancelRequested
+    )
+
+    const allowRequestCancelConditions = course
+      ? [
+          !cancelRequested,
+          acl.isBookingContactOfCourse(course),
+          bookingOnly,
+          course.type === Course_Type_Enum.Closed,
+          isFuture(new Date(course.schedule[0].end)),
+          mappedStatus !== Course_Status_Enum.Cancelled &&
+            mappedStatus !== Course_Status_Enum.Completed,
+        ]
+      : [false]
+
+    return allowRequestCancelConditions.every(el => Boolean(el))
+  }, [acl, bookingOnly, course])
 
   const courseHasStarted = course && courseStarted(course)
   const courseHasEnded = course && courseEnded(course)

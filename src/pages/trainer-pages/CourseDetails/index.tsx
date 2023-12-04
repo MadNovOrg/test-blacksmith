@@ -13,6 +13,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
+import { isFuture, isPast } from 'date-fns'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Trans, useTranslation } from 'react-i18next'
@@ -39,6 +40,7 @@ import { CourseCertifications } from '@app/pages/trainer-pages/components/Course
 import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading'
 import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
 import { GET_DIETARY_AND_DISABILITIES_COUNT } from '@app/queries/course-participant/get-participant-dietary-restrictions-by-course-id'
+import { getIndividualCourseStatuses } from '@app/rules/course-status'
 import { courseEnded, LoadingStatus } from '@app/util'
 
 import { DietaryRequirementsTab } from './components/DietaryRequirementsTab'
@@ -64,7 +66,7 @@ export const CourseDetails = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const navigate = useNavigate()
   const { id: courseId } = useParams()
-  const { acl, isOrgAdmin } = useAuth()
+  const { acl } = useAuth()
   const [searchParams] = useSearchParams()
   const initialTab = searchParams.get('tab') as CourseDetailsTabs | null
 
@@ -159,6 +161,40 @@ export const CourseDetails = () => {
     () => mutate(),
     () => !!course?.status
   )
+
+  const canRequestCancellation = useMemo(() => {
+    if (!course) return false
+
+    const courseEnded =
+      Boolean(course?.schedule.length) &&
+      isPast(new Date(course?.schedule[0].end as string))
+
+    const graduationFinished = !course?.courseParticipants?.some(
+      participant => !participant.grade
+    )
+    const cancelRequested = Boolean(course?.cancellationRequest)
+
+    const mappedStatus = getIndividualCourseStatuses(
+      course?.status as Course_Status_Enum,
+      courseEnded,
+      graduationFinished,
+      cancelRequested
+    )
+
+    const allowRequestCancelConditions = course
+      ? [
+          !acl.canCancelCourses(),
+          !cancelRequested,
+          acl.isOrgAdmin(),
+          course.type === Course_Type_Enum.Closed,
+          isFuture(new Date(course.schedule[0].end)),
+          mappedStatus !== Course_Status_Enum.Cancelled &&
+            mappedStatus !== Course_Status_Enum.Completed,
+        ]
+      : [false]
+
+    return allowRequestCancelConditions.every(el => Boolean(el))
+  }, [acl, course])
 
   useEffect(() => {
     if (course && !course.status && !polling) {
@@ -386,11 +422,7 @@ export const CourseDetails = () => {
                   ) : null}
                 </PillTabList>
                 <Box>
-                  {!course.cancellationRequest &&
-                  course.type === Course_Type_Enum.Closed &&
-                  isOrgAdmin &&
-                  course.status !== Course_Status_Enum.Cancelled &&
-                  !acl.canCancelCourses() ? (
+                  {canRequestCancellation ? (
                     <Button
                       data-testid="request-cancellation-button"
                       variant="text"
