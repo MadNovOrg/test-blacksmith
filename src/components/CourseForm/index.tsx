@@ -951,7 +951,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     values,
   ])
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     setValue('aolRegion', '')
   }, [setValue, values.aolCountry])
 
@@ -1060,11 +1060,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                               errormessage={errors.aolCountry?.message}
                               required
                               register={register('aolCountry')}
-                              value={
-                                isCreation
-                                  ? values.aolCountry
-                                  : defaultValues.aolCountry
-                              }
+                              value={values.aolCountry}
                               error={Boolean(errors.aolCountry?.message)}
                             />
                           </FormControl>
@@ -1079,12 +1075,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                             <RegionDropdown
                               required
                               {...register('aolRegion')}
-                              value={
-                                isCreation
-                                  ? values.aolRegion
-                                  : defaultValues.aolRegion
-                              }
-                              onChange={value => setValue('aolRegion', value)}
+                              value={values.aolRegion}
+                              onChange={value => {
+                                setValue('aolRegion', value, {
+                                  shouldValidate: true,
+                                })
+                              }}
                               usesAOL={usesAOL}
                               country={aolCountry}
                               disabled={
