@@ -331,8 +331,8 @@ importers:
         specifier: ^7.5.3
         version: 7.5.3(react-dom@18.2.0)(react@18.2.0)
       '@storybook/addon-mdx-gfm':
-        specifier: ^7.5.3
-        version: 7.5.3
+        specifier: ^7.6.3
+        version: 7.6.3
       '@storybook/blocks':
         specifier: ^7.5.3
         version: 7.5.3(@types/react-dom@18.2.6)(@types/react@18.2.14)(react-dom@18.2.0)(react@18.2.0)
@@ -8746,10 +8746,10 @@ packages:
       ts-dedent: 2.2.0
     dev: true
 
-  /@storybook/addon-mdx-gfm@7.5.3:
-    resolution: {integrity: sha512-ZZTqmw2DHBT2TDUmTYR9g+s+st1e375BhvALUvTODVwC49xBJRQU07tts9Tz+++v/wbc5t3y3tGxuMq9E39WJQ==}
+  /@storybook/addon-mdx-gfm@7.6.3:
+    resolution: {integrity: sha512-8BhcyTZWh5CoUSaZ6JBifuhxsumrc2QV4I1+7nMbGMGWYVLCB9S0+lcEPmu7VlhudQrmisc+ygZo9Ay74aOzAw==}
     dependencies:
-      '@storybook/node-logger': 7.5.3
+      '@storybook/node-logger': 7.6.3
       remark-gfm: 3.0.1
       ts-dedent: 2.2.0
     transitivePeerDependencies:
@@ -9344,6 +9344,10 @@ packages:
 
   /@storybook/node-logger@7.5.3:
     resolution: {integrity: sha512-7ZZDw/q3hakBj1FngsBjaHNIBguYAWojp7R1fFTvwkeunCi21EUzZjRBcqp10kB6BP3/NLX32bIQknsCWD76rQ==}
+    dev: true
+
+  /@storybook/node-logger@7.6.3:
+    resolution: {integrity: sha512-7yL0CMHuh1DhpUAoKCU0a53DvxBpkUom9SX5RaC1G2A9BK/B3XcHtDPAC0uyUwNCKLJMZo9QtmJspvxWjR0LtA==}
     dev: true
 
   /@storybook/postinstall@7.5.3:
