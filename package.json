@@ -84,7 +84,7 @@
     "@stripe/stripe-js": "^1.54.2",
     "@swc/helpers": "~0.5.0",
     "@types/chance": "1.1.6",
-    "@types/jest": "^29.5.6",
+    "@types/jest": "^29.5.10",
     "@urql/core": "3.1.1",
     "@urql/devtools": "^2.0.3",
     "@urql/exchange-auth": "^1.0.0",
