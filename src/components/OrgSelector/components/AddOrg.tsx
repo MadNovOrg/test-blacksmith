@@ -150,19 +150,22 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         country: data.country,
         postCode: data.postCode,
       } as Address,
-      attributes: isDfeSuggestion(option)
-        ? {
-            localAuthority: option.localAuthority,
-            headFirstName: option.headFirstName,
-            headLastName: option.headLastName,
-            headTitle: option.headTitle,
-            headPreferredJobTitle: option.headJobTitle,
-            ofstedRating: option.ofstedRating?.toUpperCase().replace(' ', '_'),
-            ofstedLastInspection: option.ofstedLastInspection,
-          }
-        : {
-            email: data.organisationEmail,
-          },
+      attributes: {
+        email: data.organisationEmail,
+        ...(isDfeSuggestion(option)
+          ? {
+              localAuthority: option.localAuthority,
+              headFirstName: option.headFirstName,
+              headLastName: option.headLastName,
+              headTitle: option.headTitle,
+              headPreferredJobTitle: option.headJobTitle,
+              ofstedRating: option.ofstedRating
+                ?.toUpperCase()
+                .replace(' ', '_'),
+              ofstedLastInspection: option.ofstedLastInspection,
+            }
+          : null),
+      },
     }
     await insertOrganisation(vars)
   }
