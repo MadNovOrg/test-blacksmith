@@ -62,7 +62,7 @@ export const CreateCoursePage = () => {
       <Helmet>
         <title>
           {location.pathname.includes('drafts')
-            ? t('pages.browser-tab-titles.my-courses.drafts')
+            ? t('pages.browser-tab-titles.my-courses.draft-course')
             : t('pages.browser-tab-titles.manage-courses.creating-course', {
                 courseType: capitalize(courseType),
               })}

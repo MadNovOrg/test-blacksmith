@@ -16,6 +16,7 @@ import {
   useTheme,
 } from '@mui/material'
 import React, { useEffect, useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from 'urql'
@@ -276,6 +277,9 @@ export const CourseDetails: React.FC<
 
   return (
     <>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.manage-courses.course')}</title>
+      </Helmet>
       {courseError ? (
         <Alert severity="error">There was an error loading a course.</Alert>
       ) : null}

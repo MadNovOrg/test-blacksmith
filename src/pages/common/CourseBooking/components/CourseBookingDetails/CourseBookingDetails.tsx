@@ -495,7 +495,9 @@ export const CourseBookingDetails: React.FC<
   return (
     <FormProvider {...methods}>
       <Helmet>
-        <title>{t('pages.browser-tab-titles.book-a-course.title')}</title>
+        <title>
+          {t('pages.browser-tab-titles.book-a-course.book-a-course')}
+        </title>
       </Helmet>
       <Box
         component="form"

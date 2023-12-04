@@ -1,5 +1,6 @@
 import { Alert, CircularProgress, Container, Stack } from '@mui/material'
 import React, { useEffect } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -47,6 +48,9 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   return (
     <FullHeightPageLayout pb={3}>
+      <Helmet>
+        <title>{t('pages.browser-tab-titles.manage-courses.title')}</title>
+      </Helmet>
       {status === LoadingStatus.FETCHING ? (
         <Stack
           alignItems="center"
