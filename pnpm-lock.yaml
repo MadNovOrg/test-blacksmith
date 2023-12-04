@@ -478,8 +478,8 @@ importers:
         specifier: ^0.2.8
         version: 0.2.8(eslint@8.38.0)(typescript@4.9.5)(vite@4.5.0)(vitest@0.33.0)
       hasura-cli:
-        specifier: ^2.23.0
-        version: 2.23.0
+        specifier: ^2.35.1
+        version: 2.35.1
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -15243,8 +15243,8 @@ packages:
     dependencies:
       function-bind: 1.1.2
 
-  /hasura-cli@2.23.0:
-    resolution: {integrity: sha512-8yRJtHfKtBIp5o+gXhY/n5FgbHDwRIk+BUZAlaTq00L+3//b3xx3m/syzY1TTkBodkgLad9vUDAzjudzMV5BhQ==}
+  /hasura-cli@2.35.1:
+    resolution: {integrity: sha512-rHy3cOpwj6UtgQQVkLntGaXqzP0BDaxwgtFRKV45Zuj3B2u2uvwk5sgI+iFlqZ3/lyHcTMMoQl6jeE8N+ypPlw==}
     engines: {node: '>=8'}
     hasBin: true
     requiresBuild: true
