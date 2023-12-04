@@ -193,20 +193,61 @@ export const Users = () => {
               organization: { name: { _ilike: `%${keywordDebounced}%` } },
             },
           },
-          {
-            _and: [
-              {
-                givenName: {
-                  _ilike: `%${keywordDebounced.trim().split(' ')[0] ?? ''}%`,
-                },
+          keywordDebounced.trim().split(' ').length > 1
+            ? {
+                _or: [
+                  {
+                    _and: [
+                      {
+                        givenName: {
+                          _ilike: `%${
+                            keywordDebounced.trim().split(' ')[0] ?? ''
+                          }%`,
+                        },
+                      },
+                      {
+                        familyName: {
+                          _ilike: `%${
+                            keywordDebounced.trim().split(' ')[1] ?? ''
+                          }%`,
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    _and: [
+                      {
+                        givenName: {
+                          _ilike: `%${
+                            keywordDebounced.trim().split(' ')[1] ?? ''
+                          }%`,
+                        },
+                      },
+                      {
+                        familyName: {
+                          _ilike: `%${
+                            keywordDebounced.trim().split(' ')[0] ?? ''
+                          }%`,
+                        },
+                      },
+                    ],
+                  },
+                ],
+              }
+            : {
+                _or: [
+                  {
+                    givenName: {
+                      _ilike: `%${keywordDebounced.trim() ?? ''}%`,
+                    },
+                  },
+                  {
+                    familyName: {
+                      _ilike: `%${keywordDebounced.trim() ?? ''}%`,
+                    },
+                  },
+                ],
               },
-              {
-                familyName: {
-                  _ilike: `%${keywordDebounced.trim().split(' ')[1] ?? ''}%`,
-                },
-              },
-            ],
-          },
           { email: { _ilike: `%${keywordDebounced}%` } },
         ],
       })
