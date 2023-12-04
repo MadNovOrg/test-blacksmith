@@ -438,7 +438,7 @@ export const CourseDetails: React.FC<
                         ) : null}
                         {showCertificationsTab &&
                         course.certificateCount?.aggregate.count &&
-                        course.participantSubmitedEvaluationCount?.aggregate
+                        course.participantSubmittedEvaluationCount?.aggregate
                           .count ? (
                           <PillTab
                             label={t(

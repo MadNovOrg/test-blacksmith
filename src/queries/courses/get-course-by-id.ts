@@ -166,7 +166,7 @@ export const QUERY = gql`
           count
         }
       }
-      participantSubmitedEvaluationCount: participants_aggregate(
+      participantSubmittedEvaluationCount: participants_aggregate(
         where: { completed_evaluation: { _eq: true } }
       ) {
         aggregate {

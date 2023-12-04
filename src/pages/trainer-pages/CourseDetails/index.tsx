@@ -358,7 +358,8 @@ export const CourseDetails = () => {
                     />
                   ) : null}
                   {course.certificateCount?.aggregate.count &&
-                  course.participantSubmitedEvaluationCount?.aggregate.count ? (
+                  course.participantSubmittedEvaluationCount?.aggregate
+                    .count ? (
                     <PillTab
                       label={t(
                         'pages.course-details.tabs.certifications.title'
