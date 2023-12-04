@@ -1,4 +1,4 @@
-import useSWR, { KeyedMutator } from 'swr'
+import { OperationContext, useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import { Course_Participant_Bool_Exp } from '@app/generated/graphql'
@@ -24,7 +24,7 @@ export default function useCourseParticipants(
   error?: Error
   total?: number
   status: LoadingStatus
-  mutate: KeyedMutator<ResponseType>
+  mutate: (opts?: Partial<OperationContext> | undefined) => void
 } {
   const { acl } = useAuth()
   const sortBy = options?.sortBy ?? 'name'
@@ -50,25 +50,21 @@ export default function useCourseParticipants(
     queryConditions.push(options.where)
   }
 
-  const { data, error, mutate } = useSWR<
-    ResponseType,
-    Error,
-    [string, ParamsType]
-  >([
-    QUERY,
-    {
+  const [{ data, error }, mutate] = useQuery<ResponseType, ParamsType>({
+    query: QUERY,
+    variables: {
       limit: options?.pagination?.limit,
       offset: options?.pagination?.offset,
       where: { _and: queryConditions },
       withOrder: acl.canViewOrders(),
       orderBy,
     },
-  ])
+  })
 
   return {
     data: data?.courseParticipants,
     error,
-    total: data?.courseParticipantsAggregation.aggregate.count,
+    total: data?.courseParticipantsAggregation?.aggregate?.count,
     status: getSWRLoadingStatus(data, error),
     mutate,
   }
