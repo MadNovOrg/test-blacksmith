@@ -380,7 +380,7 @@ export const useCourses = (
 
       if (Object.keys(orgAdminStatusCondition).length > 0) {
         if (obj._and) obj._and.push(orgAdminStatusCondition)
-        else obj = { _and: [{ _or: obj._or }, orgAdminStatusCondition] }
+        else obj = { _and: [{ ...obj }, orgAdminStatusCondition] }
       }
     } else {
       const regularStatuses = filters?.statuses?.filter(s =>
