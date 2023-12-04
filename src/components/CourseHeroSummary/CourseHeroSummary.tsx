@@ -99,9 +99,25 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
       ?.replace(/[()]/g, '')
       .split(',')
 
-    return {
-      lat: parseFloat(coordinates?.at(0) ?? '0'),
-      lng: parseFloat(coordinates?.at(1) ?? '0'),
+    const zeroCoordinate = parseFloat('0')
+
+    if (
+      coordinates !== null &&
+      coordinates !== undefined &&
+      Array.isArray(coordinates) &&
+      coordinates.every(element => typeof element === 'string')
+    ) {
+      const latitude = parseFloat(coordinates[0])
+      const longitude = parseFloat(coordinates[1])
+      return {
+        lat: isNaN(latitude) ? zeroCoordinate : latitude,
+        lng: isNaN(longitude) ? zeroCoordinate : longitude,
+      }
+    } else {
+      return {
+        lat: zeroCoordinate,
+        lng: zeroCoordinate,
+      }
     }
   }, [course.schedule])
 
