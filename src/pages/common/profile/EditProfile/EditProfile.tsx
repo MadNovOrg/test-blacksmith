@@ -45,6 +45,7 @@ import { Avatar } from '@app/components/Avatar'
 import { Dialog, ConfirmDialog } from '@app/components/dialogs'
 import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
+import PhoneNumberInput from '@app/components/PhoneNumberInput'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
@@ -73,6 +74,7 @@ import { MUTATION as UPDATE_ORG_MEMBER_MUTATION } from '@app/queries/organizatio
 import { MUTATION as UPDATE_PROFILE_MUTATION } from '@app/queries/profile/update-profile'
 import { MUTATION as UPDATE_PROFILE_ROLES_MUTATION } from '@app/queries/profile/update-profile-roles'
 import { MUTATION as UPDATE_PROFILE_TRAINER_ROLE_TYPES } from '@app/queries/trainer/update-trainer-role-types'
+import { schemas } from '@app/schemas'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 import {
@@ -217,7 +219,7 @@ export const EditProfilePage: React.FC<
             t('validation-errors.required-field', { name: t('surname') })
           ),
         countryCode: yup.string(),
-        phone: yup.string(),
+        phone: schemas.phone(t),
         dob: yup.date().nullable(),
         jobTitle: yup.string(),
         otherJobTitle: yup.string().when('jobTitle', ([jobTitle], schema) => {
@@ -786,17 +788,23 @@ export const EditProfilePage: React.FC<
                 </Box>
 
                 <Grid container spacing={3} mb={3}>
-                  <Grid item md={6} xs={12}>
-                    <TextField
-                      id="phone"
+                  <Grid item xs={12} sm={12} md={6} lg={6}>
+                    <PhoneNumberInput
                       label={t('phone')}
                       variant="filled"
-                      placeholder={t('phone-placeholder')}
+                      sx={{ bgcolor: 'grey.100' }}
+                      inputProps={{
+                        sx: { height: 40 },
+                        'data-testid': 'input-phone',
+                      }}
                       error={!!errors.phone}
                       helperText={errors.phone?.message}
-                      {...register('phone')}
-                      inputProps={{ 'data-testid': 'phone' }}
+                      value={values.phone !== undefined ? values.phone : ''}
+                      onChange={p => {
+                        setValue('phone', p as string, { shouldValidate: true })
+                      }}
                       fullWidth
+                      required
                     />
                   </Grid>
                 </Grid>
