@@ -112,6 +112,7 @@ export const QUERY = gql`
       course_code
       name
       status
+      reaccreditation
     }
   }
 `

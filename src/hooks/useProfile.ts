@@ -1,16 +1,18 @@
 import { isPast } from 'date-fns'
+import { matches } from 'lodash'
+import { cond, constant, stubTrue } from 'lodash-es'
 import { useCallback, useMemo } from 'react'
 import useSWR from 'swr'
 
 import {
   ArchiveProfileMutation,
   ArchiveProfileMutationVariables,
+  Course_Level_Enum,
   GetProfileDetailsQuery,
   GetProfileDetailsQueryVariables,
   UpdateAvatarMutation,
   UpdateAvatarMutationVariables,
 } from '@app/generated/graphql'
-import { Course_Level_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { MUTATION as ARCHIVE_PROFILE_MUTATION } from '@app/queries/profile/archive-profile'
 import { QUERY } from '@app/queries/profile/get-profile-details'
@@ -20,23 +22,83 @@ import { getSWRLoadingStatus } from '@app/util'
 const isValidCertificate = (certificate: { expiryDate: string }) =>
   !isPast(new Date(certificate.expiryDate))
 
-const requiredCertificateLevel = {
-  [Course_Level_Enum.Level_1]: [],
-  [Course_Level_Enum.Level_2]: [],
-  [Course_Level_Enum.ThreeDaySafetyResponseTrainer]: [],
-  [Course_Level_Enum.Advanced]: [Course_Level_Enum.Level_2],
-  [Course_Level_Enum.BildRegular]: [],
-  [Course_Level_Enum.IntermediateTrainer]: [
-    Course_Level_Enum.Level_1,
-    Course_Level_Enum.Level_2,
-  ],
-  [Course_Level_Enum.AdvancedTrainer]: [Course_Level_Enum.IntermediateTrainer],
-  [Course_Level_Enum.BildIntermediateTrainer]: [Course_Level_Enum.BildRegular],
-  [Course_Level_Enum.BildAdvancedTrainer]: [
-    Course_Level_Enum.BildRegular,
-    Course_Level_Enum.BildIntermediateTrainer,
-  ],
+type RequiredCertificateCondition = {
+  level: Course_Level_Enum
+  reaccreditation?: boolean
 }
+
+const matchRequiredCertificates = cond<
+  RequiredCertificateCondition,
+  Course_Level_Enum[]
+>([
+  [
+    matches({
+      level: Course_Level_Enum.Advanced,
+    }),
+    constant([Course_Level_Enum.Level_2]),
+  ],
+  [
+    matches({
+      level: Course_Level_Enum.AdvancedTrainer,
+      reaccreditation: false,
+    }),
+    constant([Course_Level_Enum.IntermediateTrainer]),
+  ],
+  [
+    matches({
+      level: Course_Level_Enum.AdvancedTrainer,
+      reaccreditation: true,
+    }),
+    constant([Course_Level_Enum.AdvancedTrainer]),
+  ],
+  [
+    matches({
+      level: Course_Level_Enum.BildAdvancedTrainer,
+      reaccreditation: false,
+    }),
+    constant([Course_Level_Enum.BildIntermediateTrainer]),
+  ],
+  [
+    matches({
+      level: Course_Level_Enum.BildAdvancedTrainer,
+      reaccreditation: true,
+    }),
+    constant([Course_Level_Enum.BildAdvancedTrainer]),
+  ],
+  [
+    matches({
+      level: Course_Level_Enum.BildIntermediateTrainer,
+      reaccreditation: false,
+    }),
+    constant([
+      Course_Level_Enum.BildRegular,
+      Course_Level_Enum.Level_1,
+      Course_Level_Enum.Level_2,
+    ]),
+  ],
+  [
+    matches({
+      level: Course_Level_Enum.BildIntermediateTrainer,
+      reaccreditation: true,
+    }),
+    constant([Course_Level_Enum.BildIntermediateTrainer]),
+  ],
+  [
+    matches({
+      level: Course_Level_Enum.IntermediateTrainer,
+      reaccreditation: false,
+    }),
+    constant([Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]),
+  ],
+  [
+    matches({
+      level: Course_Level_Enum.IntermediateTrainer,
+      reaccreditation: true,
+    }),
+    constant([Course_Level_Enum.IntermediateTrainer]),
+  ],
+  [stubTrue, constant([])],
+])
 
 export type MissingCertificateInfo = {
   courseId: number
@@ -80,8 +142,10 @@ export default function useProfile(
       }
       return courses
         .map(c => {
-          const requiredCertificate =
-            requiredCertificateLevel[c.level || Course_Level_Enum.Level_1]
+          const requiredCertificate = matchRequiredCertificates({
+            level: c.level,
+            reaccreditation: Boolean(c.reaccreditation),
+          })
           if (requiredCertificate.length === 0) {
             return false
           }
