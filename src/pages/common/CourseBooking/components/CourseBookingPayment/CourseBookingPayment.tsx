@@ -56,7 +56,7 @@ export const CourseBookingPayment = () => {
   }, [navigate, orderId])
 
   useEffect(() => {
-    if (isCallback) return
+    if (isCallback || typeof stripeWebhookEnabled === 'undefined') return
 
     const initiatePayment = async () => {
       try {
@@ -92,14 +92,14 @@ export const CourseBookingPayment = () => {
   }, [isCallback, fetcher, orderId, setState, onSuccess, stripeWebhookEnabled])
 
   useEffect(() => {
-    if (!isCallback) return
+    if (!isCallback || typeof stripeWebhookEnabled === 'undefined') return
 
     const checkPayment = async () => {
       try {
         const clientSecret = searchParams.get('payment_intent_client_secret')
         if (!clientSecret) throw Error('Bad request')
 
-        if (stripeWebhookEnabled) {
+        if (!stripeWebhookEnabled) {
           const s = await getStripe()
           const pi = await s.retrievePaymentIntent(clientSecret)
           const status = pi.paymentIntent?.status ?? ''
