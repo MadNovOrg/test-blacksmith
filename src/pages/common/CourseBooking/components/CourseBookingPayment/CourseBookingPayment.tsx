@@ -1,4 +1,5 @@
 import { Alert, Box, CircularProgress, Typography } from '@mui/material'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
@@ -40,6 +41,8 @@ export const CourseBookingPayment = () => {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
 
+  const stripeWebhookEnabled = useFeatureFlagEnabled('use-stripe-webhook')
+
   const [state, _setState] = useState<State>({ loading: true })
   const setState = useCallback(
     (next: Partial<State>) => _setState(prev => ({ ...prev, ...next })),
@@ -69,11 +72,13 @@ export const CourseBookingPayment = () => {
           vars
         )
 
-        const s = await getStripe()
-        const pi = await s.retrievePaymentIntent(paymentIntent.clientSecret)
-        const status = pi.paymentIntent?.status ?? ''
-        if (['succeeded'].includes(status)) {
-          return onSuccess()
+        if (stripeWebhookEnabled) {
+          const s = await getStripe()
+          const pi = await s.retrievePaymentIntent(paymentIntent.clientSecret)
+          const status = pi.paymentIntent?.status ?? ''
+          if (['succeeded'].includes(status)) {
+            return onSuccess()
+          }
         }
 
         setState({ loading: false, error: undefined, paymentIntent })
@@ -84,7 +89,7 @@ export const CourseBookingPayment = () => {
     }
 
     initiatePayment()
-  }, [isCallback, fetcher, orderId, setState, onSuccess])
+  }, [isCallback, fetcher, orderId, setState, onSuccess, stripeWebhookEnabled])
 
   useEffect(() => {
     if (!isCallback) return
@@ -94,27 +99,31 @@ export const CourseBookingPayment = () => {
         const clientSecret = searchParams.get('payment_intent_client_secret')
         if (!clientSecret) throw Error('Bad request')
 
-        const s = await getStripe()
-        const pi = await s.retrievePaymentIntent(clientSecret)
-        const status = pi.paymentIntent?.status ?? ''
-        if (['succeeded'].includes(status)) {
-          const { confirmCreditCardPayment } = await fetcher<
-            ConfirmCcPaymentMutation,
-            ConfirmCcPaymentMutationVariables
-          >(CONFIRM_CC_PAYMENT, { orderId })
+        if (stripeWebhookEnabled) {
+          const s = await getStripe()
+          const pi = await s.retrievePaymentIntent(clientSecret)
+          const status = pi.paymentIntent?.status ?? ''
+          if (['succeeded'].includes(status)) {
+            const { confirmCreditCardPayment } = await fetcher<
+              ConfirmCcPaymentMutation,
+              ConfirmCcPaymentMutationVariables
+            >(CONFIRM_CC_PAYMENT, { orderId })
 
-          if (confirmCreditCardPayment?.confirmed) {
-            return onSuccess()
-          } else {
-            console.error('Failed to confirm cc payment')
-            setState({
-              loading: false,
-              error: Error(confirmCreditCardPayment?.error ?? ''),
-            })
+            if (confirmCreditCardPayment?.confirmed) {
+              return onSuccess()
+            } else {
+              console.error('Failed to confirm cc payment')
+              setState({
+                loading: false,
+                error: Error(confirmCreditCardPayment?.error ?? ''),
+              })
+            }
           }
-        }
 
-        navigate(`../payment/${orderId}`, { replace: true })
+          navigate(`../payment/${orderId}`, { replace: true })
+        } else {
+          onSuccess()
+        }
       } catch (error) {
         console.error(error)
         setState({ loading: false, error: Error('FAILED_TO_INITIATE_PAYMENT') })
@@ -130,6 +139,7 @@ export const CourseBookingPayment = () => {
     navigate,
     orderId,
     fetcher,
+    stripeWebhookEnabled,
   ])
 
   const {
