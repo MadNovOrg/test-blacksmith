@@ -95,6 +95,7 @@ type State = {
   trainerExpenses: number
   courseType: Course_Type_Enum
   invoiceDetails?: InvoiceDetails
+  attendeeValidCertificate?: boolean
 }
 
 export type ContextType = {
@@ -244,6 +245,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
           firstName: '',
           lastName: '',
         },
+        attendeeValidCertificate: false,
       })
     }
 

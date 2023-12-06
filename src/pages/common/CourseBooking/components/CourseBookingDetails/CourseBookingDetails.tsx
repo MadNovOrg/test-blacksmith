@@ -4,10 +4,8 @@ import {
   Alert,
   Box,
   Button,
-  Checkbox,
   FormControl,
   FormControlLabel,
-  FormHelperText,
   Grid,
   InputLabel,
   NativeSelect,
@@ -20,13 +18,7 @@ import {
 import Big from 'big.js'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
-import {
-  Control,
-  Controller,
-  FieldErrors,
-  FormProvider,
-  useForm,
-} from 'react-hook-form'
+import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -64,137 +56,7 @@ import {
 } from '../BookingContext'
 import { PromoCode } from '../PromoCode'
 
-export type AttendeeValidCertificateProps = {
-  control: Control<FormInputs>
-  errors: FieldErrors
-  courseLevel?: Course_Level_Enum
-  reaccreditation: boolean
-  conversion: boolean
-  totalAttendees: number
-}
-
-const AttendeeValidCertificate: React.FC<
-  React.PropsWithChildren<AttendeeValidCertificateProps>
-> = ({
-  control,
-  courseLevel,
-  reaccreditation = false,
-  conversion = false,
-  totalAttendees,
-  errors,
-}) => {
-  const { t } = useTranslation()
-  const showAttendeeTranslationOptions = useCallback(
-    (
-      reaccreditation: boolean,
-      conversion: boolean,
-      attendees: number,
-      courseLevel?: Course_Level_Enum
-    ) => {
-      switch (courseLevel) {
-        case Course_Level_Enum.Advanced:
-          return {
-            attendees,
-            levels: reaccreditation
-              ? t(
-                  'pages.book-course.attendee-with-valid-certificate.levels.advanced.reaccreditation'
-                )
-              : t(
-                  'pages.book-course.attendee-with-valid-certificate.levels.advanced.default'
-                ),
-          }
-        case Course_Level_Enum.IntermediateTrainer:
-          return {
-            attendees,
-            levels: reaccreditation
-              ? t(
-                  'pages.book-course.attendee-with-valid-certificate.levels.intermediate-trainer.reaccreditation'
-                )
-              : t(
-                  'pages.book-course.attendee-with-valid-certificate.levels.intermediate-trainer.default'
-                ),
-          }
-        case Course_Level_Enum.AdvancedTrainer:
-          return {
-            attendees,
-            levels: reaccreditation
-              ? t(
-                  'pages.book-course.attendee-with-valid-certificate.levels.advanced-trainer.reaccreditation'
-                )
-              : t(
-                  'pages.book-course.attendee-with-valid-certificate.levels.advanced-trainer.default'
-                ),
-          }
-        case Course_Level_Enum.BildIntermediateTrainer:
-          return {
-            attendees,
-            levels: reaccreditation
-              ? t(
-                  'pages.book-course.attendee-with-valid-certificate.levels.bild-intermediate-trainer.reaccreditation'
-                )
-              : conversion
-              ? t(
-                  'pages.book-course.attendee-with-valid-certificate.levels.bild-intermediate-trainer.conversion'
-                )
-              : t(
-                  'pages.book-course.attendee-with-valid-certificate.levels.bild-intermediate-trainer.default'
-                ),
-          }
-        case Course_Level_Enum.BildAdvancedTrainer:
-          return {
-            attendees,
-            levels: reaccreditation
-              ? t(
-                  'pages.book-course.attendee-with-valid-certificate.levels.bild-advanced-trainer.reaccreditation'
-                )
-              : conversion
-              ? t(
-                  'pages.book-course.attendee-with-valid-certificate.levels.bild-advanced-trainer.conversion'
-                )
-              : t(
-                  'pages.book-course.attendee-with-valid-certificate.levels.bild-advanced-trainer.default'
-                ),
-          }
-        default:
-          return {}
-      }
-    },
-    [t]
-  )
-
-  return (
-    <Controller
-      control={control}
-      name="attendeeValidCertificate"
-      render={({ field }) => (
-        <Box bgcolor="common.white" pt={2}>
-          <FormControlLabel
-            {...field}
-            control={<Checkbox />}
-            label={
-              <Typography color="grey.700">
-                {t(
-                  'pages.book-course.attendee-with-valid-certificate.message',
-                  showAttendeeTranslationOptions(
-                    reaccreditation,
-                    conversion,
-                    totalAttendees,
-                    courseLevel
-                  )
-                )}
-              </Typography>
-            }
-          />
-          {errors.attendeeValidCertificate?.message && (
-            <FormHelperText error>
-              {errors.attendeeValidCertificate.message as string}
-            </FormHelperText>
-          )}
-        </Box>
-      )}
-    />
-  )
-}
+import { AttendeeValidCertificate } from './AttendeeValidCertificate'
 
 const isAttendeeValidCertificateMandatory = (
   courseLevel?: Course_Level_Enum,
@@ -371,7 +233,7 @@ export const CourseBookingDetails: React.FC<
       invoiceDetails: booking.invoiceDetails,
       courseLevel: course?.level,
       courseType: course?.type,
-      attendeeValidCertificate: false,
+      attendeeValidCertificate: booking.attendeeValidCertificate,
     },
   })
 
@@ -445,6 +307,10 @@ export const CourseBookingDetails: React.FC<
       ...participant,
       email,
     })
+  }
+
+  const handleOnChangeAttendeeCertificate = (state: boolean) => {
+    setValue('attendeeValidCertificate', state, { shouldValidate: true })
   }
 
   useEffect(() => {
@@ -737,6 +603,7 @@ export const CourseBookingDetails: React.FC<
             <Grid container spacing={3} mb={3}>
               <Grid item md={12}>
                 <UserSelector
+                  value={values.bookingContact.email ?? undefined}
                   onChange={handleChangeBookingContact}
                   onEmailChange={email => {
                     setValue('bookingContact', {
@@ -808,6 +675,7 @@ export const CourseBookingDetails: React.FC<
                 <Grid container spacing={3} mb={3}>
                   <Grid item md={12}>
                     <UserSelector
+                      value={values.participants[index].email}
                       onChange={profile => handleEmailSelector(profile, index)}
                       onEmailChange={email => handleEmailChange(email, index)}
                       disableSuggestions={!showRegistrantSuggestions}
@@ -993,12 +861,13 @@ export const CourseBookingDetails: React.FC<
           ) : null}
           {showAttendeeValidCertificate && (
             <AttendeeValidCertificate
-              control={control}
+              handleCheckboxValue={handleOnChangeAttendeeCertificate}
               errors={errors}
               courseLevel={course?.level}
               reaccreditation={course?.reaccreditation ?? false}
               conversion={course?.conversion ?? false}
               totalAttendees={values.quantity}
+              isChecked={values.attendeeValidCertificate ?? false}
             />
           )}
         </Box>
