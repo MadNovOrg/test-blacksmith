@@ -1,5 +1,32 @@
 # @teamteach/hub
 
+## 2.0.0
+
+### Major Changes
+
+- c15dd5ec: Add Certigicates tab for individual sub-roles e.g key-contact, booking contact, orgAdmin.
+
+### Minor Changes
+
+- 1823b917: add Knowledge Hub resources carousel to the new welcome page
+
+### Patch Changes
+
+- b778dfd1: Restrict course cancel request for completed or ended courses
+- 5c8f2186: Update certificate requirements for course attending
+- c16a29b1: use feature flag to determine whether to confirm credit card payment from the client or the server
+- 55d102ac: Fix AOL field on edit course form
+- ca236ff6: Switch date expired and date obtained columns, from certifications table.
+- 9d2f7761: Fix course NOT found error for Sales representative and Finance
+- 24ec3780: Fix courses status filter for org admin
+- bd73cb38: Allow user to search by first name , last name and part of each.
+- e488e06d: Add countries phone number input
+- 83cdfcc6: Refresh eligible course for transfer on new course create
+- e5dcc36d: Change geo coordonates validation.
+- b22e7972: fix double payment intent when paying with credit card
+- 19d90c28: Validate phone number input from Edit Profile page.
+- 7e4d1128: Show emails after going back to booking details, in BookingDetails page.
+
 ## 1.5.1
 
 ### Patch Changes
