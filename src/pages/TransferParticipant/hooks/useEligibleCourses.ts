@@ -21,6 +21,7 @@ export function useEligibleCourses() {
   >({
     query: TRANSFER_ELIGIBLE_COURSES,
     variables: { fromCourseId: fromCourse.id, participantId: participant?.id },
+    requestPolicy: 'cache-and-network',
   })
 
   return {
