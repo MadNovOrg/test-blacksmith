@@ -46,6 +46,15 @@ insert_permissions:
         - id
         - price_amount
 select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - effective_from
+        - effective_to
+        - id
+        - price_amount
+        - price_currency
+      filter: {}
   - role: finance
     permission:
       columns:
