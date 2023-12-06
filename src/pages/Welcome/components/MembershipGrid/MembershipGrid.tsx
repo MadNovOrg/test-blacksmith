@@ -1,7 +1,7 @@
 import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined'
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
-import { Box, Button, Container, Grid, Typography } from '@mui/material'
+import { Box, Button, Container, Grid, Link, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import theme from '@app/theme'
@@ -15,16 +15,20 @@ const GridItem: React.FC<
     image: string
     title: string
     icon: React.ReactNode
+    url: string
     description: string
   }>
-> = ({ image, title, description, children, icon }) => {
+> = ({ image, title, description, children, icon, url }) => {
   return (
     <Box
       borderRadius={3}
       bgcolor="white"
       border={1}
       borderColor={theme.colors.lime[400]}
-      sx={{ overflow: 'hidden' }}
+      sx={{ overflow: 'hidden', display: 'block' }}
+      component={Link}
+      href={url}
+      underline="none"
     >
       <Box>
         <img src={image} style={{ maxWidth: '100%' }} />
@@ -76,37 +80,52 @@ export const MembershipGrid = () => {
         </Typography>
       </Box>
 
-      <Grid container spacing={4}>
-        <Grid item md={4}>
+      <Grid
+        container
+        spacing={4}
+        sx={{
+          '& .grid-item': {
+            transition: 'opacity 0.4s',
+          },
+          ':hover': {
+            '& .grid-item': { opacity: 0.5 },
+            '& .grid-item:hover': { opacity: 1 },
+          },
+        }}
+      >
+        <Grid item md={4} className="grid-item">
           <GridItem
             image={knowledgeHubCard}
             title={t('knowledge-hub-title')}
             description={t('knowledge-hub-description')}
             icon={<AutoStoriesOutlinedIcon />}
+            url={import.meta.env.VITE_KNOWLEDGE_HUB_URL}
           >
             <Button color="lime" variant="contained" fullWidth>
               {t('knowledge-hub-button')}
             </Button>
           </GridItem>
         </Grid>
-        <Grid item md={4}>
+        <Grid item md={4} className="grid-item">
           <GridItem
             image={coursesCard}
             title={t('courses-title')}
             description={t('courses-description')}
             icon={<FormatListBulletedOutlinedIcon />}
+            url="./courses"
           >
             <Button color="lime" variant="contained" fullWidth>
               {t('courses-button')}
             </Button>
           </GridItem>
         </Grid>
-        <Grid item md={4}>
+        <Grid item md={4} className="grid-item">
           <GridItem
             image={accountCard}
             title={t('account-title')}
             description={t('account-description')}
             icon={<SettingsOutlinedIcon />}
+            url="./profile"
           >
             <Button variant="contained" color="lime" fullWidth>
               {t('account-button')}

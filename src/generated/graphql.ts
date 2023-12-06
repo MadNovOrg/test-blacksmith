@@ -3333,6 +3333,7 @@ export type KnowledgeHubResource = {
   id: Scalars['String'];
   imageUrl: Scalars['String'];
   publishedDate: Scalars['String'];
+  srcSet?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   type: KnowledgeHubResourceType;
   url: Scalars['String'];
@@ -53037,12 +53038,12 @@ export type TransferParticipantMutationVariables = Exact<{
 
 export type TransferParticipantMutation = { __typename?: 'mutation_root', transferParticipant?: { __typename?: 'TransferParticipantOutput', success: boolean, error?: TransferParticipantError | null } | null };
 
-export type KnowledgeHubResourceDetailsFragment = { __typename?: 'KnowledgeHubResource', id: string, title: string, description: string, imageUrl: string, url: string, publishedDate: string, type: KnowledgeHubResourceType, authors?: Array<string> | null };
+export type KnowledgeHubResourceDetailsFragment = { __typename?: 'KnowledgeHubResource', id: string, title: string, description: string, imageUrl: string, srcSet?: string | null, url: string, publishedDate: string, type: KnowledgeHubResourceType, authors?: Array<string> | null };
 
 export type KnowledgeHubResourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type KnowledgeHubResourcesQuery = { __typename?: 'query_root', knowledgeHubResources?: { __typename?: 'KnowledgeHubResourcesOutput', resources: Array<{ __typename?: 'KnowledgeHubResource', id: string, title: string, description: string, imageUrl: string, url: string, publishedDate: string, type: KnowledgeHubResourceType, authors?: Array<string> | null }> } | null };
+export type KnowledgeHubResourcesQuery = { __typename?: 'query_root', knowledgeHubResources?: { __typename?: 'KnowledgeHubResourcesOutput', resources: Array<{ __typename?: 'KnowledgeHubResource', id: string, title: string, description: string, imageUrl: string, srcSet?: string | null, url: string, publishedDate: string, type: KnowledgeHubResourceType, authors?: Array<string> | null }> } | null };
 
 export type WaitlistCourseQueryVariables = Exact<{
   id: Scalars['Int'];

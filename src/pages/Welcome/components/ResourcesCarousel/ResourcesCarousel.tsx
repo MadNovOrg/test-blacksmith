@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pagination } from 'swiper/modules'
+import { Pagination, Autoplay } from 'swiper/modules'
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react'
 import { useQuery } from 'urql'
 
@@ -80,10 +80,11 @@ export const ResourcesCarousel = () => {
           <>
             <Swiper
               spaceBetween={30}
-              modules={[Pagination]}
+              modules={[Pagination, Autoplay]}
               pagination={{ clickable: true }}
               className="resources-carousel"
               onSwiper={(swiper: SwiperClass) => (swiperRef.current = swiper)}
+              autoplay
               breakpoints={{
                 320: {
                   slidesPerView: 1,

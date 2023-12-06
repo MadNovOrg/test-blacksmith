@@ -6,6 +6,7 @@ export const KNOWLEDGE_HUB_RESOURCES_QUERY = gql`
     title
     description
     imageUrl
+    srcSet
     url
     publishedDate
     type

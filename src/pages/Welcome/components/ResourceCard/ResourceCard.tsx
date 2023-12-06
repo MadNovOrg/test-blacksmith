@@ -63,15 +63,29 @@ export const ResourceCard: React.FC<{
       boxShadow={1}
       overflow="hidden"
       height="100%"
+      component={Link}
+      underline="none"
+      href={resource.url}
+      display="block"
+      sx={{
+        '& .resource-card-image': {
+          transition: 'transform 0.4s',
+          verticalAlign: 'middle',
+        },
+        ':hover': { '& .resource-card-image': { transform: 'scale(1.1)' } },
+      }}
     >
       <Box position="relative">
-        <Link href={resource.url} component="a">
+        <Box sx={{ overflow: 'hidden' }}>
           <img
-            style={{ maxWidth: '100%' }}
+            style={{ maxWidth: '100%', objectFit: 'cover' }}
             src={resource.imageUrl}
             alt={resource.title}
+            className="resource-card-image"
+            srcSet={resource.srcSet ?? undefined}
           />
-        </Link>
+        </Box>
+
         {resource.authors?.length ? (
           <Box
             position="absolute"
@@ -93,9 +107,7 @@ export const ResourceCard: React.FC<{
 
       <Box p={3} pb={0}>
         <Typography variant="h4" fontFamily="Poppins" color="primary" mb={1.5}>
-          <Link href={resource.url} underline="none" component="a">
-            {resource.title}
-          </Link>
+          {resource.title}
         </Typography>
 
         <Box sx={{ display: { lg: 'flex' } }} justifyContent="space-between">

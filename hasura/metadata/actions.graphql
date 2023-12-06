@@ -1215,6 +1215,7 @@ type KnowledgeHubResource {
   title: String!
   description: String!
   imageUrl: String!
+  srcSet: String
   url: String!
   publishedDate: String!
   type: KnowledgeHubResourceType!
