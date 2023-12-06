@@ -56,7 +56,10 @@ const matchRequiredCertificates = cond<
       level: Course_Level_Enum.BildAdvancedTrainer,
       reaccreditation: false,
     }),
-    constant([Course_Level_Enum.BildIntermediateTrainer]),
+    constant([
+      Course_Level_Enum.IntermediateTrainer,
+      Course_Level_Enum.BildIntermediateTrainer,
+    ]),
   ],
   [
     matches({
@@ -71,9 +74,9 @@ const matchRequiredCertificates = cond<
       reaccreditation: false,
     }),
     constant([
-      Course_Level_Enum.BildRegular,
       Course_Level_Enum.Level_1,
       Course_Level_Enum.Level_2,
+      Course_Level_Enum.BildRegular,
     ]),
   ],
   [
