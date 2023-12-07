@@ -282,12 +282,18 @@ export function useUserCourses(
 
     const query = filters?.keyword?.trim()
 
+    const keywords = query?.split(' ').filter(word => Boolean(word))
+    const queryName =
+      keywords && keywords.length > 1
+        ? { _and: keywords.map(w => ({ name: { _ilike: `%${w}%` } })) }
+        : { name: { _ilike: `%${query}%` } }
+
     const onlyDigits = /^\d+$/.test(query || '')
 
     if (query?.length) {
       const orClauses = [
         onlyDigits ? { id: { _eq: Number(query) } } : null,
-        { name: { _ilike: `%${query}%` } },
+        queryName,
         { organization: { name: { _ilike: `%${query}%` } } },
         { schedule: { venue: { name: { _ilike: `%${query}%` } } } },
         { trainers: { profile: { fullName: { _ilike: `%${query}%` } } } },
