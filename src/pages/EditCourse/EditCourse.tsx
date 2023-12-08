@@ -729,7 +729,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     label={t('pages.edit-course.back-to-course-button', {
                       courseName: getCourseName(),
                     })}
-                    to={'/courses/' + id + '/details'}
                   />
                 </Box>
                 <Typography variant="h2" mb={4}>

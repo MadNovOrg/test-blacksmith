@@ -442,10 +442,7 @@ export const ICMCourseBuilder: React.FC<
 
       {modulesData && courseData?.course && (
         <Box pb={6}>
-          <BackButton
-            label={t('pages.course-participants.back-button')}
-            to="../.."
-          />
+          <BackButton label={t('pages.course-participants.back-button')} />
           {courseData.course ? (
             <Hero
               course={courseData.course}

@@ -388,10 +388,7 @@ export const BILDCourseBuilder: React.FC<
 
       {bildStrategies.length && courseData?.course && (
         <Box pb={6}>
-          <BackButton
-            label={t('pages.course-participants.back-button')}
-            to="../.."
-          />
+          <BackButton label={t('pages.course-participants.back-button')} />
 
           {submitError || saveStrategiesResult.error ? (
             <Alert severity="error" variant="outlined" sx={{ mt: 2 }}>

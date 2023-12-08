@@ -2,7 +2,8 @@ import { Box, Typography, Stack } from '@mui/material'
 import React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useLocation } from 'react-router-dom'
+import { useEffectOnce } from 'react-use'
 import {
   useQueryParam,
   withDefault,
@@ -29,7 +30,10 @@ import {
   Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
 import { CoursesFilters } from '@app/hooks/useCourses'
-import { getActionableStatuses } from '@app/pages/trainer-pages/MyCourses/utils'
+import {
+  getActionableStatuses,
+  getStatusesFromQueryString,
+} from '@app/pages/trainer-pages/MyCourses/utils'
 import { CourseStatusFilters } from '@app/pages/user-pages/MyCourses/Components/Filters/Filters'
 import { UserCourseStatus } from '@app/pages/user-pages/MyCourses/hooks/useUserCourses'
 import {
@@ -52,11 +56,12 @@ type Props = {
 }
 
 export function Filters({ onChange }: Props) {
+  const location = useLocation()
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
   const { acl, isOrgAdmin, activeRole } = useAuth()
 
-  const [orgAdminStatusOptions, setOrgAdminStatusOptions] = useState<
+  const orgAdminStatusOptions = useMemo<
     FilterOption<CourseStatusFilters>[]
   >(() => {
     return [
@@ -88,7 +93,7 @@ export function Filters({ onChange }: Props) {
         selected: false,
       },
     ]
-  })
+  }, [t])
 
   const [keyword, setKeyword] = useState(searchParams.get('q') ?? '')
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
@@ -160,18 +165,22 @@ export function Filters({ onChange }: Props) {
     },
     [setAccreditedBy]
   )
+  const orgAdminFilterStatus = useMemo(() => {
+    return orgAdminStatusOptions.flatMap(statusOption =>
+      statusOption.selected ? statusOption.id : []
+    ) as UserCourseStatus[]
+  }, [orgAdminStatusOptions])
 
-  const orgAdminFilterStatus = useMemo(
-    () =>
-      orgAdminStatusOptions.flatMap(statusOption =>
-        statusOption.selected ? statusOption.id : []
-      ) as UserCourseStatus[],
-    [orgAdminStatusOptions]
-  )
+  useEffectOnce(() => {
+    setFilterStatus(orgAdminFilterStatus)
+  })
 
   useEffect(() => {
-    setFilterStatus(orgAdminFilterStatus)
-  }, [orgAdminFilterStatus])
+    // This useEffect is here in order to make sure that when we go back to the courses page, the status filters from query parameters are applied
+
+    const statuses = getStatusesFromQueryString(location.search)
+    setFilterStatus(statuses)
+  }, [location.search])
 
   useEffect(() => {
     let startDate = undefined
@@ -256,13 +265,28 @@ export function Filters({ onChange }: Props) {
           />
           <FilterByCourseType onChange={setFilterType} />
           {acl.isOrgAdmin() ? (
-            <FilterAccordion
-              options={orgAdminStatusOptions}
-              onChange={opts => {
-                setOrgAdminStatusOptions(opts)
-              }}
-              title={t('course-status')}
-              data-testid="FilterByCourseStatus"
+            <FilterByCourseStatus
+              onChange={setFilterStatus}
+              customStatuses={
+                new Set([
+                  AttendeeOnlyCourseStatus.AwaitingGrade,
+                  AdminOnlyCourseStatus.CancellationRequested,
+                ])
+              }
+              excludedStatuses={
+                new Set([
+                  Course_Status_Enum.ConfirmModules,
+                  Course_Status_Enum.Declined,
+                  Course_Status_Enum.Draft,
+                  Course_Status_Enum.EvaluationMissing,
+                  Course_Status_Enum.ExceptionsApprovalPending,
+                  Course_Status_Enum.GradeMissing,
+                  Course_Status_Enum.TrainerDeclined,
+                  Course_Status_Enum.TrainerMissing,
+                  Course_Status_Enum.TrainerPending,
+                  Course_Status_Enum.VenueMissing,
+                ])
+              }
             />
           ) : (
             <FilterByCourseStatus

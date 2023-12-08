@@ -18,3 +18,17 @@ export function getActionableStatuses(
 
   return new Set()
 }
+
+export const getStatusesFromQueryString = (queryString: string): string[] => {
+  const params = new URLSearchParams(queryString)
+  const statuses: string[] = []
+
+  for (const [key, value] of params.entries()) {
+    if (key === 'status') {
+      const statusValues = value.split(',')
+      statuses.push(...statusValues)
+    }
+  }
+
+  return statuses
+}

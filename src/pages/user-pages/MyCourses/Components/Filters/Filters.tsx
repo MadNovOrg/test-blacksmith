@@ -1,13 +1,17 @@
 import { Box, Typography, Stack } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
+import { useEffectOnce } from 'react-use'
 
-import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
+import { FilterOption } from '@app/components/FilterAccordion'
 import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
 import { FilterByCourseState } from '@app/components/filters/FilterByCourseState'
+import { FilterByCourseStatus } from '@app/components/filters/FilterByCourseStatus'
 import { FilterByDates } from '@app/components/filters/FilterByDates'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { Course_Level_Enum, Course_Status_Enum } from '@app/generated/graphql'
+import { getStatusesFromQueryString } from '@app/pages/trainer-pages/MyCourses/utils'
 import {
   UserCourseStatus,
   CoursesFilters,
@@ -35,14 +39,14 @@ type Props = {
 export function Filters({ forManaging = false, onChange }: Props) {
   const { t } = useTranslation()
   const [keyword, setKeyword] = useState('')
+  const location = useLocation()
 
   const [filterState, setFilterState] = useState<CourseState[]>([])
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
   const [dateFilters, setDateFilters] = useState<DateFilters>()
+  const [filterStatus, setFilterStatus] = useState<string[]>([])
 
-  const [statusOptions, setStatusOptions] = useState<
-    FilterOption<CourseStatusFilters>[]
-  >(() => {
+  const statusOptions = useMemo<FilterOption<CourseStatusFilters>[]>(() => {
     return forManaging
       ? [
           {
@@ -111,15 +115,25 @@ export function Filters({ forManaging = false, onChange }: Props) {
             selected: false,
           },
         ]
-  })
+  }, [forManaging, t])
 
-  const filterStatus = useMemo(
+  const statusFilter = useMemo(
     () =>
       statusOptions.flatMap(statusOption =>
         statusOption.selected ? statusOption.id : []
       ) as UserCourseStatus[],
     [statusOptions]
   )
+  useEffectOnce(() => {
+    setFilterStatus(statusFilter)
+  })
+
+  useEffect(() => {
+    // This useEffect is here in order to make sure that when we go back to the courses page, the status filters from query parameters are applied
+
+    const statuses = getStatusesFromQueryString(location.search)
+    setFilterStatus(statuses)
+  }, [location.search])
 
   useEffect(() => {
     let startDate = undefined
@@ -146,7 +160,7 @@ export function Filters({ forManaging = false, onChange }: Props) {
 
     const filters = {
       states: filterState,
-      statuses: filterStatus,
+      statuses: filterStatus as UserCourseStatus[],
       levels: filterLevel,
       keyword,
       creation: { start: createStartDate, end: createEndDate },
@@ -193,13 +207,47 @@ export function Filters({ forManaging = false, onChange }: Props) {
             title={t('course-level')}
             onChange={setFilterLevel}
           />
-          <FilterAccordion
-            options={statusOptions}
-            onChange={opts => {
-              setStatusOptions(opts)
-            }}
-            title={t('course-status')}
-            data-testid="FilterByCourseStatus"
+          <FilterByCourseStatus
+            onChange={setFilterStatus}
+            customStatuses={
+              forManaging
+                ? new Set([
+                    AttendeeOnlyCourseStatus.AwaitingGrade,
+                    AdminOnlyCourseStatus.CancellationRequested,
+                  ])
+                : new Set([
+                    AttendeeOnlyCourseStatus.InfoRequired,
+                    AttendeeOnlyCourseStatus.NotAttended,
+                    AttendeeOnlyCourseStatus.AwaitingGrade,
+                  ])
+            }
+            excludedStatuses={
+              forManaging
+                ? new Set([
+                    Course_Status_Enum.ConfirmModules,
+                    Course_Status_Enum.Declined,
+                    Course_Status_Enum.Draft,
+                    Course_Status_Enum.EvaluationMissing,
+                    Course_Status_Enum.ExceptionsApprovalPending,
+                    Course_Status_Enum.GradeMissing,
+                    Course_Status_Enum.TrainerDeclined,
+                    Course_Status_Enum.TrainerMissing,
+                    Course_Status_Enum.TrainerPending,
+                    Course_Status_Enum.VenueMissing,
+                  ])
+                : new Set([
+                    Course_Status_Enum.ConfirmModules,
+                    Course_Status_Enum.Declined,
+                    Course_Status_Enum.Draft,
+                    Course_Status_Enum.Cancelled,
+                    Course_Status_Enum.ExceptionsApprovalPending,
+                    Course_Status_Enum.GradeMissing,
+                    Course_Status_Enum.TrainerDeclined,
+                    Course_Status_Enum.TrainerMissing,
+                    Course_Status_Enum.TrainerPending,
+                    Course_Status_Enum.VenueMissing,
+                  ])
+            }
           />
         </Stack>
       </Box>
