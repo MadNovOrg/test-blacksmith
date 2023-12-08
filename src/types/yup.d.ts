@@ -5,6 +5,9 @@ declare module 'yup' {
   interface StringSchema extends Yup.StringSchema {
     phoneNumber(t: TFunction): StringSchema
   }
+  interface StringSchema extends Yup.StringSchema {
+    isPossiblePhoneNumber(t: TFunction): StringSchema
+  }
   interface NumberSchema extends Yup.NumberSchema {
     allowEmptyNumberField(): NumberSchema
   }

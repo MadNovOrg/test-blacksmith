@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next'
+import { isPossiblePhoneNumber } from 'libphonenumber-js'
 import { matchIsValidTel } from 'mui-tel-input'
 import * as yup from 'yup'
 import YupPassword from 'yup-password'
@@ -15,6 +16,14 @@ yup.addMethod(yup.string, 'phoneNumber', function (t: TFunction) {
     'phoneNumber',
     t('validation-errors.invalid-phone'),
     (value?: string) => matchIsValidTel(value ?? '')
+  )
+})
+
+yup.addMethod(yup.string, 'isPossiblePhoneNumber', function (t: TFunction) {
+  return this.test(
+    'isPossiblePhoneNumber',
+    t('validation-errors.invalid-phone'),
+    (value?: string) => isPossiblePhoneNumber(value ?? '')
   )
 })
 
@@ -62,7 +71,11 @@ const schemas = {
       )
   },
   phone: (t: TFunction) => {
-    return yup.string().required(requiredMsg(t, 'phone')).phoneNumber(t)
+    return yup
+      .string()
+      .required(requiredMsg(t, 'phone'))
+      .phoneNumber(t)
+      .isPossiblePhoneNumber(t)
   },
 }
 
