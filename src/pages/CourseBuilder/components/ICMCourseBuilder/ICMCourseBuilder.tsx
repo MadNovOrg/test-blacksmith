@@ -193,6 +193,16 @@ export const ICMCourseBuilder: React.FC<
     [
       matches({
         level: Course_Level_Enum.Level_2,
+        reaccreditation: true,
+      }),
+      constant({
+        duration: '6 hours',
+        translationKey: 'ICM-description-choose-modules',
+      }),
+    ],
+    [
+      matches({
+        level: Course_Level_Enum.Level_2,
         type: Course_Type_Enum.Open,
       }),
       constant({ duration: '12 hour', translationKey: 'ICM-description' }),
