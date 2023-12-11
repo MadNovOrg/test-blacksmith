@@ -91,7 +91,7 @@ jobs:
         run: aws s3 sync ./dist/ ${{ secrets.s3_bucket }} --delete
 
       - name: Sentry Release
-        uses: getsentry/action-release@v1.4.1
+        uses: getsentry/action-release@v1.6.0
         continue-on-error: true
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.sentry_auth_token }}
