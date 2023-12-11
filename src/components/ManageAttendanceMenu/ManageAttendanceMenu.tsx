@@ -146,7 +146,7 @@ export const ManageAttendanceMenu = <
             courseType: Course_Type_Enum.Open,
             action: CourseAction.Transfer,
           }),
-          constant(acl.canSendCourseInformation(participantOrgIds, course)),
+          constant(acl.canTransferParticipant(participantOrgIds, course)),
         ],
         [stubTrue, constant(false)],
       ]),
