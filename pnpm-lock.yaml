@@ -367,8 +367,8 @@ importers:
         specifier: ^3.2.3
         version: 3.2.3
       '@types/big.js':
-        specifier: ^6.1.6
-        version: 6.1.6
+        specifier: ^6.2.2
+        version: 6.2.2
       '@types/convert-units':
         specifier: ^2.3.6
         version: 2.3.6
@@ -10276,8 +10276,8 @@ packages:
     dependencies:
       '@babel/types': 7.23.3
 
-  /@types/big.js@6.1.6:
-    resolution: {integrity: sha512-0r9J+Zz9rYm2hOTwiMAVkm3XFQ4u5uTK37xrQMhc9bysn/sf/okzovWMYYIBMFTn/yrEZ11pusgLEaoarTlQbA==}
+  /@types/big.js@6.2.2:
+    resolution: {integrity: sha512-e2cOW9YlVzFY2iScnGBBkplKsrn2CsObHQ2Hiw4V1sSyiGbgWL8IyqE3zFi1Pt5o1pdAtYkDAIsF3KKUPjdzaA==}
     dev: true
 
   /@types/body-parser@1.19.2:
