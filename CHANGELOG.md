@@ -1,5 +1,21 @@
 # @teamteach/hub
 
+## 2.1.0
+
+### Minor Changes
+
+- d1bb456c: When navigating back to My Courses/ Manage Courses page, reapply the filters.
+
+### Patch Changes
+
+- 8801760b: Remove transfer action for trainer on Open type courses
+- c413f041: Fix L2 Reaccreditation duration
+- b3147739: Fix: (TTHP-3267) attendee transfer participants updatate
+- e53195c7: Updates the wp_schema url
+- 0d4a5f9a: Search by multiple words in course's name
+- 94ffda52: use correct item codes for Advanced Trainer Open course bookings
+- f877cad2: Validate phone number input from Edit Profile page.
+
 ## 2.0.0
 
 ### Major Changes
