@@ -18,6 +18,7 @@ import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Status_Enum as CourseStatuses,
+  Course_Type_Enum,
   UserCoursesQuery,
 } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -207,13 +208,25 @@ export const CoursesTable: React.FC<
                   <TrainerAvatarGroup trainers={course.trainers ?? []} />
                 </TableCell>
                 <TableCell data-testid="participants-cell">
-                  <ParticipantsCount
-                    participating={
-                      course.participantsAgg?.aggregate?.count ?? 0
-                    }
-                    capacity={course.max_participants}
-                    waitlist={course.waitlistAgg?.aggregate?.count}
-                  />
+                  {/* For booking contact user display only the number of participants the booking contact has access to */}
+                  {acl.isBookingContact() &&
+                  isManaging &&
+                  course.type === Course_Type_Enum.Open ? (
+                    <Typography component="span">
+                      {course.courseParticipants.length}
+                    </Typography>
+                  ) : (
+                    <ParticipantsCount
+                      participating={
+                        (acl.isBookingContact() || acl.isOrgKeyContact()) &&
+                        isManaging
+                          ? course.courseParticipants.length
+                          : course.participantsAgg?.aggregate?.count ?? 0
+                      }
+                      capacity={course.max_participants}
+                      waitlist={course.waitlistAgg?.aggregate?.count}
+                    />
+                  )}
                 </TableCell>
                 <TableCell>
                   {isManaging && !acl.isUser() ? (

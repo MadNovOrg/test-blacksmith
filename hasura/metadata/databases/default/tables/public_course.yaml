@@ -526,6 +526,9 @@ select_permissions:
           - course_course_participant_audits:
               profile_id:
                 _eq: X-Hasura-User-Id
+          - orders:
+              bookingContactProfileId:
+                _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: finance
     permission:

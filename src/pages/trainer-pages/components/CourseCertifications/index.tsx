@@ -2,6 +2,7 @@ import { CircularProgress, Container, Stack } from '@mui/material'
 import React from 'react'
 
 import { CertificationList } from '@app/components/CertificationList'
+import { useAuth } from '@app/context/auth'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { Course } from '@app/types'
@@ -14,6 +15,7 @@ type CourseCertificationsProps = {
 export const CourseCertifications: React.FC<
   React.PropsWithChildren<CourseCertificationsProps>
 > = ({ course }) => {
+  const { acl, profile } = useAuth()
   const sorting = useTableSort('name', 'asc')
 
   const { data: certifiedParticipants, status } = useCourseParticipants(
@@ -22,6 +24,9 @@ export const CourseCertifications: React.FC<
       sortBy: sorting.by,
       order: sorting.dir,
       where: {
+        ...(acl.isOneOfBookingContactsOfTheOpenCourse(course)
+          ? { order: { bookingContactProfileId: { _eq: profile?.id } } }
+          : {}),
         certificate: {
           id: { _is_null: false },
           participant: { completed_evaluation: { _eq: true } },

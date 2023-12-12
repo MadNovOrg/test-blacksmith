@@ -16,6 +16,7 @@ import {
   Course_Invite_Status_Enum,
   Course_Trainer,
   Course_Trainer_Type_Enum,
+  Course_Type_Enum,
   ReInviteTrainerMutation,
   ReInviteTrainerMutationVariables,
 } from '@app/generated/graphql'
@@ -156,14 +157,16 @@ const ListItemWrapper: React.FC<
 }
 
 interface Props {
-  trainers: CourseTrainer[] | undefined
   canReInviteTrainer?: boolean
+  courseType?: Course_Type_Enum
+  trainers: CourseTrainer[] | undefined
 }
 
 const MAX_ASSISTANT_TO_SHOW = 2
 
 export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
   canReInviteTrainer,
+  courseType,
   trainers,
 }) => {
   const { profile, acl } = useAuth()
@@ -195,6 +198,9 @@ export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
         trainer.status === Course_Invite_Status_Enum.Accepted
       )
     }
+
+    if (acl.isBookingContact() && courseType === Course_Type_Enum.Open)
+      return false
 
     return acl.canViewProfiles()
   }

@@ -34,7 +34,7 @@ export const CourseAttendeesTab: React.FC<
 > = ({ course }) => {
   const { id } = useParams()
   const [selectedTab, setSelectedTab] = useState('0')
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
   const [showCourseInformationAlert, setShowCourseInformationAlert] = useState<
     | {
         success: boolean
@@ -49,7 +49,12 @@ export const CourseAttendeesTab: React.FC<
     status: courseParticipantsLoadingStatus,
     total: courseParticipantsTotal,
     error: courseParticipantsError,
-  } = useCourseParticipants(courseId, { alwaysShowArchived: true })
+  } = useCourseParticipants(courseId, {
+    alwaysShowArchived: true,
+    ...(acl.isBookingContact() && course.type === Course_Type_Enum.Open
+      ? { where: { order: { bookingContactProfileId: { _eq: profile?.id } } } }
+      : {}),
+  })
   const { total: pendingTotal } = useCourseInvites(
     courseId,
     InviteStatus.PENDING
@@ -96,10 +101,14 @@ export const CourseAttendeesTab: React.FC<
               fontSize="18px"
               data-testid="attending"
             >
-              {t('pages.course-participants.attending', {
-                attending: courseParticipantsTotal,
-                max: course.max_participants,
-              })}
+              {acl.isBookingContact() && course.type === Course_Type_Enum.Open
+                ? t('pages.course-participants.number-attending', {
+                    number: courseParticipantsTotal,
+                  })
+                : t('pages.course-participants.attending', {
+                    attending: courseParticipantsTotal,
+                    max: course.max_participants,
+                  })}
             </Typography>
 
             {showCourseInformationAlert ? (

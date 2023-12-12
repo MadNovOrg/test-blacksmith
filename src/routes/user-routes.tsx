@@ -107,6 +107,17 @@ const UserRoutes = () => {
             <Route path="evaluation">
               <Route path="summary" element={<EvaluationSummary />} />
             </Route>
+
+            {acl.isBookingContact() ? (
+              <Route
+                path="transfer/:participantId"
+                element={<UserTransferParticipant />}
+              >
+                <Route index element={<ChooseTransferCourse />} />
+                <Route path="details" element={<TransferDetails />} />
+                <Route path="review" element={<TransferReview />} />
+              </Route>
+            ) : null}
           </Route>
         </Route>
       ) : null}

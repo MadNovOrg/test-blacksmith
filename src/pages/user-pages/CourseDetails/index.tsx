@@ -89,6 +89,7 @@ export const CourseDetails: React.FC<
   const alertType = searchParams.get('success') as keyof typeof successAlerts
   const alertMessage = alertType ? successAlerts[alertType] : null
   const courseId = params.id as string
+  const isBookingContactManagement = acl.isBookingContact() && bookingOnly
   const canViewOrderItem =
     (acl.isBookingContact() || acl.isOrgKeyContact()) && bookingOnly
 
@@ -109,12 +110,23 @@ export const CourseDetails: React.FC<
     query: GET_COURSE_QUERY,
     variables: {
       id: courseId,
-      withOrders: canViewOrderItem,
-      withGo1Data: canViewOrderItem,
       profileId: profile?.id || '',
-      withCancellationRequest: acl.isBookingContact() && bookingOnly,
+      withCancellationRequest: isBookingContactManagement,
+      withGo1Data: canViewOrderItem,
+      withOrders: canViewOrderItem,
       withParticipants:
         (acl.isBookingContact() || acl.isOrgKeyContact()) && bookingOnly,
+      withParticipantsOrders: isBookingContactManagement,
+      ...(isBookingContactManagement
+        ? {
+            courseParticipantsWhere: {
+              _or: [
+                { course: { bookingContactProfileId: { _eq: profile?.id } } },
+                { order: { bookingContactProfileId: { _eq: profile?.id } } },
+              ],
+            },
+          }
+        : {}),
     },
     requestPolicy: 'network-only',
   })
@@ -131,6 +143,15 @@ export const CourseDetails: React.FC<
       variables: {
         courseId: Number(courseId),
         withTrainerData: !acl.canViewTrainerDietaryAndDisabilities(),
+        ...(acl.isBookingContact()
+          ? {
+              participantWhere: {
+                course: { id: { _eq: Number(courseId) } },
+                order: { bookingContactProfileId: { _eq: profile?.id } },
+                profile: { dietaryRestrictions: { _neq: 'null', _nilike: '' } },
+              },
+            }
+          : {}),
       },
       requestPolicy: 'cache-and-network',
       pause: !courseId,
@@ -166,7 +187,7 @@ export const CourseDetails: React.FC<
       : null
 
   const isBookingContact = Boolean(
-    course && acl.isBookingContactOfCourse(course) && bookingOnly
+    course && acl.isBookingContact() && bookingOnly
   )
   const isOrgKeyContact = Boolean(
     course && acl.isOrganizationKeyContactOfCourse(course) && bookingOnly
@@ -295,7 +316,10 @@ export const CourseDetails: React.FC<
     (course?.moduleGroupIds?.length || course?.bildModules?.length) &&
     course.status !== Course_Status_Enum.Draft
 
-  const isCourseContact = isBookingContact || isOrgKeyContact
+  const isCourseContact =
+    (isBookingContact && course?.type !== Course_Type_Enum.Open) ||
+    (course && acl.isOneOfBookingContactsOfTheOpenCourse(course)) ||
+    isOrgKeyContact
 
   return (
     <>
@@ -419,7 +443,7 @@ export const CourseDetails: React.FC<
                           dietaryAndDisabilitiesCount
                             ?.trainerDietaryRestrictionsCount.aggregate
                             ?.count) &&
-                        acl.canViewDietaryAndDisabiltitiesDetails(course) ? (
+                        acl.canViewDietaryAndDisabilitiesDetails(course) ? (
                           <PillTab
                             label={t(
                               'pages.course-details.tabs.dietary-requirements.title-with-count',
@@ -442,7 +466,7 @@ export const CourseDetails: React.FC<
                           ?.participantDisabilitiesCount.aggregate?.count ||
                           dietaryAndDisabilitiesCount?.trainerDisabilitiesCount
                             .aggregate?.count) &&
-                        acl.canViewDietaryAndDisabiltitiesDetails(course) ? (
+                        acl.canViewDietaryAndDisabilitiesDetails(course) ? (
                           <PillTab
                             label={t(
                               'pages.course-details.tabs.disabilities.title-with-count',
@@ -485,7 +509,8 @@ export const CourseDetails: React.FC<
                       </PillTabList>
                     </Box>
                     <Box display={'flex'}>
-                      {!courseHasStarted &&
+                      {!bookingOnly &&
+                      !courseHasStarted &&
                       course.type === Course_Type_Enum.Open ? (
                         <Button variant="text">
                           <Typography
@@ -673,14 +698,12 @@ export const CourseDetails: React.FC<
                     >
                       <CourseAttendeesTab course={course} />
                     </TabPanel>
-                    {course.type !== Course_Type_Enum.Open ? (
-                      <TabPanel
-                        sx={{ px: 0 }}
-                        value={CourseDetailsTabs.EVALUATION}
-                      >
-                        <EvaluationSummaryTab course={course} />
-                      </TabPanel>
-                    ) : null}
+                    <TabPanel
+                      sx={{ px: 0 }}
+                      value={CourseDetailsTabs.EVALUATION}
+                    >
+                      <EvaluationSummaryTab course={course} />
+                    </TabPanel>
                   </>
                 ) : null}
                 <TabPanel

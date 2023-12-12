@@ -1,5 +1,6 @@
 import { gql } from 'urql'
 
+import { Course_Participant_Bool_Exp } from '@app/generated/graphql'
 import { Course } from '@app/types'
 
 import { COURSE_SCHEDULE, ORGANIZATION, VENUE } from '../fragments'
@@ -8,12 +9,14 @@ import { COURSE_SCHEDULE, ORGANIZATION, VENUE } from '../fragments'
 export type ResponseType = { course: Course }
 
 export type ParamsType = {
+  courseParticipantsWhere?: Course_Participant_Bool_Exp
   id: string
-  withOrders?: boolean
-  withGo1Data?: boolean
-  withCancellationRequest?: boolean
-  withParticipants?: boolean
   profileId: string
+  withCancellationRequest?: boolean
+  withGo1Data?: boolean
+  withOrders?: boolean
+  withParticipants?: boolean
+  withParticipantsOrders?: boolean
 }
 
 export const QUERY = gql`
@@ -27,6 +30,8 @@ export const QUERY = gql`
     $profileId: uuid!
     $withCancellationRequest: Boolean = false
     $withParticipants: Boolean = false
+    $withParticipantsOrders: Boolean = false
+    $courseParticipantsWhere: course_participant_bool_exp = {}
   ) {
     course: course_by_pk(id: $id) {
       id
@@ -71,10 +76,15 @@ export const QUERY = gql`
         attended
       }
 
-      courseParticipants: participants @include(if: $withParticipants) {
+      courseParticipants: participants(where: $courseParticipantsWhere)
+        @include(if: $withParticipants) {
         healthSafetyConsent
         grade
         attended
+
+        order @include(if: $withParticipantsOrders) {
+          bookingContactProfileId
+        }
       }
 
       evaluation_answers_aggregate(
@@ -130,7 +140,12 @@ export const QUERY = gql`
         }
       }
       participantSubmittedEvaluationCount: participants_aggregate(
-        where: { completed_evaluation: { _eq: true } }
+        where: {
+          _and: [
+            { completed_evaluation: { _eq: true } }
+            $courseParticipantsWhere
+          ]
+        }
       ) {
         aggregate {
           count

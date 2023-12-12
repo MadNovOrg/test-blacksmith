@@ -168,6 +168,9 @@ select_permissions:
                 _eq: X-Hasura-User-Id
           - profile_id:
               _eq: X-Hasura-User-Id
+          - order:
+              bookingContactProfileId:
+                _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: finance
     permission:

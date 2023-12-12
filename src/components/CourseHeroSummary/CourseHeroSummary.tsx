@@ -303,6 +303,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 <List sx={{ paddingTop: 0.5 }}>
                   <CourseTrainersInfo
                     canReInviteTrainer={canReInviteTrainers}
+                    courseType={course.type}
                     trainers={course.trainers}
                   />
                   {course.organization && (

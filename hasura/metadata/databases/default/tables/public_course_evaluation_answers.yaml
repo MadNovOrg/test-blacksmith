@@ -81,6 +81,11 @@ select_permissions:
           - course:
               booking_contact_profile_id:
                 _eq: X-Hasura-User-Id
+          - course:
+              participants:
+                order:
+                  bookingContactProfileId:
+                    _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: organization-key-contact
     permission:

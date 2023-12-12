@@ -3,8 +3,8 @@ import { MarkOptional } from 'ts-essentials'
 
 import { getLevels } from '@app/components/CourseForm/helpers'
 import {
-  Course_Level_Enum,
   Accreditors_Enum,
+  Course_Level_Enum,
   Course_Status_Enum as CourseStatus,
   Course_Type_Enum,
 } from '@app/generated/graphql'
@@ -481,6 +481,16 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
           _course.bookingContact?.id === auth.profile?.id
       ),
 
+    isOneOfBookingContactsOfTheOpenCourse: (course: Course) =>
+      Boolean(
+        acl.isBookingContact() &&
+          course.type === Course_Type_Enum.Open &&
+          profile?.id &&
+          course.courseParticipants?.some(
+            p => p.order?.bookingContactProfileId === profile?.id
+          )
+      ),
+
     canParticipateInCourses: () =>
       anyPass([
         acl.isBookingContact,
@@ -495,15 +505,17 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.isTTOps,
         acl.isSalesAdmin,
         () => acl.isOrgAdminOf(participantOrgIds),
+        () => acl.isOneOfBookingContactsOfTheOpenCourse(_course),
       ])()
     },
 
     canReplaceParticipant: (participantOrgIds: string[], course: Course) => {
       return anyPass([
-        acl.isTTAdmin,
-        acl.isTTOps,
+        acl.isBookingContact,
         acl.isSalesAdmin,
         acl.isSalesRepresentative,
+        acl.isTTAdmin,
+        acl.isTTOps,
         () =>
           course.accreditedBy === Accreditors_Enum.Icm &&
           acl.isOrgAdminOf(participantOrgIds),
@@ -512,8 +524,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canCancelParticipant: (participantOrgIds: string[], _course: Course) => {
       return (
-        anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])() ||
-        acl.isOrgAdminOf(participantOrgIds)
+        anyPass([
+          acl.isBookingContact,
+          acl.isSalesAdmin,
+          acl.isTTAdmin,
+          acl.isTTOps,
+        ])() || acl.isOrgAdminOf(participantOrgIds)
       )
     },
 
@@ -739,15 +755,16 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
       return anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD])()
     },
-    canViewDietaryAndDisabiltitiesDetails: (course: Course) => {
+    canViewDietaryAndDisabilitiesDetails: (course: Course) => {
       const isCourseTrainer = course?.trainers?.some(
         trainer => trainer.profile.id === auth.profile?.id
       )
+
       return (
-        acl.isInternalUser() ||
-        isCourseTrainer ||
         acl.isBookingContactOfCourse(course) ||
-        acl.isOrganizationKeyContactOfCourse(course)
+        acl.isInternalUser() ||
+        acl.isOrganizationKeyContactOfCourse(course) ||
+        isCourseTrainer
       )
     },
     canViewTrainerDietaryAndDisabilities: () =>

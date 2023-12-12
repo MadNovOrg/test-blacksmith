@@ -37465,6 +37465,8 @@ export type Order = {
   billingGivenName: Scalars['String'];
   billingPhone: Scalars['String'];
   bookingContact?: Maybe<Scalars['jsonb']>;
+  /** A computed field, executes function "order_booking_contact_profile_id" */
+  bookingContactProfileId?: Maybe<Scalars['uuid']>;
   clientPurchaseOrder?: Maybe<Scalars['String']>;
   /** An object relationship */
   course: Course;
@@ -37695,6 +37697,7 @@ export type Order_Bool_Exp = {
   billingGivenName?: InputMaybe<String_Comparison_Exp>;
   billingPhone?: InputMaybe<String_Comparison_Exp>;
   bookingContact?: InputMaybe<Jsonb_Comparison_Exp>;
+  bookingContactProfileId?: InputMaybe<Uuid_Comparison_Exp>;
   clientPurchaseOrder?: InputMaybe<String_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
   courseId?: InputMaybe<Int_Comparison_Exp>;
@@ -37818,6 +37821,8 @@ export type Order_Max_Fields = {
   billingFamilyName?: Maybe<Scalars['String']>;
   billingGivenName?: Maybe<Scalars['String']>;
   billingPhone?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "order_booking_contact_profile_id" */
+  bookingContactProfileId?: Maybe<Scalars['uuid']>;
   clientPurchaseOrder?: Maybe<Scalars['String']>;
   courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
@@ -37869,6 +37874,8 @@ export type Order_Min_Fields = {
   billingFamilyName?: Maybe<Scalars['String']>;
   billingGivenName?: Maybe<Scalars['String']>;
   billingPhone?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "order_booking_contact_profile_id" */
+  bookingContactProfileId?: Maybe<Scalars['uuid']>;
   clientPurchaseOrder?: Maybe<Scalars['String']>;
   courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
@@ -37943,6 +37950,7 @@ export type Order_Order_By = {
   billingGivenName?: InputMaybe<Order_By>;
   billingPhone?: InputMaybe<Order_By>;
   bookingContact?: InputMaybe<Order_By>;
+  bookingContactProfileId?: InputMaybe<Order_By>;
   clientPurchaseOrder?: InputMaybe<Order_By>;
   course?: InputMaybe<Course_Order_By>;
   courseId?: InputMaybe<Order_By>;
@@ -41277,6 +41285,8 @@ export type Profile = {
   /** An aggregate relationship */
   certificates_aggregate: Course_Certificate_Aggregate;
   contactDetails: Scalars['jsonb'];
+  country?: Maybe<Scalars['String']>;
+  countryCode?: Maybe<Scalars['String']>;
   /** An array relationship */
   course_trainer: Array<Course_Trainer>;
   /** An aggregate relationship */
@@ -41644,6 +41654,8 @@ export type Profile_Bool_Exp = {
   certificates?: InputMaybe<Course_Certificate_Bool_Exp>;
   certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Bool_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
+  country?: InputMaybe<String_Comparison_Exp>;
+  countryCode?: InputMaybe<String_Comparison_Exp>;
   course_trainer?: InputMaybe<Course_Trainer_Bool_Exp>;
   course_trainer_aggregate?: InputMaybe<Course_Trainer_Aggregate_Bool_Exp>;
   courses?: InputMaybe<Course_Participant_Bool_Exp>;
@@ -41742,6 +41754,8 @@ export type Profile_Insert_Input = {
   avatar?: InputMaybe<Scalars['String']>;
   certificates?: InputMaybe<Course_Certificate_Arr_Rel_Insert_Input>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
+  country?: InputMaybe<Scalars['String']>;
+  countryCode?: InputMaybe<Scalars['String']>;
   course_trainer?: InputMaybe<Course_Trainer_Arr_Rel_Insert_Input>;
   courses?: InputMaybe<Course_Participant_Arr_Rel_Insert_Input>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -41776,6 +41790,8 @@ export type Profile_Max_Fields = {
   _given_name?: Maybe<Scalars['String']>;
   _phone?: Maybe<Scalars['String']>;
   avatar?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  countryCode?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   dietaryRestrictions?: Maybe<Scalars['String']>;
   disabilities?: Maybe<Scalars['String']>;
@@ -41806,6 +41822,8 @@ export type Profile_Min_Fields = {
   _given_name?: Maybe<Scalars['String']>;
   _phone?: Maybe<Scalars['String']>;
   avatar?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  countryCode?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   dietaryRestrictions?: Maybe<Scalars['String']>;
   disabilities?: Maybe<Scalars['String']>;
@@ -41863,6 +41881,8 @@ export type Profile_Order_By = {
   avatar?: InputMaybe<Order_By>;
   certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Order_By>;
   contactDetails?: InputMaybe<Order_By>;
+  country?: InputMaybe<Order_By>;
+  countryCode?: InputMaybe<Order_By>;
   course_trainer_aggregate?: InputMaybe<Course_Trainer_Aggregate_Order_By>;
   courses_aggregate?: InputMaybe<Course_Participant_Aggregate_Order_By>;
   createdAt?: InputMaybe<Order_By>;
@@ -42170,6 +42190,10 @@ export enum Profile_Select_Column {
   /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
+  Country = 'country',
+  /** column name */
+  CountryCode = 'countryCode',
+  /** column name */
   CreatedAt = 'createdAt',
   /** column name */
   DietaryRestrictions = 'dietaryRestrictions',
@@ -42212,6 +42236,8 @@ export type Profile_Set_Input = {
   attributes?: InputMaybe<Scalars['jsonb']>;
   avatar?: InputMaybe<Scalars['String']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
+  country?: InputMaybe<Scalars['String']>;
+  countryCode?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dietaryRestrictions?: InputMaybe<Scalars['String']>;
   disabilities?: InputMaybe<Scalars['String']>;
@@ -42266,6 +42292,8 @@ export type Profile_Stream_Cursor_Value_Input = {
   attributes?: InputMaybe<Scalars['jsonb']>;
   avatar?: InputMaybe<Scalars['String']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
+  country?: InputMaybe<Scalars['String']>;
+  countryCode?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dietaryRestrictions?: InputMaybe<Scalars['String']>;
   disabilities?: InputMaybe<Scalars['String']>;
@@ -42293,6 +42321,8 @@ export type Profile_Sum_Fields = {
 export type Profile_Temp = {
   __typename?: 'profile_temp';
   acceptTnc: Scalars['Boolean'];
+  country?: Maybe<Scalars['String']>;
+  countryCode?: Maybe<Scalars['String']>;
   /** An object relationship */
   course?: Maybe<Course>;
   courseId?: Maybe<Scalars['Int']>;
@@ -42353,6 +42383,8 @@ export type Profile_Temp_Bool_Exp = {
   _not?: InputMaybe<Profile_Temp_Bool_Exp>;
   _or?: InputMaybe<Array<Profile_Temp_Bool_Exp>>;
   acceptTnc?: InputMaybe<Boolean_Comparison_Exp>;
+  country?: InputMaybe<String_Comparison_Exp>;
+  countryCode?: InputMaybe<String_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
   courseId?: InputMaybe<Int_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -42384,6 +42416,8 @@ export type Profile_Temp_Inc_Input = {
 /** input type for inserting data into table "profile_temp" */
 export type Profile_Temp_Insert_Input = {
   acceptTnc?: InputMaybe<Scalars['Boolean']>;
+  country?: InputMaybe<Scalars['String']>;
+  countryCode?: InputMaybe<Scalars['String']>;
   course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -42402,6 +42436,8 @@ export type Profile_Temp_Insert_Input = {
 /** aggregate max on columns */
 export type Profile_Temp_Max_Fields = {
   __typename?: 'profile_temp_max_fields';
+  country?: Maybe<Scalars['String']>;
+  countryCode?: Maybe<Scalars['String']>;
   courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   dob?: Maybe<Scalars['date']>;
@@ -42419,6 +42455,8 @@ export type Profile_Temp_Max_Fields = {
 /** aggregate min on columns */
 export type Profile_Temp_Min_Fields = {
   __typename?: 'profile_temp_min_fields';
+  country?: Maybe<Scalars['String']>;
+  countryCode?: Maybe<Scalars['String']>;
   courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   dob?: Maybe<Scalars['date']>;
@@ -42452,6 +42490,8 @@ export type Profile_Temp_On_Conflict = {
 /** Ordering options when selecting data from "profile_temp". */
 export type Profile_Temp_Order_By = {
   acceptTnc?: InputMaybe<Order_By>;
+  country?: InputMaybe<Order_By>;
+  countryCode?: InputMaybe<Order_By>;
   course?: InputMaybe<Course_Order_By>;
   courseId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
@@ -42476,6 +42516,10 @@ export type Profile_Temp_Pk_Columns_Input = {
 export enum Profile_Temp_Select_Column {
   /** column name */
   AcceptTnc = 'acceptTnc',
+  /** column name */
+  Country = 'country',
+  /** column name */
+  CountryCode = 'countryCode',
   /** column name */
   CourseId = 'courseId',
   /** column name */
@@ -42505,6 +42549,8 @@ export enum Profile_Temp_Select_Column {
 /** input type for updating data in table "profile_temp" */
 export type Profile_Temp_Set_Input = {
   acceptTnc?: InputMaybe<Scalars['Boolean']>;
+  country?: InputMaybe<Scalars['String']>;
+  countryCode?: InputMaybe<Scalars['String']>;
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dob?: InputMaybe<Scalars['date']>;
@@ -42554,6 +42600,8 @@ export type Profile_Temp_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Profile_Temp_Stream_Cursor_Value_Input = {
   acceptTnc?: InputMaybe<Scalars['Boolean']>;
+  country?: InputMaybe<Scalars['String']>;
+  countryCode?: InputMaybe<Scalars['String']>;
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dob?: InputMaybe<Scalars['date']>;
@@ -42580,6 +42628,10 @@ export type Profile_Temp_Sum_Fields = {
 export enum Profile_Temp_Update_Column {
   /** column name */
   AcceptTnc = 'acceptTnc',
+  /** column name */
+  Country = 'country',
+  /** column name */
+  CountryCode = 'countryCode',
   /** column name */
   CourseId = 'courseId',
   /** column name */
@@ -42877,6 +42929,10 @@ export enum Profile_Update_Column {
   Avatar = 'avatar',
   /** column name */
   ContactDetails = 'contactDetails',
+  /** column name */
+  Country = 'country',
+  /** column name */
+  CountryCode = 'countryCode',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
@@ -53410,6 +53466,7 @@ export type GetCourseParticipantDietOrDisabilitiesDataQuery = { __typename?: 'qu
 export type GetDietaryAndDisabilitiesCountQueryVariables = Exact<{
   courseId: Scalars['Int'];
   withTrainerData?: InputMaybe<Scalars['Boolean']>;
+  participantWhere?: InputMaybe<Course_Participant_Bool_Exp>;
 }>;
 
 
@@ -54463,18 +54520,6 @@ export type UpdateTrainerRoleTypeMutationVariables = Exact<{
 
 
 export type UpdateTrainerRoleTypeMutation = { __typename?: 'mutation_root', delete_profile_trainer_role_type?: { __typename?: 'profile_trainer_role_type_mutation_response', affected_rows: number } | null, insert_profile_trainer_role_type?: { __typename?: 'profile_trainer_role_type_mutation_response', affected_rows: number } | null };
-
-export type GetUserCourseByIdQueryVariables = Exact<{
-  id: Scalars['Int'];
-  withOrders?: InputMaybe<Scalars['Boolean']>;
-  withGo1Data?: InputMaybe<Scalars['Boolean']>;
-  profileId: Scalars['uuid'];
-  withCancellationRequest?: InputMaybe<Scalars['Boolean']>;
-  withParticipants?: InputMaybe<Scalars['Boolean']>;
-}>;
-
-
-export type GetUserCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, go1Integration?: boolean, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, special_instructions?: string | null, parking_instructions?: string | null, status?: Course_Status_Enum | null, accreditedBy: Accreditors_Enum, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null, organization?: { __typename?: 'organization', id: any, name: string, members: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, profile_id: any }> } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null }> } | null };
 
 export type GetUserByMailQueryVariables = Exact<{
   email?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;

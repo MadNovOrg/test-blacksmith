@@ -158,7 +158,19 @@ export function useUserCourses(
   const where = useMemo(() => {
     let userConditions: Course_Bool_Exp = bookingContactOnly
       ? {
-          bookingContact: { id: { _eq: profile?.id } },
+          _or: [
+            { bookingContact: { id: { _eq: profile?.id } } },
+            {
+              _and: [
+                { type: { _eq: Course_Type_Enum.Open } },
+                {
+                  participants: {
+                    order: { bookingContactProfileId: { _eq: profile?.id } },
+                  },
+                },
+              ],
+            },
+          ],
         }
       : orgKeyContactOnly
       ? { organizationKeyContact: { id: { _eq: profile?.id } } }

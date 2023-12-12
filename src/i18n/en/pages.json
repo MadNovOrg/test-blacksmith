@@ -723,6 +723,7 @@
     "actions": "Actions",
     "prerequisites": "Prerequisites",
     "attending": "{{attending}} of {{max}} attending",
+    "number-attending": "{{number}} attending",
     "invites-left_one": "{{count}} invite left",
     "invites-left_other": "{{count}} invites left",
     "seats-left_one": "{{count}} space left",

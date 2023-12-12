@@ -73,6 +73,12 @@ object_relationships:
   - name: salesRepresentative
     using:
       foreign_key_constraint_on: sales_representative_id
+computed_fields:
+  - name: bookingContactProfileId
+    definition:
+      function:
+        name: order_booking_contact_profile_id
+        schema: public
 insert_permissions:
   - role: finance
     permission:
@@ -228,6 +234,8 @@ select_permissions:
         - xero_invoice_number
         - payment_method
         - source
+      computed_fields:
+        - bookingContactProfileId
       filter:
         _or:
           - profile_id:
@@ -243,6 +251,8 @@ select_permissions:
                             _eq: true
                 - booking_contact_profile_id:
                     _eq: X-Hasura-User-Id
+          - bookingContactProfileId:
+              _eq: X-Hasura-User-Id
       limit: 0
       allow_aggregations: true
   - role: finance
@@ -274,6 +284,8 @@ select_permissions:
         - user
         - vat
         - xero_invoice_number
+      computed_fields:
+        - bookingContactProfileId
       filter: {}
       allow_aggregations: true
   - role: sales-admin
@@ -305,6 +317,8 @@ select_permissions:
         - user
         - vat
         - xero_invoice_number
+      computed_fields:
+        - bookingContactProfileId
       filter: {}
       allow_aggregations: true
   - role: sales-representative
@@ -336,6 +350,8 @@ select_permissions:
         - user
         - vat
         - xero_invoice_number
+      computed_fields:
+        - bookingContactProfileId
       filter: {}
       allow_aggregations: true
   - role: trainer
@@ -405,6 +421,8 @@ select_permissions:
         - user
         - vat
         - xero_invoice_number
+      computed_fields:
+        - bookingContactProfileId
       filter: {}
       allow_aggregations: true
   - role: unverified
@@ -462,6 +480,8 @@ select_permissions:
         - user
         - vat
         - xero_invoice_number
+      computed_fields:
+        - bookingContactProfileId
       filter:
         _or:
           - profile_id:

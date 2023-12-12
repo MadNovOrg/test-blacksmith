@@ -131,6 +131,11 @@ select_permissions:
                     course:
                       booking_contact_profile_id:
                         _eq: X-Hasura-User-Id
+              - course:
+                  participants:
+                    order:
+                      bookingContactProfileId:
+                        _eq: X-Hasura-User-Id
           - is_revoked:
               _eq: false
       allow_aggregations: true

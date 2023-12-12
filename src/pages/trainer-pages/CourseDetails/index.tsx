@@ -100,6 +100,10 @@ export const CourseDetails = () => {
       variables: {
         courseId: Number(courseId),
         withTrainerData: !acl.canViewTrainerDietaryAndDisabilities(),
+        participantWhere: {
+          course: { id: { _eq: Number(courseId) } },
+          profile: { dietaryRestrictions: { _neq: 'null', _nilike: '' } },
+        },
       },
       requestPolicy: 'cache-and-network',
       pause: !courseId,
@@ -352,7 +356,7 @@ export const CourseDetails = () => {
                     ?.participantDietaryRestrictionsCount.aggregate?.count ||
                     dietaryAndDisabilitiesCount?.trainerDietaryRestrictionsCount
                       .aggregate?.count) &&
-                  acl.canViewDietaryAndDisabiltitiesDetails(course) ? (
+                  acl.canViewDietaryAndDisabilitiesDetails(course) ? (
                     <PillTab
                       label={t(
                         'pages.course-details.tabs.dietary-requirements.title-with-count',
@@ -375,7 +379,7 @@ export const CourseDetails = () => {
                     .aggregate?.count ||
                     dietaryAndDisabilitiesCount?.trainerDisabilitiesCount
                       .aggregate?.count) &&
-                  acl.canViewDietaryAndDisabiltitiesDetails(course) ? (
+                  acl.canViewDietaryAndDisabilitiesDetails(course) ? (
                     <PillTab
                       label={t(
                         'pages.course-details.tabs.disabilities.title-with-count',

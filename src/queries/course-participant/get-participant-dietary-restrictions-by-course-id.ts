@@ -90,12 +90,10 @@ export const GET_DIETARY_AND_DISABILITIES_COUNT = gql`
   query GetDietaryAndDisabilitiesCount(
     $courseId: Int!
     $withTrainerData: Boolean = false
+    $participantWhere: course_participant_bool_exp
   ) {
     participantDietaryRestrictionsCount: course_participant_aggregate(
-      where: {
-        course_id: { _eq: $courseId }
-        profile: { dietaryRestrictions: { _neq: "null", _nilike: "" } }
-      }
+      where: $participantWhere
     ) {
       aggregate {
         count
@@ -112,10 +110,7 @@ export const GET_DIETARY_AND_DISABILITIES_COUNT = gql`
       }
     }
     participantDisabilitiesCount: course_participant_aggregate(
-      where: {
-        course_id: { _eq: $courseId }
-        profile: { disabilities: { _neq: "null", _nilike: "" } }
-      }
+      where: $participantWhere
     ) {
       aggregate {
         count
