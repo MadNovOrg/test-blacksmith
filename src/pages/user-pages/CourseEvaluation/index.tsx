@@ -87,7 +87,7 @@ export const CourseEvaluation = () => {
   const profileId = searchParams.get('profile_id') as string
   const readOnly = !!profileId
 
-  const { data: course, status: courseStatus } = useCourse(courseId ?? '')
+  const { data: courseData, status: courseStatus } = useCourse(courseId ?? '')
   const [loading, setLoading] = useState(false)
   const { data: participantData, isValidating: participantDataLoading } =
     useSWR([GetParticipant, { profileId: profile?.id, courseId }])
@@ -111,6 +111,8 @@ export const CourseEvaluation = () => {
     variables: { courseId },
     pause: !profileId,
   })
+
+  const course = courseData?.course
 
   const attendees = useMemo(() => {
     return uniqBy(

@@ -129,10 +129,12 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     []
   )
   const {
-    data: course,
+    data: courseInfo,
     status: courseStatus,
     mutate: mutateCourse,
   } = useCourse(id ?? '')
+
+  const course = courseInfo?.course
 
   const courseInput: CourseInput | undefined = useMemo(() => {
     return course ? courseToCourseInput(course) : undefined

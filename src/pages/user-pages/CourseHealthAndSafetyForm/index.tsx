@@ -39,7 +39,7 @@ export const CourseHealthAndSafetyForm = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const courseId = params.id as string
-  const { data: course } = useCourse(courseId ?? '')
+  const { data: courseData } = useCourse(courseId ?? '')
 
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -86,7 +86,7 @@ export const CourseHealthAndSafetyForm = () => {
                 </Typography>
 
                 <Typography variant="h6" gutterBottom>
-                  {course?.name}
+                  {courseData?.course?.name}
                 </Typography>
               </Box>
             </Sticky>

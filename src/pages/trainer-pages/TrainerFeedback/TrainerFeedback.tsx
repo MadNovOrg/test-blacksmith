@@ -55,7 +55,7 @@ export const TrainerFeedback = () => {
   const { profile } = useAuth()
   const { addSnackbarMessage } = useSnackbar()
 
-  const { data: course } = useCourse(courseId)
+  const { data: courseData } = useCourse(courseId)
   const [loading, setLoading] = useState(false)
   const [searchParams] = useSearchParams()
 
@@ -210,7 +210,7 @@ export const TrainerFeedback = () => {
                   </Typography>
 
                   <Typography variant="h6" gutterBottom>
-                    {course?.name}
+                    {courseData?.course?.name}
                   </Typography>
                 </Box>
               </Sticky>

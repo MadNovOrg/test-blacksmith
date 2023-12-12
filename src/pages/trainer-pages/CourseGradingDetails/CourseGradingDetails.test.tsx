@@ -63,7 +63,7 @@ describe('page: CourseGradingDetails', () => {
 
     useCourseMocked.mockReturnValue({
       mutate: vi.fn(),
-      data: course,
+      data: { course },
       status: LoadingStatus.SUCCESS,
     })
 
@@ -83,7 +83,7 @@ describe('page: CourseGradingDetails', () => {
 
     useCourseMocked.mockReturnValue({
       mutate: vi.fn(),
-      data: course,
+      data: { course },
       status: LoadingStatus.SUCCESS,
     })
 
@@ -109,7 +109,7 @@ describe('page: CourseGradingDetails', () => {
 
     useCourseMocked.mockReturnValue({
       mutate: vi.fn(),
-      data: course,
+      data: { course },
       status: LoadingStatus.SUCCESS,
     })
 
@@ -138,7 +138,7 @@ describe('page: CourseGradingDetails', () => {
 
     useCourseMocked.mockReturnValue({
       mutate: vi.fn(),
-      data: course,
+      data: { course },
       status: LoadingStatus.SUCCESS,
     })
 
@@ -167,7 +167,7 @@ describe('page: CourseGradingDetails', () => {
 
     useCourseMocked.mockReturnValue({
       mutate: vi.fn(),
-      data: course,
+      data: { course },
       status: LoadingStatus.SUCCESS,
     })
 
@@ -200,7 +200,7 @@ describe('page: CourseGradingDetails', () => {
 
     useCourseMocked.mockReturnValue({
       mutate: vi.fn(),
-      data: course,
+      data: { course },
       status: LoadingStatus.SUCCESS,
     })
 

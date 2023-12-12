@@ -63,7 +63,7 @@ describe(CourseAttendeesTab.name, () => {
     useCourseMock.mockReturnValue({
       mutate: vi.fn(),
       status: LoadingStatus.SUCCESS,
-      data: course,
+      data: { course },
     })
 
     useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
@@ -121,7 +121,9 @@ describe(CourseAttendeesTab.name, () => {
       useCourseMock.mockReturnValue({
         mutate: vi.fn(),
         status: LoadingStatus.SUCCESS,
-        data: tableCourse,
+        data: {
+          course: tableCourse,
+        },
       })
 
       // Act
@@ -263,7 +265,7 @@ describe(CourseAttendeesTab.name, () => {
     useCourseMock.mockReturnValue({
       mutate: vi.fn(),
       status: LoadingStatus.SUCCESS,
-      data: course,
+      data: { course },
     })
 
     render(<CourseAttendeesTab course={course} />)
@@ -295,7 +297,7 @@ describe(CourseAttendeesTab.name, () => {
     useCourseMock.mockReturnValue({
       mutate: vi.fn(),
       status: LoadingStatus.SUCCESS,
-      data: course,
+      data: { course },
     })
 
     render(<CourseAttendeesTab course={course} />)
@@ -337,7 +339,7 @@ describe(CourseAttendeesTab.name, () => {
     useCourseMock.mockReturnValue({
       mutate: vi.fn(),
       status: LoadingStatus.SUCCESS,
-      data: course,
+      data: { course },
     })
 
     render(<CourseAttendeesTab course={course} />)
@@ -399,7 +401,9 @@ describe(CourseAttendeesTab.name, () => {
     useCourseMock.mockReturnValue({
       mutate: vi.fn(),
       status: LoadingStatus.SUCCESS,
-      data: openCourse,
+      data: {
+        course: openCourse,
+      },
     })
 
     render(<CourseAttendeesTab course={openCourse} />, {
@@ -474,7 +478,9 @@ describe(CourseAttendeesTab.name, () => {
     useCourseMock.mockReturnValue({
       mutate: vi.fn(),
       status: LoadingStatus.SUCCESS,
-      data: openCourse,
+      data: {
+        course: openCourse,
+      },
     })
 
     render(<CourseAttendeesTab course={openCourse} />, {
@@ -497,7 +503,7 @@ describe(CourseAttendeesTab.name, () => {
       useCourseMock.mockReturnValue({
         mutate: vi.fn(),
         status: LoadingStatus.SUCCESS,
-        data: course,
+        data: { course },
       })
     })
 

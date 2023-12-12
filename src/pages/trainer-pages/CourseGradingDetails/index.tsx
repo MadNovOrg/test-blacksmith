@@ -26,9 +26,11 @@ export const CourseGradingDetails = () => {
   const { id: courseId } = useParams()
   const { t } = useTranslation('pages', { keyPrefix: 'course-grading-details' })
 
-  const { data: course, status } = useCourse(courseId ?? '')
+  const { data: courseData, status } = useCourse(courseId ?? '')
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+  const course = courseData?.course
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>

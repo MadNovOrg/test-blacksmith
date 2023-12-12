@@ -21,7 +21,7 @@ describe('page: CourseDetails', () => {
 
     useCourseMocked.mockReturnValue({
       mutate: vi.fn(),
-      data: course,
+      data: { course },
       status: LoadingStatus.SUCCESS,
     })
 
@@ -63,7 +63,7 @@ describe('page: CourseDetails', () => {
 
       useCourseMocked.mockReturnValue({
         mutate: vi.fn(),
-        data: course,
+        data: { course },
         status: LoadingStatus.SUCCESS,
       })
 

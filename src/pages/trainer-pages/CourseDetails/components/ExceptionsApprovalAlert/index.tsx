@@ -28,12 +28,14 @@ export const ExceptionsApprovalAlert: FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { id: courseId } = useParams()
   const { acl } = useAuth()
-  const { data: course } = useCourse(courseId ?? '')
+  const { data: courseInfo } = useCourse(courseId ?? '')
   const [commentsModalOpen, setCommentsModalOpen] = useState<boolean>(false)
   const [modalAction, setModalAction] = useState<ExceptionsApprovalModalAction>(
     Course_Audit_Type_Enum.Approved
   )
   const [modalSubtitle, setModalSubtitle] = useState<string>('')
+
+  const course = courseInfo?.course
 
   const exceptionsApprovalPending =
     course?.status === Course_Status_Enum.ExceptionsApprovalPending

@@ -42,11 +42,13 @@ export const ExceptionsApprovalModalContent: FC<
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { profile } = useAuth()
   const navigate = useNavigate()
-  const { data: course, mutate } = useCourse(courseId ?? '')
+  const { data: courseInfo, mutate } = useCourse(courseId ?? '')
   const [{ error: auditError }, insertAudit] = useMutation<
     InsertCourseAuditMutation,
     InsertCourseAuditMutationVariables
   >(INSERT_COURSE_AUDIT)
+
+  const course = courseInfo?.course
 
   const schema = useMemo(() => {
     return yup.object({

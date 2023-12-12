@@ -82,10 +82,21 @@ export const CourseDetails = () => {
 
   const {
     status: courseLoadingStatus,
-    data: course,
+    data: courseData,
     error: courseError,
     mutate,
   } = useCourse(courseId ?? '')
+
+  const course = courseData?.course
+  const userIsTrainer = courseData?.isTrainer
+  const trainerAcceptedCourse = courseData?.trainerAcceptedInvite
+
+  // if course is accessed by a Trainer that didn't accept the course yet
+  // immediately redirect to Courses page
+  if (course && userIsTrainer && !trainerAcceptedCourse) {
+    navigate('/courses')
+  }
+
   const { total: courseParticipantsTotal } = useCourseParticipants(
     Number(courseId),
     { alwaysShowArchived: true }

@@ -115,7 +115,9 @@ export const EvaluationSummary = () => {
     }
   }, [pathname, hash, key])
 
-  const { data: course } = useCourse(courseId)
+  const { data: courseData } = useCourse(courseId)
+
+  const course = courseData?.course
 
   const [{ data, fetching }] = useQuery<
     GetEvaluationsSummaryQuery,

@@ -13,7 +13,11 @@ import { InviteStatus, RoleName } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export default function useCourse(courseId: string): {
-  data?: ResponseType['course']
+  data?: {
+    course: ResponseType['course']
+    isTrainer?: boolean
+    trainerAcceptedInvite?: boolean
+  }
   error?: Error
   status: LoadingStatus
   mutate: KeyedMutator<ResponseType>
@@ -37,15 +41,31 @@ export default function useCourse(courseId: string): {
   ])
 
   const course = useMemo(() => {
+    const courseData = {
+      course: null,
+      isTrainer: false,
+      trainerAcceptedInvite: false,
+    }
+
     if (activeRole === RoleName.TRAINER) {
       const hasAcceptedInvite = data?.course?.trainers?.find(
         t => t.profile.id === profile?.id && t.status === InviteStatus.ACCEPTED
       )
 
-      return hasAcceptedInvite ? data?.course : undefined
+      Object.assign(courseData, {
+        isTrainer: true,
+        trainerAcceptedInvite: hasAcceptedInvite,
+        course: data?.course as ResponseType['course'],
+      })
+
+      return courseData
     }
 
-    return data?.course
+    Object.assign(courseData, {
+      course: data?.course as ResponseType['course'],
+    })
+
+    return courseData
   }, [activeRole, data?.course, profile])
 
   return {

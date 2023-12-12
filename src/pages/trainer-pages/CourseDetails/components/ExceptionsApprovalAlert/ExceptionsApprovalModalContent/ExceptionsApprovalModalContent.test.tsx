@@ -51,7 +51,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
     useFetcherMock.mockReturnValue(fetcherMock)
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: course,
+      data: { course },
       mutate: vi.fn(),
     })
   })

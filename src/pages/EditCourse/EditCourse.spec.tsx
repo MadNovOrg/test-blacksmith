@@ -121,7 +121,9 @@ describe(EditCourse.name, () => {
 
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: openCourse,
+      data: {
+        course: openCourse,
+      },
       mutate: vi.fn(),
     })
 
@@ -151,7 +153,9 @@ describe(EditCourse.name, () => {
 
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: openCourse,
+      data: {
+        course: openCourse,
+      },
       mutate: vi.fn(),
     })
 
@@ -181,7 +185,9 @@ describe(EditCourse.name, () => {
 
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: openCourse,
+      data: {
+        course: openCourse,
+      },
       mutate: vi.fn(),
     })
 
@@ -211,7 +217,9 @@ describe(EditCourse.name, () => {
 
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: openCourse,
+      data: {
+        course: openCourse,
+      },
       mutate: vi.fn(),
     })
 
@@ -241,7 +249,9 @@ describe(EditCourse.name, () => {
 
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: openCourse,
+      data: {
+        course: openCourse,
+      },
       mutate: vi.fn(),
     })
 
@@ -271,7 +281,9 @@ describe(EditCourse.name, () => {
 
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: openCourse,
+      data: {
+        course: openCourse,
+      },
       mutate: vi.fn(),
     })
 
@@ -306,7 +318,9 @@ describe(EditCourse.name, () => {
     })
 
     useCourseMocked.mockReturnValue({
-      data: openCourse,
+      data: {
+        course: openCourse,
+      },
       status: LoadingStatus.IDLE,
       mutate: vi.fn(),
     })
@@ -369,7 +383,9 @@ describe(EditCourse.name, () => {
     })
 
     useCourseMocked.mockReturnValue({
-      data: closedCourse,
+      data: {
+        course: closedCourse,
+      },
       status: LoadingStatus.IDLE,
       mutate: vi.fn(),
     })
@@ -413,7 +429,9 @@ describe(EditCourse.name, () => {
     })
 
     useCourseMocked.mockReturnValue({
-      data: openCourse,
+      data: {
+        course: openCourse,
+      },
       status: LoadingStatus.IDLE,
       mutate: vi.fn(),
     })
