@@ -12,6 +12,7 @@ import {
   Course_Order_By,
   Course_Status_Enum,
   Course_Type_Enum,
+  Order_Bool_Exp,
   Order_By,
   TrainerCoursesQuery,
   TrainerCoursesQueryVariables,
@@ -63,7 +64,8 @@ type Props = {
 }
 
 export const getIndividualsCourseStatusesConditions = (
-  currentDate: string
+  currentDate: string,
+  forOpenCourseBookingContact?: { profileId?: string }
 ): Record<OrgAdminCourseStatuses, Course_Bool_Exp> => {
   const cancelledStatuses = [
     Course_Status_Enum.Cancelled,
@@ -88,6 +90,15 @@ export const getIndividualsCourseStatusesConditions = (
             {
               participants: {
                 grade: { _is_null: true },
+                ...(forOpenCourseBookingContact?.profileId
+                  ? {
+                      order: {
+                        bookingContactProfileId: {
+                          _eq: forOpenCourseBookingContact.profileId,
+                        },
+                      } as Order_Bool_Exp,
+                    }
+                  : null),
               },
             },
             {
@@ -137,7 +148,22 @@ export const getIndividualsCourseStatusesConditions = (
           ...notCancelledOrDeclinedCond,
           ...notCancelRequestedCond,
           _and: [
-            { _not: { participants: { grade: { _is_null: true } } } },
+            {
+              _not: {
+                participants: {
+                  grade: { _is_null: true },
+                  ...(forOpenCourseBookingContact?.profileId
+                    ? {
+                        order: {
+                          bookingContactProfileId: {
+                            _eq: forOpenCourseBookingContact.profileId,
+                          },
+                        } as Order_Bool_Exp,
+                      }
+                    : null),
+                },
+              },
+            },
             { gradingStarted: { _eq: true } },
           ],
           schedule: {

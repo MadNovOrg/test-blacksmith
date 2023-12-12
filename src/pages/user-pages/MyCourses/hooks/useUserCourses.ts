@@ -70,8 +70,14 @@ export function useUserCourses(
 
   const courseStatusConditionsMap: Record<UserCourseStatus, Course_Bool_Exp> =
     useMemo(() => {
+      const forOpenCourseBookingContact = bookingContactOnly
+        ? { profileId: profile?.id }
+        : undefined
       const individualsStatusesConditions =
-        getIndividualsCourseStatusesConditions(dateRef.current)
+        getIndividualsCourseStatusesConditions(
+          dateRef.current,
+          forOpenCourseBookingContact
+        )
 
       return {
         [AttendeeOnlyCourseStatus.InfoRequired]: {
@@ -153,7 +159,7 @@ export function useUserCourses(
 
         [Course_Status_Enum.Cancelled]: individualsStatusesConditions.CANCELLED,
       }
-    }, [forContactRole, unevaluatedIds])
+    }, [bookingContactOnly, forContactRole, profile?.id, unevaluatedIds])
 
   const where = useMemo(() => {
     let userConditions: Course_Bool_Exp = bookingContactOnly
