@@ -8,9 +8,15 @@ import { FilterOption } from '@app/components/FilterAccordion'
 import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
 import { FilterByCourseState } from '@app/components/filters/FilterByCourseState'
 import { FilterByCourseStatus } from '@app/components/filters/FilterByCourseStatus'
+import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
 import { FilterByDates } from '@app/components/filters/FilterByDates'
 import { FilterSearch } from '@app/components/FilterSearch'
-import { Course_Level_Enum, Course_Status_Enum } from '@app/generated/graphql'
+import { useAuth } from '@app/context/auth'
+import {
+  Course_Level_Enum,
+  Course_Status_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import { getStatusesFromQueryString } from '@app/pages/trainer-pages/MyCourses/utils'
 import {
   UserCourseStatus,
@@ -40,9 +46,11 @@ export function Filters({ forManaging = false, onChange }: Props) {
   const { t } = useTranslation()
   const [keyword, setKeyword] = useState('')
   const location = useLocation()
+  const { acl } = useAuth()
 
   const [filterState, setFilterState] = useState<CourseState[]>([])
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
+  const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
   const [dateFilters, setDateFilters] = useState<DateFilters>()
   const [filterStatus, setFilterStatus] = useState<string[]>([])
 
@@ -162,12 +170,21 @@ export function Filters({ forManaging = false, onChange }: Props) {
       states: filterState,
       statuses: filterStatus as UserCourseStatus[],
       levels: filterLevel,
+      types: filterType,
       keyword,
       creation: { start: createStartDate, end: createEndDate },
       schedule: { start: startDate, end: endDate },
     }
     onChange(filters)
-  }, [onChange, dateFilters, filterLevel, filterState, filterStatus, keyword])
+  }, [
+    onChange,
+    dateFilters,
+    filterLevel,
+    filterType,
+    filterState,
+    filterStatus,
+    keyword,
+  ])
 
   const onDatesChange = useCallback((from?: Date, to?: Date) => {
     setDateFilters(prev => {
@@ -249,6 +266,12 @@ export function Filters({ forManaging = false, onChange }: Props) {
                   ])
             }
           />
+          {acl.isBookingContact() && forManaging && (
+            <FilterByCourseType
+              courseTypeBlacklist={Course_Type_Enum.Indirect}
+              onChange={setFilterType}
+            />
+          )}
         </Stack>
       </Box>
     </>
