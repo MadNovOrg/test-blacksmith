@@ -11,7 +11,7 @@ import {
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
-import { useCoursePrice } from '@app/hooks/useCoursePrice'
+import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { QUERY as SET_COURSE_DRAFT } from '@app/queries/courses/set-course-draft'
 import {
   Draft,

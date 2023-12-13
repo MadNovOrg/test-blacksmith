@@ -52984,16 +52984,6 @@ export type ReplaceParticipantMutationVariables = Exact<{
 
 export type ReplaceParticipantMutation = { __typename?: 'mutation_root', replaceParticipant?: { __typename?: 'ReplaceParticipantOutput', success: boolean, error?: ReplaceParticipantError | null } | null };
 
-export type CoursePriceQueryVariables = Exact<{
-  type: Course_Type_Enum;
-  level: Course_Level_Enum;
-  blended: Scalars['Boolean'];
-  reaccreditation: Scalars['Boolean'];
-}>;
-
-
-export type CoursePriceQuery = { __typename?: 'query_root', coursePrice: Array<{ __typename?: 'course_pricing', priceAmount: any, priceCurrency: string }> };
-
 export type DeleteMeetingMutationVariables = Exact<{
   meetingId: Scalars['String'];
 }>;
@@ -53026,6 +53016,18 @@ export type ConfirmCcPaymentMutationVariables = Exact<{
 
 
 export type ConfirmCcPaymentMutation = { __typename?: 'mutation_root', confirmCreditCardPayment?: { __typename?: 'ConfirmCreditCardPaymentOutput', confirmed: boolean, error?: ConfirmCreditCardPaymentError | null } | null };
+
+export type CoursePriceQueryVariables = Exact<{
+  type: Course_Type_Enum;
+  level: Course_Level_Enum;
+  blended: Scalars['Boolean'];
+  reaccreditation: Scalars['Boolean'];
+  startDate?: InputMaybe<Scalars['date']>;
+  withSchedule: Scalars['Boolean'];
+}>;
+
+
+export type CoursePriceQuery = { __typename?: 'query_root', coursePrice: Array<{ __typename?: 'course_pricing', priceAmount: any, priceCurrency: string, pricingSchedules?: Array<{ __typename?: 'course_pricing_schedule', id: any, priceAmount: any, priceCurrency: string }> }> };
 
 export type CourseInfoFragment = { __typename?: 'course', name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> };
 

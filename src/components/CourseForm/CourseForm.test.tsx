@@ -3,7 +3,7 @@ import { setMedia } from 'mock-match-media'
 import { getI18n } from 'react-i18next'
 
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
-import { useCoursePrice } from '@app/hooks/useCoursePrice'
+import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import {
   courseToCourseInput,
   INPUT_DATE_FORMAT,
@@ -25,7 +25,7 @@ const blendedLearningInfoMessage = t(
   `components.course-form.blended-learning-price-label`
 )
 
-vi.mock('@app/hooks/useCoursePrice', () => ({
+vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
   useCoursePrice: vi.fn(),
 }))
 

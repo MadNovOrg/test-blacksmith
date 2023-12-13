@@ -67,7 +67,7 @@ import {
   GetNotDetailedProfileQuery,
   GetNotDetailedProfileQueryVariables,
 } from '@app/generated/graphql'
-import { useCoursePrice } from '@app/hooks/useCoursePrice'
+import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { QUERY as GET_NOT_DETAILED_PROFILE } from '@app/queries/profile/get-not-detailed-profile'
 import { schemas, yup } from '@app/schemas'
 import theme from '@app/theme'

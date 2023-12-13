@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
-import { useCoursePrice } from '@app/hooks/useCoursePrice'
+import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { RoleName } from '@app/types'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
@@ -18,7 +18,7 @@ vi.mock('@app/components/VenueSelector', () => ({
   VenueSelector: vi.fn(() => <p>Venue Selector</p>),
 }))
 
-vi.mock('@app/hooks/useCoursePrice', () => ({
+vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
   useCoursePrice: vi.fn(),
 }))
 

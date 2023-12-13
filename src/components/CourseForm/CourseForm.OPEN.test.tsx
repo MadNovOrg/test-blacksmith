@@ -3,7 +3,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { useCoursePrice } from '@app/hooks/useCoursePrice'
+import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
@@ -11,7 +11,7 @@ import { renderForm, selectDelivery, selectLevel } from './test-utils'
 
 import CourseForm from '.'
 
-vi.mock('@app/hooks/useCoursePrice', () => ({
+vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
   useCoursePrice: vi.fn(),
 }))
 

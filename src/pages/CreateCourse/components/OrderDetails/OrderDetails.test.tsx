@@ -11,7 +11,7 @@ import {
   GetBildStrategiesQuery,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { COURSE_PRICE_QUERY } from '@app/hooks/useCoursePrice'
+import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { QUERY as BILD_STRATEGIES_QUERY } from '@app/queries/bild/get-bild-strategies'
 import { BildStrategies, ValidCourseInput } from '@app/types'
 

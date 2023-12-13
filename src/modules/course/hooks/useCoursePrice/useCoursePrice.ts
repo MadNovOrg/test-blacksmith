@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useQuery, gql } from 'urql'
 
 import {
@@ -14,6 +15,8 @@ export const COURSE_PRICE_QUERY = gql`
     $level: course_level_enum!
     $blended: Boolean!
     $reaccreditation: Boolean!
+    $startDate: date
+    $withSchedule: Boolean!
   ) {
     coursePrice: course_pricing(
       where: {
@@ -25,6 +28,19 @@ export const COURSE_PRICE_QUERY = gql`
     ) {
       priceAmount
       priceCurrency
+      pricingSchedules(
+        where: {
+          _and: [
+            { effectiveFrom: { _lte: $startDate } }
+            { effectiveTo: { _gte: $startDate } }
+          ]
+        }
+        limit: 1
+      ) @include(if: $withSchedule) {
+        id
+        priceAmount
+        priceCurrency
+      }
     }
   }
 `
@@ -36,6 +52,7 @@ export function useCoursePrice(courseData?: {
   reaccreditation: boolean
   accreditedBy: Accreditors_Enum
   price?: number | null
+  startDateTime?: Date
 }) {
   const [{ data, fetching, error }] = useQuery<
     CoursePriceQuery,
@@ -48,6 +65,8 @@ export function useCoursePrice(courseData?: {
           level: courseData.courseLevel as unknown as Course_Level_Enum,
           blended: courseData.blendedLearning,
           reaccreditation: courseData?.reaccreditation,
+          startDate: courseData.startDateTime?.toISOString(),
+          withSchedule: Boolean(courseData.startDateTime),
         }
       : undefined,
     pause: !courseData || courseData.accreditedBy === Accreditors_Enum.Bild,
@@ -55,8 +74,32 @@ export function useCoursePrice(courseData?: {
 
   const pricing = data?.coursePrice?.length ? data.coursePrice[0] : null
 
-  const price = courseData?.price ?? pricing?.priceAmount
-  const currency = courseData?.price ? 'GBP' : pricing?.priceCurrency
+  const schedule =
+    pricing?.pricingSchedules?.length === 1 ? pricing.pricingSchedules[0] : null
+
+  const price = useMemo(() => {
+    if (courseData?.price) {
+      return courseData.price
+    }
+
+    if (schedule?.priceAmount) {
+      return schedule.priceAmount
+    }
+
+    return pricing?.priceAmount
+  }, [courseData?.price, pricing?.priceAmount, schedule?.priceAmount])
+
+  const currency = useMemo(() => {
+    if (courseData?.price) {
+      return 'GBP'
+    }
+
+    if (schedule) {
+      return schedule.priceCurrency
+    }
+
+    return pricing?.priceCurrency
+  }, [courseData?.price, pricing?.priceCurrency, schedule])
 
   return { price, error, fetching, currency }
 }
