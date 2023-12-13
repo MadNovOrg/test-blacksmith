@@ -18,6 +18,10 @@ import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'urql'
 import { InferType } from 'yup'
 
+import CountriesSelector from '@app/components/CountriesSelector'
+import useWorldCountries, {
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import PhoneNumberInput from '@app/components/PhoneNumberInput'
@@ -38,12 +42,15 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { profile, reloadCurrentProfile } = useAuth()
   const navigate = useNavigate()
   const minimalAge = subYears(new Date(), 16)
+  const { getLabel: getCountryLabel } = useWorldCountries()
 
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
   const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
   const schema = yup.object({
     givenName: yup.string().required(requiredMsg(_t, 'first-name')),
     familyName: yup.string().required(requiredMsg(_t, 'surname')),
+    country: yup.string().required(),
+    countryCode: yup.string().required(),
     phone: schemas.phone(_t),
     dob: yup
       .date()
@@ -81,6 +88,8 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               },
             }
           : null),
+        country: getCountryLabel('GB-ENG'),
+        countryCode: 'GB-ENG',
       },
     })
 
@@ -108,6 +117,8 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
         jobTitle:
           data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
         orgId: data.organization.id,
+        country: data.country,
+        countryCode: data.countryCode,
       } as UpdateUserProfileInput,
     })
   }
@@ -182,6 +193,21 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               />
             </Grid>
           </Grid>
+          <Grid item>
+            <CountriesSelector
+              onChange={(_, code) => {
+                if (code) {
+                  setValue(
+                    'country',
+                    getCountryLabel(code as WorldCountriesCodes) ?? ''
+                  )
+                  setValue('countryCode', code)
+                }
+              }}
+              value={values.countryCode}
+            />
+          </Grid>
+
           <Grid item>
             <PhoneNumberInput
               label={_t('phone')}

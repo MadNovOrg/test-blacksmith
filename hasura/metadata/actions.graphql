@@ -588,6 +588,8 @@ input CreateAppUserInput {
   firstName: String!
   lastName: String!
   password: String!
+  country: String!
+  countryCode: String!
   phone: String
   dob: String
   acceptTnc: Boolean!
@@ -677,6 +679,8 @@ input UpdateUserProfileInput {
   profileId: uuid!
   givenName: String
   familyName: String
+  country: String
+  countryCode: String
   phone: String
   jobTitle: String
   avatar: String
@@ -716,6 +720,8 @@ input SignUpInput {
   email: String!
   givenName: String!
   familyName: String!
+  country: String!
+  countryCode: String!
   phone: String
   dob: date
   courseId: Int

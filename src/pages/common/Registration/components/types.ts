@@ -9,6 +9,8 @@ export type FormInputs = {
   firstName: string
   surname: string
   email: string
+  country: string
+  countryCode: string
   phone: string
   password: string
   dob: Date | null
@@ -28,6 +30,11 @@ export const getFormSchema = (t: TFunction) => {
     email: schemas.email(t),
 
     phone: schemas.phone(t),
+
+    country: yup.string().required(),
+
+    countryCode: yup.string().required(),
+
     password: schemas.password(t),
 
     dob: yup
@@ -37,11 +44,13 @@ export const getFormSchema = (t: TFunction) => {
       .max(subYears(new Date(), 16), t('validation-errors.date-too-early')),
 
     tcs: yup.boolean().oneOf([true], t('pages.signup.tcs-required')),
+
     recaptchaToken: yup
       .string()
       .required(t('validation-errors.recaptcha-required')),
 
     jobTitle: yup.string().required(requiredMsg(t, 'job-title')),
+
     otherJobTitle: yup.string().when('jobTitle', ([jobTitle], schema) => {
       return jobTitle === 'Other'
         ? schema.required(t('validation-errors.other-job-title-required'))

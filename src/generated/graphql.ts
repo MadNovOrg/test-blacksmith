@@ -1374,6 +1374,8 @@ export enum CourseType {
 
 export type CreateAppUserInput = {
   acceptTnc: Scalars['Boolean'];
+  country: Scalars['String'];
+  countryCode: Scalars['String'];
   dob?: InputMaybe<Scalars['String']>;
   firstName: Scalars['String'];
   jobTitle: Scalars['String'];
@@ -8971,6 +8973,8 @@ export type Settings = {
 
 export type SignUpInput = {
   acceptTnc: Scalars['Boolean'];
+  country: Scalars['String'];
+  countryCode: Scalars['String'];
   courseId?: InputMaybe<Scalars['Int']>;
   dob?: InputMaybe<Scalars['date']>;
   email: Scalars['String'];
@@ -10164,6 +10168,8 @@ export type UpdateUserPayload = {
 
 export type UpdateUserProfileInput = {
   avatar?: InputMaybe<Scalars['String']>;
+  country?: InputMaybe<Scalars['String']>;
+  countryCode?: InputMaybe<Scalars['String']>;
   dietaryRestrictions?: InputMaybe<Scalars['String']>;
   disabilities?: InputMaybe<Scalars['String']>;
   dob?: InputMaybe<Scalars['String']>;

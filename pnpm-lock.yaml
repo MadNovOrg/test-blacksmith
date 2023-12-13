@@ -98,6 +98,9 @@ importers:
       '@types/jest':
         specifier: ^29.5.10
         version: 29.5.10
+      '@types/react-select-country-list':
+        specifier: ^2.2.3
+        version: 2.2.3
       '@urql/core':
         specifier: 3.1.1
         version: 3.1.1(graphql@16.8.1)
@@ -188,6 +191,9 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.2.0
+      react-country-flag:
+        specifier: ^3.1.0
+        version: 3.1.0(react@18.2.0)
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
@@ -206,6 +212,9 @@ importers:
       react-router-dom:
         specifier: ^6.18.0
         version: 6.18.0(react-dom@18.2.0)(react@18.2.0)
+      react-select-country-list:
+        specifier: ^2.2.3
+        version: 2.2.3
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@18.2.0)(react@18.2.0)
@@ -10609,6 +10618,10 @@ packages:
       '@types/react': 18.2.14
     dev: true
 
+  /@types/react-select-country-list@2.2.3:
+    resolution: {integrity: sha512-nffcYOwuun+5B0EWqubK+amHpPdK9Xj20xkLYNqYrzmESd8FnpLwHsS79ClLAWA9y+icVA8gWPkbwBp1gpjSwA==}
+    dev: false
+
   /@types/react-transition-group@4.4.10:
     resolution: {integrity: sha512-hT/+s0VQs2ojCX823m60m5f0sL5idt9SO6Tj6Dg+rdphGPIeJbJ6CxvBYkgkGKrYeDjvIpKTR38UzmtHJOGW3Q==}
     dependencies:
@@ -19756,6 +19769,15 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: true
 
+  /react-country-flag@3.1.0(react@18.2.0):
+    resolution: {integrity: sha512-JWQFw1efdv9sTC+TGQvTKXQg1NKbDU2mBiAiRWcKM9F1sK+/zjhP2yGmm8YDddWyZdXVkR8Md47rPMJmo4YO5g==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /react-devtools-core@4.28.4:
     resolution: {integrity: sha512-IUZKLv3CimeM07G3vX4H4loxVpByrzq3HvfTX7v9migalwvLs9ZY5D3S3pKR33U+GguYfBBdMMZyToFhsSE/iQ==}
     dependencies:
@@ -20032,6 +20054,10 @@ packages:
     dependencies:
       '@remix-run/router': 1.11.0
       react: 18.2.0
+    dev: false
+
+  /react-select-country-list@2.2.3:
+    resolution: {integrity: sha512-eRgXL613dVyJiE99yKDYLvSBKDxvIlhkmvO2DVIjdKVyUQq6kBqoMUV/2zuRIAsbRXgBGmKjeL1dxjf7zTfszg==}
     dev: false
 
   /react-shallow-renderer@16.15.0(react@18.2.0):

@@ -24,6 +24,10 @@ import { Controller, useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { useToggle } from 'react-use'
 
+import CountriesSelector from '@app/components/CountriesSelector'
+import useWorldCountries, {
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
@@ -59,6 +63,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const [showPassword, toggleShowPassword] = useToggle(false)
   const [loading, setLoading] = useState(false)
   const [signUpError, setError] = useState('')
+  const { getLabel: getCountryLabel } = useWorldCountries()
 
   const schema = useMemo(() => getFormSchema(t), [t])
 
@@ -75,8 +80,10 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   } = useForm<FormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
-      phone: '',
+      country: getCountryLabel('GB-ENG'),
+      countryCode: 'GB-ENG',
       dob: undefined,
+      phone: '',
     },
   })
 
@@ -86,6 +93,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const onSubmit = async (data: FormInputs) => {
     setLoading(true)
     setError('')
+
     try {
       const input: SignUpMutationVariables['input'] = {
         email: data.email,
@@ -100,6 +108,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         jobTitle:
           data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
         orgId: data.organization?.id,
+        country: data.country,
+        countryCode: data.countryCode,
       }
 
       await gqlRequest<SignUpMutation, SignUpMutationVariables>(
@@ -244,6 +254,21 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           >
             {t('common.validation-hints.password-hint-message')}
           </Typography>
+        </Box>
+
+        <Box mb={3}>
+          <CountriesSelector
+            onChange={(_, code) => {
+              if (code) {
+                setValue(
+                  'country',
+                  getCountryLabel(code as WorldCountriesCodes) ?? ''
+                )
+                setValue('countryCode', code)
+              }
+            }}
+            value={values.countryCode}
+          />
         </Box>
 
         <Box mb={3}>

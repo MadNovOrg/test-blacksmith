@@ -23,6 +23,10 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useToggle, useUpdateEffect } from 'react-use'
 import { useMutation } from 'urql'
 
+import CountriesSelector from '@app/components/CountriesSelector'
+import useWorldCountries, {
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
@@ -58,6 +62,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     useMutation<CreateUserMutation, CreateUserMutationVariables>(
       CREATE_USER_MUTATION
     )
+  const { getLabel: getCountryLabel } = useWorldCountries()
 
   const schema = useMemo(() => getFormSchema(t), [t])
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
@@ -81,16 +86,31 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const minimalAge = subYears(new Date(), 16)
 
   const onSubmit = async (data: FormInputs) => {
+    const {
+      country,
+      countryCode,
+      firstName,
+      jobTitle,
+      otherJobTitle,
+      password,
+      phone,
+      surname,
+      tcs,
+    } = data
+
     const input: CreateUserMutationVariables['input'] = {
-      firstName: data.firstName,
-      lastName: data.surname,
-      password: data.password,
-      phone: data.phone,
+      acceptTnc: tcs,
+      country,
+      countryCode,
       dob: data.dob ? format(data.dob, 'yyyy-MM-dd') : null,
+      firstName,
+      jobTitle: jobTitle === 'Other' ? otherJobTitle : jobTitle,
+      lastName: surname,
       orgId: data.organization?.id,
-      acceptTnc: data.tcs,
-      jobTitle: data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
+      password,
+      phone,
     }
+
     await createUser(
       { input },
       { fetchOptions: { headers: { 'x-auth': `Bearer ${token}` } } }
@@ -200,6 +220,21 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             {t('common.validation-hints.password-hint-message')}
           </Typography>
         </Grid>
+        <Grid item>
+          <CountriesSelector
+            onChange={(_, code) => {
+              if (code) {
+                setValue(
+                  'country',
+                  getCountryLabel(code as WorldCountriesCodes) ?? ''
+                )
+                setValue('countryCode', code)
+              }
+            }}
+            value={values.countryCode}
+          />
+        </Grid>
+
         <Grid item>
           <PhoneNumberInput
             label={t('phone')}
