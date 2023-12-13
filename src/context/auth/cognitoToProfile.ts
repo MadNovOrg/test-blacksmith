@@ -34,7 +34,7 @@ export default async function (
   const idToken = session.getIdToken()
   const token = idToken.getJwtToken()
   const claims = JSON.parse(
-    idToken.payload['https://hasura.io/jwt/claims']
+    idToken.payload['https://hasura.io/jwt/claims'] ?? '{}'
   ) as Claims
 
   const { profile } = await gqlRequest<

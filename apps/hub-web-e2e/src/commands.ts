@@ -42,7 +42,7 @@ export async function waitForGraphQLResponse(
     )
   })
   const responseBody = await response.text()
-  const { data } = JSON.parse(responseBody)
+  const { data } = JSON.parse(responseBody ?? '{}')
   if (JSON.stringify(data[keyToFind]).includes(valueToFind)) {
     return data
   }
