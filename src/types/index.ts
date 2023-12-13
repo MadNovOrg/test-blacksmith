@@ -47,6 +47,10 @@ export type Course = {
   }
   bookingContactProfileId?: string
   organizationKeyContact?: Profile
+  organizationKeyContactInviteData?: Pick<Profile, 'email'> & {
+    firstName: string
+    lastName: string
+  }
   organizationKeyContactProfileId?: string
   schedule: CourseSchedule[]
   trainers?: CourseTrainer[]

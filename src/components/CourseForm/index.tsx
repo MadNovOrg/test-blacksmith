@@ -1165,10 +1165,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                         organisationId={getValues('organization')?.id ?? ''}
                         textFieldProps={{ variant: 'filled' }}
                         error={errors.organizationKeyContact?.email?.message}
-                        disabled={
-                          !getValues('organization') ||
-                          disabledFields.has('organizationKeyContact')
-                        }
+                        disabled={disabledFields.has('organizationKeyContact')}
                         onBlur={onBlurUserSelector}
                       />
                     </Grid>
@@ -1184,11 +1181,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                           errors.organizationKeyContact?.firstName?.message ??
                           ''
                         }
-                        disabled={
-                          !values.organization ||
-                          disabledFields.has('organizationKeyContact') ||
-                          !!values.organizationKeyContact?.profileId
-                        }
+                        disabled={disabledFields.has('organizationKeyContact')}
                         InputLabelProps={{
                           shrink: !!values.organizationKeyContact?.firstName,
                         }}
@@ -1206,11 +1199,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                         helperText={
                           errors.organizationKeyContact?.lastName?.message ?? ''
                         }
-                        disabled={
-                          !getValues('organization') ||
-                          disabledFields.has('organizationKeyContact') ||
-                          !!getValues('organizationKeyContact')?.profileId
-                        }
+                        disabled={disabledFields.has('organizationKeyContact')}
                         InputLabelProps={{
                           shrink: !!values.organizationKeyContact?.lastName,
                         }}

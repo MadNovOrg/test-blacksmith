@@ -324,6 +324,12 @@ export const courseToCourseInput = (course: Course): CourseInput => {
           lastName: course.organizationKeyContact?.familyName,
           email: course.organizationKeyContact?.email,
         }
+      : course?.organizationKeyContactInviteData
+      ? {
+          firstName: course.organizationKeyContactInviteData?.firstName,
+          lastName: course.organizationKeyContactInviteData?.lastName,
+          email: course.organizationKeyContactInviteData?.email,
+        }
       : null,
     blendedLearning: course.go1Integration,
     reaccreditation: course.reaccreditation,

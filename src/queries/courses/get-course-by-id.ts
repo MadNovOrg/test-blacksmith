@@ -108,6 +108,7 @@ export const QUERY = gql`
         givenName
         familyName
       }
+      organizationKeyContactInviteData
       orders @include(if: $withOrders) {
         id
         xeroInvoiceNumber

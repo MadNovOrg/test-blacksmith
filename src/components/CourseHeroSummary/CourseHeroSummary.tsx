@@ -135,6 +135,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
     },
     [geoCoordinates]
   )
+
   return (
     <Box
       data-testid="course-hero-summary"
@@ -337,6 +338,25 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                     </ListItemText>
                     <ListItemText>
                       {course.organizationKeyContact?.email}
+                    </ListItemText>
+                  </ListItemText>
+                </ListItem>
+              ) : null}
+
+              {course.organizationKeyContactInviteData ? (
+                <ListItem
+                  disableGutters
+                  sx={{ ...backgroundList, mt: 3, ml: 4 }}
+                >
+                  <ListItemText>
+                    {`${t(
+                      'components.course-form.organization-key-contact-label'
+                    )}: `}
+                    <ListItemText>
+                      {`${course.organizationKeyContactInviteData?.firstName} `}
+                    </ListItemText>
+                    <ListItemText>
+                      {course.organizationKeyContactInviteData?.email}
                     </ListItemText>
                   </ListItemText>
                 </ListItem>
