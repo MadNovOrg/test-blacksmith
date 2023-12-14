@@ -10,15 +10,15 @@ switch (TARGET_ENV) {
     HASURA_BASE_URL = 'http://localhost:8080'
     break
   case 'dev':
-    BASE_URL = 'https://dev.hub.teamteach.com'
+    BASE_URL = 'https://dev.connect.teamteach.com'
     HASURA_BASE_URL = 'https://hasura.dev.teamteachhub.co.uk'
     break
   case 'stg':
-    BASE_URL = 'https://stg.hub.teamteach.com'
+    BASE_URL = 'https://stg.connect.teamteach.com'
     HASURA_BASE_URL = 'https://hasura.stg.teamteachhub.co.uk'
     break
   case 'prod':
-    BASE_URL = 'https://hub.teamteach.com'
+    BASE_URL = 'https://connect.teamteach.com'
     HASURA_BASE_URL = 'https://hasura.teamteachhub.co.uk'
     break
 }

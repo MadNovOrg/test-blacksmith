@@ -15,40 +15,8 @@ on:
     - cron: '30 21 * * 1-5'
 
 jobs:
-  install:
-    timeout-minutes: 60
-    name: Setup Dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-            version: 8
-      - name: Build
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18.14.2'
-          cache: 'pnpm'
-
-      - name: Cache Playwright binaries
-        uses: actions/cache@v3
-        id: cache-playwright
-        with:
-          path: |
-            ~/.cache/ms-playwright
-          key: playwright-${{ hashFiles('pnpm-lock.yaml') }}
-
-      - name: Install dependencies
-        run: pnpm i 
-
-      - name: Install Playwright Browsers
-        run: pnpm playwright install --with-deps
-
   tests:
     name: E2E regression tests
-    needs: install
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
@@ -72,6 +40,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
       - name: Build
         uses: actions/setup-node@v4
         with:
@@ -85,10 +58,10 @@ jobs:
           path: |
             ~/.cache/ms-playwright
           key: playwright-${{ hashFiles('pnpm-lock.yaml') }}
-      
+
       - name: Install Dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i 
-  
+        run: pnpm pkg delete scripts.prepare && pnpm i
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 

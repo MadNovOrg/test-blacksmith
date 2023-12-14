@@ -41,7 +41,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-            version: 8
+          version: 8
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -49,7 +49,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i 
+        run: pnpm pkg delete scripts.prepare && pnpm i
 
       - name: Install Hasura CLI
         run: |
