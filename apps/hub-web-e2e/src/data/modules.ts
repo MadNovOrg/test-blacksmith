@@ -20,6 +20,60 @@ export type ModuleSetup = {
 
 export const MODULES_SETUP: ModuleSetup[] = [
   {
+    name: 'level 1 f2f open',
+    course: (() => {
+      const course = UNIQUE_COURSE()
+      course.level = Course_Level_Enum.Level_1
+      course.type = Course_Type_Enum.Open
+      course.status = Course_Status_Enum.ConfirmModules
+      course.organization = { name: 'London First School' }
+      course.reaccreditation = false
+      return course
+    })(),
+    mandatoryModules: [
+      {
+        name: 'Theory',
+        duration: '3hrs',
+      },
+      {
+        name: 'Personal Space & Body Language',
+        duration: '1hr',
+      },
+      {
+        name: 'Elevated Risks',
+        duration: '30mins',
+      },
+      {
+        name: 'Physical Warm Up',
+        duration: '15mins',
+      },
+      {
+        name: 'Personal Safety',
+        duration: '30mins',
+      },
+      {
+        name: 'Prompts and Guides',
+        duration: '20mins',
+      },
+      {
+        name: 'Clothing Responses',
+        duration: '20mins',
+      },
+      {
+        name: 'Hair Responses',
+        duration: '20mins',
+      },
+      {
+        name: 'Bite Responses',
+        duration: '20mins',
+      },
+    ],
+    optionalModules: [],
+    modulesToMove: [],
+    durationBefore: '',
+    durationAfter: '',
+  },
+  {
     name: 'level 1 f2f',
     course: (() => {
       const course = UNIQUE_COURSE()
@@ -454,10 +508,6 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Physical Warm Up *',
         duration: '30mins',
       },
-      {
-        name: 'Two Person Escorts',
-        duration: '1hr 30mins',
-      },
     ],
     optionalModules: [
       {
@@ -496,10 +546,14 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Seated Holds',
         duration: '1hr 30mins',
       },
+      {
+        name: 'Two Person Escorts',
+        duration: '1hr 30mins',
+      },
     ],
-    modulesToMove: [],
+    modulesToMove: ['Two Person Escorts'],
     durationBefore: '5hrs',
-    durationAfter: '5hrs',
+    durationAfter: '6hrs 30mins',
   },
   {
     name: 'level 2 mixed',
@@ -530,10 +584,6 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Physical Warm Up *',
         duration: '30mins',
       },
-      {
-        name: 'Seated Holds',
-        duration: '1hr 30mins',
-      },
     ],
     optionalModules: [
       {
@@ -572,10 +622,14 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Two Person Escorts',
         duration: '1hr 30mins',
       },
+      {
+        name: 'Seated Holds',
+        duration: '1hr 30mins',
+      },
     ],
-    modulesToMove: [],
+    modulesToMove: ['Two Person Escorts'],
     durationBefore: '5hrs',
-    durationAfter: '5hrs',
+    durationAfter: '6hrs 30mins',
   },
   {
     name: 'level 2 f2f reaccred',
@@ -605,14 +659,6 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Physical Warm Up *',
         duration: '15mins',
       },
-      {
-        name: 'Two Person Escorts',
-        duration: '45mins',
-      },
-      {
-        name: 'Seated Holds',
-        duration: '45mins',
-      },
     ],
     optionalModules: [
       {
@@ -647,10 +693,18 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Small Child and One Person Holds',
         duration: '30mins',
       },
+      {
+        name: 'Two Person Escorts',
+        duration: '45mins',
+      },
+      {
+        name: 'Seated Holds',
+        duration: '45mins',
+      },
     ],
-    modulesToMove: [],
+    modulesToMove: ['Two Person Escorts'],
     durationBefore: '3hrs',
-    durationAfter: '3hrs',
+    durationAfter: '3hrs 45mins',
   },
   {
     name: 'level 2 mixed reaccred',
@@ -680,10 +734,6 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Physical Warm Up *',
         duration: '15mins',
       },
-      {
-        name: 'Two Person Escorts',
-        duration: '45mins',
-      },
     ],
     optionalModules: [
       {
@@ -722,10 +772,14 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Seated Holds',
         duration: '45mins',
       },
+      {
+        name: 'Two Person Escorts',
+        duration: '45mins',
+      },
     ],
-    modulesToMove: [],
+    modulesToMove: ['Two Person Escorts'],
     durationBefore: '3hrs',
-    durationAfter: '3hrs',
+    durationAfter: '3hrs 45mins',
   },
   {
     name: 'level 2 f2f blended',
@@ -756,10 +810,6 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Physical Warm Up *',
         duration: '15mins',
       },
-      {
-        name: 'Two Person Escorts',
-        duration: '1hr 30mins',
-      },
     ],
     optionalModules: [
       {
@@ -798,10 +848,14 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Seated Holds',
         duration: '1hr 30mins',
       },
+      {
+        name: 'Two Person Escorts',
+        duration: '1hr 30mins',
+      },
     ],
-    modulesToMove: [],
+    modulesToMove: ['Two Person Escorts'],
     durationBefore: '1hr 45mins',
-    durationAfter: '1hr 45mins',
+    durationAfter: '3hrs 15mins',
   },
   {
     name: 'level 2 f2f blended reaccred',
@@ -833,10 +887,6 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Physical Warm Up *',
         duration: '15mins',
       },
-      {
-        name: 'Two Person Escorts',
-        duration: '45mins',
-      },
     ],
     optionalModules: [
       {
@@ -875,10 +925,14 @@ export const MODULES_SETUP: ModuleSetup[] = [
         name: 'Seated Holds',
         duration: '45mins',
       },
+      {
+        name: 'Two Person Escorts',
+        duration: '45mins',
+      },
     ],
-    modulesToMove: [],
+    modulesToMove: ['Two Person Escorts'],
     durationBefore: '1hr 45mins',
-    durationAfter: '1hr 45mins',
+    durationAfter: '2hrs 30mins',
   },
   {
     name: 'advanced f2f @smoke',

@@ -33,9 +33,17 @@ for (const data of MODULES_SETUP) {
       ...data.mandatoryModules,
       ...data.optionalModules,
     ])
-    await courseBuilderPage.checkEstimatedDuration(data.durationBefore)
+
+    if (data.durationBefore) {
+      await courseBuilderPage.checkEstimatedDuration(data.durationBefore)
+    }
+
     await courseBuilderPage.selectModule(data.modulesToMove)
-    await courseBuilderPage.checkEstimatedDuration(data.durationAfter)
+
+    if (data.durationAfter) {
+      await courseBuilderPage.checkEstimatedDuration(data.durationAfter)
+    }
+
     const courseDetailsPage =
       await courseBuilderPage.clickConfirmWarningSubmitButton()
     await courseDetailsPage.checkSuccessMessage(

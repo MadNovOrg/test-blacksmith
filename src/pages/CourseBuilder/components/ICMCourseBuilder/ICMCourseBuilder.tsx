@@ -35,7 +35,7 @@ import { Hero } from '../Hero/Hero'
 import GroupsSelection, {
   CallbackFn,
 } from './components/GroupsSelection/GroupsSelection'
-import { getMinimumTimeCommitment } from './helpers'
+import { filterModuleGroups, getMinimumTimeCommitment } from './helpers'
 import { COURSE_QUERY, SET_COURSE_AS_DRAFT } from './queries'
 
 type CourseBuilderProps = unknown & { editMode?: boolean }
@@ -116,10 +116,13 @@ export const ICMCourseBuilder: React.FC<
 
   const modulesData = useMemo(
     () =>
-      moduleGroupsData?.groups.filter(
-        group => (group?.duration?.aggregate?.sum?.duration ?? 0) > 0
-      ),
-    [moduleGroupsData]
+      moduleGroupsData && courseData?.course
+        ? filterModuleGroups(moduleGroupsData.groups, {
+            type: courseData?.course?.type,
+            level: courseData?.course?.level,
+          })
+        : null,
+    [moduleGroupsData, courseData]
   )
 
   const purpleModuleIds = useMemo(
