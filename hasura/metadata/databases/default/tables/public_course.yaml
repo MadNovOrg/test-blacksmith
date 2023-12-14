@@ -575,6 +575,7 @@ select_permissions:
         - modules_duration
         - name
         - organization_id
+        - organization_key_contact_invite_data
         - organization_key_contact_profile_id
         - parking_instructions
         - price
@@ -636,6 +637,7 @@ select_permissions:
         - modules_duration
         - name
         - organization_id
+        - organization_key_contact_invite_data
         - organization_key_contact_profile_id
         - parking_instructions
         - price
@@ -836,6 +838,7 @@ select_permissions:
         - modules_duration
         - name
         - organization_id
+        - organization_key_contact_invite_data
         - organization_key_contact_profile_id
         - parking_instructions
         - price
@@ -1125,6 +1128,7 @@ select_permissions:
         - modules_duration
         - name
         - organization_id
+        - organization_key_contact_invite_data
         - organization_key_contact_profile_id
         - parking_instructions
         - price
