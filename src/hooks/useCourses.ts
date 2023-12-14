@@ -282,6 +282,7 @@ export const filtersToWhereClause = (
       { schedule: { venue: { postCode: { _ilike: `%${query}%` } } } },
       { trainers: { profile: { fullName: { _ilike: `%${query}%` } } } },
       { course_code: { _ilike: `%${query}%` } },
+      { arloReferenceId: { _ilike: `%${query}%` } },
     ]
 
     if (where._or) {

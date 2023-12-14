@@ -857,6 +857,7 @@ select_permissions:
       columns:
         - account_code
         - accredited_by
+        - arloReferenceId
         - aol_cost_of_course
         - aol_country
         - aol_region
