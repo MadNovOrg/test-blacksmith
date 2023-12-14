@@ -1,3 +1,4 @@
+import { isValid } from 'date-fns'
 import { useMemo } from 'react'
 import { useQuery, gql } from 'urql'
 
@@ -65,7 +66,9 @@ export function useCoursePrice(courseData?: {
           level: courseData.courseLevel as unknown as Course_Level_Enum,
           blended: courseData.blendedLearning,
           reaccreditation: courseData?.reaccreditation,
-          startDate: courseData.startDateTime?.toISOString(),
+          startDate: isValid(courseData.startDateTime)
+            ? courseData.startDateTime?.toISOString()
+            : undefined,
           withSchedule: Boolean(courseData.startDateTime),
         }
       : undefined,
