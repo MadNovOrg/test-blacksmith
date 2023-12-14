@@ -8,6 +8,7 @@ import {
   Button,
   Chip,
   CircularProgress,
+  Container,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -24,21 +25,21 @@ import jwtDecode from 'jwt-decode'
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import useSWR from 'swr'
+import { useMutation, useQuery } from 'urql'
 
 import { AppLogo } from '@app/components/AppLogo'
 import { useAuth } from '@app/context/auth'
-import { gqlRequest } from '@app/lib/gql-request'
 import {
-  MUTATION as DECLINE_INVITE_MUTATION,
-  ParamsType as DeclineInviteParamsType,
-  ResponseType as DeclineInviteResponseType,
-} from '@app/queries/invites/decline-invite'
-import {
-  QUERY as GET_INVITE_QUERY,
-  ResponseType as GetInviteResponseType,
-} from '@app/queries/invites/get-invite'
-import { GqlError, InviteStatus, TimeDifferenceAndContext } from '@app/types'
+  CourseDeliveryType,
+  DeclineInviteMutation,
+  DeclineInviteMutationVariables,
+  GetInviteQuery,
+  GetInviteQueryVariables,
+  InviteStatus,
+} from '@app/generated/graphql'
+import { MUTATION as DECLINE_INVITE_MUTATION } from '@app/queries/invites/decline-invite'
+import { QUERY as GET_INVITE_QUERY } from '@app/queries/invites/get-invite'
+import { TimeDifferenceAndContext } from '@app/types'
 import {
   formatCourseVenueName,
   getTimeDifferenceAndContext,
@@ -73,39 +74,50 @@ export const InvitationPage = () => {
     logout()
   }, [profile, email, logout])
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [
+    { data: inviteData, error: inviteDataError, fetching: inviteDataIsLoading },
+    getInviteData,
+  ] = useQuery<GetInviteQuery, GetInviteQueryVariables>({
+    query: GET_INVITE_QUERY,
+    pause: !token,
+    requestPolicy: 'network-only',
+    context: useMemo(
+      () => ({
+        fetchOptions: {
+          headers: { 'x-auth': `Bearer ${token}` },
+        },
+      }),
+      [token]
+    ),
+  })
 
-  // TODO: migrate to useQuery from URQL
-  const { data, error, mutate } = useSWR<GetInviteResponseType, GqlError>(
-    token ? GET_INVITE_QUERY : null,
-    (query, variables) =>
-      gqlRequest(query, variables, { headers: { 'x-auth': `Bearer ${token}` } })
+  const [
+    { error: declineInvitationError, fetching: declineInvitationLoading },
+    declineInvitation,
+  ] = useMutation<DeclineInviteMutation, DeclineInviteMutationVariables>(
+    DECLINE_INVITE_MUTATION
   )
 
-  const invite = (data?.invite || {}) as GetInviteResponseType['invite']
-  const isFetching = !data && !error
-  const isSubmitted = invite.status !== InviteStatus.PENDING
+  const invite = (inviteData?.invite || {}) as GetInviteQuery['invite']
+  const isSubmitted = invite?.status !== InviteStatus.Pending
 
-  const startDate = new Date(invite.startDate)
-  const endDate = new Date(invite.endDate)
+  const startDate = invite ? new Date(invite.startDate) : null
+  const endDate = invite ? new Date(invite.endDate) : null
 
-  const courseHasBegun = differenceInSeconds(startDate, now()) < 0
+  const courseHasBegun = startDate
+    ? differenceInSeconds(startDate, now()) < 0
+    : false
 
-  const startsIn: TimeDifferenceAndContext = getTimeDifferenceAndContext(
-    startDate,
-    now()
-  )
-  const endsIn: TimeDifferenceAndContext = getTimeDifferenceAndContext(
-    endDate,
-    now()
-  )
+  const startsIn: TimeDifferenceAndContext | null = startDate
+    ? getTimeDifferenceAndContext(startDate, now())
+    : null
+  const endsIn: TimeDifferenceAndContext | null = endDate
+    ? getTimeDifferenceAndContext(endDate, now())
+    : null
 
-  const address = invite.venueAddress
+  const address = invite?.venueAddress
 
   const handleSubmit = async () => {
-    setIsLoading(true)
-
     if (response === 'yes') {
       const isUserLoggedIn = profile?.email === email
       const exists = isUserLoggedIn ? true : await userExistsInCognito(email)
@@ -118,37 +130,24 @@ export const InvitationPage = () => {
       })
     }
 
-    setSubmitError(null)
-
-    try {
-      await gqlRequest<DeclineInviteResponseType, DeclineInviteParamsType>(
-        DECLINE_INVITE_MUTATION,
-        { note },
-        { headers: { 'x-auth': `Bearer ${token}` } }
-      )
-      mutate()
-    } catch (e) {
-      const err = e as Error
-      console.log(err)
-      setSubmitError('Unable to submit response')
-    }
-
-    setIsLoading(false)
+    await declineInvitation(
+      { note },
+      { fetchOptions: { headers: { 'x-auth': `Bearer ${token}` } } }
+    )
+    getInviteData()
   }
 
-  if (isFetching) {
-    return <CircularProgress size={40} />
+  // aligns the spinner as it was positioned in the top left of the screen
+  if (inviteDataIsLoading) {
+    return (
+      <Container sx={{ py: 5 }}>
+        <CircularProgress sx={{ m: 'auto', display: 'block' }} size={40} />
+      </Container>
+    )
   }
-
-  if (error) {
+  if (inviteDataError) {
     // TODO: Need designs
-    switch (error.code) {
-      case 'NOT_FOUND':
-        return (
-          <Box>
-            <Typography>Invitation not found</Typography>
-          </Box>
-        )
+    switch (inviteDataError.message) {
       case 'EXPIRED':
         return (
           <Box>
@@ -157,7 +156,11 @@ export const InvitationPage = () => {
         )
 
       default:
-        return null
+        return (
+          <Box>
+            <Typography>Invitation not found</Typography>
+          </Box>
+        )
     }
   }
 
@@ -173,7 +176,6 @@ export const InvitationPage = () => {
       overflow="scroll"
     >
       <AppLogo width={80} height={80} />
-
       <Box
         mt={5}
         bgcolor="common.white"
@@ -187,23 +189,26 @@ export const InvitationPage = () => {
         </Typography>
 
         <Typography variant="subtitle2" gutterBottom>
-          {invite.courseName}
+          {invite?.courseName}
         </Typography>
 
         <Typography variant="body2" color="grey.600">
-          {invite.description}
+          {invite?.description}
         </Typography>
 
         <Box mt={3} mb={4}>
-          <Chip
-            label={
-              courseHasBegun
-                ? t('pages.course-participants.until-course-ends', endsIn)
-                : t('pages.course-participants.until-course-begins', startsIn)
-            }
-            size="small"
-            sx={{ borderRadius: 2, mb: 1 }}
-          />
+          {courseHasBegun && endsIn ? (
+            <Chip
+              label={t('pages.course-participants.until-course-ends', endsIn)}
+            />
+          ) : startsIn ? (
+            <Chip
+              label={t(
+                'pages.course-participants.until-course-begins',
+                startsIn
+              )}
+            />
+          ) : null}
 
           <Box display="flex" mb={2}>
             <Box mr={1} display="flex">
@@ -211,10 +216,10 @@ export const InvitationPage = () => {
             </Box>
             <Box>
               <Typography variant="body2" gutterBottom>
-                {t('dates.withTime', { date: invite.startDate })}
+                {t('dates.withTime', { date: invite?.startDate })}
               </Typography>
               <Typography variant="body2" gutterBottom>
-                {t('dates.withTime', { date: invite.endDate })}
+                {t('dates.withTime', { date: invite?.endDate })}
               </Typography>
             </Box>
           </Box>
@@ -226,7 +231,7 @@ export const InvitationPage = () => {
             <Box>
               <Typography variant="body2">
                 {t('pages.course-participants.hosted-by', {
-                  trainer: invite.trainerName,
+                  trainer: invite?.trainerName,
                 })}
               </Typography>
             </Box>
@@ -238,7 +243,10 @@ export const InvitationPage = () => {
             </Box>
             <Box>
               <Typography variant="body2" fontWeight="600">
-                {formatCourseVenueName(invite.deliveryType, invite.venueName)}
+                {formatCourseVenueName(
+                  invite?.deliveryType as CourseDeliveryType,
+                  invite?.venueName
+                )}
               </Typography>
               <Typography variant="body2">
                 {address?.addressLineOne || ''}
@@ -328,7 +336,7 @@ export const InvitationPage = () => {
             </Box>
 
             <LoadingButton
-              loading={isLoading}
+              loading={declineInvitationLoading || inviteDataIsLoading}
               type="button"
               variant="contained"
               color="primary"
@@ -340,12 +348,11 @@ export const InvitationPage = () => {
                 ? t('invitation.continue-registration')
                 : t('invitation.send-response')}
             </LoadingButton>
-
-            {submitError && (
+            {declineInvitationError || inviteDataError ? (
               <FormHelperText sx={{ mt: 2 }} error>
-                {submitError}
+                {t('errors.unable-to-submit-error')}
               </FormHelperText>
-            )}
+            ) : null}
           </>
         )}
       </Box>

@@ -28,7 +28,8 @@
       "invite-accept-error": "Unable to accept invitation",
       "unknown-error-please-retry": "An error occurred. Please try again.",
       "malformed-query-params": "The required query parameters are missing or malformed. \n Did you copy the URL correctly?"
-    }
+    },
+    "unable-to-submit-error": "Unable to submit response"
   },
   "home": "Home",
   "knowledge-hub": "Knowledge Hub",

@@ -1,6 +1,10 @@
 import { t } from 'i18next'
 
-import { Course_Delivery_Type_Enum, Venue } from '@app/generated/graphql'
+import {
+  CourseDeliveryType,
+  Course_Delivery_Type_Enum,
+  Venue,
+} from '@app/generated/graphql'
 
 export function formatCourseVenue(
   deliveryType: Course_Delivery_Type_Enum,
@@ -32,13 +36,16 @@ export function formatCourseVenue(
 }
 
 export function formatCourseVenueName(
-  deliveryType: Course_Delivery_Type_Enum,
+  deliveryType: Course_Delivery_Type_Enum | CourseDeliveryType,
   venueName?: string
 ): string {
   if (
-    [Course_Delivery_Type_Enum.F2F, Course_Delivery_Type_Enum.Mixed].includes(
-      deliveryType
-    )
+    [
+      Course_Delivery_Type_Enum.F2F,
+      Course_Delivery_Type_Enum.Mixed,
+      CourseDeliveryType.F2F,
+      CourseDeliveryType.Mixed,
+    ].includes(deliveryType)
   ) {
     return venueName || t('common.tbc')
   } else if (deliveryType === Course_Delivery_Type_Enum.Virtual) {
