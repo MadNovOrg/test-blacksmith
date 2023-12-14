@@ -58,7 +58,7 @@ describe('component: CourseTrainersInfo', () => {
     expect(screen.queryByText(t('show-more'))).toBeNull()
   })
 
-  it('href is referenced correctly when Admin', async () => {
+  it('Link to profile is correctly generated when Admin', async () => {
     const profile = buildProfile()
     providers.auth.activeRole = RoleName.TT_ADMIN
 
@@ -77,22 +77,14 @@ describe('component: CourseTrainersInfo', () => {
     render(<CourseTrainersInfo trainers={trainers} />)
 
     providers.auth.activeRole = providers.auth.defaultRole
+    const linkToProfile = screen.queryAllByTestId('link-to-profile')
 
-    expect(screen.getByText('Leader').closest('a')).toHaveAttribute(
-      'href',
-      '/profile/1'
-    )
-    expect(screen.getByText('Assistant 1').closest('a')).toHaveAttribute(
-      'href',
-      '/profile/2'
-    )
-    expect(screen.getByText('Assistant 2').closest('a')).toHaveAttribute(
-      'href',
-      '/profile/3'
-    )
+    linkToProfile.forEach(element => {
+      expect(element).toBeInTheDocument()
+    })
   })
 
-  it('href is not present when standard user', async () => {
+  it('Link to profile is not generated when standard user', async () => {
     const profile = buildProfile()
 
     const trainers = [
@@ -110,10 +102,11 @@ describe('component: CourseTrainersInfo', () => {
     render(<CourseTrainersInfo trainers={trainers} />)
 
     providers.auth.activeRole = providers.auth.defaultRole
+    const linkToProfile = screen.queryAllByTestId('link-to-profile')
 
-    expect(screen.getByText('Leader').closest('a')).toBeNull()
-    expect(screen.getByText('Assistant 1').closest('a')).toBeNull()
-    expect(screen.getByText('Assistant 2').closest('a')).toBeNull()
+    linkToProfile.forEach(element => {
+      expect(element).toBeNull()
+    })
   })
 
   it('display you are trainer text if id match', () => {

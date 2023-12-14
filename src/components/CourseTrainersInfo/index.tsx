@@ -9,6 +9,7 @@ import {
 } from '@mui/material'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'urql'
 
 import { useAuth } from '@app/context/auth'
@@ -47,6 +48,7 @@ const ListItemTranslated: React.FC<React.PropsWithChildren<ItemProps>> = ({
 }
 
 interface ListItemWrapperProps {
+  courseId?: number
   courseTrainer: Course_Trainer
   enableLinks: boolean | undefined
   canReInviteTrainer?: boolean
@@ -54,9 +56,11 @@ interface ListItemWrapperProps {
 
 const ListItemWrapper: React.FC<
   React.PropsWithChildren<ListItemWrapperProps>
-> = ({ canReInviteTrainer, courseTrainer, enableLinks }) => {
+> = ({ courseId, canReInviteTrainer, courseTrainer, enableLinks }) => {
   const [reInvited, setReInvited] = useState<boolean>(false)
   const { course_id, profile, type } = courseTrainer
+
+  const navigate = useNavigate()
 
   const [{ data, fetching }, reInviteTrainer] = useMutation<
     ReInviteTrainerMutation,
@@ -108,16 +112,25 @@ const ListItemWrapper: React.FC<
     }
   }, [courseTrainer.status, reInvited])
 
+  const handleNavigateToProfile = () => {
+    navigate(`/profile/${courseTrainer.profile.id}`, {
+      replace: false,
+      state: { courseId },
+    })
+  }
+
   return (
     <>
       <Box display="flex" alignItems="center">
         {enableLinks ? (
-          <Link href={`/profile/${courseTrainer.profile.id}`}>
-            <ListItemTranslated
-              i18nKey={i18nKey}
-              fullName={courseTrainer.profile.fullName || ''}
-            />
-          </Link>
+          <div onClick={handleNavigateToProfile} data-testid="link-to-profile">
+            <Link>
+              <ListItemTranslated
+                i18nKey={i18nKey}
+                fullName={courseTrainer.profile.fullName || ''}
+              />
+            </Link>
+          </div>
         ) : (
           <ListItemTranslated
             i18nKey={i18nKey}
@@ -159,6 +172,7 @@ const ListItemWrapper: React.FC<
 interface Props {
   canReInviteTrainer?: boolean
   courseType?: Course_Type_Enum
+  courseId?: number
   trainers: CourseTrainer[] | undefined
 }
 
@@ -167,6 +181,7 @@ const MAX_ASSISTANT_TO_SHOW = 2
 export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
   canReInviteTrainer,
   courseType,
+  courseId,
   trainers,
 }) => {
   const { profile, acl } = useAuth()
@@ -213,6 +228,7 @@ export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
             t('pages.course-participants.trainer')
           ) : (
             <ListItemWrapper
+              courseId={courseId}
               canReInviteTrainer={canReInviteTrainer}
               courseTrainer={courseLeadTrainer}
               enableLinks={canEnableLinks(courseLeadTrainer)}
@@ -227,6 +243,7 @@ export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
               t('pages.course-participants.assistant')
             ) : (
               <ListItemWrapper
+                courseId={courseId}
                 canReInviteTrainer={canReInviteTrainer}
                 courseTrainer={assistant}
                 enableLinks={canEnableLinks(assistant)}
@@ -253,6 +270,7 @@ export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
             t('pages.course-participants.moderator')
           ) : (
             <ListItemWrapper
+              courseId={courseId}
               canReInviteTrainer={canReInviteTrainer}
               courseTrainer={courseModerator}
               enableLinks={canEnableLinks(courseModerator)}

@@ -46,10 +46,10 @@ describe('component: LinkToProfile', () => {
         }
       )
 
-      expect(screen.getByRole('link', { name: label })).toHaveAttribute(
-        'href',
-        `/profile/${profileId}`
-      )
+      const linkToProfile = screen.getByTestId('link-to-user-profile')
+
+      expect(screen.getByText(label)).toBeInTheDocument()
+      expect(linkToProfile).toBeInTheDocument()
     })
   })
 
@@ -66,10 +66,10 @@ describe('component: LinkToProfile', () => {
         }
       )
 
+      const noLinkGenerated = screen.getByTestId('no-link-generated')
+
       expect(screen.getByText(label)).toBeInTheDocument()
-      expect(
-        screen.queryByRole('link', { name: label })
-      ).not.toBeInTheDocument()
+      expect(noLinkGenerated).toBeInTheDocument()
     })
   })
 
@@ -98,10 +98,10 @@ describe('component: LinkToProfile', () => {
         }
       )
 
-      expect(screen.getByRole('link', { name: label })).toHaveAttribute(
-        'href',
-        `/profile/${profileId}`
-      )
+      const linkToProfile = screen.getByTestId('link-to-user-profile')
+
+      expect(screen.getByText(label)).toBeInTheDocument()
+      expect(linkToProfile).toBeInTheDocument()
     })
   })
 
@@ -118,10 +118,10 @@ describe('component: LinkToProfile', () => {
         }
       )
 
+      const noLinkGenerated = screen.getByTestId('no-link-generated')
+
       expect(screen.getByText(label)).toBeInTheDocument()
-      expect(
-        screen.queryByRole('link', { name: label })
-      ).not.toBeInTheDocument()
+      expect(noLinkGenerated).toBeInTheDocument()
     })
   })
 })

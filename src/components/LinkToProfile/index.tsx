@@ -1,21 +1,37 @@
 import Link from '@mui/material/Link'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 
 type Props = {
   profileId: string
   isProfileArchived?: boolean | null
+  courseId?: string | number
 }
 
 export const LinkToProfile: React.FC<React.PropsWithChildren<Props>> = ({
   profileId,
   isProfileArchived,
+  courseId,
   children,
 }) => {
   const { acl } = useAuth()
-  const link = <Link href={`/profile/${profileId}`}>{children}</Link>
-  const noLink = <>{children}</>
+  const navigate = useNavigate()
+
+  const handleNavigateToProfile = () => {
+    navigate(`/profile/${profileId}`, {
+      replace: false,
+      state: { courseId },
+    })
+  }
+
+  const link = (
+    <div onClick={handleNavigateToProfile} data-testid="link-to-user-profile">
+      <Link>{children}</Link>
+    </div>
+  )
+  const noLink = <div data-testid="no-link-generated">{children}</div>
 
   if (isProfileArchived) {
     return acl.canViewArchivedProfileData() && acl.canViewProfiles()

@@ -21,7 +21,12 @@ import {
 import React, { useState, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import {
+  useNavigate,
+  useParams,
+  useSearchParams,
+  useLocation,
+} from 'react-router-dom'
 
 import { Avatar } from '@app/components/Avatar'
 import { BackButton } from '@app/components/BackButton'
@@ -51,8 +56,9 @@ export const ViewProfilePage: React.FC<
   React.PropsWithChildren<ViewProfilePageProps>
 > = () => {
   const { t } = useTranslation()
-  const { profile: currentUserProfile, verified, acl } = useAuth()
+  const { profile: currentUserProfile, activeRole, verified, acl } = useAuth()
   const [selectedTab, setSelectedTab] = useState(0)
+  const location = useLocation()
   const navigate = useNavigate()
   const { id } = useParams()
   const [searchParams] = useSearchParams()
@@ -65,17 +71,18 @@ export const ViewProfilePage: React.FC<
 
   const orgId = searchParams.get('orgId')
 
+  const recentlyVisitedCourseId = location?.state?.courseId
   const isMyProfile = !id
 
+  const callCourseHistory = isMyProfile || Boolean(recentlyVisitedCourseId)
   const { profile, go1Licenses, certifications, status, mutate } = useProfile(
     id ?? currentUserProfile?.id,
     undefined,
     orgId ?? undefined,
     acl.canViewCourseHistory() ||
       acl.canViewCourseAsAttendeeHistory() ||
-      isMyProfile
+      callCourseHistory
   )
-  const { activeRole } = useAuth()
 
   const allTrainerRoles = Object.values(TrainerRoleTypeName)
   const profileHasTrainerRole = useMemo(() => {
@@ -86,10 +93,20 @@ export const ViewProfilePage: React.FC<
       )
     )
   }, [allTrainerRoles, profile?.roles, profile?.trainer_role_types])
+
+  const profileIsTrainerOnRecentlyVisitedCourse = () => {
+    const coursesAsTrainer = profile?.courseAsTrainer
+    const isTrainerOnVisitedCourse = coursesAsTrainer?.some(
+      course => Number(course.course_id) === Number(recentlyVisitedCourseId)
+    )
+
+    return profileHasTrainerRole && isTrainerOnVisitedCourse
+  }
+
   const cannotViewDietaryAndDisabilities =
     !isMyProfile &&
     (acl.isOrgAdmin() || acl.isOrgKeyContact() || acl.isBookingContact()) &&
-    profileHasTrainerRole
+    profileIsTrainerOnRecentlyVisitedCourse()
 
   if (status === LoadingStatus.FETCHING) {
     return <CircularProgress />

@@ -316,6 +316,7 @@ export const AttendingTab = ({
                         <LinkToProfile
                           profileId={courseParticipant.profile.id}
                           isProfileArchived={courseParticipant.profile.archived}
+                          courseId={course.id}
                         >
                           {courseParticipant.profile.archived
                             ? t('common.archived-profile')
@@ -326,6 +327,7 @@ export const AttendingTab = ({
                         <LinkToProfile
                           profileId={courseParticipant.profile.id}
                           isProfileArchived={courseParticipant.profile.archived}
+                          courseId={course.id}
                         >
                           {courseParticipant.profile.email}
                           {courseParticipant.profile.contactDetails.map(
