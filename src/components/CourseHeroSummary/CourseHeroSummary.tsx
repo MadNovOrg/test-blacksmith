@@ -344,7 +344,8 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 </ListItem>
               ) : null}
 
-              {course.organizationKeyContactInviteData ? (
+              {course.organizationKeyContactInviteData &&
+              !course.organizationKeyContact ? (
                 <ListItem
                   disableGutters
                   sx={{ ...backgroundList, mt: 3, ml: 4 }}
@@ -354,7 +355,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                       'components.course-form.organization-key-contact-label'
                     )}: `}
                     <ListItemText>
-                      {`${course.organizationKeyContactInviteData?.firstName} `}
+                      {`${course.organizationKeyContactInviteData?.firstName} ${course.organizationKeyContactInviteData?.lastName}`}
                     </ListItemText>
                     <ListItemText>
                       {course.organizationKeyContactInviteData?.email}
