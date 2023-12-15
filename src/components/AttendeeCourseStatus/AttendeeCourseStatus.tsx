@@ -20,7 +20,9 @@ export const AttendeeCourseStatus: React.FC<
 > = ({ course }) => {
   const status = useMemo(() => {
     const courseEnded = isPast(new Date(course.schedule[0]?.end))
-    const participant = course.participants?.at(0)
+    const participant = course.participants?.length
+      ? course.participants?.at(0)
+      : undefined
     const evaluated = Boolean(
       course.evaluation_answers_aggregate?.aggregate?.count
     )
@@ -29,7 +31,7 @@ export const AttendeeCourseStatus: React.FC<
       courseEnded,
       evaluated,
       graded: Boolean(participant?.grade),
-      attended: participant ? participant.attended ?? false : false,
+      attended: participant?.attended ?? false,
       providedInfo: participant?.healthSafetyConsent ?? false,
       courseStatus: course.status,
     })
