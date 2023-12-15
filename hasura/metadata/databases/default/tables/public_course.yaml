@@ -1354,6 +1354,8 @@ update_permissions:
         - aol_country
         - aol_region
         - booking_contact_profile_id
+        - cancellation_fee
+        - cancellation_fee_type
         - cancellation_reason
         - course_delivery_type
         - course_status

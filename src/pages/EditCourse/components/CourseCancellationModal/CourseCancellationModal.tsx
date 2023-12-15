@@ -185,11 +185,15 @@ export const CourseCancellationModal: React.FC<
       ...(isCourseTypeIndirect
         ? null
         : {
-            cancellationFeeType: feeType,
-            cancellationFee:
-              feeType === CourseCancelFeeTypes.CustomFee
-                ? cancellationFee
-                : cancellationFeePercent,
+            ...(Course_Type_Enum.Closed
+              ? {
+                  cancellationFeeType: feeType,
+                  cancellationFee:
+                    feeType === CourseCancelFeeTypes.CustomFee
+                      ? cancellationFee
+                      : cancellationFeePercent,
+                }
+              : {}),
           }),
     }
 
