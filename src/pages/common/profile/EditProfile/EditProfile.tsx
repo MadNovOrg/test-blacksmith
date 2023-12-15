@@ -1066,7 +1066,7 @@ export const EditProfilePage: React.FC<
                               <Button
                                 variant="outlined"
                                 color="primary"
-                                disabled={!editable}
+                                disabled={!acl.canEditOrgUser()}
                                 onClick={() => setOrgToLeave(orgMember)}
                               >
                                 {t('common.leave')}

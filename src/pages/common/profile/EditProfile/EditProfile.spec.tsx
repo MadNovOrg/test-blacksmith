@@ -112,4 +112,25 @@ describe(EditProfilePage.name, () => {
       expect(screen.getByLabelText(field)).toHaveAttribute('disabled')
     }
   )
+  it.each([RoleName.SALES_ADMIN, RoleName.TT_OPS])(
+    'should allow %s to remove user from organisation',
+    activeRole => {
+      const client = {
+        executeQuery: () => never,
+      } as unknown as Client
+      render(
+        <Provider value={client}>
+          <EditProfilePage />
+        </Provider>,
+        {
+          auth: {
+            activeRole,
+          },
+        }
+      )
+      const removeUserFromOrgButton = screen.getByText(t('common.leave'))
+      expect(removeUserFromOrgButton).toBeInTheDocument()
+      expect(removeUserFromOrgButton).not.toHaveAttribute('disabled')
+    }
+  )
 })
