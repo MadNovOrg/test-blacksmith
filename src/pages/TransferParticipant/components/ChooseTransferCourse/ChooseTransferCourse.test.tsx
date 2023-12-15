@@ -117,6 +117,7 @@ describe('page: ChooseTransferCourse', () => {
                     startDate: new Date().toISOString(),
                     endDate: new Date().toISOString(),
                     freeSlots: 2,
+                    reaccreditation: false,
                   },
                 ]
               : [],

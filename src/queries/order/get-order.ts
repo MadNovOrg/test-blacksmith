@@ -51,6 +51,7 @@ export const QUERY = gql`
           phone
         }
         bookingContactInviteData
+        reaccreditation
       }
       invoice {
         xeroId

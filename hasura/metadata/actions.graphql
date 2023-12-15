@@ -1032,6 +1032,7 @@ type TransferCourse {
   venueCity: String
   level: CourseLevel
   freeSlots: Int!
+  reaccreditation: Boolean!
 }
 
 type TransferParticipantOutput {

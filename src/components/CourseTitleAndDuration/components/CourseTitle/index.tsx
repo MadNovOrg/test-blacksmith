@@ -7,7 +7,7 @@ import { getTimeDifferenceAndContext } from '@app/util'
 
 export type CourseSubset = Pick<
   Course,
-  'id' | 'course_code' | 'start' | 'end'
+  'id' | 'course_code' | 'start' | 'end' | 'reaccreditation'
 > & {
   level?: Course_Level_Enum | CourseLevel | null
 }
@@ -41,6 +41,7 @@ export const CourseTitle: React.FC<
       data-testid="order-course-title"
     >
       {t(`course-levels.${course?.level}`)}{' '}
+      {course.reaccreditation ? t('reaccreditation') + ' ' : ''}
       {showCourseDuration
         ? difference.context === 'hours'
           ? ` - ${difference.count} ${t('hours')} `

@@ -19,6 +19,7 @@ export const TRANSFER_PARTICIPANT_DETAILS = gql`
       level
       type
       status
+      reaccreditation
       dates: schedule_aggregate {
         aggregate {
           start: min {
@@ -57,6 +58,7 @@ export const TRANSFER_ELIGIBLE_COURSES = gql`
       venueName
       venueCity
       level
+      reaccreditation
     }
   }
 `

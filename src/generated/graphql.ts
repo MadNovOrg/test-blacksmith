@@ -9581,6 +9581,7 @@ export type TransferCourse = {
   freeSlots: Scalars['Int'];
   id: Scalars['Int'];
   level?: Maybe<CourseLevel>;
+  reaccreditation: Scalars['Boolean'];
   startDate: Scalars['String'];
   venue?: Maybe<Scalars['String']>;
   venueCity?: Maybe<Scalars['String']>;
@@ -53085,7 +53086,7 @@ export type TransferParticipantDetailsQueryVariables = Exact<{
 }>;
 
 
-export type TransferParticipantDetailsQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, level: Course_Level_Enum, type: Course_Type_Enum, status?: Course_Status_Enum | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } | null, participant?: { __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } } | null };
+export type TransferParticipantDetailsQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, level: Course_Level_Enum, type: Course_Type_Enum, status?: Course_Status_Enum | null, reaccreditation?: boolean | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } | null, participant?: { __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } } | null };
 
 export type TransferEligibleCoursesQueryVariables = Exact<{
   fromCourseId: Scalars['Int'];
@@ -53093,7 +53094,7 @@ export type TransferEligibleCoursesQueryVariables = Exact<{
 }>;
 
 
-export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, freeSlots: number, courseCode: string, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null, level?: CourseLevel | null }> };
+export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, freeSlots: number, courseCode: string, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null, level?: CourseLevel | null, reaccreditation: boolean }> };
 
 export type TransferParticipantMutationVariables = Exact<{
   input: TransferInput;
@@ -54135,7 +54136,7 @@ export type GetOrderQueryVariables = Exact<{
 }>;
 
 
-export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId?: any | null, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, start?: any | null, end?: any | null, freeSpaces?: number | null, bookingContactInviteData?: any | null, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null };
+export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId?: any | null, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, start?: any | null, end?: any | null, freeSpaces?: number | null, bookingContactInviteData?: any | null, reaccreditation?: boolean | null, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null };
 
 export type GetOrderForBookingDoneQueryVariables = Exact<{
   orderId: Scalars['uuid'];
@@ -54528,6 +54529,20 @@ export type UpdateTrainerRoleTypeMutationVariables = Exact<{
 
 
 export type UpdateTrainerRoleTypeMutation = { __typename?: 'mutation_root', delete_profile_trainer_role_type?: { __typename?: 'profile_trainer_role_type_mutation_response', affected_rows: number } | null, insert_profile_trainer_role_type?: { __typename?: 'profile_trainer_role_type_mutation_response', affected_rows: number } | null };
+
+export type GetUserCourseByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+  withOrders?: InputMaybe<Scalars['Boolean']>;
+  withGo1Data?: InputMaybe<Scalars['Boolean']>;
+  profileId: Scalars['uuid'];
+  withCancellationRequest?: InputMaybe<Scalars['Boolean']>;
+  withParticipants?: InputMaybe<Scalars['Boolean']>;
+  withParticipantsOrders?: InputMaybe<Scalars['Boolean']>;
+  courseParticipantsWhere?: InputMaybe<Course_Participant_Bool_Exp>;
+}>;
+
+
+export type GetUserCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, go1Integration?: boolean, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, special_instructions?: string | null, parking_instructions?: string | null, status?: Course_Status_Enum | null, accreditedBy: Accreditors_Enum, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null, organization?: { __typename?: 'organization', id: any, name: string, members: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, profile_id: any }> } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null, order?: { __typename?: 'order', bookingContactProfileId?: any | null } | null }>, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null }> } | null };
 
 export type GetUserByMailQueryVariables = Exact<{
   email?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;

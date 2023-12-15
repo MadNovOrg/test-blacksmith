@@ -121,6 +121,7 @@ export const TransferDetails: React.FC<
             startDate: toCourse.startDate,
             endDate: toCourse.endDate,
             venue: toCourse.venue ?? '',
+            reaccreditation: toCourse.reaccreditation,
           }}
         />
       </Box>

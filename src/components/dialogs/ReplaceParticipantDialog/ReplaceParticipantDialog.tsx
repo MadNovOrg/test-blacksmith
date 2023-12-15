@@ -165,6 +165,7 @@ export const ReplaceParticipantDialog: React.FC<
               start: course.dates.aggregate.start.date,
               end: course.dates.aggregate.end.date,
               level: course.level,
+              reaccreditation: course.reaccreditation,
             }}
           />
         )}
