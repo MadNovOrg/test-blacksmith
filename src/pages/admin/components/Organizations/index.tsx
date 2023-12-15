@@ -44,7 +44,6 @@ export const Organizations: React.FC<
   const navigate = useNavigate()
   const { acl, profile } = useAuth()
   const [showExportModal, setExportShowModal] = useState(false)
-
   const sorting = useTableSort('name', 'asc')
   const cols = useMemo(
     () => [
@@ -135,6 +134,30 @@ export const Organizations: React.FC<
     return data
   }, [orgs])
 
+  const showRegionCol = useMemo(() => {
+    const colRegion = cols.find(({ id }) => id === 'region')
+    if (colRegion) {
+      return {
+        isEmpty: !orgs.some(org => org?.region),
+        id: colRegion.id,
+      }
+    }
+
+    return {
+      isEmpty: false,
+    }
+  }, [orgs, cols])
+
+  const filterCols = useMemo(() => {
+    const { isEmpty: isEmptyRegionCol, id: gerionColId } = showRegionCol
+
+    if (isEmptyRegionCol) {
+      return cols.filter(col => col.id != gerionColId)
+    }
+
+    return cols
+  }, [cols, showRegionCol])
+
   return (
     <FullHeightPageLayout>
       <Helmet>
@@ -207,7 +230,7 @@ export const Organizations: React.FC<
 
             <Table data-testid="orgs-table">
               <TableHead
-                cols={cols}
+                cols={filterCols}
                 order={sorting.dir}
                 orderBy={sorting.by}
                 onRequestSort={sorting.onSort}
@@ -236,7 +259,9 @@ export const Organizations: React.FC<
                       </Link>
                     </TableCell>
                     <TableCell>{org?.address.country}</TableCell>
-                    <TableCell>{org?.region}</TableCell>
+                    {!showRegionCol.isEmpty ? (
+                      <TableCell>{org?.region}</TableCell>
+                    ) : null}
                     <TableCell>{org?.sector}</TableCell>
                     <TableCell>
                       {lastActivityData[org?.id]
