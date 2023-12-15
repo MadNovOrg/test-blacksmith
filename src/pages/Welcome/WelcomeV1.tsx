@@ -78,7 +78,7 @@ export const WelcomeV1: React.FC<React.PropsWithChildren<unknown>> = () => {
           alignItems="center"
         >
           <Typography variant="h3" fontWeight="600" mb={1}>
-            {t('get-started')}
+            {t('help-centre')}
           </Typography>
           <Typography>{t('get-started-description')}</Typography>
           <Link href={import.meta.env.VITE_WELCOME_PAGE_URL}>
