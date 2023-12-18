@@ -292,8 +292,8 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0
       '@mermaid-js/mermaid-cli':
-        specifier: ^10.3.0
-        version: 10.3.0(typescript@4.9.5)
+        specifier: ^10.6.1
+        version: 10.6.1(typescript@4.9.5)
       '@nx/devkit':
         specifier: ^16.7.4
         version: 16.7.4(nx@16.7.4)
@@ -5981,22 +5981,6 @@ packages:
       '@types/mdx': 2.0.5
       '@types/react': 18.2.14
       react: 18.2.0
-    dev: true
-
-  /@mermaid-js/mermaid-cli@10.3.0(typescript@4.9.5):
-    resolution: {integrity: sha512-pbLhEJL99HHKDPUTnswotqfy+Zm/TsX9oseSNikrz07e47jq+UpVBJ22e9Co5qxPlP/E9VKoZHxkIz/A6M/2Ng==}
-    engines: {node: ^14.13 || >=16.0}
-    hasBin: true
-    dependencies:
-      chalk: 5.2.0
-      commander: 10.0.0
-      puppeteer: 19.11.1(typescript@4.9.5)
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - supports-color
-      - typescript
-      - utf-8-validate
     dev: true
 
   /@mermaid-js/mermaid-cli@10.6.1(typescript@4.9.5):
@@ -19906,6 +19890,7 @@ packages:
 
   /puppeteer@19.11.1(typescript@4.9.5):
     resolution: {integrity: sha512-39olGaX2djYUdhaQQHDZ0T0GwEp+5f9UB9HmEP0qHfdQHIq0xGQZuAZ5TLnJIc/88SrPLpEflPC+xUqOTv3c5g==}
+    deprecated: < 21.3.7 is no longer supported
     requiresBuild: true
     dependencies:
       '@puppeteer/browsers': 0.5.0(typescript@4.9.5)

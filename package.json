@@ -151,7 +151,7 @@
     "@graphql-codegen/typescript-operations": "^3.0.4",
     "@inrupt/jest-jsdom-polyfills": "^1.7.0",
     "@jackfranklin/test-data-bot": "^2.1.0",
-    "@mermaid-js/mermaid-cli": "^10.3.0",
+    "@mermaid-js/mermaid-cli": "^10.6.1",
     "@nx/devkit": "^16.7.4",
     "@nx/esbuild": "16.7.4",
     "@nx/eslint-plugin": "^16.10.0",
