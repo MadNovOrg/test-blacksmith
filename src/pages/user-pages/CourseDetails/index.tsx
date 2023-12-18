@@ -143,15 +143,6 @@ export const CourseDetails: React.FC<
       variables: {
         courseId: Number(courseId),
         withTrainerData: !acl.canViewTrainerDietaryAndDisabilities(),
-        ...(acl.isBookingContact()
-          ? {
-              participantWhere: {
-                course: { id: { _eq: Number(courseId) } },
-                order: { bookingContactProfileId: { _eq: profile?.id } },
-                profile: { dietaryRestrictions: { _neq: 'null', _nilike: '' } },
-              },
-            }
-          : {}),
       },
       requestPolicy: 'cache-and-network',
       pause: !courseId,

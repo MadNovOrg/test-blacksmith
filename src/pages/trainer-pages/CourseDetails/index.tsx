@@ -111,10 +111,6 @@ export const CourseDetails = () => {
       variables: {
         courseId: Number(courseId),
         withTrainerData: !acl.canViewTrainerDietaryAndDisabilities(),
-        participantWhere: {
-          course: { id: { _eq: Number(courseId) } },
-          profile: { dietaryRestrictions: { _neq: 'null', _nilike: '' } },
-        },
       },
       requestPolicy: 'cache-and-network',
       pause: !courseId,

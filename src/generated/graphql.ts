@@ -53475,7 +53475,6 @@ export type GetCourseParticipantDietOrDisabilitiesDataQuery = { __typename?: 'qu
 export type GetDietaryAndDisabilitiesCountQueryVariables = Exact<{
   courseId: Scalars['Int'];
   withTrainerData?: InputMaybe<Scalars['Boolean']>;
-  participantWhere?: InputMaybe<Course_Participant_Bool_Exp>;
 }>;
 
 
