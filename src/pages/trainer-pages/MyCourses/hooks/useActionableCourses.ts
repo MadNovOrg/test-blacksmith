@@ -152,7 +152,7 @@ export default function useActionableCourses({
       _and: conditions,
     }
 
-    where = filtersToWhereClause(where, filters)
+    where = filtersToWhereClause(where, acl.isInternalUser(), filters)
     return where
   }, [
     acl,

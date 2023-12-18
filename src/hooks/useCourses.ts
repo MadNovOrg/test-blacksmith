@@ -203,6 +203,7 @@ export const getIndividualsCourseStatusesConditions = (
 
 export const filtersToWhereClause = (
   where: Course_Bool_Exp,
+  isInternalUser: boolean,
   filters?: CoursesFilters
 ) => {
   if (filters?.levels?.length) {
@@ -282,7 +283,7 @@ export const filtersToWhereClause = (
       { schedule: { venue: { postCode: { _ilike: `%${query}%` } } } },
       { trainers: { profile: { fullName: { _ilike: `%${query}%` } } } },
       { course_code: { _ilike: `%${query}%` } },
-      { arloReferenceId: { _ilike: `%${query}%` } },
+      isInternalUser ? { arloReferenceId: { _ilike: `%${query}%` } } : null,
     ]
 
     if (where._or) {
@@ -369,7 +370,7 @@ export const useCourses = (
       }
     }
 
-    obj = filtersToWhereClause(obj, filters)
+    obj = filtersToWhereClause(obj, acl.isInternalUser(), filters)
 
     let orgAdminStatusCondition: Course_Bool_Exp = {}
 
