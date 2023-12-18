@@ -169,7 +169,7 @@
     "@storybook/addon-links": "^7.5.3",
     "@storybook/addon-mdx-gfm": "^7.6.3",
     "@storybook/blocks": "^7.5.3",
-    "@storybook/react": "^7.5.3",
+    "@storybook/react": "^7.6.5",
     "@storybook/react-vite": "^7.5.3",
     "@storybook/testing-library": "^0.2.2",
     "@swc/cli": "~0.1.63",
