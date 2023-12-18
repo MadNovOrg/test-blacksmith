@@ -8,12 +8,12 @@ import {
   Button,
   Container,
   Grid,
+  Link,
   Switch,
   TextField,
   Typography,
-  useTheme,
   useMediaQuery,
-  Link,
+  useTheme,
 } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -42,7 +42,7 @@ import * as yup from 'yup'
 import { InferType } from 'yup'
 
 import { Avatar } from '@app/components/Avatar'
-import { Dialog, ConfirmDialog } from '@app/components/dialogs'
+import { ConfirmDialog, Dialog } from '@app/components/dialogs'
 import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import PhoneNumberInput from '@app/components/PhoneNumberInput'
@@ -50,10 +50,12 @@ import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
   GetProfileDetailsQuery,
+  Organization,
   Profile_Role_Insert_Input,
   Profile_Trainer_Role_Type_Insert_Input,
   RemoveOrgMemberMutation,
   RemoveOrgMemberMutationVariables,
+  UpdateOrgMemberMutation,
   UpdateOrgMemberMutationVariables,
   UpdateProfileMutation,
   UpdateProfileMutationVariables,
@@ -62,7 +64,6 @@ import {
   UpdateTrainerRoleTypeMutation,
   UpdateTrainerRoleTypeMutationVariables,
 } from '@app/generated/graphql'
-import { Organization, UpdateOrgMemberMutation } from '@app/generated/graphql'
 import { useJobTitles } from '@app/hooks/useJobTitles'
 import useProfile from '@app/hooks/useProfile'
 import useRoles from '@app/hooks/useRoles'
@@ -78,20 +79,20 @@ import { schemas } from '@app/schemas'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 import {
+  avatarSize,
   BILDRolesNames,
+  defaultTrainerRoles,
   DietaryRestrictionRadioValues,
   DisabilitiesRadioValues,
-  EmployeeRoleName,
-  OrgMemberType,
-  UserRoleName,
-  avatarSize,
-  defaultTrainerRoles,
   employeeRole,
+  EmployeeRoleName,
   employeeRolesNames,
   maxAvatarFileSizeBytes,
+  OrgMemberType,
   salesRole,
   salesRolesNames,
   trainerRolesNames,
+  UserRoleName,
   userRolesNames,
 } from '../'
 import { CertificationsAlerts } from '../components/CertificationsAlerts'
@@ -502,10 +503,35 @@ export const EditProfilePage: React.FC<
                 profile_id: profile.id,
               })
             }
+
             return filteredRoles
           },
           [] as Profile_Role_Insert_Input[]
         )
+
+        /**
+         * TODO Add the profile's booking contact and organisation key contact roles.
+         * @author ion.mereuta@amdaris.com
+         * @link https://behaviourhub.atlassian.net/jira/software/projects/TTHP/issues/TTHP-3325
+         * As the above roles are not editable and because the roles update involves all roles
+         * replacement we add the booking contact and organisation key contact roles to
+         * not be to be deleted because of profile's roles replacement.
+         */
+
+        const profilesIndividualSubRoles = profile.roles.filter(roleData =>
+          [
+            RoleName.BOOKING_CONTACT,
+            RoleName.ORGANIZATION_KEY_CONTACT,
+          ].includes(roleData.role.name as RoleName)
+        )
+
+        profilesIndividualSubRoles.forEach(roleData => {
+          filteredRoles?.push({
+            role_id: roleData.role.id,
+            profile_id: profile.id,
+          })
+        })
+
         const filteredTrainerRoleTypes = systemTrainerRoleTypes?.reduce(
           (filteredTrainerRoleTypes, systemTrainerRoleType) => {
             if (
