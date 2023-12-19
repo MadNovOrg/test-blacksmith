@@ -48,11 +48,12 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
         getLevels(courseType, courseAccreditor).filter(level =>
           !threeDaySRTcourseLevelEnabled
             ? level !== Course_Level_Enum.ThreeDaySafetyResponseTrainer
-            : null
+            : true
         )
       ),
     [acl, courseType, courseAccreditor, threeDaySRTcourseLevelEnabled]
   )
+
   const selected = value && levels.includes(value) ? value : levels[0]
 
   useEffect(() => {
