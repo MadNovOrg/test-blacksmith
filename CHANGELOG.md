@@ -1,5 +1,36 @@
 # @teamteach/hub
 
+## 2.2.0
+
+### Minor Changes
+
+- 561857af: Add profile country field for user authentications form
+- 7180f68e: Manage OPEN courses and OPEN course details page for booking contact
+- d4c33afd: Allow searching trainer courses by arlo reference id.
+- 9f484eb7: Allow Sales admin and Operations roles to remove people from organisations
+
+### Patch Changes
+
+- 5ba7658c: FIX: TTHP-3256 create edit org key contact for indirect courses
+- 5c04bb65: Fix the issue with trainers not being able to cancel indirect courses
+- c61d7aba: Fix error reportd by Sentry, unexpected end of input
+- 78360612: Update course title includes reaccreditation
+- 799be02b: Redirect Trainer to Courses page when trying to access a Course that has not been accepted yet
+- 79acc67d: Fix: (TTHP-3228) Admin ogranisations Region column visibility.
+- dcebb681: added filter by course type in manage courses page only for booking contact role
+- d3c4e837: Fixes and sentry error and refactors some useSWR instances
+- 8dba3869: Enable H&S consent submit button after course has begun
+- 92f5d3eb: Fix (TTHP-3256) org key contact for course details indirect course
+- 340daa39: filter module groups for level 1 open course
+- c981a695: Fix edit profile roles, booking and org key contact case
+- ad02aac3: Change wording of get started link
+- 72777ea2: Update course status filter for booking contact, regarding OPEN courses
+- a28c094c: [Sentry] at is not a function fix
+- 78b1f4b6: variable pricing for closed course creation
+- dfe5a981: Fix dietary and disabilities count on managed course's details page for booking and organisation key contact
+- 70cb5df3: Changing permissions on course table
+- bde6ec74: Hide Dietary and Disabilities info on user profile
+
 ## 2.1.0
 
 ### Minor Changes
