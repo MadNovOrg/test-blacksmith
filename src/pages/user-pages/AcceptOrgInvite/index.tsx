@@ -1,6 +1,7 @@
 import { Alert, CircularProgress, Container } from '@mui/material'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useUpdateEffect } from 'react-use'
 import { useMutation } from 'urql'
 
 import { useAuth } from '@app/context/auth'
@@ -43,11 +44,11 @@ export const AcceptOrgInvite = () => {
     }
   }, [acceptOrgInvite, navigate, profile, reloadCurrentProfile, token])
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (profile && !accepted.current) {
       accept().then()
     }
-  }, [accept, profile])
+  })
 
   if (error) {
     return (
