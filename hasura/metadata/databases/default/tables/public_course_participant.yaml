@@ -430,6 +430,18 @@ select_permissions:
                         _eq: X-Hasura-User-Id
                     - is_admin:
                         _eq: true
+          - _and:
+              - course:
+                  course_type:
+                    _eq: OPEN
+              - course:
+                  course_status:
+                    _in:
+                      - CONFIRM_MODULES
+                      - SCHEDULED
+                      - TRAINER_MISSING
+                      - TRAINER_PENDING
+                      - TRAINER_DECLINED
       allow_aggregations: true
 update_permissions:
   - role: trainer
