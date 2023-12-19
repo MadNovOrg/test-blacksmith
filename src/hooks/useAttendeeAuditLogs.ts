@@ -60,6 +60,7 @@ export default function useAttendeeAuditLogs({
           { fromCourse: { course_code: { _ilike: `%${filter.query}%` } } },
           { toCourse: { course_code: { _ilike: `%${filter.query}%` } } },
           { newAttendeeEmail: { _ilike: `%${filter.query}%` } },
+          { courseParticipantInvoiceNumber: { _ilike: `%${filter.query}%` } },
         ],
       })
     }
