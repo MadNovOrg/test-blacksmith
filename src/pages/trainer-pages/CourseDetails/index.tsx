@@ -177,8 +177,8 @@ export const CourseDetails = () => {
     if (!course) return false
 
     const courseEnded =
-      Boolean(course?.schedule.length) &&
-      isPast(new Date(course?.schedule[0].end as string))
+      Boolean(course?.schedule?.length) &&
+      isPast(new Date(course?.schedule[0]?.end as string))
 
     const graduationFinished = !course?.courseParticipants?.some(
       participant => !participant.grade
