@@ -33,6 +33,11 @@ const orders = [
     paymentMethod: 'INVOICE',
     promoCodes: [],
     quantity: 2,
+    bookingContact: {
+      firstName: chance.name(),
+      email: 'booking.contact1@teamteach.testinator.com',
+      lastName: chance.name(),
+    },
     registrants: [
       {
         firstName: 'Seed',
@@ -56,8 +61,13 @@ const orders = [
     billingPhone: '+44 1111 11111',
     clientPurchaseOrder: '',
     paymentMethod: 'INVOICE',
-    promoCodes: ['CODE_5%_ALL'],
+    promoCodes: [],
     quantity: 2,
+    bookingContact: {
+      firstName: chance.name(),
+      email: 'booking.contact2@teamteach.testinator.com',
+      lastName: chance.name(),
+    },
     registrants: [
       {
         email: 'seed.registrant3@teamteach.testinator.com',
