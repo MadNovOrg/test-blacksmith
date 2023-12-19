@@ -1,4 +1,5 @@
 import { Select, SelectChangeEvent, MenuItem } from '@mui/material'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -34,14 +35,23 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   const onChangeRef = useRef<Props['onChange'] | undefined>()
 
   const { acl } = useAuth()
+  const threeDaySRTcourseLevelEnabled =
+    useFeatureFlagEnabled('3-day-srt-course')
 
   useEffect(() => {
     onChangeRef.current = onChange
   }, [onChange])
 
   const levels = useMemo(
-    () => acl.allowedCourseLevels(getLevels(courseType, courseAccreditor)),
-    [acl, courseType, courseAccreditor]
+    () =>
+      acl.allowedCourseLevels(
+        getLevels(courseType, courseAccreditor).filter(level =>
+          !threeDaySRTcourseLevelEnabled
+            ? level !== Course_Level_Enum.ThreeDaySafetyResponseTrainer
+            : null
+        )
+      ),
+    [acl, courseType, courseAccreditor, threeDaySRTcourseLevelEnabled]
   )
   const selected = value && levels.includes(value) ? value : levels[0]
 
@@ -70,14 +80,6 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
       labelId={labelId}
     >
       {levels.map(level => {
-        // TODO: @ionel.vidrighin - remove this condition when back to regular sprints
-        if (
-          import.meta.env.MODE === 'production' &&
-          level === Course_Level_Enum.ThreeDaySafetyResponseTrainer
-        ) {
-          return null
-        }
-
         return (
           <MenuItem
             key={level}
