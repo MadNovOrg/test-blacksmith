@@ -28,6 +28,10 @@ export const COURSE_QUERY = gql`
           moduleGroup {
             id
           }
+          submodules {
+            id
+            name
+          }
         }
       }
 

@@ -254,6 +254,25 @@ export const ICMCourseBuilder: React.FC<
       }),
       constant({ duration: '4 day', translationKey: 'ICM-description' }),
     ],
+    [
+      matches({
+        level: Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+        reaccreditation: true,
+      }),
+      constant({
+        duration: '1 day',
+        translationKey: '3-day-STR-choose-modules',
+      }),
+    ],
+    [
+      matches({
+        level: Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+      }),
+      constant({
+        duration: '3 day',
+        translationKey: '3-day-STR-choose-modules',
+      }),
+    ],
     [stubTrue, constant(null)],
   ])
 

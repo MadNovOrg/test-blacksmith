@@ -33,7 +33,6 @@ export const Recaptcha: React.FC<Props> = ({
         widgetId.current = window.grecaptcha.enterprise?.render(id.current, {
           sitekey: import.meta.env.VITE_RECAPTCHA_KEY,
           callback: token => {
-            console.log(token)
             onSuccess(token)
           },
           'expired-callback': onExpired,

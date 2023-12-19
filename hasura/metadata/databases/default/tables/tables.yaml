@@ -84,6 +84,7 @@
 - "!include public_promo_code.yaml"
 - "!include public_promo_code_type.yaml"
 - "!include public_role.yaml"
+- "!include public_submodule.yaml"
 - "!include public_trainer_role_type.yaml"
 - "!include public_trust_type.yaml"
 - "!include public_upcoming_enrollments.yaml"

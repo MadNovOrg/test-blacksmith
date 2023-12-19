@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import {
   Course_Delivery_Type_Enum,
@@ -31,20 +31,19 @@ export const ICMOverview: React.FC<React.PropsWithChildren<Props>> = ({
   course,
 }: Props) => {
   const { t } = useTranslation()
-  const { data: modulesDataResponse, error: moduleDataError } = useSWR<
+  const [{ data: modulesDataResponse, error: moduleDataError }] = useQuery<
     ModuleGroupsQuery,
-    Error,
-    [string, ModuleGroupsQueryVariables] | null
-  >([
-    GetModuleGroups,
-    {
+    ModuleGroupsQueryVariables
+  >({
+    query: GetModuleGroups,
+    variables: {
       level: course.level as unknown as Course_Level_Enum,
       courseDeliveryType:
         course.deliveryType as unknown as Course_Delivery_Type_Enum,
       reaccreditation: course.reaccreditation,
       go1Integration: Boolean(course.go1Integration),
     },
-  ])
+  })
 
   const modulesData = useMemo(
     () =>
@@ -53,7 +52,6 @@ export const ICMOverview: React.FC<React.PropsWithChildren<Props>> = ({
       ),
     [modulesDataResponse]
   )
-
   const modulesLoadingStatus = getSWRLoadingStatus(modulesData, moduleDataError)
 
   const [usedModules, setUsedModules] = useState<string[]>([])
@@ -65,7 +63,6 @@ export const ICMOverview: React.FC<React.PropsWithChildren<Props>> = ({
 
     setUsedModules(modulesInCourse)
   }, [course.moduleGroupIds])
-
   return (
     <>
       {modulesLoadingStatus === LoadingStatus.ERROR && (
@@ -94,17 +91,36 @@ export const ICMOverview: React.FC<React.PropsWithChildren<Props>> = ({
                 />
                 <Typography variant="body1">{item.name}</Typography>
                 <Typography variant="body2" ml={1}>
-                  {t('areas', { count: item.modules.length })}
+                  {t('areas', {
+                    count:
+                      item.modules.length +
+                      Number(
+                        item.modules.length
+                          ? item.modules
+                              .map(
+                                module =>
+                                  module.submodules_aggregate.aggregate?.count
+                              )
+                              .reduce((acc, sum) => (acc ?? 0) + (sum ?? 0))
+                          : 0
+                      ),
+                  })}
                 </Typography>
               </Box>
             </AccordionSummary>
 
             <Container>
               {item.modules.map(module => (
-                <Box key={module.id} ml={4} my={2}>
+                <Box key={module.id} ml={4} my={1} mt={1}>
                   <Typography variant="body1" color="grey.700">
                     {module.name}
                   </Typography>
+                  {module.submodules?.length > 0 &&
+                    module.submodules.map(m => (
+                      <Typography key={m.name} mb={1.5} ml={3} mt={1}>
+                        {m.name}
+                      </Typography>
+                    ))}
                 </Box>
               ))}
             </Container>

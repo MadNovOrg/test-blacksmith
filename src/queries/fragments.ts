@@ -82,6 +82,15 @@ export const MODULE = gql`
     type
     createdAt
     updatedAt
+    submodules {
+      id
+      name
+    }
+    submodules_aggregate {
+      aggregate {
+        count
+      }
+    }
   }
 `
 

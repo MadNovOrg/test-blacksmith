@@ -265,6 +265,7 @@
         "ICM-description": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the {{ duration }} duration.",
         "ICM-description-choose-modules": "To submit your course, choose from the modules available to create a course to be delivered over a minimum duration of {{ duration}}. Times indicated on the modules are the minimum recommended duration for each module.",
         "ICM-description-default": "To submit a course, choose from the modules available to create a course {{duration}} in duration. Times indicated on the modules are the minimum recommended duration for each.",
+        "3-day-STR-choose-modules": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 3 day duration.",
         "mandatory-modules-notice": "*Please note, modules that cannot be deselected must be delivered as part of the core programme.",
         "location": "Location",
         "starts": "Starts",

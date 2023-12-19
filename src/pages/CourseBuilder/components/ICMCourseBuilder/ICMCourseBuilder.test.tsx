@@ -575,7 +575,14 @@ describe('component: CourseBuilder', () => {
     const moduleGroup = buildModuleGroup({ mandatory: false })
     const course = buildCourse({
       level: Course_Level_Enum.Advanced,
-      moduleGroupIds: [{ module: { moduleGroup: { id: moduleGroup.id } } }],
+      moduleGroupIds: [
+        {
+          module: {
+            moduleGroup: { id: moduleGroup.id },
+            submodules: [],
+          },
+        },
+      ],
     })
 
     const client = {
@@ -643,6 +650,7 @@ describe('component: CourseBuilder', () => {
               moduleGroup: {
                 id: moduleGroup.id,
               },
+              submodules: [],
             },
           },
         ],

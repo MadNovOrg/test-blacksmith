@@ -30128,8 +30128,32 @@ export type Module = {
   /** An object relationship */
   moduleGroup?: Maybe<Module_Group>;
   name: Scalars['String'];
+  /** An array relationship */
+  submodules: Array<Submodule>;
+  /** An aggregate relationship */
+  submodules_aggregate: Submodule_Aggregate;
   type: Module_Category_Enum;
   updatedAt: Scalars['timestamptz'];
+};
+
+
+/** columns and relationships of "module" */
+export type ModuleSubmodulesArgs = {
+  distinct_on?: InputMaybe<Array<Submodule_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Submodule_Order_By>>;
+  where?: InputMaybe<Submodule_Bool_Exp>;
+};
+
+
+/** columns and relationships of "module" */
+export type ModuleSubmodules_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Submodule_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Submodule_Order_By>>;
+  where?: InputMaybe<Submodule_Bool_Exp>;
 };
 
 /** aggregated selection of "module" */
@@ -30191,6 +30215,8 @@ export type Module_Bool_Exp = {
   level?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
   moduleGroup?: InputMaybe<Module_Group_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
+  submodules?: InputMaybe<Submodule_Bool_Exp>;
+  submodules_aggregate?: InputMaybe<Submodule_Aggregate_Bool_Exp>;
   type?: InputMaybe<Module_Category_Enum_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
@@ -31039,6 +31065,7 @@ export type Module_Insert_Input = {
   level?: InputMaybe<Course_Level_Enum>;
   moduleGroup?: InputMaybe<Module_Group_Obj_Rel_Insert_Input>;
   name?: InputMaybe<Scalars['String']>;
+  submodules?: InputMaybe<Submodule_Arr_Rel_Insert_Input>;
   type?: InputMaybe<Module_Category_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
@@ -31117,6 +31144,7 @@ export type Module_Order_By = {
   level?: InputMaybe<Order_By>;
   moduleGroup?: InputMaybe<Module_Group_Order_By>;
   name?: InputMaybe<Order_By>;
+  submodules_aggregate?: InputMaybe<Submodule_Aggregate_Order_By>;
   type?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
@@ -31574,6 +31602,10 @@ export type Mutation_Root = {
   delete_role?: Maybe<Role_Mutation_Response>;
   /** delete single row from the table: "role" */
   delete_role_by_pk?: Maybe<Role>;
+  /** delete data from the table: "submodule" */
+  delete_submodule?: Maybe<Submodule_Mutation_Response>;
+  /** delete single row from the table: "submodule" */
+  delete_submodule_by_pk?: Maybe<Submodule>;
   /** delete data from the table: "trainer_role_type" */
   delete_trainer_role_type?: Maybe<Trainer_Role_Type_Mutation_Response>;
   /** delete single row from the table: "trainer_role_type" */
@@ -31958,6 +31990,10 @@ export type Mutation_Root = {
   insert_role?: Maybe<Role_Mutation_Response>;
   /** insert a single row into the table: "role" */
   insert_role_one?: Maybe<Role>;
+  /** insert data into the table: "submodule" */
+  insert_submodule?: Maybe<Submodule_Mutation_Response>;
+  /** insert a single row into the table: "submodule" */
+  insert_submodule_one?: Maybe<Submodule>;
   /** insert data into the table: "trainer_role_type" */
   insert_trainer_role_type?: Maybe<Trainer_Role_Type_Mutation_Response>;
   /** insert a single row into the table: "trainer_role_type" */
@@ -32532,6 +32568,12 @@ export type Mutation_Root = {
   update_role_by_pk?: Maybe<Role>;
   /** update multiples rows of table: "role" */
   update_role_many?: Maybe<Array<Maybe<Role_Mutation_Response>>>;
+  /** update data of the table: "submodule" */
+  update_submodule?: Maybe<Submodule_Mutation_Response>;
+  /** update single row of the table: "submodule" */
+  update_submodule_by_pk?: Maybe<Submodule>;
+  /** update multiples rows of table: "submodule" */
+  update_submodule_many?: Maybe<Array<Maybe<Submodule_Mutation_Response>>>;
   /** update data of the table: "trainer_role_type" */
   update_trainer_role_type?: Maybe<Trainer_Role_Type_Mutation_Response>;
   /** update single row of the table: "trainer_role_type" */
@@ -33718,6 +33760,18 @@ export type Mutation_RootDelete_RoleArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Role_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_SubmoduleArgs = {
+  where: Submodule_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Submodule_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -35049,6 +35103,20 @@ export type Mutation_RootInsert_RoleArgs = {
 export type Mutation_RootInsert_Role_OneArgs = {
   object: Role_Insert_Input;
   on_conflict?: InputMaybe<Role_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_SubmoduleArgs = {
+  objects: Array<Submodule_Insert_Input>;
+  on_conflict?: InputMaybe<Submodule_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Submodule_OneArgs = {
+  object: Submodule_Insert_Input;
+  on_conflict?: InputMaybe<Submodule_On_Conflict>;
 };
 
 
@@ -37224,6 +37292,26 @@ export type Mutation_RootUpdate_Role_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Role_ManyArgs = {
   updates: Array<Role_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_SubmoduleArgs = {
+  _set?: InputMaybe<Submodule_Set_Input>;
+  where: Submodule_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Submodule_By_PkArgs = {
+  _set?: InputMaybe<Submodule_Set_Input>;
+  pk_columns: Submodule_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Submodule_ManyArgs = {
+  updates: Array<Submodule_Updates>;
 };
 
 
@@ -44151,6 +44239,12 @@ export type Query_Root = {
   /** fetch data from the table: "role" using primary key columns */
   role_by_pk?: Maybe<Role>;
   searchTrainers?: Maybe<Array<Maybe<SearchTrainer>>>;
+  /** fetch data from the table: "submodule" */
+  submodule: Array<Submodule>;
+  /** fetch aggregated fields from the table: "submodule" */
+  submodule_aggregate: Submodule_Aggregate;
+  /** fetch data from the table: "submodule" using primary key columns */
+  submodule_by_pk?: Maybe<Submodule>;
   /** fetch data from the table: "trainer_role_type" */
   trainer_role_type: Array<Trainer_Role_Type>;
   /** fetch aggregated fields from the table: "trainer_role_type" */
@@ -46248,6 +46342,29 @@ export type Query_RootSearchTrainersArgs = {
 };
 
 
+export type Query_RootSubmoduleArgs = {
+  distinct_on?: InputMaybe<Array<Submodule_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Submodule_Order_By>>;
+  where?: InputMaybe<Submodule_Bool_Exp>;
+};
+
+
+export type Query_RootSubmodule_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Submodule_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Submodule_Order_By>>;
+  where?: InputMaybe<Submodule_Bool_Exp>;
+};
+
+
+export type Query_RootSubmodule_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootTrainer_Role_TypeArgs = {
   distinct_on?: InputMaybe<Array<Trainer_Role_Type_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -46777,6 +46894,258 @@ export type Role_Var_Samp_Fields = {
 export type Role_Variance_Fields = {
   __typename?: 'role_variance_fields';
   rank?: Maybe<Scalars['Float']>;
+};
+
+/** columns and relationships of "submodule" */
+export type Submodule = {
+  __typename?: 'submodule';
+  course_level: Course_Level_Enum;
+  created_at: Scalars['timestamptz'];
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['uuid'];
+  module_category: Module_Category_Enum;
+  module_id: Scalars['uuid'];
+  name: Scalars['String'];
+  /** An object relationship */
+  submodule_module: Module;
+  updated_at: Scalars['timestamptz'];
+};
+
+/** aggregated selection of "submodule" */
+export type Submodule_Aggregate = {
+  __typename?: 'submodule_aggregate';
+  aggregate?: Maybe<Submodule_Aggregate_Fields>;
+  nodes: Array<Submodule>;
+};
+
+export type Submodule_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Submodule_Aggregate_Bool_Exp_Count>;
+};
+
+export type Submodule_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Submodule_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Submodule_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "submodule" */
+export type Submodule_Aggregate_Fields = {
+  __typename?: 'submodule_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Submodule_Max_Fields>;
+  min?: Maybe<Submodule_Min_Fields>;
+};
+
+
+/** aggregate fields of "submodule" */
+export type Submodule_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Submodule_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "submodule" */
+export type Submodule_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Submodule_Max_Order_By>;
+  min?: InputMaybe<Submodule_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "submodule" */
+export type Submodule_Arr_Rel_Insert_Input = {
+  data: Array<Submodule_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Submodule_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "submodule". All fields are combined with a logical 'AND'. */
+export type Submodule_Bool_Exp = {
+  _and?: InputMaybe<Array<Submodule_Bool_Exp>>;
+  _not?: InputMaybe<Submodule_Bool_Exp>;
+  _or?: InputMaybe<Array<Submodule_Bool_Exp>>;
+  course_level?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  description?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  module_category?: InputMaybe<Module_Category_Enum_Comparison_Exp>;
+  module_id?: InputMaybe<Uuid_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  submodule_module?: InputMaybe<Module_Bool_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "submodule" */
+export enum Submodule_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  SubmodulePkey = 'submodule_pkey'
+}
+
+/** input type for inserting data into table "submodule" */
+export type Submodule_Insert_Input = {
+  course_level?: InputMaybe<Course_Level_Enum>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  module_category?: InputMaybe<Module_Category_Enum>;
+  module_id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  submodule_module?: InputMaybe<Module_Obj_Rel_Insert_Input>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Submodule_Max_Fields = {
+  __typename?: 'submodule_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  module_id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by max() on columns of table "submodule" */
+export type Submodule_Max_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  description?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  module_id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Submodule_Min_Fields = {
+  __typename?: 'submodule_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  module_id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by min() on columns of table "submodule" */
+export type Submodule_Min_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  description?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  module_id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "submodule" */
+export type Submodule_Mutation_Response = {
+  __typename?: 'submodule_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Submodule>;
+};
+
+/** on_conflict condition type for table "submodule" */
+export type Submodule_On_Conflict = {
+  constraint: Submodule_Constraint;
+  update_columns?: Array<Submodule_Update_Column>;
+  where?: InputMaybe<Submodule_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "submodule". */
+export type Submodule_Order_By = {
+  course_level?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  description?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  module_category?: InputMaybe<Order_By>;
+  module_id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  submodule_module?: InputMaybe<Module_Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: submodule */
+export type Submodule_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "submodule" */
+export enum Submodule_Select_Column {
+  /** column name */
+  CourseLevel = 'course_level',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ModuleCategory = 'module_category',
+  /** column name */
+  ModuleId = 'module_id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "submodule" */
+export type Submodule_Set_Input = {
+  course_level?: InputMaybe<Course_Level_Enum>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  module_category?: InputMaybe<Module_Category_Enum>;
+  module_id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** Streaming cursor of the table "submodule" */
+export type Submodule_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Submodule_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Submodule_Stream_Cursor_Value_Input = {
+  course_level?: InputMaybe<Course_Level_Enum>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  module_category?: InputMaybe<Module_Category_Enum>;
+  module_id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** update columns of table "submodule" */
+export enum Submodule_Update_Column {
+  /** column name */
+  CourseLevel = 'course_level',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ModuleCategory = 'module_category',
+  /** column name */
+  ModuleId = 'module_id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+export type Submodule_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Submodule_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Submodule_Bool_Exp;
 };
 
 export type Subscription_Root = {
@@ -47470,6 +47839,14 @@ export type Subscription_Root = {
   role_by_pk?: Maybe<Role>;
   /** fetch data from the table in a streaming manner: "role" */
   role_stream: Array<Role>;
+  /** fetch data from the table: "submodule" */
+  submodule: Array<Submodule>;
+  /** fetch aggregated fields from the table: "submodule" */
+  submodule_aggregate: Submodule_Aggregate;
+  /** fetch data from the table: "submodule" using primary key columns */
+  submodule_by_pk?: Maybe<Submodule>;
+  /** fetch data from the table in a streaming manner: "submodule" */
+  submodule_stream: Array<Submodule>;
   /** fetch data from the table: "trainer_role_type" */
   trainer_role_type: Array<Trainer_Role_Type>;
   /** fetch aggregated fields from the table: "trainer_role_type" */
@@ -50133,6 +50510,36 @@ export type Subscription_RootRole_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Role_Stream_Cursor_Input>>;
   where?: InputMaybe<Role_Bool_Exp>;
+};
+
+
+export type Subscription_RootSubmoduleArgs = {
+  distinct_on?: InputMaybe<Array<Submodule_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Submodule_Order_By>>;
+  where?: InputMaybe<Submodule_Bool_Exp>;
+};
+
+
+export type Subscription_RootSubmodule_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Submodule_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Submodule_Order_By>>;
+  where?: InputMaybe<Submodule_Bool_Exp>;
+};
+
+
+export type Subscription_RootSubmodule_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootSubmodule_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Submodule_Stream_Cursor_Input>>;
+  where?: InputMaybe<Submodule_Bool_Exp>;
 };
 
 
@@ -53054,7 +53461,7 @@ export type CourseToBuildQueryVariables = Exact<{
 }>;
 
 
-export type CourseToBuildQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, conversion?: boolean | null, name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, bildModules?: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies?: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
+export type CourseToBuildQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, conversion?: boolean | null, name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null, submodules: Array<{ __typename?: 'submodule', id: any, name: string }> } }>, bildModules?: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies?: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
 
 export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -53741,7 +54148,7 @@ export type ShallowOrganizationFragment = { __typename?: 'organization', id: any
 
 export type ProfileFragment = { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> };
 
-export type ModuleFragment = { __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any };
+export type ModuleFragment = { __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any, submodules: Array<{ __typename?: 'submodule', id: any, name: string }>, submodules_aggregate: { __typename?: 'submodule_aggregate', aggregate?: { __typename?: 'submodule_aggregate_fields', count: number } | null } };
 
 export type ModuleGroupFragment = { __typename?: 'module_group', id: any, name: string, level: Course_Level_Enum, color: Color_Enum, mandatory: boolean, requires?: any | null, createdAt: any, updatedAt: any };
 
@@ -54114,7 +54521,7 @@ export type ModuleGroupsQueryVariables = Exact<{
 }>;
 
 
-export type ModuleGroupsQuery = { __typename?: 'query_root', groups: Array<{ __typename?: 'module_group', id: any, name: string, level: Course_Level_Enum, color: Color_Enum, mandatory: boolean, requires?: any | null, createdAt: any, updatedAt: any, modules: Array<{ __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any }>, duration: { __typename?: 'module_group_duration_aggregate', aggregate?: { __typename?: 'module_group_duration_aggregate_fields', sum?: { __typename?: 'module_group_duration_sum_fields', duration?: number | null } | null } | null } }> };
+export type ModuleGroupsQuery = { __typename?: 'query_root', groups: Array<{ __typename?: 'module_group', id: any, name: string, level: Course_Level_Enum, color: Color_Enum, mandatory: boolean, requires?: any | null, createdAt: any, updatedAt: any, modules: Array<{ __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any, submodules: Array<{ __typename?: 'submodule', id: any, name: string }>, submodules_aggregate: { __typename?: 'submodule_aggregate', aggregate?: { __typename?: 'submodule_aggregate_fields', count: number } | null } }>, duration: { __typename?: 'module_group_duration_aggregate', aggregate?: { __typename?: 'module_group_duration_aggregate_fields', sum?: { __typename?: 'module_group_duration_sum_fields', duration?: number | null } | null } | null } }> };
 
 export type CreateOrderMutationVariables = Exact<{
   input: CreateOrderInput;

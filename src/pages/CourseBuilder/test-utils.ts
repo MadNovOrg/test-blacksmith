@@ -46,6 +46,8 @@ export function buildModule(
     type: Module_Category_Enum.Physical,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    submodules: [],
+    submodules_aggregate: {},
     ...overrides,
   }
 }

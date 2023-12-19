@@ -68,6 +68,10 @@ const GroupsSelection: React.FC<Props> = ({
 }) => {
   const theme = useTheme()
 
+  const is3daySRTCourse =
+    level === Course_Level_Enum.ThreeDaySafetyResponseTrainer &&
+    type === Course_Type_Enum.Open
+
   const [selectedIds, setSelectedIds] = useState<string[]>(
     !initialGroups.length
       ? mandatoryGroups.map(group => group.id)
@@ -200,6 +204,9 @@ const GroupsSelection: React.FC<Props> = ({
             dynamicMandatoryIds.includes(moduleGroup.id) ||
             type === Course_Type_Enum.Open
 
+          const hideDuration =
+            !is3daySRTCourse && moduleGroup.duration.aggregate?.sum?.duration
+
           return (
             <Accordion
               key={moduleGroup.id}
@@ -244,7 +251,7 @@ const GroupsSelection: React.FC<Props> = ({
                             <span> *</span>
                           ) : null}
                         </Typography>
-                        {moduleGroup.duration.aggregate?.sum?.duration && (
+                        {hideDuration && (
                           <Typography variant="body2" color="white">
                             {t('minimum')}{' '}
                             <span data-testid="module-duration">
@@ -265,9 +272,23 @@ const GroupsSelection: React.FC<Props> = ({
                 sx={{ borderColor: getModuleCardColor(moduleGroup.color) }}
               >
                 <Stack spacing={1}>
-                  {moduleGroup.modules.map(module => (
-                    <Typography key={module.id}>{module.name}</Typography>
-                  ))}
+                  {moduleGroup.modules &&
+                    moduleGroup.modules !== undefined &&
+                    moduleGroup.modules.map((g, index) => (
+                      <Box key={index}>
+                        <Box display="flex" alignItems="center">
+                          <Typography>{g.name || t('common.group')}</Typography>
+                        </Box>
+                        <Box sx={{ ml: 4 }}>
+                          {g?.submodules?.length > 0 &&
+                            g.submodules.map(m => (
+                              <Box key={m.name}>
+                                <Typography>{m.name}</Typography>
+                              </Box>
+                            ))}
+                        </Box>
+                      </Box>
+                    ))}
                 </Stack>
               </StyledAccordionDetails>
             </Accordion>
@@ -323,6 +344,10 @@ const GroupsSelection: React.FC<Props> = ({
               return null
             }
 
+            const hideDuration =
+              !is3daySRTCourse &&
+              selectedGroup.duration.aggregate?.sum?.duration
+
             return (
               <Accordion
                 key={groupId}
@@ -352,7 +377,7 @@ const GroupsSelection: React.FC<Props> = ({
                           ) : null}
                         </span>
                       </Typography>
-                      {selectedGroup.duration.aggregate?.sum?.duration && (
+                      {hideDuration && (
                         <Typography variant="body2" color="white">
                           {t('minimum')}{' '}
                           <span data-testid="module-duration">
@@ -373,8 +398,16 @@ const GroupsSelection: React.FC<Props> = ({
                   }}
                 >
                   <Stack spacing={1}>
-                    {selectedGroup.modules.map(module => (
-                      <Typography key={module.id}>{module.name}</Typography>
+                    {selectedGroup.modules.map((module, index) => (
+                      <Box key={index} sx={{ mt: 2 }}>
+                        <Typography key={module.id}>{module.name}</Typography>
+                        {module.submodules?.length > 0 &&
+                          module.submodules.map(m => (
+                            <Box key={m.name} sx={{ ml: 4 }}>
+                              <Typography>{m.name}</Typography>
+                            </Box>
+                          ))}
+                      </Box>
                     ))}
                   </Stack>
                 </StyledAccordionDetails>
