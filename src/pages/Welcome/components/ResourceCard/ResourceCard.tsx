@@ -139,7 +139,7 @@ export const ResourceCard: React.FC<{
                 {chipOptions[resource.type].icon}
               </Box>
 
-              {t(`pages.welcome-v2.resource-card.type-${resource.type}`)}
+              {t(`pages.welcome.resource-card.type-${resource.type}`)}
             </Typography>
           </Box>
         </Box>

@@ -7,6 +7,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore'
 import HelpCenterIcon from '@mui/icons-material/HelpCenter'
 import SchoolIcon from '@mui/icons-material/School'
 import AdminIcon from '@mui/icons-material/SupervisorAccount'
+import SupportIcon from '@mui/icons-material/Support'
 import {
   Box,
   Button,
@@ -98,6 +99,20 @@ export const ProfileMenu: React.FC<
               </ListItemText>
             </ListItemButton>
           )}
+
+          <Link to={import.meta.env.VITE_WELCOME_PAGE_URL}>
+            <ListItemButton onClick={() => navigate('/admin')}>
+              <ListItemIcon>
+                <SupportIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText
+                data-testid="getting-started-link"
+                primaryTypographyProps={{ variant: 'body2' }}
+              >
+                {t('help-centre')}
+              </ListItemText>
+            </ListItemButton>
+          </Link>
 
           {acl.isInternalUser() ? (
             <>

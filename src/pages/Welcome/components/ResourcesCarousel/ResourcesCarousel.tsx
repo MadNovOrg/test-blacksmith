@@ -33,7 +33,7 @@ export const ResourcesCarousel = () => {
   })
 
   const { t } = useTranslation('pages', {
-    keyPrefix: 'welcome-v2.resources-carousel',
+    keyPrefix: 'welcome.resources-carousel',
   })
 
   const swiperRef = useRef<SwiperClass>()

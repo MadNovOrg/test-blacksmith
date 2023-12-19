@@ -107,7 +107,7 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
             data-testid="getting-started-link"
             primaryTypographyProps={{ variant: 'body2' }}
           >
-            <Link href={import.meta.env.VITE_WELCOME_PAGE_URL}>
+            <Link href={import.meta.env.VITE_WELCOME_PAGE_URL} underline="none">
               {t('help-centre')}
             </Link>
           </ListItemText>

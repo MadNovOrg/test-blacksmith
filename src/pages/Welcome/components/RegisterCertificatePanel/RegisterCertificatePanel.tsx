@@ -8,7 +8,7 @@ import bgImage from './assets/register-card2.jpg'
 
 export const RegisterCertificatePanel = () => {
   const { t } = useTranslation('pages', {
-    keyPrefix: 'welcome-v2.register-certificate-panel',
+    keyPrefix: 'welcome.register-certificate-panel',
   })
 
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))

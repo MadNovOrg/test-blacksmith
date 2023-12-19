@@ -1,4 +1,5 @@
 import { Button, Container, Stack } from '@mui/material'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 
 import { LinkBehavior } from '@app/components/LinkBehavior'
@@ -11,11 +12,14 @@ import { MembershipGrid } from './components/MembershipGrid/MembershipGrid'
 import { ResourcesCarousel } from './components/ResourcesCarousel/ResourcesCarousel'
 import { SplitImage } from './components/SplitImage/SplitImage'
 
-export const WelcomeV2 = () => {
-  const { t } = useTranslation('pages', { keyPrefix: 'welcome-v2' })
+export const Welcome = () => {
+  const { t } = useTranslation('pages', { keyPrefix: 'welcome' })
 
   return (
     <FullHeightPageLayout bgcolor="grey.100" pb={10}>
+      <Helmet>
+        <title>{t('meta-title')}</title>
+      </Helmet>
       <Hero />
       <MembershipGrid />
 

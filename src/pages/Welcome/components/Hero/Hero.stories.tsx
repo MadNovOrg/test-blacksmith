@@ -8,7 +8,6 @@ import { Hero } from './Hero'
 import withAuthContext from '@storybook-decorators/withAuthContext'
 import withi18nProvider from '@storybook-decorators/withi18nProvider'
 import withMuiThemeProvider from '@storybook-decorators/withMuiThemeProvider'
-import withRouterProvider from '@storybook-decorators/withRouterProvider'
 
 export default {
   title: 'pages/Welcome/Hero',
@@ -16,7 +15,6 @@ export default {
   decorators: [
     withMuiThemeProvider,
     withi18nProvider,
-    withRouterProvider,
     story => (
       <FullHeightPageLayout bgcolor="grey.100">{story()}</FullHeightPageLayout>
     ),

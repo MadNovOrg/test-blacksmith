@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
-import React, { ReactNode, Suspense, useEffect, useState } from 'react'
+import React, { ReactNode, Suspense, useEffect } from 'react'
 import {
   Navigate,
   Route,
@@ -9,7 +9,6 @@ import {
   useNavigate,
 } from 'react-router-dom'
 
-import { GettingStartedDialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
 import { AppLayout } from '@app/layouts/AppLayout'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
@@ -26,11 +25,10 @@ import { LogoutPage } from '@app/pages/common/Logout'
 import { RegistrationPage } from '@app/pages/common/Registration'
 import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
-import options from '@app/pages/GettingStarted/options'
 import { InvitationPage } from '@app/pages/Invitation'
 import { OrgInvitationPage } from '@app/pages/Invitation/OrgInvitation'
 import { Onboarding } from '@app/pages/Onboarding/Onboarding'
-import { Welcome } from '@app/pages/Welcome'
+import { Welcome } from '@app/pages/Welcome/Welcome'
 import { RoleName } from '@app/types'
 
 const ProfileRoutes = React.lazy(() => import('./profile'))
@@ -123,9 +121,6 @@ function LoggedInRoutes() {
     import.meta.env.MODE === 'production' &&
     Boolean(location.state?.from?.pathname && location.state?.from?.fromLogin)
 
-  const [showGettingStartedDialog, setShowGettingStartedDialog] =
-    useState(false) // initial state should be firstTimeLogin || longTimeSinceLastLogin
-
   useEffect(() => {
     if (
       !profile?.givenName ||
@@ -143,12 +138,6 @@ function LoggedInRoutes() {
 
   return (
     <>
-      <GettingStartedDialog
-        options={options}
-        open={showGettingStartedDialog}
-        onClose={() => setShowGettingStartedDialog(false)}
-      />
-
       <Routes>
         <Route
           index

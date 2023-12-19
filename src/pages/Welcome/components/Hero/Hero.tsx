@@ -17,7 +17,7 @@ import { RegisterCertificatePanel } from '../RegisterCertificatePanel/RegisterCe
 import heroImage from './assets/hero-bg.png'
 
 export const Hero = () => {
-  const { t } = useTranslation('pages', { keyPrefix: 'welcome-v2.hero' })
+  const { t } = useTranslation('pages', { keyPrefix: 'welcome.hero' })
 
   const { activeCertificates } = useAuth()
 
@@ -87,6 +87,15 @@ export const Hero = () => {
               }}
             >
               {t('view-profile-label')}
+            </Button>
+            <Button
+              href={import.meta.env.VITE_WELCOME_PAGE_URL}
+              variant="contained"
+              size={isMobile ? 'medium' : 'large'}
+              LinkComponent={LinkBehavior}
+              color="purple"
+            >
+              {t('help-center-label')}
             </Button>
           </Stack>
         </Box>

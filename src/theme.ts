@@ -51,6 +51,7 @@ declare module '@mui/material/styles' {
     neonBlue: PaletteOptions['primary']
     critical: PaletteOptions['primary']
     lime: PaletteOptions['primary']
+    purple: PaletteOptions['primary']
   }
 }
 
@@ -74,6 +75,7 @@ declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
     gray: true
     lime: true
+    purple: true
   }
 }
 
@@ -81,6 +83,19 @@ declare module '@mui/material/SvgIcon' {
   interface SvgIconPropsColorOverrides {
     tertiary: true
   }
+}
+
+const purpleColor = {
+  50: '#fbf4ff',
+  100: '#e1d7e8',
+  200: '#c4b0d0',
+  300: '#a688b9',
+  400: '#8961a1',
+  500: '#6B398A',
+  600: '#572E70',
+  700: '#402253',
+  800: '#2A1636',
+  900: '#160C1D',
 }
 
 const theme = createTheme({
@@ -133,18 +148,7 @@ const theme = createTheme({
       800: '#654206',
       900: '#352303',
     },
-    purple: {
-      50: '#fbf4ff',
-      100: '#e1d7e8',
-      200: '#c4b0d0',
-      300: '#a688b9',
-      400: '#8961a1',
-      500: '#6B398A',
-      600: '#572E70',
-      700: '#402253',
-      800: '#2A1636',
-      900: '#160C1D',
-    },
+    purple: purpleColor,
     fuschia: {
       50: '#fbf6ff',
       100: '#e1d7e8',
@@ -217,6 +221,11 @@ const theme = createTheme({
     lime: {
       main: '#9EB934',
       dark: '#7E9329',
+      contrastText: '#fff',
+    },
+    purple: {
+      main: purpleColor[500],
+      dark: purpleColor[600],
       contrastText: '#fff',
     },
   },

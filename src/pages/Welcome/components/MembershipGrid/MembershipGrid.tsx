@@ -60,7 +60,7 @@ const GridItem: React.FC<
 
 export const MembershipGrid = () => {
   const { t } = useTranslation('pages', {
-    keyPrefix: 'welcome-v2.membership-grid',
+    keyPrefix: 'welcome.membership-grid',
   })
 
   return (
