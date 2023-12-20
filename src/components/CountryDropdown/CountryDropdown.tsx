@@ -42,7 +42,7 @@ export const CountryDropdown = React.forwardRef(function CountryDropdown(
       required={required}
       error={error}
       helperText={errormessage}
-      label={label}
+      label={label ?? t('country')}
       {...props.register}
       value={props.value}
       defaultValue={props.value}
@@ -59,7 +59,7 @@ export const CountryDropdown = React.forwardRef(function CountryDropdown(
         ))
       ) : (
         <MenuItem value="" disabled>
-          {t('fields.organization-sector')}
+          {t('country')}
         </MenuItem>
       )}
     </TextField>

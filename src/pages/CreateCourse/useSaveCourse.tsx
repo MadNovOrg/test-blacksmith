@@ -219,6 +219,7 @@ export function useSaveCourse(): {
               type: courseData.type,
               special_instructions: courseData.specialInstructions,
               parking_instructions: courseData.parkingInstructions,
+              residingCountry: courseData.residingCountry ?? '',
               ...(courseData.organization
                 ? { organization_id: courseData.organization.id }
                 : null),

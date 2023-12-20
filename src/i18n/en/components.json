@@ -174,6 +174,7 @@
     "price-required-error": "Price per attendee is a required field",
     "course-level-one-info": "Please be aware some holds may fall under Level Two certification.",
     "aol-info": "Please be aware that any training delivered outside of a licenced area would be invalidated by Team Teach and may cause the licence to be removed.",
+    "timezone-info": "Please note that the course time and date you set corresponds to the time zone of the country in which the course will take place (course residing country)",
     "select-one-option": "Please mark at least one of the options above",
     "reset-instructions-button": "Reset to default",
     "bild-strategies-required": "At least one BILD strategy should be selected",
@@ -253,7 +254,8 @@
       "label": "Certificate duration",
       "radio-label_one": "{{count}} year",
       "radio-label_other": "{{count}} years"
-    }
+    },
+    "residing-country": "Course Residing Country"
   },
   "searchTrainers": {
     "loading": "Loading...",

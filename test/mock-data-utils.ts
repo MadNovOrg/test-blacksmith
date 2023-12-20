@@ -295,6 +295,7 @@ export const buildCourse = build<Course>({
     freeSpaces: 0,
     accreditedBy: Accreditors_Enum.Icm,
     bildStrategies: [],
+    residingCountry: chance.country(),
     orders: [
       {
         salesRepresentative: perBuild(() => buildProfile()),
@@ -324,6 +325,7 @@ export const buildStartedCourse = build<Course>({
     schedule: [buildCourseSchedule()],
     level: Course_Level_Enum.Level_1,
     course_code: 'CL-L1-10000',
+    residingCountry: chance.country(),
     trainers: [buildCourseTrainer()],
     dates: {
       aggregate: {
@@ -351,6 +353,7 @@ export const buildEndedCourse = build<Course>({
     name: perBuild(() => chance.word({ length: 3 })),
     status: Course_Status_Enum.GradeMissing,
     createdAt: new Date().toISOString(),
+    residingCountry: chance.country(),
     type: Course_Type_Enum.Open,
     min_participants: 6,
     max_participants: 12,
@@ -392,6 +395,7 @@ export const buildNotStartedCourse = build<Course>({
     type: Course_Type_Enum.Open,
     min_participants: 6,
     max_participants: 12,
+    residingCountry: chance.country(),
     deliveryType: Course_Delivery_Type_Enum.F2F,
     gradingConfirmed: false,
     gradingStarted: false,

@@ -29,6 +29,7 @@ export type Course = {
   createdAt: string
   updatedAt?: string
   name: string
+  residingCountry: string
   level: Course_Level_Enum
   deliveryType: Course_Delivery_Type_Enum
   type: Course_Type_Enum
@@ -626,6 +627,7 @@ export type CourseInput = {
   price: number | null
   displayOnWebsite?: boolean
   renewalCycle?: Course_Renewal_Cycle_Enum
+  residingCountry?: string
   //TODO: Delete this after Arlo migration
   arloReferenceId?: string
 }

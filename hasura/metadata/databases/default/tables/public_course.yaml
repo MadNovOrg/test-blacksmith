@@ -274,6 +274,7 @@ insert_permissions:
         - price
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - updated_at
@@ -310,6 +311,7 @@ insert_permissions:
         - organization_key_contact_profile_id
         - parking_instructions
         - reaccreditation
+        - residingCountry
         - special_instructions
         - updated_at
   - role: tt-admin
@@ -354,6 +356,7 @@ insert_permissions:
         - price
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - updated_at
@@ -396,6 +399,7 @@ insert_permissions:
         - price
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - updated_at
@@ -420,6 +424,7 @@ select_permissions:
         - price_currency
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - start
         - updated_at
       computed_fields:
@@ -478,6 +483,7 @@ select_permissions:
         - price_currency
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - start
@@ -582,6 +588,7 @@ select_permissions:
         - price_currency
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - start
@@ -644,6 +651,7 @@ select_permissions:
         - price_currency
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - start
@@ -692,6 +700,7 @@ select_permissions:
         - price_currency
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - start
@@ -783,6 +792,7 @@ select_permissions:
         - price_currency
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - start
@@ -845,6 +855,7 @@ select_permissions:
         - price_currency
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - start
@@ -860,10 +871,10 @@ select_permissions:
       columns:
         - account_code
         - accredited_by
-        - arloReferenceId
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - arloReferenceId
         - booking_contact_invite_data
         - booking_contact_profile_id
         - conversion
@@ -895,6 +906,7 @@ select_permissions:
         - price_currency
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - start
@@ -987,6 +999,7 @@ select_permissions:
         - price_currency
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - start
@@ -1039,6 +1052,7 @@ select_permissions:
         - price_currency
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - start
@@ -1080,6 +1094,7 @@ select_permissions:
         - price_currency
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - start
         - updated_at
       computed_fields:
@@ -1135,6 +1150,7 @@ select_permissions:
         - price_currency
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - start
@@ -1236,6 +1252,7 @@ update_permissions:
         - price
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - updated_at
@@ -1293,6 +1310,7 @@ update_permissions:
         - price
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - updated_at
@@ -1338,6 +1356,7 @@ update_permissions:
         - price
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - updated_at
@@ -1378,6 +1397,7 @@ update_permissions:
         - parking_instructions
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - special_instructions
         - updated_at
       filter:
@@ -1444,6 +1464,7 @@ update_permissions:
         - price
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - updated_at
@@ -1490,6 +1511,7 @@ update_permissions:
         - price
         - reaccreditation
         - renewal_cycle
+        - residingCountry
         - source
         - special_instructions
         - updated_at

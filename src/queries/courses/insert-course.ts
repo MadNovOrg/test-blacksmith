@@ -66,6 +66,7 @@ export type ParamsType = {
     conversion?: boolean
     price?: number | null
     renewalCycle?: Course_Renewal_Cycle_Enum
+    residingCountry: string
     /// TODO: Delete this after Arlo migration
     arloReferenceId?: string
   }

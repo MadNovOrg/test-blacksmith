@@ -147,6 +147,7 @@ describe('component: ReviewLicenseOrder', () => {
   it('creates a course with the order when clicked on the save button', async () => {
     const startDate = addWeeks(new Date(), 5)
     const endDate = addHours(startDate, 8)
+    const residingCountry = chance.country()
     const trainer: TrainerInput = {
       profile_id: chance.guid(),
       trainer_role_types: [
@@ -171,6 +172,7 @@ describe('component: ReviewLicenseOrder', () => {
       reaccreditation: false,
       blendedLearning: true,
       maxParticipants: 12,
+      residingCountry,
       deliveryType: Course_Delivery_Type_Enum.F2F,
       organization: {
         id: 'org-id',
@@ -243,6 +245,7 @@ describe('component: ReviewLicenseOrder', () => {
           exceptionsPending: false,
           max_participants: courseData.maxParticipants,
           type: courseData.type,
+          residingCountry,
           organization_id: courseData.organization?.id,
           parking_instructions: undefined,
           special_instruction: undefined,

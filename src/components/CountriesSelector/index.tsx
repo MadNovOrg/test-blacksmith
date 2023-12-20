@@ -1,20 +1,28 @@
+// TODO: @ion to unit test this functionality
 import { Autocomplete, Box, TextField } from '@mui/material'
 import { BaseTextFieldProps } from '@mui/material/TextField/TextField'
 import { SyntheticEvent } from 'react'
 import ReactCountryFlag from 'react-country-flag'
+import { useTranslation } from 'react-i18next'
 
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 
 export type CountriesSelectorProps = {
-  onChange: (event: SyntheticEvent, selected: string | null) => void
-  value: string
+  onChange?: (event: SyntheticEvent, selected: string | null) => void
+  value?: string
 } & BaseTextFieldProps
 
-const CountriesSelector = ({ onChange, value }: CountriesSelectorProps) => {
+const CountriesSelector = ({
+  onChange,
+  value,
+  label,
+  error,
+  helperText,
+}: CountriesSelectorProps) => {
   const { countriesCodesWithUKs: countries, getLabel } = useWorldCountries()
-
+  const { t } = useTranslation()
   return (
     <Autocomplete
       value={!value ? undefined : value}
@@ -35,7 +43,9 @@ const CountriesSelector = ({ onChange, value }: CountriesSelectorProps) => {
       renderInput={params => (
         <TextField
           {...params}
-          label="Country"
+          error={error}
+          helperText={helperText}
+          label={label ?? t('country')}
           inputProps={{
             ...params.inputProps,
           }}

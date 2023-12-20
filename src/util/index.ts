@@ -361,6 +361,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     price: course.price ?? null,
     displayOnWebsite: course.displayOnWebsite,
     renewalCycle: course.renewalCycle,
+    residingCountry: course.residingCountry,
   }
 }
 
@@ -809,5 +810,3 @@ export const customFeeFormat = (num: number) => {
     fractionalPart ? integerPart.concat('.', fractionalPart) : integerPart
   )
 }
-
-export const INDIRECT_COURSE_MIN_ALLOWED_DATE = new Date('2023-12-04')

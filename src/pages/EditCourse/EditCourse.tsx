@@ -43,6 +43,8 @@ import {
   InsertCourseAuditMutation,
   InsertCourseAuditMutationVariables,
   UpdateCourseMutation,
+  UpdateCourseMutationVariables,
+  Course_Trainer_Insert_Input,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
@@ -63,10 +65,7 @@ import {
   ParamsType as NotifyCourseEditParamType,
   ResponseType as NotifyCourseEditResponseType,
 } from '@app/queries/courses/notify-course-edit'
-import {
-  ParamsType, // TODO: delete this and use generated type
-  UPDATE_COURSE_MUTATION,
-} from '@app/queries/courses/update-course'
+import { UPDATE_COURSE_MUTATION } from '@app/queries/courses/update-course'
 import {
   BildStrategies,
   CourseInput,
@@ -135,7 +134,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   } = useCourse(id ?? '')
 
   const course = courseInfo?.course
-
   const courseInput: CourseInput | undefined = useMemo(() => {
     return course ? courseToCourseInput(course) : undefined
   }, [course])
@@ -158,7 +156,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { addSnackbarMessage } = useSnackbar()
 
   const [{ error: updatingError, fetching: updatingCourse }, updateCourse] =
-    useMutation<UpdateCourseMutation, ParamsType>(UPDATE_COURSE_MUTATION)
+    useMutation<UpdateCourseMutation, UpdateCourseMutationVariables>(
+      UPDATE_COURSE_MUTATION
+    )
   const [{ error: auditError, fetching: insertingAudit }, insertAudit] =
     useMutation<InsertCourseAuditMutation, InsertCourseAuditMutationVariables>(
       INSERT_COURSE_AUDIT
@@ -395,12 +395,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                   }
                 : null),
               ...(courseData.price ? { price: courseData.price } : null),
+              residingCountry: courseData.residingCountry,
             },
             orderInput: orderToUpdate,
             trainers: trainersToAdd.map(t => ({
               ...t,
               course_id: course.id,
-            })),
+            })) as Course_Trainer_Insert_Input,
             trainersToDelete,
             scheduleId: course?.schedule[0].id,
             scheduleInput: {

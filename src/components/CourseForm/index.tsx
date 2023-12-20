@@ -23,6 +23,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { isPast, isDate, isValid as isValidDate, isBefore } from 'date-fns'
 import { TFunction } from 'i18next'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, {
   memo,
   RefObject,
@@ -41,7 +42,7 @@ import {
   useWatch,
 } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useUpdateEffect } from 'react-use'
+import { useEffectOnce, useUpdateEffect } from 'react-use'
 import { noop } from 'ts-essentials'
 import { useQuery } from 'urql'
 import { SchemaDescription } from 'yup'
@@ -72,13 +73,10 @@ import { QUERY as GET_NOT_DETAILED_PROFILE } from '@app/queries/profile/get-not-
 import { schemas, yup } from '@app/schemas'
 import theme from '@app/theme'
 import { CourseInput, Organization, RoleName } from '@app/types'
-import {
-  bildStrategiesToArray,
-  extractTime,
-  INDIRECT_COURSE_MIN_ALLOWED_DATE,
-  requiredMsg,
-} from '@app/util'
+import { bildStrategiesToArray, extractTime, requiredMsg } from '@app/util'
 
+import CountriesSelector from '../CountriesSelector'
+import useWorldCountries from '../CountriesSelector/hooks/useWorldCountries'
 import { InfoPanel } from '../InfoPanel'
 
 import { InstructionAccordionField } from './components/AccordionTextField'
@@ -120,12 +118,6 @@ export type DisabledFields = Partial<keyof CourseInput>
 
 type ContactType = 'bookingContact' | 'organizationKeyContact'
 
-const INDIRECT_COURSE_MIN_ALLOWED_DATE_FOR_YUP = new Date(
-  new Date(INDIRECT_COURSE_MIN_ALLOWED_DATE.getTime()).setDate(
-    INDIRECT_COURSE_MIN_ALLOWED_DATE.getDate() - 1
-  )
-)
-
 interface Props {
   type?: Course_Type_Enum
   courseInput?: CourseInput
@@ -153,7 +145,26 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation()
   const { activeRole, acl } = useAuth()
+  const residingCountryEnabled = useFeatureFlagEnabled(
+    'course-residing-country'
+  )
 
+  // We can enable feature flags based on the current URL
+  // but posthog wont update in time and the flag is set as true even if it should be false
+  // The below is not really that nice as we could omit checking for the course type and manage this fully within posthog
+  const isResidingCountryEnabled = useMemo(
+    () =>
+      residingCountryEnabled &&
+      courseInput?.accreditedBy === Accreditors_Enum.Icm &&
+      (courseInput?.type === Course_Type_Enum.Open ||
+        courseType === Course_Type_Enum.Open),
+    [
+      courseInput?.accreditedBy,
+      courseInput?.type,
+      courseType,
+      residingCountryEnabled,
+    ]
+  )
   const hasOrg = [Course_Type_Enum.Closed, Course_Type_Enum.Indirect].includes(
     courseType
   )
@@ -164,12 +175,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const minCourseStartDate = new Date()
   minCourseStartDate.setDate(minCourseStartDate.getDate() + 1)
 
-  /**
-   * @todo delete post 4th of December
-   */
-  const minStartDateRestriction =
-    courseType === Course_Type_Enum.Indirect && activeRole === RoleName.TRAINER
-
+  const { countriesCodesWithUKs } = useWorldCountries()
   const schema = useMemo(
     () =>
       yup.object({
@@ -234,6 +240,16 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .required(t('components.course-form.course-level-required')),
         blendedLearning: yup.bool(),
         reaccreditation: yup.bool(),
+        ...(isResidingCountryEnabled
+          ? {
+              residingCountry: yup
+                .string()
+                .oneOf(countriesCodesWithUKs)
+                .required(
+                  requiredMsg(t, 'components.course-form.residing-country')
+                ),
+            }
+          : {}),
         deliveryType: yup
           .mixed()
           .oneOf([
@@ -269,17 +285,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               if (value) return !isPast(value)
             }
           )
-          .when([], {
-            is: () => minStartDateRestriction,
-
-            then: sd =>
-              sd.min(
-                INDIRECT_COURSE_MIN_ALLOWED_DATE_FOR_YUP,
-                t('components.course-form.min-start-date', {
-                  date: INDIRECT_COURSE_MIN_ALLOWED_DATE,
-                })
-              ),
-          })
           .required(t('components.course-form.start-date-required')),
         startTime: yup
           .string()
@@ -295,15 +300,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               if (value) return !isPast(value)
             }
           )
-          .when([], {
-            is: () => minStartDateRestriction,
-
-            then: sd =>
-              sd.min(
-                INDIRECT_COURSE_MIN_ALLOWED_DATE_FOR_YUP,
-                t('components.course-form.min-end-date')
-              ),
-          })
           .required(t('components.course-form.end-date-required')),
         endTime: yup
           .string()
@@ -413,18 +409,18 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     [
       hasOrg,
       t,
+      courseType,
       isClosedCourse,
       isIndirectCourse,
+      isResidingCountryEnabled,
+      countriesCodesWithUKs,
       hasMinParticipants,
-      courseType,
-      minStartDateRestriction,
-      trainerRatioNotMet,
       isCreation,
       courseInput?.startDate,
+      trainerRatioNotMet,
       acl,
     ]
   )
-
   const defaultValues = useMemo<Omit<CourseInput, 'id'>>(
     () => ({
       accreditedBy: courseInput?.accreditedBy ?? Accreditors_Enum.Icm,
@@ -483,15 +479,19 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       conversion: courseInput?.conversion ?? false,
       price: courseInput?.price ?? null,
       renewalCycle: courseInput?.renewalCycle,
+      ...(isResidingCountryEnabled
+        ? {
+            residingCountry: courseInput?.residingCountry ?? 'GB-ENG',
+          }
+        : {}),
     }),
-    [courseInput, courseType]
+    [courseInput, courseType, isResidingCountryEnabled]
   )
   const methods = useForm<CourseInput>({
     resolver: yupResolver(schema),
     mode: 'all',
     defaultValues,
   })
-
   const {
     register,
     setValue,
@@ -507,7 +507,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   } = methods
 
   const errors = formState.errors
-
   const orgSelectorOnChange = useCallback(
     (org: CallbackOption) => {
       if (!org) {
@@ -874,6 +873,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     }
   }, [values.courseLevel, setValue])
 
+  useEffectOnce(() => {
+    setValue('residingCountry', courseInput?.residingCountry ?? 'GB-ENG')
+  })
   const handleContactChange = useCallback(
     (field: 'bookingContact' | 'organizationKeyContact' = 'bookingContact') =>
       (value: string | UserSelectorProfile) => {
@@ -1326,6 +1328,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     {t('components.course-form.course-level-one-info')}
                   </Alert>
                 )}
+                {errors.courseLevel?.message ? (
+                  <FormHelperText error>
+                    {errors.courseLevel.message}
+                  </FormHelperText>
+                ) : null}
                 {/* TODO: Delete this after Arlo migration to the hub - HAVENT USED THE translations file to have this easier to find by text search */}
                 {acl.isInternalUser() &&
                 courseType !== Course_Type_Enum.Indirect ? (
@@ -1344,11 +1351,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   </>
                 ) : null}
                 {/* TODO: REMOVE THE ABOVE after Arlo migration to the hub */}
-                {errors.courseLevel?.message ? (
-                  <FormHelperText error>
-                    {errors.courseLevel.message}
-                  </FormHelperText>
-                ) : null}
               </FormControl>
 
               {isBild ? (
@@ -1476,6 +1478,19 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 </Alert>
               ) : null}
 
+              {isResidingCountryEnabled ? (
+                <FormControl fullWidth sx={{ my: theme.spacing(2) }}>
+                  <CountriesSelector
+                    onChange={(_, code) =>
+                      setValue('residingCountry', code ?? '')
+                    }
+                    value={values.residingCountry}
+                    label={t('components.course-form.residing-country')}
+                    error={Boolean(errors.residingCountry?.message)}
+                    helperText={errors.residingCountry?.message}
+                  />
+                </FormControl>
+              ) : null}
               <Typography mb={2} mt={2} fontWeight={600}>
                 {t('components.course-form.delivery-type-section-title')}
               </Typography>
@@ -1639,11 +1654,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                             'components.course-form.start-date-placeholder'
                           )}
                           value={field.value}
-                          minDate={
-                            minStartDateRestriction
-                              ? INDIRECT_COURSE_MIN_ALLOWED_DATE
-                              : minCourseStartDate
-                          }
+                          minDate={minCourseStartDate}
                           maxDate={values.endDate || undefined}
                           onChange={newStartDate => {
                             field.onChange(newStartDate)
@@ -1702,12 +1713,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                             'components.course-form.end-date-placeholder'
                           )}
                           value={field.value}
-                          minDate={
-                            values.startDate ??
-                            (minStartDateRestriction
-                              ? INDIRECT_COURSE_MIN_ALLOWED_DATE
-                              : minCourseStartDate)
-                          }
+                          minDate={values.startDate ?? minCourseStartDate}
                           onChange={newEndDate => {
                             field.onChange(newEndDate)
                             setValue(
@@ -1750,6 +1756,16 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       )}
                     />
                   </Grid>
+                  {isResidingCountryEnabled ? (
+                    <Grid item>
+                      {/* timezone final wording::::This is a placeholder and is to be updated with the final wording provided by the client
+                      see https://behaviourhub.atlassian.net/browse/TTHP-2915
+                      */}
+                      <Alert severity="info" sx={{ mt: 1 }}>
+                        {t('components.course-form.timezone-info')}
+                      </Alert>
+                    </Grid>
+                  ) : null}
                 </Grid>
               </LocalizationProvider>
             </Box>

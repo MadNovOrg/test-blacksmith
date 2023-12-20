@@ -130,6 +130,7 @@ export const COURSE = gql`
     modulesDuration
     start
     end
+    residingCountry
   }
 `
 

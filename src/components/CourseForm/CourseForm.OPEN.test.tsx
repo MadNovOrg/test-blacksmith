@@ -1,11 +1,15 @@
+import { useFeatureFlagEnabled } from 'posthog-js/react'
+import { useTranslation } from 'react-i18next'
+
 import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
+import { RoleName } from '@app/types'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { render, renderHook, screen, userEvent, waitFor } from '@test/index'
 
 import { renderForm, selectDelivery, selectLevel } from './test-utils'
 
@@ -14,11 +18,17 @@ import CourseForm from '.'
 vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
   useCoursePrice: vi.fn(),
 }))
-
+vi.mock('posthog-js/react')
 const useCoursePriceMock = vi.mocked(useCoursePrice)
+const isResidingCountryEnabled = vi.mocked(useFeatureFlagEnabled)
 
 describe('component: CourseForm - OPEN', () => {
   const type = Course_Type_Enum.Open
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
 
   beforeEach(() => {
     useCoursePriceMock.mockReturnValue({
@@ -172,5 +182,34 @@ describe('component: CourseForm - OPEN', () => {
 
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
+  })
+  it('doesnt require a residing country if feature flag is disabled', async () => {
+    isResidingCountryEnabled.mockResolvedValueOnce(false)
+    await waitFor(() =>
+      render(<CourseForm type={type} />, {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      })
+    )
+
+    expect(
+      screen.queryByText(t('components.course-form.residing-country'))
+    ).not.toBeInTheDocument()
+  })
+  it('requires a residing country if feature flag is enabled', async () => {
+    isResidingCountryEnabled.mockResolvedValueOnce(true)
+    await waitFor(() =>
+      render(<CourseForm type={type} />, {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      })
+    )
+    waitFor(() =>
+      expect(
+        screen.queryByText(t('components.course-form.residing-country'))
+      ).toBeInTheDocument()
+    )
   })
 })
