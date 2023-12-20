@@ -139,6 +139,8 @@ select_permissions:
         - attributes
         - avatar
         - contact_details
+        - country
+        - countryCode
         - created_at
         - dietary_restrictions
         - disabilities
@@ -200,6 +202,8 @@ select_permissions:
         - attributes
         - avatar
         - contact_details
+        - country
+        - countryCode
         - created_at
         - dietary_restrictions
         - disabilities
@@ -255,6 +259,8 @@ select_permissions:
         - attributes
         - avatar
         - contact_details
+        - country
+        - countryCode
         - created_at
         - dietary_restrictions
         - disabilities

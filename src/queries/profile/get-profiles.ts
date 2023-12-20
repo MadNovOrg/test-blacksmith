@@ -18,6 +18,7 @@ export const getProfiles = gql`
       avatar
       archived
       email
+      countryCode
       organizations {
         isAdmin
         organization {

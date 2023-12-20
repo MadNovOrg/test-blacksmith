@@ -1,4 +1,5 @@
 import { build, perBuild } from '@jackfranklin/test-data-bot'
+import { useTranslation } from 'react-i18next'
 
 import {
   GetProfilesQuery,
@@ -7,7 +8,15 @@ import {
 import useProfiles from '@app/hooks/useProfiles'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 
-import { render, screen, within, chance, userEvent, waitFor } from '@test/index'
+import {
+  render,
+  screen,
+  within,
+  chance,
+  userEvent,
+  waitFor,
+  renderHook,
+} from '@test/index'
 
 import { Users } from './Users'
 
@@ -58,6 +67,14 @@ const mockProfile = build<
 })
 
 describe('page: Users', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+
+  const _t = (col: string) => t(`common.${col}`)
+
   it('displays a spinner while users are loading', () => {
     useProfilesMocked.mockReturnValue({
       profiles: [],
@@ -101,15 +118,18 @@ describe('page: Users', () => {
     const table = screen.getByRole('table')
     const tableHead = within(table).getByTestId('table-head')
     const columnHeaders = within(tableHead).getAllByRole('columnheader')
-    expect(columnHeaders).toHaveLength(6)
-    expect(within(columnHeaders[1]).getByText('Name')).toBeInTheDocument()
-    expect(within(columnHeaders[2]).getByText('Email')).toBeInTheDocument()
+    expect(columnHeaders).toHaveLength(7)
+    expect(within(columnHeaders[1]).getByText(_t('name'))).toBeInTheDocument()
+    expect(within(columnHeaders[2]).getByText(_t('email'))).toBeInTheDocument()
     expect(
-      within(columnHeaders[3]).getByText('Organisation')
+      within(columnHeaders[3]).getByText(_t('residing-country'))
     ).toBeInTheDocument()
-    expect(within(columnHeaders[4]).getByText('Role')).toBeInTheDocument()
     expect(
-      within(columnHeaders[5]).getByText('Trainer Type')
+      within(columnHeaders[4]).getByText(_t('organization'))
+    ).toBeInTheDocument()
+    expect(within(columnHeaders[5]).getByText(_t('role'))).toBeInTheDocument()
+    expect(
+      within(columnHeaders[6]).getByText(_t('trainer-type'))
     ).toBeInTheDocument()
     const tableBody = within(table).getByTestId('table-body')
     expect(tableBody.children).toHaveLength(1)
@@ -297,6 +317,47 @@ describe('page: Users', () => {
 
     await userEvent.click(screen.getByLabelText('Archived'))
 
+    await waitFor(() => {
+      expect(
+        screen.getByText(`${filteredProfile.fullName}`)
+      ).toBeInTheDocument()
+      expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
+    })
+  })
+
+  it('filters users by the residing country search', async () => {
+    const keyword = chance.word()
+
+    const profile = mockProfile()
+    const filteredProfile = mockProfile()
+
+    useProfilesMocked.mockImplementation(
+      ({ where }: GetProfilesQueryVariables) => {
+        const conditions = where?._or ?? []
+        console.log(
+          'conditions-------------------------------------------',
+          conditions
+        )
+        const profiles =
+          conditions.length >= 3
+            ? conditions[3]?.country?._ilike === `%${keyword}%`
+              ? [filteredProfile]
+              : [profile]
+            : [profile]
+        return {
+          profiles,
+          isLoading: false,
+          count: 0,
+          error: undefined,
+          mutate: vi.fn(),
+        }
+      }
+    )
+
+    render(<Users />)
+
+    const search = screen.getByTestId('FilterSearch-Input')
+    await userEvent.type(search, keyword)
     await waitFor(() => {
       expect(
         screen.getByText(`${filteredProfile.fullName}`)

@@ -22,6 +22,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useDebounce } from 'use-debounce'
 
 import { BackButton } from '@app/components/BackButton'
+import useWorldCountries, {
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { MergeUsersDialog } from '@app/components/dialogs'
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterByCertificateValidity } from '@app/components/filters/FilterByCertificateValidity'
@@ -47,6 +50,7 @@ export const Users = () => {
   const navigate = useNavigate()
   const [showMergeDialog, setShowMergeDialog] = useState(false)
   const { acl } = useAuth()
+  const { getLabel } = useWorldCountries()
   const sorting = useTableSort('fullName', 'asc')
 
   const roleOptions = useMemo<FilterOption[]>(() => {
@@ -249,6 +253,7 @@ export const Users = () => {
                 ],
               },
           { email: { _ilike: `%${keywordDebounced}%` } },
+          { country: { _ilike: `%${keywordDebounced}%` } },
         ],
       })
       isFiltered = true
@@ -313,6 +318,11 @@ export const Users = () => {
         id: 'email',
         label: _t('email'),
         sorting: true,
+      },
+      {
+        id: 'residingCountry',
+        label: _t('residing-country'),
+        sorting: false,
       },
       {
         id: 'organisation',
@@ -504,6 +514,17 @@ export const Users = () => {
                               {user.email}
                             </Typography>
                           </TableCell>
+
+                          <TableCell>
+                            <Typography variant="body2" color="secondary">
+                              {user.countryCode
+                                ? getLabel(
+                                    user.countryCode as WorldCountriesCodes
+                                  )
+                                : ''}
+                            </Typography>
+                          </TableCell>
+
                           <TableCell>
                             {user.organizations.map(obj => (
                               <Typography
