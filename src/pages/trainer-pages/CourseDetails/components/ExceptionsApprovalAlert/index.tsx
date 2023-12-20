@@ -59,6 +59,7 @@ export const ExceptionsApprovalAlert: FC = () => {
         conversion: course.conversion,
         accreditedBy: course.accreditedBy,
         usesAOL: Boolean(course.aolCostOfCourse),
+        isTrainer: acl.isTrainer(),
         bildStrategies: bildStrategiesToRecord(course.bildStrategies),
         hasSeniorOrPrincipalLeader:
           (leader &&
@@ -78,7 +79,7 @@ export const ExceptionsApprovalAlert: FC = () => {
         })),
       }))
     )
-  }, [course, exceptionsApprovalPending, leader])
+  }, [acl, course, exceptionsApprovalPending, leader])
 
   const handleModal: (
     action: Course_Audit_Type_Enum.Approved | Course_Audit_Type_Enum.Rejected

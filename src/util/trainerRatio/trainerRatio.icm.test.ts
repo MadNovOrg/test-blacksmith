@@ -27,6 +27,55 @@ describe('trainerRatio utils', () => {
     describe('Level 1', () => {
       beforeEach(() => (criteria.courseLevel = Course_Level_Enum.Level_1))
 
+      describe('Indirect course type, created by trainer', () => {
+        beforeEach(() => {
+          criteria.deliveryType = Course_Delivery_Type_Enum.F2F
+          criteria.isTrainer = true
+          criteria.type = Course_Type_Enum.Indirect
+        })
+
+        it('participants below threshold', () => {
+          expect(
+            getRequiredAssistants(extend({}, criteria, { maxParticipants: 4 }))
+          ).toEqual({
+            min: 1,
+            max: 1,
+          })
+        })
+        it('participants equal to threshold', () => {
+          expect(
+            getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
+          ).toEqual({
+            min: 1,
+            max: 2,
+          })
+        })
+        it('participants above threshold', () => {
+          expect(
+            getRequiredAssistants(extend({}, criteria, { maxParticipants: 27 }))
+          ).toEqual({
+            min: 2,
+            max: 2,
+          })
+        })
+        it('participants on next increment threshold', () => {
+          expect(
+            getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
+          ).toEqual({
+            min: 2,
+            max: 3,
+          })
+        })
+        it('participants above next increment threshold', () => {
+          expect(
+            getRequiredAssistants(extend({}, criteria, { maxParticipants: 39 }))
+          ).toEqual({
+            min: 3,
+            max: 3,
+          })
+        })
+      })
+
       describe('Reaccreditation', () => {
         beforeEach(() => (criteria.reaccreditation = true))
 
@@ -303,6 +352,55 @@ describe('trainerRatio utils', () => {
 
     describe('Level 2', () => {
       beforeEach(() => (criteria.courseLevel = Course_Level_Enum.Level_2))
+
+      describe('Indirect course type, created by trainer', () => {
+        beforeEach(() => {
+          criteria.deliveryType = Course_Delivery_Type_Enum.F2F
+          criteria.isTrainer = true
+          criteria.type = Course_Type_Enum.Indirect
+        })
+
+        it('participants below threshold', () => {
+          expect(
+            getRequiredAssistants(extend({}, criteria, { maxParticipants: 4 }))
+          ).toEqual({
+            min: 1,
+            max: 1,
+          })
+        })
+        it('participants equal to threshold', () => {
+          expect(
+            getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
+          ).toEqual({
+            min: 1,
+            max: 2,
+          })
+        })
+        it('participants above threshold', () => {
+          expect(
+            getRequiredAssistants(extend({}, criteria, { maxParticipants: 27 }))
+          ).toEqual({
+            min: 2,
+            max: 2,
+          })
+        })
+        it('participants on next increment threshold', () => {
+          expect(
+            getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
+          ).toEqual({
+            min: 2,
+            max: 3,
+          })
+        })
+        it('participants above next increment threshold', () => {
+          expect(
+            getRequiredAssistants(extend({}, criteria, { maxParticipants: 39 }))
+          ).toEqual({
+            min: 3,
+            max: 3,
+          })
+        })
+      })
 
       describe('Reaccreditation', () => {
         beforeEach(() => (criteria.reaccreditation = true))

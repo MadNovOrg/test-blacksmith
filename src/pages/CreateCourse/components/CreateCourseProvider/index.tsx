@@ -54,7 +54,7 @@ export const CreateCourseProvider: React.FC<
   React.PropsWithChildren<CreateCourseProviderProps>
 > = ({ children, initialValue, courseType, draftName }) => {
   const { t } = useTranslation()
-  const { profile } = useAuth()
+  const { acl, profile } = useAuth()
   const { id: draftId } = useParams()
   const fetcher = useFetcher()
 
@@ -108,10 +108,11 @@ export const CreateCourseProvider: React.FC<
         ...courseData,
         hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
         usesAOL: courseData.usesAOL,
+        isTrainer: acl.isTrainer(),
       },
       trainers
     )
-  }, [courseData, trainers, seniorOrPrincipalLead])
+  }, [courseData, seniorOrPrincipalLead, acl, trainers])
 
   const completeStep = useCallback(
     (step: StepsEnum) => {

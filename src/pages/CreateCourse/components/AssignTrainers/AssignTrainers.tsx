@@ -204,6 +204,7 @@ export const AssignTrainers = () => {
           ...courseData,
           hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
           usesAOL: courseData.usesAOL,
+          isTrainer: acl.isTrainer(),
         },
         trainers
       )
@@ -216,7 +217,7 @@ export const AssignTrainers = () => {
         await submit()
       }
     }
-  }, [courseData, seniorOrPrincipalLead, submit, trainers])
+  }, [acl, courseData, seniorOrPrincipalLead, submit, trainers])
 
   const requiredLeaders = useMemo(() => {
     if (courseData) {
@@ -242,6 +243,7 @@ export const AssignTrainers = () => {
           max_participants: courseData.maxParticipants,
           hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
           usesAOL: courseData.usesAOL,
+          isTrainer: acl.isTrainer(),
         },
         trainers.map(trainer => ({
           type: trainer.type,
@@ -249,7 +251,7 @@ export const AssignTrainers = () => {
         }))
       )
     )
-  }, [courseData, seniorOrPrincipalLead, trainers])
+  }, [acl, courseData, seniorOrPrincipalLead, trainers])
 
   if (!courseData) {
     return (

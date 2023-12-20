@@ -207,6 +207,7 @@ export const CreateCourseForm = () => {
           ...courseData,
           hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
           usesAOL: courseData.usesAOL,
+          isTrainer: acl.isTrainer(),
         },
         [
           ...assistants.map(assistant => ({
@@ -275,6 +276,7 @@ export const CreateCourseForm = () => {
           max_participants: courseData.maxParticipants,
           hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
           usesAOL: courseData.usesAOL,
+          isTrainer: acl.isTrainer(),
         },
         assistants.map(assistant => ({
           type: CourseTrainerType.Assistant,
@@ -283,7 +285,7 @@ export const CreateCourseForm = () => {
         }))
       )
     )
-  }, [assistants, courseData, seniorOrPrincipalLead])
+  }, [acl, assistants, courseData, seniorOrPrincipalLead])
 
   return (
     <Box paddingBottom={5}>
