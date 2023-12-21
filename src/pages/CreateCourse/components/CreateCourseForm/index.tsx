@@ -338,6 +338,12 @@ export const CreateCourseForm = () => {
             </Alert>
           ) : null}
 
+          {courseData?.type === Course_Type_Enum.Indirect && (
+            <Alert severity="info" sx={{ mt: 2 }}>
+              {t('components.course-form.indirect-course-assist-trainer-info')}
+            </Alert>
+          )}
+
           <FormControl required error={checkboxError}>
             <FormGroup sx={{ marginTop: 3 }} data-testid="acknowledge-checks">
               <FormControlLabel
