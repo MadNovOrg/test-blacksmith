@@ -58,7 +58,7 @@ select_permissions:
         - module_id
       filter: {}
       allow_aggregations: true
-  - role: user
+  - role: trainer
     permission:
       columns:
         - course_level
@@ -71,7 +71,7 @@ select_permissions:
         - module_id
       filter: {}
       allow_aggregations: true
-  - role: trainer
+  - role: user
     permission:
       columns:
         - course_level

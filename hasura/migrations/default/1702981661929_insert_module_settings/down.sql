@@ -1,0 +1,1 @@
+TRUNCATE TABLE module_setting CASCADE;

@@ -1,0 +1,55 @@
+table:
+  name: module_v2
+  schema: public
+configuration:
+  column_config:
+    display_name:
+      custom_name: displayName
+  custom_column_names:
+    display_name: displayName
+  custom_root_fields: {}
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - lessons
+        - display_name
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - lessons
+        - display_name
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - lessons
+        - display_name
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - lessons
+        - display_name
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+      allow_aggregations: true

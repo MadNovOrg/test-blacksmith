@@ -1,0 +1,59 @@
+table:
+  name: module_setting
+  schema: public
+configuration:
+  column_config:
+    course_delivery_type:
+      custom_name: courseDeliveryType
+    course_level:
+      custom_name: courseLevel
+    course_type:
+      custom_name: courseType
+    go1_integration:
+      custom_name: go1Integration
+    module_name:
+      custom_name: moduleName
+  custom_column_names:
+    course_delivery_type: courseDeliveryType
+    course_level: courseLevel
+    course_type: courseType
+    go1_integration: go1Integration
+    module_name: moduleName
+  custom_root_fields: {}
+object_relationships:
+  - name: module
+    using:
+      foreign_key_constraint_on: module_name
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - go1_integration
+        - mandatory
+        - reaccreditation
+        - duration
+        - sort
+        - color
+        - course_delivery_type
+        - course_level
+        - course_type
+        - module_name
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - go1_integration
+        - mandatory
+        - reaccreditation
+        - duration
+        - sort
+        - color
+        - course_delivery_type
+        - course_level
+        - course_type
+        - module_name
+        - id
+      filter: {}
+      allow_aggregations: true
