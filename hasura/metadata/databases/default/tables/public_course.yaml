@@ -414,6 +414,7 @@ select_permissions:
         - course_status
         - course_type
         - created_at
+        - curriculum
         - description
         - end
         - id
@@ -461,6 +462,7 @@ select_permissions:
         - course_type
         - created_at
         - created_by_id
+        - curriculum
         - description
         - display_on_website
         - end
@@ -566,6 +568,7 @@ select_permissions:
         - course_type
         - created_at
         - created_by_id
+        - curriculum
         - description
         - display_on_website
         - end
@@ -629,6 +632,7 @@ select_permissions:
         - course_type
         - created_at
         - created_by_id
+        - curriculum
         - description
         - display_on_website
         - end
@@ -678,6 +682,7 @@ select_permissions:
         - course_type
         - created_at
         - created_by_id
+        - curriculum
         - description
         - display_on_website
         - end
@@ -770,6 +775,7 @@ select_permissions:
         - course_type
         - created_at
         - created_by_id
+        - curriculum
         - description
         - display_on_website
         - end
@@ -833,6 +839,7 @@ select_permissions:
         - course_type
         - created_at
         - created_by_id
+        - curriculum
         - description
         - display_on_website
         - end
@@ -884,6 +891,7 @@ select_permissions:
         - course_type
         - created_at
         - created_by_id
+        - curriculum
         - description
         - display_on_website
         - end
@@ -977,6 +985,7 @@ select_permissions:
         - course_type
         - created_at
         - created_by_id
+        - curriculum
         - description
         - display_on_website
         - end
@@ -1030,6 +1039,7 @@ select_permissions:
         - course_type
         - created_at
         - created_by_id
+        - curriculum
         - description
         - display_on_website
         - end
@@ -1077,6 +1087,7 @@ select_permissions:
         - course_status
         - course_type
         - created_at
+        - curriculum
         - description
         - display_on_website
         - end
@@ -1128,6 +1139,7 @@ select_permissions:
         - course_type
         - created_at
         - created_at
+        - curriculum
         - description
         - display_on_website
         - end
@@ -1290,6 +1302,7 @@ update_permissions:
         - course_status
         - course_type
         - created_at
+        - curriculum
         - description
         - display_on_website
         - exceptions_pending
@@ -1337,6 +1350,7 @@ update_permissions:
         - course_status
         - course_type
         - created_at
+        - curriculum
         - description
         - exceptions_pending
         - free_spaces
@@ -1379,6 +1393,7 @@ update_permissions:
         - course_delivery_type
         - course_status
         - created_at
+        - curriculum
         - description
         - exceptions_pending
         - free_spaces
@@ -1442,6 +1457,7 @@ update_permissions:
         - course_type
         - created_at
         - created_at
+        - curriculum
         - description
         - description
         - display_on_website
@@ -1491,6 +1507,7 @@ update_permissions:
         - course_status
         - course_type
         - created_at
+        - curriculum
         - description
         - display_on_website
         - exceptions_pending
@@ -1521,6 +1538,7 @@ update_permissions:
     permission:
       columns:
         - course_status
+        - curriculum
         - grading_confirmed
         - grading_started
         - is_draft

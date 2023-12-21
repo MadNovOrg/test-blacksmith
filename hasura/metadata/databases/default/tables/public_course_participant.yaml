@@ -13,6 +13,8 @@ configuration:
       custom_name: go1EnrolmentProgress
     go1_enrolment_status:
       custom_name: go1EnrolmentStatus
+    graded_on:
+      custom_name: gradedOn
     hs_consent:
       custom_name: healthSafetyConsent
     invoice_id:
@@ -25,6 +27,7 @@ configuration:
     go1_enrolment_id: go1EnrolmentId
     go1_enrolment_progress: go1EnrolmentProgress
     go1_enrolment_status: go1EnrolmentStatus
+    graded_on: gradedOn
     hs_consent: healthSafetyConsent
     invoice_id: invoiceID
     order_id: orderId
@@ -141,26 +144,26 @@ select_permissions:
     permission:
       columns:
         - attended
-        - booking_date
-        - certificate_id
-        - course_id
         - completed_evaluation
-        - created_at
-        - date_graded
+        - hs_consent
+        - course_id
         - go1_enrolment_id
-        - go1_enrolment_status
+        - graded_on
         - go1_enrolment_progress
+        - go1_enrolment_status
         - grade
         - grading_feedback
-        - hs_consent
+        - booking_date
+        - created_at
+        - date_graded
+        - updated_at
+        - certificate_id
         - id
         - invite_id
         - invoice_id
         - order_id
         - profile_id
         - registration_id
-        - updated_at
-        - invite_id
       filter:
         _or:
           - course:
@@ -183,9 +186,10 @@ select_permissions:
         - created_at
         - date_graded
         - go1_enrolment_id
-        - go1_enrolment_status
         - go1_enrolment_progress
+        - go1_enrolment_status
         - grade
+        - graded_on
         - grading_feedback
         - hs_consent
         - id
@@ -207,19 +211,20 @@ select_permissions:
         - created_at
         - date_graded
         - go1_enrolment_id
-        - go1_enrolment_status
         - go1_enrolment_progress
+        - go1_enrolment_status
         - grade
+        - graded_on
         - grading_feedback
         - hs_consent
         - id
+        - invite_id
         - invite_id
         - invoice_id
         - order_id
         - profile_id
         - registration_id
         - updated_at
-        - invite_id
       filter:
         _or:
           - course:
@@ -242,6 +247,7 @@ select_permissions:
         - go1_enrolment_progress
         - go1_enrolment_status
         - grade
+        - graded_on
         - grading_feedback
         - hs_consent
         - id
@@ -259,14 +265,15 @@ select_permissions:
         - attended
         - booking_date
         - certificate_id
+        - completed_evaluation
         - course_id
         - created_at
-        - completed_evaluation
         - date_graded
         - go1_enrolment_id
-        - go1_enrolment_status
         - go1_enrolment_progress
+        - go1_enrolment_status
         - grade
+        - graded_on
         - grading_feedback
         - hs_consent
         - id
@@ -292,6 +299,7 @@ select_permissions:
         - go1_enrolment_progress
         - go1_enrolment_status
         - grade
+        - graded_on
         - grading_feedback
         - hs_consent
         - id
@@ -332,6 +340,7 @@ select_permissions:
         - go1_enrolment_progress
         - go1_enrolment_status
         - grade
+        - graded_on
         - grading_feedback
         - hs_consent
         - id
@@ -357,6 +366,7 @@ select_permissions:
         - go1_enrolment_progress
         - go1_enrolment_status
         - grade
+        - graded_on
         - grading_feedback
         - hs_consent
         - id
@@ -372,23 +382,24 @@ select_permissions:
     permission:
       columns:
         - attended
-        - hs_consent
-        - course_id
-        - go1_enrolment_id
-        - go1_enrolment_status
-        - go1_enrolment_progress
-        - grade
-        - grading_feedback
         - booking_date
+        - certificate_id
+        - course_id
         - created_at
         - date_graded
-        - updated_at
-        - certificate_id
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
         - id
         - invite_id
         - invoice_id
         - profile_id
         - registration_id
+        - updated_at
       filter:
         id:
           _eq: X-Hasura-User-Id
@@ -402,16 +413,17 @@ select_permissions:
         - completed_evaluation
         - course_id
         - date_graded
-        - go1_enrolment_status
         - go1_enrolment_progress
+        - go1_enrolment_status
         - grade
+        - graded_on
         - grading_feedback
         - hs_consent
         - id
+        - invite_id
         - invoice_id
         - profile_id
         - registration_id
-        - invite_id
       filter:
         _or:
           - profile:
@@ -450,6 +462,7 @@ update_permissions:
         - attended
         - date_graded
         - grade
+        - graded_on
         - grading_feedback
         - hs_consent
       filter:
@@ -477,9 +490,10 @@ update_permissions:
         - created_at
         - date_graded
         - go1_enrolment_id
-        - go1_enrolment_status
         - go1_enrolment_progress
+        - go1_enrolment_status
         - grade
+        - graded_on
         - grading_feedback
         - hs_consent
         - id
@@ -507,9 +521,10 @@ update_permissions:
         - created_at
         - date_graded
         - go1_enrolment_id
-        - go1_enrolment_status
         - go1_enrolment_progress
+        - go1_enrolment_status
         - grade
+        - graded_on
         - grading_feedback
         - hs_consent
         - id
