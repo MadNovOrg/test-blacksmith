@@ -10,8 +10,8 @@ import useWorldCountries, {
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 
 export type CountriesSelectorProps = {
-  onChange?: (event: SyntheticEvent, selected: string | null) => void
-  value?: string
+  onChange: (event: SyntheticEvent, selected: string | null) => void
+  value: string | undefined | null
 } & BaseTextFieldProps
 
 const CountriesSelector = ({

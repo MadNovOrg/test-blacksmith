@@ -42,6 +42,10 @@ import * as yup from 'yup'
 import { InferType } from 'yup'
 
 import { Avatar } from '@app/components/Avatar'
+import CountriesSelector from '@app/components/CountriesSelector'
+import useWorldCountries, {
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { ConfirmDialog, Dialog } from '@app/components/dialogs'
 import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
@@ -220,6 +224,11 @@ export const EditProfilePage: React.FC<
             t('validation-errors.required-field', { name: t('surname') })
           ),
         countryCode: yup.string(),
+        country: yup.string().required(
+          t('validation-errors.required-field', {
+            name: t('fields.country'),
+          })
+        ),
         phone: schemas.phone(t),
         dob: yup.date().nullable(),
         jobTitle: yup.string(),
@@ -315,6 +324,7 @@ export const EditProfilePage: React.FC<
       setValue('disabilities', profile.disabilities ?? '')
       setValue('dietaryRestrictions', profile.dietaryRestrictions ?? '')
       setValue('org', [])
+      setValue('country', profile.countryCode ?? '')
 
       if (isOtherJobTitle) {
         setValue('jobTitle', 'Other')
@@ -459,6 +469,8 @@ export const EditProfilePage: React.FC<
             data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
           disabilities: data.disabilities,
           dietaryRestrictions: data.dietaryRestrictions,
+          country: data.country,
+          countryCode: data.countryCode,
         },
       })
 
@@ -566,7 +578,7 @@ export const EditProfilePage: React.FC<
       return err
     }
   }
-
+  const { getLabel: getCountryLabel } = useWorldCountries()
   const allPositions = useMemo(() => {
     return uniq([
       ...positions.edu,
@@ -815,14 +827,26 @@ export const EditProfilePage: React.FC<
 
                 <Grid container spacing={3} mb={3}>
                   <Grid item xs={12} sm={12} md={6} lg={6}>
+                    <CountriesSelector
+                      label={t('country')}
+                      variant="filled"
+                      required
+                      onChange={(_, code) => {
+                        if (code) {
+                          setValue(
+                            'country',
+                            getCountryLabel(code as WorldCountriesCodes) ?? ''
+                          )
+                          setValue('countryCode', code)
+                        }
+                      }}
+                      value={profile.countryCode}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6} lg={6}>
                     <PhoneNumberInput
                       label={t('phone')}
                       variant="filled"
-                      sx={{ bgcolor: 'grey.100' }}
-                      inputProps={{
-                        sx: { height: 40 },
-                        'data-testid': 'input-phone',
-                      }}
                       error={!!errors.phone}
                       helperText={errors.phone?.message}
                       value={values.phone !== undefined ? values.phone : ''}

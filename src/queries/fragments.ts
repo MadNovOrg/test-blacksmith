@@ -31,6 +31,8 @@ export const PROFILE = gql`
   fragment Profile on profile {
     id
     givenName
+    country
+    countryCode
     familyName
     fullName
     avatar

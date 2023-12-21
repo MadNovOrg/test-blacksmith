@@ -359,7 +359,11 @@ export const ViewProfilePage: React.FC<
                         label={t('work-email')}
                         value={profile.email}
                       />
-
+                      <DetailsRow
+                        data-testid="profile-country"
+                        label={t('country')}
+                        value={profile.country}
+                      />
                       {trainerViewProfile || isOrgAdmin ? null : (
                         <>
                           <DetailsRow
