@@ -394,6 +394,7 @@ export type Venue = {
   country?: string
   geoCoordinates?: string | null
   googlePlacesId?: string
+  countryCode?: string
 }
 
 export type TrainerSchedule = {

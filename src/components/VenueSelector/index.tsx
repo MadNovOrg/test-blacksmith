@@ -31,6 +31,12 @@ import {
 } from '@app/queries/venue/find-venues'
 import { Venue } from '@app/types'
 
+import {
+  UKsCountriesCode,
+  UKsCountriesCodes,
+  WorldCountriesCodes,
+} from '../CountriesSelector/hooks/useWorldCountries'
+
 import { getGoogleMapsSuggestions, getPlaceDetails } from './maps-utils'
 import powerByGoogleImg from './powered-by-google.png'
 import { extractAdrStreetAddress } from './utils/adr-parser'
@@ -43,6 +49,7 @@ export type VenueSelectorProps = {
   onChange: (value: Venue | undefined) => void
   sx?: SxProps
   textFieldProps?: TextFieldProps
+  courseResidingCountry?: WorldCountriesCodes | string
 }
 
 function getOptionLabel(value: AutocompletePrediction | Venue | string) {
@@ -80,12 +87,27 @@ function getCountry(placeDetails: PlaceResult): string {
   return ''
 }
 
+function getCountryCode(placeDetails: PlaceResult): string {
+  if (placeDetails.address_components) {
+    return placeDetails.address_components[5].short_name
+  }
+  return ''
+}
+
 export const VenueSelector: React.FC<
   React.PropsWithChildren<VenueSelectorProps>
-> = function ({ value, onChange, sx, textFieldProps, ...props }) {
+> = function ({
+  value,
+  onChange,
+  sx,
+  textFieldProps,
+  courseResidingCountry,
+  ...props
+}) {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const theme = useTheme()
+  const ukCountries = Object.values(UKsCountriesCodes) as string[]
 
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<(AutocompletePrediction | Venue)[]>([])
@@ -105,7 +127,10 @@ export const VenueSelector: React.FC<
     return debounce(async query => {
       setError(undefined)
       try {
-        const googleResponse = await getGoogleMapsSuggestions(query)
+        const googleResponse = await getGoogleMapsSuggestions(
+          query,
+          courseResidingCountry as WorldCountriesCodes
+        )
         const hasuraResponse = await fetcher<
           FindVenuesResponse,
           FindVenuesParams
@@ -127,7 +152,7 @@ export const VenueSelector: React.FC<
         handleError((e as Error).message)
       }
     }, 1000)
-  }, [fetcher, t])
+  }, [courseResidingCountry, fetcher, t])
 
   const onInputChange = useCallback(
     async (event: React.SyntheticEvent, value: string, reason: string) => {
@@ -142,7 +167,7 @@ export const VenueSelector: React.FC<
 
   const handleSelection = useCallback(
     async (
-      event: React.SyntheticEvent,
+      _: React.SyntheticEvent,
       value: AutocompletePrediction | Venue | null
     ) => {
       if (value && 'place_id' in value) {
@@ -157,13 +182,18 @@ export const VenueSelector: React.FC<
             ? `(${placeDetails.geometry.location.lat()}, ${placeDetails.geometry.location.lng()})`
             : '',
           googlePlacesId: placeDetails.place_id,
+          countryCode: ukCountries.includes(
+            UKsCountriesCodes[courseResidingCountry as UKsCountriesCode]
+          )
+            ? courseResidingCountry
+            : getCountryCode(placeDetails),
         })
         setShowNewVenueModal(true)
       } else {
         onChange(value ?? undefined)
       }
     },
-    [onChange]
+    [courseResidingCountry, onChange, ukCountries]
   )
 
   const onDialogClose = () => {
@@ -310,7 +340,9 @@ export const VenueSelector: React.FC<
       <Dialog
         open={showNewVenueModal}
         onClose={onDialogClose}
-        title={t('components.venue-selector.modal.title')}
+        slots={{
+          Title: () => <>{t('components.venue-selector.modal.title')}</>,
+        }}
         maxWidth={800}
       >
         <VenueForm
@@ -319,6 +351,7 @@ export const VenueSelector: React.FC<
             onDialogClose()
             onChange(venue)
           }}
+          courseResidingCountry={courseResidingCountry}
           onCancel={onDialogClose}
         />
       </Dialog>

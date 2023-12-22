@@ -89,7 +89,8 @@
     "line2-placeholder": "Address Line 2",
     "city": "City",
     "country": "Country",
-    "postCode": "Post code"
+    "postCode": "Post code",
+    "zipCode": "Zip code"
   },
   "post-code-tooltip": "Please enter in block capitals and include a space to separate the outcode and incode. For example: XX12 3XX",
   "venue-name": "Venue name",

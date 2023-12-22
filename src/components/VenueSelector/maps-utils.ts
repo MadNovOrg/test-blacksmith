@@ -1,14 +1,25 @@
+import { WorldCountriesCodes } from '../CountriesSelector/hooks/useWorldCountries'
+
 import AutocompleteResponse = google.maps.places.AutocompleteResponse
 import PlaceResult = google.maps.places.PlaceResult
 
 export const getGoogleMapsSuggestions = async (
-  query: string
+  query: string,
+  residingCountry?: WorldCountriesCodes
 ): Promise<AutocompleteResponse> => {
+  // Google API does not support country GB-ENG type codes and I'm slicing and using the first part of the country code
+
+  const residingCountryFormat = residingCountry?.includes('-')
+    ? residingCountry.slice(0, residingCountry.indexOf('-'))
+    : residingCountry
+    ? residingCountry
+    : 'gb'
+
   return new google.maps.places.AutocompleteService().getPlacePredictions({
     input: query,
     types: ['establishment'],
     componentRestrictions: {
-      country: 'gb',
+      country: residingCountryFormat,
     },
   })
 }

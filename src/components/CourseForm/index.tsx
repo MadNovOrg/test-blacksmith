@@ -1559,6 +1559,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
               {hasVenue ? (
                 <VenueSelector
+                  courseResidingCountry={values.residingCountry}
                   {...register('venue')}
                   onChange={venue => {
                     return setValue('venue', venue ?? null, {

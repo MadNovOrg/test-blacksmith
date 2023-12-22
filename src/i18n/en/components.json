@@ -60,6 +60,7 @@
         "addressLineTwo": "Address line 2 (optional)",
         "city": "Town/City",
         "postCode": "Postcode",
+        "zipCode":"Zip code",
         "country": "Select country"
       }
     },

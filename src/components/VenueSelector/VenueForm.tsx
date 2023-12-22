@@ -14,7 +14,6 @@ import { useForm, Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
 
-import { CountryDropdown } from '@app/components/CountryDropdown'
 import { useAuth } from '@app/context/auth'
 import {
   ADD_VENUE_MUTATION,
@@ -25,23 +24,33 @@ import { yup } from '@app/schemas'
 import { Venue } from '@app/types'
 import { requiredMsg, isValidUKPostalCode } from '@app/util'
 
+import CountriesSelector from '../CountriesSelector'
+import useWorldCountries, {
+  UKsCountriesCode,
+  UKsCountriesCodes,
+  WorldCountriesCodes,
+} from '../CountriesSelector/hooks/useWorldCountries'
+
 export type VenueFormProps = {
   data: Omit<Venue, 'id'> | undefined
   onSubmit: (venue?: Venue) => void
   onCancel: () => void
+  courseResidingCountry?: WorldCountriesCodes | string
 }
 
 const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
   data,
   onSubmit,
   onCancel,
+  courseResidingCountry,
 }) {
   const { t } = useTranslation()
+  const { getLabel: getCountryNameByCode, countriesCodesWithUKs } =
+    useWorldCountries()
   const { acl } = useAuth()
   const [{ error }, handleAddVenue] = useMutation<ResponseType, ParamsType>(
     ADD_VENUE_MUTATION
   )
-
   const isAdminOrOperations = acl.isTTAdmin() || acl.isTTOps()
 
   const schema = useMemo(() => {
@@ -54,38 +63,59 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
       city: yup.string().required(requiredMsg(t, 'addr.city')),
       postCode: isAdminOrOperations
         ? yup.string()
-        : yup
-            .string()
-            .required(requiredMsg(t, 'addr.postCode'))
-            .test(
-              'is-uk-postcode',
-              t('common.validation-errors.invalid-postcode'),
-              isValidUKPostalCode
-            ),
-      country: yup.string().required(requiredMsg(t, 'addr.country')),
+        : yup.string().when('country', {
+            is: (country: string) => {
+              return Boolean(
+                UKsCountriesCodes[
+                  (country || courseResidingCountry) as UKsCountriesCode
+                ]
+              )
+            },
+            then: schema =>
+              schema
+                .required(requiredMsg(t, 'addr.postCode'))
+                .test(
+                  'is-uk-postcode',
+                  t('common.validation-errors.invalid-postcode'),
+                  isValidUKPostalCode
+                ),
+            otherwise: schema =>
+              schema.required(requiredMsg(t, 'addr.zipCode')),
+          }),
+      country: yup
+        .string()
+        .oneOf(countriesCodesWithUKs)
+        .required(requiredMsg(t, 'addr.country')),
     })
-  }, [t, isAdminOrOperations])
-
+  }, [t, isAdminOrOperations, countriesCodesWithUKs, courseResidingCountry])
   const {
     control,
     handleSubmit,
     trigger,
     formState: { errors },
-    register,
+    setValue,
     watch,
   } = useForm({
     resolver: yupResolver(schema),
     mode: 'all',
-    defaultValues: data ?? {
-      name: '',
-      addressLineOne: '',
-      addressLineTwo: '',
-      city: '',
-      postCode: '',
-      country: '',
-    },
+    defaultValues: data
+      ? {
+          ...data,
+          ...(courseResidingCountry
+            ? { country: data.countryCode }
+            : { country: data.country }),
+        }
+      : {
+          name: '',
+          addressLineOne: '',
+          addressLineTwo: '',
+          city: '',
+          postCode: '',
+          country: courseResidingCountry ? courseResidingCountry : 'GB-ENG',
+        },
   })
   const values = watch()
+
   const submitHandler = useCallback(
     async (formData: VenueFormProps['data']) => {
       const validationResult = await trigger()
@@ -96,14 +126,18 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
 
       if (formData) {
         const { data } = await handleAddVenue({
-          venue: formData,
+          venue: {
+            ...formData,
+            country: getCountryNameByCode(
+              formData.country as WorldCountriesCodes
+            ),
+          },
         })
         onSubmit(data?.venue)
       }
     },
-    [handleAddVenue, onSubmit, trigger]
+    [getCountryNameByCode, handleAddVenue, onSubmit, trigger]
   )
-
   return (
     <Box p={2}>
       <form
@@ -142,7 +176,14 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
               )}
             />
           </Grid>
-
+          <Grid item xs={12}>
+            <CountriesSelector
+              onChange={(_, code) => setValue('country', code ?? '')}
+              value={values.country}
+              error={Boolean(errors.country)}
+              helperText={errors.country?.message}
+            />
+          </Grid>
           <Grid item xs={12}>
             <Controller
               name="addressLineOne"
@@ -211,7 +252,15 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                   variant="filled"
                   required={!isAdminOrOperations}
                   error={fieldState.invalid}
-                  label={t('components.venue-selector.modal.fields.postCode')}
+                  label={
+                    !UKsCountriesCodes[
+                      (values.country
+                        ? values.country
+                        : courseResidingCountry) as UKsCountriesCode
+                    ]
+                      ? t('components.venue-selector.modal.fields.zipCode')
+                      : t('components.venue-selector.modal.fields.postCode')
+                  }
                   helperText={errors.postCode?.message}
                   {...field}
                   InputProps={{
@@ -223,17 +272,6 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                   }}
                 />
               )}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <CountryDropdown
-              register={register('country')}
-              required
-              error={Object.prototype.hasOwnProperty.call(errors, 'country')}
-              errormessage={errors.country?.message}
-              data-testid="country-dropdown"
-              value={values.country ?? null}
             />
           </Grid>
 
