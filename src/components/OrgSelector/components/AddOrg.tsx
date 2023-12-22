@@ -2,11 +2,19 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import InfoIcon from '@mui/icons-material/Info'
 import { LoadingButton } from '@mui/lab'
 import { Button, TextField, Tooltip, Grid, Typography } from '@mui/material'
-import { useEffect, useMemo, FC, PropsWithChildren } from 'react'
+import { CountryCode } from 'libphonenumber-js'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
+import { useEffect, useMemo, FC, PropsWithChildren, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation } from 'urql'
 
-import { CountryDropdown } from '@app/components/CountryDropdown'
+import CountriesSelector from '@app/components/CountriesSelector'
+import useWorldCountries, {
+  ExceptionsCountriesCode,
+  UKsCountriesCode,
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { CountryDropdown } from '@app/components/CountryDropdown/CountryDropdown'
 import { Dialog } from '@app/components/dialogs'
 import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown'
 import { isDfeSuggestion } from '@app/components/OrgSelector/utils'
@@ -25,6 +33,7 @@ type Props = {
   onSuccess: (org: InsertOrgLeadMutation['org']) => void
   onClose: VoidFunction
   option: Establishment | { name: string }
+  countryCode: CountryCode | UKsCountriesCode | ExceptionsCountriesCode
 }
 
 type FormInput = {
@@ -37,10 +46,12 @@ type FormInput = {
   city: string
   postCode: string
   country: string
+  countryCode: string
 }
 
 export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   option,
+  countryCode,
   onSuccess,
   onClose,
 }) {
@@ -49,6 +60,14 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
     useMutation<InsertOrgLeadMutation, InsertOrgLeadMutationVariables>(
       INSERT_ORG_MUTATION
     )
+  const addOrgCountriesSelectorEnabled = useFeatureFlagEnabled(
+    'add-organization-country'
+  )
+
+  const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
+
+  const [isInUK, setIsInUK] = useState(isUKCountry(countryCode))
+
   const schema = useMemo(() => {
     return yup.object({
       organisationName: yup.string().required(
@@ -85,25 +104,53 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
           name: t('fields.city'),
         })
       ),
-      postCode: yup
-        .string()
-        .required(
-          _t('validation-errors.required-field', {
-            name: t('fields.postCode'),
-          })
-        )
-        .test(
-          'is-uk-postcode',
-          _t('validation-errors.invalid-postcode'),
-          isValidUKPostalCode
-        ),
+      ...(addOrgCountriesSelectorEnabled
+        ? {
+            ...(isInUK
+              ? {
+                  postCode: yup
+                    .string()
+                    .required(
+                      _t('validation-errors.required-field', {
+                        name: t('fields.postCode'),
+                      })
+                    )
+                    .test(
+                      'is-uk-postcode',
+                      _t('validation-errors.invalid-postcode'),
+                      isValidUKPostalCode
+                    ),
+                }
+              : {
+                  postCode: yup.string().required(
+                    _t('validation-errors.required-field', {
+                      name: t('fields.zipCode'),
+                    })
+                  ),
+                }),
+          }
+        : {
+            postCode: yup
+              .string()
+              .required(
+                _t('validation-errors.required-field', {
+                  name: t('fields.postCode'),
+                })
+              )
+              .test(
+                'is-uk-postcode',
+                _t('validation-errors.invalid-postcode'),
+                isValidUKPostalCode
+              ),
+          }),
+
       country: yup.string().required(
         _t('validation-errors.required-field', {
           name: t('fields.country'),
         })
       ),
     })
-  }, [_t, t])
+  }, [_t, addOrgCountriesSelectorEnabled, isInUK, t])
 
   const defaultValues: Partial<FormInput> = isDfeSuggestion(option)
     ? {
@@ -111,7 +158,8 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         addressLine1: option.addressLineOne || '',
         addressLine2: option.addressLineTwo || '',
         city: option.town || '',
-        country: _t('UK'),
+        country: getCountryLabel(countryCode),
+        countryCode: countryCode,
         postCode: option.postcode || '',
         sector: '',
         organisationType: '',
@@ -122,7 +170,8 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         sector: '',
         addressLine2: '',
         city: '',
-        country: '',
+        country: getCountryLabel(countryCode),
+        countryCode: countryCode,
         organisationType: '',
         postCode: '',
       }
@@ -148,6 +197,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         line2: data.addressLine2,
         city: data.city,
         country: data.country,
+        countryCode: data.countryCode,
         postCode: data.postCode,
       } as Address,
       attributes: {
@@ -259,6 +309,32 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         <Typography mb={2}>{_t('org-address')}</Typography>
         <Grid container gap={3} flexDirection={'column'}>
           <Grid item>
+            {addOrgCountriesSelectorEnabled ? (
+              <CountriesSelector
+                onChange={(_, code) => {
+                  if (code) {
+                    setValue(
+                      'country',
+                      getCountryLabel(code as WorldCountriesCodes) ?? ''
+                    )
+                    setValue('countryCode', code)
+                    setIsInUK(isUKCountry(code as CountryCode))
+                  }
+                }}
+                value={values.countryCode}
+              />
+            ) : (
+              <CountryDropdown
+                register={register('country')}
+                required
+                error={Boolean(errors.country)}
+                errormessage={errors.country?.message}
+                value={values.country}
+                label={t('fields.country')}
+              />
+            )}
+          </Grid>
+          <Grid item>
             <TextField
               id="primaryAddressLine"
               label={t('fields.primary-address-line')}
@@ -299,8 +375,8 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
 
           <Grid item>
             <TextField
-              id="postCode"
-              label={t('fields.postCode')}
+              id={'postCode'}
+              label={isInUK ? t('fields.postCode') : t('fields.zipCode')}
               variant="filled"
               error={!!errors.postCode}
               helperText={errors.postCode?.message}
@@ -308,27 +384,20 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               inputProps={{ 'data-testid': 'postCode' }}
               fullWidth
               required
-              InputProps={{
-                endAdornment: (
-                  <Tooltip
-                    title={_t('post-code-tooltip')}
-                    data-testid="post-code-tooltip"
-                  >
-                    <InfoIcon color={'action'} />
-                  </Tooltip>
-                ),
-              }}
-            />
-          </Grid>
-
-          <Grid item>
-            <CountryDropdown
-              register={register('country')}
-              required
-              error={Boolean(errors.country)}
-              errormessage={errors.country?.message}
-              value={values.country}
-              label={t('fields.country')}
+              InputProps={
+                isInUK
+                  ? {
+                      endAdornment: (
+                        <Tooltip
+                          title={_t('post-code-tooltip')}
+                          data-testid="post-code-tooltip"
+                        >
+                          <InfoIcon color={'action'} />
+                        </Tooltip>
+                      ),
+                    }
+                  : {}
+              }
             />
           </Grid>
         </Grid>

@@ -21,6 +21,7 @@ export type FormInputs = {
   addressLine2: string
   city: string
   country: string
+  countryCode: string
   postcode: string
   workEmail?: string
 }
@@ -43,10 +44,16 @@ export const defaultValues = {
   addressLine2: '',
   city: '',
   country: '',
+  countryCode: 'GB-ENG',
   postcode: '',
 }
 
-export const getFormSchema = (t: TFunction, _t: TFunction) =>
+export const getFormSchema = (
+  t: TFunction,
+  _t: TFunction,
+  isInUK: boolean,
+  addOrgCountriesSelectorEnabled: boolean
+) =>
   yup.object({
     name: yup.string().required(
       _t('validation-errors.required-field', {
@@ -97,16 +104,43 @@ export const getFormSchema = (t: TFunction, _t: TFunction) =>
         name: t('fields.addressess.country'),
       })
     ),
-    postcode: yup
-      .string()
-      .required(
-        _t('validation-errors.required-field', {
-          name: t('fields.addresses.postcode'),
-        })
-      )
-      .test(
-        'is-uk-postcode',
-        _t('validation-errors.invalid-postcode'),
-        isValidUKPostalCode
-      ),
+    ...(addOrgCountriesSelectorEnabled
+      ? {
+          ...(isInUK
+            ? {
+                postcode: yup
+                  .string()
+                  .required(
+                    _t('validation-errors.required-field', {
+                      name: t('fields.addresses.postcode'),
+                    })
+                  )
+                  .test(
+                    'is-uk-postcode',
+                    _t('validation-errors.invalid-postcode'),
+                    isValidUKPostalCode
+                  ),
+              }
+            : {
+                postcode: yup.string().required(
+                  _t('validation-errors.required-field', {
+                    name: t('fields.addresses.zipCode'),
+                  })
+                ),
+              }),
+        }
+      : {
+          postcode: yup
+            .string()
+            .required(
+              _t('validation-errors.required-field', {
+                name: t('fields.addresses.postcode'),
+              })
+            )
+            .test(
+              'is-uk-postcode',
+              _t('validation-errors.invalid-postcode'),
+              isValidUKPostalCode
+            ),
+        }),
   })

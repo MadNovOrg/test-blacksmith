@@ -16,12 +16,25 @@ import {
 } from '@mui/material'
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { PropsWithChildren, FC, useMemo, useCallback, useEffect } from 'react'
+import { CountryCode } from 'libphonenumber-js'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
+import {
+  PropsWithChildren,
+  FC,
+  useMemo,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { CombinedError } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
+import CountriesSelector from '@app/components/CountriesSelector'
+import useWorldCountries, {
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CountryDropdown } from '@app/components/CountryDropdown'
 import { FormPanel } from '@app/components/FormPanel'
 import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown'
@@ -73,7 +86,21 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   const theme = useTheme()
   const navigate = useNavigate()
   const { t, _t } = useScopedTranslation('pages.create-organization')
-  const schema = useMemo(() => getFormSchema(t, _t), [t, _t])
+
+  const addOrgCountriesSelectorEnabled =
+    useFeatureFlagEnabled('add-organization-country') ?? true
+
+  const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
+
+  const [isInUK, setIsInUK] = useState(true)
+
+  defaultValues.country =
+    getCountryLabel(defaultValues.countryCode as CountryCode) ?? ''
+
+  const schema = useMemo(
+    () => getFormSchema(t, _t, isInUK, addOrgCountriesSelectorEnabled),
+    [t, _t, isInUK, addOrgCountriesSelectorEnabled]
+  )
   const {
     register,
     handleSubmit,
@@ -308,6 +335,32 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
               <FormPanel>
                 <Grid container gap={3} flexDirection={'column'}>
                   <Grid item>
+                    {addOrgCountriesSelectorEnabled ? (
+                      <CountriesSelector
+                        onChange={(_, code) => {
+                          if (code) {
+                            setValue(
+                              'country',
+                              getCountryLabel(code as WorldCountriesCodes) ?? ''
+                            )
+                            setValue('countryCode', code)
+                            setIsInUK(isUKCountry(code as CountryCode))
+                          }
+                        }}
+                        value={values.countryCode}
+                      />
+                    ) : (
+                      <CountryDropdown
+                        error={Boolean(errors.country)}
+                        errormessage={errors.country?.message}
+                        register={register('country')}
+                        required
+                        value={values.country ?? ''}
+                        label={t('fields.addresses.country')}
+                      />
+                    )}
+                  </Grid>
+                  <Grid item>
                     <TextField
                       id="line1"
                       label={t('fields.addresses.line1')}
@@ -360,38 +413,44 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   <Grid item>
                     <TextField
                       id="postcode"
-                      label={t('fields.addresses.postcode')}
+                      label={
+                        isInUK
+                          ? t('fields.addresses.postcode')
+                          : t('fields.addresses.zipCode')
+                      }
                       variant="filled"
-                      placeholder={t('fields.addresses.postcode')}
+                      placeholder={
+                        isInUK
+                          ? t('fields.addresses.postcode')
+                          : t('fields.addresses.zipCode')
+                      }
                       error={!!errors.postcode}
                       helperText={errors.postcode?.message}
-                      InputLabelProps={{
-                        shrink: Boolean(values.postcode),
-                      }}
+                      InputLabelProps={
+                        isInUK
+                          ? {
+                              shrink: Boolean(values.postcode),
+                            }
+                          : {}
+                      }
                       {...register('postcode')}
-                      inputProps={{ 'data-testid': 'postCode' }}
+                      inputProps={{ 'data-testid': 'postcode' }}
                       fullWidth
                       required
-                      InputProps={{
-                        endAdornment: (
-                          <Tooltip
-                            title={_t('post-code-tooltip')}
-                            data-testid="post-code-tooltip"
-                          >
-                            <InfoIcon color={'action'} />
-                          </Tooltip>
-                        ),
-                      }}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <CountryDropdown
-                      error={Boolean(errors.country)}
-                      errormessage={errors.country?.message}
-                      register={register('country')}
-                      required
-                      value={values.country ?? ''}
-                      label={t('fields.addresses.country')}
+                      InputProps={
+                        isInUK
+                          ? {
+                              endAdornment: (
+                                <Tooltip
+                                  title={_t('post-code-tooltip')}
+                                  data-testid="post-code-tooltip"
+                                >
+                                  <InfoIcon color={'action'} />
+                                </Tooltip>
+                              ),
+                            }
+                          : {}
+                      }
                     />
                   </Grid>
                 </Grid>

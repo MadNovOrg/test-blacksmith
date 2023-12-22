@@ -295,6 +295,7 @@
       "secondary-address-line": "Address line 2",
       "city": "Town/City",
       "postCode": "Post code",
+      "zipCode": "Zip code",
       "country": "Country"
     }
   },

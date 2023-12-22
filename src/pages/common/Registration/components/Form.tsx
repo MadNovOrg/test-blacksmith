@@ -326,6 +326,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           error={errors.organization?.message}
           allowAdding
           value={values.organization ?? undefined}
+          countryCode={values.countryCode}
           onChange={orgSelectorOnChange}
           textFieldProps={{
             variant: 'filled',

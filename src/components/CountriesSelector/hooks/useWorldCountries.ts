@@ -249,9 +249,18 @@ export default function useWorldCountries() {
       'GB-NIR',
       'GB-SCT',
       'GB-WLS',
-      ...countriesISOCodes.filter(code => code !== 'GB'),
+      ...countriesISOCodes
+        .filter(code => code !== 'GB')
+        .sort((a, b) => getLabel(a)?.localeCompare(getLabel(b) ?? '') || 0),
     ],
-    [countriesISOCodes]
+    [countriesISOCodes, getLabel]
+  )
+
+  const isUKCountry = useCallback(
+    (countryCode: CountryISOCode | UKsCountriesCode) => {
+      return Object.keys(UKsCountriesCodes).includes(countryCode)
+    },
+    []
   )
 
   return {
@@ -259,5 +268,6 @@ export default function useWorldCountries() {
     countriesISOCodes,
     countriesCodesWithUKs,
     getLabel,
+    isUKCountry,
   }
 }

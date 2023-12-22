@@ -65,6 +65,7 @@ export const buildAddress = build<Address>({
     city: perBuild(() => chance.city()),
     postCode: perBuild(() => chance.zip()),
     country: perBuild(() => chance.country()),
+    countryCode: 'GB-ENG',
     state: perBuild(() => chance.state()),
     type: perBuild(() => chance.word()),
   },

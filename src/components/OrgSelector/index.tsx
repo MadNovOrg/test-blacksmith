@@ -12,6 +12,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
+import { CountryCode } from 'libphonenumber-js'
 import { debounce } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -68,6 +69,7 @@ export type OrgSelectorProps = {
   userOrgIds?: string[]
   showTrainerOrgOnly?: boolean
   isShallowRetrieval?: boolean
+  countryCode?: string
 }
 const getOptionLabel = (option: Option) => option.name ?? ''
 export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
@@ -88,6 +90,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     isShallowRetrieval = false,
     isEditProfile,
     userOrgIds,
+    countryCode,
     ...props
   }) {
     const { t } = useTranslation()
@@ -391,6 +394,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         {adding ? (
           <AddOrg
             option={adding}
+            countryCode={(countryCode as CountryCode) ?? 'GB-ENG'}
             onClose={handleClose}
             onSuccess={handleSuccess}
           />

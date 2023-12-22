@@ -156,6 +156,7 @@ export type Address = {
   state: string
   postCode: string
   country: string
+  countryCode: string
   type: string
 } & Base
 
