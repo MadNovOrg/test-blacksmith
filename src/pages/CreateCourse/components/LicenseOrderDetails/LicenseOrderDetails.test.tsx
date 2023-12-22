@@ -231,7 +231,7 @@ describe('component: LicenseOrderDetails', () => {
 
     await waitFor(
       () => {
-        expect(screen.getByLabelText('Phone *')).toHaveValue('1234 567890')
+        expect(screen.getByLabelText('Phone *')).toHaveValue('+44 1234 567890')
         expect(screen.getByText('Review & confirm')).toBeEnabled()
       },
       {

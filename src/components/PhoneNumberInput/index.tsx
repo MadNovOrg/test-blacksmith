@@ -20,7 +20,6 @@ const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
     <MuiTelInput
       onlyCountries={onlyCountries}
       defaultCountry={'GB'}
-      forceCallingCode
       value={value}
       onChange={onChange}
       {...props}
