@@ -1,7 +1,6 @@
 import { Alert, CircularProgress, Container } from '@mui/material'
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { useUpdateEffect } from 'react-use'
 import { useMutation } from 'urql'
 
 import { useAuth } from '@app/context/auth'
@@ -12,11 +11,10 @@ import {
 import { MUTATION as ACCEPT_ORG_INVITE_MUTATION } from '@app/queries/invites/accept-org-invite'
 
 export const AcceptOrgInvite = () => {
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { profile, reloadCurrentProfile } = useAuth()
-  const [searchParams] = useSearchParams()
-
-  const accepted = useRef<boolean>(false)
+  const [inviteAccepted, setInviteAccepted] = useState<boolean>(false)
 
   const token = searchParams.get('token') || ''
 
@@ -26,7 +24,7 @@ export const AcceptOrgInvite = () => {
   >(ACCEPT_ORG_INVITE_MUTATION)
 
   const accept = useCallback(async () => {
-    if (profile && !accepted.current) {
+    if (profile && !inviteAccepted) {
       const resp = await acceptOrgInvite(
         { profileId: profile.id },
         {
@@ -37,18 +35,25 @@ export const AcceptOrgInvite = () => {
       )
 
       if (resp.data?.invite?.id) {
-        accepted.current = true
+        setInviteAccepted(() => true)
+
         await reloadCurrentProfile()
+
         return navigate('/')
       }
     }
-  }, [acceptOrgInvite, navigate, profile, reloadCurrentProfile, token])
+  }, [
+    acceptOrgInvite,
+    inviteAccepted,
+    navigate,
+    profile,
+    reloadCurrentProfile,
+    token,
+  ])
 
-  useUpdateEffect(() => {
-    if (profile && !accepted.current) {
-      accept().then()
-    }
-  })
+  useEffect(() => {
+    if (profile && !inviteAccepted) accept().then()
+  }, [accept, inviteAccepted, profile])
 
   if (error) {
     return (

@@ -800,7 +800,9 @@ type DeclineOrgInviteOutput {
 }
 
 type AcceptOrgInviteOutput {
-  id: uuid!
+  id: uuid
+  error: Boolean
+  errorMessage: String
 }
 
 type Invite {
