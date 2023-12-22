@@ -98,11 +98,44 @@ export const InvitationPage = () => {
     DECLINE_INVITE_MUTATION
   )
 
-  const invite = (inviteData?.invite || {}) as GetInviteQuery['invite']
-  const isSubmitted = invite?.status !== InviteStatus.Pending
+  const invite = useMemo(() => {
+    return inviteData
+      ? ((inviteData?.invite || {}) as GetInviteQuery['invite'])
+      : false
+  }, [inviteData])
 
-  const startDate = invite ? new Date(invite.startDate) : null
-  const endDate = invite ? new Date(invite.endDate) : null
+  const isSubmitted = useMemo(() => {
+    return invite ? invite?.status !== InviteStatus.Pending : false
+  }, [invite])
+
+  const courseName = useMemo(
+    () => (invite ? invite.courseName : null),
+    [invite]
+  )
+  const courseDescription = useMemo(
+    () => (invite ? invite.description : null),
+    [invite]
+  )
+  const startDate = useMemo(
+    () => (invite ? new Date(invite.startDate) : null),
+    [invite]
+  )
+  const endDate = useMemo(
+    () => (invite ? new Date(invite.endDate) : null),
+    [invite]
+  )
+  const courseTrainerName = useMemo(
+    () => (invite ? invite.trainerName : null),
+    [invite]
+  )
+  const courseVenueName = useMemo(
+    () => (invite ? invite.venueName : undefined),
+    [invite]
+  )
+  const courseDeliveryType = useMemo(
+    () => (invite ? invite.deliveryType : null),
+    [invite]
+  )
 
   const courseHasBegun = startDate
     ? differenceInSeconds(startDate, now()) < 0
@@ -115,7 +148,9 @@ export const InvitationPage = () => {
     ? getTimeDifferenceAndContext(endDate, now())
     : null
 
-  const address = invite?.venueAddress
+  const address = useMemo(() => {
+    return invite ? invite?.venueAddress : null
+  }, [invite])
 
   const handleSubmit = async () => {
     if (response === 'yes') {
@@ -134,6 +169,7 @@ export const InvitationPage = () => {
       { note },
       { fetchOptions: { headers: { 'x-auth': `Bearer ${token}` } } }
     )
+
     getInviteData()
   }
 
@@ -189,11 +225,11 @@ export const InvitationPage = () => {
         </Typography>
 
         <Typography variant="subtitle2" gutterBottom>
-          {invite?.courseName}
+          {courseName}
         </Typography>
 
         <Typography variant="body2" color="grey.600">
-          {invite?.description}
+          {courseDescription}
         </Typography>
 
         <Box mt={3} mb={4}>
@@ -216,10 +252,10 @@ export const InvitationPage = () => {
             </Box>
             <Box>
               <Typography variant="body2" gutterBottom>
-                {t('dates.withTime', { date: invite?.startDate })}
+                {t('dates.withTime', { date: startDate })}
               </Typography>
               <Typography variant="body2" gutterBottom>
-                {t('dates.withTime', { date: invite?.endDate })}
+                {t('dates.withTime', { date: endDate })}
               </Typography>
             </Box>
           </Box>
@@ -231,7 +267,7 @@ export const InvitationPage = () => {
             <Box>
               <Typography variant="body2">
                 {t('pages.course-participants.hosted-by', {
-                  trainer: invite?.trainerName,
+                  trainer: courseTrainerName,
                 })}
               </Typography>
             </Box>
@@ -244,8 +280,8 @@ export const InvitationPage = () => {
             <Box>
               <Typography variant="body2" fontWeight="600">
                 {formatCourseVenueName(
-                  invite?.deliveryType as CourseDeliveryType,
-                  invite?.venueName
+                  courseDeliveryType as CourseDeliveryType,
+                  courseVenueName
                 )}
               </Typography>
               <Typography variant="body2">

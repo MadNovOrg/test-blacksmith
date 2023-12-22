@@ -1,6 +1,7 @@
 import { devtoolsExchange } from '@urql/devtools'
 import { authExchange } from '@urql/exchange-auth'
 import React, { useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 import {
   makeOperation,
   cacheExchange,
@@ -16,6 +17,7 @@ export const GQLProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
   const { getJWT, queryRole } = useAuth()
+  const location = useLocation()
 
   const client = useMemo(() => {
     return createClient({
@@ -46,14 +48,28 @@ export const GQLProvider: React.FC<React.PropsWithChildren<unknown>> = ({
                 ? operation.context.fetchOptions()
                 : operation.context.fetchOptions || {}
 
+            let headers = {
+              ...fetchOptions.headers,
+            }
+
+            // only add "Authorization" to headers if the page is not Course Invitation Page
+            if (location.pathname !== '/invitation') {
+              Object.assign(headers, {
+                Authorization: `Bearer ${authState}`,
+              })
+            } else {
+              // revert headers for all requests when page is Course Invitation Page
+              // to avoid having "Authorization" and keep only the headers coming for those requests
+              headers = {
+                ...fetchOptions.headers,
+              }
+            }
+
             return makeOperation(operation.kind, operation, {
               ...operation.context,
               fetchOptions: {
                 ...fetchOptions,
-                headers: {
-                  ...fetchOptions.headers,
-                  Authorization: `Bearer ${authState}`,
-                },
+                headers,
               },
             })
           },
@@ -61,7 +77,7 @@ export const GQLProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         fetchExchange,
       ],
     })
-  }, [queryRole, getJWT])
+  }, [queryRole, getJWT, location.pathname])
 
   return <Provider value={client}>{children}</Provider>
 }
