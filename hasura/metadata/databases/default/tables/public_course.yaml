@@ -1585,6 +1585,17 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/booking-contact'
+  - name: course_builder_submitted
+    definition:
+      enable_manual: true
+      update:
+        columns:
+          - modules_duration
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/curriculum-sync'
   - name: course_created
     definition:
       enable_manual: false
