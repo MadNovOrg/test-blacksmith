@@ -76,6 +76,10 @@ type Mutation {
 }
 
 type Mutation {
+  curriculumSync: CurriculumSyncOutput!
+}
+
+type Mutation {
   declineInvite(
     note: String
   ): DeclineInviteOutput
@@ -1233,6 +1237,11 @@ type KnowledgeHubResource {
 
 type KnowledgeHubResourcesOutput {
   resources: [KnowledgeHubResource!]!
+}
+
+type CurriculumSyncOutput {
+  syncedCount: Int!
+  notSyncedCount: Int!
 }
 
 scalar Date

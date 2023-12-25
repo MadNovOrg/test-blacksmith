@@ -104,6 +104,11 @@ actions:
       forward_client_headers: true
     permissions:
       - role: anonymous
+  - name: curriculumSync
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/course/curriculum-sync/bulk'
+    comment: curriculumSync
   - name: declineInvite
     definition:
       kind: synchronous
@@ -962,5 +967,6 @@ custom_types:
     - name: ImportLegacyCertificateOutput
     - name: KnowledgeHubResource
     - name: KnowledgeHubResourcesOutput
+    - name: CurriculumSyncOutput
   scalars:
     - name: Date
