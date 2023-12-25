@@ -891,6 +891,7 @@ custom_types:
     - name: ApproveCourseInput
     - name: BlendedLearningExportDataInput
     - name: ImportLegacyCertificateInput
+    - name: CurriculumSyncInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult

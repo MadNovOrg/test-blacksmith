@@ -1982,6 +1982,16 @@ export enum Currency {
   Gbp = 'GBP'
 }
 
+export type CurriculumSyncInput = {
+  ids: Array<Scalars['Int']>;
+};
+
+export type CurriculumSyncOutput = {
+  __typename?: 'CurriculumSyncOutput';
+  notSyncedCount: Scalars['Int'];
+  syncedCount: Scalars['Int'];
+};
+
 /** Object that can be identified with a Database ID */
 export type DatabaseIdentifier = {
   /** The unique identifier stored in the database */
@@ -31307,6 +31317,33 @@ export type Module_Setting_Aggregate = {
   nodes: Array<Module_Setting>;
 };
 
+export type Module_Setting_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Module_Setting_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Module_Setting_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Module_Setting_Aggregate_Bool_Exp_Count>;
+};
+
+export type Module_Setting_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Module_Setting_Select_Column_Module_Setting_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Module_Setting_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Module_Setting_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Module_Setting_Select_Column_Module_Setting_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Module_Setting_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Module_Setting_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Module_Setting_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Module_Setting_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
 /** aggregate fields of "module_setting" */
 export type Module_Setting_Aggregate_Fields = {
   __typename?: 'module_setting_aggregate_fields';
@@ -31330,11 +31367,39 @@ export type Module_Setting_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "module_setting" */
+export type Module_Setting_Aggregate_Order_By = {
+  avg?: InputMaybe<Module_Setting_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Module_Setting_Max_Order_By>;
+  min?: InputMaybe<Module_Setting_Min_Order_By>;
+  stddev?: InputMaybe<Module_Setting_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Module_Setting_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Module_Setting_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Module_Setting_Sum_Order_By>;
+  var_pop?: InputMaybe<Module_Setting_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Module_Setting_Var_Samp_Order_By>;
+  variance?: InputMaybe<Module_Setting_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "module_setting" */
+export type Module_Setting_Arr_Rel_Insert_Input = {
+  data: Array<Module_Setting_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Module_Setting_On_Conflict>;
+};
+
 /** aggregate avg on columns */
 export type Module_Setting_Avg_Fields = {
   __typename?: 'module_setting_avg_fields';
   duration?: Maybe<Scalars['Float']>;
   sort?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "module_setting" */
+export type Module_Setting_Avg_Order_By = {
+  duration?: InputMaybe<Order_By>;
+  sort?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "module_setting". All fields are combined with a logical 'AND'. */
@@ -31395,6 +31460,14 @@ export type Module_Setting_Max_Fields = {
   sort?: Maybe<Scalars['Int']>;
 };
 
+/** order by max() on columns of table "module_setting" */
+export type Module_Setting_Max_Order_By = {
+  duration?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  moduleName?: InputMaybe<Order_By>;
+  sort?: InputMaybe<Order_By>;
+};
+
 /** aggregate min on columns */
 export type Module_Setting_Min_Fields = {
   __typename?: 'module_setting_min_fields';
@@ -31402,6 +31475,14 @@ export type Module_Setting_Min_Fields = {
   id?: Maybe<Scalars['uuid']>;
   moduleName?: Maybe<Scalars['String']>;
   sort?: Maybe<Scalars['Int']>;
+};
+
+/** order by min() on columns of table "module_setting" */
+export type Module_Setting_Min_Order_By = {
+  duration?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  moduleName?: InputMaybe<Order_By>;
+  sort?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "module_setting" */
@@ -31467,6 +31548,26 @@ export enum Module_Setting_Select_Column {
   Sort = 'sort'
 }
 
+/** select "module_setting_aggregate_bool_exp_bool_and_arguments_columns" columns of table "module_setting" */
+export enum Module_Setting_Select_Column_Module_Setting_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  Go1Integration = 'go1Integration',
+  /** column name */
+  Mandatory = 'mandatory',
+  /** column name */
+  Reaccreditation = 'reaccreditation'
+}
+
+/** select "module_setting_aggregate_bool_exp_bool_or_arguments_columns" columns of table "module_setting" */
+export enum Module_Setting_Select_Column_Module_Setting_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  Go1Integration = 'go1Integration',
+  /** column name */
+  Mandatory = 'mandatory',
+  /** column name */
+  Reaccreditation = 'reaccreditation'
+}
+
 /** input type for updating data in table "module_setting" */
 export type Module_Setting_Set_Input = {
   color?: InputMaybe<Color_Enum>;
@@ -31489,6 +31590,12 @@ export type Module_Setting_Stddev_Fields = {
   sort?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev() on columns of table "module_setting" */
+export type Module_Setting_Stddev_Order_By = {
+  duration?: InputMaybe<Order_By>;
+  sort?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_pop on columns */
 export type Module_Setting_Stddev_Pop_Fields = {
   __typename?: 'module_setting_stddev_pop_fields';
@@ -31496,11 +31603,23 @@ export type Module_Setting_Stddev_Pop_Fields = {
   sort?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev_pop() on columns of table "module_setting" */
+export type Module_Setting_Stddev_Pop_Order_By = {
+  duration?: InputMaybe<Order_By>;
+  sort?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_samp on columns */
 export type Module_Setting_Stddev_Samp_Fields = {
   __typename?: 'module_setting_stddev_samp_fields';
   duration?: Maybe<Scalars['Float']>;
   sort?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "module_setting" */
+export type Module_Setting_Stddev_Samp_Order_By = {
+  duration?: InputMaybe<Order_By>;
+  sort?: InputMaybe<Order_By>;
 };
 
 /** Streaming cursor of the table "module_setting" */
@@ -31531,6 +31650,12 @@ export type Module_Setting_Sum_Fields = {
   __typename?: 'module_setting_sum_fields';
   duration?: Maybe<Scalars['Int']>;
   sort?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "module_setting" */
+export type Module_Setting_Sum_Order_By = {
+  duration?: InputMaybe<Order_By>;
+  sort?: InputMaybe<Order_By>;
 };
 
 /** update columns of table "module_setting" */
@@ -31575,6 +31700,12 @@ export type Module_Setting_Var_Pop_Fields = {
   sort?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_pop() on columns of table "module_setting" */
+export type Module_Setting_Var_Pop_Order_By = {
+  duration?: InputMaybe<Order_By>;
+  sort?: InputMaybe<Order_By>;
+};
+
 /** aggregate var_samp on columns */
 export type Module_Setting_Var_Samp_Fields = {
   __typename?: 'module_setting_var_samp_fields';
@@ -31582,11 +31713,23 @@ export type Module_Setting_Var_Samp_Fields = {
   sort?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_samp() on columns of table "module_setting" */
+export type Module_Setting_Var_Samp_Order_By = {
+  duration?: InputMaybe<Order_By>;
+  sort?: InputMaybe<Order_By>;
+};
+
 /** aggregate variance on columns */
 export type Module_Setting_Variance_Fields = {
   __typename?: 'module_setting_variance_fields';
   duration?: Maybe<Scalars['Float']>;
   sort?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "module_setting" */
+export type Module_Setting_Variance_Order_By = {
+  duration?: InputMaybe<Order_By>;
+  sort?: InputMaybe<Order_By>;
 };
 
 /** Streaming cursor of the table "module" */
@@ -31644,6 +31787,10 @@ export type Module_V2 = {
   id: Scalars['uuid'];
   lessons: Scalars['jsonb'];
   name: Scalars['String'];
+  /** An array relationship */
+  settings: Array<Module_Setting>;
+  /** An aggregate relationship */
+  settings_aggregate: Module_Setting_Aggregate;
   updated_at: Scalars['timestamptz'];
 };
 
@@ -31651,6 +31798,26 @@ export type Module_V2 = {
 /** Holds information about modules with their lessons */
 export type Module_V2LessonsArgs = {
   path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** Holds information about modules with their lessons */
+export type Module_V2SettingsArgs = {
+  distinct_on?: InputMaybe<Array<Module_Setting_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Module_Setting_Order_By>>;
+  where?: InputMaybe<Module_Setting_Bool_Exp>;
+};
+
+
+/** Holds information about modules with their lessons */
+export type Module_V2Settings_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Module_Setting_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Module_Setting_Order_By>>;
+  where?: InputMaybe<Module_Setting_Bool_Exp>;
 };
 
 /** aggregated selection of "module_v2" */
@@ -31690,6 +31857,8 @@ export type Module_V2_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   lessons?: InputMaybe<Jsonb_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
+  settings?: InputMaybe<Module_Setting_Bool_Exp>;
+  settings_aggregate?: InputMaybe<Module_Setting_Aggregate_Bool_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
@@ -31723,6 +31892,7 @@ export type Module_V2_Insert_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   lessons?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
+  settings?: InputMaybe<Module_Setting_Arr_Rel_Insert_Input>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -31776,6 +31946,7 @@ export type Module_V2_Order_By = {
   id?: InputMaybe<Order_By>;
   lessons?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
+  settings_aggregate?: InputMaybe<Module_Setting_Aggregate_Order_By>;
   updated_at?: InputMaybe<Order_By>;
 };
 
@@ -31886,6 +32057,8 @@ export type Mutation_Root = {
   /** Creates a membership subscription */
   createStripeSubscription?: Maybe<CreateSubscriptionOutput>;
   createUser: CreateUserOutput;
+  /** curriculumSync */
+  curriculumSync: CurriculumSyncOutput;
   declineInvite?: Maybe<DeclineInviteOutput>;
   declineOrgInvite: Scalars['Boolean'];
   deleteMeeting: DeleteMeetingOutput;
@@ -33365,6 +33538,12 @@ export type Mutation_RootCreateStripeSubscriptionArgs = {
 /** mutation root */
 export type Mutation_RootCreateUserArgs = {
   input: CreateAppUserInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootCurriculumSyncArgs = {
+  input: CurriculumSyncInput;
 };
 
 

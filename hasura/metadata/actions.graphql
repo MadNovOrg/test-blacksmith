@@ -76,7 +76,9 @@ type Mutation {
 }
 
 type Mutation {
-  curriculumSync: CurriculumSyncOutput!
+  curriculumSync(
+    input: CurriculumSyncInput!
+  ): CurriculumSyncOutput!
 }
 
 type Mutation {
@@ -766,6 +768,10 @@ input BlendedLearningExportDataInput {
 input ImportLegacyCertificateInput {
   code: String!
   profileId: uuid
+}
+
+input CurriculumSyncInput {
+  ids: [Int!]!
 }
 
 type LinkProfileResult {
