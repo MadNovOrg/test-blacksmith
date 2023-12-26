@@ -63,6 +63,17 @@ export const AttendeeValidCertificate: React.FC<
                   'pages.book-course.attendee-with-valid-certificate.levels.intermediate-trainer.default'
                 ),
           }
+        case Course_Level_Enum.ThreeDaySafetyResponseTrainer:
+          return {
+            attendees,
+            levels: reaccreditation
+              ? t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.three-day-srt-trainer.reaccreditation'
+                )
+              : t(
+                  'pages.book-course.attendee-with-valid-certificate.levels.three-day-srt-trainer.default'
+                ),
+          }
         case Course_Level_Enum.AdvancedTrainer:
           return {
             attendees,

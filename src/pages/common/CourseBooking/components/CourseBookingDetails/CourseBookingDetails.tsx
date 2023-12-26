@@ -67,6 +67,7 @@ const isAttendeeValidCertificateMandatory = (
   [
     Course_Level_Enum.Advanced,
     Course_Level_Enum.IntermediateTrainer,
+    Course_Level_Enum.ThreeDaySafetyResponseTrainer,
     Course_Level_Enum.AdvancedTrainer,
     Course_Level_Enum.BildIntermediateTrainer,
     Course_Level_Enum.BildAdvancedTrainer,
