@@ -285,7 +285,7 @@ export const CourseBookingDetails: React.FC<
         postCode: '',
         country: '',
       },
-      { shouldValidate: true }
+      { shouldValidate: false }
     )
   }
 
