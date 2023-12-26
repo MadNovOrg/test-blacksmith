@@ -324,7 +324,8 @@ export const EditProfilePage: React.FC<
       setValue('disabilities', profile.disabilities ?? '')
       setValue('dietaryRestrictions', profile.dietaryRestrictions ?? '')
       setValue('org', [])
-      setValue('country', profile.countryCode ?? '')
+      setValue('country', profile.country ?? '')
+      setValue('countryCode', profile.countryCode ?? '')
 
       if (isOtherJobTitle) {
         setValue('jobTitle', 'Other')
