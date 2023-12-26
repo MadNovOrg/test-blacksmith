@@ -29,14 +29,15 @@ import { InfoPanel } from '@app/components/InfoPanel'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import {
-  SaveOrgInvitesMutation,
-  SaveOrgInvitesMutationVariables,
+  SaveOrganisationInvitesMutation,
+  SaveOrganisationInvitesMutationVariables,
+  SaveOrgInviteError,
 } from '@app/generated/graphql'
 import { useOrganizations } from '@app/hooks/useOrganizations'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgDashboardTabs } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { OrgIndividualsSubtabs } from '@app/pages/admin/components/Organizations/tabs/OrgIndividualsTab'
-import { SAVE_ORG_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
+import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
 import { yup } from '@app/schemas'
 import { Organization } from '@app/types'
 import { getFieldError, requiredMsg } from '@app/util'
@@ -108,12 +109,15 @@ export const InviteUserToOrganization = () => {
   const [
     { data: savingInvitesResponse, error: savingError, fetching: loading },
     saveOrgInvites,
-  ] = useMutation<SaveOrgInvitesMutation, SaveOrgInvitesMutationVariables>(
-    SAVE_ORG_INVITES_MUTATION
-  )
+  ] = useMutation<
+    SaveOrganisationInvitesMutation,
+    SaveOrganisationInvitesMutationVariables
+  >(SAVE_ORGANISATION_INVITES_MUTATION)
+
+  console.log(savingError?.message)
 
   const errorMessage = savingError
-    ? savingError.message.includes('organization_invites_org_id_email_key')
+    ? savingError?.message.includes(SaveOrgInviteError.OrgMemberAlreadyExists)
       ? t('pages.invite-to-org.duplicate-email')
       : t('pages.invite-to-org.error-message')
     : null
@@ -123,11 +127,11 @@ export const InviteUserToOrganization = () => {
   > = async values => {
     if (!selectedOrg) return
 
-    saveOrgInvites({
+    await saveOrgInvites({
       invites: values.emails.map(email => ({
-        email,
+        isAdmin: Boolean(values.isOrgAdmin),
         orgId: selectedOrg.id,
-        isAdmin: values.isOrgAdmin,
+        profileEmail: email,
       })),
     })
   }
@@ -144,7 +148,7 @@ export const InviteUserToOrganization = () => {
     )
   }
 
-  if (savingInvitesResponse?.insert_organization_invites?.returning.length) {
+  if (savingInvitesResponse?.saveOrgInvites?.success) {
     return (
       <Navigate
         to={`../?tab=${OrgDashboardTabs.INDIVIDUALS}&subtab=${OrgIndividualsSubtabs.INVITES}`}

@@ -1,6 +1,8 @@
 import React from 'react'
+import { Client, Provider } from 'urql'
+import { fromValue } from 'wonka'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
+import { SaveOrgInvitesMutation } from '@app/generated/graphql'
 import { useOrganizations } from '@app/hooks/useOrganizations'
 import { RoleName } from '@app/types'
 
@@ -18,7 +20,6 @@ import { InviteUserToOrganisation } from '.'
 vi.mock('@app/hooks/use-fetcher')
 vi.mock('@app/hooks/useOrganizations')
 
-const useFetcherMock = vi.mocked(useFetcher)
 const useOrganisationMock = vi.mocked(useOrganizations)
 
 const orgs = [
@@ -43,12 +44,9 @@ describe('InviteUserToOrganisation', () => {
       },
     ],
   }
-  const fetcherMock = vi.fn()
   const onCloseMock = vi.fn()
 
-  const setup = () => {
-    useFetcherMock.mockReturnValue(fetcherMock)
-
+  const setup = (client: Client) => {
     const organisations = {
       orgs,
       loading: false,
@@ -57,10 +55,12 @@ describe('InviteUserToOrganisation', () => {
     useOrganisationMock.mockReturnValue(organisations)
 
     return render(
-      <InviteUserToOrganisation
-        onClose={onCloseMock}
-        userProfile={userProfile}
-      />,
+      <Provider value={client}>
+        <InviteUserToOrganisation
+          onClose={onCloseMock}
+          userProfile={userProfile}
+        />
+      </Provider>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
@@ -70,7 +70,14 @@ describe('InviteUserToOrganisation', () => {
   }
 
   it('renders as expected', async () => {
-    setup()
+    const client = {
+      executeMutation: () =>
+        fromValue<SaveOrgInvitesMutation>({
+          insert_organization_invites: { returning: [{ id: chance.guid() }] },
+        }),
+    } as unknown as Client
+
+    setup(client)
 
     const dialog = screen.getByTestId('edit-invite-user')
     expect(within(dialog).getByText(/permissions/i)).toBeInTheDocument()
@@ -80,7 +87,16 @@ describe('InviteUserToOrganisation', () => {
   })
 
   it('invite user to org if at least one org selected', async () => {
-    setup()
+    const client = {
+      executeMutation: () =>
+        fromValue<{ data: SaveOrgInvitesMutation }>({
+          data: {
+            insert_organization_invites: { returning: [{ id: chance.guid() }] },
+          },
+        }),
+    } as unknown as Client
+
+    setup(client)
 
     const autocomplete = screen.getByTestId('edit-invite-user-org-selector')
     const input = within(autocomplete).getByRole('combobox')
@@ -91,12 +107,18 @@ describe('InviteUserToOrganisation', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Invite user' }))
 
-    expect(fetcherMock).toHaveBeenCalledTimes(1)
     expect(onCloseMock).toHaveBeenCalledTimes(1)
   })
 
   it('not invite user to org if there is no selection', async () => {
-    setup()
+    const client = {
+      executeMutation: () =>
+        fromValue<SaveOrgInvitesMutation>({
+          insert_organization_invites: { returning: [{ id: chance.guid() }] },
+        }),
+    } as unknown as Client
+
+    setup(client)
 
     const autocomplete = screen.getByTestId('edit-invite-user-org-selector')
     const input = within(autocomplete).getByRole('combobox')
@@ -107,16 +129,21 @@ describe('InviteUserToOrganisation', () => {
 
     expect(screen.getByRole('button', { name: 'Invite user' })).toBeDisabled()
 
-    expect(fetcherMock).toHaveBeenCalledTimes(0)
     expect(onCloseMock).toHaveBeenCalledTimes(0)
   })
 
   it('cancel invite', async () => {
-    setup()
+    const client = {
+      executeMutation: () =>
+        fromValue<SaveOrgInvitesMutation>({
+          insert_organization_invites: { returning: [{ id: chance.guid() }] },
+        }),
+    } as unknown as Client
+
+    setup(client)
 
     await userEvent.click(screen.getByRole('button', { name: 'Cancel' }))
 
     expect(onCloseMock).toHaveBeenCalledTimes(1)
-    expect(fetcherMock).toHaveBeenCalledTimes(0)
   })
 })

@@ -316,6 +316,18 @@ actions:
       handler: '{{ACTIONS_HOST}}/user/resend-password'
     permissions:
       - role: anonymous
+  - name: saveOrgInvites
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/invite/save'
+    permissions:
+      - role: finance
+      - role: sales-admin
+      - role: sales-representative
+      - role: tt-admin
+      - role: tt-ops
+      - role: user
+    comment: saveOrgInvites
   - name: searchTrainers
     definition:
       kind: ""
@@ -857,6 +869,14 @@ custom_types:
         - description: null
           is_deprecated: null
           value: VIDEO
+    - name: SaveOrgInviteError
+      values:
+        - description: null
+          is_deprecated: null
+          value: GENERAL_ERROR
+        - description: null
+          is_deprecated: null
+          value: ORG_MEMBER_ALREADY_EXISTS
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -891,6 +911,7 @@ custom_types:
     - name: ApproveCourseInput
     - name: BlendedLearningExportDataInput
     - name: ImportLegacyCertificateInput
+    - name: SaveOrgInviteInput
     - name: CurriculumSyncInput
   objects:
     - name: LinkProfileResult
@@ -969,5 +990,6 @@ custom_types:
     - name: KnowledgeHubResource
     - name: KnowledgeHubResourcesOutput
     - name: CurriculumSyncOutput
+    - name: SampleOutput
   scalars:
     - name: Date

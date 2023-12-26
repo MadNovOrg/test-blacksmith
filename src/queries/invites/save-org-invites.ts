@@ -1,11 +1,10 @@
 import { gql } from 'urql'
 
-export const SAVE_ORG_INVITES_MUTATION = gql`
-  mutation SaveOrgInvites($invites: [organization_invites_insert_input!]!) {
-    insert_organization_invites(objects: $invites) {
-      returning {
-        id
-      }
+export const SAVE_ORGANISATION_INVITES_MUTATION = gql`
+  mutation SaveOrganisationInvites($invites: [SaveOrgInviteInput!]!) {
+    saveOrgInvites(invites: $invites) {
+      error
+      success
     }
   }
 `

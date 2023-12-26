@@ -8883,6 +8883,23 @@ export type RootQueryToWebinarsCategoryConnectionWhereArgs = {
   updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type SampleOutput = {
+  __typename?: 'SampleOutput';
+  error?: Maybe<SaveOrgInviteError>;
+  success: Scalars['Boolean'];
+};
+
+export enum SaveOrgInviteError {
+  GeneralError = 'GENERAL_ERROR',
+  OrgMemberAlreadyExists = 'ORG_MEMBER_ALREADY_EXISTS'
+}
+
+export type SaveOrgInviteInput = {
+  isAdmin: Scalars['Boolean'];
+  orgId: Scalars['String'];
+  profileEmail: Scalars['String'];
+};
+
 export type SearchTrainer = {
   __typename?: 'SearchTrainer';
   availability?: Maybe<SearchTrainerAvailability>;
@@ -32865,6 +32882,8 @@ export type Mutation_Root = {
   /** replaceParticipant */
   replaceParticipant?: Maybe<ReplaceParticipantOutput>;
   resendPassword: Scalars['Boolean'];
+  /** saveOrgInvites */
+  saveOrgInvites?: Maybe<SampleOutput>;
   /** Send course information to the specified course attendees */
   sendCourseInformation: SendCourseInformationOutput;
   /** Creates a temporary profile */
@@ -36179,6 +36198,12 @@ export type Mutation_RootReplaceParticipantArgs = {
 /** mutation root */
 export type Mutation_RootResendPasswordArgs = {
   email: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootSaveOrgInvitesArgs = {
+  invites: Array<SaveOrgInviteInput>;
 };
 
 
@@ -55447,6 +55472,13 @@ export type SaveOrgInvitesMutationVariables = Exact<{
 
 
 export type SaveOrgInvitesMutation = { __typename?: 'mutation_root', insert_organization_invites?: { __typename?: 'organization_invites_mutation_response', returning: Array<{ __typename?: 'organization_invites', id: any }> } | null };
+
+export type SaveOrganisationInvitesMutationVariables = Exact<{
+  invites: Array<SaveOrgInviteInput> | SaveOrgInviteInput;
+}>;
+
+
+export type SaveOrganisationInvitesMutation = { __typename?: 'mutation_root', saveOrgInvites?: { __typename?: 'SampleOutput', error?: SaveOrgInviteError | null, success: boolean } | null };
 
 export type VerifyUserMutationVariables = Exact<{
   inviteId: Scalars['uuid'];

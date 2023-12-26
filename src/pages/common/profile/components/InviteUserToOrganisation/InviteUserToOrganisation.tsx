@@ -17,13 +17,18 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
+import { useMutation } from 'urql'
 
 import { FormPanel } from '@app/components/FormPanel'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
-import { useFetcher } from '@app/hooks/use-fetcher'
+import {
+  SaveOrganisationInvitesMutation,
+  SaveOrganisationInvitesMutationVariables,
+  SaveOrgInviteError,
+} from '@app/generated/graphql'
 import { useOrganizations } from '@app/hooks/useOrganizations'
-import { SAVE_ORG_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
+import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
 import { Organization } from '@app/types'
 
 export type InviteUserToOrganisationProps = {
@@ -44,14 +49,18 @@ export const InviteUserToOrganisation: React.FC<
   const theme = useTheme()
   const { acl, profile } = useAuth()
   const { t } = useTranslation()
-  const fetcher = useFetcher()
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [isOrgAdmin, setIsOrgAdmin] = useState(false)
   const { id } = useParams()
   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
   const { addSnackbarMessage, getSnackbarMessage } = useSnackbar()
   const userInvited = Boolean(getSnackbarMessage('user-invited'))
+
+  const [{ data, fetching, error: errorOnInviteSave }, saveOrgInvite] =
+    useMutation<
+      SaveOrganisationInvitesMutation,
+      SaveOrganisationInvitesMutationVariables
+    >(SAVE_ORGANISATION_INVITES_MUTATION)
 
   const where = useMemo(
     () =>
@@ -83,8 +92,19 @@ export const InviteUserToOrganisation: React.FC<
     }
   }, [id, orgs, selectedOrg])
 
+  useEffect(() => {
+    if (data && !userInvited) {
+      addSnackbarMessage('user-invited', {
+        label: t('pages.invite-to-org.user-invited-success'),
+      })
+
+      onClose()
+    }
+  }, [addSnackbarMessage, data, errorOnInviteSave, onClose, t, userInvited])
+
   const submit = async () => {
     setError('')
+
     if (!selectedOrg) return
 
     if (
@@ -95,33 +115,16 @@ export const InviteUserToOrganisation: React.FC<
       return
     }
 
-    setLoading(true)
-
-    try {
-      await fetcher(SAVE_ORG_INVITES_MUTATION, {
+    if (userProfile.email) {
+      await saveOrgInvite({
         invites: [
           {
-            email: userProfile.email,
-            orgId: selectedOrg.id,
             isAdmin: isOrgAdmin,
+            orgId: selectedOrg.id,
+            profileEmail: userProfile.email,
           },
         ],
       })
-      if (!userInvited) {
-        addSnackbarMessage('user-invited', {
-          label: t('pages.invite-to-org.user-invited-success'),
-        })
-      }
-      onClose()
-    } catch (e: unknown) {
-      const errorMessage = (e as Error).message
-      setError(
-        errorMessage.includes('organization_invites_org_id_email_key')
-          ? t('pages.invite-to-org.duplicate-email')
-          : errorMessage
-      )
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -207,7 +210,17 @@ export const InviteUserToOrganisation: React.FC<
             </>
           ) : undefined}
 
-          {error ? <Alert severity="error">{error}</Alert> : null}
+          {error || errorOnInviteSave ? (
+            <Alert severity="error">
+              {error
+                ? error
+                : errorOnInviteSave?.message.includes(
+                    SaveOrgInviteError.OrgMemberAlreadyExists
+                  )
+                ? t('pages.invite-to-org.duplicate-email')
+                : t('internal-error')}
+            </Alert>
+          ) : null}
 
           <Grid
             container
@@ -226,7 +239,7 @@ export const InviteUserToOrganisation: React.FC<
               {t('common.cancel')}
             </Button>
             <LoadingButton
-              loading={loading}
+              loading={fetching}
               type="submit"
               variant="contained"
               color="primary"

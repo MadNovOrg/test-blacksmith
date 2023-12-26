@@ -4,11 +4,12 @@ import { Client, CombinedError, Provider, TypedDocumentNode } from 'urql'
 import { never, fromValue } from 'wonka'
 
 import {
-  SaveOrgInvitesMutation,
-  SaveOrgInvitesMutationVariables,
+  SaveOrganisationInvitesMutation,
+  SaveOrganisationInvitesMutationVariables,
+  SaveOrgInviteError,
 } from '@app/generated/graphql'
 import { useOrganizations } from '@app/hooks/useOrganizations'
-import { SAVE_ORG_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
+import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
@@ -85,7 +86,7 @@ it('displays an error message that user already exist within organization', asyn
     executeMutation: () =>
       fromValue({
         error: new CombinedError({
-          graphQLErrors: [new Error('organization_invites_org_id_email_key')],
+          graphQLErrors: [new Error(SaveOrgInviteError.OrgMemberAlreadyExists)],
         }),
       }),
   } as unknown as Client
@@ -129,14 +130,14 @@ it('saves org invites and redirects back to the organization individuals tab', a
       variables,
     }: {
       query: TypedDocumentNode
-      variables: SaveOrgInvitesMutationVariables
+      variables: SaveOrganisationInvitesMutationVariables
     }) => {
       const mutationMatches = matches({
-        query: SAVE_ORG_INVITES_MUTATION,
+        query: SAVE_ORGANISATION_INVITES_MUTATION,
         variables: {
           invites: [
             {
-              email: userEmail,
+              profileEmail: userEmail,
               orgId,
               isAdmin: true,
             },
@@ -145,11 +146,9 @@ it('saves org invites and redirects back to the organization individuals tab', a
       })
 
       if (mutationMatches({ query, variables })) {
-        return fromValue<{ data: SaveOrgInvitesMutation }>({
+        return fromValue<{ data: SaveOrganisationInvitesMutation }>({
           data: {
-            insert_organization_invites: {
-              returning: [{ id: chance.guid() }],
-            },
+            saveOrgInvites: { success: true },
           },
         })
       }

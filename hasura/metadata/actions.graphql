@@ -231,6 +231,12 @@ type Mutation {
   ): Boolean
 }
 
+type Mutation {
+  saveOrgInvites(
+    invites: [SaveOrgInviteInput!]!
+  ): SampleOutput
+}
+
 type Query {
   searchTrainers(
     input: SearchTrainersInput!
@@ -528,6 +534,11 @@ enum KnowledgeHubResourceType {
   VIDEO
 }
 
+enum SaveOrgInviteError {
+  GENERAL_ERROR
+  ORG_MEMBER_ALREADY_EXISTS
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -772,6 +783,12 @@ input ImportLegacyCertificateInput {
 
 input CurriculumSyncInput {
   ids: [Int!]!
+}
+
+input SaveOrgInviteInput {
+  isAdmin: Boolean!
+  orgId: String!
+  profileEmail: String!
 }
 
 type LinkProfileResult {
@@ -1248,6 +1265,11 @@ type KnowledgeHubResourcesOutput {
 type CurriculumSyncOutput {
   syncedCount: Int!
   notSyncedCount: Int!
+}
+
+type SampleOutput {
+  success: Boolean!
+  error: SaveOrgInviteError
 }
 
 scalar Date
