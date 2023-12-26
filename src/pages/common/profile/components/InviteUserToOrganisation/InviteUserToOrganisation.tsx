@@ -53,8 +53,7 @@ export const InviteUserToOrganisation: React.FC<
   const [isOrgAdmin, setIsOrgAdmin] = useState(false)
   const { id } = useParams()
   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
-  const { addSnackbarMessage, getSnackbarMessage } = useSnackbar()
-  const userInvited = Boolean(getSnackbarMessage('user-invited'))
+  const { addSnackbarMessage } = useSnackbar()
 
   const [{ data, fetching, error: errorOnInviteSave }, saveOrgInvite] =
     useMutation<
@@ -93,14 +92,14 @@ export const InviteUserToOrganisation: React.FC<
   }, [id, orgs, selectedOrg])
 
   useEffect(() => {
-    if (data && !userInvited) {
+    if (data) {
       addSnackbarMessage('user-invited', {
         label: t('pages.invite-to-org.user-invited-success'),
       })
 
       onClose()
     }
-  }, [addSnackbarMessage, data, errorOnInviteSave, onClose, t, userInvited])
+  }, [addSnackbarMessage, data, errorOnInviteSave, onClose, t])
 
   const submit = async () => {
     setError('')
