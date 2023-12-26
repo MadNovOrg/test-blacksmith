@@ -11,6 +11,7 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  Alert,
 } from '@mui/material'
 import Link from '@mui/material/Link'
 import React, { useState } from 'react'
@@ -170,6 +171,10 @@ export const CourseHealthAndSafetyForm = () => {
               placeholder={t('common.full-name')}
               onChange={event => setSignature(event.target.value)}
             />
+
+            <Alert severity="info" sx={{ mt: 2 }}>
+              {t('components.name-and-surname-validation-info')}
+            </Alert>
 
             {error && (
               <Box mt={2}>

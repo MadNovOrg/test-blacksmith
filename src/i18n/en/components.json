@@ -174,6 +174,7 @@
     "price-number-error": "Price per attendee must be a positive number",
     "price-required-error": "Price per attendee is a required field",
     "course-level-one-info": "Please be aware some holds may fall under Level Two certification.",
+    "name-and-surname-validation-info": "Please ensure that the name and surname you enter here exactly match the upper- and lower-case versions of your full name from your profile. Additionally, please make sure that there are no additional spaces saved at the end of your name or surname.",
     "indirect-course-assist-trainer-info": "Please make sure the person you add is registered and holds a valid trainer certificate.",
     "aol-info": "Please be aware that any training delivered outside of a licenced area would be invalidated by Team Teach and may cause the licence to be removed.",
     "timezone-info": "Please note that the course time and date you set corresponds to the time zone of the country in which the course will take place (course residing country)",

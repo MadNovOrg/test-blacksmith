@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
+  Alert,
   Box,
   Container,
   FormHelperText,
@@ -440,6 +441,10 @@ export const CourseEvaluation = () => {
                   />
                 </>
               )}
+
+              <Alert severity="info" sx={{ mt: 2 }}>
+                {t('components.name-and-surname-validation-info')}
+              </Alert>
             </Grid>
           </Grid>
 
