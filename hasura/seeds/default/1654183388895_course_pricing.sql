@@ -11,6 +11,8 @@ INSERT INTO course_pricing (
 ('OPEN', 'LEVEL_2', false, true, 230, 'LEVEL2.OP'),
 ('OPEN', 'INTERMEDIATE_TRAINER', false, false, 1600, 'INT.OP'),
 ('OPEN', 'INTERMEDIATE_TRAINER', false, true, 600, 'INT.RE.OP'),
+('OPEN', 'THREE_DAY_SAFETY_RESPONSE_TRAINER', false, false, 1295, 'SRT.OP'),
+('OPEN', 'THREE_DAY_SAFETY_RESPONSE_TRAINER', false, true, 600, 'SRT.RE.OP'),
 ('OPEN', 'ADVANCED_TRAINER', false, false, 1570, 'INT.RE.OP'),
 ('OPEN', 'ADVANCED_TRAINER', false, true, 710, 'INT.RE.OP'),
 ('OPEN', 'ADVANCED', false, false, 1730, ''),
