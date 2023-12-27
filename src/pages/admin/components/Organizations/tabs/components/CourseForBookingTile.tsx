@@ -86,7 +86,7 @@ export const CourseForBookingTile: React.FC<
           .join(', '),
       ].join('\n')
     }
-    return venue.city
+    return venue.country
   }, [isRow, t, venue])
 
   const spacesLeft =
