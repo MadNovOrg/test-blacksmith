@@ -2,14 +2,24 @@ import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useTranslation } from 'react-i18next'
 
 import {
+  Accreditors_Enum,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { RoleName } from '@app/types'
+import { courseToCourseInput } from '@app/util'
 
-import { render, renderHook, screen, userEvent, waitFor } from '@test/index'
+import {
+  render,
+  renderHook,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
+import { buildCourse } from '@test/mock-data-utils'
 
 import { renderForm, selectDelivery, selectLevel } from './test-utils'
 
@@ -20,7 +30,7 @@ vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
 }))
 vi.mock('posthog-js/react')
 const useCoursePriceMock = vi.mocked(useCoursePrice)
-const isResidingCountryEnabled = vi.mocked(useFeatureFlagEnabled)
+const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 describe('component: CourseForm - OPEN', () => {
   const type = Course_Type_Enum.Open
@@ -184,7 +194,7 @@ describe('component: CourseForm - OPEN', () => {
     expect(reacc).toBeChecked()
   })
   it('doesnt require a residing country if feature flag is disabled', async () => {
-    isResidingCountryEnabled.mockResolvedValueOnce(false)
+    useFeatureFlagEnabledMock.mockResolvedValueOnce(false)
     await waitFor(() =>
       render(<CourseForm type={type} />, {
         auth: {
@@ -198,18 +208,109 @@ describe('component: CourseForm - OPEN', () => {
     ).not.toBeInTheDocument()
   })
   it('requires a residing country if feature flag is enabled', async () => {
-    isResidingCountryEnabled.mockResolvedValueOnce(true)
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+
+    const course = buildCourse({
+      overrides: { accreditedBy: Accreditors_Enum.Icm, type },
+    })
     await waitFor(() =>
-      render(<CourseForm type={type} />, {
-        auth: {
-          activeRole: RoleName.TT_ADMIN,
-        },
-      })
+      render(
+        <CourseForm courseInput={courseToCourseInput(course)} type={type} />,
+        {
+          auth: {
+            activeRole: RoleName.TT_ADMIN,
+          },
+        }
+      )
     )
-    waitFor(() =>
+    await waitFor(() =>
       expect(
         screen.queryByText(t('components.course-form.residing-country'))
       ).toBeInTheDocument()
     )
+  })
+
+  it('requires price for an international open type course accredited by ICM and with enabled flag', async () => {
+    // Mock course-residing-country and open-icm-course-international-finance to be enabled
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+
+    const course = buildCourse({
+      overrides: { accreditedBy: Accreditors_Enum.Icm, type },
+    })
+    await waitFor(() =>
+      render(
+        <CourseForm courseInput={courseToCourseInput(course)} type={type} />,
+        {
+          auth: {
+            activeRole: RoleName.TT_ADMIN,
+          },
+        }
+      )
+    )
+
+    const countriesSelector = screen.getByTestId(
+      'countries-selector-autocomplete'
+    )
+    expect(countriesSelector).toBeInTheDocument()
+    countriesSelector.focus()
+
+    const textField = within(countriesSelector).getByTestId(
+      'countries-selector-input'
+    )
+    expect(textField).toBeInTheDocument()
+
+    await userEvent.type(textField, 'Antigua')
+
+    const countryOutOfUKs = screen.getByTestId('country-AG')
+    expect(countryOutOfUKs).toBeInTheDocument()
+
+    await userEvent.click(countryOutOfUKs)
+
+    const financeSection = screen.getByText(
+      t('components.course-form.finance-section-title')
+    )
+    expect(financeSection).toBeInTheDocument()
+  })
+
+  it('do not requires price for an UKs open type course accredited by ICM and with enabled flag', async () => {
+    // Mock course-residing-country and open-icm-course-international-finance to be enabled
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+
+    const course = buildCourse({
+      overrides: { accreditedBy: Accreditors_Enum.Icm, type },
+    })
+    await waitFor(() =>
+      render(
+        <CourseForm courseInput={courseToCourseInput(course)} type={type} />,
+        {
+          auth: {
+            activeRole: RoleName.TT_ADMIN,
+          },
+        }
+      )
+    )
+
+    const countriesSelector = screen.getByTestId(
+      'countries-selector-autocomplete'
+    )
+    expect(countriesSelector).toBeInTheDocument()
+    countriesSelector.focus()
+
+    const textField = within(countriesSelector).getByTestId(
+      'countries-selector-input'
+    )
+    expect(textField).toBeInTheDocument()
+
+    await userEvent.type(textField, 'England')
+
+    const countryOutOfUKs = screen.getByTestId('country-GB-ENG')
+    expect(countryOutOfUKs).toBeInTheDocument()
+
+    await userEvent.click(countryOutOfUKs)
+
+    const financeSection = screen.queryByText(
+      t('components.course-form.finance-section-title')
+    )
+    expect(financeSection).not.toBeInTheDocument()
   })
 })

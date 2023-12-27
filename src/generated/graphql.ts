@@ -15224,6 +15224,7 @@ export type Course = {
   gradingConfirmed: Scalars['Boolean'];
   gradingStarted: Scalars['Boolean'];
   id: Scalars['Int'];
+  includeVAT?: Maybe<Scalars['Boolean']>;
   isDraft?: Maybe<Scalars['Boolean']>;
   level: Course_Level_Enum;
   max_participants: Scalars['Int'];
@@ -16780,6 +16781,7 @@ export type Course_Bool_Exp = {
   gradingConfirmed?: InputMaybe<Boolean_Comparison_Exp>;
   gradingStarted?: InputMaybe<Boolean_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
+  includeVAT?: InputMaybe<Boolean_Comparison_Exp>;
   isDraft?: InputMaybe<Boolean_Comparison_Exp>;
   level?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
   max_participants?: InputMaybe<Int_Comparison_Exp>;
@@ -20750,6 +20752,7 @@ export type Course_Insert_Input = {
   gradingConfirmed?: InputMaybe<Scalars['Boolean']>;
   gradingStarted?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['Int']>;
+  includeVAT?: InputMaybe<Scalars['Boolean']>;
   isDraft?: InputMaybe<Scalars['Boolean']>;
   level?: InputMaybe<Course_Level_Enum>;
   max_participants?: InputMaybe<Scalars['Int']>;
@@ -22058,6 +22061,7 @@ export type Course_Order_By = {
   gradingConfirmed?: InputMaybe<Order_By>;
   gradingStarted?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  includeVAT?: InputMaybe<Order_By>;
   isDraft?: InputMaybe<Order_By>;
   level?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
@@ -26295,6 +26299,8 @@ export enum Course_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  IncludeVat = 'includeVAT',
+  /** column name */
   IsDraft = 'isDraft',
   /** column name */
   Level = 'level',
@@ -26365,6 +26371,7 @@ export type Course_Set_Input = {
   gradingConfirmed?: InputMaybe<Scalars['Boolean']>;
   gradingStarted?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['Int']>;
+  includeVAT?: InputMaybe<Scalars['Boolean']>;
   isDraft?: InputMaybe<Scalars['Boolean']>;
   level?: InputMaybe<Course_Level_Enum>;
   max_participants?: InputMaybe<Scalars['Int']>;
@@ -26804,6 +26811,7 @@ export type Course_Stream_Cursor_Value_Input = {
   gradingConfirmed?: InputMaybe<Scalars['Boolean']>;
   gradingStarted?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['Int']>;
+  includeVAT?: InputMaybe<Scalars['Boolean']>;
   isDraft?: InputMaybe<Scalars['Boolean']>;
   level?: InputMaybe<Course_Level_Enum>;
   max_participants?: InputMaybe<Scalars['Int']>;
@@ -27660,6 +27668,8 @@ export enum Course_Update_Column {
   GradingStarted = 'gradingStarted',
   /** column name */
   Id = 'id',
+  /** column name */
+  IncludeVat = 'includeVAT',
   /** column name */
   IsDraft = 'isDraft',
   /** column name */
@@ -55947,7 +55957,7 @@ export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __
 export type GetTempProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, accreditedBy: Accreditors_Enum, price?: any | null, priceCurrency?: string | null, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, reaccreditation?: boolean | null, conversion?: boolean | null, freeSpaces?: number | null, courseCode?: string | null, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, expenses: Array<{ __typename?: 'course_expenses', id: any, data: any, trainer: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }> } | null }> };
+export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, accreditedBy: Accreditors_Enum, price?: any | null, priceCurrency?: string | null, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, reaccreditation?: boolean | null, conversion?: boolean | null, freeSpaces?: number | null, residingCountry?: string | null, includeVAT?: boolean | null, courseCode?: string | null, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, expenses: Array<{ __typename?: 'course_expenses', id: any, data: any, trainer: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }> } | null }> };
 
 export type InsertProfileTempMutationVariables = Exact<{
   input: Profile_Temp_Insert_Input;

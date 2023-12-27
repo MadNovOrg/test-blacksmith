@@ -49,6 +49,8 @@ configuration:
       custom_name: gradingStarted
     is_draft:
       custom_name: isDraft
+    include_VAT:
+      custom_name: includeVAT
     modules_duration:
       custom_name: modulesDuration
     organization_key_contact_invite_data:
@@ -85,6 +87,7 @@ configuration:
     grading_confirmed: gradingConfirmed
     grading_started: gradingStarted
     is_draft: isDraft
+    include_VAT: includeVAT
     modules_duration: modulesDuration
     organization_key_contact_invite_data: organizationKeyContactInviteData
     organization_key_contact_profile_id: organizationKeyContactProfileId
@@ -262,6 +265,7 @@ insert_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - include_VAT
         - is_draft
         - max_participants
         - min_participants
@@ -272,6 +276,7 @@ insert_permissions:
         - organization_key_contact_profile_id
         - parking_instructions
         - price
+        - price_currency
         - reaccreditation
         - renewal_cycle
         - residingCountry
@@ -345,6 +350,7 @@ insert_permissions:
         - grading_started
         - id
         - is_draft
+        - include_VAT
         - max_participants
         - min_participants
         - modules_duration
@@ -354,6 +360,7 @@ insert_permissions:
         - organization_key_contact_profile_id
         - parking_instructions
         - price
+        - price_currency
         - reaccreditation
         - renewal_cycle
         - residingCountry
@@ -388,6 +395,7 @@ insert_permissions:
         - grading_confirmed
         - id
         - is_draft
+        - include_VAT
         - max_participants
         - min_participants
         - modules_duration
@@ -397,6 +405,7 @@ insert_permissions:
         - organization_key_contact_profile_id
         - parking_instructions
         - price
+        - price_currency
         - reaccreditation
         - renewal_cycle
         - residingCountry
@@ -785,6 +794,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - include_VAT
         - is_draft
         - max_participants
         - min_participants
@@ -901,6 +911,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - include_VAT
         - is_draft
         - max_participants
         - min_participants
@@ -995,6 +1006,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - include_VAT
         - is_draft
         - max_participants
         - min_participants
@@ -1049,6 +1061,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - include_VAT
         - is_draft
         - max_participants
         - min_participants
@@ -1096,6 +1109,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - include_VAT
         - max_participants
         - min_participants
         - name
@@ -1149,6 +1163,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - include_VAT
         - is_draft
         - max_participants
         - min_participants

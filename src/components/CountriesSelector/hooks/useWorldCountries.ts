@@ -257,7 +257,11 @@ export default function useWorldCountries() {
   )
 
   const isUKCountry = useCallback(
-    (countryCode: CountryISOCode | UKsCountriesCode) => {
+    (
+      countryCode: CountryISOCode | UKsCountriesCode | string | null | undefined
+    ) => {
+      if (!countryCode) return false
+
       return Object.keys(UKsCountriesCodes).includes(countryCode)
     },
     []

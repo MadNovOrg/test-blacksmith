@@ -1,6 +1,9 @@
 import { useCallback, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+import useWorldCountries, {
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { hasRenewalCycle } from '@app/components/CourseForm/helpers'
 import { useAuth } from '@app/context/auth'
 import {
@@ -132,6 +135,7 @@ export function useSaveCourse(): {
     courseName,
     invoiceDetails,
   } = useCreateCourse()
+  const { isUKCountry } = useWorldCountries()
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const fetcher = useFetcher()
   const { profile, acl } = useAuth()
@@ -139,6 +143,11 @@ export function useSaveCourse(): {
 
   const saveCourse = useCallback<SaveCourse>(async () => {
     const isBild = courseData?.accreditedBy === Accreditors_Enum.Bild
+    const isOpenICMInternational =
+      courseData?.type === Course_Type_Enum.Open &&
+      courseData?.accreditedBy === Accreditors_Enum.Icm &&
+      courseData?.residingCountry &&
+      !isUKCountry(courseData?.residingCountry as WorldCountriesCodes)
 
     try {
       if (courseData) {
@@ -203,10 +212,11 @@ export function useSaveCourse(): {
               level: courseData.courseLevel,
               reaccreditation: courseData.reaccreditation,
               go1Integration: courseData.blendedLearning,
-              ...(isBild &&
-              [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
-                courseData.type
-              )
+              ...((isBild &&
+                [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
+                  courseData.type
+                )) ||
+              isOpenICMInternational
                 ? { price: courseData.price, conversion: courseData.conversion }
                 : null),
               status,
@@ -335,6 +345,12 @@ export function useSaveCourse(): {
                     },
                   }
                 : null),
+              ...(courseData.includeVAT
+                ? { includeVAT: courseData.includeVAT }
+                : null),
+              ...(courseData.priceCurrency
+                ? { priceCurrency: courseData.priceCurrency }
+                : null),
             },
           }
         )
@@ -374,8 +390,9 @@ export function useSaveCourse(): {
     }
   }, [
     courseData,
+    isUKCountry,
     trainers,
-    exceptions,
+    exceptions.length,
     acl,
     go1Licensing?.invoiceDetails,
     invoiceDetails,

@@ -630,6 +630,8 @@ export type CourseInput = {
   displayOnWebsite?: boolean
   renewalCycle?: Course_Renewal_Cycle_Enum
   residingCountry?: string
+  priceCurrency?: string
+  includeVAT?: boolean | null
   //TODO: Delete this after Arlo migration
   arloReferenceId?: string
 }

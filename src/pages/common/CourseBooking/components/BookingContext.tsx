@@ -1,4 +1,5 @@
 import { Alert, CircularProgress, Stack } from '@mui/material'
+import { allPass } from 'lodash/fp'
 import { round } from 'lodash-es'
 import React, {
   useCallback,
@@ -12,7 +13,9 @@ import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import { useMount } from 'react-use'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import {
+  Accreditors_Enum,
   Course_Source_Enum,
   Course_Type_Enum,
   GetTempProfileQuery,
@@ -152,6 +155,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
   const [course, setCourse] = useState<CourseDetails>({} as CourseDetails) // safe
   const [booking, setBooking] = useState<State>(initialState)
   const [promoCodes, setPromoCodes] = useState<PromoCodeOutput[]>([])
+  const { isUKCountry } = useWorldCountries()
 
   const isBooked = location.pathname.startsWith('/booking/payment/')
   const internalBooking = useRef(location.state?.internalBooking)
@@ -220,13 +224,20 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     )
     setCourse(profile.course)
 
+    const isInternationalCourse = allPass([
+      () => profile?.course?.type === Course_Type_Enum.Open,
+      () => profile?.course?.accreditedBy === Accreditors_Enum.Icm,
+      () => Boolean(profile?.course?.residingCountry),
+      () => !isUKCountry(profile?.course?.residingCountry),
+    ])()
+
     if (pricing) {
       setBooking({
         quantity: profile.quantity ?? 0,
         participants: [],
         price: pricing.priceAmount,
         currency: pricing.priceCurrency,
-        vat: 20,
+        vat: isInternationalCourse && !profile?.course?.includeVAT ? 0 : 20,
         promoCodes: [],
         discounts: {},
         orgId: '',

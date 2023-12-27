@@ -281,6 +281,7 @@ export const CourseBookingReview: React.FC<
               {formatCurrency(
                 {
                   amount: new Big(amounts.trainerExpenses).round(2).toNumber(),
+                  currency: booking.currency,
                 },
                 t
               )}
@@ -313,6 +314,7 @@ export const CourseBookingReview: React.FC<
                     .neg()
                     .round(2)
                     .toNumber(),
+                  currency: booking.currency,
                 },
                 t
               )}
@@ -325,6 +327,7 @@ export const CourseBookingReview: React.FC<
             {formatCurrency(
               {
                 amount: new Big(amounts.subtotalDiscounted).round(2).toNumber(),
+                currency: booking.currency,
               },
               t
             )}
@@ -337,7 +340,10 @@ export const CourseBookingReview: React.FC<
           </Typography>
           <Typography color="grey.700">
             {formatCurrency(
-              { amount: new Big(amounts.vat).round(2).toNumber() },
+              {
+                amount: new Big(amounts.vat).round(2).toNumber(),
+                currency: booking.currency,
+              },
               t
             )}
           </Typography>
@@ -353,6 +359,7 @@ export const CourseBookingReview: React.FC<
                   amount: new Big(amounts.paymentProcessingFee)
                     .round(2)
                     .toNumber(),
+                  currency: booking.currency,
                 },
                 t
               )}
@@ -366,7 +373,10 @@ export const CourseBookingReview: React.FC<
           </Typography>
           <Typography fontWeight="500">
             {formatCurrency(
-              { amount: new Big(amounts.total).round(2).toNumber() },
+              {
+                amount: new Big(amounts.total).round(2).toNumber(),
+                currency: booking.currency,
+              },
               t
             )}
           </Typography>

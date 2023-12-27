@@ -44,6 +44,8 @@ export const QUERY = gql`
             ...Venue
           }
         }
+        residingCountry
+        includeVAT
       }
       quantity
     }

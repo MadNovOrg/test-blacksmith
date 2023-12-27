@@ -1,6 +1,10 @@
-import { format, isValid, isBefore, isEqual, getYear } from 'date-fns'
+import { format, getYear, isBefore, isEqual, isValid } from 'date-fns'
 import { TFunction } from 'i18next'
 
+import {
+  UKsCountriesCodes,
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import {
   Accreditors_Enum,
   Course_Delivery_Type_Enum,
@@ -520,12 +524,14 @@ export function courseNeedsManualPrice({
   maxParticipants,
   courseType,
   courseLevel,
+  residingCountry,
 }: {
   accreditedBy: Accreditors_Enum
   blendedLearning: boolean
   maxParticipants: number
   courseType: Course_Type_Enum
   courseLevel: Course_Level_Enum
+  residingCountry?: WorldCountriesCodes
 }) {
   if (
     accreditedBy === Accreditors_Enum.Icm &&
@@ -536,6 +542,14 @@ export function courseNeedsManualPrice({
   ) {
     return true
   }
+
+  if (
+    courseType === Course_Type_Enum.Open &&
+    accreditedBy === Accreditors_Enum.Icm &&
+    residingCountry &&
+    !Object.keys(UKsCountriesCodes).includes(residingCountry)
+  )
+    return true
 
   return (
     [Course_Type_Enum.Open, Course_Type_Enum.Closed].includes(courseType) &&

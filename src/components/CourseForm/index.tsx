@@ -21,6 +21,7 @@ import {
 } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import Big from 'big.js'
 import { isPast, isDate, isValid as isValidDate, isBefore } from 'date-fns'
 import { TFunction } from 'i18next'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
@@ -48,6 +49,9 @@ import { useQuery } from 'urql'
 import { SchemaDescription } from 'yup'
 
 import { CountryDropdown } from '@app/components/CountryDropdown'
+import CurrencySelector, {
+  defaultCurrency,
+} from '@app/components/CurrencySelector'
 import { NumericTextField } from '@app/components/NumericTextField'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
@@ -76,8 +80,10 @@ import { CourseInput, Organization, RoleName } from '@app/types'
 import { bildStrategiesToArray, extractTime, requiredMsg } from '@app/util'
 
 import CountriesSelector from '../CountriesSelector'
-import useWorldCountries from '../CountriesSelector/hooks/useWorldCountries'
-import { InfoPanel } from '../InfoPanel'
+import useWorldCountries, {
+  WorldCountriesCodes,
+} from '../CountriesSelector/hooks/useWorldCountries'
+import { InfoPanel, InfoRow } from '../InfoPanel'
 
 import { InstructionAccordionField } from './components/AccordionTextField'
 import { CourseDatePicker } from './components/CourseDatePicker'
@@ -148,6 +154,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const residingCountryEnabled = useFeatureFlagEnabled(
     'course-residing-country'
   )
+  const openIcmInternationalFinanceEnabled = useFeatureFlagEnabled(
+    'open-icm-course-international-finance'
+  )
 
   // We can enable feature flags based on the current URL
   // but posthog wont update in time and the flag is set as true even if it should be false
@@ -165,6 +174,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       residingCountryEnabled,
     ]
   )
+  const isOpenICMInternationalFinanceEnabled = useMemo(
+    () =>
+      isResidingCountryEnabled && Boolean(openIcmInternationalFinanceEnabled),
+    [isResidingCountryEnabled, openIcmInternationalFinanceEnabled]
+  )
   const hasOrg = [Course_Type_Enum.Closed, Course_Type_Enum.Indirect].includes(
     courseType
   )
@@ -175,7 +189,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const minCourseStartDate = new Date()
   minCourseStartDate.setDate(minCourseStartDate.getDate() + 1)
 
-  const { countriesCodesWithUKs } = useWorldCountries()
+  const { countriesCodesWithUKs, isUKCountry } = useWorldCountries()
+
   const schema = useMemo(
     () =>
       yup.object({
@@ -248,6 +263,22 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 .required(
                   requiredMsg(t, 'components.course-form.residing-country')
                 ),
+            }
+          : {}),
+        ...(isOpenICMInternationalFinanceEnabled
+          ? {
+              priceCurrency: yup.string().when('residingCountry', {
+                is: (residingCountry: WorldCountriesCodes) =>
+                  !isUKCountry(residingCountry),
+                then: schema =>
+                  schema.required(requiredMsg(t, 'common.currency-word')),
+              }),
+              includeVAT: yup.bool().when('residingCountry', {
+                is: (residingCountry: WorldCountriesCodes) =>
+                  !isUKCountry(residingCountry),
+                then: schema =>
+                  schema.required(requiredMsg(t, 'vat')).default(false),
+              }),
             }
           : {}),
         deliveryType: yup
@@ -374,13 +405,15 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               'blendedLearning',
               'maxParticipants',
               'courseLevel',
+              'residingCountry',
             ],
             {
               is: (
                 accreditedBy: Accreditors_Enum,
                 blendedLearning: boolean,
                 maxParticipants: number,
-                courseLevel: Course_Level_Enum
+                courseLevel: Course_Level_Enum,
+                residingCountry: WorldCountriesCodes
               ) =>
                 courseNeedsManualPrice({
                   accreditedBy,
@@ -388,6 +421,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   maxParticipants,
                   courseLevel,
                   courseType,
+                  ...(isOpenICMInternationalFinanceEnabled
+                    ? { residingCountry }
+                    : {}),
                 }),
               then: s => s.required(),
               otherwise: s => s.nullable(),
@@ -407,18 +443,20 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       }),
 
     [
-      hasOrg,
-      t,
-      courseType,
-      isClosedCourse,
-      isIndirectCourse,
-      isResidingCountryEnabled,
-      countriesCodesWithUKs,
-      hasMinParticipants,
-      isCreation,
-      courseInput?.startDate,
-      trainerRatioNotMet,
       acl,
+      countriesCodesWithUKs,
+      courseInput?.startDate,
+      courseType,
+      hasMinParticipants,
+      hasOrg,
+      isClosedCourse,
+      isCreation,
+      isIndirectCourse,
+      isOpenICMInternationalFinanceEnabled,
+      isResidingCountryEnabled,
+      isUKCountry,
+      t,
+      trainerRatioNotMet,
     ]
   )
   const defaultValues = useMemo<Omit<CourseInput, 'id'>>(
@@ -478,6 +516,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       bildStrategies: courseInput?.bildStrategies ?? defaultStrategies,
       conversion: courseInput?.conversion ?? false,
       price: courseInput?.price ?? null,
+      priceCurrency: courseInput?.priceCurrency ?? defaultCurrency,
       renewalCycle: courseInput?.renewalCycle,
       ...(isResidingCountryEnabled
         ? {
@@ -485,7 +524,42 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           }
         : {}),
     }),
-    [courseInput, courseType, isResidingCountryEnabled]
+    [
+      courseInput?.accountCode,
+      courseInput?.accreditedBy,
+      courseInput?.aolCountry,
+      courseInput?.aolRegion,
+      courseInput?.arloReferenceId,
+      courseInput?.bildStrategies,
+      courseInput?.blendedLearning,
+      courseInput?.bookingContact,
+      courseInput?.conversion,
+      courseInput?.courseCost,
+      courseInput?.courseLevel,
+      courseInput?.deliveryType,
+      courseInput?.displayOnWebsite,
+      courseInput?.endDateTime,
+      courseInput?.freeSpaces,
+      courseInput?.maxParticipants,
+      courseInput?.minParticipants,
+      courseInput?.organization,
+      courseInput?.organizationKeyContact,
+      courseInput?.parkingInstructions,
+      courseInput?.price,
+      courseInput?.priceCurrency,
+      courseInput?.reaccreditation,
+      courseInput?.renewalCycle,
+      courseInput?.residingCountry,
+      courseInput?.salesRepresentative,
+      courseInput?.source,
+      courseInput?.specialInstructions,
+      courseInput?.startDateTime,
+      courseInput?.venue,
+      courseInput?.zoomMeetingUrl,
+      courseInput?.zoomProfileId,
+      courseType,
+      isResidingCountryEnabled,
+    ]
   )
   const methods = useForm<CourseInput>({
     resolver: yupResolver(schema),
@@ -629,6 +703,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           courseType,
           courseLevel: values.courseLevel as Course_Level_Enum,
           maxParticipants: values.maxParticipants ?? 0,
+          ...(isOpenICMInternationalFinanceEnabled
+            ? { residingCountry: values.residingCountry as WorldCountriesCodes }
+            : {}),
         })
       : false
 
@@ -662,7 +739,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       needsManualPrice &&
       automaticPrice &&
       !values.price &&
-      values.accreditedBy === Accreditors_Enum.Icm
+      values.accreditedBy === Accreditors_Enum.Icm &&
+      (!isOpenICMInternationalFinanceEnabled ||
+        (isOpenICMInternationalFinanceEnabled &&
+          isUKCountry(values.residingCountry as WorldCountriesCodes)))
     ) {
       setValue('price', automaticPrice)
     }
@@ -671,12 +751,32 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       resetField('price')
     }
   }, [
-    needsManualPrice,
     automaticPrice,
-    values.price,
-    setValue,
+    isOpenICMInternationalFinanceEnabled,
+    isUKCountry,
+    needsManualPrice,
     resetField,
+    setValue,
     values.accreditedBy,
+    values.price,
+    values.residingCountry,
+  ])
+
+  useEffect(() => {
+    if (
+      isOpenICMInternationalFinanceEnabled &&
+      !isUKCountry(values.residingCountry)
+    )
+      setValue('priceCurrency', defaultCurrency)
+    else {
+      resetField('priceCurrency')
+    }
+  }, [
+    isOpenICMInternationalFinanceEnabled,
+    isUKCountry,
+    resetField,
+    setValue,
+    values.residingCountry,
   ])
 
   useEffect(() => {
@@ -996,6 +1096,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                           setValue('aolCountry', '')
                           setValue('aolRegion', '')
                           setValue('price', null)
+                          setValue('priceCurrency', undefined)
+                          setValue('includeVAT', null)
 
                           resetField('bildStrategies')
 
@@ -1481,9 +1583,17 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               {isResidingCountryEnabled ? (
                 <FormControl fullWidth sx={{ my: theme.spacing(2) }}>
                   <CountriesSelector
-                    onChange={(_, code) =>
+                    onChange={(_, code) => {
+                      if (isUKCountry(code)) {
+                        resetField('includeVAT')
+                        resetField('price')
+                      } else {
+                        if (isUKCountry(values.residingCountry)) {
+                          setValue('includeVAT', false)
+                        }
+                      }
                       setValue('residingCountry', code ?? '')
-                    }
+                    }}
                     value={values.residingCountry}
                     label={t('components.course-form.residing-country')}
                     error={Boolean(errors.residingCountry?.message)}
@@ -1889,6 +1999,82 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 />
               )}
             />
+          ) : null}
+
+          {isOpenICMInternationalFinanceEnabled &&
+          !isUKCountry(values.residingCountry as WorldCountriesCodes) ? (
+            <InfoPanel
+              title={t('components.course-form.finance-section-title')}
+              titlePosition="outside"
+              renderContent={(content, props) => (
+                <Box {...props} p={3} pt={4}>
+                  {content}
+                </Box>
+              )}
+            >
+              <Grid container spacing={2}>
+                <Grid item md={5} sm={12}>
+                  <CurrencySelector
+                    {...register('priceCurrency')}
+                    error={Boolean(errors.priceCurrency)}
+                    fullWidth
+                    helperText={errors.priceCurrency?.message}
+                    value={values.priceCurrency ?? null}
+                  />
+                </Grid>
+
+                <Grid item md={7} sm={12}>
+                  <TextField
+                    {...register('price')}
+                    value={values.price}
+                    error={Boolean(errors.price)}
+                    fullWidth
+                    helperText={errors.price?.message ?? ''}
+                    label={t('components.course-form.price')}
+                    placeholder={t('components.course-form.price-placeholder')}
+                    required
+                    type={'number'}
+                    variant="filled"
+                  />
+                </Grid>
+
+                <Grid container item md={12} sm={12} alignSelf={'center'}>
+                  <Controller
+                    name="includeVAT"
+                    control={control}
+                    render={({ field }) => (
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            {...field}
+                            checked={Boolean(values.includeVAT)}
+                            data-testid="includeVAT-switch"
+                          />
+                        }
+                        label={t('vat')}
+                      />
+                    )}
+                  />
+                </Grid>
+              </Grid>
+              <InfoRow>
+                <Typography fontWeight={600}>
+                  {t('pages.order-details.total')}
+                </Typography>
+                <Typography fontWeight={600}>
+                  {t('currency', {
+                    amount:
+                      +(values.price ?? 0) +
+                      (values.includeVAT
+                        ? new Big(((values.price ?? 0) * 20) / 100)
+                            .round(2)
+                            .toNumber()
+                        : 0),
+                    currency: values.priceCurrency ?? defaultCurrency,
+                  })}
+                </Typography>
+              </InfoRow>
+            </InfoPanel>
           ) : null}
 
           {isClosedCourse ||

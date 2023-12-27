@@ -23,15 +23,18 @@ const CountriesSelector = ({
 }: CountriesSelectorProps) => {
   const { countriesCodesWithUKs: countries, getLabel } = useWorldCountries()
   const { t } = useTranslation()
+
   return (
     <Autocomplete
       value={!value ? undefined : value}
       id="country-select-demo"
+      data-testid="countries-selector-autocomplete"
       options={countries}
       autoHighlight
       getOptionLabel={code => getLabel(code as WorldCountriesCodes) ?? ''}
       renderOption={(props, code) => (
         <Box
+          data-testid={`country-${code}`}
           component="li"
           sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
           {...props}
@@ -43,6 +46,7 @@ const CountriesSelector = ({
       renderInput={params => (
         <TextField
           {...params}
+          data-testid={`countries-selector-input`}
           error={error}
           helperText={helperText}
           label={label ?? t('country')}

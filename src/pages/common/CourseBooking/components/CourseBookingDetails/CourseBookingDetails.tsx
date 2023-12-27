@@ -421,7 +421,10 @@ export const CourseBookingDetails: React.FC<
             <Typography color="grey.700">{t('course-cost')}</Typography>
             <Typography color="grey.700">
               {formatCurrency(
-                { amount: new Big(amounts.courseCost).round(2).toNumber() },
+                {
+                  amount: new Big(amounts.courseCost).round(2).toNumber(),
+                  currency: booking.currency,
+                },
                 t
               )}
             </Typography>
@@ -438,6 +441,7 @@ export const CourseBookingDetails: React.FC<
                     amount: new Big(amounts.trainerExpenses)
                       .round(2)
                       .toNumber(),
+                    currency: booking.currency,
                   },
                   t
                 )}
@@ -469,6 +473,7 @@ export const CourseBookingDetails: React.FC<
                       .neg()
                       .round(2)
                       .toNumber(),
+                    currency: booking.currency,
                   },
                   t
                 )}
@@ -484,6 +489,7 @@ export const CourseBookingDetails: React.FC<
                   amount: new Big(amounts.subtotalDiscounted)
                     .round(2)
                     .toNumber(),
+                  currency: booking.currency,
                 },
                 t
               )}
@@ -496,7 +502,10 @@ export const CourseBookingDetails: React.FC<
             </Typography>
             <Typography color="grey.700">
               {formatCurrency(
-                { amount: new Big(amounts.vat).round(2).toNumber() },
+                {
+                  amount: new Big(amounts.vat).round(2).toNumber(),
+                  currency: booking.currency,
+                },
                 t
               )}
             </Typography>
@@ -508,7 +517,10 @@ export const CourseBookingDetails: React.FC<
             </Typography>
             <Typography fontWeight="500" color="primary">
               {formatCurrency(
-                { amount: new Big(amounts.total).round(2).toNumber() },
+                {
+                  amount: new Big(amounts.total).round(2).toNumber(),
+                  currency: booking.currency,
+                },
                 t
               )}
             </Typography>

@@ -2,6 +2,7 @@
   "appTitle": "Team Teach Connect",
   "internal-error": "Internal error occurred.",
   "currency": "{{amount, currency(GBP)}}",
+  "currency-word": "Currency",
   "certificates": {
     "level-one": "Level One",
     "level-two": "Level Two",
