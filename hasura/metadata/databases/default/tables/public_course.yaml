@@ -47,10 +47,10 @@ configuration:
       custom_name: gradingConfirmed
     grading_started:
       custom_name: gradingStarted
-    is_draft:
-      custom_name: isDraft
     include_VAT:
       custom_name: includeVAT
+    is_draft:
+      custom_name: isDraft
     modules_duration:
       custom_name: modulesDuration
     organization_key_contact_invite_data:
@@ -86,8 +86,8 @@ configuration:
     go1_integration: go1Integration
     grading_confirmed: gradingConfirmed
     grading_started: gradingStarted
-    is_draft: isDraft
     include_VAT: includeVAT
+    is_draft: isDraft
     modules_duration: modulesDuration
     organization_key_contact_invite_data: organizationKeyContactInviteData
     organization_key_contact_profile_id: organizationKeyContactProfileId

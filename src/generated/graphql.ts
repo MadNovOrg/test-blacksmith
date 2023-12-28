@@ -3106,6 +3106,16 @@ export type Go1LicensesChangeOutput = {
   success: Scalars['Boolean'];
 };
 
+export type GradedOnSyncInput = {
+  participantIds: Array<Scalars['uuid']>;
+};
+
+export type GradedOnSyncOutput = {
+  __typename?: 'GradedOnSyncOutput';
+  notSyncedCount: Scalars['Int'];
+  syncedCount: Scalars['Int'];
+};
+
 /** Content node with hierarchical (parent/child) relationships */
 export type HierarchicalContentNode = {
   /** Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
@@ -32487,6 +32497,8 @@ export type Mutation_Root = {
   delete_xero_invoice_status_by_pk?: Maybe<Xero_Invoice_Status>;
   /** go1LicensesChange */
   go1LicensesChange?: Maybe<Go1LicensesChangeOutput>;
+  /** gradedOnSync */
+  gradedOnSync?: Maybe<GradedOnSyncOutput>;
   importArloCertificates: Scalars['uuid'];
   importLegacyCertificate?: Maybe<ImportLegacyCertificateOutput>;
   /** insert data into the table: "accreditors" */
@@ -34782,6 +34794,12 @@ export type Mutation_RootDelete_Xero_Invoice_Status_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootGo1LicensesChangeArgs = {
   input: Go1LicensesChangeInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootGradedOnSyncArgs = {
+  input: GradedOnSyncInput;
 };
 
 

@@ -655,6 +655,19 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/go1-licensing/issue-license'
+  - name: participant_graded_curriculum
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - grade
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/graded-on-sync'
   - name: participant_graded_status
     definition:
       enable_manual: false

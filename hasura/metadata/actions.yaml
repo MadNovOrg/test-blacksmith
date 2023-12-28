@@ -202,6 +202,11 @@ actions:
       - role: sales-admin
       - role: tt-admin
     comment: go1LicensesChange
+  - name: gradedOnSync
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/participant/graded-on-sync/bulk'
+    comment: gradedOnSync
   - name: importArloCertificates
     definition:
       kind: asynchronous
@@ -911,8 +916,9 @@ custom_types:
     - name: ApproveCourseInput
     - name: BlendedLearningExportDataInput
     - name: ImportLegacyCertificateInput
-    - name: SaveOrgInviteInput
     - name: CurriculumSyncInput
+    - name: SaveOrgInviteInput
+    - name: GradedOnSyncInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -991,5 +997,6 @@ custom_types:
     - name: KnowledgeHubResourcesOutput
     - name: CurriculumSyncOutput
     - name: SampleOutput
+    - name: GradedOnSyncOutput
   scalars:
     - name: Date

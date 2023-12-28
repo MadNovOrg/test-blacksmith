@@ -150,6 +150,12 @@ type Mutation {
 }
 
 type Mutation {
+  gradedOnSync(
+    input: GradedOnSyncInput!
+  ): GradedOnSyncOutput
+}
+
+type Mutation {
   importArloCertificates(
     report: String!
   ): ImportArloCertificatesOutput
@@ -791,6 +797,10 @@ input SaveOrgInviteInput {
   profileEmail: String!
 }
 
+input GradedOnSyncInput {
+  participantIds: [uuid!]!
+}
+
 type LinkProfileResult {
   status: Boolean!
 }
@@ -1272,6 +1282,11 @@ type CurriculumSyncOutput {
 type SampleOutput {
   success: Boolean!
   error: SaveOrgInviteError
+}
+
+type GradedOnSyncOutput {
+  syncedCount: Int!
+  notSyncedCount: Int!
 }
 
 scalar Date

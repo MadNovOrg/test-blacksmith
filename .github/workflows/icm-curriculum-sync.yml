@@ -47,3 +47,6 @@ jobs:
 
       - name: Sync curriculums
         run: npx ts-node ./scripts/sync-curriculums.ts
+
+      - name: Sync graded_on for participants
+        run: npx ts-node ./scripts/sync-graded-on.ts
