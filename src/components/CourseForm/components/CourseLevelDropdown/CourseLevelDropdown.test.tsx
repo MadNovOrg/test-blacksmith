@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
 import {
@@ -7,7 +8,7 @@ import {
 } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { render, screen, userEvent, within } from '@test/index'
+import { render, renderHook, screen, userEvent, within } from '@test/index'
 
 import { CourseLevelDropdown } from './index'
 
@@ -22,6 +23,12 @@ const getOption = (level: string | RegExp, query = false) => {
 }
 
 describe('component: CourseLevelDropdown', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+
   it('renders correctly when type is OPEN', async () => {
     render(
       <CourseLevelDropdown
@@ -35,12 +42,19 @@ describe('component: CourseLevelDropdown', () => {
 
     await userEvent.click(screen.getByRole('button'))
 
-    expect(screen.queryAllByRole('option').length).toBe(4)
+    expect(screen.queryAllByRole('option').length).toBe(5)
 
-    expect(getOption(/level one/i)).toBeInTheDocument()
-    expect(getOption(/level two/i)).toBeInTheDocument()
-    expect(getOption(/intermediate trainer/i)).toBeInTheDocument()
-    expect(getOption(/advanced trainer/i)).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.LEVEL_1'))).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
+    expect(
+      getOption(t('common.course-levels.INTERMEDIATE_TRAINER'))
+    ).toBeInTheDocument()
+    expect(
+      getOption(t('common.course-levels.ADVANCED_TRAINER'))
+    ).toBeInTheDocument()
+    expect(
+      getOption(t('common.course-levels.THREE_DAY_SAFETY_RESPONSE_TRAINER'))
+    ).toBeInTheDocument()
   })
 
   it('renders correctly when type is CLOSED', async () => {
@@ -58,11 +72,15 @@ describe('component: CourseLevelDropdown', () => {
 
     expect(screen.queryAllByRole('option').length).toBe(5)
 
-    expect(getOption(/level one/i)).toBeInTheDocument()
-    expect(getOption(/level two/i)).toBeInTheDocument()
-    expect(getOption(/advanced modules/i)).toBeInTheDocument()
-    expect(getOption(/intermediate trainer/i)).toBeInTheDocument()
-    expect(getOption(/advanced trainer/i)).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.LEVEL_1'))).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.ADVANCED'))).toBeInTheDocument()
+    expect(
+      getOption(t('common.course-levels.INTERMEDIATE_TRAINER'))
+    ).toBeInTheDocument()
+    expect(
+      getOption(t('common.course-levels.ADVANCED_TRAINER'))
+    ).toBeInTheDocument()
   })
 
   it('renders correctly when type is INDIRECT', async () => {
@@ -80,9 +98,9 @@ describe('component: CourseLevelDropdown', () => {
 
     expect(screen.queryAllByRole('option').length).toBe(3)
 
-    expect(getOption(/level one/i)).toBeInTheDocument()
-    expect(getOption(/level two/i)).toBeInTheDocument()
-    expect(getOption(/advanced modules/i)).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.LEVEL_1'))).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.ADVANCED'))).toBeInTheDocument()
   })
 
   it("doesn't render Advanced modules if a trainer isn't Advanced Trainer or BILD Advanced trainer certified", async () => {
@@ -111,9 +129,11 @@ describe('component: CourseLevelDropdown', () => {
 
     expect(screen.queryAllByRole('option').length).toBe(2)
 
-    expect(getOption(/level one/i)).toBeInTheDocument()
-    expect(getOption(/level two/i)).toBeInTheDocument()
-    expect(getOption(/advanced modules/i, true)).not.toBeInTheDocument()
+    expect(getOption(t('common.course-levels.LEVEL_1'))).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
+    expect(
+      getOption(t('common.course-levels.ADVANCED'), true)
+    ).not.toBeInTheDocument()
   })
 
   it('renders Advanced modules if a trainer has an Advanced trainer certificate', async () => {
@@ -136,9 +156,9 @@ describe('component: CourseLevelDropdown', () => {
 
     expect(screen.queryAllByRole('option').length).toBe(3)
 
-    expect(getOption(/level one/i)).toBeInTheDocument()
-    expect(getOption(/level two/i)).toBeInTheDocument()
-    expect(getOption(/advanced modules/i)).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.LEVEL_1'))).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.ADVANCED'))).toBeInTheDocument()
   })
 
   it('renders Advanced modules if a trainer has a BILD Advanced trainer certificate', async () => {
@@ -161,8 +181,8 @@ describe('component: CourseLevelDropdown', () => {
 
     expect(screen.queryAllByRole('option').length).toBe(3)
 
-    expect(getOption(/level one/i)).toBeInTheDocument()
-    expect(getOption(/level two/i)).toBeInTheDocument()
-    expect(getOption(/advanced modules/i)).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.LEVEL_1'))).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.ADVANCED'))).toBeInTheDocument()
   })
 })

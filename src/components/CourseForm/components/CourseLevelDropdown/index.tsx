@@ -46,7 +46,8 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
     () =>
       acl.allowedCourseLevels(
         getLevels(courseType, courseAccreditor).filter(level =>
-          !threeDaySRTcourseLevelEnabled
+          !threeDaySRTcourseLevelEnabled &&
+          typeof threeDaySRTcourseLevelEnabled !== 'undefined'
             ? level !== Course_Level_Enum.ThreeDaySafetyResponseTrainer
             : true
         )
