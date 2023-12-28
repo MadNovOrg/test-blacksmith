@@ -1053,12 +1053,14 @@ type CreateOrderOutput {
 type TransferCourse {
   id: Int!
   courseCode: String!
+  courseResidingCountry: String
   startDate: String!
   endDate: String!
   virtualLink: String
   venue: String
   venueName: String
   venueCity: String
+  venueCountry: String
   level: CourseLevel
   freeSlots: Int!
   reaccreditation: Boolean!
