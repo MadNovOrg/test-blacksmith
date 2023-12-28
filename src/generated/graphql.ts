@@ -9606,6 +9606,7 @@ export type TrainerRoleTypeObj = {
 export type TransferCourse = {
   __typename?: 'TransferCourse';
   courseCode: Scalars['String'];
+  courseResidingCountry?: Maybe<Scalars['String']>;
   endDate: Scalars['String'];
   freeSlots: Scalars['Int'];
   id: Scalars['Int'];
@@ -9614,6 +9615,7 @@ export type TransferCourse = {
   startDate: Scalars['String'];
   venue?: Maybe<Scalars['String']>;
   venueCity?: Maybe<Scalars['String']>;
+  venueCountry?: Maybe<Scalars['String']>;
   venueName?: Maybe<Scalars['String']>;
   virtualLink?: Maybe<Scalars['String']>;
 };
@@ -54624,7 +54626,7 @@ export type TransferEligibleCoursesQueryVariables = Exact<{
 }>;
 
 
-export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, freeSlots: number, courseCode: string, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null, level?: CourseLevel | null, reaccreditation: boolean }> };
+export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, freeSlots: number, courseCode: string, courseResidingCountry?: string | null, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null, venueCountry?: string | null, level?: CourseLevel | null, reaccreditation: boolean }> };
 
 export type TransferParticipantMutationVariables = Exact<{
   input: TransferInput;

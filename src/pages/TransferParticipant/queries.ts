@@ -51,12 +51,14 @@ export const TRANSFER_ELIGIBLE_COURSES = gql`
       id
       freeSlots
       courseCode
+      courseResidingCountry
       startDate
       endDate
       virtualLink
       venue
       venueName
       venueCity
+      venueCountry
       level
       reaccreditation
     }

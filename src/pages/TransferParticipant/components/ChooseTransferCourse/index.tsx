@@ -9,8 +9,10 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
+import { CountryCode } from 'libphonenumber-js'
 import React, { useMemo, useState } from 'react'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import theme from '@app/theme'
@@ -26,7 +28,7 @@ export const ChooseTransferCourse: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { t, _t } = useScopedTranslation('pages.transfer-participant')
-
+  const { getLabel } = useWorldCountries()
   const { courseChosen, mode, cancel } = useTransferParticipantContext()
 
   const [chosenCourse, setChosenCourse] = useState<EligibleCourse>()
@@ -37,6 +39,11 @@ export const ChooseTransferCourse: React.FC<
     () => [
       { id: 'radio', label: '', sorting: false },
       { id: 'name', label: t('choose-course.col-name'), sorting: false },
+      {
+        id: 'residing-country',
+        label: t('choose-course.col-residing-country'),
+        sorting: false,
+      },
       { id: 'venue', label: t('choose-course.col-venue'), sorting: false },
       {
         id: 'start-date',
@@ -93,6 +100,13 @@ export const ChooseTransferCourse: React.FC<
                   </TableCell>
                   <TableCell>
                     <Typography>{course.courseCode}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>
+                      {course.courseResidingCountry
+                        ? getLabel(course.courseResidingCountry as CountryCode)
+                        : course.venueCountry}
+                    </Typography>
                   </TableCell>
                   <TableCell>
                     {course.venueName ? (

@@ -1604,6 +1604,7 @@
     "choose-course": {
       "title": "Select a new course",
       "col-name": "Course name",
+      "col-residing-country": "Residing country",
       "col-venue": "Venue",
       "col-start-date": "Starts",
       "col-end-date": "Ends",
