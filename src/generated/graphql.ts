@@ -55478,13 +55478,6 @@ export type SaveCourseInvitesMutationVariables = Exact<{
 
 export type SaveCourseInvitesMutation = { __typename?: 'mutation_root', insert_course_invites?: { __typename?: 'course_invites_mutation_response', returning: Array<{ __typename?: 'course_invites', id: any }> } | null };
 
-export type SaveOrgInvitesMutationVariables = Exact<{
-  invites: Array<Organization_Invites_Insert_Input> | Organization_Invites_Insert_Input;
-}>;
-
-
-export type SaveOrgInvitesMutation = { __typename?: 'mutation_root', insert_organization_invites?: { __typename?: 'organization_invites_mutation_response', returning: Array<{ __typename?: 'organization_invites', id: any }> } | null };
-
 export type SaveOrganisationInvitesMutationVariables = Exact<{
   invites: Array<SaveOrgInviteInput> | SaveOrgInviteInput;
 }>;

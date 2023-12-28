@@ -2,7 +2,7 @@ import React from 'react'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
-import { SaveOrgInvitesMutation } from '@app/generated/graphql'
+import { SaveOrganisationInvitesMutation } from '@app/generated/graphql'
 import { useOrganizations } from '@app/hooks/useOrganizations'
 import { RoleName } from '@app/types'
 
@@ -72,8 +72,10 @@ describe('InviteUserToOrganisation', () => {
   it('renders as expected', async () => {
     const client = {
       executeMutation: () =>
-        fromValue<SaveOrgInvitesMutation>({
-          insert_organization_invites: { returning: [{ id: chance.guid() }] },
+        fromValue<{ data: SaveOrganisationInvitesMutation }>({
+          data: {
+            saveOrgInvites: { success: true },
+          },
         }),
     } as unknown as Client
 
@@ -89,9 +91,9 @@ describe('InviteUserToOrganisation', () => {
   it('invite user to org if at least one org selected', async () => {
     const client = {
       executeMutation: () =>
-        fromValue<{ data: SaveOrgInvitesMutation }>({
+        fromValue<{ data: SaveOrganisationInvitesMutation }>({
           data: {
-            insert_organization_invites: { returning: [{ id: chance.guid() }] },
+            saveOrgInvites: { success: true },
           },
         }),
     } as unknown as Client
@@ -113,8 +115,10 @@ describe('InviteUserToOrganisation', () => {
   it('not invite user to org if there is no selection', async () => {
     const client = {
       executeMutation: () =>
-        fromValue<SaveOrgInvitesMutation>({
-          insert_organization_invites: { returning: [{ id: chance.guid() }] },
+        fromValue<{ data: SaveOrganisationInvitesMutation }>({
+          data: {
+            saveOrgInvites: { success: true },
+          },
         }),
     } as unknown as Client
 
@@ -135,8 +139,10 @@ describe('InviteUserToOrganisation', () => {
   it('cancel invite', async () => {
     const client = {
       executeMutation: () =>
-        fromValue<SaveOrgInvitesMutation>({
-          insert_organization_invites: { returning: [{ id: chance.guid() }] },
+        fromValue<{ data: SaveOrganisationInvitesMutation }>({
+          data: {
+            saveOrgInvites: { success: true },
+          },
         }),
     } as unknown as Client
 
