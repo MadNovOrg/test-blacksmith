@@ -173,7 +173,7 @@ export const CourseHealthAndSafetyForm = () => {
             />
 
             <Alert severity="info" sx={{ mt: 2 }}>
-              {t('components.name-and-surname-validation-info')}
+              {t('components.course-form.name-and-surname-validation-info')}
             </Alert>
 
             {error && (
