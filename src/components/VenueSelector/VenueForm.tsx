@@ -131,6 +131,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
             country: getCountryNameByCode(
               formData.country as WorldCountriesCodes
             ),
+            countryCode: formData.countryCode ?? formData.country,
           },
         })
         onSubmit(data?.venue)

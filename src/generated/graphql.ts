@@ -52598,6 +52598,7 @@ export type Venue = {
   addressLineTwo?: Maybe<Scalars['String']>;
   city: Scalars['String'];
   country?: Maybe<Scalars['String']>;
+  countryCode?: Maybe<Scalars['String']>;
   createdAt: Scalars['timestamptz'];
   geoCoordinates?: Maybe<Scalars['point']>;
   googlePlacesId?: Maybe<Scalars['String']>;
@@ -52662,6 +52663,7 @@ export type Venue_Bool_Exp = {
   addressLineTwo?: InputMaybe<String_Comparison_Exp>;
   city?: InputMaybe<String_Comparison_Exp>;
   country?: InputMaybe<String_Comparison_Exp>;
+  countryCode?: InputMaybe<String_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   geoCoordinates?: InputMaybe<Point_Comparison_Exp>;
   googlePlacesId?: InputMaybe<String_Comparison_Exp>;
@@ -52896,6 +52898,7 @@ export type Venue_Insert_Input = {
   addressLineTwo?: InputMaybe<Scalars['String']>;
   city?: InputMaybe<Scalars['String']>;
   country?: InputMaybe<Scalars['String']>;
+  countryCode?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   geoCoordinates?: InputMaybe<Scalars['point']>;
   googlePlacesId?: InputMaybe<Scalars['String']>;
@@ -52913,6 +52916,7 @@ export type Venue_Max_Fields = {
   addressLineTwo?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
+  countryCode?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   googlePlacesId?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
@@ -52928,6 +52932,7 @@ export type Venue_Min_Fields = {
   addressLineTwo?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
+  countryCode?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   googlePlacesId?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
@@ -52965,6 +52970,7 @@ export type Venue_Order_By = {
   addressLineTwo?: InputMaybe<Order_By>;
   city?: InputMaybe<Order_By>;
   country?: InputMaybe<Order_By>;
+  countryCode?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   geoCoordinates?: InputMaybe<Order_By>;
   googlePlacesId?: InputMaybe<Order_By>;
@@ -52991,6 +52997,8 @@ export enum Venue_Select_Column {
   /** column name */
   Country = 'country',
   /** column name */
+  CountryCode = 'countryCode',
+  /** column name */
   CreatedAt = 'createdAt',
   /** column name */
   GeoCoordinates = 'geoCoordinates',
@@ -53012,6 +53020,7 @@ export type Venue_Set_Input = {
   addressLineTwo?: InputMaybe<Scalars['String']>;
   city?: InputMaybe<Scalars['String']>;
   country?: InputMaybe<Scalars['String']>;
+  countryCode?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   geoCoordinates?: InputMaybe<Scalars['point']>;
   googlePlacesId?: InputMaybe<Scalars['String']>;
@@ -53035,6 +53044,7 @@ export type Venue_Stream_Cursor_Value_Input = {
   addressLineTwo?: InputMaybe<Scalars['String']>;
   city?: InputMaybe<Scalars['String']>;
   country?: InputMaybe<Scalars['String']>;
+  countryCode?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   geoCoordinates?: InputMaybe<Scalars['point']>;
   googlePlacesId?: InputMaybe<Scalars['String']>;
@@ -53054,6 +53064,8 @@ export enum Venue_Update_Column {
   City = 'city',
   /** column name */
   Country = 'country',
+  /** column name */
+  CountryCode = 'countryCode',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
