@@ -52,6 +52,7 @@ export const QUERY = gql`
         }
         bookingContactInviteData
         reaccreditation
+        residingCountry
       }
       invoice {
         xeroId

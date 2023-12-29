@@ -53,6 +53,7 @@ export const buildOrder = build<NonNullish<GetOrderQuery['order']>>({
       type: Course_Type_Enum.Open,
       start: new Date().toISOString(),
       end: new Date().toISOString(),
+      residingCountry: 'GB-ENG',
     },
     user: {
       fullName: chance.name({ full: true }),

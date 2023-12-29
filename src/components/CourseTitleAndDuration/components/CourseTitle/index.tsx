@@ -10,6 +10,7 @@ export type CourseSubset = Pick<
   'id' | 'course_code' | 'start' | 'end' | 'reaccreditation'
 > & {
   level?: Course_Level_Enum | CourseLevel | null
+  residingCountry?: string | null
 }
 
 type CourseTitleProps = {

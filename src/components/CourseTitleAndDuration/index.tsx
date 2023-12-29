@@ -26,6 +26,7 @@ export const CourseTitleAndDuration: React.FC<
         <CourseDuration
           start={new Date(course?.start)}
           end={new Date(course?.end)}
+          courseResidingCountry={course?.residingCountry}
         />
       )}
     </Box>

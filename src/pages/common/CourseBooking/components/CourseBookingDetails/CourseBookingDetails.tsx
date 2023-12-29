@@ -60,9 +60,11 @@ import { AttendeeValidCertificate } from './AttendeeValidCertificate'
 
 const isAttendeeValidCertificateMandatory = (
   courseLevel?: Course_Level_Enum,
-  courseType?: Course_Type_Enum
+  courseType?: Course_Type_Enum,
+  courseResidingCountry?: string | null
 ) =>
   courseType === Course_Type_Enum.Open &&
+  courseResidingCountry?.includes('GB') &&
   courseLevel &&
   [
     Course_Level_Enum.Advanced,
@@ -267,7 +269,8 @@ export const CourseBookingDetails: React.FC<
 
   const showAttendeeValidCertificate = isAttendeeValidCertificateMandatory(
     course?.level,
-    course?.type
+    course?.type,
+    course?.residingCountry
   )
 
   const handleEmailSelector = async (
@@ -387,6 +390,7 @@ export const CourseBookingDetails: React.FC<
               <CourseDuration
                 start={new Date(course?.dates.aggregate?.start?.date)}
                 end={new Date(course?.dates.aggregate?.end?.date)}
+                courseResidingCountry={course?.residingCountry}
               />
             </Box>
             <Box minWidth={100} display="flex" alignItems="center">

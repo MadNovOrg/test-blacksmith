@@ -246,6 +246,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                             end: course.end,
                             level: course.level as unknown as Course_Level_Enum,
                             reaccreditation: course.reaccreditation,
+                            residingCountry: course.residingCountry,
                           }}
                         />
                       )}
