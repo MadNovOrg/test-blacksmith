@@ -23,6 +23,7 @@ export const COURSE_QUERY = gql`
   ) {
     course: course_by_pk(id: $id) {
       ...CourseHero
+      curriculum
       moduleGroupIds: modules @include(if: $withModules) {
         module {
           moduleGroup {

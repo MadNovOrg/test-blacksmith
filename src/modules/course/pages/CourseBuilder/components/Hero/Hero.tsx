@@ -11,13 +11,17 @@ import { COURSE_INFO_FRAGMENT } from '../CourseInfo/fragments'
 
 type Props = {
   course: CourseHeroFragment
+  showMandatoryNotice?: boolean
   slots?: {
     afterTitle?: React.ReactNode
-    showMandatoryNotice?: boolean
   }
 }
 
-export const Hero: React.FC<Props> = ({ course, slots }) => {
+export const Hero: React.FC<Props> = ({
+  course,
+  showMandatoryNotice,
+  slots,
+}) => {
   const { t } = useTranslation()
 
   return (
@@ -50,7 +54,7 @@ export const Hero: React.FC<Props> = ({ course, slots }) => {
             {slots.afterTitle}
           </Typography>
         ) : null}
-        {slots?.showMandatoryNotice ? (
+        {showMandatoryNotice ? (
           <Typography variant="body2" mt={1} data-testid="mandatory-notice">
             {t(
               'pages.trainer-base.create-course.new-course.mandatory-modules-notice'

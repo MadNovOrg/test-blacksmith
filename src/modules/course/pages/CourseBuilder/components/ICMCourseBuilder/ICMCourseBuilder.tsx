@@ -478,6 +478,7 @@ export const ICMCourseBuilder: React.FC<
           {courseData.course ? (
             <Hero
               course={courseData.course}
+              showMandatoryNotice={showMandatoryNotice}
               slots={{
                 afterTitle:
                   courseDescription ||
@@ -489,7 +490,6 @@ export const ICMCourseBuilder: React.FC<
                         : '0 hours',
                     }
                   ),
-                showMandatoryNotice: showMandatoryNotice,
               }}
             />
           ) : null}

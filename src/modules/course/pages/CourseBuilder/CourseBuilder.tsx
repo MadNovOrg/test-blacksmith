@@ -1,4 +1,5 @@
 import { Alert, Box, CircularProgress } from '@mui/material'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
@@ -16,10 +17,15 @@ import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { BILDCourseBuilder } from './components/BILDCourseBuilder/BILDCourseBuilder'
 import { ICMCourseBuilder } from './components/ICMCourseBuilder/ICMCourseBuilder'
+import { ICMCourseBuilderV2 } from './components/ICMCourseBuilderV2/ICMCourseBuilderV2'
 
 export const CourseBuilder: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
+
+  const newModulesDataModelEnabled = useFeatureFlagEnabled(
+    'new-modules-data-model'
+  )
 
   const { editMode } = (useLocation().state as { editMode: boolean }) ?? {}
 
@@ -56,22 +62,25 @@ export const CourseBuilder: React.FC<React.PropsWithChildren> = () => {
     )
   }
 
-  if (courseData?.course?.accreditedBy === Accreditors_Enum.Icm) {
-    return (
-      <>
-        <Helmet>
-          <title>
-            {t('pages.browser-tab-titles.manage-courses.course-builder')}
-          </title>
-        </Helmet>
-        <ICMCourseBuilder editMode={editMode ?? false} />
-      </>
-    )
-  }
+  return (
+    <>
+      <Helmet>
+        <title>
+          {t('pages.browser-tab-titles.manage-courses.course-builder')}
+        </title>
+      </Helmet>
 
-  if (courseData?.course?.accreditedBy === Accreditors_Enum.Bild) {
-    return <BILDCourseBuilder />
-  }
+      {courseData?.course?.accreditedBy === Accreditors_Enum.Icm ? (
+        newModulesDataModelEnabled ? (
+          <ICMCourseBuilderV2 editMode={editMode ?? false} />
+        ) : (
+          <ICMCourseBuilder editMode={editMode ?? false} />
+        )
+      ) : null}
 
-  return null
+      {courseData?.course?.accreditedBy === Accreditors_Enum.Bild ? (
+        <BILDCourseBuilder />
+      ) : null}
+    </>
+  )
 }

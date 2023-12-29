@@ -400,9 +400,9 @@ export const BILDCourseBuilder: React.FC<
           {courseData.course ? (
             <Hero
               course={courseData.course}
+              showMandatoryNotice={showMandatoryNotice}
               slots={{
                 afterTitle: courseDescription,
-                showMandatoryNotice: showMandatoryNotice,
               }}
             />
           ) : null}

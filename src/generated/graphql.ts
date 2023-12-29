@@ -31338,7 +31338,7 @@ export type Module_Setting = {
   courseDeliveryType: Course_Delivery_Type_Enum;
   courseLevel: Course_Level_Enum;
   courseType: Course_Type_Enum;
-  duration: Scalars['Int'];
+  duration?: Maybe<Scalars['Int']>;
   go1Integration: Scalars['Boolean'];
   id: Scalars['uuid'];
   mandatory: Scalars['Boolean'];
@@ -54616,7 +54616,18 @@ export type CourseToBuildQueryVariables = Exact<{
 }>;
 
 
-export type CourseToBuildQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, conversion?: boolean | null, name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null, submodules: Array<{ __typename?: 'submodule', id: any, name: string }> } }>, bildModules?: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies?: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
+export type CourseToBuildQuery = { __typename?: 'query_root', course?: { __typename?: 'course', curriculum?: any | null, id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, conversion?: boolean | null, name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null, submodules: Array<{ __typename?: 'submodule', id: any, name: string }> } }>, bildModules?: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies?: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
+
+export type ModuleSettingsQueryVariables = Exact<{
+  courseType: Course_Type_Enum;
+  courseLevel: Course_Level_Enum;
+  courseDeliveryType: Course_Delivery_Type_Enum;
+  go1Integration: Scalars['Boolean'];
+  reaccreditation?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+
+export type ModuleSettingsQuery = { __typename?: 'query_root', moduleSettings: Array<{ __typename?: 'module_setting', id: any, color: Color_Enum, mandatory: boolean, duration?: number | null, module: { __typename?: 'module_v2', id: any, name: string, displayName?: string | null, lessons: any } }> };
 
 export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
