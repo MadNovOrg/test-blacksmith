@@ -810,3 +810,26 @@ export const customFeeFormat = (num: number) => {
     fractionalPart ? integerPart.concat('.', fractionalPart) : integerPart
   )
 }
+
+export const validUserSignature = (
+  fullName?: string,
+  signature?: string
+): boolean => {
+  if (fullName && signature) {
+    const splitFullName = fullName
+      .split(' ')
+      .filter(name => name.length)
+      .map(name => name.trim().toLowerCase())
+
+    const splitSignature = signature
+      .split(' ')
+      .filter(name => name.length)
+      .map(name => name.trim().toLowerCase())
+
+    if (splitFullName.length !== splitSignature.length) return false
+
+    return JSON.stringify(splitFullName) === JSON.stringify(splitSignature)
+  }
+
+  return false
+}

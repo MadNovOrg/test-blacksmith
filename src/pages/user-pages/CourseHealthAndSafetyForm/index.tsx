@@ -14,7 +14,7 @@ import {
   Alert,
 } from '@mui/material'
 import Link from '@mui/material/Link'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -28,6 +28,7 @@ import {
   MUTATION,
   ParamsType,
 } from '@app/queries/user-queries/save-health-safety-consent'
+import { validUserSignature } from '@app/util'
 
 export const CourseHealthAndSafetyForm = () => {
   const { t } = useTranslation()
@@ -50,8 +51,12 @@ export const CourseHealthAndSafetyForm = () => {
   const [signature, setSignature] = useState('')
   const [hasFocus, setHasFocus] = useState(false)
 
-  const incorrectSignature = signature !== profile?.fullName
-  const valid = healthCheck && riskCheck && !incorrectSignature
+  const validSignature = useMemo(
+    () => validUserSignature(profile?.fullName, signature),
+    [profile?.fullName, signature]
+  )
+
+  const valid = healthCheck && riskCheck && validSignature
 
   const handleSubmit = async () => {
     if (profile) {
@@ -158,13 +163,11 @@ export const CourseHealthAndSafetyForm = () => {
               fullWidth
               value={signature}
               variant="filled"
-              error={
-                !hasFocus && Boolean(incorrectSignature) && Boolean(signature)
-              }
+              error={!hasFocus && !validSignature && Boolean(signature)}
               onFocus={() => setHasFocus(true)}
               onBlur={() => setHasFocus(false)}
               helperText={
-                !hasFocus && incorrectSignature && Boolean(signature)
+                !hasFocus && !validSignature && Boolean(signature)
                   ? t('pages.hs-form.incorrect-signature')
                   : ''
               }

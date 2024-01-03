@@ -57,7 +57,7 @@ import {
   CourseEvaluationQuestionType,
   CourseParticipant,
 } from '@app/types'
-import { courseStarted, LoadingStatus } from '@app/util'
+import { courseStarted, LoadingStatus, validUserSignature } from '@app/util'
 
 const groups = [
   CourseEvaluationQuestionGroup.TRAINING_RATING,
@@ -174,13 +174,11 @@ export const CourseEvaluation = () => {
       const s = yup.string()
 
       if (q.questionKey === 'SIGNATURE') {
-        obj[q.id] = s.required(t('course-evaluation.required-field')).oneOf(
-          [
-            profile ? profile.fullName : Date.now().toString(36), // if profile doesnt exist, cant validate signature
-            '',
-          ],
-          t('course-evaluation.invalid-signature')
-        )
+        obj[q.id] = s
+          .required(t('course-evaluation.required-field'))
+          .test(q.id, t('course-evaluation.invalid-signature'), signature =>
+            validUserSignature(profile?.fullName, signature)
+          )
       } else if (q.required) {
         obj[q.id] = s.required(t('course-evaluation.required-field'))
       } else {

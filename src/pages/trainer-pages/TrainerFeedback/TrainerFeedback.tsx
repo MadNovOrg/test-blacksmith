@@ -39,6 +39,7 @@ import {
   CourseEvaluationQuestion,
   CourseEvaluationQuestionType,
 } from '@app/types'
+import { validUserSignature } from '@app/util'
 
 const booleanQuestionTypes = [
   CourseEvaluationQuestionType.BOOLEAN,
@@ -103,13 +104,11 @@ export const TrainerFeedback = () => {
 
       const s = yup.string()
       if (q.questionKey === 'SIGNATURE') {
-        obj[q.id] = s.required(t('course-evaluation.required-field')).oneOf(
-          [
-            profile ? profile.fullName : Date.now().toString(36), // if profile doesnt exist, cant validate signature
-            '',
-          ],
-          t('course-evaluation.invalid-signature')
-        )
+        obj[q.id] = s
+          .required(t('course-evaluation.required-field'))
+          .test(q.id, t('course-evaluation.invalid-signature'), signature =>
+            validUserSignature(profile?.fullName, signature)
+          )
       } else if (
         q.required &&
         q.type === CourseEvaluationQuestionType.BOOLEAN_REASON_Y
