@@ -82,14 +82,20 @@ function getAddressPart(placeDetails: PlaceResult, partName: string): string {
 
 function getCountry(placeDetails: PlaceResult): string {
   if (placeDetails?.address_components) {
-    return placeDetails?.address_components[4].long_name
+    const countryAddressComponent = placeDetails?.address_components.find(
+      address => address.types.includes('country')
+    )
+    return countryAddressComponent?.long_name ?? ''
   }
   return ''
 }
 
 function getCountryCode(placeDetails: PlaceResult): string {
   if (placeDetails.address_components) {
-    return placeDetails.address_components[5].short_name
+    const countryAddressComponent = placeDetails?.address_components.find(
+      address => address.types.includes('country')
+    )
+    return countryAddressComponent?.short_name ?? ''
   }
   return ''
 }
