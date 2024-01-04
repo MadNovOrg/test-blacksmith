@@ -75,7 +75,7 @@ export const ViewProfilePage: React.FC<
   const isMyProfile = !id
 
   const callCourseHistory = isMyProfile || Boolean(recentlyVisitedCourseId)
-  const { profile, go1Licenses, certifications, status, mutate } = useProfile(
+  const { profile, go1Licenses, certifications, status } = useProfile(
     id ?? currentUserProfile?.id,
     undefined,
     orgId ?? undefined,
@@ -535,7 +535,6 @@ export const ViewProfilePage: React.FC<
         <ProfileArchiveDialog
           onClose={async () => {
             setShowArchiveDialog(false)
-            await mutate()
           }}
           profileId={id}
         />

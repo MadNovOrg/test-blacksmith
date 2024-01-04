@@ -19,6 +19,7 @@ const CountriesSelector = ({
   value,
   label,
   error,
+  required,
   helperText,
 }: CountriesSelectorProps) => {
   const { countriesCodesWithUKs: countries, getLabel } = useWorldCountries()
@@ -50,6 +51,7 @@ const CountriesSelector = ({
           error={error}
           helperText={helperText}
           label={label ?? t('country')}
+          required={required}
           inputProps={{
             ...params.inputProps,
           }}

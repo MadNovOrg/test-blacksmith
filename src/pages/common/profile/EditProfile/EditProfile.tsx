@@ -146,8 +146,11 @@ export const EditProfilePage: React.FC<
     RemoveOrgMemberMutationVariables
   >(REMOVE_ORG_MEMBER_MUTATION)
 
-  const { profile, certifications, go1Licenses, mutate, updateAvatar } =
-    useProfile(id ?? currentUserProfile?.id, undefined, orgId ?? undefined)
+  const { profile, certifications, go1Licenses, updateAvatar } = useProfile(
+    id ?? currentUserProfile?.id,
+    undefined,
+    orgId ?? undefined
+  )
   const { roles: systemRoles } = useRoles()
   const { trainerRoleTypes: systemTrainerRoleTypes } = useTrainerRoleTypes()
   const isMyProfile = !id
@@ -226,12 +229,16 @@ export const EditProfilePage: React.FC<
         countryCode: yup.string(),
         country: yup.string().required(
           t('validation-errors.required-field', {
-            name: t('fields.country'),
+            name: t('country'),
           })
         ),
         phone: schemas.phone(t),
         dob: yup.date().nullable(),
-        jobTitle: yup.string(),
+        jobTitle: yup
+          .string()
+          .required(
+            t('validation-errors.required-field', { name: t('job-title') })
+          ),
         otherJobTitle: yup.string().when('jobTitle', ([jobTitle], schema) => {
           return jobTitle === 'Other'
             ? schema.required(t('validation-errors.other-job-title-required'))
@@ -264,7 +271,7 @@ export const EditProfilePage: React.FC<
       avatar: '',
       firstName: '',
       surname: '',
-      countryCode: '+44',
+      countryCode: '',
       phone: '',
       dob: null,
       jobTitle: '',
@@ -305,10 +312,8 @@ export const EditProfilePage: React.FC<
   const refreshData = useCallback(async () => {
     if (isMyProfile) {
       await reloadCurrentProfile()
-    } else {
-      await mutate()
     }
-  }, [isMyProfile, mutate, reloadCurrentProfile])
+  }, [isMyProfile, reloadCurrentProfile])
 
   const isOtherJobTitle = useMemo(() => {
     return Boolean(profile?.jobTitle && !jobTitles.includes(profile.jobTitle))
@@ -443,10 +448,9 @@ export const EditProfilePage: React.FC<
       }
     }) => {
       await updateOrgMember(orgAdmin)
-      await mutate()
       await refreshData()
     },
-    [mutate, updateOrgMember, refreshData]
+    [updateOrgMember, refreshData]
   )
 
   const onSubmit = async (data: InferType<typeof formSchema>) => {
@@ -836,11 +840,15 @@ export const EditProfilePage: React.FC<
                         if (code) {
                           setValue(
                             'country',
-                            getCountryLabel(code as WorldCountriesCodes) ?? ''
+                            getCountryLabel(code as WorldCountriesCodes) ?? '',
+                            { shouldValidate: true }
                           )
                           setValue('countryCode', code)
+                          profile.countryCode = code
                         }
                       }}
+                      error={!!errors.country}
+                      helperText={errors.country?.message || ''}
                       value={profile.countryCode}
                     />
                   </Grid>
@@ -1218,11 +1226,7 @@ export const EditProfilePage: React.FC<
 
               {go1Licenses?.length ? (
                 <Box mt={3}>
-                  <UserGo1License
-                    license={go1Licenses[0]}
-                    editable={true}
-                    onDeleted={mutate}
-                  />
+                  <UserGo1License license={go1Licenses[0]} editable={true} />
                 </Box>
               ) : null}
 
@@ -1262,7 +1266,6 @@ export const EditProfilePage: React.FC<
       <ImportCertificateModal
         onCancel={() => setShowImportModal(false)}
         onSubmit={async () => {
-          await mutate()
           setShowImportModal(false)
         }}
         open={showImportModal}

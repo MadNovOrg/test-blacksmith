@@ -2,7 +2,7 @@ import { isPast } from 'date-fns'
 import { matches } from 'lodash'
 import { cond, constant, stubTrue } from 'lodash-es'
 import { useCallback, useMemo } from 'react'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import {
   ArchiveProfileMutation,
@@ -117,29 +117,25 @@ export default function useProfile(
 ) {
   const fetcher = useFetcher()
 
-  const { data, error, mutate } = useSWR<
+  const [{ data: getProfileResponse, error: getProfileError }] = useQuery<
     GetProfileDetailsQuery,
-    Error,
-    [string, GetProfileDetailsQueryVariables] | null
-  >(
-    profileId
-      ? [
-          QUERY,
-          {
-            profileId,
-            withGo1Licenses: Boolean(orgId),
-            orgId,
-            withCourseHistory,
-            withCourseTrainerHistory: withCourseHistory,
-          },
-        ]
-      : null
-  )
+    GetProfileDetailsQueryVariables
+  >({
+    query: QUERY,
+    variables: {
+      profileId,
+      withGo1Licenses: Boolean(orgId),
+      orgId,
+      withCourseHistory,
+      withCourseTrainerHistory: withCourseHistory,
+    },
+  })
 
   const missingCertifications = useMemo(() => {
-    if (data) {
-      const activeCertifications = data.certificates.filter(isValidCertificate)
-      let courses = data.upcomingCourses
+    if (getProfileResponse) {
+      const activeCertifications =
+        getProfileResponse.certificates.filter(isValidCertificate)
+      let courses = getProfileResponse.upcomingCourses
       if (courseId) {
         courses = courses.filter(c => c.id === parseInt(courseId))
       }
@@ -167,7 +163,7 @@ export default function useProfile(
         .filter(Boolean)
     }
     return false
-  }, [data, courseId])
+  }, [getProfileResponse, courseId])
 
   const updateAvatar = useCallback(
     async (avatar: Array<number>) => {
@@ -195,15 +191,14 @@ export default function useProfile(
   }, [fetcher, profileId])
 
   return {
-    profile: data?.profile,
-    certifications: data?.certificates,
+    profile: getProfileResponse?.profile,
+    certifications: getProfileResponse?.certificates,
     missingCertifications: missingCertifications as MissingCertificateInfo[],
-    go1Licenses: data?.profile?.go1Licenses,
-    mutate,
-    error,
-    status: getSWRLoadingStatus(data, error),
+    go1Licenses: getProfileResponse?.profile?.go1Licenses,
+    getProfileError,
+    status: getSWRLoadingStatus(getProfileResponse, getProfileError),
     updateAvatar,
     archive,
-    upcomingCourses: data?.upcomingCourses,
+    upcomingCourses: getProfileResponse?.upcomingCourses,
   }
 }
