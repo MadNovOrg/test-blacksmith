@@ -40,7 +40,11 @@ const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
     })
 
     render(
-      <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+      <AttendingTab
+        updateAttendeesHandler={vitest.fn()}
+        onSendingCourseInformation={vitest.fn()}
+        course={course}
+      />,
       { auth: { activeRole: role } }
     )
 
@@ -79,7 +83,11 @@ it('displays the attendance column if user is a lead trainer on the course', () 
   })
 
   render(
-    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    <AttendingTab
+      updateAttendeesHandler={vitest.fn()}
+      onSendingCourseInformation={vitest.fn()}
+      course={course}
+    />,
     {
       auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
     }
@@ -119,7 +127,11 @@ it('displays the attendance column if user is an assist trainer on the course', 
   })
 
   render(
-    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    <AttendingTab
+      updateAttendeesHandler={vitest.fn()}
+      onSendingCourseInformation={vitest.fn()}
+      course={course}
+    />,
     {
       auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
     }
@@ -159,7 +171,11 @@ it("doesn't display the attendance column if user is a moderator on the course",
   })
 
   render(
-    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    <AttendingTab
+      updateAttendeesHandler={vitest.fn()}
+      onSendingCourseInformation={vitest.fn()}
+      course={course}
+    />,
     {
       auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
     }
@@ -193,7 +209,11 @@ it('displays the attendance column if course has ended', () => {
   })
 
   render(
-    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    <AttendingTab
+      updateAttendeesHandler={vitest.fn()}
+      onSendingCourseInformation={vitest.fn()}
+      course={course}
+    />,
     {
       auth: { activeRole: RoleName.TT_ADMIN },
     }
@@ -232,7 +252,11 @@ it('marks attendance chip disabled if participant has been graded', () => {
   })
 
   render(
-    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    <AttendingTab
+      updateAttendeesHandler={vitest.fn()}
+      onSendingCourseInformation={vitest.fn()}
+      course={course}
+    />,
     {
       auth: { activeRole: RoleName.TT_ADMIN },
     }
@@ -274,7 +298,11 @@ it('marks attendance chip disabled if participant did not attend, course ended a
   })
 
   render(
-    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    <AttendingTab
+      updateAttendeesHandler={vitest.fn()}
+      onSendingCourseInformation={vitest.fn()}
+      course={course}
+    />,
     {
       auth: { activeRole: RoleName.TT_ADMIN },
     }

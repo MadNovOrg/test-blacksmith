@@ -49,6 +49,7 @@ export const CourseAttendeesTab: React.FC<
     status: courseParticipantsLoadingStatus,
     total: courseParticipantsTotal,
     error: courseParticipantsError,
+    mutate: mutateParticipants,
   } = useCourseParticipants(courseId, {
     alwaysShowArchived: true,
     ...(acl.isBookingContact() && course.type === Course_Type_Enum.Open
@@ -149,6 +150,7 @@ export const CourseAttendeesTab: React.FC<
                 onSendingCourseInformation={success =>
                   setShowCourseInformationAlert({ success })
                 }
+                updateAttendeesHandler={mutateParticipants}
               />
             </TabPanel>
             {!isOpenCourse ? (

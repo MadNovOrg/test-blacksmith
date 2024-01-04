@@ -42,7 +42,11 @@ const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
     })
 
     render(
-      <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+      <AttendingTab
+        updateAttendeesHandler={vitest.fn()}
+        onSendingCourseInformation={vitest.fn()}
+        course={course}
+      />,
       { auth: { activeRole: role } }
     )
 
@@ -81,7 +85,11 @@ it('displays the mark attendance button if user is a lead trainer on the course'
   })
 
   render(
-    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    <AttendingTab
+      updateAttendeesHandler={vitest.fn()}
+      onSendingCourseInformation={vitest.fn()}
+      course={course}
+    />,
     {
       auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
     }
@@ -121,7 +129,11 @@ it('displays the mark attendance button if user is an assist trainer on the cour
   })
 
   render(
-    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    <AttendingTab
+      updateAttendeesHandler={vitest.fn()}
+      onSendingCourseInformation={vitest.fn()}
+      course={course}
+    />,
     {
       auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
     }
@@ -161,7 +173,11 @@ it("doesn't display the mark attendance button if user is a moderator on the cou
   })
 
   render(
-    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    <AttendingTab
+      updateAttendeesHandler={vitest.fn()}
+      onSendingCourseInformation={vitest.fn()}
+      course={course}
+    />,
     {
       auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
     }
@@ -199,7 +215,11 @@ it('displays the mark attendance button if course has ended', () => {
   })
 
   render(
-    <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />,
+    <AttendingTab
+      updateAttendeesHandler={vitest.fn()}
+      onSendingCourseInformation={vitest.fn()}
+      course={course}
+    />,
     {
       auth: { activeRole: RoleName.TT_ADMIN },
     }
@@ -243,7 +263,11 @@ it('marks the mark attendance button disabled if course ended and course status 
 
   render(
     <Provider value={client}>
-      <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />
+      <AttendingTab
+        updateAttendeesHandler={vitest.fn()}
+        onSendingCourseInformation={vitest.fn()}
+        course={course}
+      />
     </Provider>,
     { auth: { activeRole: RoleName.TT_ADMIN } }
   )
@@ -278,7 +302,11 @@ it('toggles selected participant when main checkbox is clicked', async () => {
 
   render(
     <Provider value={client}>
-      <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />
+      <AttendingTab
+        updateAttendeesHandler={vitest.fn()}
+        onSendingCourseInformation={vitest.fn()}
+        course={course}
+      />
     </Provider>
   )
 
@@ -334,7 +362,11 @@ it('toggles the main checkbox as indeterminate when some participants are toggle
 
   render(
     <Provider value={client}>
-      <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />
+      <AttendingTab
+        updateAttendeesHandler={vitest.fn()}
+        onSendingCourseInformation={vitest.fn()}
+        course={course}
+      />
     </Provider>
   )
 
@@ -379,7 +411,11 @@ it("disables participant's checkbox when participant has been graded", () => {
 
   render(
     <Provider value={client}>
-      <AttendingTab onSendingCourseInformation={vitest.fn()} course={course} />
+      <AttendingTab
+        updateAttendeesHandler={vitest.fn()}
+        onSendingCourseInformation={vitest.fn()}
+        course={course}
+      />
     </Provider>
   )
 

@@ -60,11 +60,13 @@ import { BulkAttendanceButton } from './BulkAttendanceButton/BulkAttendanceButto
 type TabProperties = {
   course: Course
   onSendingCourseInformation: (success: boolean) => void
+  updateAttendeesHandler: () => void
 }
 
 export const AttendingTab = ({
   course,
   onSendingCourseInformation,
+  updateAttendeesHandler,
 }: TabProperties) => {
   const { isOrgAdmin, acl } = useAuth()
   const { t } = useTranslation()
@@ -107,7 +109,11 @@ export const AttendingTab = ({
 
   const matchMutate = useMatchMutate()
 
-  const invalidateCache = useCallback(() => matchMutate(Matcher), [matchMutate])
+  const invalidateCache = useCallback(() => {
+    matchMutate(Matcher)
+    mutateParticipants()
+    updateAttendeesHandler()
+  }, [matchMutate, mutateParticipants, updateAttendeesHandler])
 
   const handleRowsPerPageChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
