@@ -64,10 +64,15 @@ export const ModulesSelection = () => {
           id: string
           name: string
           covered: boolean
+          submodules:
+            | Array<{
+                id: string
+                name: string
+              }>
+            | undefined
         }>
       }
     > = {}
-
     const rawStoredSelection = localStorage.getItem(STORAGE_KEY)
     const storedSelection: Record<string, boolean> = JSON.parse(
       rawStoredSelection ?? '{}'
@@ -75,7 +80,6 @@ export const ModulesSelection = () => {
 
     courseModules.forEach(courseModule => {
       const moduleGroup = groups[courseModule.module.moduleGroup.id]
-
       if (!moduleGroup) {
         groups[courseModule.module.moduleGroup.id] = {
           id: courseModule.module.moduleGroup.id,
@@ -92,6 +96,9 @@ export const ModulesSelection = () => {
           courseModule.covered ??
           storedSelection[courseModule.module.id] ??
           true,
+        submodules: courseModules.find(
+          x => x.module.id === courseModule.module.id
+        )?.module.submodules,
       })
     })
 

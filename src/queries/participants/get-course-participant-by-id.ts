@@ -40,6 +40,15 @@ export const QUERY = gql`
             id
             name
           }
+          submodules {
+            id
+            name
+          }
+          submodules_aggregate {
+            aggregate {
+              count
+            }
+          }
         }
       }
       bildGradingModules {

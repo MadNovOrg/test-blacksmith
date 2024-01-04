@@ -10,6 +10,7 @@ import { groupBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { submodulesCount } from '@app/components/CourseOverview/utils'
 import {
   CourseParticipantQuery,
   Course_Participant_Module,
@@ -67,8 +68,14 @@ export const ICMParticipantGrading: React.FC<Props> = ({ participant }) => {
                   {group.name}{' '}
                   <Typography variant="body2" component="span">
                     {t('pages.participant-grading.completed-modules-subtitle', {
-                      completedNum: groupedModules['true']?.length,
-                      totalNum: group.modules.length,
+                      completedNum:
+                        submodulesCount(groupedModules['true']) > 0
+                          ? submodulesCount(groupedModules['true'])
+                          : groupedModules['true']?.length,
+                      totalNum:
+                        submodulesCount(group.modules) > 0
+                          ? submodulesCount(group.modules)
+                          : group.modules.length,
                     })}
                   </Typography>
                 </Typography>
@@ -76,7 +83,15 @@ export const ICMParticipantGrading: React.FC<Props> = ({ participant }) => {
               <AccordionDetails>
                 <Stack spacing={2}>
                   {groupedModules['true']?.map(module => (
-                    <Typography key={module.id}>{module.name}</Typography>
+                    <Box key={module.id}>
+                      <Typography key={module.id}>{module.name}</Typography>
+                      {module.submodules?.length > 0 &&
+                        module.submodules.map(sm => (
+                          <Typography key={sm.id} mb={1.5} ml={3} mt={1}>
+                            {sm.name}
+                          </Typography>
+                        ))}
+                    </Box>
                   ))}
                 </Stack>
 
@@ -93,12 +108,20 @@ export const ICMParticipantGrading: React.FC<Props> = ({ participant }) => {
 
                     <Stack spacing={2}>
                       {groupedModules['false'].map(module => (
-                        <Typography
-                          key={module.id}
-                          color={theme.palette.grey[700]}
-                        >
-                          {module.name}
-                        </Typography>
+                        <Box key={module.id}>
+                          <Typography
+                            key={module.id}
+                            color={theme.palette.grey[700]}
+                          >
+                            {module.name}
+                          </Typography>
+                          {module.submodules?.length > 0 &&
+                            module.submodules.map(sm => (
+                              <Typography key={sm.id} mb={1.5} ml={3} mt={1}>
+                                {sm.name}
+                              </Typography>
+                            ))}
+                        </Box>
                       ))}
                     </Stack>
                   </Box>

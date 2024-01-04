@@ -83,7 +83,17 @@ export const ICMGrading: FC<Props> = ({ course }) => {
         id: string
         name: string
         mandatory: boolean
-        modules: Array<{ id: string; name: string; covered: boolean }>
+        modules: Array<{
+          id: string
+          name: string
+          covered: boolean
+          submodules:
+            | Array<{
+                id: string
+                name: string
+              }>
+            | undefined
+        }>
       }
     > = {}
 
@@ -91,7 +101,6 @@ export const ICMGrading: FC<Props> = ({ course }) => {
     const storedSelection: Record<string, boolean> = JSON.parse(
       rawStoredSelection ?? '{}'
     )
-
     course.modules.forEach(courseModule => {
       if (!courseModule.covered || !courseModule.module.moduleGroup) {
         return
@@ -112,6 +121,9 @@ export const ICMGrading: FC<Props> = ({ course }) => {
         id: courseModule.module.id,
         name: courseModule.module.name,
         covered: storedSelection[courseModule.module.id] ?? true,
+        submodules: course.modules.find(
+          x => x.module.id === courseModule.module.id
+        )?.module.submodules,
       })
     })
 
@@ -214,7 +226,6 @@ export const ICMGrading: FC<Props> = ({ course }) => {
           <Sticky>
             <Box mb={2}>
               <BackButton
-                to={`/courses/${course.id}/details?tab=${CourseDetailsTabs.GRADING}`}
                 label={t('pages.course-grading-details.back-button-text')}
               />
             </Box>

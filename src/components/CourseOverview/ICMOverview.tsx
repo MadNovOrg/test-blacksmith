@@ -23,6 +23,8 @@ import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups
 import { Course } from '@app/types'
 import { LoadingStatus, getSWRLoadingStatus } from '@app/util'
 
+import { submodulesCount } from './utils'
+
 type Props = {
   course: Course
 }
@@ -93,17 +95,9 @@ export const ICMOverview: React.FC<React.PropsWithChildren<Props>> = ({
                 <Typography variant="body2" ml={1}>
                   {t('areas', {
                     count:
-                      item.modules.length +
-                      Number(
-                        item.modules.length
-                          ? item.modules
-                              .map(
-                                module =>
-                                  module.submodules_aggregate.aggregate?.count
-                              )
-                              .reduce((acc, sum) => (acc ?? 0) + (sum ?? 0))
-                          : 0
-                      ),
+                      submodulesCount(item.modules) > 0
+                        ? submodulesCount(item.modules)
+                        : item.modules.length,
                   })}
                 </Typography>
               </Box>

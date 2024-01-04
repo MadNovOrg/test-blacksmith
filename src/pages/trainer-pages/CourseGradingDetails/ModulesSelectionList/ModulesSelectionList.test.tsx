@@ -12,8 +12,18 @@ describe('component: ModulesSelectionList', () => {
         name: chance.name(),
         mandatory: false,
         modules: [
-          { id: chance.guid(), name: chance.name(), covered: true },
-          { id: chance.guid(), name: chance.name(), covered: false },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: false,
+            submodules: [],
+          },
         ],
       },
       {
@@ -21,8 +31,18 @@ describe('component: ModulesSelectionList', () => {
         name: chance.name(),
         mandatory: false,
         modules: [
-          { id: chance.guid(), name: chance.name(), covered: true },
-          { id: chance.guid(), name: chance.name(), covered: true },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
         ],
       },
     ]
@@ -53,8 +73,18 @@ describe('component: ModulesSelectionList', () => {
         name: chance.name(),
         mandatory: false,
         modules: [
-          { id: chance.guid(), name: chance.name(), covered: true },
-          { id: chance.guid(), name: chance.name(), covered: false },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: false,
+            submodules: [],
+          },
         ],
       },
       {
@@ -62,8 +92,18 @@ describe('component: ModulesSelectionList', () => {
         name: chance.name(),
         mandatory: false,
         modules: [
-          { id: chance.guid(), name: chance.name(), covered: true },
-          { id: chance.guid(), name: chance.name(), covered: true },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
         ],
       },
     ]
@@ -115,8 +155,18 @@ describe('component: ModulesSelectionList', () => {
         name: chance.name(),
         mandatory: false,
         modules: [
-          { id: chance.guid(), name: chance.name(), covered: true },
-          { id: chance.guid(), name: chance.name(), covered: false },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: false,
+            submodules: [],
+          },
         ],
       },
       {
@@ -124,8 +174,18 @@ describe('component: ModulesSelectionList', () => {
         name: chance.name(),
         mandatory: false,
         modules: [
-          { id: chance.guid(), name: chance.name(), covered: true },
-          { id: chance.guid(), name: chance.name(), covered: true },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
         ],
       },
     ]
@@ -169,8 +229,18 @@ describe('component: ModulesSelectionList', () => {
         name: chance.name(),
         mandatory: false,
         modules: [
-          { id: chance.guid(), name: chance.name(), covered: true },
-          { id: chance.guid(), name: chance.name(), covered: true },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
         ],
       },
       {
@@ -178,8 +248,18 @@ describe('component: ModulesSelectionList', () => {
         name: chance.name(),
         mandatory: false,
         modules: [
-          { id: chance.guid(), name: chance.name(), covered: true },
-          { id: chance.guid(), name: chance.name(), covered: false },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: false,
+            submodules: [],
+          },
         ],
       },
     ]

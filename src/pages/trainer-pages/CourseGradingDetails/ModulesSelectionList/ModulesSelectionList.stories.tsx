@@ -23,8 +23,18 @@ Default.args = {
       name: 'CORE - Theory Module',
       mandatory: true,
       modules: [
-        { id: 'Values exercise', name: 'Values exercise', covered: true },
-        { id: 'Legal framework', name: 'Legal framework', covered: true },
+        {
+          id: 'Values exercise',
+          name: 'Values exercise',
+          covered: true,
+          submodules: [],
+        },
+        {
+          id: 'Legal framework',
+          name: 'Legal framework',
+          covered: true,
+          submodules: [],
+        },
       ],
     },
     {
@@ -36,11 +46,13 @@ Default.args = {
           id: 'Circles of danger  ',
           name: 'Circles of danger  ',
           covered: true,
+          submodules: [],
         },
         {
           id: 'Posturing and body language ',
           name: 'Posturing and body language ',
           covered: true,
+          submodules: [],
         },
       ],
     },

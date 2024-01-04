@@ -121,6 +121,7 @@ export type CourseModule = {
   covered?: boolean
   course: Course
   module: Module
+  submodules: Module[]
 } & Base
 
 export enum CertificateStatus {
@@ -346,6 +347,10 @@ export type Module = {
   level: Course_Level_Enum
   type: string
   moduleGroup: ModuleGroup
+  submodules: Array<{
+    id: string
+    name: string
+  }>
 } & Base
 
 export type ModuleGroupDuration = {

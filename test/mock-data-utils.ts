@@ -448,6 +448,7 @@ export const buildModule = build<Module>({
     level: Course_Level_Enum.Level_1,
     type: '',
     moduleGroup: perBuild(() => buildModuleGroup()),
+    submodules: [],
   },
 })
 
@@ -457,6 +458,7 @@ export const buildCourseModule = build<CourseModule>({
     createdAt: new Date().toISOString(),
     course: perBuild(() => buildCourse()),
     module: perBuild(() => buildModule()),
+    submodules: [],
   },
 })
 

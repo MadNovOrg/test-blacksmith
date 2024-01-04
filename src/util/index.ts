@@ -26,6 +26,8 @@ import {
   Course_Trainer,
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
+  Submodule,
+  Submodule_Aggregate,
 } from '@app/generated/graphql'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import {
@@ -173,14 +175,26 @@ export const transformModulesToGroups = (
 ): Array<{
   id: string
   name: string
-  modules: Array<{ id: string; name: string; completed: boolean }>
+  modules: Array<{
+    id: string
+    name: string
+    completed: boolean
+    submodules: Submodule[]
+    submodules_aggregate: Submodule_Aggregate
+  }>
 }> => {
   const groups: Record<
     string,
     {
       id: string
       name: string
-      modules: Array<{ id: string; name: string; completed: boolean }>
+      modules: Array<{
+        id: string
+        name: string
+        completed: boolean
+        submodules: Submodule[]
+        submodules_aggregate: Submodule_Aggregate
+      }>
     }
   > = {}
 
@@ -200,6 +214,8 @@ export const transformModulesToGroups = (
       id: courseModule.module.id,
       name: courseModule.module.name,
       completed: courseModule.completed,
+      submodules: courseModule.module.submodules,
+      submodules_aggregate: courseModule.module.submodules_aggregate,
     })
   })
 

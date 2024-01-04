@@ -39,6 +39,10 @@ const QUERY = gql`
             name
             mandatory
           }
+          submodules {
+            id
+            name
+          }
         }
       }
       bildModules {

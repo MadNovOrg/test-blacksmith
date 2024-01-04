@@ -42,6 +42,9 @@ export function getAvailableGrades(
   ) {
     return [Grade_Enum.Pass, Grade_Enum.Fail]
   }
+  if (courseLevel === Course_Level_Enum.ThreeDaySafetyResponseTrainer) {
+    return [Grade_Enum.Pass, Grade_Enum.Fail]
+  }
 
   return [Grade_Enum.Pass, Grade_Enum.ObserveOnly, Grade_Enum.Fail]
 }
