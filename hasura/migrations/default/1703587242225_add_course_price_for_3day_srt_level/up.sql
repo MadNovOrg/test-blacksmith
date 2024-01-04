@@ -1,3 +1,5 @@
+DELETE FROM "public"."course_pricing_changelog" WHERE "course_pricing_id" = 'a46811ed-aa8e-48b8-9f35-0a864b4eecf7';
+
 DELETE FROM "public"."course_pricing_schedule" WHERE "course_pricing_id" = 'a46811ed-aa8e-48b8-9f35-0a864b4eecf7';
 
 DELETE FROM "public"."course_pricing" WHERE "id" = 'a46811ed-aa8e-48b8-9f35-0a864b4eecf7';
