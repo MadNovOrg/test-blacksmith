@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 2.3.1
+
+### Patch Changes
+
+- 855d9de4: Fix course pricing migrations
+
 ## 2.3.0
 
 ### Minor Changes
