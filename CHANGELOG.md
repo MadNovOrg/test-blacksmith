@@ -1,5 +1,44 @@
 # @teamteach/hub
 
+## 2.3.0
+
+### Minor Changes
+
+- 51ee9539: Add residing country column to Users page
+- 32528b7e: adds an event and action to sync participant's graded_on field when graded
+- bc5f36d1: Update Countries selector while adding a new venue to account for the international countries
+- 77e40096: Added price for 3 Day SRT course level
+- 3ec9baec: Use international countries when creating new organization
+- 9bd63613: new data model for course modules
+- 59cee72a: add help center button to the welcome page
+- 724fc052: Add course residing country in the table on the transfer participant page.
+- 4fcb67f0: Amendments on 'Book a course' page for International Courses
+- 03b7b33d: Update trainers ratio for Level 1 and Level 2 INDIRECT type courses for trainers
+- 67eed51f: Add mandatory modules in 3 Day SRT open course.
+- 69781fe0: Added feature flag for 3 Day SRT Course Level
+- 767b9bc5: add curriculum sync Hasura event
+- 4425a9a3: Adds Course Residing Country to while creating / editing open courses
+
+### Patch Changes
+
+- aa891bd6: Fix accept organisation invite request
+- 7b7eb576: Fixes the failing seed job by adding booking contact details to seed orders
+- 4cfaf88a: Fix typecheck
+- 296af45c: Fix undefined sentry error in Course Details component
+- e0e9c7d8: Allow invite to otg after invite declined
+- 7a990e25: Fixing multiple AJAX calls for Organisation invitation accept
+- d797e06c: Fix add Google Maps venue error, add countryCode to venue
+- 5aa67ab3: Fixing headers for unauthorized requests
+- c176c276: Add info box under assist trainers
+- c21ffc04: Remove case and space sensitive for full name signature on H&S submit form and course evaluation
+- a9b68660: Names info box under signatures
+- 9ff59a1c: fix labels for info box under signatures
+- 41653f52: Allow OrgAdmin accounts to retrieve course participants count
+- bc82b7c5: Add search by invoice code for the audits
+- 2314a124: Fix helper text for postal address fields on booking details
+- a6f39b72: Fix venue selector address components issue
+- 109bccdf: Make country code editable on phone
+
 ## 2.2.0
 
 ### Minor Changes
