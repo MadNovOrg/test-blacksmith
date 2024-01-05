@@ -1,5 +1,19 @@
 # @teamteach/hub
 
+## 2.4.0
+
+### Minor Changes
+
+- d6d0efee: Add grading for 3day SRT courses.
+
+### Patch Changes
+
+- 71ebf815: Refresh the table of attendees
+- c82fa3ea: Make Country and Job Title as required fields when editing profile. Remove organizations that user left from the list in the profile.
+- a3fe9d1e: Fix error on course creation for trainer role
+- 91ed02c8: Add permission to country and countrycode to unverified user
+- 70063b0f: Update user permission for course invite to be case insensitive by email
+
 ## 2.3.1
 
 ### Patch Changes
