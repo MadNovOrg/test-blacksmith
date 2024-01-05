@@ -351,7 +351,7 @@ update_permissions:
       filter:
         _and:
           - email:
-              _eq: X-Hasura-User-Email
+              _ilike: X-Hasura-User-Email
           - status:
               _eq: PENDING
       check: null
