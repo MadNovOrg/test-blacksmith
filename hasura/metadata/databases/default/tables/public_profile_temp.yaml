@@ -259,7 +259,7 @@ select_permissions:
         - organization_id
       filter:
         email:
-          _eq: X-Hasura-User-Email
+          _ilike: X-Hasura-User-Email
   - role: user
     permission:
       columns:
@@ -278,15 +278,15 @@ select_permissions:
         - organization_id
       filter:
         email:
-          _eq: X-Hasura-User-Email
+          _ilike: X-Hasura-User-Email
 delete_permissions:
   - role: unverified
     permission:
       filter:
         email:
-          _eq: X-Hasura-User-Email
+          _ilike: X-Hasura-User-Email
   - role: user
     permission:
       filter:
         email:
-          _eq: X-Hasura-User-Email
+          _ilike: X-Hasura-User-Email

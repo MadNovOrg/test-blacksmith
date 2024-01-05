@@ -96,5 +96,5 @@ select_permissions:
         - id
       filter:
         email_address:
-          _eq: X-Hasura-User-Email
+          _ilike: X-Hasura-User-Email
       allow_aggregations: true

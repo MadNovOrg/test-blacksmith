@@ -183,5 +183,5 @@ select_permissions:
       filter:
         contact:
           email_address:
-            _eq: X-Hasura-User-Email
+            _ilike: X-Hasura-User-Email
       allow_aggregations: true

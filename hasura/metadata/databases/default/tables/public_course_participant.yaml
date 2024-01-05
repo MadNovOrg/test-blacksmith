@@ -115,7 +115,7 @@ insert_permissions:
       check:
         invite:
           email:
-            _eq: X-Hasura-User-Email
+            _ilike: X-Hasura-User-Email
       set:
         profile_id: x-hasura-User-Id
       columns:
