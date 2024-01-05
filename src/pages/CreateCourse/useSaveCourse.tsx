@@ -345,12 +345,12 @@ export function useSaveCourse(): {
                     },
                   }
                 : null),
-              ...(courseData.includeVAT
-                ? { includeVAT: courseData.includeVAT }
-                : null),
-              ...(courseData.priceCurrency
-                ? { priceCurrency: courseData.priceCurrency }
-                : null),
+              ...(isOpenICMInternational
+                ? {
+                    includeVAT: courseData.includeVAT,
+                    priceCurrency: courseData.priceCurrency,
+                  }
+                : {}),
             },
           }
         )
