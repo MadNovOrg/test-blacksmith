@@ -80,7 +80,7 @@
     "@react-pdf/renderer": "^3.1.14",
     "@sentry/integrations": "^7.48.0",
     "@sentry/react": "^7.55.2",
-    "@stripe/react-stripe-js": "^2.1.0",
+    "@stripe/react-stripe-js": "^2.4.0",
     "@stripe/stripe-js": "^1.54.2",
     "@swc/helpers": "~0.5.0",
     "@types/chance": "1.1.6",
