@@ -28,11 +28,11 @@ export const CreateOrganization = () => {
 
   const handleSubmit = async (data: FormInputs) => {
     const organisationDataObject = {
-      name: data.name,
+      name: data.name.trim(),
       sector: data.sector,
       organisationType: data.organisationType as string,
       attributes: {
-        email: data.orgEmail,
+        email: data.orgEmail.toLowerCase(),
         phone: data.orgPhone,
         localAuthority: data.localAuthority,
         ofstedRating: data.ofstedRating,

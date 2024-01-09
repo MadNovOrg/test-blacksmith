@@ -54,11 +54,11 @@ export const EditOrgDetails: React.FC<
     const orgDataToBeUpdated = {
       id,
       org: {
-        name: data.name,
+        name: data.name.trim(),
         sector: data.sector,
         organisationType: data.organisationType,
         attributes: {
-          email: data.orgEmail,
+          email: data.orgEmail.toLowerCase(),
           phone: data.orgPhone,
           localAuthority: data.localAuthority,
           ofstedRating: data.ofstedRating,
