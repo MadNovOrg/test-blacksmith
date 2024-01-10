@@ -7,10 +7,11 @@ import {
   TableBody,
   TableCell,
   TableHead,
+  TablePagination,
   TableRow,
 } from '@mui/material'
 import Link from '@mui/material/Link'
-import React from 'react'
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Avatar } from '@app/components/Avatar'
@@ -22,16 +23,38 @@ type OrgSummaryListParams = {
   orgId: string
 }
 
+const PER_PAGE = 5
+const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 20]
+
 export const OrgSummaryList: React.FC<
   React.PropsWithChildren<OrgSummaryListParams>
 > = ({ orgId }) => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
 
+  const [currentPage, setCurrentPage] = useState(0)
+  const [perPage, setPerPage] = useState(PER_PAGE)
+
   const { data, profilesByOrg, stats } = useOrg(
     orgId,
     profile?.id,
     acl.canViewAllOrganizations()
+  )
+
+  const currentPageUsers = useMemo(() => {
+    const summaries = data || []
+    return summaries.slice(
+      currentPage * perPage,
+      currentPage * perPage + perPage
+    )
+  }, [data, currentPage, perPage])
+
+  const handleRowsPerPageChange = useCallback(
+    (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      setPerPage(parseInt(event.target.value, 10))
+      setCurrentPage(0)
+    },
+    []
   )
 
   return (
@@ -69,7 +92,7 @@ export const OrgSummaryList: React.FC<
           </TableRow>
         </TableHead>
         <TableBody>
-          {data?.map(org => (
+          {currentPageUsers?.map(org => (
             <TableRow key={org.id} sx={{ backgroundColor: 'white' }}>
               <TableCell>
                 {org?.id === orgId ? (
@@ -152,6 +175,16 @@ export const OrgSummaryList: React.FC<
           ))}
         </TableBody>
       </Table>
+      <TablePagination
+        component="div"
+        count={data?.length ?? 0}
+        page={currentPage}
+        onPageChange={(_, page) => setCurrentPage(page)}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        rowsPerPage={perPage}
+        rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+        data-testid="organization-summary-pagination"
+      />
     </Box>
   )
 }
