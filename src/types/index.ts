@@ -97,6 +97,8 @@ export type Course = {
   accreditedBy: Accreditors_Enum
   displayOnWebsite?: boolean
   price?: number
+  priceCurrency?: string
+  includeVAT?: boolean
   bildStrategies: Array<{
     strategyName: string
   }>

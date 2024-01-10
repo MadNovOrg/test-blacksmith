@@ -37,6 +37,8 @@ export default function useCourse(courseId: string): {
         acl.canViewCourseOrder(),
       withArloRefId: acl.isInternalUser(),
       withParticipants: acl.isOrgAdmin(),
+      withInternationalFinance:
+        acl.isAdmin() || acl.isTTOps() || acl.isSalesAdmin(),
     },
   ])
 

@@ -13,6 +13,7 @@ export type ParamsType = {
   withOrders?: boolean
   withArloRefId: boolean
   withParticipants?: boolean
+  withInternationalFinance?: boolean
 }
 
 export const QUERY = gql`
@@ -26,6 +27,7 @@ export const QUERY = gql`
     $withModules: Boolean = false
     $withArloRefId: Boolean = false
     $withParticipants: Boolean = false
+    $withInternationalFinance: Boolean = false
   ) {
     course: course_by_pk(id: $id) {
       ...Course
@@ -55,6 +57,8 @@ export const QUERY = gql`
         id
         reason
       }
+      priceCurrency @include(if: $withInternationalFinance)
+      includeVAT @include(if: $withInternationalFinance)
       trainers {
         id
         type

@@ -273,12 +273,15 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 then: schema =>
                   schema.required(requiredMsg(t, 'common.currency-word')),
               }),
-              includeVAT: yup.bool().when('residingCountry', {
-                is: (residingCountry: WorldCountriesCodes) =>
-                  !isUKCountry(residingCountry),
-                then: schema =>
-                  schema.required(requiredMsg(t, 'vat')).default(false),
-              }),
+              includeVAT: yup
+                .bool()
+                .nullable()
+                .when('residingCountry', {
+                  is: (residingCountry: WorldCountriesCodes) =>
+                    !isUKCountry(residingCountry),
+                  then: schema =>
+                    schema.required(requiredMsg(t, 'vat')).default(false),
+                }),
             }
           : {}),
         deliveryType: yup
@@ -517,6 +520,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       conversion: courseInput?.conversion ?? false,
       price: courseInput?.price ?? null,
       priceCurrency: courseInput?.priceCurrency ?? defaultCurrency,
+      includeVAT: courseInput?.includeVAT,
       renewalCycle: courseInput?.renewalCycle,
       ...(isResidingCountryEnabled
         ? {
@@ -540,6 +544,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       courseInput?.displayOnWebsite,
       courseInput?.endDateTime,
       courseInput?.freeSpaces,
+      courseInput?.includeVAT,
       courseInput?.maxParticipants,
       courseInput?.minParticipants,
       courseInput?.organization,
@@ -765,13 +770,15 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     if (
       isOpenICMInternationalFinanceEnabled &&
-      !isUKCountry(values.residingCountry)
+      !isUKCountry(values.residingCountry) &&
+      !courseInput?.priceCurrency
     )
       setValue('priceCurrency', defaultCurrency)
     else {
       resetField('priceCurrency')
     }
   }, [
+    courseInput?.priceCurrency,
     isOpenICMInternationalFinanceEnabled,
     isUKCountry,
     resetField,
@@ -1587,6 +1594,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       if (isUKCountry(code)) {
                         resetField('includeVAT')
                         resetField('price')
+                        resetField('priceCurrency')
                       } else {
                         if (isUKCountry(values.residingCountry)) {
                           setValue('includeVAT', false)

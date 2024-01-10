@@ -23,6 +23,7 @@ import { BackButton } from '@app/components/BackButton'
 import ChooseTrainers, {
   FormValues as TrainersFormValues,
 } from '@app/components/ChooseTrainers'
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import CourseForm, { DisabledFields } from '@app/components/CourseForm'
 import { hasRenewalCycle } from '@app/components/CourseForm/helpers'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
@@ -36,15 +37,15 @@ import {
   Course_Audit_Type_Enum,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
-  CourseLevel,
   Course_Status_Enum,
+  Course_Trainer_Insert_Input,
   Course_Type_Enum,
+  CourseLevel,
   GetCourseByIdQuery,
   InsertCourseAuditMutation,
   InsertCourseAuditMutationVariables,
   UpdateCourseMutation,
   UpdateCourseMutationVariables,
-  Course_Trainer_Insert_Input,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
@@ -77,18 +78,18 @@ import {
 } from '@app/types'
 import {
   bildStrategiesToArray,
+  courseStarted,
   courseToCourseInput,
   generateBildCourseName,
   generateCourseName,
   LoadingStatus,
   profileToInput,
-  courseStarted,
 } from '@app/util'
 
 import { NotFound } from '../common/NotFound'
 
 import { FormValues, ReviewChangesModal } from './components/ReviewChangesModal'
-import { getChangedTrainers, type CourseDiff } from './shared'
+import { type CourseDiff, getChangedTrainers } from './shared'
 
 function assertCourseDataValid(
   data: CourseInput,
@@ -114,6 +115,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const fetcher = useFetcher()
   const { profile, acl, activeRole } = useAuth()
   const navigate = useNavigate()
+  const { isUKCountry } = useWorldCountries()
   const [courseData, setCourseData] = useState<CourseInput>()
   const [courseDataValid, setCourseDataValid] = useState(false)
   const [trainersData, setTrainersData] = useState<TrainersFormValues>()
@@ -330,6 +332,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             source: courseData.source,
           }
 
+          const isOpenICMCourse = [
+            courseData.accreditedBy === Accreditors_Enum.Icm,
+            courseData.type === Course_Type_Enum.Open,
+          ].every(el => Boolean(el))
+
           const editResponse = await updateCourse({
             courseId: course.id,
             courseInput: {
@@ -394,8 +401,27 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     aolRegion: courseData.aolRegion,
                   }
                 : null),
-              ...(courseData.price ? { price: courseData.price } : null),
+              ...(isOpenICMCourse && isUKCountry(courseData.residingCountry)
+                ? { price: null }
+                : courseData.price
+                ? { price: courseData.price }
+                : null),
+
               residingCountry: courseData.residingCountry,
+
+              ...(isOpenICMCourse
+                ? {
+                    priceCurrency: !isUKCountry(courseData.residingCountry)
+                      ? courseData.priceCurrency
+                      : null,
+                  }
+                : null),
+
+              ...(isOpenICMCourse && !isUKCountry(courseData.residingCountry)
+                ? {
+                    includeVAT: courseData.includeVAT ?? null,
+                  }
+                : null),
             },
             orderInput: orderToUpdate,
             trainers: trainersToAdd.map(t => ({
@@ -476,22 +502,23 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       }
     },
     [
-      acl,
-      canGoToCourseBuilder,
       course,
       courseData,
-      courseDataValid,
-      courseDiffs,
-      courseExceptions.length,
-      courseInput?.id,
-      insertAudit,
-      mutateCourse,
-      navigate,
-      notifyCourseEdit,
-      profile,
       trainersData,
+      courseDataValid,
+      acl,
+      profile,
+      courseExceptions.length,
       updateCourse,
       getCourseName,
+      isUKCountry,
+      courseDiffs,
+      insertAudit,
+      notifyCourseEdit,
+      mutateCourse,
+      canGoToCourseBuilder,
+      navigate,
+      courseInput?.id,
     ]
   )
 
