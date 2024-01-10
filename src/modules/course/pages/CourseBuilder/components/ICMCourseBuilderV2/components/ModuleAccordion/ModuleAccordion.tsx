@@ -1,5 +1,11 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Accordion, Box, Stack, Typography } from '@mui/material'
+import {
+  Accordion,
+  AccordionProps,
+  Box,
+  Stack,
+  Typography,
+} from '@mui/material'
 import React from 'react'
 
 import { ModuleSettingsQuery } from '@app/generated/graphql'
@@ -16,12 +22,13 @@ type Props = {
   moduleSetting: ModuleSetting
   isSelected?: boolean
   renderName?: (moduleSetting: ModuleSetting) => React.ReactNode
-}
+} & Omit<AccordionProps, 'children'>
 
 export const ModuleAccordion: React.FC<Props> = ({
   moduleSetting,
   isSelected,
   renderName,
+  ...props
 }) => {
   const moduleLessons = moduleSetting.module.lessons.items
 
@@ -31,7 +38,7 @@ export const ModuleAccordion: React.FC<Props> = ({
       disableGutters
       sx={{ mb: 2 }}
       TransitionProps={{ timeout: 0 }}
-      data-testid={`available-module-group-${moduleSetting.module.id}`}
+      {...props}
     >
       <StyledAccordionSummary
         expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}

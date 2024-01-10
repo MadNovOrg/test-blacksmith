@@ -10,8 +10,6 @@ import { ConfirmDialog } from '@app/components/dialogs'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   Color_Enum,
-  CourseToBuildQuery,
-  CourseToBuildQueryVariables,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
@@ -30,13 +28,14 @@ import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-
 import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups'
 import { isNotNullish } from '@app/util'
 
+import { useCourseToBuild } from '../../hooks/useCourseToBuild'
 import { Hero } from '../Hero/Hero'
 
 import GroupsSelection, {
   CallbackFn,
 } from './components/GroupsSelection/GroupsSelection'
 import { filterModuleGroups, getMinimumTimeCommitment } from './helpers'
-import { COURSE_QUERY, SET_COURSE_AS_DRAFT } from './queries'
+import { SET_COURSE_AS_DRAFT } from './queries'
 
 type CourseBuilderProps = unknown & { editMode?: boolean }
 
@@ -85,13 +84,7 @@ export const ICMCourseBuilder: React.FC<
   const courseCreated = Boolean(getSnackbarMessage('course-created'))
 
   const [{ data: courseData, fetching: fetchingCourse, error: courseError }] =
-    useQuery<CourseToBuildQuery, CourseToBuildQueryVariables>({
-      query: COURSE_QUERY,
-      variables: courseId
-        ? { id: Number(courseId), withModules: true }
-        : undefined,
-      requestPolicy: 'cache-and-network',
-    })
+    useCourseToBuild(Number(courseId))
 
   const [
     {

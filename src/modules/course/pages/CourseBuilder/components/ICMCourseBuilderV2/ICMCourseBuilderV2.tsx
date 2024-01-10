@@ -1,30 +1,33 @@
-import { Alert, Box, CircularProgress, Container } from '@mui/material'
+import { Alert, Box, CircularProgress, Container, Link } from '@mui/material'
 import { cond, constant, matches, stubTrue } from 'lodash-es'
-import React, { useMemo, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
-import { useQuery } from 'urql'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { ConfirmDialog } from '@app/components/dialogs'
+import { useSnackbar } from '@app/context/snackbar'
 import {
-  CourseToBuildQuery,
-  CourseToBuildQueryVariables,
+  Color_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
   ModuleSettingsQuery,
-  ModuleSettingsQueryVariables,
 } from '@app/generated/graphql'
 import { NotFound } from '@app/pages/common/NotFound'
 
+import { useCourseToBuild } from '../../hooks/useCourseToBuild'
 import { Hero } from '../Hero/Hero'
 import { getMinimumTimeCommitment } from '../ICMCourseBuilder/helpers'
-import { COURSE_QUERY } from '../ICMCourseBuilder/queries'
 
-import { ModulesSelection } from './components/ModulesSelection/ModulesSelection'
-import { MODULE_SETTINGS } from './queries'
+import {
+  CallbackFn,
+  ModulesSelection,
+} from './components/ModulesSelection/ModulesSelection'
+import { useModuleSettings } from './hooks/useModuleSettings'
+import { useSaveCourseDraft } from './hooks/useSaveCourseDraft'
+import { useSubmitModules } from './hooks/useSubmitModules'
 
-type CourseBuilderProps = unknown & { editMode?: boolean }
+type Props = { editMode?: boolean }
 
 const courseBuilderWarning: Partial<Record<Course_Level_Enum, string>> = {
   [Course_Level_Enum.Level_1]: 'course-l1-info',
@@ -57,23 +60,35 @@ export const MAX_COURSE_DURATION_MAP = {
   },
 }
 
-export const ICMCourseBuilderV2: React.FC<
-  React.PropsWithChildren<CourseBuilderProps>
-> = ({ editMode }) => {
+export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
+  editMode,
+}) => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
+
+  const navigate = useNavigate()
 
   const [isTimeCommitmentModalOpen, setIsTimeCommitmentModalOpen] =
     useState(false)
 
+  const { addSnackbarMessage, getSnackbarMessage } = useSnackbar()
+  const courseCreated = Boolean(getSnackbarMessage('course-created'))
+
+  const modulesSelectionRef =
+    useRef<ModuleSettingsQuery['moduleSettings'][0]['module'][]>()
+
   const [{ data: courseData, fetching: fetchingCourse, error: courseError }] =
-    useQuery<CourseToBuildQuery, CourseToBuildQueryVariables>({
-      query: COURSE_QUERY,
-      variables: courseId
-        ? { id: Number(courseId), withModules: true }
-        : undefined,
-      requestPolicy: 'cache-and-network',
-    })
+    useCourseToBuild(Number(courseId))
+
+  const [, saveDraft] = useSaveCourseDraft()
+  const [
+    {
+      data: submitModulesData,
+      error: submitModulesError,
+      fetching: submittingModules,
+    },
+    submitModules,
+  ] = useSubmitModules()
 
   const [
     {
@@ -81,22 +96,7 @@ export const ICMCourseBuilderV2: React.FC<
       fetching: fetchingModuleSettings,
       error: moduleSettingsError,
     },
-  ] = useQuery<ModuleSettingsQuery, ModuleSettingsQueryVariables>({
-    query: MODULE_SETTINGS,
-    pause: !courseData?.course,
-    requestPolicy: 'cache-and-network',
-    ...(courseData?.course
-      ? {
-          variables: {
-            courseType: courseData.course.type,
-            courseLevel: courseData.course.level,
-            courseDeliveryType: courseData.course.deliveryType,
-            reaccreditation: courseData.course.reaccreditation,
-            go1Integration: courseData.course.go1Integration,
-          },
-        }
-      : null),
-  })
+  ] = useModuleSettings(courseData?.course)
 
   const estimatedDurationRef = useRef<number>()
 
@@ -246,6 +246,66 @@ export const ICMCourseBuilderV2: React.FC<
     )
   }, [courseData?.course])
 
+  const handleModulesChange: CallbackFn = ({
+    selectedIds,
+    previousIds,
+    estimatedDuration,
+  }) => {
+    modulesSelectionRef.current = moduleSettingsData?.moduleSettings
+      .filter(moduleSetting => selectedIds.includes(moduleSetting.module.id))
+      .map(moduleSetting => moduleSetting.module)
+
+    estimatedDurationRef.current = estimatedDuration
+
+    if (previousIds && previousIds.length !== selectedIds.length) {
+      saveDraft({
+        id: Number(courseId),
+        curriculum: modulesSelectionRef.current,
+      })
+    }
+  }
+
+  const confirmModules = () => {
+    submitModules({
+      id: Number(courseId),
+      curriculum: modulesSelectionRef.current,
+      duration: estimatedDurationRef.current ?? 0,
+    })
+  }
+
+  const handleModulesSubmit: CallbackFn = ({
+    selectedIds,
+    estimatedDuration,
+  }) => {
+    modulesSelectionRef.current = moduleSettingsData?.moduleSettings
+      .filter(moduleSetting => selectedIds.includes(moduleSetting.module.id))
+      .map(moduleSetting => moduleSetting.module)
+
+    estimatedDurationRef.current = estimatedDuration
+
+    if (minimumTimeCommitment) {
+      setIsTimeCommitmentModalOpen(true)
+    } else {
+      confirmModules()
+    }
+  }
+
+  const validateSelection = (selectedIds: string[]): boolean => {
+    const selectedModules = moduleSettingsData?.moduleSettings.filter(
+      moduleSetting => selectedIds.includes(moduleSetting.module.id)
+    )
+
+    if (courseData?.course?.level === Course_Level_Enum.Level_2) {
+      return Boolean(
+        selectedModules?.some(
+          moduleSetting => moduleSetting.color === Color_Enum.Purple
+        )
+      )
+    }
+
+    return true
+  }
+
   const hasEstimatedDuration =
     courseData?.course?.level &&
     courseData?.course?.type !== Course_Type_Enum.Open &&
@@ -253,6 +313,35 @@ export const ICMCourseBuilderV2: React.FC<
       Course_Level_Enum.IntermediateTrainer,
       Course_Level_Enum.AdvancedTrainer,
     ].includes(courseData?.course?.level)
+
+  useEffect(() => {
+    if (submitModulesData?.update_course_by_pk?.id && courseData?.course) {
+      if (!courseCreated) {
+        addSnackbarMessage('course-submitted', {
+          label: (
+            <Trans
+              i18nKey="pages.trainer-base.create-course.new-course.submitted-course"
+              values={{ code: courseData.course.course_code }}
+            >
+              <Link
+                underline="always"
+                href={`/manage-courses/all/${courseData.course.id}/details`}
+              >
+                {courseData.course.course_code}
+              </Link>
+            </Trans>
+          ),
+        })
+      }
+      navigate('../details')
+    }
+  }, [
+    navigate,
+    addSnackbarMessage,
+    courseCreated,
+    submitModulesData,
+    courseData?.course,
+  ])
 
   if (!fetchingCourse && !courseData?.course && !courseError) {
     return (
@@ -265,12 +354,18 @@ export const ICMCourseBuilderV2: React.FC<
 
   return (
     <Container sx={{ pt: 3 }}>
-      new modules
       {courseError || moduleSettingsError ? (
         <Alert severity="error" variant="outlined" sx={{ mb: 3 }}>
           {t('internal-error')}
         </Alert>
       ) : null}
+
+      {submitModulesError ? (
+        <Alert severity="error" variant="outlined" sx={{ mb: 2 }}>
+          {t('pages.trainer-base.create-course.new-course.saving-error')}
+        </Alert>
+      ) : null}
+
       {fetchingCourse || fetchingModuleSettings ? (
         <Box display="flex" margin="auto">
           <CircularProgress
@@ -303,13 +398,22 @@ export const ICMCourseBuilderV2: React.FC<
           ) : null}
           <ModulesSelection
             availableModules={moduleSettingsData.moduleSettings}
+            initialSelection={
+              Array.isArray(courseData.course.curriculum)
+                ? courseData.course.curriculum.map(m => m.id)
+                : []
+            }
+            onChange={handleModulesChange}
+            onSubmit={handleModulesSubmit}
+            submitting={submittingModules}
             showDuration={hasEstimatedDuration}
             maxDuration={maxDuration}
+            validateSelection={validateSelection}
             slots={{
               afterChosenModulesTitle:
                 courseData.course.type !== Course_Type_Enum.Open &&
                 courseBuilderWarning[courseData.course.level] != null ? (
-                  <Alert severity="info">
+                  <Alert severity="info" data-testid="modules-alert">
                     {t(
                       `pages.trainer-base.create-course.new-course.${
                         courseBuilderWarning[courseData.course.level]
@@ -323,7 +427,7 @@ export const ICMCourseBuilderV2: React.FC<
       )}
       <ConfirmDialog
         open={isTimeCommitmentModalOpen}
-        onOk={console.log}
+        onOk={confirmModules}
         onCancel={() => setIsTimeCommitmentModalOpen(false)}
         message={
           <>

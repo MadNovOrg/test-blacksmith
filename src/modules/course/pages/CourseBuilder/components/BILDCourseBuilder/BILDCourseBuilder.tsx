@@ -11,14 +11,12 @@ import { cond, constant, matches, stubTrue } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useMutation, useQuery } from 'urql'
+import { useMutation } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   Course_Level_Enum,
-  CourseToBuildQuery,
-  CourseToBuildQueryVariables,
   SaveCourseModulesBildMutation,
   SaveCourseModulesBildMutationVariables,
 } from '@app/generated/graphql'
@@ -32,8 +30,8 @@ import {
   getSWRLoadingStatus,
 } from '@app/util'
 
+import { useCourseToBuild } from '../../hooks/useCourseToBuild'
 import { Hero } from '../Hero/Hero'
-import { COURSE_QUERY } from '../ICMCourseBuilder/queries'
 import { LeftPane, PanesContainer, RightPane } from '../Panes/Panes'
 
 import { StrategyAccordion } from './components/StrategyAccordion'
@@ -159,15 +157,9 @@ export const BILDCourseBuilder: React.FC<
 
   const courseCreated = Boolean(getSnackbarMessage('course-created'))
 
-  const [{ data: courseData, error: courseDataError }] = useQuery<
-    CourseToBuildQuery,
-    CourseToBuildQueryVariables
-  >({
-    query: COURSE_QUERY,
-    variables: courseId
-      ? { id: Number(courseId), withStrategies: true }
-      : undefined,
-  })
+  const [{ data: courseData, error: courseDataError }] = useCourseToBuild(
+    Number(courseId)
+  )
 
   const courseDescription = useMemo<string>(() => {
     if (!courseData?.course) return ''

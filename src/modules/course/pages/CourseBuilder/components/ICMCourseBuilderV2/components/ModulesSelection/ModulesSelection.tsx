@@ -1,15 +1,19 @@
 import CheckedAllIcon from '@mui/icons-material/CheckCircle'
 import UncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
+import { LoadingButton } from '@mui/lab'
 import {
   Box,
+  Button,
   Checkbox,
   FormControlLabel,
   FormGroup,
   LinearProgress,
   Typography,
 } from '@mui/material'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { usePrevious } from 'react-use'
+import { noop } from 'ts-essentials'
 
 import { ModuleSettingsQuery } from '@app/generated/graphql'
 import { formatDurationShort, getPercentage, isNotNullish } from '@app/util'
@@ -17,10 +21,25 @@ import { formatDurationShort, getPercentage, isNotNullish } from '@app/util'
 import { LeftPane, PanesContainer, RightPane } from '../../../Panes/Panes'
 import { ModuleAccordion } from '../ModuleAccordion/ModuleAccordion'
 
+export type CallbackFn = ({
+  selectedIds,
+  estimatedDuration,
+  previousIds,
+}: {
+  selectedIds: string[]
+  previousIds?: string[]
+  estimatedDuration: number
+}) => void
+
 type Props = {
   availableModules: ModuleSettingsQuery['moduleSettings']
+  initialSelection?: string[]
+  onChange?: CallbackFn
+  onSubmit?: CallbackFn
   maxDuration?: number
   showDuration?: boolean
+  submitting?: boolean
+  validateSelection?: (selectedIds: string[]) => boolean
   slots?: {
     afterChosenModulesTitle?: React.ReactNode
   }
@@ -28,16 +47,27 @@ type Props = {
 
 export const ModulesSelection: React.FC<Props> = ({
   availableModules,
+  initialSelection = [],
   showDuration,
   maxDuration = 0,
+  submitting = false,
+  onChange = noop,
+  onSubmit = noop,
+  validateSelection = () => true,
   slots,
 }) => {
   const { t } = useTranslation()
-  const [selectedIds] = useState<string[]>(
-    availableModules
-      .filter(moduleSetting => moduleSetting.mandatory)
-      .map(ms => ms.module.id)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(
+    new Set([
+      ...availableModules
+        .filter(moduleSetting => moduleSetting.mandatory)
+        .map(ms => ms.module.id),
+      ...initialSelection,
+    ])
   )
+
+  const initialSelectionRef = useRef(selectedIds)
+  const previousIds = usePrevious(selectedIds)
 
   const availableModulesMap = useMemo(() => {
     const modules = new Map<string, (typeof availableModules)[0]>()
@@ -53,8 +83,8 @@ export const ModulesSelection: React.FC<Props> = ({
     availableModules.filter(moduleSetting => !moduleSetting.mandatory)
       .length === 0
 
-  const estimatedCourseDuration = useMemo(() => {
-    const selectedGroups = selectedIds
+  const estimatedDuration = useMemo(() => {
+    const selectedGroups = Array.from(selectedIds)
       .map(id =>
         availableModules.find(moduleSetting => moduleSetting.module.id === id)
       )
@@ -66,9 +96,48 @@ export const ModulesSelection: React.FC<Props> = ({
     )
   }, [selectedIds, availableModules])
 
-  console.log(estimatedCourseDuration)
+  const progressPercentage = getPercentage(estimatedDuration, maxDuration)
 
-  const progressPercentage = getPercentage(estimatedCourseDuration, maxDuration)
+  const handleModuleToggle = (moduleId: string) => {
+    const selection = new Set(selectedIds)
+
+    if (selection.has(moduleId)) {
+      selection.delete(moduleId)
+    } else {
+      selection.add(moduleId)
+    }
+
+    setSelectedIds(selection)
+  }
+
+  useEffect(() => {
+    onChange({
+      selectedIds: Array.from(selectedIds),
+      previousIds: previousIds ? Array.from(previousIds) : undefined,
+      estimatedDuration,
+    })
+  }, [selectedIds, estimatedDuration, onChange, previousIds])
+
+  const sortedSelection = useMemo(() => {
+    const selection = Array.from(selectedIds)
+
+    selection.sort((a, b) => {
+      const aSort = availableModulesMap.get(a)?.sort ?? 100
+      const bSort = availableModulesMap.get(b)?.sort ?? 100
+
+      return aSort > bSort ? 1 : -1
+    })
+
+    return selection
+  }, [selectedIds, availableModulesMap])
+
+  const submitModules = () => {
+    onSubmit({ selectedIds: Array.from(selectedIds), estimatedDuration })
+  }
+
+  const clearSelection = () => {
+    setSelectedIds(initialSelectionRef.current)
+  }
 
   return (
     <PanesContainer>
@@ -78,13 +147,14 @@ export const ModulesSelection: React.FC<Props> = ({
         </Typography>
 
         {availableModules.map(moduleSetting => {
-          const moduleSelected = selectedIds.includes(moduleSetting.module.id)
+          const moduleSelected = selectedIds.has(moduleSetting.module.id)
 
           return (
             <ModuleAccordion
               key={moduleSetting.module.id}
               moduleSetting={moduleSetting}
-              isSelected={selectedIds.includes(moduleSetting.module.id)}
+              isSelected={moduleSelected}
+              data-testid={`available-module-group-${moduleSetting.module.id}`}
               renderName={moduleSetting => (
                 <FormGroup>
                   <FormControlLabel
@@ -100,7 +170,9 @@ export const ModulesSelection: React.FC<Props> = ({
                           color: 'white',
                         }}
                         checked={moduleSelected}
-                        onChange={console.log}
+                        onChange={() => {
+                          handleModuleToggle(moduleSetting.module.id)
+                        }}
                         value={moduleSetting.module.id}
                       />
                     }
@@ -155,7 +227,7 @@ export const ModulesSelection: React.FC<Props> = ({
 
           <Box>
             <Typography variant="h6" px={1} data-testid="progress-bar-label">
-              {formatDurationShort(estimatedCourseDuration)}
+              {formatDurationShort(estimatedDuration)}
             </Typography>
             <Typography variant="body2" px={1}>
               {t(
@@ -170,7 +242,7 @@ export const ModulesSelection: React.FC<Props> = ({
         )}
 
         <Box mb={6}>
-          {selectedIds.map(moduleId => {
+          {sortedSelection.map(moduleId => {
             const selectedModule = moduleId
               ? availableModulesMap.get(moduleId)
               : null
@@ -184,6 +256,7 @@ export const ModulesSelection: React.FC<Props> = ({
                 key={selectedModule.module.id}
                 moduleSetting={selectedModule}
                 isSelected
+                data-testid={`selected-module-group-${selectedModule.module.id}`}
                 renderName={moduleSetting => (
                   <Box display="flex" alignItems="center">
                     <CheckedAllIcon color="inherit" />
@@ -214,6 +287,34 @@ export const ModulesSelection: React.FC<Props> = ({
               />
             )
           })}
+        </Box>
+
+        <Box>
+          <LoadingButton
+            variant="contained"
+            fullWidth
+            size="large"
+            sx={{ mb: 2, fontWeight: 600, fontSize: '16px' }}
+            loading={submitting}
+            disabled={
+              !selectedIds.size || !validateSelection(Array.from(selectedIds))
+            }
+            onClick={submitModules}
+            data-testid="submit-button"
+          >
+            {t('submit')}
+          </LoadingButton>
+          <Button
+            variant="outlined"
+            fullWidth
+            size="medium"
+            disabled={!selectedIds.size}
+            onClick={clearSelection}
+            sx={{ fontWeight: 600, fontSize: '16px' }}
+            data-testid="clear-button"
+          >
+            {t('clear')}
+          </Button>
         </Box>
       </RightPane>
     </PanesContainer>

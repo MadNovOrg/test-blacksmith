@@ -54609,15 +54609,6 @@ export type SetCourseAsDraftMutationVariables = Exact<{
 
 export type SetCourseAsDraftMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number } | null };
 
-export type CourseToBuildQueryVariables = Exact<{
-  id: Scalars['Int'];
-  withModules?: InputMaybe<Scalars['Boolean']>;
-  withStrategies?: InputMaybe<Scalars['Boolean']>;
-}>;
-
-
-export type CourseToBuildQuery = { __typename?: 'query_root', course?: { __typename?: 'course', curriculum?: any | null, id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, conversion?: boolean | null, name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null, submodules: Array<{ __typename?: 'submodule', id: any, name: string }> } }>, bildModules?: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies?: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
-
 export type ModuleSettingsQueryVariables = Exact<{
   courseType: Course_Type_Enum;
   courseLevel: Course_Level_Enum;
@@ -54627,7 +54618,33 @@ export type ModuleSettingsQueryVariables = Exact<{
 }>;
 
 
-export type ModuleSettingsQuery = { __typename?: 'query_root', moduleSettings: Array<{ __typename?: 'module_setting', id: any, color: Color_Enum, mandatory: boolean, duration?: number | null, module: { __typename?: 'module_v2', id: any, name: string, displayName?: string | null, lessons: any } }> };
+export type ModuleSettingsQuery = { __typename?: 'query_root', moduleSettings: Array<{ __typename?: 'module_setting', id: any, color: Color_Enum, mandatory: boolean, duration?: number | null, sort: number, module: { __typename?: 'module_v2', id: any, name: string, displayName?: string | null, lessons: any } }> };
+
+export type SaveIcmCourseDraftMutationVariables = Exact<{
+  id: Scalars['Int'];
+  curriculum?: InputMaybe<Scalars['jsonb']>;
+}>;
+
+
+export type SaveIcmCourseDraftMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number } | null };
+
+export type SubmitIcmModulesMutationVariables = Exact<{
+  id: Scalars['Int'];
+  curriculum: Scalars['jsonb'];
+  duration: Scalars['Int'];
+}>;
+
+
+export type SubmitIcmModulesMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number } | null };
+
+export type CourseToBuildQueryVariables = Exact<{
+  id: Scalars['Int'];
+  withModules?: InputMaybe<Scalars['Boolean']>;
+  withStrategies?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+
+export type CourseToBuildQuery = { __typename?: 'query_root', course?: { __typename?: 'course', curriculum?: any | null, id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, conversion?: boolean | null, name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null, submodules: Array<{ __typename?: 'submodule', id: any, name: string }> } }>, bildModules?: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies?: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
 
 export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 

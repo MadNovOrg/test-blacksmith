@@ -28,10 +28,11 @@ import {
   within,
 } from '@test/index'
 
+import { COURSE_TO_BUILD_QUERY } from '../../hooks/useCourseToBuild'
 import { buildCourse, buildModuleGroup } from '../../test-utils'
 
 import { ICMCourseBuilder } from './ICMCourseBuilder'
-import { COURSE_QUERY, SET_COURSE_AS_DRAFT } from './queries'
+import { SET_COURSE_AS_DRAFT } from './queries'
 
 describe('component: CourseBuilder', () => {
   describe('info alert for level 1 course', () => {
@@ -48,7 +49,7 @@ describe('component: CourseBuilder', () => {
 
       const client = {
         executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-          if (query === COURSE_QUERY) {
+          if (query === COURSE_TO_BUILD_QUERY) {
             return fromValue<{ data: CourseToBuildQuery }>({
               data: {
                 course,
@@ -87,7 +88,7 @@ describe('component: CourseBuilder', () => {
 
       const client = {
         executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-          if (query === COURSE_QUERY) {
+          if (query === COURSE_TO_BUILD_QUERY) {
             return fromValue<{ data: CourseToBuildQuery }>({
               data: {
                 course,
@@ -139,7 +140,7 @@ describe('component: CourseBuilder', () => {
   it("displays not found page if a course doesn't exist", () => {
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === COURSE_QUERY) {
+        if (query === COURSE_TO_BUILD_QUERY) {
           return fromValue<{ data: CourseToBuildQuery }>({
             data: {
               course: null,
@@ -167,7 +168,7 @@ describe('component: CourseBuilder', () => {
   it('displays an alert if there is an error fetching course or module groups', () => {
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === COURSE_QUERY) {
+        if (query === COURSE_TO_BUILD_QUERY) {
           return fromValue({
             error: new CombinedError({
               networkError: Error('something went wrong!'),
@@ -212,7 +213,7 @@ describe('component: CourseBuilder', () => {
         query: TypedDocumentNode
         variables: CourseToBuildQueryVariables
       }) => {
-        if (query === COURSE_QUERY) {
+        if (query === COURSE_TO_BUILD_QUERY) {
           return fromValue<{ data: CourseToBuildQuery }>({
             data: {
               course: variables.id === course.id ? course : null,
@@ -267,7 +268,7 @@ describe('component: CourseBuilder', () => {
 
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === COURSE_QUERY) {
+        if (query === COURSE_TO_BUILD_QUERY) {
           return fromValue<{ data: CourseToBuildQuery }>({
             data: {
               course,
@@ -362,7 +363,7 @@ describe('component: CourseBuilder', () => {
 
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === COURSE_QUERY) {
+        if (query === COURSE_TO_BUILD_QUERY) {
           return fromValue<{ data: CourseToBuildQuery }>({
             data: {
               course,
@@ -455,7 +456,7 @@ describe('component: CourseBuilder', () => {
 
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === COURSE_QUERY) {
+        if (query === COURSE_TO_BUILD_QUERY) {
           return fromValue<{ data: CourseToBuildQuery }>({
             data: {
               course,
@@ -517,7 +518,7 @@ describe('component: CourseBuilder', () => {
 
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === COURSE_QUERY) {
+        if (query === COURSE_TO_BUILD_QUERY) {
           return fromValue({
             data: {
               course,
@@ -587,7 +588,7 @@ describe('component: CourseBuilder', () => {
 
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === COURSE_QUERY) {
+        if (query === COURSE_TO_BUILD_QUERY) {
           return fromValue<{ data: CourseToBuildQuery }>({
             data: {
               course,
@@ -658,7 +659,7 @@ describe('component: CourseBuilder', () => {
 
       const client = {
         executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-          if (query === COURSE_QUERY) {
+          if (query === COURSE_TO_BUILD_QUERY) {
             return fromValue<{ data: CourseToBuildQuery }>({
               data: {
                 course,

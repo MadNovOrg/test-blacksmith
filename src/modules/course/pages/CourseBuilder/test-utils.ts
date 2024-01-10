@@ -7,6 +7,7 @@ import {
   CourseToBuildQuery,
   Course_Type_Enum,
   Course_Delivery_Type_Enum,
+  ModuleSettingsQuery,
 } from '@app/generated/graphql'
 
 import { chance } from '@test/index'
@@ -80,5 +81,24 @@ export function buildCourse(
     bildModules: [],
     bildStrategies: [],
     ...overrides,
+  }
+}
+
+export function buildModuleSetting(
+  overrides?: Partial<ModuleSettingsQuery['moduleSettings'][0]>
+): ModuleSettingsQuery['moduleSettings'][0] {
+  return {
+    id: chance.guid(),
+    mandatory: false,
+    color: Color_Enum.Navy,
+    duration: 0,
+    sort: 1,
+    ...overrides,
+    module: {
+      id: chance.guid(),
+      name: chance.word(),
+      lessons: [{ name: 'Lesson 1' }, { name: 'Lesson 2' }],
+      ...overrides?.module,
+    },
   }
 }

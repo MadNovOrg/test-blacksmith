@@ -28,32 +28,32 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
-        - go1_integration
-        - mandatory
-        - reaccreditation
-        - duration
-        - sort
         - color
         - course_delivery_type
         - course_level
         - course_type
-        - module_name
+        - duration
+        - go1_integration
         - id
+        - mandatory
+        - module_name
+        - reaccreditation
+        - sort
       filter: {}
       allow_aggregations: true
   - role: user
     permission:
       columns:
-        - go1_integration
-        - mandatory
-        - reaccreditation
-        - duration
-        - sort
         - color
         - course_delivery_type
         - course_level
         - course_type
-        - module_name
+        - duration
+        - go1_integration
         - id
+        - mandatory
+        - module_name
+        - reaccreditation
+        - sort
       filter: {}
       allow_aggregations: true
