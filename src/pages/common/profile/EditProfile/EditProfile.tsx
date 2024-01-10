@@ -21,6 +21,7 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { subYears } from 'date-fns'
 import { uniq } from 'lodash-es'
 import React, {
   ChangeEvent,
@@ -81,6 +82,7 @@ import { MUTATION as UPDATE_PROFILE_ROLES_MUTATION } from '@app/queries/profile/
 import { MUTATION as UPDATE_PROFILE_TRAINER_ROLE_TYPES } from '@app/queries/trainer/update-trainer-role-types'
 import { schemas } from '@app/schemas'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
+import { INPUT_DATE_FORMAT } from '@app/util'
 
 import {
   avatarSize,
@@ -122,6 +124,7 @@ export const EditProfilePage: React.FC<
   const jobTitles = useJobTitles()
   const orgId = searchParams.get('orgId')
   const [displayOrgSelector, setDisplayOrgSelector] = useState(false)
+  const minimalAge = subYears(new Date(), 16)
 
   const [{ fetching: updateProfileFetching }, updateProfile] = useMutation<
     UpdateProfileMutation,
@@ -233,7 +236,10 @@ export const EditProfilePage: React.FC<
           })
         ),
         phone: schemas.phone(t),
-        dob: yup.date().nullable(),
+        dob: yup
+          .date()
+          .nullable()
+          .max(subYears(new Date(), 16), t('validation-errors.date-too-early')),
         jobTitle: yup
           .string()
           .required(
@@ -872,15 +878,20 @@ export const EditProfilePage: React.FC<
                   <Grid item md={6} xs={12}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DatePicker
-                        format="dd/MM/yyyy"
+                        format={INPUT_DATE_FORMAT}
                         value={values.dob}
                         disabled={!canEditNamesAndDOB}
+                        maxDate={minimalAge}
                         onChange={(d: Date | null) => setValue('dob', d)}
                         slotProps={{
                           textField: {
+                            // @ts-expect-error no arbitrary props are allowed by types, which is wrong
+                            'data-testid': 'dob-input',
                             label: t('dob'),
                             variant: 'filled',
                             fullWidth: true,
+                            error: !!errors.dob,
+                            helperText: errors.dob?.message,
                           },
                         }}
                       />
