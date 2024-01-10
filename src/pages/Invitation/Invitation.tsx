@@ -47,6 +47,8 @@ import {
   userExistsInCognito,
 } from '@app/util'
 
+import { NotFound } from '../common/NotFound'
+
 export const InvitationPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -159,7 +161,6 @@ export const InvitationPage = () => {
       const nextUrl = exists ? '/auto-login' : '/auto-register'
       const continueUrl = `/accept-invite/${inviteId}?courseId=${courseId}`
       const qs = new URLSearchParams({ token, continue: continueUrl })
-
       return navigate(isUserLoggedIn ? continueUrl : `${nextUrl}?${qs}`, {
         replace: true,
       })
@@ -183,21 +184,22 @@ export const InvitationPage = () => {
   }
   if (inviteDataError) {
     // TODO: Need designs
-    switch (inviteDataError.message) {
-      case 'EXPIRED':
-        return (
-          <Box>
-            <Typography>Invitation expired</Typography>
-          </Box>
-        )
-
-      default:
-        return (
-          <Box>
-            <Typography>Invitation not found</Typography>
-          </Box>
-        )
+    if (inviteDataError.message.includes('EXPIRED')) {
+      return (
+        <NotFound
+          showHomeButton={false}
+          showTitle={false}
+          description={t('invitation.invitation-expired')}
+        />
+      )
     }
+    return (
+      <NotFound
+        showHomeButton={false}
+        showTitle={false}
+        description={t('invitation.invitation-not-found')}
+      />
+    )
   }
 
   return (

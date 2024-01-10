@@ -600,7 +600,9 @@
     "will-attend": "I will attend",
     "can-attend-q": "Are you able to attend?",
     "goto-tt": "Go to Team Teach Connect",
-    "response-sent": "Thank you for confirming you will not attend this course."
+    "response-sent": "Thank you for confirming you will not attend this course.",
+    "invitation-expired": "Invitation expired",
+    "invitation-not-found": "Invitation not found"
   },
   "course-evaluation": {
     "heading": "Course Evaluation",

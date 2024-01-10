@@ -8,12 +8,14 @@ type Props = {
   showTitle?: boolean
   title?: string
   description?: string
+  showHomeButton?: boolean
 }
 
 export const NotFound: React.FC<React.PropsWithChildren<Props>> = ({
   title,
   description,
   showTitle = true,
+  showHomeButton = true,
 }) => {
   const { t } = useTranslation()
 
@@ -28,16 +30,18 @@ export const NotFound: React.FC<React.PropsWithChildren<Props>> = ({
         {description ?? t('components.not-found.info')}
       </Typography>
 
-      <Button
-        component={LinkBehavior}
-        href="/"
-        variant="contained"
-        color="primary"
-        size="small"
-        sx={{ mt: 4 }}
-      >
-        {t('home')}
-      </Button>
+      {showHomeButton ? (
+        <Button
+          component={LinkBehavior}
+          href="/"
+          variant="contained"
+          color="primary"
+          size="small"
+          sx={{ mt: 4 }}
+        >
+          {t('home')}
+        </Button>
+      ) : null}
     </Stack>
   )
 }
