@@ -746,7 +746,7 @@ export function formatCurrency(
 export const GRACE_PERIOD_PER_LEVEL = {
   [Course_Level_Enum.Level_1]: 0,
   [Course_Level_Enum.Level_2]: 0,
-  [Course_Level_Enum.ThreeDaySafetyResponseTrainer]: 0,
+  [Course_Level_Enum.ThreeDaySafetyResponseTrainer]: 3,
   [Course_Level_Enum.Advanced]: 0,
   [Course_Level_Enum.BildRegular]: 0,
   [Course_Level_Enum.IntermediateTrainer]: 3,
