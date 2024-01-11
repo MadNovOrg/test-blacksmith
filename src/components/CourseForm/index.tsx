@@ -774,9 +774,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       !courseInput?.priceCurrency
     )
       setValue('priceCurrency', defaultCurrency)
-    else {
-      resetField('priceCurrency')
-    }
   }, [
     courseInput?.priceCurrency,
     isOpenICMInternationalFinanceEnabled,
