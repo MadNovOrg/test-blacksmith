@@ -100,6 +100,7 @@ import {
   trainerRolesNames,
   UserRoleName,
   userRolesNames,
+  userSubRoles,
 } from '../'
 import { CertificationsAlerts } from '../components/CertificationsAlerts'
 import {
@@ -383,6 +384,7 @@ export const EditProfilePage: React.FC<
         )
 
         const formattedRoles = [] as RolesFields
+
         profile.roles.map(obj => {
           const existingEmployeeRole = formattedRoles.find(
             obj => obj.userRole === employeeRole.name
@@ -430,6 +432,27 @@ export const EditProfilePage: React.FC<
             })
           }
         })
+
+        /**
+         * TODO Add default Individual role on edit
+         * @description Add default Individual role for the user who has only
+         * booking or organisation key contact roles stored explicit in the db.
+         * @see https://behaviourhub.atlassian.net/jira/software/projects/TTHP/issues/TTHP-3387
+         */
+        if (
+          !formattedRoles.length &&
+          profile.roles.some(r =>
+            userSubRoles.includes(r.role.name as RoleName)
+          )
+        ) {
+          formattedRoles.push({
+            userRole: RoleName.USER,
+            employeeRoles: [],
+            salesRoles: [],
+            trainerRoles: defaultTrainerRoles,
+          })
+        }
+
         setValue('roles', formattedRoles)
       } else {
         setValue('roles', [

@@ -80,3 +80,8 @@ export const trainerRolesNames: TrainerRoleTypeName[] = [
 export const BILDRolesNames: TrainerRoleTypeName[] = [
   TrainerRoleTypeName.BILD_SENIOR,
 ]
+
+export const userSubRoles: RoleName[] = [
+  RoleName.BOOKING_CONTACT,
+  RoleName.ORGANIZATION_KEY_CONTACT,
+]
