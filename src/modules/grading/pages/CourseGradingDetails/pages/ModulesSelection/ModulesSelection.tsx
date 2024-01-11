@@ -14,6 +14,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseModules from '@app/hooks/useCourseModules'
+import {
+  HoldsRecord,
+  ModulesSelectionList,
+} from '@app/modules/grading/components/ModulesSelectionList'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import {
   MUTATION,
@@ -22,8 +26,7 @@ import {
 } from '@app/queries/courses/save-course-modules-selection'
 import { LoadingStatus } from '@app/util'
 
-import { useGradingDetails } from '../GradingDetailsProvider'
-import { HoldsRecord, ModulesSelectionList } from '../ModulesSelectionList'
+import { useGradingDetails } from '../../components/GradingDetailsProvider'
 
 const StyledText = styled(Typography)(({ theme }) => ({
   display: 'inline',

@@ -9,8 +9,7 @@ import React, {
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { Accreditors_Enum } from '@app/generated/graphql'
-
-import { CourseDetailsTabs } from '../../CourseDetails'
+import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 
 type Step = 'grading-clearance' | 'modules'
 
@@ -95,7 +94,7 @@ export const GradingDetailsProvider: React.FC<PropsWithChildren<Props>> = ({
       },
       backToStep: step => {
         if (step === 'grading-clearance') {
-          navigate('../grading-details', { replace: true })
+          navigate('..', { replace: true, relative: 'path' })
         }
       },
     }),

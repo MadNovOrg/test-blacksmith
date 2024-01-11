@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { CourseBuilder } from '@app/modules/course/pages/CourseBuilder/CourseBuilder'
+import { GradingRoutes } from '@app/modules/grading/routes'
 import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import Organizations from '@app/pages/admin/components/Organizations'
@@ -18,11 +19,6 @@ import { ReviewLicenseOrder } from '@app/pages/CreateCourse/components/ReviewLic
 import { EditCourse } from '@app/pages/EditCourse'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
-import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
-import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
-import { CourseGradingDetails } from '@app/pages/trainer-pages/CourseGradingDetails'
-import { CourseAttendance } from '@app/pages/trainer-pages/CourseGradingDetails/CourseAttendance'
-import { ModulesSelection } from '@app/pages/trainer-pages/CourseGradingDetails/ModulesSelection'
 import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { DraftCourses } from '@app/pages/trainer-pages/MyCourses/DraftCourses'
@@ -66,22 +62,12 @@ const TrainerBaseRoutes = () => {
           <Route index element={<Navigate replace to="details" />} />
           <Route path="modules" element={<CourseBuilder />} />
           <Route path="details" element={<TrainerCourseDetails />} />
-          <Route path="grading" element={<CourseGrading />} />
-
-          <Route
-            path="grading/:participantId"
-            element={<ParticipantGrading />}
-          />
+          <Route path="grading/*" element={<GradingRoutes />} />
 
           <Route path="evaluation">
             <Route path="submit" element={<TrainerFeedback />} />
             <Route path="view" element={<CourseEvaluation />} />
             <Route path="summary" element={<EvaluationSummary />} />
-          </Route>
-
-          <Route path="grading-details" element={<CourseGradingDetails />}>
-            <Route element={<CourseAttendance />} index />
-            <Route path="modules" element={<ModulesSelection />} />
           </Route>
         </Route>
       </Route>

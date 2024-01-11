@@ -12,16 +12,16 @@ import {
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import { MUTATION } from '@app/queries/courses/save-course-attendance'
 import { LoadingStatus } from '@app/util'
 
 import { render, renderHook, screen, waitForText, within } from '@test/index'
 import { buildParticipant } from '@test/mock-data-utils'
 
-import { CourseDetailsTabs } from '../../CourseDetails'
-import { GradingDetailsProvider } from '../GradingDetailsProvider'
+import { GradingDetailsProvider } from '../../components/GradingDetailsProvider'
 
-import { CourseAttendance } from './index'
+import { CourseAttendance } from './CourseAttendance'
 
 vi.mock('@app/hooks/useCourseParticipants')
 vi.mock('@app/hooks/use-fetcher', () => ({

@@ -19,8 +19,8 @@ import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import { LoadingStatus } from '@app/util'
 
-import { CourseGradingSteps } from './CourseGradingSteps'
-import { GradingDetailsProvider } from './GradingDetailsProvider'
+import { CourseGradingSteps } from './components/CourseGradingSteps'
+import { GradingDetailsProvider } from './components/GradingDetailsProvider'
 
 export const CourseGradingDetails = () => {
   const { id: courseId } = useParams()

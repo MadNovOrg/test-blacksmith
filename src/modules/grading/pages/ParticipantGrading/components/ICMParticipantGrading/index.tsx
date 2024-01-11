@@ -15,10 +15,9 @@ import {
   CourseParticipantQuery,
   Course_Participant_Module,
 } from '@app/generated/graphql'
+import { ModuleGroupNote } from '@app/modules/grading/components/ModuleGroupNote/ModuleGroupNote'
 import theme from '@app/theme'
 import { transformModulesToGroups } from '@app/util'
-
-import { ModuleGroupNote } from '../../../ModuleGroupNote/ModuleGroupNote'
 
 type Props = {
   participant: NonNullable<CourseParticipantQuery['participant']>

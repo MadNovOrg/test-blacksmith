@@ -185,7 +185,7 @@ export const CourseGrading: React.FC<
                   <Button
                     disabled={!canEditGradingDetails}
                     onClick={() => {
-                      navigate(`/courses/${course.id}/grading-details`)
+                      navigate(`/courses/${course.id}/grading/details`)
                     }}
                     fullWidth={isMobile}
                     startIcon={<Edit fontSize="small" />}
@@ -389,7 +389,7 @@ export const CourseGrading: React.FC<
                   color="primary"
                   size="medium"
                   sx={{ py: 1 }}
-                  href={`/courses/${course.id}/grading-details`}
+                  href={`/courses/${course.id}/grading/details`}
                   LinkComponent={LinkBehavior}
                 >
                   <Typography variant="body1" fontWeight={600}>

@@ -7,12 +7,19 @@ import useCourseModules from '@app/hooks/useCourseModules'
 import { MUTATION } from '@app/queries/courses/save-course-modules-selection'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen, within, userEvent, waitForText } from '@test/index'
+import {
+  render,
+  screen,
+  within,
+  userEvent,
+  waitForText,
+  waitFor,
+} from '@test/index'
 import { buildCourseModule } from '@test/mock-data-utils'
 
-import { GradingDetailsProvider } from '../GradingDetailsProvider'
+import { GradingDetailsProvider } from '../../components/GradingDetailsProvider'
 
-import { ModulesSelection } from './index'
+import { ModulesSelection } from './ModulesSelection'
 
 vi.mock('@app/hooks/useCourseModules')
 vi.mock('@app/hooks/use-fetcher')
@@ -260,7 +267,6 @@ describe('page: ModulesSelection', () => {
     await waitForText('Manage page')
   })
 
-  // eslint-disable-next-line vitest/expect-expect
   it('navigates back to the module grading clearance page when clicked on the button', async () => {
     useCourseModulesMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
@@ -270,18 +276,20 @@ describe('page: ModulesSelection', () => {
     render(
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>
-          <Route path="grading-details">
+          <Route path="/details">
             <Route index element={<h1>Grading clearance page</h1>} />
             <Route path="modules" element={<ModulesSelection />} />
           </Route>
         </Routes>
       </GradingDetailsProvider>,
       {},
-      { initialEntries: [`/grading-details/modules`] }
+      { initialEntries: ['/details', '/details/modules'] }
     )
 
     await userEvent.click(screen.getByText('Back to grading clearance'))
 
-    await waitForText('Grading clearance page')
+    await waitFor(() => {
+      expect(screen.getByText(/grading clearance page/i)).toBeInTheDocument()
+    })
   })
 })

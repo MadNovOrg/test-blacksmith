@@ -9,7 +9,7 @@ import { LoadingStatus } from '@app/util'
 import { render, screen, within } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
-import { CourseGradingDetails } from '.'
+import { CourseGradingDetails } from './CourseGradingDetails'
 
 vi.mock('@app/hooks/useCourse')
 

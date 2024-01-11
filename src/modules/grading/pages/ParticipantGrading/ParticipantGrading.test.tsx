@@ -13,7 +13,7 @@ import {
   buildParticipantModule,
 } from '@test/mock-data-utils'
 
-import { ParticipantGrading } from '.'
+import { ParticipantGrading } from './ParticipantGrading'
 
 const MockCourseDetails = () => {
   const [searchParams] = useSearchParams()

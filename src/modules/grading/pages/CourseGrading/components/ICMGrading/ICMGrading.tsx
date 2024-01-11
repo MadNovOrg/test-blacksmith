@@ -25,12 +25,12 @@ import {
   SaveCourseGradingMutation,
   SaveCourseGradingMutationVariables,
 } from '@app/generated/graphql'
-import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
-
 import {
   HoldsRecord,
   ModulesSelectionList,
-} from '../../../CourseGradingDetails/ModulesSelectionList'
+} from '@app/modules/grading/components/ModulesSelectionList'
+import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
+
 import { useGradingParticipants } from '../../hooks'
 import { SAVE_COURSE_GRADING_MUTATION } from '../../queries/save-course-grading'
 import useCourseGradingData from '../../useCourseGradingData'

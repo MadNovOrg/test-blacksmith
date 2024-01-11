@@ -95,7 +95,7 @@ describe('component: CourseGrading', () => {
           element={<CourseGrading course={course} refreshCourse={noop} />}
         />
         <Route
-          path="/courses/:id/grading-details"
+          path="/courses/:id/grading/details"
           element={<h1>Grading clearance</h1>}
         />
       </Routes>,

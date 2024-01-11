@@ -19,7 +19,7 @@ export class CourseGradingDetailsPage extends BasePage {
   }
 
   async goto(courseId: string) {
-    await super.goto(`courses/${courseId}/grading-details`)
+    await super.goto(`courses/${courseId}/grading/details`)
   }
 
   async clickParticipantByName(name: string) {

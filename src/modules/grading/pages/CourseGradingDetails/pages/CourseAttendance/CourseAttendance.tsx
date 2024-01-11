@@ -26,9 +26,9 @@ import { MUTATION } from '@app/queries/courses/save-course-attendance'
 import { CourseParticipant } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { CourseAttendanceList } from '../CourseAttendanceList'
-import { useGradingDetails } from '../GradingDetailsProvider'
-import { useSaveGradingDetails } from '../hooks/useSaveGradingDetails'
+import { CourseAttendanceList } from '../../components/CourseAttendanceList'
+import { useGradingDetails } from '../../components/GradingDetailsProvider'
+import { useSaveGradingDetails } from '../../hooks/useSaveGradingDetails'
 
 const StyledList = styled('ol')(({ theme }) => ({
   paddingLeft: theme.spacing(3),
