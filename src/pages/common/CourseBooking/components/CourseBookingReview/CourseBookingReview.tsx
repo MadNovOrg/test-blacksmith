@@ -106,10 +106,15 @@ export const CourseBookingReview: React.FC<
         }
       }
 
+      if ((err as Error)?.message.includes('Xero error')) {
+        setError({ key: 'pages.book-course.xero-error-creating-order' })
+      } else {
+        setError(
+          errorMessage || { key: 'pages.book-course.error-creating-order' }
+        )
+      }
+
       setCreatingOrder(false)
-      setError(
-        errorMessage || { key: 'pages.book-course.error-creating-order' }
-      )
     }
   }
 

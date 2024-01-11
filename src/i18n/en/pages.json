@@ -125,6 +125,7 @@
     "user-already-registered": "Unable to proceed with a booking for <0>{{emails}}</0> on this course <0>{{courseCode}}</0>, please contact Team Teach for assistance.",
     "due-immediately": "Due immediately",
     "error-creating-order": "There was an error placing the order.",
+    "xero-error-creating-order": "There was an order payment/invoicing error when placing the booking.",
     "venue": "Venue",
     "attendee-with-valid-certificate": {
       "message": "I confirm the $t(pages.book-course.attendee-with-valid-certificate.attendees,{\"count\": {{attendees}} }) a valid Team Teach {{- levels}} ",
