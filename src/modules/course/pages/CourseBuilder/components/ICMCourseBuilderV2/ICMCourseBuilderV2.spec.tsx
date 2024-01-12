@@ -474,3 +474,69 @@ it('submits the modules and redirects to the course details page', async () => {
     expect(screen.getByText(/course details/i)).toBeInTheDocument()
   })
 })
+
+it('handles the selection of module groups that require others', async () => {
+  const dependableModuleSetting = buildModuleSetting()
+
+  const moduleSettingOne = buildModuleSetting({
+    dependencies: [{ dependency: dependableModuleSetting }],
+  })
+
+  const course = buildCourse({ level: Course_Level_Enum.Level_1 })
+
+  const client = {
+    executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+      if (query === COURSE_TO_BUILD_QUERY) {
+        return fromValue({
+          data: {
+            course,
+          },
+        })
+      }
+
+      return fromValue<{ data: ModuleSettingsQuery }>({
+        data: {
+          moduleSettings: [moduleSettingOne, dependableModuleSetting],
+        },
+      })
+    },
+    executeMutation: () => {
+      return never
+    },
+  } as unknown as Client
+
+  render(
+    <Provider value={client}>
+      <ICMCourseBuilderV2 />
+    </Provider>,
+    {},
+    { initialEntries: [`/courses/${course.id}/modules`] }
+  )
+
+  const moduleLabel = screen.getByLabelText(moduleSettingOne.module.name, {
+    exact: false,
+  })
+
+  const dependableModuleLabel = screen.getByLabelText(
+    dependableModuleSetting.module.name,
+    { exact: true }
+  )
+
+  const selectedModules = screen.getByTestId('selected-modules')
+
+  await user.click(moduleLabel)
+
+  expect(dependableModuleLabel).toBeChecked()
+  expect(dependableModuleLabel).toBeDisabled()
+
+  expect(
+    within(selectedModules).getByTestId(
+      `selected-module-group-${dependableModuleSetting.module.id}`
+    )
+  ).toBeInTheDocument()
+
+  await user.click(moduleLabel)
+
+  expect(dependableModuleLabel).toBeEnabled()
+  expect(dependableModuleLabel).toBeChecked()
+})

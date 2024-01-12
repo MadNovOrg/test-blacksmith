@@ -93,6 +93,7 @@ export function buildModuleSetting(
     color: Color_Enum.Navy,
     duration: 0,
     sort: 1,
+    dependencies: [],
     ...overrides,
     module: {
       id: chance.guid(),

@@ -24,6 +24,14 @@ object_relationships:
   - name: module
     using:
       foreign_key_constraint_on: module_name
+array_relationships:
+  - name: dependencies
+    using:
+      foreign_key_constraint_on:
+        column: module_setting_id
+        table:
+          name: module_setting_dependency
+          schema: public
 select_permissions:
   - role: anonymous
     permission:

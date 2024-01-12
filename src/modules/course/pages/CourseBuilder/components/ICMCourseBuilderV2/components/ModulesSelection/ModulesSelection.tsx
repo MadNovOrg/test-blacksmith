@@ -68,6 +68,7 @@ export const ModulesSelection: React.FC<Props> = ({
 
   const initialSelectionRef = useRef(selectedIds)
   const previousIds = usePrevious(selectedIds)
+  const dependableModuleIds = useRef<Set<string>>(new Set())
 
   const availableModulesMap = useMemo(() => {
     const modules = new Map<string, (typeof availableModules)[0]>()
@@ -100,11 +101,21 @@ export const ModulesSelection: React.FC<Props> = ({
 
   const handleModuleToggle = (moduleId: string) => {
     const selection = new Set(selectedIds)
+    const moduleDependencies = availableModulesMap.get(moduleId)?.dependencies
 
     if (selection.has(moduleId)) {
       selection.delete(moduleId)
+
+      moduleDependencies?.forEach(d => {
+        dependableModuleIds.current.delete(d.dependency.module.id)
+      })
     } else {
       selection.add(moduleId)
+
+      moduleDependencies?.forEach(d => {
+        dependableModuleIds.current.add(d.dependency.module.id)
+        selection.add(d.dependency.module.id)
+      })
     }
 
     setSelectedIds(selection)
@@ -158,7 +169,10 @@ export const ModulesSelection: React.FC<Props> = ({
               renderName={moduleSetting => (
                 <FormGroup>
                   <FormControlLabel
-                    disabled={moduleSetting.mandatory}
+                    disabled={
+                      moduleSetting.mandatory ||
+                      dependableModuleIds.current.has(moduleSetting.module.id)
+                    }
                     control={
                       <Checkbox
                         id={moduleSetting.module.id}

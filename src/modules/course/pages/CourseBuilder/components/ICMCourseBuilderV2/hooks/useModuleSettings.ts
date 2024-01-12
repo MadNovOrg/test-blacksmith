@@ -29,6 +29,14 @@ export const MODULE_SETTINGS_QUERY = gql`
       mandatory
       duration
       sort
+      dependencies {
+        dependency {
+          id
+          module {
+            id
+          }
+        }
+      }
       module {
         id
         name

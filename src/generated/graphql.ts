@@ -31339,6 +31339,10 @@ export type Module_Setting = {
   courseDeliveryType: Course_Delivery_Type_Enum;
   courseLevel: Course_Level_Enum;
   courseType: Course_Type_Enum;
+  /** An array relationship */
+  dependencies: Array<Module_Setting_Dependency>;
+  /** An aggregate relationship */
+  dependencies_aggregate: Module_Setting_Dependency_Aggregate;
   duration?: Maybe<Scalars['Int']>;
   go1Integration: Scalars['Boolean'];
   id: Scalars['uuid'];
@@ -31348,6 +31352,26 @@ export type Module_Setting = {
   moduleName: Scalars['String'];
   reaccreditation: Scalars['Boolean'];
   sort: Scalars['Int'];
+};
+
+
+/** Settings for a module */
+export type Module_SettingDependenciesArgs = {
+  distinct_on?: InputMaybe<Array<Module_Setting_Dependency_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Module_Setting_Dependency_Order_By>>;
+  where?: InputMaybe<Module_Setting_Dependency_Bool_Exp>;
+};
+
+
+/** Settings for a module */
+export type Module_SettingDependencies_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Module_Setting_Dependency_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Module_Setting_Dependency_Order_By>>;
+  where?: InputMaybe<Module_Setting_Dependency_Bool_Exp>;
 };
 
 /** aggregated selection of "module_setting" */
@@ -31451,6 +31475,8 @@ export type Module_Setting_Bool_Exp = {
   courseDeliveryType?: InputMaybe<Course_Delivery_Type_Enum_Comparison_Exp>;
   courseLevel?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
   courseType?: InputMaybe<Course_Type_Enum_Comparison_Exp>;
+  dependencies?: InputMaybe<Module_Setting_Dependency_Bool_Exp>;
+  dependencies_aggregate?: InputMaybe<Module_Setting_Dependency_Aggregate_Bool_Exp>;
   duration?: InputMaybe<Int_Comparison_Exp>;
   go1Integration?: InputMaybe<Boolean_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -31469,6 +31495,198 @@ export enum Module_Setting_Constraint {
   ModuleSettingPkey = 'module_setting_pkey'
 }
 
+/** Dependencies between module settings */
+export type Module_Setting_Dependency = {
+  __typename?: 'module_setting_dependency';
+  /** An object relationship */
+  dependency: Module_Setting;
+  id: Scalars['uuid'];
+  moduleSettingDependencyId: Scalars['uuid'];
+  moduleSettingId: Scalars['uuid'];
+};
+
+/** aggregated selection of "module_setting_dependency" */
+export type Module_Setting_Dependency_Aggregate = {
+  __typename?: 'module_setting_dependency_aggregate';
+  aggregate?: Maybe<Module_Setting_Dependency_Aggregate_Fields>;
+  nodes: Array<Module_Setting_Dependency>;
+};
+
+export type Module_Setting_Dependency_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Module_Setting_Dependency_Aggregate_Bool_Exp_Count>;
+};
+
+export type Module_Setting_Dependency_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Module_Setting_Dependency_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Module_Setting_Dependency_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "module_setting_dependency" */
+export type Module_Setting_Dependency_Aggregate_Fields = {
+  __typename?: 'module_setting_dependency_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Module_Setting_Dependency_Max_Fields>;
+  min?: Maybe<Module_Setting_Dependency_Min_Fields>;
+};
+
+
+/** aggregate fields of "module_setting_dependency" */
+export type Module_Setting_Dependency_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Module_Setting_Dependency_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "module_setting_dependency" */
+export type Module_Setting_Dependency_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Module_Setting_Dependency_Max_Order_By>;
+  min?: InputMaybe<Module_Setting_Dependency_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "module_setting_dependency" */
+export type Module_Setting_Dependency_Arr_Rel_Insert_Input = {
+  data: Array<Module_Setting_Dependency_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Module_Setting_Dependency_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "module_setting_dependency". All fields are combined with a logical 'AND'. */
+export type Module_Setting_Dependency_Bool_Exp = {
+  _and?: InputMaybe<Array<Module_Setting_Dependency_Bool_Exp>>;
+  _not?: InputMaybe<Module_Setting_Dependency_Bool_Exp>;
+  _or?: InputMaybe<Array<Module_Setting_Dependency_Bool_Exp>>;
+  dependency?: InputMaybe<Module_Setting_Bool_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  moduleSettingDependencyId?: InputMaybe<Uuid_Comparison_Exp>;
+  moduleSettingId?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "module_setting_dependency" */
+export enum Module_Setting_Dependency_Constraint {
+  /** unique or primary key constraint on columns "module_setting_dependency_id", "module_setting_id" */
+  ModuleSettingDependencyModuleSettingIdModuleSettingDepe = 'module_setting_dependency_module_setting_id_module_setting_depe',
+  /** unique or primary key constraint on columns "id" */
+  ModuleSettingDependencyPkey = 'module_setting_dependency_pkey'
+}
+
+/** input type for inserting data into table "module_setting_dependency" */
+export type Module_Setting_Dependency_Insert_Input = {
+  dependency?: InputMaybe<Module_Setting_Obj_Rel_Insert_Input>;
+  id?: InputMaybe<Scalars['uuid']>;
+  moduleSettingDependencyId?: InputMaybe<Scalars['uuid']>;
+  moduleSettingId?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Module_Setting_Dependency_Max_Fields = {
+  __typename?: 'module_setting_dependency_max_fields';
+  id?: Maybe<Scalars['uuid']>;
+  moduleSettingDependencyId?: Maybe<Scalars['uuid']>;
+  moduleSettingId?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "module_setting_dependency" */
+export type Module_Setting_Dependency_Max_Order_By = {
+  id?: InputMaybe<Order_By>;
+  moduleSettingDependencyId?: InputMaybe<Order_By>;
+  moduleSettingId?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Module_Setting_Dependency_Min_Fields = {
+  __typename?: 'module_setting_dependency_min_fields';
+  id?: Maybe<Scalars['uuid']>;
+  moduleSettingDependencyId?: Maybe<Scalars['uuid']>;
+  moduleSettingId?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "module_setting_dependency" */
+export type Module_Setting_Dependency_Min_Order_By = {
+  id?: InputMaybe<Order_By>;
+  moduleSettingDependencyId?: InputMaybe<Order_By>;
+  moduleSettingId?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "module_setting_dependency" */
+export type Module_Setting_Dependency_Mutation_Response = {
+  __typename?: 'module_setting_dependency_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Module_Setting_Dependency>;
+};
+
+/** on_conflict condition type for table "module_setting_dependency" */
+export type Module_Setting_Dependency_On_Conflict = {
+  constraint: Module_Setting_Dependency_Constraint;
+  update_columns?: Array<Module_Setting_Dependency_Update_Column>;
+  where?: InputMaybe<Module_Setting_Dependency_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "module_setting_dependency". */
+export type Module_Setting_Dependency_Order_By = {
+  dependency?: InputMaybe<Module_Setting_Order_By>;
+  id?: InputMaybe<Order_By>;
+  moduleSettingDependencyId?: InputMaybe<Order_By>;
+  moduleSettingId?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: module_setting_dependency */
+export type Module_Setting_Dependency_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "module_setting_dependency" */
+export enum Module_Setting_Dependency_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ModuleSettingDependencyId = 'moduleSettingDependencyId',
+  /** column name */
+  ModuleSettingId = 'moduleSettingId'
+}
+
+/** input type for updating data in table "module_setting_dependency" */
+export type Module_Setting_Dependency_Set_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  moduleSettingDependencyId?: InputMaybe<Scalars['uuid']>;
+  moduleSettingId?: InputMaybe<Scalars['uuid']>;
+};
+
+/** Streaming cursor of the table "module_setting_dependency" */
+export type Module_Setting_Dependency_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Module_Setting_Dependency_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Module_Setting_Dependency_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  moduleSettingDependencyId?: InputMaybe<Scalars['uuid']>;
+  moduleSettingId?: InputMaybe<Scalars['uuid']>;
+};
+
+/** update columns of table "module_setting_dependency" */
+export enum Module_Setting_Dependency_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ModuleSettingDependencyId = 'moduleSettingDependencyId',
+  /** column name */
+  ModuleSettingId = 'moduleSettingId'
+}
+
+export type Module_Setting_Dependency_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Module_Setting_Dependency_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Module_Setting_Dependency_Bool_Exp;
+};
+
 /** input type for incrementing numeric columns in table "module_setting" */
 export type Module_Setting_Inc_Input = {
   duration?: InputMaybe<Scalars['Int']>;
@@ -31481,6 +31699,7 @@ export type Module_Setting_Insert_Input = {
   courseDeliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   courseLevel?: InputMaybe<Course_Level_Enum>;
   courseType?: InputMaybe<Course_Type_Enum>;
+  dependencies?: InputMaybe<Module_Setting_Dependency_Arr_Rel_Insert_Input>;
   duration?: InputMaybe<Scalars['Int']>;
   go1Integration?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -31534,6 +31753,13 @@ export type Module_Setting_Mutation_Response = {
   returning: Array<Module_Setting>;
 };
 
+/** input type for inserting object relation for remote table "module_setting" */
+export type Module_Setting_Obj_Rel_Insert_Input = {
+  data: Module_Setting_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Module_Setting_On_Conflict>;
+};
+
 /** on_conflict condition type for table "module_setting" */
 export type Module_Setting_On_Conflict = {
   constraint: Module_Setting_Constraint;
@@ -31547,6 +31773,7 @@ export type Module_Setting_Order_By = {
   courseDeliveryType?: InputMaybe<Order_By>;
   courseLevel?: InputMaybe<Order_By>;
   courseType?: InputMaybe<Order_By>;
+  dependencies_aggregate?: InputMaybe<Module_Setting_Dependency_Aggregate_Order_By>;
   duration?: InputMaybe<Order_By>;
   go1Integration?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -32388,6 +32615,10 @@ export type Mutation_Root = {
   delete_module_setting?: Maybe<Module_Setting_Mutation_Response>;
   /** delete single row from the table: "module_setting" */
   delete_module_setting_by_pk?: Maybe<Module_Setting>;
+  /** delete data from the table: "module_setting_dependency" */
+  delete_module_setting_dependency?: Maybe<Module_Setting_Dependency_Mutation_Response>;
+  /** delete single row from the table: "module_setting_dependency" */
+  delete_module_setting_dependency_by_pk?: Maybe<Module_Setting_Dependency>;
   /** delete data from the table: "module_v2" */
   delete_module_v2?: Maybe<Module_V2_Mutation_Response>;
   /** delete single row from the table: "module_v2" */
@@ -32784,6 +33015,10 @@ export type Mutation_Root = {
   insert_module_one?: Maybe<Module>;
   /** insert data into the table: "module_setting" */
   insert_module_setting?: Maybe<Module_Setting_Mutation_Response>;
+  /** insert data into the table: "module_setting_dependency" */
+  insert_module_setting_dependency?: Maybe<Module_Setting_Dependency_Mutation_Response>;
+  /** insert a single row into the table: "module_setting_dependency" */
+  insert_module_setting_dependency_one?: Maybe<Module_Setting_Dependency>;
   /** insert a single row into the table: "module_setting" */
   insert_module_setting_one?: Maybe<Module_Setting>;
   /** insert data into the table: "module_v2" */
@@ -33342,6 +33577,12 @@ export type Mutation_Root = {
   update_module_setting?: Maybe<Module_Setting_Mutation_Response>;
   /** update single row of the table: "module_setting" */
   update_module_setting_by_pk?: Maybe<Module_Setting>;
+  /** update data of the table: "module_setting_dependency" */
+  update_module_setting_dependency?: Maybe<Module_Setting_Dependency_Mutation_Response>;
+  /** update single row of the table: "module_setting_dependency" */
+  update_module_setting_dependency_by_pk?: Maybe<Module_Setting_Dependency>;
+  /** update multiples rows of table: "module_setting_dependency" */
+  update_module_setting_dependency_many?: Maybe<Array<Maybe<Module_Setting_Dependency_Mutation_Response>>>;
   /** update multiples rows of table: "module_setting" */
   update_module_setting_many?: Maybe<Array<Maybe<Module_Setting_Mutation_Response>>>;
   /** update data of the table: "module_v2" */
@@ -34464,6 +34705,18 @@ export type Mutation_RootDelete_Module_SettingArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Module_Setting_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Module_Setting_DependencyArgs = {
+  where: Module_Setting_Dependency_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Module_Setting_Dependency_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -35800,6 +36053,20 @@ export type Mutation_RootInsert_Module_OneArgs = {
 export type Mutation_RootInsert_Module_SettingArgs = {
   objects: Array<Module_Setting_Insert_Input>;
   on_conflict?: InputMaybe<Module_Setting_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Module_Setting_DependencyArgs = {
+  objects: Array<Module_Setting_Dependency_Insert_Input>;
+  on_conflict?: InputMaybe<Module_Setting_Dependency_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Module_Setting_Dependency_OneArgs = {
+  object: Module_Setting_Dependency_Insert_Input;
+  on_conflict?: InputMaybe<Module_Setting_Dependency_On_Conflict>;
 };
 
 
@@ -37870,6 +38137,26 @@ export type Mutation_RootUpdate_Module_Setting_By_PkArgs = {
   _inc?: InputMaybe<Module_Setting_Inc_Input>;
   _set?: InputMaybe<Module_Setting_Set_Input>;
   pk_columns: Module_Setting_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Module_Setting_DependencyArgs = {
+  _set?: InputMaybe<Module_Setting_Dependency_Set_Input>;
+  where: Module_Setting_Dependency_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Module_Setting_Dependency_By_PkArgs = {
+  _set?: InputMaybe<Module_Setting_Dependency_Set_Input>;
+  pk_columns: Module_Setting_Dependency_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Module_Setting_Dependency_ManyArgs = {
+  updates: Array<Module_Setting_Dependency_Updates>;
 };
 
 
@@ -45154,6 +45441,12 @@ export type Query_Root = {
   module_setting_aggregate: Module_Setting_Aggregate;
   /** fetch data from the table: "module_setting" using primary key columns */
   module_setting_by_pk?: Maybe<Module_Setting>;
+  /** fetch data from the table: "module_setting_dependency" */
+  module_setting_dependency: Array<Module_Setting_Dependency>;
+  /** fetch aggregated fields from the table: "module_setting_dependency" */
+  module_setting_dependency_aggregate: Module_Setting_Dependency_Aggregate;
+  /** fetch data from the table: "module_setting_dependency" using primary key columns */
+  module_setting_dependency_by_pk?: Maybe<Module_Setting_Dependency>;
   /** fetch data from the table: "module_v2" */
   module_v2: Array<Module_V2>;
   /** fetch aggregated fields from the table: "module_v2" */
@@ -47004,6 +47297,29 @@ export type Query_RootModule_Setting_By_PkArgs = {
 };
 
 
+export type Query_RootModule_Setting_DependencyArgs = {
+  distinct_on?: InputMaybe<Array<Module_Setting_Dependency_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Module_Setting_Dependency_Order_By>>;
+  where?: InputMaybe<Module_Setting_Dependency_Bool_Exp>;
+};
+
+
+export type Query_RootModule_Setting_Dependency_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Module_Setting_Dependency_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Module_Setting_Dependency_Order_By>>;
+  where?: InputMaybe<Module_Setting_Dependency_Bool_Exp>;
+};
+
+
+export type Query_RootModule_Setting_Dependency_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootModule_V2Args = {
   distinct_on?: InputMaybe<Array<Module_V2_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -48783,6 +49099,14 @@ export type Subscription_Root = {
   module_setting_aggregate: Module_Setting_Aggregate;
   /** fetch data from the table: "module_setting" using primary key columns */
   module_setting_by_pk?: Maybe<Module_Setting>;
+  /** fetch data from the table: "module_setting_dependency" */
+  module_setting_dependency: Array<Module_Setting_Dependency>;
+  /** fetch aggregated fields from the table: "module_setting_dependency" */
+  module_setting_dependency_aggregate: Module_Setting_Dependency_Aggregate;
+  /** fetch data from the table: "module_setting_dependency" using primary key columns */
+  module_setting_dependency_by_pk?: Maybe<Module_Setting_Dependency>;
+  /** fetch data from the table in a streaming manner: "module_setting_dependency" */
+  module_setting_dependency_stream: Array<Module_Setting_Dependency>;
   /** fetch data from the table in a streaming manner: "module_setting" */
   module_setting_stream: Array<Module_Setting>;
   /** fetch data from the table in a streaming manner: "module" */
@@ -51130,6 +51454,36 @@ export type Subscription_RootModule_Setting_AggregateArgs = {
 
 export type Subscription_RootModule_Setting_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootModule_Setting_DependencyArgs = {
+  distinct_on?: InputMaybe<Array<Module_Setting_Dependency_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Module_Setting_Dependency_Order_By>>;
+  where?: InputMaybe<Module_Setting_Dependency_Bool_Exp>;
+};
+
+
+export type Subscription_RootModule_Setting_Dependency_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Module_Setting_Dependency_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Module_Setting_Dependency_Order_By>>;
+  where?: InputMaybe<Module_Setting_Dependency_Bool_Exp>;
+};
+
+
+export type Subscription_RootModule_Setting_Dependency_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootModule_Setting_Dependency_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Module_Setting_Dependency_Stream_Cursor_Input>>;
+  where?: InputMaybe<Module_Setting_Dependency_Bool_Exp>;
 };
 
 
@@ -54619,7 +54973,7 @@ export type ModuleSettingsQueryVariables = Exact<{
 }>;
 
 
-export type ModuleSettingsQuery = { __typename?: 'query_root', moduleSettings: Array<{ __typename?: 'module_setting', id: any, color: Color_Enum, mandatory: boolean, duration?: number | null, sort: number, module: { __typename?: 'module_v2', id: any, name: string, displayName?: string | null, lessons: any } }> };
+export type ModuleSettingsQuery = { __typename?: 'query_root', moduleSettings: Array<{ __typename?: 'module_setting', id: any, color: Color_Enum, mandatory: boolean, duration?: number | null, sort: number, dependencies: Array<{ __typename?: 'module_setting_dependency', dependency: { __typename?: 'module_setting', id: any, module: { __typename?: 'module_v2', id: any } } }>, module: { __typename?: 'module_v2', id: any, name: string, displayName?: string | null, lessons: any } }> };
 
 export type SaveIcmCourseDraftMutationVariables = Exact<{
   id: Scalars['Int'];
