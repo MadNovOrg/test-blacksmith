@@ -3308,6 +3308,7 @@ export type ImportLegacyCertificateOutput = {
   __typename?: 'ImportLegacyCertificateOutput';
   error?: Maybe<ImportLegacyCertificateError>;
   success: Scalars['Boolean'];
+  trainerRoleAdded: Scalars['Boolean'];
 };
 
 export type InitAuthOutput = {
@@ -54726,7 +54727,7 @@ export type ImportLegacyCertificateMutationVariables = Exact<{
 }>;
 
 
-export type ImportLegacyCertificateMutation = { __typename?: 'mutation_root', importLegacyCertificate?: { __typename?: 'ImportLegacyCertificateOutput', success: boolean, error?: ImportLegacyCertificateError | null } | null };
+export type ImportLegacyCertificateMutation = { __typename?: 'mutation_root', importLegacyCertificate?: { __typename?: 'ImportLegacyCertificateOutput', trainerRoleAdded: boolean, success: boolean, error?: ImportLegacyCertificateError | null } | null };
 
 export type SaveBildGradeMutationVariables = Exact<{
   modules: Array<Course_Participant_Bild_Module_Insert_Input> | Course_Participant_Bild_Module_Insert_Input;

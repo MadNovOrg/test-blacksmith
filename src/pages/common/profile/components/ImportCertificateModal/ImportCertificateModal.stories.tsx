@@ -43,6 +43,7 @@ export const AlreadyImportedCertificate: Story = {
             data: {
               importLegacyCertificate: {
                 success: false,
+                trainerRoleAdded: false,
                 error: ImportLegacyCertificateError.AlreadyImported,
               },
             },

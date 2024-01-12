@@ -70,6 +70,7 @@ it('imports legacy certificate', async () => {
       return fromValue<{ data: ImportLegacyCertificateMutation }>({
         data: {
           importLegacyCertificate: {
+            trainerRoleAdded: false,
             success: matches,
           },
         },
@@ -113,6 +114,7 @@ it('imports certificate for other user if profile id is passed', async () => {
       return fromValue<{ data: ImportLegacyCertificateMutation }>({
         data: {
           importLegacyCertificate: {
+            trainerRoleAdded: false,
             success: matches,
           },
         },
@@ -179,6 +181,7 @@ it('shows an alert when the certificate has already been imported', async () => 
         data: {
           importLegacyCertificate: {
             success: false,
+            trainerRoleAdded: false,
             error: ImportLegacyCertificateError.AlreadyImported,
           },
         },
@@ -216,6 +219,7 @@ it("shows an alert when the certificate data doesn't match the profile", async (
         data: {
           importLegacyCertificate: {
             success: false,
+            trainerRoleAdded: false,
             error: ImportLegacyCertificateError.ProfileNoMatch,
           },
         },
@@ -253,6 +257,7 @@ it("shows an alert when the certificate level isn't supported", async () => {
         data: {
           importLegacyCertificate: {
             success: false,
+            trainerRoleAdded: false,
             error: ImportLegacyCertificateError.UnsupportedLevel,
           },
         },
@@ -290,6 +295,7 @@ it("shows an alert when the certificate isn't found", async () => {
         data: {
           importLegacyCertificate: {
             success: false,
+            trainerRoleAdded: false,
             error: ImportLegacyCertificateError.CertificateNotFound,
           },
         },

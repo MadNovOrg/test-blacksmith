@@ -1,6 +1,12 @@
 import { LoadingButton } from '@mui/lab'
 import { Alert, Box, Button, TextField, Typography } from '@mui/material'
-import React, { ComponentProps, useEffect, useState } from 'react'
+import React, {
+  ComponentProps,
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMutation, gql } from 'urql'
 
@@ -13,6 +19,7 @@ import {
 export const MUTATION = gql`
   mutation ImportLegacyCertificate($input: ImportLegacyCertificateInput!) {
     importLegacyCertificate(input: $input) {
+      trainerRoleAdded
       success
       error
     }
@@ -25,9 +32,10 @@ export type ImportCertificateModalProps = {
   profileId?: string
 } & ComponentProps<typeof Dialog>
 
-export const ImportCertificateModal: React.FC<
+export const ImportCertificateModal = forwardRef<
+  ImportLegacyCertificateMutation | undefined,
   React.PropsWithChildren<ImportCertificateModalProps>
-> = function ({ onCancel, onSubmit, profileId, ...props }) {
+>(({ onCancel, onSubmit, profileId, ...props }, ref) => {
   const { t } = useTranslation()
 
   const [code, setCode] = useState('')
@@ -36,6 +44,14 @@ export const ImportCertificateModal: React.FC<
     ImportLegacyCertificateMutation,
     ImportLegacyCertificateMutationVariables
   >(MUTATION)
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return data
+    },
+    [data]
+  )
 
   useEffect(() => {
     if (data?.importLegacyCertificate?.success) {
@@ -101,4 +117,6 @@ export const ImportCertificateModal: React.FC<
       </Box>
     </Dialog>
   )
-}
+})
+
+ImportCertificateModal.displayName = ImportCertificateModal.name

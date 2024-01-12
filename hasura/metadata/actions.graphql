@@ -1255,6 +1255,7 @@ type BlendedLearningAttendeeExportData {
 
 type ImportLegacyCertificateOutput {
   success: Boolean!
+  trainerRoleAdded: Boolean!
   error: ImportLegacyCertificateError
 }
 

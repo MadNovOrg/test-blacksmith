@@ -28,6 +28,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -55,6 +56,7 @@ import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
   GetProfileDetailsQuery,
+  ImportLegacyCertificateMutation,
   Organization,
   Profile_Role_Insert_Input,
   Profile_Trainer_Role_Type_Insert_Input,
@@ -126,6 +128,9 @@ export const EditProfilePage: React.FC<
   const orgId = searchParams.get('orgId')
   const [displayOrgSelector, setDisplayOrgSelector] = useState(false)
   const minimalAge = subYears(new Date(), 16)
+  const importCertificateModalRef = useRef<
+    ImportLegacyCertificateMutation | undefined
+  >()
 
   const [{ fetching: updateProfileFetching }, updateProfile] = useMutation<
     UpdateProfileMutation,
@@ -481,6 +486,34 @@ export const EditProfilePage: React.FC<
     },
     [updateOrgMember, refreshData]
   )
+
+  useEffect(() => {
+    if (!values.roles.some(role => role.userRole === RoleName.TRAINER)) {
+      if (
+        importCertificateModalRef.current?.importLegacyCertificate
+          ?.trainerRoleAdded
+      ) {
+        setValue('roles', [
+          ...values.roles,
+          {
+            userRole: RoleName.TRAINER,
+            employeeRoles: [],
+            salesRoles: [],
+            trainerRoles: defaultTrainerRoles,
+          },
+        ])
+      }
+    }
+  }, [
+    importCertificateModalRef.current?.importLegacyCertificate
+      ?.trainerRoleAdded,
+    setValue,
+    values.roles,
+  ])
+
+  const onSubmitImportCertificate = useCallback(async () => {
+    setShowImportModal(false)
+  }, [])
 
   const onSubmit = async (data: InferType<typeof formSchema>) => {
     if (!profile) return
@@ -1299,12 +1332,11 @@ export const EditProfilePage: React.FC<
 
       <ImportCertificateModal
         onCancel={() => setShowImportModal(false)}
-        onSubmit={async () => {
-          setShowImportModal(false)
-        }}
+        onSubmit={onSubmitImportCertificate}
         open={showImportModal}
         onClose={() => setShowImportModal(false)}
         profileId={id}
+        ref={importCertificateModalRef}
       />
 
       <Dialog
