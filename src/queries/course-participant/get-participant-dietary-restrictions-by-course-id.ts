@@ -94,7 +94,7 @@ export const GET_DIETARY_AND_DISABILITIES_COUNT = gql`
     participantDietaryRestrictionsCount: course_participant_aggregate(
       where: {
         course_id: { _eq: $courseId }
-        profile: { disabilities: { _neq: "null", _nilike: "" } }
+        profile: { dietaryRestrictions: { _neq: "null", _nilike: "" } }
       }
     ) {
       aggregate {
