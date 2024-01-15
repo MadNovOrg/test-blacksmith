@@ -157,9 +157,10 @@ export const BILDCourseBuilder: React.FC<
 
   const courseCreated = Boolean(getSnackbarMessage('course-created'))
 
-  const [{ data: courseData, error: courseDataError }] = useCourseToBuild(
-    Number(courseId)
-  )
+  const [{ data: courseData, error: courseDataError }] = useCourseToBuild({
+    courseId: Number(courseId),
+    withStrategies: true,
+  })
 
   const courseDescription = useMemo<string>(() => {
     if (!courseData?.course) return ''

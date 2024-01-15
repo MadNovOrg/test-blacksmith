@@ -84,7 +84,7 @@ export const ICMCourseBuilder: React.FC<
   const courseCreated = Boolean(getSnackbarMessage('course-created'))
 
   const [{ data: courseData, fetching: fetchingCourse, error: courseError }] =
-    useCourseToBuild(Number(courseId))
+    useCourseToBuild({ courseId: Number(courseId) })
 
   const [
     {

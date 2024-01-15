@@ -78,7 +78,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
     useRef<ModuleSettingsQuery['moduleSettings'][0]['module'][]>()
 
   const [{ data: courseData, fetching: fetchingCourse, error: courseError }] =
-    useCourseToBuild(Number(courseId))
+    useCourseToBuild({ courseId: Number(courseId) })
 
   const [, saveDraft] = useSaveCourseDraft()
   const [

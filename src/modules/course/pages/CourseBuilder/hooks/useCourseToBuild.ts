@@ -41,10 +41,20 @@ export const COURSE_TO_BUILD_QUERY = gql`
   }
 `
 
-export function useCourseToBuild(courseId: number) {
+export function useCourseToBuild({
+  courseId,
+  withStrategies,
+  withModules = true,
+}: {
+  courseId: number
+  withStrategies?: boolean
+  withModules?: boolean
+}) {
   return useQuery<CourseToBuildQuery, CourseToBuildQueryVariables>({
     query: COURSE_TO_BUILD_QUERY,
-    variables: courseId ? { id: courseId, withModules: true } : undefined,
+    variables: courseId
+      ? { id: courseId, withModules, withStrategies }
+      : undefined,
     requestPolicy: 'cache-and-network',
   })
 }
