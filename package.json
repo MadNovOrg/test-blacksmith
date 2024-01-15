@@ -201,7 +201,7 @@
     "autoprefixer": "^10.4.16",
     "axios": "^1.6.2",
     "babel-loader": "^9.1.2",
-    "babel-preset-vite": "1.1.0",
+    "babel-preset-vite": "1.1.2",
     "cross-env": "^7.0.3",
     "env-cmd": "^10.1.0",
     "esbuild": "^0.17.17",

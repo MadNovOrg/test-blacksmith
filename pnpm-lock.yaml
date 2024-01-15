@@ -442,8 +442,8 @@ importers:
         specifier: ^9.1.2
         version: 9.1.2(@babel/core@7.23.7)(webpack@5.89.0)
       babel-preset-vite:
-        specifier: 1.1.0
-        version: 1.1.0
+        specifier: 1.1.2
+        version: 1.1.2
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
@@ -2739,6 +2739,7 @@ packages:
       '@babel/helper-function-name': 7.23.0
       '@babel/template': 7.22.15
       '@babel/types': 7.23.6
+
   /@babel/helpers@7.23.7:
     resolution: {integrity: sha512-6AMnjCoC8wjqBzDHkuqpa7jAKwvMo4dC+lr/TFBz+ucfulO1XMpDnwWPGBNwClOKZ8h6xn5N81W/R5OrcKtCbQ==}
     engines: {node: '>=6.9.0'}
@@ -3872,7 +3873,7 @@ packages:
       '@babel/helper-plugin-utils': 7.22.5
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.23.7)
       '@babel/plugin-transform-dotall-regex': 7.22.5(@babel/core@7.23.7)
-      '@babel/types': 7.23.3
+      '@babel/types': 7.23.6
       esutils: 2.0.3
 
   /@babel/preset-react@7.23.3(@babel/core@7.23.7):
@@ -5668,7 +5669,7 @@ packages:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.5
       '@types/istanbul-reports': 3.0.3
-      '@types/node': 20.8.7
+      '@types/node': 20.10.7
       '@types/yargs': 15.0.17
       chalk: 4.1.2
     dev: false
@@ -11069,11 +11070,6 @@ packages:
     dependencies:
       undici-types: 5.26.5
 
-  /@types/node@20.8.7:
-    resolution: {integrity: sha512-21TKHHh3eUHIi2MloeptJWALuCu5H7HQTdTrWIFReA8ad+aggoX+lRes3ex7/FtpC+sVUpFMQ+QTfYr74mruiQ==}
-    dependencies:
-      undici-types: 5.25.3
-
   /@types/normalize-package-data@2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
 
@@ -12630,12 +12626,12 @@ packages:
       '@types/babel__core': 7.20.4
     dev: true
 
-  /babel-plugin-transform-vite-meta-glob@1.0.3:
-    resolution: {integrity: sha512-JW3VnwUjJqpj0FM0vJFxrGdxSBcHOa0j5YMvvtXYPmFshroq53nbK9dqRETgjXlMrfIz0oU/6ki+u1GdVWdNHA==}
+  /babel-plugin-transform-vite-meta-glob@1.1.1:
+    resolution: {integrity: sha512-fZBW9X9QVBDF2q+CCjnaQPGnGMdXtDL0uu8dhxCn72J4O2pp9+GSMZNHcvZ7q6cr6+Cu/arkdJhe4NubqM8NYw==}
     dependencies:
       '@babel/runtime': 7.23.5
       '@types/babel__core': 7.20.4
-      glob: 7.2.3
+      glob: 10.3.10
     dev: true
 
   /babel-plugin-transform-vite-meta-hot@1.0.0:
@@ -12710,13 +12706,13 @@ packages:
       babel-preset-current-node-syntax: 1.0.1(@babel/core@7.23.7)
     dev: true
 
-  /babel-preset-vite@1.1.0:
-    resolution: {integrity: sha512-5OnV5RPD+Byi1KnhQpgzz2e1Bc2PFJ9i6wy1VDMPmYu0NjaxcyJuWy9piBoefCL4tMn1nm3VtvInPNitCHJnbQ==}
+  /babel-preset-vite@1.1.2:
+    resolution: {integrity: sha512-PyPAS1fa6XT8+W/Tf1+IEnaMuTAt4zKeyToG+H2W2JsDkq4XjfjK1rOkRnetrv9CsTov5msI1RgLjwsAslwuBQ==}
     dependencies:
-      '@babel/runtime': 7.23.2
+      '@babel/runtime': 7.23.5
       '@types/babel__core': 7.20.4
       babel-plugin-transform-vite-meta-env: 1.0.3
-      babel-plugin-transform-vite-meta-glob: 1.0.3
+      babel-plugin-transform-vite-meta-glob: 1.1.1
       babel-plugin-transform-vite-meta-hot: 1.0.0
     dev: true
 
@@ -17096,7 +17092,7 @@ packages:
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       '@jest/types': 27.5.1
-      '@types/node': 20.8.7
+      '@types/node': 20.10.7
       chalk: 4.1.2
       ci-info: 3.9.0
       graceful-fs: 4.2.11
@@ -17143,7 +17139,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.8.7
+      '@types/node': 20.10.7
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -22440,9 +22436,6 @@ packages:
   /underscore@1.13.6:
     resolution: {integrity: sha512-+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A==}
     dev: true
-
-  /undici-types@5.25.3:
-    resolution: {integrity: sha512-Ga1jfYwRn7+cP9v8auvEXN1rX3sWqlayd4HP7OKk4mZWylEmu3KzXDUGrQUN6Ol7qo1gPvB2e5gX6udnyEPgdA==}
 
   /undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
