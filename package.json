@@ -188,7 +188,7 @@
     "@types/mui-image": "^1.0.5",
     "@types/node": "^20.10.7",
     "@types/react": "18.2.14",
-    "@types/react-dom": "18.2.6",
+    "@types/react-dom": "18.2.18",
     "@types/react-gtm-module": "^2.0.3",
     "@types/react-helmet": "^6.1.9",
     "@types/sanitize-html": "^2.9.0",
