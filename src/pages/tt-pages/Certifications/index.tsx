@@ -66,7 +66,8 @@ export const Certifications: React.FC<
       conditions.push({
         _or: [
           { profile: { _or: [{ fullName: ilike }, { familyName: ilike }] } },
-          { course: { _or: [{ course_code: ilike }] } },
+          { course: { course_code: ilike } },
+          { number: ilike },
         ],
       })
     }
