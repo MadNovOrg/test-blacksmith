@@ -3,7 +3,6 @@ import {
   Box,
   CircularProgress,
   Stack,
-  styled,
   Typography,
   useTheme,
   useMediaQuery,
@@ -27,11 +26,7 @@ import {
 import { LoadingStatus } from '@app/util'
 
 import { useGradingDetails } from '../../components/GradingDetailsProvider'
-
-const StyledText = styled(Typography)(({ theme }) => ({
-  display: 'inline',
-  color: theme.palette.dimGrey.main,
-}))
+import { ModulesSelectionTitle } from '../../components/ModulesSelectionTitle/ModulesSelectionTitle'
 
 export const ModulesSelection = () => {
   const { t } = useTranslation()
@@ -179,17 +174,7 @@ export const ModulesSelection = () => {
       ) : null}
       {moduleGroups.length ? (
         <>
-          <Box mb={4}>
-            <Typography variant="h5" fontWeight="500" mb={2}>
-              {t('pages.modules-selection.title')}
-            </Typography>
-            <StyledText variant="body1">
-              {t('pages.modules-selection.page-description-line1')}
-            </StyledText>
-            <StyledText variant="body1" fontWeight="600">
-              {t('pages.modules-selection.page-description-line2')}
-            </StyledText>
-          </Box>
+          <ModulesSelectionTitle />
 
           <ModulesSelectionList
             moduleGroups={moduleGroups}

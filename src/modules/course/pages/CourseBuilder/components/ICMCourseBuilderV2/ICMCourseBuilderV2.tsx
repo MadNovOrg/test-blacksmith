@@ -253,7 +253,10 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
   }) => {
     modulesSelectionRef.current = moduleSettingsData?.moduleSettings
       .filter(moduleSetting => selectedIds.includes(moduleSetting.module.id))
-      .map(moduleSetting => moduleSetting.module)
+      .map(moduleSetting => ({
+        ...moduleSetting.module,
+        mandatory: moduleSetting.mandatory,
+      }))
 
     estimatedDurationRef.current = estimatedDuration
 
@@ -279,7 +282,10 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
   }) => {
     modulesSelectionRef.current = moduleSettingsData?.moduleSettings
       .filter(moduleSetting => selectedIds.includes(moduleSetting.module.id))
-      .map(moduleSetting => moduleSetting.module)
+      .map(moduleSetting => ({
+        ...moduleSetting.module,
+        mandatory: moduleSetting.mandatory,
+      }))
 
     estimatedDurationRef.current = estimatedDuration
 

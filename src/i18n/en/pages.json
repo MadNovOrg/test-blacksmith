@@ -834,7 +834,8 @@
     "page-description-line1": "Please confirm modules and physical techniques covered or not covered in the course.",
     "page-description-line2": "This informs the modules and physical techniques the attendee will be graded on at an individual level.",
     "save-button-text": "Continue to grading attendees",
-    "back-button-text": "Back to grading clearance"
+    "back-button-text": "Back to grading clearance",
+    "saving-error": "There was an issue saving modules selection. Please try later."
   },
   "my-training": {
     "common": {
