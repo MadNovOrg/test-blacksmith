@@ -9,6 +9,7 @@ import {
   Container,
   Link,
   Stack,
+  SxProps,
   Typography,
   useMediaQuery,
   useTheme,
@@ -58,6 +59,11 @@ export enum CourseDetailsTabs {
   EDIT = 'EDIT',
   DISABILITIES = 'DISABILITIES',
   DIETARY_REQUIREMENTS = 'DIETARY_REQUIREMENTS',
+}
+
+const snackbarStyles: SxProps = {
+  position: 'absolute',
+  mt: -1,
 }
 
 export const CourseDetails = () => {
@@ -452,24 +458,24 @@ export const CourseDetails = () => {
                 <>
                   <SnackbarMessage
                     messageKey="course-created"
-                    sx={{ position: 'absolute' }}
+                    sx={snackbarStyles}
                   />
                   <SnackbarMessage
                     messageKey="course-canceled"
                     severity="info"
-                    sx={{ position: 'absolute' }}
+                    sx={snackbarStyles}
                   />
                   <SnackbarMessage
                     messageKey="course-submitted"
-                    sx={{ position: 'absolute' }}
+                    sx={snackbarStyles}
                   />
                   <SnackbarMessage
                     messageKey="course-evaluated"
-                    sx={{ position: 'absolute' }}
+                    sx={snackbarStyles}
                   />
                   <SnackbarMessage
                     messageKey="participant-transferred"
-                    sx={{ position: 'absolute' }}
+                    sx={snackbarStyles}
                   />
                 </>
               )}
