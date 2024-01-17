@@ -309,7 +309,7 @@ export const CertificateInfo: React.FC<
                   <Stack spacing={1.5} mb={2}>
                     {strategyModules[strategyName].modules?.length
                       ? filterModules(
-                          strategyModules[strategyName] as Strategy
+                          strategyModules[strategyName]
                         ).modules?.map(
                           (bildModule: { name: string }, index: number) => (
                             <Typography mb={2} key={index}>
@@ -322,7 +322,7 @@ export const CertificateInfo: React.FC<
 
                   {strategyModules[strategyName].groups?.length
                     ? strategyModules[strategyName].groups?.map(group => (
-                        <Box key={group.name}>
+                        <Box mb={1} key={group.name}>
                           <Typography fontWeight="500" mb={1}>
                             {group.name}
                           </Typography>

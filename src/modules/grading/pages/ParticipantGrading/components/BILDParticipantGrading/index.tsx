@@ -55,7 +55,7 @@ export const BILDParticipantGrading: React.FC<Props> = ({ participant }) => {
 
                 {strategyModules[strategyName].groups?.length
                   ? strategyModules[strategyName].groups?.map(group => (
-                      <Box key={group.name}>
+                      <Box my={1} key={group.name}>
                         <Typography fontWeight="500" mb={1}>
                           {group.name}
                         </Typography>
