@@ -244,6 +244,7 @@ export const CourseCertification: React.FC<
               />
             ) : null}
             <CertificateInfo
+              accreditedBy={certificate.courseAccreditedBy as Accreditors_Enum}
               grade={grade as Grade_Enum}
               courseParticipant={courseParticipant}
               courseName={certificate.courseName}

@@ -40,6 +40,7 @@ type CertificateInfoProps = {
   courseParticipant?: Participant['participant']
   courseName: string
   grade: Grade_Enum
+  accreditedBy: Accreditors_Enum
   revokedDate: string
   expiryDate: string
   certificationNumber: string
@@ -53,6 +54,7 @@ type CertificateInfoProps = {
 export const CertificateInfo: React.FC<
   React.PropsWithChildren<CertificateInfoProps>
 > = ({
+  accreditedBy,
   courseParticipant,
   courseName,
   grade,
@@ -225,7 +227,7 @@ export const CertificateInfo: React.FC<
           </Grid>
 
           <Box mt={8} gap={6} display="flex" mb={9} alignItems="center">
-            {courseParticipant?.course.accreditedBy === Accreditors_Enum.Icm ? (
+            {accreditedBy === Accreditors_Enum.Icm ? (
               <MUIImage
                 duration={0}
                 src={icmImage}
@@ -234,8 +236,7 @@ export const CertificateInfo: React.FC<
               />
             ) : null}
 
-            {courseParticipant?.course.accreditedBy ===
-            Accreditors_Enum.Bild ? (
+            {accreditedBy === Accreditors_Enum.Bild ? (
               <MUIImage
                 duration={0}
                 src={bildNewImage}
