@@ -1,5 +1,34 @@
 # @teamteach/hub
 
+## 2.5.0
+
+### Minor Changes
+
+- 8d441c3: grading details with new modules data model
+- d62e7b6: ICM course builder to work with new modules data model
+- 03187af: Ensuring new course level 3-Day Safety Response Trainer allows access to Resources
+
+### Patch Changes
+
+- 801a6f2: Add pagination to org summary
+- 3d4bd57: Fix dietary restrictions count issue
+- 9ae3b42: Fix BILD course builder missing modules issue
+- eb7fd12: Fix certificate expiration dates for L1 and L2 indirect courses that start in 2024
+- 64c8c2e: Fix accreditedBy property of null error
+- bd9d3c3: Display a better message when error due to Xero on placing booking
+- 37b5299: Course invitation wrong message fix
+- 2044fe4: Increase num of retries for trainer role allocation on insert certificate event
+- fa47b6e: Add dob validation on editing profile
+- 01e29cd: Change course details banner to not overlap text
+- 4f72ab8: Edit finance section of an international course
+- 7dd4703: Fix currency select on create course form
+- 92ce6a7: Remove blanks and lowercase email for Add or Edit Organisation
+- 92eae54: Fix trainer role allocation adter add certificate on edit profile
+- 945f237: Search by certificate number on the certifications page
+- aee7205: Allow Sales Admin and Sales representative roles to see the `Courses as a trainer` table withinuser profile
+- 8638539: Add grace period for 3 day srt
+- 1d24a80: Add default user role on edit roles for users with only booking or organisation key contact roles stored in the database
+
 ## 2.4.0
 
 ### Minor Changes
