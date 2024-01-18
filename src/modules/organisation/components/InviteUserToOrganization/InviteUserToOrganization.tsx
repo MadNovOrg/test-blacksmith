@@ -33,8 +33,8 @@ import {
   SaveOrganisationInvitesMutationVariables,
   SaveOrgInviteError,
 } from '@app/generated/graphql'
-import { useOrganizations } from '@app/hooks/useOrganizations'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
+import { useOrganizations } from '@app/modules/organisation/hooks/useOrganizations'
 import { OrgDashboardTabs } from '@app/modules/organisation/pages/OrganisationDashboard/OrgDashboard'
 import { OrgIndividualsSubtabs } from '@app/modules/organisation/tabs/OrgIndividualsTab'
 import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'

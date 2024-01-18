@@ -5,13 +5,12 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
-import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar.tsx/OrgSelectionToolbar'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { ManageContactRoleCourses } from '@app/pages/user-pages/MyCourses/ManageContactRoleCourses'
 import { RoleName } from '@app/types'
-import { LoadingStatus } from '@app/util'
 
 export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { orgId: id } = useParams()
@@ -19,22 +18,22 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const orgId = id ?? ALL_ORGS
+  const orgId = id ?? undefined
 
-  const { data: allOrgs } = useOrg(
-    ALL_ORGS,
-    profile?.id,
-    acl.canViewAllOrganizations()
-  )
-  const { data, status } = useOrg(
+  const { data: allOrgs } = useOrgV2({
+    profileId: profile?.id,
+    showAll: acl.canViewAllOrganizations(),
+    shallow: true,
+  })
+  const { data, fetching, error } = useOrgV2({
     orgId,
-    profile?.id,
-    acl.canViewAllOrganizations()
-  )
-
+    profileId: profile?.id,
+    showAll: acl.canViewAllOrganizations(),
+    shallow: true,
+  })
   const navigateToOrgCourses =
     allOrgs &&
-    allOrgs.length === 1 &&
+    allOrgs.orgs.length === 1 &&
     activeRole &&
     ![RoleName.BOOKING_CONTACT, RoleName.ORGANIZATION_KEY_CONTACT].includes(
       activeRole
@@ -42,7 +41,7 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   useEffect(() => {
     if (navigateToOrgCourses) {
-      navigate('/manage-courses/' + allOrgs[0].id)
+      navigate('/manage-courses/' + allOrgs.orgs[0].id)
     }
   }, [allOrgs, navigate, navigateToOrgCourses])
 
@@ -51,28 +50,27 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
       <Helmet>
         <title>{t('pages.browser-tab-titles.manage-courses.title')}</title>
       </Helmet>
-      {status === LoadingStatus.FETCHING ? (
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          data-testid="org-details-fetching"
-        >
-          <CircularProgress />
-        </Stack>
-      ) : (
-        <>
-          {allOrgs && allOrgs.length > 1 ? (
-            <OrgSelectionToolbar prefix="/manage-courses" />
-          ) : null}
-
+      <>
+        {allOrgs && allOrgs.orgs.length > 1 ? (
+          <OrgSelectionToolbar prefix="/manage-courses" />
+        ) : null}
+        {fetching ? (
+          <Stack
+            alignItems="center"
+            justifyContent="center"
+            data-testid="org-details-fetching"
+          >
+            <CircularProgress />
+          </Stack>
+        ) : (
           <Container maxWidth="lg" sx={{ pt: 2 }}>
-            {status === LoadingStatus.ERROR ? (
+            {error ? (
               <Alert severity="error">
                 {t('pages.org-details.org-not-found')}
               </Alert>
             ) : null}
 
-            {data && status === LoadingStatus.SUCCESS ? (
+            {data && !fetching && !error ? (
               acl.isBookingContact() ? (
                 <ManageContactRoleCourses isBookingContact={true} />
               ) : acl.isOrgKeyContact() ? (
@@ -86,8 +84,8 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
               )
             ) : null}
           </Container>
-        </>
-      )}
+        )}
+      </>
     </FullHeightPageLayout>
   )
 }

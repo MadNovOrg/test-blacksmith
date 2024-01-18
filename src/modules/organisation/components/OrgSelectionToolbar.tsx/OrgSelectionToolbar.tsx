@@ -15,10 +15,13 @@ import { sortBy } from 'lodash-es'
 import React, { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useIntersection } from 'react-use'
+import { useDebounce } from 'use-debounce'
 
 import { StyledSubNavLink } from '@app/components/StyledSubNavLink'
 import { useAuth } from '@app/context/auth'
-import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
+
+import useOrganisationByName from '../../hooks/useOrganisationByName'
 
 const OrgNavLink: React.FC<React.PropsWithChildren<{ to: string }>> = ({
   to,
@@ -54,20 +57,31 @@ export const OrgSelectionToolbar: React.FC<
 > = ({ prefix, postfix = '' }) => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
-  const { data } = useOrg(ALL_ORGS, profile?.id, acl.canViewAllOrganizations())
+
+  const { data } = useOrgV2({
+    profileId: profile?.id,
+    shallow: true,
+    showAll: acl.canViewAllOrganizations(),
+  })
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const [query, setQuery] = useState('')
+  const [debouncedQuery] = useDebounce(query, 500)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-
-  const sorted = sortBy(data || [], org => org.name.toLowerCase())
+  const [{ data: queriedData }] = useOrganisationByName({
+    query: debouncedQuery,
+    pause: !debouncedQuery,
+  })
+  const sorted = sortBy(data?.orgs || [], org => org.name.toLowerCase())
 
   const intersectionRef = useRef(null)
+
   const observer = useIntersection(intersectionRef, {
     threshold: 1,
   })
+
   const showMoreButton = !observer?.isIntersecting
 
   const filtered = useMemo(
@@ -77,6 +91,11 @@ export const OrgSelectionToolbar: React.FC<
       ),
     [query, sorted]
   )
+
+  const moreMenuData = useMemo(() => {
+    if (queriedData?.organization && query) return queriedData.organization
+    return filtered
+  }, [filtered, queriedData?.organization, query])
 
   return (
     <Toolbar
@@ -156,7 +175,9 @@ export const OrgSelectionToolbar: React.FC<
                 placeholder={t('common.search')}
                 value={query}
                 variant="filled"
-                onChange={e => setQuery(e.target.value)}
+                onChange={e => {
+                  setQuery(e.target.value)
+                }}
                 fullWidth
                 autoFocus
                 InputProps={{
@@ -166,7 +187,7 @@ export const OrgSelectionToolbar: React.FC<
                 }}
               />
             </MenuItem>
-            {filtered.map(org => (
+            {moreMenuData.map(org => (
               <MenuItem key={org.id} onClick={() => setAnchorEl(null)}>
                 <Link
                   key={org.id}

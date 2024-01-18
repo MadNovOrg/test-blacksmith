@@ -31,17 +31,16 @@ import {
   Course_Type_Enum,
   GetUpcomingCoursesQuery,
 } from '@app/generated/graphql'
-import useOrg from '@app/hooks/useOrg'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar.tsx/OrgSelectionToolbar'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { CourseForBookingTile } from '@app/modules/organisation/tabs/components/CourseForBookingTile'
+import { ALL_ORGS } from '@app/util'
 import { geoDistance } from '@app/util/geo'
 
 type UpcomingCourse = GetUpcomingCoursesQuery['courses'][0]
-
-export const ALL_ORGS = 'all'
 
 export const AvailableCourses: React.FC<
   React.PropsWithChildren<unknown>
@@ -69,11 +68,11 @@ export const AvailableCourses: React.FC<
 
   const sortingByDistance = sortMode === 'distance-to-org'
 
-  const { data: orgs, loading: orgsLoading } = useOrg(
-    ALL_ORGS,
-    profile?.id,
-    acl.canViewAllOrganizations()
-  )
+  const { data: orgs, fetching: orgsLoading } = useOrgV2({
+    orgId: ALL_ORGS,
+    profileId: profile?.id,
+    showAll: acl.canViewAllOrganizations(),
+  })
 
   const { Pagination, perPage, offset } = useTablePagination()
   const filters = useMemo(() => {
@@ -145,7 +144,7 @@ export const AvailableCourses: React.FC<
         result.set(
           course.id,
           geoDistance(
-            orgs?.find(org => org.id === id)?.geoCoordinates,
+            orgs?.orgs.find(org => org.id === id)?.geoCoordinates,
             course.schedules[0].venue?.geoCoordinates
           )
         )
@@ -210,135 +209,132 @@ export const AvailableCourses: React.FC<
     return courses?.slice(offset, offset + perPage)
   }, [courses, offset, perPage])
 
-  if (coursesLoading || orgsLoading) {
-    return (
-      <Stack
-        alignItems="center"
-        justifyContent="center"
-        data-testid="courses-fetching"
-      >
-        <CircularProgress />
-      </Stack>
-    )
-  }
-
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enLocale}>
       <Helmet>
         <title>{t('pages.browser-tab-titles.book-a-course.title')}</title>
       </Helmet>
       <FullHeightPageLayout bgcolor={theme.palette.grey[100]} pb={3}>
-        {orgs && orgs.length > 1 ? (
+        {orgs && orgs.orgs.length > 1 ? (
           <OrgSelectionToolbar prefix="/organisations" postfix="/courses" />
         ) : null}
-
-        <Container maxWidth="lg" sx={{ py: 5 }} disableGutters={isMobile}>
-          <Box
-            display="flex"
-            flexDirection={isMobile ? 'column' : 'row'}
-            gap={3}
+        {coursesLoading || orgsLoading ? (
+          <Stack
+            alignItems="center"
+            justifyContent="center"
+            data-testid="courses-fetching"
           >
-            <Box width={isMobile ? undefined : 250} px={isMobile ? 2 : 0}>
-              <Typography variant="h1">
-                {t('pages.available-courses.title')}
-              </Typography>
+            <CircularProgress />
+          </Stack>
+        ) : (
+          <Container maxWidth="lg" sx={{ py: 5 }} disableGutters={isMobile}>
+            <Box
+              display="flex"
+              flexDirection={isMobile ? 'column' : 'row'}
+              gap={3}
+            >
+              <Box width={isMobile ? undefined : 250} px={isMobile ? 2 : 0}>
+                <Typography variant="h1">
+                  {t('pages.available-courses.title')}
+                </Typography>
 
-              <Stack gap={4} mt={4}>
-                <FilterSearch value={keyword} onChange={setKeyword} />
+                <Stack gap={4} mt={4}>
+                  <FilterSearch value={keyword} onChange={setKeyword} />
 
-                <Box>
-                  <Typography variant="body2" fontWeight="bold">
-                    {t('pages.available-courses.date-filter')}
-                  </Typography>
+                  <Box>
+                    <Typography variant="body2" fontWeight="bold">
+                      {t('pages.available-courses.date-filter')}
+                    </Typography>
 
-                  <Stack gap={1}>
-                    <DatePicker
-                      value={dateFrom}
-                      onChange={setDateFrom}
-                      slotProps={{
-                        textField: {
-                          label: t('common.from'),
-                          variant: 'standard',
-                          fullWidth: true,
-                        },
-                      }}
-                    />
+                    <Stack gap={1}>
+                      <DatePicker
+                        value={dateFrom}
+                        onChange={setDateFrom}
+                        slotProps={{
+                          textField: {
+                            label: t('common.from'),
+                            variant: 'standard',
+                            fullWidth: true,
+                          },
+                        }}
+                      />
 
-                    <DatePicker
-                      value={dateTo}
-                      onChange={setDateTo}
-                      slotProps={{
-                        textField: {
-                          label: t('common.to'),
-                          variant: 'standard',
-                          fullWidth: true,
-                        },
-                      }}
-                    />
-                  </Stack>
-                </Box>
-                <Box>
-                  <Typography variant="body2" fontWeight="bold">
-                    {t('filter-by')}
-                  </Typography>
+                      <DatePicker
+                        value={dateTo}
+                        onChange={setDateTo}
+                        slotProps={{
+                          textField: {
+                            label: t('common.to'),
+                            variant: 'standard',
+                            fullWidth: true,
+                          },
+                        }}
+                      />
+                    </Stack>
+                  </Box>
+                  <Box>
+                    <Typography variant="body2" fontWeight="bold">
+                      {t('filter-by')}
+                    </Typography>
 
-                  <Stack gap={1}>
-                    <FilterByCourseLevel
-                      title={t('course-level')}
-                      onChange={setFilteredByCertificateLevel}
-                    />
-                    <FilterByCourseDeliveryType
-                      onChange={setFilterDeliveryType}
-                    />
-                  </Stack>
-                </Box>
-                <RequestAQuoteBanner />
-              </Stack>
-            </Box>
-
-            <Box flex={1} px={isMobile ? 2 : 0}>
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="flex-end"
-                mb={2}
-              >
-                <TextField
-                  select
-                  variant="filled"
-                  value={sortMode}
-                  onChange={event => setSortMode(event.target.value)}
-                  sx={{ minWidth: 130 }}
-                >
-                  {sortModes.map(mode => (
-                    <MenuItem key={mode} value={mode}>
-                      {t(`pages.available-courses.sorting.${mode}`)}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                    <Stack gap={1}>
+                      <FilterByCourseLevel
+                        title={t('course-level')}
+                        onChange={setFilteredByCertificateLevel}
+                      />
+                      <FilterByCourseDeliveryType
+                        onChange={setFilterDeliveryType}
+                      />
+                    </Stack>
+                  </Box>
+                  <RequestAQuoteBanner />
+                </Stack>
               </Box>
 
-              {courses.length > 0 ? (
-                <>
-                  {currentPageRecords?.map(course => (
-                    <CourseForBookingTile
-                      course={course}
-                      key={course.id}
-                      showDistance={sortingByDistance}
-                      distance={distances.get(course.id)}
-                      variant="row"
-                    />
-                  ))}
-                  <Pagination total={courses.length} />{' '}
-                </>
-              ) : (
-                <Typography variant="body2">
-                  {t('pages.available-courses.no-results')}
-                </Typography>
-              )}
+              <Box flex={1} px={isMobile ? 2 : 0}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="flex-end"
+                  mb={2}
+                >
+                  <TextField
+                    select
+                    variant="filled"
+                    value={sortMode}
+                    onChange={event => setSortMode(event.target.value)}
+                    sx={{ minWidth: 130 }}
+                  >
+                    {sortModes.map(mode => (
+                      <MenuItem key={mode} value={mode}>
+                        {t(`pages.available-courses.sorting.${mode}`)}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Box>
+
+                {courses.length > 0 ? (
+                  <>
+                    {currentPageRecords?.map(course => (
+                      <CourseForBookingTile
+                        course={course}
+                        key={course.id}
+                        showDistance={sortingByDistance}
+                        distance={distances.get(course.id)}
+                        variant="row"
+                      />
+                    ))}
+                    <Pagination total={courses.length} />{' '}
+                  </>
+                ) : (
+                  <Typography variant="body2">
+                    {t('pages.available-courses.no-results')}
+                  </Typography>
+                )}
+              </Box>
             </Box>
-          </Box>
-        </Container>
+          </Container>
+        )}
       </FullHeightPageLayout>
     </LocalizationProvider>
   )

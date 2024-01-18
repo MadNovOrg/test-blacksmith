@@ -26,13 +26,16 @@ import {
   Course_Type_Enum,
   Course_Level_Enum,
 } from '@app/generated/graphql'
-import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
+import useOrganisationProfiles from '@app/modules/organisation/hooks/useOrganisationProfiles'
+import useOrganisationStats from '@app/modules/organisation/hooks/useOrganisationStats'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { CourseForBookingTile } from '@app/modules/organisation/tabs/components/CourseForBookingTile'
 import { IndividualsByLevelList } from '@app/modules/organisation/tabs/components/IndividualsByLevelList'
 import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
 import { OrgSummaryList } from '@app/modules/organisation/tabs/components/OrgSummaryList'
 import { CertificateStatus } from '@app/types'
+import { ALL_ORGS } from '@app/util'
 
 type OrgOverviewTabParams = {
   orgId: string
@@ -68,16 +71,29 @@ export const OrgOverviewTab: React.FC<
     )
   )
 
-  const {
-    stats,
-    profilesByLevel,
-    loading: orgLoading,
-  } = useOrg(
+  const { profilesByLevel, profilesByOrganisation } = useOrganisationProfiles({
     orgId,
-    profile?.id,
-    acl.canViewAllOrganizations(),
-    certificateStatus
-  )
+    profileId: profile?.id,
+    showAll: acl.canViewAllOrganizations(),
+    certificateFilter: certificateStatus,
+  })
+
+  const { data } = useOrgV2({
+    orgId,
+    profileId: profile?.id,
+    shallow: true,
+    showAll: acl.canViewAllOrganizations(),
+  })
+
+  const { stats, fetching } = useOrganisationStats({
+    orgId,
+    profileId: profile?.id,
+    showAll: acl.canViewAllOrganizations(),
+    certificateFilter: certificateStatus,
+    profilesByOrg: profilesByOrganisation,
+    organisations: data?.orgs,
+  })
+
   const { courses: coursesForBooking, loading: coursesLoading } =
     useUpcomingCourses(profile?.id, {
       _and: [
@@ -135,7 +151,7 @@ export const OrgOverviewTab: React.FC<
     [setCertificateStatus]
   )
 
-  if ((orgLoading || coursesLoading) && !stats) {
+  if ((fetching || coursesLoading) && !stats) {
     return (
       <Stack
         alignItems="center"
@@ -146,7 +162,6 @@ export const OrgOverviewTab: React.FC<
       </Stack>
     )
   }
-
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -162,7 +177,7 @@ export const OrgOverviewTab: React.FC<
           {t('pages.org-details.tabs.overview.individuals-by-training-level')}
         </Typography>
 
-        {!stats[orgId]?.profiles.count && !orgLoading ? (
+        {!stats[orgId]?.profiles.count && !fetching ? (
           <>
             {certificateStatus.length ? (
               <>
@@ -214,6 +229,8 @@ export const OrgOverviewTab: React.FC<
                   sx={{ p: 0, overflowX: 'auto' }}
                 >
                   <IndividualsByLevelList
+                    profilesByLevel={profilesByLevel}
+                    fetching={fetching}
                     orgId={orgId}
                     courseLevel={courseLevel}
                     certificateStatus={certificateStatus}

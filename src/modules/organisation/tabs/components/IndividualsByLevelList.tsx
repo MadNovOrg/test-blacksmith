@@ -17,17 +17,18 @@ import { useTranslation } from 'react-i18next'
 import { CertificateStatusChip } from '@app/components/CertificateStatusChip'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
-import { useAuth } from '@app/context/auth'
-import { Course_Level_Enum } from '@app/generated/graphql'
-import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
+import { Course_Level_Enum, Profile } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
 import theme from '@app/theme'
 import { CertificateStatus } from '@app/types'
+import { ALL_ORGS } from '@app/util'
 
 type IndividualsByLevelListParams = {
   orgId: string
   courseLevel: Course_Level_Enum | null
   certificateStatus: CertificateStatus[]
+  fetching: boolean
+  profilesByLevel: Map<Course_Level_Enum | null, Profile[]>
 }
 
 const PER_PAGE = 5
@@ -35,23 +36,15 @@ const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 20]
 
 export const IndividualsByLevelList: React.FC<
   React.PropsWithChildren<IndividualsByLevelListParams>
-> = ({ orgId, courseLevel, certificateStatus }) => {
+> = ({ orgId, courseLevel, profilesByLevel, fetching }) => {
   const { t } = useTranslation()
-  const { profile, acl } = useAuth()
 
   const sorting = useTableSort('fullName', 'asc')
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
 
-  const { profilesByLevel, loading } = useOrg(
-    orgId,
-    profile?.id,
-    acl.canViewAllOrganizations(),
-    certificateStatus
-  )
-
   const currentPageUsers = useMemo(() => {
-    const profiles = profilesByLevel.get(courseLevel) || []
+    const profiles = profilesByLevel.get(courseLevel) ?? []
     let sorted
     if (sorting.by === 'fullName') {
       sorted = sortBy(profiles, p => p.fullName)
@@ -105,7 +98,7 @@ export const IndividualsByLevelList: React.FC<
     ].filter(Boolean) as Col[]
   }, [courseLevel, t])
 
-  if (loading) {
+  if (fetching) {
     return (
       <Stack
         alignItems="center"

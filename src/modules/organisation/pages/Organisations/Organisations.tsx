@@ -30,9 +30,9 @@ import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
-import { useOrganizations } from '@app/hooks/useOrganizations'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout/FullHeightPageLayout'
+import { useOrganizations } from '@app/modules/organisation/hooks/useOrganizations'
 import theme from '@app/theme'
 
 type OrganizationsProps = unknown

@@ -1,18 +1,18 @@
 import { useTranslation } from 'react-i18next'
 
-import useOrg from '@app/hooks/useOrg'
 import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import { RoleName } from '@app/types'
 
 import { act, renderHook, userEvent } from '@test/index'
 import { render, screen } from '@test/index'
 
-vi.mock('@app/hooks/useOrg')
+vi.mock('@app/modules/organisation/hooks/useOrgV2')
 vi.mock('@app/hooks/useUpcomingCourses')
 
-vi.mocked(useOrg, { partial: true }).mockReturnValue({
-  loading: false,
+vi.mocked(useOrgV2, { partial: true }).mockReturnValue({
+  fetching: false,
 })
 vi.mocked(useUpcomingCourses, { partial: true })
   .mockReturnValueOnce({ loading: true })

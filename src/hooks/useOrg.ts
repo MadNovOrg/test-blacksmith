@@ -1,3 +1,4 @@
+// DEPRECATED. Will keep this as a baseline in case any part of the refactor goes south
 import { useMemo } from 'react'
 import useSWR from 'swr'
 
@@ -90,7 +91,9 @@ function getCountByStatus(
     }
   )
 }
-
+/**
+ * @deprecated
+ */
 export default function useOrg(
   orgId: string,
   profileId?: string,

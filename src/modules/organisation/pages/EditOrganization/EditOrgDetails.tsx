@@ -7,7 +7,7 @@ import {
   UpdateOrgMutation,
   UpdateOrgMutationVariables,
 } from '@app/generated/graphql'
-import useOrg from '@app/hooks/useOrg'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { MUTATION as UPDATE_ORG_MUTATION } from '@app/queries/organization/update-org'
 
 import { OrganizationForm } from '../../components/OrganizationForm'
@@ -23,9 +23,13 @@ export const EditOrgDetails: React.FC<
   >(UPDATE_ORG_MUTATION)
   const { id } = useParams()
   const navigate = useNavigate()
-  const { data } = useOrg(id ?? '', profile?.id, acl.canViewAllOrganizations())
-  const org = data?.length
-    ? Object.values(data).map(orgDetail => ({
+  const { data } = useOrgV2({
+    orgId: id ?? '',
+    profileId: profile?.id,
+    showAll: acl.canViewAllOrganizations(),
+  })
+  const org = data?.orgs.length
+    ? Object.values(data.orgs).map(orgDetail => ({
         name: orgDetail.name,
         sector: orgDetail.sector,
         orgPhone: orgDetail.attributes.phone,

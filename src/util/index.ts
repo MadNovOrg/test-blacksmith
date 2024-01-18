@@ -498,7 +498,7 @@ export function getProfileCertificationLevels(
 ): (Course_Level_Enum | null)[] {
   const levels = []
 
-  const advancedTrainer = certificates.find(
+  const advancedTrainer = certificates?.find(
     c => c.courseLevel === Course_Level_Enum.AdvancedTrainer
   )
   if (advancedTrainer) {
@@ -508,14 +508,14 @@ export function getProfileCertificationLevels(
     }
   }
 
-  if (certificates.find(c => c.courseLevel === Course_Level_Enum.Advanced)) {
+  if (certificates?.find(c => c.courseLevel === Course_Level_Enum.Advanced)) {
     levels.push(Course_Level_Enum.Advanced)
   }
 
   // There is no specification on how the rule should be for BILD.
   //So here is just a logic to show the higher one treating BILD as separate certification
   if (
-    certificates.find(
+    certificates?.find(
       c => c.courseLevel === Course_Level_Enum.BildAdvancedTrainer
     )
   ) {
@@ -527,7 +527,7 @@ export function getProfileCertificationLevels(
     ]
 
     for (const level of bildHierarchy) {
-      const certificate = certificates.find(c => c.courseLevel === level)
+      const certificate = certificates?.find(c => c.courseLevel === level)
       if (certificate) {
         levels.push(level)
         if (certificate.status !== CertificateStatus.EXPIRED_RECENTLY) {
@@ -543,7 +543,7 @@ export function getProfileCertificationLevels(
     Course_Level_Enum.Level_1,
   ]
   for (const level of hierarchy) {
-    const certificate = certificates.find(c => c.courseLevel === level)
+    const certificate = certificates?.find(c => c.courseLevel === level)
     if (certificate) {
       levels.push(level)
       if (certificate.status !== CertificateStatus.EXPIRED_RECENTLY) {
@@ -851,3 +851,5 @@ export const validUserSignature = (
 
   return false
 }
+
+export const ALL_ORGS = 'all'

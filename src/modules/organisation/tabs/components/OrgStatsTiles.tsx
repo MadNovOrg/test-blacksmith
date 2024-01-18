@@ -6,7 +6,9 @@ import { CountPanel } from '@app/components/CountPanel'
 import { useOrgMembers } from '@app/components/OrgUsersTable/useOrgMembers'
 import { SelectableCountPanel } from '@app/components/SelectableCountPanel/SelectableCountPanel'
 import { useAuth } from '@app/context/auth'
-import useOrg from '@app/hooks/useOrg'
+import useOrganisationProfiles from '@app/modules/organisation/hooks/useOrganisationProfiles'
+import useOrganisationStats from '@app/modules/organisation/hooks/useOrganisationStats'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { CertificateStatus } from '@app/types'
 import { noop } from '@app/util'
 
@@ -21,8 +23,29 @@ export const OrgStatsTiles: React.FC<
 > = ({ orgId, selected = [], onTileSelect = noop }) => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
+  const showAllOrgs = acl.canViewAllOrganizations()
 
-  const { stats } = useOrg(orgId, profile?.id, acl.canViewAllOrganizations())
+  const { profilesByOrganisation } = useOrganisationProfiles({
+    orgId,
+    profileId: profile?.id,
+    showAll: showAllOrgs,
+  })
+
+  const { data } = useOrgV2({
+    orgId,
+    profileId: profile?.id,
+    showAll: showAllOrgs,
+    shallow: true,
+  })
+
+  const { stats } = useOrganisationStats({
+    profilesByOrg: profilesByOrganisation,
+    organisations: data?.orgs,
+    orgId,
+    profileId: profile?.id,
+    showAll: showAllOrgs,
+  })
+
   const { total } = useOrgMembers({ orgId })
 
   return (

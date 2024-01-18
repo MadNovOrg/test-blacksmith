@@ -11,20 +11,22 @@ import {
   TableRow,
 } from '@mui/material'
 import Link from '@mui/material/Link'
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import React, { ChangeEvent, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Avatar } from '@app/components/Avatar'
 import { useAuth } from '@app/context/auth'
-import useOrg from '@app/hooks/useOrg'
+import useOrganisationProfiles from '@app/modules/organisation/hooks/useOrganisationProfiles'
+import useOrganisationStats from '@app/modules/organisation/hooks/useOrganisationStats'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import theme from '@app/theme'
 
 type OrgSummaryListParams = {
   orgId: string
 }
 
-const PER_PAGE = 5
-const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 20]
+const PER_PAGE = 12
+const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const OrgSummaryList: React.FC<
   React.PropsWithChildren<OrgSummaryListParams>
@@ -34,27 +36,37 @@ export const OrgSummaryList: React.FC<
 
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
+  const showAllOrgs = acl.canViewAllOrganizations()
 
-  const { data, profilesByOrg, stats } = useOrg(
+  const { profilesByOrganisation } = useOrganisationProfiles({
     orgId,
-    profile?.id,
-    acl.canViewAllOrganizations()
-  )
+    profileId: profile?.id,
+    showAll: showAllOrgs,
+  })
+  const { data, reexecute } = useOrgV2({
+    orgId,
+    profileId: profile?.id,
+    showAll: showAllOrgs,
+    shallow: true,
+    limit: perPage,
+    offset: perPage * currentPage,
+  })
 
-  const currentPageUsers = useMemo(() => {
-    const summaries = data || []
-    return summaries.slice(
-      currentPage * perPage,
-      currentPage * perPage + perPage
-    )
-  }, [data, currentPage, perPage])
+  const { stats } = useOrganisationStats({
+    profilesByOrg: profilesByOrganisation,
+    organisations: data?.orgs,
+    orgId,
+    profileId: profile?.id,
+    showAll: showAllOrgs,
+  })
 
   const handleRowsPerPageChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
       setPerPage(parseInt(event.target.value, 10))
       setCurrentPage(0)
+      reexecute()
     },
-    []
+    [reexecute]
   )
 
   return (
@@ -92,7 +104,7 @@ export const OrgSummaryList: React.FC<
           </TableRow>
         </TableHead>
         <TableBody>
-          {currentPageUsers?.map(org => (
+          {data?.orgs?.map(org => (
             <TableRow key={org.id} sx={{ backgroundColor: 'white' }}>
               <TableCell>
                 {org?.id === orgId ? (
@@ -121,7 +133,7 @@ export const OrgSummaryList: React.FC<
                       },
                     }}
                   >
-                    {profilesByOrg.get(org.id)?.map(profile => (
+                    {profilesByOrganisation.get(org.id)?.map(profile => (
                       <Link
                         href={`/profile/${profile.id}`}
                         key={profile.id}
@@ -177,7 +189,7 @@ export const OrgSummaryList: React.FC<
       </Table>
       <TablePagination
         component="div"
-        count={data?.length ?? 0}
+        count={data?.orgsCount.aggregate?.count ?? 0}
         page={currentPage}
         onPageChange={(_, page) => setCurrentPage(page)}
         onRowsPerPageChange={handleRowsPerPageChange}

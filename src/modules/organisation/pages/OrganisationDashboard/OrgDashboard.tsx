@@ -15,14 +15,14 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
-import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar.tsx/OrgSelectionToolbar'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { OrgDetailsTab } from '@app/modules/organisation/tabs/OrgDetailsTab'
 import { OrgIndividualsTab } from '@app/modules/organisation/tabs/OrgIndividualsTab'
 import { OrgOverviewTab } from '@app/modules/organisation/tabs/OrgOverviewTab'
 import theme from '@app/theme'
-import { LoadingStatus } from '@app/util'
+import { ALL_ORGS } from '@app/util'
 
 import { LicensesTab } from '../../tabs/Licenses/LicensesTab'
 
@@ -46,20 +46,25 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const { data: allOrgs, status } = useOrg(
-    ALL_ORGS,
-    profile?.id,
-    acl.canViewAllOrganizations()
-  )
+  const {
+    data: allOrgs,
+    fetching,
+    error,
+  } = useOrgV2({
+    orgId: ALL_ORGS,
+    profileId: profile?.id,
+    showAll: acl.canViewAllOrganizations(),
+    shallow: true,
+  })
 
-  const org = useMemo(() => allOrgs?.find(o => o.id === id), [allOrgs, id])
+  const org = useMemo(() => allOrgs?.orgs.find(o => o.id === id), [allOrgs, id])
 
   useEffect(() => {
-    if (allOrgs && allOrgs.length === 1) {
-      return navigate('/organisations/' + allOrgs[0].id)
+    if (allOrgs && allOrgs.orgs.length === 1) {
+      return navigate('/organisations/' + allOrgs.orgs[0].id)
     }
 
-    if (id !== ALL_ORGS && allOrgs?.length && !org) {
+    if (id !== ALL_ORGS && allOrgs?.orgs?.length && !org) {
       return navigate(`/organisations/${ALL_ORGS}`, { replace: true })
     }
   }, [allOrgs, navigate, org, id])
@@ -74,36 +79,36 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
       <Helmet>
         <title>{t('pages.browser-tab-titles.organisations.title')}</title>
       </Helmet>
-      {status === LoadingStatus.FETCHING ? (
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          data-testid="org-details-fetching"
-        >
-          <CircularProgress />
-        </Stack>
-      ) : (
-        <>
-          {allOrgs && allOrgs.length > 1 ? (
-            <OrgSelectionToolbar prefix="/organisations" />
-          ) : null}
+      <>
+        {allOrgs && allOrgs.orgs.length > 1 ? (
+          <OrgSelectionToolbar prefix="/organisations" />
+        ) : null}
 
+        {fetching ? (
+          <Stack
+            alignItems="center"
+            justifyContent="center"
+            data-testid="org-details-fetching"
+          >
+            <CircularProgress />
+          </Stack>
+        ) : (
           <Container maxWidth="lg" sx={{ pt: 2 }}>
-            {status === LoadingStatus.ERROR ? (
+            {error ? (
               <Alert severity="error">
                 {t('pages.org-details.org-not-found')}
               </Alert>
             ) : null}
 
-            {allOrgs?.length === 1 ? (
+            {allOrgs?.orgs.length === 1 ? (
               <Typography variant="h1" p={4}>
                 {org?.name}
               </Typography>
             ) : null}
 
-            {status === LoadingStatus.SUCCESS ? (
+            {!fetching && !error ? (
               <>
-                {allOrgs && allOrgs.length > 1 ? (
+                {allOrgs && allOrgs.orgs.length > 1 ? (
                   <Box display="flex" paddingBottom={5}>
                     <Box width="100%" pr={4}>
                       <Sticky top={20}>
@@ -169,8 +174,8 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
               </>
             ) : null}
           </Container>
-        </>
-      )}
+        )}
+      </>
     </FullHeightPageLayout>
   )
 }

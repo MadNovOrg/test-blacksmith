@@ -15,10 +15,10 @@ import { OrgInvitesTable } from '@app/components/OrgInvitesTable'
 import { OrgUsersTable } from '@app/components/OrgUsersTable'
 import { useOrgMembers } from '@app/components/OrgUsersTable/useOrgMembers'
 import { useAuth } from '@app/context/auth'
-import useOrg from '@app/hooks/useOrg'
+import useOrganisationStats from '@app/modules/organisation/hooks/useOrganisationStats'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
 import { CertificateStatus } from '@app/types'
-import { LoadingStatus } from '@app/util'
 
 export enum OrgIndividualsSubtabs {
   USERS = 'USERS',
@@ -54,12 +54,17 @@ export const OrgIndividualsTab: React.FC<
     if (initialTab) setSelectedTab(initialTab)
   }, [initialTab])
 
-  const { data, stats, status, mutate } = useOrg(
+  const { data, fetching, reexecute } = useOrgV2({
     orgId,
-    profile?.id,
-    acl.canViewAllOrganizations(),
-    certificateStatus
-  )
+    profileId: profile?.id,
+    showAll: acl.canViewAllOrganizations(),
+  })
+
+  const { stats } = useOrganisationStats({
+    orgId,
+    profileId: profile?.id,
+    showAll: acl.canViewAllOrganizations(),
+  })
 
   const { total: totalMembers, refetch: refetchOrgMembers } = useOrgMembers({
     orgId,
@@ -67,7 +72,7 @@ export const OrgIndividualsTab: React.FC<
   const { width } = useWindowSize()
   const isMobile = width <= 425
 
-  const org = data?.length ? data[0] : null
+  const org = data?.orgs.length ? data.orgs[0] : null
 
   const onKPITileSelected = useCallback(
     (status: CertificateStatus | null) => {
@@ -88,7 +93,7 @@ export const OrgIndividualsTab: React.FC<
 
   return (
     <Box sx={{ pb: 4 }}>
-      {status === LoadingStatus.FETCHING ? (
+      {fetching ? (
         <Stack
           alignItems="center"
           justifyContent="center"
@@ -98,7 +103,7 @@ export const OrgIndividualsTab: React.FC<
         </Stack>
       ) : null}
 
-      {org && status === LoadingStatus.SUCCESS ? (
+      {org && !fetching ? (
         <Grid container>
           <Grid item xs={12}>
             <OrgStatsTiles
@@ -159,7 +164,7 @@ export const OrgIndividualsTab: React.FC<
                   certificateStatus={certificateStatus}
                   onChange={async () => {
                     refetchOrgMembers()
-                    await mutate()
+                    reexecute()
                   }}
                 />
               </TabPanel>

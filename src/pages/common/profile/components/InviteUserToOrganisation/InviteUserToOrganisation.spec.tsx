@@ -1,9 +1,8 @@
-import React from 'react'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
 import { SaveOrganisationInvitesMutation } from '@app/generated/graphql'
-import { useOrganizations } from '@app/hooks/useOrganizations'
+import { useOrganizations } from '@app/modules/organisation/hooks/useOrganizations'
 import { RoleName } from '@app/types'
 
 import {
@@ -18,7 +17,7 @@ import {
 import { InviteUserToOrganisation } from '.'
 
 vi.mock('@app/hooks/use-fetcher')
-vi.mock('@app/hooks/useOrganizations')
+vi.mock('@app/modules/organisation/hooks/useOrganizations')
 
 const useOrganisationMock = vi.mocked(useOrganizations)
 

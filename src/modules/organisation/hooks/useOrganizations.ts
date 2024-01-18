@@ -8,7 +8,7 @@ import {
 } from '@app/queries/organization/get-organizations'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
-import { Sorting } from './useTableSort'
+import { Sorting } from '../../../hooks/useTableSort'
 
 export const useOrganizations = (
   sorting?: Sorting,

@@ -85,7 +85,7 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
           </MenuItem>
         )}
 
-        {acl.canViewAdmin() && (
+        {acl.canViewAdmin() ? (
           <MenuItem onClick={() => handleMenuClick('/admin')}>
             <ListItemIcon>
               <AdminIcon fontSize="small" />
@@ -97,7 +97,7 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
               {t('admin')}
             </ListItemText>
           </MenuItem>
-        )}
+        ) : null}
 
         <MenuItem>
           <ListItemIcon>
@@ -114,7 +114,8 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
         </MenuItem>
 
         {acl.isInternalUser() ? (
-          <>
+          // Added the DIV as a parent in order to get rid of the The Menu component doesn't accept a Fragment as a child.Consider providing an array instead.  error
+          <div>
             <MenuItem>
               <ListItemIcon>
                 <SchoolIcon fontSize="small" />
@@ -156,7 +157,7 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
                 </Link>
               </ListItemText>
             </MenuItem>
-          </>
+          </div>
         ) : null}
 
         <Divider />

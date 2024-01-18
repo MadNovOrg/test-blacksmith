@@ -8,10 +8,9 @@ import { useWindowSize } from 'react-use'
 
 import { DetailsRow } from '@app/components/DetailsRow'
 import { useAuth } from '@app/context/auth'
-import useOrg from '@app/hooks/useOrg'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { sectors } from '@app/pages/common/CourseBooking/components/org-data'
-import { LoadingStatus } from '@app/util'
 
 type OrgDetailsTabParams = {
   orgId: string
@@ -24,23 +23,23 @@ export const OrgDetailsTab: React.FC<
   const { profile, acl } = useAuth()
   const navigate = useNavigate()
 
-  const { data, status } = useOrg(
+  const { data, fetching, error } = useOrgV2({
     orgId,
-    profile?.id,
-    acl.canViewAllOrganizations()
-  )
+    profileId: profile?.id,
+    showAll: acl.canViewAllOrganizations(),
+  })
 
   const { width } = useWindowSize()
   const isMobile = width <= 425
 
-  const org = data?.length ? data[0] : null
+  const org = data?.orgs.length ? data.orgs[0] : null
   const [, sector = org?.sector] =
     Object.entries(sectors).find(
       ([key, value]) => key === org?.sector && value
     ) || []
   return (
     <Box sx={{ pt: 2, pb: 4 }}>
-      {status === LoadingStatus.FETCHING ? (
+      {fetching ? (
         <Stack
           alignItems="center"
           justifyContent="center"
@@ -50,7 +49,7 @@ export const OrgDetailsTab: React.FC<
         </Stack>
       ) : null}
 
-      {org && status === LoadingStatus.SUCCESS ? (
+      {!fetching && !error && org ? (
         <Box>
           <Typography variant="subtitle1" mb={2}>
             {t('organization-details-section.title')}
