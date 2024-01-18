@@ -13,6 +13,7 @@ import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CourseTitleAndDuration } from '@app/components/CourseTitleAndDuration'
 import { DetailsItemBox, ItemRow } from '@app/components/DetailsItemRow'
 import { LinkBehavior } from '@app/components/LinkBehavior'
@@ -48,6 +49,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams()
   const { t, _t } = useScopedTranslation('pages.order-details')
   const { acl } = useAuth()
+  const { getLabel, isUKCountry } = useWorldCountries()
 
   const [{ data, fetching }] = useOrder(id ?? '')
 
@@ -254,6 +256,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         <Typography color="grey.700">
                           {_t('currency', {
                             amount: go1LicensesLineItem.unitAmount,
+                            currency: invoice?.currencyCode,
                           })}{' '}
                           {t('per-attendee')}
                         </Typography>
@@ -280,6 +283,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                               <Typography color="grey.700">
                                 {_t('common.currency', {
                                   amount: lineItem?.unitAmount,
+                                  currency: invoice?.currencyCode,
                                 })}
                               </Typography>
                             </ItemRow>
@@ -327,6 +331,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                             <Typography color="grey.700">
                               {_t('common.currency', {
                                 amount: expenseLineItem?.lineAmount,
+                                currency: invoice?.currencyCode,
                               })}
                             </Typography>
                           </ItemRow>
@@ -345,6 +350,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                           <Typography color="grey.700">
                             {_t('common.currency', {
                               amount: discountAmount,
+                              currency: invoice?.currencyCode,
                             })}
                           </Typography>
                         </ItemRow>
@@ -360,6 +366,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                           >
                             {_t('common.currency', {
                               amount: discountLineItem?.lineAmount,
+                              currency: invoice?.currencyCode,
                             })}
                           </Typography>
                         </ItemRow>
@@ -370,7 +377,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                             {t('processing-fee')}
                           </Typography>
                           <Typography color="grey.700">
-                            {_t('common.currency', { amount: processingFee })}
+                            {_t('common.currency', {
+                              amount: processingFee,
+                              currency: invoice?.currencyCode,
+                            })}
                           </Typography>
                         </ItemRow>
                       ) : null}
@@ -381,14 +391,18 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         <Typography color="grey.700">
                           {_t('common.currency', {
                             amount: invoice?.subtotal,
+                            currency: invoice?.currencyCode,
                           })}
                         </Typography>
                       </ItemRow>
                       <ItemRow data-testid="order-vat">
-                        <Typography color="grey.700">{t('vat')}</Typography>
+                        <Typography color="grey.700">
+                          {t(invoice?.totalTax ? 'vat' : 'no-vat')}
+                        </Typography>
                         <Typography color="grey.700">
                           {_t('common.currency', {
                             amount: invoice?.totalTax,
+                            currency: invoice?.currencyCode,
                           })}
                         </Typography>
                       </ItemRow>
@@ -412,7 +426,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     <ItemRow data-testid="order-total">
                       <Typography color="grey.700">{t('total')}</Typography>
                       <Typography color="grey.700">
-                        {_t('common.currency', { amount: invoice?.total })}
+                        {_t('common.currency', {
+                          amount: invoice?.total,
+                          currency: invoice?.currencyCode,
+                        })}
                       </Typography>
                     </ItemRow>
                   </DetailsItemBox>
@@ -428,6 +445,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         <Typography color="grey.700">
                           {_t('common.currency', {
                             amount: invoice?.amountPaid,
+                            currency: invoice?.currencyCode,
                           })}
                         </Typography>
                       </ItemRow>
@@ -445,6 +463,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         <Typography fontWeight={600} variant="h3">
                           {_t('common.currency', {
                             amount: invoice?.amountDue,
+                            currency: invoice?.currencyCode,
                           })}
                         </Typography>
                       </ItemRow>
@@ -620,11 +639,26 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                   ) : null}
 
                   <DetailsItemBox>
-                    <Stack spacing={2}>
+                    <Stack spacing={2} data-testid="region-info">
                       <Typography fontWeight={600}>{t('region')}</Typography>
-                      <Typography color="grey.700">{t('UK')}</Typography>
+                      <Typography color="grey.700">
+                        {!isUKCountry(course?.residingCountry) ? '-' : t('UK')}
+                      </Typography>
                     </Stack>
                   </DetailsItemBox>
+                  {course?.residingCountry &&
+                  !isUKCountry(course.residingCountry) ? (
+                    <DetailsItemBox>
+                      <Stack spacing={2}>
+                        <Typography fontWeight={600}>
+                          {t('residing-country')}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {getLabel(course?.residingCountry)}
+                        </Typography>
+                      </Stack>
+                    </DetailsItemBox>
+                  ) : null}
 
                   <DetailsItemBox>
                     <Stack spacing={2}>

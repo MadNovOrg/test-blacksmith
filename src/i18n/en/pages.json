@@ -944,6 +944,7 @@
     "processing-fee": "Payment Processing Fee",
     "subtotal": "Sub total",
     "vat": "VAT (20%)",
+    "no-vat": "VAT (0%)",
     "promo-code": "Promo code: {{code}}",
     "free-spaces": "Free spaces ({{amount}})",
     "total": "Total",
@@ -962,9 +963,14 @@
     "source": "Source",
     "mailout": "Mailout",
     "region": "Region",
+    "residing-country": "Course Residing Country",
     "UK": "United Kingdom",
     "currency": "Currency",
-    "GBP": "GBP - Pound sterling"
+    "AUD": "AUD - Australian Dollar",
+    "EUR": "EUR - Euro",
+    "GBP": "GBP - Pound sterling",
+    "NZD": "NZD - New Zealand Dollar",
+    "USD": "USD - Dollar"
   },
   "reset-password": {
     "not-received-email": "If you did not receive an email with the code, please",

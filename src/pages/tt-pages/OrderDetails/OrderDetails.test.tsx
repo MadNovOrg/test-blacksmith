@@ -1,9 +1,11 @@
 import { addHours } from 'date-fns'
 import { DocumentNode } from 'graphql'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Client, CombinedError, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import {
   Course_Level_Enum,
   Course_Type_Enum,
@@ -19,7 +21,14 @@ import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { QUERY as GET_ORDER_QUERY } from '@app/queries/order/get-order'
 import { LoadingStatus } from '@app/util'
 
-import { chance, formatCurrency, render, screen, within } from '@test/index'
+import {
+  chance,
+  formatCurrency,
+  render,
+  renderHook,
+  screen,
+  within,
+} from '@test/index'
 
 import {
   buildInvoice,
@@ -35,6 +44,12 @@ vi.mock('@app/hooks/usePromoCodes')
 const usePromoCodesMock = vi.mocked(usePromoCodes)
 
 describe('page: OrderDetails', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+
   beforeEach(() => {
     usePromoCodesMock.mockReturnValue({
       promoCodes: [],
@@ -719,5 +734,53 @@ describe('page: OrderDetails', () => {
         within(expensesRow).getByText(formatCurrency(expense.lineAmount))
       ).toBeInTheDocument()
     })
+  })
+
+  it('renders course residing country for non UK country', () => {
+    const nonUKCountryCode = 'AL'
+
+    const {
+      result: {
+        current: { getLabel },
+      },
+    } = renderHook(() => useWorldCountries())
+
+    const order = buildOrder()
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_ORDER_QUERY) {
+          return fromValue<{ data: GetOrderQuery }>({
+            data: {
+              order: {
+                ...order,
+                invoice: buildInvoice(),
+                course: {
+                  ...order.course,
+                  level: Course_Level_Enum.Level_1,
+                  residingCountry: nonUKCountryCode,
+                },
+              },
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
+    )
+
+    const regionInfo = screen.getByTestId('region-info')
+
+    expect(within(regionInfo).getByText('-')).toBeInTheDocument()
+    expect(
+      screen.getByText(t('pages.order-details.residing-country'))
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(getLabel(nonUKCountryCode) as string)
+    ).toBeInTheDocument()
   })
 })
