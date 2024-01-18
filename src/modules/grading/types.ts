@@ -6,4 +6,7 @@ export type Lesson = {
   items?: Lesson[]
 }
 
-export type ModuleForGrading = Module_V2 & { mandatory?: boolean }
+export type ModuleForGrading = Module_V2 & {
+  mandatory?: boolean
+  note?: string
+}

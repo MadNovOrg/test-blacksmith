@@ -16,6 +16,7 @@ const QUERY = gql`
       level
       deliveryType
       accreditedBy
+      curriculum
       participants(
         where: { attended: { _eq: true }, grade: { _is_null: true } }
       ) {

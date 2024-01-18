@@ -27,8 +27,8 @@ import {
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import { Strategy } from '@app/types'
 
-import { useGradingParticipants } from '../../hooks'
-import useCourseGradingData from '../../useCourseGradingData'
+import useCourseGradingData from '../../hooks/useCourseGradingData'
+import { useGradingParticipants } from '../../hooks/useGradingParticipants'
 import { GradingCount } from '../GradingCount'
 import { GradingTitle } from '../GradingTitle'
 import { ModuleGroupNoteInput } from '../ModuleGroupNoteInput/ModuleGroupNoteInput'

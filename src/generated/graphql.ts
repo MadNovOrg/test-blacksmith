@@ -55016,6 +55016,23 @@ export type SaveBildGradeMutationVariables = Exact<{
 
 export type SaveBildGradeMutation = { __typename?: 'mutation_root', saveModules?: { __typename?: 'course_participant_bild_module_mutation_response', affected_rows: number } | null, saveParticipantsGrade?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, gradingStarted?: { __typename?: 'course', id: number } | null };
 
+export type SaveCourseGradingV2MutationVariables = Exact<{
+  participantIds: Array<Scalars['uuid']> | Scalars['uuid'];
+  gradedOn: Scalars['jsonb'];
+  grade: Grade_Enum;
+  courseId: Scalars['Int'];
+}>;
+
+
+export type SaveCourseGradingV2Mutation = { __typename?: 'mutation_root', saveParticipantsGrade?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, gradingStarted?: { __typename?: 'course', id: number } | null };
+
+export type CourseGradingDataQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, accreditedBy: Accreditors_Enum, curriculum?: any | null, participants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, modules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null, submodules: Array<{ __typename?: 'submodule', id: any, name: string }> } }>, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, trainers: Array<{ __typename?: 'course_trainer', profile_id: any, type: Course_Trainer_Type_Enum }> } | null };
+
 export type SaveCourseGradingMutationVariables = Exact<{
   modules: Array<Course_Participant_Module_Insert_Input> | Course_Participant_Module_Insert_Input;
   participantIds?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;
@@ -55027,13 +55044,6 @@ export type SaveCourseGradingMutationVariables = Exact<{
 
 
 export type SaveCourseGradingMutation = { __typename?: 'mutation_root', saveModules?: { __typename?: 'course_participant_module_mutation_response', affectedRows: number } | null, saveParticipantsGrade?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, gradingStarted?: { __typename?: 'course', id: number } | null, insert_course_participant_note?: { __typename?: 'course_participant_note_mutation_response', affected_rows: number } | null };
-
-export type CourseGradingDataQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, accreditedBy: Accreditors_Enum, participants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, modules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null, submodules: Array<{ __typename?: 'submodule', id: any, name: string }> } }>, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, trainers: Array<{ __typename?: 'course_trainer', profile_id: any, type: Course_Trainer_Type_Enum }> } | null };
 
 export type SaveGradingDetailsMutationVariables = Exact<{
   courseId: Scalars['Int'];

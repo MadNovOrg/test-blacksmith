@@ -21,6 +21,7 @@ export const buildGradingCourse = build<
     level: Course_Level_Enum.Level_1,
     deliveryType: Course_Delivery_Type_Enum.F2F,
     accreditedBy: Accreditors_Enum.Icm,
+    curriculum: null,
     participants: [
       {
         id: chance.guid(),

@@ -21,11 +21,15 @@ import theme from '@app/theme'
 type Props = {
   curriculum: unknown
   onChange?: (curriculum: unknown) => void
+  slots?: {
+    afterModule: (moduleId: string) => React.ReactNode
+  }
 }
 
 export const ModulesSelectionListV2: React.FC<Props> = ({
   curriculum,
   onChange = noop,
+  slots,
 }) => {
   const [curriculumMap, setCurriculumMap] = useState<Map<string, Module_V2>>(
     () => {
@@ -288,6 +292,10 @@ export const ModulesSelectionListV2: React.FC<Props> = ({
                     })}
                   </AccordionDetails>
                 </Accordion>
+
+                {typeof slots?.afterModule === 'function'
+                  ? slots.afterModule(module.id)
+                  : null}
               </Box>
             )
           })
