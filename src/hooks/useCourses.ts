@@ -270,6 +270,15 @@ export const filtersToWhereClause = (
       ? { _and: keywords.map(w => ({ name: { _ilike: `%${w}%` } })) }
       : { name: { _ilike: `%${query}%` } }
 
+  const queryTrainers = {
+    trainers: {
+      profile:
+        keywords && keywords.length > 1
+          ? { _and: keywords.map(w => ({ fullName: { _ilike: `%${w}%` } })) }
+          : { fullName: { _ilike: `%${query}%` } },
+    },
+  }
+
   if (query?.length) {
     const orClauses = [
       onlyDigits ? { id: { _eq: Number(query) } } : null,
@@ -281,7 +290,7 @@ export const filtersToWhereClause = (
       { schedule: { venue: { addressLineTwo: { _ilike: `%${query}%` } } } },
       { schedule: { venue: { country: { _ilike: `%${query}%` } } } },
       { schedule: { venue: { postCode: { _ilike: `%${query}%` } } } },
-      { trainers: { profile: { fullName: { _ilike: `%${query}%` } } } },
+      queryTrainers,
       { course_code: { _ilike: `%${query}%` } },
       isInternalUser ? { arloReferenceId: { _ilike: `%${query}%` } } : null,
     ]

@@ -306,6 +306,15 @@ export function useUserCourses(
         ? { _and: keywords.map(w => ({ name: { _ilike: `%${w}%` } })) }
         : { name: { _ilike: `%${query}%` } }
 
+    const queryTrainers = {
+      trainers: {
+        profile:
+          keywords && keywords.length > 1
+            ? { _and: keywords.map(w => ({ fullName: { _ilike: `%${w}%` } })) }
+            : { fullName: { _ilike: `%${query}%` } },
+      },
+    }
+
     const onlyDigits = /^\d+$/.test(query || '')
 
     if (query?.length) {
@@ -314,7 +323,7 @@ export function useUserCourses(
         queryName,
         { organization: { name: { _ilike: `%${query}%` } } },
         { schedule: { venue: { name: { _ilike: `%${query}%` } } } },
-        { trainers: { profile: { fullName: { _ilike: `%${query}%` } } } },
+        queryTrainers,
         { course_code: { _ilike: `%${query}%` } },
       ]
 
