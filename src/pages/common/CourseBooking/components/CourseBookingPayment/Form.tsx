@@ -21,6 +21,7 @@ const initialState = { formLoaded: false, submitting: false, error: undefined }
 
 export const PaymentForm: React.FC<React.PropsWithChildren<Props>> = ({
   amount,
+  currency,
 }) => {
   const stripe = useStripe()
   const elements = useElements()
@@ -67,7 +68,7 @@ export const PaymentForm: React.FC<React.PropsWithChildren<Props>> = ({
             ) : (
               <Typography>
                 {t('pages.book-course.payment-cc-chargeInfo')}{' '}
-                {t('currency', { amount })}
+                {t('currency', { amount, currency })}
               </Typography>
             )}
           </Box>

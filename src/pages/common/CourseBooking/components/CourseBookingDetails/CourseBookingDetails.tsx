@@ -22,6 +22,7 @@ import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CountryDropdown } from '@app/components/CountryDropdown'
 import { SourceDropdown } from '@app/components/CourseForm/components/SourceDropdown'
 import { CourseDuration } from '@app/components/CourseTitleAndDuration/components/CourseDuration'
@@ -112,6 +113,7 @@ export const CourseBookingDetails: React.FC<
     setBooking,
     internalBooking,
   } = useBooking()
+  const { getLabel, isUKCountry } = useWorldCountries()
 
   const qtyOptions = useMemo(
     () => Array.from({ length: availableSeats }, (_, i) => i + 1),
@@ -412,6 +414,12 @@ export const CourseBookingDetails: React.FC<
               </FormControl>
             </Box>
           </Box>
+
+          {course?.residingCountry && !isUKCountry(course.residingCountry) ? (
+            <Typography color="grey.700" mb={1} mt={3}>
+              {getLabel(course.residingCountry)}
+            </Typography>
+          ) : null}
 
           <Typography color="grey.700" mb={1} mt={3}>
             {t('location')}

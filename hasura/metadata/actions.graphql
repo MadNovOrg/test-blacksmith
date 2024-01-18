@@ -371,7 +371,11 @@ enum CourseTrainerType {
 }
 
 enum Currency {
+  AUD
+  EUR
   GBP
+  NZD
+  USD
 }
 
 enum OrderDirection {

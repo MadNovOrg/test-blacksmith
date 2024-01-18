@@ -1979,7 +1979,11 @@ export type CreateWebinarsCategoryPayload = {
 };
 
 export enum Currency {
-  Gbp = 'GBP'
+  Aud = 'AUD',
+  Eur = 'EUR',
+  Gbp = 'GBP',
+  Nzd = 'NZD',
+  Usd = 'USD'
 }
 
 export type CurriculumSyncInput = {
