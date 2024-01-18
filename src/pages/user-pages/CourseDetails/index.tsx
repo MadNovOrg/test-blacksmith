@@ -488,7 +488,7 @@ export const CourseDetails: React.FC<
                             data-testid="certifications-tab"
                           />
                         ) : null}
-                        {!bookingOnly && showCourseOverview && (
+                        {showCourseOverview && (
                           <PillTab
                             label={t(
                               'pages.course-details.tabs.course-overview.title'
