@@ -16,8 +16,8 @@ import { LoadingStatus } from '@app/util'
 import { chance, render, screen, userEvent } from '@test/index'
 import { buildOrganization } from '@test/mock-data-utils'
 
-import { OrgDashboardTabs } from '../OrgDashboard'
-import { OrgIndividualsSubtabs } from '../tabs/OrgIndividualsTab'
+import { OrgDashboardTabs } from '../../pages/OrganisationDashboard/OrgDashboard'
+import { OrgIndividualsSubtabs } from '../../tabs/OrgIndividualsTab'
 
 import { InviteUserToOrganization } from './InviteUserToOrganization'
 

@@ -13,8 +13,8 @@ import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { MUTATION } from '@app/queries/organization/insert-org'
 import { Address } from '@app/types'
 
-import { OrganizationForm } from './OrganizationForm'
-import { FormInputs } from './shared'
+import { OrganizationForm } from '../../components/OrganizationForm'
+import { FormInputs } from '../../utils'
 
 export const CreateOrganization = () => {
   const theme = useTheme()

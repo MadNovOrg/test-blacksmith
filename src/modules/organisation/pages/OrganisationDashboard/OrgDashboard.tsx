@@ -17,14 +17,14 @@ import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/OrgSelectionToolbar'
-import { OrgDetailsTab } from '@app/pages/admin/components/Organizations/tabs/OrgDetailsTab'
-import { OrgIndividualsTab } from '@app/pages/admin/components/Organizations/tabs/OrgIndividualsTab'
-import { OrgOverviewTab } from '@app/pages/admin/components/Organizations/tabs/OrgOverviewTab'
+import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar.tsx/OrgSelectionToolbar'
+import { OrgDetailsTab } from '@app/modules/organisation/tabs/OrgDetailsTab'
+import { OrgIndividualsTab } from '@app/modules/organisation/tabs/OrgIndividualsTab'
+import { OrgOverviewTab } from '@app/modules/organisation/tabs/OrgOverviewTab'
 import theme from '@app/theme'
 import { LoadingStatus } from '@app/util'
 
-import { LicensesTab } from './tabs/Licenses/LicensesTab'
+import { LicensesTab } from '../../tabs/Licenses/LicensesTab'
 
 export enum OrgDashboardTabs {
   OVERVIEW = 'OVERVIEW',

@@ -4,12 +4,8 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from '@app/context/auth'
 import { CourseBuilder } from '@app/modules/course/pages/CourseBuilder/CourseBuilder'
 import { GradingRoutes } from '@app/modules/grading/routes'
-import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
+import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
-import Organizations from '@app/pages/admin/components/Organizations'
-import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
-import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization/InviteUserToOrganization'
-import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
@@ -96,18 +92,7 @@ const TrainerBaseRoutes = () => {
       ) : null}
 
       {acl.canViewOrganizations() ? (
-        <Route path="organisations">
-          <Route index element={<Navigate replace to="all" />} />
-          <Route path="list" element={<Organizations />} />
-          <Route path=":id">
-            <Route index element={<OrgDashboard />} />
-            <Route path="edit" element={<EditOrgDetails />} />
-            {acl.canEditOrAddOrganizations() ? (
-              <Route path="invite" element={<InviteUserToOrganization />} />
-            ) : null}
-            <Route path="courses" element={<AvailableCourses />} />
-          </Route>
-        </Route>
+        <Route path="organisations/*" element={<OrganisationRoutes />} />
       ) : null}
 
       <Route path="resources/*" element={<ResourcesRoutes />} />

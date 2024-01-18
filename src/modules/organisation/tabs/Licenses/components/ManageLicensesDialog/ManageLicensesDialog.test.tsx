@@ -9,7 +9,7 @@ import { chance, render, screen, userEvent, waitFor } from '@test/index'
 import { fillForm } from '../../test-utils'
 import { Type } from '../ManageLicensesForm'
 
-import { ManageLicensesDialog } from './'
+import { ManageLicensesDialog } from '.'
 
 vi.mock('@app/hooks/use-fetcher')
 const useFetcherMock = vi.mocked(useFetcher)

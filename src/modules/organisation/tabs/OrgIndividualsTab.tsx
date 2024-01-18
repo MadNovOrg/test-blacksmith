@@ -16,7 +16,7 @@ import { OrgUsersTable } from '@app/components/OrgUsersTable'
 import { useOrgMembers } from '@app/components/OrgUsersTable/useOrgMembers'
 import { useAuth } from '@app/context/auth'
 import useOrg from '@app/hooks/useOrg'
-import { OrgStatsTiles } from '@app/pages/admin/components/Organizations/tabs/components/OrgStatsTiles'
+import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
 import { CertificateStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 

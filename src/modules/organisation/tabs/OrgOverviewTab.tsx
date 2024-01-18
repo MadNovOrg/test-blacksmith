@@ -28,10 +28,10 @@ import {
 } from '@app/generated/graphql'
 import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
-import { CourseForBookingTile } from '@app/pages/admin/components/Organizations/tabs/components/CourseForBookingTile'
-import { IndividualsByLevelList } from '@app/pages/admin/components/Organizations/tabs/components/IndividualsByLevelList'
-import { OrgStatsTiles } from '@app/pages/admin/components/Organizations/tabs/components/OrgStatsTiles'
-import { OrgSummaryList } from '@app/pages/admin/components/Organizations/tabs/components/OrgSummaryList'
+import { CourseForBookingTile } from '@app/modules/organisation/tabs/components/CourseForBookingTile'
+import { IndividualsByLevelList } from '@app/modules/organisation/tabs/components/IndividualsByLevelList'
+import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
+import { OrgSummaryList } from '@app/modules/organisation/tabs/components/OrgSummaryList'
 import { CertificateStatus } from '@app/types'
 
 type OrgOverviewTabParams = {

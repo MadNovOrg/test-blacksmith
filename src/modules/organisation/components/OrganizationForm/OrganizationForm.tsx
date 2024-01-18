@@ -52,7 +52,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { OfstedRating } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
-import { FormInputs, defaultValues, getFormSchema } from '../shared'
+import { FormInputs, defaultValues, getFormSchema } from '../../utils'
 
 type Props = {
   isEditMode?: boolean

@@ -3,13 +3,10 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { ParticipantGrading } from '@app/modules/grading/pages/ParticipantGrading/ParticipantGrading'
+import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { AdminPage } from '@app/pages/admin'
 import { AuditsPage } from '@app/pages/admin/Audits'
-import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
-import Organizations from '@app/pages/admin/components/Organizations'
-import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization/InviteUserToOrganization'
-import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { Contacts } from '@app/pages/admin/Contacts'
 import { Users } from '@app/pages/admin/Users'
 import { OrderDetails as CourseOrderDetails } from '@app/pages/CreateCourse/components/OrderDetails'
@@ -137,17 +134,7 @@ const FinanceRoute = () => {
         <Route path="users" element={<Users />} />
       </Route>
 
-      <Route path="organisations">
-        <Route index element={<Navigate replace to="all" />} />
-        <Route path="list" element={<Organizations />} />
-        <Route path=":id">
-          <Route index element={<OrgDashboard />} />
-          {acl.canEditOrAddOrganizations() ? (
-            <Route path="invite" element={<InviteUserToOrganization />} />
-          ) : null}
-          <Route path="courses" element={<AvailableCourses />} />
-        </Route>
-      </Route>
+      <Route path="organisations/*" element={<OrganisationRoutes />} />
 
       <Route path="certifications" element={<Certifications />} />
 

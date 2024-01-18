@@ -4,15 +4,10 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from '@app/context/auth'
 import { CourseBuilder } from '@app/modules/course/pages/CourseBuilder/CourseBuilder'
 import { GradingRoutes } from '@app/modules/grading/routes'
+import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { AdminPage } from '@app/pages/admin'
 import { AuditsPage } from '@app/pages/admin/Audits'
-import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
-import Organizations from '@app/pages/admin/components/Organizations'
-import { CreateOrganization } from '@app/pages/admin/components/Organizations/CreateOrganization'
-import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
-import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization/InviteUserToOrganization'
-import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { Contacts } from '@app/pages/admin/Contacts'
 import { CourseExceptionsLog } from '@app/pages/admin/CourseExceptionsLog'
 import { Users } from '@app/pages/admin/Users'
@@ -128,23 +123,7 @@ const TTAdminRoutes = () => {
       ) : null}
 
       {acl.canViewOrganizations() ? (
-        <Route path="organisations">
-          <Route index element={<Navigate replace to="all" />} />
-          {acl.canEditOrAddOrganizations() ? (
-            <Route path="new" element={<CreateOrganization />} />
-          ) : null}
-          <Route path="list" element={<Organizations />} />
-          <Route path=":id">
-            <Route index element={<OrgDashboard />} />
-            {acl.canEditOrAddOrganizations() ? (
-              <Route path="edit" element={<EditOrgDetails />} />
-            ) : null}
-            {acl.canEditOrAddOrganizations() ? (
-              <Route path="invite" element={<InviteUserToOrganization />} />
-            ) : null}
-            <Route path="courses" element={<AvailableCourses />} />
-          </Route>
-        </Route>
+        <Route path="organisations/*" element={<OrganisationRoutes />} />
       ) : null}
 
       <Route path="certifications" element={<Certifications />} />

@@ -10,8 +10,8 @@ import {
 import useOrg from '@app/hooks/useOrg'
 import { MUTATION as UPDATE_ORG_MUTATION } from '@app/queries/organization/update-org'
 
-import { OrganizationForm } from './OrganizationForm'
-import { FormInputs } from './shared'
+import { OrganizationForm } from '../../components/OrganizationForm'
+import { FormInputs } from '../../utils'
 
 export const EditOrgDetails: React.FC<
   React.PropsWithChildren<unknown>

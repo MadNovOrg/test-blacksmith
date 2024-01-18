@@ -35,8 +35,8 @@ import useOrg from '@app/hooks/useOrg'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/OrgSelectionToolbar'
-import { CourseForBookingTile } from '@app/pages/admin/components/Organizations/tabs/components/CourseForBookingTile'
+import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar.tsx/OrgSelectionToolbar'
+import { CourseForBookingTile } from '@app/modules/organisation/tabs/components/CourseForBookingTile'
 import { geoDistance } from '@app/util/geo'
 
 type UpcomingCourse = GetUpcomingCoursesQuery['courses'][0]
