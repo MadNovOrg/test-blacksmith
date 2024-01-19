@@ -1656,12 +1656,12 @@ event_triggers:
     webhook: '{{EVENTS_HOST}}/email/course-status-changed'
   - name: course_status_recalculation
     definition:
-      enable_manual: false
+      enable_manual: true
       update:
         columns:
           - course_status
     retry_conf:
-      interval_sec: 10
-      num_retries: 0
+      interval_sec: 20
+      num_retries: 5
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/status/clear'

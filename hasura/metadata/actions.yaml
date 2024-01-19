@@ -550,7 +550,19 @@ custom_types:
       values:
         - description: null
           is_deprecated: null
+          value: AUD
+        - description: null
+          is_deprecated: null
+          value: EUR
+        - description: null
+          is_deprecated: null
           value: GBP
+        - description: null
+          is_deprecated: null
+          value: NZD
+        - description: null
+          is_deprecated: null
+          value: USD
     - name: OrderDirection
       values:
         - description: null
