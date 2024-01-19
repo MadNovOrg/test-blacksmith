@@ -632,8 +632,8 @@ event_triggers:
           - completed_evaluation
     retry_conf:
       interval_sec: 10
-      num_retries: 0
-      timeout_sec: 60
+      num_retries: 3
+      timeout_sec: 120
     webhook: '{{EVENTS_HOST}}/certificate/insert'
   - name: go1_link
     definition:
