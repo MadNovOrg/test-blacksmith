@@ -29,18 +29,19 @@ import { InfoPanel } from '@app/components/InfoPanel'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import {
+  GetOrganisationDetailsQuery,
   SaveOrganisationInvitesMutation,
   SaveOrganisationInvitesMutationVariables,
   SaveOrgInviteError,
 } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { useOrganizations } from '@app/modules/organisation/hooks/useOrganizations'
 import { OrgDashboardTabs } from '@app/modules/organisation/pages/OrganisationDashboard/OrgDashboard'
 import { OrgIndividualsSubtabs } from '@app/modules/organisation/tabs/OrgIndividualsTab'
 import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
 import { yup } from '@app/schemas'
-import { Organization } from '@app/types'
 import { getFieldError, requiredMsg } from '@app/util'
+
+import useOrgV2 from '../../hooks/useOrgV2'
 
 export const InviteUserToOrganization = () => {
   const theme = useTheme()
@@ -48,10 +49,11 @@ export const InviteUserToOrganization = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { id } = useParams()
-  const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
+  const [selectedOrg, setSelectedOrg] = useState<
+    GetOrganisationDetailsQuery['orgs'][0] | null
+  >(null)
 
-  const { orgs, loading: loadingOrgs } = useOrganizations(
-    undefined,
+  const organisationsFilter =
     profile && acl.isOrgAdmin() && !acl.canViewAllOrganizations()
       ? {
           members: {
@@ -66,7 +68,10 @@ export const InviteUserToOrganization = () => {
           },
         }
       : undefined
-  )
+
+  const { data, fetching: loadingOrgs } = useOrgV2({
+    where: organisationsFilter,
+  })
 
   const schema = useMemo(() => {
     return yup.object({
@@ -101,10 +106,10 @@ export const InviteUserToOrganization = () => {
   const values = watch()
 
   useEffect(() => {
-    if (orgs.length > 0 && !selectedOrg && id) {
-      setSelectedOrg(orgs.find(o => o.id === id) ?? null)
+    if (data?.orgs.length && !selectedOrg && id) {
+      setSelectedOrg(data.orgs.find(o => o.id === id) ?? null)
     }
-  }, [id, orgs, selectedOrg])
+  }, [data?.orgs, id, selectedOrg])
 
   const [
     { data: savingInvitesResponse, error: savingError, fetching: loading },
@@ -206,7 +211,7 @@ export const InviteUserToOrganization = () => {
                           sx={{ bgcolor: 'grey.100' }}
                         />
                       )}
-                      options={orgs}
+                      options={data?.orgs ?? []}
                       onChange={(e, v) => setSelectedOrg(v)}
                     />
                   </FormPanel>

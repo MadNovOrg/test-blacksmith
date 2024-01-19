@@ -7,6 +7,7 @@ import {
   CircularProgress,
   FormControlLabel,
   Grid,
+  ListItemText,
   Stack,
   Switch,
   TextField,
@@ -18,18 +19,20 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
+import { useDebounce } from 'use-debounce'
 
 import { FormPanel } from '@app/components/FormPanel'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
+  GetOrganisationDetailsQuery,
   SaveOrganisationInvitesMutation,
   SaveOrganisationInvitesMutationVariables,
   SaveOrgInviteError,
 } from '@app/generated/graphql'
-import { useOrganizations } from '@app/modules/organisation/hooks/useOrganizations'
+import useOrganisationByName from '@app/modules/organisation/hooks/useOrganisationByName'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
-import { Organization } from '@app/types'
 
 export type InviteUserToOrganisationProps = {
   userProfile: {
@@ -52,7 +55,9 @@ export const InviteUserToOrganisation: React.FC<
   const [error, setError] = useState('')
   const [isOrgAdmin, setIsOrgAdmin] = useState(false)
   const { id } = useParams()
-  const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
+  const [selectedOrg, setSelectedOrg] = useState<
+    GetOrganisationDetailsQuery['orgs'][0] | null
+  >(null)
   const { addSnackbarMessage } = useSnackbar()
 
   const [{ data, fetching, error: errorOnInviteSave }, saveOrgInvite] =
@@ -72,11 +77,27 @@ export const InviteUserToOrganisation: React.FC<
               },
             },
           }
-        : undefined,
+        : {},
     [acl, profile]
   )
 
-  const { orgs, loading: loadingOrgs } = useOrganizations(undefined, where)
+  const [query, setQuery] = useState('')
+  const [debouncedQuery] = useDebounce(query, 300)
+
+  const [{ data: queriedData, fetching: singleOrgLoading }] =
+    useOrganisationByName({
+      query: debouncedQuery,
+      pause: !debouncedQuery,
+    })
+
+  const { data: orgs, fetching: loadingOrgs } = useOrgV2({
+    where,
+  })
+
+  const organisationsData = useMemo(
+    () => [...(orgs?.orgs ?? []), ...(queriedData?.organization ?? [])],
+    [orgs?.orgs, queriedData?.organization]
+  ) as GetOrganisationDetailsQuery['orgs']
 
   const { handleSubmit } = useForm<{ emails: string[] }>()
 
@@ -86,10 +107,10 @@ export const InviteUserToOrganisation: React.FC<
   ) => user.organizations.some(o => o.organization.id === orgId)
 
   useEffect(() => {
-    if (orgs.length > 0 && !selectedOrg && id) {
-      setSelectedOrg(orgs.find(o => o.id === id) ?? null)
+    if (organisationsData.length && !selectedOrg && id) {
+      setSelectedOrg(organisationsData.find(o => o.id === id) ?? null)
     }
-  }, [id, orgs, selectedOrg])
+  }, [id, organisationsData, orgs, selectedOrg])
 
   useEffect(() => {
     if (data) {
@@ -153,12 +174,17 @@ export const InviteUserToOrganisation: React.FC<
       <Box flex={1}>
         <Box display="flex" flexDirection="column" gap={2}>
           <Typography variant="subtitle1">{t('organization')}</Typography>
-
           <FormPanel>
             <Autocomplete
               value={selectedOrg}
               isOptionEqualToValue={(o, v) => o.id === v.id}
               getOptionLabel={o => o.name}
+              loading={singleOrgLoading}
+              renderOption={(props, item) => (
+                <li {...props} key={item.id}>
+                  <ListItemText>{item.name}</ListItemText>
+                </li>
+              )}
               renderInput={params => (
                 <TextField
                   {...params}
@@ -167,11 +193,12 @@ export const InviteUserToOrganisation: React.FC<
                   label={t('organization')}
                   inputProps={{ ...params.inputProps, sx: { height: 40 } }}
                   sx={{ bgcolor: 'grey.100' }}
+                  onChange={e => setQuery(e.target.value)}
                 />
               )}
-              options={orgs}
+              options={organisationsData ?? []}
               data-testid="edit-invite-user-org-selector"
-              onChange={(e, v) => setSelectedOrg(v)}
+              onChange={(_, v) => setSelectedOrg(v)}
             />
           </FormPanel>
 

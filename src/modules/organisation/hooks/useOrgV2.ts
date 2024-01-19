@@ -5,6 +5,7 @@ import {
   GetOrganisationDetailsQuery,
   GetOrganisationDetailsQueryVariables,
 } from '@app/generated/graphql'
+import { Sorting } from '@app/hooks/useTableSort'
 import { SHALLOW_ORGANIZATION, ORGANIZATION } from '@app/queries/fragments'
 import { ALL_ORGS } from '@app/util'
 export const GET_ORGANISATION_DETAILS_QUERY = gql`
@@ -19,6 +20,7 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
     $sort: [organization_order_by!] = { name: asc }
     $specificOrgId: uuid
     $withSpecificOrganisation: Boolean = false
+    $withMembers: Boolean = false
   ) {
     orgs: organization(
       where: $where
@@ -28,6 +30,12 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
     ) {
       ...ShallowOrganization @include(if: $shallow)
       ...Organization @include(if: $detailed)
+      region
+      members @include(if: $withMembers) {
+        profile {
+          lastActivity
+        }
+      }
     }
     specificOrg: organization(where: { id: { _eq: $specificOrgId } })
       @include(if: $withSpecificOrganisation) {
@@ -50,6 +58,9 @@ type UseOrgV2Input = {
   offset?: number
   specificOrgId?: string
   withSpecificOrganisation?: boolean
+  where?: Record<string, unknown>
+  sorting?: Sorting
+  withMembers?: boolean
 }
 
 export default function useOrgV2({
@@ -61,6 +72,9 @@ export default function useOrgV2({
   offset,
   specificOrgId,
   withSpecificOrganisation,
+  where,
+  sorting,
+  withMembers = false,
 }: UseOrgV2Input) {
   let conditions
   if (orgId !== ALL_ORGS) {
@@ -82,19 +96,23 @@ export default function useOrgV2({
         }
   }
 
+  const orderBy = sorting ? { [sorting.by]: sorting.dir } : undefined
+
   const [{ data, error, fetching }, reexecute] = useQuery<
     GetOrganisationDetailsQuery,
     GetOrganisationDetailsQueryVariables
   >({
     query: GET_ORGANISATION_DETAILS_QUERY,
     variables: {
-      where: conditions,
+      where: where ?? conditions,
       shallow,
       detailed: !shallow,
       limit,
       offset,
       specificOrgId,
       withSpecificOrganisation,
+      sort: orderBy,
+      withMembers,
     },
   })
 

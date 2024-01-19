@@ -4,14 +4,14 @@ import { Client, CombinedError, Provider, TypedDocumentNode } from 'urql'
 import { never, fromValue } from 'wonka'
 
 import {
+  GetOrganisationDetailsQuery,
   SaveOrganisationInvitesMutation,
   SaveOrganisationInvitesMutationVariables,
   SaveOrgInviteError,
 } from '@app/generated/graphql'
-import { useOrganizations } from '@app/modules/organisation/hooks/useOrganizations'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
 import { RoleName } from '@app/types'
-import { LoadingStatus } from '@app/util'
 
 import { chance, render, screen, userEvent } from '@test/index'
 import { buildOrganization } from '@test/mock-data-utils'
@@ -21,22 +21,19 @@ import { OrgIndividualsSubtabs } from '../../tabs/OrgIndividualsTab'
 
 import { InviteUserToOrganization } from './InviteUserToOrganization'
 
-vi.mock('@app/modules/organisation/hooks/useOrganizations', () => ({
-  useOrganizations: vi.fn(),
-}))
+vi.mock('@app/modules/organisation/hooks/useOrgV2')
 
-const useOrganizationsMock = vi.mocked(useOrganizations)
+const useOrganisationMock = vi.mocked(useOrgV2)
 
 it('validates that at least one email has been entered', async () => {
   const client = {
     executeMutation: () => never,
   } as unknown as Client
 
-  useOrganizationsMock.mockReturnValue({
-    loading: false,
-    orgs: [],
-    status: LoadingStatus.SUCCESS,
-    mutate: vi.fn(),
+  useOrganisationMock.mockReturnValue({
+    fetching: false,
+    data: { orgs: [], orgsCount: { aggregate: { count: 0 } }, specificOrg: [] },
+    reexecute: vi.fn(),
     error: undefined,
   })
 
@@ -56,11 +53,10 @@ it('validates that entered email is valid', async () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  useOrganizationsMock.mockReturnValue({
-    loading: false,
-    orgs: [],
-    status: LoadingStatus.SUCCESS,
-    mutate: vi.fn(),
+  useOrganisationMock.mockReturnValue({
+    fetching: false,
+    data: { orgs: [], orgsCount: { aggregate: { count: 1 } }, specificOrg: [] },
+    reexecute: vi.fn(),
     error: undefined,
   })
 
@@ -91,11 +87,16 @@ it('displays an error message that user already exist within organization', asyn
       }),
   } as unknown as Client
 
-  useOrganizationsMock.mockReturnValue({
-    loading: false,
-    orgs: [buildOrganization({ overrides: { id: orgId } })],
-    status: LoadingStatus.SUCCESS,
-    mutate: vi.fn(),
+  useOrganisationMock.mockReturnValue({
+    fetching: false,
+    data: {
+      orgs: [
+        buildOrganization({ overrides: { id: orgId } }),
+      ] as unknown as GetOrganisationDetailsQuery['orgs'],
+      orgsCount: { aggregate: { count: 1 } },
+      specificOrg: [],
+    },
+    reexecute: vi.fn(),
     error: undefined,
   })
 
@@ -157,11 +158,16 @@ it('saves org invites and redirects back to the organization individuals tab', a
     },
   } as unknown as Client
 
-  useOrganizationsMock.mockReturnValue({
-    loading: false,
-    orgs: [buildOrganization({ overrides: { id: orgId } })],
-    status: LoadingStatus.SUCCESS,
-    mutate: vi.fn(),
+  useOrganisationMock.mockReturnValue({
+    fetching: false,
+    data: {
+      orgs: [
+        buildOrganization({ overrides: { id: orgId } }),
+      ] as unknown as GetOrganisationDetailsQuery['orgs'],
+      orgsCount: { aggregate: { count: 1 } },
+      specificOrg: [],
+    },
+    reexecute: vi.fn(),
     error: undefined,
   })
 
@@ -194,11 +200,18 @@ it('allows an org admin to invite another org admin', async () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  useOrganizationsMock.mockReturnValue({
-    loading: false,
-    orgs: [buildOrganization({ overrides: { id: orgId } })],
-    status: LoadingStatus.SUCCESS,
-    mutate: vi.fn(),
+  useOrganisationMock.mockReturnValue({
+    fetching: false,
+    data: {
+      orgs: [
+        buildOrganization({
+          overrides: { id: orgId },
+        }),
+      ] as unknown as GetOrganisationDetailsQuery['orgs'],
+      orgsCount: { aggregate: { count: 1 } },
+      specificOrg: [],
+    },
+    reexecute: vi.fn(),
     error: undefined,
   })
 

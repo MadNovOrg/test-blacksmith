@@ -1,8 +1,11 @@
 import { Client, Provider } from 'urql'
-import { fromValue } from 'wonka'
+import { fromValue, never } from 'wonka'
 
-import { SaveOrganisationInvitesMutation } from '@app/generated/graphql'
-import { useOrganizations } from '@app/modules/organisation/hooks/useOrganizations'
+import {
+  GetOrganisationDetailsQuery,
+  SaveOrganisationInvitesMutation,
+} from '@app/generated/graphql'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { RoleName } from '@app/types'
 
 import {
@@ -13,14 +16,14 @@ import {
   within,
   fireEvent,
 } from '@test/index'
+import { buildOrganization } from '@test/mock-data-utils'
 
 import { InviteUserToOrganisation } from '.'
 
-vi.mock('@app/hooks/use-fetcher')
-vi.mock('@app/modules/organisation/hooks/useOrganizations')
+vi.mock('@app/modules/organisation/hooks/useOrgV2')
 
-const useOrganisationMock = vi.mocked(useOrganizations)
-
+const useOrganisationMock = vi.mocked(useOrgV2)
+const orgId = chance.guid()
 const orgs = [
   {
     name: chance.name(),
@@ -48,8 +51,8 @@ describe('InviteUserToOrganisation', () => {
   const setup = (client: Client) => {
     const organisations = {
       orgs,
-      loading: false,
-    } as unknown as ReturnType<typeof useOrganizations>
+      fetching: false,
+    } as unknown as ReturnType<typeof useOrgV2>
 
     useOrganisationMock.mockReturnValue(organisations)
 
@@ -89,6 +92,7 @@ describe('InviteUserToOrganisation', () => {
 
   it('invite user to org if at least one org selected', async () => {
     const client = {
+      executeQuery: () => never,
       executeMutation: () =>
         fromValue<{ data: SaveOrganisationInvitesMutation }>({
           data: {
@@ -98,6 +102,19 @@ describe('InviteUserToOrganisation', () => {
     } as unknown as Client
 
     setup(client)
+
+    useOrganisationMock.mockReturnValue({
+      fetching: false,
+      data: {
+        orgs: [
+          buildOrganization({ overrides: { id: orgId } }),
+        ] as unknown as GetOrganisationDetailsQuery['orgs'],
+        orgsCount: { aggregate: { count: 1 } },
+        specificOrg: [],
+      },
+      reexecute: vi.fn(),
+      error: undefined,
+    })
 
     const autocomplete = screen.getByTestId('edit-invite-user-org-selector')
     const input = within(autocomplete).getByRole('combobox')
@@ -113,6 +130,7 @@ describe('InviteUserToOrganisation', () => {
 
   it('not invite user to org if there is no selection', async () => {
     const client = {
+      executeQuery: () => never,
       executeMutation: () =>
         fromValue<{ data: SaveOrganisationInvitesMutation }>({
           data: {

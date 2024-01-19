@@ -6,16 +6,18 @@ import {
   Table,
   TableBody,
   TableCell,
+  TablePagination,
   TableRow,
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { maxBy } from 'lodash-es'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useDebounce } from 'use-debounce'
 import {
   ArrayParam,
   StringParam,
@@ -32,8 +34,13 @@ import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout/FullHeightPageLayout'
-import { useOrganizations } from '@app/modules/organisation/hooks/useOrganizations'
 import theme from '@app/theme'
+import {
+  DEFAULT_PAGINATION_LIMIT,
+  DEFAULT_PAGINATION_ROW_OPTIONS,
+} from '@app/util'
+
+import useOrgV2 from '../../hooks/useOrgV2'
 
 type OrganizationsProps = unknown
 
@@ -41,6 +48,8 @@ export const Organizations: React.FC<
   React.PropsWithChildren<OrganizationsProps>
 > = () => {
   const { t } = useTranslation()
+  const [currentPage, setCurrentPage] = useState(0)
+  const [perPage, setPerPage] = useState(DEFAULT_PAGINATION_LIMIT)
   const navigate = useNavigate()
   const { acl, profile } = useAuth()
   const [showExportModal, setExportShowModal] = useState(false)
@@ -80,6 +89,7 @@ export const Organizations: React.FC<
     [t]
   )
   const [query, setQuery] = useQueryParam('query', withDefault(StringParam, ''))
+  const [debouncedQuery] = useDebounce(query, 300)
   const [filterSector, setFilterSector] = useQueryParam(
     'sectors',
     withDefault(ArrayParam, [])
@@ -95,8 +105,8 @@ export const Organizations: React.FC<
       isFiltered = true
     }
 
-    if (query.trim().length) {
-      obj.name = { _ilike: `%${query}%` }
+    if (debouncedQuery.trim().length) {
+      obj.name = { _ilike: `%${debouncedQuery}%` }
       isFiltered = true
     }
 
@@ -114,31 +124,37 @@ export const Organizations: React.FC<
     }
 
     return [obj, isFiltered]
-  }, [acl, filterSector, profile, query])
+  }, [acl, debouncedQuery, filterSector, profile?.id])
 
-  const { orgs, loading } = useOrganizations(sorting, where)
+  const { data, fetching } = useOrgV2({
+    sorting,
+    where,
+    limit: perPage,
+    offset: perPage * currentPage,
+    withMembers: true,
+  })
 
-  const count = orgs?.length
+  const count = data?.orgsCount.aggregate?.count
   const closeExportModal = useCallback(() => {
     setExportShowModal(false)
   }, [])
 
   const lastActivityData = useMemo(() => {
-    const data: { [key: string]: Date | undefined } = {}
-    orgs.forEach(org => {
-      data[org.id] = maxBy(
+    const lastActivity: { [key: string]: Date | undefined } = {}
+    data?.orgs?.forEach(org => {
+      lastActivity[org.id] = maxBy(
         org.members,
         'profile.lastActivity'
       )?.profile.lastActivity
     })
-    return data
-  }, [orgs])
+    return lastActivity
+  }, [data?.orgs])
 
   const showRegionCol = useMemo(() => {
     const colRegion = cols.find(({ id }) => id === 'region')
     if (colRegion) {
       return {
-        isEmpty: !orgs.some(org => org?.region),
+        isEmpty: !data?.orgs.some(org => org?.region),
         id: colRegion.id,
       }
     }
@@ -146,7 +162,7 @@ export const Organizations: React.FC<
     return {
       isEmpty: false,
     }
-  }, [orgs, cols])
+  }, [cols, data?.orgs])
 
   const filterCols = useMemo(() => {
     const { isEmpty: isEmptyRegionCol, id: gerionColId } = showRegionCol
@@ -157,6 +173,16 @@ export const Organizations: React.FC<
 
     return cols
   }, [cols, showRegionCol])
+
+  const handleRowsPerPageChange = useCallback(
+    (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      setPerPage(parseInt(event.target.value, 10))
+      setCurrentPage(0)
+    },
+    []
+  )
+
+  const allOrganisationsData = [...(data?.orgs ?? [])]
 
   return (
     <FullHeightPageLayout>
@@ -177,7 +203,7 @@ export const Organizations: React.FC<
         <Box display="flex" gap={4}>
           <Box width={250}>
             <Typography variant="body2" color="grey.600">
-              {loading ? <>&nbsp;</> : t('x-items', { count })}
+              {fetching ? <>&nbsp;</> : t('x-items', { count })}
             </Typography>
 
             <Stack gap={4} mt={4}>
@@ -236,7 +262,7 @@ export const Organizations: React.FC<
                 onRequestSort={sorting.onSort}
               />
               <TableBody>
-                {loading && (
+                {fetching && (
                   <TableRow>
                     <TableCell colSpan={cols.length} align="center">
                       <CircularProgress />
@@ -245,13 +271,13 @@ export const Organizations: React.FC<
                 )}
 
                 <TableNoRows
-                  noRecords={!loading && !count}
+                  noRecords={!fetching && !count}
                   filtered={filtered}
                   colSpan={cols.length}
                   itemsName={t('organizations').toLowerCase()}
                 />
 
-                {orgs.map(org => (
+                {allOrganisationsData.map(org => (
                   <TableRow key={org.id} data-testid={`org-row-${org.id}`}>
                     <TableCell>
                       <Link href={`../${org?.id}`} variant="body2">
@@ -279,6 +305,17 @@ export const Organizations: React.FC<
                 ))}
               </TableBody>
             </Table>
+            {count ? (
+              <TablePagination
+                component="div"
+                count={count}
+                page={currentPage}
+                onPageChange={(_, page) => setCurrentPage(page)}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                rowsPerPage={perPage}
+                rowsPerPageOptions={DEFAULT_PAGINATION_ROW_OPTIONS}
+              />
+            ) : null}
           </Box>
         </Box>
       </Container>
