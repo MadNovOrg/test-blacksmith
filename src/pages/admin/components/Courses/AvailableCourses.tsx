@@ -34,7 +34,7 @@ import {
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar.tsx/OrgSelectionToolbar'
+import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar/OrgSelectionToolbar'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { CourseForBookingTile } from '@app/modules/organisation/tabs/components/CourseForBookingTile'
 import { ALL_ORGS } from '@app/util'

@@ -237,24 +237,25 @@ select_permissions:
   - role: ld
     permission:
       columns:
+        - id
         - name
-        - go1_licenses
-        - reserved_go1_licenses
-        - address
-        - attributes
-        - contact_details
-        - original_record
-        - preferences
         - tags
-        - geo_coordinates
-        - region
-        - organisation_type
-        - sector
-        - xero_contact_id
+        - contact_details
+        - attributes
+        - address
+        - preferences
+        - original_record
         - created_at
         - updated_at
-        - id
+        - xero_contact_id
+        - sector
+        - region
+        - go1_licenses
+        - geo_coordinates
+        - reserved_go1_licenses
+        - organisation_type
       filter: {}
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
