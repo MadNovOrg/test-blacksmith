@@ -17,6 +17,8 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
     $limit: Int
     $offset: Int
     $sort: [organization_order_by!] = { name: asc }
+    $specificOrgId: uuid
+    $withSpecificOrganisation: Boolean = false
   ) {
     orgs: organization(
       where: $where
@@ -24,6 +26,11 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
       offset: $offset
       order_by: $sort
     ) {
+      ...ShallowOrganization @include(if: $shallow)
+      ...Organization @include(if: $detailed)
+    }
+    specificOrg: organization(where: { id: { _eq: $specificOrgId } })
+      @include(if: $withSpecificOrganisation) {
       ...ShallowOrganization @include(if: $shallow)
       ...Organization @include(if: $detailed)
     }
@@ -41,6 +48,8 @@ type UseOrgV2Input = {
   profileId?: string
   limit?: number
   offset?: number
+  specificOrgId?: string
+  withSpecificOrganisation?: boolean
 }
 
 export default function useOrgV2({
@@ -50,6 +59,8 @@ export default function useOrgV2({
   profileId,
   limit = 24,
   offset,
+  specificOrgId,
+  withSpecificOrganisation,
 }: UseOrgV2Input) {
   let conditions
   if (orgId !== ALL_ORGS) {
@@ -82,6 +93,8 @@ export default function useOrgV2({
       detailed: !shallow,
       limit,
       offset,
+      specificOrgId,
+      withSpecificOrganisation,
     },
   })
 

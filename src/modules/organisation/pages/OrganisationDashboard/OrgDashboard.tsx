@@ -55,17 +55,22 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
     profileId: profile?.id,
     showAll: acl.canViewAllOrganizations(),
     shallow: true,
+    ...(id !== ALL_ORGS
+      ? { withSpecificOrganisation: true, specificOrgId: id }
+      : []),
   })
 
-  const org = useMemo(() => allOrgs?.orgs.find(o => o.id === id), [allOrgs, id])
+  const org = useMemo(
+    () =>
+      [...(allOrgs?.orgs ?? []), ...(allOrgs?.specificOrg ?? [])].find(
+        o => o.id === id
+      ),
+    [allOrgs, id]
+  )
 
   useEffect(() => {
     if (allOrgs && allOrgs.orgs.length === 1) {
       return navigate('/organisations/' + allOrgs.orgs[0].id)
-    }
-
-    if (id !== ALL_ORGS && allOrgs?.orgs?.length && !org) {
-      return navigate(`/organisations/${ALL_ORGS}`, { replace: true })
     }
   }, [allOrgs, navigate, org, id])
 
