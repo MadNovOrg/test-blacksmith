@@ -21,12 +21,14 @@ const CountriesSelector = ({
   error,
   required,
   helperText,
+  disabled,
 }: CountriesSelectorProps) => {
   const { countriesCodesWithUKs: countries, getLabel } = useWorldCountries()
   const { t } = useTranslation()
 
   return (
     <Autocomplete
+      disabled={disabled}
       value={!value ? undefined : value}
       id="country-select-demo"
       data-testid="countries-selector-autocomplete"
@@ -47,6 +49,7 @@ const CountriesSelector = ({
       renderInput={params => (
         <TextField
           {...params}
+          disabled={disabled}
           data-testid={`countries-selector-input`}
           error={error}
           helperText={helperText}

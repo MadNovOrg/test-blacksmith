@@ -44,6 +44,10 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
   onCancel,
   courseResidingCountry,
 }) {
+  const preFilledFields = useMemo(
+    () => new Set(Object.keys(data ?? {})),
+    [data]
+  )
   const { t } = useTranslation()
   const { getLabel: getCountryNameByCode, countriesCodesWithUKs } =
     useWorldCountries()
@@ -165,6 +169,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
               rules={{ required: true }}
               render={({ field, fieldState }) => (
                 <TextField
+                  disabled={preFilledFields.has('name')}
                   fullWidth
                   variant="filled"
                   required
@@ -179,6 +184,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
           </Grid>
           <Grid item xs={12}>
             <CountriesSelector
+              disabled={preFilledFields.has('country')}
               onChange={(_, code) => setValue('country', code ?? '')}
               value={values.country}
               error={Boolean(errors.country)}
@@ -192,6 +198,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
               rules={{ required: !isAdminOrOperations }}
               render={({ field, fieldState }) => (
                 <TextField
+                  disabled={preFilledFields.has('addressLineOne')}
                   fullWidth
                   variant="filled"
                   required={!isAdminOrOperations}
@@ -212,6 +219,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
               control={control}
               render={({ field }) => (
                 <TextField
+                  disabled={preFilledFields.has('addressLineTwo')}
                   fullWidth
                   variant="filled"
                   label={t(
@@ -230,6 +238,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
               rules={{ required: true }}
               render={({ field, fieldState }) => (
                 <TextField
+                  disabled={preFilledFields.has('city')}
                   fullWidth
                   variant="filled"
                   required
@@ -249,6 +258,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
               rules={{ required: !isAdminOrOperations }}
               render={({ field, fieldState }) => (
                 <TextField
+                  disabled={preFilledFields.has('postCode')}
                   fullWidth
                   variant="filled"
                   required={!isAdminOrOperations}
