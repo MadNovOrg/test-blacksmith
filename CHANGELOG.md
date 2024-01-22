@@ -1,5 +1,29 @@
 # @teamteach/hub
 
+## 3.0.0
+
+### Major Changes
+
+- 6731045: Refactors the useOrganisation logic in order to improve performance
+
+### Minor Changes
+
+- e7aaf04: Adds correct navitation whenever an user selects an organisation from the More menu / See all organisations / Organistions dashboard
+- 2438280: Paginate organisation/list page
+- 6dfb081: Move Organisations Functionality under /modules
+- 40d5908: Add internationalization on booking course
+- 959ef39: Add internationalization on the order details page
+- f02a024: Updates LD permissions to be able to query total orgs count
+- cbb1fb8: Remove Knowledge Hub redirect on Home page in production
+
+### Patch Changes
+
+- 3f2457b: add spacing in certificate info subsections
+- ba623b6: Add course overview tab for booking and organisation key contacts
+- 3aa44b5: Add retry for course status calculation event
+- d67cb72: Increase certification creation retries
+- 1d4f635: Update courses search by trainers full name
+
 ## 2.5.0
 
 ### Minor Changes
