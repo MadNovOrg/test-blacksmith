@@ -12,7 +12,10 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
-import { GetUpcomingCoursesQuery } from '@app/generated/graphql'
+import {
+  GetUpcomingCoursesQuery,
+  Accreditors_Enum,
+} from '@app/generated/graphql'
 import { capitalize } from '@app/util/index'
 
 type UpcomingCourse = GetUpcomingCoursesQuery['courses'][0]
@@ -93,7 +96,15 @@ export const CourseForBookingTile: React.FC<
     course.max_participants - (course.participantsCount?.aggregate?.count ?? 0)
 
   const handleBookClick = () => {
-    if (acl.isOrgAdmin()) {
+    const isBild = course.accreditedBy === Accreditors_Enum.Bild
+
+    if (isBild && acl.isInternalUser()) {
+      return navigate(
+        `/registration?course_id=${course.id}&quantity=1&internal=true`
+      )
+    }
+
+    if (isBild && !acl.isInternalUser()) {
       window.location.href =
         import.meta.env.VITE_BILD_ENQUIRY_EXTERNAL_USERS_URL
 

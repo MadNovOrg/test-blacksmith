@@ -18,6 +18,7 @@ export const QUERY = gql`
       limit: $limit
     ) {
       ...Course
+      accreditedBy
       schedules: schedule {
         start
         end
