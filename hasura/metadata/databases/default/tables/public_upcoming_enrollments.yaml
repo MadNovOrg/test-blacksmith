@@ -33,6 +33,15 @@ object_relationships:
         remote_table:
           name: course
           schema: public
+  - name: organization
+    using:
+      manual_configuration:
+        column_mapping:
+          org_id: id
+        insertion_order: null
+        remote_table:
+          name: organization
+          schema: public
   - name: profile
     using:
       manual_configuration:

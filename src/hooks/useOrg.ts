@@ -2,17 +2,18 @@
 import { useMemo } from 'react'
 import useSWR from 'swr'
 
+import { useAuth } from '@app/context/auth'
 import {
+  Course_Level_Enum,
   GetOrgDetailsQuery,
   GetOrgDetailsQueryVariables,
-  Course_Level_Enum,
 } from '@app/generated/graphql'
 import { QUERY } from '@app/queries/organization/get-org-details'
 import { CertificateStatus } from '@app/types'
 import {
+  LoadingStatus,
   getProfileCertificationLevels,
   getSWRLoadingStatus,
-  LoadingStatus,
 } from '@app/util'
 
 export type ProfileType = GetOrgDetailsQuery['profiles'][0]
@@ -100,6 +101,34 @@ export default function useOrg(
   showAll?: boolean,
   certificateFilter?: CertificateStatus[]
 ) {
+  const auth = useAuth()
+  const whereUpcomingEnrollmentsCourses =
+    orgId !== ALL_ORGS && auth.acl.isOrgAdmin()
+      ? {
+          _or: [
+            { orgId: { _eq: orgId } },
+            {
+              course: {
+                participants: {
+                  profile: {
+                    organizations: {
+                      organization: {
+                        members: {
+                          _and: [
+                            { profile_id: { _eq: profileId } },
+                            { isAdmin: { _eq: true } },
+                          ],
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        }
+      : {}
+
   const whereProfileCertificates = {
     _and: [
       {
@@ -145,6 +174,7 @@ export default function useOrg(
           {
             where: conditions,
             whereProfileCertificates,
+            whereUpcomingEnrollmentsCourses,
           },
         ]
       : null

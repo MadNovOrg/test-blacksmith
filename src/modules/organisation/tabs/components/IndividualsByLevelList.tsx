@@ -194,7 +194,7 @@ export const IndividualsByLevelList: React.FC<
                       <Link
                         key={enrollment.courseId}
                         variant="body2"
-                        href={`/courses/${enrollment.courseId}/details`}
+                        href={`/manage-courses/${profile.id}/${enrollment.courseId}/details`}
                       >
                         {`${t(
                           `common.certificates.${enrollment?.courseLevel?.toLowerCase()}`

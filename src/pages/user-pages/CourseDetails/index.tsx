@@ -130,10 +130,8 @@ export const CourseDetails: React.FC<
     },
     requestPolicy: 'network-only',
   })
-  const { total: courseParticipantsTotal } = useCourseParticipants(
-    Number(courseId),
-    { alwaysShowArchived: true }
-  )
+  const { data: courseParticipants, total: courseParticipantsTotal } =
+    useCourseParticipants(Number(courseId), { alwaysShowArchived: true })
   const [{ data: dietaryAndDisabilitiesCount }, reexecuteDietaryQuery] =
     useQuery<
       GetDietaryAndDisabilitiesCountQuery,
@@ -186,6 +184,26 @@ export const CourseDetails: React.FC<
   const isOrgAdmin = Boolean(
     course && course.organization?.id && acl.isOrgAdmin(course.organization?.id)
   )
+
+  const isOrgAdminIsPartOfParticipantOrganization = useMemo(() => {
+    const adminOrganizations = profile?.organizations.filter(org => org.isAdmin)
+
+    const isAdminParticipant = courseParticipants?.some(participant => {
+      const participantOrganizationIds = participant.profile.organizations.map(
+        org => org.organization.id
+      )
+
+      if (!adminOrganizations?.length) return false
+      return adminOrganizations.some(adminOrg =>
+        participantOrganizationIds.includes(adminOrg.organization.id)
+      )
+    })
+
+    return isAdminParticipant
+  }, [profile, courseParticipants])
+
+  const isOrgAdminCourseView =
+    isOrgAdmin || isOrgAdminIsPartOfParticipantOrganization
 
   const isParticipant = !!courseParticipant
   const showCertificationsTab = [
@@ -321,7 +339,7 @@ export const CourseDetails: React.FC<
         <Alert severity="error">There was an error loading a course.</Alert>
       ) : null}
 
-      {course && (isParticipant || isCourseContact) ? (
+      {course && (isParticipant || isCourseContact || isOrgAdminCourseView) ? (
         <>
           <CourseHeroSummary
             course={course}

@@ -52680,6 +52680,8 @@ export type Upcoming_Enrollments = {
   orgId?: Maybe<Scalars['uuid']>;
   orgName?: Maybe<Scalars['String']>;
   /** An object relationship */
+  organization?: Maybe<Organization>;
+  /** An object relationship */
   profile?: Maybe<Profile>;
   profileId?: Maybe<Scalars['uuid']>;
   scheduleStart?: Maybe<Scalars['timestamptz']>;
@@ -52767,6 +52769,7 @@ export type Upcoming_Enrollments_Bool_Exp = {
   courseLevel?: InputMaybe<String_Comparison_Exp>;
   orgId?: InputMaybe<Uuid_Comparison_Exp>;
   orgName?: InputMaybe<String_Comparison_Exp>;
+  organization?: InputMaybe<Organization_Bool_Exp>;
   profile?: InputMaybe<Profile_Bool_Exp>;
   profileId?: InputMaybe<Uuid_Comparison_Exp>;
   scheduleStart?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -52779,6 +52782,7 @@ export type Upcoming_Enrollments_Insert_Input = {
   courseLevel?: InputMaybe<Scalars['String']>;
   orgId?: InputMaybe<Scalars['uuid']>;
   orgName?: InputMaybe<Scalars['String']>;
+  organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   profileId?: InputMaybe<Scalars['uuid']>;
   scheduleStart?: InputMaybe<Scalars['timestamptz']>;
@@ -52833,6 +52837,7 @@ export type Upcoming_Enrollments_Order_By = {
   courseLevel?: InputMaybe<Order_By>;
   orgId?: InputMaybe<Order_By>;
   orgName?: InputMaybe<Order_By>;
+  organization?: InputMaybe<Organization_Order_By>;
   profile?: InputMaybe<Profile_Order_By>;
   profileId?: InputMaybe<Order_By>;
   scheduleStart?: InputMaybe<Order_By>;
@@ -56188,10 +56193,11 @@ export type GetOrgMembersQuery = { __typename?: 'query_root', members: Array<{ _
 export type GetOrgDetailsQueryVariables = Exact<{
   where?: InputMaybe<Organization_Bool_Exp>;
   whereProfileCertificates?: InputMaybe<Course_Certificate_Bool_Exp>;
+  whereUpcomingEnrollmentsCourses?: InputMaybe<Upcoming_Enrollments_Bool_Exp>;
 }>;
 
 
-export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, lastActivity: any, createdAt: any, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, go1Licenses: Array<{ __typename?: 'go1_licenses', id: any, expireDate: any }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null, course?: { __typename?: 'course', name: string, course_code?: string | null } | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, organization: { __typename?: 'organization', id: any, name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
+export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, lastActivity: any, createdAt: any, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, go1Licenses: Array<{ __typename?: 'go1_licenses', id: any, expireDate: any }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null, course?: { __typename?: 'course', type: Course_Type_Enum, name: string, course_code?: string | null } | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, organization: { __typename?: 'organization', id: any, name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
 
 export type GetOrgTypesQueryVariables = Exact<{
   sector: Organisation_Sector_Enum;
