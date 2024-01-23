@@ -468,6 +468,7 @@ export type CourseInvite = {
   status: InviteStatus
   createdAt: Date
   note: string
+  expiresIn?: Date
 }
 
 export type SortOrder = 'asc' | 'desc'

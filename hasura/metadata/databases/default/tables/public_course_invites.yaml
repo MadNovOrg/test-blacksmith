@@ -5,10 +5,13 @@ configuration:
   column_config:
     created_at:
       custom_name: createdAt
+    expires_in:
+      custom_name: expiresIn
     updated_at:
       custom_name: updatedAt
   custom_column_names:
     created_at: createdAt
+    expires_in: expiresIn
     updated_at: updatedAt
   custom_root_fields: {}
 object_relationships:
@@ -43,6 +46,7 @@ insert_permissions:
         - course_id
         - email
         - status
+        - expires_in
   - role: ld
     permission:
       check: {}
@@ -50,6 +54,7 @@ insert_permissions:
         - course_id
         - email
         - status
+        - expires_in
   - role: organization-key-contact
     permission:
       check:
@@ -68,6 +73,7 @@ insert_permissions:
         - course_id
         - email
         - status
+        - expires_in
   - role: sales-admin
     permission:
       check: {}
@@ -75,6 +81,7 @@ insert_permissions:
         - course_id
         - email
         - status
+        - expires_in
   - role: sales-representative
     permission:
       check:
@@ -87,6 +94,7 @@ insert_permissions:
         - course_id
         - email
         - status
+        - expires_in
   - role: trainer
     permission:
       check:
@@ -98,6 +106,7 @@ insert_permissions:
         - course_id
         - email
         - status
+        - expires_in
   - role: tt-admin
     permission:
       check: {}
@@ -105,6 +114,7 @@ insert_permissions:
         - course_id
         - email
         - status
+        - expires_in
   - role: tt-ops
     permission:
       check: {}
@@ -112,6 +122,7 @@ insert_permissions:
         - course_id
         - email
         - status
+        - expires_in
   - role: user
     permission:
       check:
@@ -127,6 +138,7 @@ insert_permissions:
         - course_id
         - email
         - status
+        - expires_in
 select_permissions:
   - role: booking-contact
     permission:
@@ -138,6 +150,7 @@ select_permissions:
         - note
         - status
         - updated_at
+        - expires_in
       filter:
         course:
           _or:
@@ -161,6 +174,7 @@ select_permissions:
         - note
         - status
         - updated_at
+        - expires_in
       filter: {}
       allow_aggregations: true
   - role: ld
@@ -173,6 +187,7 @@ select_permissions:
         - note
         - status
         - updated_at
+        - expires_in
       filter: {}
   - role: organization-key-contact
     permission:
@@ -184,6 +199,7 @@ select_permissions:
         - note
         - status
         - updated_at
+        - expires_in
       filter:
         course:
           _or:
@@ -207,6 +223,7 @@ select_permissions:
         - created_at
         - updated_at
         - id
+        - expires_in
       filter: {}
       allow_aggregations: true
   - role: sales-representative
@@ -219,6 +236,7 @@ select_permissions:
         - created_at
         - updated_at
         - id
+        - expires_in
       filter:
         course:
           course_type:
@@ -236,6 +254,7 @@ select_permissions:
         - created_at
         - updated_at
         - id
+        - expires_in
       filter:
         course:
           trainers:
@@ -253,6 +272,7 @@ select_permissions:
         - note
         - status
         - updated_at
+        - expires_in
       filter: {}
       allow_aggregations: true
   - role: tt-ops
@@ -265,6 +285,7 @@ select_permissions:
         - note
         - status
         - updated_at
+        - expires_in
       filter: {}
       allow_aggregations: true
   - role: user
@@ -277,6 +298,7 @@ select_permissions:
         - note
         - status
         - updated_at
+        - expires_in
       filter:
         course:
           organization:

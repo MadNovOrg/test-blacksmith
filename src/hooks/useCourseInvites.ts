@@ -1,3 +1,4 @@
+import { differenceInSeconds } from 'date-fns'
 import { useCallback, useMemo } from 'react'
 import useSWR from 'swr'
 import * as yup from 'yup'
@@ -23,7 +24,8 @@ export default function useCourseInvites(
   status?: InviteStatus,
   order?: SortOrder,
   limit?: number,
-  offset?: number
+  offset?: number,
+  courseEnd?: string
 ) {
   const fetcher = useFetcher()
   const matchMutate = useMatchMutate()
@@ -46,14 +48,41 @@ export default function useCourseInvites(
 
   const resend = useCallback(
     async (invite: CourseInvite) => {
+      /**
+       * @description This expires in data is a placeholder (for UI update) for the actual
+       * expires in date which will be updates accordingly to invite token
+       * @author ion.mereuta@amdaris.com
+       * @see https://behaviourhub.atlassian.net/jira/software/projects/TTHP/issues/TTHP-3429
+       */
+      const ONE_WEEK_IN_SECONDS = 604800 // 604800 seconds = 1 week
+
+      const secondsUntilWeekAfterCourseEnded = courseEnd
+        ? differenceInSeconds(
+            new Date(
+              new Date(courseEnd).setDate(new Date(courseEnd).getDate() + 7)
+            ),
+            new Date()
+          )
+        : 0
+
+      const expiresInSeconds = Math.max(
+        ONE_WEEK_IN_SECONDS,
+        secondsUntilWeekAfterCourseEnded
+      )
+
+      const expiresInDate = new Date(
+        new Date().setSeconds(new Date().getSeconds() + expiresInSeconds)
+      )
+
       await fetcher(RecreateInvite, {
         inviteId: invite.id,
         email: invite.email,
         courseId,
+        expiresIn: expiresInDate,
       })
       await invalidateCache()
     },
-    [fetcher, courseId, invalidateCache]
+    [courseEnd, fetcher, courseId, invalidateCache]
   )
 
   // Save course invites

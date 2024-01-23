@@ -523,6 +523,7 @@ describe(CourseAttendeesTab.name, () => {
         'asc',
         12,
         0,
+        course.schedule[0].end,
       ])
       expect(screen.getByText('No invites pending')).toBeVisible()
     })
@@ -553,6 +554,7 @@ describe(CourseAttendeesTab.name, () => {
         'asc',
         12,
         0,
+        course.schedule[0].end,
       ])
 
       const table = screen.getByTestId('invites-table')

@@ -2,6 +2,7 @@ import {
   Alert,
   Box,
   Button,
+  Chip,
   Snackbar,
   Table,
   TableBody,
@@ -9,8 +10,8 @@ import {
   TablePagination,
   TableRow,
   Typography,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -47,12 +48,18 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
     course.type === Course_Type_Enum.Closed ||
     course.type === Course_Type_Enum.Indirect
 
+  const courseEndDate = useMemo(
+    () => (course?.schedule.length ? course?.schedule[0].end : undefined),
+    [course?.schedule]
+  )
+
   const { data, status, total, resend, cancel } = useCourseInvites(
     course?.id,
     inviteStatus,
     order,
     perPage,
-    perPage * currentPage
+    perPage * currentPage,
+    courseEndDate
   )
 
   const handleRowsPerPageChange = useCallback(
@@ -81,6 +88,13 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
           label: t('pages.course-participants.invite-date'),
           sorting: true,
         },
+        isClosedIndirectCourse && inviteStatus === InviteStatus.PENDING
+          ? {
+              id: 'expirationDate',
+              label: t('pages.course-participants.invite-expiration'),
+              sorting: true,
+            }
+          : null,
         isClosedIndirectCourse && inviteStatus === InviteStatus.DECLINED
           ? {
               id: 'note',
@@ -131,6 +145,23 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
                     <TableCell>
                       {t('dates.default', { date: invite.createdAt })}
                     </TableCell>
+                    {isClosedIndirectCourse &&
+                    inviteStatus === InviteStatus.PENDING ? (
+                      <TableCell>
+                        {invite.expiresIn
+                          ? t('dates.default', { date: invite.expiresIn })
+                          : ''}
+                        {invite.expiresIn &&
+                        new Date() > new Date(invite.expiresIn) ? (
+                          <Chip
+                            sx={{ ml: 1 }}
+                            label={t('common.certification-status.expired')}
+                            color={'error'}
+                            size="small"
+                          />
+                        ) : null}
+                      </TableCell>
+                    ) : null}
                     {isClosedIndirectCourse &&
                     inviteStatus === InviteStatus.DECLINED ? (
                       <TableCell>{invite.note}</TableCell>

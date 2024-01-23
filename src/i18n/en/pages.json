@@ -725,6 +725,7 @@
     "name": "Name",
     "contact": "Contact",
     "invite-date": "Invite Date",
+    "invite-expiration": "Invite Expiration",
     "organisation": "Organisation",
     "actions": "Actions",
     "prerequisites": "Prerequisites",

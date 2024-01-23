@@ -20948,6 +20948,7 @@ export type Course_Invites = {
   course_id: Scalars['Int'];
   createdAt: Scalars['timestamptz'];
   email?: Maybe<Scalars['String']>;
+  expiresIn?: Maybe<Scalars['timestamptz']>;
   id: Scalars['uuid'];
   note?: Maybe<Scalars['String']>;
   /** An object relationship */
@@ -21001,6 +21002,7 @@ export type Course_Invites_Bool_Exp = {
   course_id?: InputMaybe<Int_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   email?: InputMaybe<String_Comparison_Exp>;
+  expiresIn?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   note?: InputMaybe<String_Comparison_Exp>;
   participant?: InputMaybe<Course_Participant_Bool_Exp>;
@@ -21027,6 +21029,7 @@ export type Course_Invites_Insert_Input = {
   course_id?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   email?: InputMaybe<Scalars['String']>;
+  expiresIn?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   note?: InputMaybe<Scalars['String']>;
   participant?: InputMaybe<Course_Participant_Obj_Rel_Insert_Input>;
@@ -21040,6 +21043,7 @@ export type Course_Invites_Max_Fields = {
   course_id?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
+  expiresIn?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
   note?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -21051,6 +21055,7 @@ export type Course_Invites_Min_Fields = {
   course_id?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
+  expiresIn?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
   note?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -21085,6 +21090,7 @@ export type Course_Invites_Order_By = {
   course_id?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   email?: InputMaybe<Order_By>;
+  expiresIn?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   note?: InputMaybe<Order_By>;
   participant?: InputMaybe<Course_Participant_Order_By>;
@@ -21106,6 +21112,8 @@ export enum Course_Invites_Select_Column {
   /** column name */
   Email = 'email',
   /** column name */
+  ExpiresIn = 'expiresIn',
+  /** column name */
   Id = 'id',
   /** column name */
   Note = 'note',
@@ -21120,6 +21128,7 @@ export type Course_Invites_Set_Input = {
   course_id?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   email?: InputMaybe<Scalars['String']>;
+  expiresIn?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   note?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Course_Invite_Status_Enum>;
@@ -21157,6 +21166,7 @@ export type Course_Invites_Stream_Cursor_Value_Input = {
   course_id?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   email?: InputMaybe<Scalars['String']>;
+  expiresIn?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   note?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Course_Invite_Status_Enum>;
@@ -21177,6 +21187,8 @@ export enum Course_Invites_Update_Column {
   CreatedAt = 'createdAt',
   /** column name */
   Email = 'email',
+  /** column name */
+  ExpiresIn = 'expiresIn',
   /** column name */
   Id = 'id',
   /** column name */
@@ -55909,7 +55921,7 @@ export type GetCourseInvitesQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseInvitesQuery = { __typename?: 'query_root', courseInvites: Array<{ __typename?: 'course_invites', id: any, email?: string | null, status?: Course_Invite_Status_Enum | null, createdAt: any, note?: string | null }>, courseInvitesAggregate: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } };
+export type GetCourseInvitesQuery = { __typename?: 'query_root', courseInvites: Array<{ __typename?: 'course_invites', id: any, email?: string | null, status?: Course_Invite_Status_Enum | null, createdAt: any, note?: string | null, expiresIn?: any | null }>, courseInvitesAggregate: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } };
 
 export type GetInviteQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -55940,6 +55952,7 @@ export type RecreateCourseInviteMutationVariables = Exact<{
   inviteId: Scalars['uuid'];
   courseId?: InputMaybe<Scalars['Int']>;
   email?: InputMaybe<Scalars['String']>;
+  expiresIn?: InputMaybe<Scalars['timestamptz']>;
 }>;
 
 
