@@ -2,7 +2,7 @@ import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
-import { ParticipantGrading } from '@app/modules/grading/pages/ParticipantGrading/ParticipantGrading'
+import { ParticipantGrade } from '@app/modules/grading/pages/ParticipantGrade/ParticipantGrade'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { AdminPage } from '@app/pages/admin'
 import { AuditsPage } from '@app/pages/admin/Audits'
@@ -121,10 +121,7 @@ const SalesRepresentativeRoute = () => {
         <Route path=":id">
           <Route index element={<Navigate replace to="details" />} />
           <Route path="details" element={<TrainerCourseDetails />} />
-          <Route
-            path="grading/:participantId"
-            element={<ParticipantGrading />}
-          />
+          <Route path="grading/:participantId" element={<ParticipantGrade />} />
         </Route>
       </Route>
 

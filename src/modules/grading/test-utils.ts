@@ -6,10 +6,10 @@ export function buildModule(
   overrides?: Partial<
     Pick<
       ModuleForGrading,
-      'id' | 'name' | 'displayName' | 'lessons' | 'mandatory'
+      'id' | 'name' | 'displayName' | 'lessons' | 'mandatory' | 'note'
     >
   >
-): Pick<ModuleForGrading, 'id' | 'name' | 'displayName' | 'lessons'> {
+): Pick<ModuleForGrading, 'id' | 'name' | 'displayName' | 'lessons' | 'note'> {
   return {
     id: chance.guid(),
     name: chance.word(),

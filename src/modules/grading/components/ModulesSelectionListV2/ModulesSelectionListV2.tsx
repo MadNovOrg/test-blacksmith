@@ -15,7 +15,7 @@ import { noop } from 'ts-essentials'
 
 import { Module_V2 } from '@app/generated/graphql'
 import { Lesson } from '@app/modules/grading/types'
-import { isLesson, isModule } from '@app/modules/grading/utils'
+import { countLessons, isLesson, isModule } from '@app/modules/grading/utils'
 import theme from '@app/theme'
 
 type Props = {
@@ -302,44 +302,6 @@ export const ModulesSelectionListV2: React.FC<Props> = ({
         : null}
     </Stack>
   )
-}
-
-function countLessons(lessons: Lesson[]): {
-  numberOfLessons: number
-  coveredLessons: number
-} {
-  let numberOfLessons = 0
-  let coveredLessons = 0
-
-  if (!Array.isArray(lessons) || !lessons.length) {
-    return { numberOfLessons, coveredLessons }
-  }
-
-  lessons.forEach(l => {
-    if (!isLesson(l)) {
-      return
-    }
-
-    const childItems = l.items
-
-    const lessonCovered = l.covered ?? false
-    const {
-      numberOfLessons: numberOfChildLessons,
-      coveredLessons: childCoveredLessons,
-    } = Array.isArray(childItems)
-      ? countLessons(childItems)
-      : { numberOfLessons: 0, coveredLessons: 0 }
-
-    numberOfLessons++
-    if (lessonCovered) {
-      coveredLessons++
-    }
-
-    numberOfLessons += numberOfChildLessons
-    coveredLessons += childCoveredLessons
-  })
-
-  return { coveredLessons, numberOfLessons }
 }
 
 function allLessonsChecked(lessons: Lesson[]): boolean {

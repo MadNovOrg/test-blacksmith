@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 
 import { submodulesCount } from '@app/components/CourseOverview/utils'
 import {
-  CourseParticipantQuery,
+  GradedParticipantQuery,
   Course_Participant_Module,
 } from '@app/generated/graphql'
 import { ModuleGroupNote } from '@app/modules/grading/components/ModuleGroupNote/ModuleGroupNote'
@@ -20,10 +20,13 @@ import theme from '@app/theme'
 import { transformModulesToGroups } from '@app/util'
 
 type Props = {
-  participant: NonNullable<CourseParticipantQuery['participant']>
+  participant: Pick<
+    NonNullable<GradedParticipantQuery['participant']>,
+    'course' | 'gradingModules' | 'notes'
+  >
 }
 
-export const ICMParticipantGrading: React.FC<Props> = ({ participant }) => {
+export const ICMGradedOnAccordion: React.FC<Props> = ({ participant }) => {
   const { t } = useTranslation()
   const moduleGroups = useMemo(() => {
     if (participant?.gradingModules) {

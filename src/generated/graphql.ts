@@ -55084,6 +55084,13 @@ export type SaveCurriculumSelectionMutationVariables = Exact<{
 
 export type SaveCurriculumSelectionMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number } | null };
 
+export type GradedParticipantQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type GradedParticipantQuery = { __typename?: 'query_root', participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, gradedOn?: any | null, course: { __typename?: 'course', accreditedBy: Accreditors_Enum, name: string }, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null }, gradingModules: Array<{ __typename?: 'course_participant_module', id: any, completed: boolean, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null, submodules: Array<{ __typename?: 'submodule', id: any, name: string }>, submodules_aggregate: { __typename?: 'submodule_aggregate', aggregate?: { __typename?: 'submodule_aggregate_fields', count: number } | null } } }>, bildGradingModules?: { __typename?: 'course_participant_bild_module', id: any, modules: any } | null, notes: Array<{ __typename?: 'course_participant_note', moduleGroupId: any, note: string }> } | null };
+
 export type GetOrganisationDetailsQueryVariables = Exact<{
   where?: InputMaybe<Organization_Bool_Exp>;
   shallow?: Scalars['Boolean'];
@@ -56289,13 +56296,6 @@ export type CancelIndividualFromCourseMutationVariables = Exact<{
 
 
 export type CancelIndividualFromCourseMutation = { __typename?: 'mutation_root', cancelIndividualFromCourse: boolean };
-
-export type CourseParticipantQueryVariables = Exact<{
-  id: Scalars['uuid'];
-}>;
-
-
-export type CourseParticipantQuery = { __typename?: 'query_root', participant?: { __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, dateGraded?: any | null, course: { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, accreditedBy: Accreditors_Enum }, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, gradingModules: Array<{ __typename?: 'course_participant_module', id: any, completed: boolean, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null, submodules: Array<{ __typename?: 'submodule', id: any, name: string }>, submodules_aggregate: { __typename?: 'submodule_aggregate', aggregate?: { __typename?: 'submodule_aggregate_fields', count: number } | null } } }>, bildGradingModules?: { __typename?: 'course_participant_bild_module', id: any, modules: any } | null, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null } | null, notes: Array<{ __typename?: 'course_participant_note', moduleGroupId: any, note: string }> } | null };
 
 export type GetCourseParticipantIdQueryVariables = Exact<{
   profileId: Scalars['uuid'];

@@ -6,7 +6,7 @@ import { CourseGradingDetails } from './pages/CourseGradingDetails/CourseGrading
 import { CourseAttendance } from './pages/CourseGradingDetails/pages/CourseAttendance/CourseAttendance'
 import { ModulesSelection } from './pages/CourseGradingDetails/pages/ModulesSelection/ModulesSelection'
 import { ModulesSelectionV2 } from './pages/CourseGradingDetails/pages/ModulesSelectionV2/ModulesSelectionV2'
-import { ParticipantGrading } from './pages/ParticipantGrading/ParticipantGrading'
+import { ParticipantGrade } from './pages/ParticipantGrade/ParticipantGrade'
 
 export const GradingRoutes: React.FC = () => {
   const newModulesDataModelEnabled = useFeatureFlagEnabled(
@@ -16,7 +16,7 @@ export const GradingRoutes: React.FC = () => {
   return (
     <Routes>
       <Route index element={<CourseGrading />} />
-      <Route path=":participantId" element={<ParticipantGrading />} />
+      <Route path=":participantId" element={<ParticipantGrade />} />
       <Route path="details" element={<CourseGradingDetails />}>
         <Route element={<CourseAttendance />} index />
         <Route

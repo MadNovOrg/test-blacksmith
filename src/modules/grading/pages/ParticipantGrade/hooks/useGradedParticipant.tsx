@@ -1,35 +1,26 @@
 import { gql } from 'graphql-request'
+import { useQuery } from 'urql'
 
-import { CERTIFICATE } from '../fragments'
+import {
+  GradedParticipantQuery,
+  GradedParticipantQueryVariables,
+} from '@app/generated/graphql'
 
-export const QUERY = gql`
-  ${CERTIFICATE}
-  query CourseParticipant($id: uuid!) {
+export const PARTICIPANT_QUERY = gql`
+  query GradedParticipant($id: uuid!) {
     participant: course_participant_by_pk(id: $id) {
       id
-      attended
       course {
-        id
-        name
-        level
-        deliveryType
         accreditedBy
+        name
       }
       profile {
         fullName
         avatar
-        archived
-        email
-        contactDetails
-        organizations {
-          organization {
-            id
-            name
-          }
-        }
       }
       grade
       dateGraded
+      gradedOn
       gradingModules {
         id
         completed
@@ -55,9 +46,6 @@ export const QUERY = gql`
         id
         modules
       }
-      certificate {
-        ...Certificate
-      }
       notes {
         moduleGroupId
         note
@@ -65,3 +53,10 @@ export const QUERY = gql`
     }
   }
 `
+
+export function useGradedParticipant(id: string) {
+  return useQuery<GradedParticipantQuery, GradedParticipantQueryVariables>({
+    query: PARTICIPANT_QUERY,
+    variables: { id },
+  })
+}

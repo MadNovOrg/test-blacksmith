@@ -12,32 +12,29 @@ import {
   Typography,
 } from '@mui/material'
 import { t } from 'i18next'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { Grade } from '@app/components/Grade'
-import {
-  CourseParticipantQuery,
-  CourseParticipantQueryVariables,
-} from '@app/generated/graphql'
 import { Accreditors_Enum } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
-import { QUERY as PARTICIPANT_QUERY } from '@app/queries/participants/get-course-participant-by-id'
 import theme from '@app/theme'
 
-import { BILDParticipantGrading } from './components/BILDParticipantGrading'
-import { ICMParticipantGrading } from './components/ICMParticipantGrading'
+import { BILDGradedOnAccordion } from './components/BILDGradedOnAccordion/BILDGradedOnAccordion'
+import { ICMGradedOnAccordion } from './components/ICMGradedOnAccordion/ICMGradedOnAccordion'
+import { ICMGradedOnAccordionV2 } from './components/ICMGradedOnAccordionV2/ICMGradedOnAccordionV2'
+import { useGradedParticipant } from './hooks/useGradedParticipant'
 
-export const ParticipantGrading = () => {
+export const ParticipantGrade = () => {
   const { participantId, id: courseId } = useParams()
+  const newModulesDataModelEnabled = useFeatureFlagEnabled(
+    'new-modules-data-model'
+  )
 
-  const [{ data, fetching, error }] = useQuery<
-    CourseParticipantQuery,
-    CourseParticipantQueryVariables
-  >({ query: PARTICIPANT_QUERY, variables: { id: participantId } })
+  const [{ data, fetching, error }] = useGradedParticipant(participantId ?? '')
 
   const participant = data?.participant
 
@@ -115,11 +112,15 @@ export const ParticipantGrading = () => {
                 </Typography>
 
                 {participant.course.accreditedBy === Accreditors_Enum.Icm ? (
-                  <ICMParticipantGrading participant={participant} />
+                  newModulesDataModelEnabled ? (
+                    <ICMGradedOnAccordionV2 gradedOn={participant.gradedOn} />
+                  ) : (
+                    <ICMGradedOnAccordion participant={participant} />
+                  )
                 ) : null}
 
                 {participant.course.accreditedBy === Accreditors_Enum.Bild ? (
-                  <BILDParticipantGrading participant={participant} />
+                  <BILDGradedOnAccordion participant={participant} />
                 ) : null}
               </Box>
             </Box>

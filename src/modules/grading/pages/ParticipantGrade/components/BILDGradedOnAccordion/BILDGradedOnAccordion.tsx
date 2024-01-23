@@ -9,15 +9,18 @@ import {
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CourseParticipantQuery } from '@app/generated/graphql'
+import { GradedParticipantQuery } from '@app/generated/graphql'
 import { ModuleGroupNote } from '@app/modules/grading/components/ModuleGroupNote/ModuleGroupNote'
 import { Strategy } from '@app/types'
 
 type Props = {
-  participant: NonNullable<CourseParticipantQuery['participant']>
+  participant: Pick<
+    NonNullable<GradedParticipantQuery['participant']>,
+    'bildGradingModules'
+  >
 }
 
-export const BILDParticipantGrading: React.FC<Props> = ({ participant }) => {
+export const BILDGradedOnAccordion: React.FC<Props> = ({ participant }) => {
   const { t } = useTranslation()
 
   const strategyModules: Record<string, Strategy & { note?: string }> =
