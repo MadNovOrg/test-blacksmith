@@ -20,10 +20,10 @@ export const CreateOrganization = () => {
   const theme = useTheme()
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const [
-    { data: organisationData, fetching: loading, error },
-    executeMutation,
-  ] = useMutation<InsertOrgMutation, InsertOrgMutationVariables>(MUTATION)
+  const [{ fetching: loading, error }, executeMutation] = useMutation<
+    InsertOrgMutation,
+    InsertOrgMutationVariables
+  >(MUTATION)
   const [xeroId, setXeroId] = useState<string>()
 
   const handleSubmit = async (data: FormInputs) => {
@@ -62,9 +62,11 @@ export const CreateOrganization = () => {
           ]
         : [],
     }
-    await executeMutation(organisationDataObject).finally(() =>
-      navigate(`../${organisationData?.org?.id}`)
-    )
+    const response = await executeMutation(organisationDataObject)
+
+    if (response.data) {
+      navigate(`../${response.data.org?.id}`)
+    }
   }
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
