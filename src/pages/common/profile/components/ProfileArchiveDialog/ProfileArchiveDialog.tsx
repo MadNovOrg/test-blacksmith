@@ -18,6 +18,7 @@ export type Props = {
 const ENDED_COURSES_STATUSES = [
   Course_Status_Enum.Cancelled,
   Course_Status_Enum.Completed,
+  Course_Status_Enum.EvaluationMissing,
 ]
 
 export const ProfileArchiveDialog: React.FC<React.PropsWithChildren<Props>> = ({
