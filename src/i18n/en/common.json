@@ -397,7 +397,7 @@
   "login": "Login",
   "course-registration": "Course Registration",
   "course-certificate": {
-    "course-title-ICM": "Positive Behavior Training",
+    "course-title-ICM": "Positive Behaviour Training",
     "course-title-BILD": "BILD Certified",
     "duration-message": {
       "level_1": "Level One - {{courseDuration}} hours",
