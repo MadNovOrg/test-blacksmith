@@ -45,7 +45,12 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
   courseResidingCountry,
 }) {
   const preFilledFields = useMemo(
-    () => new Set(Object.keys(data ?? {})),
+    () =>
+      new Set(
+        Object.keys(data ?? {}).filter(
+          key => data && !data[key as keyof typeof data]?.match(/^\s*$/)
+        )
+      ),
     [data]
   )
   const { t } = useTranslation()
