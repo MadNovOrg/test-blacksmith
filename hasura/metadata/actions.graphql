@@ -167,6 +167,12 @@ type Mutation {
   ): ImportLegacyCertificateOutput
 }
 
+type Mutation {
+  importUsers(
+    input: ImportUsersInput!
+  ): ImportUsersOutput
+}
+
 type Query {
   initAuth: InitAuthOutput!
 }
@@ -805,6 +811,19 @@ input GradedOnSyncInput {
   participantIds: [uuid!]!
 }
 
+input ImportUsersInput {
+  data: String!
+  config: ImportUsersConfig!
+}
+
+input ImportUsersConfig {
+  sheetName: String!
+  firstNameColumn: String!
+  lastNameColumn: String!
+  emailColumn: String!
+  certificateNumberColumn: String!
+}
+
 type LinkProfileResult {
   status: Boolean!
 }
@@ -1292,6 +1311,10 @@ type SampleOutput {
 type GradedOnSyncOutput {
   syncedCount: Int!
   notSyncedCount: Int!
+}
+
+type ImportUsersOutput {
+  jobId: String!
 }
 
 scalar Date

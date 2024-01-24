@@ -778,6 +778,11 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
           activeRole === RoleName.TRAINER)
       )
     },
+    canImportUsers: () => {
+      return activeRole
+        ? [RoleName.TT_ADMIN, RoleName.TT_OPS].includes(activeRole)
+        : false
+    },
   })
   return acl
 }

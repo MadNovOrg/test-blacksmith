@@ -89,6 +89,7 @@ jobs:
       cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_DEV }}
       cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_DEV }}
       hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_DEV }}
+      hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_DEV }}
       wp_host: ${{ secrets.WP_HOST_DEV }}
       s3_bucket: ${{ secrets.S3_BUCKET_DEV }}
       gmaps_key: ${{ secrets.GMAPS_KEY }}

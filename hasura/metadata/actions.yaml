@@ -221,6 +221,11 @@ actions:
       handler: '{{ACTIONS_HOST}}/certificate/import-legacy'
     permissions:
       - role: user
+  - name: importUsers
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/import'
+    comment: importUsers
   - name: initAuth
     definition:
       kind: ""
@@ -931,6 +936,8 @@ custom_types:
     - name: CurriculumSyncInput
     - name: SaveOrgInviteInput
     - name: GradedOnSyncInput
+    - name: ImportUsersInput
+    - name: ImportUsersConfig
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -1010,5 +1017,6 @@ custom_types:
     - name: CurriculumSyncOutput
     - name: SampleOutput
     - name: GradedOnSyncOutput
+    - name: ImportUsersOutput
   scalars:
     - name: Date

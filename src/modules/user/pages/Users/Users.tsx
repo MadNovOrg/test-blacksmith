@@ -25,7 +25,6 @@ import { BackButton } from '@app/components/BackButton'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { MergeUsersDialog } from '@app/components/dialogs'
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterByCertificateValidity } from '@app/components/filters/FilterByCertificateValidity'
 import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
@@ -42,6 +41,7 @@ import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import theme from '@app/theme'
 import { CertificateStatus, RoleName, TrainerRoleTypeName } from '@app/types'
 
+import { MergeUsersDialog } from './components/MergeUsersDialog/MergeUsersDialog'
 import UserRole from './UserRole'
 
 export const Users = () => {

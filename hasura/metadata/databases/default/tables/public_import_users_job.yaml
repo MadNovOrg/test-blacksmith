@@ -1,0 +1,19 @@
+table:
+  name: import_users_job
+  schema: public
+select_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - id
+        - result
+        - status
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - result
+        - status
+        - id
+      filter: {}

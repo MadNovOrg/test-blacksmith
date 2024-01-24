@@ -5,12 +5,12 @@ import { useAuth } from '@app/context/auth'
 import { CourseBuilder } from '@app/modules/course/pages/CourseBuilder/CourseBuilder'
 import { GradingRoutes } from '@app/modules/grading/routes'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
+import { UserRoutes } from '@app/modules/user/routes'
 import { AdminPage } from '@app/pages/admin'
 import { AuditsPage } from '@app/pages/admin/Audits'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import { Contacts } from '@app/pages/admin/Contacts'
 import { CourseExceptionsLog } from '@app/pages/admin/CourseExceptionsLog'
-import { Users } from '@app/pages/admin/Users'
 import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
@@ -139,9 +139,7 @@ const TTAdminRoutes = () => {
           <Route path="admin">
             <Route index element={<AdminPage />} />
             <Route path="contacts" element={<Contacts />} />
-            <Route path="users" element={<Users />}>
-              {acl.canMergeProfiles() ? <Route path="merge" /> : undefined}
-            </Route>
+            <Route path="users/*" element={<UserRoutes />} />
 
             {acl.canViewAdminPricing() ? (
               <Route path="pricing">

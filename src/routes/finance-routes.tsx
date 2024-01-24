@@ -4,11 +4,11 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from '@app/context/auth'
 import { ParticipantGrade } from '@app/modules/grading/pages/ParticipantGrade/ParticipantGrade'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
+import { UserRoutes } from '@app/modules/user/routes'
 import { AdminPage } from '@app/pages/admin'
 import { AuditsPage } from '@app/pages/admin/Audits'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import { Contacts } from '@app/pages/admin/Contacts'
-import { Users } from '@app/pages/admin/Users'
 import { OrderDetails as CourseOrderDetails } from '@app/pages/CreateCourse/components/OrderDetails'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
@@ -128,7 +128,7 @@ const FinanceRoute = () => {
       </Route>
 
       <Route path="admin">
-        <Route path="users" element={<Users />} />
+        <Route path="users" element={<UserRoutes />} />
       </Route>
 
       <Route path="organisations/*" element={<OrganisationRoutes />} />
@@ -158,7 +158,7 @@ const FinanceRoute = () => {
               path="course-exceptions-log"
               element={<CourseExceptionsLog />}
             />
-            <Route path="users" element={<Users />} />
+            <Route path="users/*" element={<UserRoutes />} />
             {acl.canViewAdminPricing() ? (
               <Route path="pricing">
                 <Route index element={<PricingList />} />

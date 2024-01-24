@@ -1,5 +1,6 @@
 import { devtoolsExchange } from '@urql/devtools'
 import { authExchange } from '@urql/exchange-auth'
+import { createClient as createWSClient } from 'graphql-ws'
 import React, { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import {
@@ -8,6 +9,7 @@ import {
   createClient,
   dedupExchange,
   fetchExchange,
+  subscriptionExchange,
   Provider,
 } from 'urql'
 
@@ -18,6 +20,20 @@ export const GQLProvider: React.FC<React.PropsWithChildren<unknown>> = ({
 }) => {
   const { getJWT, queryRole } = useAuth()
   const location = useLocation()
+
+  const wsClient = createWSClient({
+    url: import.meta.env.VITE_HASURA_WS_GRAPHQL_API,
+    connectionParams: async () => {
+      const token = await getJWT()
+
+      return {
+        headers: {
+          ...(queryRole ? { 'X-Hasura-Role': queryRole } : undefined),
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    },
+  })
 
   const client = useMemo(() => {
     return createClient({
@@ -75,9 +91,20 @@ export const GQLProvider: React.FC<React.PropsWithChildren<unknown>> = ({
           },
         }),
         fetchExchange,
+        subscriptionExchange({
+          forwardSubscription(request) {
+            const input = { ...request, query: request.query || '' }
+            return {
+              subscribe(sink) {
+                const unsubscribe = wsClient.subscribe(input, sink)
+                return { unsubscribe }
+              },
+            }
+          },
+        }),
       ],
     })
-  }, [queryRole, getJWT, location.pathname])
+  }, [queryRole, getJWT, location.pathname, wsClient])
 
   return <Provider value={client}>{children}</Provider>
 }

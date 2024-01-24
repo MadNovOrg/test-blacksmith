@@ -55,6 +55,7 @@ jobs:
       cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_PROD }}
       cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_PROD }}
       hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_PROD }}
+      hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_PROD }}
       wp_host: ${{ secrets.WP_HOST_PROD }}
       s3_bucket: ${{ secrets.S3_BUCKET_PROD }}
       service_role_arn: ${{ secrets.IAM_SERVICE_PROD }}

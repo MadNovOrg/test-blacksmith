@@ -13,6 +13,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Avatar } from '@app/components/Avatar'
+import { Dialog } from '@app/components/dialogs/Dialog'
 import {
   GetProfileDetailsQuery,
   MergeUserMutation,
@@ -23,8 +24,6 @@ import useProfile from '@app/hooks/useProfile'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { MUTATION as MERGE_USERS_MUTATION } from '@app/queries/user/merge-users'
 import { LoadingStatus } from '@app/util'
-
-import { Dialog } from '../Dialog'
 
 type Props = {
   onClose: () => void
