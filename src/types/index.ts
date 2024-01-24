@@ -1,3 +1,4 @@
+import { GraphQLErrorExtensions } from 'graphql'
 import { DeepNonNullable } from 'ts-essentials'
 
 import {
@@ -473,9 +474,24 @@ export type CourseInvite = {
 
 export type SortOrder = 'asc' | 'desc'
 
-export type GqlError = {
+type GqlErrorInit = {
   code?: string
-  message: string
+  message?: string
+  extensions?: GraphQLErrorExtensions
+  cause?: Error
+}
+
+export class GqlError extends Error {
+  code?: string
+  extensions?: GraphQLErrorExtensions
+
+  constructor({ code, message, extensions, cause }: GqlErrorInit = {}) {
+    super(message, {
+      cause,
+    })
+    this.code = code
+    this.extensions = extensions
+  }
 }
 
 export type WPBlogPost = {
