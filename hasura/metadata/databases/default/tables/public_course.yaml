@@ -587,6 +587,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - include_VAT
         - is_draft
         - max_participants
         - min_participants
@@ -860,6 +861,7 @@ select_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - include_VAT
         - is_draft
         - max_participants
         - min_participants
