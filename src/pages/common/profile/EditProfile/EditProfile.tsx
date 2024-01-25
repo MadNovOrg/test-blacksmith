@@ -895,7 +895,7 @@ export const EditProfilePage: React.FC<
                 <Grid container spacing={3} mb={3}>
                   <Grid item xs={12} sm={12} md={6} lg={6}>
                     <CountriesSelector
-                      label={t('country')}
+                      label={t('residing-country')}
                       variant="filled"
                       required
                       onChange={(_, code) => {

@@ -361,7 +361,7 @@ export const ViewProfilePage: React.FC<
                       />
                       <DetailsRow
                         data-testid="profile-country"
-                        label={t('country')}
+                        label={t('residing-country')}
                         value={profile.country}
                       />
                       {trainerViewProfile || isOrgAdmin ? null : (
