@@ -382,14 +382,29 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           }),
         courseCost: yup
           .number()
-          .allowEmptyNumberField()
-          .nullable()
           .typeError(
             t('components.course-form.course-cost-positive-number-error')
           )
-          .positive(
-            t('components.course-form.course-cost-positive-number-error')
-          ),
+
+          .when('usesAOL', {
+            is: true,
+            then: schema =>
+              schema
+                .required(
+                  t('components.course-form.course-cost-required-error')
+                )
+                .min(
+                  0,
+                  t('components.course-form.course-cost-positive-number-error')
+                ),
+            otherwise: schema =>
+              schema
+                .allowEmptyNumberField()
+                .nullable()
+                .positive(
+                  t('components.course-form.course-cost-positive-number-error')
+                ),
+          }),
         specialInstructions: yup.string().nullable().default(''),
         parkingInstructions: yup.string().nullable().default(''),
         bildStrategies: strategiesSchema.when('accreditedBy', {
@@ -507,7 +522,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       minParticipants: courseInput?.minParticipants ?? null,
       maxParticipants: courseInput?.maxParticipants ?? null,
       freeSpaces: courseInput?.freeSpaces ?? null,
-      usesAOL: Boolean(courseInput?.courseCost) ?? false,
+      usesAOL: Boolean(courseInput?.aolCountry) ?? false,
       aolCountry: courseInput?.aolCountry ?? null,
       aolRegion: courseInput?.aolRegion ?? null,
       courseCost: courseInput?.courseCost ?? null,
@@ -1066,6 +1081,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     courseType === Course_Type_Enum.Indirect &&
     activeRole === RoleName.TRAINER
 
+  console.log(courseInput)
   return (
     <form>
       <FormProvider {...methods}>
@@ -1221,6 +1237,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                         }}
                         label={t('components.course-form.course-cost-title')}
                         error={Boolean(errors.courseCost)}
+                        required={usesAOL}
                         helperText={errors.courseCost?.message ?? ''}
                         disabled={disabledFields.has('courseCost')}
                       />
