@@ -242,6 +242,17 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       }
     },
 
+    canInviteAttendeesAfterCourseEnded: (courseType: Course_Type_Enum) => {
+      if (
+        [Course_Type_Enum.Closed, Course_Type_Enum.Indirect].includes(
+          courseType
+        )
+      ) {
+        return anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])()
+      }
+      return false
+    },
+
     canViewUsers: () => acl.isInternalUser(),
 
     canViewAllOrganizations: () => acl.isInternalUser(),

@@ -11,6 +11,7 @@ import {
   useTheme,
 } from '@mui/material'
 import { saveAs } from 'file-saver'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -23,9 +24,9 @@ import { Dialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Status_Enum,
+  Course_Type_Enum,
   ExportBlendedLearningCourseDataQuery,
   ExportBlendedLearningCourseDataQueryVariables,
-  Course_Type_Enum,
 } from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import { EXPORT_BLENDED_LEARNING_ATTENDEES } from '@app/queries/blended-learning-attendees/blended-learning-attendees-data'
@@ -48,6 +49,9 @@ export const CourseInvites = ({
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { acl, profile } = useAuth()
+  const allowAddAttendeesAfterCourseEnded = useFeatureFlagEnabled(
+    'invite-attendees-after-course-ended'
+  )
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -260,7 +264,10 @@ export const CourseInvites = ({
     }
   }, [data, reexecuteQuery, t])
 
-  const displayInviteTools = !courseHasEnded && !courseCancelled && allowInvites
+  const displayInviteTools =
+    (!courseHasEnded && !courseCancelled && allowInvites) ||
+    (!!allowAddAttendeesAfterCourseEnded &&
+      acl.canInviteAttendeesAfterCourseEnded(course.type))
 
   return (
     <>

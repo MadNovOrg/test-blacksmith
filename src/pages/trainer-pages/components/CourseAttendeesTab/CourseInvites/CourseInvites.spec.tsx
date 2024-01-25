@@ -1,5 +1,6 @@
 import { add, addWeeks, sub } from 'date-fns'
 import { saveAs } from 'file-saver'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
@@ -27,6 +28,12 @@ vi.mock('@app/hooks/useCourseInvites')
 const useCourseInvitesMock = vi.mocked(useCourseInvites)
 
 vi.mock('file-saver', () => ({ saveAs: () => vi.fn() }))
+
+vi.mock('posthog-js/react', () => ({
+  useFeatureFlagEnabled: vi.fn(),
+}))
+
+const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 const useCourseInvitesDefaults = {
   data: [],
@@ -95,7 +102,8 @@ describe(CourseInvites.name, () => {
     expect(screen.queryByTestId('course-invite-btn')).toBeInTheDocument()
   })
 
-  it('does not render after course ended', async () => {
+  it('does render after course ended for admin', async () => {
+    useFeatureFlagEnabledMock.mockReturnValue(true)
     course = buildCourse({
       overrides: {
         schedule: [
@@ -112,6 +120,27 @@ describe(CourseInvites.name, () => {
 
     render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
+    })
+    expect(screen.queryByTestId('course-invite-btn')).toBeInTheDocument()
+  })
+
+  it('does not render after course ended', async () => {
+    course = buildCourse({
+      overrides: {
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: sub(new Date(), { days: -4 }).toISOString(),
+              end: add(new Date(), { days: -2 }).toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+    useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
+
+    render(<CourseInvites course={course} />, {
+      auth: { activeRole: RoleName.FINANCE },
     })
     expect(screen.queryByTestId('course-invite-btn')).not.toBeInTheDocument()
   })
