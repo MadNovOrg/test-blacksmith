@@ -36,6 +36,22 @@ insert_permissions:
         - course_participant_id
         - module_id
 select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter:
+        _or:
+          - course_participant:
+              profile_id:
+                _eq: X-Hasura-User-Id
+          - course_participant:
+              course:
+                booking_contact_profile_id:
+                  _eq: X-Hasura-User-Id
   - role: finance
     permission:
       columns:
@@ -47,6 +63,22 @@ select_permissions:
         course_participant:
           profile_id:
             _eq: X-Hasura-User-Id
+  - role: organization-key-contact
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter:
+        _or:
+          - course_participant:
+              profile_id:
+                _eq: X-Hasura-User-Id
+          - course_participant:
+              course:
+                organization_key_contact_profile_id:
+                  _eq: X-Hasura-User-Id
   - role: sales-admin
     permission:
       columns:

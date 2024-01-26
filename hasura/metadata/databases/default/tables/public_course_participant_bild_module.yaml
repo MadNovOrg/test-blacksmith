@@ -26,6 +26,21 @@ insert_permissions:
         - id
         - participant_id
 select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - modules
+        - id
+        - participant_id
+      filter:
+        _or:
+          - course_participant:
+              profile_id:
+                _eq: X-Hasura-User-Id
+          - course_participant:
+              course:
+                booking_contact_profile_id:
+                  _eq: X-Hasura-User-Id
   - role: finance
     permission:
       columns:
@@ -34,6 +49,21 @@ select_permissions:
         - participant_id
       filter: {}
       allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - modules
+        - id
+        - participant_id
+      filter:
+        _or:
+          - course_participant:
+              profile_id:
+                _eq: X-Hasura-User-Id
+          - course_participant:
+              course:
+                organization_key_contact_profile_id:
+                  _eq: X-Hasura-User-Id
   - role: sales-admin
     permission:
       columns:
