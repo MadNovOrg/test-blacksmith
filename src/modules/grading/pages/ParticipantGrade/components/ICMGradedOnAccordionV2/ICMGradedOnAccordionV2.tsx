@@ -9,7 +9,11 @@ import {
 import { useTranslation } from 'react-i18next'
 
 import { ModuleGroupNote } from '@app/modules/grading/components/ModuleGroupNote/ModuleGroupNote'
-import { countLessons, isLesson, isModule } from '@app/modules/grading/utils'
+import {
+  countLessons,
+  isLesson,
+  isModule,
+} from '@app/modules/grading/shared/utils'
 import theme from '@app/theme'
 
 export const ICMGradedOnAccordionV2: React.FC<{ gradedOn: unknown }> = ({

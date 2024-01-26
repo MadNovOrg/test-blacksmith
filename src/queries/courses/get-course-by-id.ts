@@ -35,6 +35,7 @@ export const QUERY = gql`
       # TODO: Delete this after Arlo migration
       arloReferenceId @include(if: $withArloRefId)
       displayOnWebsite
+      curriculum
       bildModules {
         id
         modules

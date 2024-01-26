@@ -304,6 +304,7 @@ export const buildCourse = build<Course>({
         xeroInvoiceNumber: chance.string(),
       },
     ],
+    curriculum: null,
   },
 })
 
@@ -345,6 +346,7 @@ export const buildStartedCourse = build<Course>({
     aolCostOfCourse: undefined,
     accreditedBy: Accreditors_Enum.Icm,
     bildStrategies: [],
+    curriculum: null,
   },
 })
 
@@ -384,6 +386,7 @@ export const buildEndedCourse = build<Course>({
     moduleGroupIds: [],
     accreditedBy: Accreditors_Enum.Icm,
     bildStrategies: [],
+    curriculum: null,
   },
 })
 
@@ -408,6 +411,7 @@ export const buildNotStartedCourse = build<Course>({
     level: Course_Level_Enum.Level_1,
     course_code: 'OP-L1-10000',
     trainers: [buildCourseTrainer()],
+    curriculum: null,
     dates: {
       aggregate: {
         start: { date: add(new Date(), { days: 1 }).toISOString() },

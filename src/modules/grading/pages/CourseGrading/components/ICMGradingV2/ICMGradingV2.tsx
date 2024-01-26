@@ -23,7 +23,7 @@ import {
   Grade_Enum,
 } from '@app/generated/graphql'
 import { ModulesSelectionListV2 } from '@app/modules/grading/components/ModulesSelectionListV2/ModulesSelectionListV2'
-import { isLesson, isModule } from '@app/modules/grading/utils'
+import { isLesson, isModule } from '@app/modules/grading/shared/utils'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 
 import useCourseGradingData from '../../hooks/useCourseGradingData'

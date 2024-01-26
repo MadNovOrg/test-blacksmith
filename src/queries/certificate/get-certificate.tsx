@@ -24,6 +24,7 @@ export const QUERY = gql`
         id
         grade
         dateGraded
+        gradedOn
         profile {
           fullName
           avatar

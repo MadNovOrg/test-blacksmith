@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useTranslation } from 'react-i18next'
 
 import { Accreditors_Enum } from '@app/generated/graphql'
@@ -6,6 +7,7 @@ import { Course } from '@app/types'
 
 import { BILDOverview } from './BILDOverview'
 import { ICMOverview } from './ICMOverview'
+import { ICMOverviewV2 } from './ICMOverviewV2'
 
 type CourseOverviewProps = {
   course: Course
@@ -15,6 +17,10 @@ export const CourseOverview: React.FC<
   React.PropsWithChildren<CourseOverviewProps>
 > = ({ course }: CourseOverviewProps) => {
   const { t } = useTranslation()
+
+  const newModulesDataModelEnabled = useFeatureFlagEnabled(
+    'new-modules-data-model'
+  )
 
   return (
     <Box>
@@ -26,9 +32,13 @@ export const CourseOverview: React.FC<
         {t('pages.course-details.tabs.course-overview.description')}
       </Typography>
 
-      {course.accreditedBy === Accreditors_Enum.Icm && (
-        <ICMOverview course={course} />
-      )}
+      {course.accreditedBy === Accreditors_Enum.Icm ? (
+        !newModulesDataModelEnabled ? (
+          <ICMOverview course={course} />
+        ) : (
+          <ICMOverviewV2 curriculum={course.curriculum} />
+        )
+      ) : null}
 
       {course.accreditedBy === Accreditors_Enum.Bild && (
         <BILDOverview course={course} />

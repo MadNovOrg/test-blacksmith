@@ -1,12 +1,7 @@
-import { Lesson, ModuleForGrading } from './types'
+import { Lesson, ModuleForGrading } from '../types'
 
 export function isModule(module: object): module is ModuleForGrading {
-  if (
-    'id' in module &&
-    'name' in module &&
-    'lessons' in module &&
-    'displayName' in module
-  ) {
+  if ('id' in module && 'name' in module && 'lessons' in module) {
     return true
   }
 

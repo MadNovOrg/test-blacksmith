@@ -14,8 +14,12 @@ import { useEffect, useState } from 'react'
 import { noop } from 'ts-essentials'
 
 import { Module_V2 } from '@app/generated/graphql'
+import {
+  countLessons,
+  isLesson,
+  isModule,
+} from '@app/modules/grading/shared/utils'
 import { Lesson } from '@app/modules/grading/types'
-import { countLessons, isLesson, isModule } from '@app/modules/grading/utils'
 import theme from '@app/theme'
 
 type Props = {

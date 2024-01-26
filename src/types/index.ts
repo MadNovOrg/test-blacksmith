@@ -118,6 +118,7 @@ export type Course = {
       bookingContactProfileId?: string | null
     }
   }[]
+  curriculum: unknown
 } & Omit<Base, 'id'>
 
 export type CourseModule = {

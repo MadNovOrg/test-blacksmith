@@ -15,6 +15,7 @@ import {
   useTheme,
 } from '@mui/material'
 import MUIImage from 'mui-image'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 
 import { bildNewImage, cpdImage, icmImage, ntaImage } from '@app/assets'
 import { CertificateStatusChip } from '@app/components/CertificateStatusChip'
@@ -26,6 +27,11 @@ import {
   Grade_Enum,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import {
+  countLessons,
+  isLesson,
+  isModule,
+} from '@app/modules/grading/shared/utils'
 import { CertificateStatus, NonNullish, Strategy } from '@app/types'
 import { transformModulesToGroups } from '@app/util'
 
@@ -70,6 +76,10 @@ export const CertificateInfo: React.FC<
   const imageSize = '10%'
   const { t, _t } = useScopedTranslation('common.course-certificate')
   const { acl } = useAuth()
+
+  const newModulesDataModelEnabled = useFeatureFlagEnabled(
+    'new-modules-data-model'
+  )
 
   const filterModules = (strategy: Strategy): Strategy => {
     const filteredModules = strategy.modules?.filter(
@@ -262,7 +272,68 @@ export const CertificateInfo: React.FC<
         </>
       ) : null}
 
-      {moduleGroupsWithModules?.length ? (
+      {newModulesDataModelEnabled ? (
+        <>
+          <Typography variant="h3" gutterBottom>
+            {t('modules-list-title')}
+          </Typography>
+
+          {Array.isArray(courseParticipant?.gradedOn)
+            ? courseParticipant?.gradedOn.map(module => {
+                if (!isModule(module)) {
+                  return null
+                }
+
+                const lessons = module.lessons?.items
+
+                const { numberOfLessons, coveredLessons } =
+                  countLessons(lessons)
+
+                return (
+                  <>
+                    <Accordion key={module.id}>
+                      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography
+                          variant="subtitle2"
+                          sx={{
+                            width: { sm: '60%', md: '70%' },
+                            flexShrink: 0,
+                            mt: -0.5,
+                          }}
+                        >
+                          {module.displayName ?? module.name}
+                        </Typography>
+
+                        <Typography sx={{ color: 'text.secondary' }}>
+                          {`${coveredLessons} of ${numberOfLessons} completed`}
+                        </Typography>
+                      </AccordionSummary>
+
+                      {Array.isArray(lessons) && lessons.length ? (
+                        <AccordionDetails>
+                          {lessons.map((lesson: object) => {
+                            if (!isLesson(lesson)) {
+                              return null
+                            }
+
+                            return (
+                              <Typography key={lesson.name}>
+                                {lesson.name}
+                              </Typography>
+                            )
+                          })}
+                        </AccordionDetails>
+                      ) : null}
+                    </Accordion>
+                    <Divider />
+                  </>
+                )
+              })
+            : null}
+        </>
+      ) : null}
+
+      {!newModulesDataModelEnabled && moduleGroupsWithModules?.length ? (
         <>
           <Typography variant="h3" gutterBottom>
             {t('modules-list-title')}
