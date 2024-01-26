@@ -2,7 +2,6 @@
 import { useMemo } from 'react'
 import useSWR from 'swr'
 
-import { useAuth } from '@app/context/auth'
 import {
   Course_Level_Enum,
   GetOrgDetailsQuery,
@@ -101,34 +100,6 @@ export default function useOrg(
   showAll?: boolean,
   certificateFilter?: CertificateStatus[]
 ) {
-  const auth = useAuth()
-  const whereUpcomingEnrollmentsCourses =
-    orgId !== ALL_ORGS && auth.acl.isOrgAdmin()
-      ? {
-          _or: [
-            { orgId: { _eq: orgId } },
-            {
-              course: {
-                participants: {
-                  profile: {
-                    organizations: {
-                      organization: {
-                        members: {
-                          _and: [
-                            { profile_id: { _eq: profileId } },
-                            { isAdmin: { _eq: true } },
-                          ],
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          ],
-        }
-      : {}
-
   const whereProfileCertificates = {
     _and: [
       {
@@ -174,7 +145,6 @@ export default function useOrg(
           {
             where: conditions,
             whereProfileCertificates,
-            whereUpcomingEnrollmentsCourses,
           },
         ]
       : null

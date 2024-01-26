@@ -53290,6 +53290,8 @@ export type Upcoming_Enrollments = {
   orgId?: Maybe<Scalars['uuid']>;
   orgName?: Maybe<Scalars['String']>;
   /** An object relationship */
+  organization?: Maybe<Organization>;
+  /** An object relationship */
   profile?: Maybe<Profile>;
   profileId?: Maybe<Scalars['uuid']>;
   scheduleStart?: Maybe<Scalars['timestamptz']>;
@@ -53377,6 +53379,7 @@ export type Upcoming_Enrollments_Bool_Exp = {
   courseLevel?: InputMaybe<String_Comparison_Exp>;
   orgId?: InputMaybe<Uuid_Comparison_Exp>;
   orgName?: InputMaybe<String_Comparison_Exp>;
+  organization?: InputMaybe<Organization_Bool_Exp>;
   profile?: InputMaybe<Profile_Bool_Exp>;
   profileId?: InputMaybe<Uuid_Comparison_Exp>;
   scheduleStart?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -53389,6 +53392,7 @@ export type Upcoming_Enrollments_Insert_Input = {
   courseLevel?: InputMaybe<Scalars['String']>;
   orgId?: InputMaybe<Scalars['uuid']>;
   orgName?: InputMaybe<Scalars['String']>;
+  organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   profileId?: InputMaybe<Scalars['uuid']>;
   scheduleStart?: InputMaybe<Scalars['timestamptz']>;
@@ -53443,6 +53447,7 @@ export type Upcoming_Enrollments_Order_By = {
   courseLevel?: InputMaybe<Order_By>;
   orgId?: InputMaybe<Order_By>;
   orgName?: InputMaybe<Order_By>;
+  organization?: InputMaybe<Organization_Order_By>;
   profile?: InputMaybe<Profile_Order_By>;
   profileId?: InputMaybe<Order_By>;
   scheduleStart?: InputMaybe<Order_By>;
@@ -55721,6 +55726,7 @@ export type GetOrganisationByNameQuery = { __typename?: 'query_root', organizati
 export type GetOrganisationProfilesQueryVariables = Exact<{
   where?: InputMaybe<Organization_Bool_Exp>;
   whereProfileCertificates?: InputMaybe<Course_Certificate_Bool_Exp>;
+  whereUpcomingEnrollmentsCourses?: InputMaybe<Upcoming_Enrollments_Bool_Exp>;
 }>;
 
 
@@ -56812,7 +56818,6 @@ export type GetOrgMembersQuery = { __typename?: 'query_root', members: Array<{ _
 export type GetOrgDetailsQueryVariables = Exact<{
   where?: InputMaybe<Organization_Bool_Exp>;
   whereProfileCertificates?: InputMaybe<Course_Certificate_Bool_Exp>;
-  whereUpcomingEnrollmentsCourses?: InputMaybe<Upcoming_Enrollments_Bool_Exp>;
 }>;
 
 

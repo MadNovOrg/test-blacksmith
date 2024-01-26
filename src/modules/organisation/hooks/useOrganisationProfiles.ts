@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { gql, useQuery } from 'urql'
 
+import { useAuth } from '@app/context/auth'
 import {
   Course_Level_Enum,
   GetOrganisationProfilesQuery,
@@ -16,6 +17,7 @@ export const GET_PROFILES = gql`
   query GetOrganisationProfiles(
     $where: organization_bool_exp = {}
     $whereProfileCertificates: course_certificate_bool_exp = {}
+    $whereUpcomingEnrollmentsCourses: upcoming_enrollments_bool_exp = {}
   ) {
     profiles: profile(
       where: {
@@ -43,7 +45,7 @@ export const GET_PROFILES = gql`
         id
         expireDate
       }
-      upcomingEnrollments {
+      upcomingEnrollments(where: $whereUpcomingEnrollmentsCourses) {
         orgId
         orgName
         courseLevel
@@ -84,6 +86,7 @@ export default function useOrganisationProfiles({
   showAll,
   certificateFilter,
 }: UserOrgProfiles) {
+  const auth = useAuth()
   const whereProfileCertificates = {
     _and: [
       {
@@ -97,6 +100,33 @@ export default function useOrganisationProfiles({
       },
     ],
   }
+
+  const whereUpcomingEnrollmentsCourses = auth.acl.isOrgAdmin()
+    ? {
+        _or: [
+          { orgId: { _eq: orgId } },
+          {
+            course: {
+              participants: {
+                profile: {
+                  organizations: {
+                    organization: {
+                      members: {
+                        _and: [
+                          { profile_id: { _eq: profileId } },
+                          { isAdmin: { _eq: true } },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
+      }
+    : {}
+
   let conditions
   if (orgId !== ALL_ORGS) {
     conditions = { id: { _eq: orgId } }
@@ -125,6 +155,7 @@ export default function useOrganisationProfiles({
     variables: {
       where: conditions,
       whereProfileCertificates,
+      whereUpcomingEnrollmentsCourses,
     },
   })
   const profilesByOrganisation = useMemo(() => {

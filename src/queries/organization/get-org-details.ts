@@ -10,7 +10,6 @@ export const QUERY = gql`
   query GetOrgDetails(
     $where: organization_bool_exp = {}
     $whereProfileCertificates: course_certificate_bool_exp = {}
-    $whereUpcomingEnrollmentsCourses: upcoming_enrollments_bool_exp = {}
   ) {
     orgs: organization(where: $where) {
       ...Organization
@@ -43,7 +42,7 @@ export const QUERY = gql`
         id
         expireDate
       }
-      upcomingEnrollments(where: $whereUpcomingEnrollmentsCourses) {
+      upcomingEnrollments {
         orgId
         orgName
         courseLevel
