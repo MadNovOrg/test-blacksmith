@@ -265,9 +265,10 @@ export const CourseInvites = ({
   }, [data, reexecuteQuery, t])
 
   const displayInviteTools =
-    (!courseHasEnded && !courseCancelled && allowInvites) ||
-    (!!allowAddAttendeesAfterCourseEnded &&
-      acl.canInviteAttendeesAfterCourseEnded(course.type))
+    !courseCancelled &&
+    ((!courseHasEnded && allowInvites) ||
+      (!!allowAddAttendeesAfterCourseEnded &&
+        acl.canInviteAttendeesAfterCourseEnded(course.type)))
 
   return (
     <>
