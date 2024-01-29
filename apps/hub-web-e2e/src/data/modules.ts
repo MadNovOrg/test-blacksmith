@@ -946,10 +946,6 @@ export const MODULES_SETUP: ModuleSetup[] = [
     })(),
     mandatoryModules: [
       {
-        name: 'Dead Weight Response *',
-        duration: '15mins',
-      },
-      {
         name: 'Advanced Warm Up *',
         duration: '15mins',
       },
@@ -960,15 +956,15 @@ export const MODULES_SETUP: ModuleSetup[] = [
     ],
     optionalModules: [
       {
-        name: 'Ground Recovery Techniques',
-        duration: '2hrs',
-      },
-      {
-        name: 'Response to Ground Assaults',
+        name: 'Additional Ground Responses',
         duration: '30mins',
       },
       {
-        name: 'Everyday Objects',
+        name: 'Ground Recovery Safeguards',
+        duration: '2hrs',
+      },
+      {
+        name: 'Everyday Objects used as Weapons',
         duration: '2hrs',
       },
       {
@@ -976,9 +972,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '40mins',
       },
     ],
-    modulesToMove: ['Ground Recovery Techniques'],
-    durationBefore: '50mins',
-    durationAfter: '2hrs 50mins',
+    modulesToMove: ['Ground Recovery Safeguards'],
+    durationBefore: '35mins',
+    durationAfter: '2hrs 35mins',
   },
 ]
 
