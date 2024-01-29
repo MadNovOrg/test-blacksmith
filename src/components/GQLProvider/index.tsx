@@ -21,19 +21,20 @@ export const GQLProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   const { getJWT, queryRole } = useAuth()
   const location = useLocation()
 
-  const wsClient = createWSClient({
-    url: import.meta.env.VITE_HASURA_WS_GRAPHQL_API,
-    connectionParams: async () => {
-      const token = await getJWT()
-
-      return {
-        headers: {
-          ...(queryRole ? { 'X-Hasura-Role': queryRole } : undefined),
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    },
-  })
+  const wsClient = useMemo(() => {
+    return createWSClient({
+      url: import.meta.env.VITE_HASURA_WS_GRAPHQL_API,
+      connectionParams: async () => {
+        const token = await getJWT()
+        return {
+          headers: {
+            ...(queryRole ? { 'X-Hasura-Role': queryRole } : undefined),
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      },
+    })
+  }, [getJWT, queryRole])
 
   const client = useMemo(() => {
     return createClient({
