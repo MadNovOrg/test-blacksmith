@@ -101,8 +101,11 @@ export default function useOrganisationProfiles({
     ],
   }
 
-  const whereUpcomingEnrollmentsCourses = auth.acl.isOrgAdmin()
-    ? {
+  let whereUpcomingEnrollmentsCourses
+
+  if (auth.acl.isOrgAdmin()) {
+    if (orgId !== ALL_ORGS) {
+      whereUpcomingEnrollmentsCourses = {
         _or: [
           { orgId: { _eq: orgId } },
           {
@@ -125,7 +128,27 @@ export default function useOrganisationProfiles({
           },
         ],
       }
-    : {}
+    } else {
+      whereUpcomingEnrollmentsCourses = {
+        course: {
+          participants: {
+            profile: {
+              organizations: {
+                organization: {
+                  members: {
+                    _and: [
+                      { profile_id: { _eq: profileId } },
+                      { isAdmin: { _eq: true } },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        },
+      }
+    }
+  }
 
   let conditions
   if (orgId !== ALL_ORGS) {
