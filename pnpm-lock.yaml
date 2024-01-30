@@ -445,8 +445,8 @@ importers:
         specifier: ^9.1.2
         version: 9.1.2(@babel/core@7.23.7)(webpack@5.89.0)
       babel-preset-vite:
-        specifier: 1.1.2
-        version: 1.1.2
+        specifier: 1.1.3
+        version: 1.1.3
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
@@ -4136,6 +4136,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.0
+    dev: false
 
   /@babel/runtime@7.23.8:
     resolution: {integrity: sha512-Y7KbAP984rn1VGMbGqKmBLio9V7y5Je9GvU4rQPCPinCyNfUcToxIXl06d59URp/F3LwinvODxab5N/G6qggkw==}
@@ -7031,7 +7032,7 @@ packages:
       '@babel/plugin-transform-runtime': 7.23.2(@babel/core@7.23.7)
       '@babel/preset-env': 7.23.9(@babel/core@7.23.7)
       '@babel/preset-typescript': 7.23.3(@babel/core@7.23.7)
-      '@babel/runtime': 7.23.5
+      '@babel/runtime': 7.23.8
       '@nrwl/js': 16.10.0(@swc/core@1.3.100)(@types/node@20.10.7)(nx@16.7.4)(typescript@4.9.5)
       '@nx/devkit': 16.10.0(nx@16.7.4)
       '@nx/workspace': 16.10.0(@swc/core@1.3.100)
@@ -10947,16 +10948,6 @@ packages:
     resolution: {integrity: sha512-8Mb21KWtpn6PvRQXjsKhrXIcxbSloGqNH50RntwGeJsGPW4xvNhfml+3kKulaKpO/7pgZfOmzsJz7VbepArlGQ==}
     dev: true
 
-  /@types/babel__core@7.20.4:
-    resolution: {integrity: sha512-mLnSC22IC4vcWiuObSRjrLd9XcBTGf59vUSoq2jkQDJ/QQ8PMI9rSuzE+aEV8karUMbskw07bKYoUJCKTUaygg==}
-    dependencies:
-      '@babel/parser': 7.23.6
-      '@babel/types': 7.23.6
-      '@types/babel__generator': 7.6.4
-      '@types/babel__template': 7.4.1
-      '@types/babel__traverse': 7.20.4
-    dev: true
-
   /@types/babel__core@7.20.5:
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
     dependencies:
@@ -12742,7 +12733,7 @@ packages:
     resolution: {integrity: sha512-Cg7TFGpIr01vOQNODXOOaGz2NpCU5gl8x1qJFbb6hbZxR7XrcE2vtbAsTAbJ7/xwJtUuJEw8K8Zr/AE0LHlesg==}
     engines: {node: '>=10', npm: '>=6'}
     dependencies:
-      '@babel/runtime': 7.23.5
+      '@babel/runtime': 7.23.8
       cosmiconfig: 7.0.1
       resolve: 1.22.8
 
@@ -12843,8 +12834,8 @@ packages:
       '@types/babel__core': 7.20.5
     dev: true
 
-  /babel-plugin-transform-vite-meta-glob@1.1.1:
-    resolution: {integrity: sha512-fZBW9X9QVBDF2q+CCjnaQPGnGMdXtDL0uu8dhxCn72J4O2pp9+GSMZNHcvZ7q6cr6+Cu/arkdJhe4NubqM8NYw==}
+  /babel-plugin-transform-vite-meta-glob@1.1.2:
+    resolution: {integrity: sha512-o984FUo++WYnfgUaC8ymzmNPng5Kda5A6j6PFC0uOqhFXlAsD6mNhEBhaNzbUGfq/aPcyeGo67fYXlg20rh9aA==}
     dependencies:
       '@babel/runtime': 7.23.8
       '@types/babel__core': 7.20.5
@@ -12923,13 +12914,13 @@ packages:
       babel-preset-current-node-syntax: 1.0.1(@babel/core@7.23.7)
     dev: true
 
-  /babel-preset-vite@1.1.2:
-    resolution: {integrity: sha512-PyPAS1fa6XT8+W/Tf1+IEnaMuTAt4zKeyToG+H2W2JsDkq4XjfjK1rOkRnetrv9CsTov5msI1RgLjwsAslwuBQ==}
+  /babel-preset-vite@1.1.3:
+    resolution: {integrity: sha512-xSt/EiezzeMd4RI2hjMCNyn/FGzGeroKODPMAUTsgpeHC4dFf2qiCQfyNuiNzn1OwoF4n+NYSsORhUN5G/2KTA==}
     dependencies:
-      '@babel/runtime': 7.23.5
-      '@types/babel__core': 7.20.4
+      '@babel/runtime': 7.23.8
+      '@types/babel__core': 7.20.5
       babel-plugin-transform-vite-meta-env: 1.0.3
-      babel-plugin-transform-vite-meta-glob: 1.1.1
+      babel-plugin-transform-vite-meta-glob: 1.1.2
       babel-plugin-transform-vite-meta-hot: 1.0.0
     dev: true
 
