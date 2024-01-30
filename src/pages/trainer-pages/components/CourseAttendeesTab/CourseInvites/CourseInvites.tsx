@@ -79,9 +79,10 @@ export const CourseInvites = ({
     ? course.max_participants - pendingInvites.length - attendeesCount
     : 0
 
-  const courseCancelled =
+  const courseCancelledOrDraft =
     course?.status === Course_Status_Enum.Cancelled ||
-    course?.status === Course_Status_Enum.Declined
+    course?.status === Course_Status_Enum.Declined ||
+    course?.status === Course_Status_Enum.Draft
 
   const closeModal = useCallback(() => {
     setNewEmail('')
@@ -265,7 +266,7 @@ export const CourseInvites = ({
   }, [data, reexecuteQuery, t])
 
   const displayInviteTools =
-    !courseCancelled &&
+    !courseCancelledOrDraft &&
     ((!courseHasEnded && allowInvites) ||
       (!!allowAddAttendeesAfterCourseEnded &&
         acl.canInviteAttendeesAfterCourseEnded(course.type)))
