@@ -112,19 +112,27 @@ export const isAdvisedTimeExceeded = (courseData: CourseData) => {
 
 export function checkCourseDetailsForExceptions(
   courseData: CourseData,
-  trainerData: TrainerData
+  trainerData: TrainerData,
+  ignoreExceptions: CourseException[] = []
 ): CourseException[] {
   const exceptions: CourseException[] = []
 
-  if (isOutsideOfNoticePeriod(courseData)) {
+  if (
+    !ignoreExceptions.includes(CourseException.OUTSIDE_NOTICE_PERIOD) &&
+    isOutsideOfNoticePeriod(courseData)
+  ) {
     exceptions.push(CourseException.OUTSIDE_NOTICE_PERIOD)
   }
 
-  if (isLeadTrainerInGracePeriod(courseData, trainerData)) {
+  if (
+    !ignoreExceptions.includes(CourseException.LEAD_TRAINER_IN_GRACE_PERIOD) &&
+    isLeadTrainerInGracePeriod(courseData, trainerData)
+  ) {
     exceptions.push(CourseException.LEAD_TRAINER_IN_GRACE_PERIOD)
   }
 
   if (
+    !ignoreExceptions.includes(CourseException.TRAINER_RATIO_NOT_MET) &&
     isTrainersRatioNotMet(
       {
         level: courseData.courseLevel as Course_Level_Enum,

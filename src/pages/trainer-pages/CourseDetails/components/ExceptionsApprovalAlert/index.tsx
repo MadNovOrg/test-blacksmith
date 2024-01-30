@@ -12,7 +12,10 @@ import {
   Course_Audit_Type_Enum,
 } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
-import { checkCourseDetailsForExceptions } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
+import {
+  checkCourseDetailsForExceptions,
+  CourseException,
+} from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import theme from '@app/theme'
 import { TrainerRoleTypeName } from '@app/types'
 import { bildStrategiesToRecord } from '@app/util'
@@ -47,6 +50,10 @@ export const ExceptionsApprovalAlert: FC = () => {
   const courseExceptions = useMemo(() => {
     if (!course || !course.trainers || !exceptionsApprovalPending) return []
 
+    const ignoreExceptions = acl.isCourseAssistantTrainer(course)
+      ? [CourseException.LEAD_TRAINER_IN_GRACE_PERIOD]
+      : []
+
     return checkCourseDetailsForExceptions(
       {
         startDateTime: new Date(course.dates?.aggregate?.start?.date),
@@ -77,7 +84,8 @@ export const ExceptionsApprovalAlert: FC = () => {
           courseLevel: c.courseLevel as Course_Level_Enum,
           expiryDate: c.expiryDate,
         })),
-      }))
+      })),
+      ignoreExceptions
     )
   }, [acl, course, exceptionsApprovalPending, leader])
 
@@ -94,7 +102,7 @@ export const ExceptionsApprovalAlert: FC = () => {
     )
     setCommentsModalOpen(true)
   }
-  return (
+  return courseExceptions.length ? (
     <>
       <Alert
         data-testid="exceptions-approval"
@@ -169,5 +177,5 @@ export const ExceptionsApprovalAlert: FC = () => {
         </Box>
       </Alert>
     </>
-  )
+  ) : null
 }

@@ -1,11 +1,20 @@
+import { addDays } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import { Client, Provider } from 'urql'
 
+import { Course_Status_Enum } from '@app/generated/graphql'
+import useCourse from '@app/hooks/useCourse'
 import { RoleName } from '@app/types'
+import { LoadingStatus } from '@app/util'
 
 import { render, renderHook, screen, userEvent } from '@test/index'
+import { buildCourse } from '@test/mock-data-utils'
 
 import { ExceptionsApprovalAlert } from '.'
+
+vi.mock('@app/hooks/useCourse')
+
+const useCourseMock = vi.mocked(useCourse)
 
 const urqlMockClient = {
   executeQuery: () => vi.fn(),
@@ -16,8 +25,27 @@ const urqlMockClient = {
 describe('component: ExceptionsApprovalAlert', () => {
   const { result } = renderHook(() => useTranslation())
   const t = result.current.t
-  const setup = (activeRole = RoleName.LD) =>
-    render(
+
+  const setup = (activeRole = RoleName.LD) => {
+    useCourseMock.mockReturnValue({
+      data: {
+        course: buildCourse({
+          overrides: {
+            status: Course_Status_Enum.ExceptionsApprovalPending,
+            dates: {
+              aggregate: {
+                start: { date: addDays(new Date(), 1).toISOString() },
+                end: { date: addDays(new Date(), 1).toISOString() },
+              },
+            },
+          },
+        }),
+      },
+      mutate: vi.fn(),
+      status: LoadingStatus.SUCCESS,
+    })
+
+    return render(
       <Provider value={urqlMockClient}>
         <ExceptionsApprovalAlert />
       </Provider>,
@@ -25,6 +53,7 @@ describe('component: ExceptionsApprovalAlert', () => {
         auth: { activeRole },
       }
     )
+  }
 
   it('should render the ExceptionsApprovalAlert component', () => {
     setup()

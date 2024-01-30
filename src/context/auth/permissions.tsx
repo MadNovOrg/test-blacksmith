@@ -16,6 +16,7 @@ import {
 } from '@app/pages/Resources/utils'
 import { Course, CourseInput, CourseTrainerType, RoleName } from '@app/types'
 import {
+  getCourseAssistants,
   getCourseLeadTrainer,
   REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL,
 } from '@app/util'
@@ -100,6 +101,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     isCourseLeader: (course: Pick<Course, 'trainers'>) =>
       getCourseLeadTrainer(course.trainers)?.profile.id === profile?.id &&
       activeRole === RoleName.TRAINER,
+
+    isCourseAssistantTrainer: (course: Pick<Course, 'trainers'>) =>
+      activeRole === RoleName.TRAINER &&
+      getCourseAssistants(course.trainers)?.some(
+        trainer => trainer.profile.id === profile?.id
+      ),
 
     canSeeActionableCourseTable: () => anyPass([acl.isTTAdmin, acl.isLD])(),
 
