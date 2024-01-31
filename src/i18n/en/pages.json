@@ -1755,5 +1755,55 @@
     "back-to-homepage": "Back to Welcome Page",
     "tutorials": "Tutorials",
     "title": "Getting Started"
+  },
+  "import-users": {
+    "title": "Import users",
+    "helper-description": "Upon importing users will be registered and they will receive an email that account has been created for them.",
+    "steps": {
+      "choose": {
+        "title": "Choose a .xlsx file",
+        "description": "Please choose a .xlsx file that contains user information with a given name, family name, email and certificate number.",
+        "button-text": "Choose a file"
+      },
+      "configure": {
+        "title": "Configure upload",
+        "description": "We have successfully processed chosen .xlsx file. Please choose columns for first name, last name, email and certificate number.",
+        "first-name-column-label": "First name column",
+        "last-name-column-label": "Last name column",
+        "email-column-label": "Email column",
+        "certificate-number-column-label": "Certificate number column",
+        "first-name-error": "First name column is a required field",
+        "last-name-error": "Last name column is a required field",
+        "certificate-number-error": "Certificate number column is a required field"
+      },
+      "preview": {
+        "title": "Preview import",
+        "description": "You are about to import {{count}} user(s). Please preview data extracted from the .xlsx before proceeding with the import.",
+        "button-text": "Start importing"
+      },
+      "importing": {
+        "title": "Importing",
+        "description-pending": "Please don't close the page as we are importing users.",
+        "description-success": "Importing users has finished succesfully.",
+        "description-failed": "Importing users has failed.",
+        "description-partially-succeeded": "Import users has finished. Some users haven't been imported.",
+        "imported-users_one": "Imported {{count}} user",
+        "imported-users_other": "Imported {{count}} users",
+        "not-imported_one": "Not imported {{count}} user",
+        "not-imported_other": "Not imported {{count}} users",
+        "not-imported-error-USER_EXISTS": "{{email}} is already registered",
+        "not-imported-error": "{{email}} couldn't be registered",
+        "not-imported-certificate_one": "Not imported {{count}} certificate",
+        "not-imported-certificate_other": "Not imported {{count}} certificates",
+        "not-imported-certificate-error-ALREADY_IMPORTED": "Certificate {{number}} for {{email}} is already imported",
+        "not-imported-certificate-error-CERTIFICATE_NOT_FOUND": "Certificate {{number}} for {{email}} couldn't be found",
+        "not-imported-certificate-error-PROFILE_NO_MATCH": "Given name and family name for certificate {{number}} and {{email}} don't match",
+        "not-imported-certificate-error-UNSUPPORTED_LEVEL": "Certificate {{number}} for {{email}} is of unsupported level",
+        "not-imported-certificate-error": "Certificate {{number}} for {{email}} not imported"
+      },
+      "results": {
+        "title": "Import results"
+      }
+    }
   }
 }

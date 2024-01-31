@@ -3320,7 +3320,6 @@ export type ImportUsersConfig = {
   emailColumn: Scalars['String'];
   firstNameColumn: Scalars['String'];
   lastNameColumn: Scalars['String'];
-  sheetName: Scalars['String'];
 };
 
 export type ImportUsersInput = {
@@ -29707,9 +29706,20 @@ export type ImportArloCertificates = {
 /** Tracks an import user job */
 export type Import_Users_Job = {
   __typename?: 'import_users_job';
+  config?: Maybe<Scalars['jsonb']>;
+  data?: Maybe<Scalars['String']>;
+  finishedOn?: Maybe<Scalars['timestamp']>;
   id: Scalars['uuid'];
   result: Scalars['jsonb'];
+  startedBy?: Maybe<Scalars['uuid']>;
+  startedOn: Scalars['timestamp'];
   status?: Maybe<Import_Users_Job_Status_Enum>;
+};
+
+
+/** Tracks an import user job */
+export type Import_Users_JobConfigArgs = {
+  path?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -29742,6 +29752,7 @@ export type Import_Users_Job_Aggregate_FieldsCountArgs = {
 
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Import_Users_Job_Append_Input = {
+  config?: InputMaybe<Scalars['jsonb']>;
   result?: InputMaybe<Scalars['jsonb']>;
 };
 
@@ -29750,8 +29761,13 @@ export type Import_Users_Job_Bool_Exp = {
   _and?: InputMaybe<Array<Import_Users_Job_Bool_Exp>>;
   _not?: InputMaybe<Import_Users_Job_Bool_Exp>;
   _or?: InputMaybe<Array<Import_Users_Job_Bool_Exp>>;
+  config?: InputMaybe<Jsonb_Comparison_Exp>;
+  data?: InputMaybe<String_Comparison_Exp>;
+  finishedOn?: InputMaybe<Timestamp_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   result?: InputMaybe<Jsonb_Comparison_Exp>;
+  startedBy?: InputMaybe<Uuid_Comparison_Exp>;
+  startedOn?: InputMaybe<Timestamp_Comparison_Exp>;
   status?: InputMaybe<Import_Users_Job_Status_Enum_Comparison_Exp>;
 };
 
@@ -29763,36 +29779,52 @@ export enum Import_Users_Job_Constraint {
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Import_Users_Job_Delete_At_Path_Input = {
+  config?: InputMaybe<Array<Scalars['String']>>;
   result?: InputMaybe<Array<Scalars['String']>>;
 };
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Import_Users_Job_Delete_Elem_Input = {
+  config?: InputMaybe<Scalars['Int']>;
   result?: InputMaybe<Scalars['Int']>;
 };
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Import_Users_Job_Delete_Key_Input = {
+  config?: InputMaybe<Scalars['String']>;
   result?: InputMaybe<Scalars['String']>;
 };
 
 /** input type for inserting data into table "import_users_job" */
 export type Import_Users_Job_Insert_Input = {
+  config?: InputMaybe<Scalars['jsonb']>;
+  data?: InputMaybe<Scalars['String']>;
+  finishedOn?: InputMaybe<Scalars['timestamp']>;
   id?: InputMaybe<Scalars['uuid']>;
   result?: InputMaybe<Scalars['jsonb']>;
+  startedBy?: InputMaybe<Scalars['uuid']>;
+  startedOn?: InputMaybe<Scalars['timestamp']>;
   status?: InputMaybe<Import_Users_Job_Status_Enum>;
 };
 
 /** aggregate max on columns */
 export type Import_Users_Job_Max_Fields = {
   __typename?: 'import_users_job_max_fields';
+  data?: Maybe<Scalars['String']>;
+  finishedOn?: Maybe<Scalars['timestamp']>;
   id?: Maybe<Scalars['uuid']>;
+  startedBy?: Maybe<Scalars['uuid']>;
+  startedOn?: Maybe<Scalars['timestamp']>;
 };
 
 /** aggregate min on columns */
 export type Import_Users_Job_Min_Fields = {
   __typename?: 'import_users_job_min_fields';
+  data?: Maybe<Scalars['String']>;
+  finishedOn?: Maybe<Scalars['timestamp']>;
   id?: Maybe<Scalars['uuid']>;
+  startedBy?: Maybe<Scalars['uuid']>;
+  startedOn?: Maybe<Scalars['timestamp']>;
 };
 
 /** response of any mutation on the table "import_users_job" */
@@ -29813,8 +29845,13 @@ export type Import_Users_Job_On_Conflict = {
 
 /** Ordering options when selecting data from "import_users_job". */
 export type Import_Users_Job_Order_By = {
+  config?: InputMaybe<Order_By>;
+  data?: InputMaybe<Order_By>;
+  finishedOn?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   result?: InputMaybe<Order_By>;
+  startedBy?: InputMaybe<Order_By>;
+  startedOn?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
 };
 
@@ -29825,23 +29862,39 @@ export type Import_Users_Job_Pk_Columns_Input = {
 
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Import_Users_Job_Prepend_Input = {
+  config?: InputMaybe<Scalars['jsonb']>;
   result?: InputMaybe<Scalars['jsonb']>;
 };
 
 /** select columns of table "import_users_job" */
 export enum Import_Users_Job_Select_Column {
   /** column name */
+  Config = 'config',
+  /** column name */
+  Data = 'data',
+  /** column name */
+  FinishedOn = 'finishedOn',
+  /** column name */
   Id = 'id',
   /** column name */
   Result = 'result',
+  /** column name */
+  StartedBy = 'startedBy',
+  /** column name */
+  StartedOn = 'startedOn',
   /** column name */
   Status = 'status'
 }
 
 /** input type for updating data in table "import_users_job" */
 export type Import_Users_Job_Set_Input = {
+  config?: InputMaybe<Scalars['jsonb']>;
+  data?: InputMaybe<Scalars['String']>;
+  finishedOn?: InputMaybe<Scalars['timestamp']>;
   id?: InputMaybe<Scalars['uuid']>;
   result?: InputMaybe<Scalars['jsonb']>;
+  startedBy?: InputMaybe<Scalars['uuid']>;
+  startedOn?: InputMaybe<Scalars['timestamp']>;
   status?: InputMaybe<Import_Users_Job_Status_Enum>;
 };
 
@@ -29890,6 +29943,7 @@ export enum Import_Users_Job_Status_Constraint {
 export enum Import_Users_Job_Status_Enum {
   Failed = 'FAILED',
   InProgress = 'IN_PROGRESS',
+  PartiallySucceeded = 'PARTIALLY_SUCCEEDED',
   Succeeded = 'SUCCEEDED'
 }
 
@@ -29992,17 +30046,32 @@ export type Import_Users_Job_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Import_Users_Job_Stream_Cursor_Value_Input = {
+  config?: InputMaybe<Scalars['jsonb']>;
+  data?: InputMaybe<Scalars['String']>;
+  finishedOn?: InputMaybe<Scalars['timestamp']>;
   id?: InputMaybe<Scalars['uuid']>;
   result?: InputMaybe<Scalars['jsonb']>;
+  startedBy?: InputMaybe<Scalars['uuid']>;
+  startedOn?: InputMaybe<Scalars['timestamp']>;
   status?: InputMaybe<Import_Users_Job_Status_Enum>;
 };
 
 /** update columns of table "import_users_job" */
 export enum Import_Users_Job_Update_Column {
   /** column name */
+  Config = 'config',
+  /** column name */
+  Data = 'data',
+  /** column name */
+  FinishedOn = 'finishedOn',
+  /** column name */
   Id = 'id',
   /** column name */
   Result = 'result',
+  /** column name */
+  StartedBy = 'startedBy',
+  /** column name */
+  StartedOn = 'startedOn',
   /** column name */
   Status = 'status'
 }
@@ -55746,6 +55815,13 @@ export type ImportUsersJobSubscriptionVariables = Exact<{
 
 
 export type ImportUsersJobSubscription = { __typename?: 'subscription_root', import_users_job_by_pk?: { __typename?: 'import_users_job', id: any, result: any, status?: Import_Users_Job_Status_Enum | null } | null };
+
+export type StartImportUsersJobMutationVariables = Exact<{
+  input: ImportUsersInput;
+}>;
+
+
+export type StartImportUsersJobMutation = { __typename?: 'mutation_root', importUsers?: { __typename?: 'ImportUsersOutput', jobId: string } | null };
 
 export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 

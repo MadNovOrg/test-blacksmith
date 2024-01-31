@@ -5,6 +5,10 @@ import { useAuth } from '@app/context/auth'
 import { NotFound } from '@app/pages/common/NotFound'
 
 import { Import } from './pages/Import/Import'
+import { ChooseFile } from './pages/Import/steps/ChooseFile/ChooseFile'
+import { Configure } from './pages/Import/steps/Configure/Configure'
+import { Importing } from './pages/Import/steps/Importing/Importing'
+import { Preview } from './pages/Import/steps/Preview/Preview'
 import { Users } from './pages/Users/Users'
 
 export const UserRoutes: React.FC = () => {
@@ -20,7 +24,13 @@ export const UserRoutes: React.FC = () => {
       ) : null}
 
       {importUsersEnabled && acl.canImportUsers() ? (
-        <Route path="import" element={<Import />} />
+        <Route path="import" element={<Import />}>
+          <Route index element={<ChooseFile />} />
+          <Route path="configure" element={<Configure />} />
+          <Route path="preview" element={<Preview />} />
+          <Route path="importing" element={<Importing />} />
+          <Route path="results" element={<Importing />} />
+        </Route>
       ) : null}
 
       <Route path="*" element={<NotFound />} />

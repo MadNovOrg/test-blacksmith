@@ -817,7 +817,6 @@ input ImportUsersInput {
 }
 
 input ImportUsersConfig {
-  sheetName: String!
   firstNameColumn: String!
   lastNameColumn: String!
   emailColumn: String!

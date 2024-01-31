@@ -224,7 +224,10 @@ actions:
   - name: importUsers
     definition:
       kind: synchronous
-      handler: '{{ACTIONS_HOST}}/user/import'
+      handler: '{{ACTIONS_HOST}}/user/import/start'
+    permissions:
+      - role: tt-ops
+      - role: tt-admin
     comment: importUsers
   - name: initAuth
     definition:

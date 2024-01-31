@@ -1,81 +1,47 @@
-import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import { Container, Typography, Button, styled } from '@mui/material'
-import { ChangeEvent } from 'react'
-import { gql, useSubscription } from 'urql'
-import { read, utils } from 'xlsx'
+import { Typography, Container, Box, useMediaQuery } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { Outlet } from 'react-router-dom'
 
-import {
-  ImportUsersJobSubscription,
-  ImportUsersJobSubscriptionVariables,
-} from '@app/generated/graphql'
+import { Sticky } from '@app/components/Sticky'
+import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
+import theme from '@app/theme'
 
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1,
-})
-
-const IMPORT_USERS_JOB = gql`
-  subscription ImportUsersJob($id: uuid!) {
-    import_users_job_by_pk(id: $id) {
-      id
-      result
-      status
-    }
-  }
-`
+import { ImportSteps } from './components/ImportSteps/ImportSteps'
+import { ImportProvider } from './context/ImportProvider'
 
 export const Import: React.FC = () => {
-  const handleUploadChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || !e.target.files[0]) {
-      return
-    }
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
-    const file = e.target.files[0]
-
-    const data = await file.arrayBuffer()
-
-    const workbook = read(data)
-
-    const userSheet = workbook.Sheets[workbook.SheetNames[0]]
-
-    console.log(utils.sheet_to_json(userSheet))
-  }
-
-  const [{ data }] = useSubscription<
-    ImportUsersJobSubscription,
-    ImportUsersJobSubscriptionVariables
-  >({
-    query: IMPORT_USERS_JOB,
-    variables: { id: '698bc907-af7a-4141-92dc-e8c66b4ba5f0' },
-  })
-
-  console.log(data)
+  const { t } = useTranslation('pages', { keyPrefix: 'import-users' })
 
   return (
-    <Container>
-      <Typography variant="h2">Import users</Typography>
+    <ImportProvider>
+      <FullHeightPageLayout bgcolor="grey.100">
+        <Container maxWidth="lg" sx={{ padding: theme.spacing(4, 0, 4, 0) }}>
+          <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
+            <Box width={400} display="flex" flexDirection="column" pr={6}>
+              <Sticky top={50}>
+                <Box mb={4}>
+                  <Typography variant="h2" mb={1}>
+                    {t('title')}
+                  </Typography>
+                  <Typography color="grey.700">
+                    {t('helper-description')}
+                  </Typography>
+                </Box>
 
-      <Button
-        component="label"
-        variant="contained"
-        startIcon={<CloudUploadIcon />}
-      >
-        Upload file
-        <VisuallyHiddenInput
-          type="file"
-          onChange={handleUploadChange}
-          accept=".xlsx"
-        />
-      </Button>
+                <ImportSteps />
+              </Sticky>
+            </Box>
 
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-    </Container>
+            <Box flex={1}>
+              <Box>
+                <Outlet />
+              </Box>
+            </Box>
+          </Box>
+        </Container>
+      </FullHeightPageLayout>
+    </ImportProvider>
   )
 }
