@@ -1,5 +1,39 @@
 # @teamteach/hub
 
+## 3.1.0
+
+### Minor Changes
+
+- 8ea3fbf: Allow invite attendees after course ended for Administrator, Operations and Sales administrator roles
+- 9b6f18c: Add user import page
+- 8e49614: Display course invite expires in
+- 6be0c91: Change 'Country' to 'Residing Country' on View Profile page and Edit Profile page.
+- 1eb8464: Configure GraphQL subscriptions
+
+### Patch Changes
+
+- 6678e1e: Graded on modules with new module data model on certificate details
+- 4499528: Update the stripe.js version that fixes "failed to load Stripe.js" error.
+- cb003b6: Fix: TTHP-3368 all organisations for orgAdmins
+- e840838: Make AOL course cost required, and greater than or equal to 0.
+- 9046a29: Participant grade page with new module data model
+- 7125ebc: TTHP-3220 fix booking redirect for orgAdmins
+- d1c48eb: Fix: TTHP-3368 upcoming enrollment course
+- 1d4c570: change archiving condition to allow proceeding if the trainer is in any courses with the state "Missing Evaluation"
+- 922b6cd: Fix failing E2E advanced modules coures builder test
+- 5ba7dc1: make new venue form added through google maps suggestions have the prefilled fields disabled
+- decd5e9: Fix search on manage courses page
+- e58277b: Do not display lead trainer in grace period exception for the assistant trainer
+- eb72ced: Fix redirection to organisation page after an organisation is created
+- 66614af: use error instances when throwing in gqlRequest
+- ce264a6: TTHP-3368 fix orgAdmins course enrollments
+- bd7ce30: Disable invite tools for draft courses
+- b74baee: TTHP-3457 fix wording cetificate download
+- 57fedf6: Add permission to select 'include_VAT' from 'course' table for finance and sales representative role.
+- 16d2e57: make autocompleted venue fields optional only if they are not empty strings
+- 77c466c: change tsconfig target to ES2021
+- c7e48e7: Display certificate module for org key contact and booking contact
+
 ## 3.0.0
 
 ### Major Changes
