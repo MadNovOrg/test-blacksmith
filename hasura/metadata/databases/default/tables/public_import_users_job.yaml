@@ -48,6 +48,6 @@ event_triggers:
         columns: '*'
     retry_conf:
       interval_sec: 10
-      num_retries: 10
-      timeout_sec: 120
+      num_retries: 1
+      timeout_sec: 3600
     webhook: '{{EVENTS_HOST}}/user/import'

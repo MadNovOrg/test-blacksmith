@@ -83,7 +83,7 @@ export const Importing: React.FC = () => {
           <Box mb={2}>
             <LinearProgress
               variant="determinate"
-              value={(result?.processed / result?.total) * 100}
+              value={((result?.processed ?? 0) / result?.total) * 100}
             />
             <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
               {result?.processed ?? 0} / {result?.total ?? 0}
