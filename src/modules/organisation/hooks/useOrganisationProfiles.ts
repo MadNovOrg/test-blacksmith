@@ -4,6 +4,7 @@ import { gql, useQuery } from 'urql'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Level_Enum,
+  Course_Type_Enum,
   GetOrganisationProfilesQuery,
   GetOrganisationProfilesQueryVariables,
   Profile,
@@ -18,18 +19,29 @@ export const GET_PROFILES = gql`
     $where: organization_bool_exp = {}
     $whereProfileCertificates: course_certificate_bool_exp = {}
     $whereUpcomingEnrollmentsCourses: upcoming_enrollments_bool_exp = {}
+    $whereUpcomingEnrollmentsOpenCourse: course_participant_bool_exp = {}
   ) {
     profiles: profile(
       where: {
         organizations: { organization: $where }
         archived: { _eq: false }
         certificates: $whereProfileCertificates
+        courses: $whereUpcomingEnrollmentsOpenCourse
       }
     ) {
       id
       fullName
       avatar
       archived
+      courses(where: $whereUpcomingEnrollmentsOpenCourse) {
+        course {
+          name
+          level
+          id
+          course_code
+          type
+        }
+      }
       certificates(where: $whereProfileCertificates) {
         id
         courseLevel
@@ -99,6 +111,12 @@ export default function useOrganisationProfiles({
         _or: [{ grade: { _is_null: true } }, { grade: { _neq: 'FAIL' } }],
       },
     ],
+  }
+
+  const whereUpcomingEnrollmentsOpenCourse = {
+    course: {
+      type: { _eq: Course_Type_Enum.Open },
+    },
   }
 
   let whereUpcomingEnrollmentsCourses
@@ -179,12 +197,13 @@ export default function useOrganisationProfiles({
       where: conditions,
       whereProfileCertificates,
       whereUpcomingEnrollmentsCourses,
+      whereUpcomingEnrollmentsOpenCourse,
     },
   })
   const profilesByOrganisation = useMemo(() => {
     const profilesByOrg = new Map<string, Profile[]>()
     data?.profiles.forEach(profile => {
-      profile.organizations.forEach(orgMember => {
+      profile?.organizations?.forEach(orgMember => {
         const array = profilesByOrg.get(orgMember.organization.id) ?? []
         array.push(profile as Profile)
         profilesByOrg.set(orgMember.organization.id, array)

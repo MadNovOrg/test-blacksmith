@@ -125,6 +125,14 @@ export const IndividualsByLevelList: React.FC<
             const certification = profile.certificates.find(
               c => c.courseLevel === courseLevel
             )
+            const upcomingEnrollments = [
+              ...profile.upcomingEnrollments,
+              ...profile.courses.map(({ course }) => ({
+                course,
+                courseId: course.id,
+                courseLevel: course.level,
+              })),
+            ]
             const certificationStatus =
               certification?.status as CertificateStatus
             const isRevoked = certificationStatus === CertificateStatus.REVOKED
@@ -190,7 +198,7 @@ export const IndividualsByLevelList: React.FC<
                 ) : null}
                 <TableCell>
                   <Box display="flex" flexDirection="column" alignItems="left">
-                    {profile.upcomingEnrollments.map(enrollment => (
+                    {upcomingEnrollments.map(enrollment => (
                       <Link
                         key={enrollment.courseId}
                         variant="body2"
