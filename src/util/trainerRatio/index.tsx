@@ -27,6 +27,8 @@ export type RatioCourseData = Pick<
   hasSeniorOrPrincipalLeader: boolean
   usesAOL?: boolean
   isTrainer?: boolean
+  isETA?: boolean
+  isEmployerAOL?: boolean
 }
 
 export type RatioTrainerData = Pick<
@@ -48,6 +50,8 @@ export function getRequiredAssistants(
       hasSeniorOrPrincipalLeader:
         courseData.hasSeniorOrPrincipalLeader ?? false,
       isTrainer: courseData.isTrainer,
+      isETA: courseData.isETA,
+      isEmployerAOL: courseData.isEmployerAOL,
     })
   } else if (courseData.accreditedBy === Accreditors_Enum.Bild) {
     const strategies = courseData.bildStrategies ?? {}

@@ -21,6 +21,8 @@ export type TrainerRatioCriteria = {
   hasSeniorOrPrincipalLeader: boolean
   usesAOL?: boolean
   isTrainer?: boolean
+  isETA?: boolean
+  isEmployerAOL?: boolean
 }
 
 const ratio = (
@@ -38,7 +40,12 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
     return ratio(0, 12, 12)
   }
   if (criteria.courseLevel === Course_Level_Enum.Level_1) {
-    if (criteria.reaccreditation || criteria.hasSeniorOrPrincipalLeader) {
+    if (
+      criteria.reaccreditation ||
+      criteria.hasSeniorOrPrincipalLeader ||
+      criteria.isETA ||
+      criteria.isEmployerAOL
+    ) {
       return ratio(0, 12, 12)
     }
     if (criteria.type === Course_Type_Enum.Open) {
@@ -55,10 +62,14 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
     if (criteria.deliveryType === Course_Delivery_Type_Enum.Virtual) {
       return ratio(1, 24, 12)
     }
-    return ratio(1, 12, 12)
+    return ratio(1, 24, 12)
   } else if (criteria.courseLevel === Course_Level_Enum.Level_2) {
     if (!criteria.reaccreditation && !criteria.hasSeniorOrPrincipalLeader) {
       return ratio(1, 24, 12)
+    }
+
+    if (criteria.isETA || criteria.isEmployerAOL) {
+      return ratio(0, 12, 12)
     }
 
     if (

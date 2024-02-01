@@ -47,6 +47,8 @@ import {
   SetCourseTrainerInput,
   SortOrder,
   TimeDifferenceAndContext,
+  TrainerRoleTypeName,
+  TrainerRoleType,
 } from '@app/types'
 
 export { formatCourseVenue, formatCourseVenueName } from './formatCourseVenue'
@@ -850,6 +852,20 @@ export const validUserSignature = (
   }
 
   return false
+}
+
+export function checkIsETA(trainer_role_types: TrainerRoleType[]) {
+  return (
+    trainer_role_types.some(t => t.name === TrainerRoleTypeName.TRAINER_ETA) ??
+    false
+  )
+}
+
+export function checkIsEmployerAOL(trainer_role_types: TrainerRoleType[]) {
+  return (
+    trainer_role_types.some(t => t.name === TrainerRoleTypeName.EMPLOYER_AOL) ??
+    false
+  )
 }
 
 export const ALL_ORGS = 'all'

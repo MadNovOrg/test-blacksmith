@@ -73,11 +73,14 @@ import {
   CourseTrainerType,
   InviteStatus,
   RoleName,
+  TrainerRoleType,
   TrainerRoleTypeName,
   ValidCourseInput,
 } from '@app/types'
 import {
   bildStrategiesToArray,
+  checkIsEmployerAOL,
+  checkIsETA,
   courseStarted,
   courseToCourseInput,
   generateBildCourseName,
@@ -584,6 +587,18 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     )
   }, [profile])
 
+  const isETA = useMemo(() => {
+    return checkIsETA(
+      profile?.trainer_role_types as unknown as TrainerRoleType[]
+    )
+  }, [profile])
+
+  const isEmployerAOL = useMemo(() => {
+    return checkIsEmployerAOL(
+      profile?.trainer_role_types as unknown as TrainerRoleType[]
+    )
+  }, [profile])
+
   const alignedWithProtocol =
     (courseData?.startDateTime &&
       differenceInCalendarDays(courseData.startDateTime, new Date()) > 14) ||
@@ -636,6 +651,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
           usesAOL: courseData.usesAOL,
           isTrainer: acl.isTrainer(),
+          isETA: isETA,
+          isEmployerAOL: isEmployerAOL,
         },
         trainersData.assist.map(assistant => ({
           type: CourseTrainerType.Assistant,
@@ -665,9 +682,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     acl,
     editCourse,
     seniorOrPrincipalLead,
+    isETA,
+    isEmployerAOL,
+    canRescheduleCourseEndDate,
     autoapproved,
     alignedWithProtocol,
-    canRescheduleCourseEndDate,
   ])
 
   const showTrainerRatioWarning = useMemo(() => {

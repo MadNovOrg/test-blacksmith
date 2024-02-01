@@ -33,9 +33,15 @@ import {
   CourseTrainerType,
   InviteStatus,
   TrainerInput,
+  TrainerRoleType,
   TrainerRoleTypeName,
 } from '@app/types'
-import { LoadingStatus, bildStrategiesToArray } from '@app/util'
+import {
+  LoadingStatus,
+  bildStrategiesToArray,
+  checkIsETA,
+  checkIsEmployerAOL,
+} from '@app/util'
 import { getRequiredLeads } from '@app/util/trainerRatio'
 
 import { StepsEnum } from '../../types'
@@ -122,6 +128,8 @@ export const AssignTrainers = () => {
   const navigate = useNavigate()
   const [trainersDataValid, setTrainersDataValid] = useState(false)
   const [seniorOrPrincipalLead, setSeniorOrPrincipalLead] = useState(false)
+  const [isETA, setIsETA] = useState(false)
+  const [isEmployerAOL, setIsEmployerAOL] = useState(false)
   const { savingStatus, saveCourse } = useSaveCourse()
   const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
     []
@@ -140,6 +148,16 @@ export const AssignTrainers = () => {
               role?.name === TrainerRoleTypeName.SENIOR ||
               role?.name === TrainerRoleTypeName.PRINCIPAL
           )
+        )
+      )
+      setIsETA(
+        data.lead.some(lead =>
+          checkIsETA(lead.trainer_role_types as TrainerRoleType[])
+        )
+      )
+      setIsEmployerAOL(
+        data.lead.some(lead =>
+          checkIsEmployerAOL(lead.trainer_role_types as TrainerRoleType[])
         )
       )
       setTrainers(formValuesToTrainerInput(data))
@@ -205,6 +223,8 @@ export const AssignTrainers = () => {
           hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
           usesAOL: courseData.usesAOL,
           isTrainer: acl.isTrainer(),
+          isETA: isETA,
+          isEmployerAOL: isEmployerAOL,
         },
         trainers
       )
@@ -217,7 +237,15 @@ export const AssignTrainers = () => {
         await submit()
       }
     }
-  }, [acl, courseData, seniorOrPrincipalLead, submit, trainers])
+  }, [
+    acl,
+    courseData,
+    isETA,
+    isEmployerAOL,
+    seniorOrPrincipalLead,
+    submit,
+    trainers,
+  ])
 
   const requiredLeaders = useMemo(() => {
     if (courseData) {

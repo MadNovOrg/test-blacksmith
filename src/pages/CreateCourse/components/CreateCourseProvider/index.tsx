@@ -17,10 +17,16 @@ import {
   Draft,
   ExpensesInput,
   TrainerInput,
+  TrainerRoleType,
   TrainerRoleTypeName,
   ValidCourseInput,
 } from '@app/types'
-import { generateBildCourseName, generateCourseName } from '@app/util'
+import {
+  checkIsETA,
+  checkIsEmployerAOL,
+  generateBildCourseName,
+  generateCourseName,
+} from '@app/util'
 
 import { ContextValue, StepsEnum } from '../../types'
 import { checkCourseDetailsForExceptions } from '../CourseExceptionsConfirmation/utils'
@@ -100,6 +106,18 @@ export const CreateCourseProvider: React.FC<
     )
   }, [trainers])
 
+  const isETA = useMemo(() => {
+    return trainers.some(t =>
+      checkIsETA(t.trainer_role_types as TrainerRoleType[])
+    )
+  }, [trainers])
+
+  const isEmployerAOL = useMemo(() => {
+    return trainers.some(t =>
+      checkIsEmployerAOL(t.trainer_role_types as TrainerRoleType[])
+    )
+  }, [trainers])
+
   const exceptions = useMemo(() => {
     if (!courseData) return []
 
@@ -109,10 +127,12 @@ export const CreateCourseProvider: React.FC<
         hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
         usesAOL: courseData.usesAOL,
         isTrainer: acl.isTrainer(),
+        isETA: isETA,
+        isEmployerAOL: isEmployerAOL,
       },
       trainers
     )
-  }, [courseData, seniorOrPrincipalLead, acl, trainers])
+  }, [courseData, seniorOrPrincipalLead, acl, isETA, isEmployerAOL, trainers])
 
   const completeStep = useCallback(
     (step: StepsEnum) => {

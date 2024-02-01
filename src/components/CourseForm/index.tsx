@@ -1081,7 +1081,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     courseType === Course_Type_Enum.Indirect &&
     activeRole === RoleName.TRAINER
 
-  console.log(courseInput)
   return (
     <form>
       <FormProvider {...methods}>

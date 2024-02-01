@@ -309,7 +309,7 @@ describe('trainerRatio utils', () => {
           it('participants equal to threshold', () => {
             expect(
               getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 12 })
+                extend({}, criteria, { maxParticipants: 24 })
               )
             ).toEqual({
               min: 1,
@@ -319,7 +319,7 @@ describe('trainerRatio utils', () => {
           it('participants above threshold', () => {
             expect(
               getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 13 })
+                extend({}, criteria, { maxParticipants: 25 })
               )
             ).toEqual({
               min: 2,
@@ -329,7 +329,7 @@ describe('trainerRatio utils', () => {
           it('participants on next increment threshold', () => {
             expect(
               getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 24 })
+                extend({}, criteria, { maxParticipants: 36 })
               )
             ).toEqual({
               min: 2,
@@ -339,7 +339,7 @@ describe('trainerRatio utils', () => {
           it('participants above next increment threshold', () => {
             expect(
               getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 25 })
+                extend({}, criteria, { maxParticipants: 37 })
               )
             ).toEqual({
               min: 3,

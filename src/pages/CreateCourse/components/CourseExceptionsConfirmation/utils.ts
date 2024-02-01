@@ -42,6 +42,8 @@ export type CourseData = {
   bildStrategies?: Record<string, boolean>
   usesAOL?: boolean
   isTrainer?: boolean
+  isETA?: boolean
+  isEmployerAOL?: boolean
 }
 export type TrainerData = {
   type: Course_Trainer_Type_Enum | CourseTrainerType
@@ -146,6 +148,8 @@ export function checkCourseDetailsForExceptions(
         hasSeniorOrPrincipalLeader: courseData.hasSeniorOrPrincipalLeader,
         usesAOL: courseData.usesAOL,
         isTrainer: courseData.isTrainer,
+        isETA: courseData.isETA,
+        isEmployerAOL: courseData.isEmployerAOL,
       },
       trainerData.map(t => ({
         type: t.type as CourseTrainerType,

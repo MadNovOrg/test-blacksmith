@@ -42,10 +42,16 @@ import {
   CourseInput,
   InviteStatus,
   TrainerInput,
+  TrainerRoleType,
   TrainerRoleTypeName,
   ValidCourseInput,
 } from '@app/types'
-import { LoadingStatus, bildStrategiesToArray } from '@app/util'
+import {
+  LoadingStatus,
+  bildStrategiesToArray,
+  checkIsETA,
+  checkIsEmployerAOL,
+} from '@app/util'
 
 import { StepsEnum } from '../../types'
 import { useSaveCourse } from '../../useSaveCourse'
@@ -138,6 +144,18 @@ export const CreateCourseForm = () => {
     )
   }, [profile])
 
+  const isETA = useMemo(() => {
+    return checkIsETA(
+      profile?.trainer_role_types as unknown as TrainerRoleType[]
+    )
+  }, [profile])
+
+  const isEmployerAOL = useMemo(() => {
+    return checkIsEmployerAOL(
+      profile?.trainer_role_types as unknown as TrainerRoleType[]
+    )
+  }, [profile])
+
   const nextStepEnabled = useMemo(() => {
     if (courseType !== Course_Type_Enum.Indirect) {
       return courseDataValid
@@ -208,6 +226,8 @@ export const CreateCourseForm = () => {
           hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
           usesAOL: courseData.usesAOL,
           isTrainer: acl.isTrainer(),
+          isETA: isETA,
+          isEmployerAOL: isEmployerAOL,
         },
         [
           ...assistants.map(assistant => ({

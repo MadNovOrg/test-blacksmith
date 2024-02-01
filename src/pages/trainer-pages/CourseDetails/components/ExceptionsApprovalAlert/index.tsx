@@ -17,8 +17,12 @@ import {
   CourseException,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import theme from '@app/theme'
-import { TrainerRoleTypeName } from '@app/types'
-import { bildStrategiesToRecord } from '@app/util'
+import { TrainerRoleType, TrainerRoleTypeName } from '@app/types'
+import {
+  bildStrategiesToRecord,
+  checkIsETA,
+  checkIsEmployerAOL,
+} from '@app/util'
 
 import { ExceptionsApprovalModalContent } from './ExceptionsApprovalModalContent'
 
@@ -76,6 +80,16 @@ export const ExceptionsApprovalAlert: FC = () => {
                 role.name === TrainerRoleTypeName.PRINCIPAL
             )) ??
           false,
+        isETA:
+          leader &&
+          checkIsETA(
+            leader.profile?.trainer_role_types as unknown as TrainerRoleType[]
+          ),
+        isEmployerAOL:
+          leader &&
+          checkIsEmployerAOL(
+            leader.profile?.trainer_role_types as unknown as TrainerRoleType[]
+          ),
       },
       course.trainers.map(t => ({
         type: t.type,
