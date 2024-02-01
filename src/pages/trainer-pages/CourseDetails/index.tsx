@@ -220,7 +220,9 @@ export const CourseDetails = () => {
   }, [course, startPolling, polling])
 
   const showCourseOverview =
-    (course?.moduleGroupIds?.length || course?.bildModules?.length) &&
+    (course?.moduleGroupIds?.length ||
+      course?.bildModules?.length ||
+      course?.curriculum) &&
     course.status !== Course_Status_Enum.Draft
 
   const showCourseBuilderOnEditPage = acl.canViewCourseBuilderOnEditPage(

@@ -125,6 +125,7 @@ export const QUERY = gql`
 
       status
       accreditedBy
+      curriculum
       bildModules {
         id
         modules
