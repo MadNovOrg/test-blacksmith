@@ -60,6 +60,7 @@ export const QUERY = gql`
         count
       }
     }
+    curriculum
     bildModules {
       id
     }

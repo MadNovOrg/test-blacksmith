@@ -166,7 +166,8 @@ export function CourseTitleCell({ course }: { course: TableCourse }) {
   const courseHasModules =
     (course.modulesAgg.aggregate?.count &&
       course.modulesAgg.aggregate?.count > 0) ||
-    course.bildModules.length
+    course.bildModules.length ||
+    course.curriculum?.length
 
   const titleLink =
     (course.isDraft || !courseHasModules) && acl.canBuildCourse()
