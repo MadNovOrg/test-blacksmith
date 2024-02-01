@@ -92,7 +92,6 @@ export const InvitationPage = () => {
       [token]
     ),
   })
-
   const [
     { error: declineInvitationError, fetching: declineInvitationLoading },
     declineInvitation,
@@ -301,7 +300,9 @@ export const InvitationPage = () => {
         {isSubmitted ? (
           <Box display="flex" flexDirection="column" alignItems="center" mb={5}>
             <Alert variant="outlined" color="success" sx={{ mb: 3 }}>
-              {t('invitation.response-sent')}
+              {inviteData?.invite?.status === InviteStatus.Accepted
+                ? t('invitation.accepted-response-sent')
+                : t('invitation.declined-response-sent')}
             </Alert>
 
             <Button href="/" variant="contained">

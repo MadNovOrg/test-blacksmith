@@ -600,7 +600,8 @@
     "will-attend": "I will attend",
     "can-attend-q": "Are you able to attend?",
     "goto-tt": "Go to Team Teach Connect",
-    "response-sent": "Thank you for confirming you will not attend this course.",
+    "accepted-response-sent": "You have already accepted the invitation to attend this course.",
+    "declined-response-sent": "Thank you for confirming you will not attend this course.",
     "invitation-expired": "Invitation expired",
     "invitation-not-found": "Invitation not found"
   },
