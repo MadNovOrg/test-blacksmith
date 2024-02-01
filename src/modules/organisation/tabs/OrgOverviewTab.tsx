@@ -94,7 +94,7 @@ export const OrgOverviewTab: React.FC<
     organisations: data?.orgs,
   })
 
-  const { courses: coursesForBooking, loading: coursesLoading } =
+  const { courses: coursesForBooking, fetching: coursesLoading } =
     useUpcomingCourses(profile?.id, {
       _and: [
         { type: { _eq: Course_Type_Enum.Open } },

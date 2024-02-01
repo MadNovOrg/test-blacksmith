@@ -128,13 +128,16 @@ export const AvailableCourses: React.FC<
           {
             course_code: { _ilike: `%${keyword}%` },
           },
+          {
+            name: { _ilike: `%${keyword}%` },
+          },
         ],
       })
     }
     return { _and: conditions }
   }, [dateFrom, dateTo, keyword, filterDeliveryType, filterByCertificateLevel])
 
-  const { courses: coursesForBooking, loading: coursesLoading } =
+  const { courses: coursesForBooking, fetching: coursesLoading } =
     useUpcomingCourses(profile?.id, filters)
 
   const distances = useMemo(() => {
@@ -218,7 +221,7 @@ export const AvailableCourses: React.FC<
         {orgs && orgs.orgs.length > 1 ? (
           <OrgSelectionToolbar prefix="/organisations" postfix="/courses" />
         ) : null}
-        {coursesLoading || orgsLoading ? (
+        {orgsLoading ? (
           <Stack
             alignItems="center"
             justifyContent="center"
@@ -313,7 +316,15 @@ export const AvailableCourses: React.FC<
                   </TextField>
                 </Box>
 
-                {courses.length > 0 ? (
+                {coursesLoading ? (
+                  <Stack
+                    alignItems="center"
+                    justifyContent="center"
+                    data-testid="filtered-courses-fetching"
+                  >
+                    <CircularProgress />
+                  </Stack>
+                ) : courses.length > 0 ? (
                   <>
                     {currentPageRecords?.map(course => (
                       <CourseForBookingTile
