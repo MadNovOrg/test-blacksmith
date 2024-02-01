@@ -1,3 +1,4 @@
+import { CognitoUser } from 'amazon-cognito-identity-js'
 import { Auth } from 'aws-amplify'
 import { vi, MockedFunction } from 'vitest'
 
@@ -329,6 +330,62 @@ describe('Form', () => {
     await waitFor(() => {
       const datePicker = screen.getByLabelText(/date of birth/i)
       expect(datePicker).toBeInvalid()
+    })
+  })
+
+  it('submits the form with a lowercase and trimmed email', async () => {
+    gqlRequestMocked.mockResolvedValue({})
+    mockSignup.mockResolvedValue({
+      user: {} as unknown as CognitoUser,
+      userSub: '123',
+      userConfirmed: false,
+      codeDeliveryDetails: {
+        AttributeName: 'email',
+        DeliveryMedium: 'EMAIL',
+        Destination: '...',
+      },
+    })
+
+    const props = { ...defaultProps }
+    render(<Form {...props} />)
+
+    const form = screen.getByTestId('signup-form')
+    expect(form).toBeInTheDocument()
+
+    await userEvent.type(screen.getByTestId('input-first-name'), 'testName')
+    await userEvent.type(screen.getByTestId('input-surname'), 'testSurname')
+    await userEvent.type(
+      screen.getByTestId('input-email'),
+      'joHn.DOE@exAmple.com '
+    )
+    await userEvent.type(screen.getByTestId('input-password'), 'Test1234!')
+    await userEvent.type(screen.getByTestId('input-phone'), '1234567890')
+    await userEvent.type(screen.getByTestId('org-selector'), 'Organization')
+
+    await userEvent.click(screen.getByTestId('recaptcha-success'))
+
+    // Selects your default value of the date field
+    await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
+
+    await userEvent.click(screen.getByLabelText('T&Cs'))
+
+    await userEvent.click(screen.getByLabelText('Job Title *'))
+    await userEvent.click(screen.getByTestId('position-Other'))
+    await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
+
+    await waitFor(async () => {
+      await userEvent.click(screen.getByTestId('signup-form-btn'))
+    })
+
+    await waitFor(async () => {
+      expect(gqlRequestMocked).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          input: expect.objectContaining({
+            email: 'john.doe@example.com',
+          }),
+        })
+      )
     })
   })
 })

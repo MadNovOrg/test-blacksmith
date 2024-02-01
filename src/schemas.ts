@@ -41,7 +41,7 @@ const schemas = {
   email: (t: TFunction) => {
     const email = yup
       .string()
-      .transform(currentValue => currentValue.trim())
+      .transform(currentValue => currentValue.trim().toLowerCase())
       .email(t('validation-errors.email-invalid'))
     return email
   },
