@@ -52,7 +52,16 @@ describe('page: ResourceCategoryDetails', () => {
       <Provider value={client}>
         <ResourceCategoryDetails />
       </Provider>,
-      { auth: { activeCertificates: [Course_Level_Enum.Level_1] } }
+      {
+        auth: {
+          certificates: [
+            {
+              courseLevel: Course_Level_Enum.Level_1,
+              expiryDate: '2030-12-31',
+            },
+          ],
+        },
+      }
     )
 
     expect(
@@ -120,9 +129,15 @@ describe('page: ResourceCategoryDetails', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [
-            Course_Level_Enum.Advanced,
-            Course_Level_Enum.IntermediateTrainer,
+          certificates: [
+            {
+              courseLevel: Course_Level_Enum.Advanced,
+              expiryDate: '2030-12-31',
+            },
+            {
+              courseLevel: Course_Level_Enum.IntermediateTrainer,
+              expiryDate: '2030-12-31',
+            },
           ],
         },
       }

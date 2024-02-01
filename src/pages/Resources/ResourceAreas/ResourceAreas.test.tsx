@@ -92,7 +92,12 @@ describe('page: ResourcesList', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.Level_1],
+          certificates: [
+            {
+              courseLevel: Course_Level_Enum.Level_1,
+              expiryDate: '2030-12-31',
+            },
+          ],
           activeRole: RoleName.USER,
         },
       }
@@ -143,7 +148,12 @@ describe('page: ResourcesList', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.Level_1],
+          certificates: [
+            {
+              courseLevel: Course_Level_Enum.Level_1,
+              expiryDate: '2030-12-31',
+            },
+          ],
           activeRole: RoleName.USER,
         },
       }

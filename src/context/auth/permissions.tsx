@@ -1,3 +1,4 @@
+import { isFuture, parseISO } from 'date-fns'
 import { anyPass } from 'lodash/fp'
 import { MarkOptional } from 'ts-essentials'
 
@@ -454,6 +455,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         courseProgress?.started && !courseProgress.ended
       const hasPassedTrainerCourse = hasPassed
 
+      const currentUserCertificates = auth.certificates
+        ?.filter(certificate => {
+          const expirationDate = parseISO(certificate.expiryDate)
+          return isFuture(expirationDate)
+        })
+        .map(certificate => certificate.courseLevel)
+
       if (
         anyPass(
           [
@@ -465,9 +473,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         )()
       ) {
         return Boolean(
-          auth.activeCertificates?.length ||
-            trainerCourseIsOngoing ||
-            hasPassedTrainerCourse
+          (currentUserCertificates?.length && hasPassedTrainerCourse) ||
+            trainerCourseIsOngoing
         )
       }
 

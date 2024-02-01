@@ -1,3 +1,4 @@
+import { isFuture, parseISO } from 'date-fns'
 import { useCallback } from 'react'
 
 import { useAuth } from '@app/context/auth'
@@ -16,9 +17,16 @@ import {
 import { TrainerRoleTypeName } from '@app/types'
 
 export function useResourcePermission() {
-  const { activeCertificates, trainerRoles, acl, profile } = useAuth()
+  const { certificates, trainerRoles, acl, profile } = useAuth()
 
-  const currentUserCertificates = activeCertificates
+  // remove all expired certificates user has
+  const currentUserCertificates = certificates
+    ?.filter(certificate => {
+      const expirationDate = parseISO(certificate.expiryDate)
+      return isFuture(expirationDate)
+    })
+    .map(certificate => certificate.courseLevel)
+
   const attendedCourse = courseCategoryUserAttends(
     profile?.courses as ICourseCategoryUserAttends[]
   )
@@ -39,6 +47,9 @@ export function useResourcePermission() {
         'certificateLevels' | 'principalTrainer'
       >
     ) => {
+      if (!resourcePermissions) {
+        return false
+      }
       // all internal users have access by default to 'Resources' area on the app
       if (acl.isInternalUser()) {
         return true
@@ -97,7 +108,9 @@ export function useResourcePermission() {
         }
 
         if (trainerCourseEnded) {
-          if (hasPassedTrainerCourse) {
+          // check if user got a PASS or ASSIST PASS for the recently attended Trainer Course
+          // but at the same time, he needs to have at least one valid certificate
+          if (hasPassedTrainerCourse && hasPermissionByCourseCertificateLevel) {
             return true
           }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Course_Level_Enum } from '@app/generated/graphql'
+import { Course_Level_Enum, Grade_Enum } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
 import { render, renderHook, screen } from '@test/index'
@@ -17,9 +17,27 @@ describe('component: NavLinks', () => {
   it('renders USER role links', async () => {
     render(<NavLinks />, {
       auth: {
+        profile: {
+          courses: [
+            {
+              grade: Grade_Enum.Pass,
+              course: {
+                level: Course_Level_Enum.AdvancedTrainer,
+                start: '2024-01-10',
+                end: '2024-01-11',
+              },
+            },
+          ],
+        },
         activeRole: RoleName.USER,
         allowedRoles: new Set([RoleName.USER]),
         activeCertificates: [Course_Level_Enum.Level_1],
+        certificates: [
+          {
+            courseLevel: Course_Level_Enum.Level_1,
+            expiryDate: '2030-12-31',
+          },
+        ],
       },
     })
 
@@ -105,8 +123,26 @@ describe('component: NavLinks', () => {
   it('renders resources link if a trainer has a valid certificate', () => {
     render(<NavLinks />, {
       auth: {
+        profile: {
+          courses: [
+            {
+              grade: Grade_Enum.Pass,
+              course: {
+                level: Course_Level_Enum.AdvancedTrainer,
+                start: '2024-01-10',
+                end: '2024-01-11',
+              },
+            },
+          ],
+        },
         activeRole: RoleName.TRAINER,
         activeCertificates: [Course_Level_Enum.AdvancedTrainer],
+        certificates: [
+          {
+            courseLevel: Course_Level_Enum.Level_1,
+            expiryDate: '2030-12-31',
+          },
+        ],
       },
     })
 

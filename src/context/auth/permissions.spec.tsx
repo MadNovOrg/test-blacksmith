@@ -28,6 +28,7 @@ describe(getACL.name, () => {
       | 'managedOrgIds'
       | 'allowedRoles'
       | 'activeCertificates'
+      | 'certificates'
     >
   ) => {
     const defaults = {
@@ -44,6 +45,12 @@ describe(getACL.name, () => {
       ...defaults,
     })
   }
+
+  const date = new Date()
+  const pastDate = new Date(date)
+  const futureDate = new Date(date)
+  pastDate.setDate(date.getDate() - 2)
+  futureDate.setDate(date.getDate() + 3)
 
   describe('isTTAdmin()', () => {
     it(`should return true when the activeRole is ${RoleName.TT_ADMIN}`, () => {
@@ -1798,7 +1805,26 @@ describe(getACL.name, () => {
         // Arrange
         const acl = getACLStub({
           activeRole,
-          activeCertificates: [Course_Level_Enum.Level_1],
+          profile: buildProfile({
+            overrides: {
+              courses: [
+                {
+                  grade: Grade_Enum.Pass,
+                  course: {
+                    start: pastDate.toISOString(),
+                    level: Course_Level_Enum.AdvancedTrainer,
+                    end: futureDate.toISOString(),
+                  },
+                },
+              ],
+            },
+          }),
+          certificates: [
+            {
+              courseLevel: Course_Level_Enum.Level_1,
+              expiryDate: futureDate.toISOString(),
+            },
+          ],
         })
 
         // Act & Assert
@@ -1812,7 +1838,7 @@ describe(getACL.name, () => {
         // Arrange
         const acl = getACLStub({
           activeRole,
-          activeCertificates: [],
+          certificates: [],
         })
 
         // Act & Assert
@@ -1823,16 +1849,10 @@ describe(getACL.name, () => {
     it.each([[RoleName.USER], [RoleName.TRAINER]])(
       `should return true activeRole is %s, has no certificates for 'non-trainer' courses but attends an ongoing trainer course`,
       activeRole => {
-        const date = new Date()
-        const pastDate = new Date(date)
-        const futureDate = new Date(date)
-        pastDate.setDate(date.getDate() - 2)
-        futureDate.setDate(date.getDate() + 3)
-
         // Arrange
         const acl = getACLStub({
           activeRole,
-          activeCertificates: [],
+          certificates: [],
           profile: buildProfile({
             overrides: {
               courses: [
@@ -1857,22 +1877,23 @@ describe(getACL.name, () => {
     it.each([[RoleName.USER], [RoleName.TRAINER]])(
       `should return true activeRole is %s, has no certificates for 'non-trainer' courses but got a PASS grading on a trainer course`,
       activeRole => {
-        const date = new Date()
-        const pastDate = new Date(date)
-        pastDate.setDate(date.getDate() - 2)
-
         // Arrange
         const acl = getACLStub({
           activeRole,
-          activeCertificates: [],
+          certificates: [
+            {
+              courseLevel: Course_Level_Enum.Level_1,
+              expiryDate: '2030-12-31',
+            },
+          ],
           profile: buildProfile({
             overrides: {
               courses: [
                 {
-                  grade: 'PASS' as Grade_Enum,
+                  grade: Grade_Enum.Pass,
                   course: {
                     start: pastDate.toISOString(),
-                    level: 'BILD_ADVANCED_TRAINER' as Course_Level_Enum,
+                    level: Course_Level_Enum.BildAdvancedTrainer,
                     end: pastDate.toISOString(),
                   },
                 },
@@ -1896,7 +1917,7 @@ describe(getACL.name, () => {
         // Arrange
         const acl = getACLStub({
           activeRole,
-          activeCertificates: [],
+          certificates: [],
           profile: buildProfile({
             overrides: {
               courses: [
@@ -1928,7 +1949,7 @@ describe(getACL.name, () => {
         // Arrange
         const acl = getACLStub({
           activeRole,
-          activeCertificates: [],
+          certificates: [],
           profile: buildProfile({
             overrides: {
               courses: [
