@@ -160,6 +160,14 @@ export const EditProfilePage: React.FC<
     undefined,
     orgId ?? undefined
   )
+  /**
+   * @see https://behaviourhub.atlassian.net/browse/TTHP-3402
+   *
+   * The OrgSelector component does a mutation on the model 'organization_member'
+   * and cacheExchange invalidates the queries that use that __typename from useProfile,
+   * which causes a form reset mid-completion.
+   */
+  const isProfileStaleRef = useRef(false)
   const { roles: systemRoles } = useRoles()
   const { trainerRoleTypes: systemTrainerRoleTypes } = useTrainerRoleTypes()
   const isMyProfile = !id
@@ -323,6 +331,7 @@ export const EditProfilePage: React.FC<
 
   const refreshData = useCallback(async () => {
     if (isMyProfile) {
+      isProfileStaleRef.current = false
       await reloadCurrentProfile()
     }
   }, [isMyProfile, reloadCurrentProfile])
@@ -332,7 +341,8 @@ export const EditProfilePage: React.FC<
   }, [jobTitles, profile?.jobTitle])
 
   useEffect(() => {
-    if (profile) {
+    if (profile && !isProfileStaleRef.current) {
+      isProfileStaleRef.current = true
       setValue('avatar', profile.avatar as string)
       setValue('firstName', profile.givenName ?? '')
       setValue('surname', profile.familyName ?? '')
