@@ -1,0 +1,3 @@
+
+DELETE FROM course_source
+WHERE name = 'WEBSITE_ENQUIRY'

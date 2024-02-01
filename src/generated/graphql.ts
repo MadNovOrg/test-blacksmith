@@ -26502,7 +26502,8 @@ export enum Course_Source_Enum {
   SocialMedia = 'SOCIAL_MEDIA',
   TelephoneEnquiry = 'TELEPHONE_ENQUIRY',
   Tender = 'TENDER',
-  Webinar = 'WEBINAR'
+  Webinar = 'WEBINAR',
+  WebsiteEnquiry = 'WEBSITE_ENQUIRY'
 }
 
 /** Boolean expression to compare columns of type "course_source_enum". All fields are combined with logical 'AND'. */

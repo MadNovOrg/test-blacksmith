@@ -696,7 +696,8 @@
     "EMAIL": "Email",
     "WEBINAR": "Webinar",
     "BLOG_OR_PUBLICATION": "Blog or publication",
-    "OTHER": "Other"
+    "OTHER": "Other",
+    "WEBSITE_ENQUIRY": "Website enquiry"
   },
   "save-details": "Save details",
   "course-category": "Course category",
