@@ -4,8 +4,8 @@ import { Alert, Box, Button, Grid, Link, Typography } from '@mui/material'
 import React from 'react'
 
 import { useAuth } from '@app/context/auth'
+import { CertificateStatus } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { CertificateStatus } from '@app/types'
 
 export type HoldHeaderAlertProps = {
   status: CertificateStatus
@@ -48,7 +48,7 @@ const HoldHeaderAlert: React.FC<React.PropsWithChildren<HoldHeaderAlertProps>> =
             <Box>
               <Typography variant="body2" color="grey.900">
                 {t(
-                  status === CertificateStatus.ON_HOLD
+                  status === CertificateStatus.OnHold
                     ? 'on-hold-warning'
                     : 'on-hold-planned-warning',
                   {

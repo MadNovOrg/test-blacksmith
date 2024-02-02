@@ -23,11 +23,14 @@ import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
-import { OrgMembersQuery, Course_Level_Enum } from '@app/generated/graphql'
+import {
+  OrgMembersQuery,
+  Course_Level_Enum,
+  CertificateStatus,
+} from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import theme from '@app/theme'
-import { CertificateStatus } from '@app/types'
 import { getProfileCertificationLevels } from '@app/util'
 
 import { CertificateStatusChip } from '../CertificateStatusChip'

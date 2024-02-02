@@ -26,13 +26,14 @@ import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
+  CertificateStatus,
   Course_Level_Enum,
   GetCertificationsQuery,
   Grade_Enum,
 } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
-import { CertificateStatus, Profile } from '@app/types'
+import { Profile } from '@app/types'
 
 type CertificationsTableProps = {
   certificates: GetCertificationsQuery['certifications']
@@ -60,7 +61,7 @@ export const CertificationsTable: React.FC<
     return [
       checkbox.headCol(
         certificates.flatMap(c =>
-          c.status === CertificateStatus.REVOKED ||
+          c.status === CertificateStatus.Revoked ||
           c.participant?.grade === Grade_Enum.Fail
             ? []
             : [c.id]
@@ -144,7 +145,7 @@ export const CertificationsTable: React.FC<
               onClick={() => {
                 downloadCertificates(
                   certificates.filter(
-                    c => c.status !== CertificateStatus.REVOKED
+                    c => c.status !== CertificateStatus.Revoked
                   ) ?? []
                 )
               }}
@@ -173,8 +174,8 @@ export const CertificationsTable: React.FC<
 
             {certificates.map(c => {
               const status = c.status as CertificateStatus
-              const isRevoked = c.status === CertificateStatus.REVOKED
-              const isOnHold = c.status === CertificateStatus.ON_HOLD
+              const isRevoked = c.status === CertificateStatus.Revoked
+              const isOnHold = c.status === CertificateStatus.OnHold
               const isFail = c.participant?.grade === Grade_Enum.Fail
               const statusTooltip =
                 isRevoked || isOnHold
@@ -215,7 +216,7 @@ export const CertificationsTable: React.FC<
 
                   <TableCell data-testid="status">
                     <CertificateStatusChip
-                      status={isFail ? CertificateStatus.INACTIVE : status}
+                      status={isFail ? CertificateStatus.Inactive : status}
                       tooltip={statusTooltip}
                     />
                   </TableCell>

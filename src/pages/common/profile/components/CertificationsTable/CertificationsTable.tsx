@@ -16,8 +16,10 @@ import { useNavigate } from 'react-router-dom'
 
 import { CertificateStatusChip } from '@app/components/CertificateStatusChip'
 import { useAuth } from '@app/context/auth'
-import { GetProfileDetailsQuery } from '@app/generated/graphql'
-import { CertificateStatus } from '@app/types'
+import {
+  GetProfileDetailsQuery,
+  CertificateStatus,
+} from '@app/generated/graphql'
 
 type CertificationsTableProps = {
   verified: boolean
@@ -68,7 +70,7 @@ export const CertificationsTable: FC<
               <TableBody>
                 {(certifications ?? []).map(certificate => {
                   const isRevoked =
-                    certificate.status === CertificateStatus.REVOKED
+                    certificate.status === CertificateStatus.Revoked
 
                   return (
                     <TableRow

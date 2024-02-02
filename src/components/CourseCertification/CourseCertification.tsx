@@ -31,10 +31,10 @@ import {
   GetCertificateQueryVariables,
   Grade_Enum,
   Course_Level_Enum,
+  CertificateStatus,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { QUERY } from '@app/queries/certificate/get-certificate'
-import { CertificateStatus } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import CertificateHoldHistoryModal from './components/CertificateHoldHistoryModal/CertificateHoldHistoryModal'
@@ -140,8 +140,8 @@ export const CourseCertification: React.FC<
     )
   }
 
-  const isRevoked = certificate.status === CertificateStatus.REVOKED
-  const isOnHold = certificate.status === CertificateStatus.ON_HOLD
+  const isRevoked = certificate.status === CertificateStatus.Revoked
+  const isOnHold = certificate.status === CertificateStatus.OnHold
 
   const statusTooltip =
     isRevoked || isOnHold
@@ -179,8 +179,7 @@ export const CourseCertification: React.FC<
                   variant="contained"
                   color="primary"
                   disabled={
-                    isRevoked ||
-                    certificate.status === CertificateStatus.ON_HOLD
+                    isRevoked || certificate.status === CertificateStatus.OnHold
                   }
                 >
                   <PDFDownloadLink

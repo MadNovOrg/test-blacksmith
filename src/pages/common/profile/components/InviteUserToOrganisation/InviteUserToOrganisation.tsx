@@ -95,8 +95,12 @@ export const InviteUserToOrganisation: React.FC<
   })
 
   const organisationsData = useMemo(
-    () => [...(orgs?.orgs ?? []), ...(queriedData?.organization ?? [])],
-    [orgs?.orgs, queriedData?.organization]
+    () => [
+      ...(!debouncedQuery
+        ? new Set(orgs?.orgs ?? [])
+        : new Set(queriedData?.organization ?? [])),
+    ],
+    [debouncedQuery, orgs?.orgs, queriedData?.organization]
   ) as GetOrganisationDetailsQuery['orgs']
 
   const { handleSubmit } = useForm<{ emails: string[] }>()

@@ -14,6 +14,7 @@ import {
   Course_Type_Enum,
   GetEvaluationsSummaryQuery,
   Grade_Enum,
+  CertificateStatus,
 } from '@app/generated/graphql'
 import { StepsEnum } from '@app/pages/CreateCourse/types'
 
@@ -127,16 +128,6 @@ export type CourseModule = {
   module: Module
   submodules: Module[]
 } & Base
-
-export enum CertificateStatus {
-  EXPIRED = 'EXPIRED',
-  EXPIRED_RECENTLY = 'EXPIRED_RECENTLY',
-  EXPIRING_SOON = 'EXPIRING_SOON',
-  ACTIVE = 'ACTIVE',
-  ON_HOLD = 'ON_HOLD',
-  REVOKED = 'REVOKED',
-  INACTIVE = 'INACTIVE',
-}
 
 export type CourseCertificate = {
   number: string

@@ -1,84 +1,73 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { gql, useQuery } from 'urql'
 
-import { useAuth } from '@app/context/auth'
 import {
-  Course_Level_Enum,
-  Course_Type_Enum,
-  GetOrganisationProfilesQuery,
-  GetOrganisationProfilesQueryVariables,
-  Profile,
+  CertificateStatus,
+  GetOrganizationProfilesQuery,
+  GetOrganizationProfilesQueryVariables,
 } from '@app/generated/graphql'
-import { CERTIFICATE_CHANGELOG } from '@app/queries/fragments'
-import { CertificateStatus } from '@app/types'
-import { ALL_ORGS, getProfileCertificationLevels } from '@app/util'
+import { ALL_ORGS } from '@app/util'
 
-export const GET_PROFILES = gql`
-  ${CERTIFICATE_CHANGELOG}
-  query GetOrganisationProfiles(
-    $where: organization_bool_exp = {}
-    $whereProfileCertificates: course_certificate_bool_exp = {}
-    $whereUpcomingEnrollmentsCourses: upcoming_enrollments_bool_exp = {}
-    $whereUpcomingEnrollmentsOpenCourse: course_participant_bool_exp = {}
-  ) {
-    profiles: profile(
-      where: {
-        organizations: { organization: $where }
-        archived: { _eq: false }
-        certificates: $whereProfileCertificates
-        courses: $whereUpcomingEnrollmentsOpenCourse
-      }
-    ) {
-      id
-      fullName
-      avatar
-      archived
-      courses(where: $whereUpcomingEnrollmentsOpenCourse) {
-        course {
-          name
-          level
+export const GET_ORG_PROFILES = gql`
+  query GetOrganizationProfiles($input: OrganizationProfilesInput!) {
+    profiles: getOrganizationProfiles(input: $input) {
+      profilesByOrganisation {
+        orgId
+        profiles {
           id
-          course_code
-          type
-        }
-      }
-      certificates(where: $whereProfileCertificates) {
-        id
-        courseLevel
-        expiryDate
-        status
-        participant {
-          certificateChanges(order_by: { createdAt: desc }) {
-            ...CertificateChangelog
+          fullName
+          archived
+          avatar
+          certificates {
+            courseLevel
+            status
+            expiryDate
+          }
+          upcomingEnrollments {
+            orgId
+            orgName
+            courseLevel
+          }
+          organizations {
+            id
           }
         }
       }
-      go1Licenses(where: { organization: $where }) {
-        id
-        expireDate
-      }
-      upcomingEnrollments(where: $whereUpcomingEnrollmentsCourses) {
-        orgId
-        orgName
-        courseLevel
-        courseId
-        course {
-          name
-          course_code
-        }
-      }
-      organizations {
-        id
-        position
-        isAdmin
-        profile {
-          fullName
-          avatar
-          archived
-        }
-        organization {
+      profilesByLevel {
+        level
+        profiles {
           id
-          name
+          fullName
+          certificates {
+            courseLevel
+            status
+            expiryDate
+            participant {
+              certificateChanges {
+                payload {
+                  note
+                }
+              }
+            }
+          }
+          upcomingEnrollments {
+            orgId
+            orgName
+            courseLevel
+            course {
+              id
+              course_code
+            }
+          }
+          organizations {
+            id
+            position
+            organization {
+              id
+              name
+            }
+          }
         }
       }
     }
@@ -89,157 +78,57 @@ type UserOrgProfiles = {
   orgId: string
   profileId?: string
   showAll?: boolean
-  certificateFilter?: CertificateStatus[]
 }
 
 export default function useOrganisationProfiles({
   orgId,
   profileId,
   showAll,
-  certificateFilter,
 }: UserOrgProfiles) {
-  const auth = useAuth()
-  const whereProfileCertificates = {
-    _and: [
-      {
-        status: certificateFilter?.length
-          ? { _in: certificateFilter }
-          : { _neq: CertificateStatus.EXPIRED },
-        isRevoked: { _eq: false },
-      },
-      {
-        _or: [{ grade: { _is_null: true } }, { grade: { _neq: 'FAIL' } }],
-      },
-    ],
-  }
-
-  const whereUpcomingEnrollmentsOpenCourse = {
-    course: {
-      type: { _eq: Course_Type_Enum.Open },
-    },
-  }
-
-  let whereUpcomingEnrollmentsCourses
-
-  if (auth.acl.isOrgAdmin()) {
-    if (orgId !== ALL_ORGS) {
-      whereUpcomingEnrollmentsCourses = {
-        _or: [
-          { orgId: { _eq: orgId } },
-          {
-            course: {
-              participants: {
-                profile: {
-                  organizations: {
-                    organization: {
-                      members: {
-                        _and: [
-                          { profile_id: { _eq: profileId } },
-                          { isAdmin: { _eq: true } },
-                        ],
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        ],
-      }
-    } else {
-      whereUpcomingEnrollmentsCourses = {
-        course: {
-          participants: {
-            profile: {
-              organizations: {
-                organization: {
-                  members: {
-                    _and: [
-                      { profile_id: { _eq: profileId } },
-                      { isAdmin: { _eq: true } },
-                    ],
-                  },
-                },
-              },
-            },
-          },
-        },
-      }
-    }
-  }
-
-  let conditions
-  if (orgId !== ALL_ORGS) {
-    conditions = { id: { _eq: orgId } }
-  } else {
-    conditions = showAll
-      ? {}
-      : {
-          members: {
-            _and: [
-              {
-                profile_id: {
-                  _eq: profileId,
-                },
-              },
-              { isAdmin: { _eq: true } },
-            ],
-          },
-        }
-  }
-
-  const [{ data, error, fetching }] = useQuery<
-    GetOrganisationProfilesQuery,
-    GetOrganisationProfilesQueryVariables
+  const [params] = useSearchParams()
+  const certificateFilter = params.getAll('status') as CertificateStatus[]
+  const useEffectDependency = JSON.stringify(certificateFilter)
+  const [{ data, error, fetching }, reexecute] = useQuery<
+    GetOrganizationProfilesQuery,
+    GetOrganizationProfilesQueryVariables
   >({
-    query: GET_PROFILES,
+    query: GET_ORG_PROFILES,
     variables: {
-      where: conditions,
-      whereProfileCertificates,
-      whereUpcomingEnrollmentsCourses,
-      whereUpcomingEnrollmentsOpenCourse,
+      input: {
+        orgId: orgId === ALL_ORGS ? undefined : orgId,
+        profileId,
+        certificateFilter,
+        showAll,
+      },
     },
   })
-  const profilesByOrganisation = useMemo(() => {
-    const profilesByOrg = new Map<string, Profile[]>()
-    data?.profiles.forEach(profile => {
-      profile?.organizations?.forEach(orgMember => {
-        const array = profilesByOrg.get(orgMember.organization.id) ?? []
-        array.push(profile as Profile)
-        profilesByOrg.set(orgMember.organization.id, array)
-      })
-    })
-    return profilesByOrg
-  }, [data])
 
-  const profilesByLevel: Map<Course_Level_Enum | null, Profile[]> =
-    useMemo(() => {
-      const map = new Map<Course_Level_Enum | null, Profile[]>()
-      if (data) {
-        for (const profile of data.profiles) {
-          const levels = getProfileCertificationLevels(
-            profile.certificates as {
-              courseLevel: string
-              status: CertificateStatus
-            }[]
-          )
-          for (const level of levels) {
-            const profiles = map.get(level) ?? []
-            profiles?.push(profile as Profile)
-            map.set(level, profiles as Profile[])
-          }
-        }
-      }
-      return map
-    }, [data])
+  useEffect(() => {
+    reexecute()
+  }, [useEffectDependency, reexecute])
 
   return useMemo(
     () => ({
-      profilesByOrganisation,
-      profilesByLevel,
+      profilesByOrganisation: new Map(
+        data?.profiles?.profilesByOrganisation?.map(profile => [
+          profile?.orgId,
+          profile?.profiles,
+        ])
+      ),
+      profilesByLevel: new Map(
+        (data?.profiles?.profilesByLevel ?? []).map(profile => [
+          profile?.level,
+          profile?.profiles,
+        ])
+      ),
       error,
       fetching,
     }),
-    [error, fetching, profilesByLevel, profilesByOrganisation]
+    [
+      data?.profiles?.profilesByLevel,
+      data?.profiles?.profilesByOrganisation,
+      error,
+      fetching,
+    ]
   )
 }

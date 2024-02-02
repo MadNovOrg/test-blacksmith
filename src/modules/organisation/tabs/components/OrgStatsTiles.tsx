@@ -1,16 +1,16 @@
 import { Grid } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CountPanel } from '@app/components/CountPanel'
 import { useOrgMembers } from '@app/components/OrgUsersTable/useOrgMembers'
 import { SelectableCountPanel } from '@app/components/SelectableCountPanel/SelectableCountPanel'
 import { useAuth } from '@app/context/auth'
+import { CertificateStatus, OrganizationProfile } from '@app/generated/graphql'
 import useOrganisationProfiles from '@app/modules/organisation/hooks/useOrganisationProfiles'
-import useOrganisationStats from '@app/modules/organisation/hooks/useOrganisationStats'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
-import { CertificateStatus } from '@app/types'
 import { noop } from '@app/util'
+
+import useOrganisationStats from '../../hooks/useOrganisationStats'
 
 export type OrgStatsTilesParams = {
   orgId: string
@@ -39,19 +39,20 @@ export const OrgStatsTiles: React.FC<
   })
 
   const { stats } = useOrganisationStats({
-    profilesByOrg: profilesByOrganisation,
+    profilesByOrg: profilesByOrganisation as Map<string, OrganizationProfile[]>,
     organisations: data?.orgs,
-    orgId,
-    profileId: profile?.id,
-    showAll: showAllOrgs,
   })
 
-  const { total } = useOrgMembers({ orgId })
+  const { total, fetching: totalMembersFetching } = useOrgMembers({
+    orgId,
+    withMembers: false,
+  })
 
   return (
     <Grid container>
       <Grid item xs={12} md={12} p={1} borderRadius={1}>
         <CountPanel
+          fetching={totalMembersFetching}
           count={total ?? 0}
           label={t('pages.org-details.tabs.overview.total-individuals')}
           tooltip={t(
@@ -73,8 +74,8 @@ export const OrgStatsTiles: React.FC<
           tooltip={t(
             'pages.org-details.tabs.overview.members-with-active-certificates'
           )}
-          onClick={() => onTileSelect(CertificateStatus.ACTIVE)}
-          selected={selected.includes(CertificateStatus.ACTIVE)}
+          onClick={() => onTileSelect(CertificateStatus.Active)}
+          selected={selected.includes(CertificateStatus.Active)}
         />
       </Grid>
 
@@ -88,8 +89,8 @@ export const OrgStatsTiles: React.FC<
           label={t('pages.org-details.tabs.overview.currently-enrolled', {
             count: stats[orgId]?.certificates.hold.enrolled,
           })}
-          onClick={() => onTileSelect(CertificateStatus.ON_HOLD)}
-          selected={selected.includes(CertificateStatus.ON_HOLD)}
+          onClick={() => onTileSelect(CertificateStatus.OnHold)}
+          selected={selected.includes(CertificateStatus.OnHold)}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={3} p={1} borderRadius={1}>
@@ -105,8 +106,8 @@ export const OrgStatsTiles: React.FC<
           tooltip={t(
             'pages.org-details.tabs.overview.members-with-certificates-to-expire'
           )}
-          onClick={() => onTileSelect(CertificateStatus.EXPIRING_SOON)}
-          selected={selected.includes(CertificateStatus.EXPIRING_SOON)}
+          onClick={() => onTileSelect(CertificateStatus.ExpiringSoon)}
+          selected={selected.includes(CertificateStatus.ExpiringSoon)}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={3} p={1} borderRadius={1}>
@@ -122,8 +123,8 @@ export const OrgStatsTiles: React.FC<
           tooltip={t(
             'pages.org-details.tabs.overview.members-with-expired-certificates'
           )}
-          onClick={() => onTileSelect(CertificateStatus.EXPIRED_RECENTLY)}
-          selected={selected.includes(CertificateStatus.EXPIRED_RECENTLY)}
+          onClick={() => onTileSelect(CertificateStatus.ExpiredRecently)}
+          selected={selected.includes(CertificateStatus.ExpiredRecently)}
         />
       </Grid>
     </Grid>

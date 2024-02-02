@@ -3,12 +3,12 @@ import { useMemo } from 'react'
 import useSWR from 'swr'
 
 import {
+  CertificateStatus,
   Course_Level_Enum,
   GetOrgDetailsQuery,
   GetOrgDetailsQueryVariables,
 } from '@app/generated/graphql'
 import { QUERY } from '@app/queries/organization/get-org-details'
-import { CertificateStatus } from '@app/types'
 import {
   LoadingStatus,
   getProfileCertificationLevels,
@@ -41,17 +41,17 @@ function crunchStats(profiles: ProfileType[] | undefined) {
       count: profiles?.length ?? 0,
     },
     certificates: {
-      active: getCountByStatus(CertificateStatus.ACTIVE, profiles ?? []),
+      active: getCountByStatus(CertificateStatus.Active, profiles ?? []),
       expiringSoon: getCountByStatus(
-        CertificateStatus.EXPIRING_SOON,
+        CertificateStatus.ExpiringSoon,
         profiles ?? []
       ),
       expired: getCountByStatus(
-        CertificateStatus.EXPIRED_RECENTLY,
+        CertificateStatus.ExpiredRecently,
         profiles ?? []
       ),
-      hold: getCountByStatus(CertificateStatus.ON_HOLD, profiles ?? []),
-      revoked: getCountByStatus(CertificateStatus.REVOKED, profiles ?? []),
+      hold: getCountByStatus(CertificateStatus.OnHold, profiles ?? []),
+      revoked: getCountByStatus(CertificateStatus.Revoked, profiles ?? []),
     },
   }
 }
@@ -105,7 +105,7 @@ export default function useOrg(
       {
         status: certificateFilter?.length
           ? { _in: certificateFilter }
-          : { _neq: CertificateStatus.EXPIRED },
+          : { _neq: CertificateStatus.Expired },
         isRevoked: { _eq: false },
       },
       {
@@ -164,9 +164,9 @@ export default function useOrg(
             }[]
           )
           for (const level of levels) {
-            const profiles = map.get(level) ?? []
+            const profiles = map.get(level as Course_Level_Enum) ?? []
             profiles.push(profile)
-            map.set(level, profiles)
+            map.set(level as Course_Level_Enum, profiles)
           }
         }
       }

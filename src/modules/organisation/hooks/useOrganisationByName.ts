@@ -4,13 +4,13 @@ import {
   GetOrganisationByNameQuery,
   GetOrganisationByNameQueryVariables,
 } from '@app/generated/graphql'
-import { SHALLOW_ORGANIZATION } from '@app/queries/fragments'
+import { ORGANIZATION } from '@app/queries/fragments'
 
 export const GET_ORGANISATION_BY_NAME = gql`
-  ${SHALLOW_ORGANIZATION}
+  ${ORGANIZATION}
   query GetOrganisationByName($query: String!) {
     organization(where: { name: { _ilike: $query } }) {
-      ...ShallowOrganization
+      ...Organization
     }
   }
 `

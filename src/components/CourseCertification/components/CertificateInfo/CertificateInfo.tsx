@@ -22,6 +22,7 @@ import { CertificateStatusChip } from '@app/components/CertificateStatusChip'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
+  CertificateStatus,
   Course_Participant_Module,
   GetCertificateQuery,
   Grade_Enum,
@@ -32,7 +33,7 @@ import {
   isLesson,
   isModule,
 } from '@app/modules/grading/shared/utils'
-import { CertificateStatus, NonNullish, Strategy } from '@app/types'
+import { NonNullish, Strategy } from '@app/types'
 import { transformModulesToGroups } from '@app/util'
 
 import { ModuleGroupAccordion } from '../ModuleGroupAccordion/ModuleGroupAccordion'
@@ -94,8 +95,8 @@ export const CertificateInfo: React.FC<
       )
     : null
 
-  const isRevoked = status === CertificateStatus.REVOKED
-  const isOnHold = status === CertificateStatus.ON_HOLD
+  const isRevoked = status === CertificateStatus.Revoked
+  const isOnHold = status === CertificateStatus.OnHold
 
   const strategyModules: Record<string, Strategy> =
     courseParticipant?.bildGradingModules?.modules

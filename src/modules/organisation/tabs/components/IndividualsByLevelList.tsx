@@ -1,7 +1,5 @@
 import {
   Box,
-  CircularProgress,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -17,26 +15,27 @@ import { useTranslation } from 'react-i18next'
 import { CertificateStatusChip } from '@app/components/CertificateStatusChip'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
-import { Course_Level_Enum, Profile } from '@app/generated/graphql'
+import {
+  CertificateStatus,
+  CourseLevel,
+  OrganizationProfile,
+} from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
 import theme from '@app/theme'
-import { CertificateStatus } from '@app/types'
 import { ALL_ORGS } from '@app/util'
 
 type IndividualsByLevelListParams = {
   orgId: string
-  courseLevel: Course_Level_Enum | null
+  courseLevel: CourseLevel | null
   certificateStatus: CertificateStatus[]
-  fetching: boolean
-  profilesByLevel: Map<Course_Level_Enum | null, Profile[]>
+  profilesByLevel: Map<CourseLevel | null, OrganizationProfile[]>
 }
-
 const PER_PAGE = 5
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 20]
 
 export const IndividualsByLevelList: React.FC<
   React.PropsWithChildren<IndividualsByLevelListParams>
-> = ({ orgId, courseLevel, profilesByLevel, fetching }) => {
+> = ({ orgId, courseLevel, profilesByLevel }) => {
   const { t } = useTranslation()
 
   const sorting = useTableSort('fullName', 'asc')
@@ -50,7 +49,7 @@ export const IndividualsByLevelList: React.FC<
       sorted = sortBy(profiles, p => p.fullName)
     } else {
       sorted = sortBy(profiles, p => {
-        const cert = p.certificates.find(c => c.courseLevel === courseLevel)
+        const cert = p.certificates?.find(c => c?.courseLevel === courseLevel)
         return cert?.expiryDate
       })
     }
@@ -98,18 +97,6 @@ export const IndividualsByLevelList: React.FC<
     ].filter(Boolean) as Col[]
   }, [courseLevel, t])
 
-  if (fetching) {
-    return (
-      <Stack
-        alignItems="center"
-        justifyContent="center"
-        data-testid="individuals-fetching"
-      >
-        <CircularProgress />
-      </Stack>
-    )
-  }
-
   return (
     <>
       <Table>
@@ -122,27 +109,19 @@ export const IndividualsByLevelList: React.FC<
         />
         <TableBody>
           {currentPageUsers.map(profile => {
-            const certification = profile.certificates.find(
-              c => c.courseLevel === courseLevel
+            const certification = profile?.certificates?.find(
+              c => c?.courseLevel === courseLevel
             )
-            const upcomingEnrollments = [
-              ...profile.upcomingEnrollments,
-              ...profile.courses.map(({ course }) => ({
-                course,
-                courseId: course.id,
-                courseLevel: course.level,
-              })),
-            ]
             const certificationStatus =
               certification?.status as CertificateStatus
-            const isRevoked = certificationStatus === CertificateStatus.REVOKED
-            const isOnHold = certificationStatus === CertificateStatus.ON_HOLD
+            const isRevoked = certificationStatus === CertificateStatus.Revoked
+            const isOnHold = certificationStatus === CertificateStatus.OnHold
             const statusTooltip =
               isRevoked || isOnHold
-                ? certification?.participant?.certificateChanges[0]?.payload
+                ? certification?.participant?.certificateChanges &&
+                  certification?.participant?.certificateChanges[0]?.payload
                     ?.note
                 : undefined
-
             return (
               <TableRow key={profile.id} sx={{ backgroundColor: 'white' }}>
                 <TableCell>
@@ -155,9 +134,9 @@ export const IndividualsByLevelList: React.FC<
                 </TableCell>
                 <TableCell>
                   <Box display="flex" flexDirection="column" alignItems="left">
-                    {profile.organizations.map(orgMember => (
+                    {profile.organizations?.map(orgMember => (
                       <Box
-                        key={orgMember.id}
+                        key={orgMember?.id}
                         display="flex"
                         flexDirection="row"
                       >
@@ -165,14 +144,14 @@ export const IndividualsByLevelList: React.FC<
                           variant="body2"
                           color={theme.palette.grey[900]}
                         >
-                          {orgMember.organization.name}
+                          {orgMember?.organization?.name}
                         </Typography>
                         <Typography
                           variant="body2"
                           color={theme.palette.grey[600]}
                           ml={1}
                         >
-                          {orgMember.position}
+                          {orgMember?.position}
                         </Typography>
                       </Box>
                     ))}
@@ -182,14 +161,14 @@ export const IndividualsByLevelList: React.FC<
                   <TableCell>
                     <CertificateStatusChip
                       status={certificationStatus}
-                      tooltip={statusTooltip}
+                      tooltip={String(statusTooltip ?? '')}
                     />
                   </TableCell>
                 ) : null}
                 {courseLevel ? (
                   <TableCell>
                     <Typography variant="body2">
-                      {certificationStatus !== CertificateStatus.REVOKED &&
+                      {certificationStatus !== CertificateStatus.Revoked &&
                         t('dates.default', {
                           date: new Date(certification?.expiryDate),
                         })}
@@ -198,15 +177,15 @@ export const IndividualsByLevelList: React.FC<
                 ) : null}
                 <TableCell>
                   <Box display="flex" flexDirection="column" alignItems="left">
-                    {upcomingEnrollments.map(enrollment => (
+                    {profile.upcomingEnrollments?.map(enrollment => (
                       <Link
-                        key={enrollment.courseId}
+                        key={enrollment?.course?.id}
                         variant="body2"
-                        href={`/manage-courses/${profile.id}/${enrollment.courseId}/details`}
+                        href={`/manage-courses/${profile.id}/${enrollment?.course?.id}/details`}
                       >
                         {`${t(
                           `common.certificates.${enrollment?.courseLevel?.toLowerCase()}`
-                        )} ${enrollment.course?.course_code}`}
+                        )} ${enrollment?.course?.course_code}`}
                       </Link>
                     ))}
                   </Box>

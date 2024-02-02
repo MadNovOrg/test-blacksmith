@@ -1,6 +1,7 @@
 import { gql, useQuery } from 'urql'
 
 import {
+  CertificateStatus,
   Grade_Enum,
   Order_By,
   OrgMembersQuery,
@@ -8,8 +9,8 @@ import {
   Organization_Member_Order_By,
 } from '@app/generated/graphql'
 import { Sorting } from '@app/hooks/useTableSort'
-import { CertificateStatus, SortOrder } from '@app/types'
-import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
+import { SortOrder } from '@app/types'
+import { ALL_ORGS, DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 export const MEMBERS_QUERY = gql`
   query OrgMembers(
@@ -20,13 +21,16 @@ export const MEMBERS_QUERY = gql`
       { profile: { createdAt: desc } }
     ]
     $whereProfile: profile_bool_exp = {}
+    $withMembers: Boolean = true
+    $all: Boolean = true
+    $singularOrg: Boolean = false
   ) {
     members: organization_member(
       limit: $limit
       offset: $offset
       where: { organization_id: { _eq: $orgId }, profile: $whereProfile }
       order_by: $orderBy
-    ) {
+    ) @include(if: $withMembers) {
       id
       profile {
         id
@@ -60,7 +64,12 @@ export const MEMBERS_QUERY = gql`
       position
     }
 
-    organization_member_aggregate(where: { organization_id: { _eq: $orgId } }) {
+    organization_member_aggregate @include(if: $all) {
+      aggregate {
+        count
+      }
+    }
+    single_organization_members_count: organization_member_aggregate(where: {organization_id:{_eq: $orgId}}) @include(if: $singularOrg) {
       aggregate {
         count
       }
@@ -74,6 +83,7 @@ export function useOrgMembers({
   sort = { dir: 'asc', by: 'createdAt' },
   orgId,
   certificateFilter,
+  withMembers,
 }: {
   perPage?: number
   offset?: number
@@ -83,6 +93,7 @@ export function useOrgMembers({
     by: string
   }
   certificateFilter?: CertificateStatus[]
+  withMembers?: boolean
 }) {
   const orderBy = getOrderBy(sort)
 
@@ -102,13 +113,19 @@ export function useOrgMembers({
       orgId,
       orderBy,
       whereProfile,
+      withMembers,
+      all: orgId === ALL_ORGS,
+      singularOrg: orgId !== ALL_ORGS,
     },
   })
 
   return {
     members: data?.members,
     fetching,
-    total: data?.organization_member_aggregate?.aggregate?.count,
+    total:
+      orgId === ALL_ORGS
+        ? data?.organization_member_aggregate?.aggregate?.count
+        : data?.single_organization_members_count.aggregate?.count,
     refetch,
   }
 }

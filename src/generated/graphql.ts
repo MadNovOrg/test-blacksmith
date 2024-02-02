@@ -585,6 +585,16 @@ export type CategoryToTaxonomyConnectionEdge = {
   node?: Maybe<Taxonomy>;
 };
 
+export enum CertificateStatus {
+  Active = 'ACTIVE',
+  Expired = 'EXPIRED',
+  ExpiredRecently = 'EXPIRED_RECENTLY',
+  ExpiringSoon = 'EXPIRING_SOON',
+  Inactive = 'INACTIVE',
+  OnHold = 'ON_HOLD',
+  Revoked = 'REVOKED'
+}
+
 /** A Comment object */
 export type Comment = DatabaseIdentifier & Node & {
   __typename?: 'Comment';
@@ -1322,6 +1332,19 @@ export enum CourseApprovalError {
   TrainerNotFound = 'TRAINER_NOT_FOUND'
 }
 
+export type CourseCertificate = {
+  __typename?: 'CourseCertificate';
+  courseLevel?: Maybe<CourseLevel>;
+  expiryDate?: Maybe<Scalars['date']>;
+  participant?: Maybe<CourseParticipant>;
+  status?: Maybe<Scalars['String']>;
+};
+
+export type CourseCertificateChangelog = {
+  __typename?: 'CourseCertificateChangelog';
+  payload?: Maybe<Payload>;
+};
+
 export type CourseCertificateLevel = {
   __typename?: 'CourseCertificateLevel';
   courseLevel: CourseLevel;
@@ -1361,6 +1384,11 @@ export enum CourseLevel {
   Level_2 = 'LEVEL_2',
   ThreeDaySafetyResponseTrainer = 'THREE_DAY_SAFETY_RESPONSE_TRAINER'
 }
+
+export type CourseParticipant = {
+  __typename?: 'CourseParticipant';
+  certificateChanges?: Maybe<Array<Maybe<CourseCertificateChangelog>>>;
+};
 
 export enum CourseTrainerType {
   Assistant = 'ASSISTANT',
@@ -4420,6 +4448,37 @@ export type OrgInvite = {
   orgName: Scalars['String'];
 };
 
+export type OrganizationInfo = {
+  __typename?: 'OrganizationInfo';
+  address?: Maybe<Scalars['jsonb']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+export type OrganizationProfile = {
+  __typename?: 'OrganizationProfile';
+  archived?: Maybe<Scalars['Boolean']>;
+  avatar?: Maybe<Scalars['String']>;
+  certificates?: Maybe<Array<Maybe<CourseCertificate>>>;
+  fullName?: Maybe<Scalars['String']>;
+  id: Scalars['uuid'];
+  organizations?: Maybe<Array<Maybe<ProfileOrganization>>>;
+  upcomingEnrollments?: Maybe<Array<Maybe<UpcominEnrollment>>>;
+};
+
+export type OrganizationProfilesInput = {
+  certificateFilter?: InputMaybe<Array<InputMaybe<CertificateStatus>>>;
+  orgId?: InputMaybe<Scalars['uuid']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+  showAll?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type OrganizationProfilesOutput = {
+  __typename?: 'OrganizationProfilesOutput';
+  profilesByLevel?: Maybe<Array<Maybe<ProfilesByLevel>>>;
+  profilesByOrganisation?: Maybe<Array<Maybe<ProfilesByOrganization>>>;
+};
+
 /** The page type */
 export type Page = ContentNode & DatabaseIdentifier & HierarchicalContentNode & MenuItemLinkable & Node & NodeWithAuthor & NodeWithComments & NodeWithContentEditor & NodeWithFeaturedImage & NodeWithPageAttributes & NodeWithRevisions & NodeWithTemplate & NodeWithTitle & UniformResourceIdentifiable & {
   __typename?: 'Page';
@@ -4765,6 +4824,11 @@ export type PageToRevisionConnectionWhereArgs = {
 export type Paging = {
   page?: InputMaybe<Scalars['Int']>;
   perPage?: InputMaybe<Scalars['Int']>;
+};
+
+export type Payload = {
+  __typename?: 'Payload';
+  note?: Maybe<Scalars['String']>;
 };
 
 export enum PaymentMethod {
@@ -5976,6 +6040,25 @@ export type Post_Customauthor = AcfFieldGroup & {
   displayAuthor?: Maybe<Scalars['Boolean']>;
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']>;
+};
+
+export type ProfileOrganization = {
+  __typename?: 'ProfileOrganization';
+  id?: Maybe<Scalars['uuid']>;
+  organization: OrganizationInfo;
+  position?: Maybe<Scalars['String']>;
+};
+
+export type ProfilesByLevel = {
+  __typename?: 'ProfilesByLevel';
+  level?: Maybe<CourseLevel>;
+  profiles?: Maybe<Array<Maybe<OrganizationProfile>>>;
+};
+
+export type ProfilesByOrganization = {
+  __typename?: 'ProfilesByOrganization';
+  orgId?: Maybe<Scalars['uuid']>;
+  profiles?: Maybe<Array<Maybe<OrganizationProfile>>>;
 };
 
 export type PromoCodeOutput = {
@@ -9696,6 +9779,23 @@ export type UniformResourceIdentifiable = {
   isTermNode: Scalars['Boolean'];
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']>;
+};
+
+export type UpcominEnrollment = {
+  __typename?: 'UpcominEnrollment';
+  course?: Maybe<UpcomingEnrollmentCourse>;
+  courseLevel?: Maybe<CourseLevel>;
+  orgId: Scalars['uuid'];
+  orgName?: Maybe<Scalars['String']>;
+};
+
+export type UpcomingEnrollmentCourse = {
+  __typename?: 'UpcomingEnrollmentCourse';
+  course_code?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  level?: Maybe<CourseLevel>;
+  name?: Maybe<Scalars['String']>;
+  type?: Maybe<CourseType>;
 };
 
 export type UpdateAvatarResponse = {
@@ -45918,6 +46018,7 @@ export type Query_Root = {
   getCoursePricing?: Maybe<GetCoursePricingOutput>;
   getInvite?: Maybe<CourseInvite>;
   getOrgInvite?: Maybe<OrgInvite>;
+  getOrganizationProfiles?: Maybe<OrganizationProfilesOutput>;
   getXeroInvoicesForOrders: Array<Maybe<XeroInvoice>>;
   /** fetch data from the table: "go1_history_events" */
   go1_history_events: Array<Go1_History_Events>;
@@ -47554,6 +47655,11 @@ export type Query_RootExportBlendedLearningCourseDataArgs = {
 
 export type Query_RootGetCoursePricingArgs = {
   input: GetCoursePricingInput;
+};
+
+
+export type Query_RootGetOrganizationProfilesArgs = {
+  input: OrganizationProfilesInput;
 };
 
 
@@ -55578,10 +55684,13 @@ export type OrgMembersQueryVariables = Exact<{
   orgId: Scalars['uuid'];
   orderBy?: InputMaybe<Array<Organization_Member_Order_By> | Organization_Member_Order_By>;
   whereProfile?: InputMaybe<Profile_Bool_Exp>;
+  withMembers?: InputMaybe<Scalars['Boolean']>;
+  all?: InputMaybe<Scalars['Boolean']>;
+  singularOrg?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type OrgMembersQuery = { __typename?: 'query_root', members: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, lastActivity: any, createdAt: any, go1Licenses: Array<{ __typename?: 'go1_licenses', expireDate: any }>, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', payload?: any | null }> } | null }> } }>, organization_member_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
+export type OrgMembersQuery = { __typename?: 'query_root', members: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, lastActivity: any, createdAt: any, go1Licenses: Array<{ __typename?: 'go1_licenses', expireDate: any }>, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', payload?: any | null }> } | null }> } }>, organization_member_aggregate?: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, single_organization_members_count: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
 
 export type SearchTrainerDetailsFragment = { __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> };
 
@@ -55791,25 +55900,21 @@ export type GetOrganisationByNameQueryVariables = Exact<{
 }>;
 
 
-export type GetOrganisationByNameQuery = { __typename?: 'query_root', organization: Array<{ __typename?: 'organization', id: any, name: string, address: any }> };
+export type GetOrganisationByNameQuery = { __typename?: 'query_root', organization: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null }> };
 
-export type GetOrganisationProfilesQueryVariables = Exact<{
-  where?: InputMaybe<Organization_Bool_Exp>;
-  whereProfileCertificates?: InputMaybe<Course_Certificate_Bool_Exp>;
-  whereUpcomingEnrollmentsCourses?: InputMaybe<Upcoming_Enrollments_Bool_Exp>;
-  whereUpcomingEnrollmentsOpenCourse?: InputMaybe<Course_Participant_Bool_Exp>;
+export type GetOrganisationPendingInvitesQueryVariables = Exact<{
+  orgId: Scalars['uuid'];
 }>;
 
 
-export type GetOrganisationProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, courses: Array<{ __typename?: 'course_participant', course: { __typename?: 'course', name: string, level: Course_Level_Enum, id: number, course_code?: string | null, type: Course_Type_Enum } }>, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, go1Licenses: Array<{ __typename?: 'go1_licenses', id: any, expireDate: any }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null, course?: { __typename?: 'course', name: string, course_code?: string | null } | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, organization: { __typename?: 'organization', id: any, name: string } }> }> };
+export type GetOrganisationPendingInvitesQuery = { __typename?: 'query_root', organization_invites_aggregate: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
 
-export type GetOrganisationStatsQueryVariables = Exact<{
-  where?: InputMaybe<Organization_Bool_Exp>;
-  whereProfileCertificates?: InputMaybe<Course_Certificate_Bool_Exp>;
+export type GetOrganizationProfilesQueryVariables = Exact<{
+  input: OrganizationProfilesInput;
 }>;
 
 
-export type GetOrganisationStatsQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null, course?: { __typename?: 'course', name: string, course_code?: string | null } | null }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
+export type GetOrganizationProfilesQuery = { __typename?: 'query_root', profiles?: { __typename?: 'OrganizationProfilesOutput', profilesByOrganisation?: Array<{ __typename?: 'ProfilesByOrganization', orgId?: any | null, profiles?: Array<{ __typename?: 'OrganizationProfile', id: any, fullName?: string | null, archived?: boolean | null, avatar?: string | null, certificates?: Array<{ __typename?: 'CourseCertificate', courseLevel?: CourseLevel | null, status?: string | null, expiryDate?: any | null } | null> | null, upcomingEnrollments?: Array<{ __typename?: 'UpcominEnrollment', orgId: any, orgName?: string | null, courseLevel?: CourseLevel | null } | null> | null, organizations?: Array<{ __typename?: 'ProfileOrganization', id?: any | null } | null> | null } | null> | null } | null> | null, profilesByLevel?: Array<{ __typename?: 'ProfilesByLevel', level?: CourseLevel | null, profiles?: Array<{ __typename?: 'OrganizationProfile', id: any, fullName?: string | null, certificates?: Array<{ __typename?: 'CourseCertificate', courseLevel?: CourseLevel | null, status?: string | null, expiryDate?: any | null, participant?: { __typename?: 'CourseParticipant', certificateChanges?: Array<{ __typename?: 'CourseCertificateChangelog', payload?: { __typename?: 'Payload', note?: string | null } | null } | null> | null } | null } | null> | null, upcomingEnrollments?: Array<{ __typename?: 'UpcominEnrollment', orgId: any, orgName?: string | null, courseLevel?: CourseLevel | null, course?: { __typename?: 'UpcomingEnrollmentCourse', id?: any | null, course_code?: string | null } | null } | null> | null, organizations?: Array<{ __typename?: 'ProfileOrganization', id?: any | null, position?: string | null, organization: { __typename?: 'OrganizationInfo', id?: any | null, name?: string | null } } | null> | null } | null> | null } | null> | null } | null };
 
 export type ImportUsersJobSubscriptionVariables = Exact<{
   id: Scalars['uuid'];

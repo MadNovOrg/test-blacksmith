@@ -16,10 +16,12 @@ import { useTranslation } from 'react-i18next'
 
 import { Avatar } from '@app/components/Avatar'
 import { useAuth } from '@app/context/auth'
+import { OrganizationProfile } from '@app/generated/graphql'
 import useOrganisationProfiles from '@app/modules/organisation/hooks/useOrganisationProfiles'
-import useOrganisationStats from '@app/modules/organisation/hooks/useOrganisationStats'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import theme from '@app/theme'
+
+import useOrganisationStats from '../../hooks/useOrganisationStats'
 
 type OrgSummaryListParams = {
   orgId: string
@@ -43,6 +45,7 @@ export const OrgSummaryList: React.FC<
     profileId: profile?.id,
     showAll: showAllOrgs,
   })
+
   const { data, reexecute } = useOrgV2({
     orgId,
     profileId: profile?.id,
@@ -53,11 +56,8 @@ export const OrgSummaryList: React.FC<
   })
 
   const { stats } = useOrganisationStats({
-    profilesByOrg: profilesByOrganisation,
+    profilesByOrg: profilesByOrganisation as Map<string, OrganizationProfile[]>,
     organisations: data?.orgs,
-    orgId,
-    profileId: profile?.id,
-    showAll: showAllOrgs,
   })
 
   const handleRowsPerPageChange = useCallback(
@@ -135,20 +135,20 @@ export const OrgSummaryList: React.FC<
                   >
                     {profilesByOrganisation.get(org.id)?.map(profile => (
                       <Link
-                        href={`/profile/${profile.id}`}
-                        key={profile.id}
+                        href={`/profile/${profile?.id}`}
+                        key={profile?.id}
                         underline="none"
                         ml={-1}
                       >
                         <Avatar
-                          src={profile.avatar ?? ''}
+                          src={profile?.avatar ?? ''}
                           name={
-                            profile.archived
+                            profile?.archived
                               ? undefined
-                              : profile.fullName ?? ''
+                              : profile?.fullName ?? ''
                           }
                         >
-                          {profile.archived ? <CloseIcon /> : null}
+                          {profile?.archived ? <CloseIcon /> : null}
                         </Avatar>
                       </Link>
                     ))}

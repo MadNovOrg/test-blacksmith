@@ -50,6 +50,7 @@ describe('component: OrgUsersTable', () => {
                 count: 0,
               },
             },
+            single_organization_members_count: { aggregate: { count: 0 } },
           },
         }),
     } as unknown as Client
@@ -110,6 +111,7 @@ describe('component: OrgUsersTable', () => {
                 count: members.length,
               },
             },
+            single_organization_members_count: { aggregate: { count: 0 } },
           },
         })
       },
@@ -196,6 +198,7 @@ describe('component: OrgUsersTable', () => {
                 count: members.length,
               },
             },
+            single_organization_members_count: { aggregate: { count: 0 } },
           },
         })
       },
@@ -252,6 +255,7 @@ describe('component: OrgUsersTable', () => {
                 count: members.length,
               },
             },
+            single_organization_members_count: { aggregate: { count: 0 } },
           },
         })
       },
@@ -312,6 +316,7 @@ describe('component: OrgUsersTable', () => {
                 count: members.length,
               },
             },
+            single_organization_members_count: { aggregate: { count: 0 } },
           },
         })
       },
@@ -360,6 +365,7 @@ describe('component: OrgUsersTable', () => {
                 count: 1,
               },
             },
+            single_organization_members_count: { aggregate: { count: 0 } },
           },
         }),
     } as unknown as Client
@@ -397,6 +403,7 @@ describe('component: OrgUsersTable', () => {
                     count: 1,
                   },
                 },
+                single_organization_members_count: { aggregate: { count: 0 } },
               },
             }),
         } as unknown as Client
@@ -436,6 +443,7 @@ describe('component: OrgUsersTable', () => {
                 count: 1,
               },
             },
+            single_organization_members_count: { aggregate: { count: 0 } },
           },
         }),
     } as unknown as Client
@@ -475,6 +483,7 @@ describe('component: OrgUsersTable', () => {
                 count: 1,
               },
             },
+            single_organization_members_count: { aggregate: { count: 0 } },
           },
         }),
     } as unknown as Client

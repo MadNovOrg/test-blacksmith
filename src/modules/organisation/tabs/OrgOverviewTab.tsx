@@ -22,35 +22,37 @@ import {
 import { RequestAQuoteBanner } from '@app/components/RequestAQuoteBanner'
 import { useAuth } from '@app/context/auth'
 import {
+  CertificateStatus,
   Course_Status_Enum,
   Course_Type_Enum,
-  Course_Level_Enum,
+  CourseLevel,
+  OrganizationProfile,
 } from '@app/generated/graphql'
 import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
-import useOrganisationProfiles from '@app/modules/organisation/hooks/useOrganisationProfiles'
-import useOrganisationStats from '@app/modules/organisation/hooks/useOrganisationStats'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { CourseForBookingTile } from '@app/modules/organisation/tabs/components/CourseForBookingTile'
 import { IndividualsByLevelList } from '@app/modules/organisation/tabs/components/IndividualsByLevelList'
 import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
 import { OrgSummaryList } from '@app/modules/organisation/tabs/components/OrgSummaryList'
-import { CertificateStatus } from '@app/types'
 import { ALL_ORGS } from '@app/util'
+
+import useOrganisationProfiles from '../hooks/useOrganisationProfiles'
+import useOrganisationStats from '../hooks/useOrganisationStats'
 
 type OrgOverviewTabParams = {
   orgId: string
 }
 
 const LEVELS_IN_ORDER = [
-  Course_Level_Enum.Level_1,
-  Course_Level_Enum.Level_2,
-  Course_Level_Enum.ThreeDaySafetyResponseTrainer,
-  Course_Level_Enum.IntermediateTrainer,
-  Course_Level_Enum.Advanced,
-  Course_Level_Enum.AdvancedTrainer,
-  Course_Level_Enum.BildAdvancedTrainer,
-  Course_Level_Enum.BildIntermediateTrainer,
-  Course_Level_Enum.BildRegular,
+  CourseLevel.Level_1,
+  CourseLevel.Level_2,
+  CourseLevel.ThreeDaySafetyResponseTrainer,
+  CourseLevel.IntermediateTrainer,
+  CourseLevel.Advanced,
+  CourseLevel.AdvancedTrainer,
+  CourseLevel.BildAdvancedTrainer,
+  CourseLevel.BildIntermediateTrainer,
+  CourseLevel.BildRegular,
   null,
 ]
 
@@ -71,11 +73,14 @@ export const OrgOverviewTab: React.FC<
     )
   )
 
-  const { profilesByLevel, profilesByOrganisation } = useOrganisationProfiles({
+  const {
+    profilesByLevel,
+    profilesByOrganisation,
+    fetching: profilesFetching,
+  } = useOrganisationProfiles({
     orgId,
     profileId: profile?.id,
     showAll: acl.canViewAllOrganizations(),
-    certificateFilter: certificateStatus,
   })
 
   const { data } = useOrgV2({
@@ -85,12 +90,8 @@ export const OrgOverviewTab: React.FC<
     showAll: acl.canViewAllOrganizations(),
   })
 
-  const { stats, fetching } = useOrganisationStats({
-    orgId,
-    profileId: profile?.id,
-    showAll: acl.canViewAllOrganizations(),
-    certificateFilter: certificateStatus,
-    profilesByOrg: profilesByOrganisation,
+  const { stats } = useOrganisationStats({
+    profilesByOrg: profilesByOrganisation as Map<string, OrganizationProfile[]>,
     organisations: data?.orgs,
   })
 
@@ -128,7 +129,7 @@ export const OrgOverviewTab: React.FC<
     const value =
       userByLevelSelectedTab === 'none'
         ? null
-        : (userByLevelSelectedTab as Course_Level_Enum)
+        : (userByLevelSelectedTab as CourseLevel)
     selectedTab = profilesByLevel.get(value)
       ? userByLevelSelectedTab
       : defaultTab
@@ -151,7 +152,7 @@ export const OrgOverviewTab: React.FC<
     [setCertificateStatus]
   )
 
-  if ((fetching || coursesLoading) && !stats) {
+  if (coursesLoading || (profilesFetching && profilesByLevel.size < 1)) {
     return (
       <Stack
         alignItems="center"
@@ -177,7 +178,7 @@ export const OrgOverviewTab: React.FC<
           {t('pages.org-details.tabs.overview.individuals-by-training-level')}
         </Typography>
 
-        {!stats[orgId]?.profiles.count && !fetching ? (
+        {!stats[orgId]?.profiles.count ? (
           <>
             {certificateStatus.length ? (
               <>
@@ -221,43 +222,59 @@ export const OrgOverviewTab: React.FC<
                 )
               )}
             </TabList>
-            {LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level)).map(
-              courseLevel => (
-                <TabPanel
-                  value={courseLevel ?? 'none'}
-                  key={courseLevel}
-                  sx={{ p: 0, overflowX: 'auto' }}
-                >
-                  <IndividualsByLevelList
-                    profilesByLevel={profilesByLevel}
-                    fetching={fetching}
-                    orgId={orgId}
-                    courseLevel={courseLevel}
-                    certificateStatus={certificateStatus}
-                  />
-                </TabPanel>
+            {profilesFetching ? (
+              <Stack
+                alignItems="center"
+                justifyContent="center"
+                data-testid="individuals-fetching"
+              >
+                <CircularProgress />
+              </Stack>
+            ) : (
+              LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level)).map(
+                courseLevel => (
+                  <TabPanel
+                    value={courseLevel ?? 'none'}
+                    key={courseLevel}
+                    sx={{ p: 0, overflowX: 'auto' }}
+                  >
+                    <IndividualsByLevelList
+                      profilesByLevel={
+                        profilesByLevel as Map<
+                          CourseLevel,
+                          OrganizationProfile[]
+                        >
+                      }
+                      orgId={orgId}
+                      courseLevel={courseLevel}
+                      certificateStatus={certificateStatus}
+                    />
+                  </TabPanel>
+                )
               )
             )}
           </TabContext>
         )}
 
         {orgId === ALL_ORGS ? (
-          <>
-            <Box display="flex" justifyContent="space-between" my={2}>
-              <Typography variant="h4">
-                {t('pages.org-details.tabs.overview.organization-summary')}
-              </Typography>
-              <Button
-                variant="outlined"
-                onClick={() => navigate('/organisations/list')}
-                data-testid="see-all-organisations"
-              >
-                {t('pages.org-details.tabs.overview.see-all-organizations')}
-              </Button>
-            </Box>
+          profilesFetching ? null : (
+            <>
+              <Box display="flex" justifyContent="space-between" my={2}>
+                <Typography variant="h4">
+                  {t('pages.org-details.tabs.overview.organization-summary')}
+                </Typography>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate('/organisations/list')}
+                  data-testid="see-all-organisations"
+                >
+                  {t('pages.org-details.tabs.overview.see-all-organizations')}
+                </Button>
+              </Box>
 
-            <OrgSummaryList orgId={orgId} />
-          </>
+              <OrgSummaryList orgId={orgId} />
+            </>
+          )
         ) : null}
       </Grid>
 

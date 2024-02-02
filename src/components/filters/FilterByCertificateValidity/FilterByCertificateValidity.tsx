@@ -7,7 +7,7 @@ import {
   withDefault,
 } from 'use-query-params'
 
-import { CertificateStatus } from '@app/types'
+import { CertificateStatus } from '@app/generated/graphql'
 import { noop } from '@app/util'
 
 import { FilterAccordion, FilterOption } from '../../FilterAccordion'

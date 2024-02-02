@@ -1,10 +1,17 @@
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
-import { Box, Button, CircularProgress, Grid, Stack, Tab } from '@mui/material'
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Grid,
+  Stack,
+  Tab,
+  useMediaQuery,
+} from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useWindowSize } from 'react-use'
 import {
   createEnumArrayParam,
   useQueryParam,
@@ -15,10 +22,12 @@ import { OrgInvitesTable } from '@app/components/OrgInvitesTable'
 import { OrgUsersTable } from '@app/components/OrgUsersTable'
 import { useOrgMembers } from '@app/components/OrgUsersTable/useOrgMembers'
 import { useAuth } from '@app/context/auth'
-import useOrganisationStats from '@app/modules/organisation/hooks/useOrganisationStats'
+import { CertificateStatus } from '@app/generated/graphql'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
-import { CertificateStatus } from '@app/types'
+import theme from '@app/theme'
+
+import useOrganisationPendingInvites from '../hooks/useOrganisationPendingInvites'
 
 export enum OrgIndividualsSubtabs {
   USERS = 'USERS',
@@ -60,19 +69,14 @@ export const OrgIndividualsTab: React.FC<
     showAll: acl.canViewAllOrganizations(),
   })
 
-  const { stats } = useOrganisationStats({
-    orgId,
-    profileId: profile?.id,
-    showAll: acl.canViewAllOrganizations(),
-  })
-
   const { total: totalMembers, refetch: refetchOrgMembers } = useOrgMembers({
     orgId,
   })
-  const { width } = useWindowSize()
-  const isMobile = width <= 425
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const org = data?.orgs.length ? data.orgs[0] : null
+  const [{ data: pendingInvitesData }] = useOrganisationPendingInvites(orgId)
 
   const onKPITileSelected = useCallback(
     (status: CertificateStatus | null) => {
@@ -103,16 +107,15 @@ export const OrgIndividualsTab: React.FC<
         </Stack>
       ) : null}
 
+      <Grid item xs={12}>
+        <OrgStatsTiles
+          orgId={orgId}
+          selected={certificateStatus}
+          onTileSelect={onKPITileSelected}
+        />
+      </Grid>
       {org && !fetching ? (
         <Grid container>
-          <Grid item xs={12}>
-            <OrgStatsTiles
-              orgId={orgId}
-              selected={certificateStatus}
-              onTileSelect={onKPITileSelected}
-            />
-          </Grid>
-
           <Grid item xs={12} mt={2}>
             <TabContext value={selectedTab}>
               <Box display="flex" justifyContent="space-between" my={2}>
@@ -129,7 +132,9 @@ export const OrgIndividualsTab: React.FC<
                   />
                   <Tab
                     label={t('pages.org-details.tabs.users.tabs.invites', {
-                      number: stats[orgId]?.pendingInvites?.count ?? 0,
+                      number:
+                        pendingInvitesData?.organization_invites_aggregate
+                          .aggregate?.count ?? 0,
                     })}
                     value={OrgIndividualsSubtabs.INVITES}
                     data-testid="tabInvites"

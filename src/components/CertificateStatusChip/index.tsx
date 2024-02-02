@@ -2,16 +2,16 @@ import { Box, Chip, ChipProps, Tooltip } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CertificateStatus } from '@app/types'
+import { CertificateStatus } from '@app/generated/graphql'
 
 export const colorsMap: Record<CertificateStatus, ChipProps['color']> = {
-  [CertificateStatus.ACTIVE]: 'success',
-  [CertificateStatus.ON_HOLD]: 'warning',
-  [CertificateStatus.REVOKED]: 'critical',
-  [CertificateStatus.EXPIRED]: 'error',
-  [CertificateStatus.EXPIRED_RECENTLY]: 'error',
-  [CertificateStatus.EXPIRING_SOON]: 'warning',
-  [CertificateStatus.INACTIVE]: 'error',
+  [CertificateStatus.Active]: 'success',
+  [CertificateStatus.OnHold]: 'warning',
+  [CertificateStatus.Revoked]: 'critical',
+  [CertificateStatus.Expired]: 'error',
+  [CertificateStatus.ExpiredRecently]: 'error',
+  [CertificateStatus.ExpiringSoon]: 'warning',
+  [CertificateStatus.Inactive]: 'error',
 } as const
 
 type Props = {

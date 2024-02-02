@@ -25,10 +25,14 @@ import { LinkToProfile } from '@app/components/LinkToProfile'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
-import { Grade_Enum, Course_Level_Enum } from '@app/generated/graphql'
+import {
+  Grade_Enum,
+  Course_Level_Enum,
+  CertificateStatus,
+} from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
-import { CertificateStatus, CourseParticipant } from '@app/types'
+import { CourseParticipant } from '@app/types'
 
 import { CertificateStatusChip } from '../CertificateStatusChip'
 import { TableNoRows } from '../Table/TableNoRows'
@@ -86,7 +90,7 @@ export const CertificationList: React.FC<
     return [
       checkbox.headCol(
         participants.flatMap(p =>
-          p.certificate?.status === CertificateStatus.REVOKED ? [] : [p.id]
+          p.certificate?.status === CertificateStatus.Revoked ? [] : [p.id]
         )
       ),
       ...col('name', { sorting: true }),
@@ -185,7 +189,7 @@ export const CertificationList: React.FC<
               onClick={() => {
                 downloadCertificates(
                   participants.filter(
-                    p => p.certificate?.status !== CertificateStatus.REVOKED
+                    p => p.certificate?.status !== CertificateStatus.Revoked
                   ) ?? []
                 )
               }}
@@ -215,11 +219,10 @@ export const CertificationList: React.FC<
             {participants?.map(p => {
               if (!p.certificate) return null
 
-              const status = p.certificate?.status as CertificateStatus
+              const status = p.certificate?.status
               const isRevoked =
-                p.certificate.status === CertificateStatus.REVOKED
-              const isOnHold =
-                p.certificate.status === CertificateStatus.ON_HOLD
+                p.certificate.status === CertificateStatus.Revoked
+              const isOnHold = p.certificate.status === CertificateStatus.OnHold
               const statusTooltip =
                 isRevoked || isOnHold
                   ? p.certificateChanges?.[0]?.payload?.note ?? '' // if revoked or on hold, the first changelog has the reason

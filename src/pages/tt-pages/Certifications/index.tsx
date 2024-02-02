@@ -22,12 +22,12 @@ import {
   Course_Type_Enum,
   Course_Certificate_Bool_Exp,
   Order_By,
+  CertificateStatus,
 } from '@app/generated/graphql'
 import useCertifications from '@app/hooks/useCertifications'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { CertificationsTable } from '@app/pages/tt-pages/Certifications/CertificationsTable'
-import { CertificateStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 type CertificationsProps = unknown

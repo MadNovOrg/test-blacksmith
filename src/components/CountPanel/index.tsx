@@ -1,5 +1,5 @@
 import InfoIcon from '@mui/icons-material/Info'
-import { Chip, Tooltip, Box } from '@mui/material'
+import { Chip, Tooltip, Box, CircularProgress } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import React from 'react'
 
@@ -21,15 +21,16 @@ export type CountPanelParams = {
     label: string
   }
   tooltip?: string
+  fetching?: boolean
 }
 
 export const CountPanel: React.FC<
   React.PropsWithChildren<CountPanelParams>
-> = ({ count, label, chip, tooltip }) => {
+> = ({ count, label, chip, tooltip, fetching }) => {
   return (
     <Tile flexDirection="row" gap={2}>
       <Typography variant="h2" mx={2}>
-        {count}
+        {fetching ? <CircularProgress /> : count}
       </Typography>
 
       {chip ? (
@@ -41,7 +42,7 @@ export const CountPanel: React.FC<
         </Box>
       ) : (
         <Typography variant="body2" fontWeight={600}>
-          {label}
+          {!fetching ? label : null}
         </Typography>
       )}
 

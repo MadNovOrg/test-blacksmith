@@ -185,6 +185,16 @@ actions:
       forward_client_headers: true
     permissions:
       - role: anonymous
+  - name: getOrganizationProfiles
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/organization/profiles'
+    permissions:
+      - role: sales-representative
+      - role: sales-admin
+      - role: tt-ops
+      - role: user
+      - role: tt-admin
   - name: getXeroInvoicesForOrders
     definition:
       kind: ""
@@ -902,6 +912,29 @@ custom_types:
         - description: null
           is_deprecated: null
           value: ORG_MEMBER_ALREADY_EXISTS
+    - name: CertificateStatus
+      values:
+        - description: null
+          is_deprecated: null
+          value: EXPIRED
+        - description: null
+          is_deprecated: null
+          value: EXPIRED_RECENTLY
+        - description: null
+          is_deprecated: null
+          value: EXPIRING_SOON
+        - description: null
+          is_deprecated: null
+          value: ACTIVE
+        - description: null
+          is_deprecated: null
+          value: ON_HOLD
+        - description: null
+          is_deprecated: null
+          value: REVOKED
+        - description: null
+          is_deprecated: null
+          value: INACTIVE
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -941,6 +974,7 @@ custom_types:
     - name: GradedOnSyncInput
     - name: ImportUsersInput
     - name: ImportUsersConfig
+    - name: OrganizationProfilesInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -1021,5 +1055,17 @@ custom_types:
     - name: SampleOutput
     - name: GradedOnSyncOutput
     - name: ImportUsersOutput
+    - name: OrganizationProfilesOutput
+    - name: Organization
+    - name: UpcominEnrollment
+    - name: CourseCertificate
+    - name: ProfilesByOrganization
+    - name: ProfilesByLevel
+    - name: ProfileOrganization
+    - name: CourseParticipant
+    - name: Payload
+    - name: CourseCertificateChangelog
+    - name: OrganizationProfile
+    - name: UpcomingEnrollmentCourse
   scalars:
     - name: Date

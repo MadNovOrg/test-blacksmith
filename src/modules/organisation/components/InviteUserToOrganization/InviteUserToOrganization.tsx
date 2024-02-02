@@ -17,11 +17,12 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
+import { useDebounce } from 'use-debounce'
 
 import { BackButton } from '@app/components/BackButton'
 import { FormPanel } from '@app/components/FormPanel'
@@ -35,24 +36,24 @@ import {
   SaveOrgInviteError,
 } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
+import useOrganisationByName from '@app/modules/organisation/hooks/useOrganisationByName'
+import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { OrgDashboardTabs } from '@app/modules/organisation/pages/OrganisationDashboard/OrgDashboard'
 import { OrgIndividualsSubtabs } from '@app/modules/organisation/tabs/OrgIndividualsTab'
 import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
 import { yup } from '@app/schemas'
 import { getFieldError, requiredMsg } from '@app/util'
 
-import useOrgV2 from '../../hooks/useOrgV2'
-
 export const InviteUserToOrganization = () => {
   const theme = useTheme()
   const { acl, profile } = useAuth()
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { id } = useParams()
   const [selectedOrg, setSelectedOrg] = useState<
     GetOrganisationDetailsQuery['orgs'][0] | null
   >(null)
 
+  const { id } = useParams()
   const organisationsFilter =
     profile && acl.isOrgAdmin() && !acl.canViewAllOrganizations()
       ? {
@@ -67,11 +68,29 @@ export const InviteUserToOrganization = () => {
             ],
           },
         }
-      : undefined
+      : {}
+
+  const [query, setQuery] = useState('')
+  const [debouncedQuery] = useDebounce(query, 300)
+
+  const [{ data: queriedData, fetching: singleOrgLoading }] =
+    useOrganisationByName({
+      query: debouncedQuery,
+      pause: !debouncedQuery,
+    })
 
   const { data, fetching: loadingOrgs } = useOrgV2({
     where: organisationsFilter,
   })
+
+  const organisationsData = useMemo(
+    () => [
+      ...(!debouncedQuery
+        ? new Set(data?.orgs ?? [])
+        : new Set(queriedData?.organization ?? [])),
+    ],
+    [data?.orgs, debouncedQuery, queriedData?.organization]
+  ) as GetOrganisationDetailsQuery['orgs']
 
   const schema = useMemo(() => {
     return yup.object({
@@ -89,6 +108,12 @@ export const InviteUserToOrganization = () => {
     })
   }, [t])
 
+  useEffect(() => {
+    if (data?.orgs.length && !selectedOrg && id) {
+      setSelectedOrg(data.orgs.find(o => o.id === id) ?? null)
+    }
+  }, [data?.orgs, id, selectedOrg])
+
   const {
     handleSubmit,
     formState: { errors, isSubmitted },
@@ -105,12 +130,6 @@ export const InviteUserToOrganization = () => {
 
   const values = watch()
 
-  useEffect(() => {
-    if (data?.orgs.length && !selectedOrg && id) {
-      setSelectedOrg(data.orgs.find(o => o.id === id) ?? null)
-    }
-  }, [data?.orgs, id, selectedOrg])
-
   const [
     { data: savingInvitesResponse, error: savingError, fetching: loading },
     saveOrgInvites,
@@ -118,8 +137,6 @@ export const InviteUserToOrganization = () => {
     SaveOrganisationInvitesMutation,
     SaveOrganisationInvitesMutationVariables
   >(SAVE_ORGANISATION_INVITES_MUTATION)
-
-  console.log(savingError?.message)
 
   const errorMessage = savingError
     ? savingError?.message.includes(SaveOrgInviteError.OrgMemberAlreadyExists)
@@ -195,12 +212,14 @@ export const InviteUserToOrganization = () => {
                 <InfoPanel title={t('organization')} titlePosition="outside">
                   <FormPanel>
                     <Autocomplete
+                      loading={singleOrgLoading}
                       value={selectedOrg}
                       isOptionEqualToValue={(o, v) => o.id === v.id}
                       getOptionLabel={o => o.name}
                       renderInput={params => (
                         <TextField
                           {...params}
+                          onChange={e => setQuery(e.target.value)}
                           required
                           variant="filled"
                           label={t('organization')}
@@ -211,7 +230,7 @@ export const InviteUserToOrganization = () => {
                           sx={{ bgcolor: 'grey.100' }}
                         />
                       )}
-                      options={data?.orgs ?? []}
+                      options={organisationsData}
                       onChange={(e, v) => setSelectedOrg(v)}
                     />
                   </FormPanel>

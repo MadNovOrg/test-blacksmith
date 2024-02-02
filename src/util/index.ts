@@ -28,6 +28,8 @@ import {
   Course_Type_Enum,
   Submodule,
   Submodule_Aggregate,
+  CertificateStatus,
+  CourseLevel,
 } from '@app/generated/graphql'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import {
@@ -36,7 +38,6 @@ import {
   AllCourseStatuses,
   AttendeeOnlyCourseStatus,
   BildStrategies,
-  CertificateStatus,
   Course,
   CourseInput,
   CourseParticipant,
@@ -497,7 +498,7 @@ export const INVOICE_STATUS_COLOR: Record<
 // more on this logic [here](https://github.com/TeamTeach/hub/wiki/Organisations)
 export function getProfileCertificationLevels(
   certificates: { courseLevel: string; status: CertificateStatus }[]
-): (Course_Level_Enum | null)[] {
+): (Course_Level_Enum | CourseLevel | null)[] {
   const levels = []
 
   const advancedTrainer = certificates?.find(
@@ -505,7 +506,7 @@ export function getProfileCertificationLevels(
   )
   if (advancedTrainer) {
     levels.push(Course_Level_Enum.AdvancedTrainer)
-    if (advancedTrainer.status !== CertificateStatus.EXPIRED_RECENTLY) {
+    if (advancedTrainer.status !== CertificateStatus.ExpiredRecently) {
       return levels
     }
   }
@@ -532,7 +533,7 @@ export function getProfileCertificationLevels(
       const certificate = certificates?.find(c => c.courseLevel === level)
       if (certificate) {
         levels.push(level)
-        if (certificate.status !== CertificateStatus.EXPIRED_RECENTLY) {
+        if (certificate.status !== CertificateStatus.ExpiredRecently) {
           break
         }
       }
@@ -548,7 +549,7 @@ export function getProfileCertificationLevels(
     const certificate = certificates?.find(c => c.courseLevel === level)
     if (certificate) {
       levels.push(level)
-      if (certificate.status !== CertificateStatus.EXPIRED_RECENTLY) {
+      if (certificate.status !== CertificateStatus.ExpiredRecently) {
         return levels
       }
     }

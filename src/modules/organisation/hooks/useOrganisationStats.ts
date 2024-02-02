@@ -1,62 +1,12 @@
 import { useMemo } from 'react'
-import { gql, useQuery } from 'urql'
 
 import {
-  Course_Level_Enum,
+  CertificateStatus,
+  CourseLevel,
   GetOrganisationDetailsQuery,
-  GetOrganisationStatsQuery,
-  GetOrganisationStatsQueryVariables,
-  Profile,
+  OrganizationProfile,
 } from '@app/generated/graphql'
-import { CERTIFICATE_CHANGELOG } from '@app/queries/fragments'
-import { CertificateStatus } from '@app/types'
-import { ALL_ORGS, getProfileCertificationLevels } from '@app/util'
-
-export const GET_ORGANISATION_STATS = gql`
-  ${CERTIFICATE_CHANGELOG}
-  query GetOrganisationStats(
-    $where: organization_bool_exp = {}
-    $whereProfileCertificates: course_certificate_bool_exp = {}
-  ) {
-    profiles: profile(
-      where: {
-        organizations: { organization: $where }
-        archived: { _eq: false }
-        certificates: $whereProfileCertificates
-      }
-    ) {
-      id
-      fullName
-      avatar
-      archived
-      certificates(where: $whereProfileCertificates) {
-        id
-        courseLevel
-        expiryDate
-        status
-      }
-      upcomingEnrollments {
-        orgId
-        orgName
-        courseLevel
-        courseId
-        course {
-          name
-          course_code
-        }
-      }
-    }
-    pendingInvitesCount: organization_invites_aggregate(
-      where: {
-        _and: [{ status: { _eq: "PENDING" } }, { organization: $where }]
-      }
-    ) {
-      aggregate {
-        count
-      }
-    }
-  }
-`
+import { getProfileCertificationLevels } from '@app/util'
 
 type OrgStats = {
   profiles: {
@@ -75,116 +25,60 @@ type OrgStats = {
 }
 
 type UseOrganisationStats = {
-  orgId?: string
-  profilesByOrg?: Map<string, Profile[]>
+  profilesByOrg: Map<string, OrganizationProfile[]>
   organisations?: GetOrganisationDetailsQuery['orgs']
-  showAll?: boolean
-  profileId?: string
-  certificateFilter?: CertificateStatus[]
 }
 
 export default function useOrganisationStats({
-  orgId = ALL_ORGS,
   profilesByOrg,
   organisations,
-  showAll,
-  profileId,
-  certificateFilter,
 }: UseOrganisationStats) {
-  const whereProfileCertificates = {
-    _and: [
-      {
-        status: certificateFilter?.length
-          ? { _in: certificateFilter }
-          : { _neq: CertificateStatus.EXPIRED },
-        isRevoked: { _eq: false },
-      },
-      {
-        _or: [{ grade: { _is_null: true } }, { grade: { _neq: 'FAIL' } }],
-      },
-    ],
-  }
+  const profiles = [...profilesByOrg.values()]
 
-  let conditions
-  if (orgId !== ALL_ORGS) {
-    conditions = { id: { _eq: orgId } }
-  } else {
-    conditions = showAll
-      ? {}
-      : {
-          members: {
-            _and: [
-              {
-                profile_id: {
-                  _eq: profileId,
-                },
-              },
-              { isAdmin: { _eq: true } },
-            ],
-          },
-        }
-  }
-
-  const [{ data, fetching, error }] = useQuery<
-    GetOrganisationStatsQuery,
-    GetOrganisationStatsQueryVariables
-  >({
-    query: GET_ORGANISATION_STATS,
-    variables: { where: conditions, whereProfileCertificates },
-    pause: !profilesByOrg || !organisations || !profileId,
-  })
+  const allOrganisationsProfiles = profiles.flat(1)
 
   const stats = useMemo(() => {
     const perOrg: { [orgId: string]: OrgStats } = {
       all: {
-        ...crunchStats(data?.profiles as GetOrganisationStatsQuery['profiles']),
-        pendingInvites: {
-          count: data?.pendingInvitesCount.aggregate?.count ?? 0,
-        },
+        ...crunchStats([
+          ...new Set(allOrganisationsProfiles),
+        ] as OrganizationProfile[]),
       },
     }
     organisations?.forEach(org => {
       perOrg[org.id] = {
         ...crunchStats(profilesByOrg?.get(org.id) ?? []),
-        pendingInvites: {
-          count: data?.pendingInvitesCount.aggregate?.count ?? 0,
-        },
       }
     })
     return perOrg
-  }, [
-    data?.pendingInvitesCount.aggregate?.count,
-    data?.profiles,
-    organisations,
-    profilesByOrg,
-  ])
-  return useMemo(() => ({ stats, fetching, error }), [error, fetching, stats])
+  }, [allOrganisationsProfiles, organisations, profilesByOrg])
+  return useMemo(() => ({ stats }), [stats])
 }
 
-function crunchStats(profiles: GetOrganisationStatsQuery['profiles']) {
+function crunchStats(profiles: OrganizationProfile[]) {
   return {
     profiles: {
       count: profiles?.length ?? 0,
     },
     certificates: {
-      active: getCountByStatus(CertificateStatus.ACTIVE, profiles ?? []),
+      active: getCountByStatus(CertificateStatus.Active, profiles ?? []),
       expiringSoon: getCountByStatus(
-        CertificateStatus.EXPIRING_SOON,
+        CertificateStatus.ExpiringSoon,
         profiles ?? []
       ),
       expired: getCountByStatus(
-        CertificateStatus.EXPIRED_RECENTLY,
+        CertificateStatus.ExpiredRecently,
         profiles ?? []
       ),
-      hold: getCountByStatus(CertificateStatus.ON_HOLD, profiles ?? []),
-      revoked: getCountByStatus(CertificateStatus.REVOKED, profiles ?? []),
+      hold: getCountByStatus(CertificateStatus.OnHold, profiles ?? []),
+      revoked: getCountByStatus(CertificateStatus.Revoked, profiles ?? []),
     },
   }
 }
 
 function getCountByStatus(
   status: CertificateStatus,
-  profiles: GetOrganisationStatsQuery['profiles']
+  profiles: OrganizationProfile[]
 ) {
   return profiles.reduce(
     (acc, profile) => {
@@ -196,17 +90,17 @@ function getCountByStatus(
       )
       const certs = profile.certificates?.filter(
         certificate =>
-          certificate.status === status &&
-          levels.indexOf(certificate.courseLevel as Course_Level_Enum) !== -1
+          certificate?.status === status &&
+          levels.indexOf(certificate.courseLevel as CourseLevel) !== -1
       )
       const enrolled = certs?.filter(cert =>
-        profile.upcomingEnrollments.some(
-          enrollment => enrollment.courseLevel === cert.courseLevel
+        profile.upcomingEnrollments?.some(
+          enrollment => enrollment?.courseLevel === cert?.courseLevel
         )
       )
       return {
-        count: acc.count + certs?.length,
-        enrolled: acc.enrolled + enrolled?.length,
+        count: acc.count + Number(certs?.length ?? 0),
+        enrolled: acc.enrolled + Number(enrolled?.length ?? 0),
       }
     },
     {
