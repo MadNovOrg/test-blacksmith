@@ -6,6 +6,7 @@ import {
   CircularProgress,
   Container,
   FormControlLabel,
+  Link,
   Paper,
   Stack,
   Table,
@@ -276,6 +277,7 @@ export const Users = () => {
       })
     }
 
+    // ? Strange for this to be in a useMemo
     setCurrentPage(0)
 
     return [filterConditions, isFiltered]
@@ -527,13 +529,14 @@ export const Users = () => {
 
                           <TableCell>
                             {user.organizations.map(obj => (
-                              <Typography
-                                variant="body2"
+                              <Link
+                                display="block"
                                 color="secondary"
                                 key={obj.organization.id}
+                                href={`/organisations/${obj.organization.id}`}
                               >
                                 {obj.organization.name}
-                              </Typography>
+                              </Link>
                             ))}
                           </TableCell>
 
