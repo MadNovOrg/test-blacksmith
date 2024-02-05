@@ -80,16 +80,17 @@ export const InviteUserToOrganization = () => {
     })
 
   const { data, fetching: loadingOrgs } = useOrgV2({
+    ...(id ? { specificOrgId: id, withSpecificOrganisation: Boolean(id) } : {}),
     where: organisationsFilter,
   })
 
   const organisationsData = useMemo(
     () => [
       ...(!debouncedQuery
-        ? new Set(data?.orgs ?? [])
+        ? new Set([...(data?.orgs ?? []), ...(data?.specificOrg ?? [])])
         : new Set(queriedData?.organization ?? [])),
     ],
-    [data?.orgs, debouncedQuery, queriedData?.organization]
+    [data?.orgs, data?.specificOrg, debouncedQuery, queriedData?.organization]
   ) as GetOrganisationDetailsQuery['orgs']
 
   const schema = useMemo(() => {
@@ -107,12 +108,6 @@ export const InviteUserToOrganization = () => {
         .min(1, requiredMsg(t, 'pages.invite-to-org.work-email')),
     })
   }, [t])
-
-  useEffect(() => {
-    if (data?.orgs.length && !selectedOrg && id) {
-      setSelectedOrg(data.orgs.find(o => o.id === id) ?? null)
-    }
-  }, [data?.orgs, id, selectedOrg])
 
   const {
     handleSubmit,
@@ -157,6 +152,12 @@ export const InviteUserToOrganization = () => {
       })),
     })
   }
+
+  useEffect(() => {
+    if (organisationsData.length && !selectedOrg && id) {
+      setSelectedOrg(organisationsData.find(o => o.id === id) ?? null)
+    }
+  }, [organisationsData, id, selectedOrg])
 
   if (loadingOrgs) {
     return (
@@ -213,7 +214,11 @@ export const InviteUserToOrganization = () => {
                   <FormPanel>
                     <Autocomplete
                       loading={singleOrgLoading}
-                      value={selectedOrg}
+                      defaultValue={
+                        organisationsData.find(
+                          organization => organization.id === id
+                        ) ?? selectedOrg
+                      }
                       isOptionEqualToValue={(o, v) => o.id === v.id}
                       getOptionLabel={o => o.name}
                       renderInput={params => (

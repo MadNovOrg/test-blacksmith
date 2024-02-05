@@ -200,7 +200,7 @@ export const InviteUserToOrganisation: React.FC<
                   onChange={e => setQuery(e.target.value)}
                 />
               )}
-              options={organisationsData ?? []}
+              options={organisationsData}
               data-testid="edit-invite-user-org-selector"
               onChange={(_, v) => setSelectedOrg(v)}
             />
