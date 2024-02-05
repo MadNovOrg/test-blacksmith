@@ -225,8 +225,8 @@ export const InviteUserToOrganization = () => {
                           organization => organization.id === id
                         ) ?? selectedOrg
                       }
-                      renderOption={(_, option) => (
-                        <li key={option.id}>
+                      renderOption={(props, option) => (
+                        <li {...props} key={option.id}>
                           <ListItemText>{option.name}</ListItemText>
                         </li>
                       )}
