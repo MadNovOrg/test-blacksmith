@@ -14,6 +14,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
+import { uniqBy } from 'lodash'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -95,11 +96,15 @@ export const InviteUserToOrganisation: React.FC<
   })
 
   const organisationsData = useMemo(
-    () => [
-      ...(!debouncedQuery
-        ? new Set(orgs?.orgs ?? [])
-        : new Set(queriedData?.organization ?? [])),
-    ],
+    () =>
+      uniqBy(
+        [
+          ...(!debouncedQuery
+            ? new Set(orgs?.orgs ?? [])
+            : new Set(queriedData?.organization ?? [])),
+        ],
+        'id'
+      ),
     [debouncedQuery, orgs?.orgs, queriedData?.organization]
   ) as GetOrganisationDetailsQuery['orgs']
 
@@ -184,9 +189,9 @@ export const InviteUserToOrganisation: React.FC<
               isOptionEqualToValue={(o, v) => o.id === v.id}
               getOptionLabel={o => o.name}
               loading={singleOrgLoading}
-              renderOption={(props, item) => (
-                <li {...props} key={item.id}>
-                  <ListItemText>{item.name}</ListItemText>
+              renderOption={(props, option) => (
+                <li {...props} key={option.id}>
+                  <ListItemText>{option.name}</ListItemText>
                 </li>
               )}
               renderInput={params => (

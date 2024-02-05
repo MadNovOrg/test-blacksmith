@@ -11,12 +11,14 @@ import {
   FormControlLabel,
   FormHelperText,
   Grid,
+  ListItemText,
   Stack,
   Switch,
   TextField,
   Typography,
   useTheme,
 } from '@mui/material'
+import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -85,11 +87,15 @@ export const InviteUserToOrganization = () => {
   })
 
   const organisationsData = useMemo(
-    () => [
-      ...(!debouncedQuery
-        ? new Set([...(data?.orgs ?? []), ...(data?.specificOrg ?? [])])
-        : new Set(queriedData?.organization ?? [])),
-    ],
+    () =>
+      uniqBy(
+        [
+          ...(!debouncedQuery
+            ? new Set([...(data?.orgs ?? []), ...(data?.specificOrg ?? [])])
+            : new Set(queriedData?.organization ?? [])),
+        ],
+        'id'
+      ),
     [data?.orgs, data?.specificOrg, debouncedQuery, queriedData?.organization]
   ) as GetOrganisationDetailsQuery['orgs']
 
@@ -219,6 +225,11 @@ export const InviteUserToOrganization = () => {
                           organization => organization.id === id
                         ) ?? selectedOrg
                       }
+                      renderOption={(_, option) => (
+                        <li key={option.id}>
+                          <ListItemText>{option.name}</ListItemText>
+                        </li>
+                      )}
                       isOptionEqualToValue={(o, v) => o.id === v.id}
                       getOptionLabel={o => o.name}
                       renderInput={params => (
@@ -235,8 +246,8 @@ export const InviteUserToOrganization = () => {
                           sx={{ bgcolor: 'grey.100' }}
                         />
                       )}
-                      options={organisationsData}
-                      onChange={(e, v) => setSelectedOrg(v)}
+                      options={organisationsData ?? []}
+                      onChange={(_, v) => setSelectedOrg(v)}
                     />
                   </FormPanel>
                 </InfoPanel>
