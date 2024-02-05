@@ -151,6 +151,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation()
   const { activeRole, acl } = useAuth()
+
   const residingCountryEnabled = useFeatureFlagEnabled(
     'course-residing-country'
   )
@@ -360,10 +361,34 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .required(t('components.course-form.max-participants-required'))
           .test(
             'attendees-exceeded',
-            t(
-              'components.course-form.attendees-number-exceeds-trainer-ratio-message'
-            ),
-            () => !trainerRatioNotMet || !acl.isTrainer()
+            isCreation
+              ? t(
+                  'components.course-form.attendees-number-exceeds-trainer-ratio-message'
+                )
+              : `${t('components.course-form.max-participants-exceeded')} ${
+                  courseInput?.maxParticipants
+                }`,
+            maxParticipantsValue => {
+              if (isCreation) {
+                return !trainerRatioNotMet || !acl.isTrainer()
+              }
+
+              const isBildCourse =
+                courseInput?.accreditedBy === Accreditors_Enum.Bild
+              const initialParticipantsCount = courseInput?.maxParticipants
+              const updatedParticipantsCount = maxParticipantsValue
+              if (
+                acl.isTrainer() &&
+                !isCreation &&
+                isBildCourse &&
+                initialParticipantsCount &&
+                updatedParticipantsCount > initialParticipantsCount
+              ) {
+                return false
+              } else {
+                return true
+              }
+            }
           ),
         usesAOL: yup.boolean(),
         aolCountry: yup
@@ -463,6 +488,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     [
       acl,
       countriesCodesWithUKs,
+      courseInput?.accreditedBy,
+      courseInput?.maxParticipants,
       courseInput?.startDate,
       courseType,
       hasMinParticipants,
@@ -581,6 +608,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       isResidingCountryEnabled,
     ]
   )
+
   const methods = useForm<CourseInput>({
     resolver: yupResolver(schema),
     mode: 'all',
@@ -803,7 +831,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       trigger('maxParticipants')
       if (!trainerRatioNotMet) clearErrors('maxParticipants')
     }
-  }, [trainerRatioNotMet, clearErrors, trigger, isCreation, activeRole])
+  }, [trainerRatioNotMet, clearErrors, trigger, isCreation])
 
   useEffect(() => {
     // we need to update to default values if something change in the input
@@ -995,6 +1023,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   useEffectOnce(() => {
     setValue('residingCountry', courseInput?.residingCountry ?? 'GB-ENG')
   })
+
   const handleContactChange = useCallback(
     (field: 'bookingContact' | 'organizationKeyContact' = 'bookingContact') =>
       (value: string | UserSelectorProfile) => {

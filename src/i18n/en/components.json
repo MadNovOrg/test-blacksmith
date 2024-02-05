@@ -139,6 +139,7 @@
     "min-participants-less-than": "Minimum number of attendees must be less than the maximum number of attendees",
     "max-participants-required": "Maximum number of attendees is required field",
     "max-participants-positive": "Maximum number of attendees must be a positive number",
+    "max-participants-exceeded": "Number of participants cannot be greater than ",
     "attendees-number-exceeds-trainer-ratio-message": "Number of attendees exceeds current trainer ratio",
     "venue-required": "Venue is required field",
     "online-meeting-link-label": "Online meeting link",
