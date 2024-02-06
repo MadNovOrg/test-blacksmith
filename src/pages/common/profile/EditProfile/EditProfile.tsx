@@ -673,9 +673,8 @@ export const EditProfilePage: React.FC<
           position: position,
         },
       })
-      await refreshData()
     },
-    [refreshData, updateOrgMember]
+    [updateOrgMember]
   )
 
   const deleteOrgMember = useCallback(
@@ -683,10 +682,9 @@ export const EditProfilePage: React.FC<
       await removeOrgMember({
         id: orgMember.id,
       })
-      await refreshData()
       setOrgToLeave(undefined)
     },
-    [refreshData, removeOrgMember]
+    [removeOrgMember]
   )
 
   const handleAvatarUpload = useCallback(
