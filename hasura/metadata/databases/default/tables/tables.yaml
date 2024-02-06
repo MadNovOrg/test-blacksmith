@@ -1,3 +1,4 @@
+- "!include public_about_training_email_scheduled_events.yaml"
 - "!include public_accreditors.yaml"
 - "!include public_availability.yaml"
 - "!include public_bild_strategy.yaml"

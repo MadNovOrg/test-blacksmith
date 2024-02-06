@@ -465,3 +465,13 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/certificate/expiry-date-changed'
+  - name: schedule_about_training_survey_email
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/certificate/schedule-about-training-survey-email'

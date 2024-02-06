@@ -635,6 +635,17 @@ event_triggers:
       num_retries: 3
       timeout_sec: 120
     webhook: '{{EVENTS_HOST}}/certificate/insert'
+  - name: manage_about_training_survey_email_event
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - grade
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/certificate/schedule-about-training-survey-email/manage'
   - name: go1_link
     definition:
       enable_manual: false
