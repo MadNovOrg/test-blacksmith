@@ -8,8 +8,9 @@ import {
   CourseLevel,
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
+  Course_Exception_Enum,
 } from '@app/generated/graphql'
-import { CourseTrainerType, TrainerInput } from '@app/types'
+import { TrainerInput } from '@app/types'
 import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 import {
   getRequiredAssistants,
@@ -18,13 +19,6 @@ import {
   RatioCourseData,
   RatioTrainerData,
 } from '@app/util/trainerRatio'
-
-export enum CourseException {
-  ADVISED_TIME_EXCEEDED = 'ADVISED_TIME_EXCEEDED',
-  OUTSIDE_NOTICE_PERIOD = 'OUTSIDE_NOTICE_PERIOD',
-  LEAD_TRAINER_IN_GRACE_PERIOD = 'LEAD_TRAINER_IN_GRACE_PERIOD',
-  TRAINER_RATIO_NOT_MET = 'TRAINER_RATIO_NOT_MET',
-}
 
 const MIN_DURATION_FOR_TIME_COMMITMENT = 6 * 60 // 6h
 
@@ -46,7 +40,7 @@ export type CourseData = {
   isEmployerAOL?: boolean
 }
 export type TrainerData = {
-  type: Course_Trainer_Type_Enum | CourseTrainerType
+  type: Course_Trainer_Type_Enum
   trainer_role_types: TrainerInput['trainer_role_types']
   levels: {
     courseLevel: Course_Level_Enum | CourseLevel
@@ -88,18 +82,19 @@ export const isTrainersRatioNotMet = (
   const { min: minModerator } = getRequiredModerators(courseData)
 
   const missingAssistants =
-    trainers.filter(t => t.type === CourseTrainerType.Assistant).length < min
+    trainers.filter(t => t.type === Course_Trainer_Type_Enum.Assistant).length <
+    min
 
   const missingLeads =
     courseData.type !== Course_Type_Enum.Indirect
-      ? trainers.filter(t => t.type === CourseTrainerType.Leader).length <
-        minLead
+      ? trainers.filter(t => t.type === Course_Trainer_Type_Enum.Leader)
+          .length < minLead
       : false
 
   const missingModerators =
     courseData.type === Course_Type_Enum.Open
-      ? trainers.filter(t => t.type === CourseTrainerType.Moderator).length <
-        minModerator
+      ? trainers.filter(t => t.type === Course_Trainer_Type_Enum.Moderator)
+          .length < minModerator
       : false
 
   return missingAssistants || missingLeads || missingModerators
@@ -115,26 +110,28 @@ export const isAdvisedTimeExceeded = (courseData: CourseData) => {
 export function checkCourseDetailsForExceptions(
   courseData: CourseData,
   trainerData: TrainerData,
-  ignoreExceptions: CourseException[] = []
-): CourseException[] {
-  const exceptions: CourseException[] = []
+  ignoreExceptions: Course_Exception_Enum[] = []
+): Course_Exception_Enum[] {
+  const exceptions: Course_Exception_Enum[] = []
 
   if (
-    !ignoreExceptions.includes(CourseException.OUTSIDE_NOTICE_PERIOD) &&
+    !ignoreExceptions.includes(Course_Exception_Enum.OutsideNoticePeriod) &&
     isOutsideOfNoticePeriod(courseData)
   ) {
-    exceptions.push(CourseException.OUTSIDE_NOTICE_PERIOD)
+    exceptions.push(Course_Exception_Enum.OutsideNoticePeriod)
   }
 
   if (
-    !ignoreExceptions.includes(CourseException.LEAD_TRAINER_IN_GRACE_PERIOD) &&
+    !ignoreExceptions.includes(
+      Course_Exception_Enum.LeadTrainerInGracePeriod
+    ) &&
     isLeadTrainerInGracePeriod(courseData, trainerData)
   ) {
-    exceptions.push(CourseException.LEAD_TRAINER_IN_GRACE_PERIOD)
+    exceptions.push(Course_Exception_Enum.LeadTrainerInGracePeriod)
   }
 
   if (
-    !ignoreExceptions.includes(CourseException.TRAINER_RATIO_NOT_MET) &&
+    !ignoreExceptions.includes(Course_Exception_Enum.TrainerRatioNotMet) &&
     isTrainersRatioNotMet(
       {
         level: courseData.courseLevel as Course_Level_Enum,
@@ -152,18 +149,13 @@ export function checkCourseDetailsForExceptions(
         isEmployerAOL: courseData.isEmployerAOL,
       },
       trainerData.map(t => ({
-        type: t.type as CourseTrainerType,
+        type: t.type,
         trainer_role_types: t.trainer_role_types,
       }))
     )
   ) {
-    exceptions.push(CourseException.TRAINER_RATIO_NOT_MET)
+    exceptions.push(Course_Exception_Enum.TrainerRatioNotMet)
   }
-
-  // Temporarily disabled (check TTHP-575)
-  // if (isAdvisedTimeExceeded(courseData)) {
-  //   exceptions.push(CourseException.ADVISED_TIME_EXCEEDED)
-  // }
 
   return exceptions
 }

@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
-import useSWR from 'swr'
-import { KeyedMutator } from 'swr'
+import { type OperationContext, useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import { Course_Type_Enum } from '@app/generated/graphql'
@@ -20,17 +19,14 @@ export default function useCourse(courseId: string): {
   }
   error?: Error
   status: LoadingStatus
-  mutate: KeyedMutator<ResponseType>
+  mutate: (opts?: Partial<OperationContext> | undefined) => void
 } {
   const { acl, activeRole, profile } = useAuth()
 
-  const { data, error, mutate } = useSWR<
-    ResponseType,
-    Error,
-    [string, ParamsType]
-  >([
-    QUERY,
-    {
+  // TODO: replace with             useQuery<GetCourseByIdQuery, GetCourseByIdQueryVariables>
+  const [{ data, error }, mutate] = useQuery<ResponseType, ParamsType>({
+    query: QUERY,
+    variables: {
       id: courseId,
       withOrders:
         acl.canInviteAttendees(Course_Type_Enum.Open) ||
@@ -40,7 +36,7 @@ export default function useCourse(courseId: string): {
       withInternationalFinance:
         acl.isAdmin() || acl.isTTOps() || acl.isSalesAdmin(),
     },
-  ])
+  })
 
   const course = useMemo(() => {
     const courseData = {

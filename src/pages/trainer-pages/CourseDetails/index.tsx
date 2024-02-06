@@ -174,8 +174,9 @@ export const CourseDetails = () => {
     await mutate()
   }, [mutate])
 
+  // Maybe use urql's retryExchange instead of this
   const [startPolling, polling] = usePollQuery(
-    () => mutate(),
+    () => Promise.resolve(mutate()),
     () => !!course?.status
   )
 

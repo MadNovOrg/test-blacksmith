@@ -1,8 +1,5 @@
-import {
-  CourseTrainerType,
-  InviteStatus,
-  SetCourseTrainerInput,
-} from '@app/types'
+import { Course_Trainer_Type_Enum } from '@app/generated/graphql'
+import { InviteStatus, SetCourseTrainerInput } from '@app/types'
 
 import { chance } from '@test/index'
 
@@ -18,14 +15,14 @@ describe('getChangedTrainers()', () => {
         profile_id: oldTrainerId,
         course_id: 1,
         status: InviteStatus.ACCEPTED,
-        type: CourseTrainerType.Leader,
+        type: Course_Trainer_Type_Enum.Leader,
       },
     ]
 
     const newTrainers: Pick<SetCourseTrainerInput, 'profile_id' | 'type'>[] = [
       {
         profile_id: newTrainerId,
-        type: CourseTrainerType.Leader,
+        type: Course_Trainer_Type_Enum.Leader,
       },
     ]
 
@@ -34,7 +31,7 @@ describe('getChangedTrainers()', () => {
         {
           profile_id: newTrainerId,
           status: InviteStatus.PENDING,
-          type: CourseTrainerType.Leader,
+          type: Course_Trainer_Type_Enum.Leader,
         },
       ],
       [oldTrainerId],
@@ -50,18 +47,18 @@ describe('getChangedTrainers()', () => {
         profile_id: trainerId,
         course_id: 1,
         status: InviteStatus.ACCEPTED,
-        type: CourseTrainerType.Leader,
+        type: Course_Trainer_Type_Enum.Leader,
       },
     ]
 
     const newTrainers: Pick<SetCourseTrainerInput, 'profile_id' | 'type'>[] = [
       {
         profile_id: trainerId,
-        type: CourseTrainerType.Assistant,
+        type: Course_Trainer_Type_Enum.Assistant,
       },
       {
         profile_id: newLeadTrainerId,
-        type: CourseTrainerType.Leader,
+        type: Course_Trainer_Type_Enum.Leader,
       },
     ]
 
@@ -70,11 +67,11 @@ describe('getChangedTrainers()', () => {
         {
           profile_id: trainerId,
           status: InviteStatus.PENDING,
-          type: CourseTrainerType.Assistant,
+          type: Course_Trainer_Type_Enum.Assistant,
         },
         {
           profile_id: newLeadTrainerId,
-          type: CourseTrainerType.Leader,
+          type: Course_Trainer_Type_Enum.Leader,
           status: InviteStatus.PENDING,
         },
       ],
@@ -90,14 +87,14 @@ describe('getChangedTrainers()', () => {
         profile_id: trainerId,
         course_id: 1,
         status: InviteStatus.ACCEPTED,
-        type: CourseTrainerType.Leader,
+        type: Course_Trainer_Type_Enum.Leader,
       },
     ]
 
     const newTrainers: Pick<SetCourseTrainerInput, 'profile_id' | 'type'>[] = [
       {
         profile_id: trainerId,
-        type: CourseTrainerType.Leader,
+        type: Course_Trainer_Type_Enum.Leader,
       },
     ]
 

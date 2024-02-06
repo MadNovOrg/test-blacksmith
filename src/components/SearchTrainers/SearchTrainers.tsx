@@ -25,6 +25,7 @@ import {
   CourseTrainerType,
   SearchTrainer,
   SearchTrainerAvailability,
+  Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 import { noop } from '@app/util'
 
@@ -32,7 +33,7 @@ import { SearchTrainersSchedule } from './helpers'
 import { useQueryTrainers } from './useQueryTrainers'
 
 type Props = {
-  trainerType: CourseTrainerType
+  trainerType: CourseTrainerType | Course_Trainer_Type_Enum
   courseLevel: Course_Level_Enum | CourseLevel
   courseSchedule: SearchTrainersSchedule
   bildStrategies?: BildStrategy[]
@@ -72,7 +73,7 @@ export function SearchTrainers({
   const [matches, setMatches] = useState<SearchTrainer[]>([])
   const [_selected, setSelected] = useState<SearchTrainer[]>([])
   const { search } = useQueryTrainers({
-    trainerType,
+    trainerType: trainerType as CourseTrainerType,
     courseLevel,
     schedule: courseSchedule,
     bildStrategies,

@@ -41,7 +41,6 @@ import {
   Course,
   CourseInput,
   CourseParticipant,
-  CourseTrainerType,
   NonNullish,
   Organization,
   SearchTrainer,
@@ -281,7 +280,10 @@ export const requiredMsg = (t: TFunction, name: string) => {
   return t('validation-errors.required-field', { name: t(name) })
 }
 
-export const profileToInput = (course: Course, type: CourseTrainerType) => {
+export const profileToInput = (
+  course: Course,
+  type: Course_Trainer_Type_Enum
+) => {
   return (p: Pick<SearchTrainer, 'id'>): SetCourseTrainerInput => ({
     course_id: course.id,
     profile_id: p.id,

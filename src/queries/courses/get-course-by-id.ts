@@ -184,6 +184,9 @@ export const QUERY = gql`
           count
         }
       }
+      courseExceptions {
+        exception
+      }
     }
   }
 `

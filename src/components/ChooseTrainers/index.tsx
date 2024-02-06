@@ -27,6 +27,7 @@ import {
   CourseLevel,
   Course_Type_Enum,
   Course_Level_Enum,
+  Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 import { isModeratorMandatory, isModeratorNeeded } from '@app/rules/trainers'
 import { yup } from '@app/schemas'
@@ -75,10 +76,14 @@ const courseTrainerToFormValues = (
   })
 
   return {
-    lead: mappedTrainers.filter(t => t.type === CourseTrainerType.Leader),
-    assist: mappedTrainers.filter(t => t.type === CourseTrainerType.Assistant),
+    lead: mappedTrainers.filter(
+      t => t.type === Course_Trainer_Type_Enum.Leader
+    ),
+    assist: mappedTrainers.filter(
+      t => t.type === Course_Trainer_Type_Enum.Assistant
+    ),
     moderator: mappedTrainers.filter(
-      t => t.type === CourseTrainerType.Moderator
+      t => t.type === Course_Trainer_Type_Enum.Moderator
     ),
   }
 }

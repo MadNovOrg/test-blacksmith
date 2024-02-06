@@ -11,6 +11,7 @@ import {
   Course_Delivery_Type_Enum,
   Course_Expenses_Insert_Input,
   Course_Status_Enum,
+  Course_Trainer_Type_Enum,
   Course_Type_Enum,
   Payment_Methods_Enum,
   RemoveCourseDraftMutation,
@@ -28,7 +29,6 @@ import { isModeratorNeeded } from '@app/rules/trainers'
 import {
   BildStrategies,
   CourseExpenseType,
-  CourseTrainerType,
   Currency,
   ExpensesInput,
   TrainerInput,
@@ -160,11 +160,12 @@ export function useSaveCourse(): {
         })
 
         const hasModerator = trainers.find(
-          t => t.type === CourseTrainerType.Moderator
+          t => t.type === Course_Trainer_Type_Enum.Moderator
         )
 
         const leadTrainerMissing =
-          trainers.filter(t => t.type === CourseTrainerType.Leader).length === 0
+          trainers.filter(t => t.type === Course_Trainer_Type_Enum.Leader)
+            .length === 0
         const approveExceptions =
           !(isBild && courseData.type === Course_Type_Enum.Indirect) &&
           exceptions.length > 0 &&
@@ -351,6 +352,15 @@ export function useSaveCourse(): {
                     priceCurrency: courseData.priceCurrency,
                   }
                 : {}),
+              ...(approveExceptions
+                ? {
+                    courseExceptions: {
+                      data: exceptions.map(exception => ({
+                        exception,
+                      })),
+                    },
+                  }
+                : null),
             },
           }
         )
@@ -392,7 +402,7 @@ export function useSaveCourse(): {
     courseData,
     isUKCountry,
     trainers,
-    exceptions.length,
+    exceptions,
     acl,
     go1Licensing?.invoiceDetails,
     invoiceDetails,

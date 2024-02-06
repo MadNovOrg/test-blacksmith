@@ -1,4 +1,4 @@
-import { Course_Type_Enum } from '@app/generated/graphql'
+import { Course_Exception_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import {
   Draft,
   ExpensesInput,
@@ -7,7 +7,6 @@ import {
   ValidCourseInput,
 } from '@app/types'
 
-import { CourseException } from './components/CourseExceptionsConfirmation/utils'
 import { SaveDraftResult } from './components/CreateCourseProvider'
 
 export enum StepsEnum {
@@ -42,7 +41,7 @@ export type ContextValue = {
   setGo1Licensing: (go1Licensing: Draft['go1Licensing']) => void
   setInvoiceDetails: (invoiceDetails: InvoiceDetails) => void
   go1Licensing: Draft['go1Licensing']
-  exceptions: CourseException[]
+  exceptions: Course_Exception_Enum[]
   invoiceDetails?: InvoiceDetails
   showDraftConfirmationDialog: boolean
   setShowDraftConfirmationDialog: (value: boolean) => void

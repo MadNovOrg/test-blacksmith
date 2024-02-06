@@ -3,10 +3,11 @@
 import {
   Accreditors_Enum,
   Course_Level_Enum,
+  Course_Trainer_Type_Enum,
   Course_Type_Enum,
   Grade_Enum,
 } from '@app/generated/graphql'
-import { CourseTrainerType, RoleName } from '@app/types'
+import { RoleName } from '@app/types'
 import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 
 import {
@@ -1304,7 +1305,7 @@ describe(getACL.name, () => {
                   ...profile,
                   id: profileId,
                 },
-                type: CourseTrainerType.Leader,
+                type: Course_Trainer_Type_Enum.Leader,
               }),
             }),
           ],
@@ -2408,7 +2409,7 @@ describe(getACL.name, () => {
     it('should return true when trainer is not moderator and the profiles matches', () => {
       // Arrange
       const profileId = '123'
-      const trainerType = CourseTrainerType.Leader
+      const trainerType = Course_Trainer_Type_Enum.Leader
       const acl = getACLStub({
         profile: buildProfile({
           overrides: {
@@ -2715,7 +2716,7 @@ describe(getACL.name, () => {
     it('should return true if activerole is trainer and is lead trainer', () => {
       // Arrange
       const profileId = '123'
-      const trainerType = CourseTrainerType.Leader
+      const trainerType = Course_Trainer_Type_Enum.Leader
 
       const acl = getACLStub({
         profile: buildProfile({
@@ -2746,7 +2747,7 @@ describe(getACL.name, () => {
     it('should return false if activerole is trainer and is not the lead trainer', () => {
       // Arrange
       const profileId = '123'
-      const trainerType = CourseTrainerType.Assistant
+      const trainerType = Course_Trainer_Type_Enum.Assistant
       const acl = getACLStub({
         profile: buildProfile({
           overrides: {

@@ -20,17 +20,17 @@ import { useSnackbar } from '@app/context/snackbar'
 import {
   Accreditors_Enum,
   BildStrategy,
+  Course_Exception_Enum,
+  Course_Trainer_Type_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
-  CourseException,
   checkCourseDetailsForExceptions,
   isTrainersRatioNotMet,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
   CourseTrainer,
-  CourseTrainerType,
   InviteStatus,
   TrainerInput,
   TrainerRoleType,
@@ -56,7 +56,7 @@ const formValuesToTrainerInput = (trainers?: FormValues): TrainerInput[] => {
   return [
     ...trainers.assist.map(assistant => ({
       profile_id: assistant.id,
-      type: CourseTrainerType.Assistant,
+      type: Course_Trainer_Type_Enum.Assistant,
       fullName: assistant.fullName,
       levels: assistant.levels,
       seniorOrPrincipalLeader: false,
@@ -64,7 +64,7 @@ const formValuesToTrainerInput = (trainers?: FormValues): TrainerInput[] => {
     })),
     ...trainers.moderator.map(moderator => ({
       profile_id: moderator.id,
-      type: CourseTrainerType.Moderator,
+      type: Course_Trainer_Type_Enum.Moderator,
       fullName: moderator.fullName,
       levels: moderator.levels,
       seniorOrPrincipalLeader: false,
@@ -72,7 +72,7 @@ const formValuesToTrainerInput = (trainers?: FormValues): TrainerInput[] => {
     })),
     ...trainers.lead.map(trainer => ({
       profile_id: trainer.id,
-      type: CourseTrainerType.Leader,
+      type: Course_Trainer_Type_Enum.Leader,
       fullName: trainer.fullName,
       levels: trainer.levels,
       trainer_role_types: trainer.trainer_role_types,
@@ -131,9 +131,9 @@ export const AssignTrainers = () => {
   const [isETA, setIsETA] = useState(false)
   const [isEmployerAOL, setIsEmployerAOL] = useState(false)
   const { savingStatus, saveCourse } = useSaveCourse()
-  const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
-    []
-  )
+  const [courseExceptions, setCourseExceptions] = useState<
+    Course_Exception_Enum[]
+  >([])
 
   useEffect(() => {
     setCurrentStepKey(StepsEnum.ASSIGN_TRAINER)
@@ -323,7 +323,7 @@ export const AssignTrainers = () => {
         {showTrainerRatioWarning ? (
           <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
             {t(
-              `pages.create-course.exceptions.type_${CourseException.TRAINER_RATIO_NOT_MET}`
+              `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`
             )}
           </Alert>
         ) : null}

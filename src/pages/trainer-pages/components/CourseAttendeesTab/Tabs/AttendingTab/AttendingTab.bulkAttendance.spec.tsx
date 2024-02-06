@@ -2,9 +2,13 @@ import { subDays } from 'date-fns'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
-import { Course_Status_Enum, Grade_Enum } from '@app/generated/graphql'
+import {
+  Course_Status_Enum,
+  Course_Trainer_Type_Enum,
+  Grade_Enum,
+} from '@app/generated/graphql'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
-import { CourseTrainerType, RoleName } from '@app/types'
+import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { chance, render, screen, userEvent, within } from '@test/index'
@@ -63,7 +67,7 @@ it('displays the mark attendance button if user is a lead trainer on the course'
       trainers: [
         buildCourseTrainer({
           overrides: {
-            type: CourseTrainerType.Leader,
+            type: Course_Trainer_Type_Enum.Leader,
             profile: buildProfile({ overrides: { id: trainerProfileId } }),
           },
         }),
@@ -107,7 +111,7 @@ it('displays the mark attendance button if user is an assist trainer on the cour
       trainers: [
         buildCourseTrainer({
           overrides: {
-            type: CourseTrainerType.Assistant,
+            type: Course_Trainer_Type_Enum.Assistant,
             profile: buildProfile({ overrides: { id: trainerProfileId } }),
           },
         }),
@@ -151,7 +155,7 @@ it("doesn't display the mark attendance button if user is a moderator on the cou
       trainers: [
         buildCourseTrainer({
           overrides: {
-            type: CourseTrainerType.Moderator,
+            type: Course_Trainer_Type_Enum.Moderator,
             profile: buildProfile({ overrides: { id: trainerProfileId } }),
           },
         }),

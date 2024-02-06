@@ -13,12 +13,12 @@ import {
   Payment_Methods_Enum,
   Course_Type_Enum,
   Course_Delivery_Type_Enum,
+  Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { dateFormats } from '@app/i18n/config'
 import { MUTATION } from '@app/queries/courses/insert-course'
 import {
-  CourseTrainerType,
   Draft,
   Organization,
   TrainerInput,
@@ -153,7 +153,7 @@ describe('component: ReviewLicenseOrder', () => {
       trainer_role_types: [
         { trainer_role_type: { name: TrainerRoleTypeName.PRINCIPAL } },
       ],
-      type: CourseTrainerType.Leader,
+      type: Course_Trainer_Type_Enum.Leader,
       levels: [
         {
           courseLevel:

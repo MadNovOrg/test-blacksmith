@@ -2,7 +2,10 @@ import { addDays } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import { Client, Provider } from 'urql'
 
-import { Course_Status_Enum } from '@app/generated/graphql'
+import {
+  Course_Exception_Enum,
+  Course_Status_Enum,
+} from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
@@ -38,6 +41,11 @@ describe('component: ExceptionsApprovalAlert', () => {
                 end: { date: addDays(new Date(), 1).toISOString() },
               },
             },
+            courseExceptions: [
+              {
+                exception: Course_Exception_Enum.TrainerRatioNotMet,
+              },
+            ],
           },
         }),
       },

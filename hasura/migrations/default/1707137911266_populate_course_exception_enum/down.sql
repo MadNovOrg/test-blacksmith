@@ -1,0 +1,1 @@
+truncate table "course_exception";

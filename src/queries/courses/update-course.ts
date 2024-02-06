@@ -70,6 +70,8 @@ export const UPDATE_COURSE_MUTATION = gql`
     $scheduleInput: course_schedule_set_input!
     $trainers: [course_trainer_insert_input!]!
     $trainersToDelete: [uuid!]
+    $exceptions: [course_exception_enum!] = []
+    $exceptionsInput: [course_exceptions_insert_input!] = []
   ) {
     updateCourse: update_course_by_pk(
       pk_columns: { id: $courseId }
@@ -108,6 +110,16 @@ export const UPDATE_COURSE_MUTATION = gql`
       returning {
         id
       }
+    }
+
+    deletedExceptions: delete_course_exceptions(
+      where: { courseId: { _eq: $courseId }, exception: { _in: $exceptions } }
+    ) {
+      affectedRows: affected_rows
+    }
+
+    insertExceptions: insert_course_exceptions(objects: $exceptionsInput) {
+      affectedRows: affected_rows
     }
   }
 `

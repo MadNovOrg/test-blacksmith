@@ -9,8 +9,10 @@ import {
   Course_Level_Enum,
   Course_Delivery_Type_Enum,
   Course_Type_Enum,
+  Course_Exceptions_Arr_Rel_Insert_Input,
+  Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
-import { BildStrategies, CourseTrainerType } from '@app/types'
+import { BildStrategies } from '@app/types'
 
 export type ParamsType = {
   course: {
@@ -43,7 +45,7 @@ export type ParamsType = {
     trainers?: {
       data: Array<{
         profile_id: string
-        type: CourseTrainerType
+        type: Course_Trainer_Type_Enum
       }>
     }
     schedule: {
@@ -69,6 +71,7 @@ export type ParamsType = {
     residingCountry: string
     /// TODO: Delete this after Arlo migration
     arloReferenceId?: string
+    courseExceptions?: Course_Exceptions_Arr_Rel_Insert_Input
   }
 }
 
@@ -84,6 +87,7 @@ export type ResponseType = {
   }
 }
 
+// TODO: Use insert_course_one instead of insert_course
 export const MUTATION = gql`
   mutation InsertCourse($course: course_insert_input!) {
     insertCourse: insert_course(objects: [$course]) {

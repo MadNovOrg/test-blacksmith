@@ -5,6 +5,7 @@ import {
   Course_Delivery_Type_Enum,
   Course_Type_Enum,
   Course_Level_Enum,
+  Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 import {
   CourseData,
@@ -12,7 +13,6 @@ import {
   isLeadTrainerInGracePeriod,
   isOutsideOfNoticePeriod,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
-import { CourseTrainerType } from '@app/types'
 
 describe('course exception utils', () => {
   const defaultCourseData: CourseData = {
@@ -28,7 +28,7 @@ describe('course exception utils', () => {
     hasSeniorOrPrincipalLeader: false,
   }
   const defaultTrainerData = {
-    type: CourseTrainerType.Leader,
+    type: Course_Trainer_Type_Enum.Leader,
     trainer_role_types: [],
     levels: [
       {
@@ -71,7 +71,9 @@ describe('course exception utils', () => {
     it('should return false if no leader', () => {
       expect(
         isLeadTrainerInGracePeriod(defaultCourseData, [
-          extend({}, defaultTrainerData, { type: CourseTrainerType.Assistant }),
+          extend({}, defaultTrainerData, {
+            type: Course_Trainer_Type_Enum.Assistant,
+          }),
         ])
       ).toBeFalsy()
     })

@@ -1,5 +1,5 @@
 import { Alert, Box, Button, Typography, useMediaQuery } from '@mui/material'
-import { FC, useMemo, useState } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -7,22 +7,11 @@ import { Dialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Status_Enum,
-  Course_Level_Enum,
-  CourseTrainerType,
   Course_Audit_Type_Enum,
+  Course_Exception_Enum,
 } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
-import {
-  checkCourseDetailsForExceptions,
-  CourseException,
-} from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import theme from '@app/theme'
-import { TrainerRoleType, TrainerRoleTypeName } from '@app/types'
-import {
-  bildStrategiesToRecord,
-  checkIsETA,
-  checkIsEmployerAOL,
-} from '@app/util'
 
 import { ExceptionsApprovalModalContent } from './ExceptionsApprovalModalContent'
 
@@ -47,61 +36,15 @@ export const ExceptionsApprovalAlert: FC = () => {
   const exceptionsApprovalPending =
     course?.status === Course_Status_Enum.ExceptionsApprovalPending
 
-  const leader = course?.trainers?.find(
-    c => c.type === CourseTrainerType.Leader
-  )
-
-  const courseExceptions = useMemo(() => {
-    if (!course || !course.trainers || !exceptionsApprovalPending) return []
-
-    const ignoreExceptions = acl.isCourseAssistantTrainer(course)
-      ? [CourseException.LEAD_TRAINER_IN_GRACE_PERIOD]
+  const ignoreExceptions =
+    course && acl.isCourseAssistantTrainer(course)
+      ? [Course_Exception_Enum.TrainerRatioNotMet]
       : []
 
-    return checkCourseDetailsForExceptions(
-      {
-        startDateTime: new Date(course.dates?.aggregate?.start?.date),
-        courseLevel: course.level,
-        maxParticipants: course.max_participants,
-        modulesDuration: course.modulesDuration,
-        type: course.type,
-        deliveryType: course.deliveryType,
-        reaccreditation: course.reaccreditation ?? false,
-        conversion: course.conversion,
-        accreditedBy: course.accreditedBy,
-        usesAOL: Boolean(course.aolCostOfCourse),
-        isTrainer: acl.isTrainer(),
-        bildStrategies: bildStrategiesToRecord(course.bildStrategies),
-        hasSeniorOrPrincipalLeader:
-          (leader &&
-            leader.profile.trainer_role_types.some(
-              ({ trainer_role_type: role }) =>
-                role.name === TrainerRoleTypeName.SENIOR ||
-                role.name === TrainerRoleTypeName.PRINCIPAL
-            )) ??
-          false,
-        isETA:
-          leader &&
-          checkIsETA(
-            leader.profile?.trainer_role_types as unknown as TrainerRoleType[]
-          ),
-        isEmployerAOL:
-          leader &&
-          checkIsEmployerAOL(
-            leader.profile?.trainer_role_types as unknown as TrainerRoleType[]
-          ),
-      },
-      course.trainers.map(t => ({
-        type: t.type,
-        trainer_role_types: t.profile.trainer_role_types,
-        levels: (t.profile.certificates ?? []).map(c => ({
-          courseLevel: c.courseLevel as Course_Level_Enum,
-          expiryDate: c.expiryDate,
-        })),
-      })),
-      ignoreExceptions
-    )
-  }, [acl, course, exceptionsApprovalPending, leader])
+  const courseExceptions =
+    course?.courseExceptions
+      ?.map(({ exception }) => exception)
+      ?.filter(exception => !ignoreExceptions.includes(exception)) ?? []
 
   const handleModal: (
     action: Course_Audit_Type_Enum.Approved | Course_Audit_Type_Enum.Rejected
@@ -116,7 +59,7 @@ export const ExceptionsApprovalAlert: FC = () => {
     )
     setCommentsModalOpen(true)
   }
-  return courseExceptions.length ? (
+  return exceptionsApprovalPending ? (
     <>
       <Alert
         data-testid="exceptions-approval"
@@ -138,15 +81,19 @@ export const ExceptionsApprovalAlert: FC = () => {
         >
           <Box>
             <Typography variant="body1" fontWeight={600}>
-              {t('pages.create-course.exceptions.approval-header')}
+              {t('pages.create-course.exceptions.approval-header', {
+                count: courseExceptions.length,
+              })}
             </Typography>
-            <ul>
-              {courseExceptions.map(exception => (
-                <li key={exception}>
-                  {t(`pages.create-course.exceptions.type_${exception}`)}
-                </li>
-              ))}
-            </ul>
+            {!!courseExceptions.length && (
+              <ul>
+                {courseExceptions.map(exception => (
+                  <li key={exception}>
+                    {t(`pages.create-course.exceptions.type_${exception}`)}
+                  </li>
+                ))}
+              </ul>
+            )}
             <Typography variant="body1" fontWeight={600}>
               {t('pages.create-course.exceptions.approval-footer')}
             </Typography>

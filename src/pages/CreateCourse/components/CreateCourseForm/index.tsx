@@ -26,15 +26,15 @@ import {
   Accreditors_Enum,
   BildStrategy,
   Course_Delivery_Type_Enum,
+  Course_Exception_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
-  CourseTrainerType,
+  Course_Trainer_Type_Enum,
   SearchTrainer,
 } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
-  CourseException,
   checkCourseDetailsForExceptions,
   isTrainersRatioNotMet,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
@@ -89,9 +89,9 @@ export const CreateCourseForm = () => {
   const { profile, acl } = useAuth()
   const isBild = courseData?.accreditedBy === Accreditors_Enum.Bild
 
-  const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
-    []
-  )
+  const [courseExceptions, setCourseExceptions] = useState<
+    Course_Exception_Enum[]
+  >([])
 
   const { certifications } = useProfile(profile?.id)
 
@@ -114,14 +114,14 @@ export const CreateCourseForm = () => {
       setTrainers([
         {
           profile_id: profile.id,
-          type: CourseTrainerType.Leader,
+          type: Course_Trainer_Type_Enum.Leader,
           status: InviteStatus.ACCEPTED,
           levels: certifications as TrainerInput['levels'],
           trainer_role_types: profile.trainer_role_types,
         },
         ...assistants.map(assistant => ({
           profile_id: assistant.id,
-          type: CourseTrainerType.Assistant,
+          type: Course_Trainer_Type_Enum.Assistant,
           status: InviteStatus.PENDING,
           levels: certifications as TrainerInput['levels'],
           trainer_role_types: assistant.trainer_role_types,
@@ -231,12 +231,12 @@ export const CreateCourseForm = () => {
         },
         [
           ...assistants.map(assistant => ({
-            type: CourseTrainerType.Assistant,
+            type: Course_Trainer_Type_Enum.Assistant,
             trainer_role_types: assistant.trainer_role_types,
             levels: assistant.levels,
           })),
           {
-            type: CourseTrainerType.Leader,
+            type: Course_Trainer_Type_Enum.Leader,
             levels: certifications as TrainerInput['levels'],
             trainer_role_types: profile.trainer_role_types,
           },
@@ -299,7 +299,7 @@ export const CreateCourseForm = () => {
           isTrainer: acl.isTrainer(),
         },
         assistants.map(assistant => ({
-          type: CourseTrainerType.Assistant,
+          type: Course_Trainer_Type_Enum.Assistant,
           trainer_role_types: assistant.trainer_role_types,
           levels: assistant.levels,
         }))
@@ -329,7 +329,7 @@ export const CreateCourseForm = () => {
           </Typography>
 
           <SearchTrainers
-            trainerType={CourseTrainerType.Assistant}
+            trainerType={Course_Trainer_Type_Enum.Assistant}
             courseLevel={courseData?.courseLevel || Course_Level_Enum.Level_1}
             courseSchedule={{
               start: courseData?.startDateTime ?? undefined,
@@ -353,7 +353,7 @@ export const CreateCourseForm = () => {
           {showTrainerRatioWarning ? (
             <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
               {t(
-                `pages.create-course.exceptions.type_${CourseException.TRAINER_RATIO_NOT_MET}`
+                `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`
               )}
             </Alert>
           ) : null}

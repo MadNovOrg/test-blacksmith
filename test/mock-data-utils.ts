@@ -39,7 +39,6 @@ import {
   CourseParticipantModule,
   CourseSchedule,
   CourseTrainer,
-  CourseTrainerType,
   ExpensesInput,
   InviteStatus,
   Module,
@@ -237,7 +236,7 @@ export const buildCourseSchedule = build<CourseSchedule>({
 export const buildCourseTrainer = build<CourseTrainer>({
   fields: {
     id: perBuild(() => chance.guid()),
-    type: CourseTrainerType.Leader,
+    type: Course_Trainer_Type_Enum.Leader,
     status: InviteStatus.ACCEPTED,
     profile: perBuild(() => buildProfile()),
     levels: [],
@@ -246,13 +245,13 @@ export const buildCourseTrainer = build<CourseTrainer>({
 
 export const buildCourseLeader = (overrides?: Partial<CourseTrainer>) => {
   return buildCourseTrainer({
-    overrides: { ...overrides, type: CourseTrainerType.Leader },
+    overrides: { ...overrides, type: Course_Trainer_Type_Enum.Leader },
   })
 }
 
 export const buildCourseAssistant = (overrides?: Partial<CourseTrainer>) => {
   return buildCourseTrainer({
-    overrides: { ...overrides, type: CourseTrainerType.Assistant },
+    overrides: { ...overrides, type: Course_Trainer_Type_Enum.Assistant },
   })
 }
 
@@ -305,6 +304,7 @@ export const buildCourse = build<Course>({
       },
     ],
     curriculum: null,
+    courseExceptions: [],
   },
 })
 
@@ -347,6 +347,7 @@ export const buildStartedCourse = build<Course>({
     accreditedBy: Accreditors_Enum.Icm,
     bildStrategies: [],
     curriculum: null,
+    courseExceptions: [],
   },
 })
 
@@ -387,6 +388,7 @@ export const buildEndedCourse = build<Course>({
     accreditedBy: Accreditors_Enum.Icm,
     bildStrategies: [],
     curriculum: null,
+    courseExceptions: [],
   },
 })
 
@@ -427,6 +429,7 @@ export const buildNotStartedCourse = build<Course>({
     moduleGroupIds: [],
     accreditedBy: Accreditors_Enum.Icm,
     bildStrategies: [],
+    courseExceptions: [],
   },
 })
 
@@ -710,7 +713,7 @@ export const buildExpensesInput = build<ExpensesInput>({
 export const buildTrainerInput = build<TrainerInput>({
   fields: {
     profile_id: perBuild(() => chance.guid()),
-    type: CourseTrainerType.Leader,
+    type: Course_Trainer_Type_Enum.Leader,
     fullName: perBuild(() => chance.name({ full: true })),
     status: InviteStatus.ACCEPTED,
     levels: [],
@@ -722,7 +725,7 @@ export const buildTrainerInputAssistant = (
   overrides?: Partial<TrainerInput>
 ) => {
   return buildTrainerInput({
-    overrides: { ...overrides, type: CourseTrainerType.Assistant },
+    overrides: { ...overrides, type: Course_Trainer_Type_Enum.Assistant },
   })
 }
 
@@ -730,7 +733,7 @@ export const buildTrainerInputModerator = (
   overrides?: Partial<TrainerInput>
 ) => {
   return buildTrainerInput({
-    overrides: { ...overrides, type: CourseTrainerType.Moderator },
+    overrides: { ...overrides, type: Course_Trainer_Type_Enum.Moderator },
   })
 }
 

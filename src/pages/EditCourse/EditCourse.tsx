@@ -36,9 +36,11 @@ import {
   BildStrategy,
   Course_Audit_Type_Enum,
   Course_Delivery_Type_Enum,
+  Course_Exception_Enum,
   Course_Level_Enum,
   Course_Status_Enum,
   Course_Trainer_Insert_Input,
+  Course_Trainer_Type_Enum,
   Course_Type_Enum,
   CourseLevel,
   GetCourseByIdQuery,
@@ -54,7 +56,6 @@ import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
   checkCourseDetailsForExceptions,
-  CourseException,
   isTrainersRatioNotMet,
   shouldGoIntoExceptionApproval,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
@@ -129,9 +130,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     setShowRegistrantsCancellationModal,
   ] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
-  const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
-    []
-  )
+  const [courseExceptions, setCourseExceptions] = useState<
+    Course_Exception_Enum[]
+  >([])
   const {
     data: courseInfo,
     status: courseStatus,
@@ -278,11 +279,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
           const trainers = [
             ...trainersData.assist.map(t => ({
-              ...profileToInput(course, CourseTrainerType.Assistant)(t),
+              ...profileToInput(course, Course_Trainer_Type_Enum.Assistant)(t),
               status: trainersMap.get(t.id)?.status,
             })),
             ...trainersData.moderator.map(t => ({
-              ...profileToInput(course, CourseTrainerType.Moderator)(t),
+              ...profileToInput(course, Course_Trainer_Type_Enum.Moderator)(t),
               status: trainersMap.get(t.id)?.status,
             })),
           ]
@@ -291,13 +292,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             trainers.push({
               course_id: course.id,
               profile_id: profile.id,
-              type: CourseTrainerType.Leader,
+              type: Course_Trainer_Type_Enum.Leader,
               status: InviteStatus.ACCEPTED,
             })
           } else {
             trainers.push(
               ...trainersData.lead.map(t => ({
-                ...profileToInput(course, CourseTrainerType.Leader)(t),
+                ...profileToInput(course, Course_Trainer_Type_Enum.Leader)(t),
                 status: trainersMap.get(t.id)?.status,
               }))
             )
@@ -440,6 +441,15 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               start: courseData.startDateTime,
               end: courseData.endDateTime,
             },
+            ...(status === Course_Status_Enum.ExceptionsApprovalPending
+              ? {
+                  exceptions: courseExceptions,
+                  exceptionsInput: courseExceptions.map(exception => ({
+                    courseId: course.id,
+                    exception,
+                  })),
+                }
+              : null),
           })
 
           if (editResponse.data?.updateCourse?.id && courseDiffs.length) {
@@ -487,10 +497,12 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               },
               course.trainers?.map(trainer => ({
                 id: trainer.profile.id,
-                type: trainer.type,
+                type: CourseTrainerType[
+                  trainer.type.toString() as keyof typeof CourseTrainerType
+                ],
               })) || []
             )
-            await mutateCourse()
+            mutateCourse()
             canGoToCourseBuilder
               ? navigate(`/courses/${courseInput?.id}/modules`, {
                   state: { editMode: true },
@@ -511,7 +523,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       courseDataValid,
       acl,
       profile,
-      courseExceptions.length,
+      courseExceptions,
       updateCourse,
       getCourseName,
       isUKCountry,
@@ -624,7 +636,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const canCancelCourse =
     acl.canCancelCourses() ||
     course?.trainers?.find(
-      t => t.profile.id === profile?.id && t.type === CourseTrainerType.Leader
+      t =>
+        t.profile.id === profile?.id &&
+        t.type === Course_Trainer_Type_Enum.Leader
     )
 
   const editCourseValid = courseDataValid && trainersDataValid
@@ -655,7 +669,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           isEmployerAOL: isEmployerAOL,
         },
         trainersData.assist.map(assistant => ({
-          type: CourseTrainerType.Assistant,
+          type: Course_Trainer_Type_Enum.Assistant,
           trainer_role_types: assistant.trainer_role_types,
           levels: assistant.levels,
         }))
@@ -712,17 +726,17 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       },
       [
         ...(trainersData?.assist ?? []).map(assistant => ({
-          type: CourseTrainerType.Assistant,
+          type: Course_Trainer_Type_Enum.Assistant,
           trainer_role_types: assistant.trainer_role_types,
           levels: assistant.levels,
         })),
         ...(trainersData?.lead ?? []).map(lead => ({
-          type: CourseTrainerType.Leader,
+          type: Course_Trainer_Type_Enum.Leader,
           trainer_role_types: lead.trainer_role_types,
           levels: lead.levels,
         })),
         ...(trainersData?.moderator ?? []).map(moderator => ({
-          type: CourseTrainerType.Moderator,
+          type: Course_Trainer_Type_Enum.Moderator,
           trainer_role_types: moderator.trainer_role_types,
           levels: moderator.levels,
         })),
@@ -869,7 +883,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 ) : showTrainerRatioWarning ? (
                   <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
                     {t(
-                      `pages.create-course.exceptions.type_${CourseException.TRAINER_RATIO_NOT_MET}`
+                      `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`
                     )}
                   </Alert>
                 ) : null}

@@ -8,6 +8,7 @@ import {
   Course_Level_Enum,
   Course_Status_Enum as CourseStatus,
   Course_Type_Enum,
+  Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 import {
   courseCategoryUserAttends,
@@ -15,7 +16,7 @@ import {
   ICourseCategoryUserAttends,
   trainerCourseProgress,
 } from '@app/pages/Resources/utils'
-import { Course, CourseInput, CourseTrainerType, RoleName } from '@app/types'
+import { Course, CourseInput, RoleName } from '@app/types'
 import {
   getCourseAssistants,
   getCourseLeadTrainer,
@@ -662,14 +663,14 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canGradeParticipants: (
-      trainers: { profile: { id: string }; type: CourseTrainerType }[]
+      trainers: { profile: { id: string }; type: Course_Trainer_Type_Enum }[]
     ) => {
       if (
         activeRole === RoleName.TRAINER &&
         trainers.find(
           t =>
             t.profile.id === auth.profile?.id &&
-            t.type !== CourseTrainerType.Moderator
+            t.type !== Course_Trainer_Type_Enum.Moderator
         )
       ) {
         return true
@@ -756,7 +757,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
     canViewCourseBuilderOnEditPage: (
       course: Pick<CourseInput, 'accreditedBy' | 'type'> | undefined | null,
-      trainers: { profile: { id: string }; type: CourseTrainerType }[]
+      trainers: { profile: { id: string }; type: Course_Trainer_Type_Enum }[]
     ) => {
       if (
         !(
@@ -773,7 +774,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         trainers.find(
           t =>
             t.profile.id === auth.profile?.id &&
-            t.type === CourseTrainerType.Leader
+            t.type === Course_Trainer_Type_Enum.Leader
         )
       ) {
         return true

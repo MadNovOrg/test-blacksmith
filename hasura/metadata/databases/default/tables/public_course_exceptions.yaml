@@ -1,0 +1,171 @@
+table:
+  name: course_exceptions
+  schema: public
+configuration:
+  column_config:
+    course_id:
+      custom_name: courseId
+  custom_column_names:
+    course_id: courseId
+  custom_root_fields: {}
+insert_permissions:
+  - role: ld
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - exception
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - exception
+  - role: trainer
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - exception
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - exception
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - exception
+select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      allow_aggregations: true
+  - role: ld
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      allow_aggregations: true
+  - role: unverified
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: ld
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      check: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      check: {}
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      check: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      check: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - exception
+      filter: {}
+      check: {}
+delete_permissions:
+  - role: ld
+    permission:
+      filter: {}
+  - role: sales-admin
+    permission:
+      filter: {}
+  - role: trainer
+    permission:
+      filter: {}
+  - role: tt-admin
+    permission:
+      filter: {}
+  - role: tt-ops
+    permission:
+      filter: {}

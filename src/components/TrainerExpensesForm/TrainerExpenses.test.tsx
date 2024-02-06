@@ -1,7 +1,7 @@
 import Chance from 'chance'
-import React from 'react'
 
-import { CourseTrainerType, TrainerInput, TransportMethod } from '@app/types'
+import { Course_Trainer_Type_Enum } from '@app/generated/graphql'
+import { TrainerInput, TransportMethod } from '@app/types'
 
 import { render, screen, userEvent, waitFor, within, act } from '@test/index'
 
@@ -9,7 +9,7 @@ import TrainerExpensesForm from '.'
 
 const chance = new Chance()
 
-const makeTrainer = (type: CourseTrainerType): TrainerInput => ({
+const makeTrainer = (type: Course_Trainer_Type_Enum): TrainerInput => ({
   fullName: chance.name(),
   profile_id: chance.guid(),
   type,
@@ -26,15 +26,19 @@ const makeTrainers = ({
   assistant?: number
   moderator?: boolean
 }): TrainerInput[] => {
-  const leadTrainers = lead ? [makeTrainer(CourseTrainerType.Leader)] : []
+  const leadTrainers = lead
+    ? [makeTrainer(Course_Trainer_Type_Enum.Leader)]
+    : []
 
   const assistantTrainers = assistant
     ? new Array(assistant)
         .fill(null)
-        .map(() => makeTrainer(CourseTrainerType.Assistant))
+        .map(() => makeTrainer(Course_Trainer_Type_Enum.Assistant))
     : []
 
-  const moderators = moderator ? [makeTrainer(CourseTrainerType.Moderator)] : []
+  const moderators = moderator
+    ? [makeTrainer(Course_Trainer_Type_Enum.Moderator)]
+    : []
 
   return [...leadTrainers, ...assistantTrainers, ...moderators]
 }

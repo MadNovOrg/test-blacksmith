@@ -15327,6 +15327,10 @@ export type Course = {
   /** An aggregate relationship */
   certificates_aggregate: Course_Certificate_Aggregate;
   conversion?: Maybe<Scalars['Boolean']>;
+  /** An array relationship */
+  courseExceptions: Array<Course_Exceptions>;
+  /** An aggregate relationship */
+  courseExceptions_aggregate: Course_Exceptions_Aggregate;
   /** A computed field, executes function "course_code" */
   course_code?: Maybe<Scalars['String']>;
   /** An array relationship */
@@ -15484,6 +15488,26 @@ export type CourseCertificates_AggregateArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Course_Certificate_Order_By>>;
   where?: InputMaybe<Course_Certificate_Bool_Exp>;
+};
+
+
+/** columns and relationships of "course" */
+export type CourseCourseExceptionsArgs = {
+  distinct_on?: InputMaybe<Array<Course_Exceptions_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Exceptions_Order_By>>;
+  where?: InputMaybe<Course_Exceptions_Bool_Exp>;
+};
+
+
+/** columns and relationships of "course" */
+export type CourseCourseExceptions_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Exceptions_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Exceptions_Order_By>>;
+  where?: InputMaybe<Course_Exceptions_Bool_Exp>;
 };
 
 
@@ -16893,6 +16917,8 @@ export type Course_Bool_Exp = {
   certificates?: InputMaybe<Course_Certificate_Bool_Exp>;
   certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Bool_Exp>;
   conversion?: InputMaybe<Boolean_Comparison_Exp>;
+  courseExceptions?: InputMaybe<Course_Exceptions_Bool_Exp>;
+  courseExceptions_aggregate?: InputMaybe<Course_Exceptions_Aggregate_Bool_Exp>;
   course_code?: InputMaybe<String_Comparison_Exp>;
   course_course_participant_audits?: InputMaybe<Course_Participant_Audit_Bool_Exp>;
   course_course_participant_audits_aggregate?: InputMaybe<Course_Participant_Audit_Aggregate_Bool_Exp>;
@@ -20453,6 +20479,423 @@ export type Course_Evaluation_Questions_Variance_Fields = {
   displayOrder?: Maybe<Scalars['Float']>;
 };
 
+/** Enum table for course exceptions */
+export type Course_Exception = {
+  __typename?: 'course_exception';
+  exception: Scalars['String'];
+};
+
+/** aggregated selection of "course_exception" */
+export type Course_Exception_Aggregate = {
+  __typename?: 'course_exception_aggregate';
+  aggregate?: Maybe<Course_Exception_Aggregate_Fields>;
+  nodes: Array<Course_Exception>;
+};
+
+/** aggregate fields of "course_exception" */
+export type Course_Exception_Aggregate_Fields = {
+  __typename?: 'course_exception_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Course_Exception_Max_Fields>;
+  min?: Maybe<Course_Exception_Min_Fields>;
+};
+
+
+/** aggregate fields of "course_exception" */
+export type Course_Exception_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Exception_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "course_exception". All fields are combined with a logical 'AND'. */
+export type Course_Exception_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Exception_Bool_Exp>>;
+  _not?: InputMaybe<Course_Exception_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Exception_Bool_Exp>>;
+  exception?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_exception" */
+export enum Course_Exception_Constraint {
+  /** unique or primary key constraint on columns "exception" */
+  CourseExceptionPkey = 'course_exception_pkey'
+}
+
+export enum Course_Exception_Enum {
+  AdvisedTimeExceeded = 'ADVISED_TIME_EXCEEDED',
+  LeadTrainerInGracePeriod = 'LEAD_TRAINER_IN_GRACE_PERIOD',
+  OutsideNoticePeriod = 'OUTSIDE_NOTICE_PERIOD',
+  TrainerRatioNotMet = 'TRAINER_RATIO_NOT_MET'
+}
+
+/** Boolean expression to compare columns of type "course_exception_enum". All fields are combined with logical 'AND'. */
+export type Course_Exception_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Course_Exception_Enum>;
+  _in?: InputMaybe<Array<Course_Exception_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<Course_Exception_Enum>;
+  _nin?: InputMaybe<Array<Course_Exception_Enum>>;
+};
+
+/** input type for inserting data into table "course_exception" */
+export type Course_Exception_Insert_Input = {
+  exception?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Course_Exception_Max_Fields = {
+  __typename?: 'course_exception_max_fields';
+  exception?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Course_Exception_Min_Fields = {
+  __typename?: 'course_exception_min_fields';
+  exception?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "course_exception" */
+export type Course_Exception_Mutation_Response = {
+  __typename?: 'course_exception_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Exception>;
+};
+
+/** on_conflict condition type for table "course_exception" */
+export type Course_Exception_On_Conflict = {
+  constraint: Course_Exception_Constraint;
+  update_columns?: Array<Course_Exception_Update_Column>;
+  where?: InputMaybe<Course_Exception_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_exception". */
+export type Course_Exception_Order_By = {
+  exception?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_exception */
+export type Course_Exception_Pk_Columns_Input = {
+  exception: Scalars['String'];
+};
+
+/** select columns of table "course_exception" */
+export enum Course_Exception_Select_Column {
+  /** column name */
+  Exception = 'exception'
+}
+
+/** input type for updating data in table "course_exception" */
+export type Course_Exception_Set_Input = {
+  exception?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "course_exception" */
+export type Course_Exception_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Exception_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Exception_Stream_Cursor_Value_Input = {
+  exception?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "course_exception" */
+export enum Course_Exception_Update_Column {
+  /** column name */
+  Exception = 'exception'
+}
+
+export type Course_Exception_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Exception_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Exception_Bool_Exp;
+};
+
+/** columns and relationships of "course_exceptions" */
+export type Course_Exceptions = {
+  __typename?: 'course_exceptions';
+  courseId: Scalars['Int'];
+  exception: Course_Exception_Enum;
+};
+
+/** aggregated selection of "course_exceptions" */
+export type Course_Exceptions_Aggregate = {
+  __typename?: 'course_exceptions_aggregate';
+  aggregate?: Maybe<Course_Exceptions_Aggregate_Fields>;
+  nodes: Array<Course_Exceptions>;
+};
+
+export type Course_Exceptions_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Course_Exceptions_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Exceptions_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Exceptions_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Exceptions_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "course_exceptions" */
+export type Course_Exceptions_Aggregate_Fields = {
+  __typename?: 'course_exceptions_aggregate_fields';
+  avg?: Maybe<Course_Exceptions_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Course_Exceptions_Max_Fields>;
+  min?: Maybe<Course_Exceptions_Min_Fields>;
+  stddev?: Maybe<Course_Exceptions_Stddev_Fields>;
+  stddev_pop?: Maybe<Course_Exceptions_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Course_Exceptions_Stddev_Samp_Fields>;
+  sum?: Maybe<Course_Exceptions_Sum_Fields>;
+  var_pop?: Maybe<Course_Exceptions_Var_Pop_Fields>;
+  var_samp?: Maybe<Course_Exceptions_Var_Samp_Fields>;
+  variance?: Maybe<Course_Exceptions_Variance_Fields>;
+};
+
+
+/** aggregate fields of "course_exceptions" */
+export type Course_Exceptions_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Exceptions_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "course_exceptions" */
+export type Course_Exceptions_Aggregate_Order_By = {
+  avg?: InputMaybe<Course_Exceptions_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Course_Exceptions_Max_Order_By>;
+  min?: InputMaybe<Course_Exceptions_Min_Order_By>;
+  stddev?: InputMaybe<Course_Exceptions_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Course_Exceptions_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Course_Exceptions_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Course_Exceptions_Sum_Order_By>;
+  var_pop?: InputMaybe<Course_Exceptions_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Course_Exceptions_Var_Samp_Order_By>;
+  variance?: InputMaybe<Course_Exceptions_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "course_exceptions" */
+export type Course_Exceptions_Arr_Rel_Insert_Input = {
+  data: Array<Course_Exceptions_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Course_Exceptions_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Course_Exceptions_Avg_Fields = {
+  __typename?: 'course_exceptions_avg_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "course_exceptions" */
+export type Course_Exceptions_Avg_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "course_exceptions". All fields are combined with a logical 'AND'. */
+export type Course_Exceptions_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Exceptions_Bool_Exp>>;
+  _not?: InputMaybe<Course_Exceptions_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Exceptions_Bool_Exp>>;
+  courseId?: InputMaybe<Int_Comparison_Exp>;
+  exception?: InputMaybe<Course_Exception_Enum_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_exceptions" */
+export enum Course_Exceptions_Constraint {
+  /** unique or primary key constraint on columns "exception", "course_id" */
+  CourseExceptionsPkey = 'course_exceptions_pkey'
+}
+
+/** input type for incrementing numeric columns in table "course_exceptions" */
+export type Course_Exceptions_Inc_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "course_exceptions" */
+export type Course_Exceptions_Insert_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+  exception?: InputMaybe<Course_Exception_Enum>;
+};
+
+/** aggregate max on columns */
+export type Course_Exceptions_Max_Fields = {
+  __typename?: 'course_exceptions_max_fields';
+  courseId?: Maybe<Scalars['Int']>;
+};
+
+/** order by max() on columns of table "course_exceptions" */
+export type Course_Exceptions_Max_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Course_Exceptions_Min_Fields = {
+  __typename?: 'course_exceptions_min_fields';
+  courseId?: Maybe<Scalars['Int']>;
+};
+
+/** order by min() on columns of table "course_exceptions" */
+export type Course_Exceptions_Min_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "course_exceptions" */
+export type Course_Exceptions_Mutation_Response = {
+  __typename?: 'course_exceptions_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Exceptions>;
+};
+
+/** on_conflict condition type for table "course_exceptions" */
+export type Course_Exceptions_On_Conflict = {
+  constraint: Course_Exceptions_Constraint;
+  update_columns?: Array<Course_Exceptions_Update_Column>;
+  where?: InputMaybe<Course_Exceptions_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_exceptions". */
+export type Course_Exceptions_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  exception?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_exceptions */
+export type Course_Exceptions_Pk_Columns_Input = {
+  courseId: Scalars['Int'];
+  exception: Course_Exception_Enum;
+};
+
+/** select columns of table "course_exceptions" */
+export enum Course_Exceptions_Select_Column {
+  /** column name */
+  CourseId = 'courseId',
+  /** column name */
+  Exception = 'exception'
+}
+
+/** input type for updating data in table "course_exceptions" */
+export type Course_Exceptions_Set_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+  exception?: InputMaybe<Course_Exception_Enum>;
+};
+
+/** aggregate stddev on columns */
+export type Course_Exceptions_Stddev_Fields = {
+  __typename?: 'course_exceptions_stddev_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "course_exceptions" */
+export type Course_Exceptions_Stddev_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Course_Exceptions_Stddev_Pop_Fields = {
+  __typename?: 'course_exceptions_stddev_pop_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "course_exceptions" */
+export type Course_Exceptions_Stddev_Pop_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Course_Exceptions_Stddev_Samp_Fields = {
+  __typename?: 'course_exceptions_stddev_samp_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "course_exceptions" */
+export type Course_Exceptions_Stddev_Samp_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "course_exceptions" */
+export type Course_Exceptions_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Exceptions_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Exceptions_Stream_Cursor_Value_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+  exception?: InputMaybe<Course_Exception_Enum>;
+};
+
+/** aggregate sum on columns */
+export type Course_Exceptions_Sum_Fields = {
+  __typename?: 'course_exceptions_sum_fields';
+  courseId?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "course_exceptions" */
+export type Course_Exceptions_Sum_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "course_exceptions" */
+export enum Course_Exceptions_Update_Column {
+  /** column name */
+  CourseId = 'courseId',
+  /** column name */
+  Exception = 'exception'
+}
+
+export type Course_Exceptions_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Exceptions_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Exceptions_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Exceptions_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Course_Exceptions_Var_Pop_Fields = {
+  __typename?: 'course_exceptions_var_pop_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "course_exceptions" */
+export type Course_Exceptions_Var_Pop_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Course_Exceptions_Var_Samp_Fields = {
+  __typename?: 'course_exceptions_var_samp_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "course_exceptions" */
+export type Course_Exceptions_Var_Samp_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Course_Exceptions_Variance_Fields = {
+  __typename?: 'course_exceptions_variance_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "course_exceptions" */
+export type Course_Exceptions_Variance_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
 /** columns and relationships of "course_expenses" */
 export type Course_Expenses = {
   __typename?: 'course_expenses';
@@ -20869,6 +21312,7 @@ export type Course_Insert_Input = {
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Obj_Rel_Insert_Input>;
   certificates?: InputMaybe<Course_Certificate_Arr_Rel_Insert_Input>;
   conversion?: InputMaybe<Scalars['Boolean']>;
+  courseExceptions?: InputMaybe<Course_Exceptions_Arr_Rel_Insert_Input>;
   course_course_participant_audits?: InputMaybe<Course_Participant_Audit_Arr_Rel_Insert_Input>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   createdBy?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
@@ -22188,6 +22632,7 @@ export type Course_Order_By = {
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Order_By>;
   certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Order_By>;
   conversion?: InputMaybe<Order_By>;
+  courseExceptions_aggregate?: InputMaybe<Course_Exceptions_Aggregate_Order_By>;
   course_code?: InputMaybe<Order_By>;
   course_course_participant_audits_aggregate?: InputMaybe<Course_Participant_Audit_Aggregate_Order_By>;
   createdAt?: InputMaybe<Order_By>;
@@ -32979,6 +33424,14 @@ export type Mutation_Root = {
   delete_course_evaluation_questions?: Maybe<Course_Evaluation_Questions_Mutation_Response>;
   /** delete single row from the table: "course_evaluation_questions" */
   delete_course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
+  /** delete data from the table: "course_exception" */
+  delete_course_exception?: Maybe<Course_Exception_Mutation_Response>;
+  /** delete single row from the table: "course_exception" */
+  delete_course_exception_by_pk?: Maybe<Course_Exception>;
+  /** delete data from the table: "course_exceptions" */
+  delete_course_exceptions?: Maybe<Course_Exceptions_Mutation_Response>;
+  /** delete single row from the table: "course_exceptions" */
+  delete_course_exceptions_by_pk?: Maybe<Course_Exceptions>;
   /** delete data from the table: "course_expenses" */
   delete_course_expenses?: Maybe<Course_Expenses_Mutation_Response>;
   /** delete single row from the table: "course_expenses" */
@@ -33389,6 +33842,14 @@ export type Mutation_Root = {
   insert_course_evaluation_questions?: Maybe<Course_Evaluation_Questions_Mutation_Response>;
   /** insert a single row into the table: "course_evaluation_questions" */
   insert_course_evaluation_questions_one?: Maybe<Course_Evaluation_Questions>;
+  /** insert data into the table: "course_exception" */
+  insert_course_exception?: Maybe<Course_Exception_Mutation_Response>;
+  /** insert a single row into the table: "course_exception" */
+  insert_course_exception_one?: Maybe<Course_Exception>;
+  /** insert data into the table: "course_exceptions" */
+  insert_course_exceptions?: Maybe<Course_Exceptions_Mutation_Response>;
+  /** insert a single row into the table: "course_exceptions" */
+  insert_course_exceptions_one?: Maybe<Course_Exceptions>;
   /** insert data into the table: "course_expenses" */
   insert_course_expenses?: Maybe<Course_Expenses_Mutation_Response>;
   /** insert a single row into the table: "course_expenses" */
@@ -33879,6 +34340,18 @@ export type Mutation_Root = {
   update_course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
   /** update multiples rows of table: "course_evaluation_questions" */
   update_course_evaluation_questions_many?: Maybe<Array<Maybe<Course_Evaluation_Questions_Mutation_Response>>>;
+  /** update data of the table: "course_exception" */
+  update_course_exception?: Maybe<Course_Exception_Mutation_Response>;
+  /** update single row of the table: "course_exception" */
+  update_course_exception_by_pk?: Maybe<Course_Exception>;
+  /** update multiples rows of table: "course_exception" */
+  update_course_exception_many?: Maybe<Array<Maybe<Course_Exception_Mutation_Response>>>;
+  /** update data of the table: "course_exceptions" */
+  update_course_exceptions?: Maybe<Course_Exceptions_Mutation_Response>;
+  /** update single row of the table: "course_exceptions" */
+  update_course_exceptions_by_pk?: Maybe<Course_Exceptions>;
+  /** update multiples rows of table: "course_exceptions" */
+  update_course_exceptions_many?: Maybe<Array<Maybe<Course_Exceptions_Mutation_Response>>>;
   /** update data of the table: "course_expenses" */
   update_course_expenses?: Maybe<Course_Expenses_Mutation_Response>;
   /** update single row of the table: "course_expenses" */
@@ -34780,6 +35253,31 @@ export type Mutation_RootDelete_Course_Evaluation_QuestionsArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Course_Evaluation_Questions_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_ExceptionArgs = {
+  where: Course_Exception_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Exception_By_PkArgs = {
+  exception: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_ExceptionsArgs = {
+  where: Course_Exceptions_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Exceptions_By_PkArgs = {
+  courseId: Scalars['Int'];
+  exception: Course_Exception_Enum;
 };
 
 
@@ -36077,6 +36575,34 @@ export type Mutation_RootInsert_Course_Evaluation_QuestionsArgs = {
 export type Mutation_RootInsert_Course_Evaluation_Questions_OneArgs = {
   object: Course_Evaluation_Questions_Insert_Input;
   on_conflict?: InputMaybe<Course_Evaluation_Questions_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_ExceptionArgs = {
+  objects: Array<Course_Exception_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Exception_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Exception_OneArgs = {
+  object: Course_Exception_Insert_Input;
+  on_conflict?: InputMaybe<Course_Exception_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_ExceptionsArgs = {
+  objects: Array<Course_Exceptions_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Exceptions_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Exceptions_OneArgs = {
+  object: Course_Exceptions_Insert_Input;
+  on_conflict?: InputMaybe<Course_Exceptions_On_Conflict>;
 };
 
 
@@ -37847,6 +38373,48 @@ export type Mutation_RootUpdate_Course_Evaluation_Questions_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Course_Evaluation_Questions_ManyArgs = {
   updates: Array<Course_Evaluation_Questions_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_ExceptionArgs = {
+  _set?: InputMaybe<Course_Exception_Set_Input>;
+  where: Course_Exception_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Exception_By_PkArgs = {
+  _set?: InputMaybe<Course_Exception_Set_Input>;
+  pk_columns: Course_Exception_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Exception_ManyArgs = {
+  updates: Array<Course_Exception_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_ExceptionsArgs = {
+  _inc?: InputMaybe<Course_Exceptions_Inc_Input>;
+  _set?: InputMaybe<Course_Exceptions_Set_Input>;
+  where: Course_Exceptions_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Exceptions_By_PkArgs = {
+  _inc?: InputMaybe<Course_Exceptions_Inc_Input>;
+  _set?: InputMaybe<Course_Exceptions_Set_Input>;
+  pk_columns: Course_Exceptions_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Exceptions_ManyArgs = {
+  updates: Array<Course_Exceptions_Updates>;
 };
 
 
@@ -45847,6 +46415,18 @@ export type Query_Root = {
   course_evaluation_questions_aggregate: Course_Evaluation_Questions_Aggregate;
   /** fetch data from the table: "course_evaluation_questions" using primary key columns */
   course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
+  /** fetch data from the table: "course_exception" */
+  course_exception: Array<Course_Exception>;
+  /** fetch aggregated fields from the table: "course_exception" */
+  course_exception_aggregate: Course_Exception_Aggregate;
+  /** fetch data from the table: "course_exception" using primary key columns */
+  course_exception_by_pk?: Maybe<Course_Exception>;
+  /** fetch data from the table: "course_exceptions" */
+  course_exceptions: Array<Course_Exceptions>;
+  /** fetch aggregated fields from the table: "course_exceptions" */
+  course_exceptions_aggregate: Course_Exceptions_Aggregate;
+  /** fetch data from the table: "course_exceptions" using primary key columns */
+  course_exceptions_by_pk?: Maybe<Course_Exceptions>;
   /** fetch data from the table: "course_expenses" */
   course_expenses: Array<Course_Expenses>;
   /** fetch aggregated fields from the table: "course_expenses" */
@@ -47018,6 +47598,53 @@ export type Query_RootCourse_Evaluation_Questions_AggregateArgs = {
 
 export type Query_RootCourse_Evaluation_Questions_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Query_RootCourse_ExceptionArgs = {
+  distinct_on?: InputMaybe<Array<Course_Exception_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Exception_Order_By>>;
+  where?: InputMaybe<Course_Exception_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Exception_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Exception_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Exception_Order_By>>;
+  where?: InputMaybe<Course_Exception_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Exception_By_PkArgs = {
+  exception: Scalars['String'];
+};
+
+
+export type Query_RootCourse_ExceptionsArgs = {
+  distinct_on?: InputMaybe<Array<Course_Exceptions_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Exceptions_Order_By>>;
+  where?: InputMaybe<Course_Exceptions_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Exceptions_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Exceptions_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Exceptions_Order_By>>;
+  where?: InputMaybe<Course_Exceptions_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Exceptions_By_PkArgs = {
+  courseId: Scalars['Int'];
+  exception: Course_Exception_Enum;
 };
 
 
@@ -49506,6 +50133,22 @@ export type Subscription_Root = {
   course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
   /** fetch data from the table in a streaming manner: "course_evaluation_questions" */
   course_evaluation_questions_stream: Array<Course_Evaluation_Questions>;
+  /** fetch data from the table: "course_exception" */
+  course_exception: Array<Course_Exception>;
+  /** fetch aggregated fields from the table: "course_exception" */
+  course_exception_aggregate: Course_Exception_Aggregate;
+  /** fetch data from the table: "course_exception" using primary key columns */
+  course_exception_by_pk?: Maybe<Course_Exception>;
+  /** fetch data from the table in a streaming manner: "course_exception" */
+  course_exception_stream: Array<Course_Exception>;
+  /** fetch data from the table: "course_exceptions" */
+  course_exceptions: Array<Course_Exceptions>;
+  /** fetch aggregated fields from the table: "course_exceptions" */
+  course_exceptions_aggregate: Course_Exceptions_Aggregate;
+  /** fetch data from the table: "course_exceptions" using primary key columns */
+  course_exceptions_by_pk?: Maybe<Course_Exceptions>;
+  /** fetch data from the table in a streaming manner: "course_exceptions" */
+  course_exceptions_stream: Array<Course_Exceptions>;
   /** fetch data from the table: "course_expenses" */
   course_expenses: Array<Course_Expenses>;
   /** fetch aggregated fields from the table: "course_expenses" */
@@ -50998,6 +51641,67 @@ export type Subscription_RootCourse_Evaluation_Questions_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Course_Evaluation_Questions_Stream_Cursor_Input>>;
   where?: InputMaybe<Course_Evaluation_Questions_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_ExceptionArgs = {
+  distinct_on?: InputMaybe<Array<Course_Exception_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Exception_Order_By>>;
+  where?: InputMaybe<Course_Exception_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Exception_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Exception_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Exception_Order_By>>;
+  where?: InputMaybe<Course_Exception_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Exception_By_PkArgs = {
+  exception: Scalars['String'];
+};
+
+
+export type Subscription_RootCourse_Exception_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Exception_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Exception_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_ExceptionsArgs = {
+  distinct_on?: InputMaybe<Array<Course_Exceptions_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Exceptions_Order_By>>;
+  where?: InputMaybe<Course_Exceptions_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Exceptions_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Exceptions_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Exceptions_Order_By>>;
+  where?: InputMaybe<Course_Exceptions_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Exceptions_By_PkArgs = {
+  courseId: Scalars['Int'];
+  exception: Course_Exception_Enum;
+};
+
+
+export type Subscription_RootCourse_Exceptions_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Exceptions_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Exceptions_Bool_Exp>;
 };
 
 
@@ -56375,7 +57079,7 @@ export type GetCourseByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, arloReferenceId?: string | null, displayOnWebsite?: boolean | null, curriculum?: any | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, renewalCycle?: Course_Renewal_Cycle_Enum | null, priceCurrency?: string | null, includeVAT?: boolean | null, bookingContactInviteData?: any | null, organizationKeyContactInviteData?: any | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null, residingCountry?: string | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, course_id: number, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, modules?: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
+export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, arloReferenceId?: string | null, displayOnWebsite?: boolean | null, curriculum?: any | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, renewalCycle?: Course_Renewal_Cycle_Enum | null, priceCurrency?: string | null, includeVAT?: boolean | null, bookingContactInviteData?: any | null, organizationKeyContactInviteData?: any | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null, residingCountry?: string | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, course_id: number, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, modules?: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, courseExceptions: Array<{ __typename?: 'course_exceptions', exception: Course_Exception_Enum }> } | null };
 
 export type GetCourseDraftQueryVariables = Exact<{
   draftId: Scalars['uuid'];
@@ -56561,10 +57265,12 @@ export type UpdateCourseMutationVariables = Exact<{
   scheduleInput: Course_Schedule_Set_Input;
   trainers: Array<Course_Trainer_Insert_Input> | Course_Trainer_Insert_Input;
   trainersToDelete?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;
+  exceptions?: InputMaybe<Array<Course_Exception_Enum> | Course_Exception_Enum>;
+  exceptionsInput?: InputMaybe<Array<Course_Exceptions_Insert_Input> | Course_Exceptions_Insert_Input>;
 }>;
 
 
-export type UpdateCourseMutation = { __typename?: 'mutation_root', updateCourse?: { __typename?: 'course', id: number, level: Course_Level_Enum } | null, updateOrder?: { __typename?: 'order_mutation_response', affectedRows: number } | null, updateSchedule?: { __typename?: 'course_schedule', id: any } | null, deleteCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null, insertCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null };
+export type UpdateCourseMutation = { __typename?: 'mutation_root', updateCourse?: { __typename?: 'course', id: number, level: Course_Level_Enum } | null, updateOrder?: { __typename?: 'order_mutation_response', affectedRows: number } | null, updateSchedule?: { __typename?: 'course_schedule', id: any } | null, deleteCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null, insertCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null, deletedExceptions?: { __typename?: 'course_exceptions_mutation_response', affectedRows: number } | null, insertExceptions?: { __typename?: 'course_exceptions_mutation_response', affectedRows: number } | null };
 
 export type FindEstablishmentQueryVariables = Exact<{
   where: Dfe_Establishment_Bool_Exp;
@@ -57373,7 +58079,7 @@ export type GetUserCourseByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetUserCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, go1Integration?: boolean, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, special_instructions?: string | null, parking_instructions?: string | null, status?: Course_Status_Enum | null, accreditedBy: Accreditors_Enum, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null, organization?: { __typename?: 'organization', id: any, name: string, members: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, profile_id: any }> } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null, order?: { __typename?: 'order', bookingContactProfileId?: any | null } | null }>, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null }> } | null };
+export type GetUserCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, go1Integration?: boolean, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, special_instructions?: string | null, parking_instructions?: string | null, status?: Course_Status_Enum | null, accreditedBy: Accreditors_Enum, curriculum?: any | null, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null, organization?: { __typename?: 'organization', id: any, name: string, members: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, profile_id: any }> } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null, order?: { __typename?: 'order', bookingContactProfileId?: any | null } | null }>, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null }> } | null };
 
 export type GetUserByMailQueryVariables = Exact<{
   email?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;

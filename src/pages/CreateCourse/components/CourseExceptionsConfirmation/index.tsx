@@ -12,17 +12,14 @@ import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
-import { Course_Type_Enum } from '@app/generated/graphql'
-import {
-  CourseException,
-  shouldGoIntoExceptionApproval,
-} from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
+import { Course_Exception_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import { shouldGoIntoExceptionApproval } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 
 type Props = {
   open: boolean
   onCancel: () => void
   onSubmit: () => void
-  exceptions: CourseException[]
+  exceptions: Course_Exception_Enum[]
   courseType?: Course_Type_Enum
   submitLabel?: string
 }
