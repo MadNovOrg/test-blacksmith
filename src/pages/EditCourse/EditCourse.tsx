@@ -181,7 +181,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     []
   )
 
-  const [, notifyCourseEdit] = useMutation<
+  const [{ fetching: notifyCourseEditLoading }, notifyCourseEdit] = useMutation<
     NotifyCourseEditMutation,
     NotifyCourseEditMutationVariables
   >(NOTIFY_COURSE_INPUT)
@@ -913,7 +913,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                   <LoadingButton
                     variant="contained"
                     onClick={submitButtonHandler}
-                    loading={fetching}
+                    loading={fetching || notifyCourseEditLoading}
                     data-testid="save-button"
                     sx={{ mt: isMobile ? 2 : 0 }}
                     endIcon={canGoToCourseBuilder ? <ArrowForwardIcon /> : null}
