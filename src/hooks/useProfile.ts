@@ -1,7 +1,7 @@
 import { isPast } from 'date-fns'
 import { matches } from 'lodash'
 import { cond, constant, stubTrue } from 'lodash-es'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useQuery } from 'urql'
 
 import {
@@ -113,23 +113,26 @@ export default function useProfile(
   profileId?: string,
   courseId?: string,
   orgId?: string,
-  withCourseHistory = false
+  withCourseHistory = false,
+  refreshProfileData = false
 ) {
   const fetcher = useFetcher()
 
-  const [{ data: getProfileResponse, error: getProfileError }] = useQuery<
-    GetProfileDetailsQuery,
-    GetProfileDetailsQueryVariables
-  >({
-    query: QUERY,
-    variables: {
-      profileId,
-      withGo1Licenses: Boolean(orgId),
-      orgId,
-      withCourseHistory,
-      withCourseTrainerHistory: withCourseHistory,
-    },
-  })
+  const [{ data: getProfileResponse, error: getProfileError }, reexecuteQuery] =
+    useQuery<GetProfileDetailsQuery, GetProfileDetailsQueryVariables>({
+      query: QUERY,
+      variables: {
+        profileId,
+        withGo1Licenses: Boolean(orgId),
+        orgId,
+        withCourseHistory,
+        withCourseTrainerHistory: withCourseHistory,
+      },
+    })
+
+  const refreshData = useCallback(() => {
+    reexecuteQuery({ requestPolicy: 'network-only' })
+  }, [reexecuteQuery])
 
   const missingCertifications = useMemo(() => {
     if (getProfileResponse) {
@@ -189,6 +192,13 @@ export default function useProfile(
       { profileId }
     )
   }, [fetcher, profileId])
+
+  // forcely re-execute query whenever is necessary inside a component that uses this hook
+  useEffect(() => {
+    if (refreshProfileData) {
+      refreshData()
+    }
+  }, [refreshData, refreshProfileData])
 
   return {
     profile: getProfileResponse?.profile,

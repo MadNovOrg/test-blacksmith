@@ -155,11 +155,22 @@ export const EditProfilePage: React.FC<
     RemoveOrgMemberMutationVariables
   >(REMOVE_ORG_MEMBER_MUTATION)
 
+  const [callProfileParams, setCallProfileParams] = useState({
+    id: id ?? currentUserProfile?.id,
+    courseId: undefined,
+    orgId: orgId ?? undefined,
+    userCourses: false,
+    refreshProfileData: false,
+  })
+
   const { profile, certifications, go1Licenses, updateAvatar } = useProfile(
-    id ?? currentUserProfile?.id,
-    undefined,
-    orgId ?? undefined
+    callProfileParams.id,
+    callProfileParams.courseId,
+    callProfileParams.orgId,
+    callProfileParams.userCourses,
+    callProfileParams.refreshProfileData
   )
+
   /**
    * @see https://behaviourhub.atlassian.net/browse/TTHP-3402
    *
@@ -522,6 +533,7 @@ export const EditProfilePage: React.FC<
   ])
 
   const onSubmitImportCertificate = useCallback(async () => {
+    setCallProfileParams(prev => ({ ...prev, refreshProfileData: true }))
     setShowImportModal(false)
   }, [])
 
