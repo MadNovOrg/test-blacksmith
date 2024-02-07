@@ -294,7 +294,7 @@ export const Organizations: React.FC<
                         ? t('dates.withTime', {
                             date: lastActivityData[org?.id],
                           })
-                        : ''}
+                        : t('indeterminate')}
                     </TableCell>
                     <TableCell>
                       {t('dates.withTime', {

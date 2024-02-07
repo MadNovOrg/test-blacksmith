@@ -223,7 +223,7 @@ export type Profile = {
   }>
   roles: Array<{ role: Role }> // roles assigned in profile_role
   trainer_role_types: Array<{ trainer_role_type: TrainerRoleType }>
-  lastActivity: Date
+  lastActivity?: Date
   certificates?: Omit<CourseCertificate, 'profile' | 'participant'>[] // circular refs
   courses?: {
     grade?: Grade_Enum | null | undefined

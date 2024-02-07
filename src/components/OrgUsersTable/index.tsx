@@ -228,7 +228,11 @@ export const OrgUsersTable: React.FC<
                     ) : null}
                   </TableCell>
                   <TableCell data-testid="member-last-activity">
-                    {t('dates.default', { date: member.profile.lastActivity })}
+                    {member.profile.lastActivity
+                      ? t('dates.default', {
+                          date: member.profile.lastActivity,
+                        })
+                      : t('indeterminate')}
                   </TableCell>
                   <TableCell data-testid="member-created-at">
                     {t('dates.default', { date: member.profile.createdAt })}
