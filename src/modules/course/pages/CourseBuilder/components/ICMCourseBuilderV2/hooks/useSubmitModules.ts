@@ -12,7 +12,6 @@ export const SUBMIT_MODULES_MUTATION = gql`
       _set: {
         curriculum: $curriculum
         isDraft: false
-        status: null
         modulesDuration: $duration
       }
     ) {
