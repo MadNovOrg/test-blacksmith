@@ -9,6 +9,7 @@ import {
   Course_Status_Enum as CourseStatus,
   Course_Type_Enum,
   Course_Trainer_Type_Enum,
+  CourseTrainerType,
 } from '@app/generated/graphql'
 import {
   courseCategoryUserAttends,
@@ -663,7 +664,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canGradeParticipants: (
-      trainers: { profile: { id: string }; type: Course_Trainer_Type_Enum }[]
+      trainers: {
+        profile: { id: string }
+        type: Course_Trainer_Type_Enum | CourseTrainerType
+      }[]
     ) => {
       if (
         activeRole === RoleName.TRAINER &&
@@ -757,7 +761,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
     canViewCourseBuilderOnEditPage: (
       course: Pick<CourseInput, 'accreditedBy' | 'type'> | undefined | null,
-      trainers: { profile: { id: string }; type: Course_Trainer_Type_Enum }[]
+      trainers: {
+        profile: { id: string }
+        type: Course_Trainer_Type_Enum | CourseTrainerType
+      }[]
     ) => {
       if (
         !(

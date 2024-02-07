@@ -17,6 +17,7 @@ import {
   CertificateStatus,
   Course_Exception_Enum,
   Course_Trainer_Type_Enum,
+  CourseTrainerType as GeneratedCourseTrainerType,
 } from '@app/generated/graphql'
 import { StepsEnum } from '@app/pages/CreateCourse/types'
 
@@ -307,7 +308,7 @@ export enum BildStrategies {
 
 export type CourseTrainer = {
   id: string
-  type: Course_Trainer_Type_Enum
+  type: Course_Trainer_Type_Enum | GeneratedCourseTrainerType
   status: InviteStatus
   profile: Profile
   levels: {
@@ -569,7 +570,7 @@ export type CourseEvaluationQuestion = {
 export type SetCourseTrainerInput = {
   course_id: number
   profile_id: string
-  type: Course_Trainer_Type_Enum
+  type: Course_Trainer_Type_Enum | GeneratedCourseTrainerType
   status?: InviteStatus
 }
 

@@ -43,13 +43,15 @@ import {
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
   CourseLevel,
+  CourseTrainerType,
   GetCourseByIdQuery,
   InsertCourseAuditMutation,
   InsertCourseAuditMutationVariables,
+  NotifyCourseEditMutation,
+  NotifyCourseEditMutationVariables,
   UpdateCourseMutation,
   UpdateCourseMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import useCourse from '@app/hooks/useCourse'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
@@ -62,16 +64,11 @@ import {
 import { CourseCancellationModal } from '@app/pages/EditCourse/components/CourseCancellationModal'
 import { RegistrantsCancellationModal } from '@app/pages/EditCourse/components/RegistrantsCancellationModal'
 import { INSERT_COURSE_AUDIT } from '@app/queries/courses/insert-course-audit'
-import {
-  MUTATION as NOTIFY_COURSE_INPUT,
-  ParamsType as NotifyCourseEditParamType,
-  ResponseType as NotifyCourseEditResponseType,
-} from '@app/queries/courses/notify-course-edit'
+import { MUTATION as NOTIFY_COURSE_INPUT } from '@app/queries/courses/notify-course-edit'
 import { UPDATE_COURSE_MUTATION } from '@app/queries/courses/update-course'
 import {
   BildStrategies,
   CourseInput,
-  CourseTrainerType,
   InviteStatus,
   RoleName,
   TrainerRoleType,
@@ -116,7 +113,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const { profile, acl, activeRole } = useAuth()
   const navigate = useNavigate()
   const { isUKCountry } = useWorldCountries()
@@ -185,20 +181,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     []
   )
 
-  const notifyCourseEdit = useCallback(
-    async (
-      oldCourse: NotifyCourseEditParamType['oldCourse'],
-      oldTrainers: NotifyCourseEditParamType['oldTrainers']
-    ) => {
-      const response = await fetcher<
-        NotifyCourseEditResponseType,
-        NotifyCourseEditParamType
-      >(NOTIFY_COURSE_INPUT, { oldCourse, oldTrainers })
-
-      return response
-    },
-    [fetcher]
-  )
+  const [, notifyCourseEdit] = useMutation<
+    NotifyCourseEditMutation,
+    NotifyCourseEditMutationVariables
+  >(NOTIFY_COURSE_INPUT)
 
   const [courseDiffs, autoapproved]: [CourseDiff[], boolean] = useMemo(() => {
     const diffs: CourseDiff[] = []
@@ -484,8 +470,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           }
 
           if (editResponse.data?.updateCourse?.id) {
-            await notifyCourseEdit(
-              {
+            await notifyCourseEdit({
+              oldCourse: {
                 courseId: course.id,
                 level: course.level as unknown as CourseLevel,
                 venueId: course.schedule[0].venue?.id || null,
@@ -495,13 +481,12 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 parkingInstructions: course.parking_instructions || '',
                 specialInstructions: course.special_instructions || '',
               },
-              course.trainers?.map(trainer => ({
-                id: trainer.profile.id,
-                type: CourseTrainerType[
-                  trainer.type.toString() as keyof typeof CourseTrainerType
-                ],
-              })) || []
-            )
+              oldTrainers:
+                course.trainers?.map(trainer => ({
+                  id: trainer.profile.id,
+                  type: trainer.type as CourseTrainerType,
+                })) || [],
+            })
             mutateCourse()
             canGoToCourseBuilder
               ? navigate(`/courses/${courseInput?.id}/modules`, {
