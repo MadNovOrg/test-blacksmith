@@ -1,5 +1,38 @@
 # @teamteach/hub
 
+## 3.2.0
+
+### Minor Changes
+
+- 0acd948: Add 'Website enquiry' sales source.
+- 5eadc82: Add 3 months about training survey email shceduled event
+- 2e37193: add import tracking properties to the profile table
+- 13478b6: Restrict Trainer to increase participants count on BILD courses when editing
+- b39958c: add search by name to organisation courses
+- 5a50def: Remove 'Bite Responses' technique from BILD course strategies.
+- ca49244: Updating prices for 3 Day SRT course level
+- aabf159: add hyperlink to organizations from users page
+- 4203e90: Confirm user accepted invitation with specific message.
+- 2f1e7bd: Add 'Small child escorts' technique to the 'Small Child and One Person Holds' module.
+- 4b4505d: trim and lowercase email when submitting
+- babd581: Moves the organisation profiles logic to the backend server trough the getOrganizationProfiles hasura action
+- 0c358fa: Remove access to Resources if user has expired certificate
+
+### Patch Changes
+
+- cea5edf: Show the Accept/Rekect banner when there are no exceptions, but the status is "Exceptions Approval Pending" + refactor
+- 9e3d258: Display course overview for user roles
+- d753d8f: Do not redirect to course builder once modules were submitted
+- 20324a5: Refresh page when adding a certificate to user profile
+- 615e60f: fix edit profile form refreshing when editing organizations
+- f94e83a: Fix the Invite Individual To Organization search input
+- 30b2508: Show trainer's evaluation banner if the course has been ended
+- 5fcdab6: Update the retries on create_certificate trigger
+- 44ccd6a: Update trainer ratios according to the new requirements.
+- 11285ec: Fix course editing not redirecting the user after saving changes
+- f4ffa16: fix editing position doing a refresh when editing one's own profile
+- 229f606: Fix null default status when creating course
+
 ## 3.1.0
 
 ### Minor Changes
