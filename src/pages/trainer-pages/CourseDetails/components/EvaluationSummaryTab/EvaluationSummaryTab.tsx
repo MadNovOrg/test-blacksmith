@@ -13,9 +13,10 @@ import {
   TableContainer,
   TableRow,
   Typography,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
+import { isPast } from 'date-fns'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -26,13 +27,13 @@ import { LinkToProfile } from '@app/components/LinkToProfile'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import {
-  GetEvaluationsQuery,
-  GetEvaluationsQueryVariables,
   Course_Status_Enum,
   Course_Type_Enum,
+  GetEvaluationsQuery,
+  GetEvaluationsQueryVariables,
 } from '@app/generated/graphql'
 import { QUERY as GET_EVALUATION_QUERY } from '@app/queries/course-evaluation/get-evaluations'
-import { SortOrder, Course } from '@app/types'
+import { Course, SortOrder } from '@app/types'
 import { noop } from '@app/util'
 
 import { EvaluationSummaryPDFDownloadLink } from './EvaluationSummaryPDFDownloadLink'
@@ -133,10 +134,18 @@ export const EvaluationSummaryTab: React.FC<
     [data]
   )
 
-  const isCourseCanBeEvaluated = [
-    Course_Status_Enum.GradeMissing,
-    Course_Status_Enum.EvaluationMissing,
-  ].includes(course?.status)
+  const isCourseCanBeEvaluated =
+    [
+      Course_Status_Enum.GradeMissing,
+      Course_Status_Enum.EvaluationMissing,
+    ].includes(course?.status) ||
+    ([
+      Course_Status_Enum.TrainerDeclined,
+      Course_Status_Enum.TrainerMissing,
+      Course_Status_Enum.TrainerPending,
+    ].includes(course?.status) &&
+      course.schedule?.length &&
+      isPast(new Date(course.schedule[0].end)))
 
   const canTrainerSubmitEvaluation =
     isCourseCanBeEvaluated &&
