@@ -127,7 +127,7 @@
     "end-time-required": "End time is required field",
     "attendees-section-title": "Attendees",
     "attendees-number-title": "How many attendees?",
-    "attendees-edit-label": "Trainer and attendee ratio can only be edited in accordance with Team Teach training protocols.",
+    "attendees-edit-label": "Trainer and attendee ratio can only be edited in accordance with Team Teach training protocols and your pre-approved Training Needs Analysis.",
     "attendees-description": "Assist trainer(s) may be required based on the number of attendees.",
     "min-attendees-placeholder": "Minimum",
     "max-attendees-placeholder": "Maximum",
