@@ -18,6 +18,7 @@ export const QUERY = gql`
       billingFamilyName
       billingEmail
       billingPhone
+      registrants
       salesRepresentative {
         id
         fullName
@@ -45,6 +46,7 @@ export const QUERY = gql`
         start
         end
         freeSpaces
+        deliveryType
         bookingContact {
           fullName
           email

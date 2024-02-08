@@ -4,11 +4,12 @@ import {
   Chip,
   CircularProgress,
   Container,
+  Grid,
   Link,
   Stack,
   Typography,
 } from '@mui/material'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
 
@@ -28,6 +29,7 @@ import {
   XeroLineItem,
   XeroPhone,
   XeroPhoneType,
+  Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
 import { useOrder } from '@app/hooks/useOrder'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
@@ -44,6 +46,17 @@ import {
   isProcessingFeeLineItem,
   isRegistrantLineItem,
 } from './utils'
+
+type OrderRegistrant = {
+  firstName: string
+  email: string
+  lastName: string
+  addressLine1: string
+  addressLine2: string
+  city: string
+  country: string
+  postCode: string
+}
 
 export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams()
@@ -64,6 +77,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const course = order?.course
   const invoice = order?.invoice
+
+  const registrants = (
+    Array.isArray(order?.registrants) ? order?.registrants : []
+  ) as OrderRegistrant[]
 
   const registrantsLineItems = useMemo(() => {
     return course?.name
@@ -115,6 +132,15 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
 
     return null
   }, [invoice])
+
+  const getRegistrantPostalAddress = useCallback(
+    (registrant: OrderRegistrant) =>
+      `${registrant.addressLine1}, ${
+        registrant.addressLine2?.trim() ? registrant.addressLine2 + ', ' : ''
+      }${registrant.city}, ${registrant.postCode}, ${registrant.country}`,
+
+    []
+  )
 
   const invoicedToInfo = useMemo(() => {
     return [
@@ -609,6 +635,35 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                             {order.billingPhone}
                           </Typography>
                         ) : null}
+                      </Stack>
+                    </DetailsItemBox>
+                  ) : null}
+
+                  {course?.type === Course_Type_Enum.Open &&
+                  course.deliveryType === Course_Delivery_Type_Enum.Virtual &&
+                  course.level === Course_Level_Enum.Level_1 ? (
+                    <DetailsItemBox>
+                      <Stack spacing={2}>
+                        <Typography fontWeight={600}>Registration</Typography>
+                        {registrants.map(registrant => (
+                          <>
+                            <Grid>
+                              <Grid item>
+                                <Typography>
+                                  {getRegistrantPostalAddress(registrant)}
+                                </Typography>
+                              </Grid>
+                              <Grid item>
+                                <Typography>
+                                  {registrant.firstName} {registrant.lastName}
+                                </Typography>
+                              </Grid>
+                              <Grid item>
+                                <Typography>{registrant.email}</Typography>
+                              </Grid>
+                            </Grid>
+                          </>
+                        ))}
                       </Stack>
                     </DetailsItemBox>
                   ) : null}

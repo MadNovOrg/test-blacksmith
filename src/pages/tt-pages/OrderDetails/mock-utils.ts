@@ -3,6 +3,7 @@ import { Chance } from 'chance'
 import { addDays } from 'date-fns'
 
 import {
+  Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
   Currency,
@@ -54,6 +55,7 @@ export const buildOrder = build<NonNullish<GetOrderQuery['order']>>({
       start: new Date().toISOString(),
       end: new Date().toISOString(),
       residingCountry: 'GB-ENG',
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     },
     user: {
       fullName: chance.name({ full: true }),
