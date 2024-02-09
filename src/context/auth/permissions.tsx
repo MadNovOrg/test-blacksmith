@@ -475,8 +475,9 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         )()
       ) {
         return Boolean(
-          (currentUserCertificates?.length && hasPassedTrainerCourse) ||
-            trainerCourseIsOngoing
+          currentUserCertificates?.length ||
+            trainerCourseIsOngoing ||
+            hasPassedTrainerCourse
         )
       }
 
