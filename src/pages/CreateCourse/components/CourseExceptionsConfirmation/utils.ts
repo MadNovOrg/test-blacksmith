@@ -164,7 +164,5 @@ export function shouldGoIntoExceptionApproval(
   acl: ReturnType<typeof getACL>,
   type: Course_Type_Enum
 ) {
-  if (type === Course_Type_Enum.Open) return false
-  if (type === Course_Type_Enum.Closed) return true
-  return !acl.isTTAdmin()
+  return !acl.isTTAdmin() && type !== Course_Type_Enum.Open
 }

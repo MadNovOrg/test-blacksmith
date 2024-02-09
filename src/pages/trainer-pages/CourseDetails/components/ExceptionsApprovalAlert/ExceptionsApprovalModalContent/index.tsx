@@ -87,11 +87,12 @@ export const ExceptionsApprovalModalContent: FC<
         try {
           if (action === Course_Audit_Type_Enum.Approved) {
             addNewCourseAudit(auditObject)
+            // Course audit could be in mutation approveCourse for atomicity
             await fetcher<
               ApproveCourseMutation,
               ApproveCourseMutationVariables
             >(APPROVE_COURSE_MUTATION, { input: { courseId: course.id } })
-            await mutate()
+            mutate()
 
             navigate('/manage-courses/all', {
               state: {
