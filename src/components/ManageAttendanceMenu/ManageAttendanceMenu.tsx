@@ -30,7 +30,7 @@ type ManageAttendanceMenuProps<T> = {
 }
 
 export const ManageAttendanceMenu = <
-  T extends Pick<CourseParticipant, 'course' | 'profile'> & {
+  T extends Pick<CourseParticipant, 'attended' | 'course' | 'profile'> & {
     course: Pick<Course, 'accreditedBy'>
     profile: Pick<Profile, 'organizations'>
   }
@@ -127,8 +127,11 @@ export const ManageAttendanceMenu = <
             action: CourseAction.Replace,
           }),
           constant(
-            acl.canReplaceParticipant(participantOrgIds, course) &&
-              !courseEnded(course)
+            (acl.canReplaceParticipant(participantOrgIds, course) &&
+              !courseEnded(course)) ||
+              (courseEnded(course) &&
+                !courseParticipant.attended &&
+                acl.canReplaceParticipantAfterCourseEnded())
           ),
         ],
         [
@@ -150,7 +153,7 @@ export const ManageAttendanceMenu = <
         ],
         [stubTrue, constant(false)],
       ]),
-    [acl, course, participantOrgIds]
+    [acl, course, courseParticipant.attended, participantOrgIds]
   )
 
   const allowedActions = useMemo(() => {

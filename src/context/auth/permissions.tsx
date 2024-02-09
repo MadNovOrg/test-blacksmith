@@ -550,6 +550,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ])()
     },
 
+    canReplaceParticipantAfterCourseEnded: () => {
+      return anyPass([acl.isSalesAdmin, acl.isTTAdmin, acl.isTTOps])()
+    },
+
     canCancelParticipant: (participantOrgIds: string[], _course: Course) => {
       return (
         anyPass([
