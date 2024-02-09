@@ -603,7 +603,8 @@
     "accepted-response-sent": "You have already accepted the invitation to attend this course.",
     "declined-response-sent": "Thank you for confirming you will not attend this course.",
     "invitation-expired": "Invitation expired",
-    "invitation-not-found": "Invitation not found"
+    "invitation-not-found": "Invitation not found",
+    "invitation-invalid-token": "Invalid invitation's token"
   },
   "course-evaluation": {
     "heading": "Course Evaluation",

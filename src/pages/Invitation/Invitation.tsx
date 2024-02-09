@@ -59,37 +59,44 @@ export const InvitationPage = () => {
   const [searchParams] = useSearchParams()
   const [response, setResponse] = useState('yes')
   const [note, setNote] = useState<string>('')
+  const [errorOnDecode, setErrorOnDecode] = useState<boolean>(false)
 
-  const { token, inviteId, courseId, email } = useMemo(() => {
+  const tokenData = useMemo(() => {
     const token = searchParams.get('token') as string
     const courseId = searchParams.get('courseId') as string
 
-    const decoded = jwtDecode<{ invite_id: string; sub: string }>(token)
-    const inviteId = decoded.invite_id
+    try {
+      const decoded = jwtDecode<{ invite_id: string; sub: string }>(token)
+      const inviteId = decoded.invite_id
 
-    return { token, inviteId, courseId, email: decoded.sub }
+      return { token, inviteId, courseId, email: decoded.sub }
+    } catch (e) {
+      setErrorOnDecode(true)
+      return undefined
+    }
   }, [searchParams])
 
   useEffect(() => {
-    if (!profile || !email || profile.email === email) return
+    if (!profile || !tokenData?.email || profile.email === tokenData?.email)
+      return
 
     logout()
-  }, [profile, email, logout])
+  }, [profile, logout, tokenData?.email])
 
   const [
     { data: inviteData, error: inviteDataError, fetching: inviteDataIsLoading },
     getInviteData,
   ] = useQuery<GetInviteQuery, GetInviteQueryVariables>({
     query: GET_INVITE_QUERY,
-    pause: !token,
+    pause: !tokenData?.token,
     requestPolicy: 'network-only',
     context: useMemo(
       () => ({
         fetchOptions: {
-          headers: { 'x-auth': `Bearer ${token}` },
+          headers: { 'x-auth': `Bearer ${tokenData?.token}` },
         },
       }),
-      [token]
+      [tokenData?.token]
     ),
   })
   const [
@@ -154,23 +161,30 @@ export const InvitationPage = () => {
   }, [invite])
 
   const handleSubmit = async () => {
-    if (response === 'yes') {
-      const isUserLoggedIn = profile?.email === email
-      const exists = isUserLoggedIn ? true : await userExistsInCognito(email)
-      const nextUrl = exists ? '/auto-login' : '/auto-register'
-      const continueUrl = `/accept-invite/${inviteId}?courseId=${courseId}`
-      const qs = new URLSearchParams({ token, continue: continueUrl })
-      return navigate(isUserLoggedIn ? continueUrl : `${nextUrl}?${qs}`, {
-        replace: true,
-      })
+    if (tokenData) {
+      if (response === 'yes') {
+        const isUserLoggedIn = profile?.email === tokenData.email
+        const exists = isUserLoggedIn
+          ? true
+          : await userExistsInCognito(tokenData.email)
+        const nextUrl = exists ? '/auto-login' : '/auto-register'
+        const continueUrl = `/accept-invite/${tokenData.inviteId}?courseId=${tokenData.courseId}`
+        const qs = new URLSearchParams({
+          token: tokenData.token,
+          continue: continueUrl,
+        })
+        return navigate(isUserLoggedIn ? continueUrl : `${nextUrl}?${qs}`, {
+          replace: true,
+        })
+      }
+
+      await declineInvitation(
+        { note },
+        { fetchOptions: { headers: { 'x-auth': `Bearer ${tokenData.token}` } } }
+      )
+
+      getInviteData()
     }
-
-    await declineInvitation(
-      { note },
-      { fetchOptions: { headers: { 'x-auth': `Bearer ${token}` } } }
-    )
-
-    getInviteData()
   }
 
   // aligns the spinner as it was positioned in the top left of the screen
@@ -181,6 +195,16 @@ export const InvitationPage = () => {
       </Container>
     )
   }
+  if (errorOnDecode) {
+    return (
+      <NotFound
+        showHomeButton={false}
+        showTitle={false}
+        description={t('invitation.invitation-invalid-token')}
+      />
+    )
+  }
+
   if (inviteDataError) {
     // TODO: Need designs
     if (inviteDataError.message.includes('EXPIRED')) {

@@ -39,29 +39,39 @@ export const OrgInvitationPage = () => {
   const [response, setResponse] = useState('yes')
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const [errorOnDecode, setErrorOnDecode] = useState<boolean>(false)
 
-  const { token, inviteId, email } = useMemo(() => {
+  const tokenData = useMemo(() => {
     const token = searchParams.get('token') as string
 
-    const decoded = jwtDecode<{ invite_id: string; sub: string }>(token)
-    const inviteId = decoded.invite_id
+    try {
+      const decoded = jwtDecode<{ invite_id: string; sub: string }>(token)
+      const inviteId = decoded.invite_id
 
-    return { token, inviteId, email: decoded.sub }
+      return { token, inviteId, email: decoded.sub }
+    } catch (e) {
+      console.log(e)
+      setErrorOnDecode(true)
+      return undefined
+    }
   }, [searchParams])
 
   useEffect(() => {
-    if (!profile || !email || profile.email === email) return
+    if (!profile || !tokenData?.email || profile.email === tokenData?.email)
+      return
 
     logout()
-  }, [profile, email, logout])
+  }, [profile, tokenData?.email, logout])
 
   const [isLoading, setIsLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   const { data, error } = useSWR<GetOrgInviteResponseType, GqlError>(
-    token ? GET_ORG_INVITE_QUERY : null,
+    tokenData?.token ? GET_ORG_INVITE_QUERY : null,
     (query, variables) =>
-      gqlRequest(query, variables, { headers: { 'x-auth': `Bearer ${token}` } })
+      gqlRequest(query, variables, {
+        headers: { 'x-auth': `Bearer ${tokenData?.token}` },
+      })
   )
 
   const invite = (data?.invite || {}) as GetOrgInviteResponseType['invite']
@@ -70,36 +80,54 @@ export const OrgInvitationPage = () => {
   const handleSubmit = async () => {
     setIsLoading(true)
 
-    if (response === 'yes') {
-      const isUserLoggedIn = profile?.email === email
-      const exists = isUserLoggedIn ? true : await userExistsInCognito(email)
-      const nextUrl = exists ? '/auto-login' : '/auto-register'
-      const continueUrl = `/accept-org-invite/${inviteId}?token=${token}`
-      const qs = new URLSearchParams({ token, continue: continueUrl })
+    if (tokenData) {
+      if (response === 'yes') {
+        const isUserLoggedIn = profile?.email === tokenData?.email
+        const exists = isUserLoggedIn
+          ? true
+          : await userExistsInCognito(tokenData.email)
+        const nextUrl = exists ? '/auto-login' : '/auto-register'
+        const continueUrl = `/accept-org-invite/${tokenData.inviteId}?token=${tokenData.token}`
+        const qs = new URLSearchParams({
+          token: tokenData.token,
+          continue: continueUrl,
+        })
 
-      return navigate(`${isUserLoggedIn ? continueUrl : `${nextUrl}?${qs}`}`, {
-        replace: true,
-      })
+        return navigate(
+          `${isUserLoggedIn ? continueUrl : `${nextUrl}?${qs}`}`,
+          {
+            replace: true,
+          }
+        )
+      }
+
+      setSubmitError(null)
+
+      try {
+        await gqlRequest<DeclineOrgInviteResponseType>(
+          DECLINE_ORG_INVITE_MUTATION,
+          {
+            inviteId: data?.invite.id,
+          },
+          { headers: { 'x-auth': `Bearer ${tokenData.token}` } }
+        )
+        return navigate('/login?invitationDeclined=true')
+      } catch (e) {
+        const err = e as Error
+        console.log(err)
+        setSubmitError('Unable to submit response')
+      }
+
+      setIsLoading(false)
     }
+  }
 
-    setSubmitError(null)
-
-    try {
-      await gqlRequest<DeclineOrgInviteResponseType>(
-        DECLINE_ORG_INVITE_MUTATION,
-        {
-          inviteId: data?.invite.id,
-        },
-        { headers: { 'x-auth': `Bearer ${token}` } }
-      )
-      return navigate('/login?invitationDeclined=true')
-    } catch (e) {
-      const err = e as Error
-      console.log(err)
-      setSubmitError('Unable to submit response')
-    }
-
-    setIsLoading(false)
+  if (errorOnDecode) {
+    return (
+      <Box>
+        <Typography>{t('invitation.invitation-invalid-token')}</Typography>
+      </Box>
+    )
   }
 
   if (isFetching) {
@@ -109,7 +137,7 @@ export const OrgInvitationPage = () => {
   if (error) {
     return (
       <Box>
-        <Typography>Invitation expired</Typography>
+        <Typography>{t('invitation.invitation-expired')}</Typography>
       </Box>
     )
   }
