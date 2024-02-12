@@ -1,0 +1,59 @@
+name: Sync imported user attribute from Cognito to DB
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        default: 'DEV'
+        description: 'Environment - "DEV/STG/PROD"'
+        required: true
+        type: choice
+        options:
+          - DEV
+          - STG
+          - PROD
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  DEFAULT_ENV: 'DEV'
+jobs:
+  data:
+    name: Sync imported attribute on ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set endpoint variable
+        run: echo "ENDPOINT=${{ secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
+
+      - name: Set Hasura secret
+        run: echo "SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
+
+      - name: Set Cognito User Pool ID
+        run: echo "COGNITO_POOL_ID=${{ secrets[format('COGNITO_POOL_ID_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: eu-west-2
+          role-to-assume: ${{ secrets.service_role_arn }}
+          role-duration-seconds: 1200
+
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.14.2'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm pkg delete scripts.prepare && pnpm i
+
+      - name: Sync imported attribute
+        run: npx ts-node ./scripts/sync-imported-attribute.ts
