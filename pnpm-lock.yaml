@@ -69,8 +69,8 @@ importers:
         specifier: ^5.15.5
         version: 5.15.5(@types/react@18.2.14)(react@18.2.0)
       '@mui/x-data-grid':
-        specifier: ^6.19.3
-        version: 6.19.3(@mui/material@5.13.6)(@mui/system@5.14.14)(@types/react@18.2.14)(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^6.19.4
+        version: 6.19.4(@mui/material@5.13.6)(@mui/system@5.14.14)(@types/react@18.2.14)(react-dom@18.2.0)(react@18.2.0)
       '@mui/x-date-pickers':
         specifier: ^6.18.4
         version: 6.18.4(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/material@5.13.6)(@mui/system@5.14.14)(@types/react@18.2.14)(date-fns@2.30.0)(react-dom@18.2.0)(react@18.2.0)
@@ -5814,7 +5814,7 @@ packages:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.5
       '@types/istanbul-reports': 3.0.3
-      '@types/node': 20.10.7
+      '@types/node': 20.11.16
       '@types/yargs': 15.0.17
       chalk: 4.1.2
     dev: false
@@ -6454,8 +6454,8 @@ packages:
       react-is: 18.2.0
     dev: false
 
-  /@mui/x-data-grid@6.19.3(@mui/material@5.13.6)(@mui/system@5.14.14)(@types/react@18.2.14)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-RHt+MhTgvpXTWY0MYvzSNLF8npo+mlmWuTO+qKRt42Zj634IlUYDwW5jjQ9fWZnIpWJLunw253KqHoAlSAOXaw==}
+  /@mui/x-data-grid@6.19.4(@mui/material@5.13.6)(@mui/system@5.14.14)(@types/react@18.2.14)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-qXBe2mSetdsl3ZPqB/1LpKNkEiaYUiFXIaMHTIjuzLyusXgt+w7UsHYO7R+aJYUU7c3FeHla0R1nwRMY3kZ5ng==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@mui/material': ^5.4.1
@@ -11166,11 +11166,6 @@ packages:
     dependencies:
       undici-types: 5.26.5
     dev: true
-
-  /@types/node@20.10.7:
-    resolution: {integrity: sha512-fRbIKb8C/Y2lXxB5eVMj4IU7xpdox0Lh8bUPEdtLysaylsml1hOOx1+STloRs/B9nf7C6kPRmmg/V7aQW7usNg==}
-    dependencies:
-      undici-types: 5.26.5
 
   /@types/node@20.11.16:
     resolution: {integrity: sha512-gKb0enTmRCzXSSUJDq6/sPcqrfCv2mkkG6Jt/clpn5eiCbKTY+SgZUxo+p8ZKMof5dCp9vHQUAB7wOUTod22wQ==}
@@ -17226,7 +17221,7 @@ packages:
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
       '@jest/types': 27.5.1
-      '@types/node': 20.10.7
+      '@types/node': 20.11.16
       chalk: 4.1.2
       ci-info: 3.9.0
       graceful-fs: 4.2.11
@@ -17273,7 +17268,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.10.7
+      '@types/node': 20.11.16
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
