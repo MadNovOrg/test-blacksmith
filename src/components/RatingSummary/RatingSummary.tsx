@@ -53,7 +53,7 @@ export const RatingSummary: React.FC<React.PropsWithChildren<Props>> = ({
         </Typography>
 
         <Box display="flex" flexDirection="column" alignItems="center">
-          <Typography variant="subtitle2">{values[0]}%</Typography>
+          <Typography variant="subtitle2">{Math.round(values[0])}%</Typography>
           <Typography variant="body2" fontWeight="600" color="green.main">
             {t(`course-evaluation.excellent`)}
           </Typography>
@@ -74,7 +74,7 @@ export const RatingSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 {t(label)}
               </Typography>
               <Typography variant="body2" fontWeight="600" sx={{ width: 30 }}>
-                {values[index]}%
+                {Math.round(values[index])}%
               </Typography>
             </Grid>
           </Grid>

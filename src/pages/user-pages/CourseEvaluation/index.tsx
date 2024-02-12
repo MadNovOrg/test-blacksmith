@@ -204,13 +204,10 @@ export const CourseEvaluation = () => {
   useEffect(() => {
     if (!evaluation?.answers) return
 
-    evaluation.answers.forEach(a => {
-      if (a.question.type === CourseEvaluationQuestionType.BOOLEAN_REASON_N) {
-        setValue
-      }
+    evaluation?.answers.forEach(a => {
       setValue(a.question.id, a.answer)
     })
-  }, [setValue, evaluation])
+  }, [setValue, evaluation?.answers])
 
   const isLoadingData = useMemo(
     () =>
