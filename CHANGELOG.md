@@ -1,5 +1,21 @@
 # @teamteach/hub
 
+## 3.3.0
+
+### Minor Changes
+
+- b76b7d9: Attendee replacement after course ended
+- 3a635a9: add `imported` and `account_confirmed` to the `hubspot_user_sync` view
+- 11ed544: Improve the Certifications page load time
+- 93975ac: Add course registrants to order details page
+- 2f108cf: Wording change on edit BILD course
+
+### Patch Changes
+
+- e25338b: Handle and display message for invalid invite's token
+- ac58e3c: Fixing condition to display the Resources are on the navbar
+- 359791a: allow admin to bypass exceptions on CLOSED courses
+
 ## 3.2.0
 
 ### Minor Changes
