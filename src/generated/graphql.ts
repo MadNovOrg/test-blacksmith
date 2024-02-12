@@ -15564,6 +15564,8 @@ export type Course = {
   schedule: Array<Course_Schedule>;
   /** An aggregate relationship */
   schedule_aggregate: Course_Schedule_Aggregate;
+  /** A computed field, executes function "merge_course_rows" */
+  searchFields?: Maybe<Scalars['String']>;
   source?: Maybe<Course_Source_Enum>;
   special_instructions?: Maybe<Scalars['String']>;
   start?: Maybe<Scalars['timestamptz']>;
@@ -17131,6 +17133,7 @@ export type Course_Bool_Exp = {
   residingCountry?: InputMaybe<String_Comparison_Exp>;
   schedule?: InputMaybe<Course_Schedule_Bool_Exp>;
   schedule_aggregate?: InputMaybe<Course_Schedule_Aggregate_Bool_Exp>;
+  searchFields?: InputMaybe<String_Comparison_Exp>;
   source?: InputMaybe<Course_Source_Enum_Comparison_Exp>;
   special_instructions?: InputMaybe<String_Comparison_Exp>;
   start?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -22273,6 +22276,8 @@ export type Course_Max_Fields = {
   price?: Maybe<Scalars['numeric']>;
   priceCurrency?: Maybe<Scalars['String']>;
   residingCountry?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "merge_course_rows" */
+  searchFields?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
   start?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "course_state" */
@@ -22342,6 +22347,8 @@ export type Course_Min_Fields = {
   price?: Maybe<Scalars['numeric']>;
   priceCurrency?: Maybe<Scalars['String']>;
   residingCountry?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "merge_course_rows" */
+  searchFields?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
   start?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "course_state" */
@@ -22837,6 +22844,7 @@ export type Course_Order_By = {
   renewalCycle?: InputMaybe<Order_By>;
   residingCountry?: InputMaybe<Order_By>;
   schedule_aggregate?: InputMaybe<Course_Schedule_Aggregate_Order_By>;
+  searchFields?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
   start?: InputMaybe<Order_By>;

@@ -262,37 +262,16 @@ export const filtersToWhereClause = (
   }
 
   const query = filters?.keyword?.trim()
-  const onlyDigits = /^\d+$/.test(query || '')
 
   const keywords = query?.split(' ').filter(word => Boolean(word))
-  const queryName =
-    keywords && keywords.length > 1
-      ? { _and: keywords.map(w => ({ name: { _ilike: `%${w}%` } })) }
-      : { name: { _ilike: `%${query}%` } }
-
-  const queryTrainers = {
-    trainers: {
-      profile:
-        keywords && keywords.length > 1
-          ? { _and: keywords.map(w => ({ fullName: { _ilike: `%${w}%` } })) }
-          : { fullName: { _ilike: `%${query}%` } },
-    },
-  }
 
   if (query?.length) {
     const orClauses = [
-      onlyDigits ? { id: { _eq: Number(query) } } : null,
-      queryName,
-      { organization: { name: { _ilike: `%${query}%` } } },
-      { schedule: { venue: { name: { _ilike: `%${query}%` } } } },
-      { schedule: { venue: { city: { _ilike: `%${query}%` } } } },
-      { schedule: { venue: { addressLineOne: { _ilike: `%${query}%` } } } },
-      { schedule: { venue: { addressLineTwo: { _ilike: `%${query}%` } } } },
-      { schedule: { venue: { country: { _ilike: `%${query}%` } } } },
-      { schedule: { venue: { postCode: { _ilike: `%${query}%` } } } },
-      queryTrainers,
-      { course_code: { _ilike: `%${query}%` } },
-      isInternalUser ? { arloReferenceId: { _ilike: `%${query}%` } } : null,
+      keywords && keywords?.length > 1
+        ? {
+            _and: keywords.map(w => ({ searchFields: { _ilike: `%${w}%` } })),
+          }
+        : { searchFields: { _ilike: `%${query}%` } },
     ]
 
     if (where._or) {
