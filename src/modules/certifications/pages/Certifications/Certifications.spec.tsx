@@ -1,8 +1,6 @@
-import React from 'react'
-
 import { screen, render } from '@test/index'
 
-import { Certifications } from './index'
+import { Certifications } from './Certifications'
 
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => ({
@@ -10,7 +8,7 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigate,
 }))
 
-describe('page: Certifications', () => {
+describe(Certifications.name, () => {
   it('renders empty page with filters', async () => {
     render(<Certifications />)
     expect(screen.getByText('Certifications')).toBeInTheDocument()

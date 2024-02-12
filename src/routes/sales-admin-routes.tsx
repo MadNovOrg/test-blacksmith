@@ -2,6 +2,7 @@ import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
+import { CertificationsRoutes } from '@app/modules/certifications/routes'
 import { ParticipantGrade } from '@app/modules/grading/pages/ParticipantGrade/ParticipantGrade'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { UserRoutes } from '@app/modules/user/routes'
@@ -18,7 +19,6 @@ import { AdminTransferParticipantPage } from '@app/pages/TransferParticipant/Adm
 import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
 import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
 import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
-import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
@@ -137,20 +137,6 @@ const SalesAdminRoutes = () => {
           <Route path="grading/:participantId" element={<ParticipantGrade />} />
         </Route>
       </Route>
-      {/* 
-      <Route path="organisations">
-        <Route index element={<Navigate replace to="all" />} />
-        <Route path="new" element={<CreateOrganization />} />
-        <Route path="list" element={<Organizations />} />
-        <Route path=":id">
-          <Route index element={<OrgDashboard />} />
-          <Route path="edit" element={<EditOrgDetails />} />
-          {acl.canEditOrAddOrganizations() ? (
-            <Route path="invite" element={<InviteUserToOrganization />} />
-          ) : null}
-          <Route path="courses" element={<AvailableCourses />} />
-        </Route>
-      </Route> */}
 
       {acl.canViewOrganizations() ? (
         <Route path="organisations/*" element={<OrganisationRoutes />} />
@@ -158,7 +144,7 @@ const SalesAdminRoutes = () => {
 
       <Route path="resources/*" element={<ResourcesRoutes />} />
 
-      <Route path="certifications" element={<Certifications />} />
+      <Route path="certifications" element={<CertificationsRoutes />} />
 
       <Route
         path="certification/:certificateId"

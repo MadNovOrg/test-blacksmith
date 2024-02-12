@@ -44120,6 +44120,7 @@ export type Profile = {
   _family_name?: Maybe<Scalars['String']>;
   _given_name?: Maybe<Scalars['String']>;
   _phone?: Maybe<Scalars['String']>;
+  account_confirmed?: Maybe<Scalars['Boolean']>;
   addresses: Scalars['jsonb'];
   archived?: Maybe<Scalars['Boolean']>;
   attributes: Scalars['jsonb'];
@@ -44161,8 +44162,9 @@ export type Profile = {
   identities: Array<Identity>;
   /** An aggregate relationship */
   identities_aggregate: Identity_Aggregate;
+  imported?: Maybe<Scalars['Boolean']>;
   jobTitle?: Maybe<Scalars['String']>;
-  lastActivity: Scalars['timestamptz'];
+  lastActivity?: Maybe<Scalars['timestamptz']>;
   /** An array relationship */
   organizations: Array<Organization_Member>;
   /** An aggregate relationship */
@@ -44491,6 +44493,7 @@ export type Profile_Bool_Exp = {
   _not?: InputMaybe<Profile_Bool_Exp>;
   _or?: InputMaybe<Array<Profile_Bool_Exp>>;
   _phone?: InputMaybe<String_Comparison_Exp>;
+  account_confirmed?: InputMaybe<Boolean_Comparison_Exp>;
   addresses?: InputMaybe<Jsonb_Comparison_Exp>;
   archived?: InputMaybe<Boolean_Comparison_Exp>;
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
@@ -44519,6 +44522,7 @@ export type Profile_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   identities?: InputMaybe<Identity_Bool_Exp>;
   identities_aggregate?: InputMaybe<Identity_Aggregate_Bool_Exp>;
+  imported?: InputMaybe<Boolean_Comparison_Exp>;
   jobTitle?: InputMaybe<String_Comparison_Exp>;
   lastActivity?: InputMaybe<Timestamptz_Comparison_Exp>;
   organizations?: InputMaybe<Organization_Member_Bool_Exp>;
@@ -44592,6 +44596,7 @@ export type Profile_Insert_Input = {
   _family_name?: InputMaybe<Scalars['String']>;
   _given_name?: InputMaybe<Scalars['String']>;
   _phone?: InputMaybe<Scalars['String']>;
+  account_confirmed?: InputMaybe<Scalars['Boolean']>;
   addresses?: InputMaybe<Scalars['jsonb']>;
   archived?: InputMaybe<Scalars['Boolean']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
@@ -44611,6 +44616,7 @@ export type Profile_Insert_Input = {
   go1_profile?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
   identities?: InputMaybe<Identity_Arr_Rel_Insert_Input>;
+  imported?: InputMaybe<Scalars['Boolean']>;
   jobTitle?: InputMaybe<Scalars['String']>;
   lastActivity?: InputMaybe<Scalars['timestamptz']>;
   organizations?: InputMaybe<Organization_Member_Arr_Rel_Insert_Input>;
@@ -44719,6 +44725,7 @@ export type Profile_Order_By = {
   _family_name?: InputMaybe<Order_By>;
   _given_name?: InputMaybe<Order_By>;
   _phone?: InputMaybe<Order_By>;
+  account_confirmed?: InputMaybe<Order_By>;
   addresses?: InputMaybe<Order_By>;
   archived?: InputMaybe<Order_By>;
   attributes?: InputMaybe<Order_By>;
@@ -44742,6 +44749,7 @@ export type Profile_Order_By = {
   go1_profile?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   identities_aggregate?: InputMaybe<Identity_Aggregate_Order_By>;
+  imported?: InputMaybe<Order_By>;
   jobTitle?: InputMaybe<Order_By>;
   lastActivity?: InputMaybe<Order_By>;
   organizations_aggregate?: InputMaybe<Organization_Member_Aggregate_Order_By>;
@@ -45024,6 +45032,8 @@ export enum Profile_Select_Column {
   /** column name */
   Phone = '_phone',
   /** column name */
+  AccountConfirmed = 'account_confirmed',
+  /** column name */
   Addresses = 'addresses',
   /** column name */
   Archived = 'archived',
@@ -45052,6 +45062,8 @@ export enum Profile_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  Imported = 'imported',
+  /** column name */
   JobTitle = 'jobTitle',
   /** column name */
   LastActivity = 'lastActivity',
@@ -45075,6 +45087,7 @@ export type Profile_Set_Input = {
   _family_name?: InputMaybe<Scalars['String']>;
   _given_name?: InputMaybe<Scalars['String']>;
   _phone?: InputMaybe<Scalars['String']>;
+  account_confirmed?: InputMaybe<Scalars['Boolean']>;
   addresses?: InputMaybe<Scalars['jsonb']>;
   archived?: InputMaybe<Scalars['Boolean']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
@@ -45089,6 +45102,7 @@ export type Profile_Set_Input = {
   go1Id?: InputMaybe<Scalars['Int']>;
   go1_profile?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
+  imported?: InputMaybe<Scalars['Boolean']>;
   jobTitle?: InputMaybe<Scalars['String']>;
   lastActivity?: InputMaybe<Scalars['timestamptz']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
@@ -45131,6 +45145,7 @@ export type Profile_Stream_Cursor_Value_Input = {
   _family_name?: InputMaybe<Scalars['String']>;
   _given_name?: InputMaybe<Scalars['String']>;
   _phone?: InputMaybe<Scalars['String']>;
+  account_confirmed?: InputMaybe<Scalars['Boolean']>;
   addresses?: InputMaybe<Scalars['jsonb']>;
   archived?: InputMaybe<Scalars['Boolean']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
@@ -45145,6 +45160,7 @@ export type Profile_Stream_Cursor_Value_Input = {
   go1Id?: InputMaybe<Scalars['Int']>;
   go1_profile?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
+  imported?: InputMaybe<Scalars['Boolean']>;
   jobTitle?: InputMaybe<Scalars['String']>;
   lastActivity?: InputMaybe<Scalars['timestamptz']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
@@ -45764,6 +45780,8 @@ export enum Profile_Update_Column {
   /** column name */
   Phone = '_phone',
   /** column name */
+  AccountConfirmed = 'account_confirmed',
+  /** column name */
   Addresses = 'addresses',
   /** column name */
   Archived = 'archived',
@@ -45791,6 +45809,8 @@ export enum Profile_Update_Column {
   Go1Profile = 'go1_profile',
   /** column name */
   Id = 'id',
+  /** column name */
+  Imported = 'imported',
   /** column name */
   JobTitle = 'jobTitle',
   /** column name */
@@ -56683,7 +56703,7 @@ export type OrgMembersQueryVariables = Exact<{
 }>;
 
 
-export type OrgMembersQuery = { __typename?: 'query_root', members: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, lastActivity: any, createdAt: any, go1Licenses: Array<{ __typename?: 'go1_licenses', expireDate: any }>, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', payload?: any | null }> } | null }> } }>, organization_member_aggregate?: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, single_organization_members_count: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
+export type OrgMembersQuery = { __typename?: 'query_root', members: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, lastActivity?: any | null, createdAt: any, go1Licenses: Array<{ __typename?: 'go1_licenses', expireDate: any }>, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', payload?: any | null }> } | null }> } }>, organization_member_aggregate?: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, single_organization_members_count: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
 
 export type SearchTrainerDetailsFragment = { __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, email: string, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> };
 
@@ -56743,6 +56763,15 @@ export type ConfirmCcPaymentMutationVariables = Exact<{
 
 
 export type ConfirmCcPaymentMutation = { __typename?: 'mutation_root', confirmCreditCardPayment?: { __typename?: 'ConfirmCreditCardPaymentOutput', confirmed: boolean, error?: ConfirmCreditCardPaymentError | null } | null };
+
+export type GetCertificationsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Course_Certificate_Bool_Exp>;
+}>;
+
+
+export type GetCertificationsQuery = { __typename?: 'query_root', certifications: Array<{ __typename?: 'course_certificate', status?: string | null, id: any, number: string, expiryDate: any, legacyCourseCode?: string | null, certificationDate: any, courseName: string, courseLevel: string, profile?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', payload?: any | null }> } | null, course?: { __typename?: 'course', level: Course_Level_Enum, accreditedBy: Accreditors_Enum, go1Integration: boolean, reaccreditation?: boolean | null, course_code?: string | null } | null }>, certificationsAggregation: { __typename?: 'course_certificate_aggregate', aggregate?: { __typename?: 'course_certificate_aggregate_fields', count: number } | null } };
 
 export type CoursePriceQueryVariables = Exact<{
   type: Course_Type_Enum;
@@ -56886,7 +56915,7 @@ export type GetOrganisationDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetOrganisationDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', region?: string | null, id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity: any } }> }>, specificOrg: Array<{ __typename?: 'organization', id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null }>, orgsCount: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
+export type GetOrganisationDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', region?: string | null, id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }> }>, specificOrg: Array<{ __typename?: 'organization', id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null }>, orgsCount: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
 
 export type GetOrganisationByNameQueryVariables = Exact<{
   query: Scalars['String'];
@@ -57067,7 +57096,7 @@ export type ProfilesQueryVariables = Exact<{
 }>;
 
 
-export type ProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', name: string, id: any, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string, id: any } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> }>, profilesAggregation: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+export type ProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', name: string, id: any, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string, id: any } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> }>, profilesAggregation: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type OrganizationsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -57157,16 +57186,6 @@ export type GetCertificateQueryVariables = Exact<{
 
 
 export type GetCertificateQuery = { __typename?: 'query_root', certificateHoldRequest: Array<{ __typename?: 'course_certificate_hold_request', expiry_date: any, start_date: any }>, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null, profile?: { __typename?: 'profile', fullName?: string | null, id: any, avatar?: string | null, archived?: boolean | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, gradedOn?: any | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, id: any, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, bildGradingModules?: { __typename?: 'course_participant_bild_module', id: any, modules: any } | null, course: { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, accreditedBy: Accreditors_Enum, go1Integration: boolean, reaccreditation?: boolean | null, bildStrategies: Array<{ __typename?: 'course_bild_strategy', id: any, strategyName: string }> }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum, author: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> } | null } | null };
-
-export type GetCertificationsQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<Course_Certificate_Order_By> | Course_Certificate_Order_By>;
-  where?: InputMaybe<Course_Certificate_Bool_Exp>;
-}>;
-
-
-export type GetCertificationsQuery = { __typename?: 'query_root', certifications: Array<{ __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null, profile?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> } | null, participant?: { __typename?: 'course_participant', id: any, attended?: boolean | null, invoiceID?: any | null, bookingDate?: any | null, go1EnrolmentStatus?: Blended_Learning_Status_Enum | null, go1EnrolmentProgress?: any | null, grade?: Grade_Enum | null, healthSafetyConsent: boolean, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null, course?: { __typename?: 'course', accreditedBy: Accreditors_Enum, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null, residingCountry?: string | null, bildStrategies: Array<{ __typename?: 'course_bild_strategy', id: any, strategyName: string }>, organization?: { __typename?: 'organization', name: string, id: any } | null } | null }>, certificationsAggregation: { __typename?: 'course_certificate_aggregate', aggregate?: { __typename?: 'course_certificate_aggregate_fields', count: number } | null } };
 
 export type GetUserCanAccessResourcesQueryVariables = Exact<{
   profileId?: InputMaybe<Scalars['uuid']>;
@@ -57572,7 +57591,7 @@ export type OrganizationFragment = { __typename?: 'organization', id: any, name:
 
 export type ShallowOrganizationFragment = { __typename?: 'organization', id: any, name: string, address: any };
 
-export type ProfileFragment = { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> };
+export type ProfileFragment = { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> };
 
 export type ModuleFragment = { __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any, submodules: Array<{ __typename?: 'submodule', id: any, name: string }>, submodules_aggregate: { __typename?: 'submodule_aggregate', aggregate?: { __typename?: 'submodule_aggregate_fields', count: number } | null } };
 
@@ -57749,7 +57768,7 @@ export type GetOrgInvitesQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgInvitesQuery = { __typename?: 'query_root', orgInvites: Array<{ __typename?: 'organization_invites', id: any, createdAt: any, updatedAt: any, email: string, status: string, isAdmin: boolean, profile?: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, total: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
+export type GetOrgInvitesQuery = { __typename?: 'query_root', orgInvites: Array<{ __typename?: 'organization_invites', id: any, createdAt: any, updatedAt: any, email: string, status: string, isAdmin: boolean, profile?: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, total: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
 
 export type InitAuthQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -57983,7 +58002,7 @@ export type GetOrgWithKeyContactsQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgWithKeyContactsQuery = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }> } | null };
+export type GetOrgWithKeyContactsQuery = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }> } | null };
 
 export type GetOrgMembersQueryVariables = Exact<{
   id: Scalars['uuid'];
@@ -57999,7 +58018,7 @@ export type GetOrgDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, lastActivity: any, createdAt: any, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, go1Licenses: Array<{ __typename?: 'go1_licenses', id: any, expireDate: any }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null, course?: { __typename?: 'course', type: Course_Type_Enum, name: string, course_code?: string | null } | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, organization: { __typename?: 'organization', id: any, name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
+export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, lastActivity?: any | null, createdAt: any, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, go1Licenses: Array<{ __typename?: 'go1_licenses', id: any, expireDate: any }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null, course?: { __typename?: 'course', type: Course_Type_Enum, name: string, course_code?: string | null } | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, organization: { __typename?: 'organization', id: any, name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
 
 export type GetOrgTypesQueryVariables = Exact<{
   sector: Organisation_Sector_Enum;
@@ -58016,7 +58035,7 @@ export type GetOrgUsersQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgUsersQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, profile: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, activeCertificates: { __typename?: 'course_certificate_aggregate', aggregate?: { __typename?: 'course_certificate_aggregate_fields', count: number } | null }, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, total: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
+export type GetOrgUsersQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, profile: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, activeCertificates: { __typename?: 'course_certificate_aggregate', aggregate?: { __typename?: 'course_certificate_aggregate_fields', count: number } | null }, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, total: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
 
 export type GetOrganizationsQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Organization_Order_By> | Organization_Order_By>;
@@ -58024,7 +58043,7 @@ export type GetOrganizationsQueryVariables = Exact<{
 }>;
 
 
-export type GetOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity: any } }> }> };
+export type GetOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }> }> };
 
 export type GetShallowOrganizationsQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Organization_Order_By> | Organization_Order_By>;
@@ -58214,7 +58233,7 @@ export type FindProfilesQueryVariables = Exact<{
 }>;
 
 
-export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> }> };
+export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> }> };
 
 export type GetNotDetailedProfileQueryVariables = Exact<{
   where?: InputMaybe<Profile_Bool_Exp>;
@@ -58232,7 +58251,7 @@ export type GetProfileDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileDetailsQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, participantAudits: Array<{ __typename?: 'course_participant_audit', id: any, course_id: number, type: Course_Participant_Audit_Type_Enum, course: { __typename?: 'course', name: string, status?: Course_Status_Enum | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } }>, courseAsTrainer: Array<{ __typename?: 'course_trainer', id: any, course_id: number, type: Course_Trainer_Type_Enum, course: { __typename?: 'course', id: number, name: string, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } }>, courses: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, course: { __typename?: 'course', id: number, name: string, status?: Course_Status_Enum | null, start?: any | null, end?: any | null } }>, go1Licenses?: Array<{ __typename?: 'go1_licenses', id: any, orgId: any, expireDate: any, enrolledOn: any }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null, certificates: Array<{ __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null, participant?: { __typename?: 'course_participant', grade?: Grade_Enum | null, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, upcomingCourses: Array<{ __typename?: 'course', id: number, level: Course_Level_Enum, course_code?: string | null, name: string, status?: Course_Status_Enum | null, reaccreditation?: boolean | null }> };
+export type GetProfileDetailsQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, participantAudits: Array<{ __typename?: 'course_participant_audit', id: any, course_id: number, type: Course_Participant_Audit_Type_Enum, course: { __typename?: 'course', name: string, status?: Course_Status_Enum | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } }>, courseAsTrainer: Array<{ __typename?: 'course_trainer', id: any, course_id: number, type: Course_Trainer_Type_Enum, course: { __typename?: 'course', id: number, name: string, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } }>, courses: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, course: { __typename?: 'course', id: number, name: string, status?: Course_Status_Enum | null, start?: any | null, end?: any | null } }>, go1Licenses?: Array<{ __typename?: 'go1_licenses', id: any, orgId: any, expireDate: any, enrolledOn: any }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null, certificates: Array<{ __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null, participant?: { __typename?: 'course_participant', grade?: Grade_Enum | null, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, upcomingCourses: Array<{ __typename?: 'course', id: number, level: Course_Level_Enum, course_code?: string | null, name: string, status?: Course_Status_Enum | null, reaccreditation?: boolean | null }> };
 
 export type GetProfilesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -58425,7 +58444,7 @@ export type GetProfileByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileByIdQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, managedOrgIds: Array<{ __typename?: 'organization_member', organization_id: any }>, trainerRoles: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', name: string } }>, certificates: Array<{ __typename?: 'course_certificate', expiryDate: any, courseLevel: string }>, courses: Array<{ __typename?: 'course_participant', grade?: Grade_Enum | null, course: { __typename?: 'course', end?: any | null, level: Course_Level_Enum, start?: any | null } }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null };
+export type GetProfileByIdQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, managedOrgIds: Array<{ __typename?: 'organization_member', organization_id: any }>, trainerRoles: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', name: string } }>, certificates: Array<{ __typename?: 'course_certificate', expiryDate: any, courseLevel: string }>, courses: Array<{ __typename?: 'course_participant', grade?: Grade_Enum | null, course: { __typename?: 'course', end?: any | null, level: Course_Level_Enum, start?: any | null } }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null };
 
 export type FindVenuesQueryVariables = Exact<{
   query: Scalars['String'];

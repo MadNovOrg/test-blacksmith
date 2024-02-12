@@ -2,6 +2,7 @@ import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
+import { CertificationsRoutes } from '@app/modules/certifications/routes'
 import { CourseBuilder } from '@app/modules/course/pages/CourseBuilder/CourseBuilder'
 import { GradingRoutes } from '@app/modules/grading/routes'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
@@ -31,7 +32,6 @@ import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/
 import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
 import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
 import { ArloConnect, ArloImport } from '@app/pages/tt-pages/Arlo'
-import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
@@ -126,7 +126,7 @@ const TTAdminRoutes = () => {
         <Route path="organisations/*" element={<OrganisationRoutes />} />
       ) : null}
 
-      <Route path="certifications" element={<Certifications />} />
+      <Route path="certifications" element={<CertificationsRoutes />} />
 
       <Route path="orders">
         <Route index element={<Orders />} />

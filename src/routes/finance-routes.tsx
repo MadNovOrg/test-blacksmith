@@ -2,6 +2,7 @@ import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
+import { CertificationsRoutes } from '@app/modules/certifications/routes'
 import { ParticipantGrade } from '@app/modules/grading/pages/ParticipantGrade/ParticipantGrade'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { UserRoutes } from '@app/modules/user/routes'
@@ -14,7 +15,6 @@ import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCerti
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
-import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
@@ -24,7 +24,6 @@ import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 import ResourcesRoutes from './resources'
-
 const NotFound = React.lazy(() =>
   import('@app/pages/common/NotFound').then(module => ({
     default: module.NotFound,
@@ -133,7 +132,7 @@ const FinanceRoute = () => {
 
       <Route path="organisations/*" element={<OrganisationRoutes />} />
 
-      <Route path="certifications" element={<Certifications />} />
+      <Route path="certifications" element={<CertificationsRoutes />} />
 
       <Route
         path="certification/:certificateId"

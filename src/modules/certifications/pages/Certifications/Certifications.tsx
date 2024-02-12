@@ -21,14 +21,12 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
   Course_Certificate_Bool_Exp,
-  Order_By,
   CertificateStatus,
 } from '@app/generated/graphql'
-import useCertifications from '@app/hooks/useCertifications'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
-import { CertificationsTable } from '@app/pages/tt-pages/Certifications/CertificationsTable'
-import { LoadingStatus } from '@app/util'
+import { CertificationsTable } from '@app/modules/certifications/components/CertificationsTable'
+import useCertifications from '@app/modules/certifications/hooks/useCertifications'
 
 type CertificationsProps = unknown
 
@@ -125,10 +123,9 @@ export const Certifications: React.FC<
 
   const {
     data: certificates,
-    status,
+    fetching,
     total,
   } = useCertifications({
-    order: sorting.dir as Order_By,
     where,
     pagination: {
       limit,
@@ -136,7 +133,6 @@ export const Certifications: React.FC<
     },
   })
 
-  const loading = status === LoadingStatus.FETCHING
   const filtered =
     !!keyword ||
     !!dateFrom ||
@@ -157,7 +153,7 @@ export const Certifications: React.FC<
         <Box width={250}>
           <Typography variant="h1">{t('common.certifications')}</Typography>
           <Typography variant="body2" color="grey.600" mt={1}>
-            {loading ? <>&nbsp;</> : t('x-items', { count: total })}
+            {fetching ? <>&nbsp;</> : t('x-items', { count: total })}
           </Typography>
 
           <Stack gap={4} mt={4}>
@@ -188,7 +184,7 @@ export const Certifications: React.FC<
         </Box>
 
         <Box flex={1}>
-          {loading ? (
+          {fetching ? (
             <Stack
               alignItems="center"
               justifyContent="center"
