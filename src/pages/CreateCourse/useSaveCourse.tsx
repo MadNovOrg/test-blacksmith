@@ -213,11 +213,9 @@ export function useSaveCourse(): {
               level: courseData.courseLevel,
               reaccreditation: courseData.reaccreditation,
               go1Integration: courseData.blendedLearning,
-              ...((isBild &&
-                [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
-                  courseData.type
-                )) ||
-              isOpenICMInternational
+              ...([Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
+                courseData.type
+              ) || isOpenICMInternational
                 ? { price: courseData.price, conversion: courseData.conversion }
                 : null),
               status,
