@@ -55,7 +55,7 @@ jobs:
         with:
           ref: ${{ inputs.checkout_ref }}
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         with:
           version: 8
       - name: Configure AWS Credentials
