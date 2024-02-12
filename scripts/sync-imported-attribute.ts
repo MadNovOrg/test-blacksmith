@@ -40,6 +40,8 @@ async function syncImportedAttribute() {
   let firstRun = true
   let paginationToken = ''
 
+  let totalSynced = 0
+
   console.log('Starting sync 🤞')
 
   while (firstRun || paginationToken) {
@@ -81,6 +83,8 @@ async function syncImportedAttribute() {
       if (!hasuraResponse.update_profile.returning.length) {
         console.log('No imported users found in our db 🤷')
       } else {
+        totalSynced += hasuraResponse.update_profile.returning.length
+
         console.log(
           `marked ${hasuraResponse.update_profile.returning
             ?.map(p => p.email)
@@ -95,7 +99,11 @@ async function syncImportedAttribute() {
     firstRun = false
   }
 
-  console.log('Done 🎉')
+  console.log(
+    `Done 🎉 ${totalSynced} ${
+      totalSynced === 1 ? 'user' : 'users'
+    } marked as imported in our database 👋`
+  )
   process.exit(0)
 }
 
