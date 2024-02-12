@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
@@ -9,13 +10,26 @@ import {
   Xero_Invoice_Status_Enum,
 } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import {
+  render,
+  renderHook,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
 
 import { Orders } from '.'
 
 const user = userEvent.setup()
 
 describe('page: Orders filtering', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+
   it('filters by search', async () => {
     const SEARCH_TEXT = 'search'
     let queryVariables: OrdersQueryVariables
@@ -119,7 +133,7 @@ describe('page: Orders filtering', () => {
     const paymentMethodFilter = screen.getByTestId('currency-filter')
 
     await user.click(within(paymentMethodFilter).getByText(/currency/i))
-    await user.click(within(paymentMethodFilter).getByText(Currency.Gbp))
+    await user.click(within(paymentMethodFilter).getByText(t('filters.GBP')))
 
     await waitFor(() => {
       expect(queryVariables.where).toEqual(

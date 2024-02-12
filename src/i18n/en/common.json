@@ -524,7 +524,11 @@
     "PAID": "Paid",
     "VOIDED": "Void",
     "OVERDUE": "Overdue",
-    "GBP": "GBP",
+    "AUD": "AUD $",
+    "EUR": "€",
+    "GBP": "£",
+    "NZD": "NZD $",
+    "USD": "$",
     "archived": "Archived"
   },
   "pagination": {

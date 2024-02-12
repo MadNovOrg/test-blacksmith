@@ -16,9 +16,9 @@ export const FilterByCurrencies: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
 
   const [options, setOptions] = useState<FilterOption[]>(() =>
-    possibleCurrencies.map(c => ({
-      id: c,
-      title: t(`filters.${c}`),
+    possibleCurrencies.map(currency => ({
+      id: currency,
+      title: t(`filters.${currency}`),
       selected: false,
     }))
   )
