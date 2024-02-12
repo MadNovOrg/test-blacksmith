@@ -191,7 +191,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   useEffect(() => {
     setSpecifyOther(
       values.sector !== 'other' &&
-        values.organisationType.toLocaleLowerCase() === 'other'
+        values.organisationType?.toLocaleLowerCase() === 'other'
     )
 
     setOtherOrgType && setOtherOrgType(specifyOther)
