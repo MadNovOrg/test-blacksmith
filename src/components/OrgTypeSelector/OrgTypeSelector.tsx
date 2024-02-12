@@ -33,9 +33,19 @@ export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation()
   const sectorMap = new Map()
-  if (sector === 'edu') {
-    sectorMap.set(sector, Organisation_Sector_Enum.Edu)
-  } else sectorMap.set(sector, Organisation_Sector_Enum.HscAdultAndChildren)
+  switch (sector) {
+    case 'edu':
+      sectorMap.set(sector, Organisation_Sector_Enum.Edu)
+      break
+    case 'hsc_child':
+      sectorMap.set(sector, Organisation_Sector_Enum.HscChildren)
+      break
+    case 'hsc_adult':
+      sectorMap.set(sector, Organisation_Sector_Enum.HscAdult)
+      break
+    default:
+      'other'
+  }
 
   const [{ data }] = useQuery<GetOrgTypesQuery, GetOrgTypesQueryVariables>({
     query: GET_ORG_TYPES,

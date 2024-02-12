@@ -25,12 +25,15 @@ export const CreateOrganization = () => {
     InsertOrgMutationVariables
   >(MUTATION)
   const [xeroId, setXeroId] = useState<string>()
+  const [otherOrgType, setOtherOrgType] = useState<boolean>(false)
 
   const handleSubmit = async (data: FormInputs) => {
     const organisationDataObject = {
       name: data.name.trim(),
       sector: data.sector,
-      organisationType: data.organisationType as string,
+      organisationType: !otherOrgType
+        ? (data.organisationType as string)
+        : (data.orgTypeSpecifyOther as string),
       attributes: {
         email: data.orgEmail.toLowerCase(),
         phone: data.orgPhone,
@@ -78,6 +81,7 @@ export const CreateOrganization = () => {
       <OrganizationForm
         onSubmit={handleSubmit}
         setXeroId={setXeroId}
+        setOtherOrgType={setOtherOrgType}
         error={error}
         loading={loading}
       />

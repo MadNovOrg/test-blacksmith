@@ -58,6 +58,7 @@ type Props = {
   isEditMode?: boolean
   onSubmit: (data: FormInputs) => void
   setXeroId?: (id: string | undefined) => void
+  setOtherOrgType?: (otherOrgType: boolean) => void
   error?: CombinedError | undefined
   loading?: boolean
   editOrgData?: Partial<Organization>
@@ -79,6 +80,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   isEditMode = false,
   onSubmit,
   setXeroId,
+  setOtherOrgType,
   error,
   loading,
   editOrgData,
@@ -93,13 +95,21 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
 
   const [isInUK, setIsInUK] = useState(true)
+  const [specifyOther, setSpecifyOther] = useState(false)
 
   defaultValues.country =
     getCountryLabel(defaultValues.countryCode as CountryCode) ?? ''
 
   const schema = useMemo(
-    () => getFormSchema(t, _t, isInUK, addOrgCountriesSelectorEnabled),
-    [t, _t, isInUK, addOrgCountriesSelectorEnabled]
+    () =>
+      getFormSchema(
+        t,
+        _t,
+        isInUK,
+        addOrgCountriesSelectorEnabled,
+        specifyOther
+      ),
+    [t, _t, isInUK, addOrgCountriesSelectorEnabled, specifyOther]
   )
   const {
     register,
@@ -177,6 +187,24 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
       })
     }
   }, [isEditMode, editOrgData, setValue])
+
+  useEffect(() => {
+    setSpecifyOther(
+      values.sector !== 'other' &&
+        values.organisationType.toLocaleLowerCase() === 'other'
+    )
+
+    setOtherOrgType && setOtherOrgType(specifyOther)
+  }, [
+    setOtherOrgType,
+    setSpecifyOther,
+    specifyOther,
+    values,
+    values.orgTypeSpecifyOther,
+    values.organisationType,
+    values.sector,
+  ])
+
   return (
     <Container maxWidth="lg" sx={{ py: 2 }}>
       <Box
@@ -285,6 +313,20 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                       />
                     )}
                   </Grid>
+                  {specifyOther ? (
+                    <Grid item>
+                      <TextField
+                        id="orgTypeSpecifyOther"
+                        label={t('fields.organisation-specify-other')}
+                        variant="filled"
+                        error={!!errors.orgTypeSpecifyOther}
+                        helperText={errors.orgTypeSpecifyOther?.message}
+                        {...register('orgTypeSpecifyOther')}
+                        fullWidth
+                        required
+                      />
+                    </Grid>
+                  ) : null}
                   <Grid item>
                     <TextField
                       id="orgPhone"

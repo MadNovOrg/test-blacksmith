@@ -1,4 +1,5 @@
 import { Box } from '@mui/material'
+import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
 
@@ -28,6 +29,8 @@ export const EditOrgDetails: React.FC<
     profileId: profile?.id,
     showAll: acl.canViewAllOrganizations(),
   })
+
+  const [otherOrgType, setOtherOrgType] = useState<boolean>(false)
   const org = data?.orgs.length
     ? Object.values(data.orgs).map(orgDetail => ({
         name: orgDetail.name,
@@ -60,7 +63,9 @@ export const EditOrgDetails: React.FC<
       org: {
         name: data.name.trim(),
         sector: data.sector,
-        organisationType: data.organisationType,
+        organisationType: !otherOrgType
+          ? (data.organisationType as string)
+          : (data.orgTypeSpecifyOther as string),
         attributes: {
           email: data.orgEmail.toLowerCase(),
           phone: data.orgPhone,
@@ -92,7 +97,12 @@ export const EditOrgDetails: React.FC<
 
   return (
     <Box bgcolor="grey.100" pb={6} pt={3}>
-      <OrganizationForm onSubmit={onSubmit} isEditMode editOrgData={org} />
+      <OrganizationForm
+        onSubmit={onSubmit}
+        setOtherOrgType={setOtherOrgType}
+        isEditMode
+        editOrgData={org}
+      />
     </Box>
   )
 }

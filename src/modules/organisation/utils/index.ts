@@ -8,6 +8,7 @@ export type FormInputs = {
   orgEmail: string
   orgPhone: string
   organisationType: string
+  orgTypeSpecifyOther?: string
   sector: string
   localAuthority: string
   ofstedRating: string
@@ -52,7 +53,8 @@ export const getFormSchema = (
   t: TFunction,
   _t: TFunction,
   isInUK: boolean,
-  addOrgCountriesSelectorEnabled: boolean
+  addOrgCountriesSelectorEnabled: boolean,
+  specifyOther: boolean
 ) =>
   yup.object({
     name: yup.string().required(
@@ -70,6 +72,16 @@ export const getFormSchema = (
         name: t('fields.organization-type'),
       })
     ),
+    ...(specifyOther
+      ? {
+          orgTypeSpecifyOther: yup.string().required(
+            _t('validation-errors.required-field', {
+              name: t('fields.organisation-specify-other'),
+            })
+          ),
+        }
+      : null),
+
     orgPhone: yup.string().required(
       _t('validation-errors.required-field', {
         name: t('fields.organization-phone'),

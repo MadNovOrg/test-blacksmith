@@ -25,7 +25,10 @@ describe('AddOrg component', () => {
   it.each([
     t('components.add-organisation.component-title'),
     ...labels.filter(
-      label => label !== t('components.add-organisation.fields.zipCode')
+      label =>
+        label !== t('components.add-organisation.fields.zipCode') &&
+        label !==
+          t('components.add-organisation.fields.organisation-specify-other')
     ),
   ])('renders % field', async field => {
     useFeatureFlagEnabled('add-organization-country')
@@ -43,7 +46,10 @@ describe('AddOrg component', () => {
   it.each([
     t('components.add-organisation.component-title'),
     ...labels.filter(
-      label => label !== t('components.add-organisation.fields.postCode')
+      label =>
+        label !== t('components.add-organisation.fields.postCode') &&
+        label !==
+          t('components.add-organisation.fields.organisation-specify-other')
     ),
   ])('renders % field', async field => {
     useFeatureFlagEnabled('add-organization-country')

@@ -42251,7 +42251,8 @@ export enum Organisation_Sector_Constraint {
 
 export enum Organisation_Sector_Enum {
   Edu = 'EDU',
-  HscAdultAndChildren = 'HSC_ADULT_AND_CHILDREN'
+  HscAdult = 'HSC_ADULT',
+  HscChildren = 'HSC_CHILDREN'
 }
 
 /** Boolean expression to compare columns of type "organisation_sector_enum". All fields are combined with logical 'AND'. */
@@ -43462,8 +43463,6 @@ export type Organization_Type_Bool_Exp = {
 
 /** unique or primary key constraints on table "organization_type" */
 export enum Organization_Type_Constraint {
-  /** unique or primary key constraint on columns "name" */
-  OrganizationTypeNameKey = 'organization_type_name_key',
   /** unique or primary key constraint on columns "id" */
   OrganizationTypePkey = 'organization_type_pkey'
 }

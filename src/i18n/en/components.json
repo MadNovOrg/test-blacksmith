@@ -292,6 +292,7 @@
     "fields": {
       "organisation-name": "Organisation name",
       "organisation-type": "Organisation type",
+      "organisation-specify-other": "Please specify",
       "organisation-email": "Organisation email",
       "sector": "Sector",
       "primary-address-line": "Address line 1",

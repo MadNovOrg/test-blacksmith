@@ -40,6 +40,7 @@ type FormInput = {
   organisationName: string
   sector: string
   organisationType: string
+  orgTypeSpecifyOther?: string
   organisationEmail: string
   addressLine1: string
   addressLine2: string
@@ -67,6 +68,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
 
   const [isInUK, setIsInUK] = useState(isUKCountry(countryCode))
+  const [specifyOther, setSpecifyOther] = useState(false)
 
   const schema = useMemo(() => {
     return yup.object({
@@ -85,6 +87,15 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
           name: t('fields.organisation-type'),
         })
       ),
+      orgTypeSpecifyOther: yup.string().when('specifyOther', {
+        is: true,
+        then: ot =>
+          ot.required(
+            _t('validation-errors.required-field', {
+              name: t('fields.organisation-specify-other'),
+            })
+          ),
+      }),
       organisationEmail: yup
         .string()
         .required(
@@ -191,7 +202,9 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
     const vars = {
       name: data.organisationName,
       sector: data.sector,
-      orgType: data.organisationType as string,
+      orgType: !specifyOther
+        ? (data.organisationType as string)
+        : (data.orgTypeSpecifyOther as string),
       address: {
         line1: data.addressLine1,
         line2: data.addressLine2,
@@ -225,6 +238,12 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   useEffect(() => {
     onSuccess(organisationData?.org)
   }, [onSuccess, organisationData?.org, organisationData?.org?.name])
+  useEffect(() => {
+    setSpecifyOther(
+      values.sector !== 'other' &&
+        values.organisationType.toLocaleLowerCase() === 'other'
+    )
+  }, [setSpecifyOther, specifyOther, values.organisationType, values.sector])
   return (
     <Dialog
       open
@@ -292,6 +311,20 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               />
             )}
           </Grid>
+          {specifyOther ? (
+            <Grid item>
+              <TextField
+                id="orgTypeSpecifyOther"
+                label={t('fields.organisation-specify-other')}
+                variant="filled"
+                error={!!errors.orgTypeSpecifyOther}
+                helperText={errors.orgTypeSpecifyOther?.message}
+                {...register('orgTypeSpecifyOther')}
+                fullWidth
+                required
+              />
+            </Grid>
+          ) : null}
           <Grid item>
             <TextField
               id="organisationEmail"
