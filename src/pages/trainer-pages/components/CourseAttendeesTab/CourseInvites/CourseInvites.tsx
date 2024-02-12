@@ -195,7 +195,7 @@ export const CourseInvites = ({
   )
 
   const allowInvites =
-    acl.canInviteAttendees(course.type) ||
+    acl.canInviteAttendees(course.type, undefined, course) ||
     (course.type === Course_Type_Enum.Closed &&
       course.bookingContact?.id === profile?.id)
 

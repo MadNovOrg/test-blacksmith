@@ -214,7 +214,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canInviteAttendees: (
       courseType: Course_Type_Enum,
-      courseStatus?: CourseStatus
+      courseStatus?: CourseStatus,
+      course?: Pick<Course, 'trainers'>
     ) => {
       switch (courseType) {
         case Course_Type_Enum.Open:
@@ -232,6 +233,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
             acl.isSalesAdmin,
             acl.isSalesRepresentative,
             acl.isOrgAdmin,
+            () => (course ? acl.isCourseLeader(course) : false),
+            () => (course ? acl.isCourseAssistantTrainer(course) : false),
             () =>
               courseStatus
                 ? acl.canBookingContactCancelResendInvite(
@@ -587,6 +590,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     ) => {
       return anyPass([
         () => acl.isCourseLeader(course),
+        () => acl.isCourseAssistantTrainer(course),
         () => acl.isOrgAdminOf(participantOrgIds),
         acl.isBookingContact,
         acl.isSalesAdmin,
