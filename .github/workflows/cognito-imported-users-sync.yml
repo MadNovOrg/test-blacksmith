@@ -19,6 +19,9 @@ permissions:
 
 env:
   DEFAULT_ENV: 'DEV'
+  AWS_REGION: eu-west-2
+  ENV_NAME: ${{ github.event.inputs.environment }}
+
 jobs:
   data:
     name: Sync imported attribute on ${{ github.event.inputs.environment }}
@@ -36,8 +39,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-region: eu-west-2
-          role-to-assume: ${{ secrets.service_role_arn }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets[format('IAM_SERVICE_{0}', env.ENV_NAME)] }}
           role-duration-seconds: 1200
 
       - name: Checkout
