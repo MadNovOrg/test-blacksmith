@@ -30,7 +30,7 @@ describe('user-pages/MyCourses', () => {
         const mainCondition = variables.where?._and
         const conditions = mainCondition ? mainCondition[1]._or ?? [] : []
         const courses =
-          conditions[0]?.name?._ilike === `%${KEYWORD}%`
+          conditions[0]?.searchFields?._ilike === `%${KEYWORD}%`
             ? [filteredCourse]
             : [course]
 
