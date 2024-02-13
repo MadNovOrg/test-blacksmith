@@ -1,4 +1,3 @@
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
@@ -14,8 +13,6 @@ import { Users } from './pages/Users/Users'
 export const UserRoutes: React.FC = () => {
   const { acl } = useAuth()
 
-  const importUsersEnabled = useFeatureFlagEnabled('import-users-feature')
-
   return (
     <Routes>
       <Route index element={<Users />} />
@@ -23,7 +20,7 @@ export const UserRoutes: React.FC = () => {
         <Route path="merge" element={<Users />} />
       ) : null}
 
-      {importUsersEnabled && acl.canImportUsers() ? (
+      {acl.canImportUsers() ? (
         <Route path="import" element={<Import />}>
           <Route index element={<ChooseFile />} />
           <Route path="configure" element={<Configure />} />
