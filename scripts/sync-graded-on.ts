@@ -1,3 +1,4 @@
+import { backOff } from 'exponential-backoff'
 import { gql, GraphQLClient } from 'graphql-request'
 
 const hasuraSecret = process.env.SECRET ?? 'tth-hasura-key'
@@ -56,17 +57,21 @@ async function sync() {
     }
 
     console.log(
-      `Syncing curriculums for courses ${participants.map(p => p.id)}`
+      `Syncing graded_on for participants ${participants.map(p => p.id)}`
     )
 
     const {
       gradedOnSync: { syncedCount },
-    } = await hasuraClient.request<
-      { gradedOnSync: { syncedCount: number } },
-      { ids: number[] }
-    >(SYNC_GRADED_ON, {
-      ids: participants.map(p => p.id),
-    })
+    } = await backOff(
+      () =>
+        hasuraClient.request<
+          { gradedOnSync: { syncedCount: number } },
+          { ids: number[] }
+        >(SYNC_GRADED_ON, {
+          ids: participants.map(p => p.id),
+        }),
+      { startingDelay: 1000, numOfAttempts: 5 }
+    )
 
     console.log(`Synced graded on for ${syncedCount} participants`)
 
