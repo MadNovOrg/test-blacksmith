@@ -7,7 +7,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -74,6 +74,14 @@ export const CourseAttendeesTab: React.FC<
   const showErrorAlert = useCallback(() => {
     setShowCourseInformationAlert({ success: false })
   }, [])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowCourseInformationAlert(undefined)
+    }, 3000)
+
+    return () => clearTimeout(timeout)
+  }, [showCourseInformationAlert])
 
   return (
     <Container disableGutters>
