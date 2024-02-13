@@ -255,6 +255,10 @@ type Mutation {
   ): SampleOutput
 }
 
+type Mutation {
+  scheduleAboutTrainingSurveys: scheduleAboutTrainingSurveysOutput
+}
+
 type Query {
   searchTrainers(
     input: SearchTrainersInput!
@@ -1407,6 +1411,10 @@ type UpcomingEnrollmentCourse {
   name: String
   level: CourseLevel
   type: CourseType
+}
+
+type scheduleAboutTrainingSurveysOutput {
+  message: String
 }
 
 scalar Date

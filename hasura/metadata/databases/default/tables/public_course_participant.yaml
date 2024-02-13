@@ -52,6 +52,13 @@ object_relationships:
   - name: course
     using:
       foreign_key_constraint_on: course_id
+  - name: course_participant_about_training_email_scheduled_event
+    using:
+      foreign_key_constraint_on:
+        column: course_participant_id
+        table:
+          name: about_training_email_scheduled_events
+          schema: public
   - name: invite
     using:
       foreign_key_constraint_on: invite_id
@@ -635,17 +642,6 @@ event_triggers:
       num_retries: 5
       timeout_sec: 120
     webhook: '{{EVENTS_HOST}}/certificate/insert'
-  - name: manage_about_training_survey_email_event
-    definition:
-      enable_manual: false
-      update:
-        columns:
-          - grade
-    retry_conf:
-      interval_sec: 10
-      num_retries: 5
-      timeout_sec: 60
-    webhook: '{{EVENTS_HOST}}/certificate/schedule-about-training-survey-email/manage'
   - name: go1_link
     definition:
       enable_manual: false
@@ -666,6 +662,17 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/go1-licensing/issue-license'
+  - name: manage_about_training_survey_email_event
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - grade
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/certificate/schedule-about-training-survey-email/manage'
   - name: participant_graded_curriculum
     definition:
       enable_manual: true

@@ -1,0 +1,34 @@
+name: SCHEDULE-TRAINING-SURVEYS
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Env you want to sync schedule training surveys'
+        required: false
+        type: choice
+        options:
+          - DEV
+env:
+  DEFAULT_ENV: 'DEV'
+jobs:
+  schedule-training-surveys:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log selected Environment
+        run: echo Selected value is ---- ${{github.event.inputs.environment}}
+      - name: Set hasura URL variable
+        run: echo "HASURA_URL=${{ secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
+      - name: Set Hasura secret
+        run: echo "HASURA_SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
+      - name: Sync request
+        id: syncRequest
+        run: |
+          response=$(curl -s --location --request POST "${HASURA_URL}/v1/graphql" \
+          -H "Content-Type: application/json" \
+          -H "x-hasura-admin-secret: $HASURA_SECRET" \
+          -d '{
+            "query": "query { scheduleAboutTrainingSurveys { message } }"
+          }' \
+          )
+          echo "$response"

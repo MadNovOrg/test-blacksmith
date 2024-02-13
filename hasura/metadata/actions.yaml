@@ -351,6 +351,11 @@ actions:
       - role: tt-ops
       - role: user
     comment: saveOrgInvites
+  - name: scheduleAboutTrainingSurveys
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/certificate/schedule-training-surveys'
+    comment: The action will create a schedule event for sending about training surveys to certified attendees
   - name: searchTrainers
     definition:
       kind: ""
@@ -1067,5 +1072,6 @@ custom_types:
     - name: CourseCertificateChangelog
     - name: OrganizationProfile
     - name: UpcomingEnrollmentCourse
+    - name: scheduleAboutTrainingSurveysOutput
   scalars:
     - name: Date
