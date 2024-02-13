@@ -162,6 +162,13 @@ export const BILDCourseBuilder: React.FC<
     withStrategies: true,
   })
 
+  const showEstimatedDuration = courseData?.course?.level
+    ? ![
+        Course_Level_Enum.BildIntermediateTrainer,
+        Course_Level_Enum.BildAdvancedTrainer,
+      ].includes(courseData.course.level)
+    : false
+
   const courseDescription = useMemo<string>(() => {
     if (!courseData?.course) return ''
 
@@ -446,16 +453,18 @@ export const BILDCourseBuilder: React.FC<
                     'pages.trainer-base.create-course.new-course.course-summary'
                   )}
                 </Typography>
-                <Box>
-                  <Typography variant="h6" px={1}>
-                    {formatDurationShort(estimatedDuration)}
-                  </Typography>
-                  <Typography variant="body2" px={1}>
-                    {t(
-                      'pages.trainer-base.create-course.new-course.estimated-duration'
-                    )}
-                  </Typography>
-                </Box>
+                {showEstimatedDuration ? (
+                  <Box>
+                    <Typography variant="h6" px={1}>
+                      {formatDurationShort(estimatedDuration)}
+                    </Typography>
+                    <Typography variant="body2" px={1}>
+                      {t(
+                        'pages.trainer-base.create-course.new-course.estimated-duration'
+                      )}
+                    </Typography>
+                  </Box>
+                ) : null}
               </Box>
 
               <Box

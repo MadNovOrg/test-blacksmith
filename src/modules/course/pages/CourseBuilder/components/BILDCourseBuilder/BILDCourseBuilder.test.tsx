@@ -254,6 +254,97 @@ describe('component: BILDCourseBuilder', () => {
       expect(allSelectedModules).toHaveLength(6)
     }
   )
+
+  it.each([
+    [Course_Level_Enum.BildIntermediateTrainer],
+    [Course_Level_Enum.BildAdvancedTrainer],
+  ])("doesn't display estimated duration for %s courses", courseLevel => {
+    const courseId = 10001
+
+    const primaryStrategy = buildStrategy({
+      name: BildStrategies.Primary,
+      modules: {
+        modules: [buildBILDModule({ name: 'Module AA' })],
+      },
+    })
+
+    const restrictiveIntermediateStrategy = buildStrategy({
+      name: BildStrategies.RestrictiveTertiaryIntermediate,
+      modules: {
+        modules: [buildBILDModule({ name: 'Module BB' })],
+        groups: [
+          buildBILDModuleGroup({
+            name: 'Group 1',
+            modules: [
+              buildBILDModule({
+                name: 'Module CC',
+                mandatory: false,
+                duration: 10,
+              }),
+              buildBILDModule({
+                name: 'Module DD',
+                mandatory: false,
+                duration: 20,
+              }),
+            ],
+          }),
+          buildBILDModuleGroup({
+            name: 'Group 2',
+            modules: [
+              buildBILDModule({
+                name: 'Module EE',
+                mandatory: false,
+                duration: 10,
+              }),
+              buildBILDModule({
+                name: 'Module MM',
+                mandatory: true,
+                duration: 20,
+              }),
+            ],
+          }),
+        ],
+      },
+    })
+
+    useBildStrategiesMocked.mockReturnValue({
+      strategies: [primaryStrategy, restrictiveIntermediateStrategy],
+      isLoading: false,
+      error: undefined,
+      status: LoadingStatus.SUCCESS,
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: CourseToBuildQuery }>({
+          data: {
+            course: buildCourse({
+              id: courseId,
+              level: courseLevel,
+              name: 'Course 1',
+              bildStrategies: [
+                { strategyName: BildStrategies.Primary },
+                {
+                  strategyName: BildStrategies.RestrictiveTertiaryIntermediate,
+                },
+              ],
+            }),
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/:id/modules" element={<BILDCourseBuilder />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/courses/${courseId}/modules`] }
+    )
+
+    expect(screen.queryByText(/estimated duration/i)).not.toBeInTheDocument()
+  })
 })
 
 function buildStrategy(overrides?: Partial<Strategies[0]>): Strategies[0] {
