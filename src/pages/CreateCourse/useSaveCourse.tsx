@@ -215,7 +215,7 @@ export function useSaveCourse(): {
               go1Integration: courseData.blendedLearning,
               ...([Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
                 courseData.type
-              ) || isOpenICMInternational
+              )
                 ? { price: courseData.price, conversion: courseData.conversion }
                 : null),
               status,

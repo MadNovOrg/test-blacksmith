@@ -648,7 +648,7 @@ export type CourseInput = {
   bildStrategies: Record<BildStrategies, boolean> | null
   accreditedBy: Accreditors_Enum | null
   conversion: boolean
-  price: number | null
+  price: number | null | undefined
   displayOnWebsite?: boolean
   renewalCycle?: Course_Renewal_Cycle_Enum
   residingCountry?: string

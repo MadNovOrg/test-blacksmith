@@ -271,46 +271,4 @@ describe('component: CourseForm - OPEN', () => {
     )
     expect(financeSection).toBeInTheDocument()
   })
-
-  it('do not requires price for an UKs open type course accredited by ICM and with enabled flag', async () => {
-    // Mock course-residing-country and open-icm-course-international-finance to be enabled
-    useFeatureFlagEnabledMock.mockResolvedValue(true)
-
-    const course = buildCourse({
-      overrides: { accreditedBy: Accreditors_Enum.Icm, type },
-    })
-    await waitFor(() =>
-      render(
-        <CourseForm courseInput={courseToCourseInput(course)} type={type} />,
-        {
-          auth: {
-            activeRole: RoleName.TT_ADMIN,
-          },
-        }
-      )
-    )
-
-    const countriesSelector = screen.getByTestId(
-      'countries-selector-autocomplete'
-    )
-    expect(countriesSelector).toBeInTheDocument()
-    countriesSelector.focus()
-
-    const textField = within(countriesSelector).getByTestId(
-      'countries-selector-input'
-    )
-    expect(textField).toBeInTheDocument()
-
-    await userEvent.type(textField, 'England')
-
-    const countryOutOfUKs = screen.getByTestId('country-GB-ENG')
-    expect(countryOutOfUKs).toBeInTheDocument()
-
-    await userEvent.click(countryOutOfUKs)
-
-    const financeSection = screen.queryByText(
-      t('components.course-form.finance-section-title')
-    )
-    expect(financeSection).not.toBeInTheDocument()
-  })
 })

@@ -175,14 +175,16 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       residingCountryEnabled,
     ]
   )
+
   const isOpenICMInternationalFinanceEnabled = useMemo(
-    () =>
-      isResidingCountryEnabled && Boolean(openIcmInternationalFinanceEnabled),
-    [isResidingCountryEnabled, openIcmInternationalFinanceEnabled]
+    () => Boolean(openIcmInternationalFinanceEnabled),
+    [openIcmInternationalFinanceEnabled]
   )
+
   const hasOrg = [Course_Type_Enum.Closed, Course_Type_Enum.Indirect].includes(
     courseType
   )
+  const isOpenCourse = courseType === Course_Type_Enum.Open
   const isClosedCourse = courseType === Course_Type_Enum.Closed
   const isIndirectCourse = courseType === Course_Type_Enum.Indirect
   const hasMinParticipants = courseType === Course_Type_Enum.Open
@@ -448,15 +450,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               'blendedLearning',
               'maxParticipants',
               'courseLevel',
-              'residingCountry',
             ],
             {
               is: (
                 accreditedBy: Accreditors_Enum,
                 blendedLearning: boolean,
                 maxParticipants: number,
-                courseLevel: Course_Level_Enum,
-                residingCountry: WorldCountriesCodes
+                courseLevel: Course_Level_Enum
               ) =>
                 courseNeedsManualPrice({
                   accreditedBy,
@@ -464,9 +464,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   maxParticipants,
                   courseLevel,
                   courseType,
-                  ...(isOpenICMInternationalFinanceEnabled
-                    ? { residingCountry }
-                    : {}),
                 }),
               then: s => s.required(),
               otherwise: s => s.nullable(),
@@ -560,7 +557,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       source: courseInput?.source ?? '',
       bildStrategies: courseInput?.bildStrategies ?? defaultStrategies,
       conversion: courseInput?.conversion ?? false,
-      price: courseInput?.price ?? null,
+      price: isUKCountry(courseInput?.residingCountry)
+        ? courseInput?.price
+        : null,
       priceCurrency: courseInput?.priceCurrency ?? defaultCurrency,
       includeVAT: courseInput?.includeVAT,
       renewalCycle: courseInput?.renewalCycle,
@@ -606,6 +605,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       courseInput?.zoomProfileId,
       courseType,
       isResidingCountryEnabled,
+      isUKCountry,
     ]
   )
 
@@ -751,9 +751,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           courseType,
           courseLevel: values.courseLevel as Course_Level_Enum,
           maxParticipants: values.maxParticipants ?? 0,
-          ...(isOpenICMInternationalFinanceEnabled
-            ? { residingCountry: values.residingCountry as WorldCountriesCodes }
-            : {}),
         })
       : false
 
@@ -784,47 +781,26 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     if (
-      needsManualPrice &&
-      automaticPrice &&
-      !values.price &&
       values.accreditedBy === Accreditors_Enum.Icm &&
-      (!isOpenICMInternationalFinanceEnabled ||
-        (isOpenICMInternationalFinanceEnabled &&
-          isUKCountry(values.residingCountry as WorldCountriesCodes)))
+      isUKCountry(values.residingCountry as WorldCountriesCodes)
     ) {
       setValue('price', automaticPrice)
-    }
-
-    if (!needsManualPrice) {
-      resetField('price')
+    } else {
+      setValue('price', 0)
     }
   }, [
     automaticPrice,
-    isOpenICMInternationalFinanceEnabled,
     isUKCountry,
-    needsManualPrice,
     resetField,
     setValue,
     values.accreditedBy,
-    values.price,
     values.residingCountry,
   ])
 
   useEffect(() => {
-    if (
-      isOpenICMInternationalFinanceEnabled &&
-      !isUKCountry(values.residingCountry) &&
-      !courseInput?.priceCurrency
-    )
+    if (isUKCountry(values.residingCountry))
       setValue('priceCurrency', defaultCurrency)
-  }, [
-    courseInput?.priceCurrency,
-    isOpenICMInternationalFinanceEnabled,
-    isUKCountry,
-    resetField,
-    setValue,
-    values.residingCountry,
-  ])
+  }, [isUKCountry, setValue, values.residingCountry])
 
   useEffect(() => {
     if (!isCreation) {
@@ -2065,8 +2041,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             />
           ) : null}
 
-          {isOpenICMInternationalFinanceEnabled &&
-          !isUKCountry(values.residingCountry as WorldCountriesCodes) ? (
+          {isOpenICMInternationalFinanceEnabled && isOpenCourse && (
             <InfoPanel
               title={t('components.course-form.finance-section-title')}
               titlePosition="outside"
@@ -2084,13 +2059,14 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     fullWidth
                     helperText={errors.priceCurrency?.message}
                     value={values.priceCurrency ?? null}
+                    disabled={isUKCountry(values?.residingCountry)}
                   />
                 </Grid>
 
                 <Grid item md={7} sm={12}>
                   <TextField
                     {...register('price')}
-                    value={values.price}
+                    value={values?.price}
                     error={Boolean(errors.price)}
                     fullWidth
                     helperText={errors.price?.message ?? ''}
@@ -2099,6 +2075,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     required
                     type={'number'}
                     variant="filled"
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
 
@@ -2111,7 +2088,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                         control={
                           <Switch
                             {...field}
-                            checked={Boolean(values.includeVAT)}
+                            checked={
+                              Boolean(values.includeVAT) ||
+                              isUKCountry(values.residingCountry)
+                            }
+                            disabled={isUKCountry(values.residingCountry)}
                             data-testid="includeVAT-switch"
                           />
                         }
@@ -2121,6 +2102,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   />
                 </Grid>
               </Grid>
+
               <InfoRow>
                 <Typography fontWeight={600}>
                   {t('pages.order-details.total')}
@@ -2139,10 +2121,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 </Typography>
               </InfoRow>
             </InfoPanel>
-          ) : null}
+          )}
 
-          {isClosedCourse ||
-          (isBild && courseType === Course_Type_Enum.Open) ? (
+          {(isClosedCourse || (isBild && isOpenCourse)) && (
             <InfoPanel
               title={t('components.course-form.finance-section-title')}
               titlePosition="outside"
@@ -2153,7 +2134,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               )}
             >
               <Box>
-                {isClosedCourse ? (
+                {isClosedCourse && (
                   <Grid container spacing={2}>
                     <Grid item md={6} sm={12}>
                       <Typography fontWeight={600}>
@@ -2207,10 +2188,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       />
                     </Grid>
                   </Grid>
-                ) : null}
+                )}
 
                 <Box>
-                  {needsManualPrice ? (
+                  {needsManualPrice && (
                     <TextField
                       required
                       {...register('price')}
@@ -2230,9 +2211,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       disabled={disabledFields.has('price')}
                       sx={{ mt: 2 }}
                     />
-                  ) : null}
+                  )}
 
-                  {isClosedCourse ? (
+                  {isClosedCourse && (
                     <>
                       <Typography fontWeight={600} mb={1} mt={2}>
                         {t('components.course-form.account-code-title')}
@@ -2242,11 +2223,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                         {values.accountCode}
                       </Typography>
                     </>
-                  ) : null}
+                  )}
                 </Box>
               </Box>
             </InfoPanel>
-          ) : null}
+          )}
         </Stack>
       </FormProvider>
     </form>
