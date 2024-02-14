@@ -1027,6 +1027,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           setValue(`${field}.email`, contactData.email, {
             shouldValidate: true,
           })
+        } else {
+          setValue(`${field}.email`, value, {
+            shouldValidate: true,
+          })
         }
 
         setValue(`${field}.profileId`, isEmail ? undefined : value?.id)
