@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { Avatar } from '@app/components/Avatar'
 import { useAuth } from '@app/context/auth'
 import { OrganizationProfile } from '@app/generated/graphql'
-import useOrganisationProfiles from '@app/modules/organisation/hooks/useOrganisationProfiles'
+import { useOrganisationProfiles } from '@app/modules/organisation/hooks/useOrganisationProfiles'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import theme from '@app/theme'
 

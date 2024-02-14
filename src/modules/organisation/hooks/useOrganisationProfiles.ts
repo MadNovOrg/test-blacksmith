@@ -24,14 +24,6 @@ export const GET_ORG_PROFILES = gql`
             status
             expiryDate
           }
-          upcomingEnrollments {
-            orgId
-            orgName
-            courseLevel
-          }
-          organizations {
-            id
-          }
         }
       }
       profilesByLevel {
@@ -43,13 +35,6 @@ export const GET_ORG_PROFILES = gql`
             courseLevel
             status
             expiryDate
-            participant {
-              certificateChanges {
-                payload {
-                  note
-                }
-              }
-            }
           }
           upcomingEnrollments {
             orgId
@@ -80,11 +65,11 @@ type UserOrgProfiles = {
   showAll?: boolean
 }
 
-export default function useOrganisationProfiles({
+export const useOrganisationProfiles = ({
   orgId,
   profileId,
   showAll,
-}: UserOrgProfiles) {
+}: UserOrgProfiles) => {
   const [params] = useSearchParams()
   const certificateFilter = params.getAll('status') as CertificateStatus[]
   const useEffectDependency = JSON.stringify(certificateFilter)

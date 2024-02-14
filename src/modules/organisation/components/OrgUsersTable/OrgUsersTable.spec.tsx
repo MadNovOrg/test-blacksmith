@@ -14,11 +14,11 @@ import { RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 
-import { MEMBERS_QUERY } from './useOrgMembers'
+import { MEMBERS_QUERY } from '../../hooks/useOrgMembers'
 
-import { OrgUsersTable } from '.'
+import { OrgUsersTable } from './OrgUsersTable'
 
-describe('component: OrgUsersTable', () => {
+describe(OrgUsersTable.name, () => {
   it('displays loading state while fetching org members', () => {
     const orgId = chance.guid()
 

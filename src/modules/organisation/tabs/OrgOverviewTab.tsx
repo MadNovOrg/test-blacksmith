@@ -36,7 +36,7 @@ import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStat
 import { OrgSummaryList } from '@app/modules/organisation/tabs/components/OrgSummaryList'
 import { ALL_ORGS } from '@app/util'
 
-import useOrganisationProfiles from '../hooks/useOrganisationProfiles'
+import { useOrganisationProfiles } from '../hooks/useOrganisationProfiles'
 import useOrganisationStats from '../hooks/useOrganisationStats'
 
 type OrgOverviewTabParams = {

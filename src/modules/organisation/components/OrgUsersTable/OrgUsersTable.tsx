@@ -17,8 +17,8 @@ import Link from '@mui/material/Link'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { CertificateStatusChip } from '@app/components/CertificateStatusChip'
 import { Dialog } from '@app/components/dialogs'
-import { EditOrgUserModal } from '@app/components/OrgUsersTable/EditOrgUserModal'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
@@ -30,12 +30,11 @@ import {
 } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { EditOrgUserModal } from '@app/modules/organisation/components/EditOrgUserModal'
 import theme from '@app/theme'
 import { getProfileCertificationLevels } from '@app/util'
 
-import { CertificateStatusChip } from '../CertificateStatusChip'
-
-import { useOrgMembers } from './useOrgMembers'
+import { useOrgMembers } from '../../hooks/useOrgMembers'
 
 type OrgUsersTableParams = {
   orgId: string

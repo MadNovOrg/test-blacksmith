@@ -19,10 +19,10 @@ import {
 } from 'use-query-params'
 
 import { OrgInvitesTable } from '@app/components/OrgInvitesTable'
-import { OrgUsersTable } from '@app/components/OrgUsersTable'
-import { useOrgMembers } from '@app/components/OrgUsersTable/useOrgMembers'
 import { useAuth } from '@app/context/auth'
 import { CertificateStatus } from '@app/generated/graphql'
+import { OrgUsersTable } from '@app/modules/organisation/components/OrgUsersTable'
+import { useOrgMembers } from '@app/modules/organisation/hooks/useOrgMembers'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
 import theme from '@app/theme'
