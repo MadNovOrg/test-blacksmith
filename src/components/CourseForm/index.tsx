@@ -785,8 +785,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       isUKCountry(values.residingCountry as WorldCountriesCodes)
     ) {
       setValue('price', automaticPrice)
-    } else {
-      setValue('price', 0)
     }
   }, [
     automaticPrice,
