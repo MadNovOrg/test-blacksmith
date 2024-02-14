@@ -28,7 +28,7 @@ jobs:
           -H "Content-Type: application/json" \
           -H "x-hasura-admin-secret: $HASURA_SECRET" \
           -d '{
-            "mutation": "mutation { scheduleAboutTrainingSurveys { message } }"
+            "query": "mutation { scheduleAboutTrainingSurveys { message } }"
           }' \
           )
           echo "$response"
