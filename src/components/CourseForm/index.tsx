@@ -1024,26 +1024,40 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     setValue('residingCountry', courseInput?.residingCountry ?? 'GB-ENG')
   })
 
+  const contactData = useMemo(() => {
+    return {
+      firstName: '',
+      lastName: '',
+      email: '',
+    }
+  }, [])
+
   const handleContactChange = useCallback(
     (field: 'bookingContact' | 'organizationKeyContact' = 'bookingContact') =>
       (value: string | UserSelectorProfile) => {
         const isEmail = typeof value === 'string'
+
+        if (typeof value !== 'string') {
+          Object.assign(contactData, {
+            firstName: value?.givenName,
+            lastName: value?.familyName,
+            email: value?.email,
+          })
+
+          setValue(`${field}.firstName`, contactData.firstName, {
+            shouldValidate: true,
+          })
+          setValue(`${field}.lastName`, contactData.lastName, {
+            shouldValidate: true,
+          })
+          setValue(`${field}.email`, contactData.email, {
+            shouldValidate: true,
+          })
+        }
+
         setValue(`${field}.profileId`, isEmail ? undefined : value?.id)
-        setValue(
-          `${field}.firstName`,
-          isEmail || !value?.givenName ? '' : value.givenName,
-          { shouldValidate: true }
-        )
-        setValue(
-          `${field}.lastName`,
-          isEmail || !value?.familyName ? '' : value.familyName,
-          { shouldValidate: true }
-        )
-        setValue(`${field}.email`, isEmail ? value : value?.email ?? '', {
-          shouldValidate: true,
-        })
       },
-    [setValue]
+    [contactData, setValue]
   )
 
   const contact = useMemo(
