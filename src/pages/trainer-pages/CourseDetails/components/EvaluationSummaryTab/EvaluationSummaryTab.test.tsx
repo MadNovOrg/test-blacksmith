@@ -239,11 +239,11 @@ describe('component: EvaluationSummaryTab', () => {
       for (const evaluation of evaluations) {
         if (evaluation.profile.id !== trainers[0].profile.id) {
           expect(
-            screen.queryByText(evaluation.profile.fullName)
+            screen.queryByText(new RegExp(evaluation.profile.fullName))
           ).toBeInTheDocument()
         } else {
           expect(
-            screen.queryByText(evaluation.profile.fullName)
+            screen.queryByText(new RegExp(evaluation.profile.fullName))
           ).not.toBeInTheDocument()
         }
       }
@@ -269,11 +269,11 @@ describe('component: EvaluationSummaryTab', () => {
       for (const evaluation of evaluations) {
         if (evaluation.profile.id !== trainers[1].profile.id) {
           expect(
-            screen.queryByText(evaluation.profile.fullName)
+            screen.queryByText(new RegExp(evaluation.profile.fullName))
           ).toBeInTheDocument()
         } else {
           expect(
-            screen.queryByText(evaluation.profile.fullName)
+            screen.queryByText(new RegExp(evaluation.profile.fullName))
           ).not.toBeInTheDocument()
         }
       }

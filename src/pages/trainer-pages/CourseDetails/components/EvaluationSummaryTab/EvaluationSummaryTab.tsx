@@ -31,6 +31,7 @@ import {
   Course_Type_Enum,
   GetEvaluationsQuery,
   GetEvaluationsQueryVariables,
+  Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 import { QUERY as GET_EVALUATION_QUERY } from '@app/queries/course-evaluation/get-evaluations'
 import { Course, SortOrder } from '@app/types'
@@ -130,7 +131,19 @@ export const EvaluationSummaryTab: React.FC<
   )
 
   const leadTrainer = useMemo(
-    () => data?.trainers.find(t => t.type === 'LEADER'),
+    () => data?.trainers.find(t => t.type === Course_Trainer_Type_Enum.Leader),
+    [data]
+  )
+
+  const assistTrainers = useMemo(
+    () =>
+      data?.trainers.filter(t => t.type === Course_Trainer_Type_Enum.Assistant),
+    [data]
+  )
+
+  const moderatorTrainer = useMemo(
+    () =>
+      data?.trainers.find(t => t.type === Course_Trainer_Type_Enum.Moderator),
     [data]
   )
 
@@ -151,6 +164,58 @@ export const EvaluationSummaryTab: React.FC<
     isCourseCanBeEvaluated &&
     !didTrainerSubmitEvaluation &&
     (isCourseTrainer || leadTrainer?.profile.id === profileId)
+
+  const leadTrainerEvaluation = data?.evaluations.filter(
+    e => e.profile.id === leadTrainer?.profile.id
+  )
+
+  const assistTrainersEvaluations = data?.evaluations.filter(e =>
+    assistTrainers?.map(t => t.profile).some(p => p.id === e.profile.id)
+  )
+
+  const moderatorTrainerEvaluations = data?.evaluations.filter(
+    e => e.profile.id === moderatorTrainer?.profile.id
+  )
+
+  const attendeeEvaluations = data?.evaluations
+    .filter(
+      e =>
+        !leadTrainerEvaluation
+          ?.concat(moderatorTrainerEvaluations ?? [])
+          ?.concat(assistTrainersEvaluations ?? [])
+          ?.includes(e)
+    )
+    .slice()
+    .sort((a, b) => {
+      if (!a.profile.fullName || !b.profile.fullName) return 0
+      else return a.profile.fullName?.localeCompare(b.profile.fullName)
+    })
+
+  const sortedEvaluations = leadTrainerEvaluation
+    ?.map(e => ({
+      ...e,
+      evaluationType: t('pages.course-details.tabs.evaluation.lead-trainer'),
+    }))
+    .concat(
+      assistTrainersEvaluations?.map(e => ({
+        ...e,
+        evaluationType: t(
+          'pages.course-details.tabs.evaluation.assist-trainer'
+        ),
+      })) ?? []
+    )
+    ?.concat(
+      moderatorTrainerEvaluations?.map(e => ({
+        ...e,
+        evaluationType: t('pages.course-details.tabs.evaluation.moderator'),
+      })) ?? []
+    )
+    ?.concat(
+      attendeeEvaluations?.map(e => ({
+        ...e,
+        evaluationType: '',
+      })) ?? []
+    )
 
   return (
     <Container disableGutters>
@@ -242,7 +307,7 @@ export const EvaluationSummaryTab: React.FC<
               onRequestSort={noop}
             />
             <TableBody>
-              {data?.evaluations?.map(e =>
+              {sortedEvaluations?.map(e =>
                 e.profile.id === profileId ? null : (
                   <TableRow key={e.id}>
                     <TableCell>
@@ -252,7 +317,7 @@ export const EvaluationSummaryTab: React.FC<
                       >
                         {e.profile.archived
                           ? t('common.archived-profile')
-                          : e.profile.fullName}
+                          : e.profile.fullName + e.evaluationType}
                       </LinkToProfile>
                     </TableCell>
                     <TableCell>

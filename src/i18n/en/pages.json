@@ -619,7 +619,10 @@
         "export-loading": "Generating summary...",
         "export-idle": "Export Summary",
         "export-done": "Download Summary",
-        "no-evaluations": "No evaluations to export"
+        "no-evaluations": "No evaluations to export",
+        "lead-trainer": " (Lead Trainer)",
+        "assist-trainer": " (Assist Trainer)",
+        "moderator": " (Moderator)" 
       },
       "certifications": {
         "title": "Certifications"
@@ -729,6 +732,7 @@
     "invite-expiration": "Invite Expiration",
     "organisation": "Organisation",
     "actions": "Actions",
+    "evaluation-submitted": "Evaluation submitted",
     "prerequisites": "Prerequisites",
     "attending": "{{attending}} of {{max}} attending",
     "number-attending": "{{number}} attending",

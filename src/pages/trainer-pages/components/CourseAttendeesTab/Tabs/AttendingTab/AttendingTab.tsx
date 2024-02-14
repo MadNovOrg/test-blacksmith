@@ -137,6 +137,19 @@ export const AttendingTab = ({
 
   const { selected, checkbox, isSelected } = useTableChecks()
 
+  const canViewEvaluationSubmittedColumn = useMemo(() => {
+    switch (course.type) {
+      case Course_Type_Enum.Open:
+        return acl.canViewOpenCourseEvaluationSubmitted()
+      case Course_Type_Enum.Closed:
+        return acl.canViewClosedCourseEvaluationSubmitted()
+      case Course_Type_Enum.Indirect:
+        return acl.canViewIndirectCourseEvaluationSubmitted()
+      default:
+        return false
+    }
+  }, [acl, course.type])
+
   const cols = useMemo(
     () =>
       [
@@ -170,6 +183,13 @@ export const AttendingTab = ({
           label: t('pages.course-participants.hs-consent'),
           sorting: false,
         },
+        canViewEvaluationSubmittedColumn
+          ? {
+              id: 'evaluation-submitted',
+              label: t('pages.course-participants.evaluation-submitted'),
+              sorting: false,
+            }
+          : null,
         canToggleAttendance
           ? {
               id: 'attendance',
@@ -199,14 +219,15 @@ export const AttendingTab = ({
           : null,
       ].filter(Boolean),
     [
+      checkbox,
+      courseParticipants,
       t,
       isBlendedCourse,
+      canToggleAttendance,
       isOpenCourse,
       acl,
-      courseParticipants,
       course,
-      canToggleAttendance,
-      checkbox,
+      canViewEvaluationSubmittedColumn,
     ]
   )
 
@@ -262,7 +283,6 @@ export const AttendingTab = ({
   )
 
   const isOpenTypeCourse = course.type === Course_Type_Enum.Open
-
   return (
     <>
       {courseParticipantsLoadingStatus === LoadingStatus.SUCCESS &&
@@ -374,11 +394,18 @@ export const AttendingTab = ({
                           )}
                         </TableCell>
                       )}
-                      <TableCell>
+                      <TableCell style={{ textAlign: 'center' }}>
                         {courseParticipant.healthSafetyConsent
                           ? t('common.yes')
                           : t('common.no')}
                       </TableCell>
+                      {canViewEvaluationSubmittedColumn ? (
+                        <TableCell style={{ textAlign: 'center' }}>
+                          {courseParticipant.certificate
+                            ? t('common.yes')
+                            : t('common.no')}
+                        </TableCell>
+                      ) : null}
                       {canToggleAttendance ? (
                         <TableCell width={180}>
                           <AttendingToggle

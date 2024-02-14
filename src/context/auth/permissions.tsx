@@ -825,6 +825,21 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         ? [RoleName.TT_ADMIN, RoleName.TT_OPS].includes(activeRole)
         : false
     },
+    canViewIndirectCourseEvaluationSubmitted: () =>
+      anyPass([
+        acl.isTrainer,
+        acl.isOrgAdmin,
+        acl.isOrgKeyContact,
+        acl.isInternalUser,
+      ])(),
+    canViewClosedCourseEvaluationSubmitted: () =>
+      anyPass([
+        acl.isTrainer,
+        acl.isOrgAdmin,
+        acl.isBookingContact,
+        acl.isInternalUser,
+      ])(),
+    canViewOpenCourseEvaluationSubmitted: () => anyPass([acl.isInternalUser])(),
   })
   return acl
 }

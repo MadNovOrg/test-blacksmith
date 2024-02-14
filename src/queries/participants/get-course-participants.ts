@@ -69,6 +69,7 @@ export const QUERY = gql`
       certificate {
         ...Certificate
       }
+      completed_evaluation
       order @include(if: $withOrder) {
         ...Order
       }
