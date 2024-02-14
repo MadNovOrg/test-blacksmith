@@ -53,8 +53,7 @@ export const getFormSchema = (
   t: TFunction,
   _t: TFunction,
   isInUK: boolean,
-  addOrgCountriesSelectorEnabled: boolean,
-  specifyOther: boolean
+  addOrgCountriesSelectorEnabled: boolean
 ) =>
   yup.object({
     name: yup.string().required(
@@ -72,15 +71,15 @@ export const getFormSchema = (
         name: t('fields.organization-type'),
       })
     ),
-    ...(specifyOther
-      ? {
-          orgTypeSpecifyOther: yup.string().required(
-            _t('validation-errors.required-field', {
-              name: t('fields.organisation-specify-other'),
-            })
-          ),
-        }
-      : null),
+    orgTypeSpecifyOther: yup.string().when('organisationType', {
+      is: (value: string) => value && value.toLocaleLowerCase() === 'other',
+      then: schema =>
+        schema.required(
+          _t('validation-errors.required-field', {
+            name: t('fields.organisation-specify-other'),
+          })
+        ),
+    }),
 
     orgPhone: yup.string().required(
       _t('validation-errors.required-field', {
@@ -107,8 +106,9 @@ export const getFormSchema = (
     ),
     addressLine2: yup.string(),
     city: yup.string().required(
-      _t('validation-errors.required-field', {
-        name: t('fields.addresses.city'),
+      _t('validation-errors.required-composed-field', {
+        field1: t('fields.addresses.town'),
+        field2: t('fields.addresses.city'),
       })
     ),
     country: yup.string().required(

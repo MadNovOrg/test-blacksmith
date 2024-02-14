@@ -241,7 +241,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   useEffect(() => {
     setSpecifyOther(
       values.sector !== 'other' &&
-        values.organisationType.toLocaleLowerCase() === 'other'
+        values.organisationType?.toLocaleLowerCase() === 'other'
     )
   }, [setSpecifyOther, specifyOther, values.organisationType, values.sector])
   return (

@@ -48,6 +48,7 @@ import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
 import { RegionDropdown } from '@app/components/RegionDropdown'
 import { Sticky } from '@app/components/Sticky'
 import { Organization } from '@app/generated/graphql'
+import { useOrgType } from '@app/hooks/useOrgType'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { OfstedRating } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
@@ -80,7 +81,6 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   isEditMode = false,
   onSubmit,
   setXeroId,
-  setOtherOrgType,
   error,
   loading,
   editOrgData,
@@ -95,21 +95,17 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
 
   const [isInUK, setIsInUK] = useState(true)
-  const [specifyOther, setSpecifyOther] = useState(false)
-
+  const [specifyOtherOrgType, setspecifyOtherOrgType] = useState<boolean>(false)
+  const [sectorState, setSectorState] = useState<string | undefined | null>(
+    editOrgData?.sector
+  )
+  const [orgTypeListLoaded, setOrgTypeListLoaded] = useState<boolean>(false)
   defaultValues.country =
     getCountryLabel(defaultValues.countryCode as CountryCode) ?? ''
 
   const schema = useMemo(
-    () =>
-      getFormSchema(
-        t,
-        _t,
-        isInUK,
-        addOrgCountriesSelectorEnabled,
-        specifyOther
-      ),
-    [t, _t, isInUK, addOrgCountriesSelectorEnabled, specifyOther]
+    () => getFormSchema(t, _t, isInUK, addOrgCountriesSelectorEnabled),
+    [t, _t, isInUK, addOrgCountriesSelectorEnabled]
   )
   const {
     register,
@@ -125,6 +121,8 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
     defaultValues,
   })
   const values = watch()
+
+  const { data: orgTypes } = useOrgType(values.sector)
 
   const onOrgSelected = useCallback(
     async (org: CallbackOption) => {
@@ -189,20 +187,61 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   }, [isEditMode, editOrgData, setValue])
 
   useEffect(() => {
-    setSpecifyOther(
-      values.sector !== 'other' &&
-        values.organisationType?.toLocaleLowerCase() === 'other'
-    )
-
-    setOtherOrgType && setOtherOrgType(specifyOther)
+    if (
+      orgTypes &&
+      orgTypes?.organization_type?.map(ot => ot.name).length >= 0 &&
+      orgTypeListLoaded === false
+    ) {
+      setOrgTypeListLoaded(true)
+      if (
+        values?.sector?.toLocaleLowerCase() !== 'other' &&
+        orgTypes?.organization_type
+          .map(ot => ot.name)
+          .includes(values.organisationType) &&
+        values.organisationType?.toLocaleLowerCase() !== 'other'
+      ) {
+        setspecifyOtherOrgType(false)
+      } else if (values.organisationType === '') {
+        setValue('orgTypeSpecifyOther', '')
+        setValue('organisationType', '')
+        setspecifyOtherOrgType(false)
+      } else {
+        setspecifyOtherOrgType(true)
+        setValue('organisationType', 'Other')
+        setValue('orgTypeSpecifyOther', editOrgData?.organisationType ?? '')
+      }
+    }
   }, [
-    setOtherOrgType,
-    setSpecifyOther,
-    specifyOther,
-    values,
-    values.orgTypeSpecifyOther,
+    editOrgData?.organisationType,
+    orgTypeListLoaded,
+    orgTypes,
+    setValue,
     values.organisationType,
+    values?.sector,
+  ])
+
+  useEffect(() => {
+    if (values.organisationType?.toLocaleLowerCase() === 'other') {
+      setspecifyOtherOrgType(true)
+    } else {
+      setspecifyOtherOrgType(false)
+    }
+  }, [values.organisationType])
+
+  useEffect(() => {
+    if (values.sector && sectorState !== values.sector) {
+      setValue('orgTypeSpecifyOther', '')
+      setValue('organisationType', '')
+      setspecifyOtherOrgType(false)
+      setSectorState(values.sector)
+    }
+  }, [
     values.sector,
+    setValue,
+    setspecifyOtherOrgType,
+    setSectorState,
+    sectorState,
+    values.organisationType,
   ])
 
   return (
@@ -277,7 +316,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   <Grid item>
                     <OrganisationSectorDropdown
                       required
-                      value={values.sector ?? ''}
+                      value={values.sector ?? sectorState}
                       error={errors.sector?.message}
                       register={{ ...register('sector') }}
                       label={t('fields.organization-sector')}
@@ -285,7 +324,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   </Grid>
 
                   <Grid item>
-                    {(values.sector || '').toLowerCase() !== 'other' ? (
+                    {values.sector?.toLowerCase() !== 'other' ? (
                       <OrgTypeSelector
                         label={t('fields.organization-type')}
                         value={values.organisationType}
@@ -313,7 +352,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                       />
                     )}
                   </Grid>
-                  {specifyOther ? (
+                  {specifyOtherOrgType ? (
                     <Grid item>
                       <TextField
                         id="orgTypeSpecifyOther"
@@ -438,9 +477,9 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   <Grid item>
                     <TextField
                       id="city"
-                      label={t('fields.addresses.city')}
+                      label={t('fields.addresses.town-city')}
                       variant="filled"
-                      placeholder={t('fields.addresses.city')}
+                      placeholder={t('fields.addresses.town-city')}
                       error={!!errors.city}
                       helperText={errors.city?.message}
                       InputLabelProps={{

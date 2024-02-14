@@ -1221,7 +1221,9 @@
       "addresses": {
         "line1": "Address Line 1",
         "line2": "Address Line 2",
-        "city": "Town/City",
+        "town-city": "Town/City",
+        "town": "Town",
+        "city": "City",
         "postcode": "Post code",
         "zipCode": "Zip Code",
         "country": "Country"

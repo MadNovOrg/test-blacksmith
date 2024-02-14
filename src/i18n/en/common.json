@@ -366,6 +366,7 @@
     "max-registrants": "Please enter emails of registrants for the quantity you selected",
     "this-field-is-required": "This field is required",
     "required-field": "{{name}} is required",
+    "required-composed-field": "{{field1}}/{{field2}} is required",
     "email-required": "Please enter your email",
     "email-invalid": "Please enter a valid email address",
     "phone-invalid": "Please enter a valid phone number",

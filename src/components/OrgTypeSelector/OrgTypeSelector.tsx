@@ -2,15 +2,9 @@ import { MenuItem, TextField } from '@mui/material'
 import { FC, PropsWithChildren } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useQuery } from 'urql'
 
-import {
-  GetOrgTypesQuery,
-  GetOrgTypesQueryVariables,
-  Organisation_Sector_Enum,
-  Organization_Type,
-} from '@app/generated/graphql'
-import { GET_ORG_TYPES } from '@app/queries/organization/get-org-types'
+import { Organization_Type } from '@app/generated/graphql'
+import { useOrgType } from '@app/hooks/useOrgType'
 
 type Props = {
   sector: string
@@ -32,28 +26,9 @@ export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
   register,
 }) => {
   const { t } = useTranslation()
-  const sectorMap = new Map()
-  switch (sector) {
-    case 'edu':
-      sectorMap.set(sector, Organisation_Sector_Enum.Edu)
-      break
-    case 'hsc_child':
-      sectorMap.set(sector, Organisation_Sector_Enum.HscChildren)
-      break
-    case 'hsc_adult':
-      sectorMap.set(sector, Organisation_Sector_Enum.HscAdult)
-      break
-    default:
-      'other'
-  }
 
-  const [{ data }] = useQuery<GetOrgTypesQuery, GetOrgTypesQueryVariables>({
-    query: GET_ORG_TYPES,
-    variables: {
-      sector: sectorMap.get(sector),
-    },
-    pause: !sector,
-  })
+  const { data } = useOrgType(sector)
+
   return (
     <TextField
       select
