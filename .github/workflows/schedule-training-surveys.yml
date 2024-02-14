@@ -21,14 +21,14 @@ jobs:
         run: echo "HASURA_URL=${{ secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
       - name: Set Hasura secret
         run: echo "HASURA_SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
-      - name: Sync request
-        id: syncRequest
+      - name: Schedule about training surveys
+        id: scheduleAboutTrainingSurveys
         run: |
           response=$(curl -s --location --request POST "${HASURA_URL}/v1/graphql" \
           -H "Content-Type: application/json" \
           -H "x-hasura-admin-secret: $HASURA_SECRET" \
           -d '{
-            "query": "query { scheduleAboutTrainingSurveys { message } }"
+            "mutation": "mutation { scheduleAboutTrainingSurveys { message } }"
           }' \
           )
           echo "$response"
