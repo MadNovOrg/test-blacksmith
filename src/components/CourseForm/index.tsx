@@ -1992,11 +1992,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   />
                 </Grid>
                 <Grid item>
-                  {!isCreation && courseType === Course_Type_Enum.Indirect ? (
+                  {!isCreation && isIndirectCourse && acl.isTrainer() && (
                     <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
                       {t('components.course-form.attendees-edit-label')}
                     </Alert>
-                  ) : null}
+                  )}
                 </Grid>
               </Grid>
             </Box>
