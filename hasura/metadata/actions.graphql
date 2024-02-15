@@ -51,12 +51,6 @@ type Mutation {
 }
 
 type Mutation {
-  confirmCreditCardPayment(
-    orderId: uuid!
-  ): ConfirmCreditCardPaymentOutput
-}
-
-type Mutation {
   createOrder(
     input: CreateOrderInput!
   ): CreateOrderOutput

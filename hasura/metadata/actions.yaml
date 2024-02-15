@@ -73,14 +73,6 @@ actions:
       - role: anonymous
       - role: user
     comment: Removes current anonymous user from course waitlist
-  - name: confirmCreditCardPayment
-    definition:
-      kind: synchronous
-      handler: '{{ACTIONS_HOST}}/stripe/confirm-cc-payment'
-    permissions:
-      - role: unverified
-      - role: user
-    comment: confirmCreditCardPayment
   - name: createOrder
     definition:
       kind: synchronous

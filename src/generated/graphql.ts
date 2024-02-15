@@ -912,18 +912,6 @@ export enum CommentsConnectionOrderbyEnum {
   UserId = 'USER_ID'
 }
 
-export enum ConfirmCreditCardPaymentError {
-  GenericError = 'GENERIC_ERROR',
-  OrderNotFound = 'ORDER_NOT_FOUND',
-  PaymentNotSucceeded = 'PAYMENT_NOT_SUCCEEDED'
-}
-
-export type ConfirmCreditCardPaymentOutput = {
-  __typename?: 'ConfirmCreditCardPaymentOutput';
-  confirmed: Scalars['Boolean'];
-  error?: Maybe<ConfirmCreditCardPaymentError>;
-};
-
 /** Nodes used to manage content */
 export type ContentNode = {
   /** Connection between the ContentNode type and the ContentType type */
@@ -12476,8 +12464,8 @@ export type About_Training_Email_Scheduled_Events_Bool_Exp = {
 
 /** unique or primary key constraints on table "about_training_email_scheduled_events" */
 export enum About_Training_Email_Scheduled_Events_Constraint {
-  /** unique or primary key constraint on columns "course_participant_id", "event_id" */
-  AboutTrainingEmailScheduleCourseParticipantIdEventIKey = 'about_training_email_schedule_course_participant_id_event_i_key',
+  /** unique or primary key constraint on columns "course_participant_id" */
+  AboutTrainingEmailScheduledEventsCourseParticipantIdKey = 'about_training_email_scheduled_events_course_participant_id_key',
   /** unique or primary key constraint on columns "event_id" */
   AboutTrainingEmailScheduledEventsEventIdKey = 'about_training_email_scheduled_events_event_id_key',
   /** unique or primary key constraint on columns "id" */
@@ -12517,6 +12505,13 @@ export type About_Training_Email_Scheduled_Events_Mutation_Response = {
   affected_rows: Scalars['Int'];
   /** data from the rows affected by the mutation */
   returning: Array<About_Training_Email_Scheduled_Events>;
+};
+
+/** input type for inserting object relation for remote table "about_training_email_scheduled_events" */
+export type About_Training_Email_Scheduled_Events_Obj_Rel_Insert_Input = {
+  data: About_Training_Email_Scheduled_Events_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<About_Training_Email_Scheduled_Events_On_Conflict>;
 };
 
 /** on_conflict condition type for table "about_training_email_scheduled_events" */
@@ -22875,6 +22870,8 @@ export type Course_Participant = {
   /** An object relationship */
   course: Course;
   course_id: Scalars['Int'];
+  /** An object relationship */
+  course_participant_about_training_email_scheduled_event?: Maybe<About_Training_Email_Scheduled_Events>;
   created_at?: Maybe<Scalars['timestamptz']>;
   dateGraded?: Maybe<Scalars['timestamptz']>;
   go1EnrolmentId?: Maybe<Scalars['Int']>;
@@ -23883,6 +23880,7 @@ export type Course_Participant_Bool_Exp = {
   completed_evaluation?: InputMaybe<Boolean_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
   course_id?: InputMaybe<Int_Comparison_Exp>;
+  course_participant_about_training_email_scheduled_event?: InputMaybe<About_Training_Email_Scheduled_Events_Bool_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   dateGraded?: InputMaybe<Timestamptz_Comparison_Exp>;
   go1EnrolmentId?: InputMaybe<Int_Comparison_Exp>;
@@ -24215,6 +24213,7 @@ export type Course_Participant_Insert_Input = {
   completed_evaluation?: InputMaybe<Scalars['Boolean']>;
   course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   course_id?: InputMaybe<Scalars['Int']>;
+  course_participant_about_training_email_scheduled_event?: InputMaybe<About_Training_Email_Scheduled_Events_Obj_Rel_Insert_Input>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
   dateGraded?: InputMaybe<Scalars['timestamptz']>;
   go1EnrolmentId?: InputMaybe<Scalars['Int']>;
@@ -24819,6 +24818,7 @@ export type Course_Participant_Order_By = {
   completed_evaluation?: InputMaybe<Order_By>;
   course?: InputMaybe<Course_Order_By>;
   course_id?: InputMaybe<Order_By>;
+  course_participant_about_training_email_scheduled_event?: InputMaybe<About_Training_Email_Scheduled_Events_Order_By>;
   created_at?: InputMaybe<Order_By>;
   dateGraded?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
@@ -33455,8 +33455,6 @@ export type Mutation_Root = {
   cancelMyselfFromCourse: Scalars['Boolean'];
   /** Removes current anonymous user from course waitlist */
   cancelMyselfFromCourseWaitlist?: Maybe<CancelMyselfFromCourseWaitlistOutput>;
-  /** confirmCreditCardPayment */
-  confirmCreditCardPayment?: Maybe<ConfirmCreditCardPaymentOutput>;
   content?: Maybe<ContentRootMutation>;
   /** Attempts to create a new Order */
   createOrder?: Maybe<CreateOrderOutput>;
@@ -34325,6 +34323,8 @@ export type Mutation_Root = {
   resendPassword: Scalars['Boolean'];
   /** saveOrgInvites */
   saveOrgInvites?: Maybe<SampleOutput>;
+  /** The action will create a schedule event for sending about training surveys to certified attendees */
+  scheduleAboutTrainingSurveys?: Maybe<ScheduleAboutTrainingSurveysOutput>;
   /** Send course information to the specified course attendees */
   sendCourseInformation: SendCourseInformationOutput;
   /** Creates a temporary profile */
@@ -35009,12 +35009,6 @@ export type Mutation_RootCancelMyselfFromCourseArgs = {
 /** mutation root */
 export type Mutation_RootCancelMyselfFromCourseWaitlistArgs = {
   input: CancelMyselfFromCourseWaitlistInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootConfirmCreditCardPaymentArgs = {
-  orderId: Scalars['uuid'];
 };
 
 
@@ -49911,6 +49905,11 @@ export type Role_Variance_Fields = {
   rank?: Maybe<Scalars['Float']>;
 };
 
+export type ScheduleAboutTrainingSurveysOutput = {
+  __typename?: 'scheduleAboutTrainingSurveysOutput';
+  message?: Maybe<Scalars['String']>;
+};
+
 /** columns and relationships of "submodule" */
 export type Submodule = {
   __typename?: 'submodule';
@@ -56749,13 +56748,6 @@ export type StripeCreatePaymentMutationVariables = Exact<{
 
 
 export type StripeCreatePaymentMutation = { __typename?: 'mutation_root', paymentIntent?: { __typename?: 'StripeCreatePaymentIntentOutput', clientSecret: string, amount: number, currency: Currency } | null };
-
-export type ConfirmCcPaymentMutationVariables = Exact<{
-  orderId: Scalars['uuid'];
-}>;
-
-
-export type ConfirmCcPaymentMutation = { __typename?: 'mutation_root', confirmCreditCardPayment?: { __typename?: 'ConfirmCreditCardPaymentOutput', confirmed: boolean, error?: ConfirmCreditCardPaymentError | null } | null };
 
 export type GetCertificationsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;

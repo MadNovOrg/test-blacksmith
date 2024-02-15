@@ -3,8 +3,8 @@ import { Alert, Box, Typography } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Currency } from '@app/generated/graphql'
 import { useStripe, useElements, PaymentElement } from '@app/lib/stripe'
-import { Currency } from '@app/types'
 
 type Props = {
   amount: number

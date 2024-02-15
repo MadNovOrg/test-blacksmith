@@ -1,156 +1,72 @@
 import { Alert, Box, CircularProgress, Typography } from '@mui/material'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useMutation, useQuery } from 'urql'
 
 import {
-  ConfirmCcPaymentMutation,
-  ConfirmCcPaymentMutationVariables,
+  Currency,
   GetOrderQuery,
+  GetOrderQueryVariables,
+  StripeCreatePaymentMutation,
+  StripeCreatePaymentMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
-import {
-  stripe,
-  Elements,
-  STRIPE_CREATE_PAYMENT,
-  StripeCreatePaymentResp,
-  CONFIRM_CC_PAYMENT,
-} from '@app/lib/stripe'
+import { stripe, Elements, STRIPE_CREATE_PAYMENT } from '@app/lib/stripe'
 import { QUERY as GET_ORDER } from '@app/queries/order/get-order'
-import { Currency } from '@app/types'
 
 import { PaymentForm } from './Form'
-
-type State = {
-  loading: boolean
-  error?: Error
-  paymentIntent?: StripeCreatePaymentResp['paymentIntent']
-}
-
-const getStripe = async () => {
-  const s = await stripe
-  if (!s) throw Error('Failed to load stripe')
-  return s
-}
 
 export const CourseBookingPayment = () => {
   const { t } = useTranslation()
   const { orderId } = useParams()
-  const fetcher = useFetcher()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
 
-  const stripeWebhookEnabled = useFeatureFlagEnabled('use-stripe-webhook')
-
-  const [state, _setState] = useState<State>({ loading: true })
-  const setState = useCallback(
-    (next: Partial<State>) => _setState(prev => ({ ...prev, ...next })),
-    []
-  )
-
   const isCallback = !!searchParams.get('payment_intent_client_secret')
+
+  const [{ data: orderData, fetching: orderFetching, error: orderError }] =
+    useQuery<GetOrderQuery, GetOrderQueryVariables>({
+      query: GET_ORDER,
+      variables: { orderId },
+    })
+
+  const [
+    {
+      data: createPaymentData,
+      fetching: creatingPaymentIntent,
+      error: createPaymentIntentError,
+    },
+    createPaymentIntent,
+  ] = useMutation<
+    StripeCreatePaymentMutation,
+    StripeCreatePaymentMutationVariables
+  >(STRIPE_CREATE_PAYMENT)
 
   const onSuccess = useCallback(() => {
     navigate(`../done?order_id=${orderId}`, { replace: true })
   }, [navigate, orderId])
 
   useEffect(() => {
-    if (isCallback || typeof stripeWebhookEnabled === 'undefined') return
+    if (isCallback || !orderData?.order) return
 
-    const initiatePayment = async () => {
-      try {
-        setState({ loading: true })
-        const { order } = await fetcher<GetOrderQuery>(GET_ORDER, { orderId })
-        if (!order || !order.orderTotal) {
-          return setState({ loading: false, error: Error('ORDER_INVALID') })
-        }
-
-        const vars = { input: { orderId: order.id } }
-        const { paymentIntent } = await fetcher<StripeCreatePaymentResp>(
-          STRIPE_CREATE_PAYMENT,
-          vars
-        )
-
-        if (stripeWebhookEnabled) {
-          const s = await getStripe()
-          const pi = await s.retrievePaymentIntent(paymentIntent.clientSecret)
-          const status = pi.paymentIntent?.status ?? ''
-          if (['succeeded'].includes(status)) {
-            return onSuccess()
-          }
-        }
-
-        setState({ loading: false, error: undefined, paymentIntent })
-      } catch (error) {
-        console.error(error)
-        setState({ loading: false, error: Error('FAILED_TO_INITIATE_PAYMENT') })
-      }
-    }
-
-    initiatePayment()
-  }, [isCallback, fetcher, orderId, setState, onSuccess, stripeWebhookEnabled])
+    createPaymentIntent({ input: { orderId: orderData.order.id } })
+  }, [isCallback, orderData?.order, createPaymentIntent])
 
   useEffect(() => {
-    if (!isCallback || typeof stripeWebhookEnabled === 'undefined') return
-
-    const checkPayment = async () => {
-      try {
-        const clientSecret = searchParams.get('payment_intent_client_secret')
-        if (!clientSecret) throw Error('Bad request')
-
-        if (!stripeWebhookEnabled) {
-          const s = await getStripe()
-          const pi = await s.retrievePaymentIntent(clientSecret)
-          const status = pi.paymentIntent?.status ?? ''
-          if (['succeeded'].includes(status)) {
-            const { confirmCreditCardPayment } = await fetcher<
-              ConfirmCcPaymentMutation,
-              ConfirmCcPaymentMutationVariables
-            >(CONFIRM_CC_PAYMENT, { orderId })
-
-            if (confirmCreditCardPayment?.confirmed) {
-              return onSuccess()
-            } else {
-              console.error('Failed to confirm cc payment')
-              setState({
-                loading: false,
-                error: Error(confirmCreditCardPayment?.error ?? ''),
-              })
-            }
-          }
-
-          navigate(`../payment/${orderId}`, { replace: true })
-        } else {
-          onSuccess()
-        }
-      } catch (error) {
-        console.error(error)
-        setState({ loading: false, error: Error('FAILED_TO_INITIATE_PAYMENT') })
-      }
+    if (isCallback) {
+      onSuccess()
     }
-
-    checkPayment()
-  }, [
-    isCallback,
-    setState,
-    onSuccess,
-    searchParams,
-    navigate,
-    orderId,
-    fetcher,
-    stripeWebhookEnabled,
-  ])
+  }, [isCallback, onSuccess])
 
   const {
     clientSecret,
     amount = 0,
-    currency = Currency.GBP,
-  } = state.paymentIntent ?? {}
+    currency = Currency.Gbp,
+  } = createPaymentData?.paymentIntent ?? {}
 
-  const isLoading = isCallback || state.loading
-  const isError = !isLoading && state.error
-  const isOk = !isLoading && !isError
+  const isLoading = isCallback || orderFetching || creatingPaymentIntent
+  const isError = !isLoading && (orderError || createPaymentIntentError)
+  const isOk = Boolean(!isLoading && !isError && clientSecret)
 
   return (
     <Box>
@@ -170,11 +86,13 @@ export const CourseBookingPayment = () => {
       {isError ? (
         <Box py={5}>
           <Alert variant="filled" color="error" severity="error">
-            {t(
+            {t([
               `pages.book-course.payment-cc-error-${
-                state.error?.message ?? 'FAILED_TO_INITIATE_PAYMENT'
-              }`
-            )}
+                !orderData?.order?.id ? 'ORDER_NOT_FOUND' : ''
+              }`,
+              `pages.book-course.payment-cc-error-${createPaymentIntentError?.message}`,
+              'pages.book-course.payment-cc-error-GENERIC_ERROR',
+            ])}
           </Alert>
         </Box>
       ) : null}
