@@ -56723,6 +56723,16 @@ export type ReplaceParticipantMutationVariables = Exact<{
 
 export type ReplaceParticipantMutation = { __typename?: 'mutation_root', replaceParticipant?: { __typename?: 'ReplaceParticipantOutput', success: boolean, error?: ReplaceParticipantError | null } | null };
 
+export type GetCourseInvitesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Course_Invites_Bool_Exp>;
+  orderBy?: InputMaybe<Array<Course_Invites_Order_By> | Course_Invites_Order_By>;
+}>;
+
+
+export type GetCourseInvitesQuery = { __typename?: 'query_root', courseInvites: Array<{ __typename?: 'course_invites', id: any, email?: string | null, status?: Course_Invite_Status_Enum | null, createdAt: any, note?: string | null, expiresIn?: any | null }>, courseInvitesAggregate: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } };
+
 export type DeleteMeetingMutationVariables = Exact<{
   meetingId: Scalars['String'];
 }>;
@@ -57737,17 +57747,6 @@ export type DeleteOrgInviteMutationVariables = Exact<{
 
 
 export type DeleteOrgInviteMutation = { __typename?: 'mutation_root', delete_organization_invites_by_pk?: { __typename?: 'organization_invites', id: any } | null };
-
-export type GetCourseInvitesQueryVariables = Exact<{
-  courseId: Scalars['Int'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<Course_Invites_Bool_Exp>;
-  orderBy?: InputMaybe<Array<Course_Invites_Order_By> | Course_Invites_Order_By>;
-}>;
-
-
-export type GetCourseInvitesQuery = { __typename?: 'query_root', courseInvites: Array<{ __typename?: 'course_invites', id: any, email?: string | null, status?: Course_Invite_Status_Enum | null, createdAt: any, note?: string | null, expiresIn?: any | null }>, courseInvitesAggregate: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } };
 
 export type GetInviteQueryVariables = Exact<{ [key: string]: never; }>;
 

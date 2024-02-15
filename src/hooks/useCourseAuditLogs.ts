@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import {
   Course_Audit_Bool_Exp,
@@ -11,7 +11,7 @@ import {
 } from '@app/generated/graphql'
 import { GET_COURSE_AUDIT_LOGS_QUERY } from '@app/queries/audit/get-course-audit-logs'
 import { SortOrder } from '@app/types'
-import { buildNestedSort, getSWRLoadingStatus, LoadingStatus } from '@app/util'
+import { buildNestedSort } from '@app/util'
 
 type UseCourseAuditLogsProps = {
   type: Course_Audit_Type_Enum
@@ -106,23 +106,21 @@ export default function useCourseAuditLogs({
     filter.eventDates,
   ])
 
-  const { data, error } = useSWR<
+  const [{ data, error, fetching }] = useQuery<
     GetCourseAuditLogsQuery,
-    Error,
-    [string, GetCourseAuditLogsQueryVariables]
-  >([
-    GET_COURSE_AUDIT_LOGS_QUERY,
-    { where, orderBy, limit, offset, fromExceptionsLog },
-  ])
+    GetCourseAuditLogsQueryVariables
+  >({
+    query: GET_COURSE_AUDIT_LOGS_QUERY,
+    variables: { where, orderBy, limit, offset, fromExceptionsLog },
+  })
 
-  const status = getSWRLoadingStatus(data, error)
   return useMemo(
     () => ({
       logs: data?.logs ?? [],
       count: data?.logsAggregate?.aggregate?.count ?? 0,
-      loading: status === LoadingStatus.FETCHING,
+      loading: fetching,
       error,
     }),
-    [data, error, status]
+    [data?.logs, data?.logsAggregate?.aggregate?.count, error, fetching]
   )
 }

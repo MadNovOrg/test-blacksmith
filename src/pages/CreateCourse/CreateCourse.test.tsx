@@ -6,7 +6,6 @@ import { never } from 'wonka'
 import { Course_Type_Enum } from '@app/generated/graphql'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import { RoleName } from '@app/types'
-import { LoadingStatus } from '@app/util'
 
 import { render, within, screen } from '@test/index'
 
@@ -32,7 +31,7 @@ describe('page: CreateCourse', () => {
         name: 'errorName',
         message: 'errorMessage',
       },
-      status: LoadingStatus.SUCCESS,
+      fetching: false,
     })
   })
 

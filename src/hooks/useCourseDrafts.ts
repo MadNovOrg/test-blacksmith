@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import {
@@ -9,7 +9,6 @@ import {
   Order_By,
 } from '@app/generated/graphql'
 import { QUERY as GET_COURSE_DRAFTS } from '@app/queries/courses/get-course-drafts'
-import { LoadingStatus, getSWRLoadingStatus } from '@app/util'
 
 import { Sorting } from './useTableSort'
 
@@ -22,26 +21,22 @@ type Props = {
 export function useCourseDrafts({ sorting, pagination }: Props) {
   const { acl } = useAuth()
   const orderBy = getOrderBy(sorting)
-  const { data, error } = useSWR<
+  const [{ data, error, fetching }] = useQuery<
     GetCourseDraftsQuery,
-    Error,
-    [string, GetCourseDraftsQueryVariables] | null
-  >(
-    acl.isTrainer()
-      ? [
-          GET_COURSE_DRAFTS,
-          {
-            orderBy,
-            ...(pagination
-              ? {
-                  limit: pagination.perPage,
-                  offset: pagination.perPage * (pagination?.currentPage - 1),
-                }
-              : null),
-          },
-        ]
-      : null
-  )
+    GetCourseDraftsQueryVariables
+  >({
+    query: GET_COURSE_DRAFTS,
+    variables: {
+      orderBy,
+      ...(pagination
+        ? {
+            limit: pagination.perPage,
+            offset: pagination.perPage * (pagination?.currentPage - 1),
+          }
+        : null),
+    },
+    pause: !acl.isTrainer(),
+  })
 
   const mapDraftData = (
     dataFromResponse?: GetCourseDraftsQuery['course_draft']
@@ -55,17 +50,16 @@ export function useCourseDrafts({ sorting, pagination }: Props) {
       updatedAt: d.updatedAt,
     }))
 
-  const status = getSWRLoadingStatus(data, error)
-
   return useMemo(
     () => ({
       drafts: mapDraftData(data?.course_draft) ?? [],
-      status,
       error,
-      loading: status === LoadingStatus.FETCHING,
-      total: data?.course_draft_aggregate.aggregate?.count,
+      loading: fetching,
+      total: data?.course_draft_aggregate
+        ? data?.course_draft_aggregate.aggregate?.count
+        : 0,
     }),
-    [data, error, status]
+    [data?.course_draft, data?.course_draft_aggregate, error, fetching]
   )
 }
 

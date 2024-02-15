@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import pdf from '@react-pdf/renderer'
 import React, { useMemo, useState } from 'react'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import {
   CertificateAssistIcon,
@@ -34,8 +34,7 @@ import {
   CertificateStatus,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { QUERY } from '@app/queries/certificate/get-certificate'
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
+import { GET_CERTIFICATE_QUERY } from '@app/queries/certificate/get-certificate'
 
 import CertificateHoldHistoryModal from './components/CertificateHoldHistoryModal/CertificateHoldHistoryModal'
 import { CertificateInfo } from './components/CertificateInfo/CertificateInfo'
@@ -80,12 +79,10 @@ export const CourseCertification: React.FC<
   const [showCertificateHoldHistoryModal, setShowCertificateHoldHistoryModal] =
     useState(false)
 
-  const { data, error, mutate } = useSWR<
+  const [{ data, error, fetching }, mutate] = useQuery<
     GetCertificateQuery,
-    Error,
-    [string, GetCertificateQueryVariables]
-  >([QUERY, { id: certificateId }])
-  const certificateLoadingStatus = getSWRLoadingStatus(data, error)
+    GetCertificateQueryVariables
+  >({ query: GET_CERTIFICATE_QUERY, variables: { id: certificateId } })
 
   const certificate = data?.certificate
   const holdRequest = data?.certificateHoldRequest[0]
@@ -101,7 +98,7 @@ export const CourseCertification: React.FC<
     )
   }, [certificate])
 
-  if (certificateLoadingStatus === LoadingStatus.FETCHING) {
+  if (fetching) {
     return (
       <Stack
         alignItems="center"
@@ -113,11 +110,7 @@ export const CourseCertification: React.FC<
     )
   }
 
-  if (
-    !certificate ||
-    !certificate.profile ||
-    certificateLoadingStatus === LoadingStatus.ERROR
-  ) {
+  if (!certificate || !certificate.profile || error) {
     return (
       <Container sx={{ py: 2 }}>
         <Alert severity="error" variant="outlined">
@@ -288,7 +281,9 @@ export const CourseCertification: React.FC<
           <Dialog
             open={showModifyGradeModal}
             onClose={() => setShowModifyGradeModal(false)}
-            title={t('modify-grade')}
+            slots={{
+              Title: () => <>{t('modify-grade')}</>,
+            }}
             maxWidth={800}
           >
             <ModifyGradeModal

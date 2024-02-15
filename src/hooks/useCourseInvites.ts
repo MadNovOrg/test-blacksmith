@@ -1,53 +1,138 @@
 import { differenceInSeconds } from 'date-fns'
 import { useCallback, useMemo } from 'react'
-import useSWR from 'swr'
+import { gql, useMutation, useQuery } from 'urql'
 import * as yup from 'yup'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
-import { useMatchMutate } from '@app/hooks/useMatchMutate'
-import { MUTATION as CancelInvite } from '@app/queries/invites/cancel-course-invite'
 import {
-  QUERY,
-  Matcher,
-  ResponseType,
-  ParamsType,
-} from '@app/queries/invites/get-course-invites'
-import { MUTATION as RecreateInvite } from '@app/queries/invites/recreate-course-invite'
-import { MUTATION as SaveInvites } from '@app/queries/invites/save-course-invites'
-import { CourseInvite, InviteStatus, SortOrder } from '@app/types'
-import { getSWRLoadingStatus } from '@app/util'
+  CancelCourseInviteMutation,
+  CancelCourseInviteMutationVariables,
+  Course_Invite_Status_Enum,
+  Course_Invites_Order_By,
+  GetCourseInvitesQuery,
+  GetCourseInvitesQueryVariables,
+  RecreateCourseInviteMutation,
+  RecreateCourseInviteMutationVariables,
+  SaveCourseInvitesMutation,
+  SaveCourseInvitesMutationVariables,
+} from '@app/generated/graphql'
+import { SortOrder } from '@app/types'
+
+export const GET_COURSE_INVITES = gql`
+  query GetCourseInvites(
+    $limit: Int
+    $offset: Int = 0
+    $where: course_invites_bool_exp = {}
+    $orderBy: [course_invites_order_by!] = { email: asc }
+  ) {
+    courseInvites: course_invites(
+      where: $where
+      limit: $limit
+      offset: $offset
+      order_by: $orderBy
+    ) {
+      id
+      email
+      status
+      createdAt
+      note
+      expiresIn
+    }
+    courseInvitesAggregate: course_invites_aggregate(where: $where) {
+      aggregate {
+        count
+      }
+    }
+  }
+`
+
+export const RECREATE_COURSE_INVITE = gql`
+  mutation RecreateCourseInvite(
+    $inviteId: uuid!
+    $courseId: Int
+    $email: String
+    $expiresIn: timestamptz
+  ) {
+    delete_course_invites_by_pk(id: $inviteId) {
+      id
+    }
+    insert_course_invites_one(
+      object: { course_id: $courseId, email: $email, expiresIn: $expiresIn }
+    ) {
+      id
+    }
+  }
+`
+
+export const SAVE_INVITE = gql`
+  mutation SaveCourseInvites($invites: [course_invites_insert_input!]!) {
+    insert_course_invites(objects: $invites) {
+      returning {
+        id
+      }
+    }
+  }
+`
+export const CANCEL_INVITE = gql`
+  mutation CancelCourseInvite($inviteId: uuid!) {
+    delete_course_invites_by_pk(id: $inviteId) {
+      id
+    }
+  }
+`
 
 const emailsSchema = yup.array(yup.string().email().required()).min(1)
 
-export default function useCourseInvites(
-  courseId?: number,
-  status?: InviteStatus,
-  order?: SortOrder,
-  limit?: number,
-  offset?: number,
+export default function useCourseInvites({
+  courseId,
+  status,
+  order,
+  limit,
+  offset,
+  courseEnd,
+}: {
+  courseId: number
+  status?: Course_Invite_Status_Enum
+  order?: SortOrder
+  limit?: number
+  offset?: number
   courseEnd?: string
-) {
-  const fetcher = useFetcher()
-  const matchMutate = useMatchMutate()
-
-  const where = status ? { status: { _eq: status } } : undefined
-  const orderBy = { email: order ? order : 'asc' }
+}) {
+  const where = {
+    _and: [
+      { course_id: { _eq: courseId } },
+      ...(status ? [{ status: { _eq: status } }] : [{}]),
+    ],
+  }
+  const orderBy = { email: order ? order : 'asc' } as Course_Invites_Order_By
 
   // Fetch course invites
-  const { data, error, mutate } = useSWR<
-    ResponseType,
-    Error,
-    [string, ParamsType] | null
-  >(courseId ? [QUERY, { courseId, where, orderBy, limit, offset }] : null)
+  const [
+    { data: invitesData, error: invitesError, fetching: invitesFetching },
+    getInvites,
+  ] = useQuery<GetCourseInvitesQuery, GetCourseInvitesQueryVariables>({
+    query: GET_COURSE_INVITES,
+    variables: { where, orderBy, limit, offset },
+    pause: !courseId,
+    requestPolicy: 'cache-and-network',
+  })
 
-  const invalidateCache = useMemo(() => {
-    return async () => {
-      await matchMutate(Matcher)
-    }
-  }, [matchMutate])
+  const [, recreateCourseInvite] = useMutation<
+    RecreateCourseInviteMutation,
+    RecreateCourseInviteMutationVariables
+  >(RECREATE_COURSE_INVITE)
+
+  const [, saveInvites] = useMutation<
+    SaveCourseInvitesMutation,
+    SaveCourseInvitesMutationVariables
+  >(SAVE_INVITE)
+
+  const [, cancelInvite] = useMutation<
+    CancelCourseInviteMutation,
+    CancelCourseInviteMutationVariables
+  >(CANCEL_INVITE)
 
   const resend = useCallback(
-    async (invite: CourseInvite) => {
+    async (invite: GetCourseInvitesQuery['courseInvites'][0]) => {
       /**
        * @description This expires in data is a placeholder (for UI update) for the actual
        * expires in date which will be updates accordingly to invite token
@@ -74,29 +159,28 @@ export default function useCourseInvites(
         new Date().setSeconds(new Date().getSeconds() + expiresInSeconds)
       )
 
-      await fetcher(RecreateInvite, {
+      await recreateCourseInvite({
         inviteId: invite.id,
         email: invite.email,
         courseId,
         expiresIn: expiresInDate,
       })
-      await invalidateCache()
     },
-    [courseEnd, fetcher, courseId, invalidateCache]
+    [courseEnd, courseId, recreateCourseInvite]
   )
 
   // Save course invites
   const send = useCallback(
     async (emails: string[]) => {
-      const recentData = await mutate()
-
       const declinedInvites =
-        recentData?.courseInvites.filter(
-          i => i.status === InviteStatus.DECLINED && emails.includes(i.email)
+        invitesData?.courseInvites.filter(
+          i =>
+            i.status === Course_Invite_Status_Enum.Declined &&
+            emails.includes(i.email as string)
         ) ?? []
 
       const recentInvitesEmails =
-        recentData?.courseInvites.map(i => i.email) ?? []
+        invitesData?.courseInvites.map(i => i.email) ?? []
 
       const allValid = await emailsSchema.isValid(emails)
 
@@ -114,35 +198,41 @@ export default function useCourseInvites(
         throw Error('EMAILS_ALREADY_INVITED')
       }
 
-      await Promise.all(declinedInvites.map(i => resend(i)))
+      await Promise.all(declinedInvites.map(invite => resend(invite)))
 
       const invites = newEmails.map(email => ({ course_id: courseId, email }))
-      await fetcher(SaveInvites, { invites })
-
-      await invalidateCache()
+      await saveInvites({ invites })
     },
-    [mutate, fetcher, invalidateCache, resend, courseId]
+    [invitesData?.courseInvites, saveInvites, resend, courseId]
   )
 
   const cancel = useCallback(
-    async (invite: CourseInvite) => {
-      await fetcher(CancelInvite, { inviteId: invite.id })
-      await invalidateCache()
+    async (invite: GetCourseInvitesQuery['courseInvites'][0]) => {
+      await cancelInvite({ inviteId: invite.id })
     },
-    [fetcher, invalidateCache]
+    [cancelInvite]
   )
 
   return useMemo(
     () => ({
-      data: data?.courseInvites ?? [],
-      total: data?.courseInvitesAggregate?.aggregate?.count ?? 0,
-      status: getSWRLoadingStatus(data, error),
-      error,
+      data: invitesData?.courseInvites ?? [],
+      total: invitesData?.courseInvitesAggregate?.aggregate?.count ?? 0,
+      fetching: invitesFetching,
+      error: invitesError,
       send,
       resend,
       cancel,
-      invalidateCache,
+      getInvites,
     }),
-    [data, error, send, resend, cancel, invalidateCache]
+    [
+      invitesData?.courseInvites,
+      invitesData?.courseInvitesAggregate?.aggregate?.count,
+      invitesFetching,
+      invitesError,
+      send,
+      resend,
+      cancel,
+      getInvites,
+    ]
   )
 }

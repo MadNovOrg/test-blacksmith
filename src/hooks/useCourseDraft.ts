@@ -1,4 +1,4 @@
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import {
   GetCourseDraftQuery,
@@ -6,7 +6,6 @@ import {
 } from '@app/generated/graphql'
 import { QUERY as GET_COURSE_DRAFT } from '@app/queries/courses/get-course-draft'
 import { Draft } from '@app/types'
-import { LoadingStatus, getSWRLoadingStatus } from '@app/util'
 
 type UseCourseDraft = {
   id: string
@@ -14,15 +13,14 @@ type UseCourseDraft = {
   updatedAt?: string | null
   data: Draft
   error?: Error
-  status: LoadingStatus
+  fetching: boolean
 }
 
 export function useCourseDraft(draftId?: string): UseCourseDraft {
-  const { data, error } = useSWR<
+  const [{ data, error, fetching }] = useQuery<
     GetCourseDraftQuery,
-    Error,
-    [string, GetCourseDraftQueryVariables] | null
-  >(draftId ? [GET_COURSE_DRAFT, { draftId }] : null)
+    GetCourseDraftQueryVariables
+  >({ query: GET_COURSE_DRAFT, variables: { draftId }, pause: !draftId })
 
   return {
     id: data?.course_draft_by_pk?.id,
@@ -30,6 +28,6 @@ export function useCourseDraft(draftId?: string): UseCourseDraft {
     updatedAt: data?.course_draft_by_pk?.updatedAt,
     data: data?.course_draft_by_pk?.data ?? {},
     error,
-    status: getSWRLoadingStatus(data, error),
+    fetching,
   }
 }

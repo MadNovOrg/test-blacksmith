@@ -1,7 +1,7 @@
 import { Alert, Box, Button, Grid, TextField, Typography } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import { CourseGradingMenu } from '@app/components/CourseGradingMenu/CourseGradingMenu'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
@@ -14,7 +14,7 @@ import {
   UpdateGradeMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { QUERY } from '@app/queries/certificate/get-certificate'
+import { GET_CERTIFICATE_QUERY } from '@app/queries/certificate/get-certificate'
 import { MUTATION } from '@app/queries/grading/update-grade'
 import theme from '@app/theme'
 import { NonNullish } from '@app/types'
@@ -41,11 +41,15 @@ const ModifyGradeModal: React.FC<
   const [showNoteError, setShowNoteError] = useState(false)
   const [grade, setGrade] = useState(participant.grade)
 
-  const { mutate } = useSWR<
+  const [, mutate] = useQuery<
     GetCertificateQuery,
-    Error,
-    [string, GetCertificateQueryVariables]
-  >([QUERY, { id: certificateId }])
+    GetCertificateQueryVariables
+  >({
+    query: GET_CERTIFICATE_QUERY,
+    variables: { id: certificateId },
+    requestPolicy: 'cache-and-network',
+    pause: true,
+  })
 
   const submitHandler = useCallback(async () => {
     if (grade && participant.grade) {
@@ -65,10 +69,10 @@ const ModifyGradeModal: React.FC<
               newGrade: grade as Grade_Enum,
               type: Course_Certificate_Changelog_Type_Enum.GradeModified,
             })
+            mutate()
           } catch (e: unknown) {
             setError((e as Error).message)
           }
-          await mutate()
           onClose()
         }
       }

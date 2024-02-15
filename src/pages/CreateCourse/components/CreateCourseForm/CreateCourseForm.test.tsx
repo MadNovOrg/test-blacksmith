@@ -69,7 +69,7 @@ describe('component: CreateCourseForm', () => {
         name: 'errorName',
         message: 'errorMessage',
       },
-      status: LoadingStatus.SUCCESS,
+      fetching: false,
     })
   })
 

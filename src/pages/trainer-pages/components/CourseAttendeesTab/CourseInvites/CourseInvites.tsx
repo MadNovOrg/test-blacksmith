@@ -23,6 +23,7 @@ import * as yup from 'yup'
 import { Dialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
 import {
+  Course_Invite_Status_Enum,
   Course_Status_Enum,
   Course_Type_Enum,
   ExportBlendedLearningCourseDataQuery,
@@ -30,7 +31,7 @@ import {
 } from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import { EXPORT_BLENDED_LEARNING_ATTENDEES } from '@app/queries/blended-learning-attendees/blended-learning-attendees-data'
-import { Course, InviteStatus } from '@app/types'
+import { Course } from '@app/types'
 import { courseEnded } from '@app/util'
 
 type Props = {
@@ -71,9 +72,9 @@ export const CourseInvites = ({
     pause: true,
   })
 
-  const invites = useCourseInvites(course?.id)
+  const invites = useCourseInvites({ courseId: course?.id })
   const pendingInvites = invites.data.filter(
-    i => i.status === InviteStatus.PENDING
+    i => i.status === Course_Invite_Status_Enum.Pending
   )
   const invitesLeft = course
     ? course.max_participants - pendingInvites.length - attendeesCount
@@ -148,6 +149,7 @@ export const CourseInvites = ({
     try {
       setSaving(true)
       await invites.send([...emails, ...leftOvers])
+      invites.getInvites()
       closeModal()
     } catch (err) {
       setSaving(false)

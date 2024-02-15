@@ -13,23 +13,26 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
-import { Course_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Invite_Status_Enum,
+  Course_Type_Enum,
+  GetCourseInvitesQuery,
+} from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
-import { Course, CourseInvite, InviteStatus, SortOrder } from '@app/types'
+import { Course, SortOrder } from '@app/types'
 import {
   DEFAULT_PAGINATION_LIMIT,
   DEFAULT_PAGINATION_ROW_OPTIONS,
-  LoadingStatus,
 } from '@app/util'
 
 type TabProperties = {
   course: Course
-  inviteStatus: InviteStatus
+  inviteStatus: Course_Invite_Status_Enum
 }
 
 export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
@@ -53,14 +56,14 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
     [course?.schedule]
   )
 
-  const { data, status, total, resend, cancel } = useCourseInvites(
-    course?.id,
-    inviteStatus,
+  const { data, fetching, total, resend, cancel } = useCourseInvites({
+    courseId: course?.id,
+    status: inviteStatus,
     order,
-    perPage,
-    perPage * currentPage,
-    courseEndDate
-  )
+    limit: perPage,
+    offset: perPage * currentPage,
+    courseEnd: courseEndDate,
+  })
 
   const handleRowsPerPageChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -88,14 +91,16 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
           label: t('pages.course-participants.invite-date'),
           sorting: true,
         },
-        isClosedIndirectCourse && inviteStatus === InviteStatus.PENDING
+        isClosedIndirectCourse &&
+        inviteStatus === Course_Invite_Status_Enum.Pending
           ? {
               id: 'expirationDate',
               label: t('pages.course-participants.invite-expiration'),
               sorting: true,
             }
           : null,
-        isClosedIndirectCourse && inviteStatus === InviteStatus.DECLINED
+        isClosedIndirectCourse &&
+        inviteStatus === Course_Invite_Status_Enum.Declined
           ? {
               id: 'note',
               label: t('common.notes'),
@@ -111,13 +116,17 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
     [t, inviteStatus, isClosedIndirectCourse]
   )
 
-  const handleResendInvite = async (invite: CourseInvite) => {
+  const handleResendInvite = async (
+    invite: GetCourseInvitesQuery['courseInvites'][0]
+  ) => {
     await resend(invite)
     setSnackbarMessage(t('pages.course-participants.invite-sent'))
     setMessageSnackbarOpen(true)
   }
 
-  const handleCancelInvite = async (invite: CourseInvite) => {
+  const handleCancelInvite = async (
+    invite: GetCourseInvitesQuery['courseInvites'][0]
+  ) => {
     await cancel(invite)
     setSnackbarMessage(t('pages.course-participants.invite-cancelled'))
     setMessageSnackbarOpen(true)
@@ -125,7 +134,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
 
   return (
     <>
-      {status === LoadingStatus.SUCCESS && (
+      {!fetching && (
         <>
           <Box sx={{ overflowX: 'auto' }}>
             <Table data-testid="invites-table">
@@ -146,7 +155,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
                       {t('dates.default', { date: invite.createdAt })}
                     </TableCell>
                     {isClosedIndirectCourse &&
-                    inviteStatus === InviteStatus.PENDING ? (
+                    inviteStatus === Course_Invite_Status_Enum.Pending ? (
                       <TableCell>
                         {invite.expiresIn
                           ? t('dates.default', { date: invite.expiresIn })
@@ -163,11 +172,11 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
                       </TableCell>
                     ) : null}
                     {isClosedIndirectCourse &&
-                    inviteStatus === InviteStatus.DECLINED ? (
+                    inviteStatus === Course_Invite_Status_Enum.Declined ? (
                       <TableCell>{invite.note}</TableCell>
                     ) : null}
                     <TableCell sx={{ textAlign: 'right' }}>
-                      {invite.status === InviteStatus.PENDING &&
+                      {invite.status === Course_Invite_Status_Enum.Pending &&
                         acl.canInviteAttendees(
                           course.type,
                           course.status,

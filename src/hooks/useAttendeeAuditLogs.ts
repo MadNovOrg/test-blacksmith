@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import useSWR from 'swr'
+import { CombinedError, useQuery } from 'urql'
 
 import {
   Course_Participant_Audit_Bool_Exp,
@@ -9,7 +9,7 @@ import {
 } from '@app/generated/graphql'
 import { GET_ATTENDEE_AUDIT_LOGS_QUERY } from '@app/queries/audit/get-attendee-audit-logs'
 import { SortOrder } from '@app/types'
-import { buildNestedSort, getSWRLoadingStatus, LoadingStatus } from '@app/util'
+import { buildNestedSort } from '@app/util'
 
 type UseAttendeeAuditLogsProps = {
   type: Course_Participant_Audit_Type_Enum
@@ -32,8 +32,8 @@ export default function useAttendeeAuditLogs({
 }: UseAttendeeAuditLogsProps): {
   logs: GetAttendeeAuditLogsQuery['logs']
   count: number
-  loading: boolean
-  error?: Error
+  loading?: boolean
+  error?: CombinedError | undefined
 } {
   const orderBy: GetAttendeeAuditLogsQueryVariables['orderBy'] = useMemo(
     () => buildNestedSort(sort.by, sort.dir ?? 'asc'),
@@ -67,20 +67,21 @@ export default function useAttendeeAuditLogs({
     return { _and: conditions }
   }, [type, filter.from, filter.to, filter.query])
 
-  const { data, error } = useSWR<
+  const [{ data, error, fetching }] = useQuery<
     GetAttendeeAuditLogsQuery,
-    Error,
-    [string, GetAttendeeAuditLogsQueryVariables]
-  >([GET_ATTENDEE_AUDIT_LOGS_QUERY, { where, orderBy, limit, offset }])
+    GetAttendeeAuditLogsQueryVariables
+  >({
+    query: GET_ATTENDEE_AUDIT_LOGS_QUERY,
+    variables: { where, orderBy, limit, offset },
+  })
 
-  const status = getSWRLoadingStatus(data, error)
   return useMemo(
     () => ({
       logs: data?.logs ?? [],
       count: data?.logsAggregate?.aggregate?.count ?? 0,
-      loading: status === LoadingStatus.FETCHING,
+      loading: fetching,
       error,
     }),
-    [data, error, status]
+    [data?.logs, data?.logsAggregate?.aggregate?.count, error, fetching]
   )
 }

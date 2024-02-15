@@ -9,6 +9,7 @@ import {
   CategorySummaryFragment,
   CertificateStatus,
   Course_Delivery_Type_Enum,
+  Course_Invite_Status_Enum,
   Course_Level_Enum,
   Course_Status_Enum,
   Course_Trainer_Type_Enum,
@@ -16,6 +17,7 @@ import {
   EbookSummaryFragment,
   ExportBlendedLearningCourseDataQuery,
   GetCourseAuditLogsQuery,
+  GetCourseInvitesQuery,
   GetOrgTypesQuery,
   Grade_Enum,
   Podcast,
@@ -33,7 +35,6 @@ import {
   Color,
   Course,
   CourseCertificate,
-  CourseInvite,
   CourseModule,
   CourseParticipant,
   CourseParticipantModule,
@@ -515,11 +516,11 @@ export const buildCertificate = build<CourseCertificate>({
   },
 })
 
-export const buildInvite = build<CourseInvite>({
+export const buildInvite = build<GetCourseInvitesQuery['courseInvites'][0]>({
   fields: {
     id: perBuild(() => chance.guid()),
     email: perBuild(() => chance.email()),
-    status: InviteStatus.PENDING,
+    status: Course_Invite_Status_Enum.Pending,
     createdAt: new Date(),
     note: perBuild(() => chance.string()),
   },

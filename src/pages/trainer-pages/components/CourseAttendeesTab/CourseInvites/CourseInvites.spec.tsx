@@ -5,12 +5,13 @@ import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
 import {
+  Course_Invite_Status_Enum,
   Course_Type_Enum,
   ExportBlendedLearningCourseDataQuery,
+  GetCourseInvitesQuery,
 } from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
-import { Course, InviteStatus, RoleName } from '@app/types'
-import { LoadingStatus } from '@app/util'
+import { Course, RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitForCalls } from '@test/index'
 import {
@@ -38,12 +39,12 @@ const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 const useCourseInvitesDefaults = {
   data: [],
   total: 0,
-  status: LoadingStatus.FETCHING,
+  fetching: false,
   error: undefined,
   send: vi.fn(),
   resend: vi.fn(),
   cancel: vi.fn(),
-  invalidateCache: vi.fn(),
+  getInvites: vi.fn(),
 }
 
 vi.mock('file-saver', () => ({ saveAs: vi.fn() }))
@@ -200,8 +201,12 @@ describe(CourseInvites.name, () => {
       ...useCourseInvitesDefaults,
       data: [
         buildInvite(),
-        buildInvite({ overrides: { status: InviteStatus.ACCEPTED } }),
-        buildInvite({ overrides: { status: InviteStatus.DECLINED } }),
+        buildInvite({
+          overrides: { status: Course_Invite_Status_Enum.Accepted },
+        }),
+        buildInvite({
+          overrides: { status: Course_Invite_Status_Enum.Declined },
+        }),
       ],
     })
 
@@ -225,9 +230,13 @@ describe(CourseInvites.name, () => {
     useCourseInvitesMock.mockReturnValue({
       ...useCourseInvitesDefaults,
       data: [
-        buildInvite(),
-        buildInvite({ overrides: { status: InviteStatus.ACCEPTED } }),
-        buildInvite({ overrides: { status: InviteStatus.DECLINED } }),
+        buildInvite() as GetCourseInvitesQuery['courseInvites'][0],
+        buildInvite({
+          overrides: { status: Course_Invite_Status_Enum.Accepted },
+        }),
+        buildInvite({
+          overrides: { status: Course_Invite_Status_Enum.Declined },
+        }),
       ],
     })
 

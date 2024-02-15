@@ -1,13 +1,17 @@
 import { getByTestId } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
 
-import { Course_Type_Enum, GetWaitlistQuery } from '@app/generated/graphql'
+import {
+  Course_Type_Enum,
+  GetCourseInvitesQuery,
+  GetWaitlistQuery,
+} from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useWaitlist } from '@app/hooks/useWaitlist'
 import { buildOrder } from '@app/pages/tt-pages/OrderDetails/mock-utils'
-import { Course, CourseInvite, CourseParticipant, RoleName } from '@app/types'
+import { Course, CourseParticipant, RoleName } from '@app/types'
 import { DEFAULT_PAGINATION_LIMIT, LoadingStatus } from '@app/util'
 
 import { render, screen, within } from '@test/index'
@@ -47,8 +51,8 @@ const emptyPendingInvitesResponse = {
   error: undefined,
   resend: vi.fn(),
   cancel: vi.fn(),
-  status: LoadingStatus.SUCCESS,
-  invalidateCache: vi.fn(),
+  fetching: false,
+  getInvites: vi.fn(),
 }
 
 describe(CourseAttendeesTab.name, () => {
@@ -518,18 +522,20 @@ describe(CourseAttendeesTab.name, () => {
 
       expect(useCourseInvitesMock).toHaveBeenCalledTimes(8)
       expect(useCourseInvitesMock.mock.calls[6]).toMatchObject([
-        course.id,
-        'PENDING',
-        'asc',
-        12,
-        0,
-        course.schedule[0].end,
+        {
+          courseId: course.id,
+          status: 'PENDING',
+          order: 'asc',
+          limit: 12,
+          offset: 0,
+          courseEnd: course.schedule[0].end,
+        },
       ])
       expect(screen.getByText('No invites pending')).toBeVisible()
     })
 
     it('shows table with entries, if any', async () => {
-      const invites: CourseInvite[] = [
+      const invites: GetCourseInvitesQuery['courseInvites'][0][] = [
         buildInvite(),
         buildInvite(),
         buildInvite(),
@@ -549,12 +555,14 @@ describe(CourseAttendeesTab.name, () => {
 
       expect(useCourseInvitesMock).toHaveBeenCalledTimes(8)
       expect(useCourseInvitesMock.mock.calls[6]).toMatchObject([
-        course.id,
-        'PENDING',
-        'asc',
-        12,
-        0,
-        course.schedule[0].end,
+        {
+          courseId: course.id,
+          status: 'PENDING',
+          order: 'asc',
+          limit: 12,
+          offset: 0,
+          courseEnd: course.schedule[0].end,
+        },
       ])
 
       const table = screen.getByTestId('invites-table')

@@ -1,4 +1,5 @@
 import { GraphQLClient, Variables } from 'graphql-request'
+import { TypedDocumentNode } from 'urql'
 
 import { HASURA_BASE_URL, HASURA_SECRET } from '@qa/constants'
 
@@ -15,7 +16,7 @@ export type HasuraRole =
   | 'tt-admin'
 
 export async function runQueryAsRole<T>(
-  query: string,
+  query: string | TypedDocumentNode,
   variables: Variables,
   role: HasuraRole,
   headers?: Variables

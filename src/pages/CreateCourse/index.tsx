@@ -5,7 +5,6 @@ import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
 import { Course_Type_Enum } from '@app/generated/graphql'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
-import { LoadingStatus } from '@app/util'
 
 import {
   CreateCourseProvider,
@@ -27,7 +26,7 @@ export const CreateCourse = ({ initialContextValue }: Props) => {
   const {
     data: draftData,
     name: draftName,
-    status: fetchDraftStatus,
+    fetching,
     updatedAt: draftUpdatedAt,
   } = useCourseDraft(draftId)
 
@@ -42,7 +41,7 @@ export const CreateCourse = ({ initialContextValue }: Props) => {
     [draftData, pathname, profile, searchParams]
   )
 
-  if (fetchDraftStatus === LoadingStatus.FETCHING && draftId) {
+  if (fetching && draftId) {
     return <SuspenseLoading />
   }
 

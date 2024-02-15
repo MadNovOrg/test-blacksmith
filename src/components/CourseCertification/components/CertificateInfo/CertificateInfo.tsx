@@ -91,7 +91,7 @@ export const CertificateInfo: React.FC<
 
   const moduleGroupsWithModules = courseParticipant
     ? transformModulesToGroups(
-        courseParticipant.gradingModules as unknown as Course_Participant_Module[]
+        courseParticipant.gradingModules as Course_Participant_Module[]
       )
     : null
 

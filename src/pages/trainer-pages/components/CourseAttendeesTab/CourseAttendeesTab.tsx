@@ -12,11 +12,14 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
-import { Course_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Invite_Status_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useWaitlist } from '@app/hooks/useWaitlist'
-import { Course, InviteStatus } from '@app/types'
+import { Course } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { CourseInvites } from './CourseInvites'
@@ -56,14 +59,14 @@ export const CourseAttendeesTab: React.FC<
       ? { where: { order: { bookingContactProfileId: { _eq: profile?.id } } } }
       : {}),
   })
-  const { total: pendingTotal } = useCourseInvites(
+  const { total: pendingTotal } = useCourseInvites({
     courseId,
-    InviteStatus.PENDING
-  )
-  const { total: declinedTotal } = useCourseInvites(
+    status: Course_Invite_Status_Enum.Pending,
+  })
+  const { total: declinedTotal } = useCourseInvites({
     courseId,
-    InviteStatus.DECLINED
-  )
+    status: Course_Invite_Status_Enum.Declined,
+  })
   const { total: waitlistTotal } = useWaitlist({
     courseId: courseId,
     sort: { by: 'createdAt', dir: 'asc' },
@@ -161,22 +164,22 @@ export const CourseAttendeesTab: React.FC<
                 updateAttendeesHandler={mutateParticipants}
               />
             </TabPanel>
-            {!isOpenCourse ? (
-              <>
-                <TabPanel value="1" sx={{ px: 0 }}>
-                  <InvitesTab
-                    course={course}
-                    inviteStatus={InviteStatus.PENDING}
-                  />
-                </TabPanel>
-                <TabPanel value="2" sx={{ px: 0 }}>
-                  <InvitesTab
-                    course={course}
-                    inviteStatus={InviteStatus.DECLINED}
-                  />
-                </TabPanel>
-              </>
-            ) : null}
+            {!isOpenCourse
+              ? [
+                  Course_Invite_Status_Enum.Pending,
+                  Course_Invite_Status_Enum.Declined,
+                ].map((status, index) => (
+                  <>
+                    <TabPanel
+                      key={status}
+                      value={`${index + 1}`}
+                      sx={{ px: 0 }}
+                    >
+                      <InvitesTab course={course} inviteStatus={status} />
+                    </TabPanel>
+                  </>
+                ))
+              : null}
             {isOpenCourse && acl.canSeeWaitingLists() ? (
               <TabPanel value="3" sx={{ px: 0 }}>
                 <WaitlistTab course={course} />

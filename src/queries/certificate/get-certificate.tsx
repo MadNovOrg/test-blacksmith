@@ -1,8 +1,8 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 import { CERTIFICATE, CERTIFICATE_CHANGELOG } from '@app/queries/fragments'
 
-export const QUERY = gql`
+export const GET_CERTIFICATE_QUERY = gql`
   ${CERTIFICATE}
   ${CERTIFICATE_CHANGELOG}
   query GetCertificate($id: uuid!) {
