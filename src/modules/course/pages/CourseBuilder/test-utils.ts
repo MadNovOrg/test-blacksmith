@@ -97,7 +97,7 @@ export function buildModuleSetting(
     ...overrides,
     module: {
       id: chance.guid(),
-      name: chance.word(),
+      name: chance.sentence({ words: 2 }),
       lessons: [{ name: 'Lesson 1' }, { name: 'Lesson 2' }],
       ...overrides?.module,
     },
