@@ -7,12 +7,12 @@ import { AuthContext } from '@app/context/auth'
 import { injectACL } from '@app/context/auth/permissions'
 import { TrainerCoursesQueryVariables } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
+import { ALL_ORGS } from '@app/util'
 
 import { renderHook } from '@test/index'
 import { defaultProviders } from '@test/providers'
 
 import { useCourses } from './useCourses'
-import { ALL_ORGS } from './useOrg'
 
 describe('hook: useCourses', () => {
   it('calls course query with correct variables for all organizations a user is managing', () => {

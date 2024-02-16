@@ -16,7 +16,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 import { useDebounce } from 'use-debounce'
 
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
@@ -24,10 +24,10 @@ import { StyledSubNavLink } from '@app/components/StyledSubNavLink'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import {
-  ParamsType as GetContactsParamsType,
-  QUERY as GetContacts,
-  ResponseType as GetContactsResponseType,
-} from '@app/queries/admin/get-contacts'
+  GetContactsQuery,
+  GetContactsQueryVariables,
+} from '@app/generated/graphql'
+import { GET_CONTACTS } from '@app/queries/admin/get-contacts'
 import { RoleName, SortOrder } from '@app/types'
 import {
   DEFAULT_PAGINATION_LIMIT,
@@ -139,19 +139,18 @@ export const Contacts: React.FC<
     return obj
   }, [roleFilter, keywordDebounced])
 
-  const { data, error } = useSWR<
-    GetContactsResponseType,
-    Error,
-    [string, GetContactsParamsType]
-  >([
-    GetContacts,
-    {
+  const [{ data, error }] = useQuery<
+    GetContactsQuery,
+    GetContactsQueryVariables
+  >({
+    query: GET_CONTACTS,
+    variables: {
       orderBy: sorts[`${orderBy}-${order}`],
       where,
       limit: perPage,
       offset: perPage * currentPage,
     },
-  ])
+  })
 
   const loading = !data && !error
   const profilesTotalCount = data?.profilesAggregation?.aggregate?.count

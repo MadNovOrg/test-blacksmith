@@ -550,23 +550,6 @@ export enum CourseEvaluationQuestionGroup {
   MATERIALS_AND_VENUE = 'MATERIALS_AND_VENUE',
 }
 
-export enum CourseEvaluationQuestionType {
-  BOOLEAN = 'BOOLEAN',
-  TEXT = 'TEXT',
-  RATING = 'RATING',
-  BOOLEAN_REASON_Y = 'BOOLEAN_REASON_Y',
-  BOOLEAN_REASON_N = 'BOOLEAN_REASON_N',
-}
-
-export type CourseEvaluationQuestion = {
-  id: string
-  type: CourseEvaluationQuestionType
-  questionKey: string
-  group: CourseEvaluationQuestionGroup
-  displayOrder: number
-  required: number
-}
-
 export type SetCourseTrainerInput = {
   course_id: number
   profile_id: string

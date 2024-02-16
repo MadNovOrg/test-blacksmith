@@ -15,9 +15,9 @@ export type ParamsType = {
   where?: object
 }
 
-export const QUERY = gql`
+export const GET_CONTACTS = gql`
   ${PROFILE}
-  query Profiles(
+  query GetContacts(
     $limit: Int = 20
     $offset: Int = 0
     $orderBy: [profile_order_by!] = { familyName: asc }

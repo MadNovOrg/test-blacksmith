@@ -1,18 +1,69 @@
 import { useCallback, useMemo } from 'react'
-import useSWR from 'swr'
+import { gql, useMutation, useQuery } from 'urql'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
-import { useMatchMutate } from '@app/hooks/useMatchMutate'
-import { MUTATION as DELETE_ORG_INVITE_QUERY } from '@app/queries/invites/delete-org-invite'
 import {
-  ParamsType as GetOrgInvitesParamsType,
-  QUERY as GET_ORG_INVITES_QUERY,
-  ResponseType as GetOrgInvitesResponseType,
-} from '@app/queries/invites/get-org-invites'
-import { MUTATION as RESEND_ORG_INVITE_QUERY } from '@app/queries/invites/resend-org-invite'
-import { Matcher } from '@app/queries/organization/get-org-details'
-import { OrganizationInvite } from '@app/types'
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
+  DeleteOrgInviteMutation,
+  DeleteOrgInviteMutationVariables,
+  GetOrgInvitesQuery,
+  GetOrgInvitesQueryVariables,
+  RecreateOrgInviteMutation,
+  RecreateOrgInviteMutationVariables,
+} from '@app/generated/graphql'
+import { PROFILE } from '@app/queries/fragments'
+
+export const GET_ORG_INVITES = gql`
+  ${PROFILE}
+  query GetOrgInvites(
+    $orgId: uuid!
+    $limit: Int = 20
+    $offset: Int = 0
+    $where: organization_invites_bool_exp = {}
+  ) {
+    orgInvites: organization_invites(
+      where: { _and: [{ orgId: { _eq: $orgId } }, $where] }
+      limit: $limit
+      offset: $offset
+      order_by: { createdAt: desc }
+    ) {
+      id
+      createdAt
+      updatedAt
+      email
+      status
+      isAdmin
+      profile {
+        ...Profile
+      }
+      organization {
+        ...Organization
+      }
+    }
+    total: organization_invites_aggregate(
+      where: { _and: [{ orgId: { _eq: $orgId } }, $where] }
+    ) {
+      aggregate {
+        count
+      }
+    }
+  }
+`
+export const DELETE_ORG_INVITE = gql`
+  mutation DeleteOrgInvite($inviteId: uuid!) {
+    delete_organization_invites_by_pk(id: $inviteId) {
+      id
+    }
+  }
+`
+export const RESEND_ORG_INVITE = gql`
+  mutation RecreateOrgInvite($inviteId: uuid!) {
+    update_organization_invites_by_pk(
+      pk_columns: { id: $inviteId }
+      _set: { updatedAt: "now()" }
+    ) {
+      id
+    }
+  }
+`
 
 type Props = {
   limit?: number
@@ -24,55 +75,62 @@ export const useOrgInvites = (
   orgId: string,
   { limit, offset, where }: Props
 ) => {
-  const fetcher = useFetcher()
-  const matchMutate = useMatchMutate()
+  const [{ data, error, fetching }, mutate] = useQuery<
+    GetOrgInvitesQuery,
+    GetOrgInvitesQueryVariables
+  >({
+    query: GET_ORG_INVITES,
+    variables: { orgId, limit, offset, where },
+  })
 
-  const { data, error, mutate } = useSWR<
-    GetOrgInvitesResponseType,
-    Error,
-    [string, GetOrgInvitesParamsType] | null
-  >(orgId ? [GET_ORG_INVITES_QUERY, { orgId, limit, offset, where }] : null)
+  const [, resendOrgInvite] = useMutation<
+    RecreateOrgInviteMutation,
+    RecreateOrgInviteMutationVariables
+  >(RESEND_ORG_INVITE)
 
-  const status = getSWRLoadingStatus(data, error)
-
-  const invalidateCache = useMemo(() => {
-    return async () => {
-      await mutate()
-      await matchMutate(Matcher)
-    }
-  }, [matchMutate, mutate])
+  const [, deleteOrgInvite] = useMutation<
+    DeleteOrgInviteMutation,
+    DeleteOrgInviteMutationVariables
+  >(DELETE_ORG_INVITE)
 
   const resend = useCallback(
-    async (invite: OrganizationInvite) => {
-      await fetcher(RESEND_ORG_INVITE_QUERY, {
-        inviteId: invite.id,
+    async (inviteId: string) => {
+      await resendOrgInvite({
+        inviteId: inviteId,
       })
-      await invalidateCache()
+      mutate()
     },
-    [fetcher, invalidateCache]
+    [mutate, resendOrgInvite]
   )
 
   const cancel = useCallback(
-    async (invite: OrganizationInvite) => {
-      await fetcher(DELETE_ORG_INVITE_QUERY, {
-        inviteId: invite.id,
+    async (inviteId: string) => {
+      await deleteOrgInvite({
+        inviteId: inviteId,
       })
-      await invalidateCache()
+      mutate()
     },
-    [fetcher, invalidateCache]
+    [deleteOrgInvite, mutate]
   )
 
   return useMemo(
     () => ({
       invites: data?.orgInvites ?? [],
-      totalCount: data?.total.aggregate.count,
+      totalCount: data?.total.aggregate?.count ?? 0,
       resend,
       cancel,
-      status,
       error,
-      loading: status === LoadingStatus.FETCHING,
+      loading: fetching,
       mutate,
     }),
-    [data, resend, cancel, status, error, mutate]
+    [
+      data?.orgInvites,
+      data?.total.aggregate?.count,
+      resend,
+      cancel,
+      error,
+      fetching,
+      mutate,
+    ]
   )
 }

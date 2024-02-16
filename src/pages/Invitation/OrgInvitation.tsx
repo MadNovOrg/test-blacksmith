@@ -15,20 +15,21 @@ import jwtDecode from 'jwt-decode'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import useSWR from 'swr'
+import { useMutation, useQuery } from 'urql'
 
 import { AppLogo } from '@app/components/AppLogo'
 import { useAuth } from '@app/context/auth'
-import { gqlRequest } from '@app/lib/gql-request'
 import {
-  MUTATION as DECLINE_ORG_INVITE_MUTATION,
-  ResponseType as DeclineOrgInviteResponseType,
-} from '@app/queries/invites/decline-org-invite'
+  DeclineOrgInviteMutation,
+  DeclineOrgInviteMutationVariables,
+  GetOrgInviteQuery,
+  GetOrgInviteQueryVariables,
+} from '@app/generated/graphql'
+import { MUTATION as DECLINE_ORG_INVITE_MUTATION } from '@app/queries/invites/decline-org-invite'
 import {
   QUERY as GET_ORG_INVITE_QUERY,
   ResponseType as GetOrgInviteResponseType,
 } from '@app/queries/invites/get-org-invite'
-import { GqlError } from '@app/types'
 import { userExistsInCognito } from '@app/util'
 
 export const OrgInvitationPage = () => {
@@ -66,13 +67,26 @@ export const OrgInvitationPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
-  const { data, error } = useSWR<GetOrgInviteResponseType, GqlError>(
-    tokenData?.token ? GET_ORG_INVITE_QUERY : null,
-    (query, variables) =>
-      gqlRequest(query, variables, {
-        headers: { 'x-auth': `Bearer ${tokenData?.token}` },
-      })
-  )
+  const [{ data, error }] = useQuery<
+    GetOrgInviteQuery,
+    GetOrgInviteQueryVariables
+  >({
+    query: GET_ORG_INVITE_QUERY,
+    pause: !tokenData?.token,
+    context: useMemo(
+      () => ({
+        fetchOptions: {
+          headers: { 'x-auth': `Bearer ${tokenData?.token}` },
+        },
+      }),
+      [tokenData?.token]
+    ),
+  })
+
+  const [, declineInvite] = useMutation<
+    DeclineOrgInviteMutation,
+    DeclineOrgInviteMutationVariables
+  >(DECLINE_ORG_INVITE_MUTATION)
 
   const invite = (data?.invite || {}) as GetOrgInviteResponseType['invite']
   const isFetching = !data && !error
@@ -104,12 +118,15 @@ export const OrgInvitationPage = () => {
       setSubmitError(null)
 
       try {
-        await gqlRequest<DeclineOrgInviteResponseType>(
-          DECLINE_ORG_INVITE_MUTATION,
+        declineInvite(
           {
-            inviteId: data?.invite.id,
+            inviteId: data?.invite?.id,
           },
-          { headers: { 'x-auth': `Bearer ${tokenData.token}` } }
+          {
+            fetchOptions: {
+              headers: { 'x-auth': `Bearer ${tokenData.token}` },
+            },
+          }
         )
         return navigate('/login?invitationDeclined=true')
       } catch (e) {

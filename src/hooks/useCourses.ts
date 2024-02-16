@@ -17,14 +17,14 @@ import {
   TrainerCoursesQuery,
   TrainerCoursesQueryVariables,
 } from '@app/generated/graphql'
-import { ALL_ORGS } from '@app/hooks/useOrg'
-import { QUERY as GetTrainerCourses } from '@app/queries/courses/get-trainer-courses'
+import { QUERY as GET_TRAINER_COURSES } from '@app/queries/courses/get-trainer-courses'
 import {
   AdminOnlyCourseStatus,
   AttendeeOnlyCourseStatus,
   CourseState,
   RoleName,
 } from '@app/types'
+import { ALL_ORGS } from '@app/util'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { Sorting } from './useTableSort'
@@ -448,7 +448,7 @@ export const useCourses = (
     TrainerCoursesQueryVariables
   >({
     requestPolicy: 'cache-and-network',
-    query: GetTrainerCourses,
+    query: GET_TRAINER_COURSES,
     variables: {
       where,
       orderBy,

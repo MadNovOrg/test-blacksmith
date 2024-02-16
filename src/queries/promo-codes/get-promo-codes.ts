@@ -9,7 +9,7 @@ export type InputType = GetPromoCodesQueryVariables
 
 export type ResponseType = GetPromoCodesQuery
 
-export const QUERY = gql`
+export const GET_PROMO_CODES = gql`
   query GetPromoCodes(
     $orderBy: [promo_code_order_by!]
     $where: promo_code_bool_exp

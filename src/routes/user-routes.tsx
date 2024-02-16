@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import {
@@ -30,11 +30,13 @@ const ResourcesRoutes = React.lazy(() => import('./resources'))
 const UserRoutes = () => {
   const { acl, profile } = useAuth()
 
-  const { data } = useSWR<
+  const [{ data }] = useQuery<
     GetUserCanAccessResourcesQuery,
-    Error,
-    [string, GetUserCanAccessResourcesQueryVariables]
-  >([GET_USER_CAN_ACCESS_RESOURCES, { profileId: profile?.id }])
+    GetUserCanAccessResourcesQueryVariables
+  >({
+    query: GET_USER_CAN_ACCESS_RESOURCES,
+    variables: { profileId: profile?.id },
+  })
 
   const showResources =
     (data?.certificates.aggregate?.count ||

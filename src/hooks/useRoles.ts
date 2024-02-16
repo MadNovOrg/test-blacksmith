@@ -1,19 +1,23 @@
-import useSWR from 'swr'
+import { useQuery, gql } from 'urql'
 
-import { GetRolesQuery, GetRolesQueryVariables } from '@app/generated/graphql'
-import { getRoles } from '@app/queries/users'
-import { getSWRLoadingStatus } from '@app/util'
+import { GetRolesQuery } from '@app/generated/graphql'
 
+export const GET_ROLES = gql`
+  query GetRoles {
+    role {
+      id
+      name
+    }
+  }
+`
 export default function useRoles() {
-  const { data, error } = useSWR<
-    GetRolesQuery,
-    Error,
-    [string, GetRolesQueryVariables] | null
-  >([getRoles, {}])
+  const [{ data, error, fetching }] = useQuery<GetRolesQuery>({
+    query: GET_ROLES,
+  })
 
   return {
     roles: data?.role,
     error,
-    status: getSWRLoadingStatus(data, error),
+    fetching,
   }
 }

@@ -4,8 +4,8 @@ import { useForm, FormProvider } from 'react-hook-form'
 import { noop } from 'ts-essentials'
 import { InferType } from 'yup'
 
+import { Course_Evaluation_Question_Type_Enum } from '@app/generated/graphql'
 import { yup } from '@app/schemas'
-import { CourseEvaluationQuestionType } from '@app/types'
 
 import { render, screen, userEvent } from '@test/index'
 
@@ -40,7 +40,7 @@ const FormWrapper: React.FC<PropsWithChildren> = ({ children }) => {
 
 describe('BooleanQuestion component', () => {
   it('renders BooleanQuestionReasonYes', async () => {
-    const type = CourseEvaluationQuestionType.BOOLEAN_REASON_Y
+    const type = Course_Evaluation_Question_Type_Enum.BooleanReasonY
     const value = 'YES'
     const reason = 'my reason'
     const infoText = 'info text'
@@ -59,7 +59,7 @@ describe('BooleanQuestion component', () => {
     expect(screen.getByPlaceholderText('info text')).toBeInTheDocument()
   })
   it('renders BooleanQuestionReasonNo', async () => {
-    const type = CourseEvaluationQuestionType.BOOLEAN_REASON_N
+    const type = Course_Evaluation_Question_Type_Enum.BooleanReasonN
     const value = 'NO'
     const reason = 'reason'
     const infoText = 'information text'

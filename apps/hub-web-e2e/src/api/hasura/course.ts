@@ -10,7 +10,7 @@ import { SAVE_COURSE_GRADING_MUTATION } from '@app/modules/grading/pages/CourseG
 import { TRANSFER_PARTICIPANT } from '@app/pages/TransferParticipant/queries'
 import { CANCEL_COURSE_MUTATION } from '@app/queries/courses/cancel-course'
 import { QUERY as TRAINER_COURSES } from '@app/queries/courses/get-trainer-courses'
-import { GetParticipant as GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
+import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
   CourseParticipant,
   CourseTrainerType,

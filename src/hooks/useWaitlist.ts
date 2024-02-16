@@ -1,20 +1,44 @@
 import { useMemo } from 'react'
-import useSWR, { KeyedMutator } from 'swr'
+import { useQuery, gql } from 'urql'
 
 import {
   GetWaitlistQuery,
   GetWaitlistQueryVariables,
 } from '@app/generated/graphql'
-import { QUERY } from '@app/queries/booking/get-waitlist'
+import { Waitlist as WaitlistSummary } from '@app/queries/fragments'
 import { SortOrder } from '@app/types'
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
+
+export const QUERY = gql`
+  ${WaitlistSummary}
+
+  query GetWaitlist(
+    $where: waitlist_bool_exp!
+    $limit: Int = 20
+    $offset: Int = 0
+    $orderBy: [waitlist_order_by!]
+  ) {
+    waitlist(
+      where: $where
+      limit: $limit
+      offset: $offset
+      order_by: $orderBy
+    ) {
+      ...WaitlistSummary
+    }
+
+    waitlistAggregate: waitlist_aggregate(where: $where) {
+      aggregate {
+        count
+      }
+    }
+  }
+`
 
 export type UseWaitlistProps = {
   courseId: number
   sort: { by: string; dir: SortOrder }
   limit?: number
   offset?: number
-  mutate?: KeyedMutator<unknown>
 }
 
 export const useWaitlist = ({
@@ -35,20 +59,29 @@ export const useWaitlist = ({
     [courseId]
   )
 
-  const { data, error, mutate } = useSWR<
+  const [{ data, error, fetching }, mutate] = useQuery<
     GetWaitlistQuery,
-    Error,
-    [string, GetWaitlistQueryVariables]
-  >([QUERY, { where, orderBy, limit, offset }])
+    GetWaitlistQueryVariables
+  >({
+    query: QUERY,
+    variables: { where, orderBy, limit, offset },
+    requestPolicy: 'cache-and-network',
+  })
 
   return useMemo(
     () => ({
       data: data?.waitlist ?? [],
       total: data?.waitlistAggregate?.aggregate?.count ?? 0,
-      isLoading: getSWRLoadingStatus(data, error) === LoadingStatus.FETCHING,
+      isLoading: fetching,
       error,
       mutate,
     }),
-    [data, error, mutate]
+    [
+      data?.waitlist,
+      data?.waitlistAggregate?.aggregate?.count,
+      error,
+      fetching,
+      mutate,
+    ]
   )
 }

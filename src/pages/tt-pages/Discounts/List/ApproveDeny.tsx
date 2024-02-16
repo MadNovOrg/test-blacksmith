@@ -1,21 +1,24 @@
 import { LoadingButton } from '@mui/lab'
 import { Box } from '@mui/material'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
+import { useMutation, useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import {
+  ApproveCodeMutation,
+  ApproveCodeMutationVariables,
+  DenyCodeMutation,
+  DenyCodeMutationVariables,
   GetPromoCodesPendingApprovalQuery,
   GetPromoCodesQuery,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { APPROVE_CODE, DENY_CODE } from '@app/queries/promo-codes/approve-deny'
-import { QUERY } from '@app/queries/promo-codes/get-pending-approval'
+import { GET_PROMOCODES_PENDING_APPROVAL } from '@app/queries/promo-codes/get-pending-approval'
 
 type Props = {
   promoCode: GetPromoCodesQuery['promoCodes'][number]
-  onAction: () => Promise<unknown>
+  onAction: () => Promise<unknown> | void
 }
 
 export const ApproveDeny: React.FC<React.PropsWithChildren<Props>> = ({
@@ -23,45 +26,56 @@ export const ApproveDeny: React.FC<React.PropsWithChildren<Props>> = ({
   onAction,
 }) => {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const { profile } = useAuth()
 
-  const [loading, setLoading] = useState(false)
-  const { mutate } = useSWR<GetPromoCodesPendingApprovalQuery, Error>([QUERY])
+  const [{ fetching: codeApprovalLoading }, getPromoCodes] =
+    useQuery<GetPromoCodesPendingApprovalQuery>({
+      query: GET_PROMOCODES_PENDING_APPROVAL,
+    })
+
+  const [, approveCode] = useMutation<
+    ApproveCodeMutation,
+    ApproveCodeMutationVariables
+  >(APPROVE_CODE)
+
+  const [{ fetching: codeDenialLoading }, denyCode] = useMutation<
+    DenyCodeMutation,
+    DenyCodeMutationVariables
+  >(DENY_CODE)
 
   const reloadData = useCallback(async () => {
-    await mutate()
+    getPromoCodes()
     await onAction()
-  }, [mutate, onAction])
+  }, [getPromoCodes, onAction])
 
   const onApprove = async () => {
-    setLoading(true)
     try {
-      await fetcher(APPROVE_CODE, { id: promoCode.id, approvedBy: profile?.id })
+      await approveCode({ id: promoCode.id, approvedBy: profile?.id })
+      await reloadData()
     } catch (err) {
       console.error((err as Error).message)
     }
-    await reloadData()
-    setLoading(false)
   }
 
   const onDeny = async () => {
-    setLoading(true)
     try {
-      await fetcher(DENY_CODE, { id: promoCode.id, deniedBy: profile?.id })
+      await denyCode({ id: promoCode.id, deniedBy: profile?.id })
+      await reloadData()
     } catch (err) {
       console.error((err as Error).message)
     }
-    await reloadData()
-    setLoading(false)
   }
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <LoadingButton size="small" loading={loading} onClick={onApprove}>
+      <LoadingButton
+        size="small"
+        loading={codeApprovalLoading}
+        onClick={onApprove}
+      >
         {t('approve')}
       </LoadingButton>
-      <LoadingButton size="small" loading={loading} onClick={onDeny}>
+      <LoadingButton size="small" loading={codeDenialLoading} onClick={onDeny}>
         {t('deny')}
       </LoadingButton>
     </Box>

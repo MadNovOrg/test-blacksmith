@@ -20,7 +20,7 @@ import { isPast } from 'date-fns'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { LinkToProfile } from '@app/components/LinkToProfile'
@@ -58,19 +58,18 @@ export const EvaluationSummaryTab: React.FC<
   const courseId = Number.parseInt(params.id as string, 10)
   const profileId = profile?.id as string
 
-  const { data, error } = useSWR<
+  const [{ data, error }] = useQuery<
     GetEvaluationsQuery,
-    Error,
-    [string, GetEvaluationsQueryVariables]
-  >([
-    GET_EVALUATION_QUERY,
-    {
+    GetEvaluationsQueryVariables
+  >({
+    query: GET_EVALUATION_QUERY,
+    variables: {
       courseId,
-      profileCondition: acl.canViewArchivedProfileData()
+      ...(acl.canViewArchivedProfileData()
         ? {}
-        : { archived: { _eq: false } },
+        : { profileCondition: { archived: { _eq: false } } }),
     },
-  ])
+  })
 
   const isCourseTrainer = useMemo(
     () => !!data?.trainers.find(t => t.profile.id === profileId),

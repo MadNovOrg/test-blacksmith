@@ -7,11 +7,11 @@ import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { CourseEvaluationQuestionType } from '@app/types'
+import { Course_Evaluation_Question_Type_Enum } from '@app/generated/graphql'
 import { noop } from '@app/util'
 
 type BooleanQuestionProps = {
-  type: CourseEvaluationQuestionType
+  type: Course_Evaluation_Question_Type_Enum | null | undefined
   value: string
   reason: string
   onChange?: (value: string, reason: string) => void
@@ -68,7 +68,7 @@ export const BooleanQuestion: React.FC<
           data-testid="rating-no"
         />
       </RadioGroup>
-      {type === CourseEvaluationQuestionType.BOOLEAN_REASON_Y &&
+      {type === Course_Evaluation_Question_Type_Enum.BooleanReasonY &&
         value === 'YES' && (
           <Box mt={2}>
             <Controller
@@ -94,7 +94,7 @@ export const BooleanQuestion: React.FC<
             />
           </Box>
         )}
-      {type === CourseEvaluationQuestionType.BOOLEAN_REASON_N &&
+      {type === Course_Evaluation_Question_Type_Enum.BooleanReasonN &&
         value === 'NO' && (
           <Box mt={2}>
             <Controller

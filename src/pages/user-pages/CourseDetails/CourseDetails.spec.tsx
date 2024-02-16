@@ -5,7 +5,7 @@ import { fromValue } from 'wonka'
 
 import { Course_Type_Enum } from '@app/generated/graphql'
 import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/queries/course-evaluation/get-feedback-users'
-import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
+import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 import { QUERY as GET_COURSE_QUERY } from '@app/queries/user-queries/get-course-by-id'
 import { Course, CourseParticipant, RoleName } from '@app/types'
 
@@ -43,7 +43,7 @@ const getURQLMockClient: (data: SpecCourseType) => Client = ({
               },
             },
           })
-        case GetParticipant:
+        case GET_PARTICIPANT:
           return fromValue({
             data: {
               course_participant: courseParticipants ?? [buildParticipant()],

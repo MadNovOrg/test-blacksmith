@@ -14,7 +14,6 @@ import {
   UserCoursesQueryVariables,
 } from '@app/generated/graphql'
 import { getIndividualsCourseStatusesConditions } from '@app/hooks/useCourses'
-import { ALL_ORGS } from '@app/hooks/useOrg'
 import { Sorting } from '@app/hooks/useTableSort'
 import { QUERY } from '@app/queries/user-queries/get-user-courses'
 import {
@@ -22,6 +21,7 @@ import {
   AttendeeOnlyCourseStatus,
   CourseState,
 } from '@app/types'
+import { ALL_ORGS } from '@app/util'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { useUnevaluatedUserCourses } from './useUnevaluatedUserCourses'

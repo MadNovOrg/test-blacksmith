@@ -18,8 +18,8 @@ import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TableNoRows } from '@app/components/Table/TableNoRows'
+import { Course_Invite_Status_Enum } from '@app/generated/graphql'
 import { useOrgInvites } from '@app/hooks/useOrgInvites'
-import { InviteStatus } from '@app/types'
 import {
   DEFAULT_PAGINATION_LIMIT,
   DEFAULT_PAGINATION_ROW_OPTIONS,
@@ -49,7 +49,7 @@ export const OrgInvitesTable: React.FC<
     if (!invites) return []
     const byStatus = groupBy(
       invites,
-      inv => inv.status === InviteStatus.PENDING
+      inv => inv.status === Course_Invite_Status_Enum.Pending
     )
     return [...(byStatus['true'] ?? []), ...(byStatus['false'] ?? [])]
   }, [invites])
@@ -132,9 +132,9 @@ export const OrgInvitesTable: React.FC<
                         `pages.org-details.tabs.users.invite-status.${invite.status.toLowerCase()}`
                       )}
                       color={
-                        invite.status === InviteStatus.ACCEPTED
+                        invite.status === Course_Invite_Status_Enum.Accepted
                           ? 'success'
-                          : invite.status === InviteStatus.DECLINED
+                          : invite.status === Course_Invite_Status_Enum.Declined
                           ? 'error'
                           : 'secondary'
                       }
@@ -142,14 +142,14 @@ export const OrgInvitesTable: React.FC<
                     />
                   </TableCell>
                   <TableCell>
-                    {invite.status === InviteStatus.PENDING ? (
+                    {invite.status === Course_Invite_Status_Enum.Pending ? (
                       <Box display="flex" justifyContent="flex-end">
                         <Button
                           data-testid="resend-invite-button"
                           size="large"
                           variant="text"
                           color="primary"
-                          onClick={() => resend(invite)}
+                          onClick={() => resend(invite.id)}
                         >
                           {t('common.resend')}
                         </Button>
@@ -158,7 +158,7 @@ export const OrgInvitesTable: React.FC<
                           size="large"
                           variant="text"
                           color="primary"
-                          onClick={() => cancel(invite)}
+                          onClick={() => cancel(invite.id)}
                         >
                           {t('common.cancel-invite')}
                         </Button>

@@ -22,7 +22,7 @@ type Props = {
   sorting: Sorting
   loading: boolean
   filtered: boolean
-  onAction: () => Promise<unknown>
+  onAction: () => Promise<unknown> | void
 }
 
 export const DiscountsTable: React.FC<React.PropsWithChildren<Props>> = ({

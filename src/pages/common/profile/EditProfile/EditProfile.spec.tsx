@@ -5,7 +5,6 @@ import { never } from 'wonka'
 import useProfile from '@app/hooks/useProfile'
 import useRoles from '@app/hooks/useRoles'
 import { RoleName } from '@app/types'
-import { LoadingStatus } from '@app/util'
 
 import { render, renderHook, screen } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
@@ -32,12 +31,11 @@ describe(EditProfilePage.name, () => {
         archived: false,
       },
       certifications: [],
-      status: LoadingStatus.SUCCESS,
     } as unknown as ReturnType<typeof useProfile>)
 
     useRolesMock.mockReturnValue({
       roles: [],
-      status: LoadingStatus.SUCCESS,
+      fetching: false,
       error: undefined,
     })
 
@@ -67,13 +65,12 @@ describe(EditProfilePage.name, () => {
         archived: false,
       },
       certifications: [],
-      status: LoadingStatus.SUCCESS,
     } as unknown as ReturnType<typeof useProfile>)
 
     useRolesMock.mockReturnValue({
       roles: [],
-      status: LoadingStatus.SUCCESS,
       error: undefined,
+      fetching: false,
     })
 
     const client = {

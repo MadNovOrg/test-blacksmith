@@ -16,10 +16,10 @@ import {
   filtersToWhereClause,
   getOrderBy,
 } from '@app/hooks/useCourses'
-import { ALL_ORGS } from '@app/hooks/useOrg'
 import { Sorting } from '@app/hooks/useTableSort'
 import { QUERY } from '@app/queries/courses/get-trainer-courses'
 import { RoleName } from '@app/types'
+import { ALL_ORGS } from '@app/util'
 
 type Props = {
   statuses: Course_Status_Enum[]

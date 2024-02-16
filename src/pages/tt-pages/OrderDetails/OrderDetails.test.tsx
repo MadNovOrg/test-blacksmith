@@ -19,7 +19,6 @@ import {
 } from '@app/generated/graphql'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { QUERY as GET_ORDER_QUERY } from '@app/queries/order/get-order'
-import { LoadingStatus } from '@app/util'
 
 import {
   chance,
@@ -56,8 +55,8 @@ describe('page: OrderDetails', () => {
       isLoading: false,
       total: 0,
       error: undefined,
-      status: LoadingStatus.IDLE,
       mutate: vi.fn(),
+      fetching: false,
     })
   })
 
@@ -290,10 +289,10 @@ describe('page: OrderDetails', () => {
     usePromoCodesMock.mockReturnValue({
       promoCodes: [promoCode],
       isLoading: false,
-      status: LoadingStatus.IDLE,
       error: undefined,
       total: 1,
       mutate: vi.fn(),
+      fetching: false,
     })
 
     const client = {

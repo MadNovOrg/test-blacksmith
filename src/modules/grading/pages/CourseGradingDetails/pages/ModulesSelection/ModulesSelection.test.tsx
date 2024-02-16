@@ -5,7 +5,6 @@ import { Accreditors_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseModules from '@app/hooks/useCourseModules'
 import { MUTATION } from '@app/queries/courses/save-course-modules-selection'
-import { LoadingStatus } from '@app/util'
 
 import {
   render,
@@ -34,7 +33,7 @@ describe('page: ModulesSelection', () => {
 
   it('displays a spinner while loading course modules', () => {
     const COURSE_ID = 'course-id'
-    useCourseModulesMock.mockReturnValue({ status: LoadingStatus.FETCHING })
+    useCourseModulesMock.mockReturnValue({ fetching: true })
 
     render(
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
@@ -62,8 +61,8 @@ describe('page: ModulesSelection', () => {
     ]
 
     useCourseModulesMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
       data: courseModules,
+      fetching: false,
     })
 
     render(
@@ -104,8 +103,8 @@ describe('page: ModulesSelection', () => {
     courseModules[0].module.moduleGroup.mandatory = true
 
     useCourseModulesMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
       data: courseModules,
+      fetching: false,
     })
 
     render(
@@ -146,7 +145,7 @@ describe('page: ModulesSelection', () => {
     ]
 
     useCourseModulesMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
+      fetching: false,
       data: courseModules,
     })
 
@@ -186,7 +185,7 @@ describe('page: ModulesSelection', () => {
     ]
 
     useCourseModulesMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
+      fetching: false,
       data: courseModules,
     })
 
@@ -236,7 +235,7 @@ describe('page: ModulesSelection', () => {
     ]
 
     useCourseModulesMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
+      fetching: false,
       data: courseModules,
     })
 
@@ -269,7 +268,7 @@ describe('page: ModulesSelection', () => {
 
   it('navigates back to the module grading clearance page when clicked on the button', async () => {
     useCourseModulesMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
+      fetching: false,
       data: [buildCourseModule(), buildCourseModule(), buildCourseModule()],
     })
 

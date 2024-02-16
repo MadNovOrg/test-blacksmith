@@ -4,7 +4,7 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useParams } from 'react-router-dom'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import {
   Accreditors_Enum,
@@ -13,7 +13,6 @@ import {
 } from '@app/generated/graphql'
 import { NotFound } from '@app/pages/common/NotFound'
 import { QUERY as GET_COURSE_BY_ID_QUERY } from '@app/queries/courses/get-course-by-id'
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { BILDCourseBuilder } from './components/BILDCourseBuilder/BILDCourseBuilder'
 import { ICMCourseBuilder } from './components/ICMCourseBuilder/ICMCourseBuilder'
@@ -29,15 +28,16 @@ export const CourseBuilder: React.FC<React.PropsWithChildren> = () => {
 
   const { editMode } = (useLocation().state as { editMode: boolean }) ?? {}
 
-  const { data: courseData, error: courseDataError } = useSWR<
+  const [{ data: courseData, error: courseDataError, fetching }] = useQuery<
     GetCourseByIdQuery,
-    Error,
-    [string, GetCourseByIdQueryVariables] | null
-  >(courseId ? [GET_COURSE_BY_ID_QUERY, { id: Number(courseId) }] : null)
+    GetCourseByIdQueryVariables
+  >({
+    query: GET_COURSE_BY_ID_QUERY,
+    variables: { id: Number(courseId) },
+    pause: !courseId,
+  })
 
-  const courseLoadingStatus = getSWRLoadingStatus(courseData, courseDataError)
-
-  if (courseLoadingStatus === LoadingStatus.SUCCESS && !courseData?.course) {
+  if (!fetching && !courseData?.course) {
     return (
       <NotFound
         title="Ooops!"
@@ -46,7 +46,7 @@ export const CourseBuilder: React.FC<React.PropsWithChildren> = () => {
     )
   }
 
-  if (courseLoadingStatus === LoadingStatus.ERROR) {
+  if (courseDataError) {
     return (
       <Alert severity="error" variant="filled">
         {t('internal-error')}
@@ -54,7 +54,7 @@ export const CourseBuilder: React.FC<React.PropsWithChildren> = () => {
     )
   }
 
-  if (courseLoadingStatus === LoadingStatus.FETCHING) {
+  if (fetching) {
     return (
       <Box display="flex" margin="auto">
         <CircularProgress sx={{ m: 'auto' }} size={64} />

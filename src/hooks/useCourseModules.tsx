@@ -1,25 +1,23 @@
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import {
-  ParamsType,
-  QUERY,
-  ResponseType,
-} from '@app/queries/courses/get-course-modules'
-import { CourseModule } from '@app/types'
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
+  CourseModulesQuery,
+  CourseModulesQueryVariables,
+} from '@app/generated/graphql'
+import { GET_COURSE_MODULES } from '@app/queries/courses/get-course-modules'
 
 export default function useCourseModules(courseId: string): {
-  status: LoadingStatus
-  data?: CourseModule[]
+  fetching: boolean
+  data?: CourseModulesQuery['courseModules']
   error?: Error
 } {
-  const { data, error } = useSWR<ResponseType, Error, [string, ParamsType]>([
-    QUERY,
-    { id: courseId },
-  ])
+  const [{ data, error, fetching }] = useQuery<
+    CourseModulesQuery,
+    CourseModulesQueryVariables
+  >({ query: GET_COURSE_MODULES, variables: { id: Number(courseId) ?? 0 } })
 
   return {
-    status: getSWRLoadingStatus(data, error),
+    fetching,
     data: data?.courseModules,
     error,
   }

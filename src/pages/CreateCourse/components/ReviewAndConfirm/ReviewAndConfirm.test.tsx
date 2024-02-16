@@ -1,6 +1,4 @@
 import { add, addHours } from 'date-fns'
-import React from 'react'
-import useSWR from 'swr'
 import { Client, CombinedError, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
@@ -36,9 +34,6 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigate,
 }))
 
-vi.mock('swr')
-const mockSWR = vi.mocked(useSWR)
-
 const mockFetcher = vi.fn()
 vi.mock('@app/hooks/use-fetcher', () => ({
   useFetcher: () => mockFetcher,
@@ -70,14 +65,6 @@ for (const trainer of trainers) {
 
 describe('component: ReviewAndConfirm', () => {
   it('renders alert if course is not found', async () => {
-    mockSWR.mockReturnValue({
-      data: null,
-      error: new Error(),
-      mutate: vi.fn(),
-      isValidating: false,
-      isLoading: false,
-    })
-
     const client = {
       executeQuery: () => never,
     } as unknown as Client

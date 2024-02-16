@@ -1,12 +1,4 @@
-import { gql } from 'graphql-request'
-
-import { CourseEvaluationQuestion } from '@app/types'
-
-export type ResponseType = {
-  questions: CourseEvaluationQuestion[]
-}
-
-export type ParamsType = never
+import { gql } from 'urql'
 
 export const QUERY = gql`
   query GetCourseEvaluationQuestions {

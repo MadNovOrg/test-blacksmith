@@ -1,5 +1,5 @@
 import { Alert, CircularProgress, Container } from '@mui/material'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useMutation } from 'urql'
 

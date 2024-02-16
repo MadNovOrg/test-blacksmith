@@ -1,4 +1,4 @@
-import useSWR from 'swr'
+import { useQuery, gql } from 'urql'
 
 import {
   GetProfilesQuery,
@@ -7,10 +7,55 @@ import {
   Profile_Bool_Exp,
   Profile_Order_By,
 } from '@app/generated/graphql'
-import { getProfiles } from '@app/queries/profile/get-profiles'
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { Sorting } from './useTableSort'
+
+export const GET_PROFILES = gql`
+  query GetProfiles(
+    $limit: Int
+    $offset: Int
+    $orderBy: [profile_order_by!]
+    $where: profile_bool_exp
+  ) {
+    profiles: profile(
+      limit: $limit
+      offset: $offset
+      where: $where
+      order_by: $orderBy
+    ) {
+      id
+      fullName
+      avatar
+      archived
+      email
+      countryCode
+      organizations {
+        isAdmin
+        organization {
+          id
+          name
+        }
+      }
+      roles {
+        role {
+          id
+          name
+        }
+      }
+      trainer_role_types {
+        trainer_role_type {
+          name
+          id
+        }
+      }
+    }
+    profile_aggregate(where: $where) {
+      aggregate {
+        count
+      }
+    }
+  }
+`
 
 export type UseProfileProps = {
   sorting: Sorting
@@ -27,20 +72,17 @@ export default function useProfiles({
 }: UseProfileProps) {
   const orderBy = getOrderBy(sorting)
 
-  const { data, error, mutate } = useSWR<
+  const [{ data, error, fetching }, mutate] = useQuery<
     GetProfilesQuery,
-    Error,
-    [string, GetProfilesQueryVariables] | null
-  >([getProfiles, { where, orderBy, limit, offset }])
-
-  const status = getSWRLoadingStatus(data, error)
+    GetProfilesQueryVariables
+  >({ query: GET_PROFILES, variables: { where, orderBy, limit, offset } })
 
   return {
     mutate,
     profiles: data?.profiles ?? [],
     count: data?.profile_aggregate.aggregate?.count,
     error,
-    isLoading: status === LoadingStatus.FETCHING,
+    isLoading: fetching,
   }
 }
 

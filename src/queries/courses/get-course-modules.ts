@@ -6,7 +6,7 @@ export type ResponseType = { courseModules: CourseModule[] }
 
 export type ParamsType = { id: string }
 
-export const QUERY = gql`
+export const GET_COURSE_MODULES = gql`
   query CourseModules($id: Int!) {
     courseModules: course_module(
       where: { courseId: { _eq: $id } }

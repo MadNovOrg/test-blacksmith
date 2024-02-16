@@ -7,7 +7,7 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -44,7 +44,7 @@ export const ModulesSelection = () => {
 
   const STORAGE_KEY = `modules-selection-${courseId}`
 
-  const { status, data: courseModules } = useCourseModules(courseId ?? '')
+  const { fetching, data: courseModules } = useCourseModules(courseId ?? '')
   const modulesSelectionRef = useRef<Record<string, boolean> | null>(null)
 
   const moduleGroups = useMemo(() => {
@@ -77,17 +77,17 @@ export const ModulesSelection = () => {
     )
 
     courseModules.forEach(courseModule => {
-      const moduleGroup = groups[courseModule.module.moduleGroup.id]
+      const moduleGroup = groups[courseModule.module.moduleGroup?.id]
       if (!moduleGroup) {
-        groups[courseModule.module.moduleGroup.id] = {
-          id: courseModule.module.moduleGroup.id,
-          name: courseModule.module.moduleGroup.name,
-          mandatory: courseModule.module.moduleGroup.mandatory,
+        groups[courseModule.module.moduleGroup?.id] = {
+          id: courseModule.module.moduleGroup?.id,
+          name: courseModule.module.moduleGroup?.name ?? '',
+          mandatory: courseModule.module.moduleGroup?.mandatory ?? false,
           modules: [],
         }
       }
 
-      groups[courseModule.module.moduleGroup.id].modules.push({
+      groups[courseModule.module.moduleGroup?.id].modules.push({
         id: courseModule.module.id,
         name: courseModule.module.name,
         covered:
@@ -163,7 +163,7 @@ export const ModulesSelection = () => {
 
   return (
     <Box pb={5}>
-      {status === LoadingStatus.FETCHING ? (
+      {fetching ? (
         <Stack
           alignItems="center"
           justifyContent="center"

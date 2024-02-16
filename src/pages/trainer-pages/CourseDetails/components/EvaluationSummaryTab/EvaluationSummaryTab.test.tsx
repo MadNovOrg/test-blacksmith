@@ -1,24 +1,17 @@
 import { Route, Routes } from 'react-router-dom'
-import useSWR from 'swr'
+import { Client, Provider } from 'urql'
+import { fromValue } from 'wonka'
 
-import { Course_Status_Enum } from '@app/generated/graphql'
+import {
+  Course_Status_Enum,
+  Course_Trainer_Type_Enum,
+  GetEvaluationsQuery,
+} from '@app/generated/graphql'
 
 import { render, screen, userEvent } from '@test/index'
 import { buildProfile, buildCourse } from '@test/mock-data-utils'
 
 import { EvaluationSummaryTab } from './EvaluationSummaryTab'
-
-vi.mock('swr')
-
-const useSWRMock = vi.mocked(useSWR)
-
-const baseSWRMockData = {
-  data: null,
-  error: null,
-  isValidating: false,
-  mutate: vi.fn(),
-  isLoading: false,
-}
 
 const attendees = [
   { id: '1', profile: buildProfile() },
@@ -27,8 +20,18 @@ const attendees = [
 ]
 
 const trainers = [
-  { id: '1', type: 'LEADER', profile: buildProfile() },
-  { id: '2', type: 'ASSISTANT', profile: buildProfile() },
+  { id: '1', type: Course_Trainer_Type_Enum.Leader, profile: buildProfile() },
+  {
+    id: '2',
+    type: Course_Trainer_Type_Enum.Assistant,
+    profile: buildProfile(),
+  },
+]
+const evaluations = [
+  { id: '1', profile: attendees[0].profile },
+  { id: '2', profile: attendees[1].profile },
+  { id: '3', profile: attendees[2].profile },
+  { id: '4', profile: trainers[1].profile },
 ]
 
 const course = buildCourse({
@@ -39,8 +42,6 @@ const course = buildCourse({
 
 describe('component: EvaluationSummaryTab', () => {
   it('displays a spinner while data is loading', () => {
-    useSWRMock.mockReturnValue(baseSWRMockData)
-
     render(
       <Routes>
         <Route
@@ -56,18 +57,7 @@ describe('component: EvaluationSummaryTab', () => {
   })
 
   describe(`doesn't display an alert message if course status is different from ${Course_Status_Enum.GradeMissing} or ${Course_Status_Enum.EvaluationMissing}`, () => {
-    const evaluations = [
-      { id: '1', profile: attendees[0].profile },
-      { id: '2', profile: attendees[1].profile },
-      { id: '3', profile: attendees[2].profile },
-    ]
-
     it(`lead trainer and course status is ${Course_Status_Enum.Scheduled}`, () => {
-      useSWRMock.mockReturnValue({
-        ...baseSWRMockData,
-        data: { evaluations, attendees, trainers },
-      })
-
       render(
         <Routes>
           <Route
@@ -85,24 +75,26 @@ describe('component: EvaluationSummaryTab', () => {
   })
 
   describe(`displays an alert message for the leader trainer to submit the course evaluation if course is in status ${Course_Status_Enum.GradeMissing} or ${Course_Status_Enum.EvaluationMissing}`, () => {
-    const evaluations = [
-      { id: '1', profile: attendees[0].profile },
-      { id: '2', profile: attendees[1].profile },
-      { id: '3', profile: attendees[2].profile },
-      { id: '4', profile: trainers[1].profile },
-    ]
-
     it(`leader trainer and course status is ${Course_Status_Enum.GradeMissing}`, () => {
-      useSWRMock.mockReturnValue({
-        ...baseSWRMockData,
-        data: { evaluations, attendees, trainers },
-      })
-
+      const client = {
+        executeQuery: () =>
+          fromValue<{ data: GetEvaluationsQuery }>({
+            data: {
+              evaluations,
+              attendees,
+              trainers,
+            },
+          }),
+      } as unknown as Client
       render(
         <Routes>
           <Route
             path="/courses/:id/details"
-            element={<EvaluationSummaryTab course={course} />}
+            element={
+              <Provider value={client}>
+                <EvaluationSummaryTab course={course} />
+              </Provider>
+            }
           />
         </Routes>,
         { auth: { profile: { id: trainers[0].profile.id } } },
@@ -112,21 +104,28 @@ describe('component: EvaluationSummaryTab', () => {
     })
 
     it(`leader trainer and course status is ${Course_Status_Enum.EvaluationMissing}`, () => {
-      useSWRMock.mockReturnValue({
-        ...baseSWRMockData,
-        data: { evaluations, attendees, trainers },
-      })
-
+      const client = {
+        executeQuery: () =>
+          fromValue<{ data: GetEvaluationsQuery }>({
+            data: {
+              evaluations,
+              attendees,
+              trainers,
+            },
+          }),
+      } as unknown as Client
       render(
         <Routes>
           <Route
             path="/courses/:id/details"
             element={
-              <EvaluationSummaryTab
-                course={buildCourse({
-                  overrides: { status: Course_Status_Enum.EvaluationMissing },
-                })}
-              />
+              <Provider value={client}>
+                <EvaluationSummaryTab
+                  course={buildCourse({
+                    overrides: { status: Course_Status_Enum.EvaluationMissing },
+                  })}
+                />
+              </Provider>
             }
           />
         </Routes>,
@@ -137,11 +136,6 @@ describe('component: EvaluationSummaryTab', () => {
     })
 
     it('assistant trainer', () => {
-      useSWRMock.mockReturnValue({
-        ...baseSWRMockData,
-        data: { evaluations, attendees, trainers },
-      })
-
       render(
         <Routes>
           <Route
@@ -159,20 +153,7 @@ describe('component: EvaluationSummaryTab', () => {
   })
 
   describe("doesn't display an alert message for the trainer to submit the course evaluation if they have already done so", () => {
-    const evaluations = [
-      { id: '1', profile: attendees[0].profile },
-      { id: '2', profile: attendees[1].profile },
-      { id: '3', profile: attendees[2].profile },
-      { id: '4', profile: trainers[1].profile },
-      { id: '5', profile: trainers[0].profile },
-    ]
-
     it('leader trainer', () => {
-      useSWRMock.mockReturnValue({
-        ...baseSWRMockData,
-        data: { evaluations, attendees, trainers },
-      })
-
       render(
         <Routes>
           <Route
@@ -189,11 +170,6 @@ describe('component: EvaluationSummaryTab', () => {
     })
 
     it('assistant trainer', () => {
-      useSWRMock.mockReturnValue({
-        ...baseSWRMockData,
-        data: { evaluations, attendees, trainers },
-      })
-
       render(
         <Routes>
           <Route
@@ -211,25 +187,26 @@ describe('component: EvaluationSummaryTab', () => {
   })
 
   describe("displays all but the trainer's evaluations in a table", () => {
-    const evaluations = [
-      { id: '1', profile: attendees[0].profile },
-      { id: '2', profile: attendees[1].profile },
-      { id: '3', profile: attendees[2].profile },
-      { id: '4', profile: trainers[1].profile },
-      { id: '5', profile: trainers[0].profile },
-    ]
-
     it('leader trainer', () => {
-      useSWRMock.mockReturnValue({
-        ...baseSWRMockData,
-        data: { evaluations, attendees, trainers },
-      })
-
+      const client = {
+        executeQuery: () =>
+          fromValue<{ data: GetEvaluationsQuery }>({
+            data: {
+              evaluations,
+              attendees,
+              trainers,
+            },
+          }),
+      } as unknown as Client
       render(
         <Routes>
           <Route
             path="/courses/:id/details"
-            element={<EvaluationSummaryTab course={course} />}
+            element={
+              <Provider value={client}>
+                <EvaluationSummaryTab course={course} />
+              </Provider>
+            }
           />
         </Routes>,
         { auth: { profile: { id: trainers[0].profile.id } } },
@@ -250,16 +227,25 @@ describe('component: EvaluationSummaryTab', () => {
     })
 
     it('assistant trainer', () => {
-      useSWRMock.mockReturnValue({
-        ...baseSWRMockData,
-        data: { evaluations, attendees, trainers },
-      })
-
+      const client = {
+        executeQuery: () =>
+          fromValue<{ data: GetEvaluationsQuery }>({
+            data: {
+              evaluations,
+              attendees,
+              trainers,
+            },
+          }),
+      } as unknown as Client
       render(
         <Routes>
           <Route
             path="/courses/:id/details"
-            element={<EvaluationSummaryTab course={course} />}
+            element={
+              <Provider value={client}>
+                <EvaluationSummaryTab course={course} />
+              </Provider>
+            }
           />
         </Routes>,
         { auth: { profile: { id: trainers[1].profile.id } } },
@@ -281,23 +267,25 @@ describe('component: EvaluationSummaryTab', () => {
   })
 
   it("navigates to trainer's evaluation submit page when submit evaluation button is clicked", async () => {
-    const evaluations = [
-      { id: '1', profile: attendees[0].profile },
-      { id: '2', profile: attendees[1].profile },
-      { id: '3', profile: attendees[2].profile },
-      { id: '4', profile: trainers[1].profile },
-    ]
-
-    useSWRMock.mockReturnValue({
-      ...baseSWRMockData,
-      data: { evaluations, attendees, trainers },
-    })
-
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetEvaluationsQuery }>({
+          data: {
+            evaluations,
+            attendees,
+            trainers,
+          },
+        }),
+    } as unknown as Client
     render(
       <Routes>
         <Route
           path="/courses/:id/details"
-          element={<EvaluationSummaryTab course={course} />}
+          element={
+            <Provider value={client}>
+              <EvaluationSummaryTab course={course} />
+            </Provider>
+          }
         />
         <Route path="/evaluation/submit" element={<p>Evaluation submit</p>} />
       </Routes>,

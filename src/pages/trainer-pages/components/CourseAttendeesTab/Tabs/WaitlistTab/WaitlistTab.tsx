@@ -35,7 +35,12 @@ export const WaitlistTab = ({ course }: TabProperties) => {
   const { Pagination, limit, offset } = useTablePagination()
   const sort = useTableSort('createdAt', 'asc')
 
-  const { data, total, isLoading, mutate } = useWaitlist({
+  const {
+    data,
+    total,
+    isLoading,
+    mutate: getWaitlist,
+  } = useWaitlist({
     courseId: course.id,
     sort,
     limit,
@@ -80,7 +85,6 @@ export const WaitlistTab = ({ course }: TabProperties) => {
           courseId: course.id,
           waitlistId: waitlistId,
         })
-        await mutate()
       } catch (err) {
         console.error(err)
       } finally {
@@ -93,6 +97,7 @@ export const WaitlistTab = ({ course }: TabProperties) => {
             label: t(cancellationMessage),
           })
         }
+        getWaitlist()
       }
     },
     [
@@ -100,8 +105,8 @@ export const WaitlistTab = ({ course }: TabProperties) => {
       cancelIndividualFromCourseWaitlist,
       cancellationMessage,
       course.id,
+      getWaitlist,
       hasCancellingError,
-      mutate,
       t,
     ]
   )

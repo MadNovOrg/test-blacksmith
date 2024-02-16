@@ -50,7 +50,7 @@ import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/Cours
 import { ModifyAttendanceModal } from '@app/pages/user-pages/CourseDetails/ModifyAttendanceModal'
 import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/queries/course-evaluation/get-feedback-users'
 import { GET_DIETARY_AND_DISABILITIES_COUNT } from '@app/queries/course-participant/get-participant-dietary-restrictions-by-course-id'
-import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
+import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
   ParamsType,
   QUERY as GET_COURSE_QUERY,
@@ -166,7 +166,7 @@ export const CourseDetails: React.FC<
 
   const profileId = profile?.id
   const [{ data: participantData }, reexecuteQuery] = useQuery({
-    query: GetParticipant,
+    query: GET_PARTICIPANT,
     variables: { profileId, courseId },
     requestPolicy: 'network-only',
   })

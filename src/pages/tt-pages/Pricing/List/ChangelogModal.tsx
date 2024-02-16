@@ -13,9 +13,9 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import React, { ChangeEvent, useCallback, useState } from 'react'
+import { ChangeEvent, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import { Dialog } from '@app/components/dialogs'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
@@ -25,7 +25,7 @@ import {
   PricingChangelogQuery,
   PricingChangelogQueryVariables,
 } from '@app/generated/graphql'
-import { QUERY } from '@app/queries/pricing/get-pricing-changelog'
+import { GET_PRICING_CHANGELOG } from '@app/queries/pricing/get-pricing-changelog'
 
 import { getCourseAttributes } from '../utils'
 
@@ -46,21 +46,21 @@ export const ChangelogModal = ({
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
 
-  const { data, error } = useSWR<
+  const [{ data, error }] = useQuery<
     PricingChangelogQuery,
-    [string, PricingChangelogQueryVariables]
-  >([
-    QUERY,
-    {
-      where: coursePricing
+    PricingChangelogQueryVariables
+  >({
+    query: GET_PRICING_CHANGELOG,
+    variables: {
+      ...(coursePricing
         ? {
-            coursePricingId: { _eq: coursePricing.id },
+            where: { coursePricingId: { _eq: coursePricing.id } },
           }
-        : {},
+        : {}),
       limit: perPage,
       offset: currentPage * perPage,
     },
-  ])
+  })
 
   const loading = !data && !error
   const changelogTotalCount =
@@ -80,11 +80,13 @@ export const ChangelogModal = ({
         open={true}
         onClose={onClose}
         maxWidth={960}
-        title={
-          <Typography variant="h3" ml={3} fontWeight={600} color="secondary">
-            {t('pages.course-pricing.modal-changelog-title')}
-          </Typography>
-        }
+        slots={{
+          Title: () => (
+            <Typography variant="h3" ml={3} fontWeight={600} color="secondary">
+              {t('pages.course-pricing.modal-changelog-title')}
+            </Typography>
+          ),
+        }}
       >
         <Container>
           <Divider sx={{ mb: 2 }} />

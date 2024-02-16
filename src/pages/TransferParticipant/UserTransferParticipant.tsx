@@ -7,7 +7,7 @@ import {
   GetCourseParticipantIdQuery,
   GetCourseParticipantIdQueryVariables,
 } from '@app/generated/graphql'
-import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
+import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 
 import { NotFound } from '../common/NotFound'
 
@@ -36,7 +36,7 @@ export const UserTransferParticipant: React.FC<
     GetCourseParticipantIdQuery,
     GetCourseParticipantIdQueryVariables
   >({
-    query: GetParticipant,
+    query: GET_PARTICIPANT,
     variables: { profileId: profile?.id, courseId: Number(id) },
     pause: Boolean(participantId) || participantFetched.current,
   })

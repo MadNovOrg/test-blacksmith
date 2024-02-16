@@ -1,18 +1,15 @@
 import { isValid } from 'date-fns'
 import { useMemo } from 'react'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import {
+  GetPromoCodesQuery,
+  GetPromoCodesQueryVariables,
   Promo_Code_Bool_Exp,
   Promo_Code_Type_Enum,
 } from '@app/generated/graphql'
-import {
-  InputType,
-  QUERY,
-  ResponseType,
-} from '@app/queries/promo-codes/get-promo-codes'
+import { GET_PROMO_CODES } from '@app/queries/promo-codes/get-promo-codes'
 import { PromoCodeStatus, SortOrder } from '@app/types'
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export type UsePromoCodesProps = {
   sort: { by: string; dir: SortOrder }
@@ -194,28 +191,25 @@ export const usePromoCodes = ({
     return query
   }, [filters.status])
 
-  const { data, error, mutate } = useSWR<
-    ResponseType,
-    Error,
-    [string, InputType]
-  >([
-    QUERY,
-    {
-      orderBy: sort.by ? { [sort.by]: sort.dir } : undefined,
+  const [{ data, error, fetching }, mutate] = useQuery<
+    GetPromoCodesQuery,
+    GetPromoCodesQueryVariables
+  >({
+    query: GET_PROMO_CODES,
+    variables: {
+      ...(sort.by ? { orderBy: { [sort.by]: sort.dir } } : {}),
       where: { ...dateWhere, ...typeWhere, ...codeWhere, ...statusWhere },
       limit,
       offset,
     },
-  ])
-
-  const status = getSWRLoadingStatus(data, error)
+  })
 
   return {
     promoCodes: data?.promoCodes ?? [],
     total: data?.promo_code_aggregate.aggregate?.count ?? 0,
     error,
-    status,
+    fetching,
     mutate,
-    isLoading: status === LoadingStatus.FETCHING,
+    isLoading: fetching,
   }
 }

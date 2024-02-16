@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material'
 import { groupBy, map, uniqBy } from 'lodash-es'
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import {
@@ -19,7 +19,6 @@ import {
   useParams,
   useSearchParams,
 } from 'react-router-dom'
-import useSWR from 'swr'
 import { useQuery } from 'urql'
 import * as yup from 'yup'
 
@@ -30,49 +29,45 @@ import { QuestionGroup } from '@app/components/QuestionGroup'
 import { RatingQuestion } from '@app/components/RatingQuestion'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
+import {
+  Course_Evaluation_Question_Group_Enum,
+  Course_Evaluation_Question_Type_Enum,
+  GetCourseEvaluationQuestionsQuery,
+  GetCourseParticipantIdQuery,
+  GetCourseParticipantIdQueryVariables,
+  GetEvaluationQuery,
+  GetEvaluationQueryVariables,
+  SaveCourseEvaluationMutation,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
-import {
-  ParamsType as GetAnswersParamsType,
-  QUERY as GET_ANSWERS_QUERY,
-  ResponseType as GetAnswersResponseType,
-} from '@app/queries/course-evaluation/get-answers'
+import { QUERY as GET_ANSWERS_QUERY } from '@app/queries/course-evaluation/get-answers'
 import {
   ParamsType as GetFeedbackUsersParamsType,
   QUERY as GET_FEEDBACK_USERS_QUERY,
   ResponseType as GetFeedbackUsersResponseType,
 } from '@app/queries/course-evaluation/get-feedback-users'
-import {
-  QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY,
-  ResponseType as GetCourseEvaluationQuestionsResponseType,
-} from '@app/queries/course-evaluation/get-questions'
-import {
-  MUTATION as SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
-  ResponseType as SaveCourseEvaluationResponseType,
-} from '@app/queries/course-evaluation/save-evaluation'
-import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
-import {
-  CourseEvaluationQuestion,
-  CourseEvaluationQuestionGroup,
-  CourseEvaluationQuestionType,
-  CourseParticipant,
-} from '@app/types'
+import { QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY } from '@app/queries/course-evaluation/get-questions'
+import { MUTATION as SAVE_COURSE_EVALUATION_ANSWERS_MUTATION } from '@app/queries/course-evaluation/save-evaluation'
+import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 import { courseStarted, LoadingStatus, validUserSignature } from '@app/util'
 
 const groups = [
-  CourseEvaluationQuestionGroup.TRAINING_RATING,
-  CourseEvaluationQuestionGroup.TRAINING_RELEVANCE,
-  CourseEvaluationQuestionGroup.TRAINER_STANDARDS,
-  CourseEvaluationQuestionGroup.MATERIALS_AND_VENUE,
+  Course_Evaluation_Question_Group_Enum.TrainingRating,
+  Course_Evaluation_Question_Group_Enum.TrainingRelevance,
+  Course_Evaluation_Question_Group_Enum.TrainerStandards,
+  Course_Evaluation_Question_Group_Enum.MaterialsAndVenue,
 ]
 
 const booleanQuestionTypes = [
-  CourseEvaluationQuestionType.BOOLEAN,
-  CourseEvaluationQuestionType.BOOLEAN_REASON_Y,
-  CourseEvaluationQuestionType.BOOLEAN_REASON_N,
+  Course_Evaluation_Question_Type_Enum.Boolean,
+  Course_Evaluation_Question_Type_Enum.BooleanReasonY,
+  Course_Evaluation_Question_Type_Enum.BooleanReasonN,
 ]
 
-function isAllRequired(questions: CourseEvaluationQuestion[]) {
+function isAllRequired(
+  questions: GetCourseEvaluationQuestionsQuery['questions']
+) {
   return questions?.every(q => q.required) ?? false
 }
 
@@ -90,20 +85,27 @@ export const CourseEvaluation = () => {
 
   const { data: courseData, status: courseStatus } = useCourse(courseId ?? '')
   const [loading, setLoading] = useState(false)
-  const { data: participantData, isValidating: participantDataLoading } =
-    useSWR([GetParticipant, { profileId: profile?.id, courseId }])
-
-  const { data: questionsData, isValidating: questionsLoading } =
-    useSWR<GetCourseEvaluationQuestionsResponseType>(
-      GET_COURSE_EVALUATION_QUESTIONS_QUERY
+  const [{ data: participantData, fetching: participantDataLoading }] =
+    useQuery<GetCourseParticipantIdQuery, GetCourseParticipantIdQueryVariables>(
+      {
+        query: GET_PARTICIPANT,
+        variables: { profileId: profile?.id, courseId: Number(courseId) ?? 0 },
+      }
     )
 
-  const { data: evaluation, isValidating: evaluationLoading } = useSWR<
-    GetAnswersResponseType,
-    Error,
-    [string, GetAnswersParamsType] | null
-  >(profileId ? [GET_ANSWERS_QUERY, { courseId, profileId }] : null)
+  const [{ data: questionsData, fetching: questionsLoading }] =
+    useQuery<GetCourseEvaluationQuestionsQuery>({
+      query: GET_COURSE_EVALUATION_QUESTIONS_QUERY,
+    })
 
+  const [{ data: evaluation, fetching: evaluationLoading }] = useQuery<
+    GetEvaluationQuery,
+    GetEvaluationQueryVariables
+  >({
+    query: GET_ANSWERS_QUERY,
+    variables: { courseId: Number(courseId) ?? 0, profileId },
+    pause: !profileId,
+  })
   const [{ data: usersData, fetching: usersDataLoading }] = useQuery<
     GetFeedbackUsersResponseType,
     GetFeedbackUsersParamsType
@@ -146,7 +148,7 @@ export const CourseEvaluation = () => {
               'ANY_INJURIES',
               'ISSUES_ARISING_FROM_COURSE',
               'TRAINER_COMMENTS',
-            ].includes(q.questionKey)
+            ].includes(q.questionKey ?? '')
         )
       }
 
@@ -163,7 +165,7 @@ export const CourseEvaluation = () => {
     () =>
       questions?.find(
         q => q.questionKey === 'SIGNATURE'
-      ) as CourseEvaluationQuestion,
+      ) as GetCourseEvaluationQuestionsQuery['questions'][0],
     [questions]
   )
 
@@ -205,7 +207,7 @@ export const CourseEvaluation = () => {
     if (!evaluation?.answers) return
 
     evaluation?.answers.forEach(a => {
-      setValue(a.question.id, a.answer)
+      setValue(a.question.id, a.answer ?? '')
     })
   }, [setValue, evaluation?.answers])
 
@@ -227,10 +229,15 @@ export const CourseEvaluation = () => {
 
   const courseHasStarted = course && courseStarted(course)
 
-  const courseParticipant: CourseParticipant | null =
-    participantData?.course_participant?.length > 0
-      ? participantData?.course_participant[0]
-      : null
+  const courseParticipant:
+    | GetCourseParticipantIdQuery['course_participant'][0]
+    | null = useMemo(
+    () =>
+      participantData && participantData?.course_participant?.length > 0
+        ? participantData?.course_participant[0]
+        : null,
+    [participantData]
+  )
 
   const canSubmitFeedback =
     courseHasStarted &&
@@ -252,7 +259,7 @@ export const CourseEvaluation = () => {
         }
       })
 
-      const response = await fetcher<SaveCourseEvaluationResponseType>(
+      const response = await fetcher<SaveCourseEvaluationMutation>(
         SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
         {
           answers,
@@ -367,7 +374,11 @@ export const CourseEvaluation = () => {
               ))}
 
               {ungroupedQuestions?.map(q => {
-                if (booleanQuestionTypes.includes(q.type)) {
+                if (
+                  booleanQuestionTypes.includes(
+                    q.type as Course_Evaluation_Question_Type_Enum
+                  )
+                ) {
                   const value = (values[q.id] ?? '').split('-')
 
                   return (
@@ -390,7 +401,7 @@ export const CourseEvaluation = () => {
                   )
                 }
 
-                if (q.type === CourseEvaluationQuestionType.TEXT) {
+                if (q.type === Course_Evaluation_Question_Type_Enum.Text) {
                   return (
                     <QuestionGroup
                       key={q.id}

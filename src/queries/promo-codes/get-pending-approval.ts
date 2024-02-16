@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request'
 
-export const QUERY = gql`
+export const GET_PROMOCODES_PENDING_APPROVAL = gql`
   query GetPromoCodesPendingApproval {
     promoCodes: promo_code(
       where: {

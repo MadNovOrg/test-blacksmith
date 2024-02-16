@@ -26,7 +26,7 @@ import { ApproveDeny } from './ApproveDeny'
 type Props = {
   promo: GetPromoCodesQuery['promoCodes'][number]
   showApprove?: boolean
-  onAction: () => Promise<unknown>
+  onAction: () => Promise<unknown> | void
 }
 
 export const Row: React.FC<React.PropsWithChildren<Props>> = ({

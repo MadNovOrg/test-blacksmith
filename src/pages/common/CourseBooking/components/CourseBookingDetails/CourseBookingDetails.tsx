@@ -688,7 +688,7 @@ export const CourseBookingDetails: React.FC<
           {t('registration')}
         </Typography>
         <Box bgcolor="common.white" p={2} mb={4}>
-          {booking.participants.map((participant, index) => {
+          {booking.participants.map((_, index) => {
             const emailValue = values.participants[index]?.email
             const emailDuplicated =
               !!values.participants[index] &&

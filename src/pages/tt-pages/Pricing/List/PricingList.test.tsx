@@ -2,7 +2,6 @@ import React from 'react'
 
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { useCoursePricing } from '@app/hooks/useCoursePricing'
-import { LoadingStatus } from '@app/util'
 
 import { chance, render, screen } from '@test/index'
 
@@ -36,7 +35,6 @@ describe('component: PricingList', () => {
       ],
       total: 1,
       error: undefined,
-      status: LoadingStatus.IDLE,
       isLoading: false,
       mutate: vi.fn(),
     })

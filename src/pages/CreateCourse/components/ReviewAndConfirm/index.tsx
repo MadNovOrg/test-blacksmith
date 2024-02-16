@@ -14,7 +14,7 @@ import {
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
@@ -67,17 +67,21 @@ export const ReviewAndConfirm = () => {
     orderId: '',
   })
 
-  const { data: orderCompleted, mutate } = useSWR<
+  const [{ data: orderCompleted }, getOrderReduced] = useQuery<
     GetOrderReducedQuery,
-    [string, GetOrderReducedQueryVariables]
-  >([GET_ORDER_REDUCED, { orderId: savedCourse.orderId }])
+    GetOrderReducedQueryVariables
+  >({
+    query: GET_ORDER_REDUCED,
+    variables: { orderId: savedCourse.orderId },
+    pause: !savedCourse.orderId,
+  })
 
   useEffect(() => {
     setCurrentStepKey(StepsEnum.REVIEW_AND_CONFIRM)
   }, [setCurrentStepKey])
 
   const [startPolling, polling] = usePollQuery(
-    () => mutate(),
+    () => getOrderReduced(),
     () => !!orderCompleted?.order?.xeroInvoiceNumber
   )
 

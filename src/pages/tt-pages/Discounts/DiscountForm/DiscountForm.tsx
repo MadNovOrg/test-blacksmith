@@ -25,7 +25,7 @@ import { Helmet } from 'react-helmet'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { Dialog } from '@app/components/dialogs'
@@ -47,7 +47,7 @@ import { NotFound } from '@app/pages/common/NotFound'
 import DisablePromoCode from '@app/queries/promo-codes/disable-promo-code'
 import {
   InputType,
-  QUERY as GET_PROMO_CODES_QUERY,
+  GET_PROMO_CODES,
   ResponseType,
 } from '@app/queries/promo-codes/get-promo-codes'
 import UPSERT_PROMO_CODE from '@app/queries/promo-codes/upsert-promo-code'
@@ -91,20 +91,16 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [showApprovalNotice, setShowApprovalNotice] = useState(false)
   const [showDisableModal, setShowDisableModal] = useState(false)
 
-  const { data, error } = useSWR<
+  const [{ data, error }] = useQuery<
     GetPromoCodesQuery,
-    Error,
-    [string, GetPromoCodesQueryVariables] | null
-  >(
-    id
-      ? [
-          GET_PROMO_CODES_QUERY,
-          {
-            where: { id: { _eq: id } },
-          },
-        ]
-      : null
-  )
+    GetPromoCodesQueryVariables
+  >({
+    query: GET_PROMO_CODES,
+    variables: {
+      where: { id: { _eq: id } },
+    },
+    pause: !id,
+  })
   const isLoading =
     isEdit && getSWRLoadingStatus(data, error) === LoadingStatus.FETCHING
 
@@ -177,7 +173,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
     try {
       const where = { code: { _eq: values.code } }
       const { promoCodes } = await fetcher<ResponseType, InputType>(
-        GET_PROMO_CODES_QUERY,
+        GET_PROMO_CODES,
         { where }
       )
       if (promoCodes.length) {

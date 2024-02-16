@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
 import { TableHead } from '@app/components/Table/TableHead'
@@ -60,11 +60,10 @@ export const AttendeeReplacementTable: React.FC<
 
   const emails = logs.map(log => log.newAttendeeEmail ?? '').filter(e => e)
 
-  const { data: profiles } = useSWR<
+  const [{ data: profiles }] = useQuery<
     GetUserByMailQuery,
-    Error,
-    [string, GetUserByMailQueryVariables]
-  >([GET_USER_BY_EMAIL, { email: emails }])
+    GetUserByMailQueryVariables
+  >({ query: GET_USER_BY_EMAIL, variables: { email: emails } })
 
   const cols = useMemo(
     () => [

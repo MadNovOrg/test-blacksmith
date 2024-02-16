@@ -1,25 +1,26 @@
 import { Box, Table, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { GetPromoCodesPendingApprovalQuery } from '@app/generated/graphql'
-import { QUERY } from '@app/queries/promo-codes/get-pending-approval'
+import { GET_PROMOCODES_PENDING_APPROVAL } from '@app/queries/promo-codes/get-pending-approval'
 
 import { Row } from './Row'
 
 type PromoCode = GetPromoCodesPendingApprovalQuery['promoCodes'][0]
 
-type Props = { onAction: () => Promise<unknown> }
+type Props = { onAction: () => Promise<unknown> | void }
 
 export const PendingApproval: React.FC<React.PropsWithChildren<Props>> = ({
   onAction,
 }) => {
   const { t } = useTranslation()
 
-  const { data } = useSWR<GetPromoCodesPendingApprovalQuery, Error>([QUERY])
-
+  const [{ data }] = useQuery<GetPromoCodesPendingApprovalQuery>({
+    query: GET_PROMOCODES_PENDING_APPROVAL,
+  })
   const pendingApproval = data?.promoCodes ?? []
 
   const cols = useMemo(() => {

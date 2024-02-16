@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request'
 
-export const QUERY = gql`
+export const GET_PRICING_CHANGELOG = gql`
   query PricingChangelog(
     $where: course_pricing_changelog_bool_exp
     $limit: Int = 5

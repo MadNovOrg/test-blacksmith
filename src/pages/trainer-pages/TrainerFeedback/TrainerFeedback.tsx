@@ -9,11 +9,11 @@ import {
   Typography,
 } from '@mui/material'
 import { groupBy, map } from 'lodash-es'
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 import * as yup from 'yup'
 
 import { BackButton } from '@app/components/BackButton'
@@ -22,29 +22,24 @@ import { QuestionGroup } from '@app/components/QuestionGroup'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
-import { SaveTrainerCourseEvaluationMutation } from '@app/generated/graphql'
+import {
+  Course_Evaluation_Question_Type_Enum,
+  GetCourseEvaluationQuestionsQuery,
+  GetEvaluationQuery,
+  GetEvaluationQueryVariables,
+  SaveTrainerCourseEvaluationMutation,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
-import {
-  ParamsType as GetAnswersParamsType,
-  QUERY as GET_ANSWERS_QUERY,
-  ResponseType as GetAnswersResponseType,
-} from '@app/queries/course-evaluation/get-answers'
-import {
-  QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY,
-  ResponseType as GetCourseEvaluationQuestionsResponseType,
-} from '@app/queries/course-evaluation/get-questions'
+import { QUERY as GET_ANSWERS_QUERY } from '@app/queries/course-evaluation/get-answers'
+import { QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY } from '@app/queries/course-evaluation/get-questions'
 import { MUTATION as SAVE_TRAINER_COURSE_EVALUATION_ANSWERS_MUTATION } from '@app/queries/course-evaluation/save-trainer-evaluation'
-import {
-  CourseEvaluationQuestion,
-  CourseEvaluationQuestionType,
-} from '@app/types'
 import { validUserSignature } from '@app/util'
 
 const booleanQuestionTypes = [
-  CourseEvaluationQuestionType.BOOLEAN,
-  CourseEvaluationQuestionType.BOOLEAN_REASON_Y,
-  CourseEvaluationQuestionType.BOOLEAN_REASON_N,
+  Course_Evaluation_Question_Type_Enum.Boolean,
+  Course_Evaluation_Question_Type_Enum.BooleanReasonY,
+  Course_Evaluation_Question_Type_Enum.BooleanReasonN,
 ]
 
 export const TrainerFeedback = () => {
@@ -63,19 +58,18 @@ export const TrainerFeedback = () => {
   const profileId = searchParams.get('profile_id') as string
   const readOnly = !!profileId
 
-  const { data: questions } = useSWR<GetCourseEvaluationQuestionsResponseType>(
-    GET_COURSE_EVALUATION_QUESTIONS_QUERY
-  )
+  const [{ data: questions }] = useQuery<GetCourseEvaluationQuestionsQuery>({
+    query: GET_COURSE_EVALUATION_QUESTIONS_QUERY,
+  })
 
-  const { data: evaluation } = useSWR<
-    GetAnswersResponseType,
-    Error,
-    [string, GetAnswersParamsType] | null
-  >(
-    profileId
-      ? [GET_ANSWERS_QUERY, { courseId: courseId as string, profileId }]
-      : null
-  )
+  const [{ data: evaluation }] = useQuery<
+    GetEvaluationQuery,
+    GetEvaluationQueryVariables
+  >({
+    query: GET_ANSWERS_QUERY,
+    variables: { courseId: Number(courseId) ?? 0, profileId },
+    pause: !profileId,
+  })
 
   const dataLoaded = !!questions && (readOnly ? !!evaluation : true)
 
@@ -92,7 +86,7 @@ export const TrainerFeedback = () => {
     () =>
       questions?.questions.find(
         q => q.questionKey === 'SIGNATURE'
-      ) as CourseEvaluationQuestion,
+      ) as GetCourseEvaluationQuestionsQuery['questions'][0],
     [questions]
   )
 
@@ -100,7 +94,7 @@ export const TrainerFeedback = () => {
     const obj: Record<string, yup.StringSchema> = {}
 
     questions?.questions.forEach(q => {
-      if (q.type === CourseEvaluationQuestionType.RATING) return
+      if (q.type === Course_Evaluation_Question_Type_Enum.Rating) return
 
       const s = yup.string()
       if (q.questionKey === 'SIGNATURE') {
@@ -111,7 +105,7 @@ export const TrainerFeedback = () => {
           )
       } else if (
         q.required &&
-        q.type === CourseEvaluationQuestionType.BOOLEAN_REASON_Y
+        q.type === Course_Evaluation_Question_Type_Enum.BooleanReasonY
       ) {
         obj[q.id] = s.required(t('course-evaluation.required-field'))
         obj['yesResponse'] = s.when(q.id, {
@@ -145,7 +139,7 @@ export const TrainerFeedback = () => {
   useEffect(() => {
     if (!evaluation?.answers) return
     evaluation.answers.forEach(a => {
-      setValue(a.question.id, a.answer)
+      setValue(a.question.id, a.answer ?? '')
     })
   }, [setValue, evaluation])
 
@@ -217,7 +211,11 @@ export const TrainerFeedback = () => {
 
             <Grid item md={7} pt={10}>
               {ungroupedQuestions?.map(q => {
-                if (booleanQuestionTypes.includes(q.type)) {
+                if (
+                  booleanQuestionTypes.includes(
+                    q.type as Course_Evaluation_Question_Type_Enum
+                  )
+                ) {
                   const [value, reason = ''] = (values[q.id] ?? '').split('-')
 
                   return (
@@ -241,7 +239,7 @@ export const TrainerFeedback = () => {
                   )
                 }
 
-                if (q.type === CourseEvaluationQuestionType.TEXT) {
+                if (q.type === Course_Evaluation_Question_Type_Enum.Text) {
                   return (
                     <QuestionGroup
                       key={q.id}

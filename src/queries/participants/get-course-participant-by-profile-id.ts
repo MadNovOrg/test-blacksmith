@@ -2,7 +2,7 @@ import { gql } from 'urql'
 
 import { CERTIFICATE } from '../fragments'
 
-export const GetParticipant = gql`
+export const GET_PARTICIPANT = gql`
   ${CERTIFICATE}
   query GetCourseParticipantId($profileId: uuid!, $courseId: Int!) {
     course_participant(

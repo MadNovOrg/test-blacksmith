@@ -1,22 +1,24 @@
-import useSWR from 'swr'
+import { useQuery, gql } from 'urql'
 
-import {
-  GetTrainerRoleTypesQuery,
-  GetTrainerRoleTypesQueryVariables,
-} from '@app/generated/graphql'
-import { GetTrainerRoleTypes } from '@app/queries/trainer/get-trainer-role-type'
-import { getSWRLoadingStatus } from '@app/util'
+import { GetTrainerRoleTypesQuery } from '@app/generated/graphql'
+
+export const GET_TRAINER_ROLE_TYPES = gql`
+  query GetTrainerRoleTypes {
+    trainer_role_type {
+      id
+      name
+    }
+  }
+`
 
 export default function useTrainerRoleTypes() {
-  const { data, error } = useSWR<
-    GetTrainerRoleTypesQuery,
-    Error,
-    [string, GetTrainerRoleTypesQueryVariables] | null
-  >([GetTrainerRoleTypes, {}])
+  const [{ data, error, fetching }] = useQuery<GetTrainerRoleTypesQuery>({
+    query: GET_TRAINER_ROLE_TYPES,
+  })
 
   return {
     trainerRoleTypes: data?.trainer_role_type,
     error,
-    status: getSWRLoadingStatus(data, error),
+    fetching,
   }
 }
