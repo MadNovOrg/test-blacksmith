@@ -401,7 +401,7 @@ export const AttendingTab = ({
                       </TableCell>
                       {canViewEvaluationSubmittedColumn ? (
                         <TableCell style={{ textAlign: 'center' }}>
-                          {courseParticipant.certificate
+                          {courseParticipant.completed_evaluation
                             ? t('common.yes')
                             : t('common.no')}
                         </TableCell>
