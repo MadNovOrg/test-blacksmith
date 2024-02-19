@@ -766,10 +766,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   // set VAT true for all UK countries
   useEffect(() => {
-    if (isUKCountry(values.residingCountry)) {
+    if (isUKCountry(values.residingCountry) && !isBild) {
       setValue('includeVAT', true)
     }
-  }, [isUKCountry, setValue, values.residingCountry])
+  }, [isUKCountry, setValue, values.residingCountry, isBild])
 
   const resetSpecialInstructionsToDefault = useCallback(
     (
