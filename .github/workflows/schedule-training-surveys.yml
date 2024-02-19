@@ -9,6 +9,8 @@ on:
         type: choice
         options:
           - DEV
+          - PROD
+          - STG
 env:
   DEFAULT_ENV: 'DEV'
 jobs:
