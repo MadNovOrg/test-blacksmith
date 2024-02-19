@@ -56723,6 +56723,16 @@ export type ReplaceParticipantMutationVariables = Exact<{
 
 export type ReplaceParticipantMutation = { __typename?: 'mutation_root', replaceParticipant?: { __typename?: 'ReplaceParticipantOutput', success: boolean, error?: ReplaceParticipantError | null } | null };
 
+export type GetDistinctCourseResidingCountriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetDistinctCourseResidingCountriesQuery = { __typename?: 'query_root', course: Array<{ __typename?: 'course', residingCountry?: string | null }> };
+
+export type GetDistinctCourseVenueCountriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetDistinctCourseVenueCountriesQuery = { __typename?: 'query_root', venue: Array<{ __typename?: 'venue', countryCode?: string | null }> };
+
 export type GetCourseInvitesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;

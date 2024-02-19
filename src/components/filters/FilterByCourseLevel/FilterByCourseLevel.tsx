@@ -60,7 +60,6 @@ export const FilterByCourseLevel: React.FC<React.PropsWithChildren<Props>> = ({
       selected: selected.includes(o.id),
     }))
   }, [levelOptions, selected])
-
   const _onChange = useCallback(
     (opts: FilterOption<Course_Level_Enum>[]) => {
       const sel = opts.flatMap(o => (o.selected ? o.id : []))

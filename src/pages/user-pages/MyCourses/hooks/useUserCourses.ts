@@ -37,6 +37,7 @@ export type UserCourseStatus =
 export type CoursesFilters = {
   keyword?: string
   levels?: Course_Level_Enum[]
+  courseResidingCountries?: string[]
   types?: Course_Type_Enum[]
   states?: CourseState[]
   statuses?: UserCourseStatus[]
@@ -263,6 +264,20 @@ export function useUserCourses(
 
     if (filters?.levels?.length) {
       filterConditions.level = { _in: filters.levels }
+    }
+
+    if (filters?.courseResidingCountries?.length) {
+      filterConditions._or = [
+        ...(filterConditions._or ?? []),
+        { residingCountry: { _in: filters.courseResidingCountries } },
+        {
+          schedule: {
+            venue: {
+              countryCode: { _in: filters.courseResidingCountries },
+            },
+          },
+        },
+      ]
     }
 
     if (filters?.types?.length) {

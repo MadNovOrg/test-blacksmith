@@ -39,6 +39,7 @@ export type OrgAdminCourseStatuses =
 export type CoursesFilters = {
   keyword?: string
   levels?: Course_Level_Enum[]
+  courseResidingCountries?: string[]
   types?: Course_Type_Enum[]
   statuses?: string[]
   states?: CourseState[]
@@ -208,6 +209,20 @@ export const filtersToWhereClause = (
 ) => {
   if (filters?.levels?.length) {
     where.level = { _in: filters.levels }
+  }
+
+  if (filters?.courseResidingCountries?.length) {
+    where._or = [
+      ...(where._or ?? []),
+      { residingCountry: { _in: filters.courseResidingCountries } },
+      {
+        schedule: {
+          venue: {
+            countryCode: { _in: filters.courseResidingCountries },
+          },
+        },
+      },
+    ]
   }
 
   if (filters?.types?.length) {

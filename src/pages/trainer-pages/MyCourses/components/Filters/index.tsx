@@ -15,6 +15,7 @@ import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterByBlendedLearning } from '@app/components/filters/FilterByBlendedLearning'
 import { FilterByCourseDeliveryType } from '@app/components/filters/FilterByCourseDeliveryType'
 import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
+import { FilterByCourseResidingCountry } from '@app/components/filters/FilterByCourseResidingCountry'
 import { FilterByCourseState } from '@app/components/filters/FilterByCourseState'
 import { FilterByCourseStatus } from '@app/components/filters/FilterByCourseStatus'
 import { FilterByCourseStatusWarnings } from '@app/components/filters/FilterByCourseStatusWarnings'
@@ -99,6 +100,8 @@ export function Filters({ onChange }: Props) {
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
   const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
   const [filterState, setFilterState] = useState<CourseState[]>([])
+  const [filterCourseResidingCountries, setFilterCourseResidingCountries] =
+    useState<string[]>([])
   const [filterStatus, setFilterStatus] = useState<string[]>([])
   const [dateFilters, setDateFilters] = useState<DateFilters>()
   const [filterWarningStatuses, setFilterWarningStatuses] = useState<
@@ -207,6 +210,7 @@ export function Filters({ onChange }: Props) {
 
     const filters = {
       states: filterState,
+      courseResidingCountries: filterCourseResidingCountries,
       statuses: [...filterStatus, ...filterWarningStatuses],
       levels: filterLevel,
       types: filterType,
@@ -218,6 +222,7 @@ export function Filters({ onChange }: Props) {
       accreditedBy,
       deliveryTypes: filterDeliveryType,
     }
+
     onChange(filters)
   }, [
     actionableStatuses,
@@ -232,6 +237,7 @@ export function Filters({ onChange }: Props) {
     onChange,
     accreditedBy,
     filterDeliveryType,
+    filterCourseResidingCountries,
   ])
 
   return (
@@ -258,6 +264,9 @@ export function Filters({ onChange }: Props) {
           <FilterByBlendedLearning
             selected={filterBlendedLearning}
             onChange={setFilterBlendedLearning}
+          />
+          <FilterByCourseResidingCountry
+            onChange={setFilterCourseResidingCountries}
           />
           <FilterByCourseLevel
             title={t('course-level')}

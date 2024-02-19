@@ -509,6 +509,7 @@
     "course-date-range": "Filter by Course Date",
     "created-range": "Filter by Creation Date",
     "date-obtained": "Filter by date obtained",
+    "residing-country": "Residing Country",
     "state": "Filter by Course State",
     "payment-method": "Payment Method",
     "warning-statuses": "Show all warning statuses",

@@ -6,6 +6,7 @@ import { useEffectOnce } from 'react-use'
 
 import { FilterOption } from '@app/components/FilterAccordion'
 import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
+import { FilterByCourseResidingCountry } from '@app/components/filters/FilterByCourseResidingCountry'
 import { FilterByCourseState } from '@app/components/filters/FilterByCourseState'
 import { FilterByCourseStatus } from '@app/components/filters/FilterByCourseStatus'
 import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
@@ -50,6 +51,8 @@ export function Filters({ forManaging = false, onChange }: Props) {
 
   const [filterState, setFilterState] = useState<CourseState[]>([])
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
+  const [filterCourseResidingCountries, setFilterCourseResidingCountries] =
+    useState<string[]>([])
   const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
   const [dateFilters, setDateFilters] = useState<DateFilters>()
   const [filterStatus, setFilterStatus] = useState<string[]>([])
@@ -169,6 +172,7 @@ export function Filters({ forManaging = false, onChange }: Props) {
     const filters = {
       states: filterState,
       statuses: filterStatus as UserCourseStatus[],
+      courseResidingCountries: filterCourseResidingCountries,
       levels: filterLevel,
       types: filterType,
       keyword,
@@ -184,6 +188,7 @@ export function Filters({ forManaging = false, onChange }: Props) {
     filterState,
     filterStatus,
     keyword,
+    filterCourseResidingCountries,
   ])
 
   const onDatesChange = useCallback((from?: Date, to?: Date) => {
@@ -220,6 +225,9 @@ export function Filters({ forManaging = false, onChange }: Props) {
         </Typography>
 
         <Stack gap={1}>
+          <FilterByCourseResidingCountry
+            onChange={setFilterCourseResidingCountries}
+          />
           <FilterByCourseLevel
             title={t('course-level')}
             onChange={setFilterLevel}
