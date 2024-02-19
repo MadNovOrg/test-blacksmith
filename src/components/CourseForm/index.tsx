@@ -663,46 +663,45 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const courseLevel = values.courseLevel
   const isBlended = values.blendedLearning
   const isBild = values.accreditedBy === Accreditors_Enum.Bild
+  const isICM = values.accreditedBy === Accreditors_Enum.Icm
+  const isVirtualCourse = deliveryType === Course_Delivery_Type_Enum.Virtual
+  const isMixedCourse = deliveryType === Course_Delivery_Type_Enum.Mixed
+  const isF2Fcourse = deliveryType === Course_Delivery_Type_Enum.F2F
 
-  const canBlended =
-    values.accreditedBy === Accreditors_Enum.Icm
-      ? canBeBlended(courseType, courseLevel as Course_Level_Enum, deliveryType)
-      : canBeBlendedBild(courseType, values.bildStrategies)
+  const canBlended = isICM
+    ? canBeBlended(courseType, courseLevel as Course_Level_Enum, deliveryType)
+    : canBeBlendedBild(courseType, values.bildStrategies)
 
-  const canReacc =
-    values.accreditedBy === Accreditors_Enum.Icm
-      ? canBeReacc(
-          courseType,
-          courseLevel as Course_Level_Enum,
-          deliveryType,
-          isBlended
-        )
-      : canBeReaccBild(
-          courseType,
-          values.bildStrategies,
-          values.blendedLearning,
-          values.conversion
-        )
+  const canReacc = isICM
+    ? canBeReacc(
+        courseType,
+        courseLevel as Course_Level_Enum,
+        deliveryType,
+        isBlended
+      )
+    : canBeReaccBild(
+        courseType,
+        values.bildStrategies,
+        values.blendedLearning,
+        values.conversion
+      )
 
-  const canF2F =
-    values.accreditedBy === Accreditors_Enum.Icm
-      ? canBeF2F(courseType, courseLevel as Course_Level_Enum)
-      : canBeF2FBild()
+  const canF2F = isICM
+    ? canBeF2F(courseType, courseLevel as Course_Level_Enum)
+    : canBeF2FBild()
 
-  const canVirtual =
-    values.accreditedBy === Accreditors_Enum.Icm
-      ? canBeVirtual(courseType, courseLevel as Course_Level_Enum)
-      : canBeVirtualBild(courseType, values.bildStrategies)
+  const canVirtual = isICM
+    ? canBeVirtual(courseType, courseLevel as Course_Level_Enum)
+    : canBeVirtualBild(courseType, values.bildStrategies)
 
-  const canMixed =
-    values.accreditedBy === Accreditors_Enum.Icm
-      ? canBeMixed(courseType, courseLevel as Course_Level_Enum)
-      : canBeMixedBild(
-          values.courseLevel as Course_Level_Enum,
-          values.bildStrategies
-            ? bildStrategiesToArray(values.bildStrategies)
-            : []
-        )
+  const canMixed = isICM
+    ? canBeMixed(courseType, courseLevel as Course_Level_Enum)
+    : canBeMixedBild(
+        values.courseLevel as Course_Level_Enum,
+        values.bildStrategies
+          ? bildStrategiesToArray(values.bildStrategies)
+          : []
+      )
 
   const conversionEnabled =
     isBild && canBeConversion(values.reaccreditation, values.courseLevel)
@@ -711,37 +710,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     Course_Delivery_Type_Enum.F2F,
     Course_Delivery_Type_Enum.Mixed,
   ].includes(deliveryType)
-  const usesAOL =
-    courseType === Course_Type_Enum.Indirect && !isBild ? values.usesAOL : false
+  const usesAOL = isIndirectCourse && !isBild ? values.usesAOL : false
   const aolCountry = values.aolCountry
   const startDate = useWatch({ control, name: 'startDate' })
   const startTime = useWatch({ control, name: 'startTime' })
   const endDate = useWatch({ control, name: 'endDate' })
   const endTime = useWatch({ control, name: 'endTime' })
-
-  const priceArgs = useMemo(
-    () =>
-      values.courseLevel === '' || values.accreditedBy !== Accreditors_Enum.Icm
-        ? undefined
-        : {
-            type: courseType,
-            courseLevel: values.courseLevel as Course_Level_Enum,
-            reaccreditation: values.reaccreditation,
-            blendedLearning: values.blendedLearning,
-            accreditedBy: values.accreditedBy,
-            price: values.price,
-          },
-    [
-      courseType,
-      values.accreditedBy,
-      values.blendedLearning,
-      values.courseLevel,
-      values.price,
-      values.reaccreditation,
-    ]
-  )
-
-  const { price: automaticPrice } = useCoursePrice(priceArgs)
 
   const needsManualPrice =
     values.accreditedBy && values.courseLevel
@@ -753,6 +727,49 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           maxParticipants: values.maxParticipants ?? 0,
         })
       : false
+
+  const pricesList = useCoursePrice({ accreditedBy: values.accreditedBy })
+
+  // this useEffect sets the individual course price and currency
+  // based on its LEVEL and blended & reaccreditation status
+  useEffect(() => {
+    const courseLevel = values?.courseLevel
+    const isBlended = values?.blendedLearning
+    const isReaccreditation = values?.reaccreditation
+
+    const coursePrice = pricesList?.find(element => {
+      if (
+        element.type === courseType &&
+        element.level === courseLevel &&
+        element.blended === isBlended &&
+        element.reaccreditation === isReaccreditation
+      ) {
+        return element.priceAmount
+      }
+    })
+
+    // only set the default price for UK based countries
+    if (isUKCountry(values.residingCountry)) {
+      setValue('price', coursePrice?.priceAmount)
+      setValue('priceCurrency', coursePrice?.priceCurrency)
+    }
+  }, [
+    courseType,
+    pricesList,
+    setValue,
+    values?.blendedLearning,
+    values?.courseLevel,
+    values?.reaccreditation,
+    values.residingCountry,
+    isUKCountry,
+  ])
+
+  // set VAT true for all UK countries
+  useEffect(() => {
+    if (isUKCountry(values.residingCountry)) {
+      setValue('includeVAT', true)
+    }
+  }, [isUKCountry, setValue, values.residingCountry])
 
   const resetSpecialInstructionsToDefault = useCallback(
     (
@@ -778,27 +795,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     },
     [isCreation, setValue]
   )
-
-  useEffect(() => {
-    if (
-      values.accreditedBy === Accreditors_Enum.Icm &&
-      isUKCountry(values.residingCountry as WorldCountriesCodes)
-    ) {
-      setValue('price', automaticPrice)
-    }
-  }, [
-    automaticPrice,
-    isUKCountry,
-    resetField,
-    setValue,
-    values.accreditedBy,
-    values.residingCountry,
-  ])
-
-  useEffect(() => {
-    if (isUKCountry(values.residingCountry))
-      setValue('priceCurrency', defaultCurrency)
-  }, [isUKCountry, setValue, values.residingCountry])
 
   useEffect(() => {
     if (!isCreation) {
@@ -1098,9 +1094,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   }, [setValue, values.aolCountry])
 
   const showTrainerOrgOnly =
-    !values.usesAOL &&
-    courseType === Course_Type_Enum.Indirect &&
-    activeRole === RoleName.TRAINER
+    !values.usesAOL && isIndirectCourse && activeRole === RoleName.TRAINER
 
   return (
     <form>
@@ -1158,7 +1152,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 </FormControl>
               ) : null}
 
-              {courseType === Course_Type_Enum.Indirect && !isBild ? (
+              {isIndirectCourse && !isBild ? (
                 <>
                   <Typography
                     mt={2}
@@ -1477,8 +1471,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   </FormHelperText>
                 ) : null}
                 {/* TODO: Delete this after Arlo migration to the hub - HAVENT USED THE translations file to have this easier to find by text search */}
-                {acl.isInternalUser() &&
-                courseType !== Course_Type_Enum.Indirect ? (
+                {acl.isInternalUser() && !isIndirectCourse ? (
                   <>
                     <TextField
                       sx={{ mt: theme.spacing(2) }}
@@ -1590,7 +1583,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   </Grid>
                 ) : null}
 
-                {courseType === Course_Type_Enum.Open ? (
+                {isOpenCourse ? (
                   <Grid item>
                     <Controller
                       name="displayOnWebsite"
@@ -1615,7 +1608,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 ) : null}
               </Grid>
 
-              {isBlended && courseType === Course_Type_Enum.Indirect ? (
+              {isBlended && isIndirectCourse ? (
                 <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
                   {t('components.course-form.blended-learning-price-label')}
                 </Alert>
@@ -1625,15 +1618,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 <FormControl fullWidth sx={{ my: theme.spacing(2) }}>
                   <CountriesSelector
                     onChange={(_, code) => {
-                      if (isUKCountry(code)) {
-                        resetField('includeVAT')
-                        resetField('price')
-                        resetField('priceCurrency')
-                      } else {
-                        if (isUKCountry(values.residingCountry)) {
-                          setValue('includeVAT', false)
-                        }
-                      }
                       setValue('residingCountry', code ?? '')
                     }}
                     value={values.residingCountry}
@@ -1657,7 +1641,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       .value as Course_Delivery_Type_Enum
                     setValue('deliveryType', deliveryType)
 
-                    if (deliveryType === Course_Delivery_Type_Enum.Virtual) {
+                    if (isVirtualCourse) {
                       setValue('parkingInstructions', '')
                     }
                     trigger(['venue'])
@@ -1765,8 +1749,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   />
                 )}
               />
-              {deliveryType === Course_Delivery_Type_Enum.F2F ||
-              deliveryType === Course_Delivery_Type_Enum.Mixed ? (
+              {isF2Fcourse || isMixedCourse ? (
                 <Controller
                   name="parkingInstructions"
                   control={control}
@@ -1946,7 +1929,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   <Grid item md={6} sm={12}>
                     <NumericTextField
                       required
-                      {...register('minParticipants', { valueAsNumber: true })}
+                      {...register('minParticipants', {
+                        valueAsNumber: true,
+                      })}
                       label={t(
                         'components.course-form.min-attendees-placeholder'
                       )}
@@ -2043,7 +2028,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             />
           ) : null}
 
-          {isOpenICMInternationalFinanceEnabled && isOpenCourse && (
+          {isOpenICMInternationalFinanceEnabled && isOpenCourse && isICM && (
             <InfoPanel
               title={t('components.course-form.finance-section-title')}
               titlePosition="outside"
@@ -2061,7 +2046,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     fullWidth
                     helperText={errors.priceCurrency?.message}
                     value={values.priceCurrency ?? null}
-                    disabled={isUKCountry(values?.residingCountry)}
                   />
                 </Grid>
 

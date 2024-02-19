@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 export const GET_COURSE_SOURCES_QUERY = gql`
   query GetCoursesSources {

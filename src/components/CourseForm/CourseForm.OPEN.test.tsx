@@ -12,6 +12,7 @@ import { RoleName } from '@app/types'
 import { courseToCourseInput } from '@app/util'
 
 import {
+  chance,
   render,
   renderHook,
   screen,
@@ -41,12 +42,17 @@ describe('component: CourseForm - OPEN', () => {
   } = renderHook(() => useTranslation())
 
   beforeEach(() => {
-    useCoursePriceMock.mockReturnValue({
-      price: null,
-      fetching: false,
-      currency: undefined,
-      error: undefined,
-    })
+    useCoursePriceMock.mockReturnValue([
+      {
+        id: chance.guid(),
+        level: Course_Level_Enum.Level_1,
+        type: Course_Type_Enum.Open,
+        blended: false,
+        reaccreditation: false,
+        priceCurrency: 'GBP',
+        priceAmount: 100,
+      },
+    ])
   })
 
   // Delivery
@@ -193,6 +199,7 @@ describe('component: CourseForm - OPEN', () => {
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
   })
+
   it('doesnt require a residing country if feature flag is disabled', async () => {
     useFeatureFlagEnabledMock.mockResolvedValueOnce(false)
     await waitFor(() =>
@@ -207,6 +214,7 @@ describe('component: CourseForm - OPEN', () => {
       screen.queryByText(t('components.course-form.residing-country'))
     ).not.toBeInTheDocument()
   })
+
   it('requires a residing country if feature flag is enabled', async () => {
     useFeatureFlagEnabledMock.mockResolvedValue(true)
 
@@ -230,7 +238,7 @@ describe('component: CourseForm - OPEN', () => {
     )
   })
 
-  it('requires price for an international open type course accredited by ICM and with enabled flag', async () => {
+  it('requires price for an international OPEN course accredited by ICM and with enabled flag', async () => {
     // Mock course-residing-country and open-icm-course-international-finance to be enabled
     useFeatureFlagEnabledMock.mockResolvedValue(true)
 

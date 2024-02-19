@@ -5,7 +5,7 @@ import {
 } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 
-import { screen, userEvent, waitFor } from '@test/index'
+import { chance, screen, userEvent, waitFor } from '@test/index'
 
 import { renderForm, selectDelivery, selectLevel } from './test-utils'
 
@@ -19,12 +19,17 @@ describe('component: CourseForm - INDIRECT', () => {
   const type = Course_Type_Enum.Indirect
 
   beforeEach(() => {
-    useCoursePriceMock.mockReturnValue({
-      price: null,
-      fetching: false,
-      currency: undefined,
-      error: undefined,
-    })
+    useCoursePriceMock.mockReturnValue([
+      {
+        id: chance.guid(),
+        level: Course_Level_Enum.Level_1,
+        type: Course_Type_Enum.Indirect,
+        blended: false,
+        reaccreditation: false,
+        priceCurrency: 'GBP',
+        priceAmount: 100,
+      },
+    ])
   })
 
   // Delivery

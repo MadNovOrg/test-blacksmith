@@ -11,7 +11,6 @@ import {
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
-import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { QUERY as SET_COURSE_DRAFT } from '@app/queries/courses/set-course-draft'
 import {
   Draft,
@@ -93,8 +92,6 @@ export const CreateCourseProvider: React.FC<
   const { strategies } = useBildStrategies(
     Boolean(courseData?.accreditedBy === Accreditors_Enum.Bild)
   )
-
-  const pricing = useCoursePrice(courseData)
 
   const seniorOrPrincipalLead = useMemo(() => {
     return trainers.some(t =>
@@ -262,8 +259,8 @@ export const CreateCourseProvider: React.FC<
       exceptions,
       courseName,
       pricing: {
-        amount: pricing.price,
-        error: Boolean(pricing.error),
+        amount: 0,
+        error: false,
       },
       invoiceDetails,
       setInvoiceDetails,
@@ -281,8 +278,6 @@ export const CreateCourseProvider: React.FC<
     go1Licensing,
     exceptions,
     courseName,
-    pricing.price,
-    pricing.error,
     invoiceDetails,
     showDraftConfirmationDialog,
   ])

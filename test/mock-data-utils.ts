@@ -306,6 +306,7 @@ export const buildCourse = build<Course>({
     ],
     curriculum: null,
     courseExceptions: [],
+    price: chance.integer({ min: 0, max: 200 }),
   },
 })
 
@@ -682,10 +683,10 @@ export const buildExpensesInput = build<ExpensesInput>({
         ) as TransportMethod
         const tripData: ExpensesInput['transport'][number] = {
           method,
-          accommodationCost: undefined,
-          accommodationNights: undefined,
+          accommodationCost: chance.integer({ min: 1, max: 150 }),
+          accommodationNights: chance.integer({ min: 0, max: 2 }),
           flightDays: undefined,
-          value: undefined,
+          value: chance.integer({ min: 0, max: 5 }),
         }
 
         if (method !== TransportMethod.NONE) {

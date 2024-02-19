@@ -218,14 +218,8 @@ const ExpensesDetails: React.FC<ExpensesDetailsProps> = ({
 
 export const OrderDetailsReview: React.FC = () => {
   const { t } = useTranslation()
-  const {
-    courseData,
-    courseName,
-    trainers,
-    expenses,
-    pricing,
-    invoiceDetails,
-  } = useCreateCourse()
+  const { courseData, courseName, trainers, expenses, invoiceDetails } =
+    useCreateCourse()
 
   const { startDate, endDate } = useMemo(
     () =>
@@ -304,15 +298,15 @@ export const OrderDetailsReview: React.FC = () => {
 
   const [courseBasePrice, subtotal, freeSpacesDiscount, vat, amountDue] =
     useMemo(() => {
-      if (!courseData || !pricing.amount) {
+      if (!courseData) {
         return []
       }
 
-      const courseBasePrice = new Big(pricing.amount).times(
+      const courseBasePrice = new Big(courseData.price).times(
         courseData.maxParticipants
       )
 
-      const freeSpacesDiscount = new Big(pricing.amount)
+      const freeSpacesDiscount = new Big(courseData.price)
         .times(courseData.freeSpaces ?? 0)
         .neg()
 
@@ -330,7 +324,7 @@ export const OrderDetailsReview: React.FC = () => {
         vat.round().toNumber(),
         amountDue.round().toNumber(),
       ]
-    }, [courseData, trainerExpensesTotal, pricing])
+    }, [courseData, trainerExpensesTotal])
 
   const courseVenue = courseData?.venue
   const locationNameAddressCity = [

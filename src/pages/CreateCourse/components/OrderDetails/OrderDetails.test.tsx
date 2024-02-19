@@ -55,7 +55,17 @@ describe('component: OrderDetails', () => {
       executeQuery: () =>
         fromValue<{ data: CoursePriceQuery }>({
           data: {
-            coursePrice: [{ priceAmount: 100, priceCurrency: 'GBP' }],
+            coursePrice: [
+              {
+                id: chance.guid(),
+                priceAmount: 120,
+                priceCurrency: 'GBP',
+                level: Course_Level_Enum.Level_2,
+                type: Course_Type_Enum.Open,
+                blended: false,
+                reaccreditation: false,
+              },
+            ],
           },
         }),
     } as unknown as Client
@@ -75,6 +85,7 @@ describe('component: OrderDetails', () => {
               startDateTime: courseDate,
               endDateTime: addHours(courseDate, 8),
               freeSpaces: 0,
+              price: 100,
             } as unknown as ValidCourseInput,
           }}
         >
@@ -199,7 +210,17 @@ describe('component: OrderDetails', () => {
       executeQuery: () =>
         fromValue<{ data: CoursePriceQuery }>({
           data: {
-            coursePrice: [{ priceAmount: 100, priceCurrency: 'GBP' }],
+            coursePrice: [
+              {
+                id: chance.guid(),
+                priceAmount: 120,
+                priceCurrency: 'GBP',
+                level: Course_Level_Enum.Level_2,
+                type: Course_Type_Enum.Open,
+                blended: false,
+                reaccreditation: false,
+              },
+            ],
           },
         }),
     } as unknown as Client
@@ -210,6 +231,7 @@ describe('component: OrderDetails', () => {
           courseType={Course_Type_Enum.Indirect}
           initialValue={{
             courseData: {
+              price: 120,
               maxParticipants: 10,
               organization: { id: 'org-id' },
             } as unknown as ValidCourseInput,

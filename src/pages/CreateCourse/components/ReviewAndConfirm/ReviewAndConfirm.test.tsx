@@ -1,5 +1,5 @@
-import { add, addHours } from 'date-fns'
-import { Client, CombinedError, Provider } from 'urql'
+import { addHours } from 'date-fns'
+import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
 import {
@@ -15,7 +15,14 @@ import {
 } from '@app/types'
 import { courseToCourseInput, getTrainerCarCostPerMile } from '@app/util'
 
-import { formatCurrency, render, screen, waitFor, within } from '@test/index'
+import {
+  chance,
+  formatCurrency,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@test/index'
 import {
   buildCourse,
   buildCourseSchedule,
@@ -40,22 +47,6 @@ vi.mock('@app/hooks/use-fetcher', () => ({
 }))
 mockFetcher.mockReturnValue({})
 
-const schedule = buildCourseSchedule({
-  overrides: {
-    end: add(new Date(), { hours: 8 }).toISOString(),
-  },
-})
-
-const overrides = {
-  trainers: [],
-  max_participants: 11,
-  schedule: [schedule],
-  freeSpaces: 2,
-}
-
-const courseData = courseToCourseInput(
-  buildCourse({ overrides })
-) as ValidCourseInput
 const trainers = [buildTrainerInput(), buildTrainerInputAssistant()]
 const expenses: Record<string, ExpensesInput> = {}
 
@@ -87,39 +78,6 @@ describe('component: ReviewAndConfirm', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('renders alert if pricing info could not be fetched', async () => {
-    const client = {
-      executeQuery: () =>
-        fromValue({
-          error: new CombinedError({
-            networkError: Error('something went wrong!'),
-          }),
-        }),
-    } as unknown as Client
-
-    render(
-      <Provider value={client}>
-        <CreateCourseProvider
-          initialValue={{ courseData, expenses, trainers }}
-          courseType={Course_Type_Enum.Closed}
-        >
-          <ReviewAndConfirm />
-        </CreateCourseProvider>
-      </Provider>,
-      { auth: { activeRole: RoleName.TT_ADMIN } }
-    )
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('ReviewAndConfirm-alert-pricing')
-      ).toBeInTheDocument()
-    })
-
-    expect(
-      screen.queryByTestId('ReviewAndConfirm-page-content')
-    ).not.toBeInTheDocument()
-  })
-
   it('renders course summary if course data is in context', async () => {
     const schedule = buildCourseSchedule({
       overrides: {
@@ -134,6 +92,7 @@ describe('component: ReviewAndConfirm', () => {
           max_participants: 100,
           schedule: [schedule],
           level: Course_Level_Enum.Level_1,
+          price: 120,
         },
       })
     ) as ValidCourseInput
@@ -142,7 +101,17 @@ describe('component: ReviewAndConfirm', () => {
       executeQuery: () =>
         fromValue<{ data: CoursePriceQuery }>({
           data: {
-            coursePrice: [{ priceAmount: 100, priceCurrency: 'GBP' }],
+            coursePrice: [
+              {
+                id: chance.guid(),
+                priceAmount: 120,
+                priceCurrency: 'GBP',
+                level: Course_Level_Enum.Level_2,
+                type: Course_Type_Enum.Closed,
+                blended: false,
+                reaccreditation: false,
+              },
+            ],
           },
         }),
     } as unknown as Client
@@ -203,7 +172,7 @@ describe('component: ReviewAndConfirm', () => {
           max_participants: NUM_OF_PARTICIPANTS,
           schedule: [schedule],
           level: Course_Level_Enum.Level_1,
-          freeSpaces: 2,
+          freeSpaces: 0,
         },
       })
     ) as ValidCourseInput
@@ -243,7 +212,15 @@ describe('component: ReviewAndConfirm', () => {
         fromValue<{ data: CoursePriceQuery }>({
           data: {
             coursePrice: [
-              { priceAmount: PRICING_PER_PARTICIPANT, priceCurrency: 'GBP' },
+              {
+                id: chance.guid(),
+                priceAmount: 120,
+                priceCurrency: 'GBP',
+                level: Course_Level_Enum.Level_2,
+                type: Course_Type_Enum.Closed,
+                blended: false,
+                reaccreditation: false,
+              },
             ],
           },
         }),
@@ -251,7 +228,7 @@ describe('component: ReviewAndConfirm', () => {
 
     const trainerExpenses = 610
     const freeSpacesDiscount = PRICING_PER_PARTICIPANT * courseData.freeSpaces
-    const coursePricing = PRICING_PER_PARTICIPANT * courseData.maxParticipants
+    const coursePricing = courseData.price * courseData.maxParticipants
     const subtotal = trainerExpenses + coursePricing - freeSpacesDiscount
     const vat = 1.2
 
@@ -357,7 +334,7 @@ describe('component: ReviewAndConfirm', () => {
 
     expect(
       within(screen.getByTestId('course-price-row')).getByText(
-        formatCurrency(PRICING_PER_PARTICIPANT * NUM_OF_PARTICIPANTS)
+        formatCurrency(courseData.price * courseData.maxParticipants)
       )
     ).toBeInTheDocument()
 

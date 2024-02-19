@@ -1,32 +1,25 @@
+import { Client, Provider, TypedDocumentNode } from 'urql'
+import { fromValue } from 'wonka'
+
 import {
+  CoursePriceQuery,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
+  GetCoursesSourcesQuery,
 } from '@app/generated/graphql'
-import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
-import { RoleName } from '@app/types'
+import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
+import { GET_COURSE_SOURCES_QUERY } from '@app/queries/courses/get-course-sources'
+import { CourseInput, RoleName } from '@app/types'
 
-import { screen, userEvent, waitFor } from '@test/index'
+import { chance, render, screen, userEvent, waitFor } from '@test/index'
 
 import { renderForm, selectDelivery, selectLevel } from './test-utils'
 
-vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
-  useCoursePrice: vi.fn(),
-}))
-
-const useCoursePriceMock = vi.mocked(useCoursePrice)
+import CourseForm from '.'
 
 describe('component: CourseForm - CLOSED', () => {
   const type = Course_Type_Enum.Closed
-
-  beforeEach(() => {
-    useCoursePriceMock.mockReturnValue({
-      price: null,
-      fetching: false,
-      currency: undefined,
-      error: undefined,
-    })
-  })
 
   // Delivery
   it('allows CLOSED+LEVEL_1 to be F2F, VIRTUAL or MIXED', async () => {
@@ -297,20 +290,57 @@ describe('component: CourseForm - CLOSED', () => {
   it('prepopulates price field a Level two blended closed course that has 8 or less participants', async () => {
     const pricePerAttendee = 100
 
-    useCoursePriceMock.mockReturnValue({
-      price: pricePerAttendee,
-      currency: 'GBP',
-      fetching: false,
-      error: undefined,
-    })
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          console.log('SOURCESSSS')
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: chance.name(),
+                },
+              ],
+            },
+          })
+        }
 
-    await waitFor(() => {
-      renderForm(type, Course_Level_Enum.IntermediateTrainer, RoleName.TT_ADMIN)
-    })
+        if (query === COURSE_PRICE_QUERY) {
+          console.log('enters heree')
+          return fromValue<{ data: CoursePriceQuery }>({
+            data: {
+              coursePrice: [
+                {
+                  id: chance.guid(),
+                  priceAmount: pricePerAttendee,
+                  priceCurrency: 'GBP',
+                  level: Course_Level_Enum.Level_2,
+                  type: Course_Type_Enum.Closed,
+                  blended: true,
+                  reaccreditation: false,
+                },
+              ],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <CourseForm courseInput={{} as CourseInput} type={type} />
+      </Provider>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.Level_2],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      }
+    )
 
     await selectLevel(Course_Level_Enum.Level_2)
     await userEvent.type(screen.getByLabelText(/number of attendees/i), '8')
-    await userEvent.click(screen.getByLabelText(/blended learning/i))
+    await userEvent.click(screen.getByTestId('blendedLearning-switch'))
 
     const priceField = screen.getByPlaceholderText(/price/i)
 
