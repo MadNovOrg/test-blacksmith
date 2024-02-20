@@ -734,7 +734,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const pricesList = useCoursePrice({ accreditedBy: values.accreditedBy })
 
   // this useEffect sets the individual course price and currency
-  // based on its LEVEL and blended & reaccreditation status
+  // based on its Type, LEVEL and blended & reaccreditation status
   useEffect(() => {
     const courseLevel = values?.courseLevel
     const isBlended = values?.blendedLearning
@@ -751,12 +751,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       }
     })
 
-    // only set the default price for UK based countries
-    if (isUKCountry(values.residingCountry)) {
+    // only set the default price for UK based countries when creating a course
+    if (isCreation && isUKCountry(values.residingCountry)) {
       setValue('price', coursePrice?.priceAmount)
       setValue('priceCurrency', coursePrice?.priceCurrency)
     }
   }, [
+    isCreation,
     courseType,
     pricesList,
     setValue,

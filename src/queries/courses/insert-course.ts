@@ -66,7 +66,9 @@ export type ParamsType = {
       data: Array<Order_Insert_Input>
     }
     conversion?: boolean
-    price?: number | null
+    price?: number
+    priceCurrency?: string
+    includeVAT?: boolean
     renewalCycle?: Course_Renewal_Cycle_Enum
     residingCountry: string
     /// TODO: Delete this after Arlo migration
