@@ -143,6 +143,26 @@ select_permissions:
         - question_id
       filter: {}
       allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - course_id
+        - answer
+        - id
+        - profile_id
+        - question_id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - course_id
+        - answer
+        - id
+        - profile_id
+        - question_id
+      filter: {}
+      allow_aggregations: true
   - role: user
     permission:
       columns:
