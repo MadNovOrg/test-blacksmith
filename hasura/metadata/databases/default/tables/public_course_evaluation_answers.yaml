@@ -108,17 +108,13 @@ select_permissions:
   - role: sales-admin
     permission:
       columns:
-        - answer
         - course_id
+        - answer
         - id
         - profile_id
         - question_id
-      filter:
-        course:
-          course_type:
-            _in:
-              - OPEN
-              - CLOSED
+      filter: {}
+      allow_aggregations: true
   - role: trainer
     permission:
       columns:
