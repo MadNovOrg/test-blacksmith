@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import {
   CourseTrainerType,

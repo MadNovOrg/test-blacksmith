@@ -1,14 +1,13 @@
 import { noop } from 'ts-essentials'
+import { Client, Provider } from 'urql'
+import { fromValue } from 'wonka'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
+import { GetOrganizationsQuery } from '@app/generated/graphql'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildOrganization, buildProfile } from '@test/mock-data-utils'
 
 import { OrgSelector } from '.'
-
-vi.mock('@app/hooks/use-fetcher')
-const useFetcherMock = vi.mocked(useFetcher)
 
 describe('component: OrgSelector', () => {
   beforeEach(() => {
@@ -48,20 +47,26 @@ describe('component: OrgSelector', () => {
 
   it('loads organizations when the user types organization name', async () => {
     const ORG_SEARCH_NAME = 'My Org'
-
-    const fetcherMock = vi.fn()
-    fetcherMock.mockResolvedValue({
-      orgs: [
-        buildOrganization({
-          overrides: {
-            name: ORG_SEARCH_NAME,
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetOrganizationsQuery }>({
+          data: {
+            orgs: [
+              buildOrganization({
+                overrides: {
+                  name: ORG_SEARCH_NAME,
+                },
+              }) as GetOrganizationsQuery['orgs'][0],
+            ],
           },
         }),
-      ],
-    })
-    useFetcherMock.mockReturnValue(fetcherMock)
-
-    render(<OrgSelector onChange={noop} />, { auth: { profile } })
+    } as unknown as Client
+    render(
+      <Provider value={client}>
+        <OrgSelector onChange={noop} />
+      </Provider>,
+      { auth: { profile } }
+    )
 
     await userEvent.type(
       screen.getByPlaceholderText('Organisation name', { exact: false }),
@@ -91,12 +96,23 @@ describe('component: OrgSelector', () => {
           name: 'Other Org',
         },
       }),
-    ]
-    const fetcherMock = vi.fn()
-    fetcherMock.mockResolvedValue({ orgs })
-    useFetcherMock.mockReturnValue(fetcherMock)
+    ] as GetOrganizationsQuery['orgs']
 
-    render(<OrgSelector onChange={noop} />, { auth: { profile } })
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetOrganizationsQuery }>({
+          data: {
+            orgs,
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrgSelector onChange={noop} />
+      </Provider>,
+      { auth: { profile } }
+    )
 
     await userEvent.type(
       screen.getByPlaceholderText('Organisation name', { exact: false }),
@@ -128,13 +144,21 @@ describe('component: OrgSelector', () => {
       },
     })
 
-    const fetcherMock = vi.fn()
-    fetcherMock.mockResolvedValue({
-      orgs: [organization],
-    })
-    useFetcherMock.mockReturnValue(fetcherMock)
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetOrganizationsQuery }>({
+          data: {
+            orgs: [organization] as GetOrganizationsQuery['orgs'],
+          },
+        }),
+    } as unknown as Client
 
-    render(<OrgSelector onChange={onChangeMock} />, { auth: { profile } })
+    render(
+      <Provider value={client}>
+        <OrgSelector onChange={onChangeMock} />
+      </Provider>,
+      { auth: { profile } }
+    )
 
     await userEvent.type(
       screen.getByPlaceholderText('Organisation name', { exact: false }),

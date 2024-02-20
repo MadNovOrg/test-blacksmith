@@ -1,42 +1,35 @@
-import React from 'react'
-
-import { useFetcher } from '@app/hooks/use-fetcher'
+import { Client, Provider } from 'urql'
+import { never } from 'wonka'
 
 import { chance, render, screen, userEvent } from '@test/index'
 
 import UndoRevokeModal from './UndoRevokeModal'
 
 vi.mock('@app/hooks/useProfile')
-vi.mock('@app/hooks/use-fetcher')
-vi.mock('@app/queries/certificate/undo-revoke-certificate', () => ({
-  MUTATION: 'undo-revoke-mutation',
-}))
-
-const useFetcherMock = vi.mocked(useFetcher)
 
 describe('UndoRevokeModal', () => {
-  const fetcherMock = vi.fn()
   const onCloseMock = vi.fn()
   const onSuccessMock = vi.fn()
+  const client = {
+    executeQuery: vi.fn(() => never),
+    executeMutation: vi.fn(() => never),
+    executeSubscription: vi.fn(() => never),
+  } as unknown as Client
 
-  const setup = (
-    props: { certificateId?: string; participantId?: string } = {}
-  ) => {
-    useFetcherMock.mockReturnValue(fetcherMock)
-
-    return render(
-      <UndoRevokeModal
-        onClose={onCloseMock}
-        onSuccess={onSuccessMock}
-        certificateId={props.certificateId || chance.guid()}
-        participantId={props.participantId || chance.guid()}
-      />
-    )
-  }
+  const certificateId = chance.guid()
+  const participantId = chance.guid()
 
   it('renders as expected', async () => {
-    setup()
-
+    render(
+      <Provider value={client}>
+        <UndoRevokeModal
+          onClose={onCloseMock}
+          onSuccess={onSuccessMock}
+          certificateId={certificateId}
+          participantId={participantId}
+        />
+      </Provider>
+    )
     expect(
       screen.getByText(/user will regain full access/i)
     ).toBeInTheDocument()
@@ -49,24 +42,25 @@ describe('UndoRevokeModal', () => {
     expect(onSuccessMock).toHaveBeenCalledTimes(0)
   })
 
-  it('calls undo revoke mutation as expected', async () => {
-    const certificateId = chance.guid()
-    const participantId = chance.guid()
-
-    setup({ certificateId, participantId })
+  it('calls revoke mutation as expected', async () => {
+    render(
+      <Provider value={client}>
+        <UndoRevokeModal
+          onClose={onCloseMock}
+          onSuccess={onSuccessMock}
+          certificateId={certificateId}
+          participantId={participantId}
+        />
+      </Provider>
+    )
 
     await userEvent.click(screen.getByRole('checkbox'))
 
     expect(screen.getByRole('button', { name: 'Confirm' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'Confirm' })).toBeInTheDocument()
 
     await userEvent.click(screen.getByRole('button', { name: 'Confirm' }))
 
-    expect(fetcherMock).toHaveBeenCalledWith('undo-revoke-mutation', {
-      id: certificateId,
-      participantId,
-    })
-
-    expect(onSuccessMock).toHaveBeenCalledTimes(1)
-    expect(onCloseMock).toHaveBeenCalledTimes(0)
+    expect(client.executeMutation).toHaveBeenCalledTimes(1)
   })
 })

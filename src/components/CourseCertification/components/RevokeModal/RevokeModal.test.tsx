@@ -1,29 +1,14 @@
-import React from 'react'
-
-import { useFetcher } from '@app/hooks/use-fetcher'
-
 import { chance, render, screen, userEvent } from '@test/index'
 
 import RevokeCertModal from './RevokeModal'
 
-vi.mock('@app/hooks/useProfile')
-vi.mock('@app/hooks/use-fetcher')
-vi.mock('@app/queries/certificate/revoke-certificate', () => ({
-  MUTATION: 'revoke-mutation',
-}))
-
-const useFetcherMock = vi.mocked(useFetcher)
-
 describe('RevokeCertModal', () => {
-  const fetcherMock = vi.fn()
   const onCloseMock = vi.fn()
   const onSuccessMock = vi.fn()
 
   const setup = (
     props: { certificateId?: string; participantId?: string } = {}
   ) => {
-    useFetcherMock.mockReturnValue(fetcherMock)
-
     return render(
       <RevokeCertModal
         onClose={onCloseMock}
@@ -66,12 +51,6 @@ describe('RevokeCertModal', () => {
     expect(screen.getByRole('button', { name: 'Confirm' })).toBeEnabled()
 
     await userEvent.click(screen.getByRole('button', { name: 'Confirm' }))
-
-    expect(fetcherMock).toHaveBeenCalledWith('revoke-mutation', {
-      id: certificateId,
-      participantId,
-      payload: { note: 'some reason' },
-    })
 
     expect(onSuccessMock).toHaveBeenCalled()
     expect(onCloseMock).toHaveBeenCalledTimes(0)

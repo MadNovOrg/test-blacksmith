@@ -6,12 +6,12 @@ import {
   Button,
 } from '@mui/material'
 import React, { useState } from 'react'
+import { useMutation } from 'urql'
 
 import {
   UndoRevokeCertMutation,
   UndoRevokeCertMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { MUTATION as UNDO_REVOKE_CERT_MUTATION } from '@app/queries/certificate/undo-revoke-certificate'
 
@@ -29,29 +29,19 @@ const UndoRevokeModal: React.FC<
     'common.course-certificate.undo-revoke-modal'
   )
   const [confirmed, setConfirmed] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [saving, setSaving] = useState(false)
-  const fetcher = useFetcher()
+
+  const [{ error, fetching: saving }, undoRevokeCert] = useMutation<
+    UndoRevokeCertMutation,
+    UndoRevokeCertMutationVariables
+  >(UNDO_REVOKE_CERT_MUTATION)
 
   const allowUndoRevoke = confirmed
 
   const handleUndoRevoke = async () => {
     if (!allowUndoRevoke) return
-
-    setError(null)
-    setSaving(true)
-
-    try {
-      await fetcher<UndoRevokeCertMutation, UndoRevokeCertMutationVariables>(
-        UNDO_REVOKE_CERT_MUTATION,
-        { id: certificateId, participantId }
-      )
-      setSaving(false)
-      onSuccess()
-    } catch (e: unknown) {
-      setSaving(false)
-      setError('revoke-error')
-    }
+    await undoRevokeCert({ id: certificateId, participantId })
+    onSuccess()
+    if (!error) onSuccess()
   }
 
   return (
@@ -77,7 +67,7 @@ const UndoRevokeModal: React.FC<
       {error && (
         <Box>
           <Typography variant="body2" color="error">
-            {_t(error)}
+            {t('undo-error')}
           </Typography>
         </Box>
       )}

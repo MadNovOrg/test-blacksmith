@@ -483,7 +483,8 @@
     },
     "undo-revoke-modal": {
       "description": "Once this action has been confirmed, the user will regain full access to their certificate and the relevant resources.",
-      "confirm-undo": "Please confirm that you want to proceed with this action"
+      "confirm-undo": "Please confirm that you want to proceed with this action",
+      "undo-error": "Error reinstantiating the certificate"
     },
     "expired-on": "Expired on {{date, date_default}}",
     "active-until": "Active until {{date, date_default}}",

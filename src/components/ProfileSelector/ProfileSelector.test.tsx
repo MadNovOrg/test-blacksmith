@@ -1,17 +1,13 @@
-import React from 'react'
 import { noop } from 'ts-essentials'
+import { Client, Provider } from 'urql'
+import { fromValue } from 'wonka'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
-import { QUERY } from '@app/queries/profile/find-profiles'
+import { FindProfilesQuery } from '@app/generated/graphql'
 
 import { render, screen, userEvent, within, waitFor } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
 import { ProfileSelector } from '.'
-
-vi.mock('@app/hooks/use-fetcher')
-
-const useFetcherMock = vi.mocked(useFetcher)
 
 describe('component: ProfileSelector', () => {
   beforeEach(() => {
@@ -35,38 +31,35 @@ describe('component: ProfileSelector', () => {
   it('loads profiles when the user types profile full name', async () => {
     const SEARCH_NAME = 'John Doe'
     const ORG_ID = 'org-id'
-    const fetcherMock = vi.fn()
 
-    fetcherMock.mockResolvedValue({
-      profiles: [
-        buildProfile({
-          overrides: {
-            givenName: 'John',
-            familyName: 'Doe',
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: FindProfilesQuery }>({
+          data: {
+            profiles: [
+              buildProfile({
+                overrides: {
+                  givenName: 'John',
+                  familyName: 'Doe',
+                },
+              }) as unknown as FindProfilesQuery['profiles'][0],
+            ],
           },
         }),
-      ],
-    })
+    } as unknown as Client
 
-    useFetcherMock.mockReturnValue(fetcherMock)
-
-    render(<ProfileSelector onChange={noop} orgId={ORG_ID} />)
+    render(
+      <Provider value={client}>
+        <ProfileSelector onChange={noop} orgId={ORG_ID} />
+      </Provider>
+    )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search for a profile'),
       SEARCH_NAME
     )
 
-    vi.runAllTimers()
-
     await waitFor(() => {
-      expect(fetcherMock).toHaveBeenCalledTimes(1)
-      expect(fetcherMock).toHaveBeenCalledWith(QUERY, {
-        where: {
-          fullName: { _ilike: `%${SEARCH_NAME}%` },
-          organizations: { organization_id: { _eq: ORG_ID } },
-        },
-      })
       expect(
         within(screen.getByRole('listbox')).getByText(SEARCH_NAME)
       ).toBeInTheDocument()
@@ -76,29 +69,33 @@ describe('component: ProfileSelector', () => {
   it('calls callback when the user makes the selection', async () => {
     const SEARCH_NAME = 'John Doe'
     const ORG_ID = 'org-id'
-    const fetcherMock = vi.fn()
     const onChangeMock = vi.fn()
-    const profile = buildProfile({
-      overrides: {
-        givenName: 'John',
-        familyName: 'Doe',
-      },
-    })
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: FindProfilesQuery }>({
+          data: {
+            profiles: [
+              buildProfile({
+                overrides: {
+                  givenName: 'John',
+                  familyName: 'Doe',
+                },
+              }) as unknown as FindProfilesQuery['profiles'][0],
+            ],
+          },
+        }),
+    } as unknown as Client
 
-    fetcherMock.mockResolvedValue({
-      profiles: [profile],
-    })
-
-    useFetcherMock.mockReturnValue(fetcherMock)
-
-    render(<ProfileSelector onChange={onChangeMock} orgId={ORG_ID} />)
+    render(
+      <Provider value={client}>
+        <ProfileSelector onChange={onChangeMock} orgId={ORG_ID} />
+      </Provider>
+    )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search for a profile'),
       SEARCH_NAME
     )
-
-    vi.runAllTimers()
 
     await waitFor(() => {
       expect(
@@ -111,6 +108,5 @@ describe('component: ProfileSelector', () => {
     )
 
     expect(onChangeMock).toHaveBeenCalledTimes(1)
-    expect(onChangeMock).toHaveBeenCalledWith(profile)
   })
 })

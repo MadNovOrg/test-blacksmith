@@ -38,6 +38,7 @@ import {
   Course_Type_Enum,
   DisablePromoCodeMutation,
   DisablePromoCodeMutationVariables,
+  FindProfilesQuery,
   GetPromoCodesQuery,
   GetPromoCodesQueryVariables,
   Promo_Code_Type_Enum,
@@ -81,7 +82,9 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const [saving, setSaving] = useState(false)
 
-  const [createdBy, setCreatedBy] = useState<Profile>()
+  const [createdBy, setCreatedBy] = useState<
+    Profile | FindProfilesQuery['profiles'][0]
+  >()
 
   const amountInputRef = useRef<HTMLInputElement>()
   const [amountPreset, setAmountPreset] = useState(AMOUNT_PRESETS.FIVE)

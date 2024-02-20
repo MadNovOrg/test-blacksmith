@@ -44,6 +44,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
   Course_Delivery_Type_Enum,
+  FindProfilesQuery,
 } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
 import { InvoiceDetails, Profile } from '@app/types'
@@ -86,7 +87,7 @@ type FormInputs = {
   position: string
   otherPosition: string
   source: Course_Source_Enum | ''
-  salesRepresentative: Profile | null
+  salesRepresentative: Profile | null | FindProfilesQuery['profiles'][0]
   bookingContact: BookingContact
   paymentMethod: PaymentMethod
 

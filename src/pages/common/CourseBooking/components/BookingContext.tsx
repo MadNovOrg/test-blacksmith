@@ -18,6 +18,7 @@ import {
   Accreditors_Enum,
   Course_Source_Enum,
   Course_Type_Enum,
+  FindProfilesQuery,
   GetTempProfileQuery,
   PaymentMethod,
   Promo_Code,
@@ -87,7 +88,7 @@ type State = {
   discounts: Discounts
   source: Course_Source_Enum | ''
   bookingContact: BookingContact
-  salesRepresentative: Profile | null
+  salesRepresentative: Profile | null | FindProfilesQuery['profiles'][0]
   orgId: string
   orgName: string
   sector: Sector

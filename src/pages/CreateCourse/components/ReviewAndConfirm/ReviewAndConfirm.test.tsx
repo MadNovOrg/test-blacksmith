@@ -142,7 +142,7 @@ describe('component: ReviewAndConfirm', () => {
 
     expect(
       within(screen.getByTestId('sales-row')).getByText(
-        courseData.salesRepresentative.fullName
+        courseData.salesRepresentative.fullName as string
       )
     ).toBeInTheDocument()
 

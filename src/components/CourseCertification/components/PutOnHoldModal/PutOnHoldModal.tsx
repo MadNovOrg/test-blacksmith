@@ -16,6 +16,7 @@ import { zonedTimeToUtc } from 'date-fns-tz'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useMutation } from 'urql'
 import * as yup from 'yup'
 
 import {
@@ -23,9 +24,9 @@ import {
   GetCertificateQuery,
   InsertCourseCertificateChangelogMutation,
   InsertCourseCertificateChangelogMutationVariables,
+  InsertCourseCertificateHoldRequestMutation,
   InsertCourseCertificateHoldRequestMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { INSERT_CERTIFICATE_CHANGELOG_MUTATION } from '@app/queries/certificate/insert-course-certificate-changelog'
 import { INSERT_CERTIFICATE_HOLD_MUTATION } from '@app/queries/certificate/insert-course-certificate-hold-request'
 import theme from '@app/theme'
@@ -78,10 +79,19 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
     certificateExpiryDate,
   }) {
     const { t } = useTranslation()
-    const fetcher = useFetcher()
     const [error, setError] = useState<string>()
     const lastChangelog = useMemo(() => changelogs[0], [changelogs])
     const [showHoldModal, setShowHoldModal] = useState(true)
+
+    const [{ data: insertChangeLog }, insertCertificateChangelog] = useMutation<
+      InsertCourseCertificateChangelogMutation,
+      InsertCourseCertificateChangelogMutationVariables
+    >(INSERT_CERTIFICATE_CHANGELOG_MUTATION)
+
+    const [, insertCertificateHold] = useMutation<
+      InsertCourseCertificateHoldRequestMutation,
+      InsertCourseCertificateHoldRequestMutationVariables
+    >(INSERT_CERTIFICATE_HOLD_MUTATION)
 
     const minDate = useMemo(() => new Date(Date.now()), [])
     const schema = useMemo(() => {
@@ -154,10 +164,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
             currentDate.getMinutes() + MINUTES_IN_FUTURE
           )
 
-          const { insertChangeLog } = await fetcher<
-            InsertCourseCertificateChangelogMutation,
-            InsertCourseCertificateChangelogMutationVariables
-          >(INSERT_CERTIFICATE_CHANGELOG_MUTATION, {
+          await insertCertificateChangelog({
             participantId,
             payload: {
               startDate: values.dateFrom,
@@ -185,12 +192,9 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
           const totalDiff = addDays(new Date(certificateExpiryDate), timeDiff)
           const expireDate = zonedTimeToUtc(new Date(totalDiff), 'GMT')
 
-          await fetcher<
-            null,
-            InsertCourseCertificateHoldRequestMutationVariables
-          >(INSERT_CERTIFICATE_HOLD_MUTATION, {
+          await insertCertificateHold({
             certificateId,
-            changelogId: insertChangeLog?.id,
+            changelogId: insertChangeLog?.insertChangeLog?.id,
             expireDate: dateTo,
             startDate: dateFrom,
             newExpiryDate: expireDate.toISOString(),
@@ -203,10 +207,12 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
         certificateExpiryDate,
         certificateId,
         edit,
-        fetcher,
         getValues,
         handleClose,
-        lastChangelog,
+        insertCertificateChangelog,
+        insertCertificateHold,
+        insertChangeLog?.insertChangeLog?.id,
+        lastChangelog?.payload?.expireDate,
         participantId,
       ])
 

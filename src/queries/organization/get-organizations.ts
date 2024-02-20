@@ -1,32 +1,20 @@
 import { gql } from 'graphql-request'
 
-import { ORGANIZATION } from '@app/queries/fragments'
-import { Organization } from '@app/types'
-
-export type ResponseType = {
-  orgs: (Organization & {
-    members?: {
-      profile: {
-        lastActivity: Date
-      }
-    }[]
-  })[]
-}
-
-export type ParamsType = {
-  orderBy?: object
-  where?: object
-}
+import { ORGANIZATION, SHALLOW_ORGANIZATION } from '@app/queries/fragments'
 
 export const QUERY = gql`
   ${ORGANIZATION}
+  ${SHALLOW_ORGANIZATION}
   query GetOrganizations(
     $orderBy: [organization_order_by!] = { name: asc }
     $where: organization_bool_exp = {}
+    $isShallow: Boolean = false
+    $isNotShallow: Boolean = false
   ) {
     orgs: organization(where: $where, order_by: $orderBy) {
-      ...Organization
-      members {
+      ...Organization @include(if: $isNotShallow)
+      ...ShallowOrganization @include(if: $isShallow)
+      members @include(if: $isNotShallow) {
         profile {
           lastActivity
         }

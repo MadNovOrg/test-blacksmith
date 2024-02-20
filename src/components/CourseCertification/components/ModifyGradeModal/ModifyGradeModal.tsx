@@ -1,7 +1,7 @@
 import { Alert, Box, Button, Grid, TextField, Typography } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQuery } from 'urql'
+import { useMutation, useQuery } from 'urql'
 
 import { CourseGradingMenu } from '@app/components/CourseGradingMenu/CourseGradingMenu'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
@@ -11,11 +11,11 @@ import {
   GetCertificateQuery,
   GetCertificateQueryVariables,
   Grade_Enum,
+  UpdateGradeMutation,
   UpdateGradeMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { GET_CERTIFICATE_QUERY } from '@app/queries/certificate/get-certificate'
-import { MUTATION } from '@app/queries/grading/update-grade'
+import { UPDATE_GRADE } from '@app/queries/grading/update-grade'
 import theme from '@app/theme'
 import { NonNullish } from '@app/types'
 
@@ -34,14 +34,13 @@ const ModifyGradeModal: React.FC<
   React.PropsWithChildren<ModifyGradeModalProps>
 > = function ({ certificateId, participant, onClose }) {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const { profile } = useAuth()
   const [error, setError] = useState<string>()
   const [note, setNote] = useState('')
   const [showNoteError, setShowNoteError] = useState(false)
   const [grade, setGrade] = useState(participant.grade)
 
-  const [, mutate] = useQuery<
+  const [, getCertificate] = useQuery<
     GetCertificateQuery,
     GetCertificateQueryVariables
   >({
@@ -51,6 +50,11 @@ const ModifyGradeModal: React.FC<
     pause: true,
   })
 
+  const [, updateGrade] = useMutation<
+    UpdateGradeMutation,
+    UpdateGradeMutationVariables
+  >(UPDATE_GRADE)
+
   const submitHandler = useCallback(async () => {
     if (grade && participant.grade) {
       if (grade === participant.grade) {
@@ -59,7 +63,7 @@ const ModifyGradeModal: React.FC<
         setShowNoteError(!note)
         if (profile && note) {
           try {
-            await fetcher<null, UpdateGradeMutationVariables>(MUTATION, {
+            updateGrade({
               participantId: participant.id,
               payload: {
                 oldGrade: participant.grade,
@@ -69,7 +73,7 @@ const ModifyGradeModal: React.FC<
               newGrade: grade as Grade_Enum,
               type: Course_Certificate_Changelog_Type_Enum.GradeModified,
             })
-            mutate()
+            getCertificate()
           } catch (e: unknown) {
             setError((e as Error).message)
           }
@@ -77,7 +81,16 @@ const ModifyGradeModal: React.FC<
         }
       }
     }
-  }, [fetcher, grade, mutate, note, onClose, participant, profile])
+  }, [
+    getCertificate,
+    grade,
+    note,
+    onClose,
+    participant.grade,
+    participant.id,
+    profile,
+    updateGrade,
+  ])
 
   return (
     <Box p={2}>

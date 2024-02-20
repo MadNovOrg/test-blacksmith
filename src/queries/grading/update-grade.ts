@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request'
 
-export const MUTATION = gql`
+export const UPDATE_GRADE = gql`
   mutation UpdateGrade(
     $participantId: uuid!
     $newGrade: grade_enum!

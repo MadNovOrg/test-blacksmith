@@ -8,23 +8,26 @@ import {
   TextField,
   TextFieldProps,
 } from '@mui/material'
-import { debounce } from 'lodash-es'
-import React, { HTMLAttributes, useMemo, useState } from 'react'
+import { uniqBy } from 'lodash'
+import React, { HTMLAttributes, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useQuery } from 'urql'
+import { useDebounce } from 'use-debounce'
 
 import { Avatar } from '@app/components/Avatar'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import {
-  ParamsType,
-  QUERY,
-  ResponseType,
-} from '@app/queries/profile/find-profiles'
-import { Profile, RoleName } from '@app/types'
+  FindProfilesQuery,
+  FindProfilesQueryVariables,
+} from '@app/generated/graphql'
+import { FIND_PROFILES } from '@app/queries/profile/find-profiles'
+import { RoleName, Profile } from '@app/types'
 
 export type ProfileSelectorProps = {
-  value?: Profile
-  onChange: (value: Profile | undefined) => void
+  value?: FindProfilesQuery['profiles'][0] | undefined | Profile
+  onChange: (
+    value: FindProfilesQuery['profiles'][0] | undefined | Profile
+  ) => void
   orgId?: string
   sx?: SxProps
   textFieldProps?: TextFieldProps
@@ -52,45 +55,27 @@ export const ProfileSelector: React.FC<
 }) {
   const { t } = useTranslation()
   const [selected, setSelected] = useState(value)
-  const [options, setOptions] = useState<Profile[]>(value ? [value] : [])
-  const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
-  const fetcher = useFetcher()
+  const [debouncedQuery] = useDebounce(query, 300)
 
-  const debouncedQuery = useMemo(
-    () =>
-      debounce(async query => {
-        const results = await fetcher<ResponseType, ParamsType>(QUERY, {
-          where: {
-            ...(orgId
-              ? { organizations: { organization_id: { _eq: orgId } } }
-              : null),
-            fullName: { _ilike: `${query}` },
-            ...(roleName
-              ? { roles: { role: { name: { _eq: roleName } } } }
-              : null),
-          },
-        })
-
-        setLoading(false)
-
-        if (results.profiles) {
-          setOptions(results.profiles)
-        }
-      }, 1000),
-    [fetcher, orgId, roleName]
-  )
-
-  const handleInputChange = (_: unknown, value: string, reason: string) => {
-    if (reason === 'input' && value && value.length >= 2) {
-      setLoading(true)
-      setOptions([])
-      debouncedQuery(`%${value}%`)
-    }
-
-    setQuery(value)
-  }
+  const [{ data: profiles, fetching: loading }] = useQuery<
+    FindProfilesQuery,
+    FindProfilesQueryVariables
+  >({
+    query: FIND_PROFILES,
+    variables: {
+      where: {
+        ...(orgId
+          ? { organizations: { organization_id: { _eq: orgId } } }
+          : null),
+        fullName: { _ilike: `%${debouncedQuery}%` },
+        ...(roleName ? { roles: { role: { name: { _eq: roleName } } } } : null),
+      },
+    },
+    pause: !debouncedQuery,
+    requestPolicy: 'cache-and-network',
+  })
 
   const noOptionsText =
     query.length < 2
@@ -99,11 +84,16 @@ export const ProfileSelector: React.FC<
 
   const renderOption = (
     props: HTMLAttributes<HTMLLIElement>,
-    option: Profile,
+    option: FindProfilesQuery['profiles'][0],
     _state: AutocompleteRenderOptionState
   ) => {
     return (
-      <Box {...props} component="li" sx={{ display: 'flex', gap: 2 }}>
+      <Box
+        {...props}
+        key={option.id}
+        component="li"
+        sx={{ display: 'flex', gap: 2 }}
+      >
         <ProfileAvatar profile={option} disableLink={true} />
       </Box>
     )
@@ -115,7 +105,13 @@ export const ProfileSelector: React.FC<
     }
 
     if (selected) {
-      return <Avatar size={32} src={selected.avatar} name={selected.fullName} />
+      return (
+        <Avatar
+          size={32}
+          src={selected.avatar ?? ''}
+          name={selected.fullName ?? ''}
+        />
+      )
     }
   }
 
@@ -125,16 +121,13 @@ export const ProfileSelector: React.FC<
       onOpen={() => setOpen(true)}
       onClose={() => {
         setOpen(false)
-        setLoading(false)
-        debouncedQuery.cancel()
       }}
       data-testid={testId ?? 'profile-selector'}
       disabled={disabled}
       sx={sx}
-      value={selected}
+      value={selected as FindProfilesQuery['profiles'][0]}
       openOnFocus
       clearOnBlur={false}
-      onInputChange={handleInputChange}
       onChange={(_, newValue) => {
         if (value) {
           setSelected(newValue ?? undefined)
@@ -142,8 +135,11 @@ export const ProfileSelector: React.FC<
 
         onChange(newValue ?? undefined)
       }}
-      options={options}
-      getOptionLabel={option => option.fullName}
+      onInputChange={(_: unknown, value: string, __: unknown) => {
+        value.length < 1 ? setOpen(false) : null
+      }}
+      options={loading ? [] : uniqBy(profiles?.profiles, 'id') ?? []}
+      getOptionLabel={option => option.fullName ?? ''}
       noOptionsText={noOptionsText}
       isOptionEqualToValue={(o, v) => o.id === v.id}
       loading={loading}
@@ -155,6 +151,7 @@ export const ProfileSelector: React.FC<
           placeholder={
             placeholder ?? t('components.profile-selector.placeholder')
           }
+          onChange={e => setQuery(e.target.value)}
           InputProps={{
             ...params.InputProps,
             required,

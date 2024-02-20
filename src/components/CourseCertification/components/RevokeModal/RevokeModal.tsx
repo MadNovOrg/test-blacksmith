@@ -7,12 +7,12 @@ import {
   Button,
 } from '@mui/material'
 import React, { useState } from 'react'
+import { useMutation } from 'urql'
 
 import {
   RevokeCertMutation,
   RevokeCertMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { MUTATION as REVOKE_CERT_MUTATION } from '@app/queries/certificate/revoke-certificate'
 
@@ -31,35 +31,22 @@ const RevokeCertModal: React.FC<
   )
   const [reason, setReason] = useState('')
   const [confirmed, setConfirmed] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [saving, setSaving] = useState(false)
-  const fetcher = useFetcher()
-
   const allowRevoke = confirmed && reason.trim().length > 0
+  const [{ error, fetching: saving }, revokeCertificate] = useMutation<
+    RevokeCertMutation,
+    RevokeCertMutationVariables
+  >(REVOKE_CERT_MUTATION)
 
   const handleRevoke = async () => {
     if (!allowRevoke) return
-
-    setError(null)
-    setSaving(true)
-
-    try {
-      await fetcher<RevokeCertMutation, RevokeCertMutationVariables>(
-        REVOKE_CERT_MUTATION,
-        {
-          id: certificateId,
-          participantId,
-          payload: {
-            note: reason,
-          },
-        }
-      )
-      setSaving(false)
-      onSuccess()
-    } catch (e: unknown) {
-      setSaving(false)
-      setError('revoke-error')
-    }
+    await revokeCertificate({
+      id: certificateId,
+      participantId,
+      payload: {
+        note: reason,
+      },
+    })
+    if (!error) onSuccess()
   }
 
   return (
@@ -101,7 +88,7 @@ const RevokeCertModal: React.FC<
       {error && (
         <Box>
           <Typography variant="body2" color="error">
-            {_t(error)}
+            {t('revoke-error')}
           </Typography>
         </Box>
       )}

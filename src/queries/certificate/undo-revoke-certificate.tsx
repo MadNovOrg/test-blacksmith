@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 export const MUTATION = gql`
   mutation UndoRevokeCert($id: uuid!, $participantId: uuid!) {

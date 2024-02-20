@@ -58073,18 +58073,12 @@ export type GetOrgUsersQuery = { __typename?: 'query_root', users: Array<{ __typ
 export type GetOrganizationsQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Organization_Order_By> | Organization_Order_By>;
   where?: InputMaybe<Organization_Bool_Exp>;
+  isShallow?: InputMaybe<Scalars['Boolean']>;
+  isNotShallow?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type GetOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }> }> };
-
-export type GetShallowOrganizationsQueryVariables = Exact<{
-  orderBy?: InputMaybe<Array<Organization_Order_By> | Organization_Order_By>;
-  where?: InputMaybe<Organization_Bool_Exp>;
-}>;
-
-
-export type GetShallowOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, address: any }> };
+export type GetOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }> }> };
 
 export type InsertOrgLeadMutationVariables = Exact<{
   name: Scalars['String'];

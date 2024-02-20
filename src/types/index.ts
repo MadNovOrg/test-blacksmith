@@ -18,6 +18,7 @@ import {
   Course_Exception_Enum,
   Course_Trainer_Type_Enum,
   CourseTrainerType as GeneratedCourseTrainerType,
+  FindProfilesQuery,
 } from '@app/generated/graphql'
 import { StepsEnum } from '@app/pages/CreateCourse/types'
 
@@ -603,7 +604,7 @@ export type CourseInput = {
     email: string
   } | null
 
-  salesRepresentative: Profile | null
+  salesRepresentative: Profile | null | FindProfilesQuery['profiles'][0]
   courseLevel: Course_Level_Enum | Course_Level | ''
   blendedLearning: boolean
   reaccreditation: boolean
