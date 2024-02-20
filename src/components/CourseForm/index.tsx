@@ -140,6 +140,11 @@ interface Props {
 
 const accountCodeValue = getAccountCode()
 
+const residingCountryCourseTypes = [
+  Course_Type_Enum.Open,
+  Course_Type_Enum.Closed,
+] as const
+
 const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
   type: courseType = Course_Type_Enum.Open,
@@ -152,33 +157,34 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
   const { activeRole, acl } = useAuth()
 
+  // Used for:
+  // - Open course residing country https://behaviourhub.atlassian.net/browse/TTHP-2915
+  // - Closed course ICM residing country https://behaviourhub.atlassian.net/browse/TTHP-3529
   const residingCountryEnabled = useFeatureFlagEnabled(
     'course-residing-country'
   )
   const openIcmInternationalFinanceEnabled = useFeatureFlagEnabled(
     'open-icm-course-international-finance'
   )
-
+  const isInternationalCandidateCourse = useMemo(
+    () =>
+      courseInput?.accreditedBy === Accreditors_Enum.Icm &&
+      residingCountryCourseTypes.some(type => courseType === type),
+    [courseInput?.accreditedBy, courseType]
+  )
   // We can enable feature flags based on the current URL
   // but posthog wont update in time and the flag is set as true even if it should be false
   // The below is not really that nice as we could omit checking for the course type and manage this fully within posthog
   const isResidingCountryEnabled = useMemo(
-    () =>
-      residingCountryEnabled &&
-      courseInput?.accreditedBy === Accreditors_Enum.Icm &&
-      (courseInput?.type === Course_Type_Enum.Open ||
-        courseType === Course_Type_Enum.Open),
-    [
-      courseInput?.accreditedBy,
-      courseInput?.type,
-      courseType,
-      residingCountryEnabled,
-    ]
+    () => residingCountryEnabled && isInternationalCandidateCourse,
+    [isInternationalCandidateCourse, residingCountryEnabled]
   )
 
-  const isOpenICMInternationalFinanceEnabled = useMemo(
-    () => Boolean(openIcmInternationalFinanceEnabled),
-    [openIcmInternationalFinanceEnabled]
+  const isInternationalFinanceEnabled = useMemo(
+    () =>
+      Boolean(openIcmInternationalFinanceEnabled) &&
+      isInternationalCandidateCourse,
+    [openIcmInternationalFinanceEnabled, isInternationalCandidateCourse]
   )
 
   const hasOrg = [Course_Type_Enum.Closed, Course_Type_Enum.Indirect].includes(
@@ -268,7 +274,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 ),
             }
           : {}),
-        ...(isOpenICMInternationalFinanceEnabled
+        ...(isInternationalFinanceEnabled
           ? {
               priceCurrency: yup.string().when('residingCountry', {
                 is: (residingCountry: WorldCountriesCodes) =>
@@ -494,7 +500,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       isClosedCourse,
       isCreation,
       isIndirectCourse,
-      isOpenICMInternationalFinanceEnabled,
+      isInternationalFinanceEnabled,
       isResidingCountryEnabled,
       isUKCountry,
       t,
@@ -2028,7 +2034,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             />
           ) : null}
 
-          {isOpenICMInternationalFinanceEnabled && isOpenCourse && isICM && (
+          {isInternationalFinanceEnabled && (
             <InfoPanel
               title={t('components.course-form.finance-section-title')}
               titlePosition="outside"
