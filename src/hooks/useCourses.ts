@@ -216,11 +216,16 @@ export const filtersToWhereClause = (
       ...(where._or ?? []),
       { residingCountry: { _in: filters.courseResidingCountries } },
       {
-        schedule: {
-          venue: {
-            countryCode: { _in: filters.courseResidingCountries },
+        _and: [
+          { residingCountry: { _is_null: true } },
+          {
+            schedule: {
+              venue: {
+                countryCode: { _in: filters.courseResidingCountries },
+              },
+            },
           },
-        },
+        ],
       },
     ]
   }
