@@ -563,9 +563,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       source: courseInput?.source ?? '',
       bildStrategies: courseInput?.bildStrategies ?? defaultStrategies,
       conversion: courseInput?.conversion ?? false,
-      price: isUKCountry(courseInput?.residingCountry)
-        ? courseInput?.price
-        : null,
+      price: courseInput?.price,
       priceCurrency: courseInput?.priceCurrency ?? defaultCurrency,
       includeVAT: courseInput?.includeVAT,
       renewalCycle: courseInput?.renewalCycle,
@@ -611,7 +609,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       courseInput?.zoomProfileId,
       courseType,
       isResidingCountryEnabled,
-      isUKCountry,
     ]
   )
 
@@ -2052,6 +2049,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     fullWidth
                     helperText={errors.priceCurrency?.message}
                     value={values.priceCurrency ?? null}
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
 
