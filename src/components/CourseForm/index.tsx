@@ -1523,6 +1523,16 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                             {...field}
                             checked={values.blendedLearning}
                             data-testid="blendedLearning-switch"
+                            onChange={e => {
+                              const newBlendedLearningValue = e.target.checked
+                              setValue(
+                                'blendedLearning',
+                                newBlendedLearningValue
+                              )
+                              if (newBlendedLearningValue) {
+                                setValue('reaccreditation', false)
+                              }
+                            }}
                           />
                         }
                         label={t(
@@ -1547,6 +1557,16 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                             {...field}
                             checked={values.reaccreditation}
                             data-testid="reaccreditation-switch"
+                            onChange={e => {
+                              const newReaccreditationValue = e.target.checked
+                              setValue(
+                                'reaccreditation',
+                                newReaccreditationValue
+                              )
+                              if (newReaccreditationValue) {
+                                setValue('blendedLearning', false)
+                              }
+                            }}
                           />
                         }
                         label={t(

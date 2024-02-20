@@ -79,9 +79,11 @@ export const ReviewAndConfirm = () => {
   useEffect(() => {
     setCurrentStepKey(StepsEnum.REVIEW_AND_CONFIRM)
   }, [setCurrentStepKey])
-
   const [startPolling, polling] = usePollQuery(
-    () => getOrderReduced(),
+    () =>
+      getOrderReduced({
+        requestPolicy: 'network-only',
+      }),
     () => !!orderCompleted?.order?.xeroInvoiceNumber
   )
 
