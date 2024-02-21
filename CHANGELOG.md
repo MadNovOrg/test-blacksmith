@@ -1,5 +1,38 @@
 # @teamteach/hub
 
+## 3.4.0
+
+### Minor Changes
+
+- 4df18da: Replaces useFetcher with URQL
+- 168cd26: Allow lead and assist trainer to manage course participants for closed course that has not ended.
+- 87dbfb0: remove use-stripe-webhook feature flag usage
+- 9d3cc11: disable Sentry session replays in dev, lower the volume in staging
+- 9a0695b: Adds indexes on some commonly queried table columns
+- 5ca502f: Add filter for course countries on MyCourses/ManageCourses pages.
+- 17c5367: Reveal Finance section for OPEN course creation with UK country
+- 3014ea0: add international for closed courses on the first page of course creation
+- 3d73763: Allow search by multiple criteria.
+- d1b7ecf: remove import users feature flag usage
+- 438a102: Add additional fields when creating organization.
+- 735cff6: Replaced useSWR with urql P2 - final
+- d4c3bb4: Replace swr with urql app wide (P1)
+- c29f45c: Sort course evaluations by trainers and alphabetically on Course Evaluation Tab.
+
+### Patch Changes
+
+- b2aa21f: Add currencies in currency filter on the orders page
+- abd7382: Fix: (TTHP-3449) fix issue price Level 2 courses
+- 7ffc17e: Keep TextField values
+- 83273da: add a missing lesson for `NON_RESTRICTIVE_TERTIARY` strategy
+- b73616a: Allow sales admin to view trainers on indirect courses
+- 9f27a7d: Show course price on edit course
+- 1f2e10c: Fix: (TTHP-3476) course evaluation summary
+- 8a9ea15: correct course status when confirming ICM modules from draft status
+- dcff8df: fix case creation exclusive options & invoice polling
+- 565c172: Allow Finance and Sales Representative roles to select course evaluation answers.
+- dfd4183: hide estimated duration for BILD trainer course builders
+
 ## 3.3.0
 
 ### Minor Changes
