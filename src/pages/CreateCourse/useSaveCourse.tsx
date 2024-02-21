@@ -140,6 +140,8 @@ export function useSaveCourse(): {
 
   const saveCourse = useCallback<SaveCourse>(async () => {
     const isBild = courseData?.accreditedBy === Accreditors_Enum.Bild
+    const isOpenCourse = courseData?.type === Course_Type_Enum.Open
+    const isClosedCourse = courseData?.type === Course_Type_Enum.Closed
 
     try {
       if (courseData) {
@@ -336,8 +338,12 @@ export function useSaveCourse(): {
                     },
                   }
                 : null),
-              includeVAT: courseData.includeVAT,
-              priceCurrency: courseData.priceCurrency,
+              ...(isOpenCourse || isClosedCourse
+                ? {
+                    includeVAT: courseData.includeVAT,
+                    priceCurrency: courseData.priceCurrency,
+                  }
+                : {}),
               ...(approveExceptions
                 ? {
                     courseExceptions: {
