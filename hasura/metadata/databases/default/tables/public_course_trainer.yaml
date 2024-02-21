@@ -55,17 +55,12 @@ select_permissions:
   - role: sales-admin
     permission:
       columns:
-        - course_id
-        - status
-        - type
         - id
         - profile_id
-      filter:
-        course:
-          course_type:
-            _in:
-              - CLOSED
-              - OPEN
+        - type
+        - course_id
+        - status
+      filter: {}
       allow_aggregations: true
   - role: sales-representative
     permission:
