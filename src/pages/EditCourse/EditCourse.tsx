@@ -23,7 +23,6 @@ import { BackButton } from '@app/components/BackButton'
 import ChooseTrainers, {
   FormValues as TrainersFormValues,
 } from '@app/components/ChooseTrainers'
-import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import CourseForm, { DisabledFields } from '@app/components/CourseForm'
 import { hasRenewalCycle } from '@app/components/CourseForm/helpers'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
@@ -115,7 +114,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const { profile, acl, activeRole } = useAuth()
   const navigate = useNavigate()
-  const { isUKCountry } = useWorldCountries()
+
   const [courseData, setCourseData] = useState<CourseInput>()
   const [courseDataValid, setCourseDataValid] = useState(false)
   const [trainersData, setTrainersData] = useState<TrainersFormValues>()
@@ -322,10 +321,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             source: courseData.source,
           }
 
-          const isOpenICMCourse = [
-            courseData.accreditedBy === Accreditors_Enum.Icm,
-            courseData.type === Course_Type_Enum.Open,
-          ].every(el => Boolean(el))
+          const isOpenCourse = courseData.type === Course_Type_Enum.Open
+          const isClosedCourse = courseData.type === Course_Type_Enum.Closed
 
           const editResponse = await updateCourse({
             courseId: course.id,
@@ -391,27 +388,14 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     aolRegion: courseData.aolRegion,
                   }
                 : null),
-              ...(isOpenICMCourse && isUKCountry(courseData.residingCountry)
-                ? { price: null }
-                : courseData.price
-                ? { price: courseData.price }
-                : null),
-
+              ...(isOpenCourse || isClosedCourse
+                ? {
+                    price: courseData.price,
+                    priceCurrency: courseData.priceCurrency,
+                    includeVAT: courseData.includeVAT,
+                  }
+                : {}),
               residingCountry: courseData.residingCountry,
-
-              ...(isOpenICMCourse
-                ? {
-                    priceCurrency: !isUKCountry(courseData.residingCountry)
-                      ? courseData.priceCurrency
-                      : null,
-                  }
-                : null),
-
-              ...(isOpenICMCourse && !isUKCountry(courseData.residingCountry)
-                ? {
-                    includeVAT: courseData.includeVAT ?? null,
-                  }
-                : null),
             },
             orderInput: orderToUpdate,
             trainers: trainersToAdd.map(t => ({
@@ -511,7 +495,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       courseExceptions,
       updateCourse,
       getCourseName,
-      isUKCountry,
       courseDiffs,
       insertAudit,
       notifyCourseEdit,
