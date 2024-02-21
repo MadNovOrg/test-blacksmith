@@ -13,6 +13,7 @@ export const SUBMIT_MODULES_MUTATION = gql`
         curriculum: $curriculum
         isDraft: false
         modulesDuration: $duration
+        status: null
       }
     ) {
       id
