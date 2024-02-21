@@ -9,13 +9,13 @@ import {
 } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useQuery } from 'urql'
 
 import {
   CanApplyPromoCodeQuery,
   CanApplyPromoCodeQueryVariables,
   PromoCodeOutput,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { QUERY as CAN_APPLY_PROMO_CODE } from '@app/queries/promo-codes/can-apply-promo-code'
 
 import type { Discounts } from '../BookingContext'
@@ -39,7 +39,14 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
   const [adding, setAdding] = useState(false)
   const [value, setValue] = useState('')
   const [applyError, setApplyError] = useState('')
-  const fetcher = useFetcher()
+  const [{ data: response, error }, checkCanApply] = useQuery<
+    CanApplyPromoCodeQuery,
+    CanApplyPromoCodeQueryVariables
+  >({
+    query: CAN_APPLY_PROMO_CODE,
+    variables: { input: { code: value.trim(), courseId } },
+    pause: !true,
+  })
 
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -57,28 +64,27 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   const handleApply = useCallback(async () => {
-    try {
-      const {
-        canApplyPromoCode: { result },
-      } = await fetcher<
-        CanApplyPromoCodeQuery,
-        CanApplyPromoCodeQueryVariables
-      >(CAN_APPLY_PROMO_CODE, { input: { code: value.trim(), courseId } })
+    checkCanApply()
 
-      if (!result) {
-        throw new Error('Code cannot be applied')
-      }
-
-      if (!codes.find(c => c === result.code)) {
-        onAdd(result)
-      }
-      setValue('')
-      setAdding(false)
-    } catch (err) {
-      console.error(err)
-      setApplyError(t('invalid-promo-code'))
+    if (error) {
+      return setApplyError(t('invalid-promo-code'))
     }
-  }, [codes, courseId, fetcher, onAdd, t, value])
+    if (!response?.canApplyPromoCode.result) {
+      return setApplyError('Code cannot be applied')
+    }
+    if (!codes.find(c => c === response.canApplyPromoCode.result?.code)) {
+      onAdd(response.canApplyPromoCode.result)
+    }
+    setValue('')
+    setAdding(false)
+  }, [
+    checkCanApply,
+    codes,
+    error,
+    onAdd,
+    response?.canApplyPromoCode.result,
+    t,
+  ])
 
   return (
     <Stack>

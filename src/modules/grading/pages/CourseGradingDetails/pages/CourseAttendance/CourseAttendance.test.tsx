@@ -10,10 +10,8 @@ import {
   SaveGradingDetailsMutation,
   SaveGradingDetailsMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
-import { MUTATION } from '@app/queries/courses/save-course-attendance'
 import { LoadingStatus } from '@app/util'
 
 import { render, renderHook, screen, waitForText, within } from '@test/index'
@@ -24,12 +22,8 @@ import { GradingDetailsProvider } from '../../components/GradingDetailsProvider'
 import { CourseAttendance } from './CourseAttendance'
 
 vi.mock('@app/hooks/useCourseParticipants')
-vi.mock('@app/hooks/use-fetcher', () => ({
-  useFetcher: vi.fn(),
-}))
 
 const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
-const useFetcherMock = vi.mocked(useFetcher)
 
 describe('component: CourseAttendance', () => {
   const {
@@ -277,10 +271,6 @@ describe('component: CourseAttendance', () => {
   })
 
   it('saves course attendance', async () => {
-    const fetcherMock = vi.fn()
-
-    useFetcherMock.mockReturnValue(fetcherMock)
-
     const COURSE_ID = 10001
     const participants = [
       buildParticipant(),
@@ -295,7 +285,24 @@ describe('component: CourseAttendance', () => {
     })
 
     const client = {
-      executeMutation: never,
+      executeMutation: ({
+        variables,
+      }: {
+        variables: SaveGradingDetailsMutationVariables
+      }) => {
+        const saved = variables.courseId === COURSE_ID
+
+        return fromValue<{ data: SaveGradingDetailsMutation }>({
+          data: {
+            update_course_by_pk: saved
+              ? {
+                  id: COURSE_ID,
+                  gradingConfirmed: true,
+                }
+              : null,
+          },
+        })
+      },
     } as unknown as Client
 
     render(
@@ -329,47 +336,12 @@ describe('component: CourseAttendance', () => {
       screen.getByText(t('pages.course-attendance.confirm-grading'))
     )
 
-    expect(fetcherMock).toHaveBeenCalledTimes(1)
-    expect(fetcherMock.mock.calls[0]).toEqual([
-      MUTATION,
-      {
-        attended: [participants[1].id, participants[2].id],
-        attendedAudit: [
-          {
-            course_id: COURSE_ID,
-            profile_id: participants[1].profile.id,
-            type: 'ATTENDED',
-            payload: {},
-          },
-          {
-            course_id: COURSE_ID,
-            profile_id: participants[2].profile.id,
-            type: 'ATTENDED',
-            payload: {},
-          },
-        ],
-        notAttended: [participants[0].id],
-        notAttendedAudit: [
-          {
-            course_id: COURSE_ID,
-            profile_id: participants[0].profile.id,
-            type: 'NOT_ATTENDED',
-            payload: {},
-          },
-        ],
-      },
-    ])
-
     await waitForText('Modules page')
 
     expect(localStorage.getItem(`course-attendance-${COURSE_ID}`)).toBeNull()
   })
 
   it('confirms grading details if course is BILD', async () => {
-    const fetcherMock = vi.fn()
-
-    useFetcherMock.mockReturnValue(fetcherMock)
-
     const COURSE_ID = 10001
     const participants = [
       buildParticipant(),

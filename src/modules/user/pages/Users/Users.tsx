@@ -296,7 +296,7 @@ export const Users = () => {
     profiles: users,
     isLoading,
     count: usersTotalCount,
-    mutate,
+    mutate: refreshUsers,
   } = useProfiles({
     where,
     sorting,
@@ -347,13 +347,13 @@ export const Users = () => {
   const handleMergeCancel = () => {
     setShowMergeDialog(false)
     setSelected([])
-    mutate()
+    refreshUsers()
   }
 
   const handleMergeSuccess = () => {
     setShowMergeDialog(false)
     setSelected([])
-    mutate()
+    refreshUsers()
   }
 
   return (

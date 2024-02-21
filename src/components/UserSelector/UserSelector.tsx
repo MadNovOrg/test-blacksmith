@@ -7,16 +7,16 @@ import {
   TextFieldProps,
   Typography,
 } from '@mui/material'
-import { debounce } from 'lodash-es'
 import React, { FocusEventHandler, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMount } from 'react-use'
+import { useQuery } from 'urql'
+import { useDebounce } from 'use-debounce'
 
 import {
   GetOrgMembersQuery,
   GetOrgMembersQueryVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { GET_ORG_MEMBERS } from '@app/queries/organization/get-members'
 import { NonNullish } from '@app/types'
 
@@ -58,59 +58,36 @@ export const UserSelector: React.FC<
   ...props
 }) {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const [open, setOpen] = useState(false)
-  const [options, setOptions] = useState<Member[]>([])
-  const [loading, setLoading] = useState(false)
   const [q, setQ] = useState('')
+  const [debouncedQuery] = useDebounce(q, 300)
 
-  const refreshOptions = useCallback(
-    async (query: string) => {
-      const { members } = await fetcher<
-        GetOrgMembersQuery,
-        GetOrgMembersQueryVariables
-      >(GET_ORG_MEMBERS, { id: organisationId, email: `%${query}%` })
-      setLoading(false)
-
-      setOptions(members)
-    },
-    [fetcher, organisationId]
-  )
-
-  const debouncedQuery = useMemo(() => {
-    return debounce(async query => refreshOptions(query), 1000)
-  }, [refreshOptions])
+  const [{ data, fetching: loading }] = useQuery<
+    GetOrgMembersQuery,
+    GetOrgMembersQueryVariables
+  >({
+    query: GET_ORG_MEMBERS,
+    variables: { id: organisationId, email: `%${debouncedQuery}%` },
+    pause: !debouncedQuery,
+  })
 
   const emailOptions = useMemo(() => {
-    return options.map(o => o.profile.email)
-  }, [options])
+    return data?.members.map(o => o.profile.email)
+  }, [data?.members])
 
   useMount(() => {
     if (value) {
       setQ(value)
-      refreshOptions(value)
     }
   })
 
   const onInputChange = useCallback(
-    async (event: React.SyntheticEvent, value: string, reason: string) => {
-      setQ(value)
-      setOptions([])
-      if (
-        reason === 'input' &&
-        value &&
-        value.length > 2 &&
-        organisationId &&
-        !disableSuggestions
-      ) {
-        setLoading(true)
-        debouncedQuery(value)
-      }
+    async (_: React.SyntheticEvent, value: string, reason: string) => {
       if (reason !== 'reset') {
         onEmailChange(value)
       }
     },
-    [debouncedQuery, disableSuggestions, onEmailChange, organisationId]
+    [onEmailChange]
   )
 
   const handleChange = (
@@ -118,7 +95,7 @@ export const UserSelector: React.FC<
     option?: string | null
   ) => {
     event.preventDefault()
-    const profile = options.find(o => o.profile.email === option)
+    const profile = data?.members.find(o => o.profile.email === option)
     onChange(profile?.profile ?? null)
   }
 
@@ -132,7 +109,7 @@ export const UserSelector: React.FC<
     )
 
   function renderProfile(email: string) {
-    const option = options.find(o => o.profile.email === email) as Member
+    const option = data?.members.find(o => o.profile.email === email) as Member
     return [option.profile.email, option.profile.fullName]
       .filter(Boolean)
       .join(', ')
@@ -151,9 +128,9 @@ export const UserSelector: React.FC<
         onInputChange={onInputChange}
         onChange={handleChange}
         value={value ?? null}
-        options={emailOptions}
+        options={emailOptions ?? []}
         noOptionsText={noOptionsText}
-        loading={loading}
+        loading={(q && !debouncedQuery) || loading}
         disabled={disabled}
         renderInput={params => (
           <TextField
@@ -161,13 +138,14 @@ export const UserSelector: React.FC<
             onBlur={event => {
               if (
                 onBlur &&
-                !options.find(opt => {
+                !data?.members.find(opt => {
                   return opt.profile.email === value
                 })
               ) {
                 onBlur(event)
               }
             }}
+            onChange={e => setQ(e.target.value)}
             disabled={disabled}
             required={required}
             label={t('components.user-selector.placeholder')}

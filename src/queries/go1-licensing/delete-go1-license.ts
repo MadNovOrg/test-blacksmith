@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 export default gql`
   mutation DeleteGo1License($id: uuid!) {

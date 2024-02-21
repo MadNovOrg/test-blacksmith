@@ -13,6 +13,7 @@ import {
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
+import { useMutation } from 'urql'
 
 import {
   Course_Participant_Audit_Insert_Input,
@@ -20,9 +21,8 @@ import {
   SaveCourseAttendanceMutation,
   SaveCourseAttendanceMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
-import { MUTATION } from '@app/queries/courses/save-course-attendance'
+import { MUTATION as SAVE_COURSE_ATTENDANCE } from '@app/queries/courses/save-course-attendance'
 import { CourseParticipant } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
@@ -42,7 +42,6 @@ const StyledText = styled(Typography)(({ theme }) => ({
 
 export const CourseAttendance = () => {
   const { id: courseId } = useParams()
-  const fetcher = useFetcher()
   const [attendanceSavingStatus, setAttendanceSavingStatus] = useState(
     LoadingStatus.IDLE
   )
@@ -57,6 +56,11 @@ export const CourseAttendance = () => {
   )
 
   const saveGradingDetails = useSaveGradingDetails()
+
+  const [, saveCourseAttendance] = useMutation<
+    SaveCourseAttendanceMutation,
+    SaveCourseAttendanceMutationVariables
+  >(SAVE_COURSE_ATTENDANCE)
 
   const ATTENDANCE_KEY = `course-attendance-${courseId}`
 
@@ -135,10 +139,7 @@ export const CourseAttendance = () => {
     try {
       await Promise.all(
         [
-          await fetcher<
-            SaveCourseAttendanceMutation,
-            SaveCourseAttendanceMutationVariables
-          >(MUTATION, {
+          saveCourseAttendance({
             attended,
             attendedAudit,
             notAttended,

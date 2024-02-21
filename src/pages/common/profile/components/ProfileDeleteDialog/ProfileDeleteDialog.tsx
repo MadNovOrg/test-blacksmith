@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import React, { useState } from 'react'
 import { useMount } from 'react-use'
+import { useMutation } from 'urql'
 
 import { Dialog } from '@app/components/dialogs'
 import {
@@ -12,7 +13,6 @@ import {
   DeleteUserError,
   DeleteUserOutput,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import useProfile from '@app/hooks/useProfile'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { MUTATION as DELETE_PROFILE_MUTATION } from '@app/queries/profile/delete-profile'
@@ -30,10 +30,12 @@ export const ProfileDeleteDialog: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t, _t } = useScopedTranslation('components.profile-delete-dialog')
   const [error, setError] = useState<string | null>()
-  const [saving, setSaving] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
-  const fetcher = useFetcher()
   const { profile } = useProfile(profileId)
+  const [{ fetching: saving }, deleteUser] = useMutation<
+    DeleteProfileMutation,
+    DeleteProfileMutationVariables
+  >(DELETE_PROFILE_MUTATION)
 
   const handleDeleteErrorMessage = (deleteUser: DeleteUserOutput) => {
     if (deleteUser.error === DeleteUserError.CertExist) {
@@ -55,46 +57,25 @@ export const ProfileDeleteDialog: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   useMount(async () => {
-    setSaving(true)
-    setError(null)
-
-    try {
-      const { deleteUser } = await fetcher<
-        DeleteProfileMutation,
-        DeleteProfileMutationVariables
-      >(DELETE_PROFILE_MUTATION, { profileId, dryRun: true })
-
-      setSaving(false)
-
-      if (deleteUser.error) {
-        handleDeleteErrorMessage(deleteUser)
-      }
-    } catch (e: unknown) {
-      setSaving(false)
-      setError((e as Error).message)
+    const { data: deleteUserResponse, error } = await deleteUser({
+      profileId,
+      dryRun: true,
+    })
+    if (deleteUserResponse?.deleteUser.error) {
+      handleDeleteErrorMessage(deleteUserResponse.deleteUser)
     }
+    if (error) setError((error as Error).message)
   })
 
   const onSubmit = async () => {
-    setSaving(true)
-    setError(null)
-
-    try {
-      const { deleteUser } = await fetcher<
-        DeleteProfileMutation,
-        DeleteProfileMutationVariables
-      >(DELETE_PROFILE_MUTATION, { profileId })
-      setSaving(false)
-
-      if (deleteUser.error) {
-        handleDeleteErrorMessage(deleteUser)
-      }
-
-      onSuccess()
-    } catch (e: unknown) {
-      setSaving(false)
-      setError((e as Error).message)
+    const { data: deleteUserResponse, error } = await deleteUser({ profileId })
+    if (deleteUserResponse?.deleteUser.error) {
+      handleDeleteErrorMessage(deleteUserResponse.deleteUser)
     }
+    if (deleteUserResponse) {
+      onSuccess()
+    }
+    if (error) setError((error as Error).message)
   }
 
   return (

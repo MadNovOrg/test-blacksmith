@@ -15,20 +15,22 @@ import {
 } from '@mui/material'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
-import { debounce } from 'lodash-es'
+import { Chance } from 'chance'
 import React, { useMemo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useUpdateEffect } from 'react-use'
+import { useQuery } from 'urql'
+import { useDebounce } from 'use-debounce'
 
 import { Dialog } from '@app/components/dialogs'
 import VenueForm, {
   VenueFormProps,
 } from '@app/components/VenueSelector/VenueForm'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import {
-  ParamsType as FindVenuesParams,
-  QUERY as FindVenuesQuery,
-  ResponseType as FindVenuesResponse,
-} from '@app/queries/venue/find-venues'
+  FindVenuesQuery,
+  FindVenuesQueryVariables,
+} from '@app/generated/graphql'
+import { FIND_VENUES } from '@app/queries/venue/find-venues'
 import { Venue } from '@app/types'
 
 import {
@@ -51,7 +53,7 @@ export type VenueSelectorProps = {
   textFieldProps?: TextFieldProps
   courseResidingCountry?: WorldCountriesCodes | string
 }
-
+const chance = new Chance()
 function getOptionLabel(value: AutocompletePrediction | Venue | string) {
   if (typeof value === 'string') {
     return ''
@@ -111,65 +113,51 @@ export const VenueSelector: React.FC<
   ...props
 }) {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const theme = useTheme()
   const ukCountries = Object.values(UKsCountriesCodes) as string[]
 
   const [open, setOpen] = useState(false)
-  const [options, setOptions] = useState<(AutocompletePrediction | Venue)[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string>()
   const [showNewVenueModal, setShowNewVenueModal] = useState(false)
   const [venue, setVenue] = useState<VenueFormProps['data']>()
   const [query, setQuery] = useState(value?.name ?? '')
+  const [debouncedQuery] = useDebounce(query, 300)
+  const [googleSugestions, setGoogleSugestions] =
+    useState<google.maps.places.AutocompleteResponse>()
 
-  const handleError = (err: string) => {
-    setError(err)
-    setLoading(false)
-    setOpen(false)
-  }
+  const [{ data, error, fetching: loading }] = useQuery<
+    FindVenuesQuery,
+    FindVenuesQueryVariables
+  >({
+    query: FIND_VENUES,
+    variables: { query: `%${debouncedQuery}%` },
+    pause: !debouncedQuery,
+    requestPolicy: 'cache-and-network',
+  })
 
-  const debouncedQuery = useMemo(() => {
-    return debounce(async query => {
-      setError(undefined)
-      try {
-        const googleResponse = await getGoogleMapsSuggestions(
-          query,
-          courseResidingCountry as WorldCountriesCodes
-        )
-        const hasuraResponse = await fetcher<
-          FindVenuesResponse,
-          FindVenuesParams
-        >(FindVenuesQuery, { query: `%${query}%` })
-        setLoading(false)
-        if (googleResponse) {
-          const suggestions = googleResponse.predictions.filter(
-            prediction =>
-              !hasuraResponse.venues.some(
-                venue => venue.googlePlacesId === prediction?.place_id
-              )
+  useUpdateEffect(() => {
+    const suggestions = async () => {
+      const googleResponse = await getGoogleMapsSuggestions(
+        debouncedQuery,
+        courseResidingCountry as WorldCountriesCodes
+      )
+      setGoogleSugestions(googleResponse)
+    }
+    if (debouncedQuery) suggestions()
+  }, [courseResidingCountry, debouncedQuery])
+
+  const options = useMemo(() => {
+    if (googleSugestions) {
+      const suggestions = googleSugestions.predictions.filter(
+        prediction =>
+          !(data?.venues ?? []).some(
+            venue => venue.googlePlacesId === prediction?.place_id
           )
-          setOptions([...hasuraResponse.venues, ...suggestions])
-        } else {
-          setOptions([...hasuraResponse.venues])
-          handleError(t('components.venue-selector.google-maps-api-error'))
-        }
-      } catch (e: unknown) {
-        handleError((e as Error).message)
-      }
-    }, 1000)
-  }, [courseResidingCountry, fetcher, t])
-
-  const onInputChange = useCallback(
-    async (event: React.SyntheticEvent, value: string, reason: string) => {
-      setOptions([])
-      if (reason === 'input' && value && value.length > 2) {
-        setLoading(true)
-        debouncedQuery(value)
-      }
-    },
-    [debouncedQuery]
-  )
+      )
+      return [...(data?.venues ?? []), ...suggestions]
+    } else {
+      return [...(data?.venues ?? [])]
+    }
+  }, [data?.venues, googleSugestions]) as (AutocompletePrediction | Venue)[]
 
   const handleSelection = useCallback(
     async (
@@ -224,22 +212,21 @@ export const VenueSelector: React.FC<
           onOpen={() => setOpen(true)}
           onClose={() => {
             setOpen(false)
-            setLoading(false)
             setQuery('')
-            debouncedQuery.cancel()
           }}
-          onInputChange={onInputChange}
           onChange={(_, option) => {
             handleSelection(_, option as Venue | AutocompletePrediction)
+            setQuery('')
           }}
           isOptionEqualToValue={() => true}
-          options={options}
-          loading={loading}
+          options={options ?? []}
+          loading={(query && !debouncedQuery) || loading}
           groupBy={(value: AutocompletePrediction | Venue) =>
             'place_id' in value
               ? t('components.venue-selector.suggestions')
               : t('components.venue-selector.venues')
           }
+          onInputChange={() => (query.length < 1 ? setOpen(false) : null)}
           getOptionLabel={getOptionLabel}
           value={value ?? null}
           renderGroup={params => (
@@ -310,7 +297,7 @@ export const VenueSelector: React.FC<
             })
             const parts = parse(label, matches)
             return (
-              <li {...props}>
+              <li key={chance.guid()} {...props}>
                 <Grid container justifyContent="space-between">
                   <Box display="inline">
                     {parts.map((part, index) => (

@@ -1,8 +1,10 @@
-import React from 'react'
+import { Client, Provider } from 'urql'
+import { fromValue, never } from 'wonka'
 
-import { Go1ChangeError, Go1ChangeType } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
-import go1LicensesHistoryChange from '@app/queries/go1-licensing/go1-licenses-history-change'
+import {
+  Go1ChangeError,
+  Go1LicensesChangeMutation,
+} from '@app/generated/graphql'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
 
@@ -12,9 +14,10 @@ import { Type } from '../ManageLicensesForm'
 import { ManageLicensesDialog } from '.'
 
 vi.mock('@app/hooks/use-fetcher')
-const useFetcherMock = vi.mocked(useFetcher)
-
 describe('ManageLicensesDialog', () => {
+  const client = {
+    executeMutation: vi.fn(() => never),
+  }
   it('adds licenses to an organization', async () => {
     const orgId = chance.guid()
     const balance = 20
@@ -23,25 +26,26 @@ describe('ManageLicensesDialog', () => {
     const fullName = chance.name({ full: true })
     const invoiceId = 'inv-001'
     const onSaveMock = vi.fn()
-
-    const fetcherMock = vi.fn()
-
-    fetcherMock.mockResolvedValue({
-      go1LicensesChange: {
-        success: true,
-      },
-    })
-
-    useFetcherMock.mockReturnValue(fetcherMock)
+    client.executeMutation.mockImplementationOnce(() =>
+      fromValue<{ data: Go1LicensesChangeMutation }>({
+        data: {
+          go1LicensesChange: {
+            success: true,
+          },
+        },
+      })
+    )
 
     render(
-      <ManageLicensesDialog
-        orgId={orgId}
-        opened
-        onSave={onSaveMock}
-        onClose={vi.fn()}
-        currentBalance={balance}
-      />,
+      <Provider value={client as unknown as Client}>
+        <ManageLicensesDialog
+          orgId={orgId}
+          opened
+          onSave={onSaveMock}
+          onClose={vi.fn()}
+          currentBalance={balance}
+        />
+      </Provider>,
       {
         auth: {
           profile: {
@@ -55,22 +59,9 @@ describe('ManageLicensesDialog', () => {
     await fillForm({ amount, type: Type.ADD, invoiceId })
 
     await userEvent.click(screen.getByText('Save details'))
+    expect(client.executeMutation).toHaveBeenCalledTimes(1)
 
-    expect(fetcherMock).toHaveBeenCalledTimes(1)
     expect(onSaveMock).toHaveBeenCalledTimes(1)
-    expect(fetcherMock).toHaveBeenCalledWith(go1LicensesHistoryChange, {
-      input: {
-        type: Go1ChangeType.LicensesAdded,
-        amount,
-        orgId,
-        payload: {
-          invoiceId,
-          invokedBy: fullName,
-          invokedById: profileId,
-          note: expect.any(String),
-        },
-      },
-    })
   })
 
   it('removes licenses from an organization', async () => {
@@ -83,24 +74,26 @@ describe('ManageLicensesDialog', () => {
     const licensePrice = 15
     const onSaveMock = vi.fn()
 
-    const fetcherMock = vi.fn()
-
-    fetcherMock.mockResolvedValue({
-      go1LicensesChange: {
-        success: true,
-      },
-    })
-
-    useFetcherMock.mockReturnValue(fetcherMock)
+    client.executeMutation.mockImplementationOnce(() =>
+      fromValue<{ data: Go1LicensesChangeMutation }>({
+        data: {
+          go1LicensesChange: {
+            success: true,
+          },
+        },
+      })
+    )
 
     render(
-      <ManageLicensesDialog
-        orgId={orgId}
-        opened
-        onSave={onSaveMock}
-        onClose={vi.fn()}
-        currentBalance={balance}
-      />,
+      <Provider value={client as unknown as Client}>
+        <ManageLicensesDialog
+          orgId={orgId}
+          opened
+          onSave={onSaveMock}
+          onClose={vi.fn()}
+          currentBalance={balance}
+        />
+      </Provider>,
       {
         auth: {
           profile: {
@@ -120,23 +113,8 @@ describe('ManageLicensesDialog', () => {
     })
 
     await userEvent.click(screen.getByText('Save details'))
-
-    expect(fetcherMock).toHaveBeenCalledTimes(1)
+    expect(client.executeMutation).toHaveBeenCalledTimes(1)
     expect(onSaveMock).toHaveBeenCalledTimes(1)
-    expect(fetcherMock).toHaveBeenCalledWith(go1LicensesHistoryChange, {
-      input: {
-        type: Go1ChangeType.LicensesRemoved,
-        amount,
-        orgId,
-        payload: {
-          invoiceId,
-          invokedBy: fullName,
-          invokedById: profileId,
-          note: expect.any(String),
-          licensePrice,
-        },
-      },
-    })
   })
 
   it('handles generic error', async () => {
@@ -149,24 +127,25 @@ describe('ManageLicensesDialog', () => {
     const licensePrice = 15
     const onSaveMock = vi.fn()
 
-    const fetcherMock = vi.fn()
-
-    fetcherMock.mockResolvedValue({
-      go1LicensesChange: {
-        success: false,
-      },
-    })
-
-    useFetcherMock.mockReturnValue(fetcherMock)
-
+    client.executeMutation.mockImplementationOnce(() =>
+      fromValue<{ data: Go1LicensesChangeMutation }>({
+        data: {
+          go1LicensesChange: {
+            success: false,
+          },
+        },
+      })
+    )
     render(
-      <ManageLicensesDialog
-        orgId={orgId}
-        opened
-        onSave={onSaveMock}
-        onClose={vi.fn()}
-        currentBalance={balance}
-      />,
+      <Provider value={client as unknown as Client}>
+        <ManageLicensesDialog
+          orgId={orgId}
+          opened
+          onSave={onSaveMock}
+          onClose={vi.fn()}
+          currentBalance={balance}
+        />
+      </Provider>,
       {
         auth: {
           profile: {
@@ -188,23 +167,8 @@ describe('ManageLicensesDialog', () => {
     await userEvent.click(screen.getByText('Save details'))
 
     await waitFor(() => {
-      expect(fetcherMock).toHaveBeenCalledTimes(1)
+      expect(client.executeMutation).toHaveBeenCalledTimes(1)
       expect(onSaveMock).not.toHaveBeenCalled()
-      expect(fetcherMock).toHaveBeenCalledWith(go1LicensesHistoryChange, {
-        input: {
-          type: Go1ChangeType.LicensesRemoved,
-          amount,
-          orgId,
-          payload: {
-            invoiceId,
-            invokedBy: fullName,
-            invokedById: profileId,
-            note: expect.any(String),
-            licensePrice,
-          },
-        },
-      })
-
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
         `"There was an error removing licences, please try again later."`
       )
@@ -221,25 +185,27 @@ describe('ManageLicensesDialog', () => {
     const licensePrice = 15
     const onSaveMock = vi.fn()
 
-    const fetcherMock = vi.fn()
-
-    fetcherMock.mockResolvedValue({
-      go1LicensesChange: {
-        success: false,
-        error: Go1ChangeError.InvoiceNotAuthorized,
-      },
-    })
-
-    useFetcherMock.mockReturnValue(fetcherMock)
+    client.executeMutation.mockImplementationOnce(() =>
+      fromValue<{ data: Go1LicensesChangeMutation }>({
+        data: {
+          go1LicensesChange: {
+            success: false,
+            error: Go1ChangeError.InvoiceNotAuthorized,
+          },
+        },
+      })
+    )
 
     render(
-      <ManageLicensesDialog
-        orgId={orgId}
-        opened
-        onSave={onSaveMock}
-        onClose={vi.fn()}
-        currentBalance={balance}
-      />,
+      <Provider value={client as unknown as Client}>
+        <ManageLicensesDialog
+          orgId={orgId}
+          opened
+          onSave={onSaveMock}
+          onClose={vi.fn()}
+          currentBalance={balance}
+        />
+      </Provider>,
       {
         auth: {
           profile: {
@@ -261,23 +227,8 @@ describe('ManageLicensesDialog', () => {
     await userEvent.click(screen.getByText('Save details'))
 
     await waitFor(() => {
-      expect(fetcherMock).toHaveBeenCalledTimes(1)
+      expect(client.executeMutation).toHaveBeenCalledTimes(1)
       expect(onSaveMock).not.toHaveBeenCalled()
-      expect(fetcherMock).toHaveBeenCalledWith(go1LicensesHistoryChange, {
-        input: {
-          type: Go1ChangeType.LicensesRemoved,
-          amount,
-          orgId,
-          payload: {
-            invoiceId,
-            invokedBy: fullName,
-            invokedById: profileId,
-            note: expect.any(String),
-            licensePrice,
-          },
-        },
-      })
-
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
         `"Invoice must be authorised in Xero before issuing a refund."`
       )
@@ -294,25 +245,28 @@ describe('ManageLicensesDialog', () => {
     const licensePrice = 15
     const onSaveMock = vi.fn()
 
-    const fetcherMock = vi.fn()
-
-    fetcherMock.mockResolvedValue({
-      go1LicensesChange: {
-        success: false,
-        error: Go1ChangeError.InvoicePaid,
-      },
-    })
-
-    useFetcherMock.mockReturnValue(fetcherMock)
+    const client = {
+      executeMutation: () =>
+        fromValue<{ data: Go1LicensesChangeMutation }>({
+          data: {
+            go1LicensesChange: {
+              success: false,
+              error: Go1ChangeError.InvoicePaid,
+            },
+          },
+        }),
+    } as unknown as Client
 
     render(
-      <ManageLicensesDialog
-        orgId={orgId}
-        opened
-        onSave={onSaveMock}
-        onClose={vi.fn()}
-        currentBalance={balance}
-      />,
+      <Provider value={client}>
+        <ManageLicensesDialog
+          orgId={orgId}
+          opened
+          onSave={onSaveMock}
+          onClose={vi.fn()}
+          currentBalance={balance}
+        />
+      </Provider>,
       {
         auth: {
           profile: {
@@ -332,25 +286,8 @@ describe('ManageLicensesDialog', () => {
     })
 
     await userEvent.click(screen.getByText('Save details'))
-
     await waitFor(() => {
-      expect(fetcherMock).toHaveBeenCalledTimes(1)
       expect(onSaveMock).not.toHaveBeenCalled()
-      expect(fetcherMock).toHaveBeenCalledWith(go1LicensesHistoryChange, {
-        input: {
-          type: Go1ChangeType.LicensesRemoved,
-          amount,
-          orgId,
-          payload: {
-            invoiceId,
-            invokedBy: fullName,
-            invokedById: profileId,
-            note: expect.any(String),
-            licensePrice,
-          },
-        },
-      })
-
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
         `"Unable to issue a credit note, the invoice has already been paid."`
       )

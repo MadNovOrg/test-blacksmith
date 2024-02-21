@@ -1,14 +1,12 @@
-import React from 'react'
 import { noop } from 'ts-essentials'
+import { Client, Provider } from 'urql'
+import { fromValue } from 'wonka'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
+import { GetOrgMembersQuery } from '@app/generated/graphql'
 
 import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { UserSelector } from '.'
-
-vi.mock('@app/hooks/use-fetcher')
-const useFetcherMock = vi.mocked(useFetcher)
 
 describe('component: UserSelector', () => {
   beforeEach(() => {
@@ -32,33 +30,35 @@ describe('component: UserSelector', () => {
   it('loads users when the user types user email', async () => {
     const USER_SEARCH_EMAIL = 'USER_EMAIL'
     const USER_SEARCH_FULL_NAME = chance.name()
-
-    const fetcherMock = vi.fn()
-    fetcherMock.mockResolvedValue({
-      members: [
-        {
-          profile: {
-            id: chance.guid(),
-            email: USER_SEARCH_EMAIL,
-            familyName: chance.name(),
-            givenName: chance.name(),
-            fullName: USER_SEARCH_FULL_NAME,
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetOrgMembersQuery }>({
+          data: {
+            members: [
+              {
+                profile: {
+                  id: chance.guid(),
+                  email: USER_SEARCH_EMAIL,
+                  familyName: chance.name(),
+                  givenName: chance.name(),
+                  fullName: USER_SEARCH_FULL_NAME,
+                },
+              },
+            ],
           },
-        },
-      ],
-    })
-    useFetcherMock.mockReturnValue(fetcherMock)
+        }),
+    } as unknown as Client
 
     render(
-      <UserSelector onChange={noop} onEmailChange={noop} organisationId="1" />
+      <Provider value={client}>
+        <UserSelector onChange={noop} onEmailChange={noop} organisationId="1" />
+      </Provider>
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('User email'),
       USER_SEARCH_EMAIL
     )
-
-    vi.runAllTimers()
 
     await waitFor(() =>
       expect(
@@ -72,8 +72,6 @@ describe('component: UserSelector', () => {
   it('calls callback when the user makes the selection of a user', async () => {
     const USER_SEARCH_EMAIL = 'USER_EMAIL'
     const USER_SEARCH_FULL_NAME = chance.name()
-
-    const onChangeMock = vi.fn()
     const profile = {
       id: chance.guid(),
       email: USER_SEARCH_EMAIL,
@@ -82,22 +80,24 @@ describe('component: UserSelector', () => {
       fullName: USER_SEARCH_FULL_NAME,
     }
 
-    const fetcherMock = vi.fn()
-    fetcherMock.mockResolvedValue({
-      members: [
-        {
-          profile,
-        },
-      ],
-    })
-    useFetcherMock.mockReturnValue(fetcherMock)
+    const onChangeMock = vi.fn()
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetOrgMembersQuery }>({
+          data: {
+            members: [{ profile }],
+          },
+        }),
+    } as unknown as Client
 
     render(
-      <UserSelector
-        onChange={onChangeMock}
-        onEmailChange={noop}
-        organisationId="1"
-      />
+      <Provider value={client}>
+        <UserSelector
+          onChange={onChangeMock}
+          onEmailChange={noop}
+          organisationId="1"
+        />
+      </Provider>
     )
 
     await userEvent.type(

@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useMutation } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import {
@@ -19,9 +20,8 @@ import {
   UpdateOrgMemberMutation,
   UpdateOrgMemberMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
-import { MUTATION as RemoveOrgMemberQuery } from '@app/queries/organization/remove-org-member'
-import { MUTATION as UpdateOrgMemberQuery } from '@app/queries/organization/update-org-member'
+import { MUTATION as REMOVE_ORG_MEMBER } from '@app/queries/organization/remove-org-member'
+import { MUTATION as UPDATE_ORG_MEMBER } from '@app/queries/organization/update-org-member'
 import theme from '@app/theme'
 
 export type EditOrgUserModalProps = {
@@ -36,40 +36,43 @@ export const EditOrgUserModal: React.FC<
 > = function ({ orgMember, onClose, onChange, orgId }) {
   const { t } = useTranslation()
   const { acl, profile } = useAuth()
-  const fetcher = useFetcher()
   const [error, setError] = useState<string>()
   const [isAdmin, setIsAdmin] = useState(orgMember.isAdmin)
+  const [{ error: removeOrgMemberError }, removeOrgMember] = useMutation<
+    RemoveOrgMemberMutation,
+    RemoveOrgMemberMutationVariables
+  >(REMOVE_ORG_MEMBER)
+
+  const [{ error: updateOrgMemberError }, updateOrgMember] = useMutation<
+    UpdateOrgMemberMutation,
+    UpdateOrgMemberMutationVariables
+  >(UPDATE_ORG_MEMBER)
 
   const onRemove = useCallback(async () => {
-    try {
-      await fetcher<RemoveOrgMemberMutation, RemoveOrgMemberMutationVariables>(
-        RemoveOrgMemberQuery,
-        {
-          id: orgMember.id,
-        }
-      )
-      if (onChange) onChange()
-      onClose()
-    } catch (e: unknown) {
-      setError((e as Error).message)
-    }
-  }, [fetcher, onChange, onClose, orgMember])
+    removeOrgMember({
+      id: orgMember.id,
+    })
+    if (onChange) onChange()
+    onClose()
+    if (removeOrgMemberError) setError(removeOrgMemberError.message)
+  }, [onChange, onClose, orgMember.id, removeOrgMember, removeOrgMemberError])
 
   const onSave = useCallback(async () => {
-    try {
-      await fetcher<UpdateOrgMemberMutation, UpdateOrgMemberMutationVariables>(
-        UpdateOrgMemberQuery,
-        {
-          id: orgMember.id,
-          member: { isAdmin: !!isAdmin },
-        }
-      )
-      if (onChange) onChange()
-      onClose()
-    } catch (e: unknown) {
-      setError((e as Error).message)
-    }
-  }, [fetcher, isAdmin, onChange, onClose, orgMember])
+    updateOrgMember({
+      id: orgMember.id,
+      member: { isAdmin: !!isAdmin },
+    })
+    if (onChange) onChange()
+    onClose()
+    if (updateOrgMemberError) setError(updateOrgMemberError.message)
+  }, [
+    isAdmin,
+    onChange,
+    onClose,
+    orgMember.id,
+    updateOrgMember,
+    updateOrgMemberError,
+  ])
 
   return (
     <Container>

@@ -1,8 +1,4 @@
-import { gql } from 'graphql-request'
-
-export type ParamsType = { email: string }
-
-export type ResponseType = { deleted: { affectedRows: number } }
+import { gql } from 'urql'
 
 export const MUTATION = gql`
   mutation DeleteTempProfile($email: String!) {

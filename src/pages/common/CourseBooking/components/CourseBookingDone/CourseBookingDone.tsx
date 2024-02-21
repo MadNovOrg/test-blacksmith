@@ -2,23 +2,20 @@ import { Alert, Box, Container, Link, Stack, Typography } from '@mui/material'
 import React, { useEffect, useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
-import { useQuery } from 'urql'
+import { useMutation, useQuery } from 'urql'
 
 import { StepsNavigation } from '@app/components/StepsNavigation'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import {
+  DeleteTempProfileMutation,
+  DeleteTempProfileMutationVariables,
   GetOrderForBookingDoneQuery,
   GetOrderForBookingDoneQueryVariables,
   Payment_Methods_Enum,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { ORDER_FOR_BOOKING_DONE } from '@app/queries/order/get-order'
-import {
-  MUTATION as DELETE_TEMP_PROFILE,
-  ResponseType as DeleteTempProfileResponseType,
-  ParamsType as DeleteTempProfileParamsType,
-} from '@app/queries/profile/delete-temp-profile'
+import { MUTATION as DELETE_TEMP_PROFILE } from '@app/queries/profile/delete-temp-profile'
 
 const completedSteps = ['details', 'review', 'payment']
 
@@ -27,18 +24,17 @@ export const CourseBookingDone: React.FC<
 > = () => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
-  const fetcher = useFetcher()
   const [searchParams] = useSearchParams()
   const orderId = searchParams.get('order_id') as string
+  const [, deleteTempProfile] = useMutation<
+    DeleteTempProfileMutation,
+    DeleteTempProfileMutationVariables
+  >(DELETE_TEMP_PROFILE)
 
   useEffect(() => {
     if (!profile) return
-
-    fetcher<DeleteTempProfileResponseType, DeleteTempProfileParamsType>(
-      DELETE_TEMP_PROFILE,
-      { email: profile.email }
-    )
-  }, [fetcher, profile])
+    deleteTempProfile({ email: profile.email })
+  }, [deleteTempProfile, profile])
 
   const [{ data, error }] = useQuery<
     GetOrderForBookingDoneQuery,

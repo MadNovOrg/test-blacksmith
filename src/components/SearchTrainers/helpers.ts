@@ -19,6 +19,7 @@ export type Props = {
   schedule: SearchTrainersSchedule
   bildStrategies?: BildStrategy[]
   courseType: Course_Type_Enum
+  query: string
 }
 
 export type SearchTrainersInput = {

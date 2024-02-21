@@ -2,7 +2,7 @@ import { isPast } from 'date-fns'
 import { matches } from 'lodash'
 import { cond, constant, stubTrue } from 'lodash-es'
 import { useCallback, useEffect, useMemo } from 'react'
-import { useQuery } from 'urql'
+import { useMutation, useQuery } from 'urql'
 
 import {
   ArchiveProfileMutation,
@@ -13,7 +13,6 @@ import {
   UpdateAvatarMutation,
   UpdateAvatarMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { MUTATION as ARCHIVE_PROFILE_MUTATION } from '@app/queries/profile/archive-profile'
 import { QUERY } from '@app/queries/profile/get-profile-details'
 import { MUTATION as UPDATE_AVATAR_MUTATION } from '@app/queries/profile/update-profile-avatar'
@@ -116,8 +115,6 @@ export default function useProfile(
   withCourseHistory = false,
   refreshProfileData = false
 ) {
-  const fetcher = useFetcher()
-
   const [{ data: getProfileResponse, error: getProfileError }, reexecuteQuery] =
     useQuery<GetProfileDetailsQuery, GetProfileDetailsQueryVariables>({
       query: QUERY,
@@ -129,7 +126,15 @@ export default function useProfile(
         withCourseTrainerHistory: withCourseHistory,
       },
     })
+  const [{ data: avatarData }, updateAvatarMutation] = useMutation<
+    UpdateAvatarMutation,
+    UpdateAvatarMutationVariables
+  >(UPDATE_AVATAR_MUTATION)
 
+  const [, archiveProfile] = useMutation<
+    ArchiveProfileMutation,
+    ArchiveProfileMutationVariables
+  >(ARCHIVE_PROFILE_MUTATION)
   const refreshData = useCallback(() => {
     reexecuteQuery({ requestPolicy: 'network-only' })
   }, [reexecuteQuery])
@@ -174,24 +179,20 @@ export default function useProfile(
         return
       }
 
-      const response = await fetcher<
-        UpdateAvatarMutation,
-        UpdateAvatarMutationVariables
-      >(UPDATE_AVATAR_MUTATION, { avatar: JSON.stringify(avatar) })
-      return response.updateAvatar
+      updateAvatarMutation({ avatar: JSON.stringify(avatar) })
+      return avatarData?.updateAvatar
     },
-    [fetcher, profileId]
+    [avatarData?.updateAvatar, profileId, updateAvatarMutation]
   )
 
   const archive = useCallback(async () => {
     if (!profileId) {
       return
     }
-    await fetcher<ArchiveProfileMutation, ArchiveProfileMutationVariables>(
-      ARCHIVE_PROFILE_MUTATION,
-      { profileId }
-    )
-  }, [fetcher, profileId])
+    archiveProfile({
+      profileId,
+    })
+  }, [archiveProfile, profileId])
 
   // forcely re-execute query whenever is necessary inside a component that uses this hook
   useEffect(() => {

@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useMutation } from 'urql'
 
 import { Avatar } from '@app/components/Avatar'
 import { Dialog } from '@app/components/dialogs/Dialog'
@@ -19,7 +20,6 @@ import {
   MergeUserMutation,
   MergeUserMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import useProfile from '@app/hooks/useProfile'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { MUTATION as MERGE_USERS_MUTATION } from '@app/queries/user/merge-users'
@@ -82,40 +82,28 @@ export const MergeUsersDialog: React.FC<Props> = ({
   const { t, _t } = useScopedTranslation('pages.admin.users.merge-users-dialog')
   const [error, setError] = useState<string | null>(null)
   const [confirmed, setConfirmed] = useState(false)
-  const [saving, setSaving] = useState(false)
   const [primaryUser, setPrimaryUser] = useState<string>()
   const [mergeWith, setMergeWith] = useState<string>()
-  const fetcher = useFetcher()
   const { profile: profile1, status: status1 } = useProfile(profileId1)
   const { profile: profile2, status: status2 } = useProfile(profileId2)
 
+  const [{ fetching: saving }, mergeUsers] = useMutation<
+    MergeUserMutation,
+    MergeUserMutationVariables
+  >(MERGE_USERS_MUTATION)
   const allowMerge = confirmed && primaryUser && mergeWith
 
   const handleMerge = async () => {
     if (!allowMerge) return
-
     setError(null)
-    setSaving(true)
-
-    try {
-      const { mergeUser } = await fetcher<
-        MergeUserMutation,
-        MergeUserMutationVariables
-      >(MERGE_USERS_MUTATION, {
-        primaryUser,
-        mergeWith,
-      })
-      setSaving(false)
-
-      if (mergeUser.error) {
-        return setError('merge-error')
-      }
-
-      onSuccess()
-    } catch (e: unknown) {
-      setSaving(false)
-      setError('merge-error')
+    const { data: response, error: mergeUsersError } = await mergeUsers({
+      primaryUser,
+      mergeWith,
+    })
+    if (mergeUsersError || response?.mergeUser.error) {
+      return setError('merge-error')
     }
+    onSuccess()
   }
 
   const isLoading =

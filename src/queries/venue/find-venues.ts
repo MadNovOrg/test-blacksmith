@@ -11,7 +11,7 @@ export type ParamsType = {
   query: string
 }
 
-export const QUERY = gql`
+export const FIND_VENUES = gql`
   ${VENUE}
   query FindVenues($query: String!) {
     venues: venue(

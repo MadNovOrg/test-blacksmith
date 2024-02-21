@@ -1,5 +1,6 @@
 import { Alert, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useMutation } from 'urql'
 
 import { Dialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
@@ -10,9 +11,8 @@ import {
   Go1LicensesChangeMutation,
   Go1LicensesChangeMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import go1LicensesHistoryChange from '@app/queries/go1-licensing/go1-licenses-history-change'
+import GO1_LICENSES_CHANGE_HISTORY from '@app/queries/go1-licensing/go1-licenses-history-change'
 
 import { FormData, Type, ManageLicensesForm } from '../ManageLicensesForm'
 
@@ -38,13 +38,14 @@ export const ManageLicensesDialog: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { profile } = useAuth()
   const { t } = useScopedTranslation('pages.org-details.tabs.licenses')
-  const fetcher = useFetcher()
   const [errorMessageLabel, setErrorMessageLabel] = useState('')
-  const [saving, setSaving] = useState(false)
+
+  const [{ fetching: saving }, go1LicenseChange] = useMutation<
+    Go1LicensesChangeMutation,
+    Go1LicensesChangeMutationVariables
+  >(GO1_LICENSES_CHANGE_HISTORY)
 
   const handleSave = async (data: FormData) => {
-    setSaving(true)
-
     const mutationInput: Go1LicensesChangeInput = {
       type: formTypeEventMap[data.type as Type],
       amount: Number(data.amount),
@@ -58,17 +59,12 @@ export const ManageLicensesDialog: React.FC<React.PropsWithChildren<Props>> = ({
       orgId,
     }
 
-    const response = await fetcher<
-      Go1LicensesChangeMutation,
-      Go1LicensesChangeMutationVariables
-    >(go1LicensesHistoryChange, { input: mutationInput })
+    const { data: response } = await go1LicenseChange({ input: mutationInput })
 
-    setSaving(false)
-
-    if (response.go1LicensesChange?.success) {
+    if (response?.go1LicensesChange?.success) {
       onSave()
     } else {
-      switch (response.go1LicensesChange?.error) {
+      switch (response?.go1LicensesChange?.error) {
         case Go1ChangeError.InvoiceNotAuthorized: {
           setErrorMessageLabel(`error-invoice-not-authorized`)
           break
@@ -86,6 +82,10 @@ export const ManageLicensesDialog: React.FC<React.PropsWithChildren<Props>> = ({
       }
     }
   }
+
+  useEffect(() => {
+    setErrorMessageLabel('')
+  }, [])
 
   return (
     <Dialog

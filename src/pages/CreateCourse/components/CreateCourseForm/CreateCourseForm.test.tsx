@@ -43,9 +43,6 @@ const VenueSelectorMocked = vi.mocked(VenueSelector)
 const useZoomMeetingUrlMocked = vi.mocked(useZoomMeetingLink)
 const useCourseDraftMocked = vi.mocked(useCourseDraft)
 const mockTrainerSearch = vi.fn().mockResolvedValue({ trainers: [] })
-vi.mock('@app/components/SearchTrainers/useQueryTrainers', () => ({
-  useQueryTrainers: () => ({ search: mockTrainerSearch }),
-}))
 
 describe('component: CreateCourseForm', () => {
   const {

@@ -1,6 +1,7 @@
-import React from 'react'
+import { Client, Provider } from 'urql'
+import { fromValue, never } from 'wonka'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
+import { DeleteProfileMutation, DeleteUserError } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 import { LoadingStatus } from '@app/util'
 
@@ -9,23 +10,22 @@ import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 import { ProfileDeleteDialog } from '.'
 
 vi.mock('@app/hooks/useProfile')
-vi.mock('@app/hooks/use-fetcher')
-vi.mock('@app/queries/profile/delete-profile', () => ({
-  MUTATION: 'delete-query',
-}))
-
-const useFetcherMock = vi.mocked(useFetcher)
 const useProfileMock = vi.mocked(useProfile)
 
 describe('DeleteUsersDialog', () => {
+  const mockClient = {
+    executeMutation: vi.fn(() => never),
+  }
+  mockClient.executeMutation.mockImplementation(() =>
+    fromValue<{ data: DeleteProfileMutation }>({
+      data: { deleteUser: { success: true } },
+    })
+  )
   const profileId = chance.guid()
-  const fetcherMock = vi.fn()
   const onCloseMock = vi.fn()
   const onSuccessMock = vi.fn()
 
-  const setup = () => {
-    useFetcherMock.mockReturnValue(fetcherMock)
-
+  const setup = (client?: { executeMutation: () => void }) => {
     const profile = {
       profile: {
         givenName: chance.first(),
@@ -38,11 +38,13 @@ describe('DeleteUsersDialog', () => {
     useProfileMock.mockReturnValue(profile)
 
     return render(
-      <ProfileDeleteDialog
-        onClose={onCloseMock}
-        onSuccess={onSuccessMock}
-        profileId={profileId}
-      />
+      <Provider value={(client ?? mockClient) as unknown as Client}>
+        <ProfileDeleteDialog
+          onClose={onCloseMock}
+          onSuccess={onSuccessMock}
+          profileId={profileId}
+        />
+      </Provider>
     )
   }
 
@@ -56,7 +58,6 @@ describe('DeleteUsersDialog', () => {
   })
 
   it('allows delete only after confirmation checkbox is checked', async () => {
-    fetcherMock.mockResolvedValueOnce({ deleteUser: { success: true } })
     setup()
     expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled()
 
@@ -66,28 +67,31 @@ describe('DeleteUsersDialog', () => {
   })
 
   it('delete user', async () => {
-    fetcherMock.mockResolvedValue({ deleteUser: { success: true } })
     setup()
     await userEvent.click(screen.getByRole('checkbox'))
     await userEvent.click(screen.getByRole('button', { name: 'Delete' }))
-
-    expect(fetcherMock).toHaveBeenCalledTimes(2)
-
+    expect(mockClient.executeMutation).toHaveBeenCalledTimes(2)
     expect(onSuccessMock).toHaveBeenCalledTimes(1)
   })
 
   it('delete error', async () => {
-    fetcherMock.mockResolvedValueOnce({ deleteUser: { error: 'some error' } })
-    setup()
+    const client = {
+      executeMutation: vi.fn(() => never),
+    }
+    client.executeMutation.mockImplementationOnce(() =>
+      fromValue<{ data: DeleteProfileMutation }>({
+        data: {
+          deleteUser: {
+            success: false,
+            error: 'some error' as DeleteUserError,
+          },
+        },
+      })
+    )
+    setup(client)
 
     expect(screen.getByRole('checkbox')).not.toBeVisible()
-
-    expect(fetcherMock).toHaveBeenCalledTimes(1)
-    expect(fetcherMock).toHaveBeenCalledWith('delete-query', {
-      profileId,
-      dryRun: true,
-    })
-
+    expect(client.executeMutation).toHaveBeenCalledTimes(1)
     expect(onSuccessMock).toHaveBeenCalledTimes(0)
 
     waitFor(() => {
@@ -104,6 +108,5 @@ describe('DeleteUsersDialog', () => {
 
     expect(onCloseMock).toHaveBeenCalledTimes(1)
     expect(onSuccessMock).toHaveBeenCalledTimes(0)
-    expect(fetcherMock).toHaveBeenCalledTimes(1)
   })
 })

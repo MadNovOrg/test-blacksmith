@@ -10,19 +10,19 @@ import {
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useMutation } from 'urql'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
+import {
+  SaveModuleSelectionMutation,
+  SaveModuleSelectionMutationVariables,
+} from '@app/generated/graphql'
 import useCourseModules from '@app/hooks/useCourseModules'
 import {
   HoldsRecord,
   ModulesSelectionList,
 } from '@app/modules/grading/components/ModulesSelectionList'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
-import {
-  MUTATION,
-  ParamsType,
-  ResponseType,
-} from '@app/queries/courses/save-course-modules-selection'
+import { MUTATION as SAVE_COURSE_MODULES_SELECTION } from '@app/queries/courses/save-course-modules-selection'
 import { LoadingStatus } from '@app/util'
 
 import { useGradingDetails } from '../../components/GradingDetailsProvider'
@@ -34,11 +34,15 @@ export const ModulesSelection = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const { id: courseId } = useParams()
-  const fetcher = useFetcher()
   const navigate = useNavigate()
   const [savingSelectionStatus, setSavingSelectionStatus] = useState(
     LoadingStatus.IDLE
   )
+
+  const [{ data: saveModulesData }, saveModules] = useMutation<
+    SaveModuleSelectionMutation,
+    SaveModuleSelectionMutationVariables
+  >(SAVE_COURSE_MODULES_SELECTION)
 
   const { backToStep } = useGradingDetails()
 
@@ -135,18 +139,15 @@ export const ModulesSelection = () => {
         }
       }
 
-      const { saveCovered, saveNotCovered } = await fetcher<
-        ResponseType,
-        ParamsType
-      >(MUTATION, {
+      saveModules({
         coveredModules: covered,
         notCoveredModules: notCovered,
-        courseId: courseId ?? '',
+        courseId: Number(courseId ?? 0),
       })
 
       if (
-        saveCovered.affectedRows !== covered.length ||
-        saveNotCovered.affectedRows !== notCovered.length
+        saveModulesData?.saveCovered?.affectedRows !== covered.length ||
+        saveModulesData.saveNotCovered?.affectedRows !== notCovered.length
       ) {
         setSavingSelectionStatus(LoadingStatus.ERROR)
       } else {

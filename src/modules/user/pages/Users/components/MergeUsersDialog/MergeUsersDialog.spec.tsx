@@ -1,4 +1,7 @@
-import { useFetcher } from '@app/hooks/use-fetcher'
+import { Client, Provider } from 'urql'
+import { fromValue } from 'wonka'
+
+import { MergeUserError, MergeUserMutation } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
@@ -8,24 +11,19 @@ import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 import { MergeUsersDialog } from './MergeUsersDialog'
 
 vi.mock('@app/hooks/useProfile')
-vi.mock('@app/hooks/use-fetcher')
-vi.mock('@app/queries/user/merge-users', () => ({
-  MUTATION: 'merge-query',
-}))
 
-const useFetcherMock = vi.mocked(useFetcher)
 const useProfileMock = vi.mocked(useProfile)
 
 describe(MergeUsersDialog.name, () => {
   const profileId1 = chance.guid()
   const profileId2 = chance.guid()
-  const fetcherMock = vi.fn()
   const onCloseMock = vi.fn()
   const onSuccessMock = vi.fn()
+  const client = {
+    executeMutation: vi.fn(),
+  }
 
-  const setup = () => {
-    useFetcherMock.mockReturnValue(fetcherMock)
-
+  const setup = (mockClientValue?: MergeUserMutation) => {
     const profile1 = {
       profile: {
         id: profileId1,
@@ -93,13 +91,20 @@ describe(MergeUsersDialog.name, () => {
       } as unknown as ReturnType<typeof useProfile>
     })
 
+    client.executeMutation.mockImplementation(() =>
+      fromValue<{ data: MergeUserMutation }>({
+        data: mockClientValue as MergeUserMutation,
+      })
+    )
     return render(
-      <MergeUsersDialog
-        onClose={onCloseMock}
-        onSuccess={onSuccessMock}
-        profileId1={profileId1}
-        profileId2={profileId2}
-      />
+      <Provider value={client as unknown as Client}>
+        <MergeUsersDialog
+          onClose={onCloseMock}
+          onSuccess={onSuccessMock}
+          profileId1={profileId1}
+          profileId2={profileId2}
+        />
+      </Provider>
     )
   }
 
@@ -113,34 +118,23 @@ describe(MergeUsersDialog.name, () => {
   })
 
   it('merge user', async () => {
-    fetcherMock.mockResolvedValueOnce({ mergeUser: { success: true } })
     setup()
-
     await userEvent.click(screen.getByDisplayValue(profileId2))
     await userEvent.click(screen.getByRole('checkbox'))
     await userEvent.click(screen.getByRole('button', { name: 'Continue' }))
 
-    expect(fetcherMock).toHaveBeenCalledTimes(1)
-    expect(fetcherMock).toHaveBeenCalledWith('merge-query', {
-      primaryUser: profileId2,
-      mergeWith: profileId1,
-    })
     expect(onSuccessMock).toHaveBeenCalledTimes(1)
   })
 
   it('merge error', async () => {
-    fetcherMock.mockResolvedValueOnce({ mergeUser: { error: 'some error' } })
-    setup()
+    setup({
+      mergeUser: { error: 'some error' as MergeUserError, success: false },
+    })
 
     await userEvent.click(screen.getByDisplayValue(profileId2))
     await userEvent.click(screen.getByRole('checkbox'))
     await userEvent.click(screen.getByRole('button', { name: 'Continue' }))
-
-    expect(fetcherMock).toHaveBeenCalledTimes(1)
-    expect(fetcherMock).toHaveBeenCalledWith('merge-query', {
-      primaryUser: profileId2,
-      mergeWith: profileId1,
-    })
+    expect(client.executeMutation).toHaveBeenCalledTimes(1)
     expect(onSuccessMock).toHaveBeenCalledTimes(0)
 
     await waitFor(() => {
@@ -155,6 +149,6 @@ describe(MergeUsersDialog.name, () => {
     await userEvent.click(screen.getByRole('button', { name: 'Cancel' }))
 
     expect(onCloseMock).toHaveBeenCalledTimes(1)
-    expect(fetcherMock).toHaveBeenCalledTimes(0)
+    expect(client.executeMutation).not.toHaveBeenCalled()
   })
 })

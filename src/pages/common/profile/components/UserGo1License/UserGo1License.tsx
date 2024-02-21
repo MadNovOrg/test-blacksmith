@@ -2,16 +2,15 @@ import { CheckCircle } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { Alert, Box, Typography } from '@mui/material'
 import { differenceInCalendarMonths } from 'date-fns'
-import React, { useState } from 'react'
+import { useMutation } from 'urql'
 
 import {
   DeleteGo1LicenseMutation,
   DeleteGo1LicenseMutationVariables,
   Go1_Licenses,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import deleteGo1License from '@app/queries/go1-licensing/delete-go1-license'
+import DELETE_GO1_LICENSE from '@app/queries/go1-licensing/delete-go1-license'
 
 export type Go1LicenseInfo = Pick<
   Go1_Licenses,
@@ -29,13 +28,13 @@ export const UserGo1License: React.FC<React.PropsWithChildren<Props>> = ({
   editable,
   onDeleted,
 }) => {
-  const [deletingLicense, setDeletingLicense] = useState(false)
-  const [hasError, setHasError] = useState(false)
-  const fetcher = useFetcher()
-
   const { id, enrolledOn, expireDate } = license
 
   const { t, _t } = useScopedTranslation('pages.my-profile')
+  const [{ error, fetching: deletingLicense }, deleteGo1Licence] = useMutation<
+    DeleteGo1LicenseMutation,
+    DeleteGo1LicenseMutationVariables
+  >(DELETE_GO1_LICENSE)
 
   const expiresInMonths = differenceInCalendarMonths(
     new Date(expireDate),
@@ -43,21 +42,9 @@ export const UserGo1License: React.FC<React.PropsWithChildren<Props>> = ({
   )
 
   const deleteLicense = async () => {
-    setDeletingLicense(true)
-
-    try {
-      await fetcher<
-        DeleteGo1LicenseMutation,
-        DeleteGo1LicenseMutationVariables
-      >(deleteGo1License, { id })
-
-      if (typeof onDeleted === 'function') {
-        onDeleted()
-      }
-    } catch (err) {
-      setHasError(true)
-    } finally {
-      setDeletingLicense(false)
+    await deleteGo1Licence({ id })
+    if (typeof onDeleted === 'function' && !error) {
+      onDeleted()
     }
   }
 
@@ -68,7 +55,7 @@ export const UserGo1License: React.FC<React.PropsWithChildren<Props>> = ({
       </Typography>
 
       <Box bgcolor="common.white" p={3} borderRadius={1}>
-        {hasError ? (
+        {error ? (
           <Alert sx={{ mb: 2 }} severity="error">
             {t('bl-license-deleting-error')}
           </Alert>

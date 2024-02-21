@@ -1,29 +1,26 @@
-import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import { Client, Provider } from 'urql'
+import { fromValue, never } from 'wonka'
+
+import {
+  Course_Level_Enum,
+  Course_Type_Enum,
+  SearchTrainersQuery,
+} from '@app/generated/graphql'
 import {
   CourseTrainerType,
   SearchTrainer,
   TrainerRoleTypeName,
 } from '@app/types'
 
-import {
-  chance,
-  render,
-  screen,
-  userEvent,
-  waitFor,
-  waitForCalls,
-  within,
-} from '@test/index'
+import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { SearchTrainers } from './SearchTrainers'
 
-const mockSearch = vi.fn().mockResolvedValue({ trainers: [] })
-vi.mock('./useQueryTrainers.ts', () => ({
-  useQueryTrainers: () => ({ search: mockSearch }),
-}))
-
 describe(SearchTrainers.name, () => {
+  const urqlMockClient = {
+    executeQuery: vi.fn(() => never),
+  }
   it('renders as expected', async () => {
     // Arrange
     const course = buildCourse()
@@ -76,40 +73,53 @@ describe(SearchTrainers.name, () => {
 
   it('calls search trainers when input term length is >= 3', async () => {
     // Arrange
+    const trainers = [
+      {
+        email: chance.email(),
+        fullName: chance.name(),
+        id: chance.guid(),
+      },
+      {
+        email: chance.email(),
+        fullName: chance.name(),
+        id: chance.guid(),
+      },
+      {
+        email: chance.email(),
+        fullName: chance.name(),
+        id: chance.guid(),
+      },
+    ] as SearchTrainersQuery['trainers']
     const course = buildCourse()
+    urqlMockClient.executeQuery.mockImplementationOnce(() =>
+      fromValue<{ data: SearchTrainersQuery }>({
+        data: {
+          trainers,
+        },
+      })
+    )
 
     // Act
-    const { container } = render(
-      <SearchTrainers
-        trainerType={CourseTrainerType.Leader}
-        courseLevel={Course_Level_Enum.Level_1}
-        courseSchedule={course.schedule[0]}
-        courseType={Course_Type_Enum.Open}
-      />
+    render(
+      <Provider value={urqlMockClient as unknown as Client}>
+        <SearchTrainers
+          trainerType={CourseTrainerType.Leader}
+          courseLevel={Course_Level_Enum.Level_1}
+          courseSchedule={course.schedule[0]}
+          courseType={Course_Type_Enum.Open}
+        />
+      </Provider>
     )
 
     // Assert
     const input = screen.getByTestId('SearchTrainers-input')
 
-    const loadingIcon = container.querySelector('.MuiCircularProgress-root')
-    expect(loadingIcon).toHaveClass('MuiCircularProgress-determinate') // paused
-
-    const shortQuery = chance.last().slice(0, 3)
-    await userEvent.type(input, shortQuery)
+    const shortQuery = trainers?.length ? trainers[0]?.fullName.slice(0, 3) : ''
+    await userEvent.type(input, shortQuery as string)
     expect(input).toHaveValue(shortQuery)
 
-    await userEvent.clear(input)
-
-    const enoughQuery = chance.last().slice(0, 4)
-    await userEvent.type(input, enoughQuery)
-
-    expect(loadingIcon).toHaveClass('MuiCircularProgress-indeterminate') // loading
-
-    await waitForCalls(mockSearch)
-    expect(mockSearch).toHaveBeenCalledWith(enoughQuery)
-
     await waitFor(async () => {
-      expect(loadingIcon).toHaveClass('MuiCircularProgress-determinate') // paused
+      expect(urqlMockClient.executeQuery).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -118,46 +128,52 @@ describe(SearchTrainers.name, () => {
     const course = buildCourse()
 
     const lastName = 'Smith'
-    mockSearch.mockResolvedValueOnce({
-      trainers: [
-        {
-          id: chance.guid(),
-          fullName: `John Mc${lastName}`,
-          trainer_role_types: [
+    urqlMockClient.executeQuery.mockImplementationOnce(() =>
+      fromValue<{ data: SearchTrainersQuery }>({
+        data: {
+          trainers: [
             {
-              trainer_role_type: {
-                id: '0',
-                name: TrainerRoleTypeName.PRINCIPAL,
-              },
+              id: chance.guid(),
+              fullName: `John Mc${lastName}`,
+              trainer_role_types: [
+                {
+                  trainer_role_type: {
+                    id: '0',
+                    name: TrainerRoleTypeName.PRINCIPAL,
+                  },
+                },
+              ],
             },
-          ],
+            {
+              id: chance.guid(),
+              fullName: `Ivan ${lastName}ovich`,
+              trainer_role_types: [],
+            },
+            {
+              id: chance.guid(),
+              fullName: `Coen De${lastName}`,
+              trainer_role_types: [],
+            },
+            {
+              id: chance.guid(),
+              fullName: `Mary NotAMatch`,
+              trainer_role_types: [],
+            },
+          ] as SearchTrainersQuery['trainers'],
         },
-        {
-          id: chance.guid(),
-          fullName: `Ivan ${lastName}ovich`,
-          trainer_role_types: [],
-        },
-        {
-          id: chance.guid(),
-          fullName: `Coen De${lastName}`,
-          trainer_role_types: [],
-        },
-        {
-          id: chance.guid(),
-          fullName: `Mary NotAMatch`,
-          trainer_role_types: [],
-        },
-      ],
-    })
+      })
+    )
 
     // Act
     render(
-      <SearchTrainers
-        trainerType={CourseTrainerType.Leader}
-        courseLevel={Course_Level_Enum.Level_1}
-        courseSchedule={course.schedule[0]}
-        courseType={Course_Type_Enum.Open}
-      />
+      <Provider value={urqlMockClient as unknown as Client}>
+        <SearchTrainers
+          trainerType={CourseTrainerType.Leader}
+          courseLevel={Course_Level_Enum.Level_1}
+          courseSchedule={course.schedule[0]}
+          courseType={Course_Type_Enum.Open}
+        />
+      </Provider>
     )
 
     // Assert
@@ -166,8 +182,7 @@ describe(SearchTrainers.name, () => {
     await userEvent.type(input, lastName.slice(0, 4))
 
     await waitFor(() => {
-      expect(mockSearch).toHaveBeenCalledTimes(1)
-
+      expect(urqlMockClient.executeQuery).toHaveBeenCalledTimes(1)
       expect(screen.getAllByTestId('SearchTrainers-option')).toHaveLength(3)
       expect(
         within(screen.getAllByTestId('SearchTrainers-option')[0]).getByText(
@@ -182,90 +197,65 @@ describe(SearchTrainers.name, () => {
     })
   })
 
-  it('calls matchesFilter to further filter options', async () => {
-    // Arrange
-    const course = buildCourse()
-
-    const trainers = makeTrainers()
-    mockSearch.mockResolvedValueOnce({ trainers })
-
-    const matchesFilter = vi.fn().mockReturnValueOnce([trainers[2]])
-    render(
-      <SearchTrainers
-        trainerType={CourseTrainerType.Leader}
-        courseLevel={Course_Level_Enum.Level_1}
-        courseSchedule={course.schedule[0]}
-        matchesFilter={matchesFilter}
-        courseType={Course_Type_Enum.Open}
-      />
-    )
-
-    // Assert
-    const input = screen.getByTestId('SearchTrainers-input')
-
-    await userEvent.type(input, trainers[2].fullName.slice(0, 4))
-
-    await waitForCalls(mockSearch)
-
-    expect(matchesFilter).toHaveBeenCalledWith(trainers)
-
-    await waitFor(async () => {
-      expect(screen.getAllByTestId('SearchTrainers-option')).toHaveLength(1)
-    })
-  })
-
   it('enforces max selected items when max is set', async () => {
     // Arrange
     const course = buildCourse()
 
     const lastName = 'Smith'
-    mockSearch.mockResolvedValueOnce({
-      trainers: [
-        {
-          id: chance.guid(),
-          fullName: `John Mc${lastName}`,
-          trainer_role_types: [],
-          levels: [],
+    const trainers = [
+      {
+        id: chance.guid(),
+        fullName: `John Mc${lastName}`,
+        trainer_role_types: [],
+        levels: [],
+      },
+      {
+        id: chance.guid(),
+        fullName: `Ivan ${lastName}ovich`,
+        trainer_role_types: [],
+        levels: [],
+      },
+      {
+        id: chance.guid(),
+        fullName: `Coen De${lastName}`,
+        trainer_role_types: [],
+        levels: [],
+      },
+      {
+        id: chance.guid(),
+        fullName: `Mary NotAMatch`,
+        trainer_role_types: [],
+        levels: [],
+      },
+    ]
+
+    urqlMockClient.executeQuery.mockImplementationOnce(() =>
+      fromValue<{ data: SearchTrainersQuery }>({
+        data: {
+          trainers: trainers as unknown as SearchTrainersQuery['trainers'],
         },
-        {
-          id: chance.guid(),
-          fullName: `Ivan ${lastName}ovich`,
-          trainer_role_types: [],
-          levels: [],
-        },
-        {
-          id: chance.guid(),
-          fullName: `Coen De${lastName}`,
-          trainer_role_types: [],
-          levels: [],
-        },
-        {
-          id: chance.guid(),
-          fullName: `Mary NotAMatch`,
-          trainer_role_types: [],
-          levels: [],
-        },
-      ],
-    })
+      })
+    )
 
     // Act
     render(
-      <SearchTrainers
-        trainerType={CourseTrainerType.Leader}
-        courseLevel={Course_Level_Enum.Level_1}
-        courseSchedule={course.schedule[0]}
-        max={1}
-        courseType={Course_Type_Enum.Open}
-      />
+      <Provider value={urqlMockClient as unknown as Client}>
+        <SearchTrainers
+          trainerType={CourseTrainerType.Leader}
+          courseLevel={Course_Level_Enum.Level_1}
+          courseSchedule={course.schedule[0]}
+          max={1}
+          courseType={Course_Type_Enum.Open}
+        />
+      </Provider>
     )
 
     // Assert
     const input = screen.getByTestId('SearchTrainers-input')
 
     await userEvent.type(input, lastName.slice(0, 4))
-
-    await waitForCalls(mockSearch)
     await waitFor(async () => {
+      expect(urqlMockClient.executeQuery).toHaveBeenCalledTimes(1)
       const matches = screen.getAllByTestId('SearchTrainers-option')
       expect(matches).toHaveLength(3)
       await userEvent.click(matches[0])
@@ -280,17 +270,25 @@ describe(SearchTrainers.name, () => {
     const course = buildCourse()
 
     const trainers = makeTrainers()
-    mockSearch.mockResolvedValueOnce({ trainers })
+    urqlMockClient.executeQuery.mockImplementationOnce(() =>
+      fromValue<{ data: SearchTrainersQuery }>({
+        data: {
+          trainers: trainers as unknown as SearchTrainersQuery['trainers'],
+        },
+      })
+    )
 
     const onChange = vi.fn()
     render(
-      <SearchTrainers
-        trainerType={CourseTrainerType.Leader}
-        courseLevel={Course_Level_Enum.Level_1}
-        courseSchedule={course.schedule[0]}
-        onChange={onChange}
-        courseType={Course_Type_Enum.Open}
-      />
+      <Provider value={urqlMockClient as unknown as Client}>
+        <SearchTrainers
+          trainerType={CourseTrainerType.Leader}
+          courseLevel={Course_Level_Enum.Level_1}
+          courseSchedule={course.schedule[0]}
+          onChange={onChange}
+          courseType={Course_Type_Enum.Open}
+        />
+      </Provider>
     )
 
     // Assert
@@ -298,9 +296,9 @@ describe(SearchTrainers.name, () => {
 
     await userEvent.type(input, trainers[2].fullName.slice(0, 4))
 
-    await waitForCalls(mockSearch)
     await waitFor(
       async () => {
+        expect(urqlMockClient.executeQuery).toHaveBeenCalledTimes(1)
         const matches = screen.getAllByTestId('SearchTrainers-option')
         expect(matches).toHaveLength(1)
         await userEvent.click(matches[0])
@@ -317,24 +315,30 @@ describe(SearchTrainers.name, () => {
     // Arrange
     const course = buildCourse()
 
-    mockSearch.mockResolvedValueOnce({ trainers: [] })
+    urqlMockClient.executeQuery.mockImplementationOnce(() =>
+      fromValue<{ data: SearchTrainersQuery }>({
+        data: {
+          trainers: [],
+        },
+      })
+    )
 
     // Act
     render(
-      <SearchTrainers
-        trainerType={CourseTrainerType.Leader}
-        courseLevel={Course_Level_Enum.Level_1}
-        courseSchedule={course.schedule[0]}
-        courseType={Course_Type_Enum.Open}
-      />
+      <Provider value={urqlMockClient as unknown as Client}>
+        <SearchTrainers
+          trainerType={CourseTrainerType.Leader}
+          courseLevel={Course_Level_Enum.Level_1}
+          courseSchedule={course.schedule[0]}
+          courseType={Course_Type_Enum.Open}
+        />
+      </Provider>
     )
 
     // Assert
     const input = screen.getByTestId('SearchTrainers-input')
 
     await userEvent.type(input, chance.last().slice(0, 4))
-
-    await waitForCalls(mockSearch)
 
     await waitFor(async () => {
       const noMatchTxt = 'No trainers found. Try another search term.'

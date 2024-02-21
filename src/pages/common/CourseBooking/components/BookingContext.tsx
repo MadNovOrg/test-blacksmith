@@ -11,7 +11,7 @@ import React, {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
-import { useMount } from 'react-use'
+import { useMutation, useQuery } from 'urql'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import {
@@ -19,24 +19,23 @@ import {
   Course_Source_Enum,
   Course_Type_Enum,
   FindProfilesQuery,
+  GetCoursePricingQuery,
   GetTempProfileQuery,
   PaymentMethod,
   Promo_Code,
   Promo_Code_Type_Enum,
   PromoCodeOutput,
+  Currency,
+  CreateOrderMutation,
+  CreateOrderMutationVariables,
+  GetCoursePricingQueryVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { stripeProcessingFeeRate } from '@app/lib/stripe'
-import { GetCoursePricing } from '@app/queries/courses/get-course-pricing'
-import {
-  MUTATION as CREATE_ORDER,
-  ParamsType as CreateOrderParamsType,
-  ResponseType as CreateOrderResponseType,
-} from '@app/queries/order/create-order'
+import { GET_COURSE_PRICING_QUERY } from '@app/queries/courses/get-course-pricing'
+import { MUTATION as CREATE_ORDER } from '@app/queries/order/create-order'
 import { QUERY as GET_TEMP_PROFILE } from '@app/queries/profile/get-temp-profile'
 import {
   CourseExpenseType,
-  Currency,
   InvoiceDetails,
   Profile,
   TransportMethod,
@@ -126,8 +125,9 @@ export type ContextType = {
   setBooking: (_: Partial<State>) => void
   addPromo: (_: PromoCodeOutput) => void
   removePromo: (_: string) => void
-  placeOrder: () => Promise<CreateOrderResponseType['order']>
+  placeOrder: () => Promise<CreateOrderMutation['order']>
   internalBooking: boolean
+  coursePricing: GetCoursePricingQuery['pricing']
 }
 
 const initialContext = {}
@@ -148,7 +148,6 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation()
   const location = useLocation()
-  const fetcher = useFetcher() // TODO: migrate to urql
   const [orderId, setOrderId] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -161,108 +160,132 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
   const isBooked = location.pathname.startsWith('/booking/payment/')
   const internalBooking = useRef(location.state?.internalBooking)
 
-  useMount(async () => {
-    const data = await fetcher<GetTempProfileQuery>(GET_TEMP_PROFILE) // TODO: refactor to use urql
-    const [profile] = data?.tempProfiles || []
+  const [{ data: tempProfiles, fetching: tempProfilesFetching }] =
+    useQuery<GetTempProfileQuery>({
+      query: GET_TEMP_PROFILE,
+    })
 
-    if (!profile || !profile.course) {
+  const profile = useMemo(() => {
+    if (tempProfiles) return tempProfiles.tempProfiles[0]
+  }, [tempProfiles])
+
+  const [{ data: response, fetching }] = useQuery<
+    GetCoursePricingQuery,
+    GetCoursePricingQueryVariables
+  >({
+    query: GET_COURSE_PRICING_QUERY,
+    variables: { courseId: Number(profile?.course?.id ?? 0) },
+    pause: !profile?.course,
+  })
+  const [, createOrder] = useMutation<
+    CreateOrderMutation,
+    CreateOrderMutationVariables
+  >(CREATE_ORDER)
+
+  const coursePricing = useMemo(() => {
+    if (response && !fetching) return response?.pricing
+    else return null
+  }, [fetching, response]) as GetCoursePricingQuery['pricing']
+
+  useEffect(() => {
+    if (profile && profile.course && coursePricing) {
+      let pricing: GetCoursePricingQuery['pricing']
+      if (profile.course.price && profile.course.priceCurrency) {
+        pricing = {
+          priceAmount: profile.course.price,
+          priceCurrency: profile.course.priceCurrency as Currency,
+          xeroCode: '',
+        }
+      } else {
+        pricing = coursePricing
+      }
+
+      const trainerExpenses =
+        profile.course.expenses?.reduce((acc, { data: e }) => {
+          switch (e.type) {
+            case CourseExpenseType.Accommodation:
+              return (
+                acc +
+                getTrainerSubsistenceCost(e.accommodationNights) +
+                e.accommodationCost * e.accommodationNights
+              )
+
+            case CourseExpenseType.Miscellaneous:
+              return acc + e.cost
+
+            case CourseExpenseType.Transport:
+              if (e.method === TransportMethod.CAR) {
+                return acc + getTrainerCarCostPerMile(e.mileage)
+              }
+
+              if (e.method === TransportMethod.NONE) {
+                return acc
+              }
+
+              return acc + e.cost
+
+            default:
+              return acc
+          }
+        }, 0) ?? 0
+
+      setAvailableSeats(
+        profile.course.maxParticipants -
+          (profile?.course?.participants?.aggregate?.count ?? 0)
+      )
+      setCourse(profile.course)
+
+      const isInternationalCourse = allPass([
+        () => profile?.course?.type === Course_Type_Enum.Open,
+        () => profile?.course?.accreditedBy === Accreditors_Enum.Icm,
+        () => Boolean(profile?.course?.residingCountry),
+        () => !isUKCountry(profile?.course?.residingCountry),
+      ])()
+
+      if (pricing) {
+        setBooking({
+          quantity: profile.quantity ?? 0,
+          participants: [],
+          price: pricing.priceAmount,
+          currency: pricing.priceCurrency,
+          vat: isInternationalCourse && !profile?.course?.includeVAT ? 0 : 20,
+          promoCodes: [],
+          discounts: {},
+          orgId: '',
+          orgName: '',
+          sector: '',
+          position: '',
+          otherPosition: '',
+          paymentMethod: PaymentMethod.Invoice,
+          freeSpaces: profile.course.freeSpaces ?? 0,
+          trainerExpenses,
+          courseType: profile.course.type,
+          source: '',
+          salesRepresentative: null,
+          bookingContact: {
+            email: '',
+            firstName: '',
+            lastName: '',
+          },
+          attendeeValidCertificate: false,
+        })
+      }
+      setReady(true)
+    }
+    if (!tempProfilesFetching && (!profile || !profile.course)) {
       setError(t('error-no-booking'))
       setReady(true)
-      return
     }
-
-    let pricing: Awaited<ReturnType<typeof GetCoursePricing>>['pricing']
-
-    // course has custom pricing (e.g BILD)
-    if (profile.course.price && profile.course.priceCurrency) {
-      pricing = {
-        priceAmount: profile.course.price,
-        priceCurrency: profile.course.priceCurrency as Currency,
-        xeroCode: '',
-      }
-    } else {
-      const pricingResponse = await GetCoursePricing(fetcher, profile.course.id)
-
-      if (!pricingResponse) {
-        setError(t('error-no-pricing'))
-      } else {
-        pricing = pricingResponse.pricing
-      }
-    }
-
-    const trainerExpenses =
-      profile.course.expenses?.reduce((acc, { data: e }) => {
-        switch (e.type) {
-          case CourseExpenseType.Accommodation:
-            return (
-              acc +
-              getTrainerSubsistenceCost(e.accommodationNights) +
-              e.accommodationCost * e.accommodationNights
-            )
-
-          case CourseExpenseType.Miscellaneous:
-            return acc + e.cost
-
-          case CourseExpenseType.Transport:
-            if (e.method === TransportMethod.CAR) {
-              return acc + getTrainerCarCostPerMile(e.mileage)
-            }
-
-            if (e.method === TransportMethod.NONE) {
-              return acc
-            }
-
-            return acc + e.cost
-
-          default:
-            return acc
-        }
-      }, 0) ?? 0
-
-    setAvailableSeats(
-      profile.course.maxParticipants -
-        (profile?.course?.participants?.aggregate?.count ?? 0)
-    )
-    setCourse(profile.course)
-
-    const isInternationalCourse = allPass([
-      () => profile?.course?.type === Course_Type_Enum.Open,
-      () => profile?.course?.accreditedBy === Accreditors_Enum.Icm,
-      () => Boolean(profile?.course?.residingCountry),
-      () => !isUKCountry(profile?.course?.residingCountry),
-    ])()
-
-    if (pricing) {
-      setBooking({
-        quantity: profile.quantity ?? 0,
-        participants: [],
-        price: pricing.priceAmount,
-        currency: pricing.priceCurrency,
-        vat: isInternationalCourse && !profile?.course?.includeVAT ? 0 : 20,
-        promoCodes: [],
-        discounts: {},
-        orgId: '',
-        orgName: '',
-        sector: '',
-        position: '',
-        otherPosition: '',
-        paymentMethod: PaymentMethod.Invoice,
-        freeSpaces: profile.course.freeSpaces ?? 0,
-        trainerExpenses,
-        courseType: profile.course.type,
-        source: '',
-        salesRepresentative: null,
-        bookingContact: {
-          email: '',
-          firstName: '',
-          lastName: '',
-        },
-        attendeeValidCertificate: false,
-      })
-    }
-
-    setReady(true)
-  })
+  }, [
+    coursePricing,
+    fetching,
+    isUKCountry,
+    profile,
+    response,
+    t,
+    tempProfiles,
+    tempProfilesFetching,
+  ])
 
   useEffect(() => {
     const discounts: Discounts = {}
@@ -354,11 +377,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     const promoCodes =
       booking.courseType !== Course_Type_Enum.Closed ? booking.promoCodes : []
     if (course && course.id) {
-      const response = await fetcher<
-        // TODO: refactor to use urql
-        CreateOrderResponseType,
-        CreateOrderParamsType
-      >(CREATE_ORDER, {
+      const { data: orderResponse } = await createOrder({
         input: {
           courseId: course.id,
           quantity: booking.quantity,
@@ -378,10 +397,10 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         },
       })
 
-      setOrderId(response.order?.id)
-      return response.order
+      setOrderId(orderResponse?.order?.id)
+      return orderResponse?.order
     }
-  }, [booking, fetcher, course])
+  }, [booking, course, createOrder])
 
   const value = useMemo<ContextType>(
     () => ({
@@ -400,6 +419,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       removePromo,
       placeOrder,
       internalBooking: internalBooking.current ?? false,
+      coursePricing,
     }),
     [
       error,
@@ -414,6 +434,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       availableSeats,
       placeOrder,
       internalBooking,
+      coursePricing,
     ]
   )
 

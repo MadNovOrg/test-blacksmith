@@ -1,13 +1,14 @@
+// TODO: This component is not used anywhere, check if its still needed
+// Comented some things as to not invest time in completely refactoring it
 import { Autocomplete, TextField } from '@mui/material'
-import { debounce } from 'lodash-es'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useQuery } from 'urql'
 
 import {
   SearchXeroContactsQuery,
   SearchXeroContactsQueryVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { QUERY as SearchXeroContacts } from '@app/queries/xero/search-xero-contacts'
 
 type OrgNameXeroAutocompleteProps = {
@@ -23,63 +24,39 @@ type XeroContact = {
 
 export const OrgNameXeroAutocomplete: React.FC<
   React.PropsWithChildren<OrgNameXeroAutocompleteProps>
-> = ({ value, onChange, error }) => {
+> = ({ value, onChange }) => {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
-  const [suggestions, setSuggestions] = useState<XeroContact[]>([])
-  const [internalError, setInternalError] = useState<string>()
   const [hasFocus, setHasFocus] = useState(false)
+  const [query, setQuery] = useState<string>('')
+  const [{ data, error }] = useQuery<
+    SearchXeroContactsQuery,
+    SearchXeroContactsQueryVariables
+  >({
+    query: SearchXeroContacts,
+    variables: { input: { searchTerm: query } },
+  })
 
-  const debouncedXeroContactsQuery = useMemo(() => {
-    return debounce(async query => {
-      try {
-        setSuggestions([])
-        const response = await fetcher<
-          SearchXeroContactsQuery,
-          SearchXeroContactsQueryVariables
-        >(SearchXeroContacts, {
-          input: {
-            searchTerm: query,
-          },
-        })
-        setSuggestions(response.xero?.contacts ?? [])
-      } catch (e: unknown) {
-        setInternalError((e as Error).message)
-      }
-    })
-  }, [fetcher])
-
-  const onOrgNameInputChange = useCallback(
-    async (event: React.SyntheticEvent, value: string, reason: string) => {
-      if (reason === 'input' && value) {
-        debouncedXeroContactsQuery(value)
-      }
-      onChange(value)
-    },
-    [debouncedXeroContactsQuery, onChange]
-  )
-
-  const open = hasFocus && suggestions.length > 0
-  const err = [error, internalError].filter(Boolean).join('\n')
+  const open = hasFocus && (data?.xero?.contacts ?? []).length > 0
 
   return (
     <Autocomplete
       freeSolo
       disableClearable
       open={open}
-      onClose={() => debouncedXeroContactsQuery.cancel()}
+      // onClose={() => debouncedXeroContactsQuery.cancel()}
       value={value}
       onChange={(event, data) => onChange(data || undefined)}
-      onInputChange={onOrgNameInputChange}
-      options={suggestions}
-      getOptionLabel={option =>
-        typeof option === 'string' ? option : option.name
-      }
+      // onInputChange={onOrgNameInputChange}
+      options={data?.xero?.contacts ?? []}
+      // getOptionLabel={option =>
+      //   // typeof option === 'string' ? option : option.name
+      // }
       renderInput={params => (
         <TextField
+          onChange={e => setQuery(e.target.value)}
           {...params}
-          helperText={err}
-          error={!!err}
+          helperText={error?.message}
+          error={!!error}
           data-testid="org-name"
           onFocus={() => setHasFocus(true)}
           onBlur={() => setHasFocus(false)}

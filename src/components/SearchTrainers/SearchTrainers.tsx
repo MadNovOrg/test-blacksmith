@@ -12,8 +12,7 @@ import {
 } from '@mui/material'
 import React, { HTMLAttributes, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useMountedState } from 'react-use'
-import { useDebouncedCallback } from 'use-debounce'
+import { useDebounce } from 'use-debounce'
 
 import { Avatar } from '@app/components/Avatar'
 import { useAuth } from '@app/context/auth'
@@ -48,8 +47,6 @@ type Props = {
   disabled?: boolean
 }
 
-const searchDebounceDelay = 300
-
 export function SearchTrainers({
   trainerType,
   courseLevel,
@@ -67,17 +64,17 @@ export function SearchTrainers({
 }: Props) {
   const { acl } = useAuth()
   const { t } = useTranslation()
-  const isMounted = useMountedState()
-  const [loading, setLoading] = useState(false)
-  const [inputValue, setInputValue] = useState('')
-  const [matches, setMatches] = useState<SearchTrainer[]>([])
   const [_selected, setSelected] = useState<SearchTrainer[]>([])
-  const { search } = useQueryTrainers({
+  const [query, setQuery] = useState<string>('')
+  const [debouncedQuery] = useDebounce(query, 300)
+
+  const [{ data: trainers, fetching: loading }] = useQueryTrainers({
     trainerType: trainerType as CourseTrainerType,
     courseLevel,
     schedule: courseSchedule,
     bildStrategies,
     courseType,
+    query: debouncedQuery,
   })
 
   const isControlled = value != null
@@ -100,6 +97,7 @@ export function SearchTrainers({
       showSearchIcon: selected.length === 0,
       autoFocus,
       disabled,
+      setQuery,
     })
   }
 
@@ -117,6 +115,7 @@ export function SearchTrainers({
         component="li"
         sx={{ display: 'flex', gap: 2 }}
         data-testid="SearchTrainers-option"
+        key={option.id}
       >
         <Avatar size={32} src={option.avatar ?? ''} name={option.fullName} />
         <Box>
@@ -144,46 +143,32 @@ export function SearchTrainers({
     )
   }
 
-  const searchTrainers = useDebouncedCallback(async (query: string) => {
-    const { trainers } = await search(query)
-    if (!isMounted()) return
-    setMatches(matchesFilter(trainers?.filter(Boolean) ?? []))
-    setLoading(false)
-  }, searchDebounceDelay)
-
-  const onInputChange = useCallback(
-    (_: React.SyntheticEvent, value: string) => {
-      setInputValue(value)
-      if (value.trim().length >= 3) {
-        setLoading(true)
-        return searchTrainers(value)
-      }
-      setMatches([])
-      setLoading(false)
-    },
-    [searchTrainers]
-  )
+  const options = useMemo(() => {
+    return matchesFilter(trainers?.trainers?.filter(Boolean) ?? [])
+  }, [matchesFilter, trainers?.trainers])
 
   const onSelected = useCallback(
     (_: React.SyntheticEvent, updated: SearchTrainer[]) => {
       const newSelection = updated.length <= max ? updated : selected
       if (!isControlled) setSelected(newSelection)
       onChange({ target: { value: newSelection } })
+      setQuery('')
     },
     [isControlled, max, onChange, selected]
   )
 
   const noOptionsText = useMemo(() => {
     if (loading) return t('components.searchTrainers.loading')
-    if (inputValue.trim().length >= 3)
+    if (query.trim().length >= 3)
       return t('components.searchTrainers.noResults')
     return ''
-  }, [loading, t, inputValue])
+  }, [loading, t, query])
+
   const filterOptionsByNameOrEmail = (options: SearchTrainer[]) =>
     options.filter(
       option =>
-        option.fullName?.toLowerCase().includes(inputValue.toLowerCase()) ||
-        option.email?.toLowerCase().includes(inputValue.toLowerCase())
+        option.fullName?.toLowerCase().includes(query.toLowerCase()) ||
+        option.email?.toLowerCase().includes(query.toLowerCase())
     )
 
   return (
@@ -191,19 +176,18 @@ export function SearchTrainers({
       value={selected}
       multiple={true}
       open={noOptionsText.length > 0}
-      loading={loading}
+      loading={(query && !debouncedQuery) || loading}
       noOptionsText={noOptionsText}
       renderInput={renderInput}
       renderTags={renderSelected}
       renderOption={renderOption}
-      options={matches}
+      options={options}
       filterSelectedOptions={true}
       filterOptions={filterOptionsByNameOrEmail}
       getOptionLabel={t => t.fullName ?? ''}
       isOptionEqualToValue={(o, v) => o.id === v.id}
       onChange={onSelected}
-      onInputChange={onInputChange}
-      inputValue={inputValue}
+      inputValue={query}
       popupIcon={null}
       clearIcon={null}
       sx={{
@@ -225,6 +209,7 @@ function renderTextField({
   showSearchIcon,
   autoFocus,
   disabled,
+  setQuery,
 }: {
   params: AutocompleteRenderInputParams
   loading: boolean
@@ -233,6 +218,7 @@ function renderTextField({
   showSearchIcon: boolean
   autoFocus: boolean
   disabled: boolean
+  setQuery: (value: string) => void
 }) {
   return (
     <TextField
@@ -240,6 +226,7 @@ function renderTextField({
       variant="outlined"
       autoFocus={autoFocus}
       placeholder={placeholder}
+      onChange={e => setQuery(e.target.value)}
       InputProps={{
         ...params.InputProps,
         startAdornment: (
