@@ -2071,6 +2071,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     helperText={errors.priceCurrency?.message}
                     value={values.priceCurrency ?? null}
                     InputLabelProps={{ shrink: true }}
+                    disabled={!isCreation}
                   />
                 </Grid>
 
@@ -2086,6 +2087,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     required
                     type={'number'}
                     variant="filled"
+                    disabled={disabledFields.has('price')}
                     InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
@@ -2103,7 +2105,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                               Boolean(values.includeVAT) ||
                               isUKCountry(values.residingCountry)
                             }
-                            disabled={isUKCountry(values.residingCountry)}
+                            disabled={
+                              isUKCountry(values.residingCountry) || !isCreation
+                            }
                             data-testid="includeVAT-switch"
                           />
                         }

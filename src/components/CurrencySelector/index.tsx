@@ -41,6 +41,7 @@ const CurrencySelector = ({
       error={error}
       helperText={helperText}
       id="filled-select-currency-native"
+      data-testid="currency-selector"
       select
       label={t('currency-word')}
       variant="filled"

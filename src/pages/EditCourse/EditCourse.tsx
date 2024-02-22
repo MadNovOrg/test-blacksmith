@@ -322,7 +322,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           }
 
           const isOpenCourse = courseData.type === Course_Type_Enum.Open
-          const isClosedCourse = courseData.type === Course_Type_Enum.Closed
 
           const editResponse = await updateCourse({
             courseId: course.id,
@@ -388,11 +387,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     aolRegion: courseData.aolRegion,
                   }
                 : null),
-              ...(isOpenCourse || isClosedCourse
+              ...(isOpenCourse
                 ? {
                     price: courseData.price,
-                    priceCurrency: courseData.priceCurrency,
-                    includeVAT: courseData.includeVAT,
                   }
                 : {}),
               residingCountry: courseData.residingCountry,
@@ -522,40 +519,46 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     course?.type === Course_Type_Enum.Indirect &&
     !editAttendeesForbiddenStatuses.includes(course?.status)
 
+  const baseDisabledFields: DisabledFields[] = useMemo(
+    () =>
+      course
+        ? [
+            'accreditedBy',
+            'courseLevel',
+            'bildStrategies',
+            'blendedLearning',
+            'reaccreditation',
+            'conversion',
+            ...((course.type === Course_Type_Enum.Closed
+              ? ['price']
+              : []) as DisabledFields[]),
+          ]
+        : [],
+    [course]
+  )
+
   const disabledFields = useMemo(() => {
-    if (course) {
-      if (!acl.canEditWithoutRestrictions(course.type)) {
-        return new Set<DisabledFields>([
-          'accreditedBy',
-          'organization',
-          'bookingContact',
-          'courseLevel',
-          'blendedLearning',
-          'reaccreditation',
-          'deliveryType',
-          'usesAOL',
-          'aolCountry',
-          'aolRegion',
-          'minParticipants',
-          ...(canEditAttendees
-            ? ([] as Array<DisabledFields>)
-            : (['maxParticipants'] as Array<DisabledFields>)),
-          'bildStrategies',
-          'conversion',
-        ])
-      }
-      return new Set<DisabledFields>([
-        'accreditedBy',
-        'courseLevel',
-        'bildStrategies',
-        'blendedLearning',
-        'reaccreditation',
-        'conversion',
-      ])
+    if (!course) {
+      return new Set<DisabledFields>([])
+    }
+    if (acl.canEditWithoutRestrictions(course.type)) {
+      return new Set<DisabledFields>(baseDisabledFields)
     }
 
-    return new Set([])
-  }, [acl, canEditAttendees, course])
+    return new Set<DisabledFields>([
+      ...baseDisabledFields,
+      'organization',
+      'bookingContact',
+      'deliveryType',
+      'usesAOL',
+      'aolCountry',
+      'aolRegion',
+      'minParticipants',
+      ...(canEditAttendees
+        ? ([] as Array<DisabledFields>)
+        : (['maxParticipants'] as Array<DisabledFields>)),
+    ])
+  }, [acl, canEditAttendees, course, baseDisabledFields])
 
   const seniorOrPrincipalLead = useMemo(() => {
     return (
