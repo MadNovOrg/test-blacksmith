@@ -50,7 +50,7 @@ import { SchemaDescription } from 'yup'
 
 import { CountryDropdown } from '@app/components/CountryDropdown'
 import CurrencySelector, {
-  defaultCurrency,
+  defaultCurrencyCode,
 } from '@app/components/CurrencySelector'
 import { NumericTextField } from '@app/components/NumericTextField'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
@@ -564,7 +564,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       bildStrategies: courseInput?.bildStrategies ?? defaultStrategies,
       conversion: courseInput?.conversion ?? false,
       price: courseInput?.price,
-      priceCurrency: courseInput?.priceCurrency ?? defaultCurrency,
+      priceCurrency: courseInput?.priceCurrency ?? defaultCurrencyCode,
       includeVAT: courseInput?.includeVAT,
       renewalCycle: courseInput?.renewalCycle,
       ...(isResidingCountryEnabled
@@ -2127,7 +2127,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                             .round(2)
                             .toNumber()
                         : 0),
-                    currency: values.priceCurrency ?? defaultCurrency,
+                    currency: values.priceCurrency ?? defaultCurrencyCode,
                   })}
                 </Typography>
               </InfoRow>

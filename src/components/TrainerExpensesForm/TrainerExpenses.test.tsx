@@ -1,6 +1,10 @@
 import Chance from 'chance'
 
-import { Course_Trainer_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Trainer_Type_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
+import { CreateCourseProvider } from '@app/pages/CreateCourse/components/CreateCourseProvider'
 import { TrainerInput, TransportMethod } from '@app/types'
 
 import { render, screen, userEvent, waitFor, within, act } from '@test/index'
@@ -213,11 +217,20 @@ const runTestsForTrainer = async (trainer: TrainerInput) => {
   ).toBeNull()
 }
 
+const setup = (trainers: TrainerInput[]) =>
+  waitFor(() =>
+    render(
+      <CreateCourseProvider courseType={Course_Type_Enum.Closed}>
+        <TrainerExpensesForm trainers={trainers} />
+      </CreateCourseProvider>
+    )
+  )
+
 describe('component: TrainerExpensesForm', () => {
   // eslint-disable-next-line vitest/expect-expect
   it('allows inputting expenses for single trainer', async () => {
     const [trainer] = makeTrainers({ lead: true })
-    await waitFor(() => render(<TrainerExpensesForm trainers={[trainer]} />))
+    await setup([trainer])
 
     await runTestsForTrainer(trainer)
   })
@@ -225,7 +238,7 @@ describe('component: TrainerExpensesForm', () => {
   it('allows inputting expenses for multiple trainers', async () => {
     const trainers = makeTrainers({ lead: true, assistant: 1, moderator: true })
 
-    await waitFor(() => render(<TrainerExpensesForm trainers={trainers} />))
+    await setup(trainers)
 
     await runTestsForTrainer(trainers[0])
     await runTestsForTrainer(trainers[1])

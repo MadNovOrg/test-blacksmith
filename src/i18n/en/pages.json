@@ -410,7 +410,7 @@
       "accommodation": "Accommodation",
       "accommodation-nights": "Number of nights",
       "accommodation-cost": "Accommodation cost per night",
-      "accommodation-caption": "In addition, £30 per night charged for subsistence",
+      "accommodation-caption": "In addition, £30 per night charged for subsistence (applicable for UK)",
       "subsistence": "Subsistence",
       "another-trip": "Another trip",
       "miscellaneous-costs": "Miscellaneous costs",
@@ -622,7 +622,7 @@
         "no-evaluations": "No evaluations to export",
         "lead-trainer": " (Lead Trainer)",
         "assist-trainer": " (Assist Trainer)",
-        "moderator": " (Moderator)" 
+        "moderator": " (Moderator)"
       },
       "certifications": {
         "title": "Certifications"

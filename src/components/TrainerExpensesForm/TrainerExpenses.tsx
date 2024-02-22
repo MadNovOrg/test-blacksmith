@@ -8,7 +8,9 @@ import {
   FormControlLabel,
   FormHelperText,
   Grid,
+  InputAdornment,
   InputLabel,
+  InputProps,
   Switch,
   TextField,
   Typography,
@@ -20,10 +22,18 @@ import { useTranslation } from 'react-i18next'
 
 import { DropdownMenu } from '@app/components/DropdownMenu'
 import { NumericTextField } from '@app/components/NumericTextField'
+import { Accreditors_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import { useCreateCourse } from '@app/pages/CreateCourse/components/CreateCourseProvider'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 import { ExpensesInput, TrainerInput, TransportMethod } from '@app/types'
 import { DEFAULT_ACCOMMODATION_COST_PER_NIGHT, noop } from '@app/util'
+
+import {
+  CurrenciesSymbols,
+  CurrencyCode,
+  defaultCurrencyCode,
+} from '../CurrencySelector'
 
 import { getError, transportMethodToDropdownItem } from './helpers'
 
@@ -155,6 +165,28 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
 }) => {
   const { t } = useTranslation()
+  const { courseData } = useCreateCourse()
+  const priceCurrencySymbol =
+    CurrenciesSymbols[
+      (courseData?.priceCurrency as CurrencyCode) ?? defaultCurrencyCode
+    ]
+  const shouldShowCurrency =
+    courseData?.type === Course_Type_Enum.Closed &&
+    courseData?.accreditedBy === Accreditors_Enum.Icm
+
+  const currencyAdornmentProps: InputProps = useMemo(
+    () =>
+      shouldShowCurrency
+        ? {
+            startAdornment: (
+              <InputAdornment position="start" disablePointerEvents>
+                {priceCurrencySymbol}
+              </InputAdornment>
+            ),
+          }
+        : {},
+    [shouldShowCurrency, priceCurrencySymbol]
+  )
 
   const schema = useMemo(() => makeSchema(t), [t])
 
@@ -259,6 +291,11 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                       pattern: '\\d*(\\.\\d*)?',
                       'data-testid': `trip-${idx}-input`,
                     }}
+                    InputProps={
+                      entry.method !== TransportMethod.CAR
+                        ? currencyAdornmentProps
+                        : {}
+                    }
                     error={Boolean(getError(errors, idx, 'value'))}
                   />
                   <FormHelperText error>
@@ -414,6 +451,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                       pattern: '\\d*(\\.\\d*)?',
                       'data-testid': `trip-${idx}-accommodation-cost`,
                     }}
+                    InputProps={currencyAdornmentProps}
                     error={Boolean(getError(errors, idx, 'accommodationCost'))}
                   />
                   <Typography variant="caption">
@@ -481,6 +519,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                   inputMode: 'numeric',
                   pattern: '\\d*(\\.\\d*)?',
                 }}
+                InputProps={currencyAdornmentProps}
                 error={Boolean(getError(errors, idx, 'value'))}
               />
               <FormHelperText error>
