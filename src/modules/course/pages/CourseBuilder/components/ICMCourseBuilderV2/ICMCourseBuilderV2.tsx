@@ -269,6 +269,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   const confirmModules = () => {
+    setIsTimeCommitmentModalOpen(false)
     submitModules({
       id: Number(courseId),
       curriculum: modulesSelectionRef.current,

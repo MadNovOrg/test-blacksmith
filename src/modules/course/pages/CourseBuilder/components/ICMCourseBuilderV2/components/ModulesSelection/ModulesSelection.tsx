@@ -238,17 +238,18 @@ export const ModulesSelection: React.FC<Props> = ({
           <Typography variant="h3">
             {t('pages.trainer-base.create-course.new-course.course-summary')}
           </Typography>
-
-          <Box>
-            <Typography variant="h6" px={1} data-testid="progress-bar-label">
-              {formatDurationShort(estimatedDuration)}
-            </Typography>
-            <Typography variant="body2" px={1}>
-              {t(
-                'pages.trainer-base.create-course.new-course.estimated-duration'
-              )}
-            </Typography>
-          </Box>
+          {showDuration ? (
+            <Box>
+              <Typography variant="h6" px={1} data-testid="progress-bar-label">
+                {formatDurationShort(estimatedDuration)}
+              </Typography>
+              <Typography variant="body2" px={1}>
+                {t(
+                  'pages.trainer-base.create-course.new-course.estimated-duration'
+                )}
+              </Typography>
+            </Box>
+          ) : null}
         </Box>
 
         {slots?.afterChosenModulesTitle && (
