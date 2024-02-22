@@ -1,3 +1,5 @@
+import CheckedAllIcon from '@mui/icons-material/CheckCircle'
+import UncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import {
   Alert,
   Box,
@@ -6,6 +8,9 @@ import {
   Link,
   Typography,
   Container,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
 } from '@mui/material'
 import { cond, constant, matches, stubTrue } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -17,6 +22,7 @@ import { BackButton } from '@app/components/BackButton'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   Course_Level_Enum,
+  ModuleSettingsQuery,
   SaveCourseModulesBildMutation,
   SaveCourseModulesBildMutationVariables,
 } from '@app/generated/graphql'
@@ -32,6 +38,8 @@ import {
 
 import { useCourseToBuild } from '../../hooks/useCourseToBuild'
 import { Hero } from '../Hero/Hero'
+import { ModuleAccordion } from '../ICMCourseBuilderV2/components/ModuleAccordion/ModuleAccordion'
+import { useModuleSettings } from '../ICMCourseBuilderV2/hooks/useModuleSettings'
 import { LeftPane, PanesContainer, RightPane } from '../Panes/Panes'
 
 import { StrategyAccordion } from './components/StrategyAccordion'
@@ -143,14 +151,18 @@ export const BILDCourseBuilder: React.FC<
   const [disabledStrategies, setDisabledStrategies] = useState<
     Record<string, boolean>
   >({})
-  const [selectedModules, setSelectedModules] = useState<
+  const [selectedStrategyModules, setSelectedStrategyModules] = useState<
     Record<string, boolean>
   >({})
 
+  const [selectedModules, setSelectedModules] = useState<
+    ModuleSettingsQuery['moduleSettings']
+  >([])
+
   const {
     strategies: bildStrategies,
-    error: modulesLoadingError,
-    isLoading: modulesLoading,
+    error: strategiesLoadingError,
+    isLoading: strategiesLoading,
   } = useBildStrategies(true)
 
   const { addSnackbarMessage, getSnackbarMessage } = useSnackbar()
@@ -161,6 +173,10 @@ export const BILDCourseBuilder: React.FC<
     courseId: Number(courseId),
     withStrategies: true,
   })
+
+  const [
+    { data: moduleSettingsData, error: modulesError, fetching: modulesLoading },
+  ] = useModuleSettings(courseData?.course)
 
   const showEstimatedDuration = courseData?.course?.level
     ? ![
@@ -190,8 +206,8 @@ export const BILDCourseBuilder: React.FC<
 
   const courseLoadingStatus = getSWRLoadingStatus(courseData, courseDataError)
 
-  const setInitialModules = useCallback(() => {
-    setSelectedModules(
+  const setInitialStrategyModules = useCallback(() => {
+    setSelectedStrategyModules(
       courseData?.course
         ? getPreselectedModules({
             courseLevel: courseData.course.level,
@@ -212,10 +228,10 @@ export const BILDCourseBuilder: React.FC<
   }, [bildStrategies, courseData?.course])
 
   useEffect(() => {
-    if (courseData && Object.keys(selectedModules).length === 0) {
-      setInitialModules()
+    if (courseData && Object.keys(selectedStrategyModules).length === 0) {
+      setInitialStrategyModules()
     }
-  }, [courseData, selectedModules, setInitialModules])
+  }, [courseData, selectedStrategyModules, setInitialStrategyModules])
 
   const courseStrategies = useMemo(() => {
     return bildStrategies.filter(s =>
@@ -234,8 +250,8 @@ export const BILDCourseBuilder: React.FC<
     const groupsSeen: Record<string, boolean> = {}
     const strategySeen: Record<string, boolean> = {}
 
-    Object.keys(selectedModules).forEach(key => {
-      if (!selectedModules[key]) return
+    Object.keys(selectedStrategyModules).forEach(key => {
+      if (!selectedStrategyModules[key]) return
 
       const [strategyName, ...parts] = key.split('.')
 
@@ -281,7 +297,7 @@ export const BILDCourseBuilder: React.FC<
     })
 
     return total
-  }, [selectedModules, courseStrategies])
+  }, [selectedStrategyModules, courseStrategies])
 
   const handleSubmit = async () => {
     const course = courseData?.course
@@ -296,7 +312,7 @@ export const BILDCourseBuilder: React.FC<
 
       if (strategyName === 'PRIMARY' || strategyName === 'SECONDARY') return
 
-      if (!hasKeyStartingWith(selectedModules, `${strategyName}.`)) {
+      if (!hasKeyStartingWith(selectedStrategyModules, `${strategyName}.`)) {
         hasError = true
         setSubmitError(
           t(
@@ -310,11 +326,22 @@ export const BILDCourseBuilder: React.FC<
 
     if (hasError) return
 
-    const transformedSelection = transformSelection(selectedModules)
+    const transformedSelection = transformSelection(selectedStrategyModules)
+    const modulesSelection: Record<string, { groups: []; modules: unknown[] }> =
+      {}
+
+    selectedModules.forEach(moduleSetting => {
+      modulesSelection[
+        moduleSetting.module.displayName ?? moduleSetting.module.name
+      ] = {
+        groups: [],
+        modules: moduleSetting.module.lessons.items,
+      }
+    })
 
     saveStrategies({
       courseId: course.id,
-      modules: transformedSelection,
+      modules: { ...transformedSelection, ...modulesSelection },
       duration: estimatedDuration,
       status: null,
     })
@@ -364,6 +391,16 @@ export const BILDCourseBuilder: React.FC<
     }
   })
 
+  useEffect(() => {
+    if (moduleSettingsData?.moduleSettings.length) {
+      setSelectedModules(
+        moduleSettingsData.moduleSettings.filter(
+          moduleSetting => moduleSetting.mandatory
+        )
+      )
+    }
+  }, [moduleSettingsData])
+
   if (courseLoadingStatus === LoadingStatus.SUCCESS && !courseData?.course) {
     return (
       <NotFound
@@ -375,18 +412,22 @@ export const BILDCourseBuilder: React.FC<
 
   return (
     <Container sx={{ pt: 3 }}>
-      {(courseLoadingStatus === LoadingStatus.ERROR || modulesLoadingError) && (
+      {courseLoadingStatus === LoadingStatus.ERROR ||
+      strategiesLoadingError ||
+      modulesError ? (
         <Alert severity="error" variant="outlined">
           {t('internal-error')}
         </Alert>
-      )}
-      {(courseLoadingStatus === LoadingStatus.FETCHING || modulesLoading) && (
+      ) : null}
+      {courseLoadingStatus === LoadingStatus.FETCHING ||
+      strategiesLoading ||
+      modulesLoading ? (
         <Box display="flex" margin="auto">
           <CircularProgress sx={{ m: 'auto' }} size={64} />
         </Box>
-      )}
+      ) : null}
 
-      {bildStrategies.length && courseData?.course && (
+      {bildStrategies.length && courseData?.course && !modulesLoading && (
         <Box pb={6}>
           <BackButton label={t('pages.course-participants.back-button')} />
 
@@ -408,37 +449,86 @@ export const BILDCourseBuilder: React.FC<
           ) : null}
 
           <PanesContainer>
-            <LeftPane>
-              <Typography variant="h3">
+            <LeftPane data-testid="all-modules">
+              <Typography variant="h3" mb={4}>
                 {t(
                   'pages.trainer-base.create-course.new-course.modules-available'
                 )}
               </Typography>
-              <Box
-                data-testid="all-modules"
-                display="flex"
-                flexWrap="wrap"
-                mt={{ xs: 2, md: 4 }}
-              >
-                {courseStrategies.map(s => (
-                  <StrategyAccordion
-                    id={s.id}
-                    key={s.id}
-                    expanded={expanded === s.id}
-                    onToggle={setExpanded}
-                    name={s.name}
-                    duration={s.duration}
-                    modules={s.modules}
-                    state={selectedModules}
-                    onChange={o => setSelectedModules(s => ({ ...s, ...o }))}
-                    disabled={disabledStrategies[s.name] || false}
-                    showAsterisk={
-                      (showMandatoryNotice && disabledStrategies[s.name]) ||
-                      false
-                    }
-                  />
-                ))}
-              </Box>
+
+              {courseStrategies.map(s => (
+                <StrategyAccordion
+                  id={s.id}
+                  key={s.id}
+                  expanded={expanded === s.id}
+                  onToggle={setExpanded}
+                  name={s.name}
+                  duration={s.duration}
+                  modules={s.modules}
+                  state={selectedStrategyModules}
+                  onChange={o =>
+                    setSelectedStrategyModules(s => ({ ...s, ...o }))
+                  }
+                  disabled={disabledStrategies[s.name] || false}
+                  showAsterisk={
+                    (showMandatoryNotice && disabledStrategies[s.name]) || false
+                  }
+                />
+              ))}
+
+              {moduleSettingsData?.moduleSettings.length
+                ? moduleSettingsData.moduleSettings.map(moduleSetting => (
+                    <ModuleAccordion
+                      key={moduleSetting.module.id}
+                      moduleSetting={moduleSetting}
+                      isSelected={true}
+                      renderName={moduleSetting => (
+                        <FormGroup>
+                          <FormControlLabel
+                            disabled={moduleSetting.mandatory}
+                            control={
+                              <Checkbox
+                                id={moduleSetting.module.id}
+                                disableRipple
+                                icon={<UncheckedIcon color="inherit" />}
+                                checkedIcon={<CheckedAllIcon color="inherit" />}
+                                color="default"
+                                sx={{
+                                  color: 'white',
+                                }}
+                                value={moduleSetting.module.id}
+                                checked={true}
+                              />
+                            }
+                            label={
+                              <>
+                                <Typography
+                                  color="white"
+                                  data-testid="module-name"
+                                >
+                                  <span>
+                                    {moduleSetting.module.displayName ??
+                                      moduleSetting.module.name}
+                                  </span>
+                                </Typography>
+                                {moduleSetting.duration ? (
+                                  <Typography variant="body2" color="white">
+                                    {t('minimum')}{' '}
+                                    <span data-testid="module-duration">
+                                      {formatDurationShort(
+                                        moduleSetting.duration
+                                      )}
+                                    </span>
+                                  </Typography>
+                                ) : null}
+                              </>
+                            }
+                          />
+                        </FormGroup>
+                      )}
+                    />
+                  ))
+                : null}
             </LeftPane>
 
             <RightPane>
@@ -467,20 +557,14 @@ export const BILDCourseBuilder: React.FC<
                 ) : null}
               </Box>
 
-              <Box
-                display="flex"
-                flex={1}
-                flexDirection="column"
-                my={{ xs: 4, md: 2 }}
-                data-testid="course-modules"
-              >
+              <Box my={{ xs: 4, md: 2 }} data-testid="course-modules">
                 {courseStrategies.map(s =>
-                  hasKeyStartingWith(selectedModules, s.name) ? (
+                  hasKeyStartingWith(selectedStrategyModules, s.name) ? (
                     <StrategyAccordionSummary
                       key={s.id}
                       name={s.name}
                       modules={s.modules}
-                      state={selectedModules}
+                      state={selectedStrategyModules}
                       showAsterisk={
                         (showMandatoryNotice && disabledStrategies[s.name]) ||
                         false
@@ -488,14 +572,40 @@ export const BILDCourseBuilder: React.FC<
                     />
                   ) : null
                 )}
+
+                {selectedModules.map(moduleSetting => (
+                  <ModuleAccordion
+                    key={moduleSetting.module.id}
+                    moduleSetting={moduleSetting}
+                    isSelected
+                    data-testid={`selected-module-group-${moduleSetting.module.id}`}
+                    renderName={moduleSetting => (
+                      <Box display="flex" alignItems="center">
+                        <CheckedAllIcon color="inherit" />
+
+                        <Box ml={1.5}>
+                          <Typography data-testid="module-name">
+                            <span>
+                              {moduleSetting.module.displayName ??
+                                moduleSetting.module.name}
+                            </span>
+                          </Typography>
+                          {moduleSetting.duration ? (
+                            <Typography variant="body2" color="white">
+                              {t('minimum')}{' '}
+                              <span data-testid="module-duration">
+                                {formatDurationShort(moduleSetting.duration)}
+                              </span>
+                            </Typography>
+                          ) : null}
+                        </Box>
+                      </Box>
+                    )}
+                  />
+                ))}
               </Box>
 
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
+              <Box mt={4}>
                 <Button
                   color="primary"
                   variant="contained"
@@ -512,7 +622,7 @@ export const BILDCourseBuilder: React.FC<
                 <Button
                   color="secondary"
                   variant="outlined"
-                  onClick={setInitialModules}
+                  onClick={setInitialStrategyModules}
                   disabled={false}
                   data-testid="submit-button"
                   fullWidth

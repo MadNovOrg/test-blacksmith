@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { noop } from 'ts-essentials'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
@@ -11,14 +12,24 @@ import { LoadingStatus } from '@app/util'
 import { chance, render, screen, userEvent, within } from '@test/index'
 
 import { buildCourse } from '../../test-utils'
+import { useModuleSettings } from '../ICMCourseBuilderV2/hooks/useModuleSettings'
 
 import { BILDCourseBuilder } from './BILDCourseBuilder'
 
 vi.mock('@app/hooks/useBildStrategies')
+vi.mock('../ICMCourseBuilderV2/hooks/useModuleSettings')
 
 const useBildStrategiesMocked = vi.mocked(useBildStrategies)
+const useModuleSettingsMocked = vi.mocked(useModuleSettings)
 
 describe('component: BILDCourseBuilder', () => {
+  beforeEach(() => {
+    useModuleSettingsMocked.mockReturnValue([
+      { data: { moduleSettings: [] }, fetching: false, stale: false },
+      noop,
+    ])
+  })
+
   it('renders course builder', async () => {
     const courseId = 10001
 

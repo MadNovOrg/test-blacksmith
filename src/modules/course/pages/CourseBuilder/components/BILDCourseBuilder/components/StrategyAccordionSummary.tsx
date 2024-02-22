@@ -34,6 +34,8 @@ export const StrategyAccordionSummary: React.FC<
       expanded={open}
       onChange={() => setOpen(!open)}
       sx={{ mb: 3, py: 0, width: '100%' }}
+      TransitionProps={{ timeout: 0 }}
+      disableGutters
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
@@ -45,6 +47,7 @@ export const StrategyAccordionSummary: React.FC<
           borderTopRightRadius: 8,
           borderBottomLeftRadius: open ? 0 : 8,
           borderBottomRightRadius: open ? 0 : 8,
+          opacity: 0.6,
         }}
       >
         <Box display="flex" alignItems="center">

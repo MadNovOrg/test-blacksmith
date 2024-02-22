@@ -69,6 +69,8 @@ export const StrategyAccordion: React.FC<
       expanded={expanded}
       onChange={handleToggle}
       sx={{ mb: 3, py: 0, width: '100%' }}
+      TransitionProps={{ timeout: 0 }}
+      disableGutters
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}

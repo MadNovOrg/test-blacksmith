@@ -43,7 +43,7 @@ export const BILDGradedOnAccordion: React.FC<Props> = ({ participant }) => {
                 sx={{ display: 'flex', alignItems: 'center' }}
               >
                 <Typography fontWeight={600}>
-                  {t(`common.bild-strategies.${strategyName}`)}
+                  {t(`common.bild-strategies.${strategyName}`) || strategyName}
                 </Typography>
               </AccordionSummary>
 

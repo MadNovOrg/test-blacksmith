@@ -373,7 +373,8 @@ export const CertificateInfo: React.FC<
                   expandIcon={<ExpandMoreIcon />}
                 >
                   <Typography variant="subtitle2">
-                    {_t(`common.bild-strategies.${strategyName}`)}
+                    {_t(`common.bild-strategies.${strategyName}`) ||
+                      strategyName}
                   </Typography>
                 </AccordionSummary>
 

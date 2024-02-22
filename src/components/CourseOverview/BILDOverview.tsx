@@ -37,11 +37,10 @@ export const BILDOverview: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   const { modules } = course.bildModules[0]
-  const strategies = course.bildStrategies
 
   return (
     <>
-      {strategies.map(({ strategyName }) => {
+      {Object.keys(modules).map(strategyName => {
         const numberOfModules: number =
           modules[strategyName].modules?.length ?? 0
 
@@ -70,7 +69,7 @@ export const BILDOverview: React.FC<React.PropsWithChildren<Props>> = ({
                   sx={{ marginRight: 2 }}
                 />
                 <Typography variant="body1">
-                  {t(`bild-strategies.${strategyName}`)}
+                  {t(`bild-strategies.${strategyName}`) || strategyName}
                 </Typography>
                 <Typography variant="body2" ml={1}>
                   {t('areas', { count: modulesCount })}

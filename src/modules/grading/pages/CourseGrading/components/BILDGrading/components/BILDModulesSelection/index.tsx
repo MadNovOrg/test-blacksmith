@@ -177,7 +177,8 @@ export const BILDModulesSelection: FC<Props> = ({
                 }
                 label={
                   <Typography>
-                    {t(`common.bild-strategies.${strategyName}`)}
+                    {t(`common.bild-strategies.${strategyName}`) ||
+                      strategyName}
                   </Typography>
                 }
               />
