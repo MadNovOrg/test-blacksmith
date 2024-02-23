@@ -28,16 +28,6 @@ type CoursePriceType = {
   }[]
 }
 
-type CourseType = {
-  course: {
-    id: number
-    type: string
-    level: string
-    go1Integration: boolean
-    reaccreditation: boolean
-  }[]
-}
-
 const GET_COURSE_PRICING_QUERY = gql`
   query course_pricing {
     course_pricing {
@@ -52,25 +42,13 @@ const GET_COURSE_PRICING_QUERY = gql`
   }
 `
 
-const GET_COURSES_QUERY = gql`
-  query courses {
-    course(where: { price: { _is_null: true } }) {
-      id
-      type
-      level
-      go1Integration
-      reaccreditation
-    }
-  }
-`
-
 const UPDATE_COURSE_PRICE_MUTATION = gql`
   mutation updateCoursePrice(
     $price: numeric!
     $priceCurrency: String!
     $includeVAT: Boolean!
-    $type: String!
-    $level: String!
+    $type: course_type_enum!
+    $level: course_level_enum!
     $reaccrediation: Boolean!
     $go1Integration: Boolean!
   ) {
@@ -102,12 +80,8 @@ async function updateCoursePrice() {
     const coursePrices: CoursePriceType = await hasuraClient.request(
       GET_COURSE_PRICING_QUERY
     )
-    const courses: CourseType = await hasuraClient.request(GET_COURSES_QUERY)
 
-    if (
-      coursePrices.course_pricing.length !== 0 &&
-      courses.course.length !== 0
-    ) {
+    if (coursePrices.course_pricing.length !== 0) {
       try {
         await Promise.all(
           coursePrices.course_pricing.map(coursePrice => {

@@ -10,6 +10,8 @@ on:
         type: choice
         options:
           - DEV
+          - STG
+          - PROD
 
 permissions:
   id-token: write
