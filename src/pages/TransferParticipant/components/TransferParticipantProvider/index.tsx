@@ -24,7 +24,7 @@ import { EligibleCourse, TransferStepsEnum } from '../../types'
 
 export type FromCourse = Pick<
   Course,
-  'id' | 'type' | 'status' | 'level' | 'course_code'
+  'id' | 'type' | 'status' | 'level' | 'course_code' | 'priceCurrency'
 > & {
   start?: string | null
   end?: string | null

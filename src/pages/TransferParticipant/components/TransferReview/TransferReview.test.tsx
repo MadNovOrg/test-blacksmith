@@ -161,6 +161,7 @@ describe('page: TransferReview', () => {
       start: addDays(new Date(), 20).toISOString(),
       end: addDays(new Date(), 20).toISOString(),
       type: Course_Type_Enum.Open,
+      priceCurrency: 'GBP',
     }
 
     const toCourse: EligibleCourse = {

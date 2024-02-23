@@ -15,6 +15,7 @@ export type CourseInfoPanelProps = {
     id: number
     courseCode: string
     level?: Course_Level_Enum | CourseLevel | null
+    priceCurrency?: string
     startDate: Course_Schedule['start']
     endDate: Course_Schedule['end']
     venue?: string

@@ -7,6 +7,7 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import TextField from '@mui/material/TextField'
 import { merge } from 'lodash-es'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
@@ -16,6 +17,12 @@ import { TransferModeEnum } from '@app/pages/TransferParticipant/components/Tran
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 import { customFeeFormat } from '@app/util'
+
+import {
+  CurrenciesSymbols,
+  CurrencyCode,
+  defaultCurrencyCode,
+} from '../CurrencySelector'
 
 export const schema = yup.object({
   feeType: yup
@@ -38,12 +45,14 @@ export type FormValues = yup.InferType<typeof schema>
 type Props = {
   mode?: TransferModeEnum
   optionLabels?: Partial<Record<TransferFeeType, string>>
+  priceCurrency?: string | null | undefined
 }
 
 export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
   mode = TransferModeEnum.ADMIN_TRANSFERS,
   children,
   optionLabels,
+  priceCurrency,
 }) => {
   const { t, _t } = useScopedTranslation('components.fees-form')
 
@@ -56,6 +65,10 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
   const resolvedLabels = merge(defaultLabels, optionLabels)
 
   const orgAdminMode = mode === TransferModeEnum.ORG_ADMIN_TRANSFERS
+
+  const isInternationalAttendeeTransferEnabled = useFeatureFlagEnabled(
+    'international-attendee-transfer'
+  )
 
   const { watch, control, register, formState, setValue } =
     useFormContext<FormValues>()
@@ -135,7 +148,11 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
             }
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">£</InputAdornment>
+                <InputAdornment position="start">
+                  {isInternationalAttendeeTransferEnabled && priceCurrency
+                    ? CurrenciesSymbols[priceCurrency as CurrencyCode]
+                    : CurrenciesSymbols[defaultCurrencyCode]}
+                </InputAdornment>
               ),
             }}
             {...register('customFee', { valueAsNumber: true })}

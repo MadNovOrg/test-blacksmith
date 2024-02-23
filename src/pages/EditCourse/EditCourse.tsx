@@ -976,6 +976,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               canRescheduleCourseEndDate || Boolean(alignedWithProtocol)
             }
             level={course.level as unknown as Course_Level_Enum}
+            priceCurrency={course.priceCurrency}
           />
 
           {!showTrainerRatioWarning ? (

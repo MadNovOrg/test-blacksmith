@@ -16,6 +16,7 @@ export type FormValues = yup.InferType<typeof feesFormSchema>
 type Props = {
   courseStartDate: Date
   courseLevel: Course_Level_Enum
+  priceCurrency: string | null | undefined
   onChange?: (values: FormValues, isValid: boolean) => void
   mode?: TransferModeEnum
   termsTable?: React.ReactElement
@@ -25,6 +26,7 @@ type Props = {
 const FeesPanel: React.FC<React.PropsWithChildren<Props>> = ({
   courseStartDate,
   courseLevel,
+  priceCurrency,
   onChange,
   mode = TransferModeEnum.ADMIN_TRANSFERS,
 }) => {
@@ -59,6 +61,7 @@ const FeesPanel: React.FC<React.PropsWithChildren<Props>> = ({
         <FormProvider {...methods}>
           <FeesForm
             mode={mode}
+            priceCurrency={priceCurrency}
             optionLabels={{
               [TransferFeeType.ApplyTerms]: t('apply-terms-option'),
             }}

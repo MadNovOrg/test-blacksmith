@@ -9,7 +9,12 @@ import { ReviewChangesModal } from '.'
 describe('component: ReviewChangesModal', () => {
   it('validates the reason field', async () => {
     render(
-      <ReviewChangesModal diff={[]} open level={Course_Level_Enum.Level_1} />
+      <ReviewChangesModal
+        diff={[]}
+        open
+        level={Course_Level_Enum.Level_1}
+        priceCurrency={'GBP'}
+      />
     )
 
     const confirmButton = screen.getByText(/confirm changes/i, {
@@ -37,6 +42,7 @@ describe('component: ReviewChangesModal', () => {
         diff={[dateDiff]}
         open
         withFees
+        priceCurrency={'GBP'}
         level={Course_Level_Enum.Level_1}
       />
     )
@@ -69,6 +75,7 @@ describe('component: ReviewChangesModal', () => {
       <ReviewChangesModal
         diff={[dateDiff]}
         open
+        priceCurrency={'GBP'}
         withFees
         level={Course_Level_Enum.Level_1}
       />
@@ -106,6 +113,7 @@ describe('component: ReviewChangesModal', () => {
         diff={[dateDiff]}
         open
         withFees
+        priceCurrency={'GBP'}
         level={Course_Level_Enum.Level_1}
       />
     )
@@ -132,6 +140,7 @@ describe('component: ReviewChangesModal', () => {
         diff={[]}
         open
         onCancel={onCancelMock}
+        priceCurrency={'GBP'}
         level={Course_Level_Enum.Level_1}
       />
     )
@@ -155,6 +164,7 @@ describe('component: ReviewChangesModal', () => {
         level={Course_Level_Enum.Level_1}
         diff={[dateDiff]}
         onConfirm={onConfirmMock}
+        priceCurrency={'GBP'}
         open
         withFees
       />

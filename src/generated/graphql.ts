@@ -57084,7 +57084,7 @@ export type TransferParticipantDetailsQueryVariables = Exact<{
 }>;
 
 
-export type TransferParticipantDetailsQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, level: Course_Level_Enum, type: Course_Type_Enum, status?: Course_Status_Enum | null, reaccreditation?: boolean | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } | null, participant?: { __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } } | null };
+export type TransferParticipantDetailsQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, level: Course_Level_Enum, type: Course_Type_Enum, status?: Course_Status_Enum | null, reaccreditation?: boolean | null, priceCurrency?: string | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } | null, participant?: { __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } } | null };
 
 export type TransferEligibleCoursesQueryVariables = Exact<{
   fromCourseId: Scalars['Int'];

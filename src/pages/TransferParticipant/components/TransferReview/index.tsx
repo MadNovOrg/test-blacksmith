@@ -148,7 +148,10 @@ export const TransferReview: React.FC<
                 <InfoPanel data-testid="fee-type-panel">
                   <InfoRow
                     label={t('review-transfer.custom-fee')}
-                    value={_t('currency', { amount: fees.customFee })}
+                    value={_t('currency', {
+                      amount: fees.customFee,
+                      currency: fromCourse.priceCurrency,
+                    })}
                   />
                 </InfoPanel>
                 <InfoPanel data-testid="fee-vat-type-panel">
@@ -158,6 +161,7 @@ export const TransferReview: React.FC<
                       amount: new Big((fees.customFee * 20) / 100)
                         .round(2)
                         .toNumber(),
+                      currency: fromCourse.priceCurrency,
                     })}
                   />
                 </InfoPanel>
@@ -173,6 +177,7 @@ export const TransferReview: React.FC<
                           new Big((fees.customFee * 20) / 100)
                             .round(2)
                             .toNumber(),
+                        currency: fromCourse.priceCurrency,
                       })}
                     </Typography>
                   </InfoRow>

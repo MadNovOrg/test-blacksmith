@@ -50,6 +50,7 @@ type Props = {
   withFees?: boolean
   alignedWithProtocol?: boolean
   level: Course_Level_Enum
+  priceCurrency: string | null | undefined
 }
 
 export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
@@ -61,6 +62,7 @@ export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   alignedWithProtocol = true,
   level,
+  priceCurrency,
 }) => {
   const { t } = useScopedTranslation('pages.edit-course.review-changes-modal')
 
@@ -105,6 +107,7 @@ export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
                   optionLabels={{
                     [TransferFeeType.ApplyTerms]: t('apply-terms-option'),
                   }}
+                  priceCurrency={priceCurrency}
                 >
                   <ReschedulingTermsTable
                     startDate={dateDiff.newValue[0]}

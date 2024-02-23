@@ -133,6 +133,7 @@ export const TransferDetails: React.FC<
       <FeesPanel
         courseStartDate={courseStartDate}
         courseLevel={fromCourse.level as unknown as Course_Level_Enum}
+        priceCurrency={fromCourse.priceCurrency}
         onChange={handleFeesChange}
         mode={mode}
       />
