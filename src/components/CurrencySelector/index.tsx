@@ -13,6 +13,8 @@ export const CurrenciesCodes = {
   ['€']: 'EUR',
 } as const
 
+export const defaultCurrency = CurrenciesCodes['£']
+
 export type CurrenciesLabels = keyof typeof CurrenciesCodes
 export type CurrencyCode = (typeof CurrenciesCodes)[CurrenciesLabels]
 
@@ -21,8 +23,6 @@ export const CurrenciesSymbols = Object.fromEntries(
 ) as {
   [key in CurrenciesLabels as (typeof CurrenciesCodes)[key]]: key
 }
-
-export const defaultCurrencyCode = CurrenciesCodes['£']
 
 const CurrencySelector = ({
   error,

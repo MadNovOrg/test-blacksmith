@@ -32,7 +32,7 @@ import { DEFAULT_ACCOMMODATION_COST_PER_NIGHT, noop } from '@app/util'
 import {
   CurrenciesSymbols,
   CurrencyCode,
-  defaultCurrencyCode,
+  defaultCurrency,
 } from '../CurrencySelector'
 
 import { getError, transportMethodToDropdownItem } from './helpers'
@@ -168,7 +168,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
   const { courseData } = useCreateCourse()
   const priceCurrencySymbol =
     CurrenciesSymbols[
-      (courseData?.priceCurrency as CurrencyCode) ?? defaultCurrencyCode
+      (courseData?.priceCurrency as CurrencyCode) ?? defaultCurrency
     ]
   const shouldShowCurrency =
     courseData?.type === Course_Type_Enum.Closed &&

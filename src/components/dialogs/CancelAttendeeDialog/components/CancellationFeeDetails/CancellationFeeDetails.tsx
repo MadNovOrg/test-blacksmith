@@ -8,6 +8,7 @@ import {
   RadioGroup,
   Typography,
 } from '@mui/material'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { PropsWithChildren } from 'react'
 import {
   FieldErrors,
@@ -16,6 +17,11 @@ import {
 } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 
+import {
+  CurrenciesSymbols,
+  CurrencyCode,
+  defaultCurrency,
+} from '@app/components/CurrencySelector'
 import { FormInput } from '@app/components/dialogs/CancelAttendeeDialog/types'
 import { NumericTextField } from '@app/components/NumericTextField'
 import { CancellationFeeType } from '@app/generated/graphql'
@@ -23,6 +29,7 @@ import { CancellationTermsTable } from '@app/pages/EditCourse/components/Cancell
 
 type CancellationFeeDetailsProps = {
   feeType: CancellationFeeType
+  currency: string
   startDate: string
   errors: FieldErrors<FormInput>
   register: (
@@ -40,6 +47,7 @@ export const CancellationFeeDetails: React.FC<
   PropsWithChildren<CancellationFeeDetailsProps>
 > = ({
   feeType,
+  currency,
   startDate,
   errors,
   register,
@@ -48,6 +56,9 @@ export const CancellationFeeDetails: React.FC<
 }) => {
   const { t } = useTranslation()
 
+  const isInternationalAttendeeTransferEnabled = useFeatureFlagEnabled(
+    'international-attendee-transfer'
+  )
   return (
     <Box>
       {showEditFeePercent ? (
@@ -134,7 +145,9 @@ export const CancellationFeeDetails: React.FC<
             endAdornment: (
               <React.Fragment>
                 <Typography variant="body1" color="grey.600">
-                  £
+                  {isInternationalAttendeeTransferEnabled && currency
+                    ? CurrenciesSymbols[currency as CurrencyCode]
+                    : CurrenciesSymbols[defaultCurrency]}
                 </Typography>
               </React.Fragment>
             ),

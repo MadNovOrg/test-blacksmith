@@ -153,6 +153,7 @@
   "type": "Type",
   "amount-due": "Amount due",
   "amount-due-currency": "Amount due (GBP)",
+  "amount-due-custom-currency": "Amount due ({{currency}})",
   "other": "Other",
   "sector": "Sector",
   "select-sector": "Please select a sector to see positions",

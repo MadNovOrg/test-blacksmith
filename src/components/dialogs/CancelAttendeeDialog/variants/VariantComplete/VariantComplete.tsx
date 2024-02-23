@@ -210,26 +210,32 @@ export const VariantComplete = ({
             register={register}
             errors={errors}
             feeType={feeType}
+            currency={course.priceCurrency ?? 'GBP'}
             showEditFeePercent={acl.isTTAdmin() || acl.isTTOps()}
             onSetFeeType={setFeeType}
           />
 
           {feeType === CancellationFeeType.CustomFee ? (
             <Box sx={{ mt: 2 }}>
-              <InfoRow
-                label={t('common.vat')}
-                value={t('currency', {
-                  amount: values.cancellationFee
-                    ? new Big((values.cancellationFee * 20) / 100)
-                        .round(2)
-                        .toNumber()
-                    : '0',
-                })}
-              />
+              {course.includeVAT ? (
+                <InfoRow
+                  label={t('common.vat')}
+                  value={t('currency', {
+                    amount: values.cancellationFee
+                      ? new Big((values.cancellationFee * 20) / 100)
+                          .round(2)
+                          .toNumber()
+                      : '0',
+                    currency: course.priceCurrency,
+                  })}
+                />
+              ) : null}
 
               <InfoRow>
                 <Typography fontWeight={600}>
-                  {t('amount-due-currency')}
+                  {t('amount-due-custom-currency', {
+                    currency: course.priceCurrency,
+                  })}
                 </Typography>
                 <Typography fontWeight={600}>
                   {t('currency', {
@@ -239,6 +245,7 @@ export const VariantComplete = ({
                           .round(2)
                           .toNumber()
                       : 0,
+                    currency: course.priceCurrency,
                   })}
                 </Typography>
               </InfoRow>

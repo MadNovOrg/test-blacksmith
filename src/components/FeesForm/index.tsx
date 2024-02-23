@@ -21,7 +21,7 @@ import { customFeeFormat } from '@app/util'
 import {
   CurrenciesSymbols,
   CurrencyCode,
-  defaultCurrencyCode,
+  defaultCurrency,
 } from '../CurrencySelector'
 
 export const schema = yup.object({
@@ -151,7 +151,7 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
                 <InputAdornment position="start">
                   {isInternationalAttendeeTransferEnabled && priceCurrency
                     ? CurrenciesSymbols[priceCurrency as CurrencyCode]
-                    : CurrenciesSymbols[defaultCurrencyCode]}
+                    : CurrenciesSymbols[defaultCurrency]}
                 </InputAdornment>
               ),
             }}
