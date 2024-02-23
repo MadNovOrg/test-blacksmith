@@ -280,38 +280,6 @@ describe('component: CourseForm - OPEN', () => {
     expect(financeSection).toBeInTheDocument()
   })
 
-  it('disables priceCurrency and VAT fields on edit course', async () => {
-    // Mock course-residing-country and open-icm-course-international-finance to be enabled
-    useFeatureFlagEnabledMock.mockResolvedValue(true)
-
-    const course = buildCourse({
-      overrides: { accreditedBy: Accreditors_Enum.Icm, type },
-    })
-    await waitFor(() =>
-      render(
-        <CourseForm
-          courseInput={courseToCourseInput(course)}
-          type={type}
-          isCreation={false}
-        />,
-        {
-          auth: {
-            activeRole: RoleName.TT_ADMIN,
-          },
-        }
-      )
-    )
-
-    const currencySelector = screen.getByTestId('currency-selector')
-    const VATswitch = screen.getByTestId('includeVAT-switch')
-
-    expect(currencySelector).toBeInTheDocument()
-    expect(VATswitch).toBeInTheDocument()
-
-    expect(currencySelector.children[0]).toHaveClass('Mui-disabled')
-    expect(VATswitch).toHaveClass('Mui-disabled')
-  })
-
   it('disables VAT field on create course when residing country is UK', async () => {
     // Mock course-residing-country and open-icm-course-international-finance to be enabled
     useFeatureFlagEnabledMock.mockResolvedValue(true)

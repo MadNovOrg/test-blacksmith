@@ -520,28 +520,24 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     !editAttendeesForbiddenStatuses.includes(course?.status)
 
   const baseDisabledFields: DisabledFields[] = useMemo(
-    () =>
-      course
-        ? [
-            'accreditedBy',
-            'courseLevel',
-            'bildStrategies',
-            'blendedLearning',
-            'reaccreditation',
-            'conversion',
-            ...((course.type === Course_Type_Enum.Closed
-              ? ['price']
-              : []) as DisabledFields[]),
-          ]
-        : [],
+    () => [
+      'accreditedBy',
+      'courseLevel',
+      'bildStrategies',
+      'blendedLearning',
+      'reaccreditation',
+      'conversion',
+      'priceCurrency',
+      'includeVAT',
+      ...((course?.type === Course_Type_Enum.Closed
+        ? ['price']
+        : []) as DisabledFields[]),
+    ],
     [course]
   )
 
   const disabledFields = useMemo(() => {
-    if (!course) {
-      return new Set<DisabledFields>([])
-    }
-    if (acl.canEditWithoutRestrictions(course.type)) {
+    if (!course || acl.canEditWithoutRestrictions(course.type)) {
       return new Set<DisabledFields>(baseDisabledFields)
     }
 

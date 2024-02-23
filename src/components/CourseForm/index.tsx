@@ -670,6 +670,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const isVirtualCourse = deliveryType === Course_Delivery_Type_Enum.Virtual
   const isMixedCourse = deliveryType === Course_Delivery_Type_Enum.Mixed
   const isF2Fcourse = deliveryType === Course_Delivery_Type_Enum.F2F
+  const hasFinanceSection =
+    isInternationalFinanceEnabled || isClosedCourse || (isBild && isOpenCourse)
 
   const canBlended = isICM
     ? canBeBlended(courseType, courseLevel as Course_Level_Enum, deliveryType)
@@ -2052,7 +2054,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             />
           ) : null}
 
-          {isInternationalFinanceEnabled && (
+          {hasFinanceSection && (
             <InfoPanel
               title={t('components.course-form.finance-section-title')}
               titlePosition="outside"
@@ -2062,185 +2064,156 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 </Box>
               )}
             >
-              <Grid container spacing={2}>
-                <Grid item md={5} sm={12}>
-                  <CurrencySelector
-                    {...register('priceCurrency')}
-                    error={Boolean(errors.priceCurrency)}
-                    fullWidth
-                    helperText={errors.priceCurrency?.message}
-                    value={values.priceCurrency ?? null}
-                    InputLabelProps={{ shrink: true }}
-                    disabled={!isCreation}
-                  />
-                </Grid>
+              {isClosedCourse && (
+                <Grid container spacing={2}>
+                  <Grid item md={6} sm={12}>
+                    <Typography fontWeight={600}>
+                      {t('components.course-form.sales-rep-title')}
+                    </Typography>
 
-                <Grid item md={7} sm={12}>
-                  <TextField
-                    {...register('price')}
-                    value={values?.price}
-                    error={Boolean(errors.price)}
-                    fullWidth
-                    helperText={errors.price?.message ?? ''}
-                    label={t('components.course-form.price')}
-                    placeholder={t('components.course-form.price-placeholder')}
-                    required
-                    type={'number'}
-                    variant="filled"
-                    disabled={disabledFields.has('price')}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </Grid>
-
-                <Grid container item md={12} sm={12} alignSelf={'center'}>
-                  <Controller
-                    name="includeVAT"
-                    control={control}
-                    render={({ field }) => (
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            {...field}
-                            checked={
-                              Boolean(values.includeVAT) ||
-                              isUKCountry(values.residingCountry)
-                            }
-                            disabled={
-                              isUKCountry(values.residingCountry) || !isCreation
-                            }
-                            data-testid="includeVAT-switch"
-                          />
-                        }
-                        label={t('vat')}
-                      />
-                    )}
-                  />
-                </Grid>
-              </Grid>
-
-              <InfoRow>
-                <Typography fontWeight={600}>
-                  {t('pages.order-details.total')}
-                </Typography>
-                <Typography fontWeight={600}>
-                  {t('currency', {
-                    amount:
-                      +(values.price ?? 0) +
-                      (values.includeVAT
-                        ? new Big(((values.price ?? 0) * 20) / 100)
-                            .round(2)
-                            .toNumber()
-                        : 0),
-                    currency: values.priceCurrency ?? defaultCurrency,
-                  })}
-                </Typography>
-              </InfoRow>
-            </InfoPanel>
-          )}
-
-          {(isClosedCourse || (isBild && isOpenCourse)) && (
-            <InfoPanel
-              title={t('components.course-form.finance-section-title')}
-              titlePosition="outside"
-              renderContent={(content, props) => (
-                <Box {...props} p={3} pt={4}>
-                  {content}
-                </Box>
-              )}
-            >
-              <Box>
-                {isClosedCourse && (
-                  <Grid container spacing={2}>
-                    <Grid item md={6} sm={12}>
-                      <Typography fontWeight={600}>
-                        {t('components.course-form.sales-rep-title')}
-                      </Typography>
-
-                      <ProfileSelector
-                        {...register('salesRepresentative')}
-                        roleName={RoleName.SALES_REPRESENTATIVE}
-                        value={values.salesRepresentative ?? undefined}
-                        onChange={profile => {
-                          setValue('salesRepresentative', profile ?? null, {
-                            shouldValidate: true,
-                          })
-                        }}
-                        textFieldProps={{
-                          variant: 'filled',
-                          label: t(
-                            'components.course-form.sales-rep-placeholder'
-                          ),
-                          required: true,
-                          error: Boolean(errors.salesRepresentative?.message),
-                          helperText:
-                            Boolean(errors.salesRepresentative?.message) &&
-                            t('components.course-form.sales-rep-error'),
-                        }}
-                        placeholder={t(
+                    <ProfileSelector
+                      {...register('salesRepresentative')}
+                      roleName={RoleName.SALES_REPRESENTATIVE}
+                      value={values.salesRepresentative ?? undefined}
+                      onChange={profile => {
+                        setValue('salesRepresentative', profile ?? null, {
+                          shouldValidate: true,
+                        })
+                      }}
+                      textFieldProps={{
+                        variant: 'filled',
+                        label: t(
                           'components.course-form.sales-rep-placeholder'
-                        )}
-                        testId="profile-selector-sales-representative"
-                        disabled={disabledFields.has('salesRepresentative')}
+                        ),
+                        required: true,
+                        error: Boolean(errors.salesRepresentative?.message),
+                        helperText:
+                          Boolean(errors.salesRepresentative?.message) &&
+                          t('components.course-form.sales-rep-error'),
+                      }}
+                      placeholder={t(
+                        'components.course-form.sales-rep-placeholder'
+                      )}
+                      testId="profile-selector-sales-representative"
+                      disabled={disabledFields.has('salesRepresentative')}
+                    />
+                  </Grid>
+                  <Grid item md={6} sm={12}>
+                    <Typography fontWeight={600}>
+                      {t('components.course-form.source-title')}
+                    </Typography>
+                    <Controller
+                      name="source"
+                      control={control}
+                      render={({ field }) => (
+                        <SourceDropdown
+                          {...field}
+                          required
+                          {...register('source')}
+                          error={Boolean(errors.source?.message)}
+                          data-testid="source-dropdown"
+                          disabled={disabledFields.has('source')}
+                        />
+                      )}
+                    />
+                  </Grid>
+                </Grid>
+              )}
+              {(isInternationalFinanceEnabled || needsManualPrice) && (
+                <>
+                  <Grid container spacing={2} mt={0}>
+                    <Grid item md={5} sm={12}>
+                      <CurrencySelector
+                        {...register('priceCurrency')}
+                        error={Boolean(errors.priceCurrency)}
+                        fullWidth
+                        helperText={errors.priceCurrency?.message}
+                        value={values.priceCurrency ?? defaultCurrency}
+                        InputLabelProps={{ shrink: true }}
+                        disabled={
+                          !isInternationalFinanceEnabled ||
+                          disabledFields.has('priceCurrency')
+                        }
                       />
                     </Grid>
-                    <Grid item md={6} sm={12}>
-                      <Typography fontWeight={600}>
-                        {t('components.course-form.source-title')}
-                      </Typography>
+
+                    <Grid item md={7} sm={12}>
+                      <TextField
+                        {...register('price')}
+                        value={values?.price}
+                        error={Boolean(errors.price)}
+                        fullWidth
+                        helperText={errors.price?.message ?? ''}
+                        label={t('components.course-form.price')}
+                        placeholder={t(
+                          'components.course-form.price-placeholder'
+                        )}
+                        required
+                        type={'number'}
+                        variant="filled"
+                        InputLabelProps={{ shrink: true }}
+                        data-testid="price-input"
+                        disabled={disabledFields.has('price')}
+                      />
+                    </Grid>
+
+                    <Grid container item md={12} sm={12} alignSelf={'center'}>
                       <Controller
-                        name="source"
+                        name="includeVAT"
                         control={control}
                         render={({ field }) => (
-                          <SourceDropdown
-                            {...field}
-                            required
-                            {...register('source')}
-                            error={Boolean(errors.source?.message)}
-                            data-testid="source-dropdown"
-                            disabled={disabledFields.has('source')}
+                          <FormControlLabel
+                            control={
+                              <Switch
+                                {...field}
+                                checked={
+                                  Boolean(values.includeVAT) ||
+                                  isUKCountry(values.residingCountry)
+                                }
+                                disabled={
+                                  isUKCountry(values.residingCountry) ||
+                                  disabledFields.has('includeVAT')
+                                }
+                                data-testid="includeVAT-switch"
+                              />
+                            }
+                            label={t('vat')}
                           />
                         )}
                       />
                     </Grid>
                   </Grid>
-                )}
 
-                <Box>
-                  {needsManualPrice && (
-                    <TextField
-                      required
-                      {...register('price')}
-                      label={t('components.course-form.price')}
-                      variant="filled"
-                      placeholder={t(
-                        'components.course-form.price-placeholder'
-                      )}
-                      fullWidth
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">£</InputAdornment>
-                        ),
-                      }}
-                      error={Boolean(errors.price)}
-                      helperText={errors.price?.message ?? ''}
-                      disabled={disabledFields.has('price')}
-                      sx={{ mt: 2 }}
-                    />
-                  )}
+                  <InfoRow>
+                    <Typography fontWeight={600}>
+                      {t('pages.order-details.total')}
+                    </Typography>
+                    <Typography fontWeight={600}>
+                      {t('currency', {
+                        amount:
+                          +(values.price ?? 0) +
+                          (values.includeVAT
+                            ? new Big(((values.price ?? 0) * 20) / 100)
+                                .round(2)
+                                .toNumber()
+                            : 0),
+                        currency: values.priceCurrency ?? defaultCurrency,
+                      })}
+                    </Typography>
+                  </InfoRow>
+                </>
+              )}
+              {isClosedCourse && (
+                <>
+                  <Typography fontWeight={600} mb={1} mt={2}>
+                    {t('components.course-form.account-code-title')}
+                  </Typography>
 
-                  {isClosedCourse && (
-                    <>
-                      <Typography fontWeight={600} mb={1} mt={2}>
-                        {t('components.course-form.account-code-title')}
-                      </Typography>
-
-                      <Typography color="dimGrey.main">
-                        {values.accountCode}
-                      </Typography>
-                    </>
-                  )}
-                </Box>
-              </Box>
+                  <Typography color="dimGrey.main">
+                    {values.accountCode}
+                  </Typography>
+                </>
+              )}
             </InfoPanel>
           )}
         </Stack>

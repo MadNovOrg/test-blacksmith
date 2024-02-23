@@ -1,3 +1,4 @@
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
@@ -23,10 +24,12 @@ vi.mock('@app/components/VenueSelector', () => ({
   VenueSelector: vi.fn(),
 }))
 vi.mock('@app/hooks/use-fetcher')
+vi.mock('posthog-js/react')
 const useFetcherMock = vi.mocked(useFetcher)
 
 const useCourseMocked = vi.mocked(useCourse)
 const VenueSelectorMocked = vi.mocked(VenueSelector)
+const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 describe(EditCourse.name, () => {
   beforeAll(() => {
@@ -464,5 +467,96 @@ describe(EditCourse.name, () => {
 
     expect(reaccreditationToggle).toBeDisabled()
     expect(reaccreditationToggle).not.toBeChecked()
+  })
+
+  it("doesn't allow editing VAT and currency for OPEN courses", async () => {
+    // Mock course-residing-country and open-icm-course-international-finance to be enabled
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const openCourse = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Open,
+        residingCountry: 'RO',
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: openCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
+    await waitFor(() => {
+      render(
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/edit/:id" element={<EditCourse />} />
+          </Routes>
+        </Provider>,
+        { auth: { activeRole: RoleName.TT_ADMIN } },
+        { initialEntries: ['/courses/edit/1'] }
+      )
+    })
+
+    const currencySelector = screen.getByTestId('currency-selector')
+    const VATswitch = screen.getByTestId('includeVAT-switch')
+
+    expect(currencySelector).toBeInTheDocument()
+    expect(VATswitch).toBeInTheDocument()
+
+    expect(currencySelector.children[0]).toHaveClass('Mui-disabled')
+    expect(VATswitch).toHaveClass('Mui-disabled')
+  })
+
+  it("doesn't allow editing VAT, currency and price for CLOSED courses", async () => {
+    // Mock course-residing-country and open-icm-course-international-finance to be enabled
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const closedCourse = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        residingCountry: 'RO',
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: closedCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
+    await waitFor(() => {
+      render(
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/edit/:id" element={<EditCourse />} />
+          </Routes>
+        </Provider>,
+        { auth: { activeRole: RoleName.TT_ADMIN } },
+        { initialEntries: ['/courses/edit/1'] }
+      )
+    })
+
+    const currencySelector = screen.getByTestId('currency-selector')
+    const VATswitch = screen.getByTestId('includeVAT-switch')
+    const priceInput = screen.getByTestId('price-input')
+
+    expect(currencySelector).toBeInTheDocument()
+    expect(VATswitch).toBeInTheDocument()
+    expect(priceInput).toBeInTheDocument()
+
+    expect(currencySelector.children[0]).toHaveClass('Mui-disabled')
+    expect(VATswitch).toHaveClass('Mui-disabled')
+    expect(priceInput.children[0]).toHaveClass('Mui-disabled')
   })
 })

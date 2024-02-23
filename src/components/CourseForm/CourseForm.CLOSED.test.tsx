@@ -344,7 +344,7 @@ describe('component: CourseForm - CLOSED', () => {
 
     const priceField = screen.getByPlaceholderText(/price/i)
 
-    expect(priceField).toHaveValue(String(pricePerAttendee))
+    expect(priceField).toHaveValue(pricePerAttendee)
 
     await userEvent.clear(priceField)
 
