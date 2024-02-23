@@ -86,7 +86,7 @@ export function useCoursePrice(courseData?: {
       if (price.pricingSchedules && Array.isArray(price.pricingSchedules)) {
         if (price?.pricingSchedules[0]?.coursePricingId === price.id) {
           Object.assign(coursePrice, {
-            amount: price.pricingSchedules[0].priceAmount,
+            priceAmount: price.pricingSchedules[0].priceAmount,
           })
         }
       }

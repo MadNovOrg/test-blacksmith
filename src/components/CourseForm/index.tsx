@@ -733,7 +733,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         })
       : false
 
-  const pricesList = useCoursePrice({ accreditedBy: values.accreditedBy })
+  const pricesList = useCoursePrice({
+    accreditedBy: values.accreditedBy,
+    startDateTime: values.startDateTime ?? undefined,
+  })
 
   // this useEffect sets the individual course price and currency
   // based on its Type, LEVEL and blended & reaccreditation status
