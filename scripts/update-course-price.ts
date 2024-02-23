@@ -38,12 +38,6 @@ type CourseType = {
   }[]
 }
 
-type CourseToUpdate = {
-  price: number
-  priceCurrency: string
-  includeVAT: boolean
-}
-
 const GET_COURSE_PRICING_QUERY = gql`
   query course_pricing {
     course_pricing {
@@ -75,9 +69,19 @@ const UPDATE_COURSE_PRICE_MUTATION = gql`
     $price: numeric!
     $priceCurrency: String!
     $includeVAT: Boolean!
+    $type: String!
+    $level: String!
+    $reaccrediation: Boolean!
+    $go1Integration: Boolean!
   ) {
     update_course(
-      where: { price: { _is_null: true } }
+      where: {
+        price: { _is_null: true }
+        type: { _eq: $type }
+        level: { _eq: $level }
+        reaccreditation: { _eq: $reaccrediation }
+        go1Integration: { _eq: $go1Integration }
+      }
       _set: {
         price: $price
         priceCurrency: $priceCurrency
@@ -104,33 +108,17 @@ async function updateCoursePrice() {
       coursePrices.course_pricing.length !== 0 &&
       courses.course.length !== 0
     ) {
-      const coursesToUpdate: CourseToUpdate[] = []
-
-      courses.course.forEach(course => {
-        coursePrices.course_pricing.forEach(price => {
-          if (
-            course.type === price.type &&
-            course.level === price.level &&
-            course.reaccreditation === price.reaccreditation &&
-            course.go1Integration === price.blended
-          ) {
-            const course: CourseToUpdate = {
-              price: price.priceAmount,
-              includeVAT: true,
-              priceCurrency: price.priceCurrency,
-            }
-            coursesToUpdate.push(course)
-          }
-        })
-      })
-
       try {
         await Promise.all(
-          coursesToUpdate.map((course: CourseToUpdate) => {
+          coursePrices.course_pricing.map(coursePrice => {
             const variables = {
-              price: course.price,
-              priceCurrency: course.priceCurrency,
-              includeVAT: course.includeVAT,
+              type: coursePrice.type,
+              level: coursePrice.level,
+              reaccrediation: coursePrice.reaccreditation,
+              go1Integration: coursePrice.blended,
+              price: coursePrice.priceAmount,
+              priceCurrency: coursePrice.priceCurrency,
+              includeVAT: true,
             }
 
             hasuraClient.request(UPDATE_COURSE_PRICE_MUTATION, variables)
