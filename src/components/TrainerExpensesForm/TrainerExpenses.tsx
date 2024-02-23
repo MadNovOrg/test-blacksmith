@@ -490,7 +490,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
 
       {miscellaneous?.map((entry, idx) =>
         entry ? (
-          <Grid key={idx} container mt={2} rowSpacing={2}>
+          <Grid key={idx} container mt={2} columnSpacing={2}>
             <Grid item md={6} sm={12}>
               <TextField
                 label={t('pages.create-course.trainer-expenses.misc-item-name')}
