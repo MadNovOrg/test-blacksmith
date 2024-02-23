@@ -1,5 +1,26 @@
 # @teamteach/hub
 
+## 3.5.0
+
+### Minor Changes
+
+- 5211407: Update 3day srt course builder for new data model
+- 6fc77fc: International course, attendee cancellation adjustments.
+- 59c7131: Replaces useFetcher with urql (P2)
+- f2522c3: Disabled fields on course edit
+- ccce959: International attendee transfer currency ammendments.
+- 325d076: Remove 'Cross over' technique from all course modules and techniques.
+- f2522c3: disable editing the price in CLOSED courses
+- 5d09ab7: add modules to BILD trainer courses
+- 6c08c3e: add currencies to closed course trainer expenses
+
+### Patch Changes
+
+- 627051b: Fix schedule pricing
+- 8d92082: fix closed course international features
+- fb232bf: adjust spacing for miscelnaous costs
+- 387a9e3: Fix Course Booking Review Being blank
+
 ## 3.4.0
 
 ### Minor Changes
