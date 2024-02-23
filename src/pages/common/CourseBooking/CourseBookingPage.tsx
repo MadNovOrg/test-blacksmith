@@ -14,19 +14,12 @@ import { CourseBookingReview } from './components/CourseBookingReview'
 import { CourseFull } from './components/CourseFull'
 
 const BookingRoutes: React.FC<React.PropsWithChildren<unknown>> = () => {
-  const {
-    booking,
-    availableSeats,
-    course,
-    error,
-    isBooked,
-    internalBooking,
-    coursePricing,
-  } = useBooking()
+  const { booking, availableSeats, course, error, isBooked, internalBooking } =
+    useBooking()
+
   if (
     (course?.accreditedBy === Accreditors_Enum.Bild && !internalBooking) ||
-    error ||
-    !coursePricing
+    error
   ) {
     return <NotFound />
   }

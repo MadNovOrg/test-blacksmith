@@ -18,6 +18,7 @@ import {
   Accreditors_Enum,
   Course_Source_Enum,
   Course_Type_Enum,
+  CreateOrderMutation,
   FindProfilesQuery,
   GetCoursePricingQuery,
   GetTempProfileQuery,
@@ -26,8 +27,8 @@ import {
   Promo_Code_Type_Enum,
   PromoCodeOutput,
   Currency,
-  CreateOrderMutation,
   CreateOrderMutationVariables,
+  GetTempProfileQueryVariables,
   GetCoursePricingQueryVariables,
 } from '@app/generated/graphql'
 import { stripeProcessingFeeRate } from '@app/lib/stripe'
@@ -127,7 +128,6 @@ export type ContextType = {
   removePromo: (_: string) => void
   placeOrder: () => Promise<CreateOrderMutation['order']>
   internalBooking: boolean
-  coursePricing: GetCoursePricingQuery['pricing']
 }
 
 const initialContext = {}
@@ -160,36 +160,40 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
   const isBooked = location.pathname.startsWith('/booking/payment/')
   const internalBooking = useRef(location.state?.internalBooking)
 
-  const [{ data: tempProfiles, fetching: tempProfilesFetching }] =
-    useQuery<GetTempProfileQuery>({
-      query: GET_TEMP_PROFILE,
-    })
+  const [{ data }] = useQuery<
+    GetTempProfileQuery,
+    GetTempProfileQueryVariables
+  >({
+    query: GET_TEMP_PROFILE,
+  })
 
-  const profile = useMemo(() => {
-    if (tempProfiles) return tempProfiles.tempProfiles[0]
-  }, [tempProfiles])
+  const profile = useMemo(() => data?.tempProfiles[0], [data?.tempProfiles])
 
-  const [{ data: response, fetching }] = useQuery<
+  const [{ data: coursePricing }] = useQuery<
     GetCoursePricingQuery,
     GetCoursePricingQueryVariables
   >({
     query: GET_COURSE_PRICING_QUERY,
-    variables: { courseId: Number(profile?.course?.id ?? 0) },
-    pause: !profile?.course,
+    variables: { courseId: profile?.course?.id ?? 0 },
+    pause: !profile?.course?.id,
   })
+
   const [, createOrder] = useMutation<
     CreateOrderMutation,
     CreateOrderMutationVariables
   >(CREATE_ORDER)
 
-  const coursePricing = useMemo(() => {
-    if (response && !fetching) return response?.pricing
-    else return null
-  }, [fetching, response]) as GetCoursePricingQuery['pricing']
-
   useEffect(() => {
-    if (profile && profile.course && coursePricing) {
+    if (typeof data !== 'undefined') {
+      if (!profile || !profile.course) {
+        setError(t('error-no-booking'))
+        setReady(true)
+        return
+      }
+
       let pricing: GetCoursePricingQuery['pricing']
+
+      // course has custom pricing (e.g BILD)
       if (profile.course.price && profile.course.priceCurrency) {
         pricing = {
           priceAmount: profile.course.price,
@@ -197,7 +201,11 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
           xeroCode: '',
         }
       } else {
-        pricing = coursePricing
+        if (!coursePricing) {
+          setError(t('error-no-pricing'))
+        } else {
+          pricing = coursePricing.pricing
+        }
       }
 
       const trainerExpenses =
@@ -241,8 +249,8 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         () => Boolean(profile?.course?.residingCountry),
         () => !isUKCountry(profile?.course?.residingCountry),
       ])()
-
-      if (pricing) {
+      // doesnt reset if booking already contains data in it
+      if (pricing && !booking.participants) {
         setBooking({
           quantity: profile.quantity ?? 0,
           participants: [],
@@ -272,20 +280,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       }
       setReady(true)
     }
-    if (!tempProfilesFetching && (!profile || !profile.course)) {
-      setError(t('error-no-booking'))
-      setReady(true)
-    }
-  }, [
-    coursePricing,
-    fetching,
-    isUKCountry,
-    profile,
-    response,
-    t,
-    tempProfiles,
-    tempProfilesFetching,
-  ])
+  }, [booking.participants, coursePricing, data, isUKCountry, profile, t])
 
   useEffect(() => {
     const discounts: Discounts = {}
@@ -377,7 +372,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     const promoCodes =
       booking.courseType !== Course_Type_Enum.Closed ? booking.promoCodes : []
     if (course && course.id) {
-      const { data: orderResponse } = await createOrder({
+      const { data: response } = await createOrder({
         input: {
           courseId: course.id,
           quantity: booking.quantity,
@@ -397,8 +392,8 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         },
       })
 
-      setOrderId(orderResponse?.order?.id)
-      return orderResponse?.order
+      setOrderId(response?.order?.id)
+      return response?.order
     }
   }, [booking, course, createOrder])
 
@@ -419,7 +414,6 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       removePromo,
       placeOrder,
       internalBooking: internalBooking.current ?? false,
-      coursePricing,
     }),
     [
       error,
@@ -434,7 +428,6 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       availableSeats,
       placeOrder,
       internalBooking,
-      coursePricing,
     ]
   )
 
