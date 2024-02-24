@@ -197,17 +197,17 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       let pricing: GetCoursePricingQuery['pricing']
 
       // course has custom pricing (e.g BILD)
-      if (profile.course.price && profile.course.priceCurrency) {
-        pricing = {
-          priceAmount: profile.course.price,
-          priceCurrency: profile.course.priceCurrency as Currency,
-          xeroCode: '',
-        }
+      if (coursePricing) {
+        pricing = coursePricing.pricing
       } else {
-        if (!coursePricing) {
-          setError(t('error-no-pricing'))
+        if (profile.course.price && profile.course.priceCurrency) {
+          pricing = {
+            priceAmount: profile.course.price,
+            priceCurrency: profile.course.priceCurrency as Currency,
+            xeroCode: '',
+          }
         } else {
-          pricing = coursePricing.pricing
+          setError(t('error-no-pricing'))
         }
       }
 
@@ -244,6 +244,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         profile.course.maxParticipants -
           (profile?.course?.participants?.aggregate?.count ?? 0)
       )
+
       setCourse(profile.course)
 
       const isInternationalCourse = allPass([
