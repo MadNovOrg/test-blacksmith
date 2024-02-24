@@ -169,7 +169,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
 
   const profile = useMemo(() => data?.tempProfiles[0], [data?.tempProfiles])
 
-  const [{ data: coursePricing }] = useQuery<
+  const [{ data: coursePricing, error: coursePricingError }] = useQuery<
     GetCoursePricingQuery,
     GetCoursePricingQueryVariables
   >({
@@ -184,7 +184,10 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
   >(CREATE_ORDER)
 
   useEffect(() => {
-    if (typeof data !== 'undefined') {
+    if (
+      typeof data !== 'undefined' &&
+      (typeof coursePricing !== 'undefined' || coursePricingError)
+    ) {
       if (!profile || !profile.course) {
         setError(t('error-no-booking'))
         setReady(true)
@@ -280,7 +283,15 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       }
       setReady(true)
     }
-  }, [booking.participants, coursePricing, data, isUKCountry, profile, t])
+  }, [
+    booking.participants,
+    coursePricing,
+    coursePricingError,
+    data,
+    isUKCountry,
+    profile,
+    t,
+  ])
 
   useEffect(() => {
     const discounts: Discounts = {}
