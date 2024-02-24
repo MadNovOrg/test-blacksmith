@@ -1,5 +1,12 @@
 # @teamteach/hub
 
+## 3.5.1
+
+### Patch Changes
+
+- 71d65e6: Display correct course price when booking someone to a course
+- 83cfda3: Fix booking details pricing
+
 ## 3.5.0
 
 ### Minor Changes
