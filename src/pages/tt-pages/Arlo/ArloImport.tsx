@@ -8,6 +8,7 @@ import {
 } from '@mui/material'
 import React, { ChangeEvent, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useMutation, useQuery } from 'urql'
 
 import {
   ImportArloCertificatesMutation,
@@ -15,7 +16,6 @@ import {
   ImportArloCertificatesResultQuery,
   ImportArloCertificatesResultQueryVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import usePollQuery from '@app/hooks/usePollQuery'
 import {
   IMPORT_ARLO_CERTIFICATES_ACTION,
@@ -24,38 +24,38 @@ import {
 
 export const ArloImport: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string>()
   const [actionId, setActionId] = useState<string>()
   const [result, setResult] = useState<{ processed: number; added: number }>()
+  const [
+    {
+      data: importResult,
+      error: importResultError,
+      fetching: importResultFetching,
+    },
+  ] = useQuery<
+    ImportArloCertificatesResultQuery,
+    ImportArloCertificatesResultQueryVariables
+  >({
+    query: IMPORT_ARLO_CERTIFICATES_ACTION_RESULT,
+    variables: { id: actionId },
+    pause: !actionId,
+  })
+
+  const [{ error: importError }, importCertificates] = useMutation<
+    ImportArloCertificatesMutation,
+    ImportArloCertificatesMutationVariables
+  >(IMPORT_ARLO_CERTIFICATES_ACTION)
 
   const [startPolling] = usePollQuery(
     async () => {
-      if (actionId) {
-        const { importArloCertificates } = await fetcher<
-          ImportArloCertificatesResultQuery,
-          ImportArloCertificatesResultQueryVariables
-        >(IMPORT_ARLO_CERTIFICATES_ACTION_RESULT, {
-          id: actionId ?? '',
-        })
-        if (importArloCertificates?.output) {
-          setResult(importArloCertificates.output)
-          setLoading(false)
-        } else if (importArloCertificates?.errors) {
-          console.log(importArloCertificates.errors)
-          setError(t('internal-error'))
-        }
+      if (importResult?.importArloCertificates?.output) {
+        setResult(importResult.importArloCertificates.output)
       }
     },
-    () => !!result || !!error,
+    () => !!result || !!importResultError,
     {
       interval: 5000,
       maxPolls: 30,
-      onTimeout: () => {
-        setLoading(false)
-        setError(t('pages.arlo.timeout'))
-      },
     }
   )
 
@@ -67,40 +67,27 @@ export const ArloImport: React.FC<React.PropsWithChildren<unknown>> = () => {
 
       const file = e.target.files[0]
 
-      try {
-        setError(undefined)
-        setResult(undefined)
-
-        const encoded = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader()
-          reader.onerror = () => {
-            reader.abort()
-            reject()
+      const encoded = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onerror = () => {
+          reader.abort()
+          reject()
+        }
+        reader.onload = () => {
+          if (typeof reader.result === 'string') {
+            resolve(btoa(reader.result))
+          } else {
+            throw new Error('Error reading the file.')
           }
-          reader.onload = () => {
-            if (typeof reader.result === 'string') {
-              resolve(btoa(reader.result))
-            } else {
-              throw new Error('Error reading the file.')
-            }
-          }
-          reader.readAsBinaryString(file)
-        })
+        }
+        reader.readAsBinaryString(file)
+      })
 
-        setLoading(true)
-        const response = await fetcher<
-          ImportArloCertificatesMutation,
-          ImportArloCertificatesMutationVariables
-        >(IMPORT_ARLO_CERTIFICATES_ACTION, { report: encoded })
-        setActionId(response.importArloCertificates)
-        startPolling()
-      } catch (err) {
-        console.error(err)
-        setError((err as Error).message)
-        setLoading(false)
-      }
+      const { data } = await importCertificates({ report: encoded })
+      setActionId(data?.importArloCertificates)
+      startPolling()
     },
-    [fetcher, startPolling]
+    [importCertificates, startPolling]
   )
 
   return (
@@ -110,13 +97,15 @@ export const ArloImport: React.FC<React.PropsWithChildren<unknown>> = () => {
           {t('pages.arlo.import-certificate-report')}
         </Typography>
 
-        {loading ? (
+        {importResultFetching ? (
           <CircularProgress data-testid="arlo-import-loading" />
         ) : null}
 
-        {error ? <Typography>{error}</Typography> : null}
+        {importResultError || importError ? (
+          <Typography>{(importResultError ?? importError)?.message}</Typography>
+        ) : null}
 
-        {result ? (
+        {result && !importResultFetching ? (
           <Alert severity="success" variant="outlined">
             {t('pages.arlo.import-certificate-success', result)}
           </Alert>

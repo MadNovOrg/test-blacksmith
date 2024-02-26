@@ -1,4 +1,3 @@
-import React from 'react'
 import { Client, CombinedError, Provider, TypedDocumentNode } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -13,9 +12,6 @@ import { SetCourseTrainerStatus } from '@app/queries/courses/set-course-trainer-
 import { chance, render, screen, userEvent, within } from '@test/index'
 
 import { AcceptDeclineCourse } from '.'
-
-const mockFetcher = vi.fn()
-vi.mock('@app/hooks/use-fetcher', () => ({ useFetcher: () => mockFetcher }))
 
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => ({

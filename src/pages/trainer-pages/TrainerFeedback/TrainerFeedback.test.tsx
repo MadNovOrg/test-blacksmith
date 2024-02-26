@@ -13,8 +13,6 @@ import { render, screen, chance } from '@test/index'
 
 import { TrainerFeedback } from './index'
 
-vi.mock('@app/lib/gql-request')
-
 describe('TrainerFeedback component', () => {
   const trainerName = chance.name()
 

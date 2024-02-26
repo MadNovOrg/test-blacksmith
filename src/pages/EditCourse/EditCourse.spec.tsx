@@ -9,7 +9,6 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
 import { BildStrategies, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
@@ -23,9 +22,9 @@ vi.mock('@app/hooks/useCourse')
 vi.mock('@app/components/VenueSelector', () => ({
   VenueSelector: vi.fn(),
 }))
-vi.mock('@app/hooks/use-fetcher')
-vi.mock('posthog-js/react')
-const useFetcherMock = vi.mocked(useFetcher)
+vi.mock('posthog-js/react', () => ({
+  useFeatureFlagEnabled: vi.fn(),
+}))
 
 const useCourseMocked = vi.mocked(useCourse)
 const VenueSelectorMocked = vi.mocked(VenueSelector)
@@ -33,9 +32,6 @@ const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 describe(EditCourse.name, () => {
   beforeAll(() => {
-    const fetcherMock = vi.fn()
-    useFetcherMock.mockReturnValue(fetcherMock)
-    fetcherMock.mockResolvedValue({ members: [] })
     VenueSelectorMocked.mockImplementation(() => <p>test</p>)
   })
 

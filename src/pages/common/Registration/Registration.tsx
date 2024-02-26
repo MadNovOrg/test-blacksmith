@@ -3,17 +3,17 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMount } from 'react-use'
+import { useMutation } from 'urql'
 
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
-import { useFetcher } from '@app/hooks/use-fetcher'
-import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 import {
-  MUTATION,
-  ResponseType,
-  ParamsType,
-} from '@app/queries/profile/insert-profile-temp'
+  InsertProfileTempMutation,
+  InsertProfileTempMutationVariables,
+} from '@app/generated/graphql'
+import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
+import { MUTATION as INSERT_PROFILE_TEMP } from '@app/queries/profile/insert-profile-temp'
 
 import { Form } from './components/Form'
 
@@ -25,7 +25,6 @@ export const RegistrationPage: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { login, profile } = useAuth()
-  const fetcher = useFetcher()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -45,6 +44,11 @@ export const RegistrationPage: React.FC<
     navigate('?success=true', { replace: true, state: { from } })
     await login(email, password)
   }
+
+  const [, inserProfileTemp] = useMutation<
+    InsertProfileTempMutation,
+    InsertProfileTempMutationVariables
+  >(INSERT_PROFILE_TEMP)
 
   // when login completes, we have an active profile of unverified user,
   // router sets in the available routes and we navigate to verify
@@ -80,7 +84,7 @@ export const RegistrationPage: React.FC<
       dob: null,
     }
 
-    await fetcher<ResponseType, ParamsType>(MUTATION, { input })
+    await inserProfileTemp({ input })
 
     navigate(`/booking/details`, {
       replace: true,

@@ -1,13 +1,4 @@
-import { gql } from 'graphql-request'
-
-import {
-  GetPromoCodesQuery,
-  GetPromoCodesQueryVariables,
-} from '@app/generated/graphql'
-
-export type InputType = GetPromoCodesQueryVariables
-
-export type ResponseType = GetPromoCodesQuery
+import { gql } from 'urql'
 
 export const GET_PROMO_CODES = gql`
   query GetPromoCodes(

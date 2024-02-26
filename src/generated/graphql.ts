@@ -57423,10 +57423,11 @@ export type GetDietaryAndDisabilitiesCountQuery = { __typename?: 'query_root', p
 
 export type ApproveCourseMutationVariables = Exact<{
   input: ApproveCourseInput;
+  object: Course_Audit_Insert_Input;
 }>;
 
 
-export type ApproveCourseMutation = { __typename?: 'mutation_root', approveCourse: { __typename?: 'ApproveCourseOutput', success: boolean } };
+export type ApproveCourseMutation = { __typename?: 'mutation_root', approveCourse: { __typename?: 'ApproveCourseOutput', success: boolean }, insert_course_audit?: { __typename?: 'course_audit_mutation_response', affected_rows: number } | null };
 
 export type CancelCourseMutationVariables = Exact<{
   courseId: Scalars['Int'];
@@ -57570,10 +57571,11 @@ export type ReInviteTrainerMutation = { __typename?: 'mutation_root', deleteCour
 
 export type RejectCourseMutationVariables = Exact<{
   input: RejectCourseInput;
+  object: Course_Audit_Insert_Input;
 }>;
 
 
-export type RejectCourseMutation = { __typename?: 'mutation_root', rejectCourse?: { __typename?: 'RejectCourseOutput', success: boolean } | null };
+export type RejectCourseMutation = { __typename?: 'mutation_root', rejectCourse?: { __typename?: 'RejectCourseOutput', success: boolean } | null, insert_course_audit?: { __typename?: 'course_audit_mutation_response', affected_rows: number } | null };
 
 export type RemoveCourseDraftMutationVariables = Exact<{
   draftId: Scalars['uuid'];

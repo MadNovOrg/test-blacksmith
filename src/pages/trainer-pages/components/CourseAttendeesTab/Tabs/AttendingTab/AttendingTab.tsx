@@ -12,6 +12,7 @@ import {
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useMutation } from 'urql'
 
 import {
   CancelAttendeeDialog,
@@ -28,17 +29,12 @@ import {
   Course_Status_Enum,
   Course_Type_Enum,
   Scalars,
+  SendCourseInformationMutation,
+  SendCourseInformationMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
-import { useMatchMutate } from '@app/hooks/useMatchMutate'
 import { useTableChecks } from '@app/hooks/useTableChecks'
-import {
-  MUTATION as SEND_COURSE_INFO,
-  ParamsType as SendCourseInfoParamType,
-  ResponseType as SendCourseInfoResponseType,
-} from '@app/queries/courses/send-course-information'
-import { Matcher } from '@app/queries/participants/get-course-participants'
+import { MUTATION as SEND_COURSE_INFO } from '@app/queries/courses/send-course-information'
 import {
   BlendedLearningStatus,
   Course,
@@ -84,7 +80,10 @@ export const AttendingTab = ({
   const isOpenCourse = course.type === Course_Type_Enum.Open
   const hasCourseEnded = courseEnded(course)
   const navigate = useNavigate()
-  const fetcher = useFetcher()
+  const [, sendCourseInfoMutation] = useMutation<
+    SendCourseInformationMutation,
+    SendCourseInformationMutationVariables
+  >(SEND_COURSE_INFO)
 
   const courseInProgress = courseStarted(course) && !hasCourseEnded
 
@@ -96,7 +95,7 @@ export const AttendingTab = ({
     data: courseParticipants,
     status: courseParticipantsLoadingStatus,
     total: courseParticipantsTotal,
-    mutate: mutateParticipants,
+    mutate: refreshParticipants,
   } = useCourseParticipants(course?.id ?? '', {
     sortBy: sortColumn,
     order,
@@ -106,14 +105,6 @@ export const AttendingTab = ({
     },
     alwaysShowArchived: true,
   })
-
-  const matchMutate = useMatchMutate()
-
-  const invalidateCache = useCallback(() => {
-    matchMutate(Matcher)
-    mutateParticipants()
-    updateAttendeesHandler()
-  }, [matchMutate, mutateParticipants, updateAttendeesHandler])
 
   const handleRowsPerPageChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -249,15 +240,15 @@ export const AttendingTab = ({
 
   const sendCourseInfo = useCallback(
     async (
-      courseId: SendCourseInfoParamType['courseId'],
-      attendeeIds: SendCourseInfoParamType['attendeeIds']
+      courseId: SendCourseInformationMutationVariables['courseId'],
+      attendeeIds: SendCourseInformationMutationVariables['attendeeIds']
     ) => {
       setAttendeeToResendInfo(undefined)
       try {
-        const response = await fetcher<
-          SendCourseInfoResponseType,
-          SendCourseInfoParamType
-        >(SEND_COURSE_INFO, { courseId, attendeeIds })
+        const { data: response } = await sendCourseInfoMutation({
+          courseId,
+          attendeeIds,
+        })
 
         if (response?.sendCourseInformation.success) {
           onSendingCourseInformation(true)
@@ -269,7 +260,7 @@ export const AttendingTab = ({
         onSendingCourseInformation(false)
       }
     },
-    [fetcher, onSendingCourseInformation]
+    [onSendingCourseInformation, sendCourseInfoMutation]
   )
 
   const rowActions = useMemo(
@@ -311,7 +302,7 @@ export const AttendingTab = ({
                     courseEnded(course) &&
                     course.status !== Course_Status_Enum.GradeMissing
                   }
-                  onSuccess={mutateParticipants}
+                  onSuccess={refreshParticipants}
                 />
               </Box>
             ) : null}
@@ -482,7 +473,10 @@ export const AttendingTab = ({
               participant={attendeeToCancel}
               course={course}
               onClose={() => setAttendeeToCancel(undefined)}
-              onSave={invalidateCache}
+              onSave={() => {
+                refreshParticipants()
+                updateAttendeesHandler()
+              }}
             />
           ) : null}
 
@@ -495,7 +489,10 @@ export const AttendingTab = ({
                 avatar: attendeeToReplace.profile.avatar,
               }}
               onClose={() => setAttendeeToReplace(undefined)}
-              onSuccess={invalidateCache}
+              onSuccess={() => {
+                refreshParticipants()
+                updateAttendeesHandler()
+              }}
               mode={isOrgAdmin ? Mode.ORG_ADMIN : Mode.TT_ADMIN}
             />
           ) : null}

@@ -19,7 +19,7 @@ import {
   useParams,
   useSearchParams,
 } from 'react-router-dom'
-import { useQuery } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import * as yup from 'yup'
 
 import { AttendeeMenu } from '@app/components/AttendeeMenu'
@@ -38,8 +38,8 @@ import {
   GetEvaluationQuery,
   GetEvaluationQueryVariables,
   SaveCourseEvaluationMutation,
+  SaveCourseEvaluationMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
 import { QUERY as GET_ANSWERS_QUERY } from '@app/queries/course-evaluation/get-answers'
 import {
@@ -73,7 +73,6 @@ function isAllRequired(
 
 export const CourseEvaluation = () => {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
   const params = useParams()
@@ -84,7 +83,6 @@ export const CourseEvaluation = () => {
   const readOnly = !!profileId
 
   const { data: courseData, status: courseStatus } = useCourse(courseId ?? '')
-  const [loading, setLoading] = useState(false)
   const [{ data: participantData, fetching: participantDataLoading }] =
     useQuery<GetCourseParticipantIdQuery, GetCourseParticipantIdQueryVariables>(
       {
@@ -114,6 +112,11 @@ export const CourseEvaluation = () => {
     variables: { courseId },
     pause: !profileId,
   })
+
+  const [{ fetching: loading }, saveCourseEvaluation] = useMutation<
+    SaveCourseEvaluationMutation,
+    SaveCourseEvaluationMutationVariables
+  >(SAVE_COURSE_EVALUATION_ANSWERS_MUTATION)
 
   const course = courseData?.course
 
@@ -248,36 +251,27 @@ export const CourseEvaluation = () => {
 
   const onSubmit = async (data: Record<string, string>) => {
     setError(null)
-    setLoading(true)
-
-    try {
-      const answers = map(data, (answer, questionId) => {
-        return {
-          questionId,
-          answer,
-          courseId,
-        }
-      })
-
-      const response = await fetcher<SaveCourseEvaluationMutation>(
-        SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
-        {
-          answers,
-          completedEvaluation: true,
-          id: courseParticipant?.id,
-        }
-      )
-
-      setLoading(false)
-
-      if (!response.inserted?.rows?.length) {
-        return setError(t('course-evaluation.error-submitting'))
+    const answers = map(data, (answer, questionId) => {
+      return {
+        questionId,
+        answer,
+        courseId: Number(courseId ?? 0),
       }
+    })
 
+    const { data: response, error } = await saveCourseEvaluation({
+      answers,
+      completedEvaluation: true,
+      id: courseParticipant?.id,
+    })
+
+    if (!response?.inserted?.rows?.length) {
+      return setError(t('course-evaluation.error-submitting'))
+    } else {
       navigate('../details?success=course_evaluated')
-    } catch (err: unknown) {
+    }
+    if (error) {
       setError(t('course-evaluation.error-submitting'))
-      setLoading(false)
     }
   }
 

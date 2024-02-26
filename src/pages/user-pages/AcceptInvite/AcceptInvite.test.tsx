@@ -9,10 +9,6 @@ import { render, waitForText } from '@test/index'
 
 import { AcceptInvite } from '.'
 
-vi.mock('@app/hooks/use-fetcher', () => ({
-  useFetcher: vi.fn(),
-}))
-
 const DummyParticipantPage = () => {
   const { id } = useParams()
   return <p>{id}</p>

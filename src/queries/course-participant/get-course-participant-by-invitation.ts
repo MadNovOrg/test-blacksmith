@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 export const QUERY = gql`
   query GetCourseParticipantByInvite($inviteId: uuid!, $courseId: Int!) {

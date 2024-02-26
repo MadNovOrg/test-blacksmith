@@ -236,9 +236,6 @@ importers:
       swiper:
         specifier: ^11.0.5
         version: 11.0.5
-      swr:
-        specifier: ^2.1.5
-        version: 2.1.5(react@18.2.0)
       tslib:
         specifier: ^2.3.0
         version: 2.5.3
@@ -12907,7 +12904,7 @@ packages:
     resolution: {integrity: sha512-mWEvCQTgXQf48yDqgN7CH50waTyYBeP2Lpqx4nNWab9sxEpdXVeKgfj1qYI2/TgUPQtNFZ85i3PemRtnXVYYJg==}
     peerDependencies:
       '@babel/core': ^7
-      '@babel/traverse': '>=7.23.2'
+      '@babel/traverse': ^7
     peerDependenciesMeta:
       '@babel/traverse':
         optional: true
@@ -22515,15 +22512,6 @@ packages:
   /swiper@11.0.5:
     resolution: {integrity: sha512-rhCwupqSyRnWrtNzWzemnBLMoyYuoDgGgspAm/8iBD3jCvAWycPLH4Z3TB0O5520DHLzMx94yUMH/B9Efpa48w==}
     engines: {node: '>= 4.7.0'}
-    dev: false
-
-  /swr@2.1.5(react@18.2.0):
-    resolution: {integrity: sha512-/OhfZMcEpuz77KavXST5q6XE9nrOBOVcBLWjMT+oAE/kQHyE3PASrevXCtQDZ8aamntOfFkbVJp7Il9tNBQWrw==}
-    peerDependencies:
-      react: ^16.11.0 || ^17.0.0 || ^18.0.0
-    dependencies:
-      react: 18.2.0
-      use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
   /symbol-tree@3.2.4:

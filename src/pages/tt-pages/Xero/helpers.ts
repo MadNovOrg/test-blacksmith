@@ -1,8 +1,6 @@
 import { gql } from 'graphql-request'
 
-export type XeroConnectResp = { xeroConnect: { consentUrl?: string } }
-
-export const XeroConnectQuery = gql`
+export const XERO_CONNECT_QUERY = gql`
   query XeroConnect {
     xeroConnect {
       consentUrl
@@ -12,7 +10,7 @@ export const XeroConnectQuery = gql`
 
 export type XeroCallbackResp = { xeroCallback: { status: boolean } }
 
-export const XeroCallbackQuery = gql`
+export const XERO_CONNECT_MUTATION = gql`
   mutation XeroCallback($input: XeroCallbackInput!) {
     xeroCallback(input: $input) {
       status

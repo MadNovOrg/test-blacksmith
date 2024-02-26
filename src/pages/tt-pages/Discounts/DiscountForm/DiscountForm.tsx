@@ -25,8 +25,8 @@ import { Helmet } from 'react-helmet'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useQuery } from 'urql'
-import { useDebouncedCallback } from 'use-debounce'
+import { useMutation, useQuery } from 'urql'
+import { useDebounce, useDebouncedCallback } from 'use-debounce'
 
 import { Dialog } from '@app/components/dialogs'
 import { ProfileSelector } from '@app/components/ProfileSelector'
@@ -42,22 +42,15 @@ import {
   GetPromoCodesQuery,
   GetPromoCodesQueryVariables,
   Promo_Code_Type_Enum,
+  UpsertPromoCodeMutation,
+  UpsertPromoCodeMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { NotFound } from '@app/pages/common/NotFound'
-import DisablePromoCode from '@app/queries/promo-codes/disable-promo-code'
-import {
-  InputType,
-  GET_PROMO_CODES,
-  ResponseType,
-} from '@app/queries/promo-codes/get-promo-codes'
-import UPSERT_PROMO_CODE from '@app/queries/promo-codes/upsert-promo-code'
+import { DISABLE_PROMO_CODE } from '@app/queries/promo-codes/disable-promo-code'
+import { GET_PROMO_CODES } from '@app/queries/promo-codes/get-promo-codes'
+import { UPSERT_PROMO_CODE } from '@app/queries/promo-codes/upsert-promo-code'
 import { Profile } from '@app/types'
-import {
-  getSWRLoadingStatus,
-  INPUT_DATE_FORMAT,
-  LoadingStatus,
-} from '@app/util'
+import { INPUT_DATE_FORMAT } from '@app/util'
 
 import {
   AMOUNT_PRESET_VALUE,
@@ -74,13 +67,10 @@ import { Wrapper } from './Wrapper'
 export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const { id } = useParams()
   const isEdit = !!id
   const { activeRole, acl, profile } = useAuth()
   const { addSnackbarMessage } = useSnackbar()
-
-  const [saving, setSaving] = useState(false)
 
   const [createdBy, setCreatedBy] = useState<
     Profile | FindProfilesQuery['profiles'][0]
@@ -93,20 +83,6 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const [showApprovalNotice, setShowApprovalNotice] = useState(false)
   const [showDisableModal, setShowDisableModal] = useState(false)
-
-  const [{ data, error }] = useQuery<
-    GetPromoCodesQuery,
-    GetPromoCodesQueryVariables
-  >({
-    query: GET_PROMO_CODES,
-    variables: {
-      where: { id: { _eq: id } },
-    },
-    pause: !id,
-  })
-  const isLoading =
-    isEdit && getSWRLoadingStatus(data, error) === LoadingStatus.FETCHING
-
   const {
     register,
     watch,
@@ -132,6 +108,38 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
       createdBy: profile?.id,
     },
   })
+  const values = watch()
+  const [debouncedCode] = useDebounce(values.code, 300)
+
+  const [{ data, error, fetching: promoCodesFetching }] = useQuery<
+    GetPromoCodesQuery,
+    GetPromoCodesQueryVariables
+  >({
+    query: GET_PROMO_CODES,
+    variables: {
+      where: { id: { _eq: id } },
+    },
+    pause: !id,
+  })
+  const isLoading = isEdit && promoCodesFetching
+
+  const [{ data: promoCodes, fetching: promocodesFetching }] = useQuery<
+    GetPromoCodesQuery,
+    GetPromoCodesQueryVariables
+  >({
+    query: GET_PROMO_CODES,
+    variables: { where: { code: { _eq: debouncedCode } } },
+    pause: !debouncedCode,
+  })
+  const [{ fetching: disablePromoCodeLoading }, disablePromoCodeMutation] =
+    useMutation<DisablePromoCodeMutation, DisablePromoCodeMutationVariables>(
+      DISABLE_PROMO_CODE
+    )
+
+  const [{ fetching: upsertPromoCodeLoading }, upsertPromoCodeMutation] =
+    useMutation<UpsertPromoCodeMutation, UpsertPromoCodeMutationVariables>(
+      UPSERT_PROMO_CODE
+    )
 
   useEffect(() => {
     if (data) {
@@ -168,18 +176,12 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [data, setValue])
 
   const disabled = data?.promoCodes[0].disabled
-  const values = watch()
   const appliesToRadio = values.appliesTo
 
   const checkDuplicateCode = useDebouncedCallback(async () => {
     if (data && data.promoCodes[0].code === values.code) return
     try {
-      const where = { code: { _eq: values.code } }
-      const { promoCodes } = await fetcher<ResponseType, InputType>(
-        GET_PROMO_CODES,
-        { where }
-      )
-      if (promoCodes.length) {
+      if (promoCodes?.promoCodes.length) {
         setError('code', { message: t('pages.promoCodes.fld-code-dup') })
       } else {
         clearErrors('code')
@@ -289,49 +291,30 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [activeRole, data?.promoCodes, values])
 
   const upsertPromoCode = async () => {
-    setSaving(true)
-
-    try {
-      const promoCode = omit(values, ['appliesTo', 'courses'])
-      await fetcher(UPSERT_PROMO_CODE, {
-        promoCondition: isEdit
-          ? { id: { _eq: id } }
-          : { id: { _is_null: true } },
-        promoCode: {
-          id: isEdit ? id : undefined,
-          ...promoCode,
-          approvedBy: sendForApproval ? null : profile?.id,
-          courses: {
-            data: values.courses.map(c => {
-              return { course_id: c }
-            }),
-          },
+    const promoCode = omit(values, ['appliesTo', 'courses'])
+    const { data } = await upsertPromoCodeMutation({
+      promoCondition: isEdit ? { id: { _eq: id } } : { id: { _is_null: true } },
+      promoCode: {
+        id: isEdit ? id : undefined,
+        ...promoCode,
+        approvedBy: sendForApproval ? null : profile?.id,
+        courses: {
+          data: values.courses.map(c => {
+            return { course_id: c }
+          }),
         },
-      })
-      return navigate('..')
-    } catch (err) {
-      console.error((err as Error).message)
-    } finally {
-      setSaving(false)
-    }
+      },
+    })
+    if (data) return navigate('..')
   }
 
   const disablePromoCode = useCallback(async () => {
-    setSaving(true)
-    try {
-      await fetcher<
-        DisablePromoCodeMutation,
-        DisablePromoCodeMutationVariables
-      >(DisablePromoCode, { id })
-      setSaving(false)
-      addSnackbarMessage('discount-disabled', {
-        label: t('pages.promoCodes.discount-has-been-disabled'),
-      })
-      navigate('..')
-    } catch (err) {
-      console.error((err as Error).message)
-    }
-  }, [addSnackbarMessage, fetcher, id, navigate, t])
+    await disablePromoCodeMutation({ id })
+    addSnackbarMessage('discount-disabled', {
+      label: t('pages.promoCodes.discount-has-been-disabled'),
+    })
+    navigate('..')
+  }, [addSnackbarMessage, disablePromoCodeMutation, id, navigate, t])
 
   const onSubmitValid = async () => {
     if (sendForApproval) {
@@ -719,7 +702,11 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
             <LoadingButton
               variant="contained"
               type="submit"
-              loading={saving}
+              loading={
+                disablePromoCodeLoading ||
+                upsertPromoCodeLoading ||
+                promocodesFetching
+              }
               data-testid="btn-submit"
             >
               {isEdit
@@ -766,7 +753,11 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Button>
           <LoadingButton
             variant="contained"
-            loading={saving}
+            loading={
+              disablePromoCodeLoading ||
+              upsertPromoCodeLoading ||
+              promocodesFetching
+            }
             onClick={upsertPromoCode}
           >
             {t('pages.promoCodes.approvalNeeded-submit')}
@@ -792,7 +783,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Button>
           <LoadingButton
             variant="contained"
-            loading={saving}
+            loading={disablePromoCodeLoading || upsertPromoCodeLoading}
             onClick={disablePromoCode}
           >
             {t('pages.promoCodes.disable')}

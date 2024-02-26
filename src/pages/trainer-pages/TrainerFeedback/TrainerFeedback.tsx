@@ -13,7 +13,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { useQuery } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import * as yup from 'yup'
 
 import { BackButton } from '@app/components/BackButton'
@@ -28,8 +28,8 @@ import {
   GetEvaluationQuery,
   GetEvaluationQueryVariables,
   SaveTrainerCourseEvaluationMutation,
+  SaveTrainerCourseEvaluationMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
 import { QUERY as GET_ANSWERS_QUERY } from '@app/queries/course-evaluation/get-answers'
 import { QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY } from '@app/queries/course-evaluation/get-questions'
@@ -44,7 +44,6 @@ const booleanQuestionTypes = [
 
 export const TrainerFeedback = () => {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
   const { id: courseId = '' } = useParams()
@@ -54,6 +53,10 @@ export const TrainerFeedback = () => {
   const { data: courseData } = useCourse(courseId)
   const [loading, setLoading] = useState(false)
   const [searchParams] = useSearchParams()
+  const [, saveTrainerCourseEvaluation] = useMutation<
+    SaveTrainerCourseEvaluationMutation,
+    SaveTrainerCourseEvaluationMutationVariables
+  >(SAVE_TRAINER_COURSE_EVALUATION_ANSWERS_MUTATION)
 
   const profileId = searchParams.get('profile_id') as string
   const readOnly = !!profileId
@@ -151,19 +154,16 @@ export const TrainerFeedback = () => {
         return {
           questionId,
           answer,
-          courseId,
+          courseId: Number(courseId ?? 0),
         }
       }).filter(({ questionId }) => !questionId.includes('Response'))
 
-      const response = await fetcher<SaveTrainerCourseEvaluationMutation>(
-        SAVE_TRAINER_COURSE_EVALUATION_ANSWERS_MUTATION,
-        {
-          answers,
-        }
-      )
+      const { data: response } = await saveTrainerCourseEvaluation({
+        answers,
+      })
       setLoading(false)
 
-      if (!response.inserted?.rows?.length) {
+      if (!response?.inserted?.rows?.length) {
         return setError(t('course-evaluation.error-submitting'))
       }
 

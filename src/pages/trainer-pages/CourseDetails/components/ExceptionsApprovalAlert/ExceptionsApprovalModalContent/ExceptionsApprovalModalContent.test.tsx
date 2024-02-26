@@ -1,8 +1,12 @@
 import { useTranslation } from 'react-i18next'
-import { Client, Provider } from 'urql'
+import { Client, Provider, TypedDocumentNode } from 'urql'
+import { fromValue } from 'wonka'
 
-import { Course_Audit_Type_Enum } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
+import {
+  ApproveCourseMutation,
+  Course_Audit_Type_Enum,
+  RejectCourseMutation,
+} from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import { LoadingStatus } from '@app/util'
 
@@ -11,35 +15,31 @@ import { buildCourse } from '@test/mock-data-utils'
 
 import { ExceptionsApprovalModalContent } from '.'
 
-vi.mock('@app/hooks/use-fetcher')
 vi.mock('@app/hooks/useCourse')
 
-vi.mock('@app/queries/courses/approve-course', () => ({
-  MUTATION: 'approve-course-mutation',
-}))
-vi.mock('@app/queries/courses/reject-course', () => ({
-  MUTATION: 'reject-course-mutation',
-}))
-
-const fetcherMock = vi.fn()
 const closeModalMock = vi.fn()
-const useFetcherMock = vi.mocked(useFetcher)
 const useCourseMocked = vi.mocked(useCourse)
 const urqlMockClient = {
-  executeQuery: () => vi.fn(),
-  executeMutation: () => vi.fn(),
-  executeSubscription: () => vi.fn(),
-} as never as Client
+  executeQuery: vi.fn(),
+  executeMutation: vi.fn(),
+  executeSubscription: vi.fn(),
+}
 
 describe('component: ExceptionsApprovalModalContent', () => {
   const course = buildCourse()
   const { result } = renderHook(() => useTranslation())
   const t = result.current.t
-  const setup = (
+  const setup = ({
+    action,
+    client,
+  }: {
     action?: Course_Audit_Type_Enum.Approved | Course_Audit_Type_Enum.Rejected
-  ) =>
+    client?: {
+      executeMutation: ({ mutation }: { mutation: TypedDocumentNode }) => void
+    }
+  }) =>
     render(
-      <Provider value={urqlMockClient}>
+      <Provider value={(client ?? urqlMockClient) as unknown as Client}>
         <ExceptionsApprovalModalContent
           action={action ?? Course_Audit_Type_Enum.Approved}
           courseId={String(course.id)}
@@ -48,7 +48,6 @@ describe('component: ExceptionsApprovalModalContent', () => {
       </Provider>
     )
   beforeAll(() => {
-    useFetcherMock.mockReturnValue(fetcherMock)
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: { course },
@@ -56,31 +55,31 @@ describe('component: ExceptionsApprovalModalContent', () => {
     })
   })
   it('should render the ExceptionsApprovalModalContent component', () => {
-    setup()
+    setup({})
     expect(
       screen.getByTestId('exceptions-approval-modal-content')
     ).toBeInTheDocument()
   })
   it('should set the comment correclty', () => {
-    setup()
+    setup({})
     const testValue = 'TEST'
     const input = screen.getByDisplayValue('') as HTMLInputElement
     fireEvent.change(input, { target: { value: testValue } })
     expect(input.value).toBe(testValue)
   })
   it('should render the cancel / submit buttons', () => {
-    setup()
+    setup({})
     expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.getByText(t('common.submit'))).toBeInTheDocument()
   })
   it('should click the cancel button', () => {
-    setup()
+    setup({})
     const cancelButton = screen.getByText(t('common.cancel'))
     fireEvent.click(cancelButton)
     expect(closeModalMock).toHaveBeenCalled()
   })
   it('should render an warning on the rejection modal', () => {
-    setup(Course_Audit_Type_Enum.Rejected)
+    setup({ action: Course_Audit_Type_Enum.Rejected })
     expect(
       screen.getByText(
         t('pages.create-course.exceptions.course-rejection-warning')
@@ -88,29 +87,67 @@ describe('component: ExceptionsApprovalModalContent', () => {
     ).toBeInTheDocument()
   })
   it('should click the submit button and handle the Approve action', async () => {
-    setup()
+    const client = {
+      executeMutation: vi.fn(),
+    }
+    client.executeMutation.mockImplementation(() => {
+      fromValue<{ data: ApproveCourseMutation }>({
+        data: {
+          approveCourse: {
+            success: true,
+          },
+        },
+      })
+    })
+    render(
+      <Provider value={client as unknown as Client}>
+        <ExceptionsApprovalModalContent
+          action={Course_Audit_Type_Enum.Approved}
+          courseId={String(course.id)}
+          closeModal={closeModalMock}
+        />
+      </Provider>
+    )
     const input = screen.getByDisplayValue('') as HTMLInputElement
     const testValue = 'TEST'
     fireEvent.change(input, { target: { value: testValue } })
     expect(input.value).toBe(testValue)
     await userEvent.click(screen.getByText(t('common.submit')))
-    expect(fetcherMock).toHaveBeenCalledWith('approve-course-mutation', {
-      input: { courseId: course.id },
-    })
+    expect(closeModalMock).toHaveBeenCalledTimes(1)
+    expect(client.executeMutation).toHaveBeenCalledTimes(1)
   })
   it('should click the submit button and handle the Reject action', async () => {
-    setup(Course_Audit_Type_Enum.Rejected)
+    const client = {
+      executeMutation: vi.fn(),
+    }
+    client.executeMutation.mockImplementation(() => {
+      fromValue<{ data: RejectCourseMutation }>({
+        data: {
+          rejectCourse: {
+            success: true,
+          },
+        },
+      })
+    })
+    render(
+      <Provider value={client as unknown as Client}>
+        <ExceptionsApprovalModalContent
+          action={Course_Audit_Type_Enum.Rejected}
+          courseId={String(course.id)}
+          closeModal={closeModalMock}
+        />
+      </Provider>
+    )
     const input = screen.getByDisplayValue('') as HTMLInputElement
     const testValue = 'TEST'
     fireEvent.change(input, { target: { value: testValue } })
     expect(input.value).toBe(testValue)
     await userEvent.click(screen.getByText(t('common.submit')))
-    expect(fetcherMock).toHaveBeenCalledWith('reject-course-mutation', {
-      input: { courseId: course.id },
-    })
+    expect(closeModalMock).toHaveBeenCalledTimes(1)
+    expect(client.executeMutation).toHaveBeenCalledTimes(1)
   })
   it('should fail if only SPACES were entered', async () => {
-    setup()
+    setup({})
     const input = screen.getByDisplayValue('') as HTMLInputElement
     const testValue = '      '
     fireEvent.change(input, { target: { value: testValue } })
@@ -122,7 +159,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
     ).toBeInTheDocument()
   })
   it('should fail if no reason is provided', async () => {
-    setup()
+    setup({})
     await userEvent.click(screen.getByText(t('common.submit')))
     expect(
       screen.getByText(t('pages.create-course.exceptions.reason-required'))

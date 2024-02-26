@@ -1,4 +1,3 @@
-import React from 'react'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
@@ -17,11 +16,6 @@ const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => ({
   ...((await vi.importActual('react-router-dom')) as object),
   useNavigate: () => mockNavigate,
-}))
-
-const mockFetcher = vi.fn()
-vi.mock('@app/hooks/use-fetcher', () => ({
-  useFetcher: () => mockFetcher,
 }))
 
 const placeholder = 'Search eligible trainers...'

@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
+import { useMutation } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import {
@@ -9,7 +10,6 @@ import {
   SetCourseDraftMutation,
   SetCourseDraftMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import { QUERY as SET_COURSE_DRAFT } from '@app/queries/courses/set-course-draft'
 import {
@@ -61,7 +61,6 @@ export const CreateCourseProvider: React.FC<
   const { t } = useTranslation()
   const { acl, profile } = useAuth()
   const { id: draftId } = useParams()
-  const fetcher = useFetcher()
 
   const [courseData, setCourseData] = useState<ValidCourseInput | undefined>(
     initialValue?.courseData
@@ -92,6 +91,11 @@ export const CreateCourseProvider: React.FC<
   const { strategies } = useBildStrategies(
     Boolean(courseData?.accreditedBy === Accreditors_Enum.Bild)
   )
+
+  const [, setCourseDraft] = useMutation<
+    SetCourseDraftMutation,
+    SetCourseDraftMutationVariables
+  >(SET_COURSE_DRAFT)
 
   const seniorOrPrincipalLead = useMemo(() => {
     return trainers.some(t =>
@@ -196,10 +200,7 @@ export const CreateCourseProvider: React.FC<
       }
 
       try {
-        const response = await fetcher<
-          SetCourseDraftMutation,
-          SetCourseDraftMutationVariables
-        >(SET_COURSE_DRAFT, {
+        const { data: response } = await setCourseDraft({
           object: {
             courseType: courseType ?? draft.courseData?.type,
             data: normalizedDraft,
@@ -209,7 +210,7 @@ export const CreateCourseProvider: React.FC<
         })
 
         return {
-          id: response.insert_course_draft_one?.id,
+          id: response?.insert_course_draft_one?.id,
           name,
         }
       } catch (error) {
@@ -223,17 +224,17 @@ export const CreateCourseProvider: React.FC<
       }
     },
     [
-      completedSteps,
+      profile?.id,
       courseData,
-      currentStepKey,
-      expenses,
-      profile,
       trainers,
+      expenses,
+      currentStepKey,
+      completedSteps,
       go1Licensing,
       invoiceDetails,
+      setCourseDraft,
       courseType,
       draftId,
-      fetcher,
     ]
   )
 

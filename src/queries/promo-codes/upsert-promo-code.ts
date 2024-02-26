@@ -1,6 +1,6 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
-export default gql`
+export const UPSERT_PROMO_CODE = gql`
   mutation UpsertPromoCode(
     $promoCondition: promo_code_bool_exp
     $promoCode: promo_code_insert_input!

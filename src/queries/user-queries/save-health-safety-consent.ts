@@ -1,10 +1,5 @@
 import { gql } from 'graphql-request'
 
-export type ParamsType = {
-  courseId: string
-  profileId: string
-}
-
 export const MUTATION = gql`
   mutation SaveHealthSafetyConsent($courseId: Int!, $profileId: uuid!) {
     update_course_participant(

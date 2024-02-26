@@ -194,20 +194,17 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       showHubResults,
       showTrainerNonAOLOrgs,
     ])
-    const noOptionsText =
-      showTrainerNonAOLOrgs && !myOrg?.length ? (
-        <Typography variant="body2">
-          {dfeFetching || orgsFetching
-            ? t('loading')
-            : t('components.org-selector.no-results')}
-        </Typography>
-      ) : (
-        <Typography variant="body2">
-          {dfeFetching || orgsFetching
-            ? t('loading')
-            : t('components.org-selector.no-results')}
-        </Typography>
-      )
+    const noOptionsText = q ? (
+      <Typography variant="body2">
+        {dfeFetching || orgsFetching
+          ? t('loading')
+          : t('components.org-selector.no-results')}
+      </Typography>
+    ) : (
+      <Typography variant="body2">
+        {t('components.org-selector.start-typing')}
+      </Typography>
+    )
 
     function renderAddress(option: Option) {
       if (!isHubOrg(option) && !isDfeSuggestion(option)) return ''
@@ -229,7 +226,14 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           defaultValue={defaultOrg}
           value={!value ? null : value}
           open={open}
-          onOpen={() => setOpen(true)}
+          onOpen={() => {
+            if (q) {
+              setOpen(true)
+            }
+            if (showTrainerNonAOLOrgs && myOrg?.length) {
+              setOpen(true)
+            }
+          }}
           onClose={() => setOpen(false)}
           data-testid="org-selector"
           sx={sx}

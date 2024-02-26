@@ -14,25 +14,25 @@ import {
   Alert,
 } from '@mui/material'
 import Link from '@mui/material/Link'
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useMutation } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
-import { useFetcher } from '@app/hooks/use-fetcher'
+import {
+  SaveHealthSafetyConsentMutation,
+  SaveHealthSafetyConsentMutationVariables,
+} from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import {
-  MUTATION,
-  ParamsType,
-} from '@app/queries/user-queries/save-health-safety-consent'
+import { MUTATION } from '@app/queries/user-queries/save-health-safety-consent'
 import { validUserSignature } from '@app/util'
 
 export const CourseHealthAndSafetyForm = () => {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const navigate = useNavigate()
   const params = useParams()
   const { profile } = useAuth()
@@ -42,9 +42,6 @@ export const CourseHealthAndSafetyForm = () => {
 
   const courseId = params.id as string
   const { data: courseData } = useCourse(courseId ?? '')
-
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   const [healthCheck, setHealthCheck] = useState(false)
   const [riskCheck, setRiskCheck] = useState(false)
@@ -58,19 +55,19 @@ export const CourseHealthAndSafetyForm = () => {
 
   const valid = healthCheck && riskCheck && validSignature
 
+  const [{ error, fetching: submitting }, saveHealthAndSafety] = useMutation<
+    SaveHealthSafetyConsentMutation,
+    SaveHealthSafetyConsentMutationVariables
+  >(MUTATION)
+
   const handleSubmit = async () => {
     if (profile) {
-      setSubmitting(true)
-      try {
-        await fetcher<null, ParamsType>(MUTATION, {
-          courseId,
-          profileId: profile.id,
-        })
+      const { data } = await saveHealthAndSafety({
+        courseId: Number(courseId ?? 0),
+        profileId: profile.id,
+      })
+      if (data) {
         navigate(`/courses/${courseId}/details?tab=CHECKLIST`)
-      } catch (e: unknown) {
-        setError((e as Error).message)
-      } finally {
-        setSubmitting(false)
       }
     }
   }
@@ -181,7 +178,7 @@ export const CourseHealthAndSafetyForm = () => {
 
             {error && (
               <Box mt={2}>
-                <FormHelperText error>{error}</FormHelperText>
+                <FormHelperText error>{error.message}</FormHelperText>
               </Box>
             )}
 

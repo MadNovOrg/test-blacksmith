@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 export const IMPORT_ARLO_CERTIFICATES_ACTION = gql`
   mutation ImportArloCertificates($report: String!) {

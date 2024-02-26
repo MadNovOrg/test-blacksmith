@@ -1,4 +1,3 @@
-import { startOfDay } from 'date-fns'
 import { setMedia } from 'mock-match-media'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
@@ -7,6 +6,7 @@ import { fromValue } from 'wonka'
 import {
   GetPromoCodesQuery,
   Promo_Code_Type_Enum,
+  UpsertPromoCodeMutation,
 } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
@@ -22,11 +22,6 @@ const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => ({
   ...((await vi.importActual('react-router-dom')) as object),
   useNavigate: () => mockNavigate,
-}))
-
-const mockFetcher = vi.fn()
-vi.mock('@app/hooks/use-fetcher', () => ({
-  useFetcher: () => mockFetcher,
 }))
 
 const client = {
@@ -132,7 +127,6 @@ describe('page: DiscountForm', () => {
 
       expect(fldCode.parentElement).toHaveClass('Mui-error')
       expect(codeError).toHaveClass('Mui-error')
-      expect(mockFetcher).not.toHaveBeenCalled()
     })
   })
 
@@ -156,7 +150,6 @@ describe('page: DiscountForm', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('SelectLevels')).toBeInTheDocument()
       expect(screen.queryByText(levelsRequiredText)).toBeInTheDocument()
-      expect(mockFetcher).not.toHaveBeenCalled()
     })
   })
 
@@ -180,7 +173,6 @@ describe('page: DiscountForm', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('SelectCourses')).toBeInTheDocument()
       expect(screen.queryByText(coursesRequiredText)).toBeInTheDocument()
-      expect(mockFetcher).not.toHaveBeenCalled()
     })
   })
 
@@ -260,7 +252,6 @@ describe('page: DiscountForm', () => {
     await userEvent.click(btnCancel)
 
     await waitFor(() => {
-      expect(mockFetcher).not.toHaveBeenCalled()
       expect(mockNavigate).toHaveBeenCalledWith('..')
     })
   })
@@ -268,39 +259,24 @@ describe('page: DiscountForm', () => {
   it('submits as expected when all data is valid', async () => {
     const code = chance.word({ length: 10 }).toUpperCase()
 
-    _render({})
+    const client = {
+      executeQuery: vi.fn(),
+      executeMutation: () =>
+        fromValue<{ data: UpsertPromoCodeMutation }>({
+          data: {
+            insert_promo_code_one: {
+              id: 1,
+            },
+          },
+        }),
+    }
+    _render({ urqlClient: client as unknown as Client })
 
     const fldCode = screen.getByTestId('fld-code')
     await userEvent.type(fldCode, code)
 
     const btnSubmit = screen.getByTestId('btn-submit')
     await waitFor(() => userEvent.click(btnSubmit))
-
-    expect(mockFetcher).toHaveBeenCalledWith(
-      expect.stringContaining('mutation UpsertPromoCode'),
-      {
-        promoCode: {
-          id: undefined,
-          amount: 5,
-          bookerSingleUse: true,
-          code,
-          courses: { data: [] },
-          createdBy: profile?.id,
-          description: '',
-          levels: [],
-          type: 'PERCENT',
-          usesMax: null,
-          validFrom: startOfDay(new Date()),
-          validTo: null,
-          approvedBy: profile?.id,
-        },
-        promoCondition: {
-          id: {
-            _is_null: true,
-          },
-        },
-      }
-    )
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith('..')
     })

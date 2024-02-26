@@ -8,7 +8,6 @@ import { never } from 'wonka'
 import { VenueSelector } from '@app/components/VenueSelector'
 import { Accreditors_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { Course_Level_Enum } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { BildStrategies, ValidCourseInput } from '@app/types'
@@ -27,9 +26,6 @@ import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
 import { CreateCourseProvider } from '../CreateCourseProvider'
 
 import { CreateCourseForm } from '.'
-
-vi.mock('@app/hooks/use-fetcher')
-const useFetcherMock = vi.mocked(useFetcher)
 
 vi.mock('@app/components/VenueSelector', () => ({
   VenueSelector: vi.fn(),
@@ -130,28 +126,22 @@ describe('component: CreateCourseForm', () => {
     ]
     mockTrainerSearch.mockResolvedValue({ trainers: availableTrainers })
 
-    const client = {
-      executeQuery: () => never,
-    } as unknown as Client
-
     render(
-      <Provider value={client}>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <CreateCourseProvider
-                initialValue={{
-                  courseData: courseToCourseInput(course) as ValidCourseInput,
-                }}
-                courseType={Course_Type_Enum.Indirect}
-              >
-                <CreateCourseForm />
-              </CreateCourseProvider>
-            }
-          />
-        </Routes>
-      </Provider>,
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CreateCourseProvider
+              initialValue={{
+                courseData: courseToCourseInput(course) as ValidCourseInput,
+              }}
+              courseType={Course_Type_Enum.Indirect}
+            >
+              <CreateCourseForm />
+            </CreateCourseProvider>
+          }
+        />
+      </Routes>,
       {},
       { initialEntries: ['/?type=INDIRECT'] }
     )
@@ -211,34 +201,22 @@ describe('component: CreateCourseForm', () => {
       },
     })
 
-    const fetcherMock = vi.fn()
-    fetcherMock.mockResolvedValue({
-      members: [],
-    })
-    useFetcherMock.mockReturnValue(fetcherMock)
-
-    const client = {
-      executeQuery: () => never,
-    } as unknown as Client
-
     render(
-      <Provider value={client}>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <CreateCourseProvider
-                initialValue={{
-                  courseData: courseToCourseInput(course) as ValidCourseInput,
-                }}
-                courseType={Course_Type_Enum.Indirect}
-              >
-                <CreateCourseForm />
-              </CreateCourseProvider>
-            }
-          />
-        </Routes>
-      </Provider>,
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CreateCourseProvider
+              initialValue={{
+                courseData: courseToCourseInput(course) as ValidCourseInput,
+              }}
+              courseType={Course_Type_Enum.Indirect}
+            >
+              <CreateCourseForm />
+            </CreateCourseProvider>
+          }
+        />
+      </Routes>,
       {
         auth: {
           activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],

@@ -41,12 +41,6 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigate,
 }))
 
-const mockFetcher = vi.fn()
-vi.mock('@app/hooks/use-fetcher', () => ({
-  useFetcher: () => mockFetcher,
-}))
-mockFetcher.mockReturnValue({})
-
 const trainers = [buildTrainerInput(), buildTrainerInputAssistant()]
 const expenses: Record<string, ExpensesInput> = {}
 

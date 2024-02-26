@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
-import { Chance } from 'chance'
+import { uniqueId } from 'lodash'
 import React, { useMemo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
@@ -53,7 +53,6 @@ export type VenueSelectorProps = {
   textFieldProps?: TextFieldProps
   courseResidingCountry?: WorldCountriesCodes | string
 }
-const chance = new Chance()
 function getOptionLabel(value: AutocompletePrediction | Venue | string) {
   if (typeof value === 'string') {
     return ''
@@ -196,7 +195,6 @@ export const VenueSelector: React.FC<
     setOpen(false)
     setVenue(undefined)
   }
-
   return (
     <>
       <Wrapper
@@ -230,7 +228,7 @@ export const VenueSelector: React.FC<
           getOptionLabel={getOptionLabel}
           value={value ?? null}
           renderGroup={params => (
-            <li key={params.key}>
+            <li key={uniqueId()}>
               <Grid container justifyContent="space-between" px={2} py={1}>
                 <Typography display="inline" variant="body2">
                   {params.group}
@@ -297,12 +295,12 @@ export const VenueSelector: React.FC<
             })
             const parts = parse(label, matches)
             return (
-              <li key={chance.guid()} {...props}>
+              <li {...props} key={uniqueId()}>
                 <Grid container justifyContent="space-between">
                   <Box display="inline">
-                    {parts.map((part, index) => (
+                    {parts.map(part => (
                       <Typography
-                        key={index}
+                        key={uniqueId()}
                         display="inline"
                         variant="body1"
                         fontWeight={part.highlight ? 600 : 400}

@@ -6,44 +6,38 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useMutation } from 'urql'
 
 import { LinkBehavior } from '@app/components/LinkBehavior'
-import { useFetcher } from '@app/hooks/use-fetcher'
+import {
+  ArloCallbackMutation,
+  ArloCallbackMutationVariables,
+} from '@app/generated/graphql'
 
-import { ArloCallbackQuery, ArloCallbackResp } from './helpers'
-
-const initialState = { loading: false, error: false }
+import { ARLO_CONNECT_MUTATION } from './helpers'
 
 export const ArloConnect: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const navigate = useNavigate()
-  const [state, setState] = useState(initialState)
-  const { loading, error } = state
+  const [{ error, fetching: loading }, getArloConnectionCallback] = useMutation<
+    ArloCallbackMutation,
+    ArloCallbackMutationVariables
+  >(ARLO_CONNECT_MUTATION)
 
   const arloCallback = useCallback(async () => {
-    setState(s => ({ ...s, loading: true }))
+    console.log(window.location.href, '===============')
+    const { data } = await getArloConnectionCallback({
+      input: { url: window.location.href },
+    })
 
-    try {
-      console.log(window.location.href, '===============')
-      const { arloCallback } = await fetcher<ArloCallbackResp>(
-        ArloCallbackQuery,
-        { input: { url: window.location.href } }
-      )
+    if (!data?.arloCallback?.status) throw Error('Failed to process callback')
 
-      if (!arloCallback.status) throw Error('Failed to process callback')
-      setState({ loading: false, error: false })
-    } catch (err) {
-      console.error(err)
-      setState({ loading: false, error: true })
-    }
-
-    navigate('') // clear search params
-  }, [fetcher, navigate])
+    navigate('')
+  }, [getArloConnectionCallback, navigate])
 
   useEffect(() => {
     const sp = new URLSearchParams(window.location.search)

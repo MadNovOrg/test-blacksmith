@@ -27,8 +27,9 @@ import {
   GridRowEditStopReasons,
   GridValueFormatterParams,
 } from '@mui/x-data-grid'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useMutation } from 'urql'
 import { v4 as uuidv4 } from 'uuid'
 
 import { Dialog } from '@app/components/dialogs'
@@ -42,7 +43,6 @@ import {
   DeleteCoursePricingScheduleMutation,
   DeleteCoursePricingScheduleMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { MUTATION as DELETE_MUTATION } from '@app/queries/pricing/delete-course-pricing-schedule'
 import { MUTATION as INSERT_MUTATION } from '@app/queries/pricing/insert-course-pricing-schedule'
 import { MUTATION as UPDATE_MUTATION } from '@app/queries/pricing/set-course-pricing-schedule'
@@ -99,9 +99,24 @@ export const EditPriceModal = ({
   onSave,
 }: EditPriceModalProps) => {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const { profile } = useAuth()
-  const [error, setError] = useState('')
+  const [{ error: deleteCoursePricingError }, deleteCoursePricingSchedule] =
+    useMutation<
+      DeleteCoursePricingScheduleMutation,
+      DeleteCoursePricingScheduleMutationVariables
+    >(DELETE_MUTATION)
+
+  const [{ error: insertCoursePricingError }, insertCoursePricingSchedule] =
+    useMutation<
+      InsertCoursePricingScheduleMutation,
+      InsertCoursePricingScheduleMutationVariables
+    >(INSERT_MUTATION)
+
+  const [{ error: updateCoursePricingError }, updateCoursePricingSchedule] =
+    useMutation<
+      SetCoursePricingScheduleMutation,
+      SetCoursePricingScheduleMutationVariables
+    >(UPDATE_MUTATION)
 
   const initialRows: GridRowsProp = (pricing?.pricingSchedules || []).map(
     schedule => {
@@ -114,11 +129,9 @@ export const EditPriceModal = ({
       }
     }
   )
-  const [rows, setRows] = React.useState(initialRows)
+  const [rows, setRows] = useState(initialRows)
 
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
-    {}
-  )
+  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (
     params,
@@ -138,18 +151,12 @@ export const EditPriceModal = ({
   }
 
   const handleDeleteClick = (id: GridRowId) => async () => {
-    try {
-      await fetcher<
-        DeleteCoursePricingScheduleMutation,
-        DeleteCoursePricingScheduleMutationVariables
-      >(DELETE_MUTATION, {
-        id: id,
-      })
+    const { data } = await deleteCoursePricingSchedule({
+      id: id,
+    })
+    if (data) {
       setRows(rows.filter(row => row.id !== id))
-
       onSave()
-    } catch (e: unknown) {
-      setError((e as Error).message)
     }
   }
 
@@ -170,54 +177,42 @@ export const EditPriceModal = ({
     rowBeforeChange: GridRowModel
   ) => {
     if (rowBeforeChange.isNew) {
-      try {
-        const createdCPS = await fetcher<
-          InsertCoursePricingScheduleMutation,
-          InsertCoursePricingScheduleMutationVariables
-        >(INSERT_MUTATION, {
-          id: rowAfterChange.id,
-          coursePricingId: pricing?.id,
-          priceAmount: rowAfterChange.priceAmount,
-          authorId: profile?.id,
-          effectiveFrom: rowAfterChange.effectiveFrom,
-          effectiveTo: rowAfterChange.effectiveTo,
-        })
-        const updatedRow = {
-          ...rowAfterChange,
-          isNew: false,
-          id: createdCPS?.course_pricing_schedule?.id,
-        }
-        setRows(
-          rows.map(row => (row.id === rowAfterChange.id ? updatedRow : row))
-        )
-        onSave()
-        return updatedRow
-      } catch (e: unknown) {
-        setError((e as Error).message)
+      const { data: createdCPS } = await insertCoursePricingSchedule({
+        id: rowAfterChange.id,
+        coursePricingId: pricing?.id,
+        priceAmount: rowAfterChange.priceAmount,
+        authorId: profile?.id,
+        effectiveFrom: rowAfterChange.effectiveFrom,
+        effectiveTo: rowAfterChange.effectiveTo,
+      })
+      const updatedRow = {
+        ...rowAfterChange,
+        isNew: false,
+        id: createdCPS?.course_pricing_schedule?.id,
       }
+      setRows(
+        rows.map(row => (row.id === rowAfterChange.id ? updatedRow : row))
+      )
+      if (createdCPS) {
+        onSave()
+      }
+      return updatedRow
     } else {
-      try {
-        await fetcher<
-          SetCoursePricingScheduleMutation,
-          SetCoursePricingScheduleMutationVariables
-        >(UPDATE_MUTATION, {
-          id: rowAfterChange.id,
-          coursePricingId: pricing?.id,
-          oldPrice: rowBeforeChange.priceAmount,
-          priceAmount: rowAfterChange.priceAmount,
-          authorId: profile?.id,
-          effectiveFrom: rowAfterChange.effectiveFrom,
-          effectiveTo: rowAfterChange.effectiveTo,
-        })
-        onSave()
-        const updatedRow = { ...rowAfterChange, isNew: false }
-        setRows(
-          rows.map(row => (row.id === rowAfterChange.id ? updatedRow : row))
-        )
-        return updatedRow
-      } catch (e: unknown) {
-        setError((e as Error).message)
-      }
+      const { data } = await updateCoursePricingSchedule({
+        id: rowAfterChange.id,
+        coursePricingId: pricing?.id,
+        oldPrice: rowBeforeChange.priceAmount,
+        priceAmount: rowAfterChange.priceAmount,
+        authorId: profile?.id,
+        effectiveFrom: rowAfterChange.effectiveFrom,
+        effectiveTo: rowAfterChange.effectiveTo,
+      })
+      if (data) onSave()
+      const updatedRow = { ...rowAfterChange, isNew: false }
+      setRows(
+        rows.map(row => (row.id === rowAfterChange.id ? updatedRow : row))
+      )
+      return updatedRow
     }
   }
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -351,7 +346,19 @@ export const EditPriceModal = ({
               />
             </Box>
 
-            {error && <Alert severity="error">{error}</Alert>}
+            {insertCoursePricingError ||
+            deleteCoursePricingError ||
+            updateCoursePricingError ? (
+              <Alert severity="error">
+                {
+                  (
+                    insertCoursePricingError ??
+                    deleteCoursePricingError ??
+                    updateCoursePricingError
+                  )?.message
+                }
+              </Alert>
+            ) : null}
 
             <Typography
               variant="h4"

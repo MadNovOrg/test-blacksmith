@@ -6,63 +6,57 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-
-import { useFetcher } from '@app/hooks/use-fetcher'
+import { useMutation, useQuery } from 'urql'
 
 import {
+  XeroCallbackMutation,
+  XeroCallbackMutationVariables,
   XeroConnectQuery,
-  XeroConnectResp,
-  XeroCallbackQuery,
-  XeroCallbackResp,
-} from './helpers'
+} from '@app/generated/graphql'
 
-const initialState = { loading: true, consentUrl: '', error: false }
+import { XERO_CONNECT_QUERY, XERO_CONNECT_MUTATION } from './helpers'
 
 export const XeroConnect: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const navigate = useNavigate()
-  const [state, setState] = useState(initialState)
-  const { loading, error, consentUrl } = state
+  const [
+    {
+      data: xeroConnectionStatus,
+      fetching: xeroConnectionStatusLoading,
+      error: xeroConnectionStatusError,
+    },
+    refetchXeroConnection,
+  ] = useQuery<XeroConnectQuery>({
+    query: XERO_CONNECT_QUERY,
+    requestPolicy: 'network-only',
+  })
+  const [{ error: xeroConnectError }, xeroConnect] = useMutation<
+    XeroCallbackMutation,
+    XeroCallbackMutationVariables
+  >(XERO_CONNECT_MUTATION)
 
-  const xeroConsent = useCallback(async () => {
-    setState(s => ({ ...s, loading: true }))
-    try {
-      const r = await fetcher<XeroConnectResp>(XeroConnectQuery)
-      const { consentUrl = '' } = r.xeroConnect
-      setState({ loading: false, consentUrl, error: false })
-    } catch (err) {
-      console.error(err)
-      setState({ loading: false, consentUrl: '', error: true })
-    }
-  }, [fetcher])
-
+  const consentUrl = useMemo(
+    () => xeroConnectionStatus?.xeroConnect?.consentUrl,
+    [xeroConnectionStatus?.xeroConnect?.consentUrl]
+  )
   const xeroCallback = useCallback(async () => {
-    setState(s => ({ ...s, loading: true }))
+    const { data: xeroCallback } = await xeroConnect({
+      input: { url: window.location.href },
+    })
 
-    try {
-      const { xeroCallback } = await fetcher<XeroCallbackResp>(
-        XeroCallbackQuery,
-        { input: { url: window.location.href } }
-      )
-
-      if (!xeroCallback.status) throw Error('Failed to process callback')
-      setState({ loading: false, consentUrl: '', error: false })
-    } catch (err) {
-      console.error(err)
-      setState({ loading: false, consentUrl: '', error: true })
-    }
+    if (!xeroCallback?.xeroCallback?.status)
+      throw Error('Failed to process callback')
 
     navigate('') // clear search params
-  }, [fetcher, navigate])
+  }, [xeroConnect, navigate])
 
   useEffect(() => {
     const sp = new URLSearchParams(window.location.search)
-    sp.has('code') ? xeroCallback() : xeroConsent()
-  }, [xeroConsent, xeroCallback])
+    sp.has('code') ? xeroCallback() : refetchXeroConnection()
+  }, [refetchXeroConnection, xeroCallback])
 
   const connectToXero = useCallback(() => {
     if (consentUrl) {
@@ -70,19 +64,21 @@ export const XeroConnect: React.FC<React.PropsWithChildren<unknown>> = () => {
     }
   }, [consentUrl])
 
-  const showConnect = !loading && !error && consentUrl
-  const showConnected = !loading && !error && !consentUrl
+  const showConnect =
+    !xeroConnectionStatusLoading && !xeroConnectionStatusError && consentUrl
+  const showConnected =
+    !xeroConnectionStatusLoading && !xeroConnectionStatusError && !consentUrl
 
   return (
     <Container maxWidth="lg" sx={{ py: 5, textAlign: 'center' }}>
       <Stack gap={4} alignItems="center">
         <Typography variant="h1">{t('pages.xero.connect-h1')}</Typography>
 
-        {loading ? (
+        {xeroConnectionStatusLoading ? (
           <CircularProgress data-testid="XeroConnect-loading" />
         ) : null}
 
-        {error ? (
+        {xeroConnectError ? (
           <Typography>{t('pages.xero.connect-error')}</Typography>
         ) : null}
 

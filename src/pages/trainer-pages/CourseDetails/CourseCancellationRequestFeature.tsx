@@ -12,6 +12,7 @@ import {
 } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useMutation } from 'urql'
 
 import { Dialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
@@ -19,7 +20,6 @@ import {
   DeleteCourseCancellationRequestMutation,
   DeleteCourseCancellationRequestMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { CourseCancellationModal } from '@app/pages/EditCourse/components/CourseCancellationModal'
 import { CourseCancellationRequestModal } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestModal'
 import { DELETE_COURSE_CANCELLATION_REQUEST_MUTATION } from '@app/queries/courses/delete-course-cancellation-request'
@@ -35,31 +35,25 @@ export type CourseCancellationRequestFeatureProps = {
 export const CourseCancellationRequestFeature: React.FC<
   React.PropsWithChildren<CourseCancellationRequestFeatureProps>
 > = ({ course, open, onClose, onChange }) => {
-  const fetcher = useFetcher()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { acl } = useAuth()
   const { t } = useTranslation()
 
-  const [error, setError] = useState('')
   const [showCancellationModal, setShowCancellationModal] = useState(false)
+  const [{ error }, deleteCourseCancelationRequest] = useMutation<
+    DeleteCourseCancellationRequestMutation,
+    DeleteCourseCancellationRequestMutationVariables
+  >(DELETE_COURSE_CANCELLATION_REQUEST_MUTATION)
 
   const deleteCancellationRequest = useCallback(async () => {
     if (course?.cancellationRequest) {
-      setError('')
-      try {
-        await fetcher<
-          DeleteCourseCancellationRequestMutation,
-          DeleteCourseCancellationRequestMutationVariables
-        >(DELETE_COURSE_CANCELLATION_REQUEST_MUTATION, {
-          id: course.cancellationRequest.id,
-        })
-        onChange()
-      } catch (e: unknown) {
-        setError((e as Error).message)
-      }
+      const { data } = await deleteCourseCancelationRequest({
+        id: course.cancellationRequest.id,
+      })
+      if (data) onChange()
     }
-  }, [course, fetcher, onChange])
+  }, [course.cancellationRequest, deleteCourseCancelationRequest, onChange])
 
   return (
     <Container>
@@ -127,7 +121,7 @@ export const CourseCancellationRequestFeature: React.FC<
             mt: 2,
           }}
         >
-          {error}
+          {error.message}
         </Alert>
       ) : null}
 

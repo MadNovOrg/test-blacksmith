@@ -14,13 +14,13 @@ import {
 import React, { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation, Trans } from 'react-i18next'
+import { useMutation } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import {
   RequestCourseCancellationMutation,
   RequestCourseCancellationMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import { CancellationTermsTable } from '@app/pages/EditCourse/components/CancellationTermsTable'
 import { REQUEST_COURSE_CANCELLATION_MUTATION } from '@app/queries/courses/request-course-cancellation'
 import { yup } from '@app/schemas'
@@ -40,12 +40,13 @@ export const CourseCancellationRequestModal: React.FC<
   React.PropsWithChildren<CourseCancellationRequestModalProps>
 > = function ({ course, onClose, onSubmit }) {
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const { profile } = useAuth()
-
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
   const [confirmed, setConfirmed] = useState(false)
+
+  const [{ fetching: loading, error }, requestCourseCancellation] = useMutation<
+    RequestCourseCancellationMutation,
+    RequestCourseCancellationMutationVariables
+  >(REQUEST_COURSE_CANCELLATION_MUTATION)
 
   const schema = useMemo(() => {
     return yup
@@ -69,26 +70,15 @@ export const CourseCancellationRequestModal: React.FC<
   const startDate = course.schedule[0].start
 
   const onFormSubmit = async (data: FormInput) => {
-    setLoading(true)
-
-    try {
-      await fetcher<
-        RequestCourseCancellationMutation,
-        RequestCourseCancellationMutationVariables
-      >(REQUEST_COURSE_CANCELLATION_MUTATION, {
-        cancellationRequest: {
-          course_id: course.id,
-          requested_by: profile?.id,
-          reason: data.cancellationReason,
-        },
-      })
-      if (onSubmit) {
-        onSubmit()
-      }
-    } catch (e: unknown) {
-      setError((e as Error).message)
-    } finally {
-      setLoading(false)
+    requestCourseCancellation({
+      cancellationRequest: {
+        course_id: course.id,
+        requested_by: profile?.id,
+        reason: data.cancellationReason,
+      },
+    })
+    if (onSubmit) {
+      onSubmit()
     }
   }
 
@@ -158,7 +148,7 @@ export const CourseCancellationRequestModal: React.FC<
         />
       </Box>
 
-      {error && <Alert severity="error">{error}</Alert>}
+      {error && <Alert severity="error">{error.message}</Alert>}
 
       <Box display="flex" justifyContent="space-between" mt={4}>
         <Button type="button" variant="text" color="primary" onClick={onClose}>

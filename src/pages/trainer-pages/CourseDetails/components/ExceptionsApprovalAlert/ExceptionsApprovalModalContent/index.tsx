@@ -11,18 +11,13 @@ import { useSnackbar } from '@app/context/snackbar'
 import {
   ApproveCourseMutation,
   ApproveCourseMutationVariables,
-  Course_Audit_Insert_Input,
   Course_Audit_Type_Enum,
-  InsertCourseAuditMutation,
-  InsertCourseAuditMutationVariables,
   RejectCourseMutation,
   RejectCourseMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
-import { MUTATION as APPROVE_COURSE_MUTATION } from '@app/queries/courses/approve-course'
-import { INSERT_COURSE_AUDIT } from '@app/queries/courses/insert-course-audit'
-import { MUTATION as REJECT_COURSE_MUTATION } from '@app/queries/courses/reject-course'
+import { APPROVE_COURSE_MUTATION } from '@app/queries/courses/approve-course'
+import { REJECT_COURSE_MUTATION } from '@app/queries/courses/reject-course'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 
@@ -38,15 +33,18 @@ export const ExceptionsApprovalModalContent: FC<
 > = ({ action, courseId, closeModal }) => {
   const { t } = useTranslation()
   const { addSnackbarMessage } = useSnackbar()
-  const fetcher = useFetcher()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { profile } = useAuth()
   const navigate = useNavigate()
   const { data: courseInfo, mutate } = useCourse(courseId ?? '')
-  const [{ error: auditError }, insertAudit] = useMutation<
-    InsertCourseAuditMutation,
-    InsertCourseAuditMutationVariables
-  >(INSERT_COURSE_AUDIT)
+  const [{ error: approveError }, approveCourse] = useMutation<
+    ApproveCourseMutation,
+    ApproveCourseMutationVariables
+  >(APPROVE_COURSE_MUTATION)
+  const [{ error: rejectError }, rejectCourse] = useMutation<
+    RejectCourseMutation,
+    RejectCourseMutationVariables
+  >(REJECT_COURSE_MUTATION)
 
   const course = courseInfo?.course
 
@@ -65,14 +63,6 @@ export const ExceptionsApprovalModalContent: FC<
     formState: { errors },
   } = useForm<{ reason: string }>({ resolver: yupResolver(schema) })
 
-  const addNewCourseAudit: (object: Course_Audit_Insert_Input) => void =
-    useCallback(
-      async object => {
-        await insertAudit({ object })
-      },
-      [insertAudit]
-    )
-
   const submitHandler: SubmitHandler<yup.InferType<typeof schema>> =
     useCallback(
       async data => {
@@ -86,14 +76,11 @@ export const ExceptionsApprovalModalContent: FC<
 
         try {
           if (action === Course_Audit_Type_Enum.Approved) {
-            addNewCourseAudit(auditObject)
-            // Course audit could be in mutation approveCourse for atomicity
-            await fetcher<
-              ApproveCourseMutation,
-              ApproveCourseMutationVariables
-            >(APPROVE_COURSE_MUTATION, { input: { courseId: course.id } })
+            await approveCourse({
+              input: { courseId: course.id },
+              object: auditObject,
+            })
             mutate()
-
             navigate('/manage-courses/all', {
               state: {
                 action: 'approved',
@@ -104,13 +91,10 @@ export const ExceptionsApprovalModalContent: FC<
               },
             })
           } else if (action === Course_Audit_Type_Enum.Rejected) {
-            addNewCourseAudit(auditObject)
-            await fetcher<RejectCourseMutation, RejectCourseMutationVariables>(
-              REJECT_COURSE_MUTATION,
-              {
-                input: { courseId: course.id },
-              }
-            )
+            await rejectCourse({
+              input: { courseId: course.id },
+              object: auditObject,
+            })
 
             navigate('/manage-courses/all', {
               state: {
@@ -137,23 +121,23 @@ export const ExceptionsApprovalModalContent: FC<
         course,
         action,
         profile?.id,
-        addNewCourseAudit,
-        fetcher,
+        approveCourse,
         mutate,
+        navigate,
+        rejectCourse,
+        closeModal,
         addSnackbarMessage,
         t,
-        navigate,
-        closeModal,
       ]
     )
 
   useEffect(() => {
-    if (auditError) {
+    if (rejectError || approveError) {
       addSnackbarMessage('course-approval-error', {
         label: t('errors.generic.unknown-error-please-retry'),
       })
     }
-  }, [addSnackbarMessage, auditError, t])
+  }, [addSnackbarMessage, approveError, rejectError, t])
 
   return (
     <>

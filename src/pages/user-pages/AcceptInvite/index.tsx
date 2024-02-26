@@ -1,20 +1,19 @@
 import { Alert, CircularProgress, Container } from '@mui/material'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 import { useMutation, useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import {
+  AcceptInviteMutation,
+  AcceptInviteMutationVariables,
+  Course_Invite_Status_Enum,
   GetCourseParticipantByInviteQuery,
   GetCourseParticipantByInviteQueryVariables,
 } from '@app/generated/graphql'
 import { QUERY as GET_COURSE_PARTICIPANT } from '@app/queries/course-participant/get-course-participant-by-invitation'
-import {
-  MUTATION as ACCEPT_INVITE_MUTATION,
-  ParamsType as AcceptInviteParamsType,
-  ResponseType as AcceptInviteResponseType,
-} from '@app/queries/invites/accept-invite'
-import { InviteStatus, RoleName } from '@app/types'
+import { MUTATION as ACCEPT_INVITE_MUTATION } from '@app/queries/invites/accept-invite'
+import { RoleName } from '@app/types'
 
 export const AcceptInvite = () => {
   const auth = useAuth()
@@ -39,8 +38,8 @@ export const AcceptInvite = () => {
   })
 
   const [, acceptInvite] = useMutation<
-    AcceptInviteResponseType,
-    AcceptInviteParamsType
+    AcceptInviteMutation,
+    AcceptInviteMutationVariables
   >(ACCEPT_INVITE_MUTATION)
 
   const acceptInviteCallback = useCallback(async () => {
@@ -52,9 +51,12 @@ export const AcceptInvite = () => {
         setSuccess(true)
         return
       }
-      const { data: resp } = await acceptInvite({ inviteId, courseId })
+      const { data: resp } = await acceptInvite({
+        inviteId,
+        courseId: Number(courseId ?? 0),
+      })
       if (
-        resp?.acceptInvite?.status !== InviteStatus.ACCEPTED &&
+        resp?.acceptInvite?.status !== Course_Invite_Status_Enum.Accepted &&
         !resp?.addParticipant?.id
       ) {
         setError(true)
