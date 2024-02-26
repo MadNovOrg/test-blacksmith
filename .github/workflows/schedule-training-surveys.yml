@@ -2,7 +2,7 @@ name: SCHEDULE-TRAINING-SURVEYS
 
 on:
   schedule:
-    - cron: '0 20 26 2 *'
+    - cron: '0 20 27 2 *'
 env:
   DEFAULT_ENV: 'PROD'
 jobs:
