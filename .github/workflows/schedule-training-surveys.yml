@@ -1,18 +1,10 @@
 name: SCHEDULE-TRAINING-SURVEYS
 
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Env you want to sync schedule training surveys'
-        required: false
-        type: choice
-        options:
-          - DEV
-          - PROD
-          - STG
+  schedule:
+    - cron: '0 20 26 2 *'
 env:
-  DEFAULT_ENV: 'DEV'
+  DEFAULT_ENV: 'PROD'
 jobs:
   schedule-training-surveys:
     runs-on: ubuntu-latest
