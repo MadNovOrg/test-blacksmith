@@ -99,7 +99,7 @@ import {
   schema as strategiesSchema,
   StrategyToggles,
   validateStrategies,
-} from './components/StrategyToggles'
+} from './components/StrategyToggles/StrategyToggles'
 import {
   canBeBlended,
   canBeBlendedBild,
@@ -440,8 +440,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           }),
         specialInstructions: yup.string().nullable().default(''),
         parkingInstructions: yup.string().nullable().default(''),
-        bildStrategies: strategiesSchema.when('accreditedBy', {
-          is: Accreditors_Enum.Bild,
+        bildStrategies: strategiesSchema.when(['accreditedBy', 'conversion'], {
+          is: (accreditedBy: Accreditors_Enum, conversion: boolean) =>
+            accreditedBy === Accreditors_Enum.Bild && conversion === false,
           then: s => validateStrategies(s, t),
           otherwise: s => s,
         }),
@@ -1503,6 +1504,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   <StrategyToggles
                     courseLevel={values.courseLevel}
                     disabled={disabledFields.has('bildStrategies')}
+                    isConversion={values.conversion}
                   />
                   <FormHelperText
                     error={Boolean(errors.bildStrategies?.message)}

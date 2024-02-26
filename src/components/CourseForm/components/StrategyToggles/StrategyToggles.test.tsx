@@ -15,7 +15,7 @@ import {
   defaultStrategies,
   schema as strategiesSchema,
   validateStrategies,
-} from '.'
+} from './StrategyToggles'
 
 const schema = yup.object({
   bildStrategies: validateStrategies(strategiesSchema, t),
@@ -42,18 +42,50 @@ const FormWrapper: React.FC<PropsWithChildren> = ({ children }) => {
   )
 }
 
-describe('component: StrategyToggles', () => {
-  it('validates at least one strategy is selected', async () => {
-    render(
-      <FormWrapper>
-        <StrategyToggles courseLevel={Course_Level_Enum.BildRegular} />
-      </FormWrapper>
-    )
+it('validates at least one strategy is selected', async () => {
+  render(
+    <FormWrapper>
+      <StrategyToggles courseLevel={Course_Level_Enum.BildRegular} />
+    </FormWrapper>
+  )
 
-    expect(screen.queryByText(/form is valid/i)).not.toBeInTheDocument()
+  expect(screen.queryByText(/form is valid/i)).not.toBeInTheDocument()
 
-    await userEvent.click(screen.getByLabelText(/primary/i))
+  await userEvent.click(screen.getByLabelText(/primary/i))
 
-    expect(screen.getByText(/form is valid/i)).toBeInTheDocument()
-  })
+  expect(screen.getByText(/form is valid/i)).toBeInTheDocument()
+})
+
+it('deselects all strategies and disables toggles if course is trainer conversion', async () => {
+  const { rerender } = render(
+    <FormWrapper>
+      <StrategyToggles
+        courseLevel={Course_Level_Enum.BildIntermediateTrainer}
+      />
+    </FormWrapper>
+  )
+
+  rerender(
+    <FormWrapper>
+      <StrategyToggles
+        courseLevel={Course_Level_Enum.BildIntermediateTrainer}
+        isConversion={true}
+      />
+    </FormWrapper>
+  )
+
+  expect(screen.getByLabelText(/primary/i)).toBeDisabled()
+  expect(screen.getByLabelText(/primary/i)).not.toBeChecked()
+
+  rerender(
+    <FormWrapper>
+      <StrategyToggles
+        courseLevel={Course_Level_Enum.BildIntermediateTrainer}
+        isConversion={false}
+      />
+    </FormWrapper>
+  )
+
+  expect(screen.getByLabelText(/primary/i)).toBeDisabled()
+  expect(screen.getByLabelText(/primary/i)).toBeChecked()
 })

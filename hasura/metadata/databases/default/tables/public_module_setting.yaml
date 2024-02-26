@@ -37,6 +37,7 @@ select_permissions:
     permission:
       columns:
         - color
+        - conversion
         - course_delivery_type
         - course_level
         - course_type
@@ -53,6 +54,7 @@ select_permissions:
     permission:
       columns:
         - color
+        - conversion
         - course_delivery_type
         - course_level
         - course_type

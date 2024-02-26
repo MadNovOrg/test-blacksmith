@@ -13,6 +13,7 @@ export const MODULE_SETTINGS_QUERY = gql`
     $courseDeliveryType: course_delivery_type_enum!
     $go1Integration: Boolean!
     $reaccreditation: Boolean
+    $conversion: Boolean = false
   ) {
     moduleSettings: module_setting(
       where: {
@@ -21,6 +22,7 @@ export const MODULE_SETTINGS_QUERY = gql`
         courseDeliveryType: { _eq: $courseDeliveryType }
         go1Integration: { _eq: $go1Integration }
         reaccreditation: { _eq: $reaccreditation }
+        conversion: { _eq: $conversion }
       }
       order_by: { sort: asc }
     ) {
@@ -60,6 +62,7 @@ export function useModuleSettings(course: CourseToBuildQuery['course']) {
             courseDeliveryType: course.deliveryType,
             reaccreditation: course.reaccreditation,
             go1Integration: course.go1Integration,
+            conversion: course.conversion ?? false,
           },
         }
       : null),

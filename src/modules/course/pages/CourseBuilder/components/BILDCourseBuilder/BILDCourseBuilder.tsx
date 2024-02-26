@@ -95,7 +95,7 @@ function transformSelection(selectedModules: Record<string, boolean>) {
 
 type BILDCourseBuilderProps = unknown
 
-const mapCourseLevelToDescriptionDays = cond([
+const mapCourseLevelToDuration = cond([
   [
     matches({
       level: Course_Level_Enum.BildAdvancedTrainer,
@@ -188,14 +188,21 @@ export const BILDCourseBuilder: React.FC<
   const courseDescription = useMemo<string>(() => {
     if (!courseData?.course) return ''
 
-    const days = mapCourseLevelToDescriptionDays(courseData.course)
+    const duration = mapCourseLevelToDuration(courseData.course)
 
-    if (days === 0)
+    if (duration === 0)
       return t('pages.trainer-base.create-course.new-course.BILD-description')
+
+    if (courseData.course.conversion) {
+      return t(
+        'pages.trainer-base.create-course.new-course.BILD-generic-description-hours',
+        { hours: duration }
+      )
+    }
 
     return t(
       'pages.trainer-base.create-course.new-course.BILD-generic-description',
-      { days }
+      { days: duration }
     )
   }, [courseData, t])
 

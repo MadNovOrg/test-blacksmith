@@ -18,6 +18,7 @@ export const COURSE_TO_BUILD_QUERY = gql`
     course: course_by_pk(id: $id) {
       ...CourseHero
       curriculum
+      conversion
       moduleGroupIds: modules @include(if: $withModules) {
         module {
           moduleGroup {

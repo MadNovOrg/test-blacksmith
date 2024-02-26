@@ -32475,6 +32475,7 @@ export type Module_Set_Input = {
 export type Module_Setting = {
   __typename?: 'module_setting';
   color: Color_Enum;
+  conversion?: Maybe<Scalars['Boolean']>;
   courseDeliveryType: Course_Delivery_Type_Enum;
   courseLevel: Course_Level_Enum;
   courseType: Course_Type_Enum;
@@ -32611,6 +32612,7 @@ export type Module_Setting_Bool_Exp = {
   _not?: InputMaybe<Module_Setting_Bool_Exp>;
   _or?: InputMaybe<Array<Module_Setting_Bool_Exp>>;
   color?: InputMaybe<Color_Enum_Comparison_Exp>;
+  conversion?: InputMaybe<Boolean_Comparison_Exp>;
   courseDeliveryType?: InputMaybe<Course_Delivery_Type_Enum_Comparison_Exp>;
   courseLevel?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
   courseType?: InputMaybe<Course_Type_Enum_Comparison_Exp>;
@@ -32835,6 +32837,7 @@ export type Module_Setting_Inc_Input = {
 /** input type for inserting data into table "module_setting" */
 export type Module_Setting_Insert_Input = {
   color?: InputMaybe<Color_Enum>;
+  conversion?: InputMaybe<Scalars['Boolean']>;
   courseDeliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   courseLevel?: InputMaybe<Course_Level_Enum>;
   courseType?: InputMaybe<Course_Type_Enum>;
@@ -32909,6 +32912,7 @@ export type Module_Setting_On_Conflict = {
 /** Ordering options when selecting data from "module_setting". */
 export type Module_Setting_Order_By = {
   color?: InputMaybe<Order_By>;
+  conversion?: InputMaybe<Order_By>;
   courseDeliveryType?: InputMaybe<Order_By>;
   courseLevel?: InputMaybe<Order_By>;
   courseType?: InputMaybe<Order_By>;
@@ -32932,6 +32936,8 @@ export type Module_Setting_Pk_Columns_Input = {
 export enum Module_Setting_Select_Column {
   /** column name */
   Color = 'color',
+  /** column name */
+  Conversion = 'conversion',
   /** column name */
   CourseDeliveryType = 'courseDeliveryType',
   /** column name */
@@ -32957,6 +32963,8 @@ export enum Module_Setting_Select_Column {
 /** select "module_setting_aggregate_bool_exp_bool_and_arguments_columns" columns of table "module_setting" */
 export enum Module_Setting_Select_Column_Module_Setting_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
   /** column name */
+  Conversion = 'conversion',
+  /** column name */
   Go1Integration = 'go1Integration',
   /** column name */
   Mandatory = 'mandatory',
@@ -32966,6 +32974,8 @@ export enum Module_Setting_Select_Column_Module_Setting_Aggregate_Bool_Exp_Bool_
 
 /** select "module_setting_aggregate_bool_exp_bool_or_arguments_columns" columns of table "module_setting" */
 export enum Module_Setting_Select_Column_Module_Setting_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  Conversion = 'conversion',
   /** column name */
   Go1Integration = 'go1Integration',
   /** column name */
@@ -32977,6 +32987,7 @@ export enum Module_Setting_Select_Column_Module_Setting_Aggregate_Bool_Exp_Bool_
 /** input type for updating data in table "module_setting" */
 export type Module_Setting_Set_Input = {
   color?: InputMaybe<Color_Enum>;
+  conversion?: InputMaybe<Scalars['Boolean']>;
   courseDeliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   courseLevel?: InputMaybe<Course_Level_Enum>;
   courseType?: InputMaybe<Course_Type_Enum>;
@@ -33039,6 +33050,7 @@ export type Module_Setting_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Module_Setting_Stream_Cursor_Value_Input = {
   color?: InputMaybe<Color_Enum>;
+  conversion?: InputMaybe<Scalars['Boolean']>;
   courseDeliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   courseLevel?: InputMaybe<Course_Level_Enum>;
   courseType?: InputMaybe<Course_Type_Enum>;
@@ -33068,6 +33080,8 @@ export type Module_Setting_Sum_Order_By = {
 export enum Module_Setting_Update_Column {
   /** column name */
   Color = 'color',
+  /** column name */
+  Conversion = 'conversion',
   /** column name */
   CourseDeliveryType = 'courseDeliveryType',
   /** column name */
@@ -56890,6 +56904,7 @@ export type ModuleSettingsQueryVariables = Exact<{
   courseDeliveryType: Course_Delivery_Type_Enum;
   go1Integration: Scalars['Boolean'];
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  conversion?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
@@ -56919,7 +56934,7 @@ export type CourseToBuildQueryVariables = Exact<{
 }>;
 
 
-export type CourseToBuildQuery = { __typename?: 'query_root', course?: { __typename?: 'course', curriculum?: any | null, id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, conversion?: boolean | null, name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null, submodules: Array<{ __typename?: 'submodule', id: any, name: string }> } }>, bildModules?: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies?: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
+export type CourseToBuildQuery = { __typename?: 'query_root', course?: { __typename?: 'course', curriculum?: any | null, conversion?: boolean | null, id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null, submodules: Array<{ __typename?: 'submodule', id: any, name: string }> } }>, bildModules?: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies?: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
 
 export type SaveBildGradeMutationVariables = Exact<{
   modules: Array<Course_Participant_Bild_Module_Insert_Input> | Course_Participant_Bild_Module_Insert_Input;

@@ -267,6 +267,7 @@
       "new-course": {
         "BILD-description": "To submit your course, choose from the modules available to create a course to be delivered over the approved minimum duration of hours confirmed for your Training Needs Analysis. Please be aware, the times indicated are the minimum recommended duration for each module. ",
         "BILD-generic-description": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the {{ days }} day duration.",
+        "BILD-generic-description-hours": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the {{ hours }} hour duration.",
         "ICM-description": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the {{ duration }} duration.",
         "ICM-description-choose-modules": "To submit your course, choose from the modules available to create a course to be delivered over a minimum duration of {{ duration}}. Times indicated on the modules are the minimum recommended duration for each module.",
         "ICM-description-default": "To submit a course, choose from the modules available to create a course {{duration}} in duration. Times indicated on the modules are the minimum recommended duration for each.",
