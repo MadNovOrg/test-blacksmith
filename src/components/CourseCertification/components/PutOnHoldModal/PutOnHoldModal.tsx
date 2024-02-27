@@ -83,7 +83,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
     const lastChangelog = useMemo(() => changelogs[0], [changelogs])
     const [showHoldModal, setShowHoldModal] = useState(true)
 
-    const [{ data: insertChangeLog }, insertCertificateChangelog] = useMutation<
+    const [, insertCertificateChangelog] = useMutation<
       InsertCourseCertificateChangelogMutation,
       InsertCourseCertificateChangelogMutationVariables
     >(INSERT_CERTIFICATE_CHANGELOG_MUTATION)
@@ -152,57 +152,64 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
 
     const submitHandler: SubmitHandler<yup.InferType<typeof schema>> =
       useCallback(async () => {
-        try {
-          const values = getValues()
-          if (!values.dateFrom || !values.dateTo) {
-            return
-          }
-
-          const currentDate = new Date(Date.now())
-          values.dateTo.setHours(
-            currentDate.getHours(),
-            currentDate.getMinutes() + MINUTES_IN_FUTURE
-          )
-
-          await insertCertificateChangelog({
-            participantId,
-            payload: {
-              startDate: values.dateFrom,
-              expireDate: values.dateTo,
-              note: values.note,
-              reason: values.reasonSelected,
-              certificateId,
-            },
-            type: Course_Certificate_Changelog_Type_Enum.PutOnHold,
-          })
-
-          let timeDiff = 0
-          const dateFrom = zonedTimeToUtc(values.dateFrom, 'GMT')
-          const dateTo = zonedTimeToUtc(values.dateTo, 'GMT')
-
-          if (edit) {
-            timeDiff = differenceInDays(
-              dateTo,
-              new Date(lastChangelog?.payload?.expireDate)
-            )
-          } else {
-            timeDiff = differenceInDays(dateTo, dateFrom)
-          }
-
-          const totalDiff = addDays(new Date(certificateExpiryDate), timeDiff)
-          const expireDate = zonedTimeToUtc(new Date(totalDiff), 'GMT')
-
-          await insertCertificateHold({
-            certificateId,
-            changelogId: insertChangeLog?.insertChangeLog?.id,
-            expireDate: dateTo,
-            startDate: dateFrom,
-            newExpiryDate: expireDate.toISOString(),
-          })
-          handleClose()
-        } catch (e: unknown) {
-          setError((e as Error).message)
+        const values = getValues()
+        if (!values.dateFrom || !values.dateTo) {
+          return
         }
+
+        const currentDate = new Date(Date.now())
+        values.dateTo.setHours(
+          currentDate.getHours(),
+          currentDate.getMinutes() + MINUTES_IN_FUTURE
+        )
+
+        insertCertificateChangelog({
+          participantId,
+          payload: {
+            startDate: values.dateFrom,
+            expireDate: values.dateTo,
+            note: values.note,
+            reason: values.reasonSelected,
+            certificateId,
+          },
+          type: Course_Certificate_Changelog_Type_Enum.PutOnHold,
+        })
+          .then(async ({ data }) => {
+            const changelogId = data?.insertChangeLog?.id
+
+            let timeDiff = 0
+            const dateFrom = zonedTimeToUtc(values.dateFrom, 'GMT')
+            const dateTo = zonedTimeToUtc(values.dateTo, 'GMT')
+
+            if (edit) {
+              timeDiff = differenceInDays(
+                dateTo,
+                new Date(lastChangelog?.payload?.expireDate)
+              )
+            } else {
+              timeDiff = differenceInDays(dateTo, dateFrom)
+            }
+
+            const totalDiff = addDays(new Date(certificateExpiryDate), timeDiff)
+            const expireDate = zonedTimeToUtc(new Date(totalDiff), 'GMT')
+
+            try {
+              await insertCertificateHold({
+                certificateId,
+                changelogId: changelogId,
+                expireDate: dateTo,
+                startDate: dateFrom,
+                newExpiryDate: expireDate.toISOString(),
+              })
+            } catch (e: unknown) {
+              setError((e as Error).message)
+            }
+
+            handleClose()
+          })
+          .catch(err => {
+            setError(err)
+          })
       }, [
         certificateExpiryDate,
         certificateId,
@@ -211,7 +218,6 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
         handleClose,
         insertCertificateChangelog,
         insertCertificateHold,
-        insertChangeLog?.insertChangeLog?.id,
         lastChangelog?.payload?.expireDate,
         participantId,
       ])
