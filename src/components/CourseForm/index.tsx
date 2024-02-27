@@ -776,10 +776,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   // set VAT true for all UK countries
   useEffect(() => {
-    if (isUKCountry(values.residingCountry) && !isBild) {
+    if (isUKCountry(values.residingCountry)) {
       setValue('includeVAT', true)
     }
-  }, [isUKCountry, setValue, values.residingCountry, isBild])
+  }, [isUKCountry, setValue, values.residingCountry])
 
   const resetSpecialInstructionsToDefault = useCallback(
     (
@@ -2127,22 +2127,25 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               {(isInternationalFinanceEnabled || needsManualPrice) && (
                 <>
                   <Grid container spacing={2} mt={0}>
-                    <Grid item md={5} sm={12}>
-                      <CurrencySelector
-                        {...register('priceCurrency')}
-                        error={Boolean(errors.priceCurrency)}
-                        fullWidth
-                        helperText={errors.priceCurrency?.message}
-                        value={values.priceCurrency ?? defaultCurrency}
-                        InputLabelProps={{ shrink: true }}
-                        disabled={
-                          !isInternationalFinanceEnabled ||
-                          disabledFields.has('priceCurrency')
-                        }
-                      />
-                    </Grid>
+                    {isInternationalFinanceEnabled && (
+                      <Grid item md={5} sm={12}>
+                        <CurrencySelector
+                          {...register('priceCurrency')}
+                          error={Boolean(errors.priceCurrency)}
+                          fullWidth
+                          helperText={errors.priceCurrency?.message}
+                          value={values.priceCurrency ?? defaultCurrency}
+                          InputLabelProps={{ shrink: true }}
+                          disabled={disabledFields.has('priceCurrency')}
+                        />
+                      </Grid>
+                    )}
 
-                    <Grid item md={7} sm={12}>
+                    <Grid
+                      item
+                      md={isInternationalFinanceEnabled ? 7 : 12}
+                      sm={12}
+                    >
                       <TextField
                         {...register('price')}
                         value={values?.price}
@@ -2162,31 +2165,33 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       />
                     </Grid>
 
-                    <Grid container item md={12} sm={12} alignSelf={'center'}>
-                      <Controller
-                        name="includeVAT"
-                        control={control}
-                        render={({ field }) => (
-                          <FormControlLabel
-                            control={
-                              <Switch
-                                {...field}
-                                checked={
-                                  Boolean(values.includeVAT) ||
-                                  isUKCountry(values.residingCountry)
-                                }
-                                disabled={
-                                  isUKCountry(values.residingCountry) ||
-                                  disabledFields.has('includeVAT')
-                                }
-                                data-testid="includeVAT-switch"
-                              />
-                            }
-                            label={t('vat')}
-                          />
-                        )}
-                      />
-                    </Grid>
+                    {isInternationalFinanceEnabled && (
+                      <Grid container item md={12} sm={12} alignSelf={'center'}>
+                        <Controller
+                          name="includeVAT"
+                          control={control}
+                          render={({ field }) => (
+                            <FormControlLabel
+                              control={
+                                <Switch
+                                  {...field}
+                                  checked={
+                                    Boolean(values.includeVAT) ||
+                                    isUKCountry(values.residingCountry)
+                                  }
+                                  disabled={
+                                    isUKCountry(values.residingCountry) ||
+                                    disabledFields.has('includeVAT')
+                                  }
+                                  data-testid="includeVAT-switch"
+                                />
+                              }
+                              label={t('vat')}
+                            />
+                          )}
+                        />
+                      </Grid>
+                    )}
                   </Grid>
 
                   <InfoRow>

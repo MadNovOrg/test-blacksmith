@@ -516,6 +516,7 @@ describe(EditCourse.name, () => {
       overrides: {
         type: Course_Type_Enum.Closed,
         residingCountry: 'RO',
+        accreditedBy: Accreditors_Enum.Icm,
       },
     })
 
