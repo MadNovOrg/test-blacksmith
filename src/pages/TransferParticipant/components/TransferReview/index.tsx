@@ -168,7 +168,9 @@ export const TransferReview: React.FC<
                 <InfoPanel data-testid="amount-due-panel">
                   <InfoRow>
                     <Typography fontWeight={600}>
-                      {_t('amount-due-currency')}
+                      {_t('common.amount-due-custom-currency', {
+                        currency: fromCourse.priceCurrency ?? 'GBP',
+                      })}
                     </Typography>
                     <Typography fontWeight={600}>
                       {_t('currency', {
