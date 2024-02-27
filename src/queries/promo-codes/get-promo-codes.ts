@@ -44,7 +44,7 @@ export const GET_PROMO_CODES = gql`
       updatedAt
     }
 
-    promo_code_aggregate {
+    promo_code_aggregate(where: $where) {
       aggregate {
         count
       }
