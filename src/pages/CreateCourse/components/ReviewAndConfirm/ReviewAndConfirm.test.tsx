@@ -124,9 +124,7 @@ describe('component: ReviewAndConfirm', () => {
 
     expect(
       screen.getByTestId('course-title-duration').textContent
-    ).toMatchInlineSnapshot(
-      `"Positive Behaviour Training: Level One  - 8 hours"`
-    )
+    ).toMatchInlineSnapshot(`"Positive Behaviour Training: Level One "`)
 
     expect(
       screen.getByTestId('course-dates').textContent

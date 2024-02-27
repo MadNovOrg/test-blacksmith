@@ -10,7 +10,6 @@ import { InvoiceDetails } from '@app/components/InvoiceDetails'
 import theme from '@app/theme'
 import { ExpensesInput, TransportMethod } from '@app/types'
 import {
-  getTimeDifferenceAndContext,
   getTrainerCarCostPerMile,
   getTrainerSubsistenceCost,
   getVatAmount,
@@ -238,15 +237,6 @@ export const OrderDetailsReview: React.FC = () => {
     [courseData]
   )
 
-  const courseDuration = useMemo(() => {
-    if (!startDate || !endDate) {
-      return ''
-    }
-
-    const tdc = getTimeDifferenceAndContext(endDate, startDate)
-    return `${tdc.count} ${tdc.context}`
-  }, [endDate, startDate])
-
   const trainerExpensesTotal = useMemo(() => {
     if (!expenses) {
       return 0
@@ -349,7 +339,7 @@ export const OrderDetailsReview: React.FC = () => {
           mb={1}
           data-testid="course-title-duration"
         >
-          {courseName} - {courseDuration}
+          {courseName}
         </Typography>
 
         <Typography color="dimGrey.main" data-testid="course-dates">

@@ -96,9 +96,7 @@ describe('component: OrderDetails', () => {
 
     expect(
       screen.getByTestId('course-title-duration').textContent
-    ).toMatchInlineSnapshot(
-      `"Positive Behaviour Training: Level One  - 8 hours"`
-    )
+    ).toMatchInlineSnapshot(`"Positive Behaviour Training: Level One "`)
 
     expect(
       screen.getByTestId('course-price-row').textContent
@@ -186,7 +184,7 @@ describe('component: OrderDetails', () => {
 
     expect(
       screen.getByTestId('course-title-duration').textContent
-    ).toMatchInlineSnapshot(`"BILD Certified Course: PS - 8 hours"`)
+    ).toMatchInlineSnapshot(`"BILD Certified Course: PS"`)
 
     expect(
       screen.getByTestId('course-price-row').textContent
