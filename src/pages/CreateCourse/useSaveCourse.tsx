@@ -18,6 +18,7 @@ import {
   RemoveCourseDraftMutationVariables,
   Course_Trainer_Insert_Input,
 } from '@app/generated/graphql'
+import useTimeZones from '@app/hooks/useTimeZones'
 import { shouldGoIntoExceptionApproval } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import { MUTATION as INSERT_COURSE_MUTATION } from '@app/queries/courses/insert-course'
 import { QUERY as REMOVE_COURSE_DRAFT } from '@app/queries/courses/remove-course-draft'
@@ -130,6 +131,7 @@ export function useSaveCourse(): {
     courseName,
     invoiceDetails,
   } = useCreateCourse()
+  const { setDateTimeTimeZone } = useTimeZones()
 
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const { profile, acl } = useAuth()
@@ -184,6 +186,25 @@ export function useSaveCourse(): {
         courseData.type === Course_Type_Enum.Indirect
           ? go1Licensing?.invoiceDetails
           : invoiceDetails
+
+      const scheduleDateTime: (Date | string)[] = [
+        courseData.startDateTime,
+        courseData.endDateTime,
+      ]
+
+      if (courseData.timeZone) {
+        const scheduleStarDateTime = setDateTimeTimeZone(
+          courseData.startDateTime,
+          courseData.timeZone
+        )
+        if (scheduleStarDateTime) scheduleDateTime[0] = scheduleStarDateTime
+
+        const scheduleEndDateTime = setDateTimeTimeZone(
+          courseData.endDateTime,
+          courseData.timeZone
+        )
+        if (scheduleEndDateTime) scheduleDateTime[1] = scheduleEndDateTime
+      }
 
       const { data: response } = await insertCourse({
         course: {
@@ -275,8 +296,8 @@ export function useSaveCourse(): {
           schedule: {
             data: [
               {
-                start: courseData.startDateTime,
-                end: courseData.endDateTime,
+                start: scheduleDateTime[0] ?? courseData.startDateTime,
+                end: scheduleDateTime[1] ?? courseData.endDateTime,
                 virtualLink: [
                   Course_Delivery_Type_Enum.Virtual,
                   Course_Delivery_Type_Enum.Mixed,
@@ -285,6 +306,7 @@ export function useSaveCourse(): {
                   : undefined,
                 venue_id: courseData.venue?.id,
                 virtualAccountId: courseData.zoomProfileId,
+                timeZone: courseData.timeZone?.timeZoneId,
               },
             ],
           },
@@ -401,6 +423,7 @@ export function useSaveCourse(): {
     profile?.fullName,
     profile?.email,
     profile?.phone,
+    setDateTimeTimeZone,
     draftId,
     removeCourseDraft,
   ])

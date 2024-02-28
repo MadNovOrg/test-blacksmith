@@ -19,6 +19,19 @@ export class BasePage {
   }
 
   async waitForPageLoad() {
+    await this.page.route('**/timezone/json*', route => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          dstOffset: 0,
+          rawOffset: -28800,
+          timeZoneId: 'America/Los_Angeles',
+          timeZoneName: 'Pacific Standard Time',
+        }),
+      })
+    })
+
     await this.page.waitForLoadState('domcontentloaded')
     await expect(this.muiProgressCircle).toHaveCount(0)
     await expect(this.muiSkeletonPulse).toHaveCount(0)

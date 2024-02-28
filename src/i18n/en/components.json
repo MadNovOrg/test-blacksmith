@@ -183,6 +183,7 @@
     "reset-instructions-button": "Reset to default",
     "bild-strategies-required": "At least one BILD strategy should be selected",
     "renewal-cycle-required": "Course renewal cycle is a required field",
+    "timezone-required": "Time zone is a required field",
     "special-instructions": {
       "title": "Special instructions",
       "subtitle": "Please ensure you include all applicable course information i.e. twilight dates, online training links, and any other relevant details.",

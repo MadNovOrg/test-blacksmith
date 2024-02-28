@@ -407,6 +407,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               virtualAccountId: courseData.zoomProfileId,
               start: courseData.startDateTime,
               end: courseData.endDateTime,
+              timeZone: courseData.timeZone?.timeZoneId,
             },
             ...(status === Course_Status_Enum.ExceptionsApprovalPending
               ? {

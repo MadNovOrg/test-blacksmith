@@ -20,6 +20,7 @@ import {
   CourseTrainerType as GeneratedCourseTrainerType,
   FindProfilesQuery,
 } from '@app/generated/graphql'
+import { TimeZoneDataType } from '@app/hooks/useTimeZones'
 import { StepsEnum } from '@app/pages/CreateCourse/types'
 
 export type Base = {
@@ -421,6 +422,7 @@ export type CourseSchedule = {
   venue?: Venue
   virtualLink?: string
   virtualAccountId?: string
+  timeZone?: string
 } & Base
 
 export type CourseParticipantModule = {
@@ -615,6 +617,7 @@ export type CourseInput = {
   endDateTime: Date | null
   endDate: Date | null
   endTime: string
+  timeZone?: TimeZoneDataType
   minParticipants: number | null
   maxParticipants: number | null
   venue: Venue | null

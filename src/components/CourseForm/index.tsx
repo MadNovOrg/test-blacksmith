@@ -22,7 +22,7 @@ import {
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import Big from 'big.js'
-import { isPast, isDate, isValid as isValidDate, isBefore } from 'date-fns'
+import { isBefore, isDate, isPast, isValid as isValidDate } from 'date-fns'
 import { TFunction } from 'i18next'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, {
@@ -57,6 +57,7 @@ import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
 import { ProfileSelector } from '@app/components/ProfileSelector'
 import { RegionDropdown } from '@app/components/RegionDropdown'
+import TimeZoneSelector from '@app/components/TimeZoneSelector'
 import {
   Profile as UserSelectorProfile,
   UserSelector,
@@ -72,6 +73,7 @@ import {
   GetNotDetailedProfileQuery,
   GetNotDetailedProfileQueryVariables,
 } from '@app/generated/graphql'
+import { TimeZoneDataType } from '@app/hooks/useTimeZones'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { QUERY as GET_NOT_DETAILED_PROFILE } from '@app/queries/profile/get-not-detailed-profile'
 import { schemas, yup } from '@app/schemas'
@@ -362,6 +364,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 ),
             }
           : null),
+        ...(isResidingCountryEnabled
+          ? {
+              timeZone: yup
+                .object()
+                .required(t('components.course-form.timezone-required')),
+            }
+          : null),
         maxParticipants: yup
           .number()
           .typeError(t('components.course-form.max-participants-required'))
@@ -566,6 +575,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       conversion: courseInput?.conversion ?? false,
       price: courseInput?.price,
       priceCurrency: courseInput?.priceCurrency ?? defaultCurrency,
+      timeZone: courseInput?.timeZone,
       includeVAT: courseInput?.includeVAT,
       renewalCycle: courseInput?.renewalCycle,
       ...(isResidingCountryEnabled
@@ -605,6 +615,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       courseInput?.source,
       courseInput?.specialInstructions,
       courseInput?.startDateTime,
+      courseInput?.timeZone,
       courseInput?.venue,
       courseInput?.zoomMeetingUrl,
       courseInput?.zoomProfileId,
@@ -1102,6 +1113,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   useUpdateEffect(() => {
     setValue('aolRegion', '')
   }, [setValue, values.aolCountry])
+
+  const onChangeTimeZoneSelector = useCallback(
+    (zone: TimeZoneDataType | null) => {
+      setValue('timeZone', zone ?? undefined, { shouldValidate: true })
+    },
+    [setValue]
+  )
 
   const showTrainerOrgOnly =
     !values.usesAOL && isIndirectCourse && activeRole === RoleName.TRAINER
@@ -1923,6 +1941,38 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       )}
                     />
                   </Grid>
+                  {(isResidingCountryEnabled &&
+                    values.deliveryType !== Course_Delivery_Type_Enum.Virtual &&
+                    values.venue) ||
+                  (values.deliveryType === Course_Delivery_Type_Enum.Virtual &&
+                    values.residingCountry) ? (
+                    <>
+                      <Grid item md={12}>
+                        <Typography fontWeight={600}>Time Zone</Typography>
+                      </Grid>
+                      <Grid item md={6} sm={12}>
+                        <Controller
+                          name="timeZone"
+                          control={control}
+                          render={({ fieldState }) => (
+                            <TimeZoneSelector
+                              code={values.residingCountry as string}
+                              editCourse={!isCreation}
+                              error={!!fieldState.error}
+                              helperText={fieldState.error?.message}
+                              ignoreVenue={
+                                values.deliveryType ===
+                                Course_Delivery_Type_Enum.Virtual
+                              }
+                              onChange={onChangeTimeZoneSelector}
+                              value={values.timeZone ?? null}
+                              venue={values.venue}
+                            />
+                          )}
+                        />
+                      </Grid>
+                    </>
+                  ) : null}
                   {isResidingCountryEnabled ? (
                     <Grid item>
                       {/* timezone final wording::::This is a placeholder and is to be updated with the final wording provided by the client

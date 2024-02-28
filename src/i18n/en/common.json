@@ -727,6 +727,7 @@
   "licenced-area": "Licenced Area",
   "region": "Region",
   "country": "Country",
+  "timeZone": "Time Zone",
   "getting-started-item": {
     "create-new-course": {
       "title": "How to create a new course",

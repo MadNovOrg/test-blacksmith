@@ -12,6 +12,7 @@ import {
 } from 'date-fns'
 import { TFunction } from 'i18next'
 import { find, prop, propEq, map, pipe, filter } from 'lodash/fp'
+import { DateTime } from 'luxon'
 import { FieldError, Merge } from 'react-hook-form'
 
 import {
@@ -357,6 +358,12 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     courseLevel: course.level,
     zoomMeetingUrl: course.schedule[0].virtualLink ?? null,
     zoomProfileId: course.schedule[0].virtualAccountId ?? null,
+    timeZone: course.schedule[0].timeZone
+      ? {
+          rawOffset: DateTime.now().setZone(course.schedule[0].timeZone).offset,
+          timeZoneId: course.schedule[0].timeZone,
+        }
+      : undefined,
     venue: course.schedule[0].venue ?? null,
     minParticipants: course.min_participants,
     maxParticipants: course.max_participants,
