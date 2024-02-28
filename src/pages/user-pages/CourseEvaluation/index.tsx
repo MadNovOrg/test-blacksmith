@@ -159,9 +159,9 @@ export const CourseEvaluation = () => {
     }
   }, [questionsData?.questions, acl, didAttendeeSubmitFeedback])
 
-  const { UNGROUPED: ungroupedQuestions, ...groupedQuestions } = groupBy(
-    questions,
-    q => q.group || 'UNGROUPED'
+  const { UNGROUPED: ungroupedQuestions, ...groupedQuestions } = useMemo(
+    () => groupBy(questions, q => q.group || 'UNGROUPED'),
+    [questions]
   )
 
   const signatureQuestion = useMemo(

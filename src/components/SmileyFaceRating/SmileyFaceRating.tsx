@@ -4,7 +4,7 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
 import { Box, Typography, styled } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const customIcons = [
@@ -83,7 +83,12 @@ export const SmileyFaceRating: React.FC<
   React.PropsWithChildren<SmileyFaceRatingProps>
 > = ({ value, onChange, readOnly = false }) => {
   const { t } = useTranslation()
-  const [activeIcon, setActiveIcon] = useState(+value)
+  const [activeIcon, setActiveIcon] = useState<number | null>(Number(value))
+
+  useEffect(() => {
+    if (!isNaN(Number(value))) setActiveIcon(Number(value))
+    else setActiveIcon(null)
+  }, [value])
 
   const handleHover = (rating: number) => {
     setActiveIcon(rating)
@@ -110,7 +115,7 @@ export const SmileyFaceRating: React.FC<
             data-rating={`rating-${rating}`}
             onClick={() => onChange(rating)}
             onMouseEnter={() => handleHover(rating)}
-            onMouseLeave={() => handleHover(+value)}
+            onMouseLeave={() => handleHover(Number(value))}
           >
             {icon}
             <Typography
