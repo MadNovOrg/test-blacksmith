@@ -4,6 +4,8 @@ const hasuraSecret = process.env.SECRET ?? 'tth-hasura-key'
 const hasuraEndpoint = process.env.ENDPOINT
   ? `${process.env.ENDPOINT}/v1/graphql`
   : 'http://localhost:8080/v1/graphql'
+const onlyWithoutCurriculum =
+  Boolean(process.env.ONLY_WITHOUT_CURRICULUM) ?? false
 
 if (!hasuraSecret || !hasuraEndpoint) {
   console.log('Hasura secret and endpoint is needed for syncing curriculums')
@@ -17,9 +19,16 @@ const hasuraClient = new GraphQLClient(hasuraEndpoint, {
 })
 
 const COURSES_TO_SYNC = gql`
-  query CoursesToSync($offset: Int!, $limit: Int!) {
+  query CoursesToSync(
+    $offset: Int!
+    $limit: Int!
+    $withoutCurriculum: Boolean!
+  ) {
     courses: course(
-      where: { modules_aggregate: { count: { predicate: { _gt: 0 } } } }
+      where: {
+        modules_aggregate: { count: { predicate: { _gt: 0 } } }
+        curriculum: { _is_null: $withoutCurriculum }
+      }
       limit: $limit
       offset: $offset
     ) {
@@ -48,6 +57,7 @@ async function sync() {
     }>(COURSES_TO_SYNC, {
       limit: CHUNK,
       offset: (currentPage - 1) * CHUNK,
+      withoutCurriculum: onlyWithoutCurriculum,
     })
 
     if (!courses.length) {

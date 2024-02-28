@@ -6,6 +6,8 @@ const hasuraEndpoint = process.env.ENDPOINT
   ? `${process.env.ENDPOINT}/v1/graphql`
   : 'http://localhost:8080/v1/graphql'
 
+const onlyWithoutGradedOn = Boolean(process.env.ONLY_WITHOUT_GRADED_ON) ?? false
+
 if (!hasuraSecret || !hasuraEndpoint) {
   console.log('Hasura secret and endpoint is needed for syncing curriculums')
   process.exit(1)
@@ -18,9 +20,16 @@ const hasuraClient = new GraphQLClient(hasuraEndpoint, {
 })
 
 const PARTICIPANTS_TO_SYNC = gql`
-  query ParticipantsToSync($offset: Int!, $limit: Int!) {
+  query ParticipantsToSync(
+    $offset: Int!
+    $limit: Int!
+    $withoutGradedOn: Boolean!
+  ) {
     participants: course_participant(
-      where: { grade: { _is_null: false } }
+      where: {
+        grade: { _is_null: false }
+        gradedOn: { _is_null: $withoutGradedOn }
+      }
       limit: $limit
       offset: $offset
     ) {
@@ -49,6 +58,7 @@ async function sync() {
     }>(PARTICIPANTS_TO_SYNC, {
       limit: CHUNK,
       offset: (currentPage - 1) * CHUNK,
+      withoutGradedOn: onlyWithoutGradedOn,
     })
 
     if (!participants.length) {

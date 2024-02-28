@@ -12,6 +12,10 @@ on:
           - DEV
           - STG
           - PROD
+      syncOnlyMissing:
+        default: false
+        type: boolean
+        description: 'To sync only courses and participant modules that are missing new data'
 
 permissions:
   id-token: write
@@ -46,7 +50,7 @@ jobs:
         run: pnpm pkg delete scripts.prepare && pnpm i
 
       - name: Sync curriculums
-        run: npx ts-node ./scripts/sync-curriculums.ts
+        run: ONLY_WITHOUT_CURRICULUM=${{ github.event.inputs.syncOnlyMissing }} npx ts-node ./scripts/sync-curriculums.ts
 
       - name: Sync graded_on for participants
-        run: npx ts-node ./scripts/sync-graded-on.ts
+        run: ONLY_WITHOUT_GRADED_ON=${{ github.event.inputs.syncOnlyMissing }} npx ts-node ./scripts/sync-graded-on.ts
