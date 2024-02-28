@@ -240,10 +240,12 @@ export const VariantComplete = ({
                 <Typography fontWeight={600}>
                   {t('currency', {
                     amount: values.cancellationFee
-                      ? values.cancellationFee +
-                        new Big((values.cancellationFee * 20) / 100)
-                          .round(2)
-                          .toNumber()
+                      ? course.includeVAT
+                        ? values.cancellationFee +
+                          new Big((values.cancellationFee * 20) / 100)
+                            .round(2)
+                            .toNumber()
+                        : values.cancellationFee
                       : 0,
                     currency: course.priceCurrency,
                   })}
