@@ -13,7 +13,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-import { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
@@ -33,9 +33,14 @@ import {
 type TabProperties = {
   course: Course
   inviteStatus: Course_Invite_Status_Enum
+  invitesData: GetCourseInvitesQuery['courseInvites']
 }
 
-export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
+export const InvitesTab = ({
+  course,
+  inviteStatus,
+  invitesData,
+}: TabProperties) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
 
@@ -47,6 +52,9 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
   const [order, setOrder] = useState<SortOrder>('asc')
   const [messageSnackbarOpen, setMessageSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [invites, setInvites] = useState<
+    GetCourseInvitesQuery['courseInvites']
+  >([])
   const isClosedIndirectCourse =
     course.type === Course_Type_Enum.Closed ||
     course.type === Course_Type_Enum.Indirect
@@ -64,6 +72,14 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
     offset: perPage * currentPage,
     courseEnd: courseEndDate,
   })
+
+  useEffect(() => {
+    if (data?.length !== invitesData.length) {
+      setInvites(invitesData)
+    } else {
+      setInvites(data)
+    }
+  }, [data, setInvites, invitesData])
 
   const handleRowsPerPageChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -145,7 +161,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
                 onRequestSort={handleSortChange}
               />
               <TableBody>
-                {data?.map(invite => (
+                {invites?.map(invite => (
                   <TableRow
                     key={invite.id}
                     data-testid={`course-invite-row-${invite.id}`}

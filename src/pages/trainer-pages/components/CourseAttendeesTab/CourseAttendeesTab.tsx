@@ -15,6 +15,7 @@ import { useAuth } from '@app/context/auth'
 import {
   Course_Invite_Status_Enum,
   Course_Type_Enum,
+  GetCourseInvitesQuery,
 } from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
@@ -45,6 +46,9 @@ export const CourseAttendeesTab: React.FC<
     | undefined
   >(undefined)
 
+  const [courseInvites, setCourseInvites] = useState<
+    GetCourseInvitesQuery['courseInvites']
+  >([])
   const { t } = useTranslation()
   const courseId = Number(id ?? 0)
 
@@ -59,14 +63,22 @@ export const CourseAttendeesTab: React.FC<
       ? { where: { order: { bookingContactProfileId: { _eq: profile?.id } } } }
       : {}),
   })
-  const { total: pendingTotal } = useCourseInvites({
+
+  const invites = useCourseInvites({
     courseId,
-    status: Course_Invite_Status_Enum.Pending,
   })
-  const { total: declinedTotal } = useCourseInvites({
-    courseId,
-    status: Course_Invite_Status_Enum.Declined,
-  })
+
+  useEffect(() => {
+    setCourseInvites(invites.data)
+  }, [invites, setCourseInvites])
+
+  const pendingTotal = courseInvites.filter(
+    ci => ci.status === Course_Invite_Status_Enum.Pending
+  ).length
+
+  const declinedTotal = courseInvites.filter(
+    ci => ci.status === Course_Invite_Status_Enum.Declined
+  ).length
   const { total: waitlistTotal } = useWaitlist({
     courseId: courseId,
     sort: { by: 'createdAt', dir: 'asc' },
@@ -175,7 +187,13 @@ export const CourseAttendeesTab: React.FC<
                       value={`${index + 1}`}
                       sx={{ px: 0 }}
                     >
-                      <InvitesTab course={course} inviteStatus={status} />
+                      <InvitesTab
+                        course={course}
+                        inviteStatus={status}
+                        invitesData={courseInvites.filter(
+                          ci => ci.status === status
+                        )}
+                      />
                     </TabPanel>
                   </>
                 ))

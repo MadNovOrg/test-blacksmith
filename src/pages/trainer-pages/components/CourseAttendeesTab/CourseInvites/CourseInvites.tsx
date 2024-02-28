@@ -72,12 +72,14 @@ export const CourseInvites = ({
     pause: true,
   })
 
-  const invites = useCourseInvites({ courseId: course?.id })
-  const pendingInvites = invites.data.filter(
-    i => i.status === Course_Invite_Status_Enum.Pending
-  )
+  const invites = useCourseInvites({
+    courseId: course?.id,
+  })
   const invitesLeft = course
-    ? course.max_participants - pendingInvites.length - attendeesCount
+    ? course.max_participants -
+      invites.data.filter(ci => ci.status === Course_Invite_Status_Enum.Pending)
+        .length -
+      attendeesCount
     : 0
 
   const courseCancelledOrDraft =
