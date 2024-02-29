@@ -11,10 +11,6 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 
-import {
-  CertificateTypeEnum,
-  FilterByCertificateType,
-} from '@app/components/filters/FilterByCertificateType'
 import { FilterByCertificateValidity } from '@app/components/filters/FilterByCertificateValidity'
 import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
 import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
@@ -50,9 +46,6 @@ export const Certifications: React.FC<
     setDateTo(to)
   }, [])
   const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
-  const [certificateType, setCertificateType] = useState<CertificateTypeEnum[]>(
-    []
-  )
   const [certificateStatus, setCertificateStatus] = useState<
     CertificateStatus[]
   >([])
@@ -80,14 +73,6 @@ export const Certifications: React.FC<
     if (filterType.length) {
       conditions.push({
         course: { type: { _in: filterType } },
-      })
-    }
-
-    if (certificateType.length === 1) {
-      conditions.push({
-        legacyCourseCode: {
-          _is_null: certificateType[0] === CertificateTypeEnum.Connect,
-        },
       })
     }
 
@@ -125,7 +110,6 @@ export const Certifications: React.FC<
   }, [
     keyword,
     filterType,
-    certificateType,
     dateFrom,
     dateTo,
     certificateStatus,
@@ -179,7 +163,6 @@ export const Certifications: React.FC<
               title={t('filters.date-obtained')}
             />
             <FilterByCourseType onChange={setFilterType} />
-            <FilterByCertificateType onChange={setCertificateType} />
             <FilterByCertificateValidity onChange={setCertificateStatus} />
             <FilterByCourseLevel
               title={t('course-level')}

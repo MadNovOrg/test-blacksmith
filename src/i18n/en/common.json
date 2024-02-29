@@ -102,7 +102,6 @@
   "reinstate": "Reinstate",
   "certificate": "Certificate",
   "certifications": "Certifications",
-  "certificate-type": "Certificate Type",
   "certifications-status": "Certification Status",
   "certification-details": "Certification details",
   "phone-placeholder": "Mobile/work phone",
@@ -265,10 +264,6 @@
     "OPEN": "Open",
     "CLOSED": "Closed",
     "INDIRECT": "Indirect"
-  },
-  "certificate-types":{
-    "LEGACY": "Legacy",
-    "CONNECT": "Connect"
   },
   "promo-code-types": {
     "PERCENT": "Percentage",
