@@ -637,6 +637,7 @@ event_triggers:
       update:
         columns:
           - completed_evaluation
+          - grade
     retry_conf:
       interval_sec: 10
       num_retries: 5
