@@ -10,9 +10,9 @@ import {
   isPast,
   parse,
 } from 'date-fns'
+import { getTimezoneOffset, utcToZonedTime } from 'date-fns-tz'
 import { TFunction } from 'i18next'
 import { find, prop, propEq, map, pipe, filter } from 'lodash/fp'
-import { DateTime } from 'luxon'
 import { FieldError, Merge } from 'react-hook-form'
 
 import {
@@ -319,6 +319,17 @@ export function bildStrategiesToArray(
 }
 
 export const courseToCourseInput = (course: Course): CourseInput => {
+  const timeZoneSchedule = {
+    start: utcToZonedTime(
+      new Date(course.schedule[0].start),
+      course.schedule[0].timeZone ?? 'Europe/London'
+    ),
+    end: utcToZonedTime(
+      new Date(course.schedule[0].end),
+      course.schedule[0].timeZone ?? 'Europe/London'
+    ),
+  }
+
   return {
     id: course.id,
     type: course.type,
@@ -360,19 +371,22 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     zoomProfileId: course.schedule[0].virtualAccountId ?? null,
     timeZone: course.schedule[0].timeZone
       ? {
-          rawOffset: DateTime.now().setZone(course.schedule[0].timeZone).offset,
+          rawOffset:
+            getTimezoneOffset(course.schedule[0].timeZone, Date.now()) /
+            1000 /
+            60,
           timeZoneId: course.schedule[0].timeZone,
         }
       : undefined,
     venue: course.schedule[0].venue ?? null,
     minParticipants: course.min_participants,
     maxParticipants: course.max_participants,
-    startDateTime: new Date(course.schedule[0].start),
-    startDate: new Date(course.schedule[0].start),
-    startTime: extractTime(course.schedule[0].start),
-    endDateTime: new Date(course.schedule[0].end),
-    endDate: new Date(course.schedule[0].end),
-    endTime: extractTime(course.schedule[0].end),
+    startDateTime: timeZoneSchedule.start,
+    startDate: timeZoneSchedule.start,
+    startTime: extractTime(timeZoneSchedule.start),
+    endDateTime: timeZoneSchedule.end,
+    endDate: timeZoneSchedule.end,
+    endTime: extractTime(timeZoneSchedule.end),
     courseCost: course.aolCostOfCourse ?? null,
     usesAOL: Boolean(course.aolCostOfCourse),
     aolCountry: course.aolCountry ?? null,

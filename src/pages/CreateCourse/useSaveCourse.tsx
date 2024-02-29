@@ -378,7 +378,6 @@ export function useSaveCourse(): {
             : null),
         },
       })
-      console.log(response, 'RESPONSEEEE')
       if (response?.insertCourse?.inserted.length === 1) {
         setSavingStatus(LoadingStatus.SUCCESS)
 

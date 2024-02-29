@@ -33,6 +33,7 @@ describe(`${TimeZoneSelector.name}`, () => {
 
     render(
       <TimeZoneSelector
+        date={new Date(Date.now())}
         onChange={noop}
         value={{ timeZoneId: 'Europe/London', rawOffset: 0 }}
         code={'GB'}
@@ -58,7 +59,14 @@ describe(`${TimeZoneSelector.name}`, () => {
       setDateTimeTimeZone: vi.fn(),
     })
 
-    render(<TimeZoneSelector onChange={noop} value={null} code={'US'} />)
+    render(
+      <TimeZoneSelector
+        date={new Date(Date.now())}
+        onChange={noop}
+        value={null}
+        code={'US'}
+      />
+    )
 
     await waitFor(() => {
       expect(screen.getByRole('combobox')).not.toBeDisabled()
@@ -87,6 +95,7 @@ describe(`${TimeZoneSelector.name}`, () => {
 
     render(
       <TimeZoneSelector
+        date={new Date(Date.now())}
         onChange={noop}
         value={{ timeZoneId: 'America/New_York', rawOffset: -300 }}
         venue={testVenue}
@@ -126,6 +135,7 @@ describe(`${TimeZoneSelector.name}`, () => {
 
     render(
       <TimeZoneSelector
+        date={new Date(Date.now())}
         onChange={noop}
         value={{ timeZoneId: 'America/New_York', rawOffset: -300 }}
         venue={testVenue}

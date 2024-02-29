@@ -53,6 +53,7 @@ import {
 } from '@app/generated/graphql'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import useCourse from '@app/hooks/useCourse'
+import useTimeZones from '@app/hooks/useTimeZones'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
@@ -133,6 +134,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     status: courseStatus,
     mutate: mutateCourse,
   } = useCourse(id ?? '')
+  const { setDateTimeTimeZone } = useTimeZones()
 
   const course = courseInfo?.course
   const courseInput: CourseInput | undefined = useMemo(() => {
@@ -323,6 +325,25 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
           const isOpenCourse = courseData.type === Course_Type_Enum.Open
 
+          const scheduleDateTime: (Date | string)[] = [
+            courseData.startDateTime,
+            courseData.endDateTime,
+          ]
+
+          if (courseData.timeZone) {
+            const scheduleStarDateTime = setDateTimeTimeZone(
+              courseData.startDateTime,
+              courseData.timeZone
+            )
+            if (scheduleStarDateTime) scheduleDateTime[0] = scheduleStarDateTime
+
+            const scheduleEndDateTime = setDateTimeTimeZone(
+              courseData.endDateTime,
+              courseData.timeZone
+            )
+            if (scheduleEndDateTime) scheduleDateTime[1] = scheduleEndDateTime
+          }
+
           const editResponse = await updateCourse({
             courseId: course.id,
             courseInput: {
@@ -405,8 +426,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               venue_id: newVenueId,
               virtualLink: newVirtualLink,
               virtualAccountId: courseData.zoomProfileId,
-              start: courseData.startDateTime,
-              end: courseData.endDateTime,
+              start: scheduleDateTime[0],
+              end: scheduleDateTime[1],
               timeZone: courseData.timeZone?.timeZoneId,
             },
             ...(status === Course_Status_Enum.ExceptionsApprovalPending
@@ -494,6 +515,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       updateCourse,
       getCourseName,
       courseDiffs,
+      setDateTimeTimeZone,
       insertAudit,
       notifyCourseEdit,
       mutateCourse,

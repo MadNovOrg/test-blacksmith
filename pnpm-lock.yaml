@@ -73,7 +73,7 @@ importers:
         version: 6.19.4(@mui/material@5.13.6)(@mui/system@5.14.14)(@types/react@18.2.14)(react-dom@18.2.0)(react@18.2.0)
       '@mui/x-date-pickers':
         specifier: ^6.18.4
-        version: 6.18.4(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/material@5.13.6)(@mui/system@5.14.14)(@types/react@18.2.14)(date-fns@2.30.0)(luxon@3.4.4)(react-dom@18.2.0)(react@18.2.0)
+        version: 6.18.4(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/material@5.13.6)(@mui/system@5.14.14)(@types/react@18.2.14)(date-fns@2.30.0)(react-dom@18.2.0)(react@18.2.0)
       '@react-pdf/renderer':
         specifier: ^3.1.14
         version: 3.1.14(react@18.2.0)
@@ -191,9 +191,6 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
-      luxon:
-        specifier: ^3.4.4
-        version: 3.4.4
       mui-image:
         specifier: ^1.0.7
         version: 1.0.7(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/material@5.13.6)(prop-types@15.8.1)(react@18.2.0)
@@ -6497,7 +6494,7 @@ packages:
       - '@types/react'
     dev: false
 
-  /@mui/x-date-pickers@6.18.4(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/material@5.13.6)(@mui/system@5.14.14)(@types/react@18.2.14)(date-fns@2.30.0)(luxon@3.4.4)(react-dom@18.2.0)(react@18.2.0):
+  /@mui/x-date-pickers@6.18.4(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/material@5.13.6)(@mui/system@5.14.14)(@types/react@18.2.14)(date-fns@2.30.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-YqJ6lxZHBIt344B3bvRAVbdYSQz4dcmJQXGcfvJTn26VdKjpgzjAqwhlbQhbAt55audJOWzGB99ImuQuljDROA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -6544,7 +6541,6 @@ packages:
       '@types/react-transition-group': 4.4.10
       clsx: 2.0.0
       date-fns: 2.30.0
-      luxon: 3.4.4
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -12916,7 +12912,7 @@ packages:
     resolution: {integrity: sha512-mWEvCQTgXQf48yDqgN7CH50waTyYBeP2Lpqx4nNWab9sxEpdXVeKgfj1qYI2/TgUPQtNFZ85i3PemRtnXVYYJg==}
     peerDependencies:
       '@babel/core': ^7
-      '@babel/traverse': ^7
+      '@babel/traverse': '>=7.23.2'
     peerDependenciesMeta:
       '@babel/traverse':
         optional: true
@@ -18496,11 +18492,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
-
-  /luxon@3.4.4:
-    resolution: {integrity: sha512-zobTr7akeGHnv7eBOXcRgMeCP6+uyYsczwmeRCauvpvaAltgNyTbLH/+VaEAPUeWBT+1GuNmz4wC/6jtQzbbVA==}
-    engines: {node: '>=12'}
-    dev: false
 
   /lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}

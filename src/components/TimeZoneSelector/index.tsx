@@ -20,6 +20,7 @@ export type TimeZoneSelectorSelectorProps = {
   ignoreVenue?: boolean
   initialValue?: boolean
   onChange: (selected: TimeZoneDataType | null) => void
+  date: Date
   value: TimeZoneDataType | null
   venue?: Venue | null
 } & BaseTextFieldProps
@@ -33,6 +34,7 @@ const TimeZoneSelector = ({
   label,
   onChange,
   required,
+  date,
   value,
   venue,
 }: TimeZoneSelectorSelectorProps) => {
@@ -46,14 +48,14 @@ const TimeZoneSelector = ({
     const getTimeZoneByLatLong = async () => {
       if (editCourse && value?.timeZoneId && !initialValueOnEdit) {
         if (ignoreVenue) {
-          const timeZones = getTimeZonesByCountryCode(code)
+          const timeZones = getTimeZonesByCountryCode(code, date)
 
           setTimeZoneOptions(timeZones)
         } else {
           setTimeZoneOptions([
             {
               timeZoneId: value.timeZoneId,
-              rawOffset: getTimeZoneOffset(value.timeZoneId),
+              rawOffset: getTimeZoneOffset(value.timeZoneId, date),
             },
           ])
         }
@@ -72,7 +74,8 @@ const TimeZoneSelector = ({
           ) {
             const timeZone = await getTimeZoneLatLng(
               coordinates[0],
-              coordinates[1]
+              coordinates[1],
+              date
             )
 
             if (timeZone) {
@@ -86,7 +89,7 @@ const TimeZoneSelector = ({
         }
 
         if (code) {
-          const timeZones = getTimeZonesByCountryCode(code)
+          const timeZones = getTimeZonesByCountryCode(code, date)
 
           setTimeZoneOptions(timeZones)
 
@@ -109,6 +112,7 @@ const TimeZoneSelector = ({
     getTimeZoneByLatLong().then()
   }, [
     code,
+    date,
     editCourse,
     getTimeZoneLatLng,
     getTimeZoneOffset,
