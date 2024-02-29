@@ -1124,6 +1124,25 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const showTrainerOrgOnly =
     !values.usesAOL && isIndirectCourse && activeRole === RoleName.TRAINER
 
+  const displayTimeZoneSelector = useMemo(() => {
+    const isStartDateTimeSet = Boolean(values.startDateTime)
+
+    return (
+      isResidingCountryEnabled &&
+      isStartDateTimeSet &&
+      ((values.deliveryType !== Course_Delivery_Type_Enum.Virtual &&
+        values.venue) ||
+        (values.deliveryType === Course_Delivery_Type_Enum.Virtual &&
+          values.residingCountry))
+    )
+  }, [
+    isResidingCountryEnabled,
+    values.deliveryType,
+    values.residingCountry,
+    values.startDateTime,
+    values.venue,
+  ])
+
   return (
     <form>
       <FormProvider {...methods}>
@@ -1941,11 +1960,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       )}
                     />
                   </Grid>
-                  {(isResidingCountryEnabled &&
-                    values.deliveryType !== Course_Delivery_Type_Enum.Virtual &&
-                    values.venue) ||
-                  (values.deliveryType === Course_Delivery_Type_Enum.Virtual &&
-                    values.residingCountry) ? (
+                  {displayTimeZoneSelector ? (
                     <>
                       <Grid item md={12}>
                         <Typography fontWeight={600}>Time Zone</Typography>
@@ -1957,6 +1972,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                           render={({ fieldState }) => (
                             <TimeZoneSelector
                               code={values.residingCountry as string}
+                              date={values.startDateTime as Date}
                               editCourse={!isCreation}
                               error={!!fieldState.error}
                               helperText={fieldState.error?.message}
