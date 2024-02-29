@@ -1,0 +1,3 @@
+table:
+  name: non_graded_certificate
+  schema: public
