@@ -2066,11 +2066,18 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   />
                 </Grid>
                 <Grid item>
-                  {!isCreation && isIndirectCourse && acl.isTrainer() && (
-                    <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
-                      {t('components.course-form.attendees-edit-label')}
-                    </Alert>
-                  )}
+                  {!isCreation &&
+                    isIndirectCourse &&
+                    isBild &&
+                    acl.isTrainer() && (
+                      <Alert
+                        severity="warning"
+                        variant="outlined"
+                        sx={{ mt: 1 }}
+                      >
+                        {t('components.course-form.attendees-edit-label')}
+                      </Alert>
+                    )}
                 </Grid>
               </Grid>
             </Box>
