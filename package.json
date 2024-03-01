@@ -85,7 +85,6 @@
     "@swc/helpers": "~0.5.0",
     "@types/chance": "1.1.6",
     "@types/jest": "^29.5.12",
-    "@types/luxon": "^3.4.2",
     "@types/react-select-country-list": "^2.2.3",
     "@urql/core": "3.1.1",
     "@urql/devtools": "^2.0.3",

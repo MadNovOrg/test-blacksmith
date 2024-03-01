@@ -372,7 +372,10 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     timeZone: course.schedule[0].timeZone
       ? {
           rawOffset:
-            getTimezoneOffset(course.schedule[0].timeZone, Date.now()) /
+            getTimezoneOffset(
+              course.schedule[0].timeZone,
+              new Date(course.schedule[0].start)
+            ) /
             1000 /
             60,
           timeZoneId: course.schedule[0].timeZone,

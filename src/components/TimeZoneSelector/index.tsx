@@ -7,11 +7,11 @@ import { useTranslation } from 'react-i18next'
 import useTimeZones, { TimeZoneDataType } from '@app/hooks/useTimeZones'
 import { Venue } from '@app/types'
 
-export const convertTimeZoneOffset = (seconds: number) => {
+export const convertTimeZoneOffset = (minutes: number) => {
   const baseDate = new Date(0, 0, 0, 0, 0)
-  const resultDate = addMinutes(baseDate, Math.abs(seconds))
+  const resultDate = addMinutes(baseDate, Math.abs(minutes))
 
-  return `(GMT${seconds < 0 ? '-' : '+'}${format(resultDate, 'HH:mm')})`
+  return `(GMT${minutes < 0 ? '-' : '+'}${format(resultDate, 'HH:mm')})`
 }
 
 export type TimeZoneSelectorSelectorProps = {
@@ -93,13 +93,21 @@ const TimeZoneSelector = ({
 
           setTimeZoneOptions(timeZones)
 
-          if (
-            !(
-              value?.timeZoneId &&
-              timeZones.some(zone => zone.timeZoneId === value.timeZoneId)
-            )
-          ) {
+          const currentTimeZoneInOptions = timeZones.find(
+            zone => zone.timeZoneId === value?.timeZoneId
+          )
+
+          // The same time zone can have different GMT because of Day Save Time
+          const isSameTimeZoneWithDifferentGMT =
+            currentTimeZoneInOptions &&
+            value?.rawOffset &&
+            convertTimeZoneOffset(value.rawOffset) !=
+              convertTimeZoneOffset(currentTimeZoneInOptions.rawOffset)
+
+          if (!(value?.timeZoneId && Boolean(currentTimeZoneInOptions))) {
             onChange(timeZones.length === 1 ? timeZones[0] : null)
+          } else if (isSameTimeZoneWithDifferentGMT) {
+            onChange(currentTimeZoneInOptions)
           }
 
           return
@@ -120,6 +128,7 @@ const TimeZoneSelector = ({
     ignoreVenue,
     initialValueOnEdit,
     onChange,
+    value?.rawOffset,
     value?.timeZoneId,
     venue?.geoCoordinates,
   ])

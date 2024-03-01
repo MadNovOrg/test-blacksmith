@@ -1125,7 +1125,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     !values.usesAOL && isIndirectCourse && activeRole === RoleName.TRAINER
 
   const displayTimeZoneSelector = useMemo(() => {
-    const isStartDateTimeSet = Boolean(values.startDateTime)
+    const isStartDateTimeSet =
+      Boolean(values.startDateTime) && isValidDate(values.startDateTime)
 
     return (
       isResidingCountryEnabled &&
