@@ -105,31 +105,34 @@ export const ICMGradingV2: React.FC<Props> = ({ course }) => {
   const curriculum = useMemo(() => {
     const c = [...course.curriculum]
 
-    return Array.isArray(c) && c.length
-      ? c.map(m => {
-          const module = { ...m }
+    const mappedCurriculum =
+      Array.isArray(c) && c.length
+        ? c.map(m => {
+            const module = { ...m }
 
-          if (!isModule(module)) {
-            return
-          }
-
-          const items = [...module.lessons.items]
-
-          if (Array.isArray(items) && items.length) {
-            module.lessons = {
-              items: items.filter(l => {
-                if (!isLesson(l)) {
-                  return false
-                }
-
-                return l.covered
-              }),
+            if (!isModule(module)) {
+              return
             }
-          }
 
-          return module
-        })
-      : []
+            const items = [...module.lessons.items]
+
+            if (Array.isArray(items) && items.length) {
+              module.lessons = {
+                items: items.filter(l => {
+                  if (!isLesson(l)) {
+                    return false
+                  }
+
+                  return l.covered
+                }),
+              }
+            }
+
+            return module
+          })
+        : []
+
+    return mappedCurriculum.filter(m => m?.lessons?.items?.length)
   }, [course.curriculum])
 
   useEffect(() => {

@@ -497,7 +497,10 @@ it('displays an alert if there was an error saving grades', async () => {
 it('displays module notes field when grading an individual participant as an admin', () => {
   const COURSE_ID = 'course-id'
 
-  const module = buildModule({ name: 'Theory' })
+  const module = buildModule({
+    name: 'Theory',
+    lessons: { items: [buildLesson({ covered: true })] },
+  })
 
   const participant = { ...buildParticipant(), attended: true }
 
@@ -532,7 +535,10 @@ it('displays module notes field when grading an individual participant as a lead
   const COURSE_ID = 'course-id'
   const PROFILE_ID = chance.guid()
 
-  const module = buildModule({ name: 'Theory' })
+  const module = buildModule({
+    name: 'Theory',
+    lessons: { items: [buildLesson({ covered: true })] },
+  })
 
   const participant = { ...buildParticipant(), attended: true }
 
@@ -640,4 +646,59 @@ it("doesn't display module notes field when grading as an assistant trainer", ()
   )
 
   expect(screen.queryAllByLabelText(/notes/i)).toHaveLength(0)
+})
+
+it("doesn't display modules that don't have any covered lessons", () => {
+  const COURSE_ID = 'course-id'
+  const PROFILE_ID = chance.guid()
+
+  const notCoveredModule = buildModule({
+    name: 'Not covered module',
+    lessons: { items: [buildLesson({ covered: false })] },
+  })
+
+  const coveredModule = buildModule({
+    name: 'Covered module',
+    lessons: { items: [buildLesson({ covered: true })] },
+  })
+
+  const participant = { ...buildParticipant(), attended: true }
+
+  const course = buildGradingCourse({
+    overrides: {
+      curriculum: [coveredModule, notCoveredModule],
+      participants: [participant],
+      trainers: [
+        { type: Course_Trainer_Type_Enum.Leader, profile_id: chance.guid() },
+        { type: Course_Trainer_Type_Enum.Assistant, profile_id: PROFILE_ID },
+      ],
+    },
+  })
+
+  const client = {
+    executeMutation: () => never,
+  } as unknown as Client
+
+  render(
+    <Provider value={client}>
+      <Routes>
+        <Route path=":id/grading" element={<ICMGradingV2 course={course} />} />
+        <Route path="/courses/:id/details" element={<h1>Course details</h1>} />
+      </Routes>
+    </Provider>,
+    { auth: { activeRole: RoleName.TRAINER, profile: { id: PROFILE_ID } } },
+    {
+      initialEntries: [`/${COURSE_ID}/grading?participants=${participant.id}`],
+    }
+  )
+
+  expect(screen.queryByLabelText(notCoveredModule.name)).not.toBeInTheDocument()
+
+  const moduleAccordion = within(
+    screen.getByTestId(`module-group-${coveredModule.id}`)
+  ).getByTestId('accordion-summary')
+
+  expect(
+    within(moduleAccordion).getByLabelText(coveredModule.name)
+  ).toBeChecked()
 })
