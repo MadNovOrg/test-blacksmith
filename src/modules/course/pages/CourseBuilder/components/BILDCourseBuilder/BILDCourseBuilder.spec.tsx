@@ -355,6 +355,11 @@ describe('component: BILDCourseBuilder', () => {
     )
 
     expect(screen.queryByText(/estimated duration/i)).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/\bminimum\s+(\d{3,})\s+hours\b/i)
+    ).not.toBeInTheDocument()
+
+    expect(screen.queryByText(/\b(\d+)\s+mins\b/i)).not.toBeInTheDocument()
   })
 })
 

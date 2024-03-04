@@ -27,6 +27,7 @@ type StrategyAccordionProps = {
   onChange: (state: Record<string, boolean>) => void
   disabled: boolean
   showAsterisk: boolean
+  showDuration?: boolean
 }
 
 export const StrategyAccordion: React.FC<
@@ -42,6 +43,7 @@ export const StrategyAccordion: React.FC<
   onChange,
   disabled,
   showAsterisk,
+  showDuration = true,
 }) => {
   const { t } = useTranslation()
   const handleToggle = (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -100,7 +102,7 @@ export const StrategyAccordion: React.FC<
               <span>{t(`common.bild-strategies.${name}`)}</span>
               {showAsterisk ? <span> *</span> : null}
             </Typography>
-            {duration && (
+            {duration && showDuration && (
               <Typography variant="body2" color="white" sx={{ ml: 1 }}>
                 {t('common.minimumXHours', { hours: duration / 60 })}
               </Typography>
@@ -145,6 +147,7 @@ export const StrategyAccordion: React.FC<
               state={state}
               onChange={onChange}
               disabled={disabled}
+              showDuration={showDuration}
             />
           ))}
         </Box>

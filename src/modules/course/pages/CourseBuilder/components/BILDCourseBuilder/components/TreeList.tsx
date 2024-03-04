@@ -17,6 +17,7 @@ type TreeListProps = {
   state: Record<string, boolean>
   onChange: (state: Record<string, boolean>) => void
   disabled: boolean
+  showDuration?: boolean
 }
 
 export const TreeList: React.FC<React.PropsWithChildren<TreeListProps>> = ({
@@ -25,6 +26,7 @@ export const TreeList: React.FC<React.PropsWithChildren<TreeListProps>> = ({
   state,
   onChange,
   disabled,
+  showDuration = true,
 }) => {
   const [open, setOpen] = useState(false)
   const name = `${parentName}.${group.name}`
@@ -115,7 +117,7 @@ export const TreeList: React.FC<React.PropsWithChildren<TreeListProps>> = ({
           label={
             <Typography>
               {group.name}
-              {group.duration && (
+              {group.duration && showDuration && (
                 <Typography
                   component="span"
                   variant="body2"
@@ -149,7 +151,7 @@ export const TreeList: React.FC<React.PropsWithChildren<TreeListProps>> = ({
                 <Typography>
                   {m.name}
                   {m.mandatory && !disabled && <span> *</span>}
-                  {m.duration && (
+                  {showDuration && m.duration && (
                     <Typography
                       component="span"
                       variant="body2"

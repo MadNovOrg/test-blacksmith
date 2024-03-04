@@ -178,7 +178,7 @@ export const BILDCourseBuilder: React.FC<
     { data: moduleSettingsData, error: modulesError, fetching: modulesLoading },
   ] = useModuleSettings(courseData?.course)
 
-  const showEstimatedDuration = courseData?.course?.level
+  const showDuration = courseData?.course?.level
     ? ![
         Course_Level_Enum.BildIntermediateTrainer,
         Course_Level_Enum.BildAdvancedTrainer,
@@ -480,6 +480,7 @@ export const BILDCourseBuilder: React.FC<
                   showAsterisk={
                     (showMandatoryNotice && disabledStrategies[s.name]) || false
                   }
+                  showDuration={showDuration}
                 />
               ))}
 
@@ -550,7 +551,7 @@ export const BILDCourseBuilder: React.FC<
                     'pages.trainer-base.create-course.new-course.course-summary'
                   )}
                 </Typography>
-                {showEstimatedDuration ? (
+                {showDuration ? (
                   <Box>
                     <Typography variant="h6" px={1}>
                       {formatDurationShort(estimatedDuration)}
