@@ -18,7 +18,7 @@ import { TransferReview } from '@app/pages/TransferParticipant/components/Transf
 import { UserTransferParticipant } from '@app/pages/TransferParticipant/UserTransferParticipant'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
-import { CourseDetails } from '@app/pages/user-pages/CourseDetails'
+import { CourseDetails } from '@app/pages/user-pages/CourseDetails/CourseDetails'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 import { CourseHealthAndSafetyForm } from '@app/pages/user-pages/CourseHealthAndSafetyForm'
 import { EvaluationSummary } from '@app/pages/user-pages/EvaluationSummary'

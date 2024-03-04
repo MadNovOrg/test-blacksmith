@@ -12,13 +12,14 @@ import { Course, CourseParticipant, RoleName } from '@app/types'
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
 import {
   buildCourse,
+  buildCourseSchedule,
   buildEndedCourse,
   buildNotStartedCourse,
   buildParticipant,
   buildStartedCourse,
 } from '@test/mock-data-utils'
 
-import { CourseDetails } from '.'
+import { CourseDetails } from './CourseDetails'
 
 type SpecCourseType = {
   course: Course
@@ -68,6 +69,14 @@ const MockedCourseDetails: FC<SpecCourseType> = data => {
 }
 
 describe(CourseDetails.name, () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('correctly displays *Change my attendance* modal title', async () => {
     const course = buildCourse({
       overrides: {
@@ -173,11 +182,59 @@ describe(CourseDetails.name, () => {
       { initialEntries: [`/courses/${course.id}/details`] }
     )
 
-    expect(screen.getByTestId('evaluate-course-cta')).toBeDisabled()
+    expect(
+      screen.getByRole('button', { name: /available after course/i })
+    ).toBeDisabled()
   })
 
-  it('has course evaluation button enabled if course has started', async () => {
-    const course = buildStartedCourse()
+  it('has course evaluation button disabled if not the last day of the course', () => {
+    vi.setSystemTime(new Date('2024-03-01T10:00:00'))
+
+    const course = buildStartedCourse({
+      overrides: {
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: new Date('2024-03-01T09:00:00').toISOString(),
+              end: new Date('2024-03-02T17:00:00').toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    render(
+      <Routes>
+        <Route
+          path={`/courses/:id/details`}
+          element={<MockedCourseDetails course={course} />}
+        />
+      </Routes>,
+      {},
+      { initialEntries: [`/courses/${course.id}/details`] }
+    )
+
+    expect(
+      screen.getByRole('button', { name: /available after course/i })
+    ).toBeDisabled()
+  })
+
+  it("has course evaluation button enabled if it's the last day of the course", async () => {
+    vi.setSystemTime(new Date('2024-03-02T09:01:00'))
+
+    const course = buildStartedCourse({
+      overrides: {
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: new Date('2024-03-01T09:00:00').toISOString(),
+              end: new Date('2024-03-02T17:00:00').toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
     render(
       <Routes>
         <Route
@@ -195,7 +252,48 @@ describe(CourseDetails.name, () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByTestId('evaluate-course-cta')).toBeEnabled()
+      expect(
+        screen.getByRole('button', { name: /evaluate course/i })
+      ).toBeEnabled()
+    })
+  })
+
+  it('has course evaluation button enabled if on the day course starts when course starts and ends in the same day', async () => {
+    vi.setSystemTime(new Date('2024-03-02T09:01:00'))
+
+    const course = buildStartedCourse({
+      overrides: {
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: new Date('2024-03-01T09:00:00').toISOString(),
+              end: new Date('2024-03-01T17:00:00').toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    render(
+      <Routes>
+        <Route
+          path={`/courses/:id/details`}
+          element={
+            <MockedCourseDetails
+              course={course}
+              courseParticipants={[{ ...buildParticipant(), attended: true }]}
+            />
+          }
+        />
+      </Routes>,
+      {},
+      { initialEntries: [`/courses/${course.id}/details`] }
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: /evaluate course/i })
+      ).toBeEnabled()
     })
   })
 
@@ -217,7 +315,9 @@ describe(CourseDetails.name, () => {
       { initialEntries: [`/courses/${course.id}/details`] }
     )
 
-    expect(screen.getByTestId('evaluate-course-cta')).toBeDisabled()
+    expect(
+      screen.getByRole('button', { name: /evaluate course/i })
+    ).toBeDisabled()
   })
 
   it('displays button to manage course if a participant is also an org admin', async () => {

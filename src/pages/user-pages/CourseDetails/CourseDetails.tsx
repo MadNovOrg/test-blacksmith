@@ -58,7 +58,7 @@ import {
 } from '@app/queries/user-queries/get-course-by-id'
 import { getIndividualCourseStatuses } from '@app/rules/course-status'
 import { CourseParticipant } from '@app/types'
-import { courseEnded, courseStarted } from '@app/util'
+import { courseEnded, courseStarted, isLastCourseDay } from '@app/util'
 
 const ChecklistItem = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.grey[100],
@@ -275,10 +275,12 @@ export const CourseDetails: React.FC<
   }, [acl, bookingOnly, course])
 
   const courseHasStarted = course && courseStarted(course)
+  const lastCourseDay = course && isLastCourseDay(course)
   const courseHasEnded = course && courseEnded(course)
+
   const canSubmitFeedback =
     !loading &&
-    courseHasStarted &&
+    lastCourseDay &&
     !didAttendeeSubmitFeedback &&
     courseParticipant?.attended
   const showFeedbackRequiredAlert =
@@ -660,7 +662,7 @@ export const CourseDetails: React.FC<
                             sx={{ mt: isMobile ? 2 : 0 }}
                             disabled={!canSubmitFeedback}
                           >
-                            {!courseHasEnded
+                            {!lastCourseDay
                               ? t(
                                   'pages.participant-course.course-summary-button-after-completion'
                                 )

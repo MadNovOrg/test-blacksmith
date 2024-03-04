@@ -7,6 +7,8 @@ import {
   differenceInMinutes,
   format,
   formatDistanceToNow,
+  isAfter,
+  isEqual,
   isPast,
   parse,
 } from 'date-fns'
@@ -150,6 +152,29 @@ export const courseStarted = (course: Course) =>
   isPast(new Date(course.schedule[0]?.start))
 export const courseEnded = (course: Course) =>
   isPast(new Date(course.schedule[0]?.end))
+
+export const isLastCourseDay = (course: Course): boolean => {
+  const startDate = new Date(course.schedule[0].start)
+  const endDate = new Date(course.schedule[0].end)
+
+  const lastDay = new Date(endDate)
+
+  lastDay.setHours(8)
+  lastDay.setMinutes(0)
+  lastDay.setSeconds(0)
+  lastDay.setMilliseconds(0)
+
+  if (
+    isEqual(
+      new Date(format(startDate, 'yyyy-mm-dd')),
+      new Date(format(endDate, 'yyyy-mm-dd'))
+    )
+  ) {
+    return courseStarted(course)
+  }
+
+  return isAfter(new Date(), lastDay)
+}
 
 export const getCourseLeadTrainer = find<Course_Trainer>(
   propEq('type', Course_Trainer_Type_Enum.Leader)
