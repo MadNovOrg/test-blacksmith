@@ -383,6 +383,13 @@ select_permissions:
         - phone
       filter: {}
       allow_aggregations: true
+  - role: anonymous
+    permission:
+      columns: []
+      computed_fields:
+        - email
+      filter: {}
+      allow_aggregations: true
 update_permissions:
   - role: sales-admin
     permission:

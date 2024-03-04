@@ -33808,6 +33808,10 @@ export type Mutation_Root = {
   delete_module_v2?: Maybe<Module_V2_Mutation_Response>;
   /** delete single row from the table: "module_v2" */
   delete_module_v2_by_pk?: Maybe<Module_V2>;
+  /** delete data from the table: "non_graded_certificate" */
+  delete_non_graded_certificate?: Maybe<Non_Graded_Certificate_Mutation_Response>;
+  /** delete single row from the table: "non_graded_certificate" */
+  delete_non_graded_certificate_by_pk?: Maybe<Non_Graded_Certificate>;
   /** delete data from the table: "order" */
   delete_order?: Maybe<Order_Mutation_Response>;
   /** delete single row from the table: "order" */
@@ -34232,6 +34236,10 @@ export type Mutation_Root = {
   insert_module_v2?: Maybe<Module_V2_Mutation_Response>;
   /** insert a single row into the table: "module_v2" */
   insert_module_v2_one?: Maybe<Module_V2>;
+  /** insert data into the table: "non_graded_certificate" */
+  insert_non_graded_certificate?: Maybe<Non_Graded_Certificate_Mutation_Response>;
+  /** insert a single row into the table: "non_graded_certificate" */
+  insert_non_graded_certificate_one?: Maybe<Non_Graded_Certificate>;
   /** insert data into the table: "order" */
   insert_order?: Maybe<Order_Mutation_Response>;
   /** insert a single row into the table: "order" */
@@ -34830,6 +34838,12 @@ export type Mutation_Root = {
   update_module_v2_by_pk?: Maybe<Module_V2>;
   /** update multiples rows of table: "module_v2" */
   update_module_v2_many?: Maybe<Array<Maybe<Module_V2_Mutation_Response>>>;
+  /** update data of the table: "non_graded_certificate" */
+  update_non_graded_certificate?: Maybe<Non_Graded_Certificate_Mutation_Response>;
+  /** update single row of the table: "non_graded_certificate" */
+  update_non_graded_certificate_by_pk?: Maybe<Non_Graded_Certificate>;
+  /** update multiples rows of table: "non_graded_certificate" */
+  update_non_graded_certificate_many?: Maybe<Array<Maybe<Non_Graded_Certificate_Mutation_Response>>>;
   /** update data of the table: "order" */
   update_order?: Maybe<Order_Mutation_Response>;
   /** update single row of the table: "order" */
@@ -36023,6 +36037,18 @@ export type Mutation_RootDelete_Module_V2Args = {
 
 /** mutation root */
 export type Mutation_RootDelete_Module_V2_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Non_Graded_CertificateArgs = {
+  where: Non_Graded_Certificate_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Non_Graded_Certificate_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -37458,6 +37484,20 @@ export type Mutation_RootInsert_Module_V2Args = {
 export type Mutation_RootInsert_Module_V2_OneArgs = {
   object: Module_V2_Insert_Input;
   on_conflict?: InputMaybe<Module_V2_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Non_Graded_CertificateArgs = {
+  objects: Array<Non_Graded_Certificate_Insert_Input>;
+  on_conflict?: InputMaybe<Non_Graded_Certificate_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Non_Graded_Certificate_OneArgs = {
+  object: Non_Graded_Certificate_Insert_Input;
+  on_conflict?: InputMaybe<Non_Graded_Certificate_On_Conflict>;
 };
 
 
@@ -39679,6 +39719,28 @@ export type Mutation_RootUpdate_Module_V2_ManyArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Non_Graded_CertificateArgs = {
+  _inc?: InputMaybe<Non_Graded_Certificate_Inc_Input>;
+  _set?: InputMaybe<Non_Graded_Certificate_Set_Input>;
+  where: Non_Graded_Certificate_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Non_Graded_Certificate_By_PkArgs = {
+  _inc?: InputMaybe<Non_Graded_Certificate_Inc_Input>;
+  _set?: InputMaybe<Non_Graded_Certificate_Set_Input>;
+  pk_columns: Non_Graded_Certificate_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Non_Graded_Certificate_ManyArgs = {
+  updates: Array<Non_Graded_Certificate_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_OrderArgs = {
   _append?: InputMaybe<Order_Append_Input>;
   _delete_at_path?: InputMaybe<Order_Delete_At_Path_Input>;
@@ -40315,6 +40377,355 @@ export type Mutation_RootVerifyUserArgs = {
 /** mutation root */
 export type Mutation_RootXeroCallbackArgs = {
   input: XeroCallbackInput;
+};
+
+/** Temporary table to backup certificates that were issued for non-graded participants by mistake */
+export type Non_Graded_Certificate = {
+  __typename?: 'non_graded_certificate';
+  blended_learning?: Maybe<Scalars['Boolean']>;
+  certification_date: Scalars['date'];
+  course_accredited_by?: Maybe<Scalars['String']>;
+  course_id?: Maybe<Scalars['Int']>;
+  course_level: Scalars['String'];
+  course_name: Scalars['String'];
+  created_at: Scalars['timestamptz'];
+  expiry_date: Scalars['date'];
+  id: Scalars['uuid'];
+  is_revoked: Scalars['Boolean'];
+  legacy_course_code?: Maybe<Scalars['String']>;
+  number: Scalars['String'];
+  profile_id: Scalars['uuid'];
+  reaccreditation?: Maybe<Scalars['Boolean']>;
+  updated_at: Scalars['timestamptz'];
+};
+
+/** aggregated selection of "non_graded_certificate" */
+export type Non_Graded_Certificate_Aggregate = {
+  __typename?: 'non_graded_certificate_aggregate';
+  aggregate?: Maybe<Non_Graded_Certificate_Aggregate_Fields>;
+  nodes: Array<Non_Graded_Certificate>;
+};
+
+/** aggregate fields of "non_graded_certificate" */
+export type Non_Graded_Certificate_Aggregate_Fields = {
+  __typename?: 'non_graded_certificate_aggregate_fields';
+  avg?: Maybe<Non_Graded_Certificate_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Non_Graded_Certificate_Max_Fields>;
+  min?: Maybe<Non_Graded_Certificate_Min_Fields>;
+  stddev?: Maybe<Non_Graded_Certificate_Stddev_Fields>;
+  stddev_pop?: Maybe<Non_Graded_Certificate_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Non_Graded_Certificate_Stddev_Samp_Fields>;
+  sum?: Maybe<Non_Graded_Certificate_Sum_Fields>;
+  var_pop?: Maybe<Non_Graded_Certificate_Var_Pop_Fields>;
+  var_samp?: Maybe<Non_Graded_Certificate_Var_Samp_Fields>;
+  variance?: Maybe<Non_Graded_Certificate_Variance_Fields>;
+};
+
+
+/** aggregate fields of "non_graded_certificate" */
+export type Non_Graded_Certificate_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Non_Graded_Certificate_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Non_Graded_Certificate_Avg_Fields = {
+  __typename?: 'non_graded_certificate_avg_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "non_graded_certificate". All fields are combined with a logical 'AND'. */
+export type Non_Graded_Certificate_Bool_Exp = {
+  _and?: InputMaybe<Array<Non_Graded_Certificate_Bool_Exp>>;
+  _not?: InputMaybe<Non_Graded_Certificate_Bool_Exp>;
+  _or?: InputMaybe<Array<Non_Graded_Certificate_Bool_Exp>>;
+  blended_learning?: InputMaybe<Boolean_Comparison_Exp>;
+  certification_date?: InputMaybe<Date_Comparison_Exp>;
+  course_accredited_by?: InputMaybe<String_Comparison_Exp>;
+  course_id?: InputMaybe<Int_Comparison_Exp>;
+  course_level?: InputMaybe<String_Comparison_Exp>;
+  course_name?: InputMaybe<String_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  expiry_date?: InputMaybe<Date_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  is_revoked?: InputMaybe<Boolean_Comparison_Exp>;
+  legacy_course_code?: InputMaybe<String_Comparison_Exp>;
+  number?: InputMaybe<String_Comparison_Exp>;
+  profile_id?: InputMaybe<Uuid_Comparison_Exp>;
+  reaccreditation?: InputMaybe<Boolean_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "non_graded_certificate" */
+export enum Non_Graded_Certificate_Constraint {
+  /** unique or primary key constraint on columns "number" */
+  NonGradedCertificateNumberKey = 'non_graded_certificate_number_key',
+  /** unique or primary key constraint on columns "id" */
+  NonGradedCertificatePkey = 'non_graded_certificate_pkey'
+}
+
+/** input type for incrementing numeric columns in table "non_graded_certificate" */
+export type Non_Graded_Certificate_Inc_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "non_graded_certificate" */
+export type Non_Graded_Certificate_Insert_Input = {
+  blended_learning?: InputMaybe<Scalars['Boolean']>;
+  certification_date?: InputMaybe<Scalars['date']>;
+  course_accredited_by?: InputMaybe<Scalars['String']>;
+  course_id?: InputMaybe<Scalars['Int']>;
+  course_level?: InputMaybe<Scalars['String']>;
+  course_name?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  expiry_date?: InputMaybe<Scalars['date']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  is_revoked?: InputMaybe<Scalars['Boolean']>;
+  legacy_course_code?: InputMaybe<Scalars['String']>;
+  number?: InputMaybe<Scalars['String']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Non_Graded_Certificate_Max_Fields = {
+  __typename?: 'non_graded_certificate_max_fields';
+  certification_date?: Maybe<Scalars['date']>;
+  course_accredited_by?: Maybe<Scalars['String']>;
+  course_id?: Maybe<Scalars['Int']>;
+  course_level?: Maybe<Scalars['String']>;
+  course_name?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  expiry_date?: Maybe<Scalars['date']>;
+  id?: Maybe<Scalars['uuid']>;
+  legacy_course_code?: Maybe<Scalars['String']>;
+  number?: Maybe<Scalars['String']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type Non_Graded_Certificate_Min_Fields = {
+  __typename?: 'non_graded_certificate_min_fields';
+  certification_date?: Maybe<Scalars['date']>;
+  course_accredited_by?: Maybe<Scalars['String']>;
+  course_id?: Maybe<Scalars['Int']>;
+  course_level?: Maybe<Scalars['String']>;
+  course_name?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  expiry_date?: Maybe<Scalars['date']>;
+  id?: Maybe<Scalars['uuid']>;
+  legacy_course_code?: Maybe<Scalars['String']>;
+  number?: Maybe<Scalars['String']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "non_graded_certificate" */
+export type Non_Graded_Certificate_Mutation_Response = {
+  __typename?: 'non_graded_certificate_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Non_Graded_Certificate>;
+};
+
+/** on_conflict condition type for table "non_graded_certificate" */
+export type Non_Graded_Certificate_On_Conflict = {
+  constraint: Non_Graded_Certificate_Constraint;
+  update_columns?: Array<Non_Graded_Certificate_Update_Column>;
+  where?: InputMaybe<Non_Graded_Certificate_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "non_graded_certificate". */
+export type Non_Graded_Certificate_Order_By = {
+  blended_learning?: InputMaybe<Order_By>;
+  certification_date?: InputMaybe<Order_By>;
+  course_accredited_by?: InputMaybe<Order_By>;
+  course_id?: InputMaybe<Order_By>;
+  course_level?: InputMaybe<Order_By>;
+  course_name?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  expiry_date?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  is_revoked?: InputMaybe<Order_By>;
+  legacy_course_code?: InputMaybe<Order_By>;
+  number?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+  reaccreditation?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: non_graded_certificate */
+export type Non_Graded_Certificate_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "non_graded_certificate" */
+export enum Non_Graded_Certificate_Select_Column {
+  /** column name */
+  BlendedLearning = 'blended_learning',
+  /** column name */
+  CertificationDate = 'certification_date',
+  /** column name */
+  CourseAccreditedBy = 'course_accredited_by',
+  /** column name */
+  CourseId = 'course_id',
+  /** column name */
+  CourseLevel = 'course_level',
+  /** column name */
+  CourseName = 'course_name',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  ExpiryDate = 'expiry_date',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IsRevoked = 'is_revoked',
+  /** column name */
+  LegacyCourseCode = 'legacy_course_code',
+  /** column name */
+  Number = 'number',
+  /** column name */
+  ProfileId = 'profile_id',
+  /** column name */
+  Reaccreditation = 'reaccreditation',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "non_graded_certificate" */
+export type Non_Graded_Certificate_Set_Input = {
+  blended_learning?: InputMaybe<Scalars['Boolean']>;
+  certification_date?: InputMaybe<Scalars['date']>;
+  course_accredited_by?: InputMaybe<Scalars['String']>;
+  course_id?: InputMaybe<Scalars['Int']>;
+  course_level?: InputMaybe<Scalars['String']>;
+  course_name?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  expiry_date?: InputMaybe<Scalars['date']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  is_revoked?: InputMaybe<Scalars['Boolean']>;
+  legacy_course_code?: InputMaybe<Scalars['String']>;
+  number?: InputMaybe<Scalars['String']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate stddev on columns */
+export type Non_Graded_Certificate_Stddev_Fields = {
+  __typename?: 'non_graded_certificate_stddev_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Non_Graded_Certificate_Stddev_Pop_Fields = {
+  __typename?: 'non_graded_certificate_stddev_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Non_Graded_Certificate_Stddev_Samp_Fields = {
+  __typename?: 'non_graded_certificate_stddev_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** Streaming cursor of the table "non_graded_certificate" */
+export type Non_Graded_Certificate_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Non_Graded_Certificate_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Non_Graded_Certificate_Stream_Cursor_Value_Input = {
+  blended_learning?: InputMaybe<Scalars['Boolean']>;
+  certification_date?: InputMaybe<Scalars['date']>;
+  course_accredited_by?: InputMaybe<Scalars['String']>;
+  course_id?: InputMaybe<Scalars['Int']>;
+  course_level?: InputMaybe<Scalars['String']>;
+  course_name?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  expiry_date?: InputMaybe<Scalars['date']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  is_revoked?: InputMaybe<Scalars['Boolean']>;
+  legacy_course_code?: InputMaybe<Scalars['String']>;
+  number?: InputMaybe<Scalars['String']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate sum on columns */
+export type Non_Graded_Certificate_Sum_Fields = {
+  __typename?: 'non_graded_certificate_sum_fields';
+  course_id?: Maybe<Scalars['Int']>;
+};
+
+/** update columns of table "non_graded_certificate" */
+export enum Non_Graded_Certificate_Update_Column {
+  /** column name */
+  BlendedLearning = 'blended_learning',
+  /** column name */
+  CertificationDate = 'certification_date',
+  /** column name */
+  CourseAccreditedBy = 'course_accredited_by',
+  /** column name */
+  CourseId = 'course_id',
+  /** column name */
+  CourseLevel = 'course_level',
+  /** column name */
+  CourseName = 'course_name',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  ExpiryDate = 'expiry_date',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IsRevoked = 'is_revoked',
+  /** column name */
+  LegacyCourseCode = 'legacy_course_code',
+  /** column name */
+  Number = 'number',
+  /** column name */
+  ProfileId = 'profile_id',
+  /** column name */
+  Reaccreditation = 'reaccreditation',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+export type Non_Graded_Certificate_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Non_Graded_Certificate_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Non_Graded_Certificate_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Non_Graded_Certificate_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Non_Graded_Certificate_Var_Pop_Fields = {
+  __typename?: 'non_graded_certificate_var_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Non_Graded_Certificate_Var_Samp_Fields = {
+  __typename?: 'non_graded_certificate_var_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Non_Graded_Certificate_Variance_Fields = {
+  __typename?: 'non_graded_certificate_variance_fields';
+  course_id?: Maybe<Scalars['Float']>;
 };
 
 /** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
@@ -46985,6 +47396,12 @@ export type Query_Root = {
   module_v2_aggregate: Module_V2_Aggregate;
   /** fetch data from the table: "module_v2" using primary key columns */
   module_v2_by_pk?: Maybe<Module_V2>;
+  /** fetch data from the table: "non_graded_certificate" */
+  non_graded_certificate: Array<Non_Graded_Certificate>;
+  /** fetch aggregated fields from the table: "non_graded_certificate" */
+  non_graded_certificate_aggregate: Non_Graded_Certificate_Aggregate;
+  /** fetch data from the table: "non_graded_certificate" using primary key columns */
+  non_graded_certificate_by_pk?: Maybe<Non_Graded_Certificate>;
   /** fetch data from the table: "order" */
   order: Array<Order>;
   /** fetch aggregated fields from the table: "order" */
@@ -48996,6 +49413,29 @@ export type Query_RootModule_V2_By_PkArgs = {
 };
 
 
+export type Query_RootNon_Graded_CertificateArgs = {
+  distinct_on?: InputMaybe<Array<Non_Graded_Certificate_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Non_Graded_Certificate_Order_By>>;
+  where?: InputMaybe<Non_Graded_Certificate_Bool_Exp>;
+};
+
+
+export type Query_RootNon_Graded_Certificate_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Non_Graded_Certificate_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Non_Graded_Certificate_Order_By>>;
+  where?: InputMaybe<Non_Graded_Certificate_Bool_Exp>;
+};
+
+
+export type Query_RootNon_Graded_Certificate_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootOrderArgs = {
   distinct_on?: InputMaybe<Array<Order_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -50817,6 +51257,14 @@ export type Subscription_Root = {
   module_v2_by_pk?: Maybe<Module_V2>;
   /** fetch data from the table in a streaming manner: "module_v2" */
   module_v2_stream: Array<Module_V2>;
+  /** fetch data from the table: "non_graded_certificate" */
+  non_graded_certificate: Array<Non_Graded_Certificate>;
+  /** fetch aggregated fields from the table: "non_graded_certificate" */
+  non_graded_certificate_aggregate: Non_Graded_Certificate_Aggregate;
+  /** fetch data from the table: "non_graded_certificate" using primary key columns */
+  non_graded_certificate_by_pk?: Maybe<Non_Graded_Certificate>;
+  /** fetch data from the table in a streaming manner: "non_graded_certificate" */
+  non_graded_certificate_stream: Array<Non_Graded_Certificate>;
   /** fetch data from the table: "order" */
   order: Array<Order>;
   /** fetch aggregated fields from the table: "order" */
@@ -53377,6 +53825,36 @@ export type Subscription_RootModule_V2_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Module_V2_Stream_Cursor_Input>>;
   where?: InputMaybe<Module_V2_Bool_Exp>;
+};
+
+
+export type Subscription_RootNon_Graded_CertificateArgs = {
+  distinct_on?: InputMaybe<Array<Non_Graded_Certificate_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Non_Graded_Certificate_Order_By>>;
+  where?: InputMaybe<Non_Graded_Certificate_Bool_Exp>;
+};
+
+
+export type Subscription_RootNon_Graded_Certificate_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Non_Graded_Certificate_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Non_Graded_Certificate_Order_By>>;
+  where?: InputMaybe<Non_Graded_Certificate_Bool_Exp>;
+};
+
+
+export type Subscription_RootNon_Graded_Certificate_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootNon_Graded_Certificate_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Non_Graded_Certificate_Stream_Cursor_Input>>;
+  where?: InputMaybe<Non_Graded_Certificate_Bool_Exp>;
 };
 
 
@@ -58429,6 +58907,13 @@ export type GetUserByMailQueryVariables = Exact<{
 
 
 export type GetUserByMailQuery = { __typename?: 'query_root', profile: Array<{ __typename?: 'profile', id: any, email?: string | null }> };
+
+export type CheckIfUserExistsByMailQueryVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type CheckIfUserExistsByMailQuery = { __typename?: 'query_root', profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type UserCourseFragment = { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, status?: Course_Status_Enum | null, course_code?: string | null, createdAt: any, max_participants: number, trainers: Array<{ __typename?: 'course_trainer', id: any, status?: Course_Invite_Status_Enum | null, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, organization?: { __typename?: 'organization', id: any, name: string } | null, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null };
 

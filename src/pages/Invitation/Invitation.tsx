@@ -30,6 +30,8 @@ import { useMutation, useQuery } from 'urql'
 import { AppLogo } from '@app/components/AppLogo'
 import { useAuth } from '@app/context/auth'
 import {
+  CheckIfUserExistsByMailQuery,
+  CheckIfUserExistsByMailQueryVariables,
   CourseDeliveryType,
   DeclineInviteMutation,
   DeclineInviteMutationVariables,
@@ -39,6 +41,7 @@ import {
 } from '@app/generated/graphql'
 import { MUTATION as DECLINE_INVITE_MUTATION } from '@app/queries/invites/decline-invite'
 import { QUERY as GET_INVITE_QUERY } from '@app/queries/invites/get-invite'
+import { CHECK_USER_EXISTS_BY_EMAIL } from '@app/queries/user-queries/get-user-by-email'
 import { TimeDifferenceAndContext } from '@app/types'
 import {
   formatCourseVenueName,
@@ -160,13 +163,22 @@ export const InvitationPage = () => {
     return invite ? invite?.venueAddress : null
   }, [invite])
 
+  const [{ data: profiles }] = useQuery<
+    CheckIfUserExistsByMailQuery,
+    CheckIfUserExistsByMailQueryVariables
+  >({
+    query: CHECK_USER_EXISTS_BY_EMAIL,
+    variables: { email: tokenData?.email ?? '' },
+  })
+
   const handleSubmit = async () => {
     if (tokenData) {
       if (response === 'yes') {
         const isUserLoggedIn = profile?.email === tokenData.email
         const exists = isUserLoggedIn
           ? true
-          : await userExistsInCognito(tokenData.email)
+          : (await userExistsInCognito(tokenData?.email ?? '')) &&
+            Number(profiles?.profile_aggregate.aggregate?.count)
         const nextUrl = exists ? '/auto-login' : '/auto-register'
         const continueUrl = `/accept-invite/${tokenData.inviteId}?courseId=${tokenData.courseId}`
         const qs = new URLSearchParams({
