@@ -12,6 +12,8 @@ import useWorldCountries, {
 export type CountriesSelectorProps = {
   onChange: (event: SyntheticEvent, selected: string | null) => void
   value: string | undefined | null
+  courseResidingCountry?: string
+  isBILDcourse?: boolean
 } & BaseTextFieldProps
 
 const CountriesSelector = ({
@@ -22,9 +24,21 @@ const CountriesSelector = ({
   required,
   helperText,
   disabled,
+  courseResidingCountry,
+  isBILDcourse,
 }: CountriesSelectorProps) => {
-  const { countriesCodesWithUKs: countries, getLabel } = useWorldCountries()
+  const {
+    countriesCodesWithUKs: countries,
+    getLabel,
+    isUKCountry,
+  } = useWorldCountries()
   const { t } = useTranslation()
+
+  let countriesList = countries
+
+  if (isUKCountry(courseResidingCountry) && isBILDcourse) {
+    countriesList = countries.filter(country => country.includes('GB'))
+  }
 
   return (
     <Autocomplete
@@ -32,7 +46,7 @@ const CountriesSelector = ({
       value={!value ? undefined : value}
       id="country-select-demo"
       data-testid="countries-selector-autocomplete"
-      options={countries}
+      options={countriesList}
       autoHighlight
       getOptionLabel={code => getLabel(code as WorldCountriesCodes) ?? ''}
       renderOption={(props, code) => (

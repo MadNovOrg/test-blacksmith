@@ -36,6 +36,7 @@ export type VenueFormProps = {
   onSubmit: (venue?: Venue) => void
   onCancel: () => void
   courseResidingCountry?: WorldCountriesCodes | string
+  isBILDcourse: boolean
 }
 
 const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
@@ -43,6 +44,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
   onSubmit,
   onCancel,
   courseResidingCountry,
+  isBILDcourse,
 }) {
   const preFilledFields = useMemo(
     () =>
@@ -194,6 +196,8 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
               value={values.country}
               error={Boolean(errors.country)}
               helperText={errors.country?.message}
+              courseResidingCountry={courseResidingCountry}
+              isBILDcourse={isBILDcourse}
             />
           </Grid>
           <Grid item xs={12}>

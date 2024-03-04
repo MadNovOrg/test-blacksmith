@@ -1693,6 +1693,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     label={t('components.course-form.residing-country')}
                     error={Boolean(errors.residingCountry?.message)}
                     helperText={errors.residingCountry?.message}
+                    isBILDcourse={isBild}
                   />
                 </FormControl>
               ) : null}
@@ -1764,6 +1765,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
               {hasVenue ? (
                 <VenueSelector
+                  isBILDcourse={isBild}
                   courseResidingCountry={values.residingCountry}
                   {...register('venue')}
                   onChange={venue => {

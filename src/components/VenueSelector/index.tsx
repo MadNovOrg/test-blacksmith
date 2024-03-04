@@ -52,6 +52,7 @@ export type VenueSelectorProps = {
   sx?: SxProps
   textFieldProps?: TextFieldProps
   courseResidingCountry?: WorldCountriesCodes | string
+  isBILDcourse: boolean
 }
 function getOptionLabel(value: AutocompletePrediction | Venue | string) {
   if (typeof value === 'string') {
@@ -109,6 +110,7 @@ export const VenueSelector: React.FC<
   sx,
   textFieldProps,
   courseResidingCountry,
+  isBILDcourse,
   ...props
 }) {
   const { t } = useTranslation()
@@ -343,6 +345,7 @@ export const VenueSelector: React.FC<
             onChange(venue)
           }}
           courseResidingCountry={courseResidingCountry}
+          isBILDcourse={isBILDcourse}
           onCancel={onDialogClose}
         />
       </Dialog>
