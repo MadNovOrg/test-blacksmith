@@ -67,6 +67,11 @@ export const CourseBookingReview: React.FC<
         return
       }
 
+      if (!order.success && order.error) {
+        setError({ key: `pages.book-course.order-place-error-${order.error}` })
+        return
+      }
+
       if (booking.paymentMethod === PaymentMethod.Cc) {
         navigate(`../payment/${order.id}`, { replace: true })
       } else {

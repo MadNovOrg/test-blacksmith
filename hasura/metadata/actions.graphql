@@ -342,6 +342,18 @@ type Query {
   zoomUsers: ZoomUsersResponse
 }
 
+enum CreateOrderError {
+  USER_REGISTERED_ON_COURSE
+  NUMBER_OF_REGISTRANTS_AND_QUANTITY_VALUE
+  PROMOCODES_NOT_APPLICABLE
+  PROFILE_NOT_FOUND
+  COURSE_NOT_FOUND
+  NO_SPACE_ON_COURSE
+  PRICING_NOT_FOUND
+  ORDER_NOT_CREATED
+  INTERNAL_ERROR
+}
+
 enum BillingInterval {
   day
   week
@@ -1100,7 +1112,9 @@ type CanApplyPromoCodeOutput {
 }
 
 type CreateOrderOutput {
-  id: uuid!
+  id: uuid
+  success: Boolean!
+  error: CreateOrderError
 }
 
 type TransferCourse {

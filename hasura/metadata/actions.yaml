@@ -482,6 +482,35 @@ actions:
     comment: Zoom Users list
 custom_types:
   enums:
+    - name: CreateOrderError
+      values:
+        - description: null
+          is_deprecated: null
+          value: USER_REGISTERED_ON_COURSE
+        - description: null
+          is_deprecated: null
+          value: NUMBER_OF_REGISTRANTS_AND_QUANTITY_VALUE
+        - description: null
+          is_deprecated: null
+          value: PROMOCODES_NOT_APPLICABLE
+        - description: null
+          is_deprecated: null
+          value: PROFILE_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: COURSE_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: NO_SPACE_ON_COURSE
+        - description: null
+          is_deprecated: null
+          value: PRICING_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: ORDER_NOT_CREATED
+        - description: null
+          is_deprecated: null
+          value: INTERNAL_ERROR
     - name: BillingInterval
       values:
         - description: null

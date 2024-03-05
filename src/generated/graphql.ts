@@ -1560,6 +1560,18 @@ export type CreateMediaItemPayload = {
   mediaItem?: Maybe<MediaItem>;
 };
 
+export enum CreateOrderError {
+  CourseNotFound = 'COURSE_NOT_FOUND',
+  InternalError = 'INTERNAL_ERROR',
+  NoSpaceOnCourse = 'NO_SPACE_ON_COURSE',
+  NumberOfRegistrantsAndQuantityValue = 'NUMBER_OF_REGISTRANTS_AND_QUANTITY_VALUE',
+  OrderNotCreated = 'ORDER_NOT_CREATED',
+  PricingNotFound = 'PRICING_NOT_FOUND',
+  ProfileNotFound = 'PROFILE_NOT_FOUND',
+  PromocodesNotApplicable = 'PROMOCODES_NOT_APPLICABLE',
+  UserRegisteredOnCourse = 'USER_REGISTERED_ON_COURSE'
+}
+
 export type CreateOrderInput = {
   billingAddress: Scalars['String'];
   billingEmail: Scalars['String'];
@@ -1580,7 +1592,9 @@ export type CreateOrderInput = {
 
 export type CreateOrderOutput = {
   __typename?: 'CreateOrderOutput';
-  id: Scalars['uuid'];
+  error?: Maybe<CreateOrderError>;
+  id?: Maybe<Scalars['uuid']>;
+  success: Scalars['Boolean'];
 };
 
 export type CreateOrderParticipantInput = {
@@ -58516,7 +58530,7 @@ export type CreateOrderMutationVariables = Exact<{
 }>;
 
 
-export type CreateOrderMutation = { __typename?: 'mutation_root', order?: { __typename?: 'CreateOrderOutput', id: any } | null };
+export type CreateOrderMutation = { __typename?: 'mutation_root', order?: { __typename?: 'CreateOrderOutput', id?: any | null, success: boolean, error?: CreateOrderError | null } | null };
 
 export type GetOrderReducedQueryVariables = Exact<{
   orderId: Scalars['uuid'];

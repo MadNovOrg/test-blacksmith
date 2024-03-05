@@ -18,7 +18,6 @@ import {
   Accreditors_Enum,
   Course_Source_Enum,
   Course_Type_Enum,
-  CreateOrderMutation,
   FindProfilesQuery,
   GetCoursePricingQuery,
   GetTempProfileQuery,
@@ -27,9 +26,11 @@ import {
   Promo_Code_Type_Enum,
   PromoCodeOutput,
   Currency,
-  CreateOrderMutationVariables,
   GetTempProfileQueryVariables,
   GetCoursePricingQueryVariables,
+  CreateOrderOutput,
+  CreateOrderMutation,
+  CreateOrderMutationVariables,
 } from '@app/generated/graphql'
 import { stripeProcessingFeeRate } from '@app/lib/stripe'
 import { GET_COURSE_PRICING_QUERY } from '@app/queries/courses/get-course-pricing'
@@ -126,7 +127,7 @@ export type ContextType = {
   setBooking: (_: Partial<State>) => void
   addPromo: (_: PromoCodeOutput) => void
   removePromo: (_: string) => void
-  placeOrder: () => Promise<CreateOrderMutation['order']>
+  placeOrder: () => Promise<CreateOrderOutput | undefined>
   internalBooking: boolean
 }
 
@@ -384,7 +385,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     const promoCodes =
       booking.courseType !== Course_Type_Enum.Closed ? booking.promoCodes : []
     if (course && course.id) {
-      const { data: response } = await createOrder({
+      const { data: createOrderResponse } = await createOrder({
         input: {
           courseId: course.id,
           quantity: booking.quantity,
@@ -404,10 +405,31 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         },
       })
 
-      setOrderId(response?.order?.id)
-      return response?.order
+      if (createOrderResponse?.order?.success) {
+        setOrderId(createOrderResponse?.order?.id)
+      }
+
+      return createOrderResponse?.order as CreateOrderOutput
     }
-  }, [booking, course, createOrder])
+  }, [
+    booking.bookingContact,
+    booking.courseType,
+    booking.invoiceDetails?.billingAddress,
+    booking.invoiceDetails?.email,
+    booking.invoiceDetails?.firstName,
+    booking.invoiceDetails?.phone,
+    booking.invoiceDetails?.purchaseOrder,
+    booking.invoiceDetails?.surname,
+    booking.orgId,
+    booking.participants,
+    booking.paymentMethod,
+    booking.promoCodes,
+    booking.quantity,
+    booking.salesRepresentative?.id,
+    booking.source,
+    course,
+    createOrder,
+  ])
 
   const value = useMemo<ContextType>(
     () => ({
