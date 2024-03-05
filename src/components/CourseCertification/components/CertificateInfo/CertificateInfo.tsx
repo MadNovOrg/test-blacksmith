@@ -317,7 +317,54 @@ export const CertificateInfo: React.FC<
                               return null
                             }
 
-                            return (
+                            const hasSubModules = Boolean(lesson.items)
+                            const subModules = lesson.items ?? []
+
+                            const { numberOfLessons, coveredLessons } =
+                              countLessons(subModules)
+
+                            return hasSubModules ? (
+                              <>
+                                <Accordion key={module.id}>
+                                  <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        width: { sm: '60%', md: '70%' },
+                                        flexShrink: 0,
+                                        mt: -0.5,
+                                      }}
+                                    >
+                                      {lesson.name}
+                                    </Typography>
+
+                                    <Typography
+                                      sx={{ color: 'text.secondary' }}
+                                    >
+                                      {`${coveredLessons} of ${numberOfLessons} completed`}
+                                    </Typography>
+                                  </AccordionSummary>
+
+                                  {subModules.length ? (
+                                    <AccordionDetails>
+                                      {subModules.map((lesson: object) => {
+                                        if (!isLesson(lesson)) {
+                                          return null
+                                        }
+
+                                        return (
+                                          <Typography key={lesson.name}>
+                                            {lesson.name}
+                                          </Typography>
+                                        )
+                                      })}
+                                    </AccordionDetails>
+                                  ) : null}
+                                </Accordion>
+                                <Divider />
+                              </>
+                            ) : (
                               <Typography key={lesson.name}>
                                 {lesson.name}
                               </Typography>
