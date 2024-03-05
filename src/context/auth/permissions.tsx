@@ -430,7 +430,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
       switch (courseType) {
         case Course_Type_Enum.Indirect: {
-          return false
+          return anyPass([acl.isTTOps])()
         }
 
         case Course_Type_Enum.Closed: {

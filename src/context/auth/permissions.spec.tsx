@@ -1771,18 +1771,6 @@ describe(getACL.name, () => {
       ).toBeFalsy()
     })
 
-    it(`should return true when courseType is ${Course_Type_Enum.Closed} and the active role is ${RoleName.TT_OPS}`, () => {
-      // Arrange
-      const acl = getACLStub({
-        activeRole: RoleName.TT_OPS,
-      })
-
-      // Act & Assert
-      expect(
-        acl.canEditWithoutRestrictions(Course_Type_Enum.Indirect)
-      ).toBeFalsy()
-    })
-
     it.each([[RoleName.TT_OPS], [RoleName.SALES_ADMIN]])(
       `should return true when the courseType is ${Course_Type_Enum.Open} and the activeRole is %s`,
       activeRole => {
