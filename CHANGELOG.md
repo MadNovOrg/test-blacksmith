@@ -1,5 +1,41 @@
 # @teamteach/hub
 
+## 3.6.0
+
+### Minor Changes
+
+- 2272230: Handle day saving time for course's timezone. Replace luxon library with date-fns-tz
+- a4eb109: International course, attendee cancellation adjustments.
+- ed55196: Add time zone field on course create form
+- ece8098: Only show UK countries on Venue when creating BILD course
+- e8ec10f: remove strategies for BILD trainer conversion courses, add modules
+- 675138c: International attendee transfer currency ammendments.
+- 37108f3: allow submitting evaluation feedback on the last day of the course
+- 1ba7a0f: Add filter for certificate type
+- 240836b: Completely removes swr and use fetcher
+
+### Patch Changes
+
+- 49cee46: don't issue a certificate to a non-graded participant
+- e8d1e7d: hide VAT and currency fields instead of disabling them when international is not applicable
+- af64f06: Fix pending and declined invites count and display them accordingly.
+- 80f9da8: hide duration of strategies and modules for BILD trainer courses
+- 85a7fec: Redirect invited user to auto-login only if it exists both in cognito and in database.
+- c05efc1: remove duration from order details
+- 74d87a7: Fix attendees' course evaluation view page
+- 3a557f2: Fix GMT time zone value on edit course page
+- 822869d: remove hip chair lesson from ground recovery safeguards module
+- 728ab8d: don't display modules that don't have any covered lessons when grading
+- 56fef61: Update GetPromoCodes query to apply the where condition when retrieving the aggregate count.
+- 946cad9: Adjustments on edit INDIRECT BILD course related to warning banner for Trainer & Attendee ratio
+- 8a066b1: add module settings for level 2 indirect F2F blended courses
+- dfcc406: Fix put certification on hold
+- e8d1e7d: Fix price calculation for BILD course
+- af6635f: Fix (TTHP-3261) edit inderect course operations
+- 3574d8d: Fix: TTHP-3214 error handling create order
+- 1757ec3: Display submodules on certificate view page
+- 0bb87f1: add missing modules for level 2 closed blended courses
+
 ## 3.5.1
 
 ### Patch Changes
