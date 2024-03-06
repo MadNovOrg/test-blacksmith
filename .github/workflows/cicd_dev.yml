@@ -78,9 +78,11 @@ jobs:
     name: DEV
     needs: [lint-and-typecheck, test]
     if: |
-      github.ref == 'refs/heads/main' &&
-      github.event_name == 'push' &&
-      ! startsWith(github.head_ref, 'changeset-release/')
+      github.event_name == 'push' && !startsWith(github.head_ref, 'changeset-release/')
+      && (
+        github.ref == 'refs/heads/main' ||
+        github.ref == 'refs/heads/dev-international-epic-demo'
+      )
     uses: ./.github/workflows/pipeline.yml
     with:
       mode: 'development'
