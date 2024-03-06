@@ -261,7 +261,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                   label={t('dob')}
                   format={INPUT_DATE_FORMAT}
                   value={field.value}
-                  onChange={(d: Date | null) => setValue('dob', d)}
+                  onChange={(d: Date | null) =>
+                    setValue('dob', d, { shouldValidate: true })
+                  }
                   maxDate={minimalAge}
                   slotProps={{
                     textField: {
