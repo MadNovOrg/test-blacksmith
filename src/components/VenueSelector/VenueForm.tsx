@@ -26,8 +26,6 @@ import { requiredMsg, isValidUKPostalCode } from '@app/util'
 
 import CountriesSelector from '../CountriesSelector'
 import useWorldCountries, {
-  UKsCountriesCode,
-  UKsCountriesCodes,
   WorldCountriesCodes,
 } from '../CountriesSelector/hooks/useWorldCountries'
 
@@ -56,8 +54,11 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
     [data]
   )
   const { t } = useTranslation()
-  const { getLabel: getCountryNameByCode, countriesCodesWithUKs } =
-    useWorldCountries()
+  const {
+    getLabel: getCountryNameByCode,
+    countriesCodesWithUKs,
+    isUKCountry,
+  } = useWorldCountries()
   const { acl } = useAuth()
   const [{ error }, handleAddVenue] = useMutation<ResponseType, ParamsType>(
     ADD_VENUE_MUTATION
@@ -76,11 +77,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
         ? yup.string()
         : yup.string().when('country', {
             is: (country: string) => {
-              return Boolean(
-                UKsCountriesCodes[
-                  (country || courseResidingCountry) as UKsCountriesCode
-                ]
-              )
+              return isUKCountry(country || courseResidingCountry)
             },
             then: schema =>
               schema
@@ -98,7 +95,13 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
         .oneOf(countriesCodesWithUKs)
         .required(requiredMsg(t, 'addr.country')),
     })
-  }, [t, isAdminOrOperations, countriesCodesWithUKs, courseResidingCountry])
+  }, [
+    t,
+    isAdminOrOperations,
+    countriesCodesWithUKs,
+    courseResidingCountry,
+    isUKCountry,
+  ])
   const {
     control,
     handleSubmit,
@@ -273,23 +276,26 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                   required={!isAdminOrOperations}
                   error={fieldState.invalid}
                   label={
-                    !UKsCountriesCodes[
-                      (values.country
-                        ? values.country
-                        : courseResidingCountry) as UKsCountriesCode
-                    ]
-                      ? t('components.venue-selector.modal.fields.zipCode')
-                      : t('components.venue-selector.modal.fields.postCode')
+                    isUKCountry(values.country ?? courseResidingCountry)
+                      ? t('components.venue-selector.modal.fields.postCode')
+                      : t('components.venue-selector.modal.fields.zipCode')
                   }
                   helperText={errors.postCode?.message}
                   {...field}
-                  InputProps={{
-                    endAdornment: (
-                      <Tooltip title={t('common.post-code-tooltip')}>
-                        <InfoIcon color={'action'} />
-                      </Tooltip>
-                    ),
-                  }}
+                  InputProps={
+                    isUKCountry(values.country ?? courseResidingCountry)
+                      ? {
+                          endAdornment: (
+                            <Tooltip title={t('common.post-code-tooltip')}>
+                              <InfoIcon
+                                data-testid="postcode-info-icon"
+                                color={'action'}
+                              />
+                            </Tooltip>
+                          ),
+                        }
+                      : undefined
+                  }
                 />
               )}
             />
