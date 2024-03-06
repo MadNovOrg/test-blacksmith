@@ -39,7 +39,7 @@ describe('component: OrgSelector', () => {
     render(<OrgSelector onChange={noop} />, { auth: { profile } })
 
     await userEvent.click(
-      screen.getByPlaceholderText('Organisation name', { exact: false })
+      screen.getByPlaceholderText('Start typing organisation', { exact: false })
     )
 
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
@@ -69,7 +69,9 @@ describe('component: OrgSelector', () => {
     )
 
     await userEvent.type(
-      screen.getByPlaceholderText('Organisation name', { exact: false }),
+      screen.getByPlaceholderText('Start typing organisation', {
+        exact: false,
+      }),
       ORG_SEARCH_NAME
     )
 
@@ -115,7 +117,9 @@ describe('component: OrgSelector', () => {
     )
 
     await userEvent.type(
-      screen.getByPlaceholderText('Organisation name', { exact: false }),
+      screen.getByPlaceholderText('Start typing organisation', {
+        exact: false,
+      }),
       'Org'
     )
 
@@ -161,7 +165,9 @@ describe('component: OrgSelector', () => {
     )
 
     await userEvent.type(
-      screen.getByPlaceholderText('Organisation name', { exact: false }),
+      screen.getByPlaceholderText('Start typing organisation', {
+        exact: false,
+      }),
       ORG_SEARCH_NAME
     )
 

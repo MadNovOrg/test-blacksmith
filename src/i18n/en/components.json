@@ -275,7 +275,7 @@
   },
   "org-selector": {
     "title": "Organisation name",
-    "placeholder": "Start typing organisation name",
+    "placeholder": "Start typing organisation post code, address or name",
     "no-results": "No organisations found",
     "no-individuals": "No individuals found",
     "start-typing": "Please start typing for suggestions.",

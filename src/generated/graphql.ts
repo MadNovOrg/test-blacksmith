@@ -42795,6 +42795,8 @@ export type Organisation_Sector_Updates = {
 export type Organization = {
   __typename?: 'organization';
   address: Scalars['jsonb'];
+  /** A computed field, executes function "org_address_each_text" */
+  addressEachText?: Maybe<Scalars['String']>;
   attributes: Scalars['jsonb'];
   contactDetails: Scalars['jsonb'];
   createdAt: Scalars['timestamptz'];
@@ -42974,6 +42976,7 @@ export type Organization_Bool_Exp = {
   _not?: InputMaybe<Organization_Bool_Exp>;
   _or?: InputMaybe<Array<Organization_Bool_Exp>>;
   address?: InputMaybe<Jsonb_Comparison_Exp>;
+  addressEachText?: InputMaybe<String_Comparison_Exp>;
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -43358,6 +43361,8 @@ export type Organization_Invites_Updates = {
 /** aggregate max on columns */
 export type Organization_Max_Fields = {
   __typename?: 'organization_max_fields';
+  /** A computed field, executes function "org_address_each_text" */
+  addressEachText?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   go1Licenses?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
@@ -43678,6 +43683,8 @@ export type Organization_Member_Updates = {
 /** aggregate min on columns */
 export type Organization_Min_Fields = {
   __typename?: 'organization_min_fields';
+  /** A computed field, executes function "org_address_each_text" */
+  addressEachText?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   go1Licenses?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
@@ -43716,6 +43723,7 @@ export type Organization_On_Conflict = {
 /** Ordering options when selecting data from "organization". */
 export type Organization_Order_By = {
   address?: InputMaybe<Order_By>;
+  addressEachText?: InputMaybe<Order_By>;
   attributes?: InputMaybe<Order_By>;
   contactDetails?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;

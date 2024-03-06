@@ -131,7 +131,19 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     >({
       query: GET_ORGANIZATIONS,
       variables: {
-        where: { name: { _ilike: `%${debouncedQuery}%` } },
+        where: {
+          _or: [
+            {
+              name: { _ilike: `%${debouncedQuery}%` },
+            },
+            {
+              _and: debouncedQuery
+                .trim()
+                .split(/\s+/)
+                .map(word => ({ addressEachText: { _ilike: `%${word}%` } })),
+            },
+          ],
+        },
         isNotShallow: !isShallowRetrieval,
         isShallow: isShallowRetrieval,
       },
