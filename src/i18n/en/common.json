@@ -365,6 +365,7 @@
     "required-date": "Please enter a date",
     "invalid-date-optional": "Please enter a valid date or keep it empty",
     "invalid-phone": "Please enter a valid phone number",
+    "country": "Country is required",
     "date-gte": "Must be {{date}} or after",
     "date-gte-field": "Must be greater or equal to '{{field}}'",
     "date-required": "Please enter your date of birth",

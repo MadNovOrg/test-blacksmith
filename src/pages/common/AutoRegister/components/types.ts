@@ -27,9 +27,12 @@ export const getFormSchema = (t: TFunction) => {
 
     password: schemas.password(t),
 
-    country: yup.string().required(),
+    country: yup
+      .string()
+      .nonNullable()
+      .required(t('validation-errors.country')),
 
-    countryCode: yup.string().required(),
+    countryCode: yup.string().nonNullable().required(),
 
     phone: schemas.phone(t),
 

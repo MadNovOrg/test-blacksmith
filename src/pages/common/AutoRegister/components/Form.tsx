@@ -223,15 +223,19 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         <Grid item>
           <CountriesSelector
             onChange={(_, code) => {
-              if (code) {
-                setValue(
-                  'country',
-                  getCountryLabel(code as WorldCountriesCodes) ?? ''
-                )
-                setValue('countryCode', code)
-              }
+              setValue(
+                'country',
+                getCountryLabel(code as WorldCountriesCodes) ?? '',
+                { shouldValidate: true }
+              )
+              setValue('countryCode', code as WorldCountriesCodes, {
+                shouldValidate: true,
+              })
             }}
             value={values.countryCode}
+            required={true}
+            error={!!errors.country}
+            helperText={errors.country?.message || ''}
           />
         </Grid>
 
