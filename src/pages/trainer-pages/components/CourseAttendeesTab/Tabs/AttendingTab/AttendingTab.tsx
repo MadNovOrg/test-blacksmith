@@ -42,7 +42,6 @@ import {
   SortOrder,
 } from '@app/types'
 import {
-  courseEnded,
   courseStarted,
   DEFAULT_PAGINATION_LIMIT,
   DEFAULT_PAGINATION_ROW_OPTIONS,
@@ -58,6 +57,12 @@ type TabProperties = {
   onSendingCourseInformation: (success: boolean) => void
   updateAttendeesHandler: () => void
 }
+
+const attendanceDisabledStatuses = [
+  Course_Status_Enum.Cancelled,
+  Course_Status_Enum.Declined,
+  Course_Status_Enum.Draft,
+]
 
 export const AttendingTab = ({
   course,
@@ -78,18 +83,18 @@ export const AttendingTab = ({
 
   const isBlendedCourse = course.go1Integration
   const isOpenCourse = course.type === Course_Type_Enum.Open
-  const hasCourseEnded = courseEnded(course)
   const navigate = useNavigate()
   const [, sendCourseInfoMutation] = useMutation<
     SendCourseInformationMutation,
     SendCourseInformationMutationVariables
   >(SEND_COURSE_INFO)
 
-  const courseInProgress = courseStarted(course) && !hasCourseEnded
-
   const canToggleAttendance =
-    acl.canGradeParticipants(course.trainers ?? []) &&
-    (courseInProgress || courseEnded(course))
+    acl.canGradeParticipants(course.trainers ?? []) && courseStarted(course)
+
+  const isAttendanceDisabled = attendanceDisabledStatuses.includes(
+    course.status
+  )
 
   const {
     data: courseParticipants,
@@ -238,6 +243,12 @@ export const AttendingTab = ({
     [acl, course]
   )
 
+  const canToggleParticipantAttendance = useCallback(
+    ({ grade }: CourseParticipant) =>
+      canToggleAttendance && !isAttendanceDisabled && !grade,
+    [canToggleAttendance, isAttendanceDisabled]
+  )
+
   const sendCourseInfo = useCallback(
     async (
       courseId: SendCourseInformationMutationVariables['courseId'],
@@ -298,10 +309,7 @@ export const AttendingTab = ({
                 <BulkAttendanceButton
                   courseId={course.id}
                   participantIds={Array.from(selected)}
-                  disabled={
-                    courseEnded(course) &&
-                    course.status !== Course_Status_Enum.GradeMissing
-                  }
+                  disabled={isAttendanceDisabled}
                   onSuccess={refreshParticipants}
                 />
               </Box>
@@ -327,7 +335,7 @@ export const AttendingTab = ({
                     >
                       {checkbox.rowCell(
                         courseParticipant.id,
-                        Boolean(courseParticipant.grade)
+                        !canToggleParticipantAttendance(courseParticipant)
                       )}
                       <TableCell>
                         <LinkToProfile
@@ -402,10 +410,7 @@ export const AttendingTab = ({
                           <AttendingToggle
                             participant={courseParticipant}
                             disabled={
-                              Boolean(courseParticipant.grade) ||
-                              (courseEnded(course) &&
-                                course.status !==
-                                  Course_Status_Enum.GradeMissing)
+                              !canToggleParticipantAttendance(courseParticipant)
                             }
                           />
                         </TableCell>

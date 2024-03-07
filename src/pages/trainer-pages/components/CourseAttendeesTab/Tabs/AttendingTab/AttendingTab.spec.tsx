@@ -23,8 +23,9 @@ import { AttendingTab } from './AttendingTab'
 vi.mock('@app/hooks/useCourseParticipants')
 const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
 
-;[RoleName.TT_ADMIN, RoleName.TT_OPS].forEach(role => {
-  it(`displays the attendance column if a user is ${role}`, () => {
+it.each([RoleName.TT_ADMIN, RoleName.TT_OPS])(
+  `displays the attendance column if a user is %s`,
+  role => {
     const course = buildCourse({
       overrides: {
         schedule: [
@@ -55,8 +56,8 @@ const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
     expect(
       within(screen.getByRole('table')).getByText('Attendance')
     ).toBeInTheDocument()
-  })
-})
+  }
+)
 
 it('displays the attendance column if user is a lead trainer on the course', () => {
   const trainerProfileId = chance.guid()
@@ -290,7 +291,7 @@ it('marks attendance chip disabled if participant did not attend, course ended a
 
   const participant = buildParticipant({
     overrides: {
-      grade: undefined,
+      grade: Grade_Enum.Pass,
       attended: false,
     },
   })
@@ -318,3 +319,57 @@ it('marks attendance chip disabled if participant did not attend, course ended a
     ).getByRole('button', { name: /did not attend/i })
   ).toHaveAttribute('aria-disabled', 'true')
 })
+
+// https://behaviourhub.atlassian.net/browse/TTHP-3586
+it.each([
+  Course_Status_Enum.Cancelled,
+  Course_Status_Enum.Declined,
+  Course_Status_Enum.Draft,
+])(
+  'marks attendance chip and checkbox disabled if course status is %s',
+  courseStatus => {
+    const course = buildCourse({
+      overrides: {
+        status: courseStatus,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: subDays(new Date(), 2).toISOString(),
+              end: subDays(new Date(), 1).toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    const participant = buildParticipant({
+      overrides: {
+        grade: Grade_Enum.Pass,
+        attended: false,
+      },
+    })
+
+    useCourseParticipantsMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: [participant],
+      mutate: vi.fn(),
+    })
+
+    render(
+      <AttendingTab
+        updateAttendeesHandler={vitest.fn()}
+        onSendingCourseInformation={vitest.fn()}
+        course={course}
+      />,
+      {
+        auth: { activeRole: RoleName.TT_ADMIN },
+      }
+    )
+
+    expect(
+      within(
+        screen.getByTestId(`course-participant-row-${participant.id}`)
+      ).getByRole('button', { name: /did not attend/i })
+    ).toHaveAttribute('aria-disabled', 'true')
+  }
+)

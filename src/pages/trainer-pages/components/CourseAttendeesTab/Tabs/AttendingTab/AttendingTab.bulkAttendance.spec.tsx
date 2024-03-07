@@ -350,7 +350,7 @@ it('toggles the main checkbox as indeterminate when some participants are toggle
     overrides: {
       schedule: [
         buildCourseSchedule({
-          overrides: { start: new Date().toISOString() },
+          overrides: { start: subDays(new Date(), 1).toISOString() },
         }),
       ],
     },
@@ -371,7 +371,8 @@ it('toggles the main checkbox as indeterminate when some participants are toggle
         onSendingCourseInformation={vitest.fn()}
         course={course}
       />
-    </Provider>
+    </Provider>,
+    { auth: { activeRole: RoleName.TT_ADMIN } }
   )
 
   await userEvent.click(
