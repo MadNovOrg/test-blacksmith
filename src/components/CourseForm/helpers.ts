@@ -321,19 +321,26 @@ export function canBeF2FBild() {
 
 export function canBeMixedBild(
   courseLevel: Course_Level_Enum | '',
-  selectedStrategies: BildStrategies[]
+  selectedStrategies: BildStrategies[],
+  isConversion: boolean
 ): boolean {
   if (courseLevel === Course_Level_Enum.BildRegular) {
     return selectedStrategies.includes(BildStrategies.Primary)
   }
 
-  return courseLevel === Course_Level_Enum.BildIntermediateTrainer
+  return (
+    courseLevel === Course_Level_Enum.BildIntermediateTrainer || isConversion
+  )
 }
 
 export function canBeVirtualBild(
   courseType: Course_Type_Enum,
-  strategies: Record<BildStrategies, boolean> | null
+  strategies: Record<BildStrategies, boolean> | null,
+  isConversion: boolean
 ): boolean {
+  if (isConversion) {
+    return true
+  }
   if (!strategies) {
     return false
   }

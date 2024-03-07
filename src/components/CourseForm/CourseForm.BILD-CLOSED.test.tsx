@@ -307,4 +307,28 @@ describe('CourseForm - closed BILD', () => {
 
     expect(screen.getByLabelText(/conversion/i)).toBeInTheDocument()
   })
+
+  // https://behaviourhub.atlassian.net/browse/TTHP-3613
+  it.each([
+    Course_Level_Enum.BildIntermediateTrainer,
+    Course_Level_Enum.BildAdvancedTrainer,
+  ])(
+    'enables Virtual and Mixed delivery for %s when conversion course is selected',
+    async level => {
+      await waitFor(() => {
+        render(<CourseForm type={Course_Type_Enum.Closed} />, {
+          auth: { activeRole: RoleName.TT_ADMIN },
+        })
+      })
+
+      await selectBildCategory()
+      await selectLevel(level)
+
+      await userEvent.click(screen.getByLabelText(/conversion course/i))
+      expect(screen.getByLabelText(/conversion course/i)).toBeChecked()
+
+      expect(screen.getByLabelText(/virtual/i)).toBeEnabled()
+      expect(screen.getByLabelText(/both/i)).toBeEnabled()
+    }
+  )
 })

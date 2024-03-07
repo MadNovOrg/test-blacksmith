@@ -709,7 +709,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const canVirtual = isICM
     ? canBeVirtual(courseType, courseLevel as Course_Level_Enum)
-    : canBeVirtualBild(courseType, values.bildStrategies)
+    : canBeVirtualBild(courseType, values.bildStrategies, values.conversion)
 
   const canMixed = isICM
     ? canBeMixed(courseType, courseLevel as Course_Level_Enum)
@@ -717,7 +717,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         values.courseLevel as Course_Level_Enum,
         values.bildStrategies
           ? bildStrategiesToArray(values.bildStrategies)
-          : []
+          : [],
+        values.conversion
       )
 
   const conversionEnabled =
