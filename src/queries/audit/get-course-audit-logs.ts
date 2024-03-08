@@ -41,8 +41,10 @@ export const GET_COURSE_AUDIT_LOGS_QUERY = gql`
           }
         }
         orders {
-          id
-          xeroInvoiceNumber
+          order {
+            id
+            xeroInvoiceNumber
+          }
         }
       }
       payload

@@ -38,6 +38,7 @@
 - "!include public_course_level.yaml"
 - "!include public_course_level_prefix.yaml"
 - "!include public_course_module.yaml"
+- "!include public_course_order.yaml"
 - "!include public_course_participant.yaml"
 - "!include public_course_participant_audit.yaml"
 - "!include public_course_participant_audit_type.yaml"

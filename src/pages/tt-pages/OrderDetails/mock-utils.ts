@@ -22,47 +22,50 @@ import { NonNullish } from '@app/types'
 const chance = new Chance()
 
 export const buildOrder = build<NonNullish<GetOrderQuery['order']>>({
-  fields: {
-    id: perBuild(() => chance.guid()),
-    courseId: perBuild(() => chance.integer()),
-    profileId: perBuild(() => chance.guid()),
-    quantity: 1,
-    registrants: [],
-    paymentMethod: Payment_Methods_Enum.Invoice,
-    orderTotal: chance.integer(),
-    orderDue: chance.date(),
-    promoCodes: [],
-    xeroInvoiceNumber: 'INV-001',
-    currency: 'GBP',
-    organizationId: chance.guid(),
-    salesRepresentative: null,
-    billingAddress: chance.address(),
-    billingEmail: chance.email(),
-    billingFamilyName: chance.name(),
-    billingGivenName: chance.name(),
-    billingPhone: chance.phone(),
-    organization: {
-      name: chance.name(),
+  fields: [
+    {
+      quantity: 1,
+      order: {
+        id: perBuild(() => chance.guid()),
+        profileId: perBuild(() => chance.guid()),
+        registrants: [],
+        paymentMethod: Payment_Methods_Enum.Invoice,
+        orderTotal: chance.integer(),
+        orderDue: chance.date(),
+        promoCodes: [],
+        xeroInvoiceNumber: 'INV-001',
+        currency: 'GBP',
+        organizationId: chance.guid(),
+        salesRepresentative: null,
+        billingAddress: chance.address(),
+        billingEmail: chance.email(),
+        billingFamilyName: chance.name(),
+        billingGivenName: chance.name(),
+        billingPhone: chance.phone(),
+        organization: {
+          name: chance.name(),
+        },
+        user: {
+          fullName: chance.name({ full: true }),
+          email: chance.email(),
+          phone: chance.phone(),
+        },
+      },
+      course: {
+        id: chance.integer(),
+        max_participants: chance.integer(),
+        go1Integration: chance.bool(),
+        course_code: 'course-code',
+        level: Course_Level_Enum.Level_1,
+        name: chance.name(),
+        type: Course_Type_Enum.Open,
+        start: new Date().toISOString(),
+        end: new Date().toISOString(),
+        residingCountry: 'GB-ENG',
+        deliveryType: Course_Delivery_Type_Enum.F2F,
+      },
     },
-    course: {
-      id: chance.integer(),
-      max_participants: chance.integer(),
-      go1Integration: chance.bool(),
-      course_code: 'course-code',
-      level: Course_Level_Enum.Level_1,
-      name: chance.name(),
-      type: Course_Type_Enum.Open,
-      start: new Date().toISOString(),
-      end: new Date().toISOString(),
-      residingCountry: 'GB-ENG',
-      deliveryType: Course_Delivery_Type_Enum.F2F,
-    },
-    user: {
-      fullName: chance.name({ full: true }),
-      email: chance.email(),
-      phone: chance.phone(),
-    },
-  },
+  ],
 })
 
 export const buildInvoiceContact = build<Xero_Contact>({
@@ -84,7 +87,6 @@ export const buildInvoiceContact = build<Xero_Contact>({
     ],
   },
 })
-
 export const buildInvoice = build<Xero_Invoice>({
   fields: {
     id: chance.guid(),

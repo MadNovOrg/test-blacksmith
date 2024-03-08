@@ -31,7 +31,7 @@ import {
   XeroPhoneType,
   Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
-import { useOrder } from '@app/hooks/useOrder'
+import useCourseOrders from '@app/hooks/useCourseOrders'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
@@ -64,9 +64,9 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { acl } = useAuth()
   const { getLabel, isUKCountry } = useWorldCountries()
 
-  const [{ data, fetching }] = useOrder(id ?? '')
+  const [{ data, fetching }] = useCourseOrders({ orderId: id ?? '' })
 
-  const order = data?.order
+  const order = data?.orders[0]?.order
 
   const { promoCodes, isLoading: isUsePromoCodesLoading } = usePromoCodes({
     sort: { by: 'code', dir: 'asc' },
@@ -75,7 +75,13 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     offset: 0,
   })
 
-  const course = order?.course
+  const courses = data?.orders.map(order => order.course)
+
+  const mainCourse = useMemo(
+    () => (courses?.length ? courses[0] : null),
+    [courses]
+  )
+
   const invoice = order?.invoice
 
   const registrants = (
@@ -83,12 +89,12 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   ) as OrderRegistrant[]
 
   const registrantsLineItems = useMemo(() => {
-    return course?.name
+    return mainCourse?.name
       ? invoice?.lineItems?.filter((li: XeroLineItem) =>
-          isRegistrantLineItem(li, course.level)
+          isRegistrantLineItem(li, mainCourse.level)
         )
       : []
-  }, [invoice, course])
+  }, [invoice, mainCourse])
 
   const go1LicensesLineItem = useMemo(() => {
     return invoice?.lineItems.find((li: XeroLineItem) => isGo1LicensesItem(li))
@@ -161,39 +167,37 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [order])
 
   const bookingContact = useMemo(() => {
-    if (!order?.course) return null
+    const course = courses?.length ? courses[0] : null
 
-    const course = order.course
-
-    if (course.type === Course_Type_Enum.Open && order.bookingContact) {
+    if (course?.type === Course_Type_Enum.Open && order?.bookingContact) {
       return {
         fullName: `${order.bookingContact.firstName} ${order.bookingContact.lastName}`,
         email: order.bookingContact.email,
       }
     }
 
-    if (course.bookingContact) {
+    if (course?.bookingContact) {
       return {
         fullName: course.bookingContact.fullName,
         email: course.bookingContact.email,
       }
     }
 
-    if (course.bookingContactInviteData) {
+    if (course?.bookingContactInviteData) {
       return {
-        fullName: `${course.bookingContactInviteData.firstName} ${course.bookingContactInviteData.lastName}`,
+        fullName: `${course.bookingContactInviteData.firstName} ${course?.bookingContactInviteData.lastName}`,
         email: course.bookingContactInviteData.email,
       }
     }
-  }, [order])
+  }, [courses, order?.bookingContact])
 
   const isInvoiceInXero = Boolean(xeroInvoiceUrl)
 
   const loadingData = fetching || isUsePromoCodesLoading
 
   const expensesLineItems =
-    isNotNullish(invoice) && isNotNullish(course)
-      ? getTrainerExpensesLineItems(invoice.lineItems, course.level)
+    isNotNullish(invoice) && isNotNullish(mainCourse)
+      ? getTrainerExpensesLineItems(invoice.lineItems, mainCourse.level)
       : []
 
   if (!isUsePromoCodesLoading && !fetching && !(order && invoice)) {
@@ -206,6 +210,12 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const accountCode = registrantsLineItems.length
     ? registrantsLineItems[0].accountCode
     : go1LicensesLineItem?.accountCode
+
+  const quantities = new Map<number, number>()
+
+  data?.orders.forEach(order => {
+    quantities.set(Number(order.course?.id), Number(order.quantity))
+  })
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
@@ -262,22 +272,43 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     justifyContent="space-between"
                     alignItems="center"
                   >
-                    <Stack spacing={2}>
-                      {course && (
-                        <CourseTitleAndDuration
-                          showCourseLink
-                          showCourseDuration={false}
-                          course={{
-                            id: course.id,
-                            course_code: course.course_code,
-                            start: course.start,
-                            end: course.end,
-                            level: course.level as unknown as Course_Level_Enum,
-                            reaccreditation: course.reaccreditation,
-                            residingCountry: course.residingCountry,
-                          }}
-                        />
-                      )}
+                    <Stack spacing={2} width={1}>
+                      {courses?.map(course => (
+                        <Box
+                          key={course?.id}
+                          display="flex"
+                          flexDirection="row"
+                          justifyContent="space-between"
+                          alignItems="center"
+                        >
+                          <CourseTitleAndDuration
+                            showCourseLink
+                            showCourseDuration={false}
+                            course={{
+                              id: Number(course?.id) ?? '',
+                              course_code: course?.course_code,
+                              start: course?.start,
+                              end: course?.end,
+                              level:
+                                course?.level as unknown as Course_Level_Enum,
+                              reaccreditation: course?.reaccreditation,
+                              residingCountry: course?.residingCountry,
+                            }}
+                          />
+                          <Box
+                            key={course?.id}
+                            textAlign="end"
+                            data-testid="'order-quantity'"
+                          >
+                            <Typography variant="caption">
+                              {t('quantity')}
+                            </Typography>
+                            <Typography>
+                              {quantities.get(Number(course?.id)) ?? 0}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      ))}
                       {go1LicensesLineItem ? (
                         <Typography color="grey.700">
                           {_t('currency', {
@@ -288,10 +319,6 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         </Typography>
                       ) : null}
                     </Stack>
-                    <Box textAlign="right" data-testid="order-quantity">
-                      <Typography variant="caption">{t('quantity')}</Typography>
-                      <Typography>{order.quantity}</Typography>
-                    </Box>
                   </DetailsItemBox>
 
                   {registrantsLineItems?.length ? (
@@ -318,13 +345,13 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                       </Stack>
                     </DetailsItemBox>
                   ) : null}
-                  {data?.order?.registrants.some(
+                  {registrants.some(
                     (registrant: CreateOrderParticipantInput) =>
                       registrant.postCode
                   ) ? (
                     <DetailsItemBox data-testid="registrants-details">
                       <Stack spacing={2}>
-                        {data?.order?.registrants.map(
+                        {registrants.map(
                           (
                             registrant: CreateOrderParticipantInput,
                             index: number
@@ -381,10 +408,12 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                           </Typography>
                         </ItemRow>
                       ) : discountAmount &&
-                        course?.type === Course_Type_Enum.Closed ? (
+                        mainCourse?.type === Course_Type_Enum.Closed ? (
                         <ItemRow data-testid="free-spaces-row">
                           <Typography color="grey.700">
-                            {t('free-spaces', { amount: course.freeSpaces })}
+                            {t('free-spaces', {
+                              amount: mainCourse.freeSpaces,
+                            })}
                           </Typography>
                           <Typography
                             color="grey.700"
@@ -435,14 +464,14 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </Stack>
                   </DetailsItemBox>
 
-                  {course?.go1Integration ? (
+                  {mainCourse?.go1Integration ? (
                     <DetailsItemBox>
                       <ItemRow data-testid="licenses-redemeed">
                         <Typography color="grey.700">
                           {t('licenses-redeemed')}
                         </Typography>
                         <Typography color="grey.700">
-                          {course?.max_participants}
+                          {mainCourse?.max_participants}
                         </Typography>
                       </ItemRow>
                     </DetailsItemBox>
@@ -639,36 +668,35 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </DetailsItemBox>
                   ) : null}
 
-                  {course?.type === Course_Type_Enum.Open &&
-                  course.deliveryType === Course_Delivery_Type_Enum.Virtual &&
-                  course.level === Course_Level_Enum.Level_1 ? (
+                  {mainCourse?.type === Course_Type_Enum.Open &&
+                  mainCourse.deliveryType ===
+                    Course_Delivery_Type_Enum.Virtual &&
+                  mainCourse.level === Course_Level_Enum.Level_1 ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
                         <Typography fontWeight={600}>Registration</Typography>
-                        {registrants.map(registrant => (
-                          <>
-                            <Grid>
-                              <Grid item>
-                                <Typography>
-                                  {getRegistrantPostalAddress(registrant)}
-                                </Typography>
-                              </Grid>
-                              <Grid item>
-                                <Typography>
-                                  {registrant.firstName} {registrant.lastName}
-                                </Typography>
-                              </Grid>
-                              <Grid item>
-                                <Typography>{registrant.email}</Typography>
-                              </Grid>
+                        {registrants.map((registrant, index) => (
+                          <Grid key={index}>
+                            <Grid item>
+                              <Typography>
+                                {getRegistrantPostalAddress(registrant)}
+                              </Typography>
                             </Grid>
-                          </>
+                            <Grid item>
+                              <Typography>
+                                {registrant.firstName} {registrant.lastName}
+                              </Typography>
+                            </Grid>
+                            <Grid item>
+                              <Typography>{registrant.email}</Typography>
+                            </Grid>
+                          </Grid>
                         ))}
                       </Stack>
                     </DetailsItemBox>
                   ) : null}
 
-                  {course?.type === Course_Type_Enum.Closed &&
+                  {mainCourse?.type === Course_Type_Enum.Closed &&
                   order.salesRepresentative?.fullName ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
@@ -682,12 +710,12 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </DetailsItemBox>
                   ) : null}
 
-                  {course?.source ? (
+                  {mainCourse?.source ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
                         <Typography fontWeight={600}>{t('source')}</Typography>
                         <Typography>
-                          {_t(`course-sources.${course.source}`)}
+                          {_t(`course-sources.${mainCourse.source}`)}
                         </Typography>
                       </Stack>
                     </DetailsItemBox>
@@ -697,19 +725,21 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     <Stack spacing={2} data-testid="region-info">
                       <Typography fontWeight={600}>{t('region')}</Typography>
                       <Typography color="grey.700">
-                        {!isUKCountry(course?.residingCountry) ? '-' : t('UK')}
+                        {!isUKCountry(mainCourse?.residingCountry)
+                          ? '-'
+                          : t('UK')}
                       </Typography>
                     </Stack>
                   </DetailsItemBox>
-                  {course?.residingCountry &&
-                  !isUKCountry(course.residingCountry) ? (
+                  {mainCourse?.residingCountry &&
+                  !isUKCountry(mainCourse.residingCountry) ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
                         <Typography fontWeight={600}>
                           {t('residing-country')}
                         </Typography>
                         <Typography color="grey.700">
-                          {getLabel(course?.residingCountry)}
+                          {getLabel(mainCourse?.residingCountry)}
                         </Typography>
                       </Stack>
                     </DetailsItemBox>

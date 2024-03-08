@@ -82,7 +82,7 @@ export const UPDATE_COURSE_MUTATION = gql`
     }
 
     updateOrder: update_order(
-      where: { courseId: { _eq: $courseId } }
+      where: { courses: { course_id: { _eq: $courseId } } }
       _set: $orderInput
     ) {
       affectedRows: affected_rows

@@ -54,7 +54,9 @@ describe('page: CourseDetails', () => {
         overrides: {
           orders: [
             {
-              ...testProps,
+              order: {
+                ...testProps,
+              },
             },
           ],
           ...overrides,

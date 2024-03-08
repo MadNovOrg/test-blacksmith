@@ -56,10 +56,10 @@ describe('page: Orders filtering', () => {
       expect(queryVariables.where?._or).toEqual(
         expect.objectContaining([
           {
-            course: { name: ilike },
+            courses: { course: { name: ilike } },
           },
           {
-            course: { course_code: ilike },
+            courses: { course: { course_code: ilike } },
           },
           {
             organization: {

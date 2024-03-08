@@ -367,7 +367,8 @@ export const CourseDetails: React.FC<
                         />,
                       ]}
                       values={{
-                        invoiceNumber: linkedOrderItem?.xeroInvoiceNumber,
+                        invoiceNumber:
+                          linkedOrderItem?.order?.xeroInvoiceNumber,
                       }}
                     />
                   )

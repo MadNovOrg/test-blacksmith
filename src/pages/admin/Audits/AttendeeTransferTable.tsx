@@ -111,7 +111,7 @@ export const AttendeeTransferTable: React.FC<
         label: t('common.invoice-no'),
         sorting: false,
         exportRender: (log: AttendeeLogType) =>
-          getAttendeeInvoice(log)?.xeroInvoiceNumber ?? '',
+          getAttendeeInvoice(log)?.order?.xeroInvoiceNumber ?? '',
       },
       {
         id: 'authorizedBy.fullName',
@@ -250,9 +250,9 @@ export const AttendeeTransferTable: React.FC<
                         </TableCell>
                         <TableCell>
                           {invoice ? (
-                            <Link href={`/orders/${invoice.id}`}>
+                            <Link href={`/orders/${invoice.order?.id}`}>
                               <Typography variant="body2">
-                                {invoice.xeroInvoiceNumber}
+                                {invoice.order?.xeroInvoiceNumber}
                               </Typography>
                             </Link>
                           ) : null}

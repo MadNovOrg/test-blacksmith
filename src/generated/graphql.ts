@@ -15545,9 +15545,9 @@ export type Course = {
   modules_aggregate: Course_Module_Aggregate;
   name: Scalars['String'];
   /** An array relationship */
-  orders: Array<Order>;
+  orders: Array<Course_Order>;
   /** An aggregate relationship */
-  orders_aggregate: Order_Aggregate;
+  orders_aggregate: Course_Order_Aggregate;
   /** An object relationship */
   organization?: Maybe<Organization>;
   /** An object relationship */
@@ -15772,21 +15772,21 @@ export type CourseModules_AggregateArgs = {
 
 /** columns and relationships of "course" */
 export type CourseOrdersArgs = {
-  distinct_on?: InputMaybe<Array<Order_Select_Column>>;
+  distinct_on?: InputMaybe<Array<Course_Order_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Order_Order_By>>;
-  where?: InputMaybe<Order_Bool_Exp>;
+  order_by?: InputMaybe<Array<Course_Order_Order_By>>;
+  where?: InputMaybe<Course_Order_Bool_Exp>;
 };
 
 
 /** columns and relationships of "course" */
 export type CourseOrders_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Order_Select_Column>>;
+  distinct_on?: InputMaybe<Array<Course_Order_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Order_Order_By>>;
-  where?: InputMaybe<Order_Bool_Exp>;
+  order_by?: InputMaybe<Array<Course_Order_Order_By>>;
+  where?: InputMaybe<Course_Order_Bool_Exp>;
 };
 
 
@@ -17123,8 +17123,8 @@ export type Course_Bool_Exp = {
   modulesDuration?: InputMaybe<Int_Comparison_Exp>;
   modules_aggregate?: InputMaybe<Course_Module_Aggregate_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
-  orders?: InputMaybe<Order_Bool_Exp>;
-  orders_aggregate?: InputMaybe<Order_Aggregate_Bool_Exp>;
+  orders?: InputMaybe<Course_Order_Bool_Exp>;
+  orders_aggregate?: InputMaybe<Course_Order_Aggregate_Bool_Exp>;
   organization?: InputMaybe<Organization_Bool_Exp>;
   organizationKeyContact?: InputMaybe<Profile_Bool_Exp>;
   organizationKeyContactInviteData?: InputMaybe<Jsonb_Comparison_Exp>;
@@ -21512,7 +21512,7 @@ export type Course_Insert_Input = {
   modules?: InputMaybe<Course_Module_Arr_Rel_Insert_Input>;
   modulesDuration?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
-  orders?: InputMaybe<Order_Arr_Rel_Insert_Input>;
+  orders?: InputMaybe<Course_Order_Arr_Rel_Insert_Input>;
   organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   organizationKeyContact?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   organizationKeyContactInviteData?: InputMaybe<Scalars['jsonb']>;
@@ -22791,6 +22791,104 @@ export type Course_On_Conflict = {
   where?: InputMaybe<Course_Bool_Exp>;
 };
 
+/** columns and relationships of "course_order" */
+export type Course_Order = {
+  __typename?: 'course_order';
+  /** An object relationship */
+  course?: Maybe<Course>;
+  course_id?: Maybe<Scalars['Int']>;
+  /** An object relationship */
+  order?: Maybe<Order>;
+  order_id?: Maybe<Scalars['uuid']>;
+  quantity?: Maybe<Scalars['Int']>;
+};
+
+/** aggregated selection of "course_order" */
+export type Course_Order_Aggregate = {
+  __typename?: 'course_order_aggregate';
+  aggregate?: Maybe<Course_Order_Aggregate_Fields>;
+  nodes: Array<Course_Order>;
+};
+
+export type Course_Order_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Course_Order_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Order_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Order_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Order_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "course_order" */
+export type Course_Order_Aggregate_Fields = {
+  __typename?: 'course_order_aggregate_fields';
+  avg?: Maybe<Course_Order_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Course_Order_Max_Fields>;
+  min?: Maybe<Course_Order_Min_Fields>;
+  stddev?: Maybe<Course_Order_Stddev_Fields>;
+  stddev_pop?: Maybe<Course_Order_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Course_Order_Stddev_Samp_Fields>;
+  sum?: Maybe<Course_Order_Sum_Fields>;
+  var_pop?: Maybe<Course_Order_Var_Pop_Fields>;
+  var_samp?: Maybe<Course_Order_Var_Samp_Fields>;
+  variance?: Maybe<Course_Order_Variance_Fields>;
+};
+
+
+/** aggregate fields of "course_order" */
+export type Course_Order_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Order_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "course_order" */
+export type Course_Order_Aggregate_Order_By = {
+  avg?: InputMaybe<Course_Order_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Course_Order_Max_Order_By>;
+  min?: InputMaybe<Course_Order_Min_Order_By>;
+  stddev?: InputMaybe<Course_Order_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Course_Order_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Course_Order_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Course_Order_Sum_Order_By>;
+  var_pop?: InputMaybe<Course_Order_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Course_Order_Var_Samp_Order_By>;
+  variance?: InputMaybe<Course_Order_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "course_order" */
+export type Course_Order_Arr_Rel_Insert_Input = {
+  data: Array<Course_Order_Insert_Input>;
+};
+
+/** aggregate avg on columns */
+export type Course_Order_Avg_Fields = {
+  __typename?: 'course_order_avg_fields';
+  course_id?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "course_order" */
+export type Course_Order_Avg_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "course_order". All fields are combined with a logical 'AND'. */
+export type Course_Order_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Order_Bool_Exp>>;
+  _not?: InputMaybe<Course_Order_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Order_Bool_Exp>>;
+  course?: InputMaybe<Course_Bool_Exp>;
+  course_id?: InputMaybe<Int_Comparison_Exp>;
+  order?: InputMaybe<Order_Bool_Exp>;
+  order_id?: InputMaybe<Uuid_Comparison_Exp>;
+  quantity?: InputMaybe<Int_Comparison_Exp>;
+};
+
 /** Ordering options when selecting data from "course". */
 export type Course_Order_By = {
   accountCode?: InputMaybe<Order_By>;
@@ -22838,7 +22936,7 @@ export type Course_Order_By = {
   modulesDuration?: InputMaybe<Order_By>;
   modules_aggregate?: InputMaybe<Course_Module_Aggregate_Order_By>;
   name?: InputMaybe<Order_By>;
-  orders_aggregate?: InputMaybe<Order_Aggregate_Order_By>;
+  orders_aggregate?: InputMaybe<Course_Order_Aggregate_Order_By>;
   organization?: InputMaybe<Organization_Order_By>;
   organizationKeyContact?: InputMaybe<Profile_Order_By>;
   organizationKeyContactInviteData?: InputMaybe<Order_By>;
@@ -22864,6 +22962,201 @@ export type Course_Order_By = {
   type?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   waitlists_aggregate?: InputMaybe<Waitlist_Aggregate_Order_By>;
+};
+
+/** input type for incrementing numeric columns in table "course_order" */
+export type Course_Order_Inc_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "course_order" */
+export type Course_Order_Insert_Input = {
+  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
+  course_id?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<Order_Obj_Rel_Insert_Input>;
+  order_id?: InputMaybe<Scalars['uuid']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+};
+
+/** aggregate max on columns */
+export type Course_Order_Max_Fields = {
+  __typename?: 'course_order_max_fields';
+  course_id?: Maybe<Scalars['Int']>;
+  order_id?: Maybe<Scalars['uuid']>;
+  quantity?: Maybe<Scalars['Int']>;
+};
+
+/** order by max() on columns of table "course_order" */
+export type Course_Order_Max_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Course_Order_Min_Fields = {
+  __typename?: 'course_order_min_fields';
+  course_id?: Maybe<Scalars['Int']>;
+  order_id?: Maybe<Scalars['uuid']>;
+  quantity?: Maybe<Scalars['Int']>;
+};
+
+/** order by min() on columns of table "course_order" */
+export type Course_Order_Min_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "course_order" */
+export type Course_Order_Mutation_Response = {
+  __typename?: 'course_order_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Order>;
+};
+
+/** Ordering options when selecting data from "course_order". */
+export type Course_Order_Order_By = {
+  course?: InputMaybe<Course_Order_By>;
+  course_id?: InputMaybe<Order_By>;
+  order?: InputMaybe<Order_Order_By>;
+  order_id?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "course_order" */
+export enum Course_Order_Select_Column {
+  /** column name */
+  CourseId = 'course_id',
+  /** column name */
+  OrderId = 'order_id',
+  /** column name */
+  Quantity = 'quantity'
+}
+
+/** input type for updating data in table "course_order" */
+export type Course_Order_Set_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  order_id?: InputMaybe<Scalars['uuid']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+};
+
+/** aggregate stddev on columns */
+export type Course_Order_Stddev_Fields = {
+  __typename?: 'course_order_stddev_fields';
+  course_id?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "course_order" */
+export type Course_Order_Stddev_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Course_Order_Stddev_Pop_Fields = {
+  __typename?: 'course_order_stddev_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "course_order" */
+export type Course_Order_Stddev_Pop_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Course_Order_Stddev_Samp_Fields = {
+  __typename?: 'course_order_stddev_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "course_order" */
+export type Course_Order_Stddev_Samp_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "course_order" */
+export type Course_Order_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Order_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Order_Stream_Cursor_Value_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  order_id?: InputMaybe<Scalars['uuid']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+};
+
+/** aggregate sum on columns */
+export type Course_Order_Sum_Fields = {
+  __typename?: 'course_order_sum_fields';
+  course_id?: Maybe<Scalars['Int']>;
+  quantity?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "course_order" */
+export type Course_Order_Sum_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+};
+
+export type Course_Order_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Order_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Order_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Order_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Course_Order_Var_Pop_Fields = {
+  __typename?: 'course_order_var_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "course_order" */
+export type Course_Order_Var_Pop_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Course_Order_Var_Samp_Fields = {
+  __typename?: 'course_order_var_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "course_order" */
+export type Course_Order_Var_Samp_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Course_Order_Variance_Fields = {
+  __typename?: 'course_order_variance_fields';
+  course_id?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "course_order" */
+export type Course_Order_Variance_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "course_participant" */
@@ -33670,6 +33963,8 @@ export type Mutation_Root = {
   delete_course_module?: Maybe<Course_Module_Mutation_Response>;
   /** delete single row from the table: "course_module" */
   delete_course_module_by_pk?: Maybe<Course_Module>;
+  /** delete data from the table: "course_order" */
+  delete_course_order?: Maybe<Course_Order_Mutation_Response>;
   /** delete data from the table: "course_participant" */
   delete_course_participant?: Maybe<Course_Participant_Mutation_Response>;
   /** delete data from the table: "course_participant_audit" */
@@ -34098,6 +34393,10 @@ export type Mutation_Root = {
   insert_course_module_one?: Maybe<Course_Module>;
   /** insert a single row into the table: "course" */
   insert_course_one?: Maybe<Course>;
+  /** insert data into the table: "course_order" */
+  insert_course_order?: Maybe<Course_Order_Mutation_Response>;
+  /** insert a single row into the table: "course_order" */
+  insert_course_order_one?: Maybe<Course_Order>;
   /** insert data into the table: "course_participant" */
   insert_course_participant?: Maybe<Course_Participant_Mutation_Response>;
   /** insert data into the table: "course_participant_audit" */
@@ -34624,6 +34923,10 @@ export type Mutation_Root = {
   update_course_module_by_pk?: Maybe<Course_Module>;
   /** update multiples rows of table: "course_module" */
   update_course_module_many?: Maybe<Array<Maybe<Course_Module_Mutation_Response>>>;
+  /** update data of the table: "course_order" */
+  update_course_order?: Maybe<Course_Order_Mutation_Response>;
+  /** update multiples rows of table: "course_order" */
+  update_course_order_many?: Maybe<Array<Maybe<Course_Order_Mutation_Response>>>;
   /** update data of the table: "course_participant" */
   update_course_participant?: Maybe<Course_Participant_Mutation_Response>;
   /** update data of the table: "course_participant_audit" */
@@ -35596,6 +35899,12 @@ export type Mutation_RootDelete_Course_ModuleArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Course_Module_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_OrderArgs = {
+  where: Course_Order_Bool_Exp;
 };
 
 
@@ -36966,6 +37275,18 @@ export type Mutation_RootInsert_Course_Module_OneArgs = {
 export type Mutation_RootInsert_Course_OneArgs = {
   object: Course_Insert_Input;
   on_conflict?: InputMaybe<Course_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_OrderArgs = {
+  objects: Array<Course_Order_Insert_Input>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Order_OneArgs = {
+  object: Course_Order_Insert_Input;
 };
 
 
@@ -38867,6 +39188,20 @@ export type Mutation_RootUpdate_Course_Module_ManyArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Course_OrderArgs = {
+  _inc?: InputMaybe<Course_Order_Inc_Input>;
+  _set?: InputMaybe<Course_Order_Set_Input>;
+  where: Course_Order_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Order_ManyArgs = {
+  updates: Array<Course_Order_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Course_ParticipantArgs = {
   _append?: InputMaybe<Course_Participant_Append_Input>;
   _delete_at_path?: InputMaybe<Course_Participant_Delete_At_Path_Input>;
@@ -40758,6 +41093,7 @@ export type Numeric_Comparison_Exp = {
 /** columns and relationships of "order" */
 export type Order = {
   __typename?: 'order';
+  attendeesQuantity: Scalars['Int'];
   billingAddress: Scalars['String'];
   billingEmail: Scalars['String'];
   billingFamilyName: Scalars['String'];
@@ -40767,9 +41103,10 @@ export type Order = {
   /** A computed field, executes function "order_booking_contact_profile_id" */
   bookingContactProfileId?: Maybe<Scalars['uuid']>;
   clientPurchaseOrder?: Maybe<Scalars['String']>;
-  /** An object relationship */
-  course: Course;
-  courseId: Scalars['Int'];
+  /** An array relationship */
+  courses: Array<Course_Order>;
+  /** An aggregate relationship */
+  courses_aggregate: Course_Order_Aggregate;
   createdAt: Scalars['timestamptz'];
   currency?: Maybe<Scalars['String']>;
   id: Scalars['uuid'];
@@ -40784,7 +41121,6 @@ export type Order = {
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
   promoCodes?: Maybe<Scalars['jsonb']>;
-  quantity: Scalars['Int'];
   registrants: Scalars['json'];
   /** An object relationship */
   salesRepresentative?: Maybe<Profile>;
@@ -40800,6 +41136,26 @@ export type Order = {
 /** columns and relationships of "order" */
 export type OrderBookingContactArgs = {
   path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "order" */
+export type OrderCoursesArgs = {
+  distinct_on?: InputMaybe<Array<Course_Order_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Order_Order_By>>;
+  where?: InputMaybe<Course_Order_Bool_Exp>;
+};
+
+
+/** columns and relationships of "order" */
+export type OrderCourses_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Order_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Order_Order_By>>;
+  where?: InputMaybe<Course_Order_Bool_Exp>;
 };
 
 
@@ -40827,91 +41183,6 @@ export type Order_Aggregate = {
   nodes: Array<Order>;
 };
 
-export type Order_Aggregate_Bool_Exp = {
-  avg?: InputMaybe<Order_Aggregate_Bool_Exp_Avg>;
-  corr?: InputMaybe<Order_Aggregate_Bool_Exp_Corr>;
-  count?: InputMaybe<Order_Aggregate_Bool_Exp_Count>;
-  covar_samp?: InputMaybe<Order_Aggregate_Bool_Exp_Covar_Samp>;
-  max?: InputMaybe<Order_Aggregate_Bool_Exp_Max>;
-  min?: InputMaybe<Order_Aggregate_Bool_Exp_Min>;
-  stddev_samp?: InputMaybe<Order_Aggregate_Bool_Exp_Stddev_Samp>;
-  sum?: InputMaybe<Order_Aggregate_Bool_Exp_Sum>;
-  var_samp?: InputMaybe<Order_Aggregate_Bool_Exp_Var_Samp>;
-};
-
-export type Order_Aggregate_Bool_Exp_Avg = {
-  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Avg_Arguments_Columns;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-  filter?: InputMaybe<Order_Bool_Exp>;
-  predicate: Float8_Comparison_Exp;
-};
-
-export type Order_Aggregate_Bool_Exp_Corr = {
-  arguments: Order_Aggregate_Bool_Exp_Corr_Arguments;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-  filter?: InputMaybe<Order_Bool_Exp>;
-  predicate: Float8_Comparison_Exp;
-};
-
-export type Order_Aggregate_Bool_Exp_Corr_Arguments = {
-  X: Order_Select_Column_Order_Aggregate_Bool_Exp_Corr_Arguments_Columns;
-  Y: Order_Select_Column_Order_Aggregate_Bool_Exp_Corr_Arguments_Columns;
-};
-
-export type Order_Aggregate_Bool_Exp_Count = {
-  arguments?: InputMaybe<Array<Order_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-  filter?: InputMaybe<Order_Bool_Exp>;
-  predicate: Int_Comparison_Exp;
-};
-
-export type Order_Aggregate_Bool_Exp_Covar_Samp = {
-  arguments: Order_Aggregate_Bool_Exp_Covar_Samp_Arguments;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-  filter?: InputMaybe<Order_Bool_Exp>;
-  predicate: Float8_Comparison_Exp;
-};
-
-export type Order_Aggregate_Bool_Exp_Covar_Samp_Arguments = {
-  X: Order_Select_Column_Order_Aggregate_Bool_Exp_Covar_Samp_Arguments_Columns;
-  Y: Order_Select_Column_Order_Aggregate_Bool_Exp_Covar_Samp_Arguments_Columns;
-};
-
-export type Order_Aggregate_Bool_Exp_Max = {
-  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Max_Arguments_Columns;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-  filter?: InputMaybe<Order_Bool_Exp>;
-  predicate: Float8_Comparison_Exp;
-};
-
-export type Order_Aggregate_Bool_Exp_Min = {
-  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Min_Arguments_Columns;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-  filter?: InputMaybe<Order_Bool_Exp>;
-  predicate: Float8_Comparison_Exp;
-};
-
-export type Order_Aggregate_Bool_Exp_Stddev_Samp = {
-  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Stddev_Samp_Arguments_Columns;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-  filter?: InputMaybe<Order_Bool_Exp>;
-  predicate: Float8_Comparison_Exp;
-};
-
-export type Order_Aggregate_Bool_Exp_Sum = {
-  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Sum_Arguments_Columns;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-  filter?: InputMaybe<Order_Bool_Exp>;
-  predicate: Float8_Comparison_Exp;
-};
-
-export type Order_Aggregate_Bool_Exp_Var_Samp = {
-  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Var_Samp_Arguments_Columns;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-  filter?: InputMaybe<Order_Bool_Exp>;
-  predicate: Float8_Comparison_Exp;
-};
-
 /** aggregate fields of "order" */
 export type Order_Aggregate_Fields = {
   __typename?: 'order_aggregate_fields';
@@ -40935,21 +41206,6 @@ export type Order_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
-/** order by aggregate values of table "order" */
-export type Order_Aggregate_Order_By = {
-  avg?: InputMaybe<Order_Avg_Order_By>;
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Order_Max_Order_By>;
-  min?: InputMaybe<Order_Min_Order_By>;
-  stddev?: InputMaybe<Order_Stddev_Order_By>;
-  stddev_pop?: InputMaybe<Order_Stddev_Pop_Order_By>;
-  stddev_samp?: InputMaybe<Order_Stddev_Samp_Order_By>;
-  sum?: InputMaybe<Order_Sum_Order_By>;
-  var_pop?: InputMaybe<Order_Var_Pop_Order_By>;
-  var_samp?: InputMaybe<Order_Var_Samp_Order_By>;
-  variance?: InputMaybe<Order_Variance_Order_By>;
-};
-
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Order_Append_Input = {
   bookingContact?: InputMaybe<Scalars['jsonb']>;
@@ -40957,32 +41213,14 @@ export type Order_Append_Input = {
   user?: InputMaybe<Scalars['jsonb']>;
 };
 
-/** input type for inserting array relation for remote table "order" */
-export type Order_Arr_Rel_Insert_Input = {
-  data: Array<Order_Insert_Input>;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Order_On_Conflict>;
-};
-
 /** aggregate avg on columns */
 export type Order_Avg_Fields = {
   __typename?: 'order_avg_fields';
-  courseId?: Maybe<Scalars['Float']>;
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
-};
-
-/** order by avg() on columns of table "order" */
-export type Order_Avg_Order_By = {
-  courseId?: InputMaybe<Order_By>;
-  orderDue?: InputMaybe<Order_By>;
-  orderTotal?: InputMaybe<Order_By>;
-  price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
-  vat?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "order". All fields are combined with a logical 'AND'. */
@@ -40990,6 +41228,7 @@ export type Order_Bool_Exp = {
   _and?: InputMaybe<Array<Order_Bool_Exp>>;
   _not?: InputMaybe<Order_Bool_Exp>;
   _or?: InputMaybe<Array<Order_Bool_Exp>>;
+  attendeesQuantity?: InputMaybe<Int_Comparison_Exp>;
   billingAddress?: InputMaybe<String_Comparison_Exp>;
   billingEmail?: InputMaybe<String_Comparison_Exp>;
   billingFamilyName?: InputMaybe<String_Comparison_Exp>;
@@ -40998,8 +41237,8 @@ export type Order_Bool_Exp = {
   bookingContact?: InputMaybe<Jsonb_Comparison_Exp>;
   bookingContactProfileId?: InputMaybe<Uuid_Comparison_Exp>;
   clientPurchaseOrder?: InputMaybe<String_Comparison_Exp>;
-  course?: InputMaybe<Course_Bool_Exp>;
-  courseId?: InputMaybe<Int_Comparison_Exp>;
+  courses?: InputMaybe<Course_Order_Bool_Exp>;
+  courses_aggregate?: InputMaybe<Course_Order_Aggregate_Bool_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   currency?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -41012,7 +41251,6 @@ export type Order_Bool_Exp = {
   price?: InputMaybe<Float8_Comparison_Exp>;
   profileId?: InputMaybe<Uuid_Comparison_Exp>;
   promoCodes?: InputMaybe<Jsonb_Comparison_Exp>;
-  quantity?: InputMaybe<Int_Comparison_Exp>;
   registrants?: InputMaybe<Json_Comparison_Exp>;
   salesRepresentative?: InputMaybe<Profile_Bool_Exp>;
   salesRepresentativeId?: InputMaybe<Uuid_Comparison_Exp>;
@@ -41070,16 +41308,16 @@ export type Order_Delete_Key_Input = {
 
 /** input type for incrementing numeric columns in table "order" */
 export type Order_Inc_Input = {
-  courseId?: InputMaybe<Scalars['Int']>;
+  attendeesQuantity?: InputMaybe<Scalars['Int']>;
   orderDue?: InputMaybe<Scalars['float8']>;
   orderTotal?: InputMaybe<Scalars['float8']>;
   price?: InputMaybe<Scalars['float8']>;
-  quantity?: InputMaybe<Scalars['Int']>;
   vat?: InputMaybe<Scalars['float8']>;
 };
 
 /** input type for inserting data into table "order" */
 export type Order_Insert_Input = {
+  attendeesQuantity?: InputMaybe<Scalars['Int']>;
   billingAddress?: InputMaybe<Scalars['String']>;
   billingEmail?: InputMaybe<Scalars['String']>;
   billingFamilyName?: InputMaybe<Scalars['String']>;
@@ -41087,8 +41325,7 @@ export type Order_Insert_Input = {
   billingPhone?: InputMaybe<Scalars['String']>;
   bookingContact?: InputMaybe<Scalars['jsonb']>;
   clientPurchaseOrder?: InputMaybe<Scalars['String']>;
-  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
-  courseId?: InputMaybe<Scalars['Int']>;
+  courses?: InputMaybe<Course_Order_Arr_Rel_Insert_Input>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   currency?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -41101,7 +41338,6 @@ export type Order_Insert_Input = {
   price?: InputMaybe<Scalars['float8']>;
   profileId?: InputMaybe<Scalars['uuid']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
-  quantity?: InputMaybe<Scalars['Int']>;
   registrants?: InputMaybe<Scalars['json']>;
   salesRepresentative?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
@@ -41115,6 +41351,7 @@ export type Order_Insert_Input = {
 /** aggregate max on columns */
 export type Order_Max_Fields = {
   __typename?: 'order_max_fields';
+  attendeesQuantity?: Maybe<Scalars['Int']>;
   billingAddress?: Maybe<Scalars['String']>;
   billingEmail?: Maybe<Scalars['String']>;
   billingFamilyName?: Maybe<Scalars['String']>;
@@ -41123,7 +41360,6 @@ export type Order_Max_Fields = {
   /** A computed field, executes function "order_booking_contact_profile_id" */
   bookingContactProfileId?: Maybe<Scalars['uuid']>;
   clientPurchaseOrder?: Maybe<Scalars['String']>;
-  courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   currency?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
@@ -41132,42 +41368,17 @@ export type Order_Max_Fields = {
   organizationId?: Maybe<Scalars['uuid']>;
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
-  quantity?: Maybe<Scalars['Int']>;
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
   source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
   xeroInvoiceNumber?: Maybe<Scalars['String']>;
-};
-
-/** order by max() on columns of table "order" */
-export type Order_Max_Order_By = {
-  billingAddress?: InputMaybe<Order_By>;
-  billingEmail?: InputMaybe<Order_By>;
-  billingFamilyName?: InputMaybe<Order_By>;
-  billingGivenName?: InputMaybe<Order_By>;
-  billingPhone?: InputMaybe<Order_By>;
-  clientPurchaseOrder?: InputMaybe<Order_By>;
-  courseId?: InputMaybe<Order_By>;
-  createdAt?: InputMaybe<Order_By>;
-  currency?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  orderDue?: InputMaybe<Order_By>;
-  orderTotal?: InputMaybe<Order_By>;
-  organizationId?: InputMaybe<Order_By>;
-  price?: InputMaybe<Order_By>;
-  profileId?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
-  salesRepresentativeId?: InputMaybe<Order_By>;
-  source?: InputMaybe<Order_By>;
-  stripePaymentId?: InputMaybe<Order_By>;
-  vat?: InputMaybe<Order_By>;
-  xeroInvoiceNumber?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
 export type Order_Min_Fields = {
   __typename?: 'order_min_fields';
+  attendeesQuantity?: Maybe<Scalars['Int']>;
   billingAddress?: Maybe<Scalars['String']>;
   billingEmail?: Maybe<Scalars['String']>;
   billingFamilyName?: Maybe<Scalars['String']>;
@@ -41176,7 +41387,6 @@ export type Order_Min_Fields = {
   /** A computed field, executes function "order_booking_contact_profile_id" */
   bookingContactProfileId?: Maybe<Scalars['uuid']>;
   clientPurchaseOrder?: Maybe<Scalars['String']>;
-  courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   currency?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
@@ -41185,37 +41395,11 @@ export type Order_Min_Fields = {
   organizationId?: Maybe<Scalars['uuid']>;
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
-  quantity?: Maybe<Scalars['Int']>;
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
   source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
   xeroInvoiceNumber?: Maybe<Scalars['String']>;
-};
-
-/** order by min() on columns of table "order" */
-export type Order_Min_Order_By = {
-  billingAddress?: InputMaybe<Order_By>;
-  billingEmail?: InputMaybe<Order_By>;
-  billingFamilyName?: InputMaybe<Order_By>;
-  billingGivenName?: InputMaybe<Order_By>;
-  billingPhone?: InputMaybe<Order_By>;
-  clientPurchaseOrder?: InputMaybe<Order_By>;
-  courseId?: InputMaybe<Order_By>;
-  createdAt?: InputMaybe<Order_By>;
-  currency?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  orderDue?: InputMaybe<Order_By>;
-  orderTotal?: InputMaybe<Order_By>;
-  organizationId?: InputMaybe<Order_By>;
-  price?: InputMaybe<Order_By>;
-  profileId?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
-  salesRepresentativeId?: InputMaybe<Order_By>;
-  source?: InputMaybe<Order_By>;
-  stripePaymentId?: InputMaybe<Order_By>;
-  vat?: InputMaybe<Order_By>;
-  xeroInvoiceNumber?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "order" */
@@ -41243,6 +41427,7 @@ export type Order_On_Conflict = {
 
 /** Ordering options when selecting data from "order". */
 export type Order_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
   billingAddress?: InputMaybe<Order_By>;
   billingEmail?: InputMaybe<Order_By>;
   billingFamilyName?: InputMaybe<Order_By>;
@@ -41251,8 +41436,7 @@ export type Order_Order_By = {
   bookingContact?: InputMaybe<Order_By>;
   bookingContactProfileId?: InputMaybe<Order_By>;
   clientPurchaseOrder?: InputMaybe<Order_By>;
-  course?: InputMaybe<Course_Order_By>;
-  courseId?: InputMaybe<Order_By>;
+  courses_aggregate?: InputMaybe<Course_Order_Aggregate_Order_By>;
   createdAt?: InputMaybe<Order_By>;
   currency?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -41265,7 +41449,6 @@ export type Order_Order_By = {
   price?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
   promoCodes?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
   registrants?: InputMaybe<Order_By>;
   salesRepresentative?: InputMaybe<Profile_Order_By>;
   salesRepresentativeId?: InputMaybe<Order_By>;
@@ -41291,6 +41474,8 @@ export type Order_Prepend_Input = {
 /** select columns of table "order" */
 export enum Order_Select_Column {
   /** column name */
+  AttendeesQuantity = 'attendeesQuantity',
+  /** column name */
   BillingAddress = 'billingAddress',
   /** column name */
   BillingEmail = 'billingEmail',
@@ -41304,8 +41489,6 @@ export enum Order_Select_Column {
   BookingContact = 'bookingContact',
   /** column name */
   ClientPurchaseOrder = 'clientPurchaseOrder',
-  /** column name */
-  CourseId = 'courseId',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
@@ -41327,8 +41510,6 @@ export enum Order_Select_Column {
   /** column name */
   PromoCodes = 'promoCodes',
   /** column name */
-  Quantity = 'quantity',
-  /** column name */
   Registrants = 'registrants',
   /** column name */
   SalesRepresentativeId = 'salesRepresentativeId',
@@ -41344,104 +41525,9 @@ export enum Order_Select_Column {
   XeroInvoiceNumber = 'xeroInvoiceNumber'
 }
 
-/** select "order_aggregate_bool_exp_avg_arguments_columns" columns of table "order" */
-export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Avg_Arguments_Columns {
-  /** column name */
-  OrderDue = 'orderDue',
-  /** column name */
-  OrderTotal = 'orderTotal',
-  /** column name */
-  Price = 'price',
-  /** column name */
-  Vat = 'vat'
-}
-
-/** select "order_aggregate_bool_exp_corr_arguments_columns" columns of table "order" */
-export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Corr_Arguments_Columns {
-  /** column name */
-  OrderDue = 'orderDue',
-  /** column name */
-  OrderTotal = 'orderTotal',
-  /** column name */
-  Price = 'price',
-  /** column name */
-  Vat = 'vat'
-}
-
-/** select "order_aggregate_bool_exp_covar_samp_arguments_columns" columns of table "order" */
-export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Covar_Samp_Arguments_Columns {
-  /** column name */
-  OrderDue = 'orderDue',
-  /** column name */
-  OrderTotal = 'orderTotal',
-  /** column name */
-  Price = 'price',
-  /** column name */
-  Vat = 'vat'
-}
-
-/** select "order_aggregate_bool_exp_max_arguments_columns" columns of table "order" */
-export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Max_Arguments_Columns {
-  /** column name */
-  OrderDue = 'orderDue',
-  /** column name */
-  OrderTotal = 'orderTotal',
-  /** column name */
-  Price = 'price',
-  /** column name */
-  Vat = 'vat'
-}
-
-/** select "order_aggregate_bool_exp_min_arguments_columns" columns of table "order" */
-export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Min_Arguments_Columns {
-  /** column name */
-  OrderDue = 'orderDue',
-  /** column name */
-  OrderTotal = 'orderTotal',
-  /** column name */
-  Price = 'price',
-  /** column name */
-  Vat = 'vat'
-}
-
-/** select "order_aggregate_bool_exp_stddev_samp_arguments_columns" columns of table "order" */
-export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Stddev_Samp_Arguments_Columns {
-  /** column name */
-  OrderDue = 'orderDue',
-  /** column name */
-  OrderTotal = 'orderTotal',
-  /** column name */
-  Price = 'price',
-  /** column name */
-  Vat = 'vat'
-}
-
-/** select "order_aggregate_bool_exp_sum_arguments_columns" columns of table "order" */
-export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Sum_Arguments_Columns {
-  /** column name */
-  OrderDue = 'orderDue',
-  /** column name */
-  OrderTotal = 'orderTotal',
-  /** column name */
-  Price = 'price',
-  /** column name */
-  Vat = 'vat'
-}
-
-/** select "order_aggregate_bool_exp_var_samp_arguments_columns" columns of table "order" */
-export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Var_Samp_Arguments_Columns {
-  /** column name */
-  OrderDue = 'orderDue',
-  /** column name */
-  OrderTotal = 'orderTotal',
-  /** column name */
-  Price = 'price',
-  /** column name */
-  Vat = 'vat'
-}
-
 /** input type for updating data in table "order" */
 export type Order_Set_Input = {
+  attendeesQuantity?: InputMaybe<Scalars['Int']>;
   billingAddress?: InputMaybe<Scalars['String']>;
   billingEmail?: InputMaybe<Scalars['String']>;
   billingFamilyName?: InputMaybe<Scalars['String']>;
@@ -41449,7 +41535,6 @@ export type Order_Set_Input = {
   billingPhone?: InputMaybe<Scalars['String']>;
   bookingContact?: InputMaybe<Scalars['jsonb']>;
   clientPurchaseOrder?: InputMaybe<Scalars['String']>;
-  courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   currency?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -41460,7 +41545,6 @@ export type Order_Set_Input = {
   price?: InputMaybe<Scalars['float8']>;
   profileId?: InputMaybe<Scalars['uuid']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
-  quantity?: InputMaybe<Scalars['Int']>;
   registrants?: InputMaybe<Scalars['json']>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Scalars['String']>;
@@ -41473,64 +41557,31 @@ export type Order_Set_Input = {
 /** aggregate stddev on columns */
 export type Order_Stddev_Fields = {
   __typename?: 'order_stddev_fields';
-  courseId?: Maybe<Scalars['Float']>;
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev() on columns of table "order" */
-export type Order_Stddev_Order_By = {
-  courseId?: InputMaybe<Order_By>;
-  orderDue?: InputMaybe<Order_By>;
-  orderTotal?: InputMaybe<Order_By>;
-  price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
-  vat?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Order_Stddev_Pop_Fields = {
   __typename?: 'order_stddev_pop_fields';
-  courseId?: Maybe<Scalars['Float']>;
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev_pop() on columns of table "order" */
-export type Order_Stddev_Pop_Order_By = {
-  courseId?: InputMaybe<Order_By>;
-  orderDue?: InputMaybe<Order_By>;
-  orderTotal?: InputMaybe<Order_By>;
-  price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
-  vat?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Order_Stddev_Samp_Fields = {
   __typename?: 'order_stddev_samp_fields';
-  courseId?: Maybe<Scalars['Float']>;
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev_samp() on columns of table "order" */
-export type Order_Stddev_Samp_Order_By = {
-  courseId?: InputMaybe<Order_By>;
-  orderDue?: InputMaybe<Order_By>;
-  orderTotal?: InputMaybe<Order_By>;
-  price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
-  vat?: InputMaybe<Order_By>;
 };
 
 /** Streaming cursor of the table "order" */
@@ -41543,6 +41594,7 @@ export type Order_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Order_Stream_Cursor_Value_Input = {
+  attendeesQuantity?: InputMaybe<Scalars['Int']>;
   billingAddress?: InputMaybe<Scalars['String']>;
   billingEmail?: InputMaybe<Scalars['String']>;
   billingFamilyName?: InputMaybe<Scalars['String']>;
@@ -41550,7 +41602,6 @@ export type Order_Stream_Cursor_Value_Input = {
   billingPhone?: InputMaybe<Scalars['String']>;
   bookingContact?: InputMaybe<Scalars['jsonb']>;
   clientPurchaseOrder?: InputMaybe<Scalars['String']>;
-  courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   currency?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -41561,7 +41612,6 @@ export type Order_Stream_Cursor_Value_Input = {
   price?: InputMaybe<Scalars['float8']>;
   profileId?: InputMaybe<Scalars['uuid']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
-  quantity?: InputMaybe<Scalars['Int']>;
   registrants?: InputMaybe<Scalars['json']>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Scalars['String']>;
@@ -41574,27 +41624,17 @@ export type Order_Stream_Cursor_Value_Input = {
 /** aggregate sum on columns */
 export type Order_Sum_Fields = {
   __typename?: 'order_sum_fields';
-  courseId?: Maybe<Scalars['Int']>;
+  attendeesQuantity?: Maybe<Scalars['Int']>;
   orderDue?: Maybe<Scalars['float8']>;
   orderTotal?: Maybe<Scalars['float8']>;
   price?: Maybe<Scalars['float8']>;
-  quantity?: Maybe<Scalars['Int']>;
   vat?: Maybe<Scalars['float8']>;
-};
-
-/** order by sum() on columns of table "order" */
-export type Order_Sum_Order_By = {
-  courseId?: InputMaybe<Order_By>;
-  orderDue?: InputMaybe<Order_By>;
-  orderTotal?: InputMaybe<Order_By>;
-  price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
-  vat?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "order_temp" */
 export type Order_Temp = {
   __typename?: 'order_temp';
+  attendeesQuantity: Scalars['Int'];
   billingAddress: Scalars['String'];
   billingEmail: Scalars['String'];
   billingFamilyName: Scalars['String'];
@@ -41613,7 +41653,6 @@ export type Order_Temp = {
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
   promoCodes?: Maybe<Scalars['jsonb']>;
-  quantity: Scalars['Int'];
   registrants: Scalars['json'];
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
   source?: Maybe<Scalars['String']>;
@@ -41794,21 +41833,21 @@ export type Order_Temp_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Order_Temp_Avg_Fields = {
   __typename?: 'order_temp_avg_fields';
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   courseId?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "order_temp" */
 export type Order_Temp_Avg_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -41817,6 +41856,7 @@ export type Order_Temp_Bool_Exp = {
   _and?: InputMaybe<Array<Order_Temp_Bool_Exp>>;
   _not?: InputMaybe<Order_Temp_Bool_Exp>;
   _or?: InputMaybe<Array<Order_Temp_Bool_Exp>>;
+  attendeesQuantity?: InputMaybe<Int_Comparison_Exp>;
   billingAddress?: InputMaybe<String_Comparison_Exp>;
   billingEmail?: InputMaybe<String_Comparison_Exp>;
   billingFamilyName?: InputMaybe<String_Comparison_Exp>;
@@ -41835,7 +41875,6 @@ export type Order_Temp_Bool_Exp = {
   price?: InputMaybe<Float8_Comparison_Exp>;
   profileId?: InputMaybe<Uuid_Comparison_Exp>;
   promoCodes?: InputMaybe<Jsonb_Comparison_Exp>;
-  quantity?: InputMaybe<Int_Comparison_Exp>;
   registrants?: InputMaybe<Json_Comparison_Exp>;
   salesRepresentativeId?: InputMaybe<Uuid_Comparison_Exp>;
   source?: InputMaybe<String_Comparison_Exp>;
@@ -41876,16 +41915,17 @@ export type Order_Temp_Delete_Key_Input = {
 
 /** input type for incrementing numeric columns in table "order_temp" */
 export type Order_Temp_Inc_Input = {
+  attendeesQuantity?: InputMaybe<Scalars['Int']>;
   courseId?: InputMaybe<Scalars['Int']>;
   orderDue?: InputMaybe<Scalars['float8']>;
   orderTotal?: InputMaybe<Scalars['float8']>;
   price?: InputMaybe<Scalars['float8']>;
-  quantity?: InputMaybe<Scalars['Int']>;
   vat?: InputMaybe<Scalars['float8']>;
 };
 
 /** input type for inserting data into table "order_temp" */
 export type Order_Temp_Insert_Input = {
+  attendeesQuantity?: InputMaybe<Scalars['Int']>;
   billingAddress?: InputMaybe<Scalars['String']>;
   billingEmail?: InputMaybe<Scalars['String']>;
   billingFamilyName?: InputMaybe<Scalars['String']>;
@@ -41904,7 +41944,6 @@ export type Order_Temp_Insert_Input = {
   price?: InputMaybe<Scalars['float8']>;
   profileId?: InputMaybe<Scalars['uuid']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
-  quantity?: InputMaybe<Scalars['Int']>;
   registrants?: InputMaybe<Scalars['json']>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Scalars['String']>;
@@ -41917,6 +41956,7 @@ export type Order_Temp_Insert_Input = {
 /** aggregate max on columns */
 export type Order_Temp_Max_Fields = {
   __typename?: 'order_temp_max_fields';
+  attendeesQuantity?: Maybe<Scalars['Int']>;
   billingAddress?: Maybe<Scalars['String']>;
   billingEmail?: Maybe<Scalars['String']>;
   billingFamilyName?: Maybe<Scalars['String']>;
@@ -41932,7 +41972,6 @@ export type Order_Temp_Max_Fields = {
   organizationId?: Maybe<Scalars['uuid']>;
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
-  quantity?: Maybe<Scalars['Int']>;
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
   source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
@@ -41942,6 +41981,7 @@ export type Order_Temp_Max_Fields = {
 
 /** order by max() on columns of table "order_temp" */
 export type Order_Temp_Max_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
   billingAddress?: InputMaybe<Order_By>;
   billingEmail?: InputMaybe<Order_By>;
   billingFamilyName?: InputMaybe<Order_By>;
@@ -41957,7 +41997,6 @@ export type Order_Temp_Max_Order_By = {
   organizationId?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
   salesRepresentativeId?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
@@ -41968,6 +42007,7 @@ export type Order_Temp_Max_Order_By = {
 /** aggregate min on columns */
 export type Order_Temp_Min_Fields = {
   __typename?: 'order_temp_min_fields';
+  attendeesQuantity?: Maybe<Scalars['Int']>;
   billingAddress?: Maybe<Scalars['String']>;
   billingEmail?: Maybe<Scalars['String']>;
   billingFamilyName?: Maybe<Scalars['String']>;
@@ -41983,7 +42023,6 @@ export type Order_Temp_Min_Fields = {
   organizationId?: Maybe<Scalars['uuid']>;
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
-  quantity?: Maybe<Scalars['Int']>;
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
   source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
@@ -41993,6 +42032,7 @@ export type Order_Temp_Min_Fields = {
 
 /** order by min() on columns of table "order_temp" */
 export type Order_Temp_Min_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
   billingAddress?: InputMaybe<Order_By>;
   billingEmail?: InputMaybe<Order_By>;
   billingFamilyName?: InputMaybe<Order_By>;
@@ -42008,7 +42048,6 @@ export type Order_Temp_Min_Order_By = {
   organizationId?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
   salesRepresentativeId?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
@@ -42034,6 +42073,7 @@ export type Order_Temp_On_Conflict = {
 
 /** Ordering options when selecting data from "order_temp". */
 export type Order_Temp_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
   billingAddress?: InputMaybe<Order_By>;
   billingEmail?: InputMaybe<Order_By>;
   billingFamilyName?: InputMaybe<Order_By>;
@@ -42052,7 +42092,6 @@ export type Order_Temp_Order_By = {
   price?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
   promoCodes?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
   registrants?: InputMaybe<Order_By>;
   salesRepresentativeId?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
@@ -42076,6 +42115,8 @@ export type Order_Temp_Prepend_Input = {
 
 /** select columns of table "order_temp" */
 export enum Order_Temp_Select_Column {
+  /** column name */
+  AttendeesQuantity = 'attendeesQuantity',
   /** column name */
   BillingAddress = 'billingAddress',
   /** column name */
@@ -42112,8 +42153,6 @@ export enum Order_Temp_Select_Column {
   ProfileId = 'profileId',
   /** column name */
   PromoCodes = 'promoCodes',
-  /** column name */
-  Quantity = 'quantity',
   /** column name */
   Registrants = 'registrants',
   /** column name */
@@ -42228,6 +42267,7 @@ export enum Order_Temp_Select_Column_Order_Temp_Aggregate_Bool_Exp_Var_Samp_Argu
 
 /** input type for updating data in table "order_temp" */
 export type Order_Temp_Set_Input = {
+  attendeesQuantity?: InputMaybe<Scalars['Int']>;
   billingAddress?: InputMaybe<Scalars['String']>;
   billingEmail?: InputMaybe<Scalars['String']>;
   billingFamilyName?: InputMaybe<Scalars['String']>;
@@ -42246,7 +42286,6 @@ export type Order_Temp_Set_Input = {
   price?: InputMaybe<Scalars['float8']>;
   profileId?: InputMaybe<Scalars['uuid']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
-  quantity?: InputMaybe<Scalars['Int']>;
   registrants?: InputMaybe<Scalars['json']>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Scalars['String']>;
@@ -42259,63 +42298,63 @@ export type Order_Temp_Set_Input = {
 /** aggregate stddev on columns */
 export type Order_Temp_Stddev_Fields = {
   __typename?: 'order_temp_stddev_fields';
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   courseId?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "order_temp" */
 export type Order_Temp_Stddev_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Order_Temp_Stddev_Pop_Fields = {
   __typename?: 'order_temp_stddev_pop_fields';
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   courseId?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "order_temp" */
 export type Order_Temp_Stddev_Pop_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Order_Temp_Stddev_Samp_Fields = {
   __typename?: 'order_temp_stddev_samp_fields';
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   courseId?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "order_temp" */
 export type Order_Temp_Stddev_Samp_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -42329,6 +42368,7 @@ export type Order_Temp_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Order_Temp_Stream_Cursor_Value_Input = {
+  attendeesQuantity?: InputMaybe<Scalars['Int']>;
   billingAddress?: InputMaybe<Scalars['String']>;
   billingEmail?: InputMaybe<Scalars['String']>;
   billingFamilyName?: InputMaybe<Scalars['String']>;
@@ -42347,7 +42387,6 @@ export type Order_Temp_Stream_Cursor_Value_Input = {
   price?: InputMaybe<Scalars['float8']>;
   profileId?: InputMaybe<Scalars['uuid']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
-  quantity?: InputMaybe<Scalars['Int']>;
   registrants?: InputMaybe<Scalars['json']>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Scalars['String']>;
@@ -42360,26 +42399,28 @@ export type Order_Temp_Stream_Cursor_Value_Input = {
 /** aggregate sum on columns */
 export type Order_Temp_Sum_Fields = {
   __typename?: 'order_temp_sum_fields';
+  attendeesQuantity?: Maybe<Scalars['Int']>;
   courseId?: Maybe<Scalars['Int']>;
   orderDue?: Maybe<Scalars['float8']>;
   orderTotal?: Maybe<Scalars['float8']>;
   price?: Maybe<Scalars['float8']>;
-  quantity?: Maybe<Scalars['Int']>;
   vat?: Maybe<Scalars['float8']>;
 };
 
 /** order by sum() on columns of table "order_temp" */
 export type Order_Temp_Sum_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
 /** update columns of table "order_temp" */
 export enum Order_Temp_Update_Column {
+  /** column name */
+  AttendeesQuantity = 'attendeesQuantity',
   /** column name */
   BillingAddress = 'billingAddress',
   /** column name */
@@ -42416,8 +42457,6 @@ export enum Order_Temp_Update_Column {
   ProfileId = 'profileId',
   /** column name */
   PromoCodes = 'promoCodes',
-  /** column name */
-  Quantity = 'quantity',
   /** column name */
   Registrants = 'registrants',
   /** column name */
@@ -42456,68 +42495,70 @@ export type Order_Temp_Updates = {
 /** aggregate var_pop on columns */
 export type Order_Temp_Var_Pop_Fields = {
   __typename?: 'order_temp_var_pop_fields';
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   courseId?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "order_temp" */
 export type Order_Temp_Var_Pop_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
 export type Order_Temp_Var_Samp_Fields = {
   __typename?: 'order_temp_var_samp_fields';
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   courseId?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "order_temp" */
 export type Order_Temp_Var_Samp_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
 /** aggregate variance on columns */
 export type Order_Temp_Variance_Fields = {
   __typename?: 'order_temp_variance_fields';
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   courseId?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "order_temp" */
 export type Order_Temp_Variance_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
 /** update columns of table "order" */
 export enum Order_Update_Column {
+  /** column name */
+  AttendeesQuantity = 'attendeesQuantity',
   /** column name */
   BillingAddress = 'billingAddress',
   /** column name */
@@ -42532,8 +42573,6 @@ export enum Order_Update_Column {
   BookingContact = 'bookingContact',
   /** column name */
   ClientPurchaseOrder = 'clientPurchaseOrder',
-  /** column name */
-  CourseId = 'courseId',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
@@ -42554,8 +42593,6 @@ export enum Order_Update_Column {
   ProfileId = 'profileId',
   /** column name */
   PromoCodes = 'promoCodes',
-  /** column name */
-  Quantity = 'quantity',
   /** column name */
   Registrants = 'registrants',
   /** column name */
@@ -42594,64 +42631,31 @@ export type Order_Updates = {
 /** aggregate var_pop on columns */
 export type Order_Var_Pop_Fields = {
   __typename?: 'order_var_pop_fields';
-  courseId?: Maybe<Scalars['Float']>;
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
-};
-
-/** order by var_pop() on columns of table "order" */
-export type Order_Var_Pop_Order_By = {
-  courseId?: InputMaybe<Order_By>;
-  orderDue?: InputMaybe<Order_By>;
-  orderTotal?: InputMaybe<Order_By>;
-  price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
-  vat?: InputMaybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
 export type Order_Var_Samp_Fields = {
   __typename?: 'order_var_samp_fields';
-  courseId?: Maybe<Scalars['Float']>;
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
-};
-
-/** order by var_samp() on columns of table "order" */
-export type Order_Var_Samp_Order_By = {
-  courseId?: InputMaybe<Order_By>;
-  orderDue?: InputMaybe<Order_By>;
-  orderTotal?: InputMaybe<Order_By>;
-  price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
-  vat?: InputMaybe<Order_By>;
 };
 
 /** aggregate variance on columns */
 export type Order_Variance_Fields = {
   __typename?: 'order_variance_fields';
-  courseId?: Maybe<Scalars['Float']>;
+  attendeesQuantity?: Maybe<Scalars['Float']>;
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
-  quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
-};
-
-/** order by variance() on columns of table "order" */
-export type Order_Variance_Order_By = {
-  courseId?: InputMaybe<Order_By>;
-  orderDue?: InputMaybe<Order_By>;
-  orderTotal?: InputMaybe<Order_By>;
-  price?: InputMaybe<Order_By>;
-  quantity?: InputMaybe<Order_By>;
-  vat?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "organisation_sector" */
@@ -47173,6 +47177,10 @@ export type Query_Root = {
   course_module_aggregate: Course_Module_Aggregate;
   /** fetch data from the table: "course_module" using primary key columns */
   course_module_by_pk?: Maybe<Course_Module>;
+  /** fetch data from the table: "course_order" */
+  course_order: Array<Course_Order>;
+  /** fetch aggregated fields from the table: "course_order" */
+  course_order_aggregate: Course_Order_Aggregate;
   /** fetch data from the table: "course_participant" */
   course_participant: Array<Course_Participant>;
   /** fetch aggregated fields from the table: "course_participant" */
@@ -48522,6 +48530,24 @@ export type Query_RootCourse_Module_AggregateArgs = {
 
 export type Query_RootCourse_Module_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Query_RootCourse_OrderArgs = {
+  distinct_on?: InputMaybe<Array<Course_Order_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Order_Order_By>>;
+  where?: InputMaybe<Course_Order_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Order_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Order_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Order_Order_By>>;
+  where?: InputMaybe<Course_Order_Bool_Exp>;
 };
 
 
@@ -50972,6 +50998,12 @@ export type Subscription_Root = {
   course_module_by_pk?: Maybe<Course_Module>;
   /** fetch data from the table in a streaming manner: "course_module" */
   course_module_stream: Array<Course_Module>;
+  /** fetch data from the table: "course_order" */
+  course_order: Array<Course_Order>;
+  /** fetch aggregated fields from the table: "course_order" */
+  course_order_aggregate: Course_Order_Aggregate;
+  /** fetch data from the table in a streaming manner: "course_order" */
+  course_order_stream: Array<Course_Order>;
   /** fetch data from the table: "course_participant" */
   course_participant: Array<Course_Participant>;
   /** fetch aggregated fields from the table: "course_participant" */
@@ -52695,6 +52727,31 @@ export type Subscription_RootCourse_Module_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Course_Module_Stream_Cursor_Input>>;
   where?: InputMaybe<Course_Module_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_OrderArgs = {
+  distinct_on?: InputMaybe<Array<Course_Order_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Order_Order_By>>;
+  where?: InputMaybe<Course_Order_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Order_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Order_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Order_Order_By>>;
+  where?: InputMaybe<Course_Order_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Order_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Order_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Order_Bool_Exp>;
 };
 
 
@@ -57261,6 +57318,13 @@ export type GetDistinctCourseVenueCountriesQueryVariables = Exact<{ [key: string
 
 export type GetDistinctCourseVenueCountriesQuery = { __typename?: 'query_root', venue: Array<{ __typename?: 'venue', countryCode?: string | null }> };
 
+export type GetCourseOrdersQueryVariables = Exact<{
+  orderId: Scalars['uuid'];
+}>;
+
+
+export type GetCourseOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'course_order', quantity?: number | null, order?: { __typename?: 'order', id: any, registrants: any, paymentMethod: Payment_Methods_Enum, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null, course?: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, start?: any | null, end?: any | null, freeSpaces?: number | null, deliveryType: Course_Delivery_Type_Enum, bookingContactInviteData?: any | null, reaccreditation?: boolean | null, residingCountry?: string | null, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null } | null }> };
+
 export type GetCourseInvitesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -57310,6 +57374,13 @@ export type DeleteMeetingMutationVariables = Exact<{
 
 
 export type DeleteMeetingMutation = { __typename?: 'mutation_root', deleteMeeting: { __typename?: 'DeleteMeetingOutput', success: boolean } };
+
+export type GetOrderQueryVariables = Exact<{
+  orderId: Scalars['uuid'];
+}>;
+
+
+export type GetOrderQuery = { __typename?: 'query_root', order: Array<{ __typename?: 'course_order', quantity?: number | null, order?: { __typename?: 'order', id: any, profileId?: any | null, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null, course?: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, start?: any | null, end?: any | null, freeSpaces?: number | null, deliveryType: Course_Delivery_Type_Enum, bookingContactInviteData?: any | null, reaccreditation?: boolean | null, residingCountry?: string | null, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null } | null }> };
 
 export type GetOrgInvitesQueryVariables = Exact<{
   orgId: Scalars['uuid'];
@@ -57583,6 +57654,13 @@ export type StartImportUsersJobMutationVariables = Exact<{
 
 export type StartImportUsersJobMutation = { __typename?: 'mutation_root', importUsers?: { __typename?: 'ImportUsersOutput', jobId: string } | null };
 
+export type InsertCourseOrderMutationVariables = Exact<{
+  input: Course_Order_Insert_Input;
+}>;
+
+
+export type InsertCourseOrderMutation = { __typename?: 'mutation_root', insert_course_order_one?: { __typename?: 'course_order', order?: { __typename?: 'order', id: any } | null } | null };
+
 export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -57760,7 +57838,7 @@ export type GetAttendeeAuditLogsQueryVariables = Exact<{
 }>;
 
 
-export type GetAttendeeAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_participant_audit', id: any, created_at: any, updated_at: any, payload: any, newAttendeeEmail?: string | null, authorizedBy: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null, archived?: boolean | null }, profile: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null, email?: string | null, archived?: boolean | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, course: { __typename?: 'course', id: number, course_code?: string | null, type: Course_Type_Enum, orders: Array<{ __typename?: 'order', id: any, registrants: any, xeroInvoiceNumber?: string | null }> }, fromCourse?: Array<{ __typename?: 'course', id: number, course_code?: string | null }> | null, toCourse?: Array<{ __typename?: 'course', id: number, course_code?: string | null }> | null }>, logsAggregate: { __typename?: 'course_participant_audit_aggregate', aggregate?: { __typename?: 'course_participant_audit_aggregate_fields', count: number } | null } };
+export type GetAttendeeAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_participant_audit', id: any, created_at: any, updated_at: any, payload: any, newAttendeeEmail?: string | null, authorizedBy: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null, archived?: boolean | null }, profile: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null, email?: string | null, archived?: boolean | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, course: { __typename?: 'course', id: number, course_code?: string | null, type: Course_Type_Enum, orders: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, registrants: any, xeroInvoiceNumber?: string | null } | null }> }, fromCourse?: Array<{ __typename?: 'course', id: number, course_code?: string | null }> | null, toCourse?: Array<{ __typename?: 'course', id: number, course_code?: string | null }> | null }>, logsAggregate: { __typename?: 'course_participant_audit_aggregate', aggregate?: { __typename?: 'course_participant_audit_aggregate_fields', count: number } | null } };
 
 export type GetCourseAuditLogsQueryVariables = Exact<{
   where: Course_Audit_Bool_Exp;
@@ -57771,7 +57849,7 @@ export type GetCourseAuditLogsQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_audit', id: any, created_at: any, updated_at: any, payload: any, authorizedBy: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null }, course: { __typename?: 'course', id: number, course_code?: string | null, type: Course_Type_Enum, start?: any | null, organization?: { __typename?: 'organization', name: string, id: any } | null, trainers?: Array<{ __typename?: 'course_trainer', type: Course_Trainer_Type_Enum, id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, id: any } }>, orders: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null }> } }>, logsAggregate: { __typename?: 'course_audit_aggregate', aggregate?: { __typename?: 'course_audit_aggregate_fields', count: number } | null } };
+export type GetCourseAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_audit', id: any, created_at: any, updated_at: any, payload: any, authorizedBy: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null }, course: { __typename?: 'course', id: number, course_code?: string | null, type: Course_Type_Enum, start?: any | null, organization?: { __typename?: 'organization', name: string, id: any } | null, trainers?: Array<{ __typename?: 'course_trainer', type: Course_Trainer_Type_Enum, id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, id: any } }>, orders: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null }> } }>, logsAggregate: { __typename?: 'course_audit_aggregate', aggregate?: { __typename?: 'course_audit_aggregate_fields', count: number } | null } };
 
 export type GetBildStrategiesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -58009,7 +58087,7 @@ export type GetCourseByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, arloReferenceId?: string | null, displayOnWebsite?: boolean | null, curriculum?: any | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, renewalCycle?: Course_Renewal_Cycle_Enum | null, priceCurrency?: string | null, includeVAT?: boolean | null, bookingContactInviteData?: any | null, organizationKeyContactInviteData?: any | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null, residingCountry?: string | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, course_id: number, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, timeZone: string, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, modules?: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, courseExceptions: Array<{ __typename?: 'course_exceptions', exception: Course_Exception_Enum }> } | null };
+export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, arloReferenceId?: string | null, displayOnWebsite?: boolean | null, curriculum?: any | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, renewalCycle?: Course_Renewal_Cycle_Enum | null, priceCurrency?: string | null, includeVAT?: boolean | null, bookingContactInviteData?: any | null, organizationKeyContactInviteData?: any | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, start?: any | null, end?: any | null, residingCountry?: string | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, course_id: number, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, timeZone: string, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, orders?: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null } | null, course?: { __typename?: 'course', source?: Course_Source_Enum | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, modules?: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, courseExceptions: Array<{ __typename?: 'course_exceptions', exception: Course_Exception_Enum }> } | null };
 
 export type GetCourseDraftQueryVariables = Exact<{
   draftId: Scalars['uuid'];
@@ -58080,7 +58158,7 @@ export type InsertCourseMutationVariables = Exact<{
 }>;
 
 
-export type InsertCourseMutation = { __typename?: 'mutation_root', insertCourse?: { __typename?: 'course_mutation_response', affectedRows: number, inserted: Array<{ __typename?: 'course', id: number, course_code?: string | null, orders: Array<{ __typename?: 'order', id: any }>, expenses: Array<{ __typename?: 'course_expenses', id: any }> }> } | null };
+export type InsertCourseMutation = { __typename?: 'mutation_root', insertCourse?: { __typename?: 'course', id: number, course_code?: string | null, orders: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any } | null }>, expenses: Array<{ __typename?: 'course_expenses', id: any }> } | null };
 
 export type NotifyCourseEditMutationVariables = Exact<{
   oldCourse: NotifyCourseInput;
@@ -58540,26 +58618,19 @@ export type CreateOrderMutationVariables = Exact<{
 
 export type CreateOrderMutation = { __typename?: 'mutation_root', order?: { __typename?: 'CreateOrderOutput', id?: any | null, success: boolean, error?: CreateOrderError | null } | null };
 
-export type GetOrderReducedQueryVariables = Exact<{
-  orderId: Scalars['uuid'];
-}>;
-
-
-export type GetOrderReducedQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null };
-
-export type GetOrderQueryVariables = Exact<{
-  orderId: Scalars['uuid'];
-}>;
-
-
-export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId?: any | null, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, start?: any | null, end?: any | null, freeSpaces?: number | null, deliveryType: Course_Delivery_Type_Enum, bookingContactInviteData?: any | null, reaccreditation?: boolean | null, residingCountry?: string | null, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null };
-
 export type GetOrderForBookingDoneQueryVariables = Exact<{
   orderId: Scalars['uuid'];
 }>;
 
 
 export type GetOrderForBookingDoneQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum } | null };
+
+export type GetOrderReducedQueryVariables = Exact<{
+  orderId: Scalars['uuid'];
+}>;
+
+
+export type GetOrderReducedQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null };
 
 export type GetOrgWithKeyContactsQueryVariables = Exact<{
   id: Scalars['uuid'];
@@ -58921,7 +58992,7 @@ export type GetUserCourseByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetUserCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, go1Integration?: boolean, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, special_instructions?: string | null, parking_instructions?: string | null, status?: Course_Status_Enum | null, accreditedBy: Accreditors_Enum, curriculum?: any | null, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null, organization?: { __typename?: 'organization', id: any, name: string, members: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, profile_id: any }> } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null, order?: { __typename?: 'order', bookingContactProfileId?: any | null } | null }>, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, orders?: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null }> } | null };
+export type GetUserCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, go1Integration?: boolean, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, special_instructions?: string | null, parking_instructions?: string | null, status?: Course_Status_Enum | null, accreditedBy: Accreditors_Enum, curriculum?: any | null, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null, organization?: { __typename?: 'organization', id: any, name: string, members: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, profile_id: any }> } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null, order?: { __typename?: 'order', bookingContactProfileId?: any | null } | null }>, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, email?: string | null, fullName?: string | null } | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, orders?: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null } | null }> } | null };
 
 export type GetUserByMailQueryVariables = Exact<{
   email?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;

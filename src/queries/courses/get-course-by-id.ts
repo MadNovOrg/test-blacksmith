@@ -116,15 +116,19 @@ export const QUERY = gql`
       }
       organizationKeyContactInviteData
       orders @include(if: $withOrders) {
-        id
-        xeroInvoiceNumber
-        salesRepresentative {
+        order {
           id
-          fullName
-          avatar
-          archived
+          xeroInvoiceNumber
+          salesRepresentative {
+            id
+            fullName
+            avatar
+            archived
+          }
         }
-        source
+        course {
+          source
+        }
       }
       dates: schedule_aggregate {
         aggregate {

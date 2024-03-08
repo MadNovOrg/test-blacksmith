@@ -110,11 +110,13 @@ export type Course = {
     strategyName: string
   }>
   orders?: Array<{
-    id?: string
-    xeroInvoiceNumber?: string
-    salesRepresentativeId?: string
-    salesRepresentative?: Profile
-    source?: Course_Source_Enum
+    order: {
+      id?: string
+      xeroInvoiceNumber?: string
+      salesRepresentativeId?: string
+      salesRepresentative?: Profile
+      source?: Course_Source_Enum
+    }
   }>
   courseParticipants?: {
     attended?: boolean | null

@@ -146,7 +146,7 @@ export const CourseDetails = () => {
     [acl, course, courseCancelled]
   )
 
-  const linkedOrderItem = useMemo(() => course?.orders?.[0], [course])
+  const linkedOrderItem = useMemo(() => course?.orders?.[0]?.order, [course])
   const canViewLinkedOrderItem = useMemo(
     () =>
       linkedOrderItem && (isCourseTypeClosed || isCourseTypeIndirectBlended),

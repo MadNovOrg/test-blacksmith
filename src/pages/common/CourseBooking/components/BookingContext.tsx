@@ -408,7 +408,6 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       if (createOrderResponse?.order?.success) {
         setOrderId(createOrderResponse?.order?.id)
       }
-
       return createOrderResponse?.order as CreateOrderOutput
     }
   }, [

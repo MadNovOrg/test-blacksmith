@@ -1,5 +1,7 @@
 import { getByTestId } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
+import { Client, Provider } from 'urql'
+import { never } from 'wonka'
 
 import {
   Course_Type_Enum,
@@ -92,11 +94,16 @@ describe(CourseAttendeesTab.name, () => {
           overrides: {
             // @ts-expect-error Ignore missing fields
             order: buildOrder({
-              overrides: {
-                id: 'c2715e60-752c-41f5-b38e-b2984f8f02a3',
-                xeroInvoiceNumber: 'TT-123456',
-              },
-            }),
+              overrides: [
+                {
+                  // @ts-expect-error Ignore missing fields
+                  order: {
+                    id: 'c2715e60-752c-41f5-b38e-b2984f8f02a3',
+                    xeroInvoiceNumber: 'TT-123456',
+                  },
+                },
+              ],
+            })[0].order,
           },
         }),
         buildParticipant(),
@@ -129,13 +136,20 @@ describe(CourseAttendeesTab.name, () => {
           course: tableCourse,
         },
       })
-
+      const urqlMockClient = {
+        executeMutation: vi.fn(() => never),
+      } as unknown as Client
       // Act
-      render(<CourseAttendeesTab course={tableCourse} />, {
-        auth: {
-          activeRole: role ?? RoleName.USER,
-        },
-      })
+      render(
+        <Provider value={urqlMockClient}>
+          <CourseAttendeesTab course={tableCourse} />
+        </Provider>,
+        {
+          auth: {
+            activeRole: role ?? RoleName.USER,
+          },
+        }
+      )
     }
     it('should display a table if a course has participants', () => {
       setup()
@@ -215,9 +229,11 @@ describe(CourseAttendeesTab.name, () => {
       )
 
       // Assert
+      console.log(participants[0].order)
       expect(
         within(participantRow).getByText(
-          participants[0].order?.xeroInvoiceNumber ?? ''
+          // @ts-expect-error types difference between the generator method and the actual query result
+          participants[0].order.xeroInvoiceNumber ?? ''
         )
       ).toBeInTheDocument()
     })
@@ -228,11 +244,11 @@ describe(CourseAttendeesTab.name, () => {
       const participantRow = screen.getByTestId(
         `course-participant-row-${participants[0].id}`
       )
-
       // Assert
       expect(
         within(participantRow).queryByText(
-          participants[0].order?.xeroInvoiceNumber ?? ''
+          // @ts-expect-error types difference between buildParticipant and the actual type returned by the query
+          participants[0].order.xeroInvoiceNumber ?? ''
         )
       ).not.toBeInTheDocument()
     })

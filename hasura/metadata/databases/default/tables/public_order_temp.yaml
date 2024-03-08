@@ -63,7 +63,7 @@ insert_permissions:
         - price
         - vat
         - course_id
-        - quantity
+        - attendeesQuantity
         - registrants
         - booking_contact
         - promo_codes
@@ -95,7 +95,7 @@ insert_permissions:
         - price
         - vat
         - course_id
-        - quantity
+        - attendeesQuantity
         - registrants
         - promo_codes
         - user

@@ -131,6 +131,13 @@ computed_fields:
         schema: public
       session_argument: hasura_session
 select_permissions:
+  - role: anonymous
+    permission:
+      columns: []
+      computed_fields:
+        - email
+      filter: {}
+      allow_aggregations: true
   - role: finance
     permission:
       columns:
@@ -381,13 +388,6 @@ select_permissions:
         - fullName
         - givenName
         - phone
-      filter: {}
-      allow_aggregations: true
-  - role: anonymous
-    permission:
-      columns: []
-      computed_fields:
-        - email
       filter: {}
       allow_aggregations: true
 update_permissions:

@@ -177,7 +177,7 @@ array_relationships:
       foreign_key_constraint_on:
         column: course_id
         table:
-          name: order
+          name: course_order
           schema: public
   - name: participants
     using:
@@ -470,53 +470,48 @@ select_permissions:
   - role: booking-contact
     permission:
       columns:
-        - account_code
-        - accredited_by
-        - aol_cost_of_course
-        - aol_country
-        - aol_region
-        - booking_contact_invite_data
-        - booking_contact_profile_id
-        - conversion
+        - created_at
+        - updated_at
+        - name
+        - course_type
         - course_delivery_type
         - course_level
-        - course_status
-        - course_type
-        - created_at
-        - created_by_id
-        - curriculum
-        - description
-        - display_on_website
-        - end
-        - exceptions_pending
-        - free_spaces
-        - go1_integration
-        - grading_confirmed
-        - grading_started
-        - id
-        - is_draft
-        - max_participants
-        - min_participants
-        - modules_duration
-        - name
         - organization_id
-        - organization_key_contact_invite_data
-        - organization_key_contact_profile_id
+        - reaccreditation
+        - description
+        - course_status
+        - min_participants
+        - max_participants
+        - grading_confirmed
+        - go1_integration
+        - aol_cost_of_course
+        - id
+        - booking_contact_profile_id
+        - aol_country
+        - aol_region
+        - free_spaces
+        - account_code
+        - grading_started
+        - modules_duration
+        - created_by_id
+        - special_instructions
         - parking_instructions
+        - source
+        - accredited_by
+        - conversion
         - price
         - price_currency
-        - reaccreditation
+        - booking_contact_invite_data
+        - is_draft
+        - exceptions_pending
+        - start
+        - end
+        - organization_key_contact_invite_data
+        - organization_key_contact_profile_id
+        - display_on_website
         - renewal_cycle
         - residingCountry
-        - source
-        - special_instructions
-        - start
-        - updated_at
-      computed_fields:
-        - course_code
-        - freeSlots
-        - state
-        - searchFields
+        - curriculum
       filter:
         _or:
           - participants:
@@ -558,8 +553,9 @@ select_permissions:
               profile_id:
                 _eq: X-Hasura-User-Id
           - orders:
-              bookingContactProfileId:
-                _eq: X-Hasura-User-Id
+              order:
+                bookingContactProfileId:
+                  _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: finance
     permission:

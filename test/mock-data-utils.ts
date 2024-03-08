@@ -299,9 +299,11 @@ export const buildCourse = build<Course>({
     residingCountry: chance.country(),
     orders: [
       {
-        salesRepresentative: perBuild(() => buildProfile()),
-        id: chance.guid(),
-        xeroInvoiceNumber: chance.string(),
+        order: {
+          salesRepresentative: perBuild(() => buildProfile()),
+          id: chance.guid(),
+          xeroInvoiceNumber: chance.string(),
+        },
       },
     ],
     curriculum: null,
@@ -771,8 +773,10 @@ export const buildLogs = build<GetCourseAuditLogsQuery['logs'][0]>({
       type: Course_Type_Enum.Closed,
       orders: [
         {
-          id: perBuild(() => chance.guid()),
-          xeroInvoiceNumber: perBuild(() => chance.string()),
+          order: {
+            id: perBuild(() => chance.guid()),
+            xeroInvoiceNumber: perBuild(() => chance.string()),
+          },
         },
       ],
       organization: {

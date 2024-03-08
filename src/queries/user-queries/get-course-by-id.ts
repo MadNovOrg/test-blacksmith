@@ -160,9 +160,11 @@ export const QUERY = gql`
         }
       }
       orders @include(if: $withOrders) {
-        id
-        xeroInvoiceNumber
-        source
+        order {
+          id
+          xeroInvoiceNumber
+          source
+        }
       }
     }
   }

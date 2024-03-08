@@ -1,18 +1,18 @@
 import { gql, useQuery } from 'urql'
 
-import { GetOrderQuery, GetOrderQueryVariables } from '@app/generated/graphql'
+import {
+  GetCourseOrdersQuery,
+  GetCourseOrdersQueryVariables,
+} from '@app/generated/graphql'
 
-export const GET_ORDER_QUERY = gql`
-  query GetOrder($orderId: uuid!) {
-    order: course_order(where: { order_id: { _eq: $orderId } }) {
+export const GET_COURSE_ORDERS = gql`
+  query GetCourseOrders($orderId: uuid!) {
+    orders: course_order(where: { order_id: { _eq: $orderId } }) {
       quantity
       order {
         id
-        profileId
         registrants
         paymentMethod
-        orderDue
-        orderTotal
         currency
         source
         billingAddress
@@ -20,7 +20,6 @@ export const GET_ORDER_QUERY = gql`
         billingFamilyName
         billingEmail
         billingPhone
-        registrants
         salesRepresentative {
           id
           fullName
@@ -28,7 +27,6 @@ export const GET_ORDER_QUERY = gql`
           archived
         }
         bookingContact
-        stripePaymentId
         promoCodes
         xeroInvoiceNumber
         organizationId
@@ -87,10 +85,13 @@ export const GET_ORDER_QUERY = gql`
   }
 `
 
-export const useOrder = (orderId: string) => {
-  return useQuery<GetOrderQuery, GetOrderQueryVariables>({
-    query: GET_ORDER_QUERY,
+export default function useCourseOrders({
+  orderId,
+}: {
+  orderId: GetCourseOrdersQueryVariables['orderId']
+}) {
+  return useQuery<GetCourseOrdersQuery, GetCourseOrdersQueryVariables>({
+    query: GET_COURSE_ORDERS,
     variables: { orderId },
-    requestPolicy: 'cache-and-network',
   })
 }

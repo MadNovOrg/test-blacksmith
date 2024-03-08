@@ -1,24 +1,22 @@
 import { addHours } from 'date-fns'
-import { DocumentNode } from 'graphql'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Client, CombinedError, Provider } from 'urql'
+import { Client, CombinedError, Provider, TypedDocumentNode } from 'urql'
 import { fromValue, never } from 'wonka'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import {
+  Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
-  GetOrderQuery,
-  GetXeroInvoicesForOrdersQuery,
+  GetCourseOrdersQuery,
   Payment_Methods_Enum,
   Xero_Invoice_Status_Enum,
   XeroAddressType,
   XeroLineItemSummaryFragment,
   XeroPhoneType,
 } from '@app/generated/graphql'
+import { GET_COURSE_ORDERS } from '@app/hooks/useCourseOrders'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
-import { QUERY as GET_ORDER_QUERY } from '@app/queries/order/get-order'
 
 import {
   chance,
@@ -43,6 +41,20 @@ vi.mock('@app/hooks/usePromoCodes')
 const usePromoCodesMock = vi.mocked(usePromoCodes)
 
 describe('page: OrderDetails', () => {
+  const order = buildOrder()
+  const baseOrder = order[0].order
+  const course = order[0].course
+  const baseCourse = {
+    id: course,
+    level: Course_Level_Enum.Level_1,
+    start: course?.start,
+    end: course?.end,
+    name: course?.name ?? '',
+    type: course?.type ?? Course_Type_Enum.Open,
+    go1Integration: course?.go1Integration ?? false,
+    deliveryType: course?.deliveryType ?? Course_Delivery_Type_Enum.Virtual,
+    max_participants: 1,
+  }
   const {
     result: {
       current: { t },
@@ -96,28 +108,29 @@ describe('page: OrderDetails', () => {
   })
 
   it('renders course information', () => {
-    const order = buildOrder()
     const courseStartDate = new Date('2023-01-25T08:00:00Z').toISOString()
     const courseEndDate = addHours(
       new Date('2023-01-25T08:00:00Z'),
       8
     ).toISOString()
-
     const client = {
-      executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === GET_ORDER_QUERY) {
-          return fromValue<{ data: GetOrderQuery }>({
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
             data: {
-              order: {
-                ...order,
-                invoice: buildInvoice(),
-                course: {
-                  ...order.course,
-                  level: Course_Level_Enum.Level_1,
-                  start: courseStartDate,
-                  end: courseEndDate,
+              orders: [
+                {
+                  order: {
+                    ...baseOrder,
+                    invoice: buildInvoice(),
+                  },
+                  course: {
+                    ...baseCourse,
+                    start: courseStartDate,
+                    end: courseEndDate,
+                  },
                 },
-              },
+              ] as unknown as GetCourseOrdersQuery['orders'],
             },
           })
         }
@@ -131,23 +144,17 @@ describe('page: OrderDetails', () => {
     )
     expect(
       screen.getByTestId('order-course-title').textContent
-    ).toMatchInlineSnapshot(`"Level One (course-code)"`)
+    ).toMatchInlineSnapshot(`"Level One "`)
 
     expect(
       screen.getByTestId('order-course-duration').textContent
-    ).toMatchInlineSnapshot('"25 Jan 202308:00 AM - 04:00 PM"')
+    ).toMatchInlineSnapshot('"25 Jan 202308:00 AM - 04:00 PM(local time)"')
   })
 
   it('renders order line items', () => {
     const user1Email = chance.email()
     const user2Email = chance.email()
     const unitPrice = 130
-
-    const order = buildOrder({
-      overrides: {
-        registrants: [user1Email, user2Email],
-      },
-    })
     const invoice = buildInvoice({
       overrides: {
         lineItems: [
@@ -170,20 +177,31 @@ describe('page: OrderDetails', () => {
     })
 
     const client = {
-      executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === GET_ORDER_QUERY) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
             data: {
-              order: {
-                ...order,
-                invoice,
-                course: {
-                  ...order.course,
-                  level: Course_Level_Enum.Level_1,
+              orders: [
+                {
+                  order: {
+                    ...order,
+                    invoice,
+                    registrants: [user1Email, user2Email],
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  },
+                  course: {
+                    ...baseCourse,
+                    bookingContact: {
+                      fullName: chance.name(),
+                    },
+                  },
                 },
-              },
+              ] as unknown as GetCourseOrdersQuery['orders'],
             },
           })
         }
@@ -208,13 +226,6 @@ describe('page: OrderDetails', () => {
 
   it('renders blended learning licenses information if purchased', () => {
     const unitPrice = 50
-
-    const order = buildOrder({
-      overrides: {
-        quantity: 5,
-        registrants: [],
-      },
-    })
     const invoice = buildInvoice({
       overrides: {
         lineItems: [
@@ -229,20 +240,25 @@ describe('page: OrderDetails', () => {
     })
 
     const client = {
-      executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === GET_ORDER_QUERY) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
             data: {
-              order: {
-                ...order,
-                invoice,
-                course: {
-                  ...order.course,
-                  level: Course_Level_Enum.Level_1,
+              orders: [
+                {
+                  order: {
+                    ...order,
+                    invoice,
+                    registrants: [],
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
                 },
-              },
+              ],
             },
           })
         }
@@ -257,9 +273,6 @@ describe('page: OrderDetails', () => {
 
     expect(
       screen.getByText(`${formatCurrency(unitPrice)} per attendee`)
-    ).toBeInTheDocument()
-    expect(
-      within(screen.getByTestId('order-quantity')).getByText(order.quantity)
     ).toBeInTheDocument()
   })
 
@@ -296,16 +309,24 @@ describe('page: OrderDetails', () => {
     })
 
     const client = {
-      executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === GET_ORDER_QUERY) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
             data: {
-              order: {
-                ...order,
-                invoice,
-              },
+              orders: [
+                {
+                  order: {
+                    ...order,
+                    invoice,
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
+                },
+              ],
             },
           })
         }
@@ -329,32 +350,37 @@ describe('page: OrderDetails', () => {
   })
 
   it('renders address information for each registrant', () => {
-    const order = buildOrder({
-      overrides: {
-        registrants: [
-          {
-            addressLine1: 'Times Square',
-            addressLine2: 'Apt 4B',
-            city: 'London',
-            postCode: 'E1 8GD',
-            country: 'England',
-          },
-        ],
-      },
-    })
-    const invoice = buildInvoice()
+    const orderWithRegistrants = {
+      invoice: buildInvoice(),
+      registrants: [
+        {
+          addressLine1: 'Times Square',
+          addressLine2: 'Apt 4B',
+          city: 'London',
+          postCode: 'E1 8GD',
+          country: 'England',
+        },
+      ],
+    }
 
     const client = {
-      executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === GET_ORDER_QUERY) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
             data: {
-              order: {
-                ...order,
-                invoice,
-              },
+              orders: [
+                {
+                  order: {
+                    ...orderWithRegistrants,
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
+                },
+              ],
             },
           })
         }
@@ -368,10 +394,10 @@ describe('page: OrderDetails', () => {
     )
 
     const registrantRows = screen.getAllByTestId('registrants-details')
-    expect(registrantRows).toHaveLength(order.registrants.length)
+    expect(registrantRows).toHaveLength(orderWithRegistrants.registrants.length)
 
     registrantRows.forEach((row, index) => {
-      const registrant = order.registrants[index]
+      const registrant = orderWithRegistrants.registrants[index]
       const { addressLine1, addressLine2, city, postCode, country } = registrant
       const expectedAddressText = `Address: ${addressLine1}, ${
         addressLine2 ? addressLine2 + ', ' : ''
@@ -401,16 +427,24 @@ describe('page: OrderDetails', () => {
     })
 
     const client = {
-      executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === GET_ORDER_QUERY) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
             data: {
-              order: {
-                ...order,
-                invoice,
-              },
+              orders: [
+                {
+                  order: {
+                    ...order,
+                    invoice,
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
+                },
+              ],
             },
           })
         }
@@ -447,24 +481,28 @@ describe('page: OrderDetails', () => {
   })
 
   it('renders payment information', () => {
-    const order = buildOrder({
-      overrides: {
-        paymentMethod: Payment_Methods_Enum.Cc,
-      },
-    })
     const invoice = buildInvoice()
 
     const client = {
-      executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === GET_ORDER_QUERY) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
             data: {
-              order: {
-                ...order,
-                invoice,
-              },
+              orders: [
+                {
+                  order: {
+                    ...baseOrder,
+                    invoice,
+                    paymentMethod: Payment_Methods_Enum.Cc,
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
+                },
+              ],
             },
           })
         }
@@ -487,24 +525,32 @@ describe('page: OrderDetails', () => {
     const salesPerson = chance.name({ full: true })
 
     const client = {
-      executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === GET_ORDER_QUERY) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
             data: {
-              order: {
-                ...order,
-                invoice,
-                salesRepresentative: {
-                  id: chance.guid(),
-                  fullName: salesPerson,
+              orders: [
+                {
+                  order: {
+                    ...order,
+                    invoice,
+                    salesRepresentative: {
+                      id: chance.guid(),
+                      fullName: salesPerson,
+                    },
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  },
+                  course: {
+                    ...baseCourse,
+                    type: Course_Type_Enum.Closed,
+                  },
                 },
-                course: {
-                  ...order.course,
-                  type: Course_Type_Enum.Closed,
-                },
-              },
+              ] as unknown as GetCourseOrdersQuery['orders'],
             },
           })
         }
@@ -522,11 +568,6 @@ describe('page: OrderDetails', () => {
   })
 
   it('renders invoice to information', () => {
-    const order = buildOrder({
-      overrides: {
-        paymentMethod: Payment_Methods_Enum.Invoice,
-      },
-    })
     const invoice = buildInvoice()
 
     invoice.contact.addresses = [
@@ -542,35 +583,53 @@ describe('page: OrderDetails', () => {
 
     const salesPerson = chance.name({ full: true })
 
+    const orderInfo = {
+      ...order,
+      salesRepresentative: {
+        id: chance.guid(),
+        fullName: salesPerson,
+      },
+      invoice: {
+        ...invoice,
+        contact: {
+          ...invoice.contact,
+          phones: [
+            {
+              phoneType: XeroPhoneType.Default,
+            },
+          ],
+        },
+      },
+      organization: {
+        name: chance.name(),
+      },
+      user: {
+        fullName: chance.name(),
+      },
+      billingGivenName: chance.name(),
+      billingFamilyName: chance.name(),
+      billingEmail: chance.email(),
+      billingPhone: chance.phone(),
+      billingAddress: chance.address(),
+    }
+
     const client = {
-      executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === GET_ORDER_QUERY) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
             data: {
-              order: {
-                ...order,
-                salesRepresentative: {
-                  id: chance.guid(),
-                  fullName: salesPerson,
-                },
-                invoice: {
-                  ...invoice,
-                  contact: {
-                    ...invoice.contact,
-                    phones: [
-                      {
-                        phoneType: XeroPhoneType.Default,
-                      },
-                    ],
+              orders: [
+                {
+                  order: {
+                    ...orderInfo,
+                    paymentMethod: Payment_Methods_Enum.Invoice,
+                  },
+                  course: {
+                    ...baseCourse,
+                    type: Course_Type_Enum.Closed,
                   },
                 },
-                course: {
-                  ...order.course,
-                  type: Course_Type_Enum.Closed,
-                },
-              },
+              ] as unknown as GetCourseOrdersQuery['orders'],
             },
           })
         }
@@ -586,31 +645,31 @@ describe('page: OrderDetails', () => {
     const invoicedToRow = screen.getByTestId('order-invoiced-to')
 
     expect(
-      within(invoicedToRow).getByText(order.organization.name ?? '')
+      within(invoicedToRow).getByText(orderInfo?.organization.name ?? '')
     ).toBeInTheDocument()
 
     expect(
       within(invoicedToRow).getByText(
-        `${order.billingGivenName} ${order.billingFamilyName}`
+        `${orderInfo?.billingGivenName} ${orderInfo?.billingFamilyName}`
       )
     ).toBeInTheDocument()
 
     expect(
-      within(invoicedToRow).getByText(order.billingEmail ?? '')
+      within(invoicedToRow).getByText(orderInfo?.billingEmail ?? '')
     ).toBeInTheDocument()
 
     expect(
-      within(invoicedToRow).getByText(order.billingPhone)
+      within(invoicedToRow).getByText(orderInfo?.billingPhone ?? '')
     ).toBeInTheDocument()
     expect(
       within(invoicedToRow).getByTestId('contact-address')
-    ).toHaveTextContent(order.billingAddress)
+    ).toHaveTextContent(orderInfo?.billingAddress ?? '')
   })
 
   it('displays free spaces if applied for the closed course', () => {
     const discountAmount = -25
 
-    const order = buildOrder({})
+    const order = buildOrder()
     const invoice = buildInvoice({
       overrides: {
         lineItems: [
@@ -625,21 +684,29 @@ describe('page: OrderDetails', () => {
     })
 
     const client = {
-      executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === GET_ORDER_QUERY) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
             data: {
-              order: {
-                ...order,
-                invoice,
-                course: {
-                  ...order.course,
-                  type: Course_Type_Enum.Closed,
-                  freeSpaces: 2,
+              orders: [
+                {
+                  order: {
+                    ...order,
+                    invoice,
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  },
+                  course: {
+                    ...baseCourse,
+                    type: Course_Type_Enum.Closed,
+                    freeSpaces: 2,
+                  },
                 },
-              },
+              ] as unknown as GetCourseOrdersQuery['orders'],
             },
           })
         }
@@ -696,20 +763,27 @@ describe('page: OrderDetails', () => {
     })
 
     const client = {
-      executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === GET_ORDER_QUERY) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
             data: {
-              order: {
-                ...order,
-                invoice,
-                course: {
-                  ...order.course,
-                  level: Course_Level_Enum.Level_1,
+              orders: [
+                {
+                  order: {
+                    ...order,
+                    invoice,
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  },
+                  course: {
+                    ...baseCourse,
+                  },
                 },
-              },
+              ] as unknown as GetCourseOrdersQuery['orders'],
             },
           })
         }
@@ -747,19 +821,29 @@ describe('page: OrderDetails', () => {
     const order = buildOrder()
 
     const client = {
-      executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === GET_ORDER_QUERY) {
-          return fromValue<{ data: GetOrderQuery }>({
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
             data: {
-              order: {
-                ...order,
-                invoice: buildInvoice(),
-                course: {
-                  ...order.course,
-                  level: Course_Level_Enum.Level_1,
-                  residingCountry: nonUKCountryCode,
+              orders: [
+                {
+                  order: {
+                    ...order,
+                    invoice: buildInvoice(),
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  },
+                  course: {
+                    ...baseCourse,
+                    type: Course_Type_Enum.Closed,
+                    residingCountry: nonUKCountryCode,
+                  },
                 },
-              },
+              ] as unknown as GetCourseOrdersQuery['orders'],
             },
           })
         }

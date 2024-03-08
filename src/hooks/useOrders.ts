@@ -46,10 +46,12 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
     if (isFilterValid(filters.searchParam)) {
       where._or = []
       where._or.push({
-        course: { name: { _ilike: `%${filters.searchParam}%` } },
+        courses: { course: { name: { _ilike: `%${filters.searchParam}%` } } },
       })
       where._or.push({
-        course: { course_code: { _ilike: `%${filters.searchParam}%` } },
+        courses: {
+          course: { course_code: { _ilike: `%${filters.searchParam}%` } },
+        },
       })
       where._or.push({
         organization: { name: { _ilike: `%${filters.searchParam}%` } },

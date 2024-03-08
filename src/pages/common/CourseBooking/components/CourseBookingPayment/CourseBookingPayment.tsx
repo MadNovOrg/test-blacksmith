@@ -1,18 +1,16 @@
 import { Alert, Box, CircularProgress, Typography } from '@mui/material'
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { useMutation, useQuery } from 'urql'
+import { useMutation } from 'urql'
 
 import {
   Currency,
-  GetOrderQuery,
-  GetOrderQueryVariables,
   StripeCreatePaymentMutation,
   StripeCreatePaymentMutationVariables,
 } from '@app/generated/graphql'
+import { useOrder } from '@app/hooks/useOrder'
 import { stripe, Elements, STRIPE_CREATE_PAYMENT } from '@app/lib/stripe'
-import { QUERY as GET_ORDER } from '@app/queries/order/get-order'
 
 import { PaymentForm } from './Form'
 
@@ -25,10 +23,7 @@ export const CourseBookingPayment = () => {
   const isCallback = !!searchParams.get('payment_intent_client_secret')
 
   const [{ data: orderData, fetching: orderFetching, error: orderError }] =
-    useQuery<GetOrderQuery, GetOrderQueryVariables>({
-      query: GET_ORDER,
-      variables: { orderId },
-    })
+    useOrder(orderId ?? '')
 
   const [
     {
@@ -49,7 +44,7 @@ export const CourseBookingPayment = () => {
   useEffect(() => {
     if (isCallback || !orderData?.order) return
 
-    createPaymentIntent({ input: { orderId: orderData.order.id } })
+    createPaymentIntent({ input: { orderId: orderData.order[0].order?.id } })
   }, [isCallback, orderData?.order, createPaymentIntent])
 
   useEffect(() => {
@@ -88,7 +83,7 @@ export const CourseBookingPayment = () => {
           <Alert variant="filled" color="error" severity="error">
             {t([
               `pages.book-course.payment-cc-error-${
-                !orderData?.order?.id ? 'ORDER_NOT_FOUND' : ''
+                !orderData?.order[0]?.order?.id ? 'ORDER_NOT_FOUND' : ''
               }`,
               `pages.book-course.payment-cc-error-${createPaymentIntentError?.message}`,
               'pages.book-course.payment-cc-error-GENERIC_ERROR',

@@ -190,14 +190,9 @@ describe('component: ReviewLicenseOrder', () => {
       fromValue<{ data: InsertCourseMutation }>({
         data: {
           insertCourse: {
-            inserted: [
-              {
-                id: 1,
-                orders: [],
-                expenses: [],
-              },
-            ],
-            affectedRows: 1,
+            id: 1,
+            orders: [],
+            expenses: [],
           },
         },
       })

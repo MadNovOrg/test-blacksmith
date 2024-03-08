@@ -25,7 +25,7 @@ export const getCourseInvoice = (log: CourseLogType) => {
     log.course.type === Course_Type_Enum.Indirect
   ) {
     if (log.course.orders.length > 0) {
-      return log.course.orders[0]
+      return log.course.orders[0].order
     }
   }
   return null
@@ -39,8 +39,8 @@ export const getAttendeeInvoice = (log: AttendeeLogType) => {
       return log.course.orders[0]
     }
   } else {
-    return log.course.orders.find(order =>
-      order.registrants.find(
+    return log.course.orders.find(({ order }) =>
+      order?.registrants.find(
         (register: { email: string }) => register.email === log.profile.email
       )
     )

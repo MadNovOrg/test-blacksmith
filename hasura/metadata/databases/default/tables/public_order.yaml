@@ -17,8 +17,6 @@ configuration:
       custom_name: bookingContact
     client_purchase_order:
       custom_name: clientPurchaseOrder
-    course_id:
-      custom_name: courseId
     created_at:
       custom_name: createdAt
     order_due:
@@ -45,7 +43,6 @@ configuration:
     billing_phone: billingPhone
     booking_contact: bookingContact
     client_purchase_order: clientPurchaseOrder
-    course_id: courseId
     created_at: createdAt
     order_due: orderDue
     order_total: orderTotal
@@ -57,9 +54,6 @@ configuration:
     xero_invoice_number: xeroInvoiceNumber
   custom_root_fields: {}
 object_relationships:
-  - name: course
-    using:
-      foreign_key_constraint_on: course_id
   - name: invoice
     using:
       foreign_key_constraint_on:
@@ -73,6 +67,14 @@ object_relationships:
   - name: salesRepresentative
     using:
       foreign_key_constraint_on: sales_representative_id
+array_relationships:
+  - name: courses
+    using:
+      foreign_key_constraint_on:
+        column: order_id
+        table:
+          name: course_order
+          schema: public
 computed_fields:
   - name: bookingContactProfileId
     definition:
@@ -90,25 +92,24 @@ insert_permissions:
       set:
         profile_id: x-hasura-User-Id
       columns:
-        - billing_address
-        - billing_email
-        - billing_family_name
-        - billing_given_name
-        - billing_phone
-        - client_purchase_order
-        - course_id
-        - created_at
-        - currency
         - id
-        - organization_id
+        - attendeesQuantity
         - payment_method
-        - promo_codes
-        - quantity
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
         - registrants
-        - sales_representative_id
-        - source
-        - user
+        - created_at
+        - organization_id
+        - currency
+        - promo_codes
         - xero_invoice_number
+        - client_purchase_order
+        - user
+        - source
+        - sales_representative_id
   - role: sales-representative
     permission:
       check: {}
@@ -119,21 +120,20 @@ insert_permissions:
       set:
         profile_id: x-hasura-User-Id
       columns:
-        - billing_address
-        - billing_email
-        - billing_family_name
-        - billing_given_name
-        - billing_phone
-        - client_purchase_order
-        - course_id
-        - created_at
-        - currency
         - id
-        - organization_id
+        - attendeesQuantity
         - payment_method
-        - promo_codes
-        - quantity
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
         - registrants
+        - created_at
+        - organization_id
+        - currency
+        - promo_codes
+        - client_purchase_order
         - user
   - role: tt-admin
     permission:
@@ -141,69 +141,66 @@ insert_permissions:
       set:
         profile_id: x-hasura-User-Id
       columns:
-        - billing_address
-        - billing_email
-        - billing_family_name
-        - billing_given_name
-        - billing_phone
-        - client_purchase_order
-        - course_id
-        - created_at
-        - currency
         - id
-        - organization_id
+        - attendeesQuantity
         - payment_method
-        - promo_codes
-        - quantity
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
         - registrants
-        - sales_representative_id
-        - source
-        - user
+        - created_at
+        - organization_id
+        - currency
+        - promo_codes
         - xero_invoice_number
+        - client_purchase_order
+        - user
+        - source
+        - sales_representative_id
   - role: tt-ops
     permission:
       check: {}
       set:
         profile_id: x-hasura-User-Id
       columns:
-        - billing_address
-        - billing_email
-        - billing_family_name
-        - billing_given_name
-        - billing_phone
-        - client_purchase_order
-        - course_id
-        - created_at
-        - currency
         - id
-        - organization_id
+        - attendeesQuantity
         - payment_method
-        - promo_codes
-        - quantity
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
         - registrants
-        - sales_representative_id
-        - source
-        - user
+        - created_at
+        - organization_id
+        - currency
+        - promo_codes
         - xero_invoice_number
+        - client_purchase_order
+        - user
+        - source
+        - sales_representative_id
   - role: unverified
     permission:
       check: {}
       set:
         profile_id: x-hasura-User-Id
       columns:
-        - billing_address
-        - billing_email
-        - billing_family_name
-        - billing_given_name
-        - billing_phone
-        - client_purchase_order
-        - course_id
         - id
-        - organization_id
+        - attendeesQuantity
         - payment_method
-        - promo_codes
-        - quantity
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
         - registrants
+        - organization_id
+        - promo_codes
+        - client_purchase_order
         - user
   - role: user
     permission:
@@ -211,277 +208,255 @@ insert_permissions:
       set:
         profile_id: x-hasura-User-Id
       columns:
-        - billing_address
-        - billing_email
-        - billing_family_name
-        - billing_given_name
-        - billing_phone
-        - client_purchase_order
-        - course_id
         - id
-        - organization_id
+        - attendeesQuantity
         - payment_method
-        - promo_codes
-        - quantity
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
         - registrants
+        - organization_id
+        - promo_codes
+        - client_purchase_order
         - user
 select_permissions:
   - role: booking-contact
     permission:
       columns:
         - id
-        - course_id
-        - xero_invoice_number
         - payment_method
+        - xero_invoice_number
         - source
-      computed_fields:
-        - bookingContactProfileId
       filter:
         _or:
           - profile_id:
               _eq: X-Hasura-User-Id
-          - course:
-              _or:
-                - organization:
-                    members:
-                      _and:
-                        - profile_id:
-                            _eq: X-Hasura-User-Id
-                        - is_admin:
-                            _eq: true
-                - booking_contact_profile_id:
-                    _eq: X-Hasura-User-Id
+          - courses:
+              course:
+                _or:
+                  - organization:
+                      members:
+                        _and:
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+                          - is_admin:
+                              _eq: true
+                  - booking_contact_profile_id:
+                      _eq: X-Hasura-User-Id
           - bookingContactProfileId:
               _eq: X-Hasura-User-Id
-      limit: 0
       allow_aggregations: true
   - role: finance
     permission:
       columns:
-        - billing_address
-        - billing_email
-        - billing_family_name
-        - billing_given_name
-        - billing_phone
-        - booking_contact
-        - client_purchase_order
-        - course_id
-        - created_at
-        - currency
         - id
-        - order_due
+        - profile_id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - created_at
+        - price
+        - vat
         - order_total
         - organization_id
-        - payment_method
-        - price
-        - profile_id
-        - promo_codes
-        - quantity
-        - registrants
-        - sales_representative_id
-        - source
+        - currency
         - stripePaymentId
-        - user
-        - vat
+        - promo_codes
+        - order_due
         - xero_invoice_number
-      computed_fields:
-        - bookingContactProfileId
+        - client_purchase_order
+        - user
+        - source
+        - sales_representative_id
+        - booking_contact
       filter: {}
       allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
-        - billing_address
-        - billing_email
-        - billing_family_name
-        - billing_given_name
-        - billing_phone
-        - booking_contact
-        - client_purchase_order
-        - course_id
-        - created_at
-        - currency
         - id
-        - order_due
+        - profile_id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - created_at
+        - price
+        - vat
         - order_total
         - organization_id
-        - payment_method
-        - price
-        - profile_id
-        - promo_codes
-        - quantity
-        - registrants
-        - sales_representative_id
-        - source
+        - currency
         - stripePaymentId
-        - user
-        - vat
+        - promo_codes
+        - order_due
         - xero_invoice_number
-      computed_fields:
-        - bookingContactProfileId
+        - client_purchase_order
+        - user
+        - source
+        - sales_representative_id
+        - booking_contact
       filter: {}
       allow_aggregations: true
   - role: sales-representative
     permission:
       columns:
-        - billing_address
-        - billing_email
-        - billing_family_name
-        - billing_given_name
-        - billing_phone
-        - booking_contact
-        - client_purchase_order
-        - course_id
-        - created_at
-        - currency
         - id
-        - order_due
+        - profile_id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - created_at
+        - price
+        - vat
         - order_total
         - organization_id
-        - payment_method
-        - price
-        - profile_id
-        - promo_codes
-        - quantity
-        - registrants
-        - sales_representative_id
-        - source
+        - currency
         - stripePaymentId
-        - user
-        - vat
+        - promo_codes
+        - order_due
         - xero_invoice_number
-      computed_fields:
-        - bookingContactProfileId
+        - client_purchase_order
+        - user
+        - source
+        - sales_representative_id
+        - booking_contact
       filter: {}
       allow_aggregations: true
   - role: trainer
     permission:
       columns:
         - id
-        - course_id
+        - payment_method
         - xero_invoice_number
         - source
-        - payment_method
       filter: {}
   - role: tt-admin
     permission:
       columns:
-        - billing_address
-        - billing_email
-        - billing_family_name
-        - billing_given_name
-        - billing_phone
-        - booking_contact
-        - course_id
-        - created_at
-        - currency
         - id
-        - order_due
+        - profile_id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - created_at
+        - price
+        - vat
         - order_total
         - organization_id
-        - payment_method
-        - price
-        - profile_id
-        - promo_codes
-        - quantity
-        - registrants
-        - sales_representative_id
-        - source
+        - currency
         - stripePaymentId
-        - user
-        - vat
+        - promo_codes
+        - order_due
         - xero_invoice_number
+        - user
+        - source
+        - sales_representative_id
+        - booking_contact
       filter: {}
       allow_aggregations: true
   - role: tt-ops
     permission:
       columns:
-        - billing_address
-        - billing_email
-        - billing_family_name
-        - billing_given_name
-        - billing_phone
-        - booking_contact
-        - course_id
-        - created_at
-        - currency
         - id
-        - order_due
+        - profile_id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - created_at
+        - price
+        - vat
         - order_total
         - organization_id
-        - payment_method
-        - price
-        - profile_id
-        - promo_codes
-        - quantity
-        - registrants
-        - sales_representative_id
-        - source
+        - currency
         - stripePaymentId
-        - user
-        - vat
+        - promo_codes
+        - order_due
         - xero_invoice_number
-      computed_fields:
-        - bookingContactProfileId
+        - user
+        - source
+        - sales_representative_id
+        - booking_contact
       filter: {}
       allow_aggregations: true
   - role: unverified
     permission:
       columns:
-        - billing_address
-        - billing_email
-        - billing_family_name
-        - billing_given_name
-        - billing_phone
-        - course_id
-        - created_at
-        - currency
         - id
-        - order_due
+        - profile_id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - created_at
+        - price
+        - vat
         - order_total
         - organization_id
-        - payment_method
-        - price
-        - profile_id
-        - promo_codes
-        - quantity
-        - registrants
+        - currency
         - stripePaymentId
-        - user
-        - vat
+        - promo_codes
+        - order_due
         - xero_invoice_number
+        - user
       filter:
         profile_id:
           _eq: X-Hasura-User-Id
   - role: user
     permission:
       columns:
-        - billing_address
-        - billing_email
-        - billing_family_name
-        - billing_given_name
-        - billing_phone
-        - booking_contact
-        - course_id
-        - created_at
-        - currency
         - id
-        - order_due
+        - profile_id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - created_at
+        - price
+        - vat
         - order_total
         - organization_id
-        - payment_method
-        - price
-        - profile_id
-        - promo_codes
-        - quantity
-        - registrants
-        - source
+        - currency
         - stripePaymentId
-        - user
-        - vat
+        - promo_codes
+        - order_due
         - xero_invoice_number
-      computed_fields:
-        - bookingContactProfileId
+        - user
+        - source
+        - booking_contact
       filter:
         _or:
           - profile_id:
@@ -493,46 +468,50 @@ select_permissions:
                       _eq: X-Hasura-User-Id
                   - is_admin:
                       _eq: true
-          - course:
-              booking_contact_profile_id:
-                _eq: X-Hasura-User-Id
+          - courses:
+              course:
+                booking_contact_profile_id:
+                  _eq: X-Hasura-User-Id
 update_permissions:
   - role: ld
     permission:
       columns:
-        - sales_representative_id
         - source
+        - sales_representative_id
       filter:
-        course:
-          course_type:
-            _in:
-              - OPEN
-              - CLOSED
-      check: null
+        courses:
+          course:
+            course_type:
+              _in:
+                - OPEN
+                - CLOSED
+      check: {}
   - role: sales-admin
     permission:
       columns:
-        - sales_representative_id
         - source
+        - sales_representative_id
       filter:
-        course:
-          course_type:
-            _in:
-              - OPEN
-              - CLOSED
-      check: null
+        courses:
+          course:
+            course_type:
+              _in:
+                - OPEN
+                - CLOSED
+      check: {}
   - role: sales-representative
     permission:
       columns:
-        - sales_representative_id
         - source
+        - sales_representative_id
       filter:
-        course:
-          course_type:
-            _in:
-              - OPEN
-              - CLOSED
-      check: null
+        courses:
+          course:
+            course_type:
+              _in:
+                - OPEN
+                - CLOSED
+      check: {}
   - role: trainer
     permission:
       columns:
@@ -545,34 +524,36 @@ update_permissions:
   - role: tt-admin
     permission:
       columns:
-        - sales_representative_id
         - source
+        - sales_representative_id
       filter:
-        course:
-          course_type:
-            _in:
-              - OPEN
-              - CLOSED
-      check: null
+        courses:
+          course:
+            course_type:
+              _in:
+                - OPEN
+                - CLOSED
+      check: {}
   - role: tt-ops
     permission:
       columns:
-        - sales_representative_id
         - source
+        - sales_representative_id
       filter:
-        course:
-          course_type:
-            _in:
-              - OPEN
-              - CLOSED
-      check: null
+        courses:
+          course:
+            course_type:
+              _in:
+                - OPEN
+                - CLOSED
+      check: {}
 event_triggers:
   - name: licenses_purchased
     definition:
       enable_manual: true
       update:
         columns:
-          - quantity
+          - attendeesQuantity
     retry_conf:
       interval_sec: 10
       num_retries: 0

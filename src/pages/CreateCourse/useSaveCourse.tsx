@@ -205,7 +205,33 @@ export function useSaveCourse(): {
         )
         if (scheduleEndDateTime) scheduleDateTime[1] = scheduleEndDateTime
       }
-
+      const orderToBeCreated = {
+        registrants: [],
+        billingEmail: invoiceData?.email,
+        billingGivenName: invoiceData?.firstName,
+        billingFamilyName: invoiceData?.surname,
+        billingPhone: invoiceData?.phone,
+        organizationId: invoiceData?.orgId,
+        billingAddress: invoiceData?.billingAddress,
+        clientPurchaseOrder: invoiceData?.purchaseOrder,
+        paymentMethod: Payment_Methods_Enum.Invoice,
+        attendeesQuantity:
+          courseData.type === Course_Type_Enum.Closed
+            ? courseData.maxParticipants
+            : 0,
+        currency: Currency.GBP,
+        user: {
+          fullName: profile?.fullName,
+          email: profile?.email,
+          phone: profile?.phone,
+        },
+        ...(courseData.source ? { source: courseData.source } : null),
+        ...(courseData.salesRepresentative?.id
+          ? {
+              salesRepresentativeId: courseData.salesRepresentative?.id,
+            }
+          : null),
+      }
       const { data: response } = await insertCourse({
         course: {
           /// TODO: Delete this after Arlo migration
@@ -328,34 +354,16 @@ export function useSaveCourse(): {
                   : 'orders']: {
                   data: [
                     {
-                      registrants: [],
-                      billingEmail: invoiceData.email,
-                      billingGivenName: invoiceData.firstName,
-                      billingFamilyName: invoiceData.surname,
-                      billingPhone: invoiceData.phone,
-                      organizationId: invoiceData.orgId,
-                      billingAddress: invoiceData.billingAddress,
-                      clientPurchaseOrder: invoiceData.purchaseOrder,
-                      paymentMethod: Payment_Methods_Enum.Invoice,
-                      quantity:
-                        courseData.type === Course_Type_Enum.Closed
-                          ? courseData.maxParticipants
-                          : 0,
-                      currency: Currency.GBP,
-                      user: {
-                        fullName: profile?.fullName,
-                        email: profile?.email,
-                        phone: profile?.phone,
-                      },
-                      ...(courseData.source
-                        ? { source: courseData.source }
-                        : null),
-                      ...(courseData.salesRepresentative?.id
+                      ...(exceptions.length && !acl.isAdmin()
                         ? {
-                            salesRepresentativeId:
-                              courseData.salesRepresentative?.id,
+                            ...orderToBeCreated,
                           }
-                        : null),
+                        : {
+                            order: {
+                              data: { ...orderToBeCreated },
+                            },
+                            quantity: orderToBeCreated.attendeesQuantity,
+                          }),
                     },
                   ],
                 },
@@ -378,7 +386,7 @@ export function useSaveCourse(): {
             : null),
         },
       })
-      if (response?.insertCourse?.inserted.length === 1) {
+      if (response?.insertCourse?.id) {
         setSavingStatus(LoadingStatus.SUCCESS)
 
         if (draftId) {
@@ -391,13 +399,13 @@ export function useSaveCourse(): {
           }
         }
 
-        const insertedCourse = response.insertCourse?.inserted[0]
+        const insertedCourse = response.insertCourse
         return {
           id: String(insertedCourse.id),
           courseCode: String(insertedCourse.course_code),
           hasExceptions: exceptions.length > 0 ?? false,
           orderId: insertedCourse.orders?.length
-            ? insertedCourse.orders[0].id
+            ? insertedCourse.orders[0].order?.id
             : undefined,
         }
       }
