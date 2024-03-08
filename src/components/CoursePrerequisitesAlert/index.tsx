@@ -43,6 +43,9 @@ export const CoursePrerequisitesAlert: React.FC<
     if (profile.disabilities === null) {
       missing.push(t('disabilities'))
     }
+    if (!profile.country) {
+      missing.push(t('residing-country'))
+    }
     return missing
   }, [profile, t])
 

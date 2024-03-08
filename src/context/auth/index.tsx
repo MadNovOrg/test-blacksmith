@@ -120,6 +120,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     setState({ loggedOut: true })
 
     posthog.reset()
+    localStorage.removeItem('residingCountryDialogWasDisplayed')
   }, [])
 
   const getJWT = useCallback(async () => {

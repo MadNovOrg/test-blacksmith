@@ -9,6 +9,7 @@ import teamsImg from './assets/teams.png'
 import trainersImg from './assets/trainers.png'
 import { Hero } from './components/Hero/Hero'
 import { MembershipGrid } from './components/MembershipGrid/MembershipGrid'
+import { ResidingCountryDialog } from './components/ResidingCountryDialog/ResidingCountryDialog'
 import { ResourcesCarousel } from './components/ResourcesCarousel/ResourcesCarousel'
 import { SplitImage } from './components/SplitImage/SplitImage'
 
@@ -23,6 +24,7 @@ export const Welcome = () => {
       <Hero />
       <MembershipGrid />
 
+      <ResidingCountryDialog />
       <ResourcesCarousel />
 
       <Container sx={{ mt: 20 }}>

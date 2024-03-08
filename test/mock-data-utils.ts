@@ -145,6 +145,7 @@ export const buildProfile = build<Profile>({
     fullName: '',
     title: perBuild(() => chance.word()),
     addresses: [],
+    country: undefined,
     attributes: [],
     contactDetails: [],
     email: perBuild(() => chance.email()),

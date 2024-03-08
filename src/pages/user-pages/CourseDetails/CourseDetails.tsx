@@ -48,6 +48,7 @@ import { DisabilitiesTab } from '@app/pages/trainer-pages/CourseDetails/componen
 import { EvaluationSummaryTab } from '@app/pages/trainer-pages/CourseDetails/components/EvaluationSummaryTab'
 import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
 import { ModifyAttendanceModal } from '@app/pages/user-pages/CourseDetails/ModifyAttendanceModal'
+import { ResidingCountryDialog } from '@app/pages/Welcome/components/ResidingCountryDialog/ResidingCountryDialog'
 import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/queries/course-evaluation/get-feedback-users'
 import { GET_DIETARY_AND_DISABILITIES_COUNT } from '@app/queries/course-participant/get-participant-dietary-restrictions-by-course-id'
 import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
@@ -334,6 +335,7 @@ export const CourseDetails: React.FC<
 
   return (
     <>
+      <ResidingCountryDialog />
       <Helmet>
         <title>{t('pages.browser-tab-titles.manage-courses.course')}</title>
       </Helmet>

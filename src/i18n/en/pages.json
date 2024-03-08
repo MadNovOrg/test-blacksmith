@@ -1769,6 +1769,11 @@
       "view-all-button-text": "View All"
     }
   },
+  "capture-residing-country":{
+    "title": "Information Required" ,
+    "description": "Please set your Residing Country on your profile",
+    "redirect-button": "Go to My Profile"
+  },
   "getting-started": {
     "back-to-homepage": "Back to Welcome Page",
     "tutorials": "Tutorials",

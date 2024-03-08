@@ -239,6 +239,7 @@ export type Profile = {
     }
   }[]
   archived?: boolean
+  country?: string
 } & Base
 
 export type Role = {

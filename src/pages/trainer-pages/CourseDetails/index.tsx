@@ -40,6 +40,7 @@ import { CourseAttendeesTab } from '@app/pages/trainer-pages/components/CourseAt
 import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
 import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading'
 import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
+import { ResidingCountryDialog } from '@app/pages/Welcome/components/ResidingCountryDialog/ResidingCountryDialog'
 import { GET_DIETARY_AND_DISABILITIES_COUNT } from '@app/queries/course-participant/get-participant-dietary-restrictions-by-course-id'
 import { getIndividualCourseStatuses } from '@app/rules/course-status'
 import { courseEnded, LoadingStatus } from '@app/util'
@@ -248,6 +249,7 @@ export const CourseDetails = () => {
   }
   return (
     <>
+      <ResidingCountryDialog />
       <Helmet>
         <title>{t('pages.browser-tab-titles.manage-courses.course')}</title>
       </Helmet>
