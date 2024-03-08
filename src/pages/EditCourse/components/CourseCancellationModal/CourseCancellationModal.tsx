@@ -15,11 +15,17 @@ import {
   Typography,
 } from '@mui/material'
 import { isNumber } from 'lodash-es'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
 
+import {
+  CurrenciesSymbols,
+  CurrencyCode,
+  defaultCurrency,
+} from '@app/components/CurrencySelector'
 import { NumericTextField } from '@app/components/NumericTextField'
 import {
   CancelCourseMutation,
@@ -80,6 +86,10 @@ export const CourseCancellationModal: React.FC<
     CancelCourseMutation,
     CancelCourseMutationVariables
   >(CANCEL_COURSE_MUTATION)
+
+  const emailUpdatedCurrenciesEnabled = useFeatureFlagEnabled(
+    'email-updated-currencies'
+  )
 
   const schema = useMemo(() => {
     const cancellationFeePercent = yup.number().required()
@@ -299,7 +309,11 @@ export const CourseCancellationModal: React.FC<
                 endAdornment: (
                   <React.Fragment>
                     <Typography variant="body1" color="grey.600">
-                      £
+                      {emailUpdatedCurrenciesEnabled && course.priceCurrency
+                        ? CurrenciesSymbols[
+                            course.priceCurrency as CurrencyCode
+                          ]
+                        : CurrenciesSymbols[defaultCurrency]}
                     </Typography>
                   </React.Fragment>
                 ),
