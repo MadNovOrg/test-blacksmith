@@ -141,10 +141,15 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const getRegistrantPostalAddress = useCallback(
     (registrant: OrderRegistrant) =>
-      `${registrant.addressLine1}, ${
-        registrant.addressLine2?.trim() ? registrant.addressLine2 + ', ' : ''
-      }${registrant.city}, ${registrant.postCode}, ${registrant.country}`,
-
+      [
+        registrant.addressLine1,
+        registrant.addressLine2,
+        registrant.city,
+        registrant.postCode,
+        registrant.country,
+      ]
+        .filter(Boolean)
+        .join(', '),
     []
   )
 
@@ -674,7 +679,9 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                   mainCourse.level === Course_Level_Enum.Level_1 ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
-                        <Typography fontWeight={600}>Registration</Typography>
+                        <Typography fontWeight={600}>
+                          {t('registration')}
+                        </Typography>
                         {registrants.map((registrant, index) => (
                           <Grid key={index}>
                             <Grid item>
