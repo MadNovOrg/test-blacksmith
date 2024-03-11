@@ -58,6 +58,7 @@ type Props = {
   methodsRef?: RefObject<{
     reset: UseFormReset<FormValues>
   }>
+  useAOL?: boolean
 }
 
 const courseTrainerToFormValues = (
@@ -102,6 +103,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
   showAssistHint = true,
   requiredLeaders = { min: 0, max: 1 },
   methodsRef,
+  useAOL,
 }) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
@@ -226,6 +228,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
                 disabled={disabled}
                 bildStrategies={bildStrategies}
                 courseType={courseType}
+                useAOL={useAOL}
               />
             )}
           />
@@ -254,6 +257,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
               disabled={disabled}
               bildStrategies={bildStrategies}
               courseType={courseType}
+              useAOL={useAOL}
             />
           )}
         />
@@ -285,6 +289,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
                 onChange={field.onChange}
                 matchesFilter={notUsedElsewhere('moderator')}
                 courseType={courseType}
+                useAOL={useAOL}
               />
             )}
           />

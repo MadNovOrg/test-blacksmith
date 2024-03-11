@@ -9043,6 +9043,7 @@ export type SearchTrainersInput = {
   courseType?: InputMaybe<CourseType>;
   query?: InputMaybe<Scalars['String']>;
   trainerType?: InputMaybe<CourseTrainerType>;
+  useAOL?: InputMaybe<Scalars['Boolean']>;
 };
 
 export enum SendCourseInformationError {

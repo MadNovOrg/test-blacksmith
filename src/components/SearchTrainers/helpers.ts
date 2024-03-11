@@ -20,6 +20,7 @@ export type Props = {
   bildStrategies?: BildStrategy[]
   courseType: Course_Type_Enum
   query: string
+  useAOL?: boolean
 }
 
 export type SearchTrainersInput = {

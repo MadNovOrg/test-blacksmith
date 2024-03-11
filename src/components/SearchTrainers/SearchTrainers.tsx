@@ -45,6 +45,7 @@ type Props = {
   onChange?: (ev: { target: { value: SearchTrainer[] } }) => void
   matchesFilter?: (matches: SearchTrainer[]) => SearchTrainer[]
   disabled?: boolean
+  useAOL?: boolean
 }
 
 export function SearchTrainers({
@@ -61,6 +62,7 @@ export function SearchTrainers({
   onChange = noop,
   matchesFilter = t => t,
   disabled = false,
+  useAOL,
 }: Props) {
   const { acl } = useAuth()
   const { t } = useTranslation()
@@ -75,6 +77,7 @@ export function SearchTrainers({
     bildStrategies,
     courseType,
     query: debouncedQuery,
+    useAOL,
   })
 
   const isControlled = value != null

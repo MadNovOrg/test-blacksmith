@@ -618,6 +618,7 @@ input SearchTrainersInput {
   courseEnd: date
   bildStrategies: [BildStrategy!]
   courseType: CourseType
+  useAOL: Boolean
 }
 
 input Ordering {

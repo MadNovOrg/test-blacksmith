@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 
 import { StepsNavigation } from '@app/components/StepsNavigation'
+import { useAuth } from '@app/context/auth'
 import { Course_Type_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { StepsEnum } from '@app/pages/CreateCourse/types'
@@ -19,6 +20,7 @@ export const CreateCourseSteps: React.FC<React.PropsWithChildren<Props>> = ({
   blendedLearning = false,
 }) => {
   const { t } = useScopedTranslation('pages.create-course')
+  const { acl } = useAuth()
 
   const steps = useMemo(() => {
     const courseDetailsStep = {
@@ -67,6 +69,10 @@ export const CreateCourseSteps: React.FC<React.PropsWithChildren<Props>> = ({
       steps.push(reviewAndConfirmStep)
     }
 
+    if (type === Course_Type_Enum.Indirect && acl.isInternalUser()) {
+      steps.push(assignTrainerStep)
+    }
+
     if (type === Course_Type_Enum.Closed) {
       steps.push(trainerExpensesStep)
       steps.push(orderDetailsStep)
@@ -76,7 +82,7 @@ export const CreateCourseSteps: React.FC<React.PropsWithChildren<Props>> = ({
     }
 
     return steps
-  }, [type, t, blendedLearning])
+  }, [t, type, blendedLearning, acl])
 
   return (
     <StepsNavigation

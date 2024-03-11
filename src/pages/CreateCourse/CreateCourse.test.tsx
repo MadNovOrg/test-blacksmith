@@ -200,7 +200,7 @@ describe('page: CreateCourse', () => {
 
     const nav = screen.getByTestId('create-course-nav')
 
-    expect(within(nav).queryByText('Assign trainer(s)')).not.toBeInTheDocument()
+    expect(within(nav).queryByText('Assign trainer(s)')).toBeInTheDocument()
   })
 
   it('displays correct steps for the indirect course with TT-OPS', () => {
@@ -222,7 +222,7 @@ describe('page: CreateCourse', () => {
 
     const nav = screen.getByTestId('create-course-nav')
 
-    expect(within(nav).queryByText('Assign trainer(s)')).not.toBeInTheDocument()
+    expect(within(nav).queryByText('Assign trainer(s)')).toBeInTheDocument()
   })
 
   it("doesn't allow trainer to create open course", () => {

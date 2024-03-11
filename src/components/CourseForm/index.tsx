@@ -78,7 +78,12 @@ import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCour
 import { QUERY as GET_NOT_DETAILED_PROFILE } from '@app/queries/profile/get-not-detailed-profile'
 import { schemas, yup } from '@app/schemas'
 import theme from '@app/theme'
-import { CourseInput, Organization, RoleName } from '@app/types'
+import {
+  CourseInput,
+  Organization,
+  RoleName,
+  TrainerRoleTypeName,
+} from '@app/types'
 import { bildStrategiesToArray, extractTime, requiredMsg } from '@app/util'
 
 import CountriesSelector from '../CountriesSelector'
@@ -157,7 +162,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   trainerRatioNotMet,
 }) => {
   const { t } = useTranslation()
-  const { activeRole, acl } = useAuth()
+  const { activeRole, acl, profile } = useAuth()
 
   // Used for:
   // - Open course residing country https://behaviourhub.atlassian.net/browse/TTHP-2915
@@ -196,6 +201,19 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const isClosedCourse = courseType === Course_Type_Enum.Closed
   const isIndirectCourse = courseType === Course_Type_Enum.Indirect
   const hasMinParticipants = courseType === Course_Type_Enum.Open
+
+  const allowUseAOL = useMemo(() => {
+    return Boolean(
+      acl.isInternalUser() ||
+        profile?.trainer_role_types.some(trainerRole =>
+          [
+            TrainerRoleTypeName.EMPLOYER_AOL,
+            TrainerRoleTypeName.PRINCIPAL,
+            TrainerRoleTypeName.SENIOR,
+          ].includes(trainerRole.trainer_role_type.name)
+        )
+    )
+  }, [acl, profile?.trainer_role_types])
 
   const minCourseStartDate = new Date()
   minCourseStartDate.setDate(minCourseStartDate.getDate() + 1)
@@ -1225,7 +1243,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                           }
                         }}
                         checked={usesAOL}
-                        disabled={disabledFields.has('usesAOL') || isBild}
+                        disabled={disabledFields.has('usesAOL') || !allowUseAOL}
                         data-testid="aol-checkbox"
                       />
                     }

@@ -110,7 +110,12 @@ export const CreateCourseForm = () => {
   }>(null)
 
   useEffect(() => {
-    if (courseType === Course_Type_Enum.Indirect && profile && certifications) {
+    if (
+      courseType === Course_Type_Enum.Indirect &&
+      profile &&
+      certifications &&
+      !acl.isInternalUser()
+    ) {
       setTrainers([
         {
           profile_id: profile.id,
@@ -128,7 +133,7 @@ export const CreateCourseForm = () => {
         })),
       ])
     }
-  }, [assistants, courseType, setTrainers, profile, certifications])
+  }, [assistants, courseType, setTrainers, profile, certifications, acl])
 
   useEffect(() => {
     setCurrentStepKey(StepsEnum.COURSE_DETAILS)
@@ -181,7 +186,10 @@ export const CreateCourseForm = () => {
     ) {
       completeStep(StepsEnum.COURSE_DETAILS)
       navigate('./license-order-details')
-    } else if (courseType === Course_Type_Enum.Indirect) {
+    } else if (
+      courseType === Course_Type_Enum.Indirect &&
+      !acl.isInternalUser()
+    ) {
       const savedCourse = await saveCourse()
 
       if (savedCourse?.id) {
@@ -191,7 +199,7 @@ export const CreateCourseForm = () => {
       completeStep(StepsEnum.COURSE_DETAILS)
       navigate('./assign-trainers')
     }
-  }, [completeStep, courseData, courseType, navigate, profile, saveCourse])
+  }, [acl, completeStep, courseData, courseType, navigate, profile, saveCourse])
 
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false)
 
@@ -324,45 +332,56 @@ export const CreateCourseForm = () => {
 
       {courseType === Course_Type_Enum.Indirect ? (
         <>
-          <Typography mt={2} mb={2} variant="h5" fontWeight={500}>
-            {t('pages.create-course.assign-trainers-title')}
-          </Typography>
+          {!acl.isInternalUser() ? (
+            <>
+              <Typography mt={2} mb={2} variant="h5" fontWeight={500}>
+                {t('pages.create-course.assign-trainers-title')}
+              </Typography>
 
-          <SearchTrainers
-            trainerType={Course_Trainer_Type_Enum.Assistant}
-            courseLevel={courseData?.courseLevel || Course_Level_Enum.Level_1}
-            courseSchedule={{
-              start: courseData?.startDateTime ?? undefined,
-              end: courseData?.endDateTime ?? undefined,
-            }}
-            matchesFilter={matches => matches.filter(t => t.id !== profile?.id)}
-            value={assistants}
-            onChange={event => {
-              setAssistants(event.target.value)
-            }}
-            courseType={courseType}
-            bildStrategies={
-              courseData?.bildStrategies
-                ? (bildStrategiesToArray(
-                    courseData?.bildStrategies
-                  ) as unknown as BildStrategy[])
-                : []
-            }
-          />
+              <SearchTrainers
+                trainerType={Course_Trainer_Type_Enum.Assistant}
+                courseLevel={
+                  courseData?.courseLevel || Course_Level_Enum.Level_1
+                }
+                courseSchedule={{
+                  start: courseData?.startDateTime ?? undefined,
+                  end: courseData?.endDateTime ?? undefined,
+                }}
+                matchesFilter={matches =>
+                  matches.filter(t => t.id !== profile?.id)
+                }
+                value={assistants}
+                onChange={event => {
+                  setAssistants(event.target.value)
+                }}
+                courseType={courseType}
+                bildStrategies={
+                  courseData?.bildStrategies
+                    ? (bildStrategiesToArray(
+                        courseData?.bildStrategies
+                      ) as unknown as BildStrategy[])
+                    : []
+                }
+                useAOL={courseData?.usesAOL}
+              />
 
-          {showTrainerRatioWarning ? (
-            <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
-              {t(
-                `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`
+              {showTrainerRatioWarning ? (
+                <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
+                  {t(
+                    `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`
+                  )}
+                </Alert>
+              ) : null}
+
+              {courseData?.type === Course_Type_Enum.Indirect && (
+                <Alert severity="info" sx={{ mt: 2 }}>
+                  {t(
+                    'components.course-form.indirect-course-assist-trainer-info'
+                  )}
+                </Alert>
               )}
-            </Alert>
+            </>
           ) : null}
-
-          {courseData?.type === Course_Type_Enum.Indirect && (
-            <Alert severity="info" sx={{ mt: 2 }}>
-              {t('components.course-form.indirect-course-assist-trainer-info')}
-            </Alert>
-          )}
 
           <FormControl required error={checkboxError}>
             <FormGroup sx={{ marginTop: 3 }} data-testid="acknowledge-checks">
