@@ -22,9 +22,12 @@ export const ResidingCountryDialog = () => {
       if (localStorage.getItem(STORAGE_KEY)) {
         setOpen(false)
       } else if (!profile.country) {
+        const timeoutValue = window.location.pathname.includes('details')
+          ? 5000
+          : 1000
         const timeout = setTimeout(() => {
           setOpen(true)
-        }, 1000)
+        }, timeoutValue)
         return () => clearTimeout(timeout)
       } else {
         setOpen(false)
@@ -52,7 +55,7 @@ export const ResidingCountryDialog = () => {
       maxWidth={600}
       data-testid="profile-country-dialog"
     >
-      <Grid container alignItems="flex-end" spacing={2} sx={{ my: 1 }}>
+      <Grid container alignItems="flex-end" spacing={2}>
         <Grid item md={12} sm={12}>
           <Typography variant="body2">
             <Trans i18nKey="pages.capture-residing-country.description" />
