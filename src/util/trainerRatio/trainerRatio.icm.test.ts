@@ -1,4 +1,5 @@
 import { extend } from 'lodash-es'
+import { describe } from 'vitest'
 
 import {
   Course_Delivery_Type_Enum,
@@ -10,734 +11,290 @@ import {
   TrainerRatioCriteria,
 } from '@app/util/trainerRatio/trainerRatio.icm'
 
-describe('trainerRatio utils', () => {
-  describe('getRequiredTrainers', () => {
-    let criteria: TrainerRatioCriteria
-    beforeEach(() => {
-      criteria = {
-        courseLevel: Course_Level_Enum.Level_1,
-        type: Course_Type_Enum.Open,
-        deliveryType: Course_Delivery_Type_Enum.Virtual,
-        reaccreditation: false,
-        maxParticipants: 0,
-        hasSeniorOrPrincipalLeader: false,
-      }
-    })
+describe('getRequiredTrainersV2', () => {
+  let criteria: TrainerRatioCriteria
 
-    describe('Level 1', () => {
-      beforeEach(() => (criteria.courseLevel = Course_Level_Enum.Level_1))
+  beforeEach(() => {
+    criteria = {
+      courseLevel: Course_Level_Enum.Level_1,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
+      maxParticipants: 0,
+      reaccreditation: false,
+      type: Course_Type_Enum.Open,
+    }
+  })
 
-      describe('Indirect course type, created by trainer', () => {
-        beforeEach(() => {
-          criteria.deliveryType = Course_Delivery_Type_Enum.F2F
-          criteria.isTrainer = true
-          criteria.type = Course_Type_Enum.Indirect
-        })
+  test.each([
+    Course_Level_Enum.Level_1,
+    Course_Level_Enum.Level_2,
+    Course_Level_Enum.IntermediateTrainer,
+    Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+  ])('assist ratio value for %s course', courseLevel => {
+    criteria.courseLevel = courseLevel
+    criteria.type = Course_Type_Enum.Open
 
-        it('participants below threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 4 }))
-          ).toEqual({
-            min: 1,
-            max: 1,
-          })
+    // Below threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 11,
         })
-        it('participants equal to threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
-          ).toEqual({
-            min: 1,
-            max: 2,
-          })
-        })
-        it('participants above threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 27 }))
-          ).toEqual({
-            min: 2,
-            max: 2,
-          })
-        })
-        it('participants on next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
-          ).toEqual({
-            min: 2,
-            max: 3,
-          })
-        })
-        it('participants above next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 39 }))
-          ).toEqual({
-            min: 3,
-            max: 3,
-          })
-        })
-      })
-
-      describe('Reaccreditation', () => {
-        beforeEach(() => (criteria.reaccreditation = true))
-
-        // 0 assistants up to 12, then 1 additional per every 12 above 12
-
-        it('participants below threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 4 }))
-          ).toEqual({
-            min: 0,
-            max: 0,
-          })
-        })
-        it('participants equal to threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 12 }))
-          ).toEqual({
-            min: 0,
-            max: 1,
-          })
-        })
-        it('participants above threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 }))
-          ).toEqual({
-            min: 1,
-            max: 1,
-          })
-        })
-        it('participants on next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
-          ).toEqual({
-            min: 1,
-            max: 2,
-          })
-        })
-        it('participants above next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
-          ).toEqual({
-            min: 2,
-            max: 2,
-          })
-        })
-      })
-
-      describe('Open', () => {
-        beforeEach(() => (criteria.type = Course_Type_Enum.Open))
-
-        // 0 assistants up to 24, then 1 additional per every 12 above 24
-
-        it('participants below threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 4 }))
-          ).toEqual({
-            min: 0,
-            max: 0,
-          })
-        })
-        it('participants equal to threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
-          ).toEqual({
-            min: 0,
-            max: 1,
-          })
-        })
-        it('participants above threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
-          ).toEqual({
-            min: 1,
-            max: 1,
-          })
-        })
-        it('participants on next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
-          ).toEqual({
-            min: 1,
-            max: 2,
-          })
-        })
-        it('participants above next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 }))
-          ).toEqual({
-            min: 2,
-            max: 2,
-          })
-        })
-      })
-
-      describe('Closed/Indirect', () => {
-        beforeEach(() => (criteria.type = Course_Type_Enum.Closed))
-
-        describe('senior/principal trainer assigned', () => {
-          beforeEach(() => (criteria.hasSeniorOrPrincipalLeader = true))
-
-          // 0 assistants for up to 12, then 1 additional per each additional 12
-
-          it('participants below threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 4 })
-              )
-            ).toEqual({
-              min: 0,
-              max: 0,
-            })
-          })
-          it('participants equal to threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 12 })
-              )
-            ).toEqual({
-              min: 0,
-              max: 1,
-            })
-          })
-          it('participants above threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 13 })
-              )
-            ).toEqual({
-              min: 1,
-              max: 1,
-            })
-          })
-          it('participants on next increment threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 24 })
-              )
-            ).toEqual({
-              min: 1,
-              max: 2,
-            })
-          })
-          it('participants above next increment threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 25 })
-              )
-            ).toEqual({
-              min: 2,
-              max: 2,
-            })
-          })
-        })
-
-        describe('Virtual', () => {
-          beforeEach(
-            () => (criteria.deliveryType = Course_Delivery_Type_Enum.Virtual)
-          )
-
-          // 1 assistant for up to 24, then 1 additional per each additional 12
-
-          it('participants below threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 4 })
-              )
-            ).toEqual({
-              min: 1,
-              max: 1,
-            })
-          })
-          it('participants equal to threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 24 })
-              )
-            ).toEqual({
-              min: 1,
-              max: 2,
-            })
-          })
-          it('participants above threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 25 })
-              )
-            ).toEqual({
-              min: 2,
-              max: 2,
-            })
-          })
-          it('participants on next increment threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 36 })
-              )
-            ).toEqual({
-              min: 2,
-              max: 3,
-            })
-          })
-          it('participants above next increment threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 37 })
-              )
-            ).toEqual({
-              min: 3,
-              max: 3,
-            })
-          })
-        })
-
-        describe('F2F', () => {
-          beforeEach(
-            () => (criteria.deliveryType = Course_Delivery_Type_Enum.F2F)
-          )
-
-          // 1 assistant for up to 12, then 1 additional per each additional 12
-
-          it('participants below threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 4 })
-              )
-            ).toEqual({
-              min: 1,
-              max: 1,
-            })
-          })
-          it('participants equal to threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 24 })
-              )
-            ).toEqual({
-              min: 1,
-              max: 2,
-            })
-          })
-          it('participants above threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 25 })
-              )
-            ).toEqual({
-              min: 2,
-              max: 2,
-            })
-          })
-          it('participants on next increment threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 36 })
-              )
-            ).toEqual({
-              min: 2,
-              max: 3,
-            })
-          })
-          it('participants above next increment threshold', () => {
-            expect(
-              getRequiredAssistants(
-                extend({}, criteria, { maxParticipants: 37 })
-              )
-            ).toEqual({
-              min: 3,
-              max: 3,
-            })
-          })
-        })
-      })
-    })
-
-    describe('Level 2', () => {
-      beforeEach(() => (criteria.courseLevel = Course_Level_Enum.Level_2))
-
-      describe('Indirect course type, created by trainer', () => {
-        beforeEach(() => {
-          criteria.deliveryType = Course_Delivery_Type_Enum.F2F
-          criteria.isTrainer = true
-          criteria.type = Course_Type_Enum.Indirect
-        })
-
-        it('participants below threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 4 }))
-          ).toEqual({
-            min: 1,
-            max: 1,
-          })
-        })
-        it('participants equal to threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
-          ).toEqual({
-            min: 1,
-            max: 2,
-          })
-        })
-        it('participants above threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 27 }))
-          ).toEqual({
-            min: 2,
-            max: 2,
-          })
-        })
-        it('participants on next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
-          ).toEqual({
-            min: 2,
-            max: 3,
-          })
-        })
-        it('participants above next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 39 }))
-          ).toEqual({
-            min: 3,
-            max: 3,
-          })
-        })
-      })
-
-      describe('Reaccreditation', () => {
-        beforeEach(() => (criteria.reaccreditation = true))
-
-        // 0 assistants up to 12, then 1 additional per every 12 above 12
-
-        it('participants below threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 4 }))
-          ).toEqual({
-            min: 0,
-            max: 0,
-          })
-        })
-        it('participants equal to threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 12 }))
-          ).toEqual({
-            min: 0,
-            max: 1,
-          })
-        })
-        it('participants above threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 }))
-          ).toEqual({
-            min: 1,
-            max: 1,
-          })
-        })
-        it('participants on next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
-          ).toEqual({
-            min: 1,
-            max: 2,
-          })
-        })
-        it('participants above next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
-          ).toEqual({
-            min: 2,
-            max: 2,
-          })
-        })
-      })
-
-      describe('no senior/principal trainer assigned', () => {
-        beforeEach(() => (criteria.hasSeniorOrPrincipalLeader = false))
-
-        // 1 assistant for up to 24, then 1 additional per each additional 12
-
-        it('participants below threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 4 }))
-          ).toEqual({
-            min: 1,
-            max: 1,
-          })
-        })
-        it('participants equal to threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
-          ).toEqual({
-            min: 1,
-            max: 2,
-          })
-        })
-        it('participants above threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
-          ).toEqual({
-            min: 2,
-            max: 2,
-          })
-        })
-        it('participants on next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
-          ).toEqual({
-            min: 2,
-            max: 3,
-          })
-        })
-        it('participants above next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 }))
-          ).toEqual({
-            min: 3,
-            max: 3,
-          })
-        })
-      })
-
-      describe('senior/principal trainer assigned', () => {
-        beforeEach(() => (criteria.hasSeniorOrPrincipalLeader = true))
-
-        // 0 assistants up to 12, then 1 additional per every 12 above 12
-
-        it('participants below threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 4 }))
-          ).toEqual({
-            min: 0,
-            max: 0,
-          })
-        })
-        it('participants equal to threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 12 }))
-          ).toEqual({
-            min: 0,
-            max: 1,
-          })
-        })
-        it('participants above threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 }))
-          ).toEqual({
-            min: 1,
-            max: 1,
-          })
-        })
-        it('participants on next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
-          ).toEqual({
-            min: 1,
-            max: 2,
-          })
-        })
-        it('participants above next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
-          ).toEqual({
-            min: 2,
-            max: 2,
-          })
-        })
-      })
-    })
-
-    describe('Advanced Modules', () => {
-      beforeEach(() => (criteria.courseLevel = Course_Level_Enum.Advanced))
-
-      describe('no senior/principal trainer assigned', () => {
-        beforeEach(() => (criteria.hasSeniorOrPrincipalLeader = false))
-
-        // 1 assistant for up to 16, then 1 additional per each additional 8
-
-        it('participants below threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 4 }))
-          ).toEqual({
-            min: 1,
-            max: 1,
-          })
-        })
-        it('participants equal to threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 16 }))
-          ).toEqual({
-            min: 1,
-            max: 2,
-          })
-        })
-        it('participants above threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 17 }))
-          ).toEqual({
-            min: 2,
-            max: 2,
-          })
-        })
-        it('participants on next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
-          ).toEqual({
-            min: 2,
-            max: 3,
-          })
-        })
-        it('participants above next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
-          ).toEqual({
-            min: 3,
-            max: 3,
-          })
-        })
-      })
-
-      describe('senior/principal trainer assigned', () => {
-        beforeEach(() => (criteria.hasSeniorOrPrincipalLeader = true))
-
-        // 0 assistants up to 8, then 1 additional per every 8 above 8
-
-        it('participants below threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 4 }))
-          ).toEqual({
-            min: 0,
-            max: 0,
-          })
-        })
-        it('participants equal to threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 8 }))
-          ).toEqual({
-            min: 0,
-            max: 1,
-          })
-        })
-        it('participants above threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 9 }))
-          ).toEqual({
-            min: 1,
-            max: 1,
-          })
-        })
-        it('participants on next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 16 }))
-          ).toEqual({
-            min: 1,
-            max: 2,
-          })
-        })
-        it('participants above next increment threshold', () => {
-          expect(
-            getRequiredAssistants(extend({}, criteria, { maxParticipants: 17 }))
-          ).toEqual({
-            min: 2,
-            max: 2,
-          })
-        })
-      })
-    })
-
-    describe('Intermediate Trainer', () => {
-      beforeEach(
-        () => (criteria.courseLevel = Course_Level_Enum.IntermediateTrainer)
       )
-
-      // 1 assistant up to 24, then 1 additional per every 12 above 24
-
-      it('participants below threshold', () => {
-        expect(
-          getRequiredAssistants(extend({}, criteria, { maxParticipants: 4 }))
-        ).toEqual({
-          min: 1,
-          max: 1,
-        })
-      })
-      it('participants equal to threshold', () => {
-        expect(
-          getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
-        ).toEqual({
-          min: 1,
-          max: 2,
-        })
-      })
-      it('participants above threshold', () => {
-        expect(
-          getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
-        ).toEqual({
-          min: 2,
-          max: 2,
-        })
-      })
-      it('participants on next increment threshold', () => {
-        expect(
-          getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
-        ).toEqual({
-          min: 2,
-          max: 3,
-        })
-      })
-      it('participants above next increment threshold', () => {
-        expect(
-          getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 }))
-        ).toEqual({
-          min: 3,
-          max: 3,
-        })
-      })
+    ).toEqual({
+      min: 0,
+      max: 0,
     })
 
-    describe('Advanced Trainer', () => {
-      beforeEach(
-        () => (criteria.courseLevel = Course_Level_Enum.AdvancedTrainer)
+    // Equal to threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 12,
+        })
       )
+    ).toEqual({
+      min: 0,
+      max: 1,
+    })
 
-      // 1 assistant up to 24, then 1 additional per every 12 above 24
+    // Above threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 }))
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
 
-      it('participants below threshold', () => {
-        expect(
-          getRequiredAssistants(extend({}, criteria, { maxParticipants: 4 }))
-        ).toEqual({
-          min: 1,
-          max: 1,
-        })
+    // Next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
+    ).toEqual({
+      min: 1,
+      max: 2,
+    })
+
+    // Above next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
+  })
+
+  test.each([Course_Level_Enum.Level_1, Course_Level_Enum.Level_2])(
+    'assist ratio value for %s Indirect course with no reaccreditation and without AOL',
+    courseLevel => {
+      criteria.courseLevel = courseLevel
+      criteria.reaccreditation = false
+      criteria.type = Course_Type_Enum.Indirect
+      criteria.usesAOL = false
+
+      // Below threshold
+      expect(
+        getRequiredAssistants(
+          extend({}, criteria, {
+            maxParticipants: 23,
+          })
+        )
+      ).toEqual({
+        min: 1,
+        max: 1,
       })
-      it('participants equal to threshold', () => {
-        expect(
-          getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
-        ).toEqual({
-          min: 1,
-          max: 2,
-        })
+
+      // Equal to threshold
+      expect(
+        getRequiredAssistants(
+          extend({}, criteria, {
+            maxParticipants: 24,
+          })
+        )
+      ).toEqual({
+        min: 1,
+        max: 2,
       })
-      it('participants above threshold', () => {
-        expect(
-          getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
-        ).toEqual({
-          min: 2,
-          max: 2,
-        })
+
+      // Above threshold
+      expect(
+        getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+      ).toEqual({
+        min: 2,
+        max: 2,
       })
-      it('participants on next increment threshold', () => {
-        expect(
-          getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
-        ).toEqual({
-          min: 2,
-          max: 3,
-        })
+
+      // Next increment threshold
+      expect(
+        getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
+      ).toEqual({
+        min: 2,
+        max: 3,
       })
-      it('participants above next increment threshold', () => {
-        expect(
-          getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 }))
-        ).toEqual({
-          min: 3,
-          max: 3,
-        })
+
+      // Above next increment threshold
+      expect(
+        getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 }))
+      ).toEqual({
+        min: 3,
+        max: 3,
       })
+    }
+  )
+
+  it('test assist ratio value for Open Virtual Level 1 course', () => {
+    criteria.courseLevel = Course_Level_Enum.Level_1
+    criteria.deliveryType = Course_Delivery_Type_Enum.Virtual
+    criteria.type = Course_Type_Enum.Open
+
+    // Below threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 23,
+        })
+      )
+    ).toEqual({
+      min: 0,
+      max: 0,
+    })
+
+    // Equal to threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 24,
+        })
+      )
+    ).toEqual({
+      min: 0,
+      max: 1,
+    })
+
+    // Above threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
+
+    // Next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
+    ).toEqual({
+      min: 1,
+      max: 2,
+    })
+
+    // Above next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 }))
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
+  })
+
+  it('test assist ratio value for Advanced course', () => {
+    criteria.courseLevel = Course_Level_Enum.Advanced
+
+    // Below threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 7,
+        })
+      )
+    ).toEqual({
+      min: 0,
+      max: 0,
+    })
+
+    // Equal to threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 8,
+        })
+      )
+    ).toEqual({
+      min: 0,
+      max: 1,
+    })
+
+    // Above threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 9 }))
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
+
+    // Next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 16 }))
+    ).toEqual({
+      min: 1,
+      max: 2,
+    })
+
+    // Above next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 17 }))
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
+  })
+
+  it('test assist ratio value for Advanced Trainer course', () => {
+    criteria.courseLevel = Course_Level_Enum.AdvancedTrainer
+
+    // Below threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 11,
+        })
+      )
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
+
+    // Equal to threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 12,
+        })
+      )
+    ).toEqual({
+      min: 1,
+      max: 2,
+    })
+
+    // Above threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 }))
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
+
+    // Next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
+    ).toEqual({
+      min: 2,
+      max: 3,
+    })
+
+    // Above next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+    ).toEqual({
+      min: 3,
+      max: 3,
     })
   })
 })

@@ -18,7 +18,6 @@ import ChooseTrainers, { FormValues } from '@app/components/ChooseTrainers'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
-  Accreditors_Enum,
   BildStrategy,
   Course_Exception_Enum,
   Course_Trainer_Type_Enum,
@@ -249,17 +248,11 @@ export const AssignTrainers = () => {
 
   const requiredLeaders = useMemo(() => {
     if (courseData) {
-      return getRequiredLeads({
-        ...courseData,
-        accreditedBy: courseData?.accreditedBy ?? Accreditors_Enum.Icm,
-        level: courseData.courseLevel,
-        max_participants: courseData.maxParticipants,
-        hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
-      })
+      return getRequiredLeads(courseData.type)
     } else {
       return { max: 1, min: 0 }
     }
-  }, [courseData, seniorOrPrincipalLead])
+  }, [courseData])
 
   const showTrainerRatioWarning = useMemo(() => {
     return (
@@ -269,9 +262,7 @@ export const AssignTrainers = () => {
           ...courseData,
           level: courseData.courseLevel,
           max_participants: courseData.maxParticipants,
-          hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
           usesAOL: courseData.usesAOL,
-          isTrainer: acl.isTrainer(),
         },
         trainers.map(trainer => ({
           type: trainer.type,
@@ -279,7 +270,7 @@ export const AssignTrainers = () => {
         }))
       )
     )
-  }, [acl, courseData, seniorOrPrincipalLead, trainers])
+  }, [courseData, trainers])
 
   if (!courseData) {
     return (

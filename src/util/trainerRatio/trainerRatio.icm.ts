@@ -6,7 +6,18 @@ import {
 
 import { RequiredTrainers } from './types'
 
-type TrainerRatio = {
+const { Indirect, Open } = Course_Type_Enum
+
+const {
+  Advanced,
+  AdvancedTrainer,
+  IntermediateTrainer,
+  Level_1,
+  Level_2,
+  ThreeDaySafetyResponseTrainer,
+} = Course_Level_Enum
+
+export type TrainerRatio = {
   initialAssistants: number
   threshold: number
   increment: number
@@ -14,18 +25,14 @@ type TrainerRatio = {
 
 export type TrainerRatioCriteria = {
   courseLevel: Course_Level_Enum
-  type: Course_Type_Enum
   deliveryType: Course_Delivery_Type_Enum
-  reaccreditation: boolean
   maxParticipants: number
-  hasSeniorOrPrincipalLeader: boolean
+  reaccreditation: boolean
+  type: Course_Type_Enum
   usesAOL?: boolean
-  isTrainer?: boolean
-  isETA?: boolean
-  isEmployerAOL?: boolean
 }
 
-const ratio = (
+export const ratio = (
   initialAssistants: number,
   threshold: number,
   increment: number
@@ -36,56 +43,40 @@ const ratio = (
 })
 
 const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
-  if (criteria.usesAOL) {
+  const { type, courseLevel, deliveryType, reaccreditation, usesAOL } = criteria
+
+  if (type === Open && deliveryType === Course_Delivery_Type_Enum.Virtual)
+    return ratio(0, 24, 12)
+
+  if (type === Indirect) {
+    if (
+      (courseLevel === Level_1 || courseLevel === Level_2) &&
+      !reaccreditation &&
+      !usesAOL
+    ) {
+      return ratio(1, 24, 12)
+    }
+
+    if (courseLevel === Advanced) {
+      return ratio(1, 8, 8)
+    }
+  }
+
+  if (
+    [
+      IntermediateTrainer,
+      Level_1,
+      Level_2,
+      ThreeDaySafetyResponseTrainer,
+    ].includes(courseLevel)
+  ) {
     return ratio(0, 12, 12)
   }
-  if (criteria.courseLevel === Course_Level_Enum.Level_1) {
-    if (
-      criteria.reaccreditation ||
-      criteria.hasSeniorOrPrincipalLeader ||
-      criteria.isETA ||
-      criteria.isEmployerAOL
-    ) {
-      return ratio(0, 12, 12)
-    }
-    if (criteria.type === Course_Type_Enum.Open) {
-      return ratio(0, 24, 12)
-    }
 
-    if (
-      criteria.type === Course_Type_Enum.Indirect &&
-      Boolean(criteria.isTrainer)
-    ) {
-      return ratio(1, 24, 12)
-    }
+  if (courseLevel === Advanced) return ratio(0, 8, 8)
 
-    if (criteria.deliveryType === Course_Delivery_Type_Enum.Virtual) {
-      return ratio(1, 24, 12)
-    }
-    return ratio(1, 24, 12)
-  } else if (criteria.courseLevel === Course_Level_Enum.Level_2) {
-    if (!criteria.reaccreditation && !criteria.hasSeniorOrPrincipalLeader) {
-      return ratio(1, 24, 12)
-    }
+  if (courseLevel === AdvancedTrainer) return ratio(1, 12, 12)
 
-    if (criteria.isETA || criteria.isEmployerAOL) {
-      return ratio(0, 12, 12)
-    }
-
-    if (
-      criteria.type === Course_Type_Enum.Indirect &&
-      Boolean(criteria.isTrainer)
-    ) {
-      return ratio(1, 24, 12)
-    }
-
-    return ratio(0, 12, 12)
-  } else if (criteria.courseLevel === Course_Level_Enum.Advanced) {
-    if (criteria.hasSeniorOrPrincipalLeader) {
-      return ratio(0, 8, 8)
-    }
-    return ratio(1, 16, 8)
-  }
   return ratio(1, 24, 12)
 }
 

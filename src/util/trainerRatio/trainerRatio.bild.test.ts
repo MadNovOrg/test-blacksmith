@@ -1,387 +1,206 @@
-import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
-import { BildStrategies } from '@app/types'
+import { extend } from 'lodash-es'
 
+import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import { getRequiredLeads } from '@app/util/trainerRatio/index'
 import {
   BildRatioCriteria,
   getRequiredAssistantsBild,
-  getRequiredLeadsBild,
-  toRange,
-} from './trainerRatio.bild'
+} from '@app/util/trainerRatio/trainerRatio.bild'
 
-describe('Bild trainer ratios', () => {
-  it("doesn't require a lead trainer if BILD open course", () => {
-    expect(
-      getRequiredLeadsBild({
-        type: Course_Type_Enum.Open,
-        numberParticipants: 12,
-        level: Course_Level_Enum.BildIntermediateTrainer,
-        strategies: [],
-        isReaccreditation: false,
-        isConversion: false,
-      })
-    ).toEqual({ min: 0, max: 1 })
+describe('getRequiredTrainers BILD', () => {
+  it("doesn't require a lead trainer if BILD Open type course", () => {
+    expect(getRequiredLeads(Course_Type_Enum.Open)).toEqual({ min: 0, max: 1 })
   })
 
-  it('requires 1 lead regardless of participants and 1 assist per next 12 participants after 12 participants have been registered for a conversion course', () => {
+  it('assist ratio value for Indirect BILD Certified non reaccreditation course', () => {
     const criteria: BildRatioCriteria = {
-      isConversion: true,
-      numberParticipants: 11,
-      level: Course_Level_Enum.BildIntermediateTrainer,
-      isReaccreditation: false,
-      strategies: [],
-      type: Course_Type_Enum.Closed,
-    }
-
-    expect(getRequiredLeadsBild(criteria)).toEqual(toRange(1))
-    expect(getRequiredAssistantsBild(criteria)).toEqual(toRange(0))
-
-    expect(
-      getRequiredLeadsBild({ ...criteria, numberParticipants: 25 })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredAssistantsBild({ ...criteria, numberParticipants: 25 })
-    ).toEqual(toRange(2))
-  })
-
-  it(`requires 1 lead regardless of participants and 1 assist per next 12 participants after 12 participants have been registered given a course is ${Course_Level_Enum.BildIntermediateTrainer} and is not reaccreditation`, () => {
-    const criteria: BildRatioCriteria = {
-      isConversion: false,
-      numberParticipants: 25,
-      level: Course_Level_Enum.BildIntermediateTrainer,
-      isReaccreditation: false,
-      strategies: [],
-      type: Course_Type_Enum.Closed,
-    }
-
-    expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 12,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 12,
-      })
-    ).toEqual(toRange(0))
-
-    expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 24,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 24,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 36,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 36,
-      })
-    ).toEqual(toRange(2))
-  })
-
-  it(`requires 1 lead regardless of participant and 1 assist per next 12 participants after 12 participants have been registered given a course is ${Course_Level_Enum.BildIntermediateTrainer} and is reaccreditation`, () => {
-    const criteria: BildRatioCriteria = {
-      isConversion: false,
-      numberParticipants: 25,
-      level: Course_Level_Enum.BildIntermediateTrainer,
       isReaccreditation: true,
-      strategies: [],
-      type: Course_Type_Enum.Closed,
+      level: Course_Level_Enum.BildRegular,
+      numberParticipants: 1,
+      type: Course_Type_Enum.Indirect,
     }
 
+    // Below threshold
     expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 12,
-      })
-    ).toEqual(toRange(1))
+      getRequiredAssistantsBild(
+        extend({}, criteria, {
+          numberParticipants: 23,
+        })
+      )
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
 
+    // Equal to threshold
     expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 12,
-      })
-    ).toEqual(toRange(0))
+      getRequiredAssistantsBild(
+        extend({}, criteria, {
+          maxParticipants: 24,
+        })
+      )
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
 
+    // Above threshold
     expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 24,
-      })
-    ).toEqual(toRange(1))
+      getRequiredAssistantsBild(
+        extend({}, criteria, { numberParticipants: 25 })
+      )
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
 
+    // Next increment threshold
     expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 24,
-      })
-    ).toEqual(toRange(1))
+      getRequiredAssistantsBild(
+        extend({}, criteria, { numberParticipants: 36 })
+      )
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
 
+    // Above next increment threshold
     expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 36,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 36,
-      })
-    ).toEqual(toRange(2))
+      getRequiredAssistantsBild(
+        extend({}, criteria, { numberParticipants: 37 })
+      )
+    ).toEqual({
+      min: 3,
+      max: 3,
+    })
   })
 
-  it(`requires 1 lead regardless of participants and 1 assist per next 12 participants after 12 participants have been registered given a course is ${Course_Level_Enum.BildAdvancedTrainer} regardless of reaccreditation`, () => {
+  it('assist ratio value for Indirect BILD Advanced Trainer course', () => {
     const criteria: BildRatioCriteria = {
-      isConversion: false,
-      numberParticipants: 25,
+      isReaccreditation: true,
       level: Course_Level_Enum.BildAdvancedTrainer,
-      isReaccreditation: true,
-      strategies: [],
-      type: Course_Type_Enum.Closed,
-    }
-
-    expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        isReaccreditation: true,
-        numberParticipants: 12,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        isReaccreditation: false,
-        numberParticipants: 12,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        isReaccreditation: false,
-        numberParticipants: 12,
-      })
-    ).toEqual(toRange(0))
-
-    expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        isReaccreditation: true,
-        numberParticipants: 12,
-      })
-    ).toEqual(toRange(0))
-
-    expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 24,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 24,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 36,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 36,
-      })
-    ).toEqual(toRange(2))
-  })
-
-  it(`requires 1 lead regardless of participants and 1 assist per next 12 participants after 12 participants have been registered given a course is ${Course_Level_Enum.BildRegular} and ${BildStrategies.Primary} is the only selected strategy`, () => {
-    const criteria: BildRatioCriteria = {
-      isConversion: false,
-      numberParticipants: 25,
-      level: Course_Level_Enum.BildRegular,
-      isReaccreditation: false,
-      strategies: [BildStrategies.Primary],
-      type: Course_Type_Enum.Closed,
-    }
-
-    expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 12,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 12,
-      })
-    ).toEqual(toRange(0))
-
-    expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 24,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 24,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 36,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 36,
-      })
-    ).toEqual(toRange(2))
-  })
-
-  it(`requires 1 lead regardless of participant and 1 assist per next 12 participants after 12 participants have been registered given a course is ${Course_Level_Enum.BildRegular} and all strategies except ${BildStrategies.RestrictiveTertiaryAdvanced} is selected`, () => {
-    const criteria: BildRatioCriteria = {
-      isConversion: false,
-      numberParticipants: 25,
-      level: Course_Level_Enum.BildRegular,
-      isReaccreditation: false,
+      numberParticipants: 1,
       type: Course_Type_Enum.Indirect,
-      strategies: [
-        BildStrategies.Primary,
-        BildStrategies.Secondary,
-        BildStrategies.NonRestrictiveTertiary,
-        BildStrategies.RestrictiveTertiaryIntermediate,
-      ],
     }
 
+    // Below threshold
     expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 12,
-      })
-    ).toEqual(toRange(1))
+      getRequiredAssistantsBild(
+        extend({}, criteria, {
+          numberParticipants: 11,
+        })
+      )
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
 
+    // Equal to threshold
     expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 12,
-      })
-    ).toEqual(toRange(0))
+      getRequiredAssistantsBild(
+        extend({}, criteria, {
+          maxParticipants: 12,
+        })
+      )
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
 
+    // Above threshold
     expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 24,
-      })
-    ).toEqual(toRange(1))
+      getRequiredAssistantsBild(
+        extend({}, criteria, { numberParticipants: 13 })
+      )
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
 
+    // Next increment threshold
     expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 24,
-      })
-    ).toEqual(toRange(1))
+      getRequiredAssistantsBild(
+        extend({}, criteria, { numberParticipants: 24 })
+      )
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
 
+    // Above next increment threshold
     expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 36,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 36,
-      })
-    ).toEqual(toRange(2))
+      getRequiredAssistantsBild(
+        extend({}, criteria, { numberParticipants: 25 })
+      )
+    ).toEqual({
+      min: 3,
+      max: 3,
+    })
   })
 
-  it(`requires 1 lead regardless of participants and 1 assist per next 8 participants after 8 participants have been registered given a course is ${Course_Level_Enum.BildRegular} and Restrictive Tertiary advanced strategy is selected`, () => {
+  test.each([
+    Course_Level_Enum.BildRegular,
+    Course_Level_Enum.BildIntermediateTrainer,
+  ])('assist ratio value for %s course', courseLevel => {
     const criteria: BildRatioCriteria = {
-      isConversion: false,
-      numberParticipants: 25,
-      level: Course_Level_Enum.BildRegular,
       isReaccreditation: false,
-      type: Course_Type_Enum.Indirect,
-      strategies: [BildStrategies.RestrictiveTertiaryAdvanced],
+      level: courseLevel,
+      numberParticipants: 1,
+      type: Course_Type_Enum.Open,
     }
 
+    // Below threshold
     expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 8,
-      })
-    ).toEqual(toRange(1))
+      getRequiredAssistantsBild(
+        extend({}, criteria, {
+          numberParticipants: 11,
+        })
+      )
+    ).toEqual({
+      min: 0,
+      max: 0,
+    })
 
+    // Equal to threshold
     expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 8,
-      })
-    ).toEqual(toRange(0))
+      getRequiredAssistantsBild(
+        extend({}, criteria, {
+          maxParticipants: 12,
+        })
+      )
+    ).toEqual({
+      min: 0,
+      max: 0,
+    })
 
+    // Above threshold
     expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 16,
-      })
-    ).toEqual(toRange(1))
+      getRequiredAssistantsBild(
+        extend({}, criteria, { numberParticipants: 13 })
+      )
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
 
+    // Next increment threshold
     expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 16,
-      })
-    ).toEqual(toRange(1))
+      getRequiredAssistantsBild(
+        extend({}, criteria, { numberParticipants: 24 })
+      )
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
 
+    // Above next increment threshold
     expect(
-      getRequiredLeadsBild({
-        ...criteria,
-        numberParticipants: 24,
-      })
-    ).toEqual(toRange(1))
-
-    expect(
-      getRequiredAssistantsBild({
-        ...criteria,
-        numberParticipants: 24,
-      })
-    ).toEqual(toRange(2))
+      getRequiredAssistantsBild(
+        extend({}, criteria, { numberParticipants: 25 })
+      )
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
   })
 })

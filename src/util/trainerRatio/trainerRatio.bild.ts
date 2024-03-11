@@ -1,63 +1,53 @@
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
-import { BildStrategies } from '@app/types'
+import { ratio, TrainerRatio } from '@app/util/trainerRatio/trainerRatio.icm'
 
 export type BildRatioCriteria = {
-  isConversion: boolean
   isReaccreditation: boolean
-  strategies: BildStrategies[]
   level: Course_Level_Enum
   numberParticipants: number
   type: Course_Type_Enum
 }
 
-export function getRequiredLeadsBild(criteria: BildRatioCriteria): {
-  min: number
-  max: number
-} {
-  return criteria.type === Course_Type_Enum.Open
-    ? { min: 0, max: 1 }
-    : toRange(1)
+export function toRange(count: number) {
+  return { min: count, max: count }
+}
+
+const getTrainerRatioBILD = (criteria: BildRatioCriteria): TrainerRatio => {
+  const { level, type, isReaccreditation } = criteria
+
+  if (
+    type === Course_Type_Enum.Indirect &&
+    level === Course_Level_Enum.BildRegular &&
+    isReaccreditation
+  ) {
+    return ratio(1, 24, 12)
+  }
+  if (
+    [
+      Course_Level_Enum.BildRegular,
+      Course_Level_Enum.BildIntermediateTrainer,
+    ].includes(level)
+  )
+    return ratio(0, 12, 12)
+
+  if (level === Course_Level_Enum.BildAdvancedTrainer) return ratio(1, 12, 12)
+
+  return ratio(1, 12, 12)
 }
 
 export function getRequiredAssistantsBild(criteria: BildRatioCriteria): {
   min: number
   max: number
 } {
-  const withoutAdvanced =
-    criteria.level === Course_Level_Enum.BildRegular &&
-    criteria.strategies.length >= 1 &&
-    !criteria.strategies.includes(BildStrategies.RestrictiveTertiaryAdvanced)
+  const ratio = getTrainerRatioBILD(criteria)
 
-  const advancedSelected =
-    criteria.level === Course_Level_Enum.BildRegular &&
-    criteria.strategies.includes(BildStrategies.RestrictiveTertiaryAdvanced)
+  const { numberParticipants } = criteria
+  let assistants = ratio.initialAssistants
 
-  if (criteria.isConversion) {
-    return toRange(Math.abs(Math.ceil((criteria.numberParticipants - 12) / 12)))
+  if (numberParticipants > ratio.threshold) {
+    const overThreshold = numberParticipants - ratio.threshold
+    assistants += Math.ceil(overThreshold / ratio.increment)
   }
 
-  if (
-    (withoutAdvanced ||
-      [
-        Course_Level_Enum.BildIntermediateTrainer,
-        Course_Level_Enum.BildAdvancedTrainer,
-      ].includes(criteria.level)) &&
-    criteria.numberParticipants > 12
-  ) {
-    return toRange(Math.abs(Math.ceil((criteria.numberParticipants - 12) / 12)))
-  }
-
-  if (
-    advancedSelected &&
-    criteria.level === Course_Level_Enum.BildRegular &&
-    criteria.numberParticipants > 8
-  ) {
-    return toRange(Math.abs(Math.ceil((criteria.numberParticipants - 8) / 8)))
-  }
-
-  return toRange(0)
-}
-
-export function toRange(count: number) {
-  return { min: count, max: count }
+  return toRange(assistants)
 }

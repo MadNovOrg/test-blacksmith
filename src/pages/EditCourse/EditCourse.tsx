@@ -706,13 +706,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       {
         ...courseData,
         accreditedBy: courseData.accreditedBy ?? Accreditors_Enum.Icm,
-        bildStrategies: courseData.bildStrategies ?? {},
         level: courseData.courseLevel as unknown as Course_Level_Enum,
         type: courseData.type,
         max_participants: courseData.maxParticipants as unknown as number,
-        hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
         usesAOL: courseData.usesAOL,
-        isTrainer: acl.isTrainer(),
       },
       [
         ...(trainersData?.assist ?? []).map(assistant => ({
@@ -733,9 +730,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       ]
     )
   }, [
-    acl,
     courseData,
-    seniorOrPrincipalLead,
     trainersData?.assist,
     trainersData?.lead,
     trainersData?.moderator,

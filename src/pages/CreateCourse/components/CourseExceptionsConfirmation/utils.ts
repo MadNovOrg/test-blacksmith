@@ -78,7 +78,7 @@ export const isTrainersRatioNotMet = (
   trainers: RatioTrainerData
 ) => {
   const { min } = getRequiredAssistants(courseData)
-  const { min: minLead } = getRequiredLeads(courseData)
+  const { min: minLead } = getRequiredLeads(courseData.type)
   const { min: minModerator } = getRequiredModerators(courseData)
 
   const missingAssistants =
@@ -136,17 +136,11 @@ export function checkCourseDetailsForExceptions(
       {
         level: courseData.courseLevel as Course_Level_Enum,
         reaccreditation: courseData.reaccreditation,
-        conversion: courseData.conversion,
         accreditedBy: courseData.accreditedBy,
         max_participants: courseData.maxParticipants,
         type: courseData.type,
         deliveryType: courseData.deliveryType,
-        bildStrategies: courseData.bildStrategies,
-        hasSeniorOrPrincipalLeader: courseData.hasSeniorOrPrincipalLeader,
         usesAOL: courseData.usesAOL,
-        isTrainer: courseData.isTrainer,
-        isETA: courseData.isETA,
-        isEmployerAOL: courseData.isEmployerAOL,
       },
       trainerData.map(t => ({
         type: t.type,
