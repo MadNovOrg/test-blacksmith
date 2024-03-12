@@ -63,17 +63,16 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
   const [{ error }, handleAddVenue] = useMutation<ResponseType, ParamsType>(
     ADD_VENUE_MUTATION
   )
-  const isAdminOrOperations = acl.isTTAdmin() || acl.isTTOps()
 
   const schema = useMemo(() => {
     return yup.object({
       name: yup.string().required(requiredMsg(t, 'venue-name')),
-      addressLineOne: isAdminOrOperations
+      addressLineOne: acl.isTTAdmin()
         ? yup.string()
         : yup.string().required(requiredMsg(t, 'addr.line1-placeholder')),
       addressLineTwo: yup.string(),
       city: yup.string().required(requiredMsg(t, 'addr.city')),
-      postCode: isAdminOrOperations
+      postCode: acl.isTTAdmin()
         ? yup.string()
         : yup.string().when('country', {
             is: (country: string) => {
@@ -92,16 +91,11 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
           }),
       country: yup
         .string()
-        .oneOf(countriesCodesWithUKs)
-        .required(requiredMsg(t, 'addr.country')),
+        .test('is-valid-value', requiredMsg(t, 'addr.country'), value => {
+          return countriesCodesWithUKs.includes(value as WorldCountriesCodes)
+        }),
     })
-  }, [
-    t,
-    isAdminOrOperations,
-    countriesCodesWithUKs,
-    courseResidingCountry,
-    isUKCountry,
-  ])
+  }, [t, acl, isUKCountry, courseResidingCountry, countriesCodesWithUKs])
   const {
     control,
     handleSubmit,
@@ -157,7 +151,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
     <Box p={2}>
       <form
         onSubmit={handleSubmit(submitHandler)}
-        noValidate={!isAdminOrOperations}
+        noValidate={!acl.isTTAdmin()}
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -201,19 +195,20 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
               helperText={errors.country?.message}
               courseResidingCountry={courseResidingCountry}
               isBILDcourse={isBILDcourse}
+              required={true}
             />
           </Grid>
           <Grid item xs={12}>
             <Controller
               name="addressLineOne"
               control={control}
-              rules={{ required: !isAdminOrOperations }}
+              rules={{ required: !acl.isTTAdmin() }}
               render={({ field, fieldState }) => (
                 <TextField
                   disabled={preFilledFields.has('addressLineOne')}
                   fullWidth
                   variant="filled"
-                  required={!isAdminOrOperations}
+                  required={!acl.isTTAdmin()}
                   error={fieldState.invalid}
                   label={t(
                     'components.venue-selector.modal.fields.addressLineOne'
@@ -267,14 +262,19 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
             <Controller
               name="postCode"
               control={control}
-              rules={{ required: !isAdminOrOperations }}
+              rules={{ required: !acl.isTTAdmin() }}
               render={({ field, fieldState }) => (
                 <TextField
                   disabled={preFilledFields.has('postCode')}
                   fullWidth
                   variant="filled"
-                  required={!isAdminOrOperations}
+                  required={!acl.isTTAdmin()}
                   error={fieldState.invalid}
+                  type={
+                    isUKCountry(values.country ?? courseResidingCountry)
+                      ? 'number'
+                      : 'text'
+                  }
                   label={
                     isUKCountry(values.country ?? courseResidingCountry)
                       ? t('components.venue-selector.modal.fields.postCode')
