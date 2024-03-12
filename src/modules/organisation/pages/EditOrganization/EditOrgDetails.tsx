@@ -1,4 +1,5 @@
 import { Box } from '@mui/material'
+import { isValid } from 'date-fns'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
 
@@ -48,9 +49,11 @@ export const EditOrgDetails: React.FC<
         settingName: orgDetail.attributes.settingName,
         localAuthority: orgDetail.attributes.localAuthority,
         ofstedRating: orgDetail.attributes.ofstedRating,
-        ofstedLastInspection: orgDetail.attributes.ofstedLastInspection
-          ? new Date(orgDetail?.attributes.ofstedLastInspection)
-          : null,
+        ofstedLastInspection:
+          orgDetail.attributes.ofstedLastInspection &&
+          isValid(new Date(orgDetail.attributes.ofstedLastInspection))
+            ? new Date(orgDetail?.attributes.ofstedLastInspection)
+            : null,
       }))[0]
     : null
 
