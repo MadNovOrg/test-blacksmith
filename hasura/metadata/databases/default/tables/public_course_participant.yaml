@@ -674,6 +674,18 @@ event_triggers:
       num_retries: 5
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/certificate/schedule-about-training-survey-email/manage'
+  - name: manage_post_training_survey_email_event
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - grade
+          - attended
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/schedule-post-training-survey-email/manage'    
   - name: participant_graded_curriculum
     definition:
       enable_manual: true
@@ -698,15 +710,15 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/status'
-  - name: post_training_survey
+  - name: schedule_post_training_survey_email
     definition:
       enable_manual: false
       update:
         columns:
-          - attended
           - grade
+          - attended
     retry_conf:
       interval_sec: 10
-      num_retries: 0
+      num_retries: 5
       timeout_sec: 60
-    webhook: '{{EVENTS_HOST}}/email/post-training-survey'
+    webhook: '{{EVENTS_HOST}}/participant/schedule-post-training-survey-email'
