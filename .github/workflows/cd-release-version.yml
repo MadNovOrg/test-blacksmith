@@ -40,7 +40,7 @@ jobs:
           git tag RC-${{ env.RELEASE_VERSION }}
           git push origin --tags
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: 'RC-${{ env.RELEASE_VERSION }}'
 
