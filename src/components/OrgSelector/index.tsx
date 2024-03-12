@@ -127,30 +127,28 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       pause: !debouncedQuery,
     })
 
-    const [{ data: hubOrgs, fetching: orgsFetching }] = useQuery<
-      GetOrganizationsQuery,
-      GetOrganizationsQueryVariables
-    >({
-      query: GET_ORGANIZATIONS,
-      variables: {
-        where: {
-          _or: [
-            {
-              name: { _ilike: `%${debouncedQuery}%` },
-            },
-            {
-              _and: debouncedQuery
-                .trim()
-                .split(/\s+/)
-                .map(word => ({ addressEachText: { _ilike: `%${word}%` } })),
-            },
-          ],
+    const [{ data: hubOrgs, fetching: orgsFetching }, refetchOrganisations] =
+      useQuery<GetOrganizationsQuery, GetOrganizationsQueryVariables>({
+        query: GET_ORGANIZATIONS,
+        variables: {
+          where: {
+            _or: [
+              {
+                name: { _ilike: `%${debouncedQuery}%` },
+              },
+              {
+                _and: debouncedQuery
+                  .trim()
+                  .split(/\s+/)
+                  .map(word => ({ addressEachText: { _ilike: `%${word}%` } })),
+              },
+            ],
+          },
+          isNotShallow: !isShallowRetrieval,
+          isShallow: isShallowRetrieval,
         },
-        isNotShallow: !isShallowRetrieval,
-        isShallow: isShallowRetrieval,
-      },
-      pause: !debouncedQuery,
-    })
+        pause: !debouncedQuery,
+      })
 
     const handleClose = () => setAdding(null)
     const handleSuccess = async (org: InsertOrgLeadMutation['org']) => {
@@ -158,6 +156,8 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       setAdding(null)
       // TODO: Not auto selecting the newly added org, needs fixing
       onChange(org)
+
+      refetchOrganisations({ requestPolicy: 'network-only' })
     }
     const handleChange = (
       event: React.SyntheticEvent,
