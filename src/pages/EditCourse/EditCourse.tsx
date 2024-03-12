@@ -858,6 +858,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     }
                     showAssistHint={false}
                     methodsRef={trainerMethods}
+                    useAOL={courseData.usesAOL}
                   />
                 ) : null}
 

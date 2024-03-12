@@ -309,6 +309,7 @@ export const AssignTrainers = () => {
               courseData.bildStrategies
             ) as unknown as BildStrategy[]
           }
+          useAOL={courseData.usesAOL}
         />
 
         {showTrainerRatioWarning ? (
