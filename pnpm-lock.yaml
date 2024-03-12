@@ -114,8 +114,8 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       amazon-cognito-identity-js:
-        specifier: ^6.3.7
-        version: 6.3.7
+        specifier: ^6.3.12
+        version: 6.3.12
       autosuggest-highlight:
         specifier: ^3.3.4
         version: 3.3.4
@@ -12309,8 +12309,8 @@ packages:
       - encoding
     dev: false
 
-  /amazon-cognito-identity-js@6.3.7:
-    resolution: {integrity: sha512-tSjnM7KyAeOZ7UMah+oOZ6cW4Gf64FFcc7BE2l7MTcp7ekAPrXaCbpcW2xEpH1EiDS4cPcAouHzmCuc2tr72vQ==}
+  /amazon-cognito-identity-js@6.3.12:
+    resolution: {integrity: sha512-s7NKDZgx336cp+oDeUtB2ZzT8jWJp/v2LWuYl+LQtMEODe22RF1IJ4nRiDATp+rp1pTffCZcm44Quw4jx2bqNg==}
     dependencies:
       '@aws-crypto/sha256-js': 1.2.2
       buffer: 4.9.2

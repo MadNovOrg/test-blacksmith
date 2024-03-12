@@ -90,7 +90,7 @@
     "@urql/devtools": "^2.0.3",
     "@urql/exchange-auth": "^1.0.0",
     "@urql/storybook-addon": "^2.0.1",
-    "amazon-cognito-identity-js": "^6.3.7",
+    "amazon-cognito-identity-js": "^6.3.12",
     "autosuggest-highlight": "^3.3.4",
     "aws-amplify": "^5.3.6",
     "big.js": "^6.2.1",
