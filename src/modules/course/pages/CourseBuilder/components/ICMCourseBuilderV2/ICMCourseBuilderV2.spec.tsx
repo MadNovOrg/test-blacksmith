@@ -277,7 +277,6 @@ it.each([
   [Course_Level_Enum.Level_1, false],
   [Course_Level_Enum.Level_2, false],
   [Course_Level_Enum.Advanced, false],
-  [Course_Level_Enum.AdvancedTrainer, true],
 ])(
   'displays the time commitment modal if course is %s level and reaccreditation is %b',
   async (level, reaccreditation) => {
@@ -332,6 +331,64 @@ it.each([
     await user.click(screen.getByRole('button', { name: /submit/i }))
 
     expect(screen.getByRole('dialog')).toBeInTheDocument()
+  }
+)
+
+// https://behaviourhub.atlassian.net/browse/TTHP-3619 - Advanced Trainer Re-accreditation
+it.each([[Course_Level_Enum.AdvancedTrainer, true]])(
+  'does not display the time commitment modal if course is %s level and reaccreditation is %b',
+  async (level, reaccreditation) => {
+    const moduleSettingOne = buildModuleSetting({ mandatory: false })
+    const moduleSettingTwo = buildModuleSetting({
+      mandatory: false,
+      color: Color_Enum.Purple,
+    })
+
+    const course = buildCourse({
+      type: Course_Type_Enum.Closed,
+      level,
+      reaccreditation,
+      curriculum: null,
+    })
+
+    const client = {
+      executeMutation: () => never,
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === COURSE_TO_BUILD_QUERY) {
+          return fromValue<{ data: CourseToBuildQuery }>({
+            data: {
+              course,
+            },
+          })
+        }
+
+        if (query === MODULE_SETTINGS_QUERY) {
+          return fromValue<{ data: ModuleSettingsQuery }>({
+            data: {
+              moduleSettings: [moduleSettingOne, moduleSettingTwo],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/:id/modules" element={<ICMCourseBuilderV2 />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/courses/${course.id}/modules`] }
+    )
+
+    await user.click(
+      screen.getByLabelText(moduleSettingTwo.module.name, { exact: false })
+    )
+
+    await user.click(screen.getByRole('button', { name: /submit/i }))
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   }
 )
 

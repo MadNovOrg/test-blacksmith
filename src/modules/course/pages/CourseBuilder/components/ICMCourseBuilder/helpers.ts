@@ -11,6 +11,8 @@ export const getMinimumTimeCommitment = ({
   level: Course_Level_Enum
   reaccreditation?: boolean | null
 }) => {
+  // locked modules
+  if (level === Course_Level_Enum.AdvancedTrainer && reaccreditation) return 0
   if (
     reaccreditation ||
     level === Course_Level_Enum.Level_1 ||
