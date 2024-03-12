@@ -124,6 +124,13 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
 
   const { data: orgTypes } = useOrgType(values.sector)
 
+  const onOrgInputChange = useCallback(
+    (value: string) => {
+      setValue('name', value ?? '', { shouldValidate: true })
+    },
+    [setValue]
+  )
+
   const onOrgSelected = useCallback(
     async (org: CallbackOption) => {
       const orgDataMap = new Map()
@@ -295,6 +302,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                         allowAdding
                         autocompleteMode={true}
                         onChange={onOrgSelected}
+                        onInputChange={onOrgInputChange}
                         textFieldProps={{
                           variant: 'filled',
                         }}

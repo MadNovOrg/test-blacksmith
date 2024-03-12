@@ -52,6 +52,7 @@ export type CallbackOption =
   | null
 export type OrgSelectorProps = {
   onChange: (org: CallbackOption) => void
+  onInputChange?: (value: string) => void
   sx?: SxProps
   textFieldProps?: TextFieldProps
   placeholder?: string
@@ -75,6 +76,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     value,
     showTrainerOrgOnly = false,
     onChange,
+    onInputChange,
     sx,
     textFieldProps,
     placeholder,
@@ -252,6 +254,9 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           openOnFocus
           clearOnBlur={false}
           onChange={handleChange}
+          onInputChange={
+            onInputChange ? (_, value) => onInputChange(value) : undefined
+          }
           options={options}
           filterOptions={
             !showTrainerOrgOnly
