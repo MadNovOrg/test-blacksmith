@@ -19,6 +19,7 @@ import { FilterByCourseResidingCountry } from '@app/components/filters/FilterByC
 import { FilterByCourseState } from '@app/components/filters/FilterByCourseState'
 import { FilterByCourseStatus } from '@app/components/filters/FilterByCourseStatus'
 import { FilterByCourseStatusWarnings } from '@app/components/filters/FilterByCourseStatusWarnings'
+import { FilterByTrainerCourseType } from '@app/components/filters/FilterByCourseTrainerType'
 import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
 import { FilterByDates } from '@app/components/filters/FilterByDates'
 import { FilterSearch } from '@app/components/FilterSearch'
@@ -29,6 +30,7 @@ import {
   Course_Status_Enum,
   Course_Type_Enum,
   Course_Delivery_Type_Enum,
+  Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 import { CoursesFilters } from '@app/hooks/useCourses'
 import {
@@ -41,6 +43,7 @@ import {
   AdminOnlyCourseStatus,
   AttendeeOnlyCourseStatus,
   CourseState,
+  TrainerRoleTypeName,
 } from '@app/types'
 
 const allAccreditors = Object.values(Accreditors_Enum)
@@ -60,7 +63,7 @@ export function Filters({ onChange }: Props) {
   const location = useLocation()
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
-  const { acl, isOrgAdmin, activeRole } = useAuth()
+  const { acl, isOrgAdmin, activeRole, trainerRoles } = useAuth()
 
   const orgAdminStatusOptions = useMemo<
     FilterOption<CourseStatusFilters>[]
@@ -109,6 +112,9 @@ export function Filters({ onChange }: Props) {
   >([])
   const [filterDeliveryType, setFilterDeliveryType] = useState<
     Course_Delivery_Type_Enum[]
+  >([])
+  const [filterByCourseTrainerType, setFilterByCourseTrainerType] = useState<
+    Course_Trainer_Type_Enum[]
   >([])
 
   const [filterBlendedLearning, setFilterBlendedLearning] = useQueryParam(
@@ -208,9 +214,10 @@ export function Filters({ onChange }: Props) {
       createEndDate.setHours(23, 59, 59)
     }
 
-    const filters = {
+    const filters: CoursesFilters = {
       states: filterState,
       courseResidingCountries: filterCourseResidingCountries,
+      courseTrainerTypes: filterByCourseTrainerType,
       statuses: [...filterStatus, ...filterWarningStatuses],
       levels: filterLevel,
       types: filterType,
@@ -238,6 +245,7 @@ export function Filters({ onChange }: Props) {
     accreditedBy,
     filterDeliveryType,
     filterCourseResidingCountries,
+    filterByCourseTrainerType,
   ])
 
   return (
@@ -316,6 +324,15 @@ export function Filters({ onChange }: Props) {
             data-testid="filter-accredited-by"
           />
           <FilterByCourseDeliveryType onChange={setFilterDeliveryType} />
+          {acl.isTrainer() || acl.isInternalUser() ? (
+            <FilterByTrainerCourseType
+              onChange={setFilterByCourseTrainerType}
+              includeModerator={
+                acl.isInternalUser() ||
+                trainerRoles?.includes(TrainerRoleTypeName.MODERATOR)
+              }
+            />
+          ) : null}
         </Stack>
       </Box>
     </>

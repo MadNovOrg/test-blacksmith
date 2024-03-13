@@ -27,6 +27,7 @@ type FilterAccordionProps<T = string> = {
   'data-testid'?: string
   sx?: SxProps
   disabled?: boolean
+  sort?: boolean
 }
 
 export const FilterAccordion = <T,>({
@@ -36,6 +37,7 @@ export const FilterAccordion = <T,>({
   defaultExpanded,
   'data-testid': testId = 'FilterAccordion',
   sx,
+  sort = true,
 }: FilterAccordionProps<T>) => {
   const handleChange = (item: FilterOption<T>) =>
     onChange(
@@ -65,25 +67,26 @@ export const FilterAccordion = <T,>({
         {title}
       </AccordionSummary>
       <AccordionDetails>
-        {options
-          .sort((a, b) => a.title.localeCompare(b.title))
-          .map(o => (
-            <ListItemButton
-              key={String(o.id)}
-              className={o.selected ? 'selected' : ''}
-              onClick={() => handleChange(o)}
-              data-testid={`${testId}-option-${o.id}`}
-              data-id={o.id}
-            >
-              <ListItemText
-                primary={o.title}
-                sx={o.highlight ? { color: theme.palette.error.dark } : {}}
-              />
-              <ListItemIcon>
-                <Check />
-              </ListItemIcon>
-            </ListItemButton>
-          ))}
+        {(sort
+          ? options.sort((a, b) => a.title.localeCompare(b.title))
+          : options
+        ).map(o => (
+          <ListItemButton
+            key={String(o.id)}
+            className={o.selected ? 'selected' : ''}
+            onClick={() => handleChange(o)}
+            data-testid={`${testId}-option-${o.id}`}
+            data-id={o.id}
+          >
+            <ListItemText
+              primary={o.title}
+              sx={o.highlight ? { color: theme.palette.error.dark } : {}}
+            />
+            <ListItemIcon>
+              <Check />
+            </ListItemIcon>
+          </ListItemButton>
+        ))}
       </AccordionDetails>
     </StyledAccordion>
   )

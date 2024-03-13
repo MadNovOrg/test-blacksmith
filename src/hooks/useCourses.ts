@@ -11,6 +11,7 @@ import {
   Course_Level_Enum,
   Course_Order_By,
   Course_Status_Enum,
+  Course_Trainer_Type_Enum,
   Course_Type_Enum,
   Order_Bool_Exp,
   Order_By,
@@ -24,8 +25,7 @@ import {
   CourseState,
   RoleName,
 } from '@app/types'
-import { ALL_ORGS } from '@app/util'
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
+import { ALL_ORGS, getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { Sorting } from './useTableSort'
 
@@ -40,10 +40,12 @@ export type CoursesFilters = {
   keyword?: string
   levels?: Course_Level_Enum[]
   courseResidingCountries?: string[]
+  courseTrainerTypes?: Course_Trainer_Type_Enum[]
   types?: Course_Type_Enum[]
   statuses?: string[]
   states?: CourseState[]
   excludedCourses?: number[]
+  excludedStatuses?: Course_Status_Enum[]
   go1Integration?: boolean
   creation?: {
     start?: Date
@@ -301,6 +303,34 @@ export const filtersToWhereClause = (
     }
   }
 
+  if (
+    filters?.courseTrainerTypes?.length &&
+    (!isInternalUser || (isInternalUser && query?.length))
+  ) {
+    where.trainers = {
+      _and: [
+        ...(isInternalUser
+          ? keywords && keywords?.length > 1
+            ? [
+                {
+                  _and: keywords.map(w => ({
+                    profile: { fullName: { _ilike: `%${w}%` } },
+                  })),
+                },
+              ]
+            : [
+                {
+                  profile: { fullName: { _ilike: `%${query}%` } },
+                },
+              ]
+          : []),
+        {
+          type: { _in: filters.courseTrainerTypes },
+        },
+      ],
+    }
+  }
+
   return where
 }
 
@@ -442,9 +472,17 @@ export const useCourses = (
     }
 
     if (role === RoleName.TRAINER) {
-      obj.trainers = {
-        status: { _eq: Course_Invite_Status_Enum.Accepted },
-        profile_id: { _eq: profile?.id },
+      if (obj.trainers?._and) {
+        obj.trainers._and = [
+          ...obj.trainers._and,
+          { status: { _eq: Course_Invite_Status_Enum.Accepted } },
+          { profile_id: { _eq: profile?.id } },
+        ]
+      } else {
+        obj.trainers = {
+          status: { _eq: Course_Invite_Status_Enum.Accepted },
+          profile_id: { _eq: profile?.id },
+        }
       }
     }
 

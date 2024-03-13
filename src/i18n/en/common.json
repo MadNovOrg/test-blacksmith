@@ -17,6 +17,11 @@
     "bild_intermediate_trainer": "BILD Intermediate Trainer",
     "bild_advanced_trainer": "BILD Advanced Trainer"
   },
+  "course-trainer-types": {
+    "leader": "Lead",
+    "assistant": "Assist",
+    "moderator": "Moderator"
+  },
   "errors": {
     "loading-participants": "There was an error loading course participants",
     "loading-course": "There was an error loading a course",
