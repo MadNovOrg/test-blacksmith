@@ -9,7 +9,7 @@ import {
   Typography,
   Tooltip,
 } from '@mui/material'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
@@ -124,6 +124,10 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
   })
   const values = watch()
 
+  useEffect(() => {
+    setValue('postCode', values.postCode, { shouldValidate: true })
+  }, [setValue, values.country, values.postCode])
+
   const submitHandler = useCallback(
     async (formData: VenueFormProps['data']) => {
       const validationResult = await trigger()
@@ -189,7 +193,9 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
           <Grid item xs={12}>
             <CountriesSelector
               disabled={preFilledFields.has('country')}
-              onChange={(_, code) => setValue('country', code ?? '')}
+              onChange={(_, code) =>
+                setValue('country', code ?? '', { shouldValidate: true })
+              }
               value={values.country}
               error={Boolean(errors.country)}
               helperText={errors.country?.message}
