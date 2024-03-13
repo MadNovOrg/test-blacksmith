@@ -676,7 +676,8 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                   {mainCourse?.type === Course_Type_Enum.Open &&
                   mainCourse.deliveryType ===
                     Course_Delivery_Type_Enum.Virtual &&
-                  mainCourse.level === Course_Level_Enum.Level_1 ? (
+                  mainCourse.level === Course_Level_Enum.Level_1 &&
+                  registrants.length ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
                         <Typography fontWeight={600}>
