@@ -25,7 +25,7 @@ export default function useWorldCountries() {
   }, [])
 
   const getLabel = useCallback(
-    (code: CountryISOCode | UKsCountriesCode | string | undefined) => {
+    (code: CountryISOCode | UKsCountriesCode | string | null | undefined) => {
       if (!countries || !code) return undefined
 
       if (Object.keys(UKsCountriesCodes).includes(code)) {

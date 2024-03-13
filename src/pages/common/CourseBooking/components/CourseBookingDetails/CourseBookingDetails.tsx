@@ -12,17 +12,21 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Typography,
   Tooltip,
+  Typography,
 } from '@mui/material'
 import Big from 'big.js'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import CountriesSelector from '@app/components/CountriesSelector'
+import useWorldCountries, {
+  UKsCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CountryDropdown } from '@app/components/CountryDropdown'
 import { SourceDropdown } from '@app/components/CourseForm/components/SourceDropdown'
 import { CourseDuration } from '@app/components/CourseTitleAndDuration/components/CourseDuration'
@@ -34,21 +38,22 @@ import { OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
 import { ProfileSelector } from '@app/components/ProfileSelector'
 import {
-  UserSelector,
   Profile as UserSelectorProfile,
+  UserSelector,
 } from '@app/components/UserSelector'
 import { useAuth } from '@app/context/auth'
 import {
-  Course_Source_Enum,
-  PaymentMethod,
-  Course_Level_Enum,
-  Course_Type_Enum,
+  Accreditors_Enum,
   Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+  Course_Source_Enum,
+  Course_Type_Enum,
   FindProfilesQuery,
+  PaymentMethod,
 } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
 import { InvoiceDetails, Profile } from '@app/types'
-import { formatCurrency, requiredMsg, isValidUKPostalCode } from '@app/util'
+import { formatCurrency, isValidUKPostalCode, requiredMsg } from '@app/util'
 
 import {
   BookingContact,
@@ -102,8 +107,13 @@ export const CourseBookingDetails: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { t } = useTranslation()
+
   const { acl, profile } = useAuth()
   const navigate = useNavigate()
+  const residingCountryEnabled = useFeatureFlagEnabled(
+    'course-residing-country'
+  )
+
   const {
     course,
     availableSeats,
@@ -114,6 +124,20 @@ export const CourseBookingDetails: React.FC<
     setBooking,
     internalBooking,
   } = useBooking()
+
+  const isIntlEnabled = useMemo(
+    () =>
+      [
+        Boolean(residingCountryEnabled),
+        Boolean(course),
+        course?.accreditedBy === Accreditors_Enum.Icm,
+        course?.type === Course_Type_Enum.Open,
+        course?.deliveryType === Course_Delivery_Type_Enum.Virtual,
+        course?.level === Course_Level_Enum.Level_1,
+      ].every(el => el),
+    [course, residingCountryEnabled]
+  )
+
   const { getLabel, isUKCountry } = useWorldCountries()
 
   const qtyOptions = useMemo(
@@ -364,6 +388,17 @@ export const CourseBookingDetails: React.FC<
 
   const showRegistrantSuggestions =
     values.orgId && (acl.isAdmin() || acl.isOrgAdmin(values.orgId))
+
+  const checkIsParticipantUKCountry = useCallback(
+    (index: number) => {
+      if (!values.participants[index].country) return true
+
+      return (Object.values(UKsCountriesCodes) as string[]).includes(
+        values.participants[index].country
+      )
+    },
+    [values.participants]
+  )
 
   return (
     <FormProvider {...methods}>
@@ -827,48 +862,85 @@ export const CourseBookingDetails: React.FC<
                       </Box>
                       <Box mb={3}>
                         <TextField
-                          id="postCode"
-                          label={t('post-code')}
-                          {...register(`participants.${index}.postCode`)}
-                          placeholder={t('common.addr.postCode')}
                           error={!!getParticipantError(index, 'postCode')}
+                          fullWidth
+                          helperText={
+                            getParticipantError(index, 'postCode')?.message ??
+                            ''
+                          }
+                          id="postCode"
+                          inputProps={{ 'data-testid': 'postCode' }}
+                          label={
+                            checkIsParticipantUKCountry(index)
+                              ? t(
+                                  'components.venue-selector.modal.fields.postCode'
+                                )
+                              : t(
+                                  'components.venue-selector.modal.fields.zipCode'
+                                )
+                          }
+                          placeholder={t('common.addr.postCode')}
+                          required
+                          sx={{ bgcolor: 'grey.100' }}
+                          type={
+                            checkIsParticipantUKCountry(index)
+                              ? 'text'
+                              : 'number'
+                          }
+                          variant="filled"
+                          {...register(`participants.${index}.postCode`)}
                           InputLabelProps={{
                             shrink: Boolean(
                               values.participants[index].postCode
                             ),
                           }}
-                          helperText={
-                            getParticipantError(index, 'postCode')?.message ??
-                            ''
+                          InputProps={
+                            checkIsParticipantUKCountry(index)
+                              ? {
+                                  endAdornment: (
+                                    <Tooltip
+                                      title={t('post-code-tooltip')}
+                                      data-testid="post-code-tooltip"
+                                    >
+                                      <InfoIcon color={'action'} />
+                                    </Tooltip>
+                                  ),
+                                }
+                              : undefined
                           }
-                          variant="filled"
-                          sx={{ bgcolor: 'grey.100' }}
-                          inputProps={{ 'data-testid': 'postCode' }}
-                          fullWidth
-                          required
-                          InputProps={{
-                            endAdornment: (
-                              <Tooltip
-                                title={t('post-code-tooltip')}
-                                data-testid="post-code-tooltip"
-                              >
-                                <InfoIcon color={'action'} />
-                              </Tooltip>
-                            ),
-                          }}
                         />
                       </Box>
                       <Box mb={3}>
-                        <CountryDropdown
-                          required
-                          register={register(`participants.${index}.country`)}
-                          error={!!getParticipantError(index, 'country')}
-                          value={values.participants[index].country}
-                          errormessage={
-                            getParticipantError(index, 'country')?.message ?? ''
-                          }
-                          label={t('country')}
-                        />
+                        {isIntlEnabled ? (
+                          <CountriesSelector
+                            error={Boolean(
+                              getParticipantError(index, 'country')?.message
+                            )}
+                            helperText={
+                              getParticipantError(index, 'country')?.message ??
+                              ''
+                            }
+                            onChange={(_, code) => {
+                              setValue(
+                                `participants.${index}.country`,
+                                getLabel(code) ?? ''
+                              )
+                            }}
+                            value={values.participants[index].country}
+                          />
+                        ) : (
+                          <CountryDropdown
+                            required
+                            register={register(`participants.${index}.country`)}
+                            error={!!getParticipantError(index, 'country')}
+                            value={values.participants[index].country}
+                            errormessage={
+                              getParticipantError(index, 'country')?.message ??
+                              ''
+                            }
+                            label={t('country')}
+                          />
+                        )}
                       </Box>
                     </Grid>
                   ) : null}
