@@ -270,11 +270,6 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                   variant="filled"
                   required={!acl.isTTAdmin()}
                   error={fieldState.invalid}
-                  type={
-                    isUKCountry(values.country ?? courseResidingCountry)
-                      ? 'number'
-                      : 'text'
-                  }
                   label={
                     isUKCountry(values.country ?? courseResidingCountry)
                       ? t('components.venue-selector.modal.fields.postCode')
