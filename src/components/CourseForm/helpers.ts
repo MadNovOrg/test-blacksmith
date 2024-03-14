@@ -268,8 +268,11 @@ export function canBeReacc(
       if (!courseLevel) return false
 
       if (isF2F) {
+        if (courseLevel === Course_Level_Enum.Level_1) {
+          return !blended
+        }
+
         const levels = [
-          Course_Level_Enum.Level_1,
           Course_Level_Enum.Level_2,
           Course_Level_Enum.IntermediateTrainer,
           Course_Level_Enum.AdvancedTrainer,
