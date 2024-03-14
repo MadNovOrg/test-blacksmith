@@ -9,7 +9,7 @@ import {
   Typography,
   Tooltip,
 } from '@mui/material'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
@@ -63,6 +63,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
   const [{ error }, handleAddVenue] = useMutation<ResponseType, ParamsType>(
     ADD_VENUE_MUTATION
   )
+  const [trySubmit, setTrySubmit] = useState(false)
 
   const schema = useMemo(() => {
     return yup.object({
@@ -123,10 +124,6 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
         },
   })
   const values = watch()
-
-  useEffect(() => {
-    setValue('postCode', values.postCode, { shouldValidate: true })
-  }, [setValue, values.country, values.postCode])
 
   const submitHandler = useCallback(
     async (formData: VenueFormProps['data']) => {
@@ -193,9 +190,12 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
           <Grid item xs={12}>
             <CountriesSelector
               disabled={preFilledFields.has('country')}
-              onChange={(_, code) =>
+              onChange={async (_, code) => {
                 setValue('country', code ?? '', { shouldValidate: true })
-              }
+                if (values.postCode || trySubmit) {
+                  await trigger('postCode')
+                }
+              }}
               value={values.country}
               error={Boolean(errors.country)}
               helperText={errors.country?.message}
@@ -317,6 +317,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
               variant="contained"
               color="primary"
               size="large"
+              onClick={() => setTrySubmit(true)}
             >
               {t('components.venue-selector.modal.submit')}
             </Button>
