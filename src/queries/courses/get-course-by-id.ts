@@ -119,15 +119,13 @@ export const QUERY = gql`
         order {
           id
           xeroInvoiceNumber
+          source
           salesRepresentative {
             id
             fullName
             avatar
             archived
           }
-        }
-        course {
-          source
         }
       }
       dates: schedule_aggregate {
