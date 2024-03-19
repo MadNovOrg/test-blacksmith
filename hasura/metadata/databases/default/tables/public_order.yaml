@@ -225,10 +225,11 @@ select_permissions:
   - role: booking-contact
     permission:
       columns:
+        - booking_contact
         - id
         - payment_method
-        - xero_invoice_number
         - source
+        - xero_invoice_number
       computed_fields:
         - bookingContactProfileId
       filter:

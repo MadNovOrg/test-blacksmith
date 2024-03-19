@@ -172,7 +172,13 @@ export function useUserCourses(
                 { type: { _eq: Course_Type_Enum.Open } },
                 {
                   participants: {
-                    order: { bookingContactProfileId: { _eq: profile?.id } },
+                    order: {
+                      bookingContact: {
+                        _contains: {
+                          email: profile?.email,
+                        },
+                      },
+                    },
                   },
                 },
               ],
@@ -341,14 +347,31 @@ export function useUserCourses(
       _and: [userConditions, filterConditions],
     }
   }, [
-    orgKeyContactOnly,
     bookingContactOnly,
-    orgId,
-    filters,
     profile?.id,
-    courseStatusConditionsMap,
+    profile?.email,
+    orgKeyContactOnly,
+    orgId,
+    filters?.statuses,
+    filters?.states,
+    filters?.levels,
+    filters?.courseResidingCountries,
+    filters?.types,
+    filters?.creation?.start,
+    filters?.creation?.end,
+    filters?.schedule?.start,
+    filters?.schedule?.end,
+    filters?.keyword,
     acl,
     organizationIds,
+    courseStatusConditionsMap.INFO_REQUIRED,
+    courseStatusConditionsMap.NOT_ATTENDED,
+    courseStatusConditionsMap.EVALUATION_MISSING,
+    courseStatusConditionsMap.SCHEDULED,
+    courseStatusConditionsMap.COMPLETED,
+    courseStatusConditionsMap.AWAITING_GRADE,
+    courseStatusConditionsMap.CANCELLATION_REQUESTED,
+    courseStatusConditionsMap.CANCELLED,
   ])
 
   const [{ data, error }] = useQuery<
