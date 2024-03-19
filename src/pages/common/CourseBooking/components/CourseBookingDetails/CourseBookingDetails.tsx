@@ -695,6 +695,7 @@ export const CourseBookingDetails: React.FC<
                   }}
                   fullWidth
                   required
+                  disabled={Boolean(values.bookingContact.firstName)}
                 />
               </Grid>
               <Grid item md={6}>
@@ -714,6 +715,7 @@ export const CourseBookingDetails: React.FC<
                   }}
                   fullWidth
                   required
+                  disabled={Boolean(values.bookingContact.lastName)}
                 />
               </Grid>
             </Grid>
@@ -768,6 +770,7 @@ export const CourseBookingDetails: React.FC<
                       }}
                       fullWidth
                       required
+                      disabled={Boolean(values.participants[index].firstName)}
                     />
                   </Grid>
                   <Grid item md={6}>
@@ -789,6 +792,7 @@ export const CourseBookingDetails: React.FC<
                       }}
                       fullWidth
                       required
+                      disabled={Boolean(values.participants[index].lastName)}
                     />
                   </Grid>
                   {isAddressInfoRequired ? (
