@@ -17,7 +17,7 @@ import {
 } from '@mui/material'
 import Big from 'big.js'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -109,6 +109,12 @@ export const CourseBookingDetails: React.FC<
   const { t } = useTranslation()
 
   const { acl, profile } = useAuth()
+  const [bookingContactProfile, setBookingContactProfile] = useState<
+    Partial<UserSelectorProfile>
+  >({})
+  const [participantsProfiles, setParticipantProfiles] = useState<
+    Partial<UserSelectorProfile[]>
+  >([])
   const navigate = useNavigate()
   const residingCountryEnabled = useFeatureFlagEnabled(
     'course-residing-country'
@@ -285,6 +291,10 @@ export const CourseBookingDetails: React.FC<
         lastName: profile.familyName,
         email: profile.email,
       })
+      setBookingContactProfile({
+        familyName: profile?.familyName,
+        givenName: profile?.givenName,
+      })
     }
   }, [profile, isInternalUserBooking, setValue])
 
@@ -318,6 +328,11 @@ export const CourseBookingDetails: React.FC<
       },
       { shouldValidate: false }
     )
+    const participants = values.participants.map(participant => ({
+      familyName: participant.firstName,
+      givenName: participant.lastName,
+    })) as Partial<UserSelectorProfile[]>
+    setParticipantProfiles([...participants])
   }
 
   const handleChangeBookingContact = async (profile: UserSelectorProfile) => {
@@ -330,6 +345,10 @@ export const CourseBookingDetails: React.FC<
       },
       { shouldValidate: true }
     )
+    setBookingContactProfile({
+      familyName: profile?.familyName,
+      givenName: profile?.givenName,
+    })
   }
 
   const handleEmailChange = async (email: string, index: number) => {
@@ -695,7 +714,7 @@ export const CourseBookingDetails: React.FC<
                   }}
                   fullWidth
                   required
-                  disabled={Boolean(values.bookingContact.firstName)}
+                  disabled={Boolean(bookingContactProfile?.familyName)}
                 />
               </Grid>
               <Grid item md={6}>
@@ -715,7 +734,7 @@ export const CourseBookingDetails: React.FC<
                   }}
                   fullWidth
                   required
-                  disabled={Boolean(values.bookingContact.lastName)}
+                  disabled={Boolean(bookingContactProfile?.givenName)}
                 />
               </Grid>
             </Grid>
@@ -770,7 +789,9 @@ export const CourseBookingDetails: React.FC<
                       }}
                       fullWidth
                       required
-                      disabled={Boolean(values.participants[index].firstName)}
+                      disabled={Boolean(
+                        participantsProfiles[index]?.familyName
+                      )}
                     />
                   </Grid>
                   <Grid item md={6}>
@@ -792,7 +813,7 @@ export const CourseBookingDetails: React.FC<
                       }}
                       fullWidth
                       required
-                      disabled={Boolean(values.participants[index].lastName)}
+                      disabled={Boolean(participantsProfiles[index]?.givenName)}
                     />
                   </Grid>
                   {isAddressInfoRequired ? (
