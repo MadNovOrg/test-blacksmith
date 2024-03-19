@@ -52,7 +52,7 @@ import {
   PaymentMethod,
 } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
-import { InvoiceDetails, Profile } from '@app/types'
+import { InvoiceDetails, NonNullish, Profile } from '@app/types'
 import { formatCurrency, isValidUKPostalCode, requiredMsg } from '@app/util'
 
 import {
@@ -113,7 +113,7 @@ export const CourseBookingDetails: React.FC<
     Partial<UserSelectorProfile>
   >({})
   const [participantsProfiles, setParticipantProfiles] = useState<
-    Partial<UserSelectorProfile[]>
+    Pick<NonNullish<UserSelectorProfile>, 'familyName' | 'givenName'>[]
   >([])
   const navigate = useNavigate()
   const residingCountryEnabled = useFeatureFlagEnabled(
@@ -310,28 +310,38 @@ export const CourseBookingDetails: React.FC<
     course?.residingCountry
   )
 
+  useEffect(() => {
+    setParticipantProfiles(
+      Array.from(Array(values.participants.length)).fill({})
+    )
+  }, [values.participants.length])
+
   const handleEmailSelector = async (
     profile: UserSelectorProfile,
     index: number
   ) => {
+    const newParticipant = {
+      email: profile?.email || '',
+      firstName: profile?.givenName || '',
+      lastName: profile?.familyName || '',
+      addressLine1: '',
+      addressLine2: '',
+      city: '',
+      postCode: '',
+      country: '',
+    }
     setValue(
       `participants.${index}`,
-      {
-        email: profile?.email || '',
-        firstName: profile?.givenName || '',
-        lastName: profile?.familyName || '',
-        addressLine1: '',
-        addressLine2: '',
-        city: '',
-        postCode: '',
-        country: '',
-      },
+      { ...newParticipant },
       { shouldValidate: false }
     )
-    const participants = values.participants.map(participant => ({
-      familyName: participant.firstName,
-      givenName: participant.lastName,
-    })) as Partial<UserSelectorProfile[]>
+
+    const participants = participantsProfiles
+
+    participants[index] = {
+      familyName: newParticipant.lastName,
+      givenName: newParticipant.firstName,
+    }
     setParticipantProfiles([...participants])
   }
 
@@ -690,6 +700,7 @@ export const CourseBookingDetails: React.FC<
                       ...values.bookingContact,
                       email,
                     })
+                    setBookingContactProfile({})
                   }}
                   required
                   error={errors.bookingContact?.email?.message}
