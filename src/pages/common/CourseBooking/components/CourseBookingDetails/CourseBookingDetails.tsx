@@ -149,11 +149,6 @@ export const CourseBookingDetails: React.FC<
     [availableSeats]
   )
 
-  const onSubmit = async (data: FormInputs) => {
-    setBooking(data)
-    navigate('../review')
-  }
-
   const isInternalUserBooking = acl.canInviteAttendees(Course_Type_Enum.Open)
   const isAddressInfoRequired =
     course?.type === Course_Type_Enum.Open &&
@@ -290,6 +285,11 @@ export const CourseBookingDetails: React.FC<
 
   const values = watch()
 
+  const onSubmit = async (data: FormInputs) => {
+    setBooking(data)
+    navigate('../review')
+  }
+
   useEffect(() => {
     if (profile && !isInternalUserBooking) {
       setValue('bookingContact', {
@@ -326,6 +326,8 @@ export const CourseBookingDetails: React.FC<
     profile: UserSelectorProfile,
     index: number
   ) => {
+    const participants = participantsProfiles
+    participants[index] = {}
     const newParticipant = {
       email: profile?.email || '',
       firstName: profile?.givenName || '',
@@ -342,8 +344,6 @@ export const CourseBookingDetails: React.FC<
       { shouldValidate: false }
     )
 
-    const participants = participantsProfiles
-
     participants[index] = {
       familyName: newParticipant.lastName,
       givenName: newParticipant.firstName,
@@ -352,6 +352,7 @@ export const CourseBookingDetails: React.FC<
   }
 
   const handleChangeBookingContact = async (profile: UserSelectorProfile) => {
+    setBookingContactProfile({})
     setValue(
       'bookingContact',
       {
@@ -373,6 +374,9 @@ export const CourseBookingDetails: React.FC<
       ...participant,
       email,
     })
+    const participants = participantsProfiles
+    participants[index] = {}
+    setParticipantProfiles([...participants])
   }
 
   const handleOnChangeAttendeeCertificate = (state: boolean) => {

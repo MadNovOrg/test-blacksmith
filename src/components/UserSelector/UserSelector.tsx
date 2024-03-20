@@ -179,6 +179,13 @@ export const UserSelector: React.FC<
               {...props}
               key={email}
               data-testid={`profile-selector-result-${email}`}
+              onClick={() => {
+                onChange(
+                  data?.members.find(o => o.profile.email === email)?.profile ??
+                    null
+                )
+                setOpen(false)
+              }}
             >
               <Typography
                 flex={1}
