@@ -490,6 +490,7 @@
       "send-for-approval": "Send for approval",
       "no-approval-header": "This course does not require approval from a Team Teach administrator. This is a warning to highlight this course does not meet protocol for reasons:",
       "approval-header_zero": "This course has been created with exceptions that fall outside of Team Teach standard protocols.",
+      "approval-header_one": "This course has been created with exceptions that fall outside of Team Teach standard protocols:",
       "approval-header_other": "This course has been created with exceptions that fall outside of Team Teach standard protocols:",
       "approval-footer": "Training will not be supported until all exceptions have been approved.",
       "modal-subtitle-approve": "Please provide a reason to the trainer for your decision to accept",
@@ -974,7 +975,7 @@
     "per-attendee": "per attendee",
     "ordered-by": "Ordered by",
     "invoiced-to": "Invoiced to",
-    "registration":"Registration",
+    "registration": "Registration",
     "sales-person": "Sales person",
     "licenses-redeemed": "Blended Learning licenses redeemed",
     "source": "Source",
@@ -1770,8 +1771,8 @@
       "view-all-button-text": "View All"
     }
   },
-  "capture-residing-country":{
-    "title": "Information Required" ,
+  "capture-residing-country": {
+    "title": "Information Required",
     "description": "Please set your Residing Country on your profile",
     "redirect-button": "Go to My Profile"
   },
