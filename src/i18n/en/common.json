@@ -129,6 +129,7 @@
   "line1": "Address Line 1",
   "line2": "Address Line 2",
   "post-code": "Post code",
+  "zip-code": "Zip code",
   "date": "Date",
   "dietary-restrictions": "Dietary Requirements",
   "dietary-restrictions-question": "Do you have any dietary requirements (intolerances, etc.)?",

@@ -24,9 +24,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import CountriesSelector from '@app/components/CountriesSelector'
-import useWorldCountries, {
-  UKsCountriesCodes,
-} from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CountryDropdown } from '@app/components/CountryDropdown'
 import { SourceDropdown } from '@app/components/CourseForm/components/SourceDropdown'
 import { CourseDuration } from '@app/components/CourseTitleAndDuration/components/CourseDuration'
@@ -144,7 +142,7 @@ export const CourseBookingDetails: React.FC<
     [course, residingCountryEnabled]
   )
 
-  const { getLabel, isUKCountry } = useWorldCountries()
+  const { checkUKsCountryName, getLabel, isUKCountry } = useWorldCountries()
 
   const qtyOptions = useMemo(
     () => Array.from({ length: availableSeats }, (_, i) => i + 1),
@@ -178,15 +176,22 @@ export const CourseBookingDetails: React.FC<
                   addressLine1: yup.string().required(requiredMsg(t, 'line1')),
                   addressLine2: yup.string(),
                   city: yup.string().required(requiredMsg(t, 'city')),
+                  country: yup.string().required(requiredMsg(t, 'country')),
                   postCode: yup
                     .string()
-                    .required(requiredMsg(t, 'post-code'))
-                    .test(
-                      'is-uk-postcode',
-                      t('validation-errors.invalid-postcode'),
-                      isValidUKPostalCode
-                    ),
-                  country: yup.string().required(requiredMsg(t, 'country')),
+                    .when('country', ([country], schema) => {
+                      if (country && !checkUKsCountryName(country)) {
+                        return schema.required(requiredMsg(t, 'zip-code'))
+                      }
+
+                      return schema
+                        .required(requiredMsg(t, 'post-code'))
+                        .test(
+                          'is-uk-postcode',
+                          t('validation-errors.invalid-postcode'),
+                          isValidUKPostalCode
+                        )
+                    }),
                 }
               : {}),
           })
@@ -245,7 +250,7 @@ export const CourseBookingDetails: React.FC<
           otherwise: schema => schema,
         }),
     })
-  }, [t, isAddressInfoRequired])
+  }, [t, isAddressInfoRequired, checkUKsCountryName])
 
   const methods = useForm<FormInputs>({
     resolver: yupResolver(schema),
@@ -280,6 +285,7 @@ export const CourseBookingDetails: React.FC<
     watch,
     control,
     setValue,
+    trigger,
   } = methods
 
   const values = watch()
@@ -422,11 +428,40 @@ export const CourseBookingDetails: React.FC<
     (index: number) => {
       if (!values.participants[index].country) return true
 
-      return (Object.values(UKsCountriesCodes) as string[]).includes(
+      return checkUKsCountryName(values.participants[index].country)
+    },
+    [checkUKsCountryName, values.participants]
+  )
+
+  const onCountryChange = useCallback(
+    async (index: number, countryCode: string | null) => {
+      const postCode = values.participants[index].postCode
+      const isPreviousCountryUKs = checkUKsCountryName(
         values.participants[index].country
       )
+
+      setValue(`participants.${index}.country`, getLabel(countryCode) ?? '')
+      await trigger(`participants.${index}.country`)
+
+      const isCurrentCountryUKs = checkUKsCountryName(
+        values.participants[index].country
+      )
+
+      if (
+        (errors.participants && errors.participants[index]?.postCode) ||
+        (postCode && isCurrentCountryUKs !== isPreviousCountryUKs)
+      ) {
+        await trigger(`participants.${index}.postCode`)
+      }
     },
-    [values.participants]
+    [
+      checkUKsCountryName,
+      errors.participants,
+      getLabel,
+      setValue,
+      trigger,
+      values.participants,
+    ]
   )
 
   return (
@@ -915,7 +950,11 @@ export const CourseBookingDetails: React.FC<
                                   'components.venue-selector.modal.fields.zipCode'
                                 )
                           }
-                          placeholder={t('common.addr.postCode')}
+                          placeholder={
+                            checkIsParticipantUKCountry(index)
+                              ? t('common.addr.postCode')
+                              : t('common.addr.zipCode')
+                          }
                           required
                           sx={{ bgcolor: 'grey.100' }}
                           type={
@@ -956,12 +995,9 @@ export const CourseBookingDetails: React.FC<
                               getParticipantError(index, 'country')?.message ??
                               ''
                             }
-                            onChange={(_, code) => {
-                              setValue(
-                                `participants.${index}.country`,
-                                getLabel(code) ?? ''
-                              )
-                            }}
+                            onChange={async (_, code) =>
+                              await onCountryChange(index, code)
+                            }
                             value={values.participants[index].country}
                           />
                         ) : (

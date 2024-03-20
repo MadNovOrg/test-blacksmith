@@ -267,10 +267,20 @@ export default function useWorldCountries() {
     []
   )
 
+  const checkUKsCountryName = useCallback(
+    (country: string | null | undefined) => {
+      if (!country) return false
+
+      return (Object.values(UKsCountriesCodes) as string[]).includes(country)
+    },
+    []
+  )
+
   return {
+    checkUKsCountryName,
     countries,
-    countriesISOCodes,
     countriesCodesWithUKs,
+    countriesISOCodes,
     getLabel,
     isUKCountry,
   }
