@@ -181,7 +181,7 @@ export const CourseBookingDetails: React.FC<
                     .string()
                     .when('country', ([country], schema) => {
                       if (country && !checkUKsCountryName(country)) {
-                        return schema.required(requiredMsg(t, 'zip-code'))
+                        return schema
                       }
 
                       return schema
