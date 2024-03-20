@@ -9,7 +9,10 @@ import {
 
 describe('getRequiredTrainers BILD', () => {
   it("doesn't require a lead trainer if BILD Open type course", () => {
-    expect(getRequiredLeads(Course_Type_Enum.Open)).toEqual({ min: 0, max: 1 })
+    expect(getRequiredLeads(Course_Type_Enum.Open, false)).toEqual({
+      min: 0,
+      max: 1,
+    })
   })
 
   it('assist ratio value for Indirect BILD Certified non reaccreditation course', () => {
@@ -24,12 +27,12 @@ describe('getRequiredTrainers BILD', () => {
     expect(
       getRequiredAssistantsBild(
         extend({}, criteria, {
-          numberParticipants: 23,
+          numberParticipants: 12,
         })
       )
     ).toEqual({
-      min: 1,
-      max: 1,
+      min: 0,
+      max: 0,
     })
 
     // Equal to threshold
@@ -40,11 +43,31 @@ describe('getRequiredTrainers BILD', () => {
         })
       )
     ).toEqual({
+      min: 0,
+      max: 0,
+    })
+
+    // Above threshold
+    expect(
+      getRequiredAssistantsBild(
+        extend({}, criteria, { numberParticipants: 13 })
+      )
+    ).toEqual({
       min: 1,
       max: 1,
     })
 
-    // Above threshold
+    // Next increment threshold
+    expect(
+      getRequiredAssistantsBild(
+        extend({}, criteria, { numberParticipants: 24 })
+      )
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
+
+    // Above next increment threshold
     expect(
       getRequiredAssistantsBild(
         extend({}, criteria, { numberParticipants: 25 })
@@ -52,26 +75,6 @@ describe('getRequiredTrainers BILD', () => {
     ).toEqual({
       min: 2,
       max: 2,
-    })
-
-    // Next increment threshold
-    expect(
-      getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 36 })
-      )
-    ).toEqual({
-      min: 2,
-      max: 2,
-    })
-
-    // Above next increment threshold
-    expect(
-      getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 37 })
-      )
-    ).toEqual({
-      min: 3,
-      max: 3,
     })
   })
 

@@ -78,7 +78,10 @@ export const isTrainersRatioNotMet = (
   trainers: RatioTrainerData
 ) => {
   const { min } = getRequiredAssistants(courseData)
-  const { min: minLead } = getRequiredLeads(courseData.type)
+  const { min: minLead } = getRequiredLeads(
+    courseData.type,
+    courseData.isTrainer
+  )
   const { min: minModerator } = getRequiredModerators(courseData)
 
   const missingAssistants =
@@ -86,10 +89,8 @@ export const isTrainersRatioNotMet = (
     min
 
   const missingLeads =
-    courseData.type !== Course_Type_Enum.Indirect
-      ? trainers.filter(t => t.type === Course_Trainer_Type_Enum.Leader)
-          .length < minLead
-      : false
+    trainers.filter(t => t.type === Course_Trainer_Type_Enum.Leader).length <
+    minLead
 
   const missingModerators =
     courseData.type === Course_Type_Enum.Open
@@ -141,6 +142,7 @@ export function checkCourseDetailsForExceptions(
         type: courseData.type,
         deliveryType: courseData.deliveryType,
         usesAOL: courseData.usesAOL,
+        isTrainer: courseData.isTrainer ?? false,
       },
       trainerData.map(t => ({
         type: t.type,

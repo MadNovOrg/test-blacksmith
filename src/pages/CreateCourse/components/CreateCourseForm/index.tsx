@@ -303,6 +303,7 @@ export const CreateCourseForm = () => {
           level: courseData.courseLevel,
           max_participants: courseData.maxParticipants,
           usesAOL: courseData.usesAOL,
+          isTrainer: acl.isTrainer(),
         },
         assistants.map(assistant => ({
           type: Course_Trainer_Type_Enum.Assistant,
@@ -311,7 +312,7 @@ export const CreateCourseForm = () => {
         }))
       )
     )
-  }, [assistants, courseData])
+  }, [acl, assistants, courseData])
 
   return (
     <Box paddingBottom={5}>

@@ -248,11 +248,11 @@ export const AssignTrainers = () => {
 
   const requiredLeaders = useMemo(() => {
     if (courseData) {
-      return getRequiredLeads(courseData.type)
+      return getRequiredLeads(courseData.type, acl.isTrainer())
     } else {
       return { max: 1, min: 0 }
     }
-  }, [courseData])
+  }, [acl, courseData])
 
   const showTrainerRatioWarning = useMemo(() => {
     return (
@@ -263,6 +263,7 @@ export const AssignTrainers = () => {
           level: courseData.courseLevel,
           max_participants: courseData.maxParticipants,
           usesAOL: courseData.usesAOL,
+          isTrainer: acl.isTrainer(),
         },
         trainers.map(trainer => ({
           type: trainer.type,
@@ -270,7 +271,7 @@ export const AssignTrainers = () => {
         }))
       )
     )
-  }, [courseData, trainers])
+  }, [acl, courseData, trainers])
 
   if (!courseData) {
     return (

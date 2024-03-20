@@ -710,6 +710,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
         type: courseData.type,
         max_participants: courseData.maxParticipants as unknown as number,
         usesAOL: courseData.usesAOL,
+        isTrainer: acl.isTrainer(),
       },
       [
         ...(trainersData?.assist ?? []).map(assistant => ({
@@ -730,6 +731,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       ]
     )
   }, [
+    acl,
     courseData,
     trainersData?.assist,
     trainersData?.lead,

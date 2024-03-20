@@ -18,7 +18,7 @@ const getTrainerRatioBILD = (criteria: BildRatioCriteria): TrainerRatio => {
   if (
     type === Course_Type_Enum.Indirect &&
     level === Course_Level_Enum.BildRegular &&
-    isReaccreditation
+    !isReaccreditation
   ) {
     return ratio(1, 24, 12)
   }

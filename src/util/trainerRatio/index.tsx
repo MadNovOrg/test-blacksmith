@@ -20,6 +20,7 @@ export type RatioCourseData = Pick<
   | 'max_participants'
 > & {
   usesAOL?: boolean
+  isTrainer: boolean
 }
 
 export type RatioTrainerData = Pick<
@@ -51,21 +52,27 @@ export function getRequiredAssistants(
   return { min: 0, max: 0 }
 }
 export function getRequiredLeads(
-  courseType: Course_Type_Enum
+  courseType: Course_Type_Enum,
+  isTrainer: boolean
 ): RequiredTrainers {
-  return { min: courseType === Course_Type_Enum.Open ? 0 : 1, max: 1 }
+  const notLeadTrainerRequired =
+    courseType === Course_Type_Enum.Open ||
+    (courseType === Course_Type_Enum.Indirect && isTrainer)
+  return { min: notLeadTrainerRequired ? 0 : 1, max: 1 }
 }
 
 export function getRequiredModerators(courseData: {
   accreditedBy: Accreditors_Enum
   level: Course_Level_Enum
+  reaccreditation?: boolean | null
 }): RequiredTrainers {
   if (
     courseData.accreditedBy === Accreditors_Enum.Icm &&
     [
       Course_Level_Enum.IntermediateTrainer,
       Course_Level_Enum.AdvancedTrainer,
-    ].includes(courseData.level)
+    ].includes(courseData.level) &&
+    !courseData.reaccreditation
   ) {
     return { min: 1, max: 1 }
   }
