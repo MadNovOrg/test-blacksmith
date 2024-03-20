@@ -1,5 +1,50 @@
 # @teamteach/hub
 
+## 3.7.0
+
+### Minor Changes
+
+- c942ce8: Update orders transfer logic to account for multiple courses on the same order
+- 033cfde: Hide the Registration section of there are no registrants on an order
+- 1080e07: Add table for post training survey emails, in order to send them after 24 hours.
+- e04d37e: Modify UI and email templeates to reflect course currency and VAT.
+- ceb704f: Restrict AOL checkbox from non Employer AOL, Principal or Senior trainer
+- fc141d1: Ask users to add residing country when they log in.
+- 61a1647: Update the order details registrants section to account for users with missing bits from their address
+- 92b79a1: Update Organisation search to search also by address and postal code values
+- b68fcd6: Update assistants trainer ratio
+- ceb704f: Allow internal users to select the lead trainer for Indirect courses
+- 582aa89: Add course filter by trainer type for trainer role and internal users
+
+### Patch Changes
+
+- 4fd1f67: Intl on booking details
+- 60999d5: Make venue fields optional only for admin.
+- dff0dbc: Fix useAOL in trainer search
+- 5a207b4: Fix ICM modules overview order
+- 8a96565: Fix organisation edit form
+- 94638e2: Make country required on auto-register form. Revalidate field after clear button was pressed.
+- fe7858d: Optimize booking contact manage courses fetch
+- adcfd83: Fix assist trainers ratio
+- a3d3c91: Make zip code field not required on booking contact details
+- 21bf61c: hide venue form info icon for non-UK countries
+- 8e43532: Fix tthp-3618 fix course creation
+- b776771: remove course builer time commitment dialog for Advanced Trainer Reaccreditation
+- e5f43a7: Fix post/zip code field on booking details page
+- 1c0ad95: Fix Orders being saved with eronate names
+- 5ba08c5: Fix intermediate trainer course builder
+- d2b85fe: Fix booking contact courses permissions
+- 69c9796: Fix org selector options on new organisation create
+- c864fda: amend bild duplicate course builder submodule
+- 0bdb977: amend bild modules
+- baaad6f: Properly show the importing progress of arlo certificates import functionality
+- 8f45fe9: fix (TTHP-3643): Fix order "source" field retrieve
+- 004f40e: Fix name field on add organisation form
+- 8e43532: Fix: (TTHP-3618) unable to create inderect course
+- ab62742: Revalidate date of birth on auto-register form when user changes date.
+- af47540: revamp the conditions to mark attendance
+- 308cba0: enable virtual & mixed delivery for build conversion courses
+
 ## 3.6.0
 
 ### Minor Changes
