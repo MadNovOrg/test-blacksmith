@@ -1,6 +1,7 @@
 import { isFuture, parseISO } from 'date-fns'
 import { useCallback } from 'react'
 
+import { isCertificateOutsideGracePeriod } from '@app/components/CourseCertification/utils'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Level_Enum,
@@ -23,7 +24,12 @@ export function useResourcePermission() {
   const currentUserCertificates = certificates
     ?.filter(certificate => {
       const expirationDate = parseISO(certificate.expiryDate)
-      return isFuture(expirationDate)
+      return acl.isTrainer()
+        ? !isCertificateOutsideGracePeriod(
+            certificate.expiryDate,
+            certificate.courseLevel
+          )
+        : isFuture(expirationDate)
     })
     .map(certificate => certificate.courseLevel)
 
