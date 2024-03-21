@@ -287,6 +287,8 @@
     "tt-suggestions": "Suggestions from Team Teach",
     "existing-organizations": "Found in Team Teach Connect",
     "add-manually": "Create new organisation",
+    "request-creation": "Can’t find your Organisation?",
+    "request-creation-sub": "In case you could not find your Organisation, please fill out the form",
     "my-organizations": "My organisations"
   },
   "add-organisation": {

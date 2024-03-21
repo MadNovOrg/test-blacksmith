@@ -289,7 +289,6 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             {...register('organization')}
             showTrainerOrgOnly={false}
             error={errors.organization?.message}
-            allowAdding
             value={values.organization ?? undefined}
             onChange={handleOrganizationSelection}
             textFieldProps={{

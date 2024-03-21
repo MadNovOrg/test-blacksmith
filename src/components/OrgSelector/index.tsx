@@ -52,25 +52,25 @@ export type CallbackOption =
   | SuggestionOption
   | null
 export type OrgSelectorProps = {
+  allowAdding?: boolean
+  autocompleteMode?: boolean
+  countryCode?: string
+  disabled?: boolean
+  error?: string
+  isEditProfile?: boolean
+  isShallowRetrieval?: boolean
   onChange: (org: CallbackOption) => void
   onInputChange?: (value: string) => void
+  placeholder?: string
+  required?: boolean
+  searchOnlyByPostCode?: boolean
+  showDfeResults?: boolean
+  showHubResults?: boolean
+  showTrainerOrgOnly?: boolean
   sx?: SxProps
   textFieldProps?: TextFieldProps
-  placeholder?: string
-  allowAdding?: boolean
-  error?: string
-  value?: Pick<Organization, 'name' | 'id'> | null
-  disabled?: boolean
-  required?: boolean
-  showHubResults?: boolean
-  showDfeResults?: boolean
-  autocompleteMode?: boolean
-  isEditProfile?: boolean
   userOrgIds?: string[]
-  showTrainerOrgOnly?: boolean
-  isShallowRetrieval?: boolean
-  countryCode?: string
-  searchOnlyByPostCode?: boolean
+  value?: Pick<Organization, 'name' | 'id'> | null
 }
 const getOptionLabel = (option: Option) => option.name ?? ''
 export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
@@ -207,6 +207,9 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           ...(allowAdding && !autocompleteMode && debouncedQuery
             ? [{ name: debouncedQuery }]
             : []),
+          ...(!allowAdding
+            ? [{ name: t('components.org-selector.request-creation-sub') }]
+            : []),
           ...(showDfeResults ? dfeOrgs?.establishments ?? [] : []),
         ],
         'id'
@@ -223,6 +226,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       showDfeResults,
       showHubResults,
       showTrainerNonAOLOrgs,
+      t,
     ])
     const noOptionsText = q ? (
       <Typography variant="body2">
@@ -302,7 +306,11 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
                 ? t('components.org-selector.my-organizations')
                 : t('components.org-selector.existing-organizations')
             } else {
-              return t('components.org-selector.add-manually')
+              return t(
+                allowAdding
+                  ? 'components.org-selector.add-manually'
+                  : 'components.org-selector.request-creation'
+              )
             }
           }}
           renderGroup={params => (
@@ -397,11 +405,24 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
                   <Button
                     color="primary"
                     variant="contained"
-                    onClick={() => setAdding(option)}
+                    onClick={() => {
+                      if (!isDfeSuggestion(option) && !allowAdding) {
+                        window.location.href =
+                          import.meta.env.VITE_ORGANISATION_ENQUIRY
+                        return
+                      }
+                      setAdding(option)
+                    }}
                     size="small"
                     fullWidth={isMobile}
                   >
-                    {t(isDfeSuggestion(option) ? 'add' : 'create')}
+                    {t(
+                      isDfeSuggestion(option)
+                        ? 'add'
+                        : allowAdding
+                        ? 'create'
+                        : 'organisation-enquiry'
+                    )}
                   </Button>
                 ) : null}
               </Box>
