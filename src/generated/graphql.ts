@@ -34154,6 +34154,10 @@ export type Mutation_Root = {
   delete_payment_methods?: Maybe<Payment_Methods_Mutation_Response>;
   /** delete single row from the table: "payment_methods" */
   delete_payment_methods_by_pk?: Maybe<Payment_Methods>;
+  /** delete data from the table: "post_training_email_scheduled_events" */
+  delete_post_training_email_scheduled_events?: Maybe<Post_Training_Email_Scheduled_Events_Mutation_Response>;
+  /** delete single row from the table: "post_training_email_scheduled_events" */
+  delete_post_training_email_scheduled_events_by_pk?: Maybe<Post_Training_Email_Scheduled_Events>;
   /** delete data from the table: "private_course_booking" */
   delete_private_course_booking?: Maybe<Private_Course_Booking_Mutation_Response>;
   /** delete single row from the table: "private_course_booking" */
@@ -34586,6 +34590,10 @@ export type Mutation_Root = {
   insert_payment_methods?: Maybe<Payment_Methods_Mutation_Response>;
   /** insert a single row into the table: "payment_methods" */
   insert_payment_methods_one?: Maybe<Payment_Methods>;
+  /** insert data into the table: "post_training_email_scheduled_events" */
+  insert_post_training_email_scheduled_events?: Maybe<Post_Training_Email_Scheduled_Events_Mutation_Response>;
+  /** insert a single row into the table: "post_training_email_scheduled_events" */
+  insert_post_training_email_scheduled_events_one?: Maybe<Post_Training_Email_Scheduled_Events>;
   /** insert data into the table: "private_course_booking" */
   insert_private_course_booking?: Maybe<Private_Course_Booking_Mutation_Response>;
   /** insert a single row into the table: "private_course_booking" */
@@ -35210,6 +35218,12 @@ export type Mutation_Root = {
   update_payment_methods_by_pk?: Maybe<Payment_Methods>;
   /** update multiples rows of table: "payment_methods" */
   update_payment_methods_many?: Maybe<Array<Maybe<Payment_Methods_Mutation_Response>>>;
+  /** update data of the table: "post_training_email_scheduled_events" */
+  update_post_training_email_scheduled_events?: Maybe<Post_Training_Email_Scheduled_Events_Mutation_Response>;
+  /** update single row of the table: "post_training_email_scheduled_events" */
+  update_post_training_email_scheduled_events_by_pk?: Maybe<Post_Training_Email_Scheduled_Events>;
+  /** update multiples rows of table: "post_training_email_scheduled_events" */
+  update_post_training_email_scheduled_events_many?: Maybe<Array<Maybe<Post_Training_Email_Scheduled_Events_Mutation_Response>>>;
   /** update data of the table: "private_course_booking" */
   update_private_course_booking?: Maybe<Private_Course_Booking_Mutation_Response>;
   /** update single row of the table: "private_course_booking" */
@@ -36470,6 +36484,18 @@ export type Mutation_RootDelete_Payment_MethodsArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Payment_Methods_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Post_Training_Email_Scheduled_EventsArgs = {
+  where: Post_Training_Email_Scheduled_Events_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Post_Training_Email_Scheduled_Events_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -37946,6 +37972,20 @@ export type Mutation_RootInsert_Payment_MethodsArgs = {
 export type Mutation_RootInsert_Payment_Methods_OneArgs = {
   object: Payment_Methods_Insert_Input;
   on_conflict?: InputMaybe<Payment_Methods_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Post_Training_Email_Scheduled_EventsArgs = {
+  objects: Array<Post_Training_Email_Scheduled_Events_Insert_Input>;
+  on_conflict?: InputMaybe<Post_Training_Email_Scheduled_Events_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Post_Training_Email_Scheduled_Events_OneArgs = {
+  object: Post_Training_Email_Scheduled_Events_Insert_Input;
+  on_conflict?: InputMaybe<Post_Training_Email_Scheduled_Events_On_Conflict>;
 };
 
 
@@ -40283,6 +40323,26 @@ export type Mutation_RootUpdate_Payment_Methods_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Payment_Methods_ManyArgs = {
   updates: Array<Payment_Methods_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Post_Training_Email_Scheduled_EventsArgs = {
+  _set?: InputMaybe<Post_Training_Email_Scheduled_Events_Set_Input>;
+  where: Post_Training_Email_Scheduled_Events_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Post_Training_Email_Scheduled_Events_By_PkArgs = {
+  _set?: InputMaybe<Post_Training_Email_Scheduled_Events_Set_Input>;
+  pk_columns: Post_Training_Email_Scheduled_Events_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Post_Training_Email_Scheduled_Events_ManyArgs = {
+  updates: Array<Post_Training_Email_Scheduled_Events_Updates>;
 };
 
 
@@ -42823,6 +42883,8 @@ export type Organization = {
   name: Scalars['String'];
   organisationType?: Maybe<Scalars['String']>;
   original_record?: Maybe<Scalars['jsonb']>;
+  /** A computed field, executes function "org_address_post_code" */
+  postCode?: Maybe<Scalars['String']>;
   preferences: Scalars['jsonb'];
   region?: Maybe<Scalars['String']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
@@ -42997,6 +43059,7 @@ export type Organization_Bool_Exp = {
   name?: InputMaybe<String_Comparison_Exp>;
   organisationType?: InputMaybe<String_Comparison_Exp>;
   original_record?: InputMaybe<Jsonb_Comparison_Exp>;
+  postCode?: InputMaybe<String_Comparison_Exp>;
   preferences?: InputMaybe<Jsonb_Comparison_Exp>;
   region?: InputMaybe<String_Comparison_Exp>;
   reservedGo1Licenses?: InputMaybe<Int_Comparison_Exp>;
@@ -43373,6 +43436,8 @@ export type Organization_Max_Fields = {
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
   organisationType?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "org_address_post_code" */
+  postCode?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
   sector?: Maybe<Scalars['String']>;
@@ -43695,6 +43760,8 @@ export type Organization_Min_Fields = {
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
   organisationType?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "org_address_post_code" */
+  postCode?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
   sector?: Maybe<Scalars['String']>;
@@ -43741,6 +43808,7 @@ export type Organization_Order_By = {
   name?: InputMaybe<Order_By>;
   organisationType?: InputMaybe<Order_By>;
   original_record?: InputMaybe<Order_By>;
+  postCode?: InputMaybe<Order_By>;
   preferences?: InputMaybe<Order_By>;
   region?: InputMaybe<Order_By>;
   reservedGo1Licenses?: InputMaybe<Order_By>;
@@ -44250,6 +44318,170 @@ export type Point_Comparison_Exp = {
   _lte?: InputMaybe<Scalars['point']>;
   _neq?: InputMaybe<Scalars['point']>;
   _nin?: InputMaybe<Array<Scalars['point']>>;
+};
+
+/** Scheduled events for sending post training survey email to graded users */
+export type Post_Training_Email_Scheduled_Events = {
+  __typename?: 'post_training_email_scheduled_events';
+  course_participant_id: Scalars['uuid'];
+  created_at: Scalars['timestamptz'];
+  event_id: Scalars['uuid'];
+  id: Scalars['uuid'];
+};
+
+/** aggregated selection of "post_training_email_scheduled_events" */
+export type Post_Training_Email_Scheduled_Events_Aggregate = {
+  __typename?: 'post_training_email_scheduled_events_aggregate';
+  aggregate?: Maybe<Post_Training_Email_Scheduled_Events_Aggregate_Fields>;
+  nodes: Array<Post_Training_Email_Scheduled_Events>;
+};
+
+/** aggregate fields of "post_training_email_scheduled_events" */
+export type Post_Training_Email_Scheduled_Events_Aggregate_Fields = {
+  __typename?: 'post_training_email_scheduled_events_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Post_Training_Email_Scheduled_Events_Max_Fields>;
+  min?: Maybe<Post_Training_Email_Scheduled_Events_Min_Fields>;
+};
+
+
+/** aggregate fields of "post_training_email_scheduled_events" */
+export type Post_Training_Email_Scheduled_Events_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Post_Training_Email_Scheduled_Events_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "post_training_email_scheduled_events". All fields are combined with a logical 'AND'. */
+export type Post_Training_Email_Scheduled_Events_Bool_Exp = {
+  _and?: InputMaybe<Array<Post_Training_Email_Scheduled_Events_Bool_Exp>>;
+  _not?: InputMaybe<Post_Training_Email_Scheduled_Events_Bool_Exp>;
+  _or?: InputMaybe<Array<Post_Training_Email_Scheduled_Events_Bool_Exp>>;
+  course_participant_id?: InputMaybe<Uuid_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  event_id?: InputMaybe<Uuid_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "post_training_email_scheduled_events" */
+export enum Post_Training_Email_Scheduled_Events_Constraint {
+  /** unique or primary key constraint on columns "course_participant_id", "event_id" */
+  PostTrainingEmailScheduledCourseParticipantIdEventIKey = 'post_training_email_scheduled_course_participant_id_event_i_key',
+  /** unique or primary key constraint on columns "course_participant_id" */
+  PostTrainingEmailScheduledEventsCourseParticipantIdKey = 'post_training_email_scheduled_events_course_participant_id_key',
+  /** unique or primary key constraint on columns "event_id" */
+  PostTrainingEmailScheduledEventsEventIdKey = 'post_training_email_scheduled_events_event_id_key',
+  /** unique or primary key constraint on columns "id" */
+  PostTrainingEmailScheduledEventsPkey = 'post_training_email_scheduled_events_pkey'
+}
+
+/** input type for inserting data into table "post_training_email_scheduled_events" */
+export type Post_Training_Email_Scheduled_Events_Insert_Input = {
+  course_participant_id?: InputMaybe<Scalars['uuid']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  event_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Post_Training_Email_Scheduled_Events_Max_Fields = {
+  __typename?: 'post_training_email_scheduled_events_max_fields';
+  course_participant_id?: Maybe<Scalars['uuid']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  event_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate min on columns */
+export type Post_Training_Email_Scheduled_Events_Min_Fields = {
+  __typename?: 'post_training_email_scheduled_events_min_fields';
+  course_participant_id?: Maybe<Scalars['uuid']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  event_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+};
+
+/** response of any mutation on the table "post_training_email_scheduled_events" */
+export type Post_Training_Email_Scheduled_Events_Mutation_Response = {
+  __typename?: 'post_training_email_scheduled_events_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Post_Training_Email_Scheduled_Events>;
+};
+
+/** on_conflict condition type for table "post_training_email_scheduled_events" */
+export type Post_Training_Email_Scheduled_Events_On_Conflict = {
+  constraint: Post_Training_Email_Scheduled_Events_Constraint;
+  update_columns?: Array<Post_Training_Email_Scheduled_Events_Update_Column>;
+  where?: InputMaybe<Post_Training_Email_Scheduled_Events_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "post_training_email_scheduled_events". */
+export type Post_Training_Email_Scheduled_Events_Order_By = {
+  course_participant_id?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  event_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: post_training_email_scheduled_events */
+export type Post_Training_Email_Scheduled_Events_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "post_training_email_scheduled_events" */
+export enum Post_Training_Email_Scheduled_Events_Select_Column {
+  /** column name */
+  CourseParticipantId = 'course_participant_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  EventId = 'event_id',
+  /** column name */
+  Id = 'id'
+}
+
+/** input type for updating data in table "post_training_email_scheduled_events" */
+export type Post_Training_Email_Scheduled_Events_Set_Input = {
+  course_participant_id?: InputMaybe<Scalars['uuid']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  event_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** Streaming cursor of the table "post_training_email_scheduled_events" */
+export type Post_Training_Email_Scheduled_Events_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Post_Training_Email_Scheduled_Events_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Post_Training_Email_Scheduled_Events_Stream_Cursor_Value_Input = {
+  course_participant_id?: InputMaybe<Scalars['uuid']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  event_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** update columns of table "post_training_email_scheduled_events" */
+export enum Post_Training_Email_Scheduled_Events_Update_Column {
+  /** column name */
+  CourseParticipantId = 'course_participant_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  EventId = 'event_id',
+  /** column name */
+  Id = 'id'
+}
+
+export type Post_Training_Email_Scheduled_Events_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Post_Training_Email_Scheduled_Events_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Post_Training_Email_Scheduled_Events_Bool_Exp;
 };
 
 /** Private course booking enquiry */
@@ -47485,6 +47717,12 @@ export type Query_Root = {
   podcast?: Maybe<PodcastPayload>;
   /** Podcasts list */
   podcasts?: Maybe<PodcastsPayload>;
+  /** fetch data from the table: "post_training_email_scheduled_events" */
+  post_training_email_scheduled_events: Array<Post_Training_Email_Scheduled_Events>;
+  /** fetch aggregated fields from the table: "post_training_email_scheduled_events" */
+  post_training_email_scheduled_events_aggregate: Post_Training_Email_Scheduled_Events_Aggregate;
+  /** fetch data from the table: "post_training_email_scheduled_events" using primary key columns */
+  post_training_email_scheduled_events_by_pk?: Maybe<Post_Training_Email_Scheduled_Events>;
   /** fetch data from the table: "private_course_booking" */
   private_course_booking: Array<Private_Course_Booking>;
   /** fetch aggregated fields from the table: "private_course_booking" */
@@ -49679,6 +49917,29 @@ export type Query_RootPodcastsArgs = {
 };
 
 
+export type Query_RootPost_Training_Email_Scheduled_EventsArgs = {
+  distinct_on?: InputMaybe<Array<Post_Training_Email_Scheduled_Events_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Post_Training_Email_Scheduled_Events_Order_By>>;
+  where?: InputMaybe<Post_Training_Email_Scheduled_Events_Bool_Exp>;
+};
+
+
+export type Query_RootPost_Training_Email_Scheduled_Events_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Post_Training_Email_Scheduled_Events_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Post_Training_Email_Scheduled_Events_Order_By>>;
+  where?: InputMaybe<Post_Training_Email_Scheduled_Events_Bool_Exp>;
+};
+
+
+export type Query_RootPost_Training_Email_Scheduled_Events_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootPrivate_Course_BookingArgs = {
   distinct_on?: InputMaybe<Array<Private_Course_Booking_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -51384,6 +51645,14 @@ export type Subscription_Root = {
   payment_methods_by_pk?: Maybe<Payment_Methods>;
   /** fetch data from the table in a streaming manner: "payment_methods" */
   payment_methods_stream: Array<Payment_Methods>;
+  /** fetch data from the table: "post_training_email_scheduled_events" */
+  post_training_email_scheduled_events: Array<Post_Training_Email_Scheduled_Events>;
+  /** fetch aggregated fields from the table: "post_training_email_scheduled_events" */
+  post_training_email_scheduled_events_aggregate: Post_Training_Email_Scheduled_Events_Aggregate;
+  /** fetch data from the table: "post_training_email_scheduled_events" using primary key columns */
+  post_training_email_scheduled_events_by_pk?: Maybe<Post_Training_Email_Scheduled_Events>;
+  /** fetch data from the table in a streaming manner: "post_training_email_scheduled_events" */
+  post_training_email_scheduled_events_stream: Array<Post_Training_Email_Scheduled_Events>;
   /** fetch data from the table: "private_course_booking" */
   private_course_booking: Array<Private_Course_Booking>;
   /** fetch aggregated fields from the table: "private_course_booking" */
@@ -54175,6 +54444,36 @@ export type Subscription_RootPayment_Methods_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Payment_Methods_Stream_Cursor_Input>>;
   where?: InputMaybe<Payment_Methods_Bool_Exp>;
+};
+
+
+export type Subscription_RootPost_Training_Email_Scheduled_EventsArgs = {
+  distinct_on?: InputMaybe<Array<Post_Training_Email_Scheduled_Events_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Post_Training_Email_Scheduled_Events_Order_By>>;
+  where?: InputMaybe<Post_Training_Email_Scheduled_Events_Bool_Exp>;
+};
+
+
+export type Subscription_RootPost_Training_Email_Scheduled_Events_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Post_Training_Email_Scheduled_Events_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Post_Training_Email_Scheduled_Events_Order_By>>;
+  where?: InputMaybe<Post_Training_Email_Scheduled_Events_Bool_Exp>;
+};
+
+
+export type Subscription_RootPost_Training_Email_Scheduled_Events_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootPost_Training_Email_Scheduled_Events_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Post_Training_Email_Scheduled_Events_Stream_Cursor_Input>>;
+  where?: InputMaybe<Post_Training_Email_Scheduled_Events_Bool_Exp>;
 };
 
 
@@ -57319,13 +57618,6 @@ export type GetDistinctCourseVenueCountriesQueryVariables = Exact<{ [key: string
 
 export type GetDistinctCourseVenueCountriesQuery = { __typename?: 'query_root', venue: Array<{ __typename?: 'venue', countryCode?: string | null }> };
 
-export type GetCourseOrdersQueryVariables = Exact<{
-  orderId: Scalars['uuid'];
-}>;
-
-
-export type GetCourseOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'course_order', quantity?: number | null, order?: { __typename?: 'order', id: any, registrants: any, paymentMethod: Payment_Methods_Enum, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null, course?: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, start?: any | null, end?: any | null, freeSpaces?: number | null, deliveryType: Course_Delivery_Type_Enum, bookingContactInviteData?: any | null, reaccreditation?: boolean | null, residingCountry?: string | null, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null } | null }> };
-
 export type GetCourseInvitesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -57359,6 +57651,13 @@ export type CancelCourseInviteMutationVariables = Exact<{
 
 
 export type CancelCourseInviteMutation = { __typename?: 'mutation_root', delete_course_invites_by_pk?: { __typename?: 'course_invites', id: any } | null };
+
+export type GetCourseOrdersQueryVariables = Exact<{
+  orderId: Scalars['uuid'];
+}>;
+
+
+export type GetCourseOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'course_order', quantity?: number | null, order?: { __typename?: 'order', id: any, registrants: any, paymentMethod: Payment_Methods_Enum, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null, course?: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, start?: any | null, end?: any | null, freeSpaces?: number | null, deliveryType: Course_Delivery_Type_Enum, bookingContactInviteData?: any | null, reaccreditation?: boolean | null, residingCountry?: string | null, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null } | null }> };
 
 export type GetPricingQueryVariables = Exact<{
   where?: InputMaybe<Course_Pricing_Bool_Exp>;
@@ -57654,13 +57953,6 @@ export type StartImportUsersJobMutationVariables = Exact<{
 
 
 export type StartImportUsersJobMutation = { __typename?: 'mutation_root', importUsers?: { __typename?: 'ImportUsersOutput', jobId: string } | null };
-
-export type InsertCourseOrderMutationVariables = Exact<{
-  input: Course_Order_Insert_Input;
-}>;
-
-
-export type InsertCourseOrderMutation = { __typename?: 'mutation_root', insert_course_order_one?: { __typename?: 'course_order', order?: { __typename?: 'order', id: any } | null } | null };
 
 export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 

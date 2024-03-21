@@ -276,6 +276,7 @@
   "org-selector": {
     "title": "Organisation name",
     "placeholder": "Start typing organisation post code, address or name",
+    "post-code-placeholder": "Start typing organisation post code",
     "no-results": "No organisations found",
     "no-individuals": "No individuals found",
     "start-typing": "Please start typing for suggestions.",

@@ -333,6 +333,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           }}
           sx={{ mb: 3 }}
           isShallowRetrieval
+          searchOnlyByPostCode
         />
 
         <Box>

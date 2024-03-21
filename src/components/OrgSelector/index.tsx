@@ -33,6 +33,7 @@ import {
   InsertOrgLeadMutation,
   Organization,
   Dfe_Establishment,
+  Organization_Bool_Exp,
 } from '@app/generated/graphql'
 import { QUERY as FIND_ESTABLISHMENTS } from '@app/queries/dfe/find-establishment'
 import { QUERY as GET_ORGANIZATIONS } from '@app/queries/organization/get-organizations'
@@ -69,6 +70,7 @@ export type OrgSelectorProps = {
   showTrainerOrgOnly?: boolean
   isShallowRetrieval?: boolean
   countryCode?: string
+  searchOnlyByPostCode?: boolean
 }
 const getOptionLabel = (option: Option) => option.name ?? ''
 export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
@@ -91,6 +93,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     isEditProfile,
     userOrgIds,
     countryCode,
+    searchOnlyByPostCode = false,
     ...props
   }) {
     const { t } = useTranslation()
@@ -127,23 +130,36 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       pause: !debouncedQuery,
     })
 
+    const where = useMemo<Organization_Bool_Exp>(() => {
+      return {
+        _or: [
+          ...(searchOnlyByPostCode
+            ? []
+            : [
+                {
+                  name: { _ilike: `%${debouncedQuery}%` },
+                },
+                {
+                  _and: debouncedQuery
+                    .trim()
+                    .split(/\s+/)
+                    .map(word => ({
+                      addressEachText: { _ilike: `%${word}%` },
+                    })),
+                },
+              ]),
+          {
+            postCode: { _ilike: `%${debouncedQuery.replace(/\s/g, '')}%` },
+          },
+        ],
+      }
+    }, [debouncedQuery, searchOnlyByPostCode])
+
     const [{ data: hubOrgs, fetching: orgsFetching }, refetchOrganisations] =
       useQuery<GetOrganizationsQuery, GetOrganizationsQueryVariables>({
         query: GET_ORGANIZATIONS,
         variables: {
-          where: {
-            _or: [
-              {
-                name: { _ilike: `%${debouncedQuery}%` },
-              },
-              {
-                _and: debouncedQuery
-                  .trim()
-                  .split(/\s+/)
-                  .map(word => ({ addressEachText: { _ilike: `%${word}%` } })),
-              },
-            ],
-          },
+          where,
           isNotShallow: !isShallowRetrieval,
           isShallow: isShallowRetrieval,
         },
@@ -319,7 +335,10 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
               }}
               onChange={e => setQ(e.target.value)}
               placeholder={
-                placeholder ?? t('components.org-selector.placeholder')
+                placeholder ??
+                (searchOnlyByPostCode
+                  ? t('components.org-selector.post-code-placeholder')
+                  : t('components.org-selector.placeholder'))
               }
               InputProps={{
                 ...params.InputProps,

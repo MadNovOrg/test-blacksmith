@@ -297,6 +297,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             }}
             isShallowRetrieval
             required
+            searchOnlyByPostCode
           />
         </Grid>
         <Grid item>

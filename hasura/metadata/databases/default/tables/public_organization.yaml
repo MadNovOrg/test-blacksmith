@@ -57,6 +57,11 @@ computed_fields:
       function:
         name: org_address_each_text
         schema: public
+  - name: postCode
+    definition:
+      function:
+        name: org_address_post_code
+        schema: public
 insert_permissions:
   - role: anonymous
     permission:
@@ -219,6 +224,7 @@ select_permissions:
         - address
       computed_fields:
         - addressEachText
+        - postCode
       filter: {}
   - role: finance
     permission:
@@ -242,6 +248,7 @@ select_permissions:
         - id
       computed_fields:
         - addressEachText
+        - postCode
       filter: {}
       allow_aggregations: true
   - role: ld
@@ -266,6 +273,7 @@ select_permissions:
         - organisation_type
       computed_fields:
         - addressEachText
+        - postCode
       filter: {}
       allow_aggregations: true
   - role: sales-admin
@@ -290,6 +298,7 @@ select_permissions:
         - id
       computed_fields:
         - addressEachText
+        - postCode
       filter: {}
       allow_aggregations: true
   - role: sales-representative
@@ -314,6 +323,7 @@ select_permissions:
         - id
       computed_fields:
         - addressEachText
+        - postCode
       filter: {}
       allow_aggregations: true
   - role: trainer
@@ -338,6 +348,7 @@ select_permissions:
         - xero_contact_id
       computed_fields:
         - addressEachText
+        - postCode
       filter: {}
       allow_aggregations: true
   - role: tt-admin
@@ -362,6 +373,7 @@ select_permissions:
         - xero_contact_id
       computed_fields:
         - addressEachText
+        - postCode
       filter: {}
       allow_aggregations: true
   - role: tt-ops
@@ -386,6 +398,7 @@ select_permissions:
         - id
       computed_fields:
         - addressEachText
+        - postCode
       filter: {}
       allow_aggregations: true
   - role: unverified
@@ -407,6 +420,7 @@ select_permissions:
         - xero_contact_id
       computed_fields:
         - addressEachText
+        - postCode
       filter: {}
   - role: user
     permission:
@@ -430,6 +444,7 @@ select_permissions:
         - xero_contact_id
       computed_fields:
         - addressEachText
+        - postCode
       filter: {}
       allow_aggregations: true
 update_permissions:
