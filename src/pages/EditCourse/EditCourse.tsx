@@ -79,6 +79,7 @@ import {
   bildStrategiesToArray,
   checkIsEmployerAOL,
   checkIsETA,
+  convertScheduleDateToLocalTime,
   courseStarted,
   courseToCourseInput,
   generateBildCourseName,
@@ -197,8 +198,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       courseData?.startDateTime &&
       courseData.endDateTime
     ) {
-      const oldStart = new Date(course.schedule[0].start)
-      const oldEnd = new Date(course.schedule[0].end)
+      const { start: oldStart, end: oldEnd } = convertScheduleDateToLocalTime(
+        course.schedule[0].start,
+        course.schedule[0].end,
+        course.schedule[0].timeZone
+      )
 
       const newStart = courseData.startDateTime
       const newEnd = courseData.endDateTime

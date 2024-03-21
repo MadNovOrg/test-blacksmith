@@ -343,17 +343,25 @@ export function bildStrategiesToArray(
   ) as BildStrategies[]
 }
 
-export const courseToCourseInput = (course: Course): CourseInput => {
+export const convertScheduleDateToLocalTime = (
+  courseStartDate: string,
+  courseEndDate: string,
+  timeZone = 'Europe/London'
+) => {
   const timeZoneSchedule = {
-    start: utcToZonedTime(
-      new Date(course.schedule[0].start),
-      course.schedule[0].timeZone ?? 'Europe/London'
-    ),
-    end: utcToZonedTime(
-      new Date(course.schedule[0].end),
-      course.schedule[0].timeZone ?? 'Europe/London'
-    ),
+    start: utcToZonedTime(new Date(courseStartDate), timeZone),
+    end: utcToZonedTime(new Date(courseEndDate), timeZone),
   }
+
+  return timeZoneSchedule
+}
+
+export const courseToCourseInput = (course: Course): CourseInput => {
+  const timeZoneSchedule = convertScheduleDateToLocalTime(
+    course.schedule[0].start,
+    course.schedule[0].end,
+    course.schedule[0].timeZone
+  )
 
   return {
     id: course.id,
