@@ -264,13 +264,13 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                 errors.organization?.id?.message ||
                 errors.organization?.name?.message
               }
-              allowAdding
               value={values.organization ?? null}
               onChange={orgSelectorOnChange}
               textFieldProps={{
                 variant: 'filled',
               }}
               isShallowRetrieval
+              searchOnlyByPostCode
             />
           </Grid>
           <Grid item>

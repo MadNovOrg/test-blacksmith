@@ -275,6 +275,7 @@
   },
   "org-selector": {
     "title": "Organisation name",
+    "residing-org": "Residing Organisation",
     "placeholder": "Start typing organisation post code, address or name",
     "post-code-placeholder": "Start typing organisation post code",
     "no-results": "No organisations found",

@@ -336,7 +336,11 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             <TextField
               {...textFieldProps}
               {...params}
-              label={t('components.org-selector.title')}
+              label={
+                searchOnlyByPostCode
+                  ? t('components.org-selector.residing-org')
+                  : t('components.org-selector.title')
+              }
               InputLabelProps={{
                 shrink: true,
                 required,
