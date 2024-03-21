@@ -1,9 +1,9 @@
-import { isPast } from 'date-fns'
 import { matches } from 'lodash'
 import { cond, constant, stubTrue } from 'lodash-es'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useMutation, useQuery } from 'urql'
 
+import { isValidCertificate } from '@app/components/CourseCertification/utils'
 import {
   ArchiveProfileMutation,
   ArchiveProfileMutationVariables,
@@ -17,9 +17,6 @@ import { MUTATION as ARCHIVE_PROFILE_MUTATION } from '@app/queries/profile/archi
 import { QUERY } from '@app/queries/profile/get-profile-details'
 import { MUTATION as UPDATE_AVATAR_MUTATION } from '@app/queries/profile/update-profile-avatar'
 import { getSWRLoadingStatus } from '@app/util'
-
-const isValidCertificate = (certificate: { expiryDate: string }) =>
-  !isPast(new Date(certificate.expiryDate))
 
 type RequiredCertificateCondition = {
   level: Course_Level_Enum
