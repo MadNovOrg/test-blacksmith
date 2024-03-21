@@ -19,6 +19,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { Auth } from 'aws-amplify'
 import { subYears } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo, useState, useCallback } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
@@ -59,6 +60,10 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   courseId,
   quantity,
 }) => {
+  const isOrgEnquiryEnabled = useFeatureFlagEnabled(
+    'organisation-enquiry-on-registration'
+  )
+
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
   const [loading, setLoading] = useState(false)
@@ -321,6 +326,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         <OrgSelector
           required
           {...register('organization')}
+          allowAdding={!isOrgEnquiryEnabled}
           autocompleteMode={false}
           showTrainerOrgOnly={false}
           error={errors.organization?.message}

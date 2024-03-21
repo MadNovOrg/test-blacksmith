@@ -17,6 +17,7 @@ import {
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { subYears, format } from 'date-fns'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
@@ -56,6 +57,10 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   token,
   onSuccess,
 }) => {
+  const isOrgEnquiryEnabled = useFeatureFlagEnabled(
+    'organisation-enquiry-on-registration'
+  )
+
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
   const [{ data: userData, error, fetching: loading }, createUser] =
@@ -287,6 +292,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         <Grid item>
           <OrgSelector
             {...register('organization')}
+            allowAdding={!isOrgEnquiryEnabled}
             showTrainerOrgOnly={false}
             error={errors.organization?.message}
             value={values.organization ?? undefined}
