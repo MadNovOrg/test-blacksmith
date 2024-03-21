@@ -204,13 +204,13 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       return uniqBy(
         [
           ...(showHubResults ? hubOrgs?.orgs ?? [] : []),
+          ...(showDfeResults ? dfeOrgs?.establishments ?? [] : []),
           ...(allowAdding && !autocompleteMode && debouncedQuery
             ? [{ name: debouncedQuery }]
             : []),
           ...(!allowAdding
             ? [{ name: t('components.org-selector.request-creation-sub') }]
             : []),
-          ...(showDfeResults ? dfeOrgs?.establishments ?? [] : []),
         ],
         'id'
       )
