@@ -725,6 +725,11 @@ input TransferInput {
   toCourseId: Int!
   fee: TransferFee!
   reason: String!
+  inviteeAddressLine1: String
+  inviteeAddressLine2: String
+  inviteeCity: String
+  inviteePostCode: String
+  inviteeCountry: String
 }
 
 input GetOrdersInput {
@@ -1132,6 +1137,8 @@ type TransferCourse {
   level: CourseLevel
   freeSlots: Int!
   reaccreditation: Boolean!
+  type: CourseType!
+  deliveryType: CourseDeliveryType!
 }
 
 type TransferParticipantOutput {

@@ -14,6 +14,7 @@ import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useSnackbar } from '@app/context/snackbar'
 import {
+  Course,
   Course_Level_Enum,
   TransferFeeType,
   TransferParticipantMutation,
@@ -23,7 +24,11 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 import { TRANSFER_PARTICIPANT } from '../../queries'
 import { TransferStepsEnum } from '../../types'
-import { getTransferTermsFee, isTrainTheTrainerCourse } from '../../utils'
+import {
+  getTransferTermsFee,
+  isAddressInfoRequired,
+  isTrainTheTrainerCourse,
+} from '../../utils'
 import { CourseInfoPanel } from '../CourseInfoPanel'
 import {
   TransferModeEnum,
@@ -48,6 +53,7 @@ export const TransferReview: React.FC<
     completeStep,
     cancel,
     reason,
+    virtualCourseParticipantAdress,
   } = useTransferParticipantContext()
 
   const { addSnackbarMessage } = useSnackbar()
@@ -59,40 +65,41 @@ export const TransferReview: React.FC<
 
   const handleParticipantTransfer = async () => {
     if (toCourse && participant && fees && fees.type) {
-      try {
-        const result = await transferParticipant({
-          input: {
-            participantId: participant.id,
-            toCourseId: toCourse.id,
-            fee: {
-              type: fees.type,
-              customFee: fees.customFee,
-            },
-            reason,
+      const result = await transferParticipant({
+        input: {
+          participantId: participant.id,
+          toCourseId: toCourse.id,
+          fee: {
+            type: fees.type,
+            customFee: fees.customFee,
           },
+          ...(isAddressInfoRequired({
+            fromCourse: fromCourse as Course,
+            toCourse,
+          })
+            ? virtualCourseParticipantAdress
+            : {}),
+          reason,
+        },
+      })
+
+      const transferSuccessfully = result.data?.transferParticipant?.success
+
+      if (
+        transferSuccessfully &&
+        mode !== TransferModeEnum.ATTENDEE_TRANSFERS
+      ) {
+        addSnackbarMessage('participant-transferred', {
+          label: _t('pages.transfer-participant.success-message'),
         })
 
-        const transferSuccessfully = result.data?.transferParticipant?.success
-
-        if (
-          transferSuccessfully &&
-          mode !== TransferModeEnum.ATTENDEE_TRANSFERS
-        ) {
-          addSnackbarMessage('participant-transferred', {
-            label: _t('pages.transfer-participant.success-message'),
-          })
-
-          navigate('../../details')
-        } else if (transferSuccessfully) {
-          completeStep(TransferStepsEnum.REVIEW)
-          setSuccess(true)
-        } else {
-          setSuccess(false)
-          setError(result.data?.transferParticipant?.error ?? 'Generic error')
-        }
-      } catch (err) {
-        // declaratively doing error handling from useMutation
-        console.error(err)
+        navigate('../../details')
+      } else if (transferSuccessfully) {
+        completeStep(TransferStepsEnum.REVIEW)
+        setSuccess(true)
+      } else {
+        setSuccess(false)
+        setError(result.data?.transferParticipant?.error ?? 'Generic error')
       }
     }
   }

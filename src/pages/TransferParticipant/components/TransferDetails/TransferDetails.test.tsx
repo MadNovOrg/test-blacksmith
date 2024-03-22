@@ -6,6 +6,9 @@ import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
 import {
+  CourseDeliveryType,
+  CourseType,
+  Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
   TransferFeeType,
@@ -48,6 +51,7 @@ describe('page: TransferDetails', () => {
       start: new Date().toISOString(),
       end: addDays(new Date(), 1).toISOString(),
       type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const participant: ChosenParticipant = {
@@ -96,6 +100,7 @@ describe('page: TransferDetails', () => {
       start: new Date().toISOString(),
       end: addDays(new Date(), 1).toISOString(),
       type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const toCourse: EligibleCourse = {
@@ -105,6 +110,8 @@ describe('page: TransferDetails', () => {
       endDate: addDays(new Date(), 1).toISOString(),
       freeSlots: 2,
       reaccreditation: false,
+      deliveryType: CourseDeliveryType.F2F,
+      type: CourseType.Open,
     }
 
     const participant: ChosenParticipant = {
@@ -165,6 +172,7 @@ describe('page: TransferDetails', () => {
       start: new Date().toISOString(),
       end: addDays(new Date(), 1).toISOString(),
       type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const toCourse: EligibleCourse = {
@@ -174,6 +182,8 @@ describe('page: TransferDetails', () => {
       endDate: addDays(new Date(), 1).toISOString(),
       freeSlots: 2,
       reaccreditation: false,
+      deliveryType: CourseDeliveryType.F2F,
+      type: CourseType.Open,
     }
 
     const participant: ChosenParticipant = {
@@ -253,6 +263,7 @@ describe('page: TransferDetails', () => {
       start: new Date().toISOString(),
       end: addDays(new Date(), 1).toISOString(),
       type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const toCourse: EligibleCourse = {
@@ -262,6 +273,8 @@ describe('page: TransferDetails', () => {
       endDate: addDays(new Date(), 1).toISOString(),
       freeSlots: 2,
       reaccreditation: false,
+      deliveryType: CourseDeliveryType.F2F,
+      type: CourseType.Open,
     }
 
     const participant: ChosenParticipant = {
@@ -346,6 +359,7 @@ describe('page: TransferDetails', () => {
       start: new Date().toISOString(),
       end: addDays(new Date(), 1).toISOString(),
       type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const toCourse: EligibleCourse = {
@@ -355,6 +369,8 @@ describe('page: TransferDetails', () => {
       endDate: addDays(new Date(), 1).toISOString(),
       freeSlots: 2,
       reaccreditation: false,
+      deliveryType: CourseDeliveryType.F2F,
+      type: CourseType.Open,
     }
 
     const participant: ChosenParticipant = {
@@ -413,6 +429,7 @@ describe('page: TransferDetails', () => {
       start: new Date().toISOString(),
       end: addDays(new Date(), 1).toISOString(),
       type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const toCourse: EligibleCourse = {
@@ -422,6 +439,8 @@ describe('page: TransferDetails', () => {
       endDate: addDays(new Date(), 1).toISOString(),
       freeSlots: 2,
       reaccreditation: false,
+      deliveryType: CourseDeliveryType.F2F,
+      type: CourseType.Open,
     }
 
     const participant: ChosenParticipant = {

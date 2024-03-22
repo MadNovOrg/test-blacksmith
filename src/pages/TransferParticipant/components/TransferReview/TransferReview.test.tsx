@@ -7,6 +7,9 @@ import { fromValue } from 'wonka'
 
 import { useSnackbar } from '@app/context/snackbar'
 import {
+  CourseDeliveryType,
+  CourseType,
+  Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
   TransferFeeType,
@@ -47,6 +50,7 @@ describe('page: TransferReview', () => {
       start: new Date().toISOString(),
       end: addDays(new Date(), 1).toISOString(),
       type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const participant: ChosenParticipant = {
@@ -95,6 +99,7 @@ describe('page: TransferReview', () => {
       start: addDays(new Date(), 20).toISOString(),
       end: addDays(new Date(), 20).toISOString(),
       type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const toCourse: EligibleCourse = {
@@ -104,6 +109,8 @@ describe('page: TransferReview', () => {
       endDate: addDays(new Date(), 1).toISOString(),
       freeSlots: 2,
       reaccreditation: false,
+      deliveryType: CourseDeliveryType.F2F,
+      type: CourseType.Open,
     }
 
     const participant: ChosenParticipant = {
@@ -162,6 +169,7 @@ describe('page: TransferReview', () => {
       end: addDays(new Date(), 20).toISOString(),
       type: Course_Type_Enum.Open,
       priceCurrency: 'GBP',
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const toCourse: EligibleCourse = {
@@ -171,6 +179,8 @@ describe('page: TransferReview', () => {
       endDate: addDays(new Date(), 1).toISOString(),
       freeSlots: 2,
       reaccreditation: false,
+      deliveryType: CourseDeliveryType.F2F,
+      type: CourseType.Open,
     }
 
     const participant: ChosenParticipant = {
@@ -224,6 +234,7 @@ describe('page: TransferReview', () => {
       start: addDays(new Date(), 20).toISOString(),
       end: addDays(new Date(), 20).toISOString(),
       type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const toCourse: EligibleCourse = {
@@ -233,6 +244,8 @@ describe('page: TransferReview', () => {
       endDate: addDays(new Date(), 1).toISOString(),
       freeSlots: 2,
       reaccreditation: false,
+      deliveryType: CourseDeliveryType.F2F,
+      type: CourseType.Open,
     }
 
     const participant: ChosenParticipant = {
@@ -292,6 +305,7 @@ describe('page: TransferReview', () => {
       start: addDays(new Date(), 40).toISOString(),
       end: addDays(new Date(), 40).toISOString(),
       type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const toCourse: EligibleCourse = {
@@ -301,6 +315,8 @@ describe('page: TransferReview', () => {
       endDate: addDays(new Date(), 1).toISOString(),
       freeSlots: 2,
       reaccreditation: false,
+      deliveryType: CourseDeliveryType.F2F,
+      type: CourseType.Open,
     }
 
     const participant: ChosenParticipant = {
@@ -399,6 +415,7 @@ describe('page: TransferReview', () => {
       start: addDays(new Date(), 40).toISOString(),
       end: addDays(new Date(), 40).toISOString(),
       type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const toCourse: EligibleCourse = {
@@ -408,6 +425,8 @@ describe('page: TransferReview', () => {
       endDate: addDays(new Date(), 1).toISOString(),
       freeSlots: 2,
       reaccreditation: false,
+      deliveryType: CourseDeliveryType.F2F,
+      type: CourseType.Open,
     }
 
     const participant: ChosenParticipant = {

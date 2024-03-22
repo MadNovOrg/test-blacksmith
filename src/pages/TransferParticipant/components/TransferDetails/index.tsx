@@ -11,6 +11,8 @@ import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
 import { MarkOptional } from 'ts-essentials'
 
+import { FormValues as FeesFormValues } from '@app/components/FeesForm'
+import { FormValues as ParticipantFormValues } from '@app/components/ParticipantPostalAddressForm'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import {
@@ -19,9 +21,13 @@ import {
 } from '@app/pages/TransferParticipant/types'
 import { yup } from '@app/schemas'
 
+import { isAddressInfoRequired } from '../../utils'
 import { CourseInfoPanel } from '../CourseInfoPanel'
-import FeesPanel, { FormValues } from '../FeesPanel'
+import FeesPanel from '../FeesPanel'
 import { useTransferParticipantContext } from '../TransferParticipantProvider'
+
+type FormValues = MarkOptional<FeesFormValues, 'feeType'> &
+  Partial<ParticipantFormValues>
 
 export const TransferDetails: React.FC<
   React.PropsWithChildren<unknown>
@@ -58,8 +64,15 @@ export const TransferDetails: React.FC<
     },
   })
 
-  const { toCourse, backFrom, feesChosen, fromCourse, mode, setReason } =
-    useTransferParticipantContext()
+  const {
+    toCourse,
+    backFrom,
+    feesChosen,
+    fromCourse,
+    mode,
+    setReason,
+    setParticipantPostalAddress,
+  } = useTransferParticipantContext()
   const { t } = useScopedTranslation(
     'pages.transfer-participant.transfer-details'
   )
@@ -73,11 +86,18 @@ export const TransferDetails: React.FC<
   }, [fromCourse])
 
   const [formData, setFormData] = useState<
-    MarkOptional<FormValues, 'feeType'> & { isValid: boolean }
+    MarkOptional<FeesFormValues, 'feeType'> & {
+      isValid: boolean
+    } & Partial<ParticipantFormValues>
   >({
     isValid: false,
-    customFee: undefined,
+    customFee: 0,
     feeType: undefined,
+    inviteeAddressLine1: '',
+    inviteeAddressLine2: '',
+    inviteeCity: '',
+    inviteeCountry: '',
+    inviteePostCode: '',
   })
 
   useEffect(() => {
@@ -105,6 +125,15 @@ export const TransferDetails: React.FC<
       formData.feeType,
       isNaN(Number(formData.customFee)) ? undefined : Number(formData.customFee)
     )
+    if (isAddressInfoRequired({ fromCourse, toCourse })) {
+      setParticipantPostalAddress({
+        inviteeAddressLine1: formData.inviteeAddressLine1 ?? '',
+        inviteeAddressLine2: formData.inviteeAddressLine2 ?? '',
+        inviteeCity: formData.inviteeCity ?? '',
+        inviteeCountry: formData.inviteeCountry ?? '',
+        inviteePostCode: formData.inviteePostCode ?? '',
+      })
+    }
   }
 
   return (
@@ -136,6 +165,7 @@ export const TransferDetails: React.FC<
         priceCurrency={fromCourse.priceCurrency}
         onChange={handleFeesChange}
         mode={mode}
+        courseToTransferTo={toCourse}
       />
 
       {displayReasonField ? (

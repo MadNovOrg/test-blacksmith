@@ -1,6 +1,13 @@
 import { differenceInWeeks } from 'date-fns'
 
-import { Course_Level_Enum } from '@app/generated/graphql'
+import {
+  Course,
+  CourseDeliveryType,
+  CourseLevel,
+  CourseType,
+  Course_Level_Enum,
+  TransferCourse,
+} from '@app/generated/graphql'
 
 export function isTrainTheTrainerCourse(courseLevel: Course_Level_Enum) {
   return [
@@ -40,3 +47,17 @@ export const getTransferTermsFee = (
 
   return 0
 }
+
+export const isAddressInfoRequired = ({
+  fromCourse,
+  toCourse,
+}: {
+  [key: string]: Partial<Course | TransferCourse>
+}) =>
+  fromCourse.deliveryType === CourseDeliveryType.F2F &&
+  fromCourse.level === CourseLevel.Level_1 &&
+  [
+    toCourse.type === CourseType.Open,
+    toCourse.deliveryType === CourseDeliveryType.Virtual,
+    toCourse.level === CourseLevel.Level_1,
+  ].every(Boolean)

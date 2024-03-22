@@ -10,6 +10,7 @@ import { merge } from 'lodash-es'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
+import { InferType } from 'yup'
 
 import { TransferFeeType } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
@@ -41,7 +42,7 @@ export const schema = yup.object({
     }),
 })
 
-export type FormValues = yup.InferType<typeof schema>
+export type FormValues = InferType<typeof schema>
 type Props = {
   mode?: TransferModeEnum
   optionLabels?: Partial<Record<TransferFeeType, string>>

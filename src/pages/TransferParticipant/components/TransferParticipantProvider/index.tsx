@@ -24,7 +24,13 @@ import { EligibleCourse, TransferStepsEnum } from '../../types'
 
 export type FromCourse = Pick<
   Course,
-  'id' | 'type' | 'status' | 'level' | 'course_code' | 'priceCurrency'
+  | 'id'
+  | 'type'
+  | 'status'
+  | 'level'
+  | 'course_code'
+  | 'priceCurrency'
+  | 'deliveryType'
 > & {
   start?: string | null
   end?: string | null
@@ -38,6 +44,14 @@ export enum TransferModeEnum {
   ADMIN_TRANSFERS = 'ADMIN_TRANSFERS',
   ORG_ADMIN_TRANSFERS = 'ORG_ADMIN_TRANSFERS',
   ATTENDEE_TRANSFERS = 'ATTENDEE_TRANSFERS',
+}
+
+type VirtualCourseNewParticipant = {
+  inviteeAddressLine1: string
+  inviteeAddressLine2: string
+  inviteeCity: string
+  inviteePostCode: string
+  inviteeCountry: string
 }
 
 export type ContextValue = {
@@ -58,6 +72,10 @@ export type ContextValue = {
   cancel: () => void
   reason: string
   setReason: (reason: string) => void
+  setParticipantPostalAddress: (
+    participant: VirtualCourseNewParticipant
+  ) => void
+  virtualCourseParticipantAdress: VirtualCourseNewParticipant | undefined
 }
 
 export const TransferParticipantContext = React.createContext<
@@ -94,6 +112,8 @@ export const TransferParticipantProvider: React.FC<
       ? initialValue?.fees
       : { type: TransferFeeType.ApplyTerms }
   )
+  const [virtualCourseParticipantAdress, setVirtualCourseParticipantAddress] =
+    useState<VirtualCourseNewParticipant>()
   const [completedSteps, setCompletedSteps] = useState<
     ContextValue['completedSteps']
   >(initialValue?.completedSteps ?? [])
@@ -123,6 +143,7 @@ export const TransferParticipantProvider: React.FC<
         ...course,
         start: course.dates.aggregate?.start?.date,
         end: course.dates.aggregate?.end?.date,
+        deliveryType: course.deliveryType,
       })
     }
   }, [course, fetchedParticipant])
@@ -195,6 +216,11 @@ export const TransferParticipantProvider: React.FC<
     },
     [completeStep, navigate]
   )
+  const setParticipantPostalAddress: ContextValue['setParticipantPostalAddress'] =
+    useCallback(
+      participant => setVirtualCourseParticipantAddress(participant),
+      []
+    )
 
   const cancel: ContextValue['cancel'] = useCallback(() => {
     navigate(`/courses/${fromCourse?.id}/details`, { replace: true })
@@ -216,6 +242,8 @@ export const TransferParticipantProvider: React.FC<
       cancel,
       reason,
       setReason,
+      virtualCourseParticipantAdress,
+      setParticipantPostalAddress,
     }),
     [
       participant,
@@ -231,6 +259,8 @@ export const TransferParticipantProvider: React.FC<
       mode,
       cancel,
       reason,
+      virtualCourseParticipantAdress,
+      setParticipantPostalAddress,
     ]
   )
 

@@ -5,6 +5,9 @@ import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
 import {
+  CourseDeliveryType,
+  CourseType,
+  Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
   TransferEligibleCoursesQuery,
@@ -30,6 +33,7 @@ describe('page: ChooseTransferCourse', () => {
       start: new Date().toISOString(),
       end: addDays(new Date(), 1).toISOString(),
       type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const participant: ChosenParticipant = {
@@ -80,6 +84,7 @@ describe('page: ChooseTransferCourse', () => {
       start: fromStartDate.toISOString(),
       end: addDays(fromStartDate, 1).toISOString(),
       type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
     }
 
     const participant: ChosenParticipant = {
@@ -118,6 +123,8 @@ describe('page: ChooseTransferCourse', () => {
                     endDate: new Date().toISOString(),
                     freeSlots: 2,
                     reaccreditation: false,
+                    deliveryType: CourseDeliveryType.F2F,
+                    type: CourseType.Open,
                   },
                 ]
               : [],
