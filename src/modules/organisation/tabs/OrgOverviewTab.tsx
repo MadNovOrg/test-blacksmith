@@ -43,6 +43,8 @@ type OrgOverviewTabParams = {
   orgId: string
 }
 
+const UPCOMING_COURSES_LIMIT = 5
+
 const LEVELS_IN_ORDER = [
   CourseLevel.Level_1,
   CourseLevel.Level_2,
@@ -96,24 +98,28 @@ export const OrgOverviewTab: React.FC<
   })
 
   const { courses: coursesForBooking, fetching: coursesLoading } =
-    useUpcomingCourses(profile?.id, {
-      _and: [
-        { type: { _eq: Course_Type_Enum.Open } },
-        { displayOnWebsite: { _eq: true } },
-        {
-          status: {
-            _nin: [
-              Course_Status_Enum.Cancelled,
-              Course_Status_Enum.Completed,
-              Course_Status_Enum.Declined,
-              Course_Status_Enum.EvaluationMissing,
-              Course_Status_Enum.GradeMissing,
-              Course_Status_Enum.Draft,
-            ],
+    useUpcomingCourses(
+      profile?.id,
+      {
+        _and: [
+          { type: { _eq: Course_Type_Enum.Open } },
+          { displayOnWebsite: { _eq: true } },
+          {
+            status: {
+              _nin: [
+                Course_Status_Enum.Cancelled,
+                Course_Status_Enum.Completed,
+                Course_Status_Enum.Declined,
+                Course_Status_Enum.EvaluationMissing,
+                Course_Status_Enum.GradeMissing,
+                Course_Status_Enum.Draft,
+              ],
+            },
           },
-        },
-      ],
-    })
+        ],
+      },
+      UPCOMING_COURSES_LIMIT
+    )
 
   const defaultTab =
     LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level))[0] ?? 'none'
