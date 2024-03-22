@@ -187,15 +187,27 @@ it('displays selected participants from query param', () => {
 it('displays confirmation modal when clicked on submit button', async () => {
   const COURSE_ID = 'course-id'
 
-  const curriculum = [buildModule()]
+  const moduleToSelect = buildModule({
+    name: 'Theory',
+    lessons: {
+      items: [buildLesson({ covered: true }), buildLesson({ covered: true })],
+    },
+  })
+
+  const moduleToDeselect = buildModule({
+    name: 'To deselect',
+    lessons: { items: [buildLesson({ covered: true })] },
+  })
+
   const courseParticipants = [
     { ...buildParticipant(), attended: false },
+    { ...buildParticipant(), attended: true },
     { ...buildParticipant(), attended: true },
   ]
 
   const course = buildGradingCourse({
     overrides: {
-      curriculum,
+      curriculum: [moduleToSelect, moduleToDeselect],
       participants: courseParticipants,
     },
   })
@@ -232,15 +244,27 @@ it('displays confirmation modal when clicked on submit button', async () => {
 it('closes modal when saving is not confirmed', async () => {
   const COURSE_ID = 'course-id'
 
-  const curriculum = [buildModule()]
+  const moduleToSelect = buildModule({
+    name: 'Theory',
+    lessons: {
+      items: [buildLesson({ covered: true }), buildLesson({ covered: true })],
+    },
+  })
+
+  const moduleToDeselect = buildModule({
+    name: 'To deselect',
+    lessons: { items: [buildLesson({ covered: true })] },
+  })
+
   const courseParticipants = [
     { ...buildParticipant(), attended: false },
+    { ...buildParticipant(), attended: true },
     { ...buildParticipant(), attended: true },
   ]
 
   const course = buildGradingCourse({
     overrides: {
-      curriculum,
+      curriculum: [moduleToSelect, moduleToDeselect],
       participants: courseParticipants,
     },
   })
@@ -275,16 +299,27 @@ it('closes modal when saving is not confirmed', async () => {
 it("disables save button if a grading option isn't selected", () => {
   const COURSE_ID = 'course-id'
 
-  const curriculum = [buildModule()]
+  const moduleToSelect = buildModule({
+    name: 'Theory',
+    lessons: {
+      items: [buildLesson({ covered: true }), buildLesson({ covered: true })],
+    },
+  })
+
+  const moduleToDeselect = buildModule({
+    name: 'To deselect',
+    lessons: { items: [buildLesson({ covered: true })] },
+  })
 
   const courseParticipants = [
     { ...buildParticipant(), attended: false },
+    { ...buildParticipant(), attended: true },
     { ...buildParticipant(), attended: true },
   ]
 
   const course = buildGradingCourse({
     overrides: {
-      curriculum,
+      curriculum: [moduleToSelect, moduleToDeselect],
       participants: courseParticipants,
     },
   })
@@ -410,16 +445,27 @@ it('saves grades for participants when an intent for saving is confirmed', async
 it('displays loading state while saving grades', async () => {
   const COURSE_ID = 'course-id'
 
-  const module = buildModule({ name: 'Theory' })
+  const moduleToSelect = buildModule({
+    name: 'Theory',
+    lessons: {
+      items: [buildLesson({ covered: true }), buildLesson({ covered: true })],
+    },
+  })
+
+  const moduleToDeselect = buildModule({
+    name: 'To deselect',
+    lessons: { items: [buildLesson({ covered: true })] },
+  })
 
   const courseParticipants = [
     { ...buildParticipant(), attended: false },
+    { ...buildParticipant(), attended: true },
     { ...buildParticipant(), attended: true },
   ]
 
   const course = buildGradingCourse({
     overrides: {
-      curriculum: [module],
+      curriculum: [moduleToSelect, moduleToDeselect],
       participants: courseParticipants,
     },
   })
@@ -450,16 +496,27 @@ it('displays loading state while saving grades', async () => {
 it('displays an alert if there was an error saving grades', async () => {
   const COURSE_ID = 'course-id'
 
-  const module = buildModule({ name: 'Theory' })
+  const moduleToSelect = buildModule({
+    name: 'Theory',
+    lessons: {
+      items: [buildLesson({ covered: true }), buildLesson({ covered: true })],
+    },
+  })
+
+  const moduleToDeselect = buildModule({
+    name: 'To deselect',
+    lessons: { items: [buildLesson({ covered: true })] },
+  })
 
   const courseParticipants = [
     { ...buildParticipant(), attended: false },
+    { ...buildParticipant(), attended: true },
     { ...buildParticipant(), attended: true },
   ]
 
   const course = buildGradingCourse({
     overrides: {
-      curriculum: [module],
+      curriculum: [moduleToSelect, moduleToDeselect],
       participants: courseParticipants,
     },
   })
@@ -575,17 +632,28 @@ it('displays module notes field when grading an individual participant as a lead
 it("doesn't display module notes field when grading in bulk", () => {
   const COURSE_ID = 'course-id'
 
-  const module = buildModule({ name: 'Theory' })
+  const moduleToSelect = buildModule({
+    name: 'Theory',
+    lessons: {
+      items: [buildLesson({ covered: true }), buildLesson({ covered: true })],
+    },
+  })
 
-  const participants = [
+  const moduleToDeselect = buildModule({
+    name: 'To deselect',
+    lessons: { items: [buildLesson({ covered: true })] },
+  })
+
+  const courseParticipants = [
+    { ...buildParticipant(), attended: false },
     { ...buildParticipant(), attended: true },
     { ...buildParticipant(), attended: true },
   ]
 
   const course = buildGradingCourse({
     overrides: {
-      curriculum: [module],
-      participants,
+      curriculum: [moduleToSelect, moduleToDeselect],
+      participants: courseParticipants,
     },
   })
 
@@ -701,4 +769,38 @@ it("doesn't display modules that don't have any covered lessons", () => {
   expect(
     within(moduleAccordion).getByLabelText(coveredModule.name)
   ).toBeChecked()
+})
+
+it("displays proper message when course doesn't have modules", () => {
+  const COURSE_ID = 'course-id'
+
+  const courseParticipants = [
+    { ...buildParticipant(), attended: true, grade: Grade_Enum.Pass },
+    { ...buildParticipant(), attended: true },
+  ]
+
+  const course = buildGradingCourse({
+    overrides: {
+      curriculum: [],
+      participants: courseParticipants,
+    },
+  })
+
+  const client = {
+    executeMutation: () => never,
+  } as unknown as Client
+
+  render(
+    <Provider value={client}>
+      <Routes>
+        <Route path="/:id/grading" element={<ICMGradingV2 course={course} />} />
+      </Routes>
+    </Provider>,
+    {},
+    { initialEntries: [`/${COURSE_ID}/grading`] }
+  )
+
+  expect(
+    screen.getByText(`There are no modules for this course.`)
+  ).toBeInTheDocument()
 })

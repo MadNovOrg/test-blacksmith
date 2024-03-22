@@ -103,7 +103,7 @@ export const ICMGradingV2: React.FC<Props> = ({ course }) => {
   )
 
   const curriculum = useMemo(() => {
-    const c = [...course.curriculum]
+    const c = course.curriculum ? [...course.curriculum] : []
 
     const mappedCurriculum =
       Array.isArray(c) && c.length
@@ -179,7 +179,7 @@ export const ICMGradingV2: React.FC<Props> = ({ course }) => {
           </Sticky>
         </Box>
 
-        {curriculum ? (
+        {curriculum.length ? (
           <Box flex={1} mt={'6px'}>
             <Typography variant="h5" fontWeight="500" mb={2}>
               {t('pages.course-grading.modules-selection-title')}
