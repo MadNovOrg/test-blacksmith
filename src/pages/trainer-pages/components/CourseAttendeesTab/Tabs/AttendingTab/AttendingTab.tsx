@@ -146,6 +146,15 @@ export const AttendingTab = ({
     }
   }, [acl, course.type])
 
+  const canViewRowActions = useCallback(
+    (cp: CourseParticipant) =>
+      [
+        !cp.profile.archived,
+        acl.canManageParticipantAttendance(getParticipantOrgIds(cp), course),
+      ].every(Boolean),
+    [acl, course]
+  )
+
   const cols = useMemo(
     () =>
       [
@@ -186,7 +195,11 @@ export const AttendingTab = ({
               sorting: false,
             }
           : null,
-        canToggleAttendance
+        canToggleAttendance ||
+        (courseParticipants?.some(participant =>
+          canViewRowActions(participant)
+        ) &&
+          acl.isOrgAdmin())
           ? {
               id: 'attendance',
               label: 'Attendance',
@@ -219,11 +232,12 @@ export const AttendingTab = ({
       courseParticipants,
       t,
       isBlendedCourse,
+      canViewEvaluationSubmittedColumn,
       canToggleAttendance,
       isOpenCourse,
       acl,
       course,
-      canViewEvaluationSubmittedColumn,
+      canViewRowActions,
     ]
   )
 
@@ -232,15 +246,6 @@ export const AttendingTab = ({
       navigate(`../transfer/${participant.id}`, { replace: true })
     },
     [navigate]
-  )
-
-  const canViewRowActions = useCallback(
-    (cp: CourseParticipant) =>
-      [
-        !cp.profile.archived,
-        acl.canManageParticipantAttendance(getParticipantOrgIds(cp), course),
-      ].every(Boolean),
-    [acl, course]
   )
 
   const canToggleParticipantAttendance = useCallback(
@@ -405,7 +410,9 @@ export const AttendingTab = ({
                             : t('common.no')}
                         </TableCell>
                       ) : null}
-                      {canToggleAttendance ? (
+                      {canToggleAttendance ||
+                      (canViewRowActions(courseParticipant) &&
+                        acl.isOrgAdmin()) ? (
                         <TableCell width={180}>
                           <AttendingToggle
                             participant={courseParticipant}
