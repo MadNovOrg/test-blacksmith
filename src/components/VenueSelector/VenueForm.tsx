@@ -9,6 +9,7 @@ import {
   Typography,
   Tooltip,
 } from '@mui/material'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -60,6 +61,9 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
     isUKCountry,
   } = useWorldCountries()
   const { acl } = useAuth()
+  const residingCountryEnabled = !!useFeatureFlagEnabled(
+    'course-residing-country'
+  )
   const [{ error }, handleAddVenue] = useMutation<ResponseType, ParamsType>(
     ADD_VENUE_MUTATION
   )
@@ -76,9 +80,8 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
       postCode: acl.isTTAdmin()
         ? yup.string()
         : yup.string().when('country', {
-            is: (country: string) => {
-              return isUKCountry(country || courseResidingCountry)
-            },
+            is: (country: string) =>
+              isUKCountry(country || courseResidingCountry),
             then: schema =>
               schema
                 .required(requiredMsg(t, 'addr.postCode'))
@@ -96,7 +99,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
           return countriesCodesWithUKs.includes(value as WorldCountriesCodes)
         }),
     })
-  }, [t, acl, isUKCountry, courseResidingCountry, countriesCodesWithUKs])
+  }, [t, acl, countriesCodesWithUKs, courseResidingCountry, isUKCountry])
   const {
     control,
     handleSubmit,
@@ -120,7 +123,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
           addressLineTwo: '',
           city: '',
           postCode: '',
-          country: courseResidingCountry ? courseResidingCountry : 'GB-ENG',
+          country: courseResidingCountry || 'GB-ENG',
         },
   })
   const values = watch()
@@ -189,7 +192,9 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
           </Grid>
           <Grid item xs={12}>
             <CountriesSelector
-              disabled={preFilledFields.has('country')}
+              disabled={
+                preFilledFields.has('country') || residingCountryEnabled
+              }
               onChange={async (_, code) => {
                 setValue('country', code ?? '', { shouldValidate: true })
                 if (values.postCode || trySubmit) {
