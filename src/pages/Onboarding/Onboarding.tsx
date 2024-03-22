@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { subYears } from 'date-fns'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useEffect, useMemo, useCallback } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Trans } from 'react-i18next'
@@ -38,6 +39,9 @@ import { schemas, yup } from '@app/schemas'
 import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
 
 export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
+  const isOrgEnquiryEnabled =
+    useFeatureFlagEnabled('organisation-enquiry-on-registration') ?? true
+
   const { t, _t } = useScopedTranslation('pages.onboarding')
   const { profile, reloadCurrentProfile } = useAuth()
   const navigate = useNavigate()
@@ -256,6 +260,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Grid>
           <Grid item>
             <OrgSelector
+              allowAdding={!isOrgEnquiryEnabled}
               required
               {...register('organization')}
               autocompleteMode={false}

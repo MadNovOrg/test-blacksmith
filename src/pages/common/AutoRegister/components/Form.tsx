@@ -57,9 +57,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   token,
   onSuccess,
 }) => {
-  const isOrgEnquiryEnabled = useFeatureFlagEnabled(
-    'organisation-enquiry-on-registration'
-  )
+  const isOrgEnquiryEnabled =
+    useFeatureFlagEnabled('organisation-enquiry-on-registration') ?? true
 
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
