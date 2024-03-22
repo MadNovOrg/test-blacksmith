@@ -122,7 +122,7 @@ export const VenueSelector: React.FC<
   const [venue, setVenue] = useState<VenueFormProps['data']>()
   const [query, setQuery] = useState(value?.name ?? '')
   const [debouncedQuery] = useDebounce(query, 300)
-  const [googleSugestions, setGoogleSugestions] =
+  const [googleSuggestions, setGoogleSuggestions] =
     useState<google.maps.places.AutocompleteResponse>()
 
   const [{ data, error, fetching: loading }] = useQuery<
@@ -141,14 +141,14 @@ export const VenueSelector: React.FC<
         debouncedQuery,
         courseResidingCountry as WorldCountriesCodes
       )
-      setGoogleSugestions(googleResponse)
+      if (googleResponse) setGoogleSuggestions(googleResponse)
     }
     if (debouncedQuery) suggestions()
   }, [courseResidingCountry, debouncedQuery])
 
   const options = useMemo(() => {
-    if (googleSugestions) {
-      const suggestions = googleSugestions.predictions.filter(
+    if (googleSuggestions) {
+      const suggestions = googleSuggestions.predictions.filter(
         prediction =>
           !(data?.venues ?? []).some(
             venue => venue.googlePlacesId === prediction?.place_id
@@ -158,7 +158,7 @@ export const VenueSelector: React.FC<
     } else {
       return [...(data?.venues ?? [])]
     }
-  }, [data?.venues, googleSugestions]) as (AutocompletePrediction | Venue)[]
+  }, [data?.venues, googleSuggestions]) as (AutocompletePrediction | Venue)[]
 
   const handleSelection = useCallback(
     async (

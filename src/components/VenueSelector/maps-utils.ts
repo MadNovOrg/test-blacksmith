@@ -6,8 +6,10 @@ import PlaceResult = google.maps.places.PlaceResult
 export const getGoogleMapsSuggestions = async (
   query: string,
   residingCountry?: WorldCountriesCodes
-): Promise<AutocompleteResponse> => {
+): Promise<AutocompleteResponse | null> => {
   // Google API does not support country GB-ENG type codes and I'm slicing and using the first part of the country code
+
+  if (!window?.google) return null
 
   const residingCountryFormat = residingCountry?.includes('-')
     ? residingCountry.slice(0, residingCountry.indexOf('-'))
