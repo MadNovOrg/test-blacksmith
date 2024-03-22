@@ -64,13 +64,13 @@ export const CreateCourseSteps: React.FC<React.PropsWithChildren<Props>> = ({
       steps.push(assignTrainerStep)
     }
 
+    if (type === Course_Type_Enum.Indirect && acl.isInternalUser()) {
+      steps.push(assignTrainerStep)
+    }
+
     if (blendedLearning && type === Course_Type_Enum.Indirect) {
       steps.push(licenseOrderDetailsStep)
       steps.push(reviewAndConfirmStep)
-    }
-
-    if (type === Course_Type_Enum.Indirect && acl.isInternalUser()) {
-      steps.push(assignTrainerStep)
     }
 
     if (type === Course_Type_Enum.Closed) {
@@ -78,7 +78,9 @@ export const CreateCourseSteps: React.FC<React.PropsWithChildren<Props>> = ({
       steps.push(orderDetailsStep)
       steps.push(reviewAndConfirmStep)
     } else {
-      steps.push(courseBuilderStep)
+      if (!(type === Course_Type_Enum.Indirect && acl.isInternalUser())) {
+        steps.push(courseBuilderStep)
+      }
     }
 
     return steps

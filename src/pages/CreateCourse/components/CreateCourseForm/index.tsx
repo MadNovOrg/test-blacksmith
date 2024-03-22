@@ -182,7 +182,8 @@ export const CreateCourseForm = () => {
 
     if (
       courseData.blendedLearning &&
-      courseData.type === Course_Type_Enum.Indirect
+      courseData.type === Course_Type_Enum.Indirect &&
+      !acl.isInternalUser()
     ) {
       completeStep(StepsEnum.COURSE_DETAILS)
       navigate('./license-order-details')
@@ -288,9 +289,11 @@ export const CreateCourseForm = () => {
   )
 
   const nextStepButtonLabel =
-    courseData?.blendedLearning && courseData.type === Course_Type_Enum.Indirect
+    courseData?.blendedLearning &&
+    courseData.type === Course_Type_Enum.Indirect &&
+    !acl.isInternalUser()
       ? 'order-details-button-text'
-      : courseType === Course_Type_Enum.Indirect
+      : courseType === Course_Type_Enum.Indirect && !acl.isInternalUser()
       ? 'course-builder-button-text'
       : 'select-trainers-button-text'
 

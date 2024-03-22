@@ -7,6 +7,9 @@ import { useNavigate } from 'react-router-dom'
 
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { InvoiceDetails } from '@app/components/InvoiceDetails'
+import { useAuth } from '@app/context/auth'
+import { useSnackbar } from '@app/context/snackbar'
+import { Course_Type_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { LoadingStatus } from '@app/util'
 
@@ -17,8 +20,11 @@ import { useCreateCourse } from '../CreateCourseProvider'
 export const ReviewLicenseOrder: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
-  const { go1Licensing, courseData, setCurrentStepKey } = useCreateCourse()
+  const { acl } = useAuth()
+  const { go1Licensing, courseData, setCurrentStepKey, completeStep } =
+    useCreateCourse()
   const { saveCourse, savingStatus } = useSaveCourse()
+  const { addSnackbarMessage } = useSnackbar()
 
   const hasSavingError = savingStatus === LoadingStatus.ERROR
 
@@ -35,6 +41,21 @@ export const ReviewLicenseOrder: React.FC<
     const savedCourse = await saveCourse()
 
     if (savedCourse?.id) {
+      if (
+        courseData?.type === Course_Type_Enum.Indirect &&
+        acl.isInternalUser()
+      ) {
+        completeStep(StepsEnum.REVIEW_AND_CONFIRM)
+        addSnackbarMessage('course-created', {
+          label: t('pages.create-course.submitted-closed-exceptions', {
+            code: savedCourse?.courseCode,
+          }),
+        })
+        navigate(`/manage-courses/all/${savedCourse?.id}/details`)
+
+        return
+      }
+
       navigate(`/courses/${savedCourse.id}/modules`)
     }
   }
@@ -146,7 +167,10 @@ export const ReviewLicenseOrder: React.FC<
             onClick={() => handleSubmitButtonClick()}
             data-testid="courseBuilder-button"
           >
-            {_t('pages.create-course.course-builder-button-text')}
+            {courseData?.type === Course_Type_Enum.Indirect &&
+            acl.isInternalUser()
+              ? _t('pages.create-course.review-and-confirm.submit-btn')
+              : _t('pages.create-course.course-builder-button-text')}
           </LoadingButton>
         </Box>
       </Box>

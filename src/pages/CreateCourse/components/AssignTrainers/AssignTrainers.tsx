@@ -167,11 +167,15 @@ export const AssignTrainers = () => {
 
   const submit = useCallback(async () => {
     if (courseData && trainers) {
-      const isClosedCourse = courseData.type === Course_Type_Enum.Closed
-
       let nextPage: string
-      if (isClosedCourse) {
+      if (courseData.type === Course_Type_Enum.Closed) {
         nextPage = '../trainer-expenses'
+      } else if (
+        courseData.type === Course_Type_Enum.Indirect &&
+        courseData.blendedLearning &&
+        acl.isInternalUser()
+      ) {
+        nextPage = '../license-order-details'
       } else {
         const savedCourse = await saveCourse()
 
