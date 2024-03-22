@@ -2,7 +2,13 @@ import CheckedAllIcon from '@mui/icons-material/CheckCircle'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import UncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import CheckedSomeIcon from '@mui/icons-material/RemoveCircle'
-import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  type SxProps,
+  Typography,
+} from '@mui/material'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
@@ -28,6 +34,7 @@ type StrategyAccordionProps = {
   disabled: boolean
   showAsterisk: boolean
   showDuration?: boolean
+  sx?: SxProps
 }
 
 export const StrategyAccordion: React.FC<
@@ -44,6 +51,7 @@ export const StrategyAccordion: React.FC<
   disabled,
   showAsterisk,
   showDuration = true,
+  sx = {},
 }) => {
   const { t } = useTranslation()
   const handleToggle = (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -70,7 +78,7 @@ export const StrategyAccordion: React.FC<
     <Accordion
       expanded={expanded}
       onChange={handleToggle}
-      sx={{ mb: 3, py: 0, width: '100%' }}
+      sx={{ mb: 3, py: 0, width: '100%', ...sx }}
       TransitionProps={{ timeout: 0 }}
       disableGutters
     >

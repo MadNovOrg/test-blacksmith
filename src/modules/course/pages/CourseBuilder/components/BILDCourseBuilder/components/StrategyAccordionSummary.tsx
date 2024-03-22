@@ -1,6 +1,12 @@
 import CheckedAllIcon from '@mui/icons-material/CheckCircle'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  type SxProps,
+  Typography,
+} from '@mui/material'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
@@ -21,11 +27,12 @@ type StrategyAccordionSummaryProps = {
   }
   state: Record<string, boolean>
   showAsterisk: boolean
+  sx?: SxProps
 }
 
 export const StrategyAccordionSummary: React.FC<
   React.PropsWithChildren<StrategyAccordionSummaryProps>
-> = ({ name, modules, state, showAsterisk }) => {
+> = ({ name, modules, state, showAsterisk, sx = {} }) => {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
@@ -33,7 +40,7 @@ export const StrategyAccordionSummary: React.FC<
     <Accordion
       expanded={open}
       onChange={() => setOpen(!open)}
-      sx={{ mb: 3, py: 0, width: '100%' }}
+      sx={{ mb: 3, py: 0, width: '100%', ...sx }}
       TransitionProps={{ timeout: 0 }}
       disableGutters
     >
