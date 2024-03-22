@@ -78,7 +78,7 @@ export const FilterByTrainerCourseType: React.FC<
     <FilterAccordion
       sx={sx}
       options={options}
-      title={t('role-names.trainer')}
+      title={t('trainer-role')}
       onChange={_onChange}
       data-testid="FilterByCourseTrainerType"
       sort={false}

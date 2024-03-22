@@ -350,6 +350,7 @@
     "organization-key-contact": "Organisation Key Contact",
     "organization-admin": "Organisation Administrator"
   },
+  "trainer-role": "Trainer role",
   "trainer-role-types": {
     "assistant": "Assistant",
     "principal": "Principal",
