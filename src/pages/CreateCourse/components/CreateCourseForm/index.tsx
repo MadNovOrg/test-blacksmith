@@ -228,6 +228,14 @@ export const CreateCourseForm = () => {
     if (!courseData || !profile || !nextStepEnabled) return
     assertCourseDataValid(courseData, courseDataValid)
 
+    const ignoreExceptions =
+      courseType === Course_Type_Enum.Indirect && acl.isInternalUser()
+        ? [
+            Course_Exception_Enum.LeadTrainerInGracePeriod,
+            Course_Exception_Enum.TrainerRatioNotMet,
+          ]
+        : []
+
     if (courseType === Course_Type_Enum.Indirect && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
         {
@@ -249,7 +257,8 @@ export const CreateCourseForm = () => {
             levels: certifications as TrainerInput['levels'],
             trainer_role_types: profile.trainer_role_types,
           },
-        ]
+        ],
+        ignoreExceptions
       )
       setCourseExceptions(exceptions)
       if (exceptions.length > 0) return

@@ -46,11 +46,15 @@ export const ReviewLicenseOrder: React.FC<
         acl.isInternalUser()
       ) {
         completeStep(StepsEnum.REVIEW_AND_CONFIRM)
-        addSnackbarMessage('course-created', {
-          label: t('pages.create-course.submitted-closed-exceptions', {
-            code: savedCourse?.courseCode,
-          }),
-        })
+
+        if (savedCourse.hasExceptions) {
+          addSnackbarMessage('course-created', {
+            label: _t('pages.create-course.submitted-closed-exceptions', {
+              code: savedCourse?.courseCode,
+            }),
+          })
+        }
+
         navigate(`/manage-courses/all/${savedCourse?.id}/details`)
 
         return
