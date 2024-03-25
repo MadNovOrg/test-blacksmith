@@ -1,5 +1,16 @@
 # @teamteach/hub
 
+## 3.9.0
+
+### Minor Changes
+
+- ef902c8: Update replacement form to give suggestions based on user's organization
+
+### Patch Changes
+
+- d0d5a2f: Add search only by post code also for dfe organisations
+- c0ffaba: Modules for Indirect BL Reacc Level 2 course's builder
+
 ## 3.8.0
 
 ### Minor Changes
