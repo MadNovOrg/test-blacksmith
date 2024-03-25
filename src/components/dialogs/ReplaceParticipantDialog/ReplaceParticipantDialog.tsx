@@ -12,7 +12,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar'
 import ListItemText from '@mui/material/ListItemText'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Trans } from 'react-i18next'
 import { noop } from 'ts-essentials'
@@ -20,6 +20,11 @@ import { useMutation, useQuery } from 'urql'
 import { InferType } from 'yup'
 
 import { CourseTitleAndDuration } from '@app/components/CourseTitleAndDuration'
+import {
+  UserSelector,
+  Profile as UserSelectorProfile,
+} from '@app/components/UserSelector'
+import { useAuth } from '@app/context/auth'
 import {
   GetCourseParticipantOrderQuery,
   GetCourseParticipantOrderQueryVariables,
@@ -66,25 +71,35 @@ export const ReplaceParticipantDialog: React.FC<
   course,
 }) => {
   const { t, _t } = useScopedTranslation(TRANSLATION_SCOPE)
+  const { profile } = useAuth()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const [newAttendeeProfile, setNewAttendeeProfile] = useState<
+    Partial<UserSelectorProfile>
+  >({})
 
   const schema = yup.object({
-    email: schemas.email(_t).required(),
-    firstName: yup.string().required(requiredMsg(_t, 'first-name')),
-    surname: yup.string().required(requiredMsg(_t, 'surname')),
+    profile: yup.object({
+      email: schemas.email(_t).required(requiredMsg(_t, 'email')),
+      firstName: yup.string().required(requiredMsg(_t, 'first-name')),
+      surname: yup.string().required(requiredMsg(_t, 'surname')),
+    }),
     termsAccepted: yup.bool().required().isTrue(),
   })
 
-  const { register, formState, handleSubmit } = useForm<
+  const { register, formState, handleSubmit, watch, setValue } = useForm<
     InferType<typeof schema>
   >({
     resolver: yupResolver(schema),
     mode: 'all',
     defaultValues: {
       termsAccepted: mode !== Mode.TT_ADMIN ? undefined : true,
+      profile: {
+        email: '',
+      },
     },
   })
+  const values = watch()
 
   const [{ data, fetching, error }, replaceParticipant] = useMutation<
     ReplaceParticipantMutation,
@@ -95,9 +110,9 @@ export const ReplaceParticipantDialog: React.FC<
     replaceParticipant({
       input: {
         participantId: participant.id,
-        inviteeEmail: data.email,
-        inviteeFirstName: data.firstName,
-        inviteeLastName: data.surname,
+        inviteeEmail: data.profile.email,
+        inviteeFirstName: data.profile.firstName,
+        inviteeLastName: data.profile.surname,
       },
     })
   }
@@ -127,13 +142,31 @@ export const ReplaceParticipantDialog: React.FC<
     !participantError &&
     participantData?.participant?.order
 
+  const handleProfileChange = async (profile: UserSelectorProfile) => {
+    setNewAttendeeProfile({})
+    setValue(
+      'profile',
+      {
+        email: profile?.email || '',
+        firstName: profile?.givenName || '',
+        surname: profile?.familyName || '',
+      },
+      { shouldValidate: true }
+    )
+    setNewAttendeeProfile({
+      familyName: profile?.familyName,
+      givenName: profile?.givenName,
+    })
+  }
   return (
     <Dialog
-      title={
-        <Typography variant="h3" color="grey.800">
-          {t('title')}
-        </Typography>
-      }
+      slots={{
+        Title: () => (
+          <Typography variant="h3" color="grey.800">
+            {t('title')}
+          </Typography>
+        ),
+      }}
       open
       onClose={onClose ?? noop}
       maxWidth={700}
@@ -194,34 +227,45 @@ export const ReplaceParticipantDialog: React.FC<
           </Typography>
 
           <Grid container spacing={2} mb={4}>
-            <Grid item md={6} xs={12}>
+            <Grid item xs={12}>
+              <UserSelector
+                value={values.profile.email ?? undefined}
+                onChange={handleProfileChange}
+                onEmailChange={email => {
+                  setValue('profile', {
+                    ...values.profile,
+                    email,
+                  })
+                  setNewAttendeeProfile({})
+                }}
+                required
+                error={formState.errors.profile?.email?.message}
+                textFieldProps={{ variant: 'filled' }}
+                organisationId={
+                  profile?.organizations.map(org => org.organization.id) ?? []
+                }
+              />
+            </Grid>
+            <Grid item md={6}>
               <TextField
                 variant="filled"
                 placeholder={t('first-name-placeholder')}
                 fullWidth
-                error={Boolean(formState.errors.firstName?.message)}
-                helperText={formState.errors.firstName?.message}
-                {...register('firstName')}
+                error={Boolean(formState.errors.profile?.firstName?.message)}
+                helperText={formState.errors.profile?.firstName?.message}
+                {...register('profile.firstName')}
+                disabled={Boolean(newAttendeeProfile?.givenName)}
               />
             </Grid>
-            <Grid item md={6} xs={12}>
+            <Grid item md={6}>
               <TextField
                 variant="filled"
                 placeholder={t('surname-placeholder')}
                 fullWidth
-                error={Boolean(formState.errors.surname?.message)}
-                helperText={formState.errors.surname?.message}
-                {...register('surname')}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="filled"
-                placeholder={t('email-placeholder')}
-                fullWidth
-                error={Boolean(formState.errors.email?.message)}
-                helperText={formState.errors.email?.message}
-                {...register('email')}
+                error={Boolean(formState.errors.profile?.surname?.message)}
+                helperText={formState.errors.profile?.surname?.message}
+                {...register('profile.surname')}
+                disabled={Boolean(newAttendeeProfile?.familyName)}
               />
             </Grid>
           </Grid>
@@ -235,7 +279,7 @@ export const ReplaceParticipantDialog: React.FC<
               control={
                 <Checkbox
                   {...register('termsAccepted')}
-                  data-testid="terms-checkbox"
+                  data-testId="terms-checkbox"
                 />
               }
               label={
@@ -268,7 +312,7 @@ export const ReplaceParticipantDialog: React.FC<
         >
           <Button
             onClick={onClose}
-            data-testId="replace-cancel"
+            data-testid="replace-cancel"
             fullWidth={isMobile}
           >
             {t('cancel-btn-text')}
@@ -278,7 +322,7 @@ export const ReplaceParticipantDialog: React.FC<
             variant="contained"
             disabled={!formState.isValid}
             loading={fetching}
-            data-testId="replace-submit"
+            data-testid="replace-submit"
             fullWidth={isMobile}
           >
             {t('submit-btn-text')}

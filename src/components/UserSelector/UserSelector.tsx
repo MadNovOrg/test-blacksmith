@@ -30,7 +30,7 @@ export type Profile = Member['profile'] | null
 export type UserSelectorProps = {
   onChange: (profile: Profile) => void
   onEmailChange: (email: string) => void
-  organisationId: string
+  organisationId: string | string[]
   disabled?: boolean
   error?: string
   textFieldProps?: TextFieldProps
@@ -67,7 +67,12 @@ export const UserSelector: React.FC<
     GetOrgMembersQueryVariables
   >({
     query: GET_ORG_MEMBERS,
-    variables: { id: organisationId, email: `%${debouncedQuery}%` },
+    variables: {
+      id: [
+        ...(Array.isArray(organisationId) ? organisationId : [organisationId]),
+      ],
+      email: `%${debouncedQuery}%`,
+    },
     pause: !debouncedQuery,
   })
 

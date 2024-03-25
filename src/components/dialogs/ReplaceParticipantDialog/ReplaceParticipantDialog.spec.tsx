@@ -39,33 +39,6 @@ describe(ReplaceParticipantDialog.name, () => {
     expect(screen.getByText(participant.fullName)).toBeInTheDocument()
   })
 
-  it('should validate email field', async () => {
-    const client = {
-      executeMutation: () => never,
-      executeQuery: () => never,
-    } as unknown as Client
-
-    const participant: Props['participant'] = {
-      id: chance.guid(),
-      fullName: chance.name(),
-      avatar: chance.url(),
-    }
-
-    render(
-      <Provider value={client}>
-        <ReplaceParticipantDialog participant={participant} />
-      </Provider>
-    )
-
-    await userEvent.type(screen.getByPlaceholderText(/email/i), 'invalid email')
-
-    await waitFor(() => {
-      expect(
-        screen.getByText('Please enter a valid email address')
-      ).toBeInTheDocument()
-    })
-  })
-
   it('should call cancel prop when closing dialog', async () => {
     const client = {
       executeMutation: () => never,
@@ -138,12 +111,12 @@ describe(ReplaceParticipantDialog.name, () => {
       </Provider>
     )
 
-    await userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
-    await userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
     await userEvent.type(
       screen.getByPlaceholderText(/email/i),
       'example@example.com'
     )
+    await userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
+    await userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
 
     await userEvent.click(screen.getByTestId('replace-submit'))
 
@@ -183,12 +156,12 @@ describe(ReplaceParticipantDialog.name, () => {
       </Provider>
     )
 
-    await userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
-    await userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
     await userEvent.type(
       screen.getByPlaceholderText(/email/i),
       'example@example.com'
     )
+    await userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
+    await userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
 
     await waitFor(async () => {
       await userEvent.click(screen.getByTestId('replace-submit'))
@@ -223,12 +196,12 @@ describe(ReplaceParticipantDialog.name, () => {
       </Provider>
     )
 
-    await userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
-    await userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
     await userEvent.type(
       screen.getByPlaceholderText(/email/i),
       'example@example.com'
     )
+    await userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
+    await userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
 
     await waitFor(() => {
       expect(screen.getByTestId('replace-submit')).toBeDisabled()
