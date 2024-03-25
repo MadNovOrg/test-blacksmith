@@ -28948,6 +28948,8 @@ export type Dfe_Establishment = {
   name: Scalars['String'];
   ofstedLastInspection?: Maybe<Scalars['String']>;
   ofstedRating?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "dfe_org_post_code" */
+  postCodeForSearch?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
   town?: Maybe<Scalars['String']>;
   trustName?: Maybe<Scalars['String']>;
@@ -28995,6 +28997,7 @@ export type Dfe_Establishment_Bool_Exp = {
   name?: InputMaybe<String_Comparison_Exp>;
   ofstedLastInspection?: InputMaybe<String_Comparison_Exp>;
   ofstedRating?: InputMaybe<String_Comparison_Exp>;
+  postCodeForSearch?: InputMaybe<String_Comparison_Exp>;
   postcode?: InputMaybe<String_Comparison_Exp>;
   town?: InputMaybe<String_Comparison_Exp>;
   trustName?: InputMaybe<String_Comparison_Exp>;
@@ -29046,6 +29049,8 @@ export type Dfe_Establishment_Max_Fields = {
   name?: Maybe<Scalars['String']>;
   ofstedLastInspection?: Maybe<Scalars['String']>;
   ofstedRating?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "dfe_org_post_code" */
+  postCodeForSearch?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
   town?: Maybe<Scalars['String']>;
   trustName?: Maybe<Scalars['String']>;
@@ -29069,6 +29074,8 @@ export type Dfe_Establishment_Min_Fields = {
   name?: Maybe<Scalars['String']>;
   ofstedLastInspection?: Maybe<Scalars['String']>;
   ofstedRating?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "dfe_org_post_code" */
+  postCodeForSearch?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
   town?: Maybe<Scalars['String']>;
   trustName?: Maybe<Scalars['String']>;
@@ -29107,6 +29114,7 @@ export type Dfe_Establishment_Order_By = {
   name?: InputMaybe<Order_By>;
   ofstedLastInspection?: InputMaybe<Order_By>;
   ofstedRating?: InputMaybe<Order_By>;
+  postCodeForSearch?: InputMaybe<Order_By>;
   postcode?: InputMaybe<Order_By>;
   town?: InputMaybe<Order_By>;
   trustName?: InputMaybe<Order_By>;

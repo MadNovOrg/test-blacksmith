@@ -1,0 +1,1 @@
+DROP FUNCTION IF EXISTS public.dfe_org_post_code;

@@ -41,6 +41,12 @@ configuration:
     trust_name: trustName
     trust_type: trustType
   custom_root_fields: {}
+computed_fields:
+  - name: postCodeForSearch
+    definition:
+      function:
+        name: dfe_org_post_code
+        schema: public
 select_permissions:
   - role: anonymous
     permission:
@@ -63,6 +69,8 @@ select_permissions:
         - head_job_title
         - ofsted_rating
         - ofsted_last_inspection
+      computed_fields:
+        - postCodeForSearch
       filter: {}
       allow_aggregations: true
   - role: sales-admin
@@ -86,6 +94,8 @@ select_permissions:
         - trust_type
         - urn
         - id
+      computed_fields:
+        - postCodeForSearch
       filter: {}
       allow_aggregations: true
   - role: unverified
@@ -109,6 +119,8 @@ select_permissions:
         - trust_type
         - urn
         - id
+      computed_fields:
+        - postCodeForSearch
       filter: {}
       allow_aggregations: true
   - role: user
@@ -132,5 +144,7 @@ select_permissions:
         - trust_type
         - urn
         - id
+      computed_fields:
+        - postCodeForSearch
       filter: {}
       allow_aggregations: true

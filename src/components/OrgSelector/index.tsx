@@ -126,7 +126,15 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       FindEstablishmentQueryVariables
     >({
       query: FIND_ESTABLISHMENTS,
-      variables: { where: { name: { _ilike: `%${debouncedQuery}%` } } },
+      variables: {
+        where: searchOnlyByPostCode
+          ? {
+              postCodeForSearch: {
+                _ilike: `%${debouncedQuery.replace(/\s/g, '')}%`,
+              },
+            }
+          : { name: { _ilike: `%${debouncedQuery}%` } },
+      },
       pause: !debouncedQuery,
     })
 
