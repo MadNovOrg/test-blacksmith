@@ -200,6 +200,18 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const loadingData = fetching || isUsePromoCodesLoading
 
+  const showRegistrants = useMemo(
+    () =>
+      courses?.some(
+        course =>
+          course?.type === Course_Type_Enum.Open &&
+          course.deliveryType === Course_Delivery_Type_Enum.Virtual &&
+          course.level === Course_Level_Enum.Level_1 &&
+          registrants.length
+      ),
+    [courses, registrants.length]
+  )
+
   const expensesLineItems =
     isNotNullish(invoice) && isNotNullish(mainCourse)
       ? getTrainerExpensesLineItems(invoice.lineItems, mainCourse.level)
@@ -356,25 +368,19 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                   ) ? (
                     <DetailsItemBox data-testid="registrants-details">
                       <Stack spacing={2}>
-                        {registrants.map(
-                          (
-                            registrant: CreateOrderParticipantInput,
-                            index: number
-                          ) => (
-                            <ItemRow key={index}>
-                              <Typography color="grey.700">
-                                Address:{' '}
-                                {`${registrant.addressLine1}, ${
-                                  registrant.addressLine2?.trim()
-                                    ? registrant.addressLine2 + ', '
-                                    : ''
-                                }${registrant.city}, ${registrant.postCode}, ${
-                                  registrant.country
-                                }`}
-                              </Typography>
-                            </ItemRow>
-                          )
-                        )}
+                        {registrants.map((registrant, index: number) => {
+                          if (getRegistrantPostalAddress(registrant)) {
+                            return (
+                              <ItemRow key={index}>
+                                <Typography color="grey.700">
+                                  {` Address: ${getRegistrantPostalAddress(
+                                    registrant
+                                  )}`}
+                                </Typography>
+                              </ItemRow>
+                            )
+                          } else return null
+                        })}
                       </Stack>
                     </DetailsItemBox>
                   ) : null}
@@ -672,34 +678,33 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                       </Stack>
                     </DetailsItemBox>
                   ) : null}
-
-                  {mainCourse?.type === Course_Type_Enum.Open &&
-                  mainCourse.deliveryType ===
-                    Course_Delivery_Type_Enum.Virtual &&
-                  mainCourse.level === Course_Level_Enum.Level_1 &&
-                  registrants.length ? (
+                  {showRegistrants ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
                         <Typography fontWeight={600}>
                           {t('registration')}
                         </Typography>
-                        {registrants.map((registrant, index) => (
-                          <Grid key={index}>
-                            <Grid item>
-                              <Typography>
-                                {getRegistrantPostalAddress(registrant)}
-                              </Typography>
-                            </Grid>
-                            <Grid item>
-                              <Typography>
-                                {registrant.firstName} {registrant.lastName}
-                              </Typography>
-                            </Grid>
-                            <Grid item>
-                              <Typography>{registrant.email}</Typography>
-                            </Grid>
-                          </Grid>
-                        ))}
+                        {registrants.map((registrant, index) => {
+                          if (getRegistrantPostalAddress(registrant)) {
+                            return (
+                              <Grid key={index}>
+                                <Grid item>
+                                  <Typography>
+                                    {getRegistrantPostalAddress(registrant)}
+                                  </Typography>
+                                </Grid>
+                                <Grid item>
+                                  <Typography>
+                                    {registrant.firstName} {registrant.lastName}
+                                  </Typography>
+                                </Grid>
+                                <Grid item>
+                                  <Typography>{registrant.email}</Typography>
+                                </Grid>
+                              </Grid>
+                            )
+                          } else return null
+                        })}
                       </Stack>
                     </DetailsItemBox>
                   ) : null}
