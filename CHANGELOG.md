@@ -1,5 +1,32 @@
 # @teamteach/hub
 
+## 3.8.0
+
+### Minor Changes
+
+- fc00a2b: Allow org admin to view attendance status
+- 83e71f0: Updates the transfer flow to include address details field on transfers from L1 F2F to L1 Virtual
+- 980ac9c: Update order's address / registration section to account for transfered attendees
+- 910f180: Allow request organisation create instead of organisation creation on register pages
+- d03f3c6: Limit number of upcoming courses on organisations page to 5.
+- 1b50fff: Org search only by post code on registration forms
+
+### Patch Changes
+
+- b355b02: Fix snackbar on Indirect course create
+- e01fc58: Check if certificate is in grace period before displaying 'Course Certificate Required' warning.
+- b606763: Fix google is not defined error
+- 4fcdbd6: Trainer role courses filter wording change
+- 6afd7e3: Grading - course curriculum type error fix
+- 584b89e: make venue selector take country from course details
+- 606a040: amend modules, order and wording for advanced trainer bild course builder
+- 9e891e8: Fix resource area access for trainers
+- 0621c2d: Add org selector search only by post code on onboarding form
+- 6c71308: Fix next step button on Indirect course creation form for internal users
+- 8bb10c0: Move create organisation option at the bottom of organisation selector
+- dc0dc90: Convert schedule time for review changes modal
+- e2e958b: fix exceptions alert header when there's only 1 exception
+
 ## 3.7.0
 
 ### Minor Changes
