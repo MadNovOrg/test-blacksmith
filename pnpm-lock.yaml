@@ -195,8 +195,8 @@ importers:
         specifier: ^3.1.3
         version: 3.1.3(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/material@5.13.6)(@types/react@18.2.14)(react-dom@18.2.0)(react@18.2.0)
       posthog-js:
-        specifier: ^1.116.0
-        version: 1.116.0
+        specifier: ^1.116.5
+        version: 1.116.5
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -20494,8 +20494,8 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
-  /posthog-js@1.116.0:
-    resolution: {integrity: sha512-mSXEnB8W/hgiT8HE8Y0bWlLIM9JSI1e4TlosJL9H4/H/ekDJqL+Yi8JQNWhIefTgUBCU/ZuXmHzs2mO0rbVxhQ==}
+  /posthog-js@1.116.5:
+    resolution: {integrity: sha512-Dfsy07WGPRqbXNQgfhR5zhcQw4A078xCRX1y0oGmy8xVUmL6QLNNTVKENB4xpo45Ox+88cysi+hEMhd9SfV5Qg==}
     dependencies:
       fflate: 0.4.8
       preact: 10.19.6
