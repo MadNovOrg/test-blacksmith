@@ -217,7 +217,7 @@
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.6.15",
-    "eslint-plugin-vitest": "^0.3.20",
+    "eslint-plugin-vitest": "^0.3.26",
     "hasura-cli": "^2.36.1",
     "husky": "^8.0.3",
     "identity-obj-proxy": "^3.0.0",
