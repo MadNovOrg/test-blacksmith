@@ -8,6 +8,12 @@ object_relationships:
   - name: course
     using:
       foreign_key_constraint_on: course_id
+computed_fields:
+  - name: searchFields
+    definition:
+      function:
+        name: merge_course_audit_rows
+        schema: public
 insert_permissions:
   - role: ld
     permission:
@@ -16,6 +22,7 @@ insert_permissions:
         - course_id
         - payload
         - type
+        - xero_invoice_number
         - created_at
         - updated_at
         - authorized_by
@@ -32,6 +39,7 @@ insert_permissions:
         - course_id
         - payload
         - type
+        - xero_invoice_number
         - created_at
         - updated_at
         - authorized_by
@@ -47,6 +55,7 @@ insert_permissions:
         - course_id
         - payload
         - type
+        - xero_invoice_number
         - created_at
         - updated_at
         - authorized_by
@@ -61,6 +70,7 @@ insert_permissions:
         - course_id
         - authorized_by
         - type
+        - xero_invoice_number
         - payload
   - role: tt-ops
     permission:
@@ -74,6 +84,7 @@ insert_permissions:
         - course_id
         - payload
         - type
+        - xero_invoice_number
         - created_at
         - updated_at
         - authorized_by
@@ -88,7 +99,10 @@ select_permissions:
         - course_id
         - authorized_by
         - type
+        - xero_invoice_number
         - payload
+      computed_fields:
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: ld
@@ -100,7 +114,10 @@ select_permissions:
         - course_id
         - authorized_by
         - type
+        - xero_invoice_number
         - payload
+      computed_fields:
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: sales-admin
@@ -112,7 +129,10 @@ select_permissions:
         - course_id
         - authorized_by
         - type
+        - xero_invoice_number
         - payload
+      computed_fields:
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: sales-representative
@@ -124,7 +144,10 @@ select_permissions:
         - course_id
         - authorized_by
         - type
+        - xero_invoice_number
         - payload
+      computed_fields:
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: tt-admin
@@ -136,7 +159,10 @@ select_permissions:
         - course_id
         - authorized_by
         - type
+        - xero_invoice_number
         - payload
+      computed_fields:
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: tt-ops
@@ -148,7 +174,10 @@ select_permissions:
         - course_id
         - authorized_by
         - type
+        - xero_invoice_number
         - payload
+      computed_fields:
+        - searchFields
       filter: {}
       allow_aggregations: true
 event_triggers:

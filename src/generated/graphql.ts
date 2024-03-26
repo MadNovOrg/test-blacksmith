@@ -15987,8 +15987,11 @@ export type Course_Audit = {
   created_at: Scalars['timestamptz'];
   id: Scalars['uuid'];
   payload: Scalars['jsonb'];
+  /** A computed field, executes function "merge_course_audit_rows" */
+  searchFields?: Maybe<Scalars['String']>;
   type: Course_Audit_Type_Enum;
   updated_at: Scalars['timestamptz'];
+  xero_invoice_number?: Maybe<Scalars['String']>;
 };
 
 
@@ -16050,8 +16053,10 @@ export type Course_Audit_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   payload?: InputMaybe<Jsonb_Comparison_Exp>;
+  searchFields?: InputMaybe<String_Comparison_Exp>;
   type?: InputMaybe<Course_Audit_Type_Enum_Comparison_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  xero_invoice_number?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "course_audit" */
@@ -16091,6 +16096,7 @@ export type Course_Audit_Insert_Input = {
   payload?: InputMaybe<Scalars['jsonb']>;
   type?: InputMaybe<Course_Audit_Type_Enum>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
+  xero_invoice_number?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
@@ -16100,7 +16106,10 @@ export type Course_Audit_Max_Fields = {
   course_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
+  /** A computed field, executes function "merge_course_audit_rows" */
+  searchFields?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+  xero_invoice_number?: Maybe<Scalars['String']>;
 };
 
 /** aggregate min on columns */
@@ -16110,7 +16119,10 @@ export type Course_Audit_Min_Fields = {
   course_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
+  /** A computed field, executes function "merge_course_audit_rows" */
+  searchFields?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+  xero_invoice_number?: Maybe<Scalars['String']>;
 };
 
 /** response of any mutation on the table "course_audit" */
@@ -16138,8 +16150,10 @@ export type Course_Audit_Order_By = {
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   payload?: InputMaybe<Order_By>;
+  searchFields?: InputMaybe<Order_By>;
   type?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
+  xero_invoice_number?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: course_audit */
@@ -16167,7 +16181,9 @@ export enum Course_Audit_Select_Column {
   /** column name */
   Type = 'type',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updated_at',
+  /** column name */
+  XeroInvoiceNumber = 'xero_invoice_number'
 }
 
 /** input type for updating data in table "course_audit" */
@@ -16179,6 +16195,7 @@ export type Course_Audit_Set_Input = {
   payload?: InputMaybe<Scalars['jsonb']>;
   type?: InputMaybe<Course_Audit_Type_Enum>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
+  xero_invoice_number?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate stddev on columns */
@@ -16216,6 +16233,7 @@ export type Course_Audit_Stream_Cursor_Value_Input = {
   payload?: InputMaybe<Scalars['jsonb']>;
   type?: InputMaybe<Course_Audit_Type_Enum>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
+  xero_invoice_number?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate sum on columns */
@@ -16377,7 +16395,9 @@ export enum Course_Audit_Update_Column {
   /** column name */
   Type = 'type',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updated_at',
+  /** column name */
+  XeroInvoiceNumber = 'xero_invoice_number'
 }
 
 export type Course_Audit_Updates = {
@@ -23390,10 +23410,13 @@ export type Course_Participant_Audit = {
   /** An object relationship */
   profile: Profile;
   profile_id: Scalars['uuid'];
+  /** A computed field, executes function "merge_course_participant_audit_rows" */
+  searchFields?: Maybe<Scalars['String']>;
   /** A computed field, executes function "course_participant_audit_to_course" */
   toCourse?: Maybe<Array<Course>>;
   type: Course_Participant_Audit_Type_Enum;
   updated_at: Scalars['timestamptz'];
+  xero_invoice_number?: Maybe<Scalars['String']>;
 };
 
 
@@ -23518,9 +23541,11 @@ export type Course_Participant_Audit_Bool_Exp = {
   payload?: InputMaybe<Jsonb_Comparison_Exp>;
   profile?: InputMaybe<Profile_Bool_Exp>;
   profile_id?: InputMaybe<Uuid_Comparison_Exp>;
+  searchFields?: InputMaybe<String_Comparison_Exp>;
   toCourse?: InputMaybe<Course_Bool_Exp>;
   type?: InputMaybe<Course_Participant_Audit_Type_Enum_Comparison_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  xero_invoice_number?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "course_participant_audit" */
@@ -23562,6 +23587,7 @@ export type Course_Participant_Audit_Insert_Input = {
   profile_id?: InputMaybe<Scalars['uuid']>;
   type?: InputMaybe<Course_Participant_Audit_Type_Enum>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
+  xero_invoice_number?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
@@ -23576,7 +23602,10 @@ export type Course_Participant_Audit_Max_Fields = {
   /** A computed field, executes function "course_participant_audit_new_attendee" */
   newAttendeeEmail?: Maybe<Scalars['String']>;
   profile_id?: Maybe<Scalars['uuid']>;
+  /** A computed field, executes function "merge_course_participant_audit_rows" */
+  searchFields?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+  xero_invoice_number?: Maybe<Scalars['String']>;
 };
 
 /** order by max() on columns of table "course_participant_audit" */
@@ -23587,6 +23616,7 @@ export type Course_Participant_Audit_Max_Order_By = {
   id?: InputMaybe<Order_By>;
   profile_id?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
+  xero_invoice_number?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -23601,7 +23631,10 @@ export type Course_Participant_Audit_Min_Fields = {
   /** A computed field, executes function "course_participant_audit_new_attendee" */
   newAttendeeEmail?: Maybe<Scalars['String']>;
   profile_id?: Maybe<Scalars['uuid']>;
+  /** A computed field, executes function "merge_course_participant_audit_rows" */
+  searchFields?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+  xero_invoice_number?: Maybe<Scalars['String']>;
 };
 
 /** order by min() on columns of table "course_participant_audit" */
@@ -23612,6 +23645,7 @@ export type Course_Participant_Audit_Min_Order_By = {
   id?: InputMaybe<Order_By>;
   profile_id?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
+  xero_invoice_number?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "course_participant_audit" */
@@ -23644,9 +23678,11 @@ export type Course_Participant_Audit_Order_By = {
   payload?: InputMaybe<Order_By>;
   profile?: InputMaybe<Profile_Order_By>;
   profile_id?: InputMaybe<Order_By>;
+  searchFields?: InputMaybe<Order_By>;
   toCourse_aggregate?: InputMaybe<Course_Aggregate_Order_By>;
   type?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
+  xero_invoice_number?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: course_participant_audit */
@@ -23676,7 +23712,9 @@ export enum Course_Participant_Audit_Select_Column {
   /** column name */
   Type = 'type',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updated_at',
+  /** column name */
+  XeroInvoiceNumber = 'xero_invoice_number'
 }
 
 /** input type for updating data in table "course_participant_audit" */
@@ -23689,6 +23727,7 @@ export type Course_Participant_Audit_Set_Input = {
   profile_id?: InputMaybe<Scalars['uuid']>;
   type?: InputMaybe<Course_Participant_Audit_Type_Enum>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
+  xero_invoice_number?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate stddev on columns */
@@ -23742,6 +23781,7 @@ export type Course_Participant_Audit_Stream_Cursor_Value_Input = {
   profile_id?: InputMaybe<Scalars['uuid']>;
   type?: InputMaybe<Course_Participant_Audit_Type_Enum>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
+  xero_invoice_number?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate sum on columns */
@@ -23911,7 +23951,9 @@ export enum Course_Participant_Audit_Update_Column {
   /** column name */
   Type = 'type',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updated_at',
+  /** column name */
+  XeroInvoiceNumber = 'xero_invoice_number'
 }
 
 export type Course_Participant_Audit_Updates = {
@@ -58146,7 +58188,7 @@ export type GetAttendeeAuditLogsQueryVariables = Exact<{
 }>;
 
 
-export type GetAttendeeAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_participant_audit', id: any, created_at: any, updated_at: any, payload: any, newAttendeeEmail?: string | null, authorizedBy: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null, archived?: boolean | null }, profile: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null, email?: string | null, archived?: boolean | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, course: { __typename?: 'course', id: number, course_code?: string | null, type: Course_Type_Enum, orders: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, registrants: any, xeroInvoiceNumber?: string | null } | null }> }, fromCourse?: Array<{ __typename?: 'course', id: number, course_code?: string | null }> | null, toCourse?: Array<{ __typename?: 'course', id: number, course_code?: string | null }> | null }>, logsAggregate: { __typename?: 'course_participant_audit_aggregate', aggregate?: { __typename?: 'course_participant_audit_aggregate_fields', count: number } | null } };
+export type GetAttendeeAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_participant_audit', id: any, created_at: any, updated_at: any, xero_invoice_number?: string | null, payload: any, newAttendeeEmail?: string | null, authorizedBy: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null, archived?: boolean | null }, profile: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null, email?: string | null, archived?: boolean | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, course: { __typename?: 'course', id: number, course_code?: string | null, type: Course_Type_Enum, orders: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null }> }, fromCourse?: Array<{ __typename?: 'course', id: number, course_code?: string | null }> | null, toCourse?: Array<{ __typename?: 'course', id: number, course_code?: string | null }> | null }>, logsAggregate: { __typename?: 'course_participant_audit_aggregate', aggregate?: { __typename?: 'course_participant_audit_aggregate_fields', count: number } | null } };
 
 export type GetCourseAuditLogsQueryVariables = Exact<{
   where: Course_Audit_Bool_Exp;
@@ -58157,7 +58199,7 @@ export type GetCourseAuditLogsQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_audit', id: any, created_at: any, updated_at: any, payload: any, authorizedBy: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null }, course: { __typename?: 'course', id: number, course_code?: string | null, type: Course_Type_Enum, start?: any | null, organization?: { __typename?: 'organization', name: string, id: any } | null, trainers?: Array<{ __typename?: 'course_trainer', type: Course_Trainer_Type_Enum, id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, id: any } }>, orders: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null }> } }>, logsAggregate: { __typename?: 'course_audit_aggregate', aggregate?: { __typename?: 'course_audit_aggregate_fields', count: number } | null } };
+export type GetCourseAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_audit', id: any, created_at: any, updated_at: any, xero_invoice_number?: string | null, payload: any, authorizedBy: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null }, course: { __typename?: 'course', id: number, course_code?: string | null, type: Course_Type_Enum, start?: any | null, organization?: { __typename?: 'organization', name: string, id: any } | null, trainers?: Array<{ __typename?: 'course_trainer', type: Course_Trainer_Type_Enum, id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, id: any } }>, orders: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null }> } }>, logsAggregate: { __typename?: 'course_audit_aggregate', aggregate?: { __typename?: 'course_audit_aggregate_fields', count: number } | null } };
 
 export type GetBildStrategiesQueryVariables = Exact<{ [key: string]: never; }>;
 

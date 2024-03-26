@@ -59,23 +59,18 @@ export default function useCourseAuditLogs({
       conditions.push({ created_at: { _lte: filter.to } })
     }
     if (filter.query) {
-      conditions.push({
-        _or: [
-          {
-            course: {
-              trainers: {
-                profile: { fullName: { _ilike: `%${filter.query}%` } },
-              },
-            },
-          },
-          { course: { course_code: { _ilike: `%${filter.query}%` } } },
-          {
-            course: { organization: { name: { _ilike: `%${filter.query}%` } } },
-          },
-          { authorizedBy: { fullName: { _ilike: `%${filter.query}%` } } },
-          { authorizedBy: { fullName: { _ilike: `%${filter.query}%` } } },
-        ],
-      })
+      const query = filter.query.trim()
+      const keywords = query.split(' ').filter(word => Boolean(word))
+
+      conditions.push(
+        keywords && keywords.length > 1
+          ? {
+              _and: keywords.map(w => ({
+                searchFields: { _ilike: `%${w}%` },
+              })),
+            }
+          : { searchFields: { _ilike: `%${query}%` } }
+      )
     }
     if (filter.filterByCertificateLevel?.length) {
       conditions.push({

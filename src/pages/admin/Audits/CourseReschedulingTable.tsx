@@ -102,7 +102,8 @@ export const CourseReschedulingTable: React.FC<
         label: t('common.invoice-no'),
         sorting: false,
         exportRender: (log: CourseLogType) =>
-          getCourseInvoice(log)?.xeroInvoiceNumber ?? '',
+          log.xero_invoice_number ??
+          (log.course.orders[0].order?.xeroInvoiceNumber || ''),
       },
       {
         id: 'authorizedBy.fullName',
@@ -229,9 +230,10 @@ export const CourseReschedulingTable: React.FC<
                         </TableCell>
                         <TableCell>
                           {invoice ? (
-                            <Link href={`/orders/${invoice.id}`}>
+                            <Link href={`/orders/${invoice.order?.id}`}>
                               <Typography variant="body2">
-                                {invoice.xeroInvoiceNumber}
+                                {log.xero_invoice_number ??
+                                  log.course.orders[0].order?.xeroInvoiceNumber}
                               </Typography>
                             </Link>
                           ) : null}

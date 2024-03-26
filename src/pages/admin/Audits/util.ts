@@ -1,5 +1,4 @@
 import {
-  Course_Type_Enum,
   GetAttendeeAuditLogsQuery,
   GetCourseAuditLogsQuery,
 } from '@app/generated/graphql'
@@ -20,30 +19,26 @@ export type CourseLogType = GetCourseAuditLogsQuery['logs'][0]
 export type AttendeeLogType = GetAttendeeAuditLogsQuery['logs'][0]
 
 export const getCourseInvoice = (log: CourseLogType) => {
-  if (
-    log.course.type === Course_Type_Enum.Closed ||
-    log.course.type === Course_Type_Enum.Indirect
-  ) {
-    if (log.course.orders.length > 0) {
-      return log.course.orders[0].order
-    }
+  if (!log.course.orders || log.course.orders.length === 0) {
+    return null
   }
-  return null
+  if (log.xero_invoice_number) {
+    return log.course?.orders?.find(
+      o => o.order?.xeroInvoiceNumber === log.xero_invoice_number
+    )
+  } else {
+    return log.course?.orders[0]
+  }
 }
 export const getAttendeeInvoice = (log: AttendeeLogType) => {
-  if (
-    log.course.type === Course_Type_Enum.Closed ||
-    log.course.type === Course_Type_Enum.Indirect
-  ) {
-    if (log.course.orders.length > 0) {
-      return log.course.orders[0]
-    }
-  } else {
-    return log.course.orders.find(({ order }) =>
-      order?.registrants.find(
-        (register: { email: string }) => register.email === log.profile.email
-      )
-    )
+  if (!log.course.orders || log.course.orders.length === 0) {
+    return null
   }
-  return null
+  if (log.xero_invoice_number) {
+    return log.course?.orders?.find(
+      o => o.order?.xeroInvoiceNumber === log.xero_invoice_number
+    )
+  } else {
+    return log.course?.orders[0]
+  }
 }

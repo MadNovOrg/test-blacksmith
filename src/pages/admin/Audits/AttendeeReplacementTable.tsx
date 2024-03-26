@@ -123,7 +123,8 @@ export const AttendeeReplacementTable: React.FC<
         label: t('common.invoice-no'),
         sorting: false,
         exportRender: (log: AttendeeLogType) =>
-          getAttendeeInvoice(log)?.order?.xeroInvoiceNumber ?? '',
+          log.xero_invoice_number ??
+          (log.course.orders[0].order?.xeroInvoiceNumber || ''),
       },
       {
         id: 'authorizedBy.fullName',
@@ -289,7 +290,8 @@ export const AttendeeReplacementTable: React.FC<
                           {invoice ? (
                             <Link href={`/orders/${invoice.order?.id}`}>
                               <Typography variant="body2">
-                                {invoice.order?.xeroInvoiceNumber}
+                                {log.xero_invoice_number ??
+                                  log.course.orders[0].order?.xeroInvoiceNumber}
                               </Typography>
                             </Link>
                           ) : null}

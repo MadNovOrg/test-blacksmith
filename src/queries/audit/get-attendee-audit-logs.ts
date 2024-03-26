@@ -16,6 +16,7 @@ export const GET_ATTENDEE_AUDIT_LOGS_QUERY = gql`
       id
       created_at
       updated_at
+      xero_invoice_number
       authorizedBy {
         id
         avatar
@@ -42,7 +43,6 @@ export const GET_ATTENDEE_AUDIT_LOGS_QUERY = gql`
         orders {
           order {
             id
-            registrants
             xeroInvoiceNumber
           }
         }

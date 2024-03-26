@@ -472,6 +472,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 course_id: course.id,
                 payload,
                 authorized_by: profile?.id,
+                xero_invoice_number:
+                  course.orders && course.orders.length > 0
+                    ? course.orders[0]?.order.xeroInvoiceNumber
+                    : null,
               },
             })
           }

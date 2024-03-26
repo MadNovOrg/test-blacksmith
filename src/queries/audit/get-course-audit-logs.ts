@@ -17,6 +17,7 @@ export const GET_COURSE_AUDIT_LOGS_QUERY = gql`
       id
       created_at
       updated_at
+      xero_invoice_number
       authorizedBy {
         id
         avatar

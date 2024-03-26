@@ -12,11 +12,6 @@ object_relationships:
     using:
       foreign_key_constraint_on: profile_id
 computed_fields:
-  - name: courseParticipantInvoiceNumber
-    definition:
-      function:
-        name: participant_audit_participation_order_invoice_number
-        schema: public
   - name: fromCourse
     definition:
       function:
@@ -31,6 +26,11 @@ computed_fields:
     definition:
       function:
         name: course_participant_audit_to_course
+        schema: public
+  - name: searchFields
+    definition:
+      function:
+        name: merge_course_participant_audit_rows
         schema: public
 insert_permissions:
   - role: trainer
@@ -50,6 +50,7 @@ insert_permissions:
         - payload
         - profile_id
         - type
+        - xero_invoice_number
         - updated_at
   - role: tt-admin
     permission:
@@ -63,6 +64,7 @@ insert_permissions:
         - updated_at
         - authorized_by
         - id
+        - xero_invoice_number
         - profile_id
         - course_id
   - role: tt-ops
@@ -77,6 +79,7 @@ insert_permissions:
         - updated_at
         - authorized_by
         - id
+        - xero_invoice_number
         - profile_id
         - course_id
 select_permissions:
@@ -87,6 +90,7 @@ select_permissions:
         - id
         - profile_id
         - type
+        - xero_invoice_number
       filter:
         profile_id:
           _eq: X-Hasura-User-Id
@@ -100,11 +104,12 @@ select_permissions:
         - updated_at
         - authorized_by
         - id
+        - xero_invoice_number
         - profile_id
         - course_id
       computed_fields:
         - newAttendeeEmail
-        - courseParticipantInvoiceNumber
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: ld
@@ -113,6 +118,7 @@ select_permissions:
         - course_id
         - payload
         - type
+        - xero_invoice_number
         - created_at
         - updated_at
         - authorized_by
@@ -120,6 +126,7 @@ select_permissions:
         - profile_id
       computed_fields:
         - newAttendeeEmail
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: organization-key-contact
@@ -129,6 +136,7 @@ select_permissions:
         - id
         - profile_id
         - type
+        - xero_invoice_number
       filter:
         profile_id:
           _eq: X-Hasura-User-Id
@@ -139,6 +147,7 @@ select_permissions:
         - course_id
         - payload
         - type
+        - xero_invoice_number
         - created_at
         - updated_at
         - authorized_by
@@ -146,7 +155,7 @@ select_permissions:
         - profile_id
       computed_fields:
         - newAttendeeEmail
-        - courseParticipantInvoiceNumber
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: sales-representative
@@ -154,6 +163,7 @@ select_permissions:
       columns:
         - payload
         - type
+        - xero_invoice_number
         - created_at
         - updated_at
         - authorized_by
@@ -162,7 +172,7 @@ select_permissions:
         - course_id
       computed_fields:
         - newAttendeeEmail
-        - courseParticipantInvoiceNumber
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: trainer
@@ -172,6 +182,7 @@ select_permissions:
         - id
         - profile_id
         - type
+        - xero_invoice_number
       filter:
         profile_id:
           _eq: X-Hasura-User-Id
@@ -181,6 +192,7 @@ select_permissions:
       columns:
         - payload
         - type
+        - xero_invoice_number
         - created_at
         - updated_at
         - authorized_by
@@ -189,7 +201,7 @@ select_permissions:
         - course_id
       computed_fields:
         - newAttendeeEmail
-        - courseParticipantInvoiceNumber
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: tt-ops
@@ -197,6 +209,7 @@ select_permissions:
       columns:
         - payload
         - type
+        - xero_invoice_number
         - created_at
         - updated_at
         - authorized_by
@@ -205,7 +218,7 @@ select_permissions:
         - course_id
       computed_fields:
         - newAttendeeEmail
-        - courseParticipantInvoiceNumber
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: user
@@ -215,6 +228,7 @@ select_permissions:
         - id
         - profile_id
         - type
+        - xero_invoice_number
       filter:
         profile_id:
           _eq: X-Hasura-User-Id

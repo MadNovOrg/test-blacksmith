@@ -124,6 +124,7 @@ export const CourseAttendance = () => {
           profile_id: participant?.profile.id,
           course_id: Number(courseId),
           payload: {},
+          xero_invoice_number: participant.order?.xeroInvoiceNumber,
         })
       } else {
         notAttended.push(id)
@@ -132,6 +133,7 @@ export const CourseAttendance = () => {
           profile_id: participant?.profile.id,
           course_id: Number(courseId),
           payload: {},
+          xero_invoice_number: participant.order?.xeroInvoiceNumber,
         })
       }
     }

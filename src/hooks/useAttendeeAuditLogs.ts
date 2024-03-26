@@ -51,18 +51,18 @@ export default function useAttendeeAuditLogs({
       conditions.push({ created_at: { _lte: filter.to } })
     }
     if (filter.query) {
-      conditions.push({
-        _or: [
-          { profile: { fullName: { _ilike: `%${filter.query}%` } } },
-          { profile: { email: { _ilike: `%${filter.query}%` } } },
-          { course: { course_code: { _ilike: `%${filter.query}%` } } },
-          { authorizedBy: { fullName: { _ilike: `%${filter.query}%` } } },
-          { fromCourse: { course_code: { _ilike: `%${filter.query}%` } } },
-          { toCourse: { course_code: { _ilike: `%${filter.query}%` } } },
-          { newAttendeeEmail: { _ilike: `%${filter.query}%` } },
-          { courseParticipantInvoiceNumber: { _ilike: `%${filter.query}%` } },
-        ],
-      })
+      const query = filter.query.trim()
+      const keywords = query.split(' ').filter(word => Boolean(word))
+
+      conditions.push(
+        keywords && keywords.length > 1
+          ? {
+              _and: keywords.map(w => ({
+                searchFields: { _ilike: `%${w}%` },
+              })),
+            }
+          : { searchFields: { _ilike: `%${query}%` } }
+      )
     }
     return { _and: conditions }
   }, [type, filter.from, filter.to, filter.query])
