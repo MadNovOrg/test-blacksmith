@@ -51,7 +51,7 @@ describe('page: Orders', () => {
     ).toBeInTheDocument()
 
     expect(
-      within(tableRow).getByText(order.invoice?.reference ?? '')
+      within(tableRow).getByText(order.courses[0].course?.course_code ?? '')
     ).toBeInTheDocument()
     expect(
       within(tableRow).getByText(order.organization.name)

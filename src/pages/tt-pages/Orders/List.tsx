@@ -192,6 +192,12 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
           />
 
           {orders.map(order => {
+            const references = order.courses
+              ? order.courses
+                  .map(data => data.course?.course_code)
+                  .filter(reference => Boolean(reference))
+              : []
+
             const { status, dueDate } = order.invoice ?? {}
 
             return (
@@ -211,9 +217,14 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
                 </TableCell>
 
                 <TableCell>
-                  <span style={{ whiteSpace: 'nowrap' }}>
-                    {order.invoice?.reference}
-                  </span>
+                  {references.map((code, i) => (
+                    <>
+                      <span key={code} style={{ whiteSpace: 'nowrap' }}>
+                        {code}
+                      </span>
+                      {i === references.length - 1 ? null : <br />}
+                    </>
+                  ))}
                 </TableCell>
 
                 <TableCell>

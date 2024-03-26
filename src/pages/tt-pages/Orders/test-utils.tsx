@@ -20,6 +20,7 @@ export function buildOrder(
     id: chance.guid(),
     orderDue: chance.date(),
     xeroInvoiceNumber: chance.string(),
+    courses: [{ course: { course_code: 'code' } }],
     paymentMethod: Payment_Methods_Enum.Cc,
     orderTotal: chance.integer(),
     currency: Currency.Gbp,

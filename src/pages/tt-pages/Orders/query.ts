@@ -35,6 +35,11 @@ export const GET_ORDERS = gql`
     invoice {
       ...InvoiceInfo
     }
+    courses {
+      course {
+        course_code
+      }
+    }
   }
 
   query Orders(
