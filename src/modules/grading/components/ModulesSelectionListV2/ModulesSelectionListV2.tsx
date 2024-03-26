@@ -213,7 +213,7 @@ export const ModulesSelectionListV2: React.FC<Props> = ({
                   </AccordionSummary>
 
                   <AccordionDetails sx={{ paddingLeft: 4 }}>
-                    {module.lessons.items.map((lesson: object) => {
+                    {module.lessons.items?.map((lesson: object) => {
                       if (!isLesson(lesson)) {
                         return null
                       }
