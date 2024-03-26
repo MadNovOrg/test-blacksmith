@@ -283,9 +283,20 @@ export const CourseDetails: React.FC<
     !loading &&
     lastCourseDay &&
     !didAttendeeSubmitFeedback &&
-    courseParticipant?.attended
+    courseParticipant?.attended &&
+    courseParticipant?.healthSafetyConsent
   const showFeedbackRequiredAlert =
     courseParticipant && courseParticipant.grade && !didAttendeeSubmitFeedback
+
+  // extend when https://behaviourhub.atlassian.net/browse/TTHP-3709 is ready
+  const getFeedbackHelperText = () => {
+    if (!courseParticipant?.healthSafetyConsent) {
+      return t('pages.participant-course.evaluation-helper-health-and-safety')
+    }
+
+    return null
+  }
+  const feedbackHelperText = getFeedbackHelperText()
 
   useEffect(() => {
     if (
@@ -628,7 +639,12 @@ export const CourseDetails: React.FC<
                           )}
                         </Grid>
                       </ChecklistItem>
-                      <ChecklistItem padding={2}>
+                      <ChecklistItem
+                        p={2}
+                        sx={{
+                          display: 'block',
+                        }}
+                      >
                         <Grid container alignItems={'center'}>
                           <CheckCircleOutlineIcon sx={{ marginRight: 1 }} />
                           <Typography
@@ -672,6 +688,16 @@ export const CourseDetails: React.FC<
                               : t('pages.participant-course.evaluate-course')}
                           </Button>
                         </Grid>
+                        {!canSubmitFeedback && feedbackHelperText ? (
+                          <Typography
+                            display="block"
+                            align="right"
+                            mt={1}
+                            data-testid="evaluation-helper-text"
+                          >
+                            {feedbackHelperText}
+                          </Typography>
+                        ) : null}
                       </ChecklistItem>
                     </>
                   ) : null}

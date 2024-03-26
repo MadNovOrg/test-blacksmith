@@ -360,4 +360,37 @@ describe(CourseDetails.name, () => {
       expect(screen.getByText(/manage course page/i)).toBeInTheDocument()
     })
   })
+
+  it('disables the evaluation button and shows helper text if the participant has not submitted the health and safety form', async () => {
+    const course = buildEndedCourse()
+    render(
+      <Routes>
+        <Route
+          path={`/courses/:id/details`}
+          element={
+            <MockedCourseDetails
+              courseParticipants={[
+                {
+                  ...buildParticipant(),
+                  attended: true,
+                  healthSafetyConsent: false,
+                },
+              ]}
+              course={course}
+            />
+          }
+        />
+      </Routes>,
+      {},
+      { initialEntries: [`/courses/${course.id}/details`] }
+    )
+
+    expect(
+      screen.getByRole('button', { name: /evaluate course/i })
+    ).toBeDisabled()
+
+    expect(
+      screen.getByText(/Please submit the Health & Safety Consent Form first/i)
+    ).toBeInTheDocument()
+  })
 })

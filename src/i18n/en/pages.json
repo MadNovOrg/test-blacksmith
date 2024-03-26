@@ -892,7 +892,8 @@
     "resources-empty-message": "Trainer will provide course materials here",
     "change-my-attendance": "Change my attendance",
     "manage-course": "Manage course",
-    "feedback-required-alert": "To receive your certificate, please complete course summary evaluation."
+    "feedback-required-alert": "To receive your certificate, please complete course summary evaluation.",
+    "evaluation-helper-health-and-safety": "Please submit the Health & Safety Consent Form first"
   },
   "upcoming-training": {
     "course-upcoming": "Course Upcoming",
