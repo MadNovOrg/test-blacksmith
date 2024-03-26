@@ -47,6 +47,7 @@ export type CoursesFilters = {
   excludedCourses?: number[]
   excludedStatuses?: Course_Status_Enum[]
   go1Integration?: boolean
+  reaccreditation?: boolean
   creation?: {
     start?: Date
     end?: Date
@@ -244,6 +245,10 @@ export const filtersToWhereClause = (
 
   if (filters?.go1Integration) {
     where.go1Integration = { _eq: filters?.go1Integration }
+  }
+
+  if (filters?.reaccreditation) {
+    where.reaccreditation = { _eq: filters?.reaccreditation }
   }
 
   if (filters?.creation?.start) {

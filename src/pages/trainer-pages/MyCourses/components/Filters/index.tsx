@@ -22,6 +22,7 @@ import { FilterByCourseStatusWarnings } from '@app/components/filters/FilterByCo
 import { FilterByTrainerCourseType } from '@app/components/filters/FilterByCourseTrainerType'
 import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
 import { FilterByDates } from '@app/components/filters/FilterByDates'
+import { FilterByReaccreditation } from '@app/components/filters/FilterByReaccreditation'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { useAuth } from '@app/context/auth'
 import {
@@ -119,6 +120,11 @@ export function Filters({ onChange }: Props) {
 
   const [filterBlendedLearning, setFilterBlendedLearning] = useQueryParam(
     'bl',
+    withDefault(BooleanParam, false)
+  )
+
+  const [filterReaccreditation, setFilterReaccreditation] = useQueryParam(
+    'reacc',
     withDefault(BooleanParam, false)
   )
 
@@ -222,6 +228,7 @@ export function Filters({ onChange }: Props) {
       levels: filterLevel,
       types: filterType,
       go1Integration: filterBlendedLearning,
+      reaccreditation: filterReaccreditation,
       keyword,
       excludedStatuses: Array.from(actionableStatuses),
       creation: { start: createStartDate, end: createEndDate },
@@ -236,6 +243,7 @@ export function Filters({ onChange }: Props) {
     filterWarningStatuses,
     dateFilters,
     filterBlendedLearning,
+    filterReaccreditation,
     filterLevel,
     filterState,
     filterStatus,
@@ -269,10 +277,16 @@ export function Filters({ onChange }: Props) {
           {t('filter-by')}
         </Typography>
         <Stack gap={1}>
-          <FilterByBlendedLearning
-            selected={filterBlendedLearning}
-            onChange={setFilterBlendedLearning}
-          />
+          <Stack gap={1} marginBottom={2}>
+            <FilterByBlendedLearning
+              selected={filterBlendedLearning}
+              onChange={setFilterBlendedLearning}
+            />
+            <FilterByReaccreditation
+              selected={filterReaccreditation}
+              onChange={setFilterReaccreditation}
+            />
+          </Stack>
           <FilterByCourseResidingCountry
             onChange={setFilterCourseResidingCountries}
           />
