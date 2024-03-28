@@ -94,6 +94,12 @@ type Mutation {
 }
 
 type Mutation {
+  deleteOrganisation(
+    orgId: uuid!
+  ): DeleteOrganisationOutput
+}
+
+type Mutation {
   deleteUser(
     profileId: uuid!
     dryRun: Boolean
@@ -1431,6 +1437,10 @@ type UpcomingEnrollmentCourse {
 
 type scheduleAboutTrainingSurveysOutput {
   message: String
+}
+
+type DeleteOrganisationOutput {
+  success: Boolean!
 }
 
 scalar Date

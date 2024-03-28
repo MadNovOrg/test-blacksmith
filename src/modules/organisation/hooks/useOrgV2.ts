@@ -21,6 +21,7 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
     $specificOrgId: uuid
     $withSpecificOrganisation: Boolean = false
     $withMembers: Boolean = false
+    $withAggregateData: Boolean = false
   ) {
     orgs: organization(
       where: $where
@@ -34,6 +35,21 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
       members @include(if: $withMembers) {
         profile {
           lastActivity
+        }
+      }
+      members_aggregate @include(if: $withAggregateData) {
+        aggregate {
+          count
+        }
+      }
+      organization_courses_aggregate @include(if: $withAggregateData) {
+        aggregate {
+          count
+        }
+      }
+      organization_orders_aggregate @include(if: $withAggregateData) {
+        aggregate {
+          count
         }
       }
     }
@@ -61,6 +77,7 @@ type UseOrgV2Input = {
   where?: Record<string, unknown>
   sorting?: Sorting
   withMembers?: boolean
+  withAggregateData?: boolean
 }
 
 export default function useOrgV2({
@@ -75,11 +92,14 @@ export default function useOrgV2({
   where,
   sorting,
   withMembers = false,
+  withAggregateData = false,
 }: UseOrgV2Input) {
   let conditions
   if (orgId !== ALL_ORGS) {
     conditions = { id: { _eq: orgId } }
   } else {
+    withAggregateData = false
+
     conditions = showAll
       ? {}
       : {
@@ -98,6 +118,8 @@ export default function useOrgV2({
 
   const orderBy = sorting ? { [sorting.by]: sorting.dir } : undefined
 
+  console.log(withAggregateData)
+
   const [{ data, error, fetching }, reexecute] = useQuery<
     GetOrganisationDetailsQuery,
     GetOrganisationDetailsQueryVariables
@@ -113,6 +135,7 @@ export default function useOrgV2({
       withSpecificOrganisation,
       sort: orderBy,
       withMembers,
+      withAggregateData,
     },
   })
 

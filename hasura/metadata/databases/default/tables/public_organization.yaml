@@ -51,6 +51,27 @@ array_relationships:
         table:
           name: organization_member
           schema: public
+  - name: organization_courses
+    using:
+      foreign_key_constraint_on:
+        column: organization_id
+        table:
+          name: course
+          schema: public
+  - name: organization_go1_licenses
+    using:
+      foreign_key_constraint_on:
+        column: org_id
+        table:
+          name: go1_licenses
+          schema: public
+  - name: organization_orders
+    using:
+      foreign_key_constraint_on:
+        column: organization_id
+        table:
+          name: order
+          schema: public
 computed_fields:
   - name: addressEachText
     definition:

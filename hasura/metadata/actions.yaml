@@ -121,6 +121,14 @@ actions:
       handler: '{{ACTIONS_HOST}}/zoom/delete-meeting'
     permissions:
       - role: user
+  - name: deleteOrganisation
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/organization/delete'
+    permissions:
+      - role: tt-admin
+      - role: tt-ops
+      - role: sales-admin
   - name: deleteUser
     definition:
       kind: synchronous
@@ -1094,5 +1102,6 @@ custom_types:
     - name: OrganizationProfile
     - name: UpcomingEnrollmentCourse
     - name: scheduleAboutTrainingSurveysOutput
+    - name: DeleteOrganisationOutput
   scalars:
     - name: Date

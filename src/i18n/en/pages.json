@@ -1266,6 +1266,13 @@
     "tabs": {
       "details": {
         "title": "Details",
+        "error-on-delete": "Something goes wrong on trying organisation delete",
+        "count-members": "{{num}} individuals",
+        "count-courses": "{{num}} courses",
+        "count-orders": "{{num}} orders",
+        "confirm-deleting": "Are you sure you want to delete Organisation {{name}}? Deleting the Organisation will totally remove it from Connect. This action can not be undone.",
+        "cannot-be-deleted": "There are individuals, courses, or orders linked to this Organisation, so that it can not be deleted. Please unlink those from this Organisation and try to delete it after.",
+        "delete-organisation": "Delete Organisation",
         "organization-details-section": {
           "title": "Organisation details",
           "organization-name": "Organisation name",

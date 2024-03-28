@@ -409,6 +409,9 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.isOrgAdmin,
       ])(),
 
+    canDeleteOrgs: () =>
+      anyPass([acl.isSalesAdmin, acl.isTTAdmin, acl.isTTOps])(),
+
     canCancelCourses: () =>
       anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])(),
 

@@ -1,14 +1,17 @@
+import DeleteIcon from '@mui/icons-material/Delete'
 import { Box, Button, CircularProgress, Grid, Stack } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { isValid } from 'date-fns'
 import { format } from 'date-fns-tz'
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useWindowSize } from 'react-use'
 
 import { DetailsRow } from '@app/components/DetailsRow'
 import { useAuth } from '@app/context/auth'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { DeleteOrgModalProps } from '@app/modules/organisation/components/DeleteOrgModal'
+import DeleteOrgModal from '@app/modules/organisation/components/DeleteOrgModal/DeleteOrgModal'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { sectors } from '@app/pages/common/CourseBooking/components/org-data'
 
@@ -22,12 +25,46 @@ export const OrgDetailsTab: React.FC<
   const { t, _t } = useScopedTranslation('pages.org-details.tabs.details')
   const { profile, acl } = useAuth()
   const navigate = useNavigate()
+  const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false)
 
   const { data, fetching, error } = useOrgV2({
     orgId,
     profileId: profile?.id,
     showAll: acl.canViewAllOrganizations(),
+    withAggregateData: acl.canDeleteOrgs(),
   })
+
+  const deleteOrgModalData = useMemo<Pick<
+    DeleteOrgModalProps,
+    'org'
+  > | null>(() => {
+    const org = data?.orgs.length ? data?.orgs[0] : null
+
+    if (!org) return null
+
+    if (
+      [
+        org.members_aggregate?.aggregate?.count,
+        org.organization_courses_aggregate?.aggregate?.count,
+        org.organization_orders_aggregate?.aggregate?.count,
+      ].some(agg => !agg && agg !== 0)
+    ) {
+      return null
+    }
+
+    return {
+      org: {
+        id: org.id,
+        name: org.name,
+        count: {
+          members: org.members_aggregate?.aggregate?.count as number,
+          courses: org.organization_courses_aggregate?.aggregate
+            ?.count as number,
+          orders: org.organization_orders_aggregate?.aggregate?.count as number,
+        },
+      },
+    }
+  }, [data?.orgs])
 
   const { width } = useWindowSize()
   const isMobile = width <= 425
@@ -37,6 +74,7 @@ export const OrgDetailsTab: React.FC<
     Object.entries(sectors).find(
       ([key, value]) => key === org?.sector && value
     ) || []
+
   return (
     <Box sx={{ pt: 2, pb: 4 }}>
       {fetching ? (
@@ -91,18 +129,49 @@ export const OrgDetailsTab: React.FC<
 
               {acl.canEditOrgs() ? (
                 <Grid item xs={4}>
-                  <Box display="flex" justifyContent="flex-end">
+                  <Box
+                    display="flex"
+                    justifyContent="flex-end"
+                    alignItems={'flex-end'}
+                    flexDirection={'column'}
+                  >
                     <Button
                       variant="outlined"
                       color="primary"
                       size={isMobile ? 'medium' : 'large'}
                       sx={{
                         fontSize: isMobile ? '10px' : '12px',
+                        width: '50%',
                       }}
                       onClick={() => navigate('./edit')}
                     >
                       {_t('pages.org-details.edit-organization')}
                     </Button>
+                    {acl.canDeleteOrgs() ? (
+                      <>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          size={isMobile ? 'medium' : 'large'}
+                          sx={{
+                            fontSize: isMobile ? '10px' : '12px',
+                            width: '50%',
+                            mt: 1,
+                          }}
+                          onClick={() => setOpenDeleteDialog(true)}
+                          startIcon={<DeleteIcon />}
+                        >
+                          {t('delete-organisation')}
+                        </Button>
+                        {deleteOrgModalData ? (
+                          <DeleteOrgModal
+                            onClose={() => setOpenDeleteDialog(false)}
+                            open={openDeleteDialog}
+                            org={deleteOrgModalData.org}
+                          />
+                        ) : null}
+                      </>
+                    ) : null}
                   </Box>
                 </Grid>
               ) : null}

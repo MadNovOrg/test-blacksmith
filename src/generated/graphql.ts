@@ -2190,6 +2190,11 @@ export type DeleteMeetingOutput = {
   success: Scalars['Boolean'];
 };
 
+export type DeleteOrganisationOutput = {
+  __typename?: 'DeleteOrganisationOutput';
+  success: Scalars['Boolean'];
+};
+
 /** Input for the deletePage mutation */
 export type DeletePageInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -15930,6 +15935,33 @@ export type Course_Aggregate = {
   nodes: Array<Course>;
 };
 
+export type Course_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Course_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Course_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Course_Aggregate_Bool_Exp_Count>;
+};
+
+export type Course_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Course_Select_Column_Course_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Course_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Course_Select_Column_Course_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Course_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Course_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Course_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
 /** aggregate fields of "course" */
 export type Course_Aggregate_Fields = {
   __typename?: 'course_aggregate_fields';
@@ -15973,6 +16005,13 @@ export type Course_Append_Input = {
   bookingContactInviteData?: InputMaybe<Scalars['jsonb']>;
   curriculum?: InputMaybe<Scalars['jsonb']>;
   organizationKeyContactInviteData?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** input type for inserting array relation for remote table "course" */
+export type Course_Arr_Rel_Insert_Input = {
+  data: Array<Course_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Course_On_Conflict>;
 };
 
 /** columns and relationships of "course_audit" */
@@ -27476,6 +27515,50 @@ export enum Course_Select_Column {
   UpdatedAt = 'updatedAt'
 }
 
+/** select "course_aggregate_bool_exp_bool_and_arguments_columns" columns of table "course" */
+export enum Course_Select_Column_Course_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  Conversion = 'conversion',
+  /** column name */
+  DisplayOnWebsite = 'displayOnWebsite',
+  /** column name */
+  ExceptionsPending = 'exceptionsPending',
+  /** column name */
+  Go1Integration = 'go1Integration',
+  /** column name */
+  GradingConfirmed = 'gradingConfirmed',
+  /** column name */
+  GradingStarted = 'gradingStarted',
+  /** column name */
+  IncludeVat = 'includeVAT',
+  /** column name */
+  IsDraft = 'isDraft',
+  /** column name */
+  Reaccreditation = 'reaccreditation'
+}
+
+/** select "course_aggregate_bool_exp_bool_or_arguments_columns" columns of table "course" */
+export enum Course_Select_Column_Course_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  Conversion = 'conversion',
+  /** column name */
+  DisplayOnWebsite = 'displayOnWebsite',
+  /** column name */
+  ExceptionsPending = 'exceptionsPending',
+  /** column name */
+  Go1Integration = 'go1Integration',
+  /** column name */
+  GradingConfirmed = 'gradingConfirmed',
+  /** column name */
+  GradingStarted = 'gradingStarted',
+  /** column name */
+  IncludeVat = 'includeVAT',
+  /** column name */
+  IsDraft = 'isDraft',
+  /** column name */
+  Reaccreditation = 'reaccreditation'
+}
+
 /** input type for updating data in table "course" */
 export type Course_Set_Input = {
   accountCode?: InputMaybe<Scalars['String']>;
@@ -28972,6 +29055,418 @@ export type Date_Comparison_Exp = {
   _lte?: InputMaybe<Scalars['date']>;
   _neq?: InputMaybe<Scalars['date']>;
   _nin?: InputMaybe<Array<Scalars['date']>>;
+};
+
+/** columns and relationships of "deleted_organizations_backup" */
+export type Deleted_Organizations_Backup = {
+  __typename?: 'deleted_organizations_backup';
+  address?: Maybe<Scalars['jsonb']>;
+  attributes?: Maybe<Scalars['jsonb']>;
+  contact_details?: Maybe<Scalars['jsonb']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  geo_coordinates?: Maybe<Scalars['point']>;
+  go1_licenses?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  organisation_type?: Maybe<Scalars['String']>;
+  original_record?: Maybe<Scalars['jsonb']>;
+  preferences?: Maybe<Scalars['jsonb']>;
+  region?: Maybe<Scalars['String']>;
+  reserved_go1_licenses?: Maybe<Scalars['Int']>;
+  sector?: Maybe<Scalars['String']>;
+  tags?: Maybe<Scalars['jsonb']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  xero_contact_id?: Maybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "deleted_organizations_backup" */
+export type Deleted_Organizations_BackupAddressArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "deleted_organizations_backup" */
+export type Deleted_Organizations_BackupAttributesArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "deleted_organizations_backup" */
+export type Deleted_Organizations_BackupContact_DetailsArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "deleted_organizations_backup" */
+export type Deleted_Organizations_BackupOriginal_RecordArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "deleted_organizations_backup" */
+export type Deleted_Organizations_BackupPreferencesArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "deleted_organizations_backup" */
+export type Deleted_Organizations_BackupTagsArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "deleted_organizations_backup" */
+export type Deleted_Organizations_Backup_Aggregate = {
+  __typename?: 'deleted_organizations_backup_aggregate';
+  aggregate?: Maybe<Deleted_Organizations_Backup_Aggregate_Fields>;
+  nodes: Array<Deleted_Organizations_Backup>;
+};
+
+/** aggregate fields of "deleted_organizations_backup" */
+export type Deleted_Organizations_Backup_Aggregate_Fields = {
+  __typename?: 'deleted_organizations_backup_aggregate_fields';
+  avg?: Maybe<Deleted_Organizations_Backup_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Deleted_Organizations_Backup_Max_Fields>;
+  min?: Maybe<Deleted_Organizations_Backup_Min_Fields>;
+  stddev?: Maybe<Deleted_Organizations_Backup_Stddev_Fields>;
+  stddev_pop?: Maybe<Deleted_Organizations_Backup_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Deleted_Organizations_Backup_Stddev_Samp_Fields>;
+  sum?: Maybe<Deleted_Organizations_Backup_Sum_Fields>;
+  var_pop?: Maybe<Deleted_Organizations_Backup_Var_Pop_Fields>;
+  var_samp?: Maybe<Deleted_Organizations_Backup_Var_Samp_Fields>;
+  variance?: Maybe<Deleted_Organizations_Backup_Variance_Fields>;
+};
+
+
+/** aggregate fields of "deleted_organizations_backup" */
+export type Deleted_Organizations_Backup_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Deleted_Organizations_Backup_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Deleted_Organizations_Backup_Append_Input = {
+  address?: InputMaybe<Scalars['jsonb']>;
+  attributes?: InputMaybe<Scalars['jsonb']>;
+  contact_details?: InputMaybe<Scalars['jsonb']>;
+  original_record?: InputMaybe<Scalars['jsonb']>;
+  preferences?: InputMaybe<Scalars['jsonb']>;
+  tags?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** aggregate avg on columns */
+export type Deleted_Organizations_Backup_Avg_Fields = {
+  __typename?: 'deleted_organizations_backup_avg_fields';
+  go1_licenses?: Maybe<Scalars['Float']>;
+  reserved_go1_licenses?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "deleted_organizations_backup". All fields are combined with a logical 'AND'. */
+export type Deleted_Organizations_Backup_Bool_Exp = {
+  _and?: InputMaybe<Array<Deleted_Organizations_Backup_Bool_Exp>>;
+  _not?: InputMaybe<Deleted_Organizations_Backup_Bool_Exp>;
+  _or?: InputMaybe<Array<Deleted_Organizations_Backup_Bool_Exp>>;
+  address?: InputMaybe<Jsonb_Comparison_Exp>;
+  attributes?: InputMaybe<Jsonb_Comparison_Exp>;
+  contact_details?: InputMaybe<Jsonb_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  geo_coordinates?: InputMaybe<Point_Comparison_Exp>;
+  go1_licenses?: InputMaybe<Int_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  organisation_type?: InputMaybe<String_Comparison_Exp>;
+  original_record?: InputMaybe<Jsonb_Comparison_Exp>;
+  preferences?: InputMaybe<Jsonb_Comparison_Exp>;
+  region?: InputMaybe<String_Comparison_Exp>;
+  reserved_go1_licenses?: InputMaybe<Int_Comparison_Exp>;
+  sector?: InputMaybe<String_Comparison_Exp>;
+  tags?: InputMaybe<Jsonb_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  xero_contact_id?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Deleted_Organizations_Backup_Delete_At_Path_Input = {
+  address?: InputMaybe<Array<Scalars['String']>>;
+  attributes?: InputMaybe<Array<Scalars['String']>>;
+  contact_details?: InputMaybe<Array<Scalars['String']>>;
+  original_record?: InputMaybe<Array<Scalars['String']>>;
+  preferences?: InputMaybe<Array<Scalars['String']>>;
+  tags?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Deleted_Organizations_Backup_Delete_Elem_Input = {
+  address?: InputMaybe<Scalars['Int']>;
+  attributes?: InputMaybe<Scalars['Int']>;
+  contact_details?: InputMaybe<Scalars['Int']>;
+  original_record?: InputMaybe<Scalars['Int']>;
+  preferences?: InputMaybe<Scalars['Int']>;
+  tags?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Deleted_Organizations_Backup_Delete_Key_Input = {
+  address?: InputMaybe<Scalars['String']>;
+  attributes?: InputMaybe<Scalars['String']>;
+  contact_details?: InputMaybe<Scalars['String']>;
+  original_record?: InputMaybe<Scalars['String']>;
+  preferences?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for incrementing numeric columns in table "deleted_organizations_backup" */
+export type Deleted_Organizations_Backup_Inc_Input = {
+  go1_licenses?: InputMaybe<Scalars['Int']>;
+  reserved_go1_licenses?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "deleted_organizations_backup" */
+export type Deleted_Organizations_Backup_Insert_Input = {
+  address?: InputMaybe<Scalars['jsonb']>;
+  attributes?: InputMaybe<Scalars['jsonb']>;
+  contact_details?: InputMaybe<Scalars['jsonb']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  geo_coordinates?: InputMaybe<Scalars['point']>;
+  go1_licenses?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  organisation_type?: InputMaybe<Scalars['String']>;
+  original_record?: InputMaybe<Scalars['jsonb']>;
+  preferences?: InputMaybe<Scalars['jsonb']>;
+  region?: InputMaybe<Scalars['String']>;
+  reserved_go1_licenses?: InputMaybe<Scalars['Int']>;
+  sector?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<Scalars['jsonb']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  xero_contact_id?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Deleted_Organizations_Backup_Max_Fields = {
+  __typename?: 'deleted_organizations_backup_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  go1_licenses?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  organisation_type?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+  reserved_go1_licenses?: Maybe<Scalars['Int']>;
+  sector?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  xero_contact_id?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Deleted_Organizations_Backup_Min_Fields = {
+  __typename?: 'deleted_organizations_backup_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  go1_licenses?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  organisation_type?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+  reserved_go1_licenses?: Maybe<Scalars['Int']>;
+  sector?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  xero_contact_id?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "deleted_organizations_backup" */
+export type Deleted_Organizations_Backup_Mutation_Response = {
+  __typename?: 'deleted_organizations_backup_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Deleted_Organizations_Backup>;
+};
+
+/** Ordering options when selecting data from "deleted_organizations_backup". */
+export type Deleted_Organizations_Backup_Order_By = {
+  address?: InputMaybe<Order_By>;
+  attributes?: InputMaybe<Order_By>;
+  contact_details?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  geo_coordinates?: InputMaybe<Order_By>;
+  go1_licenses?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  organisation_type?: InputMaybe<Order_By>;
+  original_record?: InputMaybe<Order_By>;
+  preferences?: InputMaybe<Order_By>;
+  region?: InputMaybe<Order_By>;
+  reserved_go1_licenses?: InputMaybe<Order_By>;
+  sector?: InputMaybe<Order_By>;
+  tags?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  xero_contact_id?: InputMaybe<Order_By>;
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Deleted_Organizations_Backup_Prepend_Input = {
+  address?: InputMaybe<Scalars['jsonb']>;
+  attributes?: InputMaybe<Scalars['jsonb']>;
+  contact_details?: InputMaybe<Scalars['jsonb']>;
+  original_record?: InputMaybe<Scalars['jsonb']>;
+  preferences?: InputMaybe<Scalars['jsonb']>;
+  tags?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "deleted_organizations_backup" */
+export enum Deleted_Organizations_Backup_Select_Column {
+  /** column name */
+  Address = 'address',
+  /** column name */
+  Attributes = 'attributes',
+  /** column name */
+  ContactDetails = 'contact_details',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  GeoCoordinates = 'geo_coordinates',
+  /** column name */
+  Go1Licenses = 'go1_licenses',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  OrganisationType = 'organisation_type',
+  /** column name */
+  OriginalRecord = 'original_record',
+  /** column name */
+  Preferences = 'preferences',
+  /** column name */
+  Region = 'region',
+  /** column name */
+  ReservedGo1Licenses = 'reserved_go1_licenses',
+  /** column name */
+  Sector = 'sector',
+  /** column name */
+  Tags = 'tags',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  XeroContactId = 'xero_contact_id'
+}
+
+/** input type for updating data in table "deleted_organizations_backup" */
+export type Deleted_Organizations_Backup_Set_Input = {
+  address?: InputMaybe<Scalars['jsonb']>;
+  attributes?: InputMaybe<Scalars['jsonb']>;
+  contact_details?: InputMaybe<Scalars['jsonb']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  geo_coordinates?: InputMaybe<Scalars['point']>;
+  go1_licenses?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  organisation_type?: InputMaybe<Scalars['String']>;
+  original_record?: InputMaybe<Scalars['jsonb']>;
+  preferences?: InputMaybe<Scalars['jsonb']>;
+  region?: InputMaybe<Scalars['String']>;
+  reserved_go1_licenses?: InputMaybe<Scalars['Int']>;
+  sector?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<Scalars['jsonb']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  xero_contact_id?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate stddev on columns */
+export type Deleted_Organizations_Backup_Stddev_Fields = {
+  __typename?: 'deleted_organizations_backup_stddev_fields';
+  go1_licenses?: Maybe<Scalars['Float']>;
+  reserved_go1_licenses?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Deleted_Organizations_Backup_Stddev_Pop_Fields = {
+  __typename?: 'deleted_organizations_backup_stddev_pop_fields';
+  go1_licenses?: Maybe<Scalars['Float']>;
+  reserved_go1_licenses?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Deleted_Organizations_Backup_Stddev_Samp_Fields = {
+  __typename?: 'deleted_organizations_backup_stddev_samp_fields';
+  go1_licenses?: Maybe<Scalars['Float']>;
+  reserved_go1_licenses?: Maybe<Scalars['Float']>;
+};
+
+/** Streaming cursor of the table "deleted_organizations_backup" */
+export type Deleted_Organizations_Backup_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Deleted_Organizations_Backup_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Deleted_Organizations_Backup_Stream_Cursor_Value_Input = {
+  address?: InputMaybe<Scalars['jsonb']>;
+  attributes?: InputMaybe<Scalars['jsonb']>;
+  contact_details?: InputMaybe<Scalars['jsonb']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  geo_coordinates?: InputMaybe<Scalars['point']>;
+  go1_licenses?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  organisation_type?: InputMaybe<Scalars['String']>;
+  original_record?: InputMaybe<Scalars['jsonb']>;
+  preferences?: InputMaybe<Scalars['jsonb']>;
+  region?: InputMaybe<Scalars['String']>;
+  reserved_go1_licenses?: InputMaybe<Scalars['Int']>;
+  sector?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<Scalars['jsonb']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  xero_contact_id?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate sum on columns */
+export type Deleted_Organizations_Backup_Sum_Fields = {
+  __typename?: 'deleted_organizations_backup_sum_fields';
+  go1_licenses?: Maybe<Scalars['Int']>;
+  reserved_go1_licenses?: Maybe<Scalars['Int']>;
+};
+
+export type Deleted_Organizations_Backup_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Deleted_Organizations_Backup_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Deleted_Organizations_Backup_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Deleted_Organizations_Backup_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Deleted_Organizations_Backup_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Deleted_Organizations_Backup_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Deleted_Organizations_Backup_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Deleted_Organizations_Backup_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Deleted_Organizations_Backup_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Deleted_Organizations_Backup_Var_Pop_Fields = {
+  __typename?: 'deleted_organizations_backup_var_pop_fields';
+  go1_licenses?: Maybe<Scalars['Float']>;
+  reserved_go1_licenses?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Deleted_Organizations_Backup_Var_Samp_Fields = {
+  __typename?: 'deleted_organizations_backup_var_samp_fields';
+  go1_licenses?: Maybe<Scalars['Float']>;
+  reserved_go1_licenses?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Deleted_Organizations_Backup_Variance_Fields = {
+  __typename?: 'deleted_organizations_backup_variance_fields';
+  go1_licenses?: Maybe<Scalars['Float']>;
+  reserved_go1_licenses?: Maybe<Scalars['Float']>;
 };
 
 /** columns and relationships of "dfe_establishment" */
@@ -33859,6 +34354,7 @@ export type Mutation_Root = {
   declineInvite?: Maybe<DeclineInviteOutput>;
   declineOrgInvite: Scalars['Boolean'];
   deleteMeeting: DeleteMeetingOutput;
+  deleteOrganisation?: Maybe<DeleteOrganisationOutput>;
   /** Delete users */
   deleteUser: DeleteUserOutput;
   /** delete data from the table: "about_training_email_scheduled_events" */
@@ -34099,6 +34595,8 @@ export type Mutation_Root = {
   delete_course_type_prefix?: Maybe<Course_Type_Prefix_Mutation_Response>;
   /** delete single row from the table: "course_type_prefix" */
   delete_course_type_prefix_by_pk?: Maybe<Course_Type_Prefix>;
+  /** delete data from the table: "deleted_organizations_backup" */
+  delete_deleted_organizations_backup?: Maybe<Deleted_Organizations_Backup_Mutation_Response>;
   /** delete data from the table: "dfe_establishment" */
   delete_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** delete single row from the table: "dfe_establishment" */
@@ -34535,6 +35033,10 @@ export type Mutation_Root = {
   insert_course_type_prefix?: Maybe<Course_Type_Prefix_Mutation_Response>;
   /** insert a single row into the table: "course_type_prefix" */
   insert_course_type_prefix_one?: Maybe<Course_Type_Prefix>;
+  /** insert data into the table: "deleted_organizations_backup" */
+  insert_deleted_organizations_backup?: Maybe<Deleted_Organizations_Backup_Mutation_Response>;
+  /** insert a single row into the table: "deleted_organizations_backup" */
+  insert_deleted_organizations_backup_one?: Maybe<Deleted_Organizations_Backup>;
   /** insert data into the table: "dfe_establishment" */
   insert_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** insert a single row into the table: "dfe_establishment" */
@@ -35107,6 +35609,10 @@ export type Mutation_Root = {
   update_course_type_prefix_by_pk?: Maybe<Course_Type_Prefix>;
   /** update multiples rows of table: "course_type_prefix" */
   update_course_type_prefix_many?: Maybe<Array<Maybe<Course_Type_Prefix_Mutation_Response>>>;
+  /** update data of the table: "deleted_organizations_backup" */
+  update_deleted_organizations_backup?: Maybe<Deleted_Organizations_Backup_Mutation_Response>;
+  /** update multiples rows of table: "deleted_organizations_backup" */
+  update_deleted_organizations_backup_many?: Maybe<Array<Maybe<Deleted_Organizations_Backup_Mutation_Response>>>;
   /** update data of the table: "dfe_establishment" */
   update_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** update single row of the table: "dfe_establishment" */
@@ -35483,6 +35989,12 @@ export type Mutation_RootDeclineOrgInviteArgs = {
 /** mutation root */
 export type Mutation_RootDeleteMeetingArgs = {
   meetingId: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDeleteOrganisationArgs = {
+  orgId: Scalars['uuid'];
 };
 
 
@@ -36205,6 +36717,12 @@ export type Mutation_RootDelete_Course_Type_PrefixArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Course_Type_Prefix_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Deleted_Organizations_BackupArgs = {
+  where: Deleted_Organizations_Backup_Bool_Exp;
 };
 
 
@@ -37637,6 +38155,18 @@ export type Mutation_RootInsert_Course_Type_PrefixArgs = {
 export type Mutation_RootInsert_Course_Type_Prefix_OneArgs = {
   object: Course_Type_Prefix_Insert_Input;
   on_conflict?: InputMaybe<Course_Type_Prefix_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Deleted_Organizations_BackupArgs = {
+  objects: Array<Deleted_Organizations_Backup_Insert_Input>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Deleted_Organizations_Backup_OneArgs = {
+  object: Deleted_Organizations_Backup_Insert_Input;
 };
 
 
@@ -39728,6 +40258,25 @@ export type Mutation_RootUpdate_Course_Type_Prefix_ManyArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Deleted_Organizations_BackupArgs = {
+  _append?: InputMaybe<Deleted_Organizations_Backup_Append_Input>;
+  _delete_at_path?: InputMaybe<Deleted_Organizations_Backup_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Deleted_Organizations_Backup_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Deleted_Organizations_Backup_Delete_Key_Input>;
+  _inc?: InputMaybe<Deleted_Organizations_Backup_Inc_Input>;
+  _prepend?: InputMaybe<Deleted_Organizations_Backup_Prepend_Input>;
+  _set?: InputMaybe<Deleted_Organizations_Backup_Set_Input>;
+  where: Deleted_Organizations_Backup_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Deleted_Organizations_Backup_ManyArgs = {
+  updates: Array<Deleted_Organizations_Backup_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Dfe_EstablishmentArgs = {
   _set?: InputMaybe<Dfe_Establishment_Set_Input>;
   where: Dfe_Establishment_Bool_Exp;
@@ -41301,6 +41850,91 @@ export type Order_Aggregate = {
   nodes: Array<Order>;
 };
 
+export type Order_Aggregate_Bool_Exp = {
+  avg?: InputMaybe<Order_Aggregate_Bool_Exp_Avg>;
+  corr?: InputMaybe<Order_Aggregate_Bool_Exp_Corr>;
+  count?: InputMaybe<Order_Aggregate_Bool_Exp_Count>;
+  covar_samp?: InputMaybe<Order_Aggregate_Bool_Exp_Covar_Samp>;
+  max?: InputMaybe<Order_Aggregate_Bool_Exp_Max>;
+  min?: InputMaybe<Order_Aggregate_Bool_Exp_Min>;
+  stddev_samp?: InputMaybe<Order_Aggregate_Bool_Exp_Stddev_Samp>;
+  sum?: InputMaybe<Order_Aggregate_Bool_Exp_Sum>;
+  var_samp?: InputMaybe<Order_Aggregate_Bool_Exp_Var_Samp>;
+};
+
+export type Order_Aggregate_Bool_Exp_Avg = {
+  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Avg_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Corr = {
+  arguments: Order_Aggregate_Bool_Exp_Corr_Arguments;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Corr_Arguments = {
+  X: Order_Select_Column_Order_Aggregate_Bool_Exp_Corr_Arguments_Columns;
+  Y: Order_Select_Column_Order_Aggregate_Bool_Exp_Corr_Arguments_Columns;
+};
+
+export type Order_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Order_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Covar_Samp = {
+  arguments: Order_Aggregate_Bool_Exp_Covar_Samp_Arguments;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Covar_Samp_Arguments = {
+  X: Order_Select_Column_Order_Aggregate_Bool_Exp_Covar_Samp_Arguments_Columns;
+  Y: Order_Select_Column_Order_Aggregate_Bool_Exp_Covar_Samp_Arguments_Columns;
+};
+
+export type Order_Aggregate_Bool_Exp_Max = {
+  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Max_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Min = {
+  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Min_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Stddev_Samp = {
+  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Stddev_Samp_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Sum = {
+  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Sum_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
+export type Order_Aggregate_Bool_Exp_Var_Samp = {
+  arguments: Order_Select_Column_Order_Aggregate_Bool_Exp_Var_Samp_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Order_Bool_Exp>;
+  predicate: Float8_Comparison_Exp;
+};
+
 /** aggregate fields of "order" */
 export type Order_Aggregate_Fields = {
   __typename?: 'order_aggregate_fields';
@@ -41324,11 +41958,33 @@ export type Order_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "order" */
+export type Order_Aggregate_Order_By = {
+  avg?: InputMaybe<Order_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Order_Max_Order_By>;
+  min?: InputMaybe<Order_Min_Order_By>;
+  stddev?: InputMaybe<Order_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Order_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Order_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Order_Sum_Order_By>;
+  var_pop?: InputMaybe<Order_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Order_Var_Samp_Order_By>;
+  variance?: InputMaybe<Order_Variance_Order_By>;
+};
+
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Order_Append_Input = {
   bookingContact?: InputMaybe<Scalars['jsonb']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   user?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** input type for inserting array relation for remote table "order" */
+export type Order_Arr_Rel_Insert_Input = {
+  data: Array<Order_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Order_On_Conflict>;
 };
 
 /** aggregate avg on columns */
@@ -41339,6 +41995,15 @@ export type Order_Avg_Fields = {
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "order" */
+export type Order_Avg_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "order". All fields are combined with a logical 'AND'. */
@@ -41493,6 +42158,30 @@ export type Order_Max_Fields = {
   xeroInvoiceNumber?: Maybe<Scalars['String']>;
 };
 
+/** order by max() on columns of table "order" */
+export type Order_Max_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
+  billingAddress?: InputMaybe<Order_By>;
+  billingEmail?: InputMaybe<Order_By>;
+  billingFamilyName?: InputMaybe<Order_By>;
+  billingGivenName?: InputMaybe<Order_By>;
+  billingPhone?: InputMaybe<Order_By>;
+  clientPurchaseOrder?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  currency?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  organizationId?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
+  salesRepresentativeId?: InputMaybe<Order_By>;
+  source?: InputMaybe<Order_By>;
+  stripePaymentId?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+  xeroInvoiceNumber?: InputMaybe<Order_By>;
+};
+
 /** aggregate min on columns */
 export type Order_Min_Fields = {
   __typename?: 'order_min_fields';
@@ -41518,6 +42207,30 @@ export type Order_Min_Fields = {
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
   xeroInvoiceNumber?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "order" */
+export type Order_Min_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
+  billingAddress?: InputMaybe<Order_By>;
+  billingEmail?: InputMaybe<Order_By>;
+  billingFamilyName?: InputMaybe<Order_By>;
+  billingGivenName?: InputMaybe<Order_By>;
+  billingPhone?: InputMaybe<Order_By>;
+  clientPurchaseOrder?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  currency?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  organizationId?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
+  salesRepresentativeId?: InputMaybe<Order_By>;
+  source?: InputMaybe<Order_By>;
+  stripePaymentId?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+  xeroInvoiceNumber?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "order" */
@@ -41643,6 +42356,102 @@ export enum Order_Select_Column {
   XeroInvoiceNumber = 'xeroInvoiceNumber'
 }
 
+/** select "order_aggregate_bool_exp_avg_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Avg_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_corr_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Corr_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_covar_samp_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Covar_Samp_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_max_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Max_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_min_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Min_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_stddev_samp_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Stddev_Samp_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_sum_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Sum_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
+/** select "order_aggregate_bool_exp_var_samp_arguments_columns" columns of table "order" */
+export enum Order_Select_Column_Order_Aggregate_Bool_Exp_Var_Samp_Arguments_Columns {
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Vat = 'vat'
+}
+
 /** input type for updating data in table "order" */
 export type Order_Set_Input = {
   attendeesQuantity?: InputMaybe<Scalars['Int']>;
@@ -41682,6 +42491,15 @@ export type Order_Stddev_Fields = {
   vat?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev() on columns of table "order" */
+export type Order_Stddev_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_pop on columns */
 export type Order_Stddev_Pop_Fields = {
   __typename?: 'order_stddev_pop_fields';
@@ -41692,6 +42510,15 @@ export type Order_Stddev_Pop_Fields = {
   vat?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev_pop() on columns of table "order" */
+export type Order_Stddev_Pop_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_samp on columns */
 export type Order_Stddev_Samp_Fields = {
   __typename?: 'order_stddev_samp_fields';
@@ -41700,6 +42527,15 @@ export type Order_Stddev_Samp_Fields = {
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "order" */
+export type Order_Stddev_Samp_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
 };
 
 /** Streaming cursor of the table "order" */
@@ -41747,6 +42583,15 @@ export type Order_Sum_Fields = {
   orderTotal?: Maybe<Scalars['float8']>;
   price?: Maybe<Scalars['float8']>;
   vat?: Maybe<Scalars['float8']>;
+};
+
+/** order by sum() on columns of table "order" */
+export type Order_Sum_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "order_temp" */
@@ -42756,6 +43601,15 @@ export type Order_Var_Pop_Fields = {
   vat?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_pop() on columns of table "order" */
+export type Order_Var_Pop_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
 /** aggregate var_samp on columns */
 export type Order_Var_Samp_Fields = {
   __typename?: 'order_var_samp_fields';
@@ -42766,6 +43620,15 @@ export type Order_Var_Samp_Fields = {
   vat?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_samp() on columns of table "order" */
+export type Order_Var_Samp_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
 /** aggregate variance on columns */
 export type Order_Variance_Fields = {
   __typename?: 'order_variance_fields';
@@ -42774,6 +43637,15 @@ export type Order_Variance_Fields = {
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "order" */
+export type Order_Variance_Order_By = {
+  attendeesQuantity?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "organisation_sector" */
@@ -42939,6 +43811,18 @@ export type Organization = {
   members_aggregate: Organization_Member_Aggregate;
   name: Scalars['String'];
   organisationType?: Maybe<Scalars['String']>;
+  /** An array relationship */
+  organization_courses: Array<Course>;
+  /** An aggregate relationship */
+  organization_courses_aggregate: Course_Aggregate;
+  /** An array relationship */
+  organization_go1_licenses: Array<Go1_Licenses>;
+  /** An aggregate relationship */
+  organization_go1_licenses_aggregate: Go1_Licenses_Aggregate;
+  /** An array relationship */
+  organization_orders: Array<Order>;
+  /** An aggregate relationship */
+  organization_orders_aggregate: Order_Aggregate;
   original_record?: Maybe<Scalars['jsonb']>;
   /** A computed field, executes function "org_address_post_code" */
   postCode?: Maybe<Scalars['String']>;
@@ -43031,6 +43915,66 @@ export type OrganizationMembers_AggregateArgs = {
 
 
 /** columns and relationships of "organization" */
+export type OrganizationOrganization_CoursesArgs = {
+  distinct_on?: InputMaybe<Array<Course_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Order_By>>;
+  where?: InputMaybe<Course_Bool_Exp>;
+};
+
+
+/** columns and relationships of "organization" */
+export type OrganizationOrganization_Courses_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Order_By>>;
+  where?: InputMaybe<Course_Bool_Exp>;
+};
+
+
+/** columns and relationships of "organization" */
+export type OrganizationOrganization_Go1_LicensesArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_Bool_Exp>;
+};
+
+
+/** columns and relationships of "organization" */
+export type OrganizationOrganization_Go1_Licenses_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_Bool_Exp>;
+};
+
+
+/** columns and relationships of "organization" */
+export type OrganizationOrganization_OrdersArgs = {
+  distinct_on?: InputMaybe<Array<Order_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Order_Order_By>>;
+  where?: InputMaybe<Order_Bool_Exp>;
+};
+
+
+/** columns and relationships of "organization" */
+export type OrganizationOrganization_Orders_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Order_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Order_Order_By>>;
+  where?: InputMaybe<Order_Bool_Exp>;
+};
+
+
+/** columns and relationships of "organization" */
 export type OrganizationOriginal_RecordArgs = {
   path?: InputMaybe<Scalars['String']>;
 };
@@ -43115,6 +44059,12 @@ export type Organization_Bool_Exp = {
   members_aggregate?: InputMaybe<Organization_Member_Aggregate_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   organisationType?: InputMaybe<String_Comparison_Exp>;
+  organization_courses?: InputMaybe<Course_Bool_Exp>;
+  organization_courses_aggregate?: InputMaybe<Course_Aggregate_Bool_Exp>;
+  organization_go1_licenses?: InputMaybe<Go1_Licenses_Bool_Exp>;
+  organization_go1_licenses_aggregate?: InputMaybe<Go1_Licenses_Aggregate_Bool_Exp>;
+  organization_orders?: InputMaybe<Order_Bool_Exp>;
+  organization_orders_aggregate?: InputMaybe<Order_Aggregate_Bool_Exp>;
   original_record?: InputMaybe<Jsonb_Comparison_Exp>;
   postCode?: InputMaybe<String_Comparison_Exp>;
   preferences?: InputMaybe<Jsonb_Comparison_Exp>;
@@ -43182,6 +44132,9 @@ export type Organization_Insert_Input = {
   members?: InputMaybe<Organization_Member_Arr_Rel_Insert_Input>;
   name?: InputMaybe<Scalars['String']>;
   organisationType?: InputMaybe<Scalars['String']>;
+  organization_courses?: InputMaybe<Course_Arr_Rel_Insert_Input>;
+  organization_go1_licenses?: InputMaybe<Go1_Licenses_Arr_Rel_Insert_Input>;
+  organization_orders?: InputMaybe<Order_Arr_Rel_Insert_Input>;
   original_record?: InputMaybe<Scalars['jsonb']>;
   preferences?: InputMaybe<Scalars['jsonb']>;
   region?: InputMaybe<Scalars['String']>;
@@ -43864,6 +44817,9 @@ export type Organization_Order_By = {
   members_aggregate?: InputMaybe<Organization_Member_Aggregate_Order_By>;
   name?: InputMaybe<Order_By>;
   organisationType?: InputMaybe<Order_By>;
+  organization_courses_aggregate?: InputMaybe<Course_Aggregate_Order_By>;
+  organization_go1_licenses_aggregate?: InputMaybe<Go1_Licenses_Aggregate_Order_By>;
+  organization_orders_aggregate?: InputMaybe<Order_Aggregate_Order_By>;
   original_record?: InputMaybe<Order_By>;
   postCode?: InputMaybe<Order_By>;
   preferences?: InputMaybe<Order_By>;
@@ -47585,6 +48541,10 @@ export type Query_Root = {
   course_type_prefix_aggregate: Course_Type_Prefix_Aggregate;
   /** fetch data from the table: "course_type_prefix" using primary key columns */
   course_type_prefix_by_pk?: Maybe<Course_Type_Prefix>;
+  /** fetch data from the table: "deleted_organizations_backup" */
+  deleted_organizations_backup: Array<Deleted_Organizations_Backup>;
+  /** fetch aggregated fields from the table: "deleted_organizations_backup" */
+  deleted_organizations_backup_aggregate: Deleted_Organizations_Backup_Aggregate;
   /** fetch data from the table: "dfe_establishment" */
   dfe_establishment: Array<Dfe_Establishment>;
   /** fetch aggregated fields from the table: "dfe_establishment" */
@@ -49281,6 +50241,24 @@ export type Query_RootCourse_Type_Prefix_AggregateArgs = {
 
 export type Query_RootCourse_Type_Prefix_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Query_RootDeleted_Organizations_BackupArgs = {
+  distinct_on?: InputMaybe<Array<Deleted_Organizations_Backup_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Deleted_Organizations_Backup_Order_By>>;
+  where?: InputMaybe<Deleted_Organizations_Backup_Bool_Exp>;
+};
+
+
+export type Query_RootDeleted_Organizations_Backup_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Deleted_Organizations_Backup_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Deleted_Organizations_Backup_Order_By>>;
+  where?: InputMaybe<Deleted_Organizations_Backup_Bool_Exp>;
 };
 
 
@@ -51477,6 +52455,12 @@ export type Subscription_Root = {
   course_type_prefix_stream: Array<Course_Type_Prefix>;
   /** fetch data from the table in a streaming manner: "course_type" */
   course_type_stream: Array<Course_Type>;
+  /** fetch data from the table: "deleted_organizations_backup" */
+  deleted_organizations_backup: Array<Deleted_Organizations_Backup>;
+  /** fetch aggregated fields from the table: "deleted_organizations_backup" */
+  deleted_organizations_backup_aggregate: Deleted_Organizations_Backup_Aggregate;
+  /** fetch data from the table in a streaming manner: "deleted_organizations_backup" */
+  deleted_organizations_backup_stream: Array<Deleted_Organizations_Backup>;
   /** fetch data from the table: "dfe_establishment" */
   dfe_establishment: Array<Dfe_Establishment>;
   /** fetch aggregated fields from the table: "dfe_establishment" */
@@ -53656,6 +54640,31 @@ export type Subscription_RootCourse_Type_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Course_Type_Stream_Cursor_Input>>;
   where?: InputMaybe<Course_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootDeleted_Organizations_BackupArgs = {
+  distinct_on?: InputMaybe<Array<Deleted_Organizations_Backup_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Deleted_Organizations_Backup_Order_By>>;
+  where?: InputMaybe<Deleted_Organizations_Backup_Bool_Exp>;
+};
+
+
+export type Subscription_RootDeleted_Organizations_Backup_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Deleted_Organizations_Backup_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Deleted_Organizations_Backup_Order_By>>;
+  where?: InputMaybe<Deleted_Organizations_Backup_Bool_Exp>;
+};
+
+
+export type Subscription_RootDeleted_Organizations_Backup_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Deleted_Organizations_Backup_Stream_Cursor_Input>>;
+  where?: InputMaybe<Deleted_Organizations_Backup_Bool_Exp>;
 };
 
 
@@ -57971,10 +58980,11 @@ export type GetOrganisationDetailsQueryVariables = Exact<{
   specificOrgId?: InputMaybe<Scalars['uuid']>;
   withSpecificOrganisation?: InputMaybe<Scalars['Boolean']>;
   withMembers?: InputMaybe<Scalars['Boolean']>;
+  withAggregateData?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type GetOrganisationDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', region?: string | null, id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }> }>, specificOrg: Array<{ __typename?: 'organization', id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null }>, orgsCount: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
+export type GetOrganisationDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', region?: string | null, id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }>, members_aggregate?: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, organization_courses_aggregate?: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null }, organization_orders_aggregate?: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } }>, specificOrg: Array<{ __typename?: 'organization', id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null }>, orgsCount: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
 
 export type GetOrganisationByNameQueryVariables = Exact<{
   query: Scalars['String'];
@@ -58988,6 +59998,13 @@ export type GetOrgWithKeyContactsQueryVariables = Exact<{
 
 
 export type GetOrgWithKeyContactsQuery = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }> } | null };
+
+export type DeleteOrgMutationVariables = Exact<{
+  orgId: Scalars['uuid'];
+}>;
+
+
+export type DeleteOrgMutation = { __typename?: 'mutation_root', deleteOrganisation?: { __typename?: 'DeleteOrganisationOutput', success: boolean } | null };
 
 export type GetOrgMembersQueryVariables = Exact<{
   id?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;
