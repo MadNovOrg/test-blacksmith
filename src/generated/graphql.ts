@@ -23436,8 +23436,6 @@ export type Course_Participant_Audit = {
   authorized_by: Scalars['uuid'];
   /** An object relationship */
   course: Course;
-  /** A computed field, executes function "participant_audit_participation_order_invoice_number" */
-  courseParticipantInvoiceNumber?: Maybe<Scalars['String']>;
   course_id: Scalars['Int'];
   created_at: Scalars['timestamptz'];
   /** A computed field, executes function "course_participant_audit_from_course" */
@@ -23571,7 +23569,6 @@ export type Course_Participant_Audit_Bool_Exp = {
   authorizedBy?: InputMaybe<Profile_Bool_Exp>;
   authorized_by?: InputMaybe<Uuid_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
-  courseParticipantInvoiceNumber?: InputMaybe<String_Comparison_Exp>;
   course_id?: InputMaybe<Int_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   fromCourse?: InputMaybe<Course_Bool_Exp>;
@@ -23633,8 +23630,6 @@ export type Course_Participant_Audit_Insert_Input = {
 export type Course_Participant_Audit_Max_Fields = {
   __typename?: 'course_participant_audit_max_fields';
   authorized_by?: Maybe<Scalars['uuid']>;
-  /** A computed field, executes function "participant_audit_participation_order_invoice_number" */
-  courseParticipantInvoiceNumber?: Maybe<Scalars['String']>;
   course_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
@@ -23662,8 +23657,6 @@ export type Course_Participant_Audit_Max_Order_By = {
 export type Course_Participant_Audit_Min_Fields = {
   __typename?: 'course_participant_audit_min_fields';
   authorized_by?: Maybe<Scalars['uuid']>;
-  /** A computed field, executes function "participant_audit_participation_order_invoice_number" */
-  courseParticipantInvoiceNumber?: Maybe<Scalars['String']>;
   course_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
@@ -23708,7 +23701,6 @@ export type Course_Participant_Audit_Order_By = {
   authorizedBy?: InputMaybe<Profile_Order_By>;
   authorized_by?: InputMaybe<Order_By>;
   course?: InputMaybe<Course_Order_By>;
-  courseParticipantInvoiceNumber?: InputMaybe<Order_By>;
   course_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   fromCourse_aggregate?: InputMaybe<Course_Aggregate_Order_By>;
@@ -59427,6 +59419,13 @@ export type DeleteCourseCancellationRequestMutationVariables = Exact<{
 
 
 export type DeleteCourseCancellationRequestMutation = { __typename?: 'mutation_root', delete_course_cancellation_request_by_pk?: { __typename?: 'course_cancellation_request', id: any } | null };
+
+export type DeleteCourseMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+}>;
+
+
+export type DeleteCourseMutation = { __typename?: 'mutation_root', delete_course_audit?: { __typename?: 'course_audit_mutation_response', affected_rows: number } | null, delete_course_participant_audit?: { __typename?: 'course_participant_audit_mutation_response', affected_rows: number } | null, delete_course_by_pk?: { __typename?: 'course', id: number, course_code?: string | null } | null };
 
 export type FinalizeCourseBuilderMutationVariables = Exact<{
   id: Scalars['Int'];

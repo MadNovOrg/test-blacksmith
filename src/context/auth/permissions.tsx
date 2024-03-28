@@ -89,6 +89,41 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.isFinance,
       ])(),
 
+    canDeleteCourse: (
+      course: Pick<
+        Course,
+        | 'courseParticipants'
+        | 'go1Integration'
+        | 'participantSubmittedEvaluationCount'
+        | 'trainers'
+        | 'type'
+      >
+    ) => {
+      // Only Indirect NON Blended Learning courses without any evaluation submitted or graded participant
+      if (
+        course.go1Integration ||
+        [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
+          course.type
+        ) ||
+        !course.courseParticipants ||
+        (course.participantSubmittedEvaluationCount?.aggregate.count ?? 0) >
+          0 ||
+        course.courseParticipants.some(participant =>
+          Boolean(participant.grade)
+        )
+      ) {
+        return false
+      }
+
+      return anyPass([
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isTTAdmin,
+        acl.isTTOps,
+        () => acl.isCourseLeader({ trainers: course.trainers }),
+      ])()
+    },
+
     canViewRevokedCert: () =>
       anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD, acl.isSalesAdmin])(),
 

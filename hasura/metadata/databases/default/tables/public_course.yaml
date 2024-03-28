@@ -1591,6 +1591,48 @@ update_permissions:
             _eq: X-Hasura-User-Id
       check: null
 delete_permissions:
+  - role: sales-admin
+    permission:
+      filter:
+        _and:
+          - course_type:
+              _eq: INDIRECT
+          - go1_integration:
+              _eq: false
+          - _not:
+              participants:
+                grade:
+                  _is_null: false
+  - role: sales-representative
+    permission:
+      filter:
+        _and:
+          - course_type:
+              _eq: INDIRECT
+          - go1_integration:
+              _eq: false
+          - _not:
+              participants:
+                grade:
+                  _is_null: false
+  - role: trainer
+    permission:
+      filter:
+        _and:
+          - trainers:
+              _and:
+                - profile_id:
+                    _eq: X-Hasura-User-Id
+                - type:
+                    _eq: LEADER
+          - course_type:
+              _eq: INDIRECT
+          - go1_integration:
+              _eq: false
+          - _not:
+              participants:
+                grade:
+                  _is_null: false
   - role: tt-ops
     permission:
       filter: {}

@@ -279,7 +279,6 @@ export const CourseDetails = () => {
                       data-testid="edit-course-button"
                       color="secondary"
                       size="large"
-                      sx={{ mt: 3 }}
                       onClick={() => navigate(`/courses/edit/${courseId}`)}
                     >
                       {t('pages.course-participants.edit-course-button')}

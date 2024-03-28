@@ -44,7 +44,7 @@ export type Props = {
 }
 
 type LocationStateType = {
-  action: 'approved' | 'rejected'
+  action: 'approved' | 'rejected' | 'deleted'
   course: {
     id: number
     code: string
@@ -134,19 +134,33 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
       } = locationState
 
       addSnackbarMessage('course-approval-message', {
-        label: (
-          <Trans
-            i18nKey="pages.course-details.course-approval-message"
-            components={{
-              courseLink: <Link href={`/manage-courses/all/${id}/details`} />,
-            }}
-            values={{
-              action,
-              code,
-            }}
-          />
-        ),
+        label:
+          action !== 'deleted' ? (
+            <Trans
+              i18nKey="pages.course-details.course-approval-message"
+              components={{
+                courseLink: <Link href={`/manage-courses/all/${id}/details`} />,
+              }}
+              values={{
+                action,
+                code,
+              }}
+            />
+          ) : (
+            <Trans
+              i18nKey="pages.course-details.course-deleted-message"
+              values={{
+                code,
+              }}
+            />
+          ),
       })
+
+      window.history.replaceState(
+        null,
+        document.title,
+        window.location.pathname
+      )
     }
   }, [addSnackbarMessage, locationState])
 

@@ -1,4 +1,5 @@
 import { Wrapper } from '@googlemaps/react-wrapper'
+import DeleteIcon from '@mui/icons-material/Delete'
 import DescriptionOutlined from '@mui/icons-material/DescriptionOutlined'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import PinDropIcon from '@mui/icons-material/PinDrop'
@@ -35,6 +36,7 @@ import {
   Course_Status_Enum,
   Venue,
 } from '@app/generated/graphql'
+import { DeleteCourseModal } from '@app/modules/course/components/DeleteCourseModal'
 import { AdminOnlyCourseStatus, Course } from '@app/types'
 import {
   getCourseBeginsForMessage,
@@ -71,6 +73,14 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
     useState(false)
 
   const { acl } = useAuth()
+
+  const [openDeleteCourseDialog, setOpenDeleteCourseDialog] =
+    useState<boolean>(false)
+
+  const onCloseDeleteCourseDialog = useCallback(
+    () => setOpenDeleteCourseDialog(false),
+    []
+  )
 
   const courseCancelled =
     course &&
@@ -238,7 +248,33 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 </Wrapper>
               </Grid>
             ) : undefined}
-            {slots?.EditButton?.()}
+            <Grid container spacing={1} alignItems={'center'} sx={{ mt: 3 }}>
+              {slots?.EditButton ? (
+                <Grid item>{slots?.EditButton?.()}</Grid>
+              ) : null}
+
+              {acl.canDeleteCourse(course) ? (
+                <Grid item>
+                  <Button
+                    color="error"
+                    data-testid="delete-course-button"
+                    onClick={() => setOpenDeleteCourseDialog(true)}
+                    size="large"
+                    startIcon={<DeleteIcon />}
+                    variant="contained"
+                  >
+                    {t('pages.course-participants.delete-course-button')}
+                  </Button>
+                  {
+                    <DeleteCourseModal
+                      courseId={course.id}
+                      onClose={onCloseDeleteCourseDialog}
+                      open={openDeleteCourseDialog}
+                    />
+                  }
+                </Grid>
+              ) : null}
+            </Grid>
           </Grid>
           <Grid item xs={12} md={4}>
             <Typography

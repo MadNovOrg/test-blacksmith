@@ -22,15 +22,15 @@ computed_fields:
       function:
         name: course_participant_audit_new_attendee
         schema: public
-  - name: toCourse
-    definition:
-      function:
-        name: course_participant_audit_to_course
-        schema: public
   - name: searchFields
     definition:
       function:
         name: merge_course_participant_audit_rows
+        schema: public
+  - name: toCourse
+    definition:
+      function:
+        name: course_participant_audit_to_course
         schema: public
 insert_permissions:
   - role: trainer
@@ -233,6 +233,58 @@ select_permissions:
         profile_id:
           _eq: X-Hasura-User-Id
       allow_aggregations: true
+delete_permissions:
+  - role: sales-admin
+    permission:
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
+  - role: sales-representative
+    permission:
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
+  - role: trainer
+    permission:
+      filter:
+        course:
+          _and:
+            - trainers:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - type:
+                      _eq: LEADER
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
+  - role: tt-admin
+    permission:
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
+  - role: tt-ops
+    permission:
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
 event_triggers:
   - name: participant_audit_added
     definition:

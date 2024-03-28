@@ -150,6 +150,23 @@ select_permissions:
         - searchFields
       filter: {}
       allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+      filter:
+        course:
+          _and:
+            - trainers:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - type:
+                      _eq: LEADER
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
   - role: tt-admin
     permission:
       columns:
@@ -180,6 +197,58 @@ select_permissions:
         - searchFields
       filter: {}
       allow_aggregations: true
+delete_permissions:
+  - role: sales-admin
+    permission:
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
+  - role: sales-representative
+    permission:
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
+  - role: trainer
+    permission:
+      filter:
+        course:
+          _and:
+            - trainers:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - type:
+                      _eq: LEADER
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
+  - role: tt-admin
+    permission:
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
+  - role: tt-ops
+    permission:
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
 event_triggers:
   - name: course_audit_added
     definition:

@@ -34,6 +34,7 @@ type Props = {
   maxWidth?: number
   minWidth?: number
   'data-testid'?: string
+  noPaddings?: boolean
 }
 
 export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
@@ -48,6 +49,7 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
   maxWidth = 500,
   minWidth,
   'data-testid': testId,
+  noPaddings = false,
 }) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -67,7 +69,7 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '1rem',
+          ...(noPaddings ? {} : { padding: '1rem' }),
         }}
       >
         {slots?.Title || slots?.Subtitle ? (
@@ -108,7 +110,7 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
             display: 'flex',
             justifyContent: 'space-between',
             mt: 0,
-            mx: 3,
+            mx: noPaddings ? 1 : 3,
             mb: 3,
             flexDirection: isMobile ? 'column' : 'row',
           }}
