@@ -45,7 +45,6 @@ import { useTranslation } from 'react-i18next'
 import { useEffectOnce, useUpdateEffect } from 'react-use'
 import { noop } from 'ts-essentials'
 import { useQuery } from 'urql'
-import { SchemaDescription } from 'yup'
 
 import { CountryDropdown } from '@app/components/CountryDropdown'
 import { defaultCurrency } from '@app/components/CurrencySelector'
@@ -1854,10 +1853,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   textFieldProps={{
                     variant: 'filled',
                     error: Boolean(errors.venue),
-                    required: Boolean(
-                      !(schema.describe().fields.venue as SchemaDescription)
-                        .optional
-                    ),
+                    required:
+                      deliveryType !== Course_Delivery_Type_Enum.Virtual,
                   }}
                 />
               ) : null}
