@@ -14,6 +14,7 @@ export const COURSE_INFO_FRAGMENT = gql`
         name
         city
       }
+      timeZone
     }
     deliveryType
   }

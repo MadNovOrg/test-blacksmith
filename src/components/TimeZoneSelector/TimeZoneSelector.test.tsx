@@ -29,6 +29,7 @@ describe(`${TimeZoneSelector.name}`, () => {
         .mockReturnValue([{ timeZoneId: 'Europe/London', rawOffset: 0 }]),
       setDateTimeGeoCoordinates: vi.fn(),
       setDateTimeTimeZone: vi.fn(),
+      formatGMTDateTimeByTimeZone: vi.fn(),
     })
 
     render(
@@ -57,6 +58,7 @@ describe(`${TimeZoneSelector.name}`, () => {
       ]),
       setDateTimeGeoCoordinates: vi.fn(),
       setDateTimeTimeZone: vi.fn(),
+      formatGMTDateTimeByTimeZone: vi.fn(),
     })
 
     render(
@@ -82,6 +84,7 @@ describe(`${TimeZoneSelector.name}`, () => {
       getTimeZonesByCountryCode: vi.fn(),
       setDateTimeGeoCoordinates: vi.fn(),
       setDateTimeTimeZone: vi.fn(),
+      formatGMTDateTimeByTimeZone: vi.fn(),
     })
 
     const testVenue: Venue = {
@@ -122,6 +125,7 @@ describe(`${TimeZoneSelector.name}`, () => {
       ]),
       setDateTimeGeoCoordinates: vi.fn(),
       setDateTimeTimeZone: vi.fn(),
+      formatGMTDateTimeByTimeZone: vi.fn(),
     })
 
     const testVenue: Venue = {

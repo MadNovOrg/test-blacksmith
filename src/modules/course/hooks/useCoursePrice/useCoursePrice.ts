@@ -2,6 +2,9 @@ import { isValid } from 'date-fns'
 import { useMemo, useCallback } from 'react'
 import { useQuery, gql } from 'urql'
 
+import useWorldCountries, {
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import {
   Accreditors_Enum,
   CoursePriceQuery,
@@ -56,7 +59,11 @@ interface ICoursePrice {
 export function useCoursePrice(courseData?: {
   accreditedBy: Accreditors_Enum | null
   startDateTime?: Date
+  residingCountry: WorldCountriesCodes
 }) {
+  const { isUKCountry } = useWorldCountries()
+  const isBILDcourse = courseData?.accreditedBy === Accreditors_Enum.Bild
+
   const [{ data }] = useQuery<CoursePriceQuery, CoursePriceQueryVariables>({
     query: COURSE_PRICE_QUERY,
     variables: courseData
@@ -67,7 +74,8 @@ export function useCoursePrice(courseData?: {
           withSchedule: Boolean(courseData?.startDateTime),
         }
       : undefined,
-    pause: !courseData || courseData.accreditedBy === Accreditors_Enum.Bild,
+    pause:
+      !courseData || isBILDcourse || !isUKCountry(courseData.residingCountry),
   })
 
   const extractCoursePrices = useCallback((pricesList?: ICoursePrice[]) => {

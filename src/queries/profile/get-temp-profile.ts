@@ -43,6 +43,7 @@ export const QUERY = gql`
           venue {
             ...Venue
           }
+          timeZone
         }
         residingCountry
         includeVAT

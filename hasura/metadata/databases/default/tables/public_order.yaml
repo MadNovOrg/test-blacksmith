@@ -150,6 +150,10 @@ insert_permissions:
         - billing_email
         - billing_phone
         - registrants
+        - sales_representative_id
+        - source
+        - user
+        - vat
         - created_at
         - organization_id
         - currency

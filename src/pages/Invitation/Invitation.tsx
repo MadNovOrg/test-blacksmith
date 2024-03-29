@@ -21,7 +21,9 @@ import {
   useTheme,
 } from '@mui/material'
 import { differenceInSeconds } from 'date-fns'
+import { utcToZonedTime } from 'date-fns-tz'
 import jwtDecode from 'jwt-decode'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -39,6 +41,7 @@ import {
   GetInviteQueryVariables,
   InviteStatus,
 } from '@app/generated/graphql'
+import useTimeZones from '@app/hooks/useTimeZones'
 import { MUTATION as DECLINE_INVITE_MUTATION } from '@app/queries/invites/decline-invite'
 import { QUERY as GET_INVITE_QUERY } from '@app/queries/invites/get-invite'
 import { CHECK_USER_EXISTS_BY_EMAIL } from '@app/queries/user-queries/get-user-by-email'
@@ -54,6 +57,14 @@ import { NotFound } from '../common/NotFound'
 
 export const InvitationPage = () => {
   const { t } = useTranslation()
+  const { formatGMTDateTimeByTimeZone } = useTimeZones()
+  const residingCountryEnabled = useFeatureFlagEnabled(
+    'course-residing-country'
+  )
+  const isResidingCountryEnabled = useMemo(
+    () => residingCountryEnabled,
+    [residingCountryEnabled]
+  )
   const navigate = useNavigate()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -127,14 +138,26 @@ export const InvitationPage = () => {
     () => (invite ? invite.description : null),
     [invite]
   )
-  const startDate = useMemo(
-    () => (invite ? new Date(invite.startDate) : null),
-    [invite]
-  )
-  const endDate = useMemo(
-    () => (invite ? new Date(invite.endDate) : null),
-    [invite]
-  )
+  const startDate = useMemo(() => {
+    if (invite) {
+      return isResidingCountryEnabled
+        ? utcToZonedTime(new Date(invite.startDate), invite.timeZone as string)
+        : new Date(invite.startDate)
+    }
+
+    return null
+  }, [invite, isResidingCountryEnabled])
+
+  const endDate = useMemo(() => {
+    if (invite) {
+      return isResidingCountryEnabled
+        ? utcToZonedTime(new Date(invite.endDate), invite.timeZone as string)
+        : new Date(invite.endDate)
+    }
+
+    return null
+  }, [invite, isResidingCountryEnabled])
+
   const courseTrainerName = useMemo(
     () => (invite ? invite.trainerName : null),
     [invite]
@@ -288,12 +311,36 @@ export const InvitationPage = () => {
               <CalendarIcon fontSize="small" />
             </Box>
             <Box>
-              <Typography variant="body2" gutterBottom>
-                {t('dates.withTime', { date: startDate })}
-              </Typography>
-              <Typography variant="body2" gutterBottom>
-                {t('dates.withTime', { date: endDate })}
-              </Typography>
+              {invite && startDate ? (
+                <>
+                  <Typography variant="body2" gutterBottom>
+                    {`${t('dates.withTime', {
+                      date: startDate,
+                    })}${
+                      isResidingCountryEnabled
+                        ? ` ${formatGMTDateTimeByTimeZone(
+                            startDate,
+                            invite.timeZone ?? 'Europe/London',
+                            true
+                          )}`
+                        : ''
+                    }`}
+                  </Typography>
+                  <Typography variant="body2" gutterBottom>
+                    {`${t('dates.withTime', {
+                      date: endDate,
+                    })}${
+                      isResidingCountryEnabled
+                        ? ` ${formatGMTDateTimeByTimeZone(
+                            endDate as Date,
+                            invite.timeZone ?? 'Europe/London',
+                            true
+                          )}`
+                        : ''
+                    }`}
+                  </Typography>
+                </>
+              ) : null}
             </Box>
           </Box>
 

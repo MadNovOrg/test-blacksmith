@@ -7,6 +7,8 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
+import { utcToZonedTime } from 'date-fns-tz'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -16,6 +18,7 @@ import {
   GetUpcomingCoursesQuery,
   Accreditors_Enum,
 } from '@app/generated/graphql'
+import useTimeZones from '@app/hooks/useTimeZones'
 import { capitalize } from '@app/util/index'
 
 type UpcomingCourse = GetUpcomingCoursesQuery['courses'][0]
@@ -30,6 +33,16 @@ type CourseForBookingTileParams = {
 export const CourseForBookingTile: React.FC<
   React.PropsWithChildren<CourseForBookingTileParams>
 > = ({ course, variant = 'default', showDistance, distance }) => {
+  const { formatGMTDateTimeByTimeZone } = useTimeZones()
+  const residingCountryEnabled = useFeatureFlagEnabled(
+    'course-residing-country'
+  )
+
+  const isResidingCountryEnabled = useMemo(
+    () => residingCountryEnabled,
+    [residingCountryEnabled]
+  )
+
   const { acl } = useAuth()
   const { t } = useTranslation()
   const { pathname } = useLocation()
@@ -40,8 +53,19 @@ export const CourseForBookingTile: React.FC<
   const isRow = variant === 'row'
 
   const dateLabel = useMemo(() => {
-    const start = new Date(course.schedules[0].start)
-    const end = new Date(course.schedules[0].end)
+    const timeZone = course.schedules[0].timeZone ?? 'Europe/London'
+
+    const start = isResidingCountryEnabled
+      ? utcToZonedTime(new Date(course.schedules[0].start), timeZone)
+      : new Date(course.schedules[0].start)
+    const end = isResidingCountryEnabled
+      ? utcToZonedTime(new Date(course.schedules[0].end), timeZone)
+      : new Date(course.schedules[0].end)
+
+    if (course.id == 11014) {
+      console.log('start', start, 'end', end)
+    }
+
     const days = Math.abs(differenceInDays(start, end)) + 1
     return days === 1
       ? `${t('dates.defaultShort', {
@@ -52,19 +76,30 @@ export const CourseForBookingTile: React.FC<
         })}-${t('dates.defaultShort', {
           date: end,
         })} (${days} ${t('common.days')})`
-  }, [course, t])
+  }, [course.id, course.schedules, isResidingCountryEnabled, t])
 
   const venue = course.schedules[0].venue
 
   const dateSecondLabel = useMemo(() => {
-    const start = new Date(course.schedules[0].start)
-    const end = new Date(course.schedules[0].end)
+    const timeZone = course.schedules[0].timeZone ?? 'Europe/London'
+
+    const start = isResidingCountryEnabled
+      ? utcToZonedTime(new Date(course.schedules[0].start), timeZone)
+      : new Date(course.schedules[0].start)
+    const end = isResidingCountryEnabled
+      ? utcToZonedTime(new Date(course.schedules[0].end), timeZone)
+      : new Date(course.schedules[0].end)
+
     let weekDayPart = format(start, 'iii')
     if (differenceInDays(start, end) !== 0) {
       weekDayPart += `-${format(end, 'iii')}`
     }
-    return `${weekDayPart} • ${format(start, 'p')}`
-  }, [course])
+    return `${weekDayPart} • ${format(start, 'p')}${
+      isResidingCountryEnabled
+        ? ` ${formatGMTDateTimeByTimeZone(start, timeZone)}`
+        : ''
+    }`
+  }, [course.schedules, formatGMTDateTimeByTimeZone, isResidingCountryEnabled])
 
   const distanceLabel = useMemo(() => {
     if (!course.schedules[0].start) return ''

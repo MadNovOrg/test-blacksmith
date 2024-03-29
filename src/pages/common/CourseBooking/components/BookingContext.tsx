@@ -195,17 +195,29 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         return
       }
 
+      const isBILDcourse = profile.course.accreditedBy === Accreditors_Enum.Bild
+      const courseHasPrice = Boolean(profile.course.price)
+      const courseResidingCountry = profile.course.residingCountry
+
       let pricing: GetCoursePricingQuery['pricing']
 
       // course has custom pricing (e.g BILD)
-      if (coursePricing) {
-        pricing = coursePricing.pricing
+      if (
+        courseHasPrice &&
+        (!isUKCountry(courseResidingCountry) || isBILDcourse)
+      ) {
+        pricing = {
+          priceAmount: profile.course.price,
+          priceCurrency: (profile.course.priceCurrency as Currency) ?? 'GBP',
+          xeroCode: '',
+        }
       } else {
-        if (profile.course.price && profile.course.priceCurrency) {
+        const defaultPricing = coursePricing
+        if (defaultPricing) {
           pricing = {
-            priceAmount: profile.course.price,
-            priceCurrency: profile.course.priceCurrency as Currency,
-            xeroCode: '',
+            priceAmount: Number(defaultPricing?.pricing?.priceAmount),
+            priceCurrency: defaultPricing?.pricing?.priceCurrency as Currency,
+            xeroCode: defaultPricing?.pricing?.xeroCode ?? '',
           }
         } else {
           setError(t('error-no-pricing'))
@@ -218,7 +230,10 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
             case CourseExpenseType.Accommodation:
               return (
                 acc +
-                getTrainerSubsistenceCost(e.accommodationNights) +
+                getTrainerSubsistenceCost(
+                  e.accommodationNights,
+                  isUKCountry(course?.residingCountry)
+                ) +
                 e.accommodationCost * e.accommodationNights
               )
 
@@ -293,6 +308,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     isUKCountry,
     profile,
     t,
+    course?.residingCountry,
   ])
 
   useEffect(() => {

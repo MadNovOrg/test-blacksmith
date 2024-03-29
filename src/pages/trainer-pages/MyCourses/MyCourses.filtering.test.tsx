@@ -995,6 +995,7 @@ describe('trainers-pages/MyCourses', () => {
         overrides: {
           schedule: [
             {
+              timeZone: 'GMT+00:00',
               id: 'id1',
               start: addHours(new Date(), 1),
               end: addHours(new Date(), 1),
@@ -1006,6 +1007,7 @@ describe('trainers-pages/MyCourses', () => {
         overrides: {
           schedule: [
             {
+              timeZone: 'GMT+00:00',
               id: 'id2',
               start: addHours(new Date(), -1),
               end: addHours(new Date(), 1),
@@ -1078,6 +1080,7 @@ describe('trainers-pages/MyCourses', () => {
       overrides: {
         schedule: [
           {
+            timeZone: 'GMT+00:00',
             id: 'id1',
             start: addHours(new Date(), -2),
             end: addHours(new Date(), -1),

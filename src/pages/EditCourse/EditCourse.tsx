@@ -23,6 +23,7 @@ import { BackButton } from '@app/components/BackButton'
 import ChooseTrainers, {
   FormValues as TrainersFormValues,
 } from '@app/components/ChooseTrainers'
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import CourseForm, { DisabledFields } from '@app/components/CourseForm'
 import { hasRenewalCycle } from '@app/components/CourseForm/helpers'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
@@ -136,6 +137,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     mutate: mutateCourse,
   } = useCourse(id ?? '')
   const { setDateTimeTimeZone } = useTimeZones()
+  const { isUKCountry } = useWorldCountries()
 
   const course = courseInfo?.course
   const courseInput: CourseInput | undefined = useMemo(() => {
@@ -327,7 +329,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             source: courseData.source,
           }
 
+          const isBildCourse = courseData.accreditedBy === Accreditors_Enum.Bild
           const isOpenCourse = courseData.type === Course_Type_Enum.Open
+          const isClosedCourse = courseData.type === Course_Type_Enum.Closed
 
           const scheduleDateTime: (Date | string)[] = [
             courseData.startDateTime,
@@ -337,13 +341,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           if (courseData.timeZone) {
             const scheduleStarDateTime = setDateTimeTimeZone(
               courseData.startDateTime,
-              courseData.timeZone
+              courseData.timeZone.timeZoneId
             )
             if (scheduleStarDateTime) scheduleDateTime[0] = scheduleStarDateTime
 
             const scheduleEndDateTime = setDateTimeTimeZone(
               courseData.endDateTime,
-              courseData.timeZone
+              courseData.timeZone.timeZoneId
             )
             if (scheduleEndDateTime) scheduleDateTime[1] = scheduleEndDateTime
           }
@@ -415,6 +419,28 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               ...(isOpenCourse
                 ? {
                     price: courseData.price,
+                    priceCurrency: !isUKCountry(courseData.residingCountry)
+                      ? courseData.priceCurrency
+                      : null,
+                    includeVAT: !isUKCountry(courseData.residingCountry)
+                      ? courseData.includeVAT
+                      : null,
+                  }
+                : {}),
+              ...(isClosedCourse
+                ? {
+                    price:
+                      isBildCourse || !isUKCountry(courseData.residingCountry)
+                        ? courseData.price
+                        : null,
+                    priceCurrency:
+                      isBildCourse || !isUKCountry(courseData.residingCountry)
+                        ? courseData.priceCurrency
+                        : null,
+                    includeVAT:
+                      isBildCourse || !isUKCountry(courseData.residingCountry)
+                        ? courseData.includeVAT
+                        : null,
                   }
                 : {}),
               residingCountry: courseData.residingCountry,
@@ -530,6 +556,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       canGoToCourseBuilder,
       navigate,
       courseInput?.id,
+      isUKCountry,
     ]
   )
 
@@ -558,13 +585,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       'blendedLearning',
       'reaccreditation',
       'conversion',
-      'priceCurrency',
-      'includeVAT',
-      ...((course?.type === Course_Type_Enum.Closed
-        ? ['price']
-        : []) as DisabledFields[]),
     ],
-    [course]
+    []
   )
 
   const disabledFields = useMemo(() => {

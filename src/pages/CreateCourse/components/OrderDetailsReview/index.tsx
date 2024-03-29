@@ -1,14 +1,15 @@
-import { Box, Grid, Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import Big from 'big.js'
 import { parseISO } from 'date-fns'
 import React from 'react'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { defaultCurrency } from '@app/components/CurrencySelector'
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { InvoiceDetails } from '@app/components/InvoiceDetails'
-import theme from '@app/theme'
-import { ExpensesInput, TransportMethod } from '@app/types'
+import { TransportMethod } from '@app/types'
 import {
   getTrainerCarCostPerMile,
   getTrainerSubsistenceCost,
@@ -17,208 +18,16 @@ import {
 
 import { useCreateCourse } from '../CreateCourseProvider'
 
-const mainColor = theme.typography.body1.color
-const secondaryColor = theme.typography.body2.color
-
-type TransportExpense = ExpensesInput['transport'][number]
-type MiscellaneousExpense = NonNullable<ExpensesInput['miscellaneous']>[number]
-
-type PageRowProps = {
-  caption?: string | null
-  isBold?: boolean
-  label?: string | null
-  mt?: number
-  value?: string | null
-  testId?: string
-}
-
-const PageRow: React.FC<React.PropsWithChildren<PageRowProps>> = ({
-  caption,
-  isBold,
-  label,
-  mt = 0,
-  value,
-  testId,
-}) => (
-  <Grid container spacing={0} mt={mt} data-testid={testId}>
-    <Grid item xs={8}>
-      <Typography
-        color={isBold ? mainColor : secondaryColor}
-        fontWeight={isBold ? 600 : 400}
-      >
-        {label}
-      </Typography>
-    </Grid>
-
-    <Grid item xs={4}>
-      <Typography fontWeight={isBold ? 600 : 400} textAlign="right">
-        {value}
-      </Typography>
-    </Grid>
-
-    {caption ? (
-      <Grid item xs={8}>
-        <Typography variant="caption" color={secondaryColor}>
-          {caption}
-        </Typography>
-      </Grid>
-    ) : null}
-  </Grid>
-)
-
-type ExpensesDetailsProps = {
-  expenses: ExpensesInput
-  trainerName: string
-}
-
-const ExpensesDetails: React.FC<ExpensesDetailsProps> = ({
-  expenses,
-  trainerName,
-}) => {
-  const { t } = useTranslation()
-
-  const getRowForTransportExpense = useCallback(
-    (e: TransportExpense, key: number) => {
-      const { method, value, flightDays } = e
-      const amount =
-        (method === TransportMethod.CAR
-          ? getTrainerCarCostPerMile(value)
-          : value) ?? 0
-
-      let caption: string | null = null
-      switch (method) {
-        case TransportMethod.CAR:
-          caption = t(
-            `pages.create-course.review-and-confirm.caption.${method}`,
-            { count: value }
-          )
-          break
-        case TransportMethod.FLIGHTS:
-          caption = t(
-            `pages.create-course.review-and-confirm.caption.${method}`,
-            { count: flightDays }
-          )
-          break
-        default:
-          break
-      }
-
-      const label = t(`pages.create-course.trainer-expenses.${method}`)
-      const formattedAmount = t('common.currency', {
-        amount: new Big(amount).round().toNumber(),
-      })
-
-      return (
-        <PageRow
-          label={label}
-          value={formattedAmount}
-          caption={caption}
-          key={key}
-          testId={`${trainerName}-trip-${key}`}
-        />
-      )
-    },
-    [t, trainerName]
-  )
-
-  const getRowForMiscellaneousExpense = useCallback(
-    (e: MiscellaneousExpense, key: number) => {
-      const { name, value } = e
-
-      const formattedAmount = t('common.currency', { amount: value })
-
-      return (
-        <PageRow
-          label={name}
-          value={formattedAmount}
-          key={key}
-          testId={`${trainerName}-misc-${key}`}
-        />
-      )
-    },
-    [t, trainerName]
-  )
-
-  const getRowForExpense = useCallback(
-    (
-      e: TransportExpense | MiscellaneousExpense,
-      type: keyof ExpensesInput,
-      key: number
-    ) =>
-      type === 'transport'
-        ? getRowForTransportExpense(e as TransportExpense, key)
-        : getRowForMiscellaneousExpense(e as MiscellaneousExpense, key),
-    [getRowForTransportExpense, getRowForMiscellaneousExpense]
-  )
-
-  const accommodationRow = useMemo(() => {
-    const accommodationNights =
-      expenses.transport.reduce(
-        (acc, { accommodationNights: n }) => (n && n > 0 ? acc + n : acc),
-        0
-      ) ?? 0
-
-    const accommodationCost =
-      expenses.transport.reduce(
-        (acc, { accommodationCost: c, accommodationNights: n }) =>
-          n && c && n > 0 ? acc + n * c : acc,
-        0
-      ) ?? 0
-
-    const aLabel = t('pages.create-course.trainer-expenses.accommodation')
-    const aFormattedAmount = t('common.currency', {
-      amount: accommodationCost,
-    })
-
-    const sLabel = t('pages.create-course.trainer-expenses.subsistence')
-    const sFormattedAmount = t('common.currency', {
-      amount: getTrainerSubsistenceCost(accommodationNights),
-    })
-    const sCaption = t(
-      'pages.create-course.review-and-confirm.caption.accommodation',
-      { count: accommodationNights }
-    )
-
-    return (
-      <>
-        <PageRow
-          label={aLabel}
-          value={aFormattedAmount}
-          testId={`${trainerName}-accommodation-costs`}
-        />
-        <PageRow
-          label={sLabel}
-          value={sFormattedAmount}
-          caption={sCaption}
-          testId={`${trainerName}-accommodation-nights`}
-        />
-      </>
-    )
-  }, [t, expenses.transport, trainerName])
-
-  return (
-    <Box data-testid={`${trainerName}-trainer-expenses`}>
-      <Typography variant="h6" fontWeight={600} mb={1}>
-        {trainerName}
-      </Typography>
-
-      <Stack spacing={1}>
-        {expenses.transport
-          ?.filter(({ method }) => method !== TransportMethod.NONE)
-          .map((e, idx) => getRowForExpense(e, 'transport', idx))}
-        {accommodationRow}
-        {expenses.miscellaneous?.map((e, idx) =>
-          getRowForExpense(e, 'miscellaneous', idx)
-        )}
-      </Stack>
-    </Box>
-  )
-}
+import { ExpensesDetails } from './ExpensesDetails'
+import { PageRow } from './PageRow'
 
 export const OrderDetailsReview: React.FC = () => {
   const { t } = useTranslation()
+  const { isUKCountry } = useWorldCountries()
   const { courseData, courseName, trainers, expenses, invoiceDetails } =
     useCreateCourse()
+
+  const currency = courseData?.priceCurrency ?? defaultCurrency
 
   const { startDate, endDate } = useMemo(
     () =>
@@ -252,9 +61,11 @@ export const OrderDetailsReview: React.FC = () => {
               ? getTrainerCarCostPerMile(value)
               : value) ?? 0
           const subsistenceCost =
-            (accommodationNights ?? 0) > 0
-              ? getTrainerSubsistenceCost(accommodationNights)
-              : 0
+            Number((accommodationNights ?? 0) > 0) &&
+            getTrainerSubsistenceCost(
+              accommodationNights,
+              isUKCountry(courseData?.residingCountry)
+            )
 
           return new Big(acc)
             .add(cost)
@@ -284,7 +95,7 @@ export const OrderDetailsReview: React.FC = () => {
     }
 
     return result
-  }, [expenses])
+  }, [expenses, courseData?.residingCountry, isUKCountry])
 
   const [courseBasePrice, subtotal, freeSpacesDiscount, vat, amountDue] =
     useMemo(() => {
@@ -304,7 +115,11 @@ export const OrderDetailsReview: React.FC = () => {
         .add(freeSpacesDiscount)
         .add(trainerExpensesTotal)
 
-      const vat = new Big(getVatAmount(subtotal.toNumber()))
+      const vat = new Big(
+        courseData.includeVAT || isUKCountry(courseData?.residingCountry)
+          ? getVatAmount(subtotal.toNumber())
+          : 0
+      )
       const amountDue = subtotal.add(vat)
 
       return [
@@ -314,7 +129,7 @@ export const OrderDetailsReview: React.FC = () => {
         vat.round().toNumber(),
         amountDue.round().toNumber(),
       ]
-    }, [courseData, trainerExpensesTotal])
+    }, [courseData, trainerExpensesTotal, isUKCountry])
 
   const courseVenue = courseData?.venue
   const locationNameAddressCity = [
@@ -344,7 +159,8 @@ export const OrderDetailsReview: React.FC = () => {
 
         <Typography color="dimGrey.main" data-testid="course-dates">
           {t('dates.withTime', { date: startDate })} -{' '}
-          {t('dates.withTime', { date: endDate })}
+          {t('dates.withTime', { date: endDate })}{' '}
+          {t('pages.create-course.review-and-confirm.local-time-mention')}
         </Typography>
       </InfoPanel>
 
@@ -409,7 +225,10 @@ export const OrderDetailsReview: React.FC = () => {
           label={t(
             'pages.create-course.review-and-confirm.trainer-expenses-total'
           )}
-          value={t('common.currency', { amount: trainerExpensesTotal })}
+          value={t('common.currency', {
+            amount: trainerExpensesTotal,
+            currency,
+          })}
           testId="trainer-total-expenses"
         />
       </InfoPanel>
@@ -417,7 +236,7 @@ export const OrderDetailsReview: React.FC = () => {
       <InfoPanel>
         <PageRow
           label={t('pages.create-course.review-and-confirm.base-price')}
-          value={t('common.currency', { amount: courseBasePrice })}
+          value={t('common.currency', { amount: courseBasePrice, currency })}
           testId="course-price-row"
         />
       </InfoPanel>
@@ -428,19 +247,26 @@ export const OrderDetailsReview: React.FC = () => {
             label={t('pages.create-course.review-and-confirm.free-spaces', {
               count: courseData?.freeSpaces,
             })}
-            value={t('common.currency', { amount: freeSpacesDiscount })}
+            value={t('common.currency', {
+              amount: freeSpacesDiscount,
+              currency,
+            })}
             testId="free-spaces-row"
           />
 
           <PageRow
             label={t('pages.create-course.review-and-confirm.subtotal')}
-            value={t('common.currency', { amount: subtotal })}
+            value={t('common.currency', { amount: subtotal, currency })}
             testId="subtotal-row"
           />
 
           <PageRow
-            label={t('pages.create-course.review-and-confirm.vat')}
-            value={t('common.currency', { amount: vat })}
+            label={t(
+              courseData?.includeVAT
+                ? 'pages.create-course.review-and-confirm.vat'
+                : 'pages.create-course.review-and-confirm.no-vat'
+            )}
+            value={t('common.currency', { amount: vat, currency })}
             testId="vat-row"
           />
         </Stack>
@@ -449,8 +275,10 @@ export const OrderDetailsReview: React.FC = () => {
       <InfoPanel>
         <PageRow
           isBold={true}
-          label={t('pages.create-course.review-and-confirm.amount-due')}
-          value={t('common.currency', { amount: amountDue })}
+          label={t('pages.create-course.review-and-confirm.amount-due', {
+            currency,
+          })}
+          value={t('common.currency', { amount: amountDue, currency })}
           testId="total-costs-row"
         />
       </InfoPanel>

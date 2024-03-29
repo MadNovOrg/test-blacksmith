@@ -509,7 +509,7 @@ describe(EditCourse.name, () => {
     expect(VATswitch).toHaveClass('Mui-disabled')
   })
 
-  it("doesn't allow editing VAT, currency and price for CLOSED courses", async () => {
+  it("doesn't allow editing VAT and currency for International CLOSED courses", async () => {
     // Mock course-residing-country and open-icm-course-international-finance to be enabled
     useFeatureFlagEnabledMock.mockResolvedValue(true)
     const closedCourse = buildCourse({
@@ -546,14 +546,11 @@ describe(EditCourse.name, () => {
 
     const currencySelector = screen.getByTestId('currency-selector')
     const VATswitch = screen.getByTestId('includeVAT-switch')
-    const priceInput = screen.getByTestId('price-input')
 
     expect(currencySelector).toBeInTheDocument()
     expect(VATswitch).toBeInTheDocument()
-    expect(priceInput).toBeInTheDocument()
 
     expect(currencySelector.children[0]).toHaveClass('Mui-disabled')
     expect(VATswitch).toHaveClass('Mui-disabled')
-    expect(priceInput.children[0]).toHaveClass('Mui-disabled')
   })
 })

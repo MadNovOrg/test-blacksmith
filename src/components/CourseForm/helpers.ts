@@ -9,6 +9,11 @@ import {
 } from '@app/generated/graphql'
 import { BildStrategies, CourseInput } from '@app/types'
 
+import {
+  UKsCountriesCodes,
+  WorldCountriesCodes,
+} from '../CountriesSelector/hooks/useWorldCountries'
+
 function parseTime(time: string) {
   let hours = 0
   let minutes = 0
@@ -524,40 +529,68 @@ export function getDefaultSpecialInstructions(
   return translation
 }
 
+export function displayClosedCourseSalesRepr({
+  accreditedBy,
+  courseType,
+  residingCountry,
+}: {
+  accreditedBy: Accreditors_Enum
+  courseType: Course_Type_Enum
+  residingCountry: WorldCountriesCodes
+}) {
+  const isICMcourse = accreditedBy === Accreditors_Enum.Icm
+  const isClosedCourse = courseType === Course_Type_Enum.Closed
+  const isUKcountry = Object.keys(UKsCountriesCodes).includes(residingCountry)
+
+  if (isUKcountry && isClosedCourse && isICMcourse) {
+    return true
+  }
+
+  return false
+}
+
 export function courseNeedsManualPrice({
   accreditedBy,
   blendedLearning,
   maxParticipants,
   courseType,
   courseLevel,
+  residingCountry,
+  internationalFinanceEnabled,
 }: {
   accreditedBy: Accreditors_Enum
   blendedLearning: boolean
   maxParticipants: number
   courseType: Course_Type_Enum
   courseLevel: Course_Level_Enum
+  residingCountry: WorldCountriesCodes
+  internationalFinanceEnabled: boolean
 }) {
+  const isICMcourse = accreditedBy === Accreditors_Enum.Icm
+  const isClosedCourse = courseType === Course_Type_Enum.Closed
+  const isLEVEL2 = courseLevel === Course_Level_Enum.Level_2
+  const isUKcountry = Object.keys(UKsCountriesCodes).includes(residingCountry)
+
   if (
-    accreditedBy === Accreditors_Enum.Icm &&
-    courseType === Course_Type_Enum.Closed &&
-    courseLevel === Course_Level_Enum.Level_2 &&
+    isUKcountry &&
+    isClosedCourse &&
+    isICMcourse &&
+    isLEVEL2 &&
     blendedLearning &&
     maxParticipants <= 8
   ) {
     return true
   }
 
-  if (
-    courseType === Course_Type_Enum.Open &&
-    accreditedBy === Accreditors_Enum.Icm
-  ) {
+  if (!isUKcountry && isClosedCourse && isICMcourse) {
+    if (!internationalFinanceEnabled) {
+      return false
+    }
+
     return true
   }
 
-  return (
-    [Course_Type_Enum.Open, Course_Type_Enum.Closed].includes(courseType) &&
-    accreditedBy === Accreditors_Enum.Bild
-  )
+  return false
 }
 
 export function hasRenewalCycle({

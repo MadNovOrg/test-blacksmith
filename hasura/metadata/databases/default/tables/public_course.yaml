@@ -1511,6 +1511,7 @@ update_permissions:
         - grading_confirmed
         - grading_started
         - id
+        - include_VAT
         - is_draft
         - max_participants
         - min_participants
@@ -1521,6 +1522,7 @@ update_permissions:
         - organization_key_contact_profile_id
         - parking_instructions
         - price
+        - price_currency
         - reaccreditation
         - renewal_cycle
         - residingCountry

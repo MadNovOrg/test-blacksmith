@@ -4,14 +4,14 @@ import { useCallback, useMemo } from 'react'
 import countryList from 'react-select-country-list'
 
 export const UKsCountriesCodes = {
-  ['GB-ENG']: 'England',
-  ['GB-NIR']: 'Northern Ireland',
-  ['GB-SCT']: 'Scotland',
-  ['GB-WLS']: 'Wales',
+  'GB-ENG': 'England',
+  'GB-NIR': 'Northern Ireland',
+  'GB-SCT': 'Scotland',
+  'GB-WLS': 'Wales',
 } as const
 
 export const ExceptionsCountriesCodes = {
-  ['XK']: 'Kosovo',
+  XK: 'Kosovo',
 } as const
 
 export type UKsCountriesCode = keyof typeof UKsCountriesCodes

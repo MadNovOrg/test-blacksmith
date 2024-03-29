@@ -261,7 +261,9 @@ it('displays course information properly', () => {
     organization: { name: 'Organization' },
     start: '2023-07-28T09:00Z',
     end: '2023-07-28T17:00Z',
-    schedule: [{ venue: { name: 'Venue', city: 'City' } }],
+    schedule: [
+      { timeZone: 'GMT+00:00', venue: { name: 'Venue', city: 'City' } },
+    ],
   })
 
   const client = {

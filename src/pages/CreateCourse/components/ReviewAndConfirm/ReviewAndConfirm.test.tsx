@@ -129,7 +129,7 @@ describe('component: ReviewAndConfirm', () => {
     expect(
       screen.getByTestId('course-dates').textContent
     ).toMatchInlineSnapshot(
-      `"1 February 2023, 12:00 AM - 1 February 2023, 08:00 AM"`
+      `"1 February 2023, 12:00 AM - 1 February 2023, 08:00 AM (local time)"`
     )
 
     expect(
@@ -165,6 +165,8 @@ describe('component: ReviewAndConfirm', () => {
           schedule: [schedule],
           level: Course_Level_Enum.Level_1,
           freeSpaces: 0,
+          residingCountry: 'GB-ENG',
+          includeVAT: true,
         },
       })
     ) as ValidCourseInput

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { getTimeZonesByCode } from 'country-tz'
-import { addMinutes } from 'date-fns'
-import { getTimezoneOffset } from 'date-fns-tz'
+import { addMinutes, format } from 'date-fns'
+import { getTimezoneOffset, utcToZonedTime } from 'date-fns-tz'
 import { CountryCode as CountryISOCode } from 'libphonenumber-js/types'
 import { useCallback } from 'react'
 
@@ -70,12 +70,12 @@ export default function useTimeZones() {
   )
 
   const setDateTimeTimeZone = useCallback(
-    (date: Date, timeZone: TimeZoneDataType) => {
+    (date: Date, timeZoneId: string) => {
       const currentTimeZoneOffset = date.getTimezoneOffset()
 
       const timeZoneDateTime = addMinutes(
         date,
-        -getTimeZoneOffset(timeZone.timeZoneId, date) - currentTimeZoneOffset
+        -getTimeZoneOffset(timeZoneId, date) - currentTimeZoneOffset
       )
 
       return timeZoneDateTime.toISOString()
@@ -88,7 +88,7 @@ export default function useTimeZones() {
       const timeZone = await getTimeZoneLatLng(lat, lng)
 
       if (timeZone) {
-        return setDateTimeTimeZone(date, timeZone)
+        return setDateTimeTimeZone(date, timeZone.timeZoneId)
       }
 
       return null
@@ -96,7 +96,27 @@ export default function useTimeZones() {
     [getTimeZoneLatLng, setDateTimeTimeZone]
   )
 
+  const formatGMTDateTimeByTimeZone = useCallback(
+    (
+      date: Date | string,
+      timeZoneId?: string,
+      includeTimeZoneName?: boolean
+    ) => {
+      const UTCDate = utcToZonedTime(date, timeZoneId ?? 'Europe/London')
+      const offset = getTimeZoneOffset(timeZoneId ?? 'Europe/London', UTCDate)
+
+      const baseDate = new Date(0, 0, 0, 0, 0)
+      const resultDate = addMinutes(baseDate, Math.abs(offset))
+
+      return `(GMT${offset < 0 ? '-' : '+'}${format(resultDate, 'HH:mm')})${
+        includeTimeZoneName ? ` ${timeZoneId ?? 'Europe/London'}` : ''
+      }`
+    },
+    [getTimeZoneOffset]
+  )
+
   return {
+    formatGMTDateTimeByTimeZone,
     getTimeZoneLatLng,
     getTimeZoneOffset,
     getTimeZonesByCountryCode,

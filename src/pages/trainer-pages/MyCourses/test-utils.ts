@@ -59,9 +59,10 @@ export const buildTrainerCourse = build<TrainerCourseQueryFragment>({
     schedule: [
       {
         id: perBuild(() => chance.guid()),
+        timeZone: perBuild(() => chance.string()),
         venue: {
           id: perBuild(() => chance.guid()),
-          name: perBuild(() => chance.word()),
+          name: perBuild(() => chance.string()),
           city: perBuild(() => chance.city()),
         },
         end: new Date().toISOString(),

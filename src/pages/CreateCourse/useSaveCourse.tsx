@@ -1,7 +1,8 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { hasRenewalCycle } from '@app/components/CourseForm/helpers'
 import { useAuth } from '@app/context/auth'
 import {
@@ -26,9 +27,9 @@ import { isModeratorNeeded } from '@app/rules/trainers'
 import {
   BildStrategies,
   CourseExpenseType,
-  Currency,
   ExpensesInput,
   TransportMethod,
+  Currency,
 } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
@@ -132,6 +133,7 @@ export function useSaveCourse(): {
     invoiceDetails,
   } = useCreateCourse()
   const { setDateTimeTimeZone } = useTimeZones()
+  const { isUKCountry } = useWorldCountries()
 
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const { profile, acl } = useAuth()
@@ -145,11 +147,30 @@ export function useSaveCourse(): {
     RemoveCourseDraftMutationVariables
   >(REMOVE_COURSE_DRAFT)
 
-  const saveCourse = useCallback<SaveCourse>(async () => {
-    const isBild = courseData?.accreditedBy === Accreditors_Enum.Bild
-    const isOpenCourse = courseData?.type === Course_Type_Enum.Open
-    const isClosedCourse = courseData?.type === Course_Type_Enum.Closed
+  const isBild = courseData?.accreditedBy === Accreditors_Enum.Bild
+  const isOpenCourse = courseData?.type === Course_Type_Enum.Open
+  const isClosedCourse = courseData?.type === Course_Type_Enum.Closed
+  const isIndirectCourse = courseData?.type === Course_Type_Enum.Indirect
 
+  const calculateVATrate = useMemo(() => {
+    if (
+      (isClosedCourse || isOpenCourse) &&
+      !isUKCountry(courseData.residingCountry) &&
+      !courseData.includeVAT
+    ) {
+      return 0
+    }
+
+    return 20
+  }, [
+    isClosedCourse,
+    isOpenCourse,
+    isUKCountry,
+    courseData?.residingCountry,
+    courseData?.includeVAT,
+  ])
+
+  const saveCourse = useCallback<SaveCourse>(async () => {
     if (courseData) {
       setSavingStatus(LoadingStatus.FETCHING)
 
@@ -167,7 +188,7 @@ export function useSaveCourse(): {
         trainers.filter(t => t.type === Course_Trainer_Type_Enum.Leader)
           .length === 0
       const approveExceptions =
-        !(isBild && courseData.type === Course_Type_Enum.Indirect) &&
+        !(isBild && isIndirectCourse) &&
         exceptions.length > 0 &&
         shouldGoIntoExceptionApproval(acl, courseData.type)
 
@@ -178,14 +199,11 @@ export function useSaveCourse(): {
         : Course_Status_Enum.TrainerPending
 
       const shouldInsertOrder =
-        (courseData.type === Course_Type_Enum.Indirect &&
-          courseData.blendedLearning) ||
-        courseData.type === Course_Type_Enum.Closed
+        (isIndirectCourse && courseData.blendedLearning) || isClosedCourse
 
-      const invoiceData =
-        courseData.type === Course_Type_Enum.Indirect
-          ? go1Licensing?.invoiceDetails
-          : invoiceDetails
+      const invoiceData = isIndirectCourse
+        ? go1Licensing?.invoiceDetails
+        : invoiceDetails
 
       const scheduleDateTime: (Date | string)[] = [
         courseData.startDateTime,
@@ -195,13 +213,13 @@ export function useSaveCourse(): {
       if (courseData.timeZone) {
         const scheduleStarDateTime = setDateTimeTimeZone(
           courseData.startDateTime,
-          courseData.timeZone
+          courseData.timeZone.timeZoneId
         )
         if (scheduleStarDateTime) scheduleDateTime[0] = scheduleStarDateTime
 
         const scheduleEndDateTime = setDateTimeTimeZone(
           courseData.endDateTime,
-          courseData.timeZone
+          courseData.timeZone.timeZoneId
         )
         if (scheduleEndDateTime) scheduleDateTime[1] = scheduleEndDateTime
       }
@@ -219,7 +237,8 @@ export function useSaveCourse(): {
           courseData.type === Course_Type_Enum.Closed
             ? courseData.maxParticipants
             : 0,
-        currency: Currency.GBP,
+        currency: courseData.priceCurrency ?? Currency.GBP,
+        vat: calculateVATrate,
         user: {
           fullName: profile?.fullName,
           email: profile?.email,
@@ -239,7 +258,7 @@ export function useSaveCourse(): {
           name: courseName,
           deliveryType: courseData.deliveryType,
           accreditedBy: courseData.accreditedBy,
-          ...(courseData.type === Course_Type_Enum.Open
+          ...(isOpenCourse
             ? { displayOnWebsite: courseData.displayOnWebsite }
             : null),
           bildStrategies: isBild
@@ -336,13 +355,13 @@ export function useSaveCourse(): {
               },
             ],
           },
-          ...(courseData.type !== Course_Type_Enum.Indirect
+          ...(!isIndirectCourse
             ? {
                 accountCode: courseData.accountCode,
                 freeSpaces: courseData.freeSpaces,
               }
             : null),
-          ...(courseData.type === Course_Type_Enum.Closed
+          ...(isClosedCourse
             ? {
                 expenses: { data: prepareExpensesData(expenses) },
               }
@@ -420,16 +439,21 @@ export function useSaveCourse(): {
     draftError,
     insertError,
     trainers,
+    isBild,
+    isIndirectCourse,
     exceptions,
     acl,
+    isClosedCourse,
     go1Licensing?.invoiceDetails,
     invoiceDetails,
-    insertCourse,
-    courseName,
-    expenses,
+    calculateVATrate,
     profile?.fullName,
     profile?.email,
     profile?.phone,
+    insertCourse,
+    courseName,
+    isOpenCourse,
+    expenses,
     setDateTimeTimeZone,
     draftId,
     removeCourseDraft,

@@ -5,6 +5,8 @@ import TableBody from '@mui/material/TableBody/TableBody'
 import TableCell, { TableCellProps } from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
+import { utcToZonedTime } from 'date-fns-tz'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,6 +22,7 @@ import {
   TrainerCoursesQuery,
 } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
+import useTimeZones from '@app/hooks/useTimeZones'
 import { AdminOnlyCourseStatus, RoleName } from '@app/types'
 import { findCourseTrainer } from '@app/util'
 
@@ -90,6 +93,8 @@ export const CoursesTable: React.FC<React.PropsWithChildren<Props>> = ({
         />
 
         {courses.map((c, index) => {
+          const timeZone = c.schedule[0].timeZone ?? 'Europe/London'
+
           return typeof renderRow === 'function' ? (
             renderRow(c, index)
           ) : (
@@ -105,10 +110,16 @@ export const CoursesTable: React.FC<React.PropsWithChildren<Props>> = ({
               {!hiddenColumns.has('venue') ? <VenueCell course={c} /> : null}
               {!hiddenColumns.has('type') ? <TypeCell course={c} /> : null}
               {!hiddenColumns.has('start') ? (
-                <DateCell date={c.dates?.aggregate?.start?.date} />
+                <DateCell
+                  date={c.dates?.aggregate?.start?.date}
+                  timeZone={timeZone}
+                />
               ) : null}
               {!hiddenColumns.has('end') ? (
-                <DateCell date={c.dates?.aggregate?.end?.date} />
+                <DateCell
+                  date={c.dates?.aggregate?.end?.date}
+                  timeZone={timeZone}
+                />
               ) : null}
               {!hiddenColumns.has('createdAt') ? (
                 <DateCell date={c.createdAt} />
@@ -246,8 +257,28 @@ function TypeCell({ course }: { course: TableCourse }) {
   )
 }
 
-export function DateCell({ date }: { date: Date }) {
+export function DateCell({
+  date,
+  timeZone,
+}: {
+  date: Date
+  timeZone?: string
+}) {
+  const residingCountryEnabled = useFeatureFlagEnabled(
+    'course-residing-country'
+  )
+
+  const isResidingCountryEnabled = useMemo(
+    () => residingCountryEnabled,
+    [residingCountryEnabled]
+  )
   const { t } = useTranslation()
+  const { formatGMTDateTimeByTimeZone } = useTimeZones()
+
+  const UTCDate = useMemo(
+    () => utcToZonedTime(date, timeZone ?? 'Europe/London'),
+    [date, timeZone]
+  )
 
   return (
     <TableCell>
@@ -255,14 +286,19 @@ export function DateCell({ date }: { date: Date }) {
         <Box>
           <Typography variant="body2" gutterBottom>
             {t('dates.defaultShort', {
-              date: date,
+              date: isResidingCountryEnabled ? UTCDate : date,
             })}
           </Typography>
           <Typography variant="body2" whiteSpace="nowrap">
             {t('dates.time', {
-              date: date,
+              date: isResidingCountryEnabled ? UTCDate : date,
             })}
           </Typography>
+          {isResidingCountryEnabled ? (
+            <Typography variant="body2" whiteSpace="nowrap">
+              {formatGMTDateTimeByTimeZone(UTCDate, timeZone)}
+            </Typography>
+          ) : null}
         </Box>
       )}
     </TableCell>

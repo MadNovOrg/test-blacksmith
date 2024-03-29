@@ -497,6 +497,11 @@ export const CourseBookingDetails: React.FC<
                 start={new Date(course?.dates.aggregate?.start?.date)}
                 end={new Date(course?.dates.aggregate?.end?.date)}
                 courseResidingCountry={course?.residingCountry}
+                timeZone={
+                  course?.schedule.length
+                    ? course?.schedule[0].timeZone
+                    : undefined
+                }
               />
             </Box>
             <Box minWidth={100} display="flex" alignItems="center">

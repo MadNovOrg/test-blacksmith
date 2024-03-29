@@ -711,7 +711,8 @@ export const getCourseBeginsForMessage = (course: Course, t: TFunction) => {
 
 export const getTrainerCarCostPerMile = (miles = 0) => miles * 0.6
 
-export const getTrainerSubsistenceCost = (nights = 0) => nights * 30
+export const getTrainerSubsistenceCost = (nights = 0, isUKCountry = true) =>
+  isUKCountry ? nights * 30 : 0
 
 export const getVatAmount = (amount = 0) => amount * 0.2
 

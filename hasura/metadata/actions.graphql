@@ -926,6 +926,7 @@ type CourseInvite {
   venueName: String!
   venueAddress: Address
   venueCoordinates: String
+  timeZone: String
 }
 
 type OrgInvite {

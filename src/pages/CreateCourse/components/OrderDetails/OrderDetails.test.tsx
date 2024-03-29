@@ -86,6 +86,7 @@ describe('component: OrderDetails', () => {
               endDateTime: addHours(courseDate, 8),
               freeSpaces: 0,
               price: 100,
+              includeVAT: true,
             } as unknown as ValidCourseInput,
           }}
         >
@@ -112,7 +113,7 @@ describe('component: OrderDetails', () => {
 
     expect(
       screen.getByTestId('total-costs-row').textContent
-    ).toMatchInlineSnapshot(`"Amount due (GBP)£1,200.00"`)
+    ).toMatchInlineSnapshot(`"Amount due GBP£1,200.00"`)
   })
 
   it('displays course details, and pricing with trainer expenses for a BILD course', async () => {
@@ -174,6 +175,7 @@ describe('component: OrderDetails', () => {
               endDateTime: addHours(courseDate, 8),
               freeSpaces: 0,
               price: 200,
+              includeVAT: true,
             } as unknown as ValidCourseInput,
           }}
         >
@@ -200,7 +202,74 @@ describe('component: OrderDetails', () => {
 
     expect(
       screen.getByTestId('total-costs-row').textContent
-    ).toMatchInlineSnapshot(`"Amount due (GBP)£2,400.00"`)
+    ).toMatchInlineSnapshot(`"Amount due GBP£2,400.00"`)
+  })
+
+  it("doesn't calculate and display VAT in order details if it was not included", async () => {
+    const courseDate = new Date(1, 1, 2023)
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: CoursePriceQuery }>({
+          data: {
+            coursePrice: [
+              {
+                id: chance.guid(),
+                priceAmount: 120,
+                priceCurrency: 'GBP',
+                level: Course_Level_Enum.Level_2,
+                type: Course_Type_Enum.Open,
+                blended: false,
+                reaccreditation: false,
+              },
+            ],
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <CreateCourseProvider
+          courseType={Course_Type_Enum.Closed}
+          initialValue={{
+            courseData: {
+              maxParticipants: 10,
+              organization: { id: 'org-id' },
+              minParticipants: 10,
+              courseLevel: Course_Level_Enum.Level_1,
+              reaccreditation: false,
+              blendedLearning: false,
+              startDateTime: courseDate,
+              endDateTime: addHours(courseDate, 8),
+              freeSpaces: 0,
+              price: 100,
+              includeVAT: false,
+            } as unknown as ValidCourseInput,
+          }}
+        >
+          <OrderDetails />
+        </CreateCourseProvider>
+      </Provider>
+    )
+
+    expect(
+      screen.getByTestId('course-title-duration').textContent
+    ).toMatchInlineSnapshot(`"Positive Behaviour Training: Level One "`)
+
+    expect(
+      screen.getByTestId('course-price-row').textContent
+    ).toMatchInlineSnapshot(`"Course Cost£1,000.00"`)
+
+    expect(
+      screen.getByTestId('subtotal-row').textContent
+    ).toMatchInlineSnapshot(`"Sub total£1,000.00"`)
+
+    expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
+      '"VAT (0%)£0.00"'
+    )
+
+    expect(
+      screen.getByTestId('total-costs-row').textContent
+    ).toMatchInlineSnapshot(`"Amount due GBP£1,000.00"`)
   })
 
   it('saves invoice details and navigates to order review step when submitted', async () => {

@@ -21,7 +21,6 @@ import {
 } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import Big from 'big.js'
 import { isBefore, isDate, isPast, isValid as isValidDate } from 'date-fns'
 import { TFunction } from 'i18next'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
@@ -49,13 +48,10 @@ import { useQuery } from 'urql'
 import { SchemaDescription } from 'yup'
 
 import { CountryDropdown } from '@app/components/CountryDropdown'
-import CurrencySelector, {
-  defaultCurrency,
-} from '@app/components/CurrencySelector'
+import { defaultCurrency } from '@app/components/CurrencySelector'
 import { NumericTextField } from '@app/components/NumericTextField'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
-import { ProfileSelector } from '@app/components/ProfileSelector'
 import { RegionDropdown } from '@app/components/RegionDropdown'
 import TimeZoneSelector from '@app/components/TimeZoneSelector'
 import {
@@ -90,7 +86,7 @@ import CountriesSelector from '../CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '../CountriesSelector/hooks/useWorldCountries'
-import { InfoPanel, InfoRow } from '../InfoPanel'
+import { InfoPanel } from '../InfoPanel'
 
 import { InstructionAccordionField } from './components/AccordionTextField'
 import { CourseDatePicker } from './components/CourseDatePicker'
@@ -100,13 +96,15 @@ import {
   RenewalCycleRadios,
   schema as renewalCycleSchema,
 } from './components/RenewalCycleRadios/RenewalCycleRadios'
-import { SourceDropdown } from './components/SourceDropdown'
 import {
   defaultStrategies,
   schema as strategiesSchema,
   StrategyToggles,
   validateStrategies,
 } from './components/StrategyToggles/StrategyToggles'
+import BildCourseFinanceSection from './FormFinanceSection/BildCourseFinanceSection'
+import ClosedCourseFinanceSection from './FormFinanceSection/ClosedCourseFinanceSection'
+import OpenCourseFinanceSection from './FormFinanceSection/OpenCourseFinanceSection'
 import {
   canBeBlended,
   canBeBlendedBild,
@@ -120,6 +118,7 @@ import {
   canBeVirtual,
   canBeVirtualBild,
   courseNeedsManualPrice,
+  displayClosedCourseSalesRepr,
   getAccountCode,
   getDefaultSpecialInstructions,
   hasRenewalCycle,
@@ -130,6 +129,8 @@ import {
 export type DisabledFields = Partial<keyof CourseInput>
 
 type ContactType = 'bookingContact' | 'organizationKeyContact'
+
+const DEFAULT_COUNTRY = 'GB-ENG'
 
 interface Props {
   type?: Course_Type_Enum
@@ -146,11 +147,6 @@ interface Props {
 }
 
 const accountCodeValue = getAccountCode()
-
-const residingCountryCourseTypes = [
-  Course_Type_Enum.Open,
-  Course_Type_Enum.Closed,
-] as const
 
 const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
@@ -173,25 +169,15 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const openIcmInternationalFinanceEnabled = useFeatureFlagEnabled(
     'open-icm-course-international-finance'
   )
-  const isInternationalCandidateCourse = useMemo(
-    () =>
-      courseInput?.accreditedBy === Accreditors_Enum.Icm &&
-      residingCountryCourseTypes.some(type => courseType === type),
-    [courseInput?.accreditedBy, courseType]
-  )
-  // We can enable feature flags based on the current URL
-  // but posthog wont update in time and the flag is set as true even if it should be false
-  // The below is not really that nice as we could omit checking for the course type and manage this fully within posthog
+
   const isResidingCountryEnabled = useMemo(
-    () => residingCountryEnabled && isInternationalCandidateCourse,
-    [isInternationalCandidateCourse, residingCountryEnabled]
+    () => residingCountryEnabled,
+    [residingCountryEnabled]
   )
 
   const isInternationalFinanceEnabled = useMemo(
-    () =>
-      Boolean(openIcmInternationalFinanceEnabled) &&
-      isInternationalCandidateCourse,
-    [openIcmInternationalFinanceEnabled, isInternationalCandidateCourse]
+    () => Boolean(openIcmInternationalFinanceEnabled),
+    [openIcmInternationalFinanceEnabled]
   )
 
   const hasOrg = [Course_Type_Enum.Closed, Course_Type_Enum.Indirect].includes(
@@ -484,13 +470,15 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               'blendedLearning',
               'maxParticipants',
               'courseLevel',
+              'residingCountry',
             ],
             {
               is: (
                 accreditedBy: Accreditors_Enum,
                 blendedLearning: boolean,
                 maxParticipants: number,
-                courseLevel: Course_Level_Enum
+                courseLevel: Course_Level_Enum,
+                residingCountry: WorldCountriesCodes
               ) =>
                 courseNeedsManualPrice({
                   accreditedBy,
@@ -498,6 +486,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   maxParticipants,
                   courseLevel,
                   courseType,
+                  residingCountry,
+                  internationalFinanceEnabled: isInternationalFinanceEnabled,
                 }),
               then: s => s.required(),
               otherwise: s => s.nullable(),
@@ -700,8 +690,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const isVirtualCourse = deliveryType === Course_Delivery_Type_Enum.Virtual
   const isMixedCourse = deliveryType === Course_Delivery_Type_Enum.Mixed
   const isF2Fcourse = deliveryType === Course_Delivery_Type_Enum.F2F
-  const hasFinanceSection =
-    isInternationalFinanceEnabled || isClosedCourse || (isBild && isOpenCourse)
 
   const canBlended = isICM
     ? canBeBlended(courseType, courseLevel as Course_Level_Enum, deliveryType)
@@ -753,23 +741,113 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const endDate = useWatch({ control, name: 'endDate' })
   const endTime = useWatch({ control, name: 'endTime' })
 
-  const needsManualPrice =
-    values.accreditedBy && values.courseLevel
-      ? courseNeedsManualPrice({
-          accreditedBy: values.accreditedBy,
-          blendedLearning: values.blendedLearning,
-          courseType,
-          courseLevel: values.courseLevel as Course_Level_Enum,
-          maxParticipants: values.maxParticipants ?? 0,
-        })
-      : false
+  /**
+   * this flag shows 3 fields: priceCurrency, price & includesVAT
+   * if the PostHog feature flag is enabled
+   */
+  const showInternationalFinanceSection = useMemo(
+    () => isInternationalFinanceEnabled && !isUKCountry(values.residingCountry),
+    [isInternationalFinanceEnabled, isUKCountry, values.residingCountry]
+  )
+
+  // CLOSED course shows two fields by default: Sales Representative & Source
+  const showClosedCourseSalesRepr = useMemo(
+    () =>
+      values.accreditedBy && values.courseLevel
+        ? displayClosedCourseSalesRepr({
+            courseType,
+            accreditedBy: values.accreditedBy,
+            residingCountry: values.residingCountry as WorldCountriesCodes,
+          })
+        : false,
+    [
+      courseType,
+      values.accreditedBy,
+      values.courseLevel,
+      values.residingCountry,
+    ]
+  )
+
+  /**
+   * CLOSED course shows price field in the following condition:
+   *** course level: LEVEL 2, blendedLearning: true, residingCountry: one of UKs countries
+   *
+   * CLOSED course shows priceCurrency, price & includeVAT fields in the following condition:
+   *** all course levels when country is other than UK
+   */
+  const CLOSEDcourseNeedsManualPrice = useMemo(
+    () =>
+      values.accreditedBy && values.courseLevel
+        ? courseNeedsManualPrice({
+            accreditedBy: values.accreditedBy,
+            blendedLearning: values.blendedLearning,
+            courseType,
+            courseLevel: values.courseLevel as Course_Level_Enum,
+            maxParticipants: values.maxParticipants ?? 0,
+            residingCountry: values.residingCountry as WorldCountriesCodes,
+            internationalFinanceEnabled: isInternationalFinanceEnabled,
+          })
+        : false,
+    [
+      courseType,
+      values.accreditedBy,
+      values.blendedLearning,
+      values.courseLevel,
+      values.maxParticipants,
+      values.residingCountry,
+      isInternationalFinanceEnabled,
+    ]
+  )
+
+  /**
+   * flag to display Finance Section for CLOSED courses
+   * it shows following fields: priceCurrency, price & includeVAT
+   */
+  const showCLOSEDcourseFinanceSection = useMemo(() => {
+    return (
+      isClosedCourse &&
+      !isOpenCourse &&
+      (showInternationalFinanceSection ||
+        showClosedCourseSalesRepr ||
+        CLOSEDcourseNeedsManualPrice)
+    )
+  }, [
+    isClosedCourse,
+    isOpenCourse,
+    showInternationalFinanceSection,
+    showClosedCourseSalesRepr,
+    CLOSEDcourseNeedsManualPrice,
+  ])
+
+  // flag to display Finance Section for OPEN courses
+  const showOPENcourseFinanceSection = useMemo(() => {
+    return isOpenCourse && !isClosedCourse && showInternationalFinanceSection
+  }, [isClosedCourse, isOpenCourse, showInternationalFinanceSection])
+
+  /**
+   * BILD course (both OPEN & CLOSED) shows price field only
+   */
+  const showBILDcourseFinanceSection = useMemo(
+    () => (isOpenCourse || isClosedCourse) && isBild,
+    [isBild, isClosedCourse, isOpenCourse]
+  )
 
   const pricesList = useCoursePrice({
     accreditedBy: values.accreditedBy,
     startDateTime: values.startDateTime ?? undefined,
+    residingCountry:
+      (values.residingCountry as WorldCountriesCodes) ?? DEFAULT_COUNTRY,
   })
 
-  // this useEffect sets the individual course price and currency
+  useEffectOnce(() => {
+    setValue('residingCountry', courseInput?.residingCountry ?? DEFAULT_COUNTRY)
+
+    if (isCreation) {
+      setValue('includeVAT', true)
+    }
+  })
+
+  // this useEffect sets the individual course price for UK residing countries
   // based on its Type, LEVEL and blended & reaccreditation status
   useEffect(() => {
     const courseLevel = values?.courseLevel
@@ -791,12 +869,16 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     if (isCreation && isUKCountry(values.residingCountry)) {
       setValue('price', coursePrice?.priceAmount)
       setValue('priceCurrency', coursePrice?.priceCurrency)
+    } else {
+      resetField('price')
+      resetField('priceCurrency')
     }
   }, [
     isCreation,
     courseType,
     pricesList,
     setValue,
+    resetField,
     values?.blendedLearning,
     values?.courseLevel,
     values?.reaccreditation,
@@ -806,10 +888,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   // set VAT true for all UK countries
   useEffect(() => {
-    if (isUKCountry(values.residingCountry)) {
+    if (isCreation && isUKCountry(values.residingCountry)) {
       setValue('includeVAT', true)
     }
-  }, [isUKCountry, setValue, values.residingCountry])
+  }, [isCreation, isUKCountry, setValue, values.residingCountry])
 
   const resetSpecialInstructionsToDefault = useCallback(
     (
@@ -1029,10 +1111,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       setValue('conversion', false)
     }
   }, [values.courseLevel, setValue])
-
-  useEffectOnce(() => {
-    setValue('residingCountry', courseInput?.residingCountry ?? 'GB-ENG')
-  })
 
   const contactData = useMemo(() => {
     return {
@@ -1682,7 +1760,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 </Alert>
               ) : null}
 
-              {isResidingCountryEnabled ? (
+              {isResidingCountryEnabled && !isBild && !isIndirectCourse ? (
                 <FormControl fullWidth sx={{ my: theme.spacing(2) }}>
                   <CountriesSelector
                     onChange={(_, code) => {
@@ -2054,7 +2132,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     })}
                     id="filled-basic"
                     label={t(
-                      courseType === Course_Type_Enum.Open
+                      isOpenCourse
                         ? 'components.course-form.max-attendees-placeholder'
                         : 'components.course-form.num-attendees-placeholder'
                     )}
@@ -2134,173 +2212,53 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             />
           ) : null}
 
-          {hasFinanceSection && (
-            <InfoPanel
-              title={t('components.course-form.finance-section-title')}
-              titlePosition="outside"
-              renderContent={(content, props) => (
-                <Box {...props} p={3} pt={4}>
-                  {content}
-                </Box>
-              )}
-            >
-              {isClosedCourse && (
-                <Grid container spacing={2}>
-                  <Grid item md={6} sm={12}>
-                    <Typography fontWeight={600}>
-                      {t('components.course-form.sales-rep-title')}
-                    </Typography>
+          {showOPENcourseFinanceSection ? (
+            <OpenCourseFinanceSection
+              isCreateCourse={isCreation}
+              errors={errors}
+              price={values.price}
+              priceCurrency={values.priceCurrency}
+              includeVAT={values.includeVAT}
+              disabledFields={disabledFields}
+              register={register}
+              control={control}
+            />
+          ) : null}
 
-                    <ProfileSelector
-                      {...register('salesRepresentative')}
-                      roleName={RoleName.SALES_REPRESENTATIVE}
-                      value={values.salesRepresentative ?? undefined}
-                      onChange={profile => {
-                        setValue('salesRepresentative', profile ?? null, {
-                          shouldValidate: true,
-                        })
-                      }}
-                      textFieldProps={{
-                        variant: 'filled',
-                        label: t(
-                          'components.course-form.sales-rep-placeholder'
-                        ),
-                        required: true,
-                        error: Boolean(errors.salesRepresentative?.message),
-                        helperText:
-                          Boolean(errors.salesRepresentative?.message) &&
-                          t('components.course-form.sales-rep-error'),
-                      }}
-                      placeholder={t(
-                        'components.course-form.sales-rep-placeholder'
-                      )}
-                      testId="profile-selector-sales-representative"
-                      disabled={disabledFields.has('salesRepresentative')}
-                    />
-                  </Grid>
-                  <Grid item md={6} sm={12}>
-                    <Typography fontWeight={600}>
-                      {t('components.course-form.source-title')}
-                    </Typography>
-                    <Controller
-                      name="source"
-                      control={control}
-                      render={({ field }) => (
-                        <SourceDropdown
-                          {...field}
-                          required
-                          {...register('source')}
-                          error={Boolean(errors.source?.message)}
-                          data-testid="source-dropdown"
-                          disabled={disabledFields.has('source')}
-                        />
-                      )}
-                    />
-                  </Grid>
-                </Grid>
-              )}
-              {(isInternationalFinanceEnabled || needsManualPrice) && (
-                <>
-                  <Grid container spacing={2} mt={0}>
-                    {isInternationalFinanceEnabled && (
-                      <Grid item md={5} sm={12}>
-                        <CurrencySelector
-                          {...register('priceCurrency')}
-                          error={Boolean(errors.priceCurrency)}
-                          fullWidth
-                          helperText={errors.priceCurrency?.message}
-                          value={values.priceCurrency ?? defaultCurrency}
-                          InputLabelProps={{ shrink: true }}
-                          disabled={disabledFields.has('priceCurrency')}
-                        />
-                      </Grid>
-                    )}
+          {showCLOSEDcourseFinanceSection ? (
+            <ClosedCourseFinanceSection
+              showPricingSection={CLOSEDcourseNeedsManualPrice}
+              isCreateCourse={isCreation}
+              courseLevel={values.courseLevel as Course_Level_Enum}
+              isBlended={values.blendedLearning}
+              errors={errors}
+              price={values.price}
+              priceCurrency={values.priceCurrency}
+              includeVAT={values.includeVAT}
+              residingCountry={values.residingCountry ?? DEFAULT_COUNTRY}
+              salesRepresentative={values.salesRepresentative}
+              accountCode={values.accountCode}
+              disabledFields={disabledFields}
+              register={register}
+              setValue={setValue}
+              control={control}
+            />
+          ) : null}
 
-                    <Grid
-                      item
-                      md={isInternationalFinanceEnabled ? 7 : 12}
-                      sm={12}
-                    >
-                      <TextField
-                        {...register('price')}
-                        value={values?.price}
-                        error={Boolean(errors.price)}
-                        fullWidth
-                        helperText={errors.price?.message ?? ''}
-                        label={t('components.course-form.price')}
-                        placeholder={t(
-                          'components.course-form.price-placeholder'
-                        )}
-                        required
-                        type={'number'}
-                        variant="filled"
-                        InputLabelProps={{ shrink: true }}
-                        data-testid="price-input"
-                        disabled={disabledFields.has('price')}
-                      />
-                    </Grid>
-
-                    {isInternationalFinanceEnabled && (
-                      <Grid container item md={12} sm={12} alignSelf={'center'}>
-                        <Controller
-                          name="includeVAT"
-                          control={control}
-                          render={({ field }) => (
-                            <FormControlLabel
-                              control={
-                                <Switch
-                                  {...field}
-                                  checked={
-                                    Boolean(values.includeVAT) ||
-                                    isUKCountry(values.residingCountry)
-                                  }
-                                  disabled={
-                                    isUKCountry(values.residingCountry) ||
-                                    disabledFields.has('includeVAT')
-                                  }
-                                  data-testid="includeVAT-switch"
-                                />
-                              }
-                              label={t('vat')}
-                            />
-                          )}
-                        />
-                      </Grid>
-                    )}
-                  </Grid>
-
-                  <InfoRow>
-                    <Typography fontWeight={600}>
-                      {t('pages.order-details.total')}
-                    </Typography>
-                    <Typography fontWeight={600}>
-                      {t('currency', {
-                        amount:
-                          +(values.price ?? 0) +
-                          (values.includeVAT
-                            ? new Big(((values.price ?? 0) * 20) / 100)
-                                .round(2)
-                                .toNumber()
-                            : 0),
-                        currency: values.priceCurrency ?? defaultCurrency,
-                      })}
-                    </Typography>
-                  </InfoRow>
-                </>
-              )}
-              {isClosedCourse && (
-                <>
-                  <Typography fontWeight={600} mb={1} mt={2}>
-                    {t('components.course-form.account-code-title')}
-                  </Typography>
-
-                  <Typography color="dimGrey.main">
-                    {values.accountCode}
-                  </Typography>
-                </>
-              )}
-            </InfoPanel>
-          )}
+          {showBILDcourseFinanceSection ? (
+            <BildCourseFinanceSection
+              showSalesRepr={isClosedCourse}
+              errors={errors}
+              price={values.price}
+              priceCurrency={values.priceCurrency}
+              includeVAT={values.includeVAT}
+              salesRepresentative={values.salesRepresentative}
+              disabledFields={disabledFields}
+              register={register}
+              setValue={setValue}
+              control={control}
+            />
+          ) : null}
         </Stack>
       </FormProvider>
     </form>

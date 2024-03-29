@@ -32,6 +32,7 @@ export const QUERY = gql`
           country
           geoCoordinates
         }
+        timeZone
       }
       participantsCount: participants_aggregate {
         aggregate {

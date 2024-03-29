@@ -449,7 +449,9 @@
       "free-spaces_one": "Free space x {{count}}",
       "free-spaces_other": "Free spaces x {{count}}",
       "vat": "VAT (20%)",
-      "amount-due": "Amount due (GBP)",
+      "no-vat": "VAT (0%)",
+      "local-time-mention": "(local time)",
+      "amount-due": "Amount due {{currency}}",
       "caption": {
         "FLIGHTS_one": "{{count}} day of travel",
         "FLIGHTS_other": "{{count}} days of travel",

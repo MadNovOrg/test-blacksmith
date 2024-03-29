@@ -1,8 +1,11 @@
 import { Box, BoxProps, Typography } from '@mui/material'
-import React from 'react'
+import { utcToZonedTime } from 'date-fns-tz'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CourseInfoFragment } from '@app/generated/graphql'
+import useTimeZones from '@app/hooks/useTimeZones'
 
 type CourseInfoProps = {
   data: CourseInfoFragment
@@ -13,6 +16,24 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
   ...props
 }) => {
   const { t } = useTranslation()
+  const { formatGMTDateTimeByTimeZone } = useTimeZones()
+  const residingCountryEnabled = useFeatureFlagEnabled(
+    'course-residing-country'
+  )
+
+  const isResidingCountryEnabled = useMemo(
+    () => residingCountryEnabled,
+    [residingCountryEnabled]
+  )
+
+  const timeZoneScheduleDateTime = useMemo(() => {
+    const timeZone = data.schedule[0].timeZone ?? 'Europe/London'
+
+    return {
+      start: utcToZonedTime(data.start, timeZone),
+      end: utcToZonedTime(data.end, timeZone),
+    }
+  }, [data.end, data.schedule, data.start])
 
   let location = ''
   if (data.schedule && data.schedule.length > 0) {
@@ -62,7 +83,18 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
           {`${t('pages.trainer-base.create-course.new-course.starts')}: `}
         </Typography>
         <Typography display="inline" variant="body2">
-          {t('dates.withTime', { date: data.start })}
+          {`${t('dates.withTime', {
+            date: isResidingCountryEnabled
+              ? timeZoneScheduleDateTime.start
+              : data.start,
+          })}${
+            isResidingCountryEnabled
+              ? ` ${formatGMTDateTimeByTimeZone(
+                  timeZoneScheduleDateTime.start,
+                  data.schedule[0].timeZone
+                )}`
+              : ''
+          }`}
         </Typography>
       </Box>
       <Box data-testid="course-end-date">
@@ -70,9 +102,18 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
           {`${t('pages.trainer-base.create-course.new-course.ends')}: `}
         </Typography>
         <Typography display="inline" variant="body2">
-          {t('dates.withTime', {
-            date: data.end,
-          })}
+          {`${t('dates.withTime', {
+            date: isResidingCountryEnabled
+              ? timeZoneScheduleDateTime.end
+              : data.end,
+          })}${
+            isResidingCountryEnabled
+              ? ` ${formatGMTDateTimeByTimeZone(
+                  timeZoneScheduleDateTime.end,
+                  data.schedule[0].timeZone
+                )}`
+              : ''
+          }`}
         </Typography>
       </Box>
       <Box data-testid="course-type">

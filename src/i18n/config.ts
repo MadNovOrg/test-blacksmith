@@ -34,6 +34,11 @@ i18n.use(initReactI18next).init({
   nsSeparator: '.',
   parseMissingKeyHandler: () => '',
   returnNull: false,
+  interpolation: {
+    defaultVariables: {
+      currency: 'GBP',
+    },
+  },
 })
 
 export const dateFormats = {

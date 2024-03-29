@@ -74,6 +74,7 @@ export const QUERY = gql`
         name
         city
       }
+      timeZone
       virtualLink
     }
     cancellationRequest {

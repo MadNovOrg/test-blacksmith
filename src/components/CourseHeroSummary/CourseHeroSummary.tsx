@@ -20,6 +20,8 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
+import { utcToZonedTime } from 'date-fns-tz'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -36,6 +38,7 @@ import {
   Course_Status_Enum,
   Venue,
 } from '@app/generated/graphql'
+import useTimeZones from '@app/hooks/useTimeZones'
 import { DeleteCourseModal } from '@app/modules/course/components/DeleteCourseModal'
 import { AdminOnlyCourseStatus, Course } from '@app/types'
 import {
@@ -68,7 +71,17 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   slots,
   isManaged = false,
 }) => {
+  const residingCountryEnabled = useFeatureFlagEnabled(
+    'course-residing-country'
+  )
+
+  const isResidingCountryEnabled = useMemo(
+    () => residingCountryEnabled,
+    [residingCountryEnabled]
+  )
   const { t } = useTranslation()
+
+  const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const [isInstructionsDialogOpen, setIsInstructionsDialogOpen] =
     useState(false)
 
@@ -94,6 +107,20 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
       !courseEnded(course) &&
       !courseCancelled,
     [acl, course, courseCancelled]
+  )
+
+  const timeZoneSchedule = useMemo(
+    () => ({
+      start: utcToZonedTime(
+        new Date(course.schedule[0].start),
+        course.schedule[0].timeZone ?? 'Europe/London'
+      ),
+      end: utcToZonedTime(
+        new Date(course.schedule[0].end),
+        course.schedule[0].timeZone ?? 'Europe/London'
+      ),
+    }),
+    [course.schedule]
   )
 
   const theme = useTheme()
@@ -307,7 +334,15 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                     color="secondary"
                     data-testid="startDate-label"
                   >
-                    {t('dates.withTime', { date: course.schedule[0].start })}
+                    {isResidingCountryEnabled
+                      ? `${t('dates.withTime', {
+                          date: timeZoneSchedule.start,
+                        })} ${formatGMTDateTimeByTimeZone(
+                          course.schedule[0].start,
+                          course.schedule[0].timeZone,
+                          true
+                        )}`
+                      : t('dates.withTime', { date: course.schedule[0].start })}
                   </Typography>
                 </ListItemText>
               </ListItem>
@@ -321,7 +356,15 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                     color="secondary"
                     data-testid="endDate-label"
                   >
-                    {t('dates.withTime', { date: course.schedule[0].end })}
+                    {isResidingCountryEnabled
+                      ? `${t('dates.withTime', {
+                          date: timeZoneSchedule.end,
+                        })} ${formatGMTDateTimeByTimeZone(
+                          course.schedule[0].end,
+                          course.schedule[0].timeZone,
+                          true
+                        )}`
+                      : t('dates.withTime', { date: course.schedule[0].end })}
                   </Typography>
                 </ListItemText>
               </ListItem>

@@ -77,7 +77,10 @@ jobs:
   dev-cd:
     name: DEV
     needs: [lint-and-typecheck, test]
-    if: github.ref == 'refs/heads/dev-international-epic-demo'
+    if: |
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'push' &&
+      ! startsWith(github.head_ref, 'changeset-release/')
     uses: ./.github/workflows/pipeline.yml
     with:
       mode: 'development'
