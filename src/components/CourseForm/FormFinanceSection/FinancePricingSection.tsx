@@ -72,7 +72,7 @@ const FinancePricingSection: React.FC<React.PropsWithChildren<Props>> = ({
   return (
     <>
       <Grid container spacing={2} mt={0}>
-        <Grid item md={5} sm={12}>
+        <Grid item md={6} sm={12}>
           <CurrencySelector
             {...register('priceCurrency')}
             error={Boolean(errors?.priceCurrency)}
@@ -84,7 +84,7 @@ const FinancePricingSection: React.FC<React.PropsWithChildren<Props>> = ({
           />
         </Grid>
 
-        <Grid item md={7} sm={12}>
+        <Grid item md={6} sm={12}>
           <TextField
             {...register('price')}
             value={price}

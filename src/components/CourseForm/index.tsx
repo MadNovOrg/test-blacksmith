@@ -1433,7 +1433,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     {t('components.course-form.organization-key-contact-label')}
                   </Typography>
 
-                  <Grid container spacing={3} mb={3}>
+                  <Grid container spacing={2} mb={3}>
                     <Grid item md={12} xs={12}>
                       <UserSelector
                         {...register(`organizationKeyContact`)}
@@ -1499,7 +1499,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     {t('components.course-form.contact-person-label')}
                   </Typography>
 
-                  <Grid container spacing={3} mb={3}>
+                  <Grid container spacing={2} mb={3}>
                     <Grid item md={12} xs={12}>
                       <UserSelector
                         {...register(`bookingContact`)}
@@ -2120,7 +2120,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   </Grid>
                 ) : null}
 
-                <Grid item md={6} sm={12}>
+                <Grid
+                  item
+                  md={courseType === Course_Type_Enum.Open ? 6 : 12}
+                  sm={12}
+                >
                   <NumericTextField
                     required
                     {...register('maxParticipants', {
@@ -2169,7 +2173,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 </Typography>
 
                 <Grid container spacing={2}>
-                  <Grid item md={6} sm={12}>
+                  <Grid item md={12} sm={12}>
                     <NumericTextField
                       required
                       {...register('freeSpaces', { valueAsNumber: true })}
