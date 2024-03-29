@@ -77,7 +77,7 @@ export const UserSelector: React.FC<
   })
 
   const emailOptions = useMemo(() => {
-    return data?.members.map(o => o.profile.email)
+    return [...new Set(data?.members.map(o => o.profile.email))]
   }, [data?.members])
 
   useMount(() => {
