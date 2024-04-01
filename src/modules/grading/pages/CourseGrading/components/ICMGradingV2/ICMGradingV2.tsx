@@ -103,7 +103,10 @@ export const ICMGradingV2: React.FC<Props> = ({ course }) => {
   )
 
   const curriculum = useMemo(() => {
-    const c = course.curriculum ? [...course.curriculum] : []
+    const c =
+      course.curriculum && Array.isArray(course.curriculum)
+        ? [...course.curriculum]
+        : []
 
     const mappedCurriculum =
       Array.isArray(c) && c.length
