@@ -244,6 +244,7 @@ const breakpoints = {
 export const APP_BAR_HEIGHT = 72
 export const FOOTER_HEIGHT = 192
 
+// @ts-expect-error some missing colors
 export default createTheme({
   ...theme,
   breakpoints,
