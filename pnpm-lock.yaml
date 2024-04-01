@@ -237,8 +237,8 @@ importers:
         specifier: ^2.10.0
         version: 2.10.0
       swiper:
-        specifier: ^11.0.7
-        version: 11.0.7
+        specifier: ^11.1.0
+        version: 11.1.0
       tslib:
         specifier: ^2.3.0
         version: 2.5.3
@@ -13546,7 +13546,7 @@ packages:
     resolution: {integrity: sha512-mWEvCQTgXQf48yDqgN7CH50waTyYBeP2Lpqx4nNWab9sxEpdXVeKgfj1qYI2/TgUPQtNFZ85i3PemRtnXVYYJg==}
     peerDependencies:
       '@babel/core': ^7
-      '@babel/traverse': ^7
+      '@babel/traverse': '>=7.23.2'
     peerDependenciesMeta:
       '@babel/traverse':
         optional: true
@@ -23208,8 +23208,8 @@ packages:
       tslib: 2.5.3
     dev: true
 
-  /swiper@11.0.7:
-    resolution: {integrity: sha512-cDfglW1B6uSmB6eB6pNmzDTNLmZtu5bWWa1vak0RU7fOI9qHjMzl7gVBvYSl34b0RU2N11HxxETJqQ5LeqI1cA==}
+  /swiper@11.1.0:
+    resolution: {integrity: sha512-Pm78CgU7Wvg+w/MgIL/1NwMSLgx0XqFof25EnVyX8iZFCYJv5CppH7LHkBj43qW2k5Cp3Iz7FcdBxrox7XX2AQ==}
     engines: {node: '>= 4.7.0'}
     dev: false
 
