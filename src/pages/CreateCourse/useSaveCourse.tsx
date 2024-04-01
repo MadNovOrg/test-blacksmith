@@ -3,7 +3,10 @@ import { useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { hasRenewalCycle } from '@app/components/CourseForm/helpers'
+import {
+  hasRenewalCycle,
+  isRenewalCycleHiddenFromUI,
+} from '@app/components/CourseForm/helpers'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
@@ -34,6 +37,7 @@ import {
 import { LoadingStatus } from '@app/util'
 
 import { useCreateCourse } from './components/CreateCourseProvider'
+import { getCourseRenewalCycle } from './utils'
 
 const prepareExpensesData = (
   expenses: Record<string, ExpensesInput>
@@ -319,9 +323,9 @@ export function useSaveCourse(): {
             courseType: courseData.type,
             startDate: courseData.startDate,
             courseLevel: courseData.courseLevel,
-          })
+          }) || isRenewalCycleHiddenFromUI(courseData.courseLevel)
             ? {
-                renewalCycle: courseData.renewalCycle,
+                renewalCycle: getCourseRenewalCycle(courseData),
               }
             : null),
           ...(courseData.usesAOL

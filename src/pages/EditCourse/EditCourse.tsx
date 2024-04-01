@@ -25,7 +25,10 @@ import ChooseTrainers, {
 } from '@app/components/ChooseTrainers'
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import CourseForm, { DisabledFields } from '@app/components/CourseForm'
-import { hasRenewalCycle } from '@app/components/CourseForm/helpers'
+import {
+  hasRenewalCycle,
+  isRenewalCycleHiddenFromUI,
+} from '@app/components/CourseForm/helpers'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { Dialog } from '@app/components/dialogs'
 import { Sticky } from '@app/components/Sticky'
@@ -90,6 +93,7 @@ import {
 } from '@app/util'
 
 import { NotFound } from '../common/NotFound'
+import { getCourseRenewalCycle } from '../CreateCourse/utils'
 
 import { FormValues, ReviewChangesModal } from './components/ReviewChangesModal'
 import { type CourseDiff, getChangedTrainers } from './shared'
@@ -376,8 +380,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 courseType: courseData.type,
                 startDate: courseData.startDate,
                 courseLevel: courseData.courseLevel,
-              })
-                ? { renewalCycle: courseData.renewalCycle }
+              }) || isRenewalCycleHiddenFromUI(courseData.courseLevel)
+                ? { renewalCycle: getCourseRenewalCycle(courseData) }
                 : { renewalCycle: null }),
               ...(courseData.minParticipants
                 ? { min_participants: courseData.minParticipants }

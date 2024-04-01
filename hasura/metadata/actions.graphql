@@ -375,6 +375,7 @@ enum InviteStatus {
 
 enum CourseLevel {
   LEVEL_1
+  LEVEL_1_MVA
   LEVEL_2
   ADVANCED
   INTERMEDIATE_TRAINER

@@ -93,7 +93,7 @@ export const CoursesTable: React.FC<React.PropsWithChildren<Props>> = ({
         />
 
         {courses.map((c, index) => {
-          const timeZone = c.schedule[0].timeZone ?? 'Europe/London'
+          const timeZone = c?.schedule[0]?.timeZone ?? 'Europe/London'
 
           return typeof renderRow === 'function' ? (
             renderRow(c, index)

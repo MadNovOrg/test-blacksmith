@@ -685,7 +685,7 @@ event_triggers:
       interval_sec: 10
       num_retries: 5
       timeout_sec: 60
-    webhook: '{{EVENTS_HOST}}/participant/schedule-post-training-survey-email/manage'    
+    webhook: '{{EVENTS_HOST}}/participant/schedule-post-training-survey-email/manage'
   - name: participant_graded_curriculum
     definition:
       enable_manual: true

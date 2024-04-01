@@ -253,6 +253,7 @@
   },
   "course-levels": {
     "LEVEL_1": "Level One",
+    "LEVEL_1_MVA": "Level One Managing Violence and Aggression",
     "LEVEL_2": "Level Two",
     "ADVANCED": "Advanced Modules",
     "INTERMEDIATE_TRAINER": "Intermediate Trainer",

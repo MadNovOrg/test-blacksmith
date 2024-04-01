@@ -1,6 +1,10 @@
 import Big from 'big.js'
 
-import { Go1LicensingPrices } from '@app/types'
+import {
+  Course_Level_Enum,
+  Course_Renewal_Cycle_Enum,
+} from '@app/generated/graphql'
+import { Go1LicensingPrices, ValidCourseInput } from '@app/types'
 
 export const PRICE_PER_LICENSE = 50
 
@@ -23,4 +27,11 @@ export function calculateGo1LicenseCost(
     subtotal: fullPrice.toNumber(),
     allowancePrice: allowancePrice.toNumber(),
   }
+}
+
+export const getCourseRenewalCycle = (courseData: ValidCourseInput) => {
+  if (courseData.renewalCycle) return courseData.renewalCycle
+  if (courseData.courseLevel === Course_Level_Enum.Level_1Mva)
+    return Course_Renewal_Cycle_Enum.One
+  return null
 }

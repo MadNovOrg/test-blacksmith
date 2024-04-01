@@ -1,3 +1,4 @@
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
@@ -11,6 +12,10 @@ import { RoleName } from '@app/types'
 import { render, renderHook, screen, userEvent, within } from '@test/index'
 
 import { CourseLevelDropdown } from './index'
+vi.mock('posthog-js/react', () => ({
+  useFeatureFlagEnabled: vi.fn(),
+}))
+const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 const getOption = (level: string | RegExp, query = false) => {
   const dropdown = screen.getByRole('listbox')
@@ -58,6 +63,8 @@ describe('component: CourseLevelDropdown', () => {
   })
 
   it('renders correctly when type is CLOSED', async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+
     render(
       <CourseLevelDropdown
         value=""
@@ -70,7 +77,7 @@ describe('component: CourseLevelDropdown', () => {
 
     await userEvent.click(screen.getByRole('button'))
 
-    expect(screen.queryAllByRole('option').length).toBe(5)
+    expect(screen.queryAllByRole('option').length).toBe(6)
 
     expect(getOption(t('common.course-levels.LEVEL_1'))).toBeInTheDocument()
     expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
@@ -80,6 +87,9 @@ describe('component: CourseLevelDropdown', () => {
     ).toBeInTheDocument()
     expect(
       getOption(t('common.course-levels.ADVANCED_TRAINER'))
+    ).toBeInTheDocument()
+    expect(
+      screen.getByTestId('course-level-option-LEVEL_1_MVA')
     ).toBeInTheDocument()
   })
 

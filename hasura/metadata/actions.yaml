@@ -551,6 +551,9 @@ custom_types:
           value: LEVEL_1
         - description: null
           is_deprecated: null
+          value: LEVEL_1_MVA
+        - description: null
+          is_deprecated: null
           value: LEVEL_2
         - description: null
           is_deprecated: null

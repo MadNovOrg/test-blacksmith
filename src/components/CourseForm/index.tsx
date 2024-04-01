@@ -31,6 +31,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
+  useState,
 } from 'react'
 import {
   Controller,
@@ -105,6 +106,7 @@ import BildCourseFinanceSection from './FormFinanceSection/BildCourseFinanceSect
 import ClosedCourseFinanceSection from './FormFinanceSection/ClosedCourseFinanceSection'
 import OpenCourseFinanceSection from './FormFinanceSection/OpenCourseFinanceSection'
 import {
+  Countries_Code,
   canBeBlended,
   canBeBlendedBild,
   canBeConversion,
@@ -116,6 +118,7 @@ import {
   canBeReaccBild,
   canBeVirtual,
   canBeVirtualBild,
+  changeCountryOnCourseLevelChange,
   courseNeedsManualPrice,
   displayClosedCourseSalesRepr,
   getAccountCode,
@@ -128,8 +131,6 @@ import {
 export type DisabledFields = Partial<keyof CourseInput>
 
 type ContactType = 'bookingContact' | 'organizationKeyContact'
-
-const DEFAULT_COUNTRY = 'GB-ENG'
 
 interface Props {
   type?: Course_Type_Enum
@@ -158,6 +159,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation()
   const { activeRole, acl, profile } = useAuth()
+  const [
+    wasDefaultResidingCountryChanged,
+    setWasDefaultResidingCountryChanged,
+  ] = useState(false)
 
   // Used for:
   // - Open course residing country https://behaviourhub.atlassian.net/browse/TTHP-2915
@@ -168,6 +173,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const openIcmInternationalFinanceEnabled = useFeatureFlagEnabled(
     'open-icm-course-international-finance'
   )
+
+  const levelOneMVAEnabled = useFeatureFlagEnabled('level-one-mva')
 
   const isResidingCountryEnabled = useMemo(
     () => residingCountryEnabled,
@@ -587,7 +594,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       renewalCycle: courseInput?.renewalCycle,
       ...(isResidingCountryEnabled
         ? {
-            residingCountry: courseInput?.residingCountry ?? 'GB-ENG',
+            residingCountry:
+              courseInput?.residingCountry ??
+              Countries_Code.DEFAULT_RESIDING_COUNTRY,
           }
         : {}),
     }),
@@ -835,11 +844,15 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     accreditedBy: values.accreditedBy,
     startDateTime: values.startDateTime ?? undefined,
     residingCountry:
-      (values.residingCountry as WorldCountriesCodes) ?? DEFAULT_COUNTRY,
+      (values.residingCountry as WorldCountriesCodes) ??
+      Countries_Code.DEFAULT_RESIDING_COUNTRY,
   })
 
   useEffectOnce(() => {
-    setValue('residingCountry', courseInput?.residingCountry ?? DEFAULT_COUNTRY)
+    setValue(
+      'residingCountry',
+      courseInput?.residingCountry ?? Countries_Code.DEFAULT_RESIDING_COUNTRY
+    )
 
     if (isCreation) {
       setValue('includeVAT', true)
@@ -1586,7 +1599,15 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       labelId="course-level-dropdown"
                       onChange={event => {
                         field.onChange(event)
-
+                        levelOneMVAEnabled &&
+                          setValue(
+                            'residingCountry',
+                            changeCountryOnCourseLevelChange(
+                              event.target.value,
+                              wasDefaultResidingCountryChanged,
+                              values?.residingCountry
+                            )
+                          )
                         resetSpecialInstructionsToDefault(
                           courseType,
                           event.target.value as Course_Level_Enum,
@@ -1764,6 +1785,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   <CountriesSelector
                     onChange={(_, code) => {
                       setValue('residingCountry', code ?? '')
+                      setWasDefaultResidingCountryChanged(true)
                     }}
                     value={values.residingCountry}
                     label={t('components.course-form.residing-country')}
@@ -2080,7 +2102,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               </LocalizationProvider>
             </Box>
           </InfoPanel>
-
           <InfoPanel
             title={t('components.course-form.attendees-section-title')}
             titlePosition="outside"
@@ -2193,7 +2214,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               </Box>
             ) : null}
           </InfoPanel>
-
+          {/* For level 1 MVA this input is hidden from UI, however it is set when we are sending request to create course*/}
           {startDate &&
           values.courseLevel &&
           hasRenewalCycle({
@@ -2236,7 +2257,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               price={values.price}
               priceCurrency={values.priceCurrency}
               includeVAT={values.includeVAT}
-              residingCountry={values.residingCountry ?? DEFAULT_COUNTRY}
+              residingCountry={
+                values.residingCountry ??
+                Countries_Code.DEFAULT_RESIDING_COUNTRY
+              }
               salesRepresentative={values.salesRepresentative}
               accountCode={values.accountCode}
               disabledFields={disabledFields}

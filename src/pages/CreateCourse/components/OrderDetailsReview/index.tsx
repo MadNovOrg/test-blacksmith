@@ -103,11 +103,11 @@ export const OrderDetailsReview: React.FC = () => {
         return []
       }
 
-      const courseBasePrice = new Big(courseData.price).times(
+      const courseBasePrice = new Big(courseData?.price ?? 0).times(
         courseData.maxParticipants
       )
 
-      const freeSpacesDiscount = new Big(courseData.price)
+      const freeSpacesDiscount = new Big(courseData?.price ?? 0)
         .times(courseData.freeSpaces ?? 0)
         .neg()
 

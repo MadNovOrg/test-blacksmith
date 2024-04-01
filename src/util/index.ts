@@ -816,6 +816,7 @@ export const GRACE_PERIOD_PER_LEVEL = {
   [Course_Level_Enum.AdvancedTrainer]: 1,
   [Course_Level_Enum.BildIntermediateTrainer]: 0,
   [Course_Level_Enum.BildAdvancedTrainer]: 0,
+  [Course_Level_Enum.Level_1Mva]: 0,
 }
 
 export function expiryDateWithGracePeriod(
@@ -863,6 +864,12 @@ export const REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL = {
     Course_Level_Enum.BildAdvancedTrainer,
   ],
   [Course_Level_Enum.Level_1]: [
+    Course_Level_Enum.IntermediateTrainer,
+    Course_Level_Enum.BildIntermediateTrainer,
+    Course_Level_Enum.AdvancedTrainer,
+    Course_Level_Enum.BildAdvancedTrainer,
+  ],
+  [Course_Level_Enum.Level_1Mva]: [
     Course_Level_Enum.IntermediateTrainer,
     Course_Level_Enum.BildIntermediateTrainer,
     Course_Level_Enum.AdvancedTrainer,

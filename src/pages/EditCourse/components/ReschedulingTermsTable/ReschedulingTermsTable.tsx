@@ -32,6 +32,7 @@ const LEVEL_TERMS: Record<
   typeof TERMS | typeof TRAINER_TERMS
 > = {
   [Course_Level_Enum.Level_1]: TERMS,
+  [Course_Level_Enum.Level_1Mva]: TERMS,
   [Course_Level_Enum.Level_2]: TERMS,
   [Course_Level_Enum.ThreeDaySafetyResponseTrainer]: TERMS,
   [Course_Level_Enum.Advanced]: TERMS,

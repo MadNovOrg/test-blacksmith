@@ -1370,6 +1370,7 @@ export enum CourseLevel {
   BildRegular = 'BILD_REGULAR',
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   Level_1 = 'LEVEL_1',
+  Level_1Mva = 'LEVEL_1_MVA',
   Level_2 = 'LEVEL_2',
   ThreeDaySafetyResponseTrainer = 'THREE_DAY_SAFETY_RESPONSE_TRAINER'
 }
@@ -22079,6 +22080,7 @@ export enum Course_Level_Enum {
   BildRegular = 'BILD_REGULAR',
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   Level_1 = 'LEVEL_1',
+  Level_1Mva = 'LEVEL_1_MVA',
   Level_2 = 'LEVEL_2',
   ThreeDaySafetyResponseTrainer = 'THREE_DAY_SAFETY_RESPONSE_TRAINER'
 }

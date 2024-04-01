@@ -87,6 +87,16 @@ select_permissions:
                   bookingContactProfileId:
                     _eq: X-Hasura-User-Id
       allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - course_id
+        - answer
+        - id
+        - profile_id
+        - question_id
+      filter: {}
+      allow_aggregations: true
   - role: organization-key-contact
     permission:
       columns:
@@ -115,6 +125,16 @@ select_permissions:
         - question_id
       filter: {}
       allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - course_id
+        - answer
+        - id
+        - profile_id
+        - question_id
+      filter: {}
+      allow_aggregations: true
   - role: trainer
     permission:
       columns:
@@ -130,26 +150,6 @@ select_permissions:
               _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: tt-ops
-    permission:
-      columns:
-        - course_id
-        - answer
-        - id
-        - profile_id
-        - question_id
-      filter: {}
-      allow_aggregations: true
-  - role: finance
-    permission:
-      columns:
-        - course_id
-        - answer
-        - id
-        - profile_id
-        - question_id
-      filter: {}
-      allow_aggregations: true
-  - role: sales-representative
     permission:
       columns:
         - course_id

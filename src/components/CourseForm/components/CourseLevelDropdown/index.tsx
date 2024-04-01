@@ -37,6 +37,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   const { acl } = useAuth()
   const threeDaySRTcourseLevelEnabled =
     useFeatureFlagEnabled('3-day-srt-course')
+  const levelOneMVAEnabled = useFeatureFlagEnabled('level-one-mva')
 
   useEffect(() => {
     onChangeRef.current = onChange
@@ -45,14 +46,31 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   const levels = useMemo(
     () =>
       acl.allowedCourseLevels(
-        getLevels(courseType, courseAccreditor).filter(level =>
-          !threeDaySRTcourseLevelEnabled &&
-          typeof threeDaySRTcourseLevelEnabled !== 'undefined'
-            ? level !== Course_Level_Enum.ThreeDaySafetyResponseTrainer
-            : true
-        )
+        getLevels(courseType, courseAccreditor).filter(level => {
+          if (
+            !threeDaySRTcourseLevelEnabled &&
+            typeof threeDaySRTcourseLevelEnabled !== 'undefined' &&
+            level === Course_Level_Enum.ThreeDaySafetyResponseTrainer
+          )
+            return false
+
+          if (
+            !levelOneMVAEnabled &&
+            typeof levelOneMVAEnabled !== 'undefined' &&
+            level === Course_Level_Enum.Level_1Mva
+          )
+            return false
+
+          return true
+        })
       ),
-    [acl, courseType, courseAccreditor, threeDaySRTcourseLevelEnabled]
+    [
+      acl,
+      courseType,
+      courseAccreditor,
+      threeDaySRTcourseLevelEnabled,
+      levelOneMVAEnabled,
+    ]
   )
 
   const selected = value && levels.includes(value) ? value : levels[0]
