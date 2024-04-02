@@ -99,6 +99,7 @@ insert_permissions:
         - billing_given_name
         - billing_family_name
         - billing_email
+        - vat
         - billing_phone
         - registrants
         - created_at
@@ -130,6 +131,7 @@ insert_permissions:
         - billing_phone
         - registrants
         - created_at
+        - vat
         - organization_id
         - currency
         - promo_codes
@@ -150,9 +152,6 @@ insert_permissions:
         - billing_email
         - billing_phone
         - registrants
-        - sales_representative_id
-        - source
-        - user
         - vat
         - created_at
         - organization_id
@@ -179,6 +178,7 @@ insert_permissions:
         - billing_phone
         - registrants
         - created_at
+        - vat
         - organization_id
         - currency
         - promo_codes
