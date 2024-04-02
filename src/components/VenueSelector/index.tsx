@@ -130,7 +130,15 @@ export const VenueSelector: React.FC<
     FindVenuesQueryVariables
   >({
     query: FIND_VENUES,
-    variables: { query: `%${debouncedQuery}%` },
+    variables: {
+      query: `%${debouncedQuery}%`,
+      country: [
+        ...(courseResidingCountry
+          ? [courseResidingCountry ?? '']
+          : // for Indirect courses, we need to retun all results based on UK countries since there's no residing country yet
+            [...Object.keys(UKsCountriesCodes)]),
+      ],
+    },
     pause: !debouncedQuery,
     requestPolicy: 'cache-and-network',
   })
@@ -161,10 +169,7 @@ export const VenueSelector: React.FC<
   }, [data?.venues, googleSuggestions]) as (AutocompletePrediction | Venue)[]
 
   const handleSelection = useCallback(
-    async (
-      _: React.SyntheticEvent,
-      value: AutocompletePrediction | Venue | null
-    ) => {
+    async (value: AutocompletePrediction | Venue | null) => {
       if (value && 'place_id' in value) {
         const placeDetails = await getPlaceDetails(value.place_id)
         setVenue({
@@ -197,6 +202,12 @@ export const VenueSelector: React.FC<
     setOpen(false)
     setVenue(undefined)
   }
+
+  useUpdateEffect(() => {
+    setGoogleSuggestions({ predictions: [] })
+    setQuery('')
+  }, [courseResidingCountry])
+
   return (
     <>
       <Wrapper
@@ -206,7 +217,7 @@ export const VenueSelector: React.FC<
         <Autocomplete
           freeSolo={query?.length > 3 ? false : true}
           sx={sx}
-          open={open}
+          open={open && Boolean(debouncedQuery && query)}
           openOnFocus={true}
           clearOnBlur={true}
           onOpen={() => setOpen(true)}
@@ -215,7 +226,7 @@ export const VenueSelector: React.FC<
             setQuery('')
           }}
           onChange={(_, option) => {
-            handleSelection(_, option as Venue | AutocompletePrediction)
+            handleSelection(option as Venue | AutocompletePrediction)
             setQuery('')
           }}
           isOptionEqualToValue={() => true}

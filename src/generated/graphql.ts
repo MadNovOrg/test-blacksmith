@@ -60424,6 +60424,7 @@ export type GetProfileByIdQuery = { __typename?: 'query_root', profile?: { __typ
 
 export type FindVenuesQueryVariables = Exact<{
   query: Scalars['String'];
+  country?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
 
 

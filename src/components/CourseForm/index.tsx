@@ -1786,6 +1786,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     onChange={(_, code) => {
                       setValue('residingCountry', code ?? '')
                       setWasDefaultResidingCountryChanged(true)
+                      setValue('venue', null)
                     }}
                     value={values.residingCountry}
                     label={t('components.course-form.residing-country')}
@@ -1864,7 +1865,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               {hasVenue ? (
                 <VenueSelector
                   isBILDcourse={isBild}
-                  courseResidingCountry={values.residingCountry}
+                  courseResidingCountry={
+                    courseInput?.type !== Course_Type_Enum.Indirect
+                      ? values.residingCountry
+                      : ''
+                  } // there's no residing country yet on the Indirect courses
                   {...register('venue')}
                   onChange={venue => {
                     return setValue('venue', venue ?? null, {
