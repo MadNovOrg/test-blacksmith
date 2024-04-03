@@ -3,14 +3,13 @@ import { Box, Button, CircularProgress, Grid, Stack } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { isValid } from 'date-fns'
 import { format } from 'date-fns-tz'
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useWindowSize } from 'react-use'
 
 import { DetailsRow } from '@app/components/DetailsRow'
 import { useAuth } from '@app/context/auth'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { DeleteOrgModalProps } from '@app/modules/organisation/components/DeleteOrgModal'
 import DeleteOrgModal from '@app/modules/organisation/components/DeleteOrgModal/DeleteOrgModal'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { sectors } from '@app/pages/common/CourseBooking/components/org-data'
@@ -33,38 +32,6 @@ export const OrgDetailsTab: React.FC<
     showAll: acl.canViewAllOrganizations(),
     withAggregateData: acl.canDeleteOrgs(),
   })
-
-  const deleteOrgModalData = useMemo<Pick<
-    DeleteOrgModalProps,
-    'org'
-  > | null>(() => {
-    const org = data?.orgs.length ? data?.orgs[0] : null
-
-    if (!org) return null
-
-    if (
-      [
-        org.members_aggregate?.aggregate?.count,
-        org.organization_courses_aggregate?.aggregate?.count,
-        org.organization_orders_aggregate?.aggregate?.count,
-      ].some(agg => !agg && agg !== 0)
-    ) {
-      return null
-    }
-
-    return {
-      org: {
-        id: org.id,
-        name: org.name,
-        count: {
-          members: org.members_aggregate?.aggregate?.count as number,
-          courses: org.organization_courses_aggregate?.aggregate
-            ?.count as number,
-          orders: org.organization_orders_aggregate?.aggregate?.count as number,
-        },
-      },
-    }
-  }, [data?.orgs])
 
   const { width } = useWindowSize()
   const isMobile = width <= 425
@@ -163,11 +130,11 @@ export const OrgDetailsTab: React.FC<
                         >
                           {t('delete-organisation')}
                         </Button>
-                        {deleteOrgModalData ? (
+                        {data?.orgs.length ? (
                           <DeleteOrgModal
                             onClose={() => setOpenDeleteDialog(false)}
                             open={openDeleteDialog}
-                            org={deleteOrgModalData.org}
+                            org={data?.orgs[0]}
                           />
                         ) : null}
                       </>

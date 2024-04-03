@@ -118,8 +118,6 @@ export default function useOrgV2({
 
   const orderBy = sorting ? { [sorting.by]: sorting.dir } : undefined
 
-  console.log(withAggregateData)
-
   const [{ data, error, fetching }, reexecute] = useQuery<
     GetOrganisationDetailsQuery,
     GetOrganisationDetailsQueryVariables

@@ -1,3 +1,7 @@
+import { Client, Provider } from 'urql'
+import { fromValue } from 'wonka'
+
+import { GetOrganisationDetailsForDeleteQuery } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import DeleteOrgModal from '@app/modules/organisation/components/DeleteOrgModal/DeleteOrgModal'
 
@@ -19,24 +23,34 @@ describe(DeleteOrgModal.name, () => {
   } = renderHook(() => useScopedTranslation('pages.org-details.tabs.details'))
 
   it('should render the modal with correct content if delete is allowed', () => {
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetOrganisationDetailsForDeleteQuery }>({
+          data: {
+            orgs: {
+              members: { aggregate: { count: 0 } },
+              courses: { aggregate: { count: 0 } },
+              orders: { aggregate: { count: 0 } },
+            },
+          },
+        }),
+    } as unknown as Client
+
     const org = {
       id: chance.guid(),
       name: chance.name(),
-      count: {
-        orders: 0,
-        members: 0,
-        courses: 0,
-      },
     }
 
     const { getByText } = render(
-      <DeleteOrgModal
-        onClose={() => {
-          return
-        }}
-        open={true}
-        org={org}
-      />
+      <Provider value={client}>
+        <DeleteOrgModal
+          onClose={() => {
+            return
+          }}
+          open={true}
+          org={org}
+        />
+      </Provider>
     )
 
     expect(
@@ -46,24 +60,34 @@ describe(DeleteOrgModal.name, () => {
   })
 
   it('should render the modal with correct content if delete is NOT allowed', () => {
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetOrganisationDetailsForDeleteQuery }>({
+          data: {
+            orgs: {
+              members: { aggregate: { count: 0 } },
+              courses: { aggregate: { count: 0 } },
+              orders: { aggregate: { count: 1 } },
+            },
+          },
+        }),
+    } as unknown as Client
+
     const org = {
       id: chance.guid(),
       name: chance.name(),
-      count: {
-        orders: 1,
-        members: 0,
-        courses: 0,
-      },
     }
 
     const { getByText } = render(
-      <DeleteOrgModal
-        onClose={() => {
-          return
-        }}
-        open={true}
-        org={org}
-      />
+      <Provider value={client}>
+        <DeleteOrgModal
+          onClose={() => {
+            return
+          }}
+          open={true}
+          org={org}
+        />
+      </Provider>
     )
 
     expect(getByText(t('cannot-be-deleted'))).toBeInTheDocument()
@@ -74,36 +98,42 @@ describe(DeleteOrgModal.name, () => {
   })
 
   it('should render the modal with correct organisation linked entities', () => {
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetOrganisationDetailsForDeleteQuery }>({
+          data: {
+            orgs: {
+              members: { aggregate: { count: 1 } },
+              courses: { aggregate: { count: 0 } },
+              orders: { aggregate: { count: 1 } },
+            },
+          },
+        }),
+    } as unknown as Client
+
     const org = {
       id: chance.guid(),
       name: chance.name(),
-      count: {
-        orders: 1,
-        members: 1,
-        courses: 0,
-      },
     }
 
     const { getByText } = render(
-      <DeleteOrgModal
-        onClose={() => {
-          return
-        }}
-        open={true}
-        org={org}
-      />
+      <Provider value={client}>
+        <DeleteOrgModal
+          onClose={() => {
+            return
+          }}
+          open={true}
+          org={org}
+        />
+      </Provider>
     )
 
     expect(getByText(t('cannot-be-deleted'))).toBeInTheDocument()
 
+    expect(getByText(t('count-members', { num: 1 }))).toBeInTheDocument()
+    expect(getByText(t('count-orders', { num: 1 }))).toBeInTheDocument()
     expect(
-      getByText(t('count-members', { num: org.count.members }))
-    ).toBeInTheDocument()
-    expect(
-      getByText(t('count-orders', { num: org.count.orders }))
-    ).toBeInTheDocument()
-    expect(
-      screen.queryByText(t('count-courses', { num: org.count.orders }))
+      screen.queryByText(t('count-courses', { num: 0 }))
     ).not.toBeInTheDocument()
 
     expect(

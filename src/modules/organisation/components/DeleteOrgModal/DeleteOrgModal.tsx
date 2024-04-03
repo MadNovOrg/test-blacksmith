@@ -10,15 +10,22 @@ import {
 import Typography from '@mui/material/Typography'
 import React, { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useMutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
 
 import { Dialog } from '@app/components/dialogs'
 import {
   DeleteOrgMutation,
   DeleteOrgMutationVariables,
+  GetOrganisationDetailsForDeleteQuery,
+  GetOrganisationDetailsForDeleteQueryVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { GET_ORGANISATION_DETAILS_FOR_DELETE } from '@app/modules/organisation/components/DeleteOrgModal/queries'
 import { DELETE_ORG } from '@app/queries/organization/delete-org'
+
+type OrgAggregateData = {
+  count: { members: number; courses: number; orders: number }
+}
 
 export type DeleteOrgModalProps = {
   onClose: () => void
@@ -26,11 +33,6 @@ export type DeleteOrgModalProps = {
   org: {
     id: string
     name: string
-    count: {
-      members: number
-      courses: number
-      orders: number
-    }
   }
 }
 
@@ -38,14 +40,55 @@ const DeleteOrgModal = ({ onClose, open, org }: DeleteOrgModalProps) => {
   const { t, _t } = useScopedTranslation('pages.org-details.tabs.details')
   const navigate = useNavigate()
 
+  const [{ data: orgData, error: fetchOrgError }] = useQuery<
+    GetOrganisationDetailsForDeleteQuery,
+    GetOrganisationDetailsForDeleteQueryVariables
+  >({
+    query: GET_ORGANISATION_DETAILS_FOR_DELETE,
+    variables: {
+      orgId: org.id,
+    },
+    requestPolicy: 'cache-and-network',
+  })
+
   const [{ data, fetching, error }, deleteOrg] = useMutation<
     DeleteOrgMutation,
     DeleteOrgMutationVariables
   >(DELETE_ORG)
 
   const allowOrgDelete = useMemo(() => {
-    return !(org.count.orders + org.count.members + org.count.orders)
-  }, [org.count.members, org.count.orders])
+    if (!orgData) return false
+
+    return !(
+      (orgData.orgs?.members.aggregate?.count ?? 0) +
+      (orgData.orgs?.courses.aggregate?.count ?? 0) +
+      (orgData.orgs?.orders.aggregate?.count ?? 0)
+    )
+  }, [orgData])
+
+  const deleteOrgModalData = useMemo<OrgAggregateData | null>(() => {
+    const org = orgData?.orgs ? orgData?.orgs : null
+
+    if (!org) return null
+
+    if (
+      [
+        org.members?.aggregate?.count,
+        org.courses?.aggregate?.count,
+        org.orders?.aggregate?.count,
+      ].some(agg => !agg && agg !== 0)
+    ) {
+      return null
+    }
+
+    return {
+      count: {
+        members: org.members?.aggregate?.count as number,
+        courses: org.courses?.aggregate?.count as number,
+        orders: org.orders?.aggregate?.count as number,
+      },
+    }
+  }, [orgData?.orgs])
 
   useEffect(() => {
     if (data?.deleteOrganisation?.success) {
@@ -53,7 +96,7 @@ const DeleteOrgModal = ({ onClose, open, org }: DeleteOrgModalProps) => {
     }
   }, [data?.deleteOrganisation?.success, navigate])
 
-  return (
+  return deleteOrgModalData ? (
     <Dialog
       onClose={onClose}
       open={open}
@@ -82,13 +125,16 @@ const DeleteOrgModal = ({ onClose, open, org }: DeleteOrgModalProps) => {
             {allowOrgDelete
               ? t('confirm-deleting', { name: org.name })
               : t('cannot-be-deleted')}
-            {error ? (
+            {error || fetchOrgError ? (
               <Alert severity="error">{t('error-on-delete')}</Alert>
             ) : null}
             {!allowOrgDelete ? (
               <List>
-                {Object.keys(org.count).map(key => {
-                  const count = org.count[key as keyof typeof org.count]
+                {Object.keys(deleteOrgModalData.count).map(key => {
+                  const count =
+                    deleteOrgModalData!.count[
+                      key as keyof typeof deleteOrgModalData.count
+                    ]
 
                   return count > 0 ? (
                     <ListItem key={key}>
@@ -106,7 +152,7 @@ const DeleteOrgModal = ({ onClose, open, org }: DeleteOrgModalProps) => {
         ),
       }}
     ></Dialog>
-  )
+  ) : null
 }
 
 export default DeleteOrgModal
