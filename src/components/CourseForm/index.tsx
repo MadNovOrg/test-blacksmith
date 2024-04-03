@@ -701,7 +701,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const canBlended = isICM
     ? canBeBlended(courseType, courseLevel as Course_Level_Enum, deliveryType)
-    : canBeBlendedBild(courseType, values.bildStrategies)
+    : canBeBlendedBild(
+        courseType,
+        courseLevel as Course_Level_Enum,
+        values.bildStrategies
+      )
 
   const canReacc = isICM
     ? canBeReacc(

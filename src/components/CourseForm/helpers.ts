@@ -138,11 +138,20 @@ export const changeCountryOnCourseLevelChange = (
 
 export function canBeBlendedBild(
   courseType: Course_Type_Enum,
+  courseLevel: Course_Level_Enum,
   strategies: Record<BildStrategies, boolean> | null
 ): boolean {
   if (!strategies) {
     return false
   }
+
+  if (
+    [
+      Course_Level_Enum.BildIntermediateTrainer,
+      Course_Level_Enum.BildAdvancedTrainer,
+    ].includes(courseLevel)
+  )
+    return false
 
   const selectedStrategies = Object.keys(strategies).filter(
     strategy => strategies[strategy as BildStrategies] === true
