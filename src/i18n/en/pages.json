@@ -1373,6 +1373,7 @@
           "bild_intermediate_trainer": "BILD Intermediate Trainer ({{ count }})",
           "bild_advanced_trainer": "BILD Advanced Trainer ({{ count }})",
           "advanced_trainer": "Advanced Trainer ({{ count }})",
+          "three_day_safety_response_trainer": "3-Day Safety Responses Trainer ({{count}})",
           "no-certification": "No certification ({{ count }})"
         },
         "all-organisation-members": "All organisation members",
