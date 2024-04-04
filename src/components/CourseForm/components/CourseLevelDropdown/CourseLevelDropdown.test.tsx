@@ -77,7 +77,7 @@ describe('component: CourseLevelDropdown', () => {
 
     await userEvent.click(screen.getByRole('button'))
 
-    expect(screen.queryAllByRole('option').length).toBe(6)
+    expect(screen.queryAllByRole('option').length).toBe(7)
 
     expect(getOption(t('common.course-levels.LEVEL_1'))).toBeInTheDocument()
     expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()

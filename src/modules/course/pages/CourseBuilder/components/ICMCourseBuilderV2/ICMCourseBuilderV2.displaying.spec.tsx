@@ -428,3 +428,92 @@ it('displays already saved modules as preselected', () => {
     )
   ).toBeInTheDocument()
 })
+
+it.each([
+  Course_Level_Enum.IntermediateTrainer,
+  Course_Level_Enum.AdvancedTrainer,
+  Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+])(
+  'does not display the course estimated duration for %s course (if not OPEN)',
+  level => {
+    const course = buildCourse({
+      level,
+      type: Course_Type_Enum.Closed,
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === COURSE_TO_BUILD_QUERY) {
+          return fromValue<{ data: CourseToBuildQuery }>({
+            data: {
+              course,
+            },
+          })
+        }
+
+        return fromValue<{ data: ModuleSettingsQuery }>({
+          data: {
+            moduleSettings: [],
+          },
+        })
+      },
+      executeMutation: () => {
+        return never
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <ICMCourseBuilderV2 />
+      </Provider>,
+      {},
+      { initialEntries: [`/courses/${course.id}/modules`] }
+    )
+
+    expect(
+      screen.queryByTestId('course-estimated-duration')
+    ).not.toBeInTheDocument()
+  }
+)
+
+it.each([
+  Course_Level_Enum.Level_1,
+  Course_Level_Enum.Level_2,
+  Course_Level_Enum.Advanced,
+])('displays the course estimated duration for %s course', level => {
+  const course = buildCourse({
+    level,
+    type: Course_Type_Enum.Closed,
+  })
+
+  const client = {
+    executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+      if (query === COURSE_TO_BUILD_QUERY) {
+        return fromValue<{ data: CourseToBuildQuery }>({
+          data: {
+            course,
+          },
+        })
+      }
+
+      return fromValue<{ data: ModuleSettingsQuery }>({
+        data: {
+          moduleSettings: [],
+        },
+      })
+    },
+    executeMutation: () => {
+      return never
+    },
+  } as unknown as Client
+
+  render(
+    <Provider value={client}>
+      <ICMCourseBuilderV2 />
+    </Provider>,
+    {},
+    { initialEntries: [`/courses/${course.id}/modules`] }
+  )
+
+  expect(screen.getByTestId('course-estimated-duration')).toBeInTheDocument()
+})

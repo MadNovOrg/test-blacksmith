@@ -174,7 +174,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     'open-icm-course-international-finance'
   )
 
+  const threeDaySRTLevelEnabled = useFeatureFlagEnabled('3-day-srt-course')
   const levelOneMVAEnabled = useFeatureFlagEnabled('level-one-mva')
+
+  const MVAor3DaySRTenabled = threeDaySRTLevelEnabled || levelOneMVAEnabled
 
   const isResidingCountryEnabled = useMemo(
     () => residingCountryEnabled,
@@ -1603,7 +1606,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       labelId="course-level-dropdown"
                       onChange={event => {
                         field.onChange(event)
-                        levelOneMVAEnabled &&
+                        MVAor3DaySRTenabled &&
                           setValue(
                             'residingCountry',
                             changeCountryOnCourseLevelChange(

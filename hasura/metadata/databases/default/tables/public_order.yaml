@@ -102,6 +102,7 @@ insert_permissions:
         - vat
         - billing_phone
         - registrants
+        - vat
         - created_at
         - organization_id
         - currency
@@ -177,6 +178,7 @@ insert_permissions:
         - billing_email
         - billing_phone
         - registrants
+        - vat
         - created_at
         - vat
         - organization_id

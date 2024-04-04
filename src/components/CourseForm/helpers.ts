@@ -79,6 +79,7 @@ export function getLevels(
         Course_Level_Enum.Advanced,
         Course_Level_Enum.IntermediateTrainer,
         Course_Level_Enum.AdvancedTrainer,
+        Course_Level_Enum.ThreeDaySafetyResponseTrainer,
       ]
     },
 
@@ -130,7 +131,10 @@ export const changeCountryOnCourseLevelChange = (
   )
     return courseResidingCountry
 
-  if (newCourseLevel === Course_Level_Enum.Level_1Mva)
+  if (
+    newCourseLevel === Course_Level_Enum.ThreeDaySafetyResponseTrainer ||
+    newCourseLevel === Course_Level_Enum.Level_1Mva
+  )
     return Countries_Code.IRELAND
 
   return Countries_Code.DEFAULT_RESIDING_COUNTRY
@@ -318,6 +322,7 @@ export function canBeReacc(
           Course_Level_Enum.Level_2,
           Course_Level_Enum.IntermediateTrainer,
           Course_Level_Enum.AdvancedTrainer,
+          Course_Level_Enum.ThreeDaySafetyResponseTrainer,
         ]
         return levels.includes(courseLevel)
       }
@@ -325,6 +330,8 @@ export function canBeReacc(
       if (isMixed) {
         const levels = [
           Course_Level_Enum.Level_1,
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.ThreeDaySafetyResponseTrainer,
           Course_Level_Enum.Level_1Mva,
           Course_Level_Enum.Level_2,
         ]
@@ -332,7 +339,10 @@ export function canBeReacc(
       }
 
       if (isVirtual) {
-        const levels = [Course_Level_Enum.Level_1]
+        const levels = [
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+        ]
         return levels.includes(courseLevel)
       }
 
@@ -440,6 +450,7 @@ export function canBeF2F(
         Course_Level_Enum.Advanced,
         Course_Level_Enum.IntermediateTrainer,
         Course_Level_Enum.AdvancedTrainer,
+        Course_Level_Enum.ThreeDaySafetyResponseTrainer,
       ]
       return levels.includes(courseLevel)
     },
@@ -479,6 +490,8 @@ export function canBeMixed(
 
       const levels = [
         Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.ThreeDaySafetyResponseTrainer,
         Course_Level_Enum.Level_1Mva,
         Course_Level_Enum.Level_2,
       ]

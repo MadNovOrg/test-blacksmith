@@ -239,7 +239,7 @@ export const ModulesSelection: React.FC<Props> = ({
             {t('pages.trainer-base.create-course.new-course.course-summary')}
           </Typography>
           {showDuration ? (
-            <Box>
+            <Box data-testid="course-estimated-duration">
               <Typography variant="h6" px={1} data-testid="progress-bar-label">
                 {formatDurationShort(estimatedDuration)}
               </Typography>

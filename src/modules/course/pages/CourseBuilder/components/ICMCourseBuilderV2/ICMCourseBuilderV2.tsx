@@ -321,6 +321,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
     ![
       Course_Level_Enum.IntermediateTrainer,
       Course_Level_Enum.AdvancedTrainer,
+      Course_Level_Enum.ThreeDaySafetyResponseTrainer,
     ].includes(courseData?.course?.level)
 
   useEffect(() => {
