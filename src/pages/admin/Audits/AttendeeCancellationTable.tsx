@@ -15,7 +15,10 @@ import { useTranslation } from 'react-i18next'
 import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import { Course_Participant_Audit_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Participant_Audit_Type_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import useAttendeeAuditLogs from '@app/hooks/useAttendeeAuditLogs'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -40,12 +43,13 @@ export const AttendeeCancellationTable: React.FC<
   const [to, setTo] = useState<Date>()
   const [query, setQuery] = useState<string>()
 
-  const { logs, count, loading } = useAttendeeAuditLogs({
+  const { logs, count, loading, getUnpagedLogs } = useAttendeeAuditLogs({
     type: Course_Participant_Audit_Type_Enum.Cancellation,
     filter: {
       from,
       to,
       query,
+      courseType: Course_Type_Enum.Open,
     },
     sort,
     offset,
@@ -115,9 +119,10 @@ export const AttendeeCancellationTable: React.FC<
     [t]
   )
 
-  const renderExportData = useMemo(
-    () => getExportDataRenderFunction<AttendeeLogType>(cols, logs),
-    [cols, logs]
+  const renderExportData = useCallback(
+    () =>
+      getUnpagedLogs().then(logs => getExportDataRenderFunction(cols, logs)()),
+    [cols, getUnpagedLogs]
   )
 
   const onFilterChange = useCallback((e: FilterChangeEvent) => {

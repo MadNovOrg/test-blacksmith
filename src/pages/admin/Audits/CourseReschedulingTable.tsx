@@ -40,7 +40,7 @@ export const CourseReschedulingTable: React.FC<
   const [to, setTo] = useState<Date>()
   const [query, setQuery] = useState<string>()
 
-  const { logs, count, loading } = useCourseAuditLogs({
+  const { logs, count, loading, getUnpagedLogs } = useCourseAuditLogs({
     type: Course_Audit_Type_Enum.Reschedule,
     filter: {
       from,
@@ -124,9 +124,10 @@ export const CourseReschedulingTable: React.FC<
     }
   }, [])
 
-  const renderExportData = useMemo(
-    () => getExportDataRenderFunction<CourseLogType>(cols, logs),
-    [cols, logs]
+  const renderExportData = useCallback(
+    () =>
+      getUnpagedLogs().then(logs => getExportDataRenderFunction(cols, logs)()),
+    [cols, getUnpagedLogs]
   )
 
   return (

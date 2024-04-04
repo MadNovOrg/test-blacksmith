@@ -16,6 +16,7 @@ describe('component: CourseExceptionsLogsTabs', () => {
     error: undefined,
     loading: false,
     count: logsMock.length,
+    getUnpagedLogs: () => Promise.resolve(logsMock),
   })
   beforeEach(() => {
     render(<CourseExceptionsLogTabs />)

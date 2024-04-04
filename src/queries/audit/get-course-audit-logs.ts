@@ -3,7 +3,7 @@ import { gql } from 'graphql-request'
 export const GET_COURSE_AUDIT_LOGS_QUERY = gql`
   query GetCourseAuditLogs(
     $where: course_audit_bool_exp!
-    $limit: Int = 20
+    $limit: Int
     $offset: Int = 0
     $orderBy: [course_audit_order_by!]
     $fromExceptionsLog: Boolean = false

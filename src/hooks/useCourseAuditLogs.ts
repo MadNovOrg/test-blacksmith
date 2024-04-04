@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
-import { useQuery } from 'urql'
+import { useCallback, useMemo } from 'react'
+import { useClient, useQuery } from 'urql'
 
 import {
   Course_Audit_Bool_Exp,
@@ -44,6 +44,7 @@ export default function useCourseAuditLogs({
   count: number
   loading: boolean
   error?: Error
+  getUnpagedLogs: () => Promise<GetCourseAuditLogsQuery['logs']>
 } {
   const orderBy: GetCourseAuditLogsQueryVariables['orderBy'] = useMemo(
     () => buildNestedSort(sort.by, sort.dir ?? 'asc'),
@@ -101,6 +102,7 @@ export default function useCourseAuditLogs({
     filter.eventDates,
   ])
 
+  const client = useClient()
   const [{ data, error, fetching }] = useQuery<
     GetCourseAuditLogsQuery,
     GetCourseAuditLogsQueryVariables
@@ -109,13 +111,32 @@ export default function useCourseAuditLogs({
     variables: { where, orderBy, limit, offset, fromExceptionsLog },
   })
 
+  const getUnpagedLogs = useCallback(
+    () =>
+      client
+        .query<GetCourseAuditLogsQuery, GetCourseAuditLogsQueryVariables>(
+          GET_COURSE_AUDIT_LOGS_QUERY,
+          { where, orderBy, fromExceptionsLog }
+        )
+        .toPromise()
+        .then(result => result?.data?.logs ?? []),
+    [client, where, orderBy, fromExceptionsLog]
+  )
+
   return useMemo(
     () => ({
       logs: data?.logs ?? [],
       count: data?.logsAggregate?.aggregate?.count ?? 0,
       loading: fetching,
       error,
+      getUnpagedLogs,
     }),
-    [data?.logs, data?.logsAggregate?.aggregate?.count, error, fetching]
+    [
+      data?.logs,
+      data?.logsAggregate?.aggregate?.count,
+      error,
+      fetching,
+      getUnpagedLogs,
+    ]
   )
 }

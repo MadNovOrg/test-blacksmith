@@ -40,7 +40,7 @@ export const AttendeeTransferTable: React.FC<
   const [to, setTo] = useState<Date>()
   const [query, setQuery] = useState<string>()
 
-  const { logs, count, loading } = useAttendeeAuditLogs({
+  const { logs, count, loading, getUnpagedLogs } = useAttendeeAuditLogs({
     type: Course_Participant_Audit_Type_Enum.Transfer,
     filter: {
       from,
@@ -124,9 +124,10 @@ export const AttendeeTransferTable: React.FC<
     [t]
   )
 
-  const renderExportData = useMemo(
-    () => getExportDataRenderFunction<AttendeeLogType>(cols, logs),
-    [cols, logs]
+  const renderExportData = useCallback(
+    () =>
+      getUnpagedLogs().then(logs => getExportDataRenderFunction(cols, logs)()),
+    [cols, getUnpagedLogs]
   )
 
   const onFilterChange = useCallback((e: FilterChangeEvent) => {

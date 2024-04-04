@@ -1,9 +1,10 @@
-import { useMemo } from 'react'
-import { CombinedError, useQuery } from 'urql'
+import { useCallback, useMemo } from 'react'
+import { CombinedError, useQuery, useClient } from 'urql'
 
 import {
   Course_Participant_Audit_Bool_Exp,
   Course_Participant_Audit_Type_Enum,
+  Course_Type_Enum,
   GetAttendeeAuditLogsQuery,
   GetAttendeeAuditLogsQueryVariables,
 } from '@app/generated/graphql'
@@ -20,6 +21,7 @@ type UseAttendeeAuditLogsProps = {
     from?: Date
     to?: Date
     query?: string
+    courseType?: Course_Type_Enum
   }
 }
 
@@ -34,6 +36,7 @@ export default function useAttendeeAuditLogs({
   count: number
   loading?: boolean
   error?: CombinedError | undefined
+  getUnpagedLogs: () => Promise<GetAttendeeAuditLogsQuery['logs']>
 } {
   const orderBy: GetAttendeeAuditLogsQueryVariables['orderBy'] = useMemo(
     () => buildNestedSort(sort.by, sort.dir ?? 'asc'),
@@ -64,9 +67,15 @@ export default function useAttendeeAuditLogs({
           : { searchFields: { _ilike: `%${query}%` } }
       )
     }
+    if (filter.courseType) {
+      conditions.push({
+        course: { type: { _eq: filter.courseType } },
+      })
+    }
     return { _and: conditions }
-  }, [type, filter.from, filter.to, filter.query])
+  }, [type, filter.from, filter.to, filter.query, filter.courseType])
 
+  const client = useClient()
   const [{ data, error, fetching }] = useQuery<
     GetAttendeeAuditLogsQuery,
     GetAttendeeAuditLogsQueryVariables
@@ -75,13 +84,32 @@ export default function useAttendeeAuditLogs({
     variables: { where, orderBy, limit, offset },
   })
 
+  const getUnpagedLogs = useCallback(
+    () =>
+      client
+        .query<GetAttendeeAuditLogsQuery, GetAttendeeAuditLogsQueryVariables>(
+          GET_ATTENDEE_AUDIT_LOGS_QUERY,
+          { where, orderBy }
+        )
+        .toPromise()
+        .then(result => result?.data?.logs ?? []),
+    [client, where, orderBy]
+  )
+
   return useMemo(
     () => ({
       logs: data?.logs ?? [],
       count: data?.logsAggregate?.aggregate?.count ?? 0,
       loading: fetching,
       error,
+      getUnpagedLogs,
     }),
-    [data?.logs, data?.logsAggregate?.aggregate?.count, error, fetching]
+    [
+      data?.logs,
+      data?.logsAggregate?.aggregate?.count,
+      error,
+      fetching,
+      getUnpagedLogs,
+    ]
   )
 }
