@@ -46,17 +46,17 @@ type OrgOverviewTabParams = {
 const UPCOMING_COURSES_LIMIT = 5
 
 const LEVELS_IN_ORDER = [
-  CourseLevel.Level_1,
-  CourseLevel.Level_2,
-  CourseLevel.ThreeDaySafetyResponseTrainer,
-  CourseLevel.IntermediateTrainer,
   CourseLevel.Advanced,
   CourseLevel.AdvancedTrainer,
   CourseLevel.BildAdvancedTrainer,
   CourseLevel.BildIntermediateTrainer,
   CourseLevel.BildRegular,
+  CourseLevel.IntermediateTrainer,
+  CourseLevel.Level_1,
+  CourseLevel.Level_2,
+  CourseLevel.ThreeDaySafetyResponseTrainer,
   null,
-]
+].sort()
 
 export const OrgOverviewTab: React.FC<
   React.PropsWithChildren<OrgOverviewTabParams>
