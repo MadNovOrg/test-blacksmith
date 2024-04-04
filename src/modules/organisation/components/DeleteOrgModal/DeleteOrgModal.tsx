@@ -10,6 +10,7 @@ import {
 import Typography from '@mui/material/Typography'
 import React, { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import sanitize from 'sanitize-html'
 import { useMutation, useQuery } from 'urql'
 
 import { Dialog } from '@app/components/dialogs'
@@ -96,6 +97,8 @@ const DeleteOrgModal = ({ onClose, open, org }: DeleteOrgModalProps) => {
     }
   }, [data?.deleteOrganisation?.success, navigate])
 
+  const sanitizedOrgName = sanitize(org.name)
+
   return deleteOrgModalData ? (
     <Dialog
       onClose={onClose}
@@ -123,8 +126,14 @@ const DeleteOrgModal = ({ onClose, open, org }: DeleteOrgModalProps) => {
         Content: () => (
           <DialogContentText>
             {allowOrgDelete
-              ? t('confirm-deleting', { name: org.name })
-              : t('cannot-be-deleted')}
+              ? t('confirm-deleting', {
+                  interpolation: { escapeValue: false },
+                  name: sanitizedOrgName,
+                })
+              : t('cannot-be-deleted', {
+                  interpolation: { escapeValue: false },
+                  name: sanitizedOrgName,
+                })}
             {error || fetchOrgError ? (
               <Alert severity="error">{t('error-on-delete')}</Alert>
             ) : null}

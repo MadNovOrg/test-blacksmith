@@ -1,3 +1,4 @@
+import sanitize from 'sanitize-html'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
@@ -53,8 +54,15 @@ describe(DeleteOrgModal.name, () => {
       </Provider>
     )
 
+    const sanitizedOrgName = sanitize(org.name)
+
     expect(
-      getByText(t('confirm-deleting', { name: org.name }))
+      getByText(
+        t('confirm-deleting', {
+          interpolation: { escapeValue: false },
+          name: sanitizedOrgName,
+        })
+      )
     ).toBeInTheDocument()
     expect(screen.getByTestId('delete-org-btn')).toBeInTheDocument()
   })
@@ -90,10 +98,26 @@ describe(DeleteOrgModal.name, () => {
       </Provider>
     )
 
-    expect(getByText(t('cannot-be-deleted'))).toBeInTheDocument()
+    const sanitizedOrgName = sanitize(org.name)
+
     expect(
-      screen.queryByText(t('confirm-deleting', { name: org.name }))
+      getByText(
+        t('cannot-be-deleted', {
+          interpolation: { escapeValue: false },
+          name: sanitizedOrgName,
+        })
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      screen.queryByText(
+        t('confirm-deleting', {
+          interpolation: { escapeValue: false },
+          name: sanitizedOrgName,
+        })
+      )
     ).not.toBeInTheDocument()
+
     expect(screen.queryByTestId('delete-org-btn')).not.toBeInTheDocument()
   })
 
@@ -128,7 +152,16 @@ describe(DeleteOrgModal.name, () => {
       </Provider>
     )
 
-    expect(getByText(t('cannot-be-deleted'))).toBeInTheDocument()
+    const sanitizedOrgName = sanitize(org.name)
+
+    expect(
+      getByText(
+        t('cannot-be-deleted', {
+          interpolation: { escapeValue: false },
+          name: sanitizedOrgName,
+        })
+      )
+    ).toBeInTheDocument()
 
     expect(getByText(t('count-members', { num: 1 }))).toBeInTheDocument()
     expect(getByText(t('count-orders', { num: 1 }))).toBeInTheDocument()
@@ -137,7 +170,12 @@ describe(DeleteOrgModal.name, () => {
     ).not.toBeInTheDocument()
 
     expect(
-      screen.queryByText(t('confirm-deleting', { name: org.name }))
+      screen.queryByText(
+        t('confirm-deleting', {
+          interpolation: { escapeValue: false },
+          name: sanitizedOrgName,
+        })
+      )
     ).not.toBeInTheDocument()
     expect(screen.queryByTestId('delete-org-btn')).not.toBeInTheDocument()
   })

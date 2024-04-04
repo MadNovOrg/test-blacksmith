@@ -1276,8 +1276,8 @@
         "count-members": "{{num}} individuals",
         "count-courses": "{{num}} courses",
         "count-orders": "{{num}} orders",
-        "confirm-deleting": "Are you sure you want to delete Organisation {{name}}? Deleting the Organisation will totally remove it from Connect. This action can not be undone.",
-        "cannot-be-deleted": "There are individuals, courses, or orders linked to this Organisation, so that it can not be deleted. Please unlink those from this Organisation and try to delete it after.",
+        "confirm-deleting": "Deleting {{name}} will remove all record of this organisation from the system. This action cannot be undone.",
+        "cannot-be-deleted": "{{name}} cannot be deleted as there are still individual(s), order(s) or course(s) associated to this organisation.",
         "delete-organisation": "Delete Organisation",
         "organization-details-section": {
           "title": "Organisation details",
