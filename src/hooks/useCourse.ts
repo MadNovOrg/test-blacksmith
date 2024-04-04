@@ -2,13 +2,14 @@ import { useMemo } from 'react'
 import { type OperationContext, useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
-import { Course_Type_Enum } from '@app/generated/graphql'
 import {
-  ParamsType,
-  QUERY,
-  ResponseType,
-} from '@app/queries/courses/get-course-by-id'
-import { InviteStatus, RoleName } from '@app/types'
+  Course_Invite_Status_Enum,
+  Course_Type_Enum,
+  GetCourseByIdQuery,
+  GetCourseByIdQueryVariables,
+} from '@app/generated/graphql'
+import { QUERY, ResponseType } from '@app/queries/courses/get-course-by-id'
+import { RoleName } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export default function useCourse(courseId: string): {
@@ -23,11 +24,13 @@ export default function useCourse(courseId: string): {
 } {
   const { acl, activeRole, profile } = useAuth()
 
-  // TODO: replace with             useQuery<GetCourseByIdQuery, GetCourseByIdQueryVariables>
-  const [{ data, error }, mutate] = useQuery<ResponseType, ParamsType>({
+  const [{ data, error }, mutate] = useQuery<
+    GetCourseByIdQuery,
+    GetCourseByIdQueryVariables
+  >({
     query: QUERY,
     variables: {
-      id: courseId,
+      id: Number(courseId),
       withOrders:
         acl.canInviteAttendees(Course_Type_Enum.Open) ||
         acl.canViewCourseOrder(),
@@ -48,7 +51,9 @@ export default function useCourse(courseId: string): {
 
     if (activeRole === RoleName.TRAINER) {
       const hasAcceptedInvite = data?.course?.trainers?.find(
-        t => t.profile.id === profile?.id && t.status === InviteStatus.ACCEPTED
+        t =>
+          t.profile.id === profile?.id &&
+          t.status === Course_Invite_Status_Enum.Accepted
       )
 
       Object.assign(courseData, {

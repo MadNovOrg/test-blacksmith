@@ -111,8 +111,6 @@ select_permissions:
                         _eq: X-Hasura-User-Id
                     - is_admin:
                         _eq: true
-          - requested_by:
-              _eq: X-Hasura-User-Id
 delete_permissions:
   - role: booking-contact
     permission:
@@ -141,8 +139,6 @@ delete_permissions:
                         _eq: X-Hasura-User-Id
                     - is_admin:
                         _eq: true
-          - requested_by:
-              _eq: X-Hasura-User-Id
 event_triggers:
   - name: course_cancellation_request_added
     definition:

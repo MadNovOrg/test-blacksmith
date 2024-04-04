@@ -317,16 +317,22 @@ export const CourseDetails = () => {
                 : undefined,
             }}
           />
-          <Container disableGutters={isMobile}>
-            <CourseCancellationRequestFeature
-              course={course}
-              open={showCancellationRequestModal}
-              onClose={() => setShowCancellationRequestModal(false)}
-              onChange={mutate}
-            />
-            {exceptionsApprovalPending ? <ExceptionsApprovalAlert /> : null}
-            <OrderYourWorkbookAlert course={course} />
-          </Container>
+          {course ? (
+            <Container disableGutters={isMobile}>
+              <CourseCancellationRequestFeature
+                course={course}
+                open={showCancellationRequestModal}
+                onClose={() => setShowCancellationRequestModal(false)}
+                onChange={() =>
+                  mutate({
+                    requestPolicy: 'network-only',
+                  })
+                }
+              />
+              {exceptionsApprovalPending ? <ExceptionsApprovalAlert /> : null}
+              <OrderYourWorkbookAlert course={course} />
+            </Container>
+          ) : null}
 
           <TabContext value={selectedTab}>
             <Box borderBottom={1} borderColor="divider">
