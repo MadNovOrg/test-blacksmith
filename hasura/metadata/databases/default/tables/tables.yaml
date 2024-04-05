@@ -60,6 +60,7 @@
 - "!include public_course_type_prefix.yaml"
 - "!include public_deleted_organizations_backup.yaml"
 - "!include public_dfe_establishment.yaml"
+- "!include public_email_notifications.yaml"
 - "!include public_expire_go1_license_jobs.yaml"
 - "!include public_go1_history_events.yaml"
 - "!include public_go1_licenses.yaml"

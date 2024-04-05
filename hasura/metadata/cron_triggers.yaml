@@ -1,3 +1,14 @@
+- name: ClearEmailNotifications
+  webhook: '{{EVENTS_HOST}}/clear-email-notifications'
+  schedule: 0 0 * * *
+  include_in_metadata: true
+  payload: {}
+  retry_conf:
+    num_retries: 3
+    retry_interval_seconds: 10
+    timeout_seconds: 60
+    tolerance_seconds: 21600
+  comment: clear email notifications
 - name: XeroCredentialStatusCheck
   webhook: '{{EVENTS_HOST}}/xero/status'
   schedule: 0 0 * * *

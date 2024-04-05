@@ -1,0 +1,2 @@
+CREATE TABLE "public"."email_notifications" ("created_at" timestamptz NOT NULL DEFAULT now(), "id" uuid NOT NULL DEFAULT gen_random_uuid(), "course_id" integer NOT NULL, "user_email" jsonb NOT NULL DEFAULT jsonb_build_array(), "template_name" text NOT NULL, "template_data" text NOT NULL, PRIMARY KEY ("id") );COMMENT ON TABLE "public"."email_notifications" IS E'email notifications';
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
