@@ -397,8 +397,8 @@ importers:
         specifier: ^4.17.12
         version: 4.17.12
       '@types/mdx':
-        specifier: ^2.0.5
-        version: 2.0.5
+        specifier: ^2.0.12
+        version: 2.0.12
       '@types/mui-image':
         specifier: ^1.0.5
         version: 1.0.5
@@ -6730,7 +6730,7 @@ packages:
     peerDependencies:
       react: '>=16'
     dependencies:
-      '@types/mdx': 2.0.5
+      '@types/mdx': 2.0.12
       '@types/react': 18.2.14
       react: 18.2.0
     dev: true
@@ -11820,8 +11820,8 @@ packages:
       '@types/unist': 2.0.6
     dev: true
 
-  /@types/mdx@2.0.5:
-    resolution: {integrity: sha512-76CqzuD6Q7LC+AtbPqrvD9AqsN0k8bsYo2bM2J8pmNldP1aIPAbzUQ7QbobyXL4eLr1wK5x8FZFe8eF/ubRuBg==}
+  /@types/mdx@2.0.12:
+    resolution: {integrity: sha512-H9VZ9YqE+H28FQVchC83RCs5xQ2J7mAAv6qdDEaWmXEVl3OpdH+xfrSUzQ1lp7U7oSTRZ0RvW08ASPJsYBi7Cw==}
     dev: true
 
   /@types/mime-types@2.1.1:
