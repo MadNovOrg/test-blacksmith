@@ -937,3 +937,4 @@ export function checkIsEmployerAOL(trainer_role_types: TrainerRoleType[]) {
 }
 
 export const ALL_ORGS = 'all'
+export const UKTimezone = 'Europe/London'

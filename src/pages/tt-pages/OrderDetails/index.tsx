@@ -9,6 +9,9 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
+import { utcToZonedTime } from 'date-fns-tz'
+import { uniqueId } from 'lodash/fp'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
@@ -34,6 +37,7 @@ import {
 import useCourseOrders from '@app/hooks/useCourseOrders'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import useTimeZones from '@app/hooks/useTimeZones'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { NotFound } from '@app/pages/common/NotFound'
 import theme from '@app/theme'
@@ -63,6 +67,11 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t, _t } = useScopedTranslation('pages.order-details')
   const { acl } = useAuth()
   const { getLabel, isUKCountry } = useWorldCountries()
+  const { formatGMTDateTimeByTimeZone } = useTimeZones()
+
+  const residingCountryEnabled = useFeatureFlagEnabled(
+    'course-residing-country'
+  )
 
   const [{ data, fetching }] = useCourseOrders({ orderId: id ?? '' })
 
@@ -290,42 +299,97 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     alignItems="center"
                   >
                     <Stack spacing={2} width={1}>
-                      {courses?.map(course => (
-                        <Box
-                          key={course?.id}
-                          display="flex"
-                          flexDirection="row"
-                          justifyContent="space-between"
-                          alignItems="center"
-                        >
-                          <CourseTitleAndDuration
-                            showCourseLink
-                            showCourseDuration={false}
-                            course={{
-                              id: Number(course?.id) ?? '',
-                              course_code: course?.course_code,
-                              start: course?.start,
-                              end: course?.end,
-                              level:
-                                course?.level as unknown as Course_Level_Enum,
-                              reaccreditation: course?.reaccreditation,
-                              residingCountry: course?.residingCountry,
-                            }}
-                          />
+                      {courses?.map(course => {
+                        const courseTimezone = course?.schedule.length
+                          ? course?.schedule[0].timeZone
+                          : undefined
+
+                        const courseStart = new Date(
+                          course?.dates.aggregate?.start?.date
+                        )
+                        const courseEnd = new Date(
+                          course?.dates.aggregate?.end?.date
+                        )
+                        const timeZoneScheduleDateTime = () => {
+                          if (!courseTimezone) return { courseStart, courseEnd }
+
+                          return {
+                            courseStart: utcToZonedTime(
+                              courseStart,
+                              courseTimezone
+                            ),
+                            courseEnd: utcToZonedTime(
+                              courseEnd,
+                              courseTimezone
+                            ),
+                          }
+                        }
+                        return (
                           <Box
-                            key={course?.id}
-                            textAlign="end"
-                            data-testid="'order-quantity'"
+                            key={uniqueId('course')}
+                            display="flex"
+                            flexDirection="row"
+                            justifyContent="space-between"
+                            alignItems="center"
                           >
-                            <Typography variant="caption">
-                              {t('quantity')}
-                            </Typography>
-                            <Typography>
-                              {quantities.get(Number(course?.id)) ?? 0}
-                            </Typography>
+                            <Box>
+                              <CourseTitleAndDuration
+                                showCourseLink
+                                showCourseDuration={!residingCountryEnabled}
+                                course={{
+                                  id: Number(course?.id) ?? '',
+                                  course_code: course?.course_code,
+                                  ...(residingCountryEnabled
+                                    ? {}
+                                    : {
+                                        start: courseStart,
+                                        end: courseEnd,
+                                      }),
+                                  level:
+                                    course?.level as unknown as Course_Level_Enum,
+                                  reaccreditation: course?.reaccreditation,
+                                  residingCountry: course?.residingCountry,
+                                }}
+                              />
+                              {residingCountryEnabled ? (
+                                <Typography
+                                  data-testid={'order-timezone-info'}
+                                  gutterBottom
+                                  color="grey.700"
+                                  width={'90%'}
+                                >
+                                  {_t('dates.withTime', {
+                                    date: timeZoneScheduleDateTime()
+                                      .courseStart,
+                                  })}{' '}
+                                  {formatGMTDateTimeByTimeZone(
+                                    timeZoneScheduleDateTime().courseStart,
+                                    courseTimezone,
+                                    false
+                                  )}{' '}
+                                  -{' '}
+                                  {_t('dates.withTime', {
+                                    date: timeZoneScheduleDateTime().courseEnd,
+                                  })}{' '}
+                                  {formatGMTDateTimeByTimeZone(
+                                    timeZoneScheduleDateTime().courseEnd,
+                                    courseTimezone,
+                                    true
+                                  )}
+                                </Typography>
+                              ) : null}
+                            </Box>
+                            <Box textAlign="end" data-testid="'order-quantity'">
+                              <Typography variant="caption">
+                                {t('quantity')}
+                              </Typography>
+                              <Typography>
+                                {quantities.get(Number(course?.id)) ?? 0}
+                              </Typography>
+                            </Box>
                           </Box>
-                        </Box>
-                      ))}
+                        )
+                      })}
                       {go1LicensesLineItem ? (
                         <Typography color="grey.700">
                           {_t('currency', {

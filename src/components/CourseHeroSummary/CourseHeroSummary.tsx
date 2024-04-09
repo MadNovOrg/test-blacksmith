@@ -45,6 +45,7 @@ import {
   getCourseBeginsForMessage,
   formatCourseVenue,
   courseEnded,
+  UKTimezone,
 } from '@app/util'
 
 import { CourseHostInfo } from '../CourseHostInfo'
@@ -172,7 +173,6 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
     },
     [geoCoordinates]
   )
-
   return (
     <Box
       data-testid="course-hero-summary"
@@ -251,7 +251,15 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   />
                 ) : isManaged ? (
                   <IndividualCourseStatusChip
-                    course={course}
+                    course={{
+                      ...course,
+                      schedule: [
+                        {
+                          ...course.schedule[0],
+                          timeZone: course.schedule[0].timeZone ?? UKTimezone,
+                        },
+                      ],
+                    }}
                     participants={course.courseParticipants ?? []}
                   />
                 ) : (

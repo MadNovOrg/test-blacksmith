@@ -1,4 +1,5 @@
-import { addHours } from 'date-fns'
+import { addHours, format } from 'date-fns'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useTranslation } from 'react-i18next'
 import { Client, CombinedError, Provider, TypedDocumentNode } from 'urql'
 import { fromValue, never } from 'wonka'
@@ -17,6 +18,7 @@ import {
 } from '@app/generated/graphql'
 import { GET_COURSE_ORDERS } from '@app/hooks/useCourseOrders'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
+import useTimeZones from '@app/hooks/useTimeZones'
 
 import {
   chance,
@@ -39,11 +41,21 @@ import { OrderDetails } from '.'
 vi.mock('@app/hooks/usePromoCodes')
 
 const usePromoCodesMock = vi.mocked(usePromoCodes)
+vi.mock('posthog-js/react', () => ({
+  useFeatureFlagEnabled: vi.fn(),
+}))
+const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 describe('page: OrderDetails', () => {
   const order = buildOrder()
   const baseOrder = order[0].order
   const course = order[0].course
+  const courseStartDate = new Date('2023-01-25T08:00:00+00:00').toISOString()
+  const courseEndDate = addHours(
+    new Date('2023-01-25T08:00:00+00:00'),
+    8
+  ).toISOString()
+
   const baseCourse = {
     id: course,
     level: Course_Level_Enum.Level_1,
@@ -54,12 +66,33 @@ describe('page: OrderDetails', () => {
     go1Integration: course?.go1Integration ?? false,
     deliveryType: course?.deliveryType ?? Course_Delivery_Type_Enum.Virtual,
     max_participants: 1,
+    dates: {
+      aggregate: {
+        start: {
+          date: courseStartDate,
+        },
+        end: {
+          date: courseEndDate,
+        },
+      },
+    },
+    schedule: [
+      {
+        timezone: 'Europe/London',
+      },
+    ],
   }
   const {
     result: {
       current: { t },
     },
   } = renderHook(() => useTranslation())
+
+  const {
+    result: {
+      current: { formatGMTDateTimeByTimeZone },
+    },
+  } = renderHook(() => useTimeZones())
 
   beforeEach(() => {
     usePromoCodesMock.mockReturnValue({
@@ -108,11 +141,6 @@ describe('page: OrderDetails', () => {
   })
 
   it('renders course information', () => {
-    const courseStartDate = new Date('2023-01-25T08:00:00Z').toISOString()
-    const courseEndDate = addHours(
-      new Date('2023-01-25T08:00:00Z'),
-      8
-    ).toISOString()
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
         if (query === GET_COURSE_ORDERS) {
@@ -126,9 +154,8 @@ describe('page: OrderDetails', () => {
                   },
                   course: {
                     ...baseCourse,
-                    start: courseStartDate,
-                    end: courseEndDate,
                   },
+                  quantity: 1,
                 },
               ] as unknown as GetCourseOrdersQuery['orders'],
             },
@@ -144,11 +171,15 @@ describe('page: OrderDetails', () => {
     )
     expect(
       screen.getByTestId('order-course-title').textContent
-    ).toMatchInlineSnapshot(`"Level One "`)
-
+    ).toMatchInlineSnapshot(`"Level One  - 8 hours "`)
     expect(
       screen.getByTestId('order-course-duration').textContent
-    ).toMatchInlineSnapshot('"25 Jan 202308:00 AM - 04:00 PM(local time)"')
+    ).toMatchInlineSnapshot(
+      `"${format(new Date(courseStartDate), 'd LLL yyyyhh:mm a')} - ${format(
+        new Date(courseEndDate),
+        'hh:mm a'
+      )}(local time)"`
+    )
   })
 
   it('renders order line items', () => {
@@ -200,6 +231,7 @@ describe('page: OrderDetails', () => {
                       fullName: chance.name(),
                     },
                   },
+                  quantity: 1,
                 },
               ] as unknown as GetCourseOrdersQuery['orders'],
             },
@@ -257,6 +289,7 @@ describe('page: OrderDetails', () => {
                       fullName: chance.name(),
                     },
                   } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
+                  quantity: 1,
                 },
               ],
             },
@@ -325,6 +358,7 @@ describe('page: OrderDetails', () => {
                       fullName: chance.name(),
                     },
                   } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
+                  quantity: 1,
                 },
               ],
             },
@@ -379,6 +413,7 @@ describe('page: OrderDetails', () => {
                       fullName: chance.name(),
                     },
                   } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
+                  quantity: 1,
                 },
               ],
             },
@@ -443,6 +478,7 @@ describe('page: OrderDetails', () => {
                       fullName: chance.name(),
                     },
                   } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
+                  quantity: 1,
                 },
               ],
             },
@@ -501,6 +537,7 @@ describe('page: OrderDetails', () => {
                       fullName: chance.name(),
                     },
                   } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
+                  quantity: 1,
                 },
               ],
             },
@@ -549,6 +586,7 @@ describe('page: OrderDetails', () => {
                     ...baseCourse,
                     type: Course_Type_Enum.Closed,
                   },
+                  quantity: 1,
                 },
               ] as unknown as GetCourseOrdersQuery['orders'],
             },
@@ -628,6 +666,7 @@ describe('page: OrderDetails', () => {
                     ...baseCourse,
                     type: Course_Type_Enum.Closed,
                   },
+                  quantity: 1,
                 },
               ] as unknown as GetCourseOrdersQuery['orders'],
             },
@@ -705,6 +744,7 @@ describe('page: OrderDetails', () => {
                     type: Course_Type_Enum.Closed,
                     freeSpaces: 2,
                   },
+                  quantity: 1,
                 },
               ] as unknown as GetCourseOrdersQuery['orders'],
             },
@@ -782,6 +822,7 @@ describe('page: OrderDetails', () => {
                   course: {
                     ...baseCourse,
                   },
+                  quantity: 1,
                 },
               ] as unknown as GetCourseOrdersQuery['orders'],
             },
@@ -842,6 +883,7 @@ describe('page: OrderDetails', () => {
                     type: Course_Type_Enum.Closed,
                     residingCountry: nonUKCountryCode,
                   },
+                  quantity: 1,
                 },
               ] as unknown as GetCourseOrdersQuery['orders'],
             },
@@ -865,5 +907,58 @@ describe('page: OrderDetails', () => {
     expect(
       screen.getByText(getLabel(nonUKCountryCode) as string)
     ).toBeInTheDocument()
+  })
+  it('renders timezone details when feature flag is enabled', () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
+            data: {
+              orders: [
+                {
+                  order: {
+                    ...baseOrder,
+                    invoice: buildInvoice(),
+                  },
+                  course: {
+                    ...baseCourse,
+                  },
+                  quantity: 1,
+                },
+              ] as unknown as GetCourseOrdersQuery['orders'],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
+    )
+    expect(
+      screen.getByTestId('order-course-title').textContent
+    ).toMatchInlineSnapshot(`"Level One "`)
+    expect(
+      screen.getByTestId('order-timezone-info').textContent
+    ).toMatchInlineSnapshot(
+      `"${format(
+        new Date(courseStartDate),
+        'd MMMM yyyy, hh:mm a'
+      )} ${formatGMTDateTimeByTimeZone(
+        courseStartDate,
+        baseCourse.schedule[0].timezone,
+        false
+      )} - ${format(
+        new Date(courseEndDate),
+        'd MMMM yyyy, hh:mm a'
+      )} ${formatGMTDateTimeByTimeZone(
+        courseStartDate,
+        baseCourse.schedule[0].timezone,
+        true
+      )}"`
+    )
   })
 })

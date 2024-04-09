@@ -4,8 +4,10 @@ import {
   GetCourseOrdersQuery,
   GetCourseOrdersQueryVariables,
 } from '@app/generated/graphql'
+import { COURSE_DATES } from '@app/queries/fragments'
 
 export const GET_COURSE_ORDERS = gql`
+  ${COURSE_DATES}
   query GetCourseOrders($orderId: uuid!) {
     orders: course_order(where: { order_id: { _eq: $orderId } }) {
       quantity
@@ -80,6 +82,12 @@ export const GET_COURSE_ORDERS = gql`
         bookingContactInviteData
         reaccreditation
         residingCountry
+        dates: schedule_aggregate {
+          ...CourseDates
+        }
+        schedule {
+          timeZone
+        }
       }
     }
   }

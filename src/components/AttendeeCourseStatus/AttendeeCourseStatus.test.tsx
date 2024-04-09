@@ -24,6 +24,7 @@ it("shows not attended if a participant didn't attend the course", () => {
         id: chance.guid(),
         start: subDays(new Date(), 2).toISOString(),
         end: subDays(new Date(), 1).toISOString(),
+        timeZone: String(chance.timezone()),
       },
     ],
   })
@@ -41,6 +42,7 @@ it("shows info required if a participant didn't fill health and safety form", ()
         id: chance.guid(),
         start: addDays(new Date(), 1).toISOString(),
         end: addDays(new Date(), 1).toISOString(),
+        timeZone: String(chance.timezone()),
       },
     ],
   })
@@ -65,6 +67,7 @@ it("shows evaluation missing if course has ended and a participant didn't evalua
         id: chance.guid(),
         start: subDays(new Date(), 2).toISOString(),
         end: subDays(new Date(), 1).toISOString(),
+        timeZone: String(chance.timezone()),
       },
     ],
   })
@@ -87,6 +90,7 @@ it("shows grade missing if course has ended and participant has provided evaluat
         id: chance.guid(),
         start: subDays(new Date(), 2).toISOString(),
         end: subDays(new Date(), 1).toISOString(),
+        timeZone: String(chance.timezone()),
       },
     ],
   })
@@ -111,6 +115,7 @@ it('shows completed if course has ended, participant evaluation the course and h
         id: chance.guid(),
         start: subDays(new Date(), 2).toISOString(),
         end: subDays(new Date(), 1).toISOString(),
+        timeZone: String(chance.timezone()),
       },
     ],
   })
@@ -133,6 +138,7 @@ it("shows scheduled if course hasn't started and participant has provided health
         id: chance.guid(),
         start: addDays(new Date(), 1).toISOString(),
         end: addDays(new Date(), 1).toISOString(),
+        timeZone: String(chance.timezone()),
       },
     ],
   })
@@ -157,6 +163,7 @@ function buildAttendeeCourse(
         end: new Date().toISOString(),
         start: new Date().toISOString(),
         id: chance.guid(),
+        timeZone: String(chance.timezone()),
       },
     ],
     participants: [],

@@ -240,7 +240,7 @@
     "typescript": "^5.3.3",
     "vite": "^4.5.0",
     "vite-plugin-svgr": "^3.2.0",
-    "vitest": "0.33.0",
+    "vitest": "1.4.0",
     "wonka": "^6.3.3"
   },
   "lint-staged": {

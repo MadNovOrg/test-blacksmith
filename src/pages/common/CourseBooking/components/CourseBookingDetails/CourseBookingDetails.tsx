@@ -16,6 +16,7 @@ import {
   Typography,
 } from '@mui/material'
 import Big from 'big.js'
+import { utcToZonedTime } from 'date-fns-tz'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
@@ -49,6 +50,7 @@ import {
   FindProfilesQuery,
   PaymentMethod,
 } from '@app/generated/graphql'
+import useTimeZones from '@app/hooks/useTimeZones'
 import { schemas, yup } from '@app/schemas'
 import { InvoiceDetails, NonNullish, Profile } from '@app/types'
 import { formatCurrency, isValidUKPostalCode, requiredMsg } from '@app/util'
@@ -117,7 +119,7 @@ export const CourseBookingDetails: React.FC<
   const residingCountryEnabled = useFeatureFlagEnabled(
     'course-residing-country'
   )
-
+  const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const {
     course,
     availableSeats,
@@ -467,6 +469,28 @@ export const CourseBookingDetails: React.FC<
       values.participants,
     ]
   )
+  const courseTimezone = useMemo(() => {
+    return course?.schedule.length ? course?.schedule[0].timeZone : undefined
+  }, [course?.schedule])
+
+  const courseStartDate = useMemo(
+    () => new Date(course?.dates.aggregate?.start?.date),
+    [course?.dates]
+  )
+  const courseEndDate = useMemo(
+    () => new Date(course?.dates.aggregate?.end?.date),
+    [course?.dates]
+  )
+
+  const timeZoneScheduleDateTime = useMemo(() => {
+    if (!courseTimezone)
+      return { courseStart: courseStartDate, courseEnd: courseEndDate }
+
+    return {
+      courseStart: utcToZonedTime(courseStartDate, courseTimezone),
+      courseEnd: utcToZonedTime(courseEndDate, courseTimezone),
+    }
+  }, [courseStartDate, courseEndDate, courseTimezone])
 
   return (
     <FormProvider {...methods}>
@@ -493,16 +517,34 @@ export const CourseBookingDetails: React.FC<
               <Typography gutterBottom fontWeight="600">
                 {course?.name}
               </Typography>
-              <CourseDuration
-                start={new Date(course?.dates.aggregate?.start?.date)}
-                end={new Date(course?.dates.aggregate?.end?.date)}
-                courseResidingCountry={course?.residingCountry}
-                timeZone={
-                  course?.schedule.length
-                    ? course?.schedule[0].timeZone
-                    : undefined
-                }
-              />
+              {residingCountryEnabled ? (
+                <Typography>
+                  {`${t('dates.withTime', {
+                    date: timeZoneScheduleDateTime.courseStart,
+                  })} ${formatGMTDateTimeByTimeZone(
+                    timeZoneScheduleDateTime.courseStart,
+                    courseTimezone,
+                    false
+                  )} - ${t('dates.withTime', {
+                    date: timeZoneScheduleDateTime.courseEnd,
+                  })} ${formatGMTDateTimeByTimeZone(
+                    timeZoneScheduleDateTime.courseEnd,
+                    courseTimezone,
+                    true
+                  )} `}
+                </Typography>
+              ) : (
+                <CourseDuration
+                  start={new Date(course?.dates.aggregate?.start?.date)}
+                  end={new Date(course?.dates.aggregate?.end?.date)}
+                  courseResidingCountry={course?.residingCountry}
+                  timeZone={
+                    course?.schedule.length
+                      ? course?.schedule[0].timeZone
+                      : undefined
+                  }
+                />
+              )}
             </Box>
             <Box minWidth={100} display="flex" alignItems="center">
               <FormControl fullWidth sx={{ bgcolor: 'grey.200' }}>

@@ -37,6 +37,7 @@ export const QUERY = gql`
         city
       }
       virtualLink
+      timeZone
     }
     participants(where: { profile_id: { _eq: $profileId } }) {
       healthSafetyConsent

@@ -2,7 +2,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
 import { Alert, Box, Button, Stack, Typography } from '@mui/material'
-import React, { useEffect } from 'react'
+import { parseISO } from 'date-fns'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
+import React, { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
@@ -11,6 +13,7 @@ import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import { Course_Type_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import useTimeZones from '@app/hooks/useTimeZones'
 import { LoadingStatus } from '@app/util'
 
 import { StepsEnum } from '../../types'
@@ -25,13 +28,34 @@ export const ReviewLicenseOrder: React.FC<
     useCreateCourse()
   const { saveCourse, savingStatus } = useSaveCourse()
   const { addSnackbarMessage } = useSnackbar()
+  const residingCountryEnabled = useFeatureFlagEnabled(
+    'course-residing-country'
+  )
 
+  const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const hasSavingError = savingStatus === LoadingStatus.ERROR
 
   const { _t, t } = useScopedTranslation(
     'pages.create-course.license-order-review'
   )
   const navigate = useNavigate()
+
+  const { startDate, endDate } = useMemo(
+    () =>
+      courseData
+        ? {
+            startDate:
+              typeof courseData.startDateTime === 'string'
+                ? parseISO(courseData.startDateTime)
+                : courseData.startDateTime,
+            endDate:
+              typeof courseData.endDateTime === 'string'
+                ? parseISO(courseData.endDateTime)
+                : courseData.endDateTime,
+          }
+        : {},
+    [courseData]
+  )
 
   useEffect(() => {
     setCurrentStepKey(StepsEnum.REVIEW_AND_CONFIRM)
@@ -63,6 +87,10 @@ export const ReviewLicenseOrder: React.FC<
       navigate(`/courses/${savedCourse.id}/modules`)
     }
   }
+
+  const courseTimezone = courseData?.timeZone
+    ? courseData?.timeZone.timeZoneId
+    : undefined
 
   return (
     <Box>
@@ -101,10 +129,26 @@ export const ReviewLicenseOrder: React.FC<
               })}`}
             />
             <InfoRow
-              label={_t('dates.timeFromTo', {
-                from: courseData.startDateTime,
-                to: courseData.endDateTime,
-              })}
+              label={
+                residingCountryEnabled
+                  ? `${_t('dates.time', {
+                      date: startDate,
+                    })} ${formatGMTDateTimeByTimeZone(
+                      startDate as Date,
+                      courseTimezone,
+                      false
+                    )} - ${_t('dates.time', {
+                      date: endDate,
+                    })} ${formatGMTDateTimeByTimeZone(
+                      endDate as Date,
+                      courseTimezone,
+                      true
+                    )} `
+                  : _t('dates.timeFromTo', {
+                      from: courseData.startDateTime,
+                      to: courseData.endDateTime,
+                    })
+              }
             />
           </InfoPanel>
         ) : null}

@@ -56,9 +56,10 @@ export const buildUserCourse = build<
         end: addHours(new Date(), 8),
         venue: {
           id: perBuild(() => chance.guid()),
-          name: perBuild(() => chance.word()),
-          city: perBuild(() => chance.city()),
+          name: chance.word(),
+          city: chance.city(),
         },
+        timeZone: String(chance.timezone()),
         virtualLink: null,
       },
     ],

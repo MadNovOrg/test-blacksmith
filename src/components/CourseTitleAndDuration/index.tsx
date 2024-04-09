@@ -22,13 +22,13 @@ export const CourseTitleAndDuration: React.FC<
         showCourseDuration={showCourseDuration}
         mb={1}
       />
-      {course?.start && course?.end && (
+      {course?.start && course?.end ? (
         <CourseDuration
           start={new Date(course?.start)}
           end={new Date(course?.end)}
           courseResidingCountry={course?.residingCountry}
         />
-      )}
+      ) : null}
     </Box>
   )
 }

@@ -11,7 +11,9 @@ import {
 } from '@mui/material'
 import Big from 'big.js'
 import { isPast } from 'date-fns'
-import React, { useState } from 'react'
+import { utcToZonedTime } from 'date-fns-tz'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
+import React, { useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -23,6 +25,7 @@ import {
   PaymentMethod,
   Venue,
 } from '@app/generated/graphql'
+import useTimeZones from '@app/hooks/useTimeZones'
 import {
   formatCourseVenue,
   formatCurrency,
@@ -47,6 +50,10 @@ export const CourseBookingReview: React.FC<
   const navigate = useNavigate()
   const { profile, acl } = useAuth()
   const { course, booking, amounts, placeOrder } = useBooking()
+  const { formatGMTDateTimeByTimeZone } = useTimeZones()
+  const residingCountryEnabled = useFeatureFlagEnabled(
+    'course-residing-country'
+  )
 
   const [accept, setAccept] = useState(false)
   const [creatingOrder, setCreatingOrder] = useState(false)
@@ -133,6 +140,29 @@ export const CourseBookingReview: React.FC<
         })
   }
 
+  const courseTimezone = useMemo(() => {
+    return course?.schedule.length ? course?.schedule[0].timeZone : undefined
+  }, [course?.schedule])
+
+  const courseStartDate = useMemo(
+    () => new Date(course?.dates.aggregate?.start?.date),
+    [course?.dates]
+  )
+  const courseEndDate = useMemo(
+    () => new Date(course?.dates.aggregate?.end?.date),
+    [course?.dates]
+  )
+
+  const timeZoneScheduleDateTime = useMemo(() => {
+    if (!courseTimezone)
+      return { courseStart: courseStartDate, courseEnd: courseEndDate }
+
+    return {
+      courseStart: utcToZonedTime(courseStartDate, courseTimezone),
+      courseEnd: utcToZonedTime(courseEndDate, courseTimezone),
+    }
+  }, [courseStartDate, courseEndDate, courseTimezone])
+
   return (
     <Box>
       <Typography variant="subtitle1" fontWeight="500">
@@ -167,18 +197,47 @@ export const CourseBookingReview: React.FC<
             <Typography gutterBottom fontWeight="600">
               {course?.name ?? ''}
             </Typography>
-            <Typography gutterBottom color="grey.700">
-              {t('start')}:{' '}
-              {t('dates.withTime', {
-                date: course?.dates?.aggregate?.start?.date,
-              })}
-            </Typography>
-            <Typography gutterBottom color="grey.700">
-              {t('end')}:{' '}
-              {t('dates.withTime', {
-                date: course?.dates?.aggregate?.end?.date,
-              })}
-            </Typography>
+            {residingCountryEnabled ? (
+              <>
+                <Typography gutterBottom color="grey.700">
+                  {t('start')}:{' '}
+                  {t('dates.withTime', {
+                    date: timeZoneScheduleDateTime.courseStart,
+                  })}{' '}
+                  {formatGMTDateTimeByTimeZone(
+                    timeZoneScheduleDateTime.courseStart,
+                    courseTimezone,
+                    true
+                  )}
+                </Typography>
+                <Typography gutterBottom color="grey.700">
+                  {t('end')}:{' '}
+                  {t('dates.withTime', {
+                    date: timeZoneScheduleDateTime.courseEnd,
+                  })}{' '}
+                  {formatGMTDateTimeByTimeZone(
+                    timeZoneScheduleDateTime.courseEnd,
+                    courseTimezone,
+                    true
+                  )}
+                </Typography>
+              </>
+            ) : (
+              <>
+                <Typography gutterBottom color="grey.700">
+                  {t('start')}:{' '}
+                  {t('dates.withTime', {
+                    date: course?.dates?.aggregate?.start?.date,
+                  })}
+                </Typography>
+                <Typography gutterBottom color="grey.700">
+                  {t('end')}:{' '}
+                  {t('dates.withTime', {
+                    date: course?.dates?.aggregate?.end?.date,
+                  })}
+                </Typography>
+              </>
+            )}
 
             <Typography color="grey.700">
               {t('pages.book-course.venue')}:{' '}

@@ -10,6 +10,7 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AttendeeCourseStatus } from '@app/components/AttendeeCourseStatus/AttendeeCourseStatus'
+import { DateCell } from '@app/components/DateCell/DateCell'
 import { IndividualCourseStatusChip } from '@app/components/IndividualCourseStatus'
 import { ParticipantsCount } from '@app/components/ParticipantsCount'
 import { TableHead } from '@app/components/Table/TableHead'
@@ -145,64 +146,28 @@ export const CoursesTable: React.FC<
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  {course.dates?.aggregate?.start?.date && (
-                    <Box>
-                      <Typography variant="body2" gutterBottom>
-                        {t('dates.defaultShort', {
-                          date: course.dates.aggregate.start.date,
-                        })}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="grey.600"
-                        whiteSpace="nowrap"
-                      >
-                        {t('dates.time', {
-                          date: course.dates.aggregate.start.date,
-                        })}
-                      </Typography>
-                    </Box>
-                  )}
+                  {course.dates?.aggregate?.start?.date ? (
+                    <DateCell
+                      date={course.dates.aggregate.start.date}
+                      timeZone={course.schedule[0].timeZone}
+                    />
+                  ) : null}
                 </TableCell>
                 <TableCell>
-                  {course.dates?.aggregate?.end?.date && (
-                    <Box>
-                      <Typography variant="body2" gutterBottom>
-                        {t('dates.defaultShort', {
-                          date: course.dates.aggregate.end.date,
-                        })}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="grey.600"
-                        whiteSpace="nowrap"
-                      >
-                        {t('dates.time', {
-                          date: course.dates.aggregate.end.date,
-                        })}
-                      </Typography>
-                    </Box>
-                  )}
+                  {course.dates?.aggregate?.end?.date ? (
+                    <DateCell
+                      date={course.dates.aggregate.start?.date}
+                      timeZone={course.schedule[0].timeZone}
+                    />
+                  ) : null}
                 </TableCell>
                 <TableCell>
-                  {course.createdAt && (
-                    <Box>
-                      <Typography variant="body2" gutterBottom>
-                        {t('dates.defaultShort', {
-                          date: course.createdAt,
-                        })}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="grey.600"
-                        whiteSpace="nowrap"
-                      >
-                        {t('dates.time', {
-                          date: course.createdAt,
-                        })}
-                      </Typography>
-                    </Box>
-                  )}
+                  {course.createdAt ? (
+                    <DateCell
+                      date={course.dates.aggregate?.start?.date}
+                      timeZone={course.schedule[0].timeZone}
+                    />
+                  ) : null}
                 </TableCell>
                 <TableCell>
                   <TrainerAvatarGroup trainers={course.trainers ?? []} />

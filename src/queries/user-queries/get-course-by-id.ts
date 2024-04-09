@@ -100,6 +100,7 @@ export const QUERY = gql`
         venue {
           ...Venue
         }
+        timeZone
       }
       dates: schedule_aggregate {
         aggregate {

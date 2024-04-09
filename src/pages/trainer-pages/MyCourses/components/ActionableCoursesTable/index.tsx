@@ -3,6 +3,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
+import { DateCell } from '@app/components/DateCell/DateCell'
 import { ParticipantsCount } from '@app/components/ParticipantsCount'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
 import { useAuth } from '@app/context/auth'
@@ -16,7 +17,6 @@ import { AcceptDeclineCourse, Trainer } from '../AcceptDeclineCourse'
 import {
   CoursesTable,
   CourseTitleCell,
-  DateCell,
   VenueCell,
   TableCourse,
 } from '../CoursesTable'
@@ -57,9 +57,18 @@ export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
           <CourseTitleCell course={course} />
           <VenueCell course={course} />
           <TableCell>{t(`course-types.${course.type}`)}</TableCell>
-          <DateCell date={course.dates?.aggregate?.start?.date} />
-          <DateCell date={course.dates?.aggregate?.end?.date} />
-          <DateCell date={course.createdAt} />
+          <DateCell
+            date={course.dates?.aggregate?.start?.date}
+            timeZone={course.schedule[0].timeZone}
+          />
+          <DateCell
+            date={course.dates?.aggregate?.end?.date}
+            timeZone={course.schedule[0].timeZone}
+          />
+          <DateCell
+            date={course.createdAt}
+            timeZone={course.schedule[0].timeZone}
+          />
           <TableCell>
             <TrainerAvatarGroup trainers={course.trainers} />
           </TableCell>

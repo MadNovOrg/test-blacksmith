@@ -17,6 +17,7 @@ const buildCourseForIndividualStatusChip = (
       end: new Date().toISOString(),
       start: new Date().toISOString(),
       id: chance.guid(),
+      timeZone: String(chance.timezone()),
     },
   ],
   status: CourseStatuses.Scheduled,
@@ -76,6 +77,7 @@ it('shows awaiting grade status if course has missing graduation', () => {
         id: chance.guid(),
         start: subDays(new Date(), 2).toISOString(),
         end: subDays(new Date(), 1).toISOString(),
+        timeZone: String(chance.timezone()),
       },
     ],
   })

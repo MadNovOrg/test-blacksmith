@@ -1,16 +1,14 @@
-import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody/TableBody'
 import TableCell, { TableCellProps } from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
-import { utcToZonedTime } from 'date-fns-tz'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
+import { DateCell } from '@app/components/DateCell/DateCell'
 import { IndividualCourseStatusChip } from '@app/components/IndividualCourseStatus'
 import { ParticipantsCount } from '@app/components/ParticipantsCount'
 import { TableHead } from '@app/components/Table/TableHead'
@@ -22,7 +20,6 @@ import {
   TrainerCoursesQuery,
 } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
-import useTimeZones from '@app/hooks/useTimeZones'
 import { AdminOnlyCourseStatus, RoleName } from '@app/types'
 import { findCourseTrainer } from '@app/util'
 
@@ -252,54 +249,6 @@ function TypeCell({ course }: { course: TableCourse }) {
         </Typography>
       ) : (
         ''
-      )}
-    </TableCell>
-  )
-}
-
-export function DateCell({
-  date,
-  timeZone,
-}: {
-  date: Date
-  timeZone?: string
-}) {
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
-  )
-
-  const isResidingCountryEnabled = useMemo(
-    () => residingCountryEnabled,
-    [residingCountryEnabled]
-  )
-  const { t } = useTranslation()
-  const { formatGMTDateTimeByTimeZone } = useTimeZones()
-
-  const UTCDate = useMemo(
-    () => utcToZonedTime(date, timeZone ?? 'Europe/London'),
-    [date, timeZone]
-  )
-
-  return (
-    <TableCell>
-      {date && (
-        <Box>
-          <Typography variant="body2" gutterBottom>
-            {t('dates.defaultShort', {
-              date: isResidingCountryEnabled ? UTCDate : date,
-            })}
-          </Typography>
-          <Typography variant="body2" whiteSpace="nowrap">
-            {t('dates.time', {
-              date: isResidingCountryEnabled ? UTCDate : date,
-            })}
-          </Typography>
-          {isResidingCountryEnabled ? (
-            <Typography variant="body2" whiteSpace="nowrap">
-              {formatGMTDateTimeByTimeZone(UTCDate, timeZone)}
-            </Typography>
-          ) : null}
-        </Box>
       )}
     </TableCell>
   )

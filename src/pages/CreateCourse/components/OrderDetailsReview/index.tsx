@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from '@mui/material'
 import Big from 'big.js'
 import { parseISO } from 'date-fns'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -9,6 +10,7 @@ import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldC
 import { defaultCurrency } from '@app/components/CurrencySelector'
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { InvoiceDetails } from '@app/components/InvoiceDetails'
+import useTimeZones from '@app/hooks/useTimeZones'
 import { TransportMethod } from '@app/types'
 import {
   getTrainerCarCostPerMile,
@@ -28,6 +30,10 @@ export const OrderDetailsReview: React.FC = () => {
     useCreateCourse()
 
   const currency = courseData?.priceCurrency ?? defaultCurrency
+  const residingCountryEnabled = useFeatureFlagEnabled(
+    'course-residing-country'
+  )
+  const { formatGMTDateTimeByTimeZone } = useTimeZones()
 
   const { startDate, endDate } = useMemo(
     () =>
@@ -45,7 +51,6 @@ export const OrderDetailsReview: React.FC = () => {
         : {},
     [courseData]
   )
-
   const trainerExpensesTotal = useMemo(() => {
     if (!expenses) {
       return 0
@@ -144,6 +149,10 @@ export const OrderDetailsReview: React.FC = () => {
     .filter(item => item)
     .join(', ')
 
+  const courseTimezone = courseData?.timeZone
+    ? courseData?.timeZone.timeZoneId
+    : undefined
+
   return (
     <Stack spacing="2px">
       <InfoPanel data-testid="course-info">
@@ -157,11 +166,29 @@ export const OrderDetailsReview: React.FC = () => {
           {courseName}
         </Typography>
 
-        <Typography color="dimGrey.main" data-testid="course-dates">
-          {t('dates.withTime', { date: startDate })} -{' '}
-          {t('dates.withTime', { date: endDate })}{' '}
-          {t('pages.create-course.review-and-confirm.local-time-mention')}
-        </Typography>
+        {residingCountryEnabled ? (
+          <Typography>
+            {`${t('dates.withTime', {
+              date: startDate,
+            })} ${formatGMTDateTimeByTimeZone(
+              startDate as Date,
+              courseTimezone,
+              false
+            )} - ${t('dates.withTime', {
+              date: endDate,
+            })} ${formatGMTDateTimeByTimeZone(
+              endDate as Date,
+              courseTimezone,
+              true
+            )} `}
+          </Typography>
+        ) : (
+          <Typography color="dimGrey.main" data-testid="course-dates">
+            {t('dates.withTime', { date: startDate })} -{' '}
+            {t('dates.withTime', { date: endDate })}{' '}
+            {t('pages.create-course.review-and-confirm.local-time-mention')}
+          </Typography>
+        )}
       </InfoPanel>
 
       <InfoPanel>
