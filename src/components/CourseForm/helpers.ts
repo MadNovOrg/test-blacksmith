@@ -572,7 +572,10 @@ export function getDefaultSpecialInstructions(
     'components.course-form.special-instructions.instructions'
   let key = `${keyPrefixPath}.${type}.${level}`
 
-  if (level === Course_Level_Enum.Level_1) {
+  if (
+    level === Course_Level_Enum.Level_1 ||
+    Course_Level_Enum.ThreeDaySafetyResponseTrainer
+  ) {
     key = `${key}.${deliveryType}`
   } else if (level === Course_Level_Enum.Level_2) {
     key = `${key}.default`

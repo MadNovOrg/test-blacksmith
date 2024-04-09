@@ -219,6 +219,10 @@
           "LEVEL_1_MVA": {
             "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>",
             "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>"
+          },
+          "THREE_DAY_SAFETY_RESPONSE_TRAINER": {
+            "F2F": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>",
+            "VIRTUAL": "<p dir=\"ltr\"><span>This course is non-physical and will be delivered virtually via Zoom.</span></p>"
           }
         },
         "OPEN": {
