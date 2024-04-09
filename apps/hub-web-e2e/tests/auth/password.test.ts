@@ -33,7 +33,7 @@ test('reset password @smoke', async ({ page }) => {
   await forgotPasswordPage.submitEmail(users.resetPassword.email)
   const email = await getLatestEmail(
     users.resetPassword.email,
-    'Forgot Password Confirmation Code'
+    'Team Teach Hub Password Reset'
   )
   const emailPage = new EmailPage(page)
   await emailPage.renderContent(email.html)

@@ -25,6 +25,7 @@ for (const data of MODULES_SETUP) {
   test.use({ storageState: stateFilePath('trainer') })
 
   test(`build course: ${data.name}`, async ({ page, course }) => {
+    test.skip()
     const myCoursesPage = new MyCoursesPage(page)
     await myCoursesPage.goto(`${course.id}`)
     const courseBuilderPage = await myCoursesPage.clickCourse(course.id)

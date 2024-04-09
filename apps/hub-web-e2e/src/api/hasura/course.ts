@@ -499,7 +499,7 @@ export const cancelCourse = async (
     }>(CANCEL_COURSE_MUTATION, {
       courseId,
       cancellationReason,
-      cancellationFeePercent,
+      cancellationFee: cancellationFeePercent,
     })
     console.log(`
       Cancelled the course "${courseId}" with the reason "${cancellationReason}"

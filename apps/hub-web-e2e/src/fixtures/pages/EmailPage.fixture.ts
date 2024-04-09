@@ -14,7 +14,7 @@ export class EmailPage {
 
   constructor(page: Page) {
     this.page = page
-    this.resetPasswordLink = this.page.locator('text="Reset Your Password"')
+    this.resetPasswordLink = this.page.locator('text="Reset Password"')
     this.registerNowButton = this.page.locator('text="Register Now"')
     this.acceptInviteButton = this.page.locator('text="Join organisation"')
   }

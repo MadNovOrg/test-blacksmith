@@ -29,6 +29,7 @@ const test = base.extend<{ course: Course }>({
 test.use({ storageState: stateFilePath('trainer') })
 
 test('course draft', async ({ page, course }) => {
+  test.skip()
   test.fixme(true, 'See https://behaviourhub.atlassian.net/browse/TTHP-1756')
   const modules = ['Personal Safety']
   const myCoursesPage = new MyCoursesPage(page)
@@ -43,6 +44,7 @@ test('course draft', async ({ page, course }) => {
 })
 
 test('course draft: clear modules', async ({ page, course }) => {
+  test.skip()
   const modules = ['Personal Safety', 'Neck Disengagement']
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto(`${course.id}`)

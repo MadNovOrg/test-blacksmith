@@ -16,6 +16,17 @@ credentials.forEach(cred => {
       users[cred.name].password
     )
 
+    const STORAGE_KEY = 'residingCountryDialogWasDisplayed'
+    await page.evaluate(
+      params => {
+        window.localStorage.setItem(params.name, params.value)
+      },
+      {
+        name: STORAGE_KEY,
+        value: 'true',
+      }
+    )
+
     await bypassHSCookieConsent(page)
 
     await myCoursesPage.userMenu.checkIsVisible()

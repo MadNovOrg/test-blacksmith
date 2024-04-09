@@ -36,7 +36,7 @@ test('displays the audit trail for a cancelled course', async ({
   course,
   page,
 }) => {
-  API.course.cancelCourse(course.id)
+  await API.course.cancelCourse(course.id)
   const auditPage = new AuditPage(page)
   await auditPage.goto(Audit_Type.CourseCancellation)
   await auditPage.checkCourseCancelled(course.id)
