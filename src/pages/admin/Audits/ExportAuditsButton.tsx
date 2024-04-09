@@ -36,6 +36,7 @@ export const ExportAuditsButton: React.FC<React.PropsWithChildren<Props>> = ({
       loading={isLoading}
       variant="contained"
       onClick={exportAudits}
+      data-testid="export-audits-button"
     >
       {t('common.export')}
     </LoadingButton>

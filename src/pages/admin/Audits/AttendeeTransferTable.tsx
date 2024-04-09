@@ -112,7 +112,7 @@ export const AttendeeTransferTable: React.FC<
         sorting: false,
         exportRender: (log: AttendeeLogType) =>
           log.xero_invoice_number ??
-          log.course.orders[0].order?.xeroInvoiceNumber,
+          log.course.orders[0]?.order?.xeroInvoiceNumber,
       },
       {
         id: 'authorizedBy.fullName',
