@@ -20,19 +20,19 @@ import { BackButton } from '@app/components/BackButton'
 import { Grade } from '@app/components/Grade'
 import { Accreditors_Enum } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
+import { ICMGradedOnAccordion } from '@app/modules/grading/pages/ParticipantGrade/components/ICMGradedOnAccordion/ICMGradedOnAccordion'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import theme from '@app/theme'
 
 import { BILDGradedOnAccordion } from './components/BILDGradedOnAccordion/BILDGradedOnAccordion'
-import { ICMGradedOnAccordion } from './components/ICMGradedOnAccordion/ICMGradedOnAccordion'
 import { ICMGradedOnAccordionV2 } from './components/ICMGradedOnAccordionV2/ICMGradedOnAccordionV2'
 import { useGradedParticipant } from './hooks/useGradedParticipant'
 
 export const ParticipantGrade = () => {
-  const { participantId, id: courseId } = useParams()
   const newModulesDataModelEnabled = useFeatureFlagEnabled(
     'new-modules-data-model'
   )
+  const { participantId, id: courseId } = useParams()
 
   const [{ data, fetching, error }] = useGradedParticipant(participantId ?? '')
 

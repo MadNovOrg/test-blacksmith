@@ -11,20 +11,19 @@ import {
   GetCourseByIdQuery,
   GetCourseByIdQueryVariables,
 } from '@app/generated/graphql'
+import { ICMCourseBuilder } from '@app/modules/course/pages/CourseBuilder/components/ICMCourseBuilder/ICMCourseBuilder'
 import { NotFound } from '@app/pages/common/NotFound'
 import { QUERY as GET_COURSE_BY_ID_QUERY } from '@app/queries/courses/get-course-by-id'
 
 import { BILDCourseBuilder } from './components/BILDCourseBuilder/BILDCourseBuilder'
-import { ICMCourseBuilder } from './components/ICMCourseBuilder/ICMCourseBuilder'
 import { ICMCourseBuilderV2 } from './components/ICMCourseBuilderV2/ICMCourseBuilderV2'
 
 export const CourseBuilder: React.FC<React.PropsWithChildren> = () => {
-  const { t } = useTranslation()
-  const { id: courseId } = useParams()
-
   const newModulesDataModelEnabled = useFeatureFlagEnabled(
     'new-modules-data-model'
   )
+  const { t } = useTranslation()
+  const { id: courseId } = useParams()
 
   const { editMode } = (useLocation().state as { editMode: boolean }) ?? {}
 
