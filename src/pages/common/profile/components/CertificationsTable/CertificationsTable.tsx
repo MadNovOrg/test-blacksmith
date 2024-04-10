@@ -101,7 +101,9 @@ export const CertificationsTable: FC<
                                 ? `${formatDistanceToNow(
                                     new Date(certificate.expiryDate)
                                   )} ${t('common.ago')}`
-                                : certificate.expiryDate}
+                                : new Date(
+                                    certificate.expiryDate
+                                  ).toLocaleDateString('en-GB')}
                             </Typography>
                           )}
                         </Grid>
