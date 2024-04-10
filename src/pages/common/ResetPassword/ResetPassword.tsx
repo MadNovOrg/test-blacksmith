@@ -100,7 +100,7 @@ export const ResetPasswordPage = () => {
       await Auth.forgotPasswordSubmit(data.email, data.code, data.password)
 
       navigate({
-        pathname: 'login',
+        pathname: '/login',
         search: `?${createSearchParams({
           email: data.email,
           justResetPassword: 'true',
