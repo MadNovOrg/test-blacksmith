@@ -1506,6 +1506,15 @@
     "modal-edit": "Edit",
     "modal-delete": "Delete",
     "modal-individual-edit-title": "Edit price",
+    "validation-errors": {
+      "effective-from-required": "Effective from is required.",
+      "effective-from-valid": "Effective from should be a valid date.",
+      "effective-to-required": "Effective to is required.",
+      "effective-to-valid": "Effective to should be a valid date.",
+      "effective-date-valid-interval": "Effective from should be before Effective to.",
+      "price-amount-required": "Price is required.",
+      "price-amount-positive": "Price should be a positive value."
+    },
     "modal-individual-edit-description": "Please review the course details before proceeding. Price changes are effective immediately after saving.",
     "modal-cols-effective-from": "Effective from",
     "modal-cols-effective-to": "Effective to",

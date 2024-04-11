@@ -12,6 +12,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Snackbar,
 } from '@mui/material'
 import {
   GridRowsProp,
@@ -32,6 +33,8 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
 import { v4 as uuidv4 } from 'uuid'
+import * as yup from 'yup'
+import { ValidationError } from 'yup'
 
 import { Dialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
@@ -133,6 +136,54 @@ export const EditPriceModal = ({
   const [rows, setRows] = useState(initialRows)
 
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
+  const [errors, setErrors] = useState<string[]>([])
+  const schema = yup.object({
+    effectiveFrom: yup
+      .string()
+      .test(
+        'validEffectiveFrom',
+        t('pages.course-pricing.validation-errors.effective-from-valid'),
+        value => {
+          return value ? !isNaN(new Date(value).getDate()) : false
+        }
+      )
+      .required(
+        t('pages.course-pricing.validation-errors.effective-from-required')
+      ),
+    effectiveTo: yup
+      .string()
+      .test(
+        'validEffectiveTo',
+        t('pages.course-pricing.validation-errors.effective-to-valid'),
+        value => {
+          return value ? !isNaN(new Date(value)?.getDate()) : false
+        }
+      )
+      .test(
+        'EffectiveToBeforeEffectiveFrom',
+        t(
+          'pages.course-pricing.validation-errors.effective-date-valid-interval'
+        ),
+        (value, context) =>
+          value
+            ? zonedTimeToUtc(new Date(value), 'GMT') >=
+              zonedTimeToUtc(new Date(context?.parent.effectiveFrom), 'GMT')
+            : false
+      )
+      .required(
+        t('pages.course-pricing.validation-errors.effective-to-required')
+      ),
+    priceAmount: yup
+      .number()
+      .positive(
+        t('pages.course-pricing.validation-errors.price-amount-positive')
+      )
+      .required(
+        t('pages.course-pricing.validation-errors.price-amount-required')
+      ),
+  })
+
+  const handleCloseSnackbar = () => setErrors([])
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (
     params,
@@ -142,7 +193,6 @@ export const EditPriceModal = ({
       event.defaultMuiPrevented = true
     }
   }
-
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
   }
@@ -173,10 +223,23 @@ export const EditPriceModal = ({
     }
   }
 
+  const validateRow = (row: GridRowModel) => {
+    try {
+      return schema.validateSync(row, { abortEarly: false })
+    } catch (err) {
+      return err as ValidationError
+    }
+  }
+
   const processRowUpdate = async (
     rowAfterChange: GridRowModel,
     rowBeforeChange: GridRowModel
   ) => {
+    const validationResult = validateRow(rowAfterChange)
+    if (validationResult instanceof ValidationError) {
+      setErrors(validationResult.errors)
+      return
+    }
     if (rowBeforeChange.isNew) {
       const { data: createdCPS } = await insertCoursePricingSchedule({
         id: rowAfterChange.id,
@@ -358,6 +421,23 @@ export const EditPriceModal = ({
                   toolbar: { setRows, setRowModesModel },
                 }}
               />
+              {errors.length ? (
+                <Snackbar
+                  open
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                  sx={{
+                    marginTop: '50px',
+                  }}
+                  onClose={handleCloseSnackbar}
+                  autoHideDuration={6000}
+                >
+                  <Alert severity="error" onClose={handleCloseSnackbar}>
+                    {errors.map((e, index) => (
+                      <Typography key={index}>{e}</Typography>
+                    ))}
+                  </Alert>
+                </Snackbar>
+              ) : null}
             </Box>
 
             {insertCoursePricingError ||
