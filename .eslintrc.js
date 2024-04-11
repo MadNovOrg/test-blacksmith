@@ -15,7 +15,6 @@ module.exports = {
     {
       files: ['**/**/*.test.*', '**/**/*.test.tsx.snap'],
       plugins: ['vitest'],
-      extends: ['plugin:vitest/recommended'],
       parserOptions: {
         ecmaVersion: 12,
       },
