@@ -29,7 +29,7 @@ export const CourseHostInfo: React.FC<React.PropsWithChildren<Props>> = ({
               organization.name ||
               t('pages.course-participants.missing-company-name')
             }`,
-          })
+          }).replace(/&#39;/g, "'")
         : t('pages.course-participants.team-Teach-host')}
     </ListItemText>
   )
