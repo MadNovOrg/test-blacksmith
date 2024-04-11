@@ -6,4 +6,4 @@ src/generated/graphql.ts
 .eslintrc.js
 tmp
 html
-apps/hub-web-e2e/src/generated/graphql.ts
+hub-web-e2e/src/generated/graphql.ts

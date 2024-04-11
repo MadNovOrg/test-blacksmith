@@ -24,9 +24,5 @@
   },
   "dependencies": {},
   "devDependencies": {},
-  "nx": {
-    "implicitDependencies": [
-      "hub-web"
-    ]
-  }
+  "nx": {}
 }

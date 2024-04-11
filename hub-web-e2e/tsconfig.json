@@ -10,8 +10,8 @@
     "paths": {
       "@qa/*": ["./src/*"],
       // TODO Extract app specific types to shared instead of direct ref
-      "@test/*": ["../../test/*"],
-      "@app/*": ["../../src/*"],
+      "@test/*": ["../test/*"],
+      "@app/*": ["../src/*"],
     }
   },
   "files": [],

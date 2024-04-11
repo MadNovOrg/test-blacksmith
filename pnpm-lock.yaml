@@ -565,7 +565,7 @@ importers:
         specifier: ^6.3.3
         version: 6.3.3
 
-  apps/hub-web-e2e: {}
+  hub-web-e2e: {}
 
 packages:
 

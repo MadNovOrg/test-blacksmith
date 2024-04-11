@@ -1,5 +1,5 @@
 {
-  "extends": ["plugin:playwright/recommended", "../../.eslintrc.js"],
+  "extends": ["plugin:playwright/recommended", "../.eslintrc.js"],
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
