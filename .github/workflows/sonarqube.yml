@@ -7,6 +7,9 @@ jobs:
   sonar-analysis:
     name: SonarQube Analysis
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shard: [1, 2, 3, 4]
     permissions: read-all
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +30,7 @@ jobs:
         run: pnpm pkg delete scripts.prepare && pnpm i
 
       - name: Test
-        run: pnpm test:coverage
+        run: pnpm test:coverage -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
 
       - uses: sonarsource/sonarqube-scan-action@master
         env:
