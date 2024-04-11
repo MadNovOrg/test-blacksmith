@@ -27,6 +27,7 @@ import {
   GridRowEditStopReasons,
   GridValueFormatterParams,
 } from '@mui/x-data-grid'
+import { zonedTimeToUtc } from 'date-fns-tz'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
@@ -182,8 +183,14 @@ export const EditPriceModal = ({
         coursePricingId: pricing?.id,
         priceAmount: rowAfterChange.priceAmount,
         authorId: profile?.id,
-        effectiveFrom: rowAfterChange.effectiveFrom,
-        effectiveTo: rowAfterChange.effectiveTo,
+        effectiveFrom: zonedTimeToUtc(
+          new Date(rowAfterChange.effectiveFrom),
+          'GMT'
+        ),
+        effectiveTo: zonedTimeToUtc(
+          new Date(rowAfterChange.effectiveTo),
+          'GMT'
+        ),
       })
       const updatedRow = {
         ...rowAfterChange,
@@ -204,9 +211,16 @@ export const EditPriceModal = ({
         oldPrice: rowBeforeChange.priceAmount,
         priceAmount: rowAfterChange.priceAmount,
         authorId: profile?.id,
-        effectiveFrom: rowAfterChange.effectiveFrom,
-        effectiveTo: rowAfterChange.effectiveTo,
+        effectiveFrom: zonedTimeToUtc(
+          new Date(rowAfterChange.effectiveFrom),
+          'GMT'
+        ),
+        effectiveTo: zonedTimeToUtc(
+          new Date(rowAfterChange.effectiveTo),
+          'GMT'
+        ),
       })
+
       if (data) onSave()
       const updatedRow = { ...rowAfterChange, isNew: false }
       setRows(
