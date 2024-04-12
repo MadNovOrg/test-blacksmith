@@ -184,6 +184,10 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     CreateOrderMutationVariables
   >(CREATE_ORDER)
 
+  const isBILDcourse = profile?.course?.accreditedBy === Accreditors_Enum.Bild
+  const courseHasPrice = Boolean(profile?.course?.price)
+  const courseResidingCountry = profile?.course?.residingCountry
+
   useEffect(() => {
     if (
       typeof data !== 'undefined' &&
@@ -194,10 +198,6 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         setReady(true)
         return
       }
-
-      const isBILDcourse = profile.course.accreditedBy === Accreditors_Enum.Bild
-      const courseHasPrice = Boolean(profile.course.price)
-      const courseResidingCountry = profile.course.residingCountry
 
       let pricing: GetCoursePricingQuery['pricing']
 
@@ -212,12 +212,12 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
           xeroCode: '',
         }
       } else {
-        const defaultPricing = coursePricing
-        if (defaultPricing) {
+        const scheduledPrice = coursePricing
+        if (scheduledPrice) {
           pricing = {
-            priceAmount: Number(defaultPricing?.pricing?.priceAmount),
-            priceCurrency: defaultPricing?.pricing?.priceCurrency as Currency,
-            xeroCode: defaultPricing?.pricing?.xeroCode ?? '',
+            priceAmount: Number(scheduledPrice?.pricing?.priceAmount),
+            priceCurrency: scheduledPrice?.pricing?.priceCurrency as Currency,
+            xeroCode: scheduledPrice?.pricing?.xeroCode ?? '',
           }
         } else {
           setError(t('error-no-pricing'))
@@ -309,6 +309,9 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     profile,
     t,
     course?.residingCountry,
+    courseHasPrice,
+    courseResidingCountry,
+    isBILDcourse,
   ])
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { RoleName } from '@app/types'
 
-import { chance, render, screen, userEvent, waitFor } from '@test/index'
+import { render, screen, userEvent, waitFor } from '@test/index'
 
 import { selectBildCategory, selectLevel } from './test-utils'
 
@@ -24,17 +24,10 @@ const useCoursePriceMock = vi.mocked(useCoursePrice)
 
 describe('CourseForm - closed BILD', () => {
   beforeEach(() => {
-    useCoursePriceMock.mockReturnValue([
-      {
-        id: chance.guid(),
-        level: Course_Level_Enum.Level_1,
-        type: Course_Type_Enum.Closed,
-        blended: false,
-        reaccreditation: false,
-        priceCurrency: 'GBP',
-        priceAmount: 100,
-      },
-    ])
+    useCoursePriceMock.mockReturnValue({
+      priceCurrency: 'GBP',
+      priceAmount: 100,
+    })
   })
   ;[RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].forEach(role => {
     it(`allows ${role} user to select BILD in the dropdown`, async () => {

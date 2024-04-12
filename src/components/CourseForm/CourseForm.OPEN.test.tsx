@@ -12,7 +12,6 @@ import { RoleName } from '@app/types'
 import { courseToCourseInput } from '@app/util'
 
 import {
-  chance,
   render,
   renderHook,
   screen,
@@ -42,17 +41,10 @@ describe('component: CourseForm - OPEN', () => {
   } = renderHook(() => useTranslation())
 
   beforeEach(() => {
-    useCoursePriceMock.mockReturnValue([
-      {
-        id: chance.guid(),
-        level: Course_Level_Enum.Level_1,
-        type: Course_Type_Enum.Open,
-        blended: false,
-        reaccreditation: false,
-        priceCurrency: 'GBP',
-        priceAmount: 100,
-      },
-    ])
+    useCoursePriceMock.mockReturnValue({
+      priceCurrency: 'GBP',
+      priceAmount: 100,
+    })
   })
 
   // Delivery

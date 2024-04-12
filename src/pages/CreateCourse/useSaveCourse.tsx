@@ -128,6 +128,7 @@ export type SaveCourse = () => Promise<
 
 export function useSaveCourse(): {
   savingStatus: LoadingStatus
+  allowCreateCourse: boolean
   saveCourse: SaveCourse
 } {
   const {
@@ -154,10 +155,23 @@ export function useSaveCourse(): {
     RemoveCourseDraftMutationVariables
   >(REMOVE_COURSE_DRAFT)
 
-  const isBild = courseData?.accreditedBy === Accreditors_Enum.Bild
+  const isBILDcourse = courseData?.accreditedBy === Accreditors_Enum.Bild
   const isOpenCourse = courseData?.type === Course_Type_Enum.Open
   const isClosedCourse = courseData?.type === Course_Type_Enum.Closed
   const isIndirectCourse = courseData?.type === Course_Type_Enum.Indirect
+
+  const courseWithManualPrice = setManualPriceOnCourse(
+    courseData?.type as Course_Type_Enum,
+    courseData?.courseLevel as Course_Level_Enum,
+    courseData?.accreditedBy as Accreditors_Enum,
+    Boolean(courseData?.blendedLearning),
+    courseData?.residingCountry as WorldCountriesCodes
+  )
+
+  const allowCreateCourse = useMemo(
+    () => courseWithManualPrice || Boolean(courseData?.price),
+    [courseWithManualPrice, courseData?.price]
+  )
 
   const calculateVATrate = useMemo(() => {
     if (
@@ -177,14 +191,6 @@ export function useSaveCourse(): {
     courseData?.includeVAT,
   ])
 
-  const courseWithManualPrice = setManualPriceOnCourse(
-    courseData?.type as Course_Type_Enum,
-    courseData?.courseLevel as Course_Level_Enum,
-    courseData?.accreditedBy as Accreditors_Enum,
-    Boolean(courseData?.blendedLearning),
-    courseData?.residingCountry as WorldCountriesCodes
-  )
-
   const saveCourse = useCallback<SaveCourse>(async () => {
     if (courseData) {
       setSavingStatus(LoadingStatus.FETCHING)
@@ -203,7 +209,7 @@ export function useSaveCourse(): {
         trainers.filter(t => t.type === Course_Trainer_Type_Enum.Leader)
           .length === 0
       const approveExceptions =
-        !(isBild && isIndirectCourse) &&
+        !(isBILDcourse && isIndirectCourse) &&
         exceptions.length > 0 &&
         shouldGoIntoExceptionApproval(acl, courseData.type)
 
@@ -276,7 +282,7 @@ export function useSaveCourse(): {
           ...(isOpenCourse
             ? { displayOnWebsite: courseData.displayOnWebsite }
             : null),
-          bildStrategies: isBild
+          bildStrategies: isBILDcourse
             ? {
                 data: Object.keys(courseData.bildStrategies).flatMap(s => {
                   const strategy = s as BildStrategies
@@ -455,7 +461,7 @@ export function useSaveCourse(): {
     draftError,
     insertError,
     trainers,
-    isBild,
+    isBILDcourse,
     isIndirectCourse,
     exceptions,
     acl,
@@ -478,6 +484,7 @@ export function useSaveCourse(): {
 
   return {
     savingStatus,
+    allowCreateCourse,
     saveCourse,
   }
 }

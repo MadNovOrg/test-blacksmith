@@ -15,14 +15,7 @@ import {
 } from '@app/types'
 import { courseToCourseInput, getTrainerCarCostPerMile } from '@app/util'
 
-import {
-  chance,
-  formatCurrency,
-  render,
-  screen,
-  waitFor,
-  within,
-} from '@test/index'
+import { formatCurrency, render, screen, waitFor, within } from '@test/index'
 import {
   buildCourse,
   buildCourseSchedule,
@@ -97,13 +90,16 @@ describe('component: ReviewAndConfirm', () => {
           data: {
             coursePrice: [
               {
-                id: chance.guid(),
-                priceAmount: 120,
-                priceCurrency: 'GBP',
                 level: Course_Level_Enum.Level_2,
                 type: Course_Type_Enum.Closed,
                 blended: false,
                 reaccreditation: false,
+                pricingSchedules: [
+                  {
+                    priceAmount: 120,
+                    priceCurrency: 'GBP',
+                  },
+                ],
               },
             ],
           },
@@ -207,13 +203,16 @@ describe('component: ReviewAndConfirm', () => {
           data: {
             coursePrice: [
               {
-                id: chance.guid(),
-                priceAmount: 120,
-                priceCurrency: 'GBP',
                 level: Course_Level_Enum.Level_2,
                 type: Course_Type_Enum.Closed,
                 blended: false,
                 reaccreditation: false,
+                pricingSchedules: [
+                  {
+                    priceAmount: 120,
+                    priceCurrency: 'GBP',
+                  },
+                ],
               },
             ],
           },

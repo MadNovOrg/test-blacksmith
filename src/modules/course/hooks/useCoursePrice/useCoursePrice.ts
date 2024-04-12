@@ -14,15 +14,12 @@ import {
 } from '@app/generated/graphql'
 
 export const COURSE_PRICE_QUERY = gql`
-  query CoursePrice($startDate: date, $withSchedule: Boolean!) {
+  query CoursePrice($startDate: date) {
     coursePrice: course_pricing {
-      id
       level
       type
       blended
       reaccreditation
-      priceAmount
-      priceCurrency
       pricingSchedules(
         where: {
           _and: [
@@ -30,9 +27,7 @@ export const COURSE_PRICE_QUERY = gql`
             { effectiveTo: { _gte: $startDate } }
           ]
         }
-      ) @include(if: $withSchedule) {
-        id
-        coursePricingId
+      ) {
         priceAmount
         priceCurrency
       }
@@ -41,16 +36,11 @@ export const COURSE_PRICE_QUERY = gql`
 `
 
 interface ICoursePrice {
-  id: string
   level: Course_Level_Enum
   type: Course_Type_Enum
-  priceAmount: number
-  priceCurrency: string
   blended: boolean
   reaccreditation: boolean
   pricingSchedules?: {
-    id: number
-    coursePricingId: string
     priceAmount: number
     priceCurrency: string
   }[]
@@ -58,11 +48,21 @@ interface ICoursePrice {
 
 export function useCoursePrice(courseData?: {
   accreditedBy: Accreditors_Enum | null
-  startDateTime?: Date
+  startDateTime: Date | null
   residingCountry: WorldCountriesCodes
+  courseType: Course_Type_Enum
+  courseLevel: Course_Level_Enum
+  reaccreditation: boolean
+  blended: boolean
 }) {
   const { isUKCountry } = useWorldCountries()
   const isBILDcourse = courseData?.accreditedBy === Accreditors_Enum.Bild
+
+  const pauseQuery =
+    !courseData ||
+    !isValid(courseData?.startDateTime) ||
+    isBILDcourse ||
+    !isUKCountry(courseData.residingCountry)
 
   const [{ data }] = useQuery<CoursePriceQuery, CoursePriceQueryVariables>({
     query: COURSE_PRICE_QUERY,
@@ -71,38 +71,49 @@ export function useCoursePrice(courseData?: {
           startDate: isValid(courseData?.startDateTime)
             ? courseData.startDateTime?.toISOString()
             : undefined,
-          withSchedule: Boolean(courseData?.startDateTime),
         }
       : undefined,
-    pause:
-      !courseData || isBILDcourse || !isUKCountry(courseData.residingCountry),
+    pause: pauseQuery,
   })
 
-  const extractCoursePrices = useCallback((pricesList?: ICoursePrice[]) => {
-    const coursePricesList: Omit<ICoursePrice, 'pricingSchedules'>[] = []
-    pricesList?.forEach((price: ICoursePrice) => {
-      const coursePrice = {
-        id: price.id,
-        level: price.level,
-        type: price.type,
-        blended: price.blended,
-        reaccreditation: price.reaccreditation,
-        priceCurrency: price.priceCurrency,
-        priceAmount: price.priceAmount,
-      }
-
-      if (price.pricingSchedules && Array.isArray(price.pricingSchedules)) {
-        if (price?.pricingSchedules[0]?.coursePricingId === price.id) {
-          Object.assign(coursePrice, {
-            priceAmount: price.pricingSchedules[0].priceAmount,
-          })
+  const extractCoursePrices = useCallback(
+    (pricesList?: ICoursePrice[]) => {
+      const coursePrice = pricesList?.find(price => {
+        if (
+          price.type === courseData?.courseType &&
+          price.level === courseData?.courseLevel &&
+          Boolean(price.blended) === Boolean(courseData?.blended) &&
+          Boolean(price.reaccreditation) ===
+            Boolean(courseData?.reaccreditation)
+        ) {
+          return price
         }
-      }
-      coursePricesList.push(coursePrice)
-    })
+        return null
+      })
 
-    return coursePricesList
-  }, [])
+      if (
+        coursePrice?.pricingSchedules &&
+        Array.isArray(coursePrice.pricingSchedules)
+      ) {
+        const scheduledPrice = coursePrice.pricingSchedules
+        if (scheduledPrice.length !== 0) {
+          return {
+            priceCurrency: scheduledPrice[0].priceCurrency,
+            priceAmount: scheduledPrice[0].priceAmount,
+          }
+        }
+        return null
+      }
+
+      return null
+    },
+    [
+      courseData?.blended,
+      courseData?.courseLevel,
+      courseData?.courseType,
+      courseData?.reaccreditation,
+    ]
+  )
 
   return useMemo(
     () => extractCoursePrices(data?.coursePrice),

@@ -847,12 +847,16 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     [isBild, isClosedCourse, isOpenCourse]
   )
 
-  const pricesList = useCoursePrice({
+  const coursePrice = useCoursePrice({
     accreditedBy: values.accreditedBy,
-    startDateTime: values.startDateTime ?? undefined,
+    startDateTime: values.startDateTime ?? null,
     residingCountry:
       (values.residingCountry as WorldCountriesCodes) ??
       Countries_Code.DEFAULT_RESIDING_COUNTRY,
+    courseType,
+    courseLevel: values.courseLevel as Course_Level_Enum,
+    reaccreditation: values.reaccreditation,
+    blended: values.blendedLearning,
   })
 
   useEffectOnce(() => {
@@ -870,26 +874,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     }
   })
 
-  // this useEffect sets the individual course price for UK residing countries
+  // this sets the course price for UK residing countries
   // based on its Type, LEVEL and blended & reaccreditation status
   useEffect(() => {
-    const courseLevel = values?.courseLevel
-    const isBlended = values?.blendedLearning
-    const isReaccreditation = values?.reaccreditation
-
-    const coursePrice = pricesList?.find(element => {
-      if (
-        element.type === courseType &&
-        element.level === courseLevel &&
-        element.blended === isBlended &&
-        element.reaccreditation === isReaccreditation
-      ) {
-        return element.priceAmount
-      }
-    })
-
-    // only set the default price for UK based countries when creating a course
-    if (isCreation && isUKCountry(values.residingCountry)) {
+    if (isCreation && isUKCountry(values.residingCountry) && isICM) {
       setValue('price', coursePrice?.priceAmount)
       setValue('priceCurrency', coursePrice?.priceCurrency)
     }
@@ -904,16 +892,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     isCreation,
     isICM,
     isBild,
-    courseType,
-    pricesList,
     setValue,
     resetField,
     isClosedCourse,
-    values?.blendedLearning,
-    values?.courseLevel,
-    values?.reaccreditation,
-    values.residingCountry,
     isUKCountry,
+    values.residingCountry,
+    coursePrice?.priceAmount,
+    coursePrice?.priceCurrency,
   ])
 
   // set VAT true for all UK countries
@@ -2242,6 +2227,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               </Box>
             ) : null}
           </InfoPanel>
+
           {/* For level 1 MVA this input is hidden from UI, however it is set when we are sending request to create course*/}
           {startDate &&
           values.courseLevel &&

@@ -57,13 +57,16 @@ describe('component: OrderDetails', () => {
           data: {
             coursePrice: [
               {
-                id: chance.guid(),
-                priceAmount: 120,
-                priceCurrency: 'GBP',
                 level: Course_Level_Enum.Level_2,
                 type: Course_Type_Enum.Open,
                 blended: false,
                 reaccreditation: false,
+                pricingSchedules: [
+                  {
+                    priceAmount: 120,
+                    priceCurrency: 'GBP',
+                  },
+                ],
               },
             ],
           },
@@ -213,13 +216,16 @@ describe('component: OrderDetails', () => {
           data: {
             coursePrice: [
               {
-                id: chance.guid(),
-                priceAmount: 120,
-                priceCurrency: 'GBP',
                 level: Course_Level_Enum.Level_2,
                 type: Course_Type_Enum.Open,
                 blended: false,
                 reaccreditation: false,
+                pricingSchedules: [
+                  {
+                    priceAmount: 120,
+                    priceCurrency: 'GBP',
+                  },
+                ],
               },
             ],
           },
@@ -279,13 +285,16 @@ describe('component: OrderDetails', () => {
           data: {
             coursePrice: [
               {
-                id: chance.guid(),
-                priceAmount: 120,
-                priceCurrency: 'GBP',
                 level: Course_Level_Enum.Level_2,
                 type: Course_Type_Enum.Open,
                 blended: false,
                 reaccreditation: false,
+                pricingSchedules: [
+                  {
+                    priceAmount: 120,
+                    priceCurrency: 'GBP',
+                  },
+                ],
               },
             ],
           },
@@ -295,7 +304,7 @@ describe('component: OrderDetails', () => {
     render(
       <Provider value={client}>
         <CreateCourseProvider
-          courseType={Course_Type_Enum.Indirect}
+          courseType={Course_Type_Enum.Open}
           initialValue={{
             courseData: {
               price: 120,

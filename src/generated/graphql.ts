@@ -59252,11 +59252,10 @@ export type GetCertificationsQuery = { __typename?: 'query_root', certifications
 
 export type CoursePriceQueryVariables = Exact<{
   startDate?: InputMaybe<Scalars['date']>;
-  withSchedule: Scalars['Boolean'];
 }>;
 
 
-export type CoursePriceQuery = { __typename?: 'query_root', coursePrice: Array<{ __typename?: 'course_pricing', id: any, level: Course_Level_Enum, type: Course_Type_Enum, blended: boolean, reaccreditation: boolean, priceAmount: any, priceCurrency: string, pricingSchedules?: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId: any, priceAmount: any, priceCurrency: string }> }> };
+export type CoursePriceQuery = { __typename?: 'query_root', coursePrice: Array<{ __typename?: 'course_pricing', level: Course_Level_Enum, type: Course_Type_Enum, blended: boolean, reaccreditation: boolean, pricingSchedules: Array<{ __typename?: 'course_pricing_schedule', priceAmount: any, priceCurrency: string }> }> };
 
 export type CourseInfoFragment = { __typename?: 'course', name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', timeZone: string, venue?: { __typename?: 'venue', name: string, city: string } | null }> };
 

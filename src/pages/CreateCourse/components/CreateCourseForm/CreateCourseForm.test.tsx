@@ -186,6 +186,7 @@ describe('component: CreateCourseForm', () => {
     const endDate = addHours(startDate, 8)
     const course = buildCourse({
       overrides: {
+        type: Course_Type_Enum.Indirect,
         accreditedBy: Accreditors_Enum.Bild,
         level: Course_Level_Enum.BildRegular,
         bildStrategies: [{ strategyName: BildStrategies.Primary }],

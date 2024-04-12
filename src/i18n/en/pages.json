@@ -84,6 +84,7 @@
   "book-course": {
     "title": "Book a course",
     "title-complete": "Book a Course - Complete",
+    "no-course-price": "A price has not been configured for this course type and attributes over the specified date period. Please update the pricing before creating this course.",
     "not-enough-spaces": "There aren't enough spaces left for the quantity you want to book.",
     "your-info": "Your information",
     "notice": "Please ensure the email address is entered correctly and is for the participant attending the course. Course instructions will be sent to the relevant details provided.",
@@ -365,6 +366,7 @@
     "assists-needed_other": "{{count}} assist trainers needed.",
     "course-not-found": "Course not found",
     "error-creating-course": "There was an error creating a course.",
+    "no-course-price": "A price has not been configured for this course type and attributes over the specified date period. Please update the pricing before creating this course.",
     "assign-trainers": {
       "lead-title": "Lead Trainer",
       "lead-error-min": "Lead trainer is required",

@@ -81,7 +81,7 @@ export const CreateCourseForm = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
-  const { savingStatus, saveCourse } = useSaveCourse()
+  const { savingStatus, saveCourse, allowCreateCourse } = useSaveCourse()
   const [assistants, setAssistants] = useState<SearchTrainer[]>([])
   const [courseDataValid, setCourseDataValid] = useState(false)
   const { t } = useTranslation()
@@ -92,6 +92,8 @@ export const CreateCourseForm = () => {
   const [courseExceptions, setCourseExceptions] = useState<
     Course_Exception_Enum[]
   >([])
+  const [displayNoCoursePriceError, setDisplayNoCoursePriceError] =
+    useState<boolean>(false)
 
   const { certifications } = useProfile(profile?.id)
 
@@ -226,6 +228,12 @@ export const CreateCourseForm = () => {
     setFormSubmitted(true)
 
     if (!courseData || !profile || !nextStepEnabled) return
+
+    if (!allowCreateCourse) {
+      setDisplayNoCoursePriceError(true)
+      return
+    }
+
     assertCourseDataValid(courseData, courseDataValid)
 
     const ignoreExceptions =
@@ -325,6 +333,14 @@ export const CreateCourseForm = () => {
       )
     )
   }, [acl, assistants, courseData])
+
+  if (displayNoCoursePriceError) {
+    return (
+      <Alert severity="error" variant="outlined">
+        {t('pages.create-course.no-course-price')}
+      </Alert>
+    )
+  }
 
   return (
     <Box paddingBottom={5}>

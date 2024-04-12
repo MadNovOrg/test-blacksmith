@@ -10,7 +10,7 @@ import {
   INPUT_TIME_FORMAT,
 } from '@app/util'
 
-import { act, chance, render, screen, userEvent, waitFor } from '@test/index'
+import { act, render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { renderForm, selectLevel } from './test-utils'
@@ -33,17 +33,10 @@ const useCoursePriceMock = vi.mocked(useCoursePrice)
 
 describe('component: CourseForm', () => {
   beforeEach(() => {
-    useCoursePriceMock.mockReturnValue([
-      {
-        id: chance.guid(),
-        level: Course_Level_Enum.Level_1,
-        type: Course_Type_Enum.Open,
-        blended: false,
-        reaccreditation: false,
-        priceCurrency: 'GBP',
-        priceAmount: 100,
-      },
-    ])
+    useCoursePriceMock.mockReturnValue({
+      priceCurrency: 'GBP',
+      priceAmount: 100,
+    })
   })
 
   it('displays venue selector if F2F delivery type', async () => {
