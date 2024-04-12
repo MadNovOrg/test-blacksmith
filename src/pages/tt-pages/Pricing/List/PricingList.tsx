@@ -192,7 +192,9 @@ export const PricingList: React.FC = () => {
                 onClose={() => setSelectedEditPrice(null)}
                 onSave={() => {
                   setSelectedEditPrice(null)
-                  mutate()
+                  mutate({
+                    requestPolicy: 'network-only',
+                  })
                 }}
               />
             ) : null}
