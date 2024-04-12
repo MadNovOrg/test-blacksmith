@@ -2,7 +2,9 @@ import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
 
-import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import useWorldCountries, {
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import {
   hasRenewalCycle,
   isRenewalCycleHiddenFromUI,
@@ -21,6 +23,7 @@ import {
   RemoveCourseDraftMutation,
   RemoveCourseDraftMutationVariables,
   Course_Trainer_Insert_Input,
+  Course_Level_Enum,
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { shouldGoIntoExceptionApproval } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
@@ -37,7 +40,7 @@ import {
 import { LoadingStatus } from '@app/util'
 
 import { useCreateCourse } from './components/CreateCourseProvider'
-import { getCourseRenewalCycle } from './utils'
+import { getCourseRenewalCycle, setManualPriceOnCourse } from './utils'
 
 const prepareExpensesData = (
   expenses: Record<string, ExpensesInput>
@@ -174,6 +177,14 @@ export function useSaveCourse(): {
     courseData?.includeVAT,
   ])
 
+  const courseWithManualPrice = setManualPriceOnCourse(
+    courseData?.type as Course_Type_Enum,
+    courseData?.courseLevel as Course_Level_Enum,
+    courseData?.accreditedBy as Accreditors_Enum,
+    Boolean(courseData?.blendedLearning),
+    courseData?.residingCountry as WorldCountriesCodes
+  )
+
   const saveCourse = useCallback<SaveCourse>(async () => {
     if (courseData) {
       setSavingStatus(LoadingStatus.FETCHING)
@@ -282,7 +293,7 @@ export function useSaveCourse(): {
           ...([Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
             courseData.type
           )
-            ? { price: courseData.price, conversion: courseData.conversion }
+            ? { conversion: courseData.conversion }
             : null),
           status,
           exceptionsPending:
@@ -398,6 +409,7 @@ export function useSaveCourse(): {
                 priceCurrency: courseData.priceCurrency,
               }
             : {}),
+          ...(courseWithManualPrice ? { price: courseData.price } : null),
           ...(approveExceptions
             ? {
                 courseExceptions: {
@@ -461,6 +473,7 @@ export function useSaveCourse(): {
     setDateTimeTimeZone,
     draftId,
     removeCourseDraft,
+    courseWithManualPrice,
   ])
 
   return {

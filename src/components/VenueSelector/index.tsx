@@ -147,6 +147,7 @@ export const VenueSelector: React.FC<
     const suggestions = async () => {
       const googleResponse = await getGoogleMapsSuggestions(
         debouncedQuery,
+        isBILDcourse,
         courseResidingCountry as WorldCountriesCodes
       )
       if (googleResponse) setGoogleSuggestions(googleResponse)

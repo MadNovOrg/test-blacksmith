@@ -820,15 +820,15 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
    */
   const showCLOSEDcourseFinanceSection = useMemo(() => {
     return (
+      isICM &&
       isClosedCourse &&
-      !isOpenCourse &&
       (showInternationalFinanceSection ||
         showClosedCourseSalesRepr ||
         CLOSEDcourseNeedsManualPrice)
     )
   }, [
+    isICM,
     isClosedCourse,
-    isOpenCourse,
     showInternationalFinanceSection,
     showClosedCourseSalesRepr,
     CLOSEDcourseNeedsManualPrice,
@@ -836,8 +836,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   // flag to display Finance Section for OPEN courses
   const showOPENcourseFinanceSection = useMemo(() => {
-    return isOpenCourse && !isClosedCourse && showInternationalFinanceSection
-  }, [isClosedCourse, isOpenCourse, showInternationalFinanceSection])
+    return isICM && isOpenCourse && showInternationalFinanceSection
+  }, [isICM, isOpenCourse, showInternationalFinanceSection])
 
   /**
    * BILD course (both OPEN & CLOSED) shows price field only
@@ -861,7 +861,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       courseInput?.residingCountry ?? Countries_Code.DEFAULT_RESIDING_COUNTRY
     )
 
-    if (isCreation) {
+    const UKcountry = isUKCountry(
+      courseInput?.residingCountry ?? Countries_Code.DEFAULT_RESIDING_COUNTRY
+    )
+
+    if (isCreation && UKcountry) {
       setValue('includeVAT', true)
     }
   })
@@ -888,16 +892,23 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     if (isCreation && isUKCountry(values.residingCountry)) {
       setValue('price', coursePrice?.priceAmount)
       setValue('priceCurrency', coursePrice?.priceCurrency)
-    } else {
+    }
+
+    if (
+      isCreation &&
+      (isBild || (isClosedCourse && !isUKCountry(values.residingCountry)))
+    ) {
       resetField('price')
-      resetField('priceCurrency')
     }
   }, [
     isCreation,
+    isICM,
+    isBild,
     courseType,
     pricesList,
     setValue,
     resetField,
+    isClosedCourse,
     values?.blendedLearning,
     values?.courseLevel,
     values?.reaccreditation,
@@ -907,10 +918,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   // set VAT true for all UK countries
   useEffect(() => {
-    if (isCreation && isUKCountry(values.residingCountry)) {
+    if (isCreation && isUKCountry(values.residingCountry) && !isBild) {
       setValue('includeVAT', true)
     }
-  }, [isCreation, isUKCountry, setValue, values.residingCountry])
+  }, [isCreation, isUKCountry, setValue, values.residingCountry, isBild])
 
   const resetSpecialInstructionsToDefault = useCallback(
     (
@@ -1298,6 +1309,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                           setValue('includeVAT', null)
 
                           resetField('bildStrategies')
+
+                          if (e.target.value === Accreditors_Enum.Bild) {
+                            setValue('residingCountry', 'GB-ENG')
+                          }
+                          setValue('venue', null)
 
                           field.onChange(e)
                         }}

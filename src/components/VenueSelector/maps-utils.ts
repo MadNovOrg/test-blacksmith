@@ -5,9 +5,12 @@ import PlaceResult = google.maps.places.PlaceResult
 
 export const getGoogleMapsSuggestions = async (
   query: string,
+  isBildCourse: boolean,
   residingCountry?: WorldCountriesCodes
 ): Promise<AutocompleteResponse | null> => {
   // Google API does not support country GB-ENG type codes and I'm slicing and using the first part of the country code
+
+  const UKcountryCode = 'GB'
 
   if (!window?.google) return null
 
@@ -21,7 +24,7 @@ export const getGoogleMapsSuggestions = async (
     input: query,
     types: ['establishment'],
     componentRestrictions: {
-      country: residingCountryFormat,
+      country: isBildCourse ? UKcountryCode : residingCountryFormat,
     },
   })
 }

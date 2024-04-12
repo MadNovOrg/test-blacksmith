@@ -69,22 +69,30 @@ const FinancePricingSection: React.FC<React.PropsWithChildren<Props>> = ({
     return false
   }, [isBlended, isCreateCourse, isLevel2, isUKCountry, residingCountry])
 
+  // these fields are only shown for International Courses
+  const showCurrencyAndVATfields = useMemo(
+    () => !isUKCountry(residingCountry),
+    [isUKCountry, residingCountry]
+  )
+
   return (
     <>
       <Grid container spacing={2} mt={0}>
-        <Grid item md={6} sm={12}>
-          <CurrencySelector
-            {...register('priceCurrency')}
-            error={Boolean(errors?.priceCurrency)}
-            fullWidth
-            helperText={errors?.priceCurrency?.message}
-            value={priceCurrency ?? defaultCurrency}
-            InputLabelProps={{ shrink: true }}
-            disabled={disabledVATandCurrency}
-          />
-        </Grid>
+        {showCurrencyAndVATfields ? (
+          <Grid item md={6} sm={12}>
+            <CurrencySelector
+              {...register('priceCurrency')}
+              error={Boolean(errors?.priceCurrency)}
+              fullWidth
+              helperText={errors?.priceCurrency?.message}
+              value={priceCurrency ?? defaultCurrency}
+              InputLabelProps={{ shrink: true }}
+              disabled={disabledVATandCurrency}
+            />
+          </Grid>
+        ) : null}
 
-        <Grid item md={6} sm={12}>
+        <Grid item md={showCurrencyAndVATfields ? 6 : 12} sm={12}>
           <TextField
             {...register('price')}
             value={price}
@@ -102,27 +110,29 @@ const FinancePricingSection: React.FC<React.PropsWithChildren<Props>> = ({
           />
         </Grid>
 
-        <Grid container item md={12} sm={12} alignSelf={'center'}>
-          <Controller
-            name="includeVAT"
-            control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                control={
-                  <Switch
-                    {...field}
-                    checked={
-                      Boolean(includeVAT) || isUKCountry(residingCountry)
-                    }
-                    disabled={disabledVATandCurrency}
-                    data-testid="includeVAT-switch"
-                  />
-                }
-                label={t('vat')}
-              />
-            )}
-          />
-        </Grid>
+        {showCurrencyAndVATfields ? (
+          <Grid container item md={12} sm={12} alignSelf={'center'}>
+            <Controller
+              name="includeVAT"
+              control={control}
+              render={({ field }) => (
+                <FormControlLabel
+                  control={
+                    <Switch
+                      {...field}
+                      checked={
+                        Boolean(includeVAT) || isUKCountry(residingCountry)
+                      }
+                      disabled={disabledVATandCurrency}
+                      data-testid="includeVAT-switch"
+                    />
+                  }
+                  label={t('vat')}
+                />
+              )}
+            />
+          </Grid>
+        ) : null}
       </Grid>
 
       <InfoRow>

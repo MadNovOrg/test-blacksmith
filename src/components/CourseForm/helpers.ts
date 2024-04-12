@@ -628,19 +628,21 @@ export function courseNeedsManualPrice({
   residingCountry: WorldCountriesCodes
   internationalFinanceEnabled: boolean
 }) {
+  const isBILDcourse = accreditedBy === Accreditors_Enum.Bild
   const isICMcourse = accreditedBy === Accreditors_Enum.Icm
   const isClosedCourse = courseType === Course_Type_Enum.Closed
   const isLEVEL2 = courseLevel === Course_Level_Enum.Level_2
   const isUKcountry = Object.keys(UKsCountriesCodes).includes(residingCountry)
 
-  if (
-    isUKcountry &&
-    isClosedCourse &&
+  const specialUKcountryCondition =
     isICMcourse &&
+    isClosedCourse &&
     isLEVEL2 &&
     blendedLearning &&
+    isUKcountry &&
     maxParticipants <= 8
-  ) {
+
+  if (specialUKcountryCondition || isBILDcourse) {
     return true
   }
 
@@ -648,10 +650,8 @@ export function courseNeedsManualPrice({
     if (!internationalFinanceEnabled) {
       return false
     }
-
     return true
   }
-
   return false
 }
 
