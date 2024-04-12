@@ -20,27 +20,43 @@ jobs:
       postgres:
         image: postgres:14
         ports:
-          - 5432:5432
+          - 6432:6432
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: root
           POSTGRES_DB: tth-db
+          POSTGRES_MAX_CONNECTIONS: 200
+          POSTGRES_HOST_AUTH_METHOD: md5
+          POSTGRES_INITDB_ARGS: --auth=md5
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
 
+      pgbouncer:
+        image: edoburu/pgbouncer:latest
+        ports:
+          - 5432:5432
+        env:
+          DB_USER: postgres
+          DB_PASSWORD: root
+          DB_NAME: tth-db
+          DB_PORT: 5432
+          DB_HOST: postgres
+          POOL_MODE: session
+          MAX_CLIENT_CONN: 200
+          DEFAULT_POOL_SIZE: 50
+
       graphql-engine:
         image: hasura/graphql-engine:v2.28.2-ce.cli-migrations-v3
         ports:
           - 8080:8080
         env:
-          HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@postgres:5432/tth-db
+          HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@pgbouncer:5432/tth-db
           HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
           HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
           HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_JYEuK9iJg/.well-known/jwks.json","claims_format":"stringified_json"}'
-
     steps:
       - name: Set Environment Variables
         run: |
@@ -48,6 +64,7 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:

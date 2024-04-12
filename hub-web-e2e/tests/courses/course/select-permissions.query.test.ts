@@ -1,3 +1,4 @@
+/* eslint-disable playwright/expect-expect */
 import { expect, test as base } from '@playwright/test'
 
 import {
@@ -39,6 +40,7 @@ const test = base.extend<{
   }
 }>({
   courseIds: async ({}, use) => {
+    base.setTimeout(600000)
     const [
       openCourseId,
       closedCourseId,

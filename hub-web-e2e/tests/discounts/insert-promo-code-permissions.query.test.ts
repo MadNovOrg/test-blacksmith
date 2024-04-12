@@ -36,13 +36,15 @@ function buildPromoCode(
   courseId: number,
   createdBy: string
 ): UpsertPromoCodeMutationVariables {
+  const uniquePart =
+    new Date().getTime() + Math.random().toString(36).slice(2, 7)
   return {
     promoCondition: { id: { _is_null: true } },
     promoCode: {
       courses: { data: [{ course_id: courseId }] },
       amount: 100,
       createdBy,
-      code: 'PROMO_100_TESTS',
+      code: `PROMO_100_TESTS_${uniquePart}`,
     },
   }
 }
@@ -72,7 +74,7 @@ allowedRoles.forEach(role => {
         'x-hasura-user-email': 'whatever',
       }
     )
-    await expect(results.insert_promo_code_one?.id).not.toBeNull()
+    expect(results?.insert_promo_code_one?.id).not.toBeNull()
     API.promoCode.remove(results.insert_promo_code_one?.id)
   })
 })

@@ -1,3 +1,4 @@
+/* eslint-disable playwright/expect-expect */
 import { test as base } from '@playwright/test'
 import { gql } from 'graphql-request'
 
@@ -48,6 +49,7 @@ const test = base.extend<{
   }
 }>({
   bildCourses: async ({}, use) => {
+    base.setTimeout(600000)
     const [bildRegular, bildIntermediate, bildAdvanced] = await Promise.all([
       insertCourse(
         buildCourseInput({
@@ -99,6 +101,7 @@ const test = base.extend<{
     ])
   },
   icmCourses: async ({}, use) => {
+    base.setTimeout(600000)
     const [level1, level2, advanced, intermediateTrainer, advancedTrainer] =
       await Promise.all([
         insertCourse(
@@ -147,13 +150,7 @@ const test = base.extend<{
   },
 })
 
-/**
- * TODO Shamelessly ignore this test.
- * Come back to this test separately
- * @author Alexei.Gaidulean <alexei.gaidulean@teamteach.co.uk>
- */
-// eslint-disable-next-line playwright/no-skipped-test
-test.skip('returns correct course codes for BILD courses', async ({
+test('returns correct course codes for BILD courses', async ({
   bildCourses,
 }) => {
   const { bildRegular, bildIntermediate, bildAdvanced } = bildCourses
