@@ -72,7 +72,27 @@ jobs:
         run: pnpm pkg delete scripts.prepare && pnpm i
 
       - name: Test
-        run: pnpm test -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+        run: |
+          pnpm test:coverage --shard ${{ matrix.shard }}/${{ strategy.job-total }}
+          mv coverage/coverage-final.json coverage/coverage-shard${SHARD_NUMBER}.json
+          npx nyc merge ./coverage ./coverage/coverage-final.json
+          npx nyc report -t coverage --report-dir coverage --reporter=lcov
+
+      ## Commented as to not run it until we have the sonarqube server up and running
+
+      # - name: SonarQube Analysis
+      #   uses: sonarsource/sonarqube-scan-action@master
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #     SONAR_HOST_URL:
+      #       ${{ secrets.SONAR_HOST_URL }}
+      #       # If you wish to fail your job when the Quality Gate is red, uncomment the
+      #       # following lines. This would typically be used to fail a deployment.
+      #       ###### Disable this so we can run SonarQube as part of CI and the quality gate is not yet satisfied
+      #       # - uses: sonarsource/sonarqube-quality-gate-action@master
+      #       #  timeout-minutes: 5
+      #       #  env:
+      #       #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   dev-cd:
     name: DEV

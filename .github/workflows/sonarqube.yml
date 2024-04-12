@@ -1,4 +1,4 @@
-name: SonarQube Analysis
+name: Manual Sonar Analysis
 
 on:
   workflow_dispatch:
@@ -7,31 +7,10 @@ jobs:
   sonar-analysis:
     name: SonarQube Analysis
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        shard: [1, 2, 3, 4]
-    permissions: read-all
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
-      - name: Build
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18.14.2'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i
-
-      - name: Test
-        run: pnpm test:coverage -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}
-
       - uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

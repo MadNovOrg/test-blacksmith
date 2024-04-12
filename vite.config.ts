@@ -48,7 +48,7 @@ export default defineConfig({
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     reporters: ['default', 'html'],
     coverage: {
-      reporter: ['lcov', 'text-summary'],
+      reporter: ['json', 'text-summary'],
       include: ['src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
       reportsDirectory: './coverage',
     },
