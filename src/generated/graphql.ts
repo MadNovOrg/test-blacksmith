@@ -56,6 +56,7 @@ export type Address = {
 
 export type ApproveCourseInput = {
   courseId: Scalars['Int'];
+  reason: Scalars['String'];
 };
 
 export type ApproveCourseOutput = {
@@ -6139,6 +6140,7 @@ export type RegisterUserPayload = {
 
 export type RejectCourseInput = {
   courseId: Scalars['Int'];
+  reason: Scalars['String'];
 };
 
 export type RejectCourseOutput = {
@@ -29798,6 +29800,290 @@ export type Dfe_Establishment_Updates = {
   where: Dfe_Establishment_Bool_Exp;
 };
 
+/** email notifications */
+export type Email_Notifications = {
+  __typename?: 'email_notifications';
+  course_id: Scalars['Int'];
+  created_at: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  template_data: Scalars['String'];
+  template_name: Scalars['String'];
+  user_email: Scalars['jsonb'];
+};
+
+
+/** email notifications */
+export type Email_NotificationsUser_EmailArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "email_notifications" */
+export type Email_Notifications_Aggregate = {
+  __typename?: 'email_notifications_aggregate';
+  aggregate?: Maybe<Email_Notifications_Aggregate_Fields>;
+  nodes: Array<Email_Notifications>;
+};
+
+/** aggregate fields of "email_notifications" */
+export type Email_Notifications_Aggregate_Fields = {
+  __typename?: 'email_notifications_aggregate_fields';
+  avg?: Maybe<Email_Notifications_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Email_Notifications_Max_Fields>;
+  min?: Maybe<Email_Notifications_Min_Fields>;
+  stddev?: Maybe<Email_Notifications_Stddev_Fields>;
+  stddev_pop?: Maybe<Email_Notifications_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Email_Notifications_Stddev_Samp_Fields>;
+  sum?: Maybe<Email_Notifications_Sum_Fields>;
+  var_pop?: Maybe<Email_Notifications_Var_Pop_Fields>;
+  var_samp?: Maybe<Email_Notifications_Var_Samp_Fields>;
+  variance?: Maybe<Email_Notifications_Variance_Fields>;
+};
+
+
+/** aggregate fields of "email_notifications" */
+export type Email_Notifications_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Email_Notifications_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Email_Notifications_Append_Input = {
+  user_email?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** aggregate avg on columns */
+export type Email_Notifications_Avg_Fields = {
+  __typename?: 'email_notifications_avg_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "email_notifications". All fields are combined with a logical 'AND'. */
+export type Email_Notifications_Bool_Exp = {
+  _and?: InputMaybe<Array<Email_Notifications_Bool_Exp>>;
+  _not?: InputMaybe<Email_Notifications_Bool_Exp>;
+  _or?: InputMaybe<Array<Email_Notifications_Bool_Exp>>;
+  course_id?: InputMaybe<Int_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  template_data?: InputMaybe<String_Comparison_Exp>;
+  template_name?: InputMaybe<String_Comparison_Exp>;
+  user_email?: InputMaybe<Jsonb_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "email_notifications" */
+export enum Email_Notifications_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  EmailNotificationsPkey = 'email_notifications_pkey'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Email_Notifications_Delete_At_Path_Input = {
+  user_email?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Email_Notifications_Delete_Elem_Input = {
+  user_email?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Email_Notifications_Delete_Key_Input = {
+  user_email?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for incrementing numeric columns in table "email_notifications" */
+export type Email_Notifications_Inc_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "email_notifications" */
+export type Email_Notifications_Insert_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  template_data?: InputMaybe<Scalars['String']>;
+  template_name?: InputMaybe<Scalars['String']>;
+  user_email?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** aggregate max on columns */
+export type Email_Notifications_Max_Fields = {
+  __typename?: 'email_notifications_max_fields';
+  course_id?: Maybe<Scalars['Int']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  template_data?: Maybe<Scalars['String']>;
+  template_name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Email_Notifications_Min_Fields = {
+  __typename?: 'email_notifications_min_fields';
+  course_id?: Maybe<Scalars['Int']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  template_data?: Maybe<Scalars['String']>;
+  template_name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "email_notifications" */
+export type Email_Notifications_Mutation_Response = {
+  __typename?: 'email_notifications_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Email_Notifications>;
+};
+
+/** on_conflict condition type for table "email_notifications" */
+export type Email_Notifications_On_Conflict = {
+  constraint: Email_Notifications_Constraint;
+  update_columns?: Array<Email_Notifications_Update_Column>;
+  where?: InputMaybe<Email_Notifications_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "email_notifications". */
+export type Email_Notifications_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  template_data?: InputMaybe<Order_By>;
+  template_name?: InputMaybe<Order_By>;
+  user_email?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: email_notifications */
+export type Email_Notifications_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Email_Notifications_Prepend_Input = {
+  user_email?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "email_notifications" */
+export enum Email_Notifications_Select_Column {
+  /** column name */
+  CourseId = 'course_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  TemplateData = 'template_data',
+  /** column name */
+  TemplateName = 'template_name',
+  /** column name */
+  UserEmail = 'user_email'
+}
+
+/** input type for updating data in table "email_notifications" */
+export type Email_Notifications_Set_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  template_data?: InputMaybe<Scalars['String']>;
+  template_name?: InputMaybe<Scalars['String']>;
+  user_email?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** aggregate stddev on columns */
+export type Email_Notifications_Stddev_Fields = {
+  __typename?: 'email_notifications_stddev_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Email_Notifications_Stddev_Pop_Fields = {
+  __typename?: 'email_notifications_stddev_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Email_Notifications_Stddev_Samp_Fields = {
+  __typename?: 'email_notifications_stddev_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** Streaming cursor of the table "email_notifications" */
+export type Email_Notifications_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Email_Notifications_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Email_Notifications_Stream_Cursor_Value_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  template_data?: InputMaybe<Scalars['String']>;
+  template_name?: InputMaybe<Scalars['String']>;
+  user_email?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** aggregate sum on columns */
+export type Email_Notifications_Sum_Fields = {
+  __typename?: 'email_notifications_sum_fields';
+  course_id?: Maybe<Scalars['Int']>;
+};
+
+/** update columns of table "email_notifications" */
+export enum Email_Notifications_Update_Column {
+  /** column name */
+  CourseId = 'course_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  TemplateData = 'template_data',
+  /** column name */
+  TemplateName = 'template_name',
+  /** column name */
+  UserEmail = 'user_email'
+}
+
+export type Email_Notifications_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Email_Notifications_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Email_Notifications_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Email_Notifications_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Email_Notifications_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Email_Notifications_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Email_Notifications_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Email_Notifications_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Email_Notifications_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Email_Notifications_Var_Pop_Fields = {
+  __typename?: 'email_notifications_var_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Email_Notifications_Var_Samp_Fields = {
+  __typename?: 'email_notifications_var_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Email_Notifications_Variance_Fields = {
+  __typename?: 'email_notifications_variance_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
 /** Stores scheduled jobs ids for expiring Go1 licenses */
 export type Expire_Go1_License_Jobs = {
   __typename?: 'expire_go1_license_jobs';
@@ -34596,6 +34882,10 @@ export type Mutation_Root = {
   delete_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** delete single row from the table: "dfe_establishment" */
   delete_dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
+  /** delete data from the table: "email_notifications" */
+  delete_email_notifications?: Maybe<Email_Notifications_Mutation_Response>;
+  /** delete single row from the table: "email_notifications" */
+  delete_email_notifications_by_pk?: Maybe<Email_Notifications>;
   /** delete data from the table: "expire_go1_license_jobs" */
   delete_expire_go1_license_jobs?: Maybe<Expire_Go1_License_Jobs_Mutation_Response>;
   /** delete single row from the table: "expire_go1_license_jobs" */
@@ -35036,6 +35326,10 @@ export type Mutation_Root = {
   insert_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** insert a single row into the table: "dfe_establishment" */
   insert_dfe_establishment_one?: Maybe<Dfe_Establishment>;
+  /** insert data into the table: "email_notifications" */
+  insert_email_notifications?: Maybe<Email_Notifications_Mutation_Response>;
+  /** insert a single row into the table: "email_notifications" */
+  insert_email_notifications_one?: Maybe<Email_Notifications>;
   /** insert data into the table: "expire_go1_license_jobs" */
   insert_expire_go1_license_jobs?: Maybe<Expire_Go1_License_Jobs_Mutation_Response>;
   /** insert a single row into the table: "expire_go1_license_jobs" */
@@ -35614,6 +35908,12 @@ export type Mutation_Root = {
   update_dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
   /** update multiples rows of table: "dfe_establishment" */
   update_dfe_establishment_many?: Maybe<Array<Maybe<Dfe_Establishment_Mutation_Response>>>;
+  /** update data of the table: "email_notifications" */
+  update_email_notifications?: Maybe<Email_Notifications_Mutation_Response>;
+  /** update single row of the table: "email_notifications" */
+  update_email_notifications_by_pk?: Maybe<Email_Notifications>;
+  /** update multiples rows of table: "email_notifications" */
+  update_email_notifications_many?: Maybe<Array<Maybe<Email_Notifications_Mutation_Response>>>;
   /** update data of the table: "expire_go1_license_jobs" */
   update_expire_go1_license_jobs?: Maybe<Expire_Go1_License_Jobs_Mutation_Response>;
   /** update single row of the table: "expire_go1_license_jobs" */
@@ -36729,6 +37029,18 @@ export type Mutation_RootDelete_Dfe_EstablishmentArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Dfe_Establishment_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Email_NotificationsArgs = {
+  where: Email_Notifications_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Email_Notifications_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -38176,6 +38488,20 @@ export type Mutation_RootInsert_Dfe_EstablishmentArgs = {
 export type Mutation_RootInsert_Dfe_Establishment_OneArgs = {
   object: Dfe_Establishment_Insert_Input;
   on_conflict?: InputMaybe<Dfe_Establishment_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Email_NotificationsArgs = {
+  objects: Array<Email_Notifications_Insert_Input>;
+  on_conflict?: InputMaybe<Email_Notifications_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Email_Notifications_OneArgs = {
+  object: Email_Notifications_Insert_Input;
+  on_conflict?: InputMaybe<Email_Notifications_On_Conflict>;
 };
 
 
@@ -40288,6 +40614,38 @@ export type Mutation_RootUpdate_Dfe_Establishment_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Dfe_Establishment_ManyArgs = {
   updates: Array<Dfe_Establishment_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Email_NotificationsArgs = {
+  _append?: InputMaybe<Email_Notifications_Append_Input>;
+  _delete_at_path?: InputMaybe<Email_Notifications_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Email_Notifications_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Email_Notifications_Delete_Key_Input>;
+  _inc?: InputMaybe<Email_Notifications_Inc_Input>;
+  _prepend?: InputMaybe<Email_Notifications_Prepend_Input>;
+  _set?: InputMaybe<Email_Notifications_Set_Input>;
+  where: Email_Notifications_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Email_Notifications_By_PkArgs = {
+  _append?: InputMaybe<Email_Notifications_Append_Input>;
+  _delete_at_path?: InputMaybe<Email_Notifications_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Email_Notifications_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Email_Notifications_Delete_Key_Input>;
+  _inc?: InputMaybe<Email_Notifications_Inc_Input>;
+  _prepend?: InputMaybe<Email_Notifications_Prepend_Input>;
+  _set?: InputMaybe<Email_Notifications_Set_Input>;
+  pk_columns: Email_Notifications_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Email_Notifications_ManyArgs = {
+  updates: Array<Email_Notifications_Updates>;
 };
 
 
@@ -48548,6 +48906,12 @@ export type Query_Root = {
   dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
   /** eligibleTransferCourses */
   eligibleTransferCourses: Array<TransferCourse>;
+  /** fetch data from the table: "email_notifications" */
+  email_notifications: Array<Email_Notifications>;
+  /** fetch aggregated fields from the table: "email_notifications" */
+  email_notifications_aggregate: Email_Notifications_Aggregate;
+  /** fetch data from the table: "email_notifications" using primary key columns */
+  email_notifications_by_pk?: Maybe<Email_Notifications>;
   /** fetch data from the table: "expire_go1_license_jobs" */
   expire_go1_license_jobs: Array<Expire_Go1_License_Jobs>;
   /** fetch aggregated fields from the table: "expire_go1_license_jobs" */
@@ -50283,6 +50647,29 @@ export type Query_RootDfe_Establishment_By_PkArgs = {
 export type Query_RootEligibleTransferCoursesArgs = {
   fromCourseId: Scalars['Int'];
   participantId: Scalars['uuid'];
+};
+
+
+export type Query_RootEmail_NotificationsArgs = {
+  distinct_on?: InputMaybe<Array<Email_Notifications_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Email_Notifications_Order_By>>;
+  where?: InputMaybe<Email_Notifications_Bool_Exp>;
+};
+
+
+export type Query_RootEmail_Notifications_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Email_Notifications_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Email_Notifications_Order_By>>;
+  where?: InputMaybe<Email_Notifications_Bool_Exp>;
+};
+
+
+export type Query_RootEmail_Notifications_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -52464,6 +52851,14 @@ export type Subscription_Root = {
   dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
   /** fetch data from the table in a streaming manner: "dfe_establishment" */
   dfe_establishment_stream: Array<Dfe_Establishment>;
+  /** fetch data from the table: "email_notifications" */
+  email_notifications: Array<Email_Notifications>;
+  /** fetch aggregated fields from the table: "email_notifications" */
+  email_notifications_aggregate: Email_Notifications_Aggregate;
+  /** fetch data from the table: "email_notifications" using primary key columns */
+  email_notifications_by_pk?: Maybe<Email_Notifications>;
+  /** fetch data from the table in a streaming manner: "email_notifications" */
+  email_notifications_stream: Array<Email_Notifications>;
   /** fetch data from the table: "expire_go1_license_jobs" */
   expire_go1_license_jobs: Array<Expire_Go1_License_Jobs>;
   /** fetch aggregated fields from the table: "expire_go1_license_jobs" */
@@ -54690,6 +55085,36 @@ export type Subscription_RootDfe_Establishment_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Dfe_Establishment_Stream_Cursor_Input>>;
   where?: InputMaybe<Dfe_Establishment_Bool_Exp>;
+};
+
+
+export type Subscription_RootEmail_NotificationsArgs = {
+  distinct_on?: InputMaybe<Array<Email_Notifications_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Email_Notifications_Order_By>>;
+  where?: InputMaybe<Email_Notifications_Bool_Exp>;
+};
+
+
+export type Subscription_RootEmail_Notifications_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Email_Notifications_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Email_Notifications_Order_By>>;
+  where?: InputMaybe<Email_Notifications_Bool_Exp>;
+};
+
+
+export type Subscription_RootEmail_Notifications_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootEmail_Notifications_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Email_Notifications_Stream_Cursor_Input>>;
+  where?: InputMaybe<Email_Notifications_Bool_Exp>;
 };
 
 
@@ -59392,11 +59817,10 @@ export type GetDietaryAndDisabilitiesCountQuery = { __typename?: 'query_root', p
 
 export type ApproveCourseMutationVariables = Exact<{
   input: ApproveCourseInput;
-  object: Course_Audit_Insert_Input;
 }>;
 
 
-export type ApproveCourseMutation = { __typename?: 'mutation_root', approveCourse: { __typename?: 'ApproveCourseOutput', success: boolean }, insert_course_audit?: { __typename?: 'course_audit_mutation_response', affected_rows: number } | null };
+export type ApproveCourseMutation = { __typename?: 'mutation_root', approveCourse: { __typename?: 'ApproveCourseOutput', success: boolean } };
 
 export type CancelCourseMutationVariables = Exact<{
   courseId: Scalars['Int'];
@@ -59547,11 +59971,10 @@ export type ReInviteTrainerMutation = { __typename?: 'mutation_root', deleteCour
 
 export type RejectCourseMutationVariables = Exact<{
   input: RejectCourseInput;
-  object: Course_Audit_Insert_Input;
 }>;
 
 
-export type RejectCourseMutation = { __typename?: 'mutation_root', rejectCourse?: { __typename?: 'RejectCourseOutput', success: boolean } | null, insert_course_audit?: { __typename?: 'course_audit_mutation_response', affected_rows: number } | null };
+export type RejectCourseMutation = { __typename?: 'mutation_root', rejectCourse?: { __typename?: 'RejectCourseOutput', success: boolean } | null };
 
 export type RemoveCourseDraftMutationVariables = Exact<{
   draftId: Scalars['uuid'];

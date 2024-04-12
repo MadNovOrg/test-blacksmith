@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'urql'
 
-import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   ApproveCourseMutation,
@@ -23,6 +22,28 @@ import theme from '@app/theme'
 
 import { ExceptionsApprovalModalAction } from '..'
 
+type WarningAlertProps = {
+  action: ExceptionsApprovalModalAction
+}
+
+const WarningAlert = ({ action }: WarningAlertProps) => {
+  const { t } = useTranslation()
+
+  if (action === Course_Audit_Type_Enum.Rejected)
+    return (
+      <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
+        {t('pages.create-course.exceptions.course-rejection-warning')}
+      </Alert>
+    )
+  if (action === Course_Audit_Type_Enum.Approved)
+    return (
+      <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
+        {t('pages.create-course.exceptions.course-approve-warning')}
+      </Alert>
+    )
+  return null
+}
+
 type ExceptionsApprovalModalContentProps = {
   action: ExceptionsApprovalModalAction
   courseId: string | undefined
@@ -34,7 +55,6 @@ export const ExceptionsApprovalModalContent: FC<
   const { t } = useTranslation()
   const { addSnackbarMessage } = useSnackbar()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const { profile } = useAuth()
   const navigate = useNavigate()
   const { data: courseInfo, mutate } = useCourse(courseId ?? '')
   const [{ error: approveError }, approveCourse] = useMutation<
@@ -67,18 +87,11 @@ export const ExceptionsApprovalModalContent: FC<
     useCallback(
       async data => {
         if (!course) return
-        const auditObject = {
-          type: action,
-          course_id: course?.id,
-          payload: { reason: data.reason },
-          authorized_by: profile?.id,
-        }
 
         try {
           if (action === Course_Audit_Type_Enum.Approved) {
             await approveCourse({
-              input: { courseId: course.id },
-              object: auditObject,
+              input: { courseId: course.id, reason: data.reason },
             })
             mutate()
             navigate('/manage-courses/all', {
@@ -92,8 +105,7 @@ export const ExceptionsApprovalModalContent: FC<
             })
           } else if (action === Course_Audit_Type_Enum.Rejected) {
             await rejectCourse({
-              input: { courseId: course.id },
-              object: auditObject,
+              input: { courseId: course.id, reason: data.reason },
             })
 
             navigate('/manage-courses/all', {
@@ -120,7 +132,6 @@ export const ExceptionsApprovalModalContent: FC<
       [
         course,
         action,
-        profile?.id,
         approveCourse,
         mutate,
         navigate,
@@ -140,58 +151,48 @@ export const ExceptionsApprovalModalContent: FC<
   }, [addSnackbarMessage, approveError, rejectError, t])
 
   return (
-    <>
-      <Box data-testid="exceptions-approval-modal-content">
-        <form noValidate onSubmit={handleSubmit(submitHandler)}>
-          <TextField
-            error={!!errors.reason?.message}
-            fullWidth
-            variant="filled"
-            label={t('common.reason')}
-            required
-            helperText={errors.reason?.message ?? ''}
-            {...register('reason', {
-              required: {
-                value: true,
-                message: t('pages.create-course.exceptions.reason-required'),
-              },
-            })}
-          />
-          {action === Course_Audit_Type_Enum.Rejected ? (
-            <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
-              {t('pages.create-course.exceptions.course-rejection-warning')}
-            </Alert>
-          ) : action === Course_Audit_Type_Enum.Approved ? (
-            <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
-              {t('pages.create-course.exceptions.course-approve-warning')}
-            </Alert>
-          ) : null}
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            flexDirection={isMobile ? 'column' : 'row'}
-            sx={{ mt: 4 }}
+    <Box data-testid="exceptions-approval-modal-content">
+      <form noValidate onSubmit={handleSubmit(submitHandler)}>
+        <TextField
+          error={!!errors.reason?.message}
+          fullWidth
+          variant="filled"
+          label={t('common.reason')}
+          required
+          helperText={errors.reason?.message ?? ''}
+          {...register('reason', {
+            required: {
+              value: true,
+              message: t('pages.create-course.exceptions.reason-required'),
+            },
+          })}
+        />
+        <WarningAlert action={action} />
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          flexDirection={isMobile ? 'column' : 'row'}
+          sx={{ mt: 4 }}
+        >
+          <Button
+            variant="text"
+            fullWidth={isMobile}
+            type="button"
+            onClick={closeModal}
+            sx={{ px: 4 }}
           >
-            <Button
-              variant="text"
-              fullWidth={isMobile}
-              type="button"
-              onClick={closeModal}
-              sx={{ px: 4 }}
-            >
-              {t('common.cancel')}
-            </Button>
-            <Button
-              variant="contained"
-              fullWidth={isMobile}
-              type="submit"
-              sx={{ px: 4 }}
-            >
-              {t('common.submit')}
-            </Button>
-          </Box>
-        </form>
-      </Box>
-    </>
+            {t('common.cancel')}
+          </Button>
+          <Button
+            variant="contained"
+            fullWidth={isMobile}
+            type="submit"
+            sx={{ px: 4 }}
+          >
+            {t('common.submit')}
+          </Button>
+        </Box>
+      </form>
+    </Box>
   )
 }

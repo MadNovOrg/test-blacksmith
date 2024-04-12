@@ -93,6 +93,7 @@ module.exports = {
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 0,
+    // 'react/jsx-no-useless-fragment': 'error', // uncomment after full sonarqube integration, also sonarlint rule
   },
   settings: {
     react: {

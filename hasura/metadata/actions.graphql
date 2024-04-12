@@ -821,10 +821,12 @@ input CancelMyselfFromCourseWaitlistInput {
 
 input RejectCourseInput {
   courseId: Int!
+  reason: String!
 }
 
 input ApproveCourseInput {
   courseId: Int!
+  reason: String!
 }
 
 input BlendedLearningExportDataInput {
