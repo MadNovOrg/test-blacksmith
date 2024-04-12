@@ -68,8 +68,38 @@ describe('component: VenueForm', () => {
   )
 
   it('should make the venue country pre-selected with England and the field editable when international flag is disabled', () => {
-    useFeatureFlagEnabledMock.mockReturnValue(false)
-    const { getByLabelText } = setup()
+    useFeatureFlagEnabledMock.mockReturnValue(true)
+    const { getByLabelText } = render(
+      <VenueForm
+        data={undefined}
+        onSubmit={onSubmit}
+        onCancel={onCancel}
+        courseResidingCountry="GB-ENG"
+        isBILDcourse={false}
+      />,
+      {
+        auth: { activeRole: RoleName.TRAINER },
+      }
+    )
+
+    expect(getByLabelText(/country/i)).toHaveValue('England')
+    expect(getByLabelText(/country/i)).toBeDisabled()
+  })
+
+  it('should make the venue country pre-selected with England and the field editable for BILD course', () => {
+    useFeatureFlagEnabledMock.mockReturnValue(true)
+    const { getByLabelText } = render(
+      <VenueForm
+        data={undefined}
+        onSubmit={onSubmit}
+        onCancel={onCancel}
+        courseResidingCountry="GB-ENG"
+        isBILDcourse={true}
+      />,
+      {
+        auth: { activeRole: RoleName.TRAINER },
+      }
+    )
 
     expect(getByLabelText(/country/i)).toHaveValue('England')
     expect(getByLabelText(/country/i)).not.toBeDisabled()

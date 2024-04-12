@@ -9,7 +9,6 @@ import {
   Typography,
   Tooltip,
 } from '@mui/material'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -54,6 +53,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
       ),
     [data]
   )
+
   const { t } = useTranslation()
   const {
     getLabel: getCountryNameByCode,
@@ -61,9 +61,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
     isUKCountry,
   } = useWorldCountries()
   const { acl } = useAuth()
-  const residingCountryEnabled = !!useFeatureFlagEnabled(
-    'course-residing-country'
-  )
+
   const [{ error }, handleAddVenue] = useMutation<ResponseType, ParamsType>(
     ADD_VENUE_MUTATION
   )
@@ -192,9 +190,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
           </Grid>
           <Grid item xs={12}>
             <CountriesSelector
-              disabled={
-                preFilledFields.has('country') || residingCountryEnabled
-              }
+              disabled={preFilledFields.has('country') || !isBILDcourse}
               onChange={async (_, code) => {
                 setValue('country', code ?? '', { shouldValidate: true })
                 if (values.postCode || trySubmit) {
