@@ -52,6 +52,7 @@ export type CallbackOption =
   | SuggestionOption
   | null
 export type OrgSelectorProps = {
+  label?: string
   allowAdding?: boolean
   autocompleteMode?: boolean
   countryCode?: string
@@ -94,6 +95,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     userOrgIds,
     countryCode,
     searchOnlyByPostCode = false,
+    label,
     ...props
   }) {
     const { t } = useTranslation()
@@ -345,9 +347,10 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
               {...textFieldProps}
               {...params}
               label={
-                searchOnlyByPostCode
+                label ??
+                (searchOnlyByPostCode
                   ? t('components.org-selector.residing-org')
-                  : t('components.org-selector.title')
+                  : t('components.org-selector.title'))
               }
               InputLabelProps={{
                 shrink: true,

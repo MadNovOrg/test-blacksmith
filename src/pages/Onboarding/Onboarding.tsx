@@ -41,6 +41,9 @@ import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
 export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const isOrgEnquiryEnabled =
     useFeatureFlagEnabled('organisation-enquiry-on-registration') ?? true
+  const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
+    'search-only-by-postcode-on-registration'
+  )
 
   const { t, _t } = useScopedTranslation('pages.onboarding')
   const { profile, reloadCurrentProfile } = useAuth()
@@ -275,7 +278,17 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                 variant: 'filled',
               }}
               isShallowRetrieval
-              searchOnlyByPostCode
+              searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
+              placeholder={
+                isSearchOnlyByPostCodeEnabled
+                  ? undefined
+                  : t('components.org-selector.post-code-and-name-placeholder')
+              }
+              label={
+                isSearchOnlyByPostCodeEnabled
+                  ? undefined
+                  : t('components.org-selector.residing-org')
+              }
             />
           </Grid>
           <Grid item>

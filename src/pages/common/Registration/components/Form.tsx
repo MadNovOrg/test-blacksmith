@@ -62,6 +62,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const isOrgEnquiryEnabled =
     useFeatureFlagEnabled('organisation-enquiry-on-registration') ?? true
+  const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
+    'search-only-by-postcode-on-registration'
+  )
 
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
@@ -337,7 +340,17 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           }}
           sx={{ mb: 3 }}
           isShallowRetrieval
-          searchOnlyByPostCode
+          searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
+          placeholder={
+            isSearchOnlyByPostCodeEnabled
+              ? undefined
+              : t('components.org-selector.post-code-and-name-placeholder')
+          }
+          label={
+            isSearchOnlyByPostCodeEnabled
+              ? undefined
+              : t('components.org-selector.residing-org')
+          }
         />
 
         <Box>
