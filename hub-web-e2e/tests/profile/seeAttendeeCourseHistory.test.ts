@@ -21,7 +21,8 @@ const test = base.extend<{ courses: Course[] }>({
     await API.course.transferToCourse(
       courses[0].id,
       courses[1].id,
-      users.user1.email
+      users.user1.email,
+      'Reason'
     )
     await use(courses)
     for (const course of courses) {

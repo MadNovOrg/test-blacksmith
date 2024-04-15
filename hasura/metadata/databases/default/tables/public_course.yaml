@@ -353,6 +353,7 @@ insert_permissions:
         - course_status
         - course_type
         - created_at
+        - curriculum
         - description
         - display_on_website
         - exceptions_pending

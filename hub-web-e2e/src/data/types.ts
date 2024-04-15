@@ -25,46 +25,35 @@ export type Email = {
 }
 
 export type Course = {
-  id: number
-  name: string
-  cancellationRequest?: {
-    id: string
-    reason: string
-  }
-  course_code?: string
-  description: string
-  organization?: Organization
-  level: Course_Level_Enum
-  deliveryType: Course_Delivery_Type_Enum
-  type: Course_Type_Enum
-  status: Course_Status_Enum
-  reaccreditation: boolean
-  schedule: CourseSchedule[]
-  dates?: {
-    aggregate: {
-      start: { date: Date }
-      end: { date: Date }
-    }
-  }
-  createdAt?: Date
-  go1Integration?: boolean
-  min_participants: number
-  max_participants: number
-  freeSpaces?: number
-  bookingContactProfile?: User
-  gradingConfirmed: boolean
-  salesRepresentative?: User
-  moderator?: User
-  assistTrainer?: User
-  source?: Course_Source_Enum
-  trainers?: CourseTrainer[]
-  invoiceDetails?: InvoiceDetails
-  participants_aggregate?: {
-    aggregate?: {
-      count: number
-    }
-  }
   accreditedBy: Accreditors_Enum
+  assistTrainer?: User
+  bookingContactProfile?: User
+  cancellationRequest?: { id: string; reason: string }
+  course_code?: string
+  createdAt?: Date
+  curriculum?: unknown
+  dates?: { aggregate: { start: { date: Date }; end: { date: Date } } }
+  deliveryType: Course_Delivery_Type_Enum
+  description: string
+  freeSpaces?: number
+  go1Integration?: boolean
+  gradingConfirmed: boolean
+  id: number
+  invoiceDetails?: InvoiceDetails
+  level: Course_Level_Enum
+  max_participants: number
+  min_participants: number
+  moderator?: User
+  name: string
+  organization?: Organization
+  participants_aggregate?: { aggregate?: { count: number } }
+  reaccreditation: boolean
+  salesRepresentative?: User
+  schedule: CourseSchedule[]
+  source?: Course_Source_Enum
+  status: Course_Status_Enum
+  trainers?: CourseTrainer[]
+  type: Course_Type_Enum
 }
 
 export type CourseSchedule = {

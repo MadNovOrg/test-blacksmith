@@ -55,7 +55,7 @@ export class CourseGradingPage extends BasePage {
   }
 
   async submitFinalGrade() {
-    await this.page.click('text=Submit')
+    await this.page.click('data-testid=grading-submit-button')
   }
 
   async clickConfirm() {

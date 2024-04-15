@@ -204,26 +204,24 @@ export const ICMGradingV2: React.FC<Props> = ({ course }) => {
               </Alert>
             ) : null}
 
-            {
-              <ModulesSelectionListV2
-                curriculum={curriculum}
-                onChange={curriculum =>
-                  (modulesSelectionRef.current = curriculum)
-                }
-                slots={{
-                  afterModule: moduleId =>
-                    filteredCourseParticipants.length === 1 &&
-                    canAddModuleNotes ? (
-                      <ModuleGroupNoteInput
-                        groupId={moduleId}
-                        onChange={e => {
-                          notesRef.current.set(moduleId, e.target.value)
-                        }}
-                      />
-                    ) : null,
-                }}
-              />
-            }
+            <ModulesSelectionListV2
+              curriculum={curriculum}
+              onChange={curriculum =>
+                (modulesSelectionRef.current = curriculum)
+              }
+              slots={{
+                afterModule: moduleId =>
+                  filteredCourseParticipants.length === 1 &&
+                  canAddModuleNotes ? (
+                    <ModuleGroupNoteInput
+                      groupId={moduleId}
+                      onChange={e => {
+                        notesRef.current.set(moduleId, e.target.value)
+                      }}
+                    />
+                  ) : null,
+              }}
+            />
 
             <Typography mt={3} color={theme.palette.dimGrey.main}>
               {t('pages.course-grading.submit-description')}
@@ -233,6 +231,7 @@ export const ICMGradingV2: React.FC<Props> = ({ course }) => {
                 variant="contained"
                 onClick={openConfirmationModal}
                 disabled={!grade}
+                data-testid="grading-submit-button"
               >
                 {t('pages.course-grading.submit-button-text')}
               </LoadingButton>

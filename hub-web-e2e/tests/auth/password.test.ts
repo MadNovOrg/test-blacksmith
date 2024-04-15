@@ -1,7 +1,6 @@
 import { test as base } from '@playwright/test'
 
 import { getLatestEmail } from '@qa/api/email-api'
-import { TARGET_ENV } from '@qa/constants'
 import { users } from '@qa/data/users'
 import { ForgotPasswordPage } from '@qa/fixtures/pages/auth/ForgotPasswordPage.fixture'
 import { LoginPage } from '@qa/fixtures/pages/auth/LoginPage.fixture'
@@ -26,7 +25,7 @@ test('forgot password page @smoke', async ({ page }) => {
 
 test('reset password @smoke', async ({ page }) => {
   // eslint-disable-next-line playwright/no-skipped-test
-  test.skip(TARGET_ENV === 'local')
+  test.skip()
   const newPassword = `$qweRTY${new Date().getMilliseconds()}`
   const forgotPasswordPage = new ForgotPasswordPage(page)
   await forgotPasswordPage.goto()

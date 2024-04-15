@@ -523,7 +523,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                           : {}
                       }
                       {...register('postcode')}
-                      inputProps={{ 'data-testid': 'postcode' }}
+                      inputProps={{ 'data-testid': 'postCode' }}
                       fullWidth
                       required
                       InputProps={

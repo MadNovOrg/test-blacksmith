@@ -22,6 +22,7 @@ const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
       defaultCountry={'GB'}
       value={value}
       onChange={onChange}
+      inputProps={{ 'data-testid': 'phone' }}
       {...props}
     />
   )

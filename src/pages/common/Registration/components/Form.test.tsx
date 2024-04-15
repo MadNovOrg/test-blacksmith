@@ -254,7 +254,7 @@ describe('Form', () => {
     await userEvent.click(screen.getByLabelText('T&Cs'))
 
     await userEvent.click(screen.getByLabelText('Job Title *'))
-    await userEvent.click(screen.getByTestId('position-Other'))
+    await userEvent.click(screen.getByTestId('job-position-Other'))
     await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
 
     await waitFor(async () => {
@@ -292,7 +292,7 @@ describe('Form', () => {
     await userEvent.type(screen.getByTestId('org-selector'), 'Organization')
 
     await userEvent.click(screen.getByLabelText('Job Title *'))
-    await userEvent.click(screen.getByTestId('position-Other'))
+    await userEvent.click(screen.getByTestId('job-position-Other'))
     await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
 
     // Selects your default value of the date field
@@ -370,7 +370,7 @@ describe('Form', () => {
     await userEvent.click(screen.getByLabelText('T&Cs'))
 
     await userEvent.click(screen.getByLabelText('Job Title *'))
-    await userEvent.click(screen.getByTestId('position-Other'))
+    await userEvent.click(screen.getByTestId('job-position-Other'))
     await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
 
     await waitFor(async () => {

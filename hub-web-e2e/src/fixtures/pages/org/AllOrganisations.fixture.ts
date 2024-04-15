@@ -16,6 +16,7 @@ export class AllOrganisations extends BasePage {
   readonly blendedLicences: Locator
   readonly city: Locator
   readonly country: Locator
+  readonly email: Locator
   readonly exportHistory: Locator
   readonly invoiceNote: Locator
   readonly invoiceNumber: Locator
@@ -31,6 +32,7 @@ export class AllOrganisations extends BasePage {
   readonly saveDetails: Locator
   readonly saveOrganisation: Locator
   readonly seeAllOrgs: Locator
+  readonly sector: Locator
   readonly trustName: Locator
   readonly workEmail: Locator
   readonly individualsTab: Locator
@@ -41,6 +43,8 @@ export class AllOrganisations extends BasePage {
   readonly editUserButton: Locator
   readonly organisationMembersTable: Locator
   readonly organisationTitle: Locator
+  readonly phone: Locator
+  readonly type: Locator
 
   constructor(page: Page) {
     super(page)
@@ -50,6 +54,7 @@ export class AllOrganisations extends BasePage {
     this.blendedLicences = this.page.locator('data-testid=org-blended-licences')
     this.city = this.page.locator('[data-testid="city"]')
     this.country = this.page.locator('[data-testid="country"]')
+    this.email = this.page.locator('data-testid=org-email')
     this.exportHistory = this.page.locator('data-testid=export-history')
     this.invoiceNote = this.page.locator('text=Add a note (optional)')
     this.invoiceNumber = this.page.locator('text=Invoice number *')
@@ -64,6 +69,7 @@ export class AllOrganisations extends BasePage {
     this.organisationSummaryTable = this.page.locator(
       '[data-testid="organisation-summary-table"]'
     )
+    this.phone = this.page.locator('data-testid=org-phone')
     this.postCode = this.page.locator('[data-testid="postCode"]')
     this.removeCheckbox = this.page.locator(
       'data-testid=licence-remove-checkbox'
@@ -72,6 +78,7 @@ export class AllOrganisations extends BasePage {
     this.saveOrganisation = this.page.locator(
       '[data-testid="create-org-form-submit-btn"]'
     )
+    this.sector = this.page.locator('data-testid=sector-select')
     this.seeAllOrgs = this.page.locator('[data-testid="see-all-organisations"]')
     this.trustName = this.page.locator('[data-testid="trust-name"]')
     this.workEmail = this.page.locator('[data-testid="input-admin-email"]')
@@ -89,6 +96,7 @@ export class AllOrganisations extends BasePage {
       '[data-testid=organisation-members]'
     )
     this.organisationTitle = this.page.locator('[data-testid=org-title]')
+    this.type = this.page.locator('data-testid=org-type-selector')
   }
 
   async goto(orgId?: string) {
@@ -111,7 +119,26 @@ export class AllOrganisations extends BasePage {
     return this.inputtedOrgName
   }
 
+  async selectSector() {
+    await this.sector.click()
+    await this.page.locator('text=Education').click()
+  }
+
+  async selectType() {
+    await this.type.click()
+    await this.page.locator('text=UTC').click()
+  }
+
+  async addPhoneNumber() {
+    await this.phone.type('5555555555')
+  }
+
   chance = new Chance()
+
+  async addEmail() {
+    await this.email.type(this.chance.email())
+  }
+
   async addTrustName() {
     const trustName = this.chance.word()
     await this.trustName.type(trustName)
@@ -129,8 +156,7 @@ export class AllOrganisations extends BasePage {
     await this.country.type(country)
   }
   async addPostCode() {
-    const postCode = this.chance.postcode()
-    await this.postCode.type(postCode)
+    await this.postCode.type('E1 7BT')
   }
   async addWorkEmail() {
     const workEmail = this.chance.email()
@@ -204,7 +230,7 @@ export class AllOrganisations extends BasePage {
         E: 'Course start date',
         F: 'Note',
         G: 'Invoked by',
-        H: 'Action',
+        H: 'Amount',
         I: 'Balance',
         J: 'Reserved balance',
         K: 'Cost per licence',

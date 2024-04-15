@@ -126,17 +126,18 @@ export const insertCourse = async (
 ): Promise<number> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const courseInput: any = {
+    curriculum: course.curriculum,
     deliveryType: course.deliveryType,
     description: course.description,
     go1Integration: course.go1Integration,
+    gradingConfirmed: course.gradingConfirmed,
     level: course.level,
-    min_participants: course.min_participants,
     max_participants: course.max_participants,
+    min_participants: course.min_participants,
     name: course.name,
     reaccreditation: course.reaccreditation,
     status: course.status,
     type: course.type,
-    gradingConfirmed: course.gradingConfirmed,
   }
   if (course.organization) {
     courseInput.organization_id = await getOrganizationId(
@@ -513,7 +514,8 @@ export const cancelCourse = async (
 export const transferToCourse = async (
   fromCourseId: number,
   toCourseId: number,
-  email: string
+  email: string,
+  reason: string
 ): Promise<void> => {
   const participantId = await getCourseParticipantId(fromCourseId, email)
   const variables = {
@@ -523,6 +525,7 @@ export const transferToCourse = async (
       },
       participantId: participantId,
       toCourseId: toCourseId,
+      reason,
     },
   }
   const response: { transferParticipant: { success: string; error: string } } =

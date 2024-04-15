@@ -50,7 +50,6 @@ allowedRoles.forEach(role => {
     await courseGradingPage.expectParticipantsToBeVisible(participants)
     await courseGradingPage.clickCourseGradingMenu()
     await courseGradingPage.clickPass()
-    await courseGradingPage.fillInFeedback('Feedback')
     await courseGradingPage.submitFinalGrade()
     await courseGradingPage.clickConfirm()
     await courseGradingPage.expectParticipantsToHaveGrade(participants, 'Pass')
@@ -76,7 +75,6 @@ allowedRoles.forEach(role => {
     await courseGradingPage.expectParticipantsToBeVisible([participants[0]])
     await courseGradingPage.clickCourseGradingMenu()
     await courseGradingPage.clickPass()
-    await courseGradingPage.fillInFeedback('Feedback')
     await courseGradingPage.submitFinalGrade()
     await courseGradingPage.clickConfirm()
     await courseGradingPage.expectParticipantsToHaveGrade(

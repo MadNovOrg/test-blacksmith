@@ -10,6 +10,8 @@ export class ProfilePage extends BasePage {
   readonly saveChanges: Locator
   readonly certificateButton: Locator
   readonly phoneNumberField: Locator
+
+  readonly jobTitleSelector: Locator
   readonly viewPhoneNumber: Locator
 
   constructor(page: Page) {
@@ -20,6 +22,7 @@ export class ProfilePage extends BasePage {
       `[data-testid*=certificate] button`
     )
     this.phoneNumberField = this.page.locator('[data-testid="phone"]')
+    this.jobTitleSelector = this.page.locator('data-testid=job-title-selector')
     this.viewPhoneNumber = this.page.locator('[data-testid="profile-phone"]')
   }
 
@@ -35,9 +38,22 @@ export class ProfilePage extends BasePage {
     await this.editProfile.click()
   }
 
+  async selectJobTitle(jobTitle: string) {
+    await this.jobTitleSelector.click()
+    await this.page.locator(`data-testid=job-position-${jobTitle}`).click()
+  }
+
   async enterPhoneNumber(phoneNumber: string) {
-    await this.phoneNumberField.clear()
+    const currentPhoneNumberValue = await this.phoneNumberField.inputValue()
+
+    await this.phoneNumberField.click()
+
+    for (let i = 0; i <= currentPhoneNumberValue.length; i++) {
+      await this.page.keyboard.press('Backspace')
+    }
+
     await this.phoneNumberField.type(phoneNumber)
+
     await expect(this.phoneNumberField).toHaveValue(phoneNumber)
   }
 
@@ -48,6 +64,12 @@ export class ProfilePage extends BasePage {
     ])
     await expect(this.editProfile).toBeVisible()
     await this.page.reload()
+  }
+
+  async checkJobTitle(jobTitle: string) {
+    await expect(this.page.locator('data-testid=profile-job-title')).toHaveText(
+      jobTitle
+    )
   }
 
   async checkPhoneNumber(phoneNumber: string) {

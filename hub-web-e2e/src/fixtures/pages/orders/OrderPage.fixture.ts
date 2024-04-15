@@ -104,15 +104,17 @@ export class OrderPage extends BasePage {
     data?.forEach((order, index) => {
       const cellIndex = index + 2
 
-      expect(sheet[`A${cellIndex}`].v).toBe(order?.xeroInvoiceNumber)
-      expect(sheet[`C${cellIndex}`].v).toContain(order?.organization?.name)
-      expect(sheet[`C${cellIndex}`].v).toContain(
+      expect(sheet[`A${cellIndex}`]?.v ?? null).toBe(order?.xeroInvoiceNumber)
+      expect(sheet[`C${cellIndex}`]?.v ?? null).toContain(
+        order?.organization?.name
+      )
+      expect(sheet[`C${cellIndex}`]?.v ?? null).toContain(
         order?.organization?.address?.line1
       )
-      expect(sheet[`C${cellIndex}`].v).toContain(
+      expect(sheet[`C${cellIndex}`]?.v ?? null).toContain(
         order?.organization?.address?.city
       )
-      expect(sheet[`C${cellIndex}`].v).toContain(
+      expect(sheet[`C${cellIndex}`]?.v ?? null).toContain(
         order?.organization?.address?.postCode
       )
 
@@ -120,11 +122,13 @@ export class OrderPage extends BasePage {
         ? PAYMENT_METHODS[order.paymentMethod]
         : 'error'
 
-      expect(sheet[`D${cellIndex}`].v).toMatch(new RegExp(paymentMethod))
-      expect(sheet[`E${cellIndex}`].v).toBe(Number(order?.orderTotal))
+      expect(sheet[`D${cellIndex}`]?.v ?? null).toMatch(
+        new RegExp(paymentMethod)
+      )
+      expect(sheet[`E${cellIndex}`]?.v ?? 0).toBe(Number(order?.orderTotal))
 
       if (order?.orderDue) {
-        expect(sheet[`F${cellIndex}`].v).toBe(order?.orderDue ?? '')
+        expect(sheet[`F${cellIndex}`]?.v ?? null).toBe(order?.orderDue ?? '')
       }
     })
   }

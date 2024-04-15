@@ -151,7 +151,7 @@ describe('page: Onboarding', () => {
     await userEvent.click(
       screen.getByLabelText(t('job-title'), { exact: false })
     )
-    await userEvent.click(screen.getByTestId('position-Other'))
+    await userEvent.click(screen.getByTestId('job-position-Other'))
     await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
 
     await userEvent.click(screen.getByLabelText(/I accept/i))
@@ -261,7 +261,7 @@ describe('page: Onboarding', () => {
     await userEvent.click(
       screen.getByLabelText(t('job-title'), { exact: false })
     )
-    await userEvent.click(screen.getByTestId(/position-Other/i))
+    await userEvent.click(screen.getByTestId(/job-position-Other/i))
     await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
 
     await userEvent.click(screen.getByLabelText(/I accept/i))

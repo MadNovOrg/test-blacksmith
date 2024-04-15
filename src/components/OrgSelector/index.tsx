@@ -346,6 +346,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             <TextField
               {...textFieldProps}
               {...params}
+              data-testid="org-name"
               label={
                 label ??
                 (searchOnlyByPostCode

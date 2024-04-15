@@ -42,13 +42,18 @@ export const JobTitleSelector: FC<
         select
         value={values.jobTitle}
         variant="filled"
+        data-testid={'job-title-selector'}
         {...register.jobTitle}
       >
         <MenuItem value="" disabled>
           {t('job-title')}
         </MenuItem>
         {jobTitles.map((option, i) => (
-          <MenuItem key={i} value={option} data-testid={`position-${option}`}>
+          <MenuItem
+            key={i}
+            value={option}
+            data-testid={`job-position-${option}`}
+          >
             {option}
           </MenuItem>
         ))}

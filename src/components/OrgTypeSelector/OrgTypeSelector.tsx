@@ -43,6 +43,7 @@ export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
       value={value}
       defaultValue={value}
       {...register}
+      data-testid="org-type-selector"
     >
       {data?.organization_type.length ? (
         data?.organization_type.map(m => (
