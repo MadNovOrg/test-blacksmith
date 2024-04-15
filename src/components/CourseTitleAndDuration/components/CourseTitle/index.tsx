@@ -11,6 +11,7 @@ export type CourseSubset = Pick<
 > & {
   level?: Course_Level_Enum | CourseLevel | null
   residingCountry?: string | null
+  timeZone?: string | null
 }
 
 type CourseTitleProps = {

@@ -201,6 +201,7 @@ export const VariantComplete = ({
                 end: course.dates.aggregate.end.date,
                 level: course.level,
                 reaccreditation: course.reaccreditation,
+                timeZone: course.schedule[0]?.timeZone,
               }}
             />
           )}

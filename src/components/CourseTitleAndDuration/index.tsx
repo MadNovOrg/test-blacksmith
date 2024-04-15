@@ -27,6 +27,7 @@ export const CourseTitleAndDuration: React.FC<
           start={new Date(course?.start)}
           end={new Date(course?.end)}
           courseResidingCountry={course?.residingCountry}
+          timeZone={course.timeZone ?? 'Europe/London'}
         />
       ) : null}
     </Box>
