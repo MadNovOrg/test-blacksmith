@@ -33,7 +33,7 @@ This application is built using:
 
 ## Architecture
 
-A draft variant of the current architecture can be found [here](https://github.com/TeamTeach/hub/wiki/Architecture).
+Current architecture can be found [here](https://github.com/TeamTeach/hub/wiki/Architecture).
 
 ## Managing database schema
 
@@ -83,8 +83,8 @@ pnpm hasura:metadata:reload
     - NPM dependencies installed
     - Deployment step runs & S3 content is being updated
 - Deployment to `STG` is being triggered using GitHub Actions by providing a new tag with the following format (SemVer): `vX.X.X`
-- Once testing to `STG` is finished a new Release needs to be created using GitHub UI with the appropriate tag
-- When the release is created a pipeline is automatically triggered in order to deploy the chosen tag to `PROD` 
+- Once testing to `STG` a release PR to `main` is created using the `RELEASE-PROD` github action.
+- When the PR is created and merged a pipeline is automatically triggered. It creates a new Github release and Tag and it then deploys the created tag to `PROD` 
 
 ### DEV
 - Deployment is being triggered automatically on PR merge
@@ -94,23 +94,21 @@ pnpm hasura:metadata:reload
 - It is being triggered by the Github Action `CD-STG`
 - Expects:
     - The branch to perform the run from. Default is `main`
-    - Major, minor and patch numbers (SemVer) to build the right version 
 - Performs the following steps:
     - Validates user input
     - Updates package version according to user input
         - Automatically commits new package version & pushes to `main`
-    - Creates a new repo tag according to user input
-    - Triggers CD pipeline for `STG` environment by checking out the code to the tag created above
+    - Triggers CD pipeline for `STG` environment by checking out the code
         - Installs dependencies 
         - Builds the code using APP version according to user input
         - Deploys the code to S3
         - Runs Hasura migrations
 
 ### PROD
-- It is only being triggered automatically by creating a new `Release` using Github UI
+- It uses `changesets` and it will only be triggered by the `RELEASE-PROD` github action.
 - Performs the following steps:
-    - Gets the appropriate version from the tag that was used
-    - Triggers CD pipeline for `PROD` environment by checking out the code to the chosen tag on Release creation
+    - Creates a new PR in which it checks all the `changesets` related files and bumps the package.json version
+    - After the PR is approved and merged it triggers CD pipeline for `PROD` environment.
         - Installs dependencies 
         - Builds the code using APP version from retrieved version
         - Deploys the code to S3
@@ -118,11 +116,7 @@ pnpm hasura:metadata:reload
 
 ## Rollbacks
 
-### All Envs
-- It is only being triggered by the Github Action `APP-ROLLBACK`
-- Expects:
-    - The branch to perform the run from. Default is `main` 
-    - The environment to perform the rollback action to
+- An additional pipeline needs to be created.
 
 ## E2E tests
 
