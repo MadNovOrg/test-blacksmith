@@ -177,7 +177,7 @@ export const CourseDetails = () => {
 
   // Maybe use urql's retryExchange instead of this
   const [startPolling, polling] = usePollQuery(
-    () => Promise.resolve(mutate()),
+    () => Promise.resolve(mutate({ requestPolicy: 'network-only' })),
     () => !!course?.status
   )
 
