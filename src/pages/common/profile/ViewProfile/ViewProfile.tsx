@@ -392,9 +392,10 @@ export const ViewProfilePage: React.FC<
                         data-testid="profile-dietary-restrictions"
                         label={t('dietary-restrictions')}
                         value={
-                          profile.dietaryRestrictions === '' ||
                           cannotViewDietaryAndDisabilities
                             ? '--'
+                            : profile.dietaryRestrictions === ''
+                            ? 'No'
                             : profile.dietaryRestrictions
                         }
                       />
@@ -402,9 +403,10 @@ export const ViewProfilePage: React.FC<
                         data-testid="profile-disabilities"
                         label={t('disabilities')}
                         value={
-                          profile.disabilities === '' ||
                           cannotViewDietaryAndDisabilities
                             ? '--'
+                            : profile.disabilities === ''
+                            ? 'No'
                             : profile.disabilities
                         }
                       />
