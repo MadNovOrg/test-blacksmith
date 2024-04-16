@@ -169,8 +169,9 @@ export function useSaveCourse(): {
   )
 
   const allowCreateCourse = useMemo(
-    () => courseWithManualPrice || Boolean(courseData?.price),
-    [courseWithManualPrice, courseData?.price]
+    () =>
+      isIndirectCourse || courseWithManualPrice || Boolean(courseData?.price),
+    [isIndirectCourse, courseWithManualPrice, courseData?.price]
   )
 
   const calculateVATrate = useMemo(() => {

@@ -27,6 +27,7 @@ import VenueForm, {
   VenueFormProps,
 } from '@app/components/VenueSelector/VenueForm'
 import {
+  Course_Type_Enum,
   FindVenuesQuery,
   FindVenuesQueryVariables,
 } from '@app/generated/graphql'
@@ -53,6 +54,7 @@ export type VenueSelectorProps = {
   textFieldProps?: TextFieldProps
   courseResidingCountry?: WorldCountriesCodes | string
   isBILDcourse: boolean
+  courseType: Course_Type_Enum
 }
 function getOptionLabel(value: AutocompletePrediction | Venue | string) {
   if (typeof value === 'string') {
@@ -111,6 +113,7 @@ export const VenueSelector: React.FC<
   textFieldProps,
   courseResidingCountry,
   isBILDcourse,
+  courseType,
   ...props
 }) {
   const { t } = useTranslation()
@@ -358,6 +361,7 @@ export const VenueSelector: React.FC<
           }}
           courseResidingCountry={courseResidingCountry}
           isBILDcourse={isBILDcourse}
+          courseType={courseType}
           onCancel={onDialogClose}
         />
       </Dialog>

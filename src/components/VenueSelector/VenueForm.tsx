@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
 
 import { useAuth } from '@app/context/auth'
+import { Course_Type_Enum } from '@app/generated/graphql'
 import {
   ADD_VENUE_MUTATION,
   ParamsType,
@@ -35,6 +36,7 @@ export type VenueFormProps = {
   onCancel: () => void
   courseResidingCountry?: WorldCountriesCodes | string
   isBILDcourse: boolean
+  courseType: Course_Type_Enum
 }
 
 const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
@@ -43,7 +45,9 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
   onCancel,
   courseResidingCountry,
   isBILDcourse,
+  courseType,
 }) {
+  const isINDIRECTcourse = courseType === Course_Type_Enum.Indirect
   const preFilledFields = useMemo(
     () =>
       new Set(
@@ -53,6 +57,13 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
       ),
     [data]
   )
+
+  const disableCountryField = useMemo(() => {
+    if (isINDIRECTcourse || isBILDcourse) {
+      return false
+    }
+    return preFilledFields.has('country')
+  }, [isBILDcourse, isINDIRECTcourse, preFilledFields])
 
   const { t } = useTranslation()
   const {
@@ -98,6 +109,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
         }),
     })
   }, [t, acl, countriesCodesWithUKs, courseResidingCountry, isUKCountry])
+
   const {
     control,
     handleSubmit,
@@ -149,6 +161,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
     },
     [getCountryNameByCode, handleAddVenue, onSubmit, trigger]
   )
+
   return (
     <Box p={2}>
       <form
@@ -190,7 +203,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
           </Grid>
           <Grid item xs={12}>
             <CountriesSelector
-              disabled={preFilledFields.has('country') || !isBILDcourse}
+              disabled={disableCountryField}
               onChange={async (_, code) => {
                 setValue('country', code ?? '', { shouldValidate: true })
                 if (values.postCode || trySubmit) {
@@ -202,6 +215,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
               helperText={errors.country?.message}
               courseResidingCountry={courseResidingCountry}
               isBILDcourse={isBILDcourse}
+              courseType={courseType}
               required={true}
             />
           </Grid>

@@ -1801,6 +1801,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     error={Boolean(errors.residingCountry?.message)}
                     helperText={errors.residingCountry?.message}
                     isBILDcourse={isBild}
+                    courseType={values.type as Course_Type_Enum}
                   />
                 </FormControl>
               ) : null}
@@ -1873,10 +1874,9 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               {hasVenue ? (
                 <VenueSelector
                   isBILDcourse={isBild}
+                  courseType={values.type as Course_Type_Enum}
                   courseResidingCountry={
-                    courseInput?.type !== Course_Type_Enum.Indirect
-                      ? values.residingCountry
-                      : ''
+                    !isIndirectCourse ? values.residingCountry : 'GB-ENG'
                   } // there's no residing country yet on the Indirect courses
                   {...register('venue')}
                   onChange={venue => {

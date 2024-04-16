@@ -8,12 +8,14 @@ import { useTranslation } from 'react-i18next'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { Course_Type_Enum } from '@app/generated/graphql'
 
 export type CountriesSelectorProps = {
   onChange: (event: SyntheticEvent, selected: string | null) => void
   value: string | undefined | null
   courseResidingCountry?: string
   isBILDcourse?: boolean
+  courseType?: Course_Type_Enum
 } & BaseTextFieldProps
 
 const CountriesSelector = ({
@@ -26,6 +28,7 @@ const CountriesSelector = ({
   disabled,
   courseResidingCountry,
   isBILDcourse,
+  courseType,
 }: CountriesSelectorProps) => {
   const {
     countriesCodesWithUKs: countries,
@@ -33,10 +36,14 @@ const CountriesSelector = ({
     isUKCountry,
   } = useWorldCountries()
   const { t } = useTranslation()
+  const isINDIRECTcourse = courseType === Course_Type_Enum.Indirect
 
   let countriesList = countries
 
-  if (isUKCountry(courseResidingCountry) && isBILDcourse) {
+  if (
+    isUKCountry(courseResidingCountry) &&
+    (isBILDcourse || isINDIRECTcourse)
+  ) {
     countriesList = countries.filter(country => country.includes('GB'))
   }
 
