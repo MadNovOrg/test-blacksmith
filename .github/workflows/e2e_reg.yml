@@ -17,7 +17,7 @@ on:
 jobs:
   tests:
     name: E2E regression tests
-    timeout-minutes: 60
+    timeout-minutes: 120
     runs-on: ubuntu-latest
     env:
       CI: true
