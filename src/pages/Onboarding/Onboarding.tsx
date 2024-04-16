@@ -282,12 +282,12 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               placeholder={
                 isSearchOnlyByPostCodeEnabled
                   ? undefined
-                  : t('components.org-selector.post-code-and-name-placeholder')
+                  : _t('components.org-selector.post-code-and-name-placeholder')
               }
               label={
                 isSearchOnlyByPostCodeEnabled
                   ? undefined
-                  : t('components.org-selector.residing-org')
+                  : _t('components.org-selector.residing-org')
               }
             />
           </Grid>
