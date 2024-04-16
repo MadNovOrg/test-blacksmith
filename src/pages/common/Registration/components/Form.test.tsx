@@ -323,9 +323,7 @@ describe('Form', () => {
 
     await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/2022')
 
-    await waitFor(async () => {
-      await userEvent.click(screen.getByTestId('signup-form-btn'))
-    })
+    await userEvent.click(screen.getByTestId('signup-form-btn'))
 
     await waitFor(() => {
       const datePicker = screen.getByLabelText(/date of birth/i)

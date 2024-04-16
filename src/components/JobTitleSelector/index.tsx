@@ -40,7 +40,7 @@ export const JobTitleSelector: FC<
         label={t('job-title')}
         required
         select
-        value={values.jobTitle}
+        value={values.jobTitle ?? ''}
         variant="filled"
         data-testid={'job-title-selector'}
         {...register.jobTitle}

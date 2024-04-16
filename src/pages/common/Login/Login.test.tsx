@@ -67,7 +67,6 @@ describe('Login', () => {
     await waitForCalls(providers.auth.login, 1)
   })
 
-  // eslint-disable-next-line vitest/expect-expect
   it('shows error if password is incorrect', async () => {
     providers.auth.login.mockResolvedValue({
       error: { code: 'NotAuthorizedException' },

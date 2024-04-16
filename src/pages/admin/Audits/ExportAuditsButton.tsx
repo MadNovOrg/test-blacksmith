@@ -26,6 +26,8 @@ export const ExportAuditsButton: React.FC<React.PropsWithChildren<Props>> = ({
       xlsxUtils.book_append_sheet(wb, ws, 'Events')
       const buffer = write(wb, { type: 'buffer', bookType: 'xlsx' })
       saveAs(new Blob([buffer]), `${prefix}-${new Date().toISOString()}.xlsx`)
+    } catch {
+      return
     } finally {
       setIsLoading(false)
     }
