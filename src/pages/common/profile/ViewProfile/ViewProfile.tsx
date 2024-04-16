@@ -94,18 +94,24 @@ export const ViewProfilePage: React.FC<
     )
   }, [allTrainerRoles, profile?.roles, profile?.trainer_role_types])
 
-  const profileIsTrainerOnRecentlyVisitedCourse = () => {
+  const profileIsTrainerOnRecentlyVisitedCourse = (): boolean => {
+    if (!profile?.courseAsTrainer) {
+      return false
+    }
+    if (!profileHasTrainerRole) {
+      return false
+    }
     const coursesAsTrainer = profile?.courseAsTrainer
     const isTrainerOnVisitedCourse = coursesAsTrainer?.some(
       course => Number(course.course_id) === Number(recentlyVisitedCourseId)
     )
 
-    return profileHasTrainerRole && isTrainerOnVisitedCourse
+    return isTrainerOnVisitedCourse
   }
 
-  const cannotViewDietaryAndDisabilities =
-    !isMyProfile &&
-    (acl.isOrgAdmin() || acl.isOrgKeyContact() || acl.isBookingContact()) &&
+  const canViewDietaryAndDisabilities =
+    isMyProfile ||
+    acl.isInternalUser() ||
     profileIsTrainerOnRecentlyVisitedCourse()
 
   if (status === LoadingStatus.FETCHING) {
@@ -392,7 +398,7 @@ export const ViewProfilePage: React.FC<
                         data-testid="profile-dietary-restrictions"
                         label={t('dietary-restrictions')}
                         value={
-                          cannotViewDietaryAndDisabilities
+                          !canViewDietaryAndDisabilities
                             ? '--'
                             : profile.dietaryRestrictions === ''
                             ? 'No'
@@ -403,7 +409,7 @@ export const ViewProfilePage: React.FC<
                         data-testid="profile-disabilities"
                         label={t('disabilities')}
                         value={
-                          cannotViewDietaryAndDisabilities
+                          !canViewDietaryAndDisabilities
                             ? '--'
                             : profile.disabilities === ''
                             ? 'No'
