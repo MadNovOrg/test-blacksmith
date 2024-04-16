@@ -112,7 +112,7 @@ export const ViewProfilePage: React.FC<
   const canViewDietaryAndDisabilities =
     isMyProfile ||
     acl.isInternalUser() ||
-    profileIsTrainerOnRecentlyVisitedCourse()
+    !profileIsTrainerOnRecentlyVisitedCourse()
 
   if (status === LoadingStatus.FETCHING) {
     return <CircularProgress />
