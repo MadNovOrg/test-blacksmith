@@ -294,7 +294,7 @@ export const OrgUsersTable: React.FC<
             orgMember={editedUser}
             onClose={() => setShowEditUserModal(false)}
             onChange={async () => {
-              refetch()
+              refetch({ requestPolicy: 'network-only' })
               if (onChange) onChange()
             }}
             orgId={orgId}

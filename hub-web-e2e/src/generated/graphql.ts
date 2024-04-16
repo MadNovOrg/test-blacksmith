@@ -56,6 +56,7 @@ export type Address = {
 
 export type ApproveCourseInput = {
   courseId: Scalars['Int'];
+  reason: Scalars['String'];
 };
 
 export type ApproveCourseOutput = {
@@ -4210,6 +4211,8 @@ export enum MimeTypeEnum {
   AudioXMsWma = 'AUDIO_X_MS_WMA',
   /** MimeType audio/x-realaudio */
   AudioXRealaudio = 'AUDIO_X_REALAUDIO',
+  /** MimeType image/avif */
+  ImageAvif = 'IMAGE_AVIF',
   /** MimeType image/bmp */
   ImageBmp = 'IMAGE_BMP',
   /** MimeType image/gif */
@@ -6139,6 +6142,7 @@ export type RegisterUserPayload = {
 
 export type RejectCourseInput = {
   courseId: Scalars['Int'];
+  reason: Scalars['String'];
 };
 
 export type RejectCourseOutput = {
@@ -46609,6 +46613,8 @@ export type Profile_Bool_Exp = {
 
 /** unique or primary key constraints on table "profile" */
 export enum Profile_Constraint {
+  /** unique or primary key constraint on columns "_email" */
+  ProfileEmailKey = 'profile__email_key',
   /** unique or primary key constraint on columns "id" */
   ProfilePkey = 'profile_pkey',
   /** unique or primary key constraint on columns "stripe_customer_id" */

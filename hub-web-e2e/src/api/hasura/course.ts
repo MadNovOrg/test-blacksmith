@@ -267,6 +267,9 @@ export const deleteCourse = async (id?: number) => {
   }
   const query = gql`
     mutation MyMutation($course_id: Int!) {
+      delete_course_audit(where: { course_id: { _eq: $course_id } }) {
+        affected_rows
+      }
       delete_course(where: { id: { _eq: $course_id } }) {
         affected_rows
       }

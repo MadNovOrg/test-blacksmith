@@ -49,7 +49,7 @@ export const EditOrgUserModal: React.FC<
   >(UPDATE_ORG_MEMBER)
 
   const onRemove = useCallback(async () => {
-    removeOrgMember({
+    await removeOrgMember({
       id: orgMember.id,
     })
     if (onChange) onChange()
@@ -58,7 +58,7 @@ export const EditOrgUserModal: React.FC<
   }, [onChange, onClose, orgMember.id, removeOrgMember, removeOrgMemberError])
 
   const onSave = useCallback(async () => {
-    updateOrgMember({
+    await updateOrgMember({
       id: orgMember.id,
       member: { isAdmin: !!isAdmin },
     })

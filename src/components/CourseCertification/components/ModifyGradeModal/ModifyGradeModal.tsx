@@ -46,7 +46,7 @@ const ModifyGradeModal: React.FC<
   >({
     query: GET_CERTIFICATE_QUERY,
     variables: { id: certificateId },
-    requestPolicy: 'cache-and-network',
+    requestPolicy: 'network-only',
     pause: true,
   })
 
@@ -63,7 +63,7 @@ const ModifyGradeModal: React.FC<
         setShowNoteError(!note)
         if (profile && note) {
           try {
-            updateGrade({
+            await updateGrade({
               participantId: participant.id,
               payload: {
                 oldGrade: participant.grade,
@@ -73,7 +73,7 @@ const ModifyGradeModal: React.FC<
               newGrade: grade as Grade_Enum,
               type: Course_Certificate_Changelog_Type_Enum.GradeModified,
             })
-            getCertificate()
+            getCertificate({ requestPolicy: 'network-only' })
           } catch (e: unknown) {
             setError((e as Error).message)
           }
