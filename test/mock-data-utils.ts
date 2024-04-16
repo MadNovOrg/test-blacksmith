@@ -10,6 +10,7 @@ import {
   CertificateStatus,
   Course_Delivery_Type_Enum,
   Course_Invite_Status_Enum,
+  CourseLevel as Course_Level,
   Course_Level_Enum,
   Course_Status_Enum,
   Course_Trainer_Type_Enum,
@@ -136,7 +137,14 @@ export const buildRole = build<Role>({
   },
 })
 
-export const buildProfile = build<Profile>({
+export const buildProfile = build<
+  Profile & {
+    levels: {
+      courseLevel: Course_Level
+      expiryDate: string
+    }[]
+  }
+>({
   fields: {
     id: perBuild(() => chance.guid()),
     createdAt: new Date().toISOString(),
@@ -160,6 +168,7 @@ export const buildProfile = build<Profile>({
         role: buildRole(),
       },
     ],
+    levels: [],
     trainer_role_types: [],
     organizations: [{ organization: buildOrganization(), isAdmin: false }],
     dietaryRestrictions: null,
@@ -241,7 +250,6 @@ export const buildCourseTrainer = build<CourseTrainer>({
     type: Course_Trainer_Type_Enum.Leader,
     status: InviteStatus.ACCEPTED,
     profile: perBuild(() => buildProfile()),
-    levels: [],
   },
 })
 

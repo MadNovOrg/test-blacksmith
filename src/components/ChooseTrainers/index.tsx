@@ -72,7 +72,7 @@ const courseTrainerToFormValues = (
       trainer_role_types: t.profile.trainer_role_types ?? [],
       avatar: t.profile.avatar,
       type: t.type,
-      levels: t.levels,
+      levels: t.profile.levels,
     }
   })
 

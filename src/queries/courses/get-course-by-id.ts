@@ -72,7 +72,7 @@ export const QUERY = gql`
           fullName
           avatar
           archived
-          certificates {
+          levels: certificates {
             courseLevel
             expiryDate
           }

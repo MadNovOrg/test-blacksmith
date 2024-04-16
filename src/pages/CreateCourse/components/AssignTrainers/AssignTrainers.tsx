@@ -108,6 +108,7 @@ const trainerInputToCourseTrainer = (
       trainer_role_types: [],
       lastActivity: now,
       createdAt: now.toISOString(),
+      levels: [],
     },
     type: t.type,
     status: InviteStatus.PENDING,

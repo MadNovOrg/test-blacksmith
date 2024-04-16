@@ -315,11 +315,12 @@ export type CourseTrainer = {
   id: string
   type: Course_Trainer_Type_Enum | GeneratedCourseTrainerType
   status: InviteStatus
-  profile: Profile
-  levels: {
-    courseLevel: Course_Level
-    expiryDate: string
-  }[]
+  profile: Profile & {
+    levels: {
+      courseLevel: Course_Level
+      expiryDate: string
+    }[]
+  }
 }
 
 export enum CourseTrainerType {

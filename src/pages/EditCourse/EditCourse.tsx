@@ -692,11 +692,23 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           isETA: isETA,
           isEmployerAOL: isEmployerAOL,
         },
-        trainersData.assist.map(assistant => ({
-          type: Course_Trainer_Type_Enum.Assistant,
-          trainer_role_types: assistant.trainer_role_types,
-          levels: assistant.levels,
-        }))
+        [
+          ...trainersData.lead.map(leader => ({
+            type: Course_Trainer_Type_Enum.Leader,
+            trainer_role_types: leader.trainer_role_types,
+            levels: leader.levels,
+          })),
+          ...trainersData.assist.map(assistant => ({
+            type: Course_Trainer_Type_Enum.Assistant,
+            trainer_role_types: assistant.trainer_role_types,
+            levels: assistant.levels,
+          })),
+          ...trainersData.moderator.map(mod => ({
+            type: Course_Trainer_Type_Enum.Moderator,
+            trainer_role_types: mod.trainer_role_types,
+            levels: mod.levels,
+          })),
+        ]
       )
       if (
         canRescheduleCourseEndDate ||
@@ -1030,7 +1042,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             priceCurrency={course.priceCurrency}
           />
 
-          {!showTrainerRatioWarning ? (
+          {showTrainerRatioWarning ? (
             <CourseExceptionsConfirmation
               open={courseExceptions.length > 0}
               onCancel={() => setCourseExceptions([])}
