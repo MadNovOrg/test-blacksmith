@@ -480,6 +480,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               'maxParticipants',
               'courseLevel',
               'residingCountry',
+              'type',
             ],
             {
               is: (
@@ -487,7 +488,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 blendedLearning: boolean,
                 maxParticipants: number,
                 courseLevel: Course_Level_Enum,
-                residingCountry: WorldCountriesCodes
+                residingCountry: WorldCountriesCodes,
+                courseType: Course_Type_Enum
               ) =>
                 courseNeedsManualPrice({
                   accreditedBy,

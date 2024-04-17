@@ -630,6 +630,7 @@ export function courseNeedsManualPrice({
 }) {
   const isBILDcourse = accreditedBy === Accreditors_Enum.Bild
   const isICMcourse = accreditedBy === Accreditors_Enum.Icm
+  const isIndirectCourse = courseType === Course_Type_Enum.Indirect
   const isClosedCourse = courseType === Course_Type_Enum.Closed
   const isLEVEL2 = courseLevel === Course_Level_Enum.Level_2
   const isUKcountry = Object.keys(UKsCountriesCodes).includes(residingCountry)
@@ -642,7 +643,7 @@ export function courseNeedsManualPrice({
     isUKcountry &&
     maxParticipants <= 8
 
-  if (specialUKcountryCondition || isBILDcourse) {
+  if (specialUKcountryCondition || (isBILDcourse && !isIndirectCourse)) {
     return true
   }
 
@@ -652,6 +653,7 @@ export function courseNeedsManualPrice({
     }
     return true
   }
+
   return false
 }
 
