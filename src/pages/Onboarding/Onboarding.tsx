@@ -39,8 +39,14 @@ import { schemas, yup } from '@app/schemas'
 import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
 
 export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
-  const isOrgEnquiryEnabled =
-    useFeatureFlagEnabled('organisation-enquiry-on-registration') ?? true
+  const isOrgEnquiryEnabled = useFeatureFlagEnabled(
+    'organisation-enquiry-on-registration'
+  )
+
+  const allowOrgAdd = useMemo(() => {
+    return isOrgEnquiryEnabled === false
+  }, [isOrgEnquiryEnabled])
+
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
     'search-only-by-postcode-on-registration'
   )
@@ -263,7 +269,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Grid>
           <Grid item>
             <OrgSelector
-              allowAdding={!isOrgEnquiryEnabled}
+              allowAdding={allowOrgAdd}
               required
               {...register('organization')}
               autocompleteMode={false}

@@ -57,11 +57,16 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   token,
   onSuccess,
 }) => {
-  const isOrgEnquiryEnabled =
-    useFeatureFlagEnabled('organisation-enquiry-on-registration') ?? true
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
     'search-only-by-postcode-on-registration'
   )
+  const isOrgEnquiryEnabled = useFeatureFlagEnabled(
+    'organisation-enquiry-on-registration'
+  )
+
+  const allowOrgAdd = useMemo(() => {
+    return isOrgEnquiryEnabled === false
+  }, [isOrgEnquiryEnabled])
 
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
@@ -294,7 +299,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         <Grid item>
           <OrgSelector
             {...register('organization')}
-            allowAdding={!isOrgEnquiryEnabled}
+            allowAdding={allowOrgAdd}
             showTrainerOrgOnly={false}
             error={errors.organization?.message}
             value={values.organization ?? undefined}
