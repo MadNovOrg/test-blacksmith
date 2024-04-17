@@ -72,6 +72,7 @@ export type OrgSelectorProps = {
   textFieldProps?: TextFieldProps
   userOrgIds?: string[]
   value?: Pick<Organization, 'name' | 'id'> | null
+  canSearchByAddress?: boolean
 }
 const getOptionLabel = (option: Option) => option.name ?? ''
 export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
@@ -95,6 +96,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     userOrgIds,
     countryCode,
     searchOnlyByPostCode = false,
+    canSearchByAddress = true,
     label,
     ...props
   }) {
@@ -141,29 +143,29 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     })
 
     const where = useMemo<Organization_Bool_Exp>(() => {
-      return {
-        _or: [
-          ...(searchOnlyByPostCode
-            ? []
-            : [
-                {
-                  name: { _ilike: `%${debouncedQuery}%` },
-                },
-                {
-                  _and: debouncedQuery
-                    .trim()
-                    .split(/\s+/)
-                    .map(word => ({
-                      addressEachText: { _ilike: `%${word}%` },
-                    })),
-                },
-              ]),
-          {
-            postCode: { _ilike: `%${debouncedQuery.replace(/\s/g, '')}%` },
-          },
-        ],
+      const orConditions = []
+
+      orConditions.push({
+        postCode: { _ilike: `%${debouncedQuery.replace(/\s/g, '')}%` },
+      })
+
+      if (searchOnlyByPostCode) return { _or: orConditions }
+
+      orConditions.push({ name: { _ilike: `%${debouncedQuery}%` } })
+
+      if (canSearchByAddress) {
+        const address = debouncedQuery
+          .trim()
+          .split(/\s+/)
+          .map(word => ({
+            addressEachText: { _ilike: `%${word}%` },
+          }))
+
+        orConditions.push({ _and: address })
       }
-    }, [debouncedQuery, searchOnlyByPostCode])
+
+      return { _or: orConditions }
+    }, [debouncedQuery, searchOnlyByPostCode, canSearchByAddress])
 
     const [{ data: hubOrgs, fetching: orgsFetching }, refetchOrganisations] =
       useQuery<GetOrganizationsQuery, GetOrganizationsQueryVariables>({

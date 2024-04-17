@@ -310,6 +310,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             isShallowRetrieval
             required
             searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
+            canSearchByAddress={false}
             placeholder={
               isSearchOnlyByPostCodeEnabled
                 ? undefined

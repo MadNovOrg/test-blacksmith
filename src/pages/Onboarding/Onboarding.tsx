@@ -285,6 +285,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               }}
               isShallowRetrieval
               searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
+              canSearchByAddress={false}
               placeholder={
                 isSearchOnlyByPostCodeEnabled
                   ? undefined

@@ -346,6 +346,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           }}
           sx={{ mb: 3 }}
           isShallowRetrieval
+          canSearchByAddress={false}
           searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
           placeholder={
             isSearchOnlyByPostCodeEnabled
