@@ -671,6 +671,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     if (
       !editCourseValid ||
       !courseData?.courseLevel ||
+      !courseData?.type ||
       !profile ||
       !trainersData
     )
@@ -683,7 +684,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           accreditedBy: courseData.accreditedBy ?? Accreditors_Enum.Icm,
           bildStrategies: courseData.bildStrategies ?? {},
           courseLevel: courseData.courseLevel ?? Course_Level_Enum.Level_1,
-          type: Course_Type_Enum.Indirect,
+          type: courseData.type,
           maxParticipants: courseData.maxParticipants ?? 0,
           startDateTime: courseData.startDateTime ?? new Date(),
           hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
@@ -1042,15 +1043,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             priceCurrency={course.priceCurrency}
           />
 
-          {showTrainerRatioWarning ? (
-            <CourseExceptionsConfirmation
-              open={courseExceptions.length > 0}
-              onCancel={() => setCourseExceptions([])}
-              onSubmit={editCourse}
-              exceptions={courseExceptions}
-              courseType={courseData?.type ?? undefined}
-            />
-          ) : null}
+          <CourseExceptionsConfirmation
+            open={courseExceptions.length > 0}
+            onCancel={() => setCourseExceptions([])}
+            onSubmit={editCourse}
+            exceptions={courseExceptions}
+            courseType={courseData?.type ?? undefined}
+          />
         </>
       ) : null}
     </FullHeightPageLayout>
