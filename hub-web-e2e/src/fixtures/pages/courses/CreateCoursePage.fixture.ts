@@ -50,6 +50,7 @@ export class CreateCoursePage extends BasePage {
   readonly bookingFirstName: Locator
   readonly bookingLastName: Locator
   readonly saveChangesButton: Locator
+  readonly renewalCycle: Locator
 
   constructor(page: Page) {
     super(page)
@@ -118,6 +119,7 @@ export class CreateCoursePage extends BasePage {
     this.bookingLastName = this.page.locator(
       'input[name="bookingContact.lastName"]'
     )
+    this.renewalCycle = this.page.locator('[data-testid]="renewal-cycle"')
     this.saveChangesButton = this.page.locator('[data-testid="save-button"]')
   }
 
@@ -143,24 +145,24 @@ export class CreateCoursePage extends BasePage {
   }
 
   async selectVenue(venue: string) {
-    await this.venueInput.type(venue)
+    await this.venueInput.fill(venue)
     await this.autocompleteOption.locator(`text=${venue}`).first().click()
   }
 
   async selectOrganisation(name: string) {
-    await this.organisationInput.type(name)
+    await this.organisationInput.fill(name)
     await this.autocompleteOption.locator(`text=${name}`).first().click()
   }
 
   async selectContact(user: User) {
-    await this.contactInput.type(user.email)
+    await this.contactInput.fill(user.email)
     await this.autocompleteOption.first().click()
-    await this.bookingFirstName.type(user.givenName)
-    await this.bookingLastName.type(user.familyName)
+    await this.bookingFirstName.fill(user.givenName)
+    await this.bookingLastName.fill(user.familyName)
   }
 
   async selectSalesPerson(name: string) {
-    await this.salesPersonInput.type(name)
+    await this.salesPersonInput.fill(name)
     await this.autocompleteOption.first().click()
   }
 
@@ -171,14 +173,14 @@ export class CreateCoursePage extends BasePage {
 
   async setStartDateTime(dateTime: Date) {
     await this.startDateInput.clear()
-    await this.startDateInput.type(format(dateTime, INPUT_DATE_FORMAT))
+    await this.startDateInput.fill(format(dateTime, INPUT_DATE_FORMAT))
     const time = toUiTime(dateTime)
     time !== '08:00' && (await this.startTimeInput.fill(time))
   }
 
   async setEndDateTime(dateTime: Date) {
     await this.endDateInput.clear()
-    await this.endDateInput.type(format(dateTime, INPUT_DATE_FORMAT))
+    await this.endDateInput.fill(format(dateTime, INPUT_DATE_FORMAT))
     const time = toUiTime(dateTime)
     time !== '17:00' && (await this.endTimeInput.fill(time))
   }
@@ -295,7 +297,7 @@ export class CreateCoursePage extends BasePage {
       course.type === Course_Type_Enum.Closed &&
       course.source
     ) {
-      await this.freeSpacesInput.type(course.freeSpaces.toString())
+      await this.freeSpacesInput.fill(course.freeSpaces.toString())
       await this.selectSalesPerson(
         `${course.salesRepresentative.givenName} ${course.salesRepresentative.familyName}`
       )

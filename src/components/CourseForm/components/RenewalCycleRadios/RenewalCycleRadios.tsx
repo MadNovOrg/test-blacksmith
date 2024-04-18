@@ -43,7 +43,12 @@ export const RenewalCycleRadios: React.FC<
             {t('label')}
           </Typography>
         </FormLabel>
-        <RadioGroup aria-labelledby="renewal-cycle-label" row {...props}>
+        <RadioGroup
+          aria-labelledby="renewal-cycle-label"
+          row
+          {...props}
+          data-testid="renewal-cycle"
+        >
           <FormControlLabel
             value={Course_Renewal_Cycle_Enum.One}
             control={<Radio />}

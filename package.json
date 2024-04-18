@@ -26,6 +26,7 @@
     "test:ui": "vitest --ui",
     "test:ui:coverage": "vitest --ui --coverage",
     "e2e": "nx e2e",
+    "e2e:ui": "nx e2e:ui",
     "e2e:debug": "nx e2e:debug",
     "e2e:queries": "nx e2e:queries",
     "e2e:chromium": "nx e2e:chromium",

@@ -10,6 +10,7 @@
   "license": "LICENSE.md",
   "scripts": {
     "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
     "e2e:debug": "playwright test --ui --ui-port=6007 --debug --project=chromium",
     "e2e:queries": "cross-env QUERY=true playwright test --project=queries",
     "e2e:chromium": "playwright test --project=chromium",
