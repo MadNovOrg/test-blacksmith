@@ -148,6 +148,8 @@ export const TransferReview: React.FC<
                 startDate: toCourse.startDate,
                 endDate: toCourse.endDate,
                 venue: toCourse.venue ?? '',
+                timezone: toCourse.timezone ?? 'Europe/London',
+                residingCountry: toCourse.courseResidingCountry ?? 'GB-ENG',
               }}
             />
             {fees.customFee && fees.type === TransferFeeType.CustomFee ? (

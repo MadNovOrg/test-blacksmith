@@ -68,7 +68,7 @@ export const CourseDuration: React.FC<React.PropsWithChildren<Props>> = ({
                   date: timeZoneScheduleDateTime.end,
                 }
               )} ${formatGMTDateTimeByTimeZone(
-                timeZoneScheduleDateTime.start,
+                timeZoneScheduleDateTime.end,
                 timeZone,
                 true
               )}`}

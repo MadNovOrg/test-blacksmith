@@ -65,6 +65,7 @@ export const TRANSFER_ELIGIBLE_COURSES = gql`
       reaccreditation
       type
       deliveryType
+      timezone
     }
   }
 `

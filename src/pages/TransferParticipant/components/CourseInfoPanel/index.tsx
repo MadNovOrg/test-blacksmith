@@ -20,6 +20,8 @@ export type CourseInfoPanelProps = {
     endDate: Course_Schedule['end']
     venue?: string
     reaccreditation?: boolean
+    timezone?: string
+    residingCountry?: string
   }
 }
 
@@ -36,6 +38,8 @@ export const CourseInfoPanel: React.FC<
         start: course.startDate,
         end: course.endDate,
         reaccreditation: course.reaccreditation,
+        timeZone: course.timezone,
+        residingCountry: course.residingCountry,
       }}
     />
 

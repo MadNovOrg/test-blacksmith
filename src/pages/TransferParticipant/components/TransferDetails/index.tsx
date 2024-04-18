@@ -151,6 +151,8 @@ export const TransferDetails: React.FC<
             endDate: toCourse.endDate,
             venue: toCourse.venue ?? '',
             reaccreditation: toCourse.reaccreditation,
+            timezone: toCourse.timezone ?? 'Europe/London',
+            residingCountry: toCourse.courseResidingCountry ?? 'GB-ENG',
           }}
         />
       </Box>

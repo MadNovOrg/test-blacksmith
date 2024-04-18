@@ -4211,6 +4211,8 @@ export enum MimeTypeEnum {
   AudioXMsWma = 'AUDIO_X_MS_WMA',
   /** MimeType audio/x-realaudio */
   AudioXRealaudio = 'AUDIO_X_REALAUDIO',
+  /** MimeType image/avif */
+  ImageAvif = 'IMAGE_AVIF',
   /** MimeType image/bmp */
   ImageBmp = 'IMAGE_BMP',
   /** MimeType image/gif */
@@ -9741,6 +9743,7 @@ export type TransferCourse = {
   level?: Maybe<CourseLevel>;
   reaccreditation: Scalars['Boolean'];
   startDate: Scalars['String'];
+  timezone?: Maybe<Scalars['String']>;
   type: CourseType;
   venue?: Maybe<Scalars['String']>;
   venueCity?: Maybe<Scalars['String']>;
@@ -59485,7 +59488,7 @@ export type TransferEligibleCoursesQueryVariables = Exact<{
 }>;
 
 
-export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, freeSlots: number, courseCode: string, courseResidingCountry?: string | null, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null, venueCountry?: string | null, level?: CourseLevel | null, reaccreditation: boolean, type: CourseType, deliveryType: CourseDeliveryType }> };
+export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, freeSlots: number, courseCode: string, courseResidingCountry?: string | null, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null, venueCountry?: string | null, level?: CourseLevel | null, reaccreditation: boolean, type: CourseType, deliveryType: CourseDeliveryType, timezone?: string | null }> };
 
 export type TransferParticipantMutationVariables = Exact<{
   input: TransferInput;

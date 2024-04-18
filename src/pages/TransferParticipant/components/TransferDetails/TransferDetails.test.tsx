@@ -1,4 +1,6 @@
 import { addDays } from 'date-fns'
+import { utcToZonedTime } from 'date-fns-tz'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
@@ -13,6 +15,7 @@ import {
   Course_Type_Enum,
   TransferFeeType,
 } from '@app/generated/graphql'
+import useTimeZones from '@app/hooks/useTimeZones'
 
 import { render, renderHook, screen, userEvent, waitFor } from '@test/index'
 
@@ -27,12 +30,23 @@ import {
 
 import { TransferDetails } from '.'
 
+vi.mock('posthog-js/react', () => ({
+  useFeatureFlagEnabled: vi.fn(),
+}))
+const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
+
 describe('page: TransferDetails', () => {
   const {
     result: {
       current: { t },
     },
   } = renderHook(() => useTranslation())
+
+  const {
+    result: {
+      current: { formatGMTDateTimeByTimeZone },
+    },
+  } = renderHook(() => useTimeZones())
 
   it('redirects to the first step if there is no chosen course', async () => {
     const client = {
@@ -492,5 +506,193 @@ describe('page: TransferDetails', () => {
 
       expect(screen.getByTestId('transfer-terms-table')).toBeInTheDocument()
     })
+  })
+
+  it(`displays correct course timezone`, async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const client = {
+      executeQuery: () =>
+        fromValue({
+          data: {
+            course: null,
+            participant: null,
+          },
+        }),
+    } as unknown as Client
+
+    const toCourseTimezone = 'Europe/Bucharest'
+
+    const fromCourse: FromCourse = {
+      id: 1,
+      level: Course_Level_Enum.Level_1,
+      start: new Date().toISOString(),
+      end: addDays(new Date(), 1).toISOString(),
+      type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
+    }
+
+    const toCourse: EligibleCourse = {
+      id: 2,
+      courseCode: 'course-code',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      freeSlots: 2,
+      reaccreditation: false,
+      courseResidingCountry: 'RO',
+      timezone: toCourseTimezone,
+      deliveryType: CourseDeliveryType.F2F,
+      type: CourseType.Open,
+    }
+
+    const participant: ChosenParticipant = {
+      id: 'participant-id',
+      profile: {
+        fullName: 'John Doe',
+      },
+    }
+
+    const ReviewMock: React.FC<React.PropsWithChildren<unknown>> = () => {
+      const { fees } = useTransferParticipantContext()
+
+      return (
+        <>
+          <p>{fees?.type}</p>
+          <p>{fees?.customFee}</p>
+        </>
+      )
+    }
+
+    render(
+      <Provider value={client}>
+        <TransferParticipantProvider
+          participantId={participant.id}
+          courseId={fromCourse.id}
+          initialValue={{ fromCourse, participant, toCourse }}
+        >
+          <Routes>
+            <Route
+              path="/transfer/:participantId/details"
+              element={<TransferDetails />}
+            />
+            <Route path="/review" element={<ReviewMock />} />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/transfer/participant-id/details'] }
+    )
+
+    expect(
+      screen.getByTestId('order-course-duration').textContent
+    ).toMatchInlineSnapshot(
+      `"${t('dates.defaultShort', { date: toCourse.startDate })}${t(
+        'pages.course-participants.course-beggins'
+      )} ${t('dates.time', {
+        date: utcToZonedTime(toCourse.startDate, toCourseTimezone),
+      })} ${formatGMTDateTimeByTimeZone(
+        toCourse.startDate,
+        toCourseTimezone,
+        true
+      )}${t('pages.course-participants.course-ends')} ${t('dates.time', {
+        date: utcToZonedTime(toCourse.endDate, toCourseTimezone),
+      })} ${formatGMTDateTimeByTimeZone(
+        toCourse.endDate,
+        toCourseTimezone,
+        true
+      )}"`
+    )
+  })
+
+  it(`displays default England/London timezone`, async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const client = {
+      executeQuery: () =>
+        fromValue({
+          data: {
+            course: null,
+            participant: null,
+          },
+        }),
+    } as unknown as Client
+
+    const defaultTimeZone = 'Europe/London'
+
+    const fromCourse: FromCourse = {
+      id: 1,
+      level: Course_Level_Enum.Level_1,
+      start: new Date().toISOString(),
+      end: addDays(new Date(), 1).toISOString(),
+      type: Course_Type_Enum.Open,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
+    }
+
+    const toCourse: EligibleCourse = {
+      id: 2,
+      courseCode: 'course-code',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      freeSlots: 2,
+      reaccreditation: false,
+      deliveryType: CourseDeliveryType.F2F,
+      type: CourseType.Open,
+    }
+
+    const participant: ChosenParticipant = {
+      id: 'participant-id',
+      profile: {
+        fullName: 'John Doe',
+      },
+    }
+
+    const ReviewMock: React.FC<React.PropsWithChildren<unknown>> = () => {
+      const { fees } = useTransferParticipantContext()
+
+      return (
+        <>
+          <p>{fees?.type}</p>
+          <p>{fees?.customFee}</p>
+        </>
+      )
+    }
+
+    render(
+      <Provider value={client}>
+        <TransferParticipantProvider
+          participantId={participant.id}
+          courseId={fromCourse.id}
+          initialValue={{ fromCourse, participant, toCourse }}
+        >
+          <Routes>
+            <Route
+              path="/transfer/:participantId/details"
+              element={<TransferDetails />}
+            />
+            <Route path="/review" element={<ReviewMock />} />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/transfer/participant-id/details'] }
+    )
+
+    expect(
+      screen.getByTestId('order-course-duration').textContent
+    ).toMatchInlineSnapshot(
+      `"${t('dates.defaultShort', { date: toCourse.startDate })}${t(
+        'pages.course-participants.course-beggins'
+      )} ${t('dates.time', {
+        date: utcToZonedTime(toCourse.startDate, defaultTimeZone),
+      })} ${formatGMTDateTimeByTimeZone(
+        toCourse.startDate,
+        defaultTimeZone,
+        true
+      )}${t('pages.course-participants.course-ends')} ${t('dates.time', {
+        date: utcToZonedTime(toCourse.endDate, defaultTimeZone),
+      })} ${formatGMTDateTimeByTimeZone(
+        toCourse.endDate,
+        defaultTimeZone,
+        true
+      )}"`
+    )
   })
 })

@@ -1149,6 +1149,7 @@ type TransferCourse {
   reaccreditation: Boolean!
   type: CourseType!
   deliveryType: CourseDeliveryType!
+  timezone: String
 }
 
 type TransferParticipantOutput {
