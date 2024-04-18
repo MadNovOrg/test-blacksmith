@@ -10,7 +10,7 @@ import {
   ModuleSettingsQuery,
 } from '@app/generated/graphql'
 
-import { render, screen, within } from '@test/index'
+import { fireEvent, render, screen, within } from '@test/index'
 
 import { COURSE_TO_BUILD_QUERY } from '../../hooks/useCourseToBuild'
 import { buildCourse, buildModuleSetting } from '../../test-utils'
@@ -472,6 +472,103 @@ it.each([
 
     expect(
       screen.queryByTestId('course-estimated-duration')
+    ).not.toBeInTheDocument()
+  }
+)
+
+it.each([true, false])(
+  'does not display the course estimated duration for 3 Day SRT and reaccreditation %s course',
+  reaccreditation => {
+    const course = buildCourse({
+      level: Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+      type: Course_Type_Enum.Open,
+      reaccreditation,
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === COURSE_TO_BUILD_QUERY) {
+          return fromValue<{ data: CourseToBuildQuery }>({
+            data: {
+              course,
+            },
+          })
+        }
+
+        return fromValue<{ data: ModuleSettingsQuery }>({
+          data: {
+            moduleSettings: [],
+          },
+        })
+      },
+      executeMutation: () => {
+        return never
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <ICMCourseBuilderV2 />
+      </Provider>,
+      {},
+      { initialEntries: [`/courses/${course.id}/modules`] }
+    )
+
+    expect(
+      screen.queryByTestId('course-estimated-duration')
+    ).not.toBeInTheDocument()
+  }
+)
+
+it.each([true, false])(
+  'does not display the time commitment warning modal for 3 Day SRT and reaccreditation %s course',
+  reaccreditation => {
+    const moduleSettings = Array.from({ length: 10 }, () =>
+      buildModuleSetting({
+        duration: 120,
+        mandatory: true,
+      })
+    )
+
+    const course = buildCourse({
+      level: Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+      type: Course_Type_Enum.Open,
+      reaccreditation,
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === COURSE_TO_BUILD_QUERY) {
+          return fromValue<{ data: CourseToBuildQuery }>({
+            data: {
+              course,
+            },
+          })
+        }
+
+        return fromValue<{ data: ModuleSettingsQuery }>({
+          data: {
+            moduleSettings,
+          },
+        })
+      },
+      executeMutation: () => {
+        return never
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <ICMCourseBuilderV2 />
+      </Provider>,
+      {},
+      { initialEntries: [`/courses/${course.id}/modules`] }
+    )
+
+    fireEvent.click(screen.getByTestId('submit-button'))
+
+    expect(
+      screen.queryByTestId('time-commitment-dialog')
     ).not.toBeInTheDocument()
   }
 )

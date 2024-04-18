@@ -464,7 +464,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
         )}
         okLabel={t('pages.trainer-base.create-course.new-course.submit-course')}
         data-testid="time-commitment-dialog"
-      ></ConfirmDialog>
+      />
     </Container>
   )
 }
