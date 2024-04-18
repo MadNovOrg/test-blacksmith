@@ -199,6 +199,7 @@ export const ReplaceParticipantDialog: React.FC<
               end: course.dates.aggregate.end.date,
               level: course.level,
               reaccreditation: course.reaccreditation,
+              timeZone: course.schedule[0]?.timeZone,
             }}
           />
         )}
