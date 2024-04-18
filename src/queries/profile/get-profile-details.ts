@@ -86,7 +86,12 @@ export const QUERY = gql`
       }
     }
     certificates: course_certificate(
-      where: { profileId: { _eq: $profileId } }
+      where: {
+        _and: [
+          { profileId: { _eq: $profileId } }
+          { participant: { completed_evaluation: { _eq: true } } }
+        ]
+      }
       order_by: { expiryDate: desc }
     ) {
       ...Certificate

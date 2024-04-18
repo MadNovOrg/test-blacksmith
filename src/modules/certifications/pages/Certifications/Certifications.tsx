@@ -64,6 +64,10 @@ export const Certifications: React.FC<
   const where = useMemo(() => {
     const conditions: Course_Certificate_Bool_Exp[] = []
 
+    conditions.push({
+      participant: { completed_evaluation: { _eq: true } },
+    })
+
     if (keyword) {
       const query = keyword?.trim()
 
