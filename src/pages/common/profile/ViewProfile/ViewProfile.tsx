@@ -120,7 +120,11 @@ export const ViewProfilePage: React.FC<
 
   if (!profile) {
     return (
-      <Alert severity="error" variant="outlined">
+      <Alert
+        severity="error"
+        variant="outlined"
+        data-testid="profile-not-found-err"
+      >
         {t('common.errors.generic.loading-error')}
       </Alert>
     )

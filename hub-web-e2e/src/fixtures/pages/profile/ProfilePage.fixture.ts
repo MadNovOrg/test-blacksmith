@@ -13,6 +13,7 @@ export class ProfilePage extends BasePage {
 
   readonly jobTitleSelector: Locator
   readonly viewPhoneNumber: Locator
+  readonly deleteProfile: Locator
 
   constructor(page: Page) {
     super(page)
@@ -24,18 +25,36 @@ export class ProfilePage extends BasePage {
     this.phoneNumberField = this.page.locator('[data-testid="phone"]')
     this.jobTitleSelector = this.page.locator('data-testid=job-title-selector')
     this.viewPhoneNumber = this.page.locator('[data-testid="profile-phone"]')
+    this.deleteProfile = this.page.locator('data-testid=delete-profile-button')
   }
 
   async goto(profileId?: string, orgId?: string) {
-    if (orgId) {
-      await super.goto(`profile/${profileId}?orgId=${orgId}`)
-    } else {
-      await super.goto(`profile/${profileId ?? ''}`)
-    }
+    const url = orgId
+      ? `profile/${profileId}?orgId=${orgId}`
+      : `profile/${profileId ?? ''}`
+
+    await this.page.goto(url)
+    await this.page.waitForURL(url)
   }
 
   async clickEditButton() {
     await this.editProfile.click()
+  }
+
+  async clickDeleteProfileButton() {
+    await this.page.waitForSelector('data-testid=delete-profile-button', {
+      state: 'visible',
+    })
+    await this.deleteProfile.click()
+  }
+
+  async clickConfirmDeleteCheckbox() {
+    await this.page.waitForSelector('data-testid=profile-delete-checkbox')
+    await this.page.locator('data-testid=profile-delete-checkbox').click()
+  }
+
+  async deleteUserProfile() {
+    await this.page.locator('data-testid=profile-delete-confirm-btn').click()
   }
 
   async selectJobTitle(jobTitle: string) {

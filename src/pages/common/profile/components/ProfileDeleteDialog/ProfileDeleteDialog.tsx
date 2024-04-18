@@ -110,6 +110,7 @@ export const ProfileDeleteDialog: React.FC<React.PropsWithChildren<Props>> = ({
             <Checkbox
               sx={{ marginRight: 1, padding: 0 }}
               onChange={e => setConfirmed(e.target.checked)}
+              data-testid="profile-delete-checkbox"
             />
             <Typography variant="body2" fontWeight={700}>
               {t('confirmation-warning')}
@@ -127,6 +128,7 @@ export const ProfileDeleteDialog: React.FC<React.PropsWithChildren<Props>> = ({
           loading={saving}
           color="error"
           disabled={!!error || !confirmed}
+          data-testid="profile-delete-confirm-btn"
         >
           {t('delete')}
         </LoadingButton>

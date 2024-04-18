@@ -16,6 +16,13 @@ export const getClient = () => {
       'x-hasura-user-email': 'adm@teamteach.testinator.com',
     }
   }
+  if (TEST_SETTINGS.role === 'admin') {
+    additionalHeaders = {
+      'x-hasura-role': 'admin',
+      'x-hasura-user-id': '22015a3e-8907-4333-8811-85f782265a63',
+      'x-hasura-user-email': 'adm@teamteach.testinator.com',
+    }
+  }
   if (!graphQLClient) {
     graphQLClient = new GraphQLClient(endpoint, {
       headers: {
