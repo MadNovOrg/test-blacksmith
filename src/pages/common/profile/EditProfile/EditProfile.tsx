@@ -201,14 +201,17 @@ export const EditProfilePage: React.FC<
   useEffect(() => {
     const restriction = profile?.dietaryRestrictions
     const disabilities = profile?.disabilities
-    if (restriction !== null && !dietaryRestrictionsRadioValue) {
+
+    //If dietaryRestrictions or disabilities is empty string, it means the user as submited those fields, and choose option 'No'
+
+    if ((restriction || restriction === '') && !dietaryRestrictionsRadioValue) {
       setDietaryRestrictionsRadioValue(
         restriction
           ? DietaryRestrictionRadioValues.YES
           : DietaryRestrictionRadioValues.NO
       )
     }
-    if (disabilities !== null && !disabilitiesRadioValue) {
+    if ((disabilities || disabilities === '') && !disabilitiesRadioValue) {
       setDisabilitiesRadioValue(
         disabilities
           ? disabilities === ratherNotSayText
