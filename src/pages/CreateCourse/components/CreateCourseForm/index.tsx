@@ -87,7 +87,8 @@ export const CreateCourseForm = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { profile, acl } = useAuth()
-  const isBild = courseData?.accreditedBy === Accreditors_Enum.Bild
+  const isBILDcourse = courseData?.accreditedBy === Accreditors_Enum.Bild
+  const isINDIRECTcourse = courseData?.type === Course_Type_Enum.Indirect
 
   const [courseExceptions, setCourseExceptions] = useState<
     Course_Exception_Enum[]
@@ -113,7 +114,7 @@ export const CreateCourseForm = () => {
 
   useEffect(() => {
     if (
-      courseType === Course_Type_Enum.Indirect &&
+      isINDIRECTcourse &&
       profile &&
       certifications &&
       !acl.isInternalUser()
@@ -135,7 +136,7 @@ export const CreateCourseForm = () => {
         })),
       ])
     }
-  }, [assistants, courseType, setTrainers, profile, certifications, acl])
+  }, [assistants, isINDIRECTcourse, setTrainers, profile, certifications, acl])
 
   useEffect(() => {
     setCurrentStepKey(StepsEnum.COURSE_DETAILS)
@@ -164,11 +165,11 @@ export const CreateCourseForm = () => {
   }, [profile])
 
   const nextStepEnabled = useMemo(() => {
-    if (courseType !== Course_Type_Enum.Indirect) {
+    if (!isINDIRECTcourse) {
       return courseDataValid
     }
 
-    const evaluatedFlag = !isBild
+    const evaluatedFlag = !isBILDcourse
       ? omit(consentFlags, 'needsAnalysis')
       : consentFlags
 
@@ -177,7 +178,7 @@ export const CreateCourseForm = () => {
     )
 
     return hasCheckedAllFlags && courseDataValid
-  }, [consentFlags, courseDataValid, courseType, isBild])
+  }, [consentFlags, courseDataValid, isINDIRECTcourse, isBILDcourse])
 
   const submit = useCallback(async () => {
     if (!courseData || !profile) return
@@ -212,10 +213,10 @@ export const CreateCourseForm = () => {
       (!consentFlags.practiceProtocols ||
         !consentFlags.validID ||
         !consentFlags.connectFee ||
-        (isBild && !consentFlags.needsAnalysis)),
+        (isBILDcourse && !consentFlags.needsAnalysis)),
     [
       formSubmitted,
-      isBild,
+      isBILDcourse,
       consentFlags.practiceProtocols,
       consentFlags.validID,
       consentFlags.needsAnalysis,
@@ -336,7 +337,11 @@ export const CreateCourseForm = () => {
 
   if (displayNoCoursePriceError) {
     return (
-      <Alert severity="error" variant="outlined">
+      <Alert
+        severity="error"
+        variant="outlined"
+        data-testid="price-error-banner"
+      >
         {t('pages.create-course.no-course-price')}
       </Alert>
     )
@@ -425,6 +430,7 @@ export const CreateCourseForm = () => {
                   t('pages.create-course.form.health-leaflet-copy') as string
                 }
                 sx={{ mb: 1 }}
+                data-testid="healthLeaflet"
               />
               <FormControlLabel
                 control={
@@ -442,6 +448,7 @@ export const CreateCourseForm = () => {
                   t('pages.create-course.form.practice-protocol-copy') as string
                 }
                 sx={{ mb: 2 }}
+                data-testid="practiceProtocols"
               />
 
               <FormControlLabel
@@ -455,6 +462,7 @@ export const CreateCourseForm = () => {
                 }
                 label={t('pages.create-course.form.valid-id-copy') as string}
                 sx={{ mb: 2 }}
+                data-testid="validID"
               />
 
               <FormControlLabel
@@ -471,9 +479,10 @@ export const CreateCourseForm = () => {
                     'pages.create-course.form.connect-fee-notification'
                   ) as string
                 }
+                data-testid="connectFee"
               />
 
-              {isBild && (
+              {isBILDcourse && (
                 <FormControlLabel
                   required
                   control={
@@ -490,6 +499,7 @@ export const CreateCourseForm = () => {
                   label={
                     t('pages.create-course.form.needs-analysis-copy') as string
                   }
+                  data-testid="needsAnalysis"
                 />
               )}
 
@@ -530,7 +540,7 @@ export const CreateCourseForm = () => {
         </LoadingButton>
       </Box>
 
-      {isBild && courseData.type === Course_Type_Enum.Indirect ? (
+      {isBILDcourse && isINDIRECTcourse ? (
         <NoExceptionsDialog
           open={courseExceptions.length > 0}
           onClose={() => setCourseExceptions([])}

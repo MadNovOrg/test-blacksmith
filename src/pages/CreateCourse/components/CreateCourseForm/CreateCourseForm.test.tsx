@@ -1,16 +1,26 @@
 import { fireEvent, renderHook } from '@testing-library/react'
 import { addDays, addHours } from 'date-fns'
+import { DocumentNode } from 'graphql'
 import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
-import { never } from 'wonka'
+import { fromValue, never } from 'wonka'
 
 import { VenueSelector } from '@app/components/VenueSelector'
-import { Accreditors_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import {
+  Accreditors_Enum,
+  CoursePriceQuery,
+  Course_Type_Enum,
+  GetCoursesSourcesQuery,
+} from '@app/generated/graphql'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
+import useProfile from '@app/hooks/useProfile'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
-import { BildStrategies, ValidCourseInput } from '@app/types'
+import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
+import { CreateCourseProvider } from '@app/pages/CreateCourse/components/CreateCourseProvider'
+import { GET_COURSE_SOURCES_QUERY } from '@app/queries/courses/get-course-sources'
+import { BildStrategies, ValidCourseInput, RoleName } from '@app/types'
 import { courseToCourseInput, LoadingStatus } from '@app/util'
 
 import {
@@ -23,8 +33,6 @@ import {
 } from '@test/index'
 import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
 
-import { CreateCourseProvider } from '../CreateCourseProvider'
-
 import { CreateCourseForm } from '.'
 
 vi.mock('@app/components/VenueSelector', () => ({
@@ -35,9 +43,18 @@ vi.mock('@app/hooks/useZoomMeetingLink')
 
 vi.mock('@app/hooks/useCourseDraft')
 
+vi.mock('@app/hooks/useProfile')
+
+const mockNavigate = vi.fn()
+vi.mock('react-router-dom', async () => ({
+  ...((await vi.importActual('react-router-dom')) as object),
+  useNavigate: () => mockNavigate,
+}))
+
 const VenueSelectorMocked = vi.mocked(VenueSelector)
 const useZoomMeetingUrlMocked = vi.mocked(useZoomMeetingLink)
 const useCourseDraftMocked = vi.mocked(useCourseDraft)
+const useProfileMocked = vi.mocked(useProfile)
 const mockTrainerSearch = vi.fn().mockResolvedValue({ trainers: [] })
 
 describe('component: CreateCourseForm', () => {
@@ -46,8 +63,10 @@ describe('component: CreateCourseForm', () => {
       current: { t },
     },
   } = renderHook(() => useTranslation())
+
   beforeAll(() => {
     VenueSelectorMocked.mockImplementation(() => <p>test</p>)
+
     useZoomMeetingUrlMocked.mockReturnValue({
       meetingUrl: '',
       meetingId: 123,
@@ -55,6 +74,7 @@ describe('component: CreateCourseForm', () => {
       clearLink: vi.fn(),
       status: LoadingStatus.SUCCESS,
     })
+
     useCourseDraftMocked.mockReturnValue({
       id: 'random-id',
       data: {},
@@ -63,6 +83,18 @@ describe('component: CreateCourseForm', () => {
         message: 'errorMessage',
       },
       fetching: false,
+    })
+
+    useProfileMocked.mockReturnValue({
+      profile: null,
+      certifications: undefined,
+      missingCertifications: [],
+      go1Licenses: undefined,
+      getProfileError: undefined,
+      updateAvatar: () => Promise.resolve(undefined),
+      upcomingCourses: [],
+      archive: () => Promise.resolve(),
+      status: LoadingStatus.SUCCESS,
     })
   })
 
@@ -248,5 +280,680 @@ describe('component: CreateCourseForm', () => {
     expect(dialog.textContent).toMatchInlineSnapshot(
       `"No exceptions allowedThis course does not follow Team Teach training protocols, please review and amend the course date and/or trainer ratios before resubmitting."`
     )
+  })
+
+  it('allows creating a BILD INDIRECT course and not show the price error banner', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Indirect,
+        accreditedBy: Accreditors_Enum.Bild,
+        level: Course_Level_Enum.BildRegular,
+        bildStrategies: [{ strategyName: BildStrategies.Primary }],
+        bookingContact: undefined,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        price: undefined,
+        residingCountry: 'GB-ENG',
+      },
+    })
+
+    render(
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CreateCourseProvider
+              initialValue={{
+                courseData: courseToCourseInput(course) as ValidCourseInput,
+              }}
+              courseType={Course_Type_Enum.Indirect}
+            >
+              <CreateCourseForm />
+            </CreateCourseProvider>
+          }
+        />
+      </Routes>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=INDIRECT'] }
+    )
+
+    const healthLeaflet = screen.getByTestId('healthLeaflet')
+    const practiceProtocols = screen.getByTestId('practiceProtocols')
+    const validID = screen.getByTestId('validID')
+    const needsAnalysis = screen.getByTestId('needsAnalysis')
+    const connectFee = screen.getByTestId('connectFee')
+    await userEvent.click(healthLeaflet)
+    await userEvent.click(practiceProtocols)
+    await userEvent.click(validID)
+    await userEvent.click(needsAnalysis)
+    await userEvent.click(connectFee)
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates away to the next step
+      expect(mockNavigate).toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('allows creating an ICM INDIRECT course and not show the price error banner', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Indirect,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_1,
+        //bildStrategies: [{ strategyName: BildStrategies.Primary }],
+        bookingContact: undefined,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        price: undefined,
+        residingCountry: 'GB-ENG',
+      },
+    })
+
+    render(
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CreateCourseProvider
+              initialValue={{
+                courseData: courseToCourseInput(course) as ValidCourseInput,
+              }}
+              courseType={Course_Type_Enum.Indirect}
+            >
+              <CreateCourseForm />
+            </CreateCourseProvider>
+          }
+        />
+      </Routes>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=INDIRECT'] }
+    )
+
+    const healthLeaflet = screen.getByTestId('healthLeaflet')
+    const practiceProtocols = screen.getByTestId('practiceProtocols')
+    const validID = screen.getByTestId('validID')
+    const connectFee = screen.getByTestId('connectFee')
+    await userEvent.click(healthLeaflet)
+    await userEvent.click(practiceProtocols)
+    await userEvent.click(validID)
+    await userEvent.click(connectFee)
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates away to the next step
+      expect(mockNavigate).toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('allows creating a BILD CLOSED course and not show the price error banner', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        accreditedBy: Accreditors_Enum.Bild,
+        level: Course_Level_Enum.BildIntermediateTrainer,
+        bildStrategies: [{ strategyName: BildStrategies.Primary }],
+        organizationKeyContact: undefined,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        includeVAT: true,
+        priceCurrency: 'GBP',
+        residingCountry: 'GB-ENG',
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetCoursesSourcesQuery }>({
+          data: {
+            sources: [
+              {
+                name: 'EMAIL_ENQUIRY',
+              },
+              {
+                name: 'EVENT',
+              },
+            ],
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <CreateCourseProvider
+                initialValue={{
+                  courseData: courseToCourseInput(course) as ValidCourseInput,
+                }}
+                courseType={Course_Type_Enum.Closed}
+              >
+                <CreateCourseForm />
+              </CreateCourseProvider>
+            }
+          />
+        </Routes>
+      </Provider>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=CLOSED'] }
+    )
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates away to the next step
+      expect(mockNavigate).toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('allows creating a BILD OPEN course and not show the price error banner', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Open,
+        accreditedBy: Accreditors_Enum.Bild,
+        level: Course_Level_Enum.BildIntermediateTrainer,
+        bildStrategies: [{ strategyName: BildStrategies.Primary }],
+        organizationKeyContact: undefined,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        includeVAT: true,
+        priceCurrency: 'GBP',
+        residingCountry: 'GB-ENG',
+      },
+    })
+
+    render(
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CreateCourseProvider
+              initialValue={{
+                courseData: courseToCourseInput(course) as ValidCourseInput,
+              }}
+              courseType={Course_Type_Enum.Open}
+            >
+              <CreateCourseForm />
+            </CreateCourseProvider>
+          }
+        />
+      </Routes>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=OPEN'] }
+    )
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates away to the next step
+      expect(mockNavigate).toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('allows creating an ICM OPEN course with UK residing country that has a scheduled price', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Open,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_1,
+        bildStrategies: [{ strategyName: BildStrategies.Primary }],
+        organizationKeyContact: undefined,
+        bookingContact: undefined,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        includeVAT: true,
+        priceCurrency: 'GBP',
+        residingCountry: 'GB-ENG', // specifically set the country to UK
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: CoursePriceQuery }>({
+          data: {
+            coursePrice: [
+              {
+                level: Course_Level_Enum.Level_1,
+                type: Course_Type_Enum.Open,
+                blended: false,
+                reaccreditation: false,
+                pricingSchedules: [
+                  {
+                    priceAmount: 150,
+                    priceCurrency: 'GBP',
+                  },
+                ],
+              },
+            ],
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <CreateCourseProvider
+                initialValue={{
+                  courseData: courseToCourseInput(course) as ValidCourseInput,
+                }}
+                courseType={Course_Type_Enum.Open}
+              >
+                <CreateCourseForm />
+              </CreateCourseProvider>
+            }
+          />
+        </Routes>
+      </Provider>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.Level_1],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=OPEN'] }
+    )
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure price error banner is shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates away to the next step
+      expect(mockNavigate).toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('allows creating an ICM CLOSED course with UK residing country that has a scheduled price', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_1,
+        bildStrategies: [{ strategyName: BildStrategies.Primary }],
+        organizationKeyContact: undefined,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        includeVAT: true,
+        residingCountry: 'GB-ENG', // specifically set the country to UK
+      },
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+
+        if (query === COURSE_PRICE_QUERY) {
+          return fromValue<{ data: CoursePriceQuery }>({
+            data: {
+              coursePrice: [
+                {
+                  level: Course_Level_Enum.Level_1,
+                  type: Course_Type_Enum.Closed,
+                  blended: false,
+                  reaccreditation: false,
+                  pricingSchedules: [
+                    {
+                      priceAmount: 150,
+                      priceCurrency: 'GBP',
+                    },
+                  ],
+                },
+              ],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <CreateCourseProvider
+                initialValue={{
+                  courseData: courseToCourseInput(course) as ValidCourseInput,
+                }}
+                courseType={Course_Type_Enum.Closed}
+              >
+                <CreateCourseForm />
+              </CreateCourseProvider>
+            }
+          />
+        </Routes>
+      </Provider>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.Level_1],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=CLOSED'] }
+    )
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates away to the next step
+      expect(mockNavigate).toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('does not allow creating an ICM OPEN course with UK residing country that has no scheduled price', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Open,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_1,
+        bildStrategies: [{ strategyName: BildStrategies.Primary }],
+        organizationKeyContact: undefined,
+        bookingContact: undefined,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        includeVAT: true,
+        residingCountry: 'GB-ENG', // specifically set the country to UK
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: CoursePriceQuery }>({
+          data: {
+            coursePrice: [
+              {
+                level: Course_Level_Enum.Level_1,
+                type: Course_Type_Enum.Open,
+                blended: false,
+                reaccreditation: false,
+                pricingSchedules: [],
+              },
+            ],
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <CreateCourseProvider
+                initialValue={{
+                  courseData: courseToCourseInput(course) as ValidCourseInput,
+                }}
+                courseType={Course_Type_Enum.Open}
+              >
+                <CreateCourseForm />
+              </CreateCourseProvider>
+            }
+          />
+        </Routes>
+      </Provider>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.Level_1],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=OPEN'] }
+    )
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure price error banner is shown
+      expect(errorBanner).toBeInTheDocument()
+      expect(errorBanner).toHaveTextContent(
+        t('pages.create-course.no-course-price')
+      )
+
+      // ensure it did not navigate away to the next step
+      expect(mockNavigate).not.toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('does not allow creating an ICM CLOSED course with UK residing country that has no scheduled price', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_1,
+        bildStrategies: [{ strategyName: BildStrategies.Primary }],
+        organizationKeyContact: undefined,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        includeVAT: true,
+        residingCountry: 'GB-ENG', // specifically set the country to UK
+      },
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+
+        if (query === COURSE_PRICE_QUERY) {
+          return fromValue<{ data: CoursePriceQuery }>({
+            data: {
+              coursePrice: [
+                {
+                  level: Course_Level_Enum.Level_1,
+                  type: Course_Type_Enum.Closed,
+                  blended: false,
+                  reaccreditation: false,
+                  pricingSchedules: [],
+                },
+              ],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <CreateCourseProvider
+                initialValue={{
+                  courseData: courseToCourseInput(course) as ValidCourseInput,
+                }}
+                courseType={Course_Type_Enum.Closed}
+              >
+                <CreateCourseForm />
+              </CreateCourseProvider>
+            }
+          />
+        </Routes>
+      </Provider>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.Level_1],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=CLOSED'] }
+    )
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure price error banner is shown
+      expect(errorBanner).toBeInTheDocument()
+      expect(errorBanner).toHaveTextContent(
+        t('pages.create-course.no-course-price')
+      )
+
+      // ensure it did not navigate away to the next step
+      expect(mockNavigate).not.toHaveBeenCalledWith('./assign-trainers')
+    })
   })
 })
