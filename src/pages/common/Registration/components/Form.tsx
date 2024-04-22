@@ -60,14 +60,6 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   courseId,
   quantity,
 }) => {
-  const isOrgEnquiryEnabled = useFeatureFlagEnabled(
-    'organisation-enquiry-on-registration'
-  )
-
-  const allowOrgAdd = useMemo(() => {
-    return isOrgEnquiryEnabled === false
-  }, [isOrgEnquiryEnabled])
-
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
     'search-only-by-postcode-on-registration'
   )
@@ -334,7 +326,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         <OrgSelector
           required
           {...register('organization')}
-          allowAdding={allowOrgAdd}
+          allowAdding={false}
           autocompleteMode={false}
           showTrainerOrgOnly={false}
           error={errors.organization?.message}

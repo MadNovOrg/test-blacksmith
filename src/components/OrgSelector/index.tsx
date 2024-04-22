@@ -137,7 +137,14 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
                 _ilike: `%${debouncedQuery.replace(/\s/g, '')}%`,
               },
             }
-          : { name: { _ilike: `%${debouncedQuery}%` } },
+          : {
+              _and: debouncedQuery
+                .trim()
+                .split(/\s+/)
+                .map(word => ({
+                  name: { _ilike: `%${word}%` },
+                })),
+            },
       },
       pause: !debouncedQuery,
     })
@@ -151,7 +158,14 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
 
       if (searchOnlyByPostCode) return { _or: orConditions }
 
-      orConditions.push({ name: { _ilike: `%${debouncedQuery}%` } })
+      orConditions.push({
+        _and: debouncedQuery
+          .trim()
+          .split(/\s+/)
+          .map(word => ({
+            name: { _ilike: `%${word}%` },
+          })),
+      })
 
       if (canSearchByAddress) {
         const address = debouncedQuery
