@@ -611,52 +611,6 @@ export function displayClosedCourseSalesRepr({
   return false
 }
 
-export function courseNeedsManualPrice({
-  accreditedBy,
-  blendedLearning,
-  maxParticipants,
-  courseType,
-  courseLevel,
-  residingCountry,
-  internationalFinanceEnabled,
-}: {
-  accreditedBy: Accreditors_Enum
-  blendedLearning: boolean
-  maxParticipants: number
-  courseType: Course_Type_Enum
-  courseLevel: Course_Level_Enum
-  residingCountry: WorldCountriesCodes
-  internationalFinanceEnabled: boolean
-}) {
-  const isBILDcourse = accreditedBy === Accreditors_Enum.Bild
-  const isICMcourse = accreditedBy === Accreditors_Enum.Icm
-  const isIndirectCourse = courseType === Course_Type_Enum.Indirect
-  const isClosedCourse = courseType === Course_Type_Enum.Closed
-  const isLEVEL2 = courseLevel === Course_Level_Enum.Level_2
-  const isUKcountry = Object.keys(UKsCountriesCodes).includes(residingCountry)
-
-  const specialUKcountryCondition =
-    isICMcourse &&
-    isClosedCourse &&
-    isLEVEL2 &&
-    blendedLearning &&
-    isUKcountry &&
-    maxParticipants <= 8
-
-  if (specialUKcountryCondition || (isBILDcourse && !isIndirectCourse)) {
-    return true
-  }
-
-  if (!isUKcountry && isClosedCourse && isICMcourse) {
-    if (!internationalFinanceEnabled) {
-      return false
-    }
-    return true
-  }
-
-  return false
-}
-
 export function hasRenewalCycle({
   courseType,
   startDate,

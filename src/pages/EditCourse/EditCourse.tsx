@@ -135,6 +135,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [courseExceptions, setCourseExceptions] = useState<
     Course_Exception_Enum[]
   >([])
+  const [
+    allowCourseEditWithoutScheduledPrice,
+    setAllowCourseEditWithoutScheduledPrice,
+  ] = useState<boolean>(true)
+
   const {
     data: courseInfo,
     status: courseStatus,
@@ -269,7 +274,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const saveChanges = useCallback(
     async (reviewInput?: FormValues) => {
       const trainersMap = new Map(course?.trainers?.map(t => [t.profile.id, t]))
-
       try {
         if (courseData && course && trainersData) {
           assertCourseDataValid(courseData, courseDataValid)
@@ -666,8 +670,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     )
 
   const editCourseValid = courseDataValid && trainersDataValid
+
   const submitButtonHandler = useCallback(async () => {
     courseMethods?.current?.trigger()
+
     if (
       !editCourseValid ||
       !courseData?.courseLevel ||
@@ -676,6 +682,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       !trainersData
     )
       return
+
+    if (!allowCourseEditWithoutScheduledPrice) return
 
     if (courseData.type !== Course_Type_Enum.Open && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
@@ -738,6 +746,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     canRescheduleCourseEndDate,
     autoapproved,
     alignedWithProtocol,
+    allowCourseEditWithoutScheduledPrice,
   ])
 
   const showTrainerRatioWarning = useMemo(() => {
@@ -877,6 +886,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     isCreation={false}
                     methodsRef={courseMethods}
                     trainerRatioNotMet={showTrainerRatioWarning}
+                    allowCourseEditWithoutScheduledPrice={
+                      setAllowCourseEditWithoutScheduledPrice
+                    }
                   />
                 </Box>
 
@@ -974,6 +986,17 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                       : t('pages.edit-course.save-button-text')}
                   </LoadingButton>
                 </Box>
+
+                {!allowCourseEditWithoutScheduledPrice && (
+                  <Alert
+                    severity="error"
+                    variant="outlined"
+                    sx={{ marginTop: '1rem' }}
+                    data-testid="price-error-banner"
+                  >
+                    {t('pages.create-course.no-course-price')}
+                  </Alert>
+                )}
               </Box>
             </Box>
           </Box>

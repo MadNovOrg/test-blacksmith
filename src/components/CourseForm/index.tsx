@@ -25,8 +25,10 @@ import { isBefore, isDate, isPast, isValid as isValidDate } from 'date-fns'
 import { TFunction } from 'i18next'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, {
+  Dispatch,
   memo,
   RefObject,
+  SetStateAction,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -71,6 +73,10 @@ import {
 } from '@app/generated/graphql'
 import { TimeZoneDataType } from '@app/hooks/useTimeZones'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
+import {
+  priceFieldIsMandatory,
+  courseWithManualPrice,
+} from '@app/pages/CreateCourse/utils'
 import { QUERY as GET_NOT_DETAILED_PROFILE } from '@app/queries/profile/get-not-detailed-profile'
 import { schemas, yup } from '@app/schemas'
 import theme from '@app/theme'
@@ -119,7 +125,6 @@ import {
   canBeVirtual,
   canBeVirtualBild,
   changeCountryOnCourseLevelChange,
-  courseNeedsManualPrice,
   displayClosedCourseSalesRepr,
   getAccountCode,
   getDefaultSpecialInstructions,
@@ -144,6 +149,7 @@ interface Props {
     reset: UseFormReset<CourseInput>
   }>
   trainerRatioNotMet?: boolean
+  allowCourseEditWithoutScheduledPrice?: Dispatch<SetStateAction<boolean>>
 }
 
 const accountCodeValue = getAccountCode()
@@ -156,6 +162,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   disabledFields = new Set(),
   methodsRef,
   trainerRatioNotMet,
+  allowCourseEditWithoutScheduledPrice = noop,
 }) => {
   const { t } = useTranslation()
   const { activeRole, acl, profile } = useAuth()
@@ -228,7 +235,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 .required(t('components.course-form.organisation-required')),
             }
           : null),
-        ...(courseType === Course_Type_Enum.Open
+        ...(isOpenCourse
           ? {
               displayOnWebsite: yup.bool().required().default(true),
             }
@@ -259,7 +266,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             }
           : null),
         //TODO: Delete this after Arlo migration ------ search for Delete this after Arlo migration to find every occurence that needs to be deleted //
-        ...(courseType !== Course_Type_Enum.Indirect
+        ...(!isIndirectCourse
           ? {
               arloReferenceId: yup.string(),
             }
@@ -476,29 +483,28 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .when(
             [
               'accreditedBy',
+              'type',
+              'courseLevel',
               'blendedLearning',
               'maxParticipants',
-              'courseLevel',
               'residingCountry',
-              'type',
             ],
             {
               is: (
                 accreditedBy: Accreditors_Enum,
+                courseType: Course_Type_Enum,
+                courseLevel: Course_Level_Enum,
                 blendedLearning: boolean,
                 maxParticipants: number,
-                courseLevel: Course_Level_Enum,
-                residingCountry: WorldCountriesCodes,
-                courseType: Course_Type_Enum
+                residingCountry: WorldCountriesCodes
               ) =>
-                courseNeedsManualPrice({
+                priceFieldIsMandatory({
                   accreditedBy,
                   blendedLearning,
                   maxParticipants,
                   courseLevel,
                   courseType,
                   residingCountry,
-                  internationalFinanceEnabled: isInternationalFinanceEnabled,
                 }),
               then: s => s.required(),
               otherwise: s => s.nullable(),
@@ -526,6 +532,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       courseType,
       hasMinParticipants,
       hasOrg,
+      isOpenCourse,
       isClosedCourse,
       isCreation,
       isIndirectCourse,
@@ -785,36 +792,25 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     ]
   )
 
-  /**
-   * CLOSED course shows price field in the following condition:
-   *** course level: LEVEL 2, blendedLearning: true, residingCountry: one of UKs countries
-   *
-   * CLOSED course shows priceCurrency, price & includeVAT fields in the following condition:
-   *** all course levels when country is other than UK
-   */
-  const CLOSEDcourseNeedsManualPrice = useMemo(
-    () =>
-      values.accreditedBy && values.courseLevel
-        ? courseNeedsManualPrice({
-            accreditedBy: values.accreditedBy,
-            blendedLearning: values.blendedLearning,
-            courseType,
-            courseLevel: values.courseLevel as Course_Level_Enum,
-            maxParticipants: values.maxParticipants ?? 0,
-            residingCountry: values.residingCountry as WorldCountriesCodes,
-            internationalFinanceEnabled: isInternationalFinanceEnabled,
-          })
-        : false,
-    [
+  const courseHasManualPrice = useMemo(() => {
+    return courseWithManualPrice({
+      accreditedBy: values.accreditedBy as Accreditors_Enum,
       courseType,
-      values.accreditedBy,
-      values.blendedLearning,
-      values.courseLevel,
-      values.maxParticipants,
-      values.residingCountry,
-      isInternationalFinanceEnabled,
-    ]
-  )
+      courseLevel: values.courseLevel as Course_Level_Enum,
+      blendedLearning: values.blendedLearning,
+      maxParticipants: values.maxParticipants ?? 0,
+      residingCountry: values.residingCountry as WorldCountriesCodes,
+      internationalFlagEnabled: isInternationalFinanceEnabled,
+    })
+  }, [
+    courseType,
+    isInternationalFinanceEnabled,
+    values.accreditedBy,
+    values.blendedLearning,
+    values.courseLevel,
+    values.maxParticipants,
+    values.residingCountry,
+  ])
 
   /**
    * flag to display Finance Section for CLOSED courses
@@ -826,14 +822,14 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       isClosedCourse &&
       (showInternationalFinanceSection ||
         showClosedCourseSalesRepr ||
-        CLOSEDcourseNeedsManualPrice)
+        courseHasManualPrice)
     )
   }, [
     isICM,
     isClosedCourse,
     showInternationalFinanceSection,
     showClosedCourseSalesRepr,
-    CLOSEDcourseNeedsManualPrice,
+    courseHasManualPrice,
   ])
 
   // flag to display Finance Section for OPEN courses
@@ -901,6 +897,24 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     values.residingCountry,
     coursePrice?.priceAmount,
     coursePrice?.priceCurrency,
+  ])
+
+  useEffect(() => {
+    if (!isCreation && courseHasManualPrice) {
+      allowCourseEditWithoutScheduledPrice(true)
+    }
+
+    // do not allow editing a course if there's no scheduled price for it
+    if (!isCreation && !courseHasManualPrice && !coursePrice) {
+      allowCourseEditWithoutScheduledPrice(false)
+    } else if (!isCreation && !courseHasManualPrice && coursePrice) {
+      allowCourseEditWithoutScheduledPrice(true)
+    }
+  }, [
+    isCreation,
+    coursePrice,
+    courseHasManualPrice,
+    allowCourseEditWithoutScheduledPrice,
   ])
 
   // set VAT true for all UK countries
@@ -2265,7 +2279,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
           {showCLOSEDcourseFinanceSection ? (
             <ClosedCourseFinanceSection
-              showPricingSection={CLOSEDcourseNeedsManualPrice}
+              showPricingSection={courseHasManualPrice}
               isCreateCourse={isCreation}
               courseLevel={values.courseLevel as Course_Level_Enum}
               isBlended={values.blendedLearning}

@@ -14,23 +14,88 @@ import { Go1LicensingPrices, ValidCourseInput } from '@app/types'
 
 export const PRICE_PER_LICENSE = 50
 
-export const setManualPriceOnCourse = (
-  courseType: Course_Type_Enum,
-  courseLevel: Course_Level_Enum,
-  accreditedBy: Accreditors_Enum,
-  blended: boolean,
+export const priceFieldIsMandatory = ({
+  accreditedBy,
+  courseType,
+  courseLevel,
+  blendedLearning,
+  maxParticipants,
+  residingCountry,
+}: {
+  accreditedBy: Accreditors_Enum
+  courseType: Course_Type_Enum
+  courseLevel: Course_Level_Enum
+  blendedLearning: boolean
+  maxParticipants: number
   residingCountry: WorldCountriesCodes
-) => {
-  const isUKcountry = Object.keys(UKsCountriesCodes).includes(residingCountry)
-  const isICMcourse = accreditedBy === Accreditors_Enum.Icm
+}) => {
   const isBILDcourse = accreditedBy === Accreditors_Enum.Bild
+  const isICMcourse = accreditedBy === Accreditors_Enum.Icm
+  const isIndirectCourse = courseType === Course_Type_Enum.Indirect
   const isClosedCourse = courseType === Course_Type_Enum.Closed
-  const isLevel2 = courseLevel === Course_Level_Enum.Level_2
+  const isLEVEL2 = courseLevel === Course_Level_Enum.Level_2
+  const isUKcountry = Object.keys(UKsCountriesCodes).includes(residingCountry)
 
   const specialUKcountryCondition =
-    isICMcourse && isClosedCourse && isLevel2 && blended
+    isICMcourse &&
+    isClosedCourse &&
+    isLEVEL2 &&
+    blendedLearning &&
+    isUKcountry &&
+    maxParticipants <= 8
 
-  if (!isUKcountry || isBILDcourse || specialUKcountryCondition) {
+  if (
+    specialUKcountryCondition ||
+    !isUKcountry ||
+    (isBILDcourse && !isIndirectCourse)
+  ) {
+    return true
+  }
+
+  return false
+}
+
+export const courseWithManualPrice = ({
+  accreditedBy,
+  courseType,
+  courseLevel,
+  blendedLearning,
+  maxParticipants,
+  residingCountry,
+  internationalFlagEnabled,
+}: {
+  accreditedBy: Accreditors_Enum
+  courseType: Course_Type_Enum
+  courseLevel: Course_Level_Enum
+  blendedLearning: boolean
+  maxParticipants: number
+  residingCountry: WorldCountriesCodes
+  internationalFlagEnabled: boolean
+}) => {
+  const isBILDcourse = accreditedBy === Accreditors_Enum.Bild
+  const isICMcourse = accreditedBy === Accreditors_Enum.Icm
+  const isIndirectCourse = courseType === Course_Type_Enum.Indirect
+  const isClosedCourse = courseType === Course_Type_Enum.Closed
+  const isOpenCourse = courseType === Course_Type_Enum.Open
+  const isLEVEL2 = courseLevel === Course_Level_Enum.Level_2
+  const isUKcountry = Object.keys(UKsCountriesCodes).includes(residingCountry)
+
+  const specialUKcountryCondition =
+    isICMcourse &&
+    isClosedCourse &&
+    isLEVEL2 &&
+    blendedLearning &&
+    isUKcountry &&
+    maxParticipants <= 8
+
+  if (specialUKcountryCondition || isBILDcourse || isIndirectCourse) {
+    return true
+  }
+
+  if (!isUKcountry && (isClosedCourse || isOpenCourse) && isICMcourse) {
+    if (!internationalFlagEnabled) {
+      return false
+    }
     return true
   }
 

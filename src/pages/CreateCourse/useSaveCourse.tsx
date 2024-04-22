@@ -1,3 +1,4 @@
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
@@ -27,6 +28,7 @@ import {
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { shouldGoIntoExceptionApproval } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
+import { courseWithManualPrice } from '@app/pages/CreateCourse/utils'
 import { MUTATION as INSERT_COURSE_MUTATION } from '@app/queries/courses/insert-course'
 import { QUERY as REMOVE_COURSE_DRAFT } from '@app/queries/courses/remove-course-draft'
 import { isModeratorNeeded } from '@app/rules/trainers'
@@ -40,7 +42,7 @@ import {
 import { LoadingStatus } from '@app/util'
 
 import { useCreateCourse } from './components/CreateCourseProvider'
-import { getCourseRenewalCycle, setManualPriceOnCourse } from './utils'
+import { getCourseRenewalCycle } from './utils'
 
 const prepareExpensesData = (
   expenses: Record<string, ExpensesInput>
@@ -143,6 +145,10 @@ export function useSaveCourse(): {
   const { setDateTimeTimeZone } = useTimeZones()
   const { isUKCountry } = useWorldCountries()
 
+  const InternationalFinanceEnabled = useFeatureFlagEnabled(
+    'open-icm-course-international-finance'
+  )
+
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const { profile, acl } = useAuth()
   const { id: draftId } = useParams()
@@ -160,18 +166,24 @@ export function useSaveCourse(): {
   const isClosedCourse = courseData?.type === Course_Type_Enum.Closed
   const isIndirectCourse = courseData?.type === Course_Type_Enum.Indirect
 
-  const courseWithManualPrice = setManualPriceOnCourse(
-    courseData?.type as Course_Type_Enum,
-    courseData?.courseLevel as Course_Level_Enum,
-    courseData?.accreditedBy as Accreditors_Enum,
-    Boolean(courseData?.blendedLearning),
-    courseData?.residingCountry as WorldCountriesCodes
+  const isInternationalFlagEnabled = useMemo(
+    () => Boolean(InternationalFinanceEnabled),
+    [InternationalFinanceEnabled]
   )
 
+  const courseHasManualPrice = courseWithManualPrice({
+    accreditedBy: courseData?.accreditedBy as Accreditors_Enum,
+    courseType: courseData?.type as Course_Type_Enum,
+    courseLevel: courseData?.courseLevel as Course_Level_Enum,
+    blendedLearning: Boolean(courseData?.blendedLearning),
+    maxParticipants: courseData?.maxParticipants ?? 0,
+    residingCountry: courseData?.residingCountry as WorldCountriesCodes,
+    internationalFlagEnabled: isInternationalFlagEnabled,
+  })
+
   const allowCreateCourse = useMemo(
-    () =>
-      isIndirectCourse || courseWithManualPrice || Boolean(courseData?.price),
-    [isIndirectCourse, courseWithManualPrice, courseData?.price]
+    () => courseHasManualPrice || Boolean(courseData?.price),
+    [courseHasManualPrice, courseData?.price]
   )
 
   const calculateVATrate = useMemo(() => {
@@ -416,7 +428,7 @@ export function useSaveCourse(): {
                 priceCurrency: courseData.priceCurrency,
               }
             : {}),
-          ...(courseWithManualPrice ? { price: courseData.price } : null),
+          ...(courseHasManualPrice ? { price: courseData.price } : null),
           ...(approveExceptions
             ? {
                 courseExceptions: {
@@ -480,7 +492,7 @@ export function useSaveCourse(): {
     setDateTimeTimeZone,
     draftId,
     removeCourseDraft,
-    courseWithManualPrice,
+    courseHasManualPrice,
   ])
 
   return {

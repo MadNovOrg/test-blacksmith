@@ -56,6 +56,7 @@ import {
   TransportMethod,
   Venue,
 } from '@app/types'
+import { UKTimezone } from '@app/util'
 
 const chance = new Chance()
 
@@ -243,6 +244,7 @@ export const buildCourseSchedule = build<CourseSchedule>({
     end: new Date().toISOString(),
     venue: buildVenue(),
     virtualLink: perBuild(() => chance.url()),
+    timeZone: UKTimezone,
   },
 })
 

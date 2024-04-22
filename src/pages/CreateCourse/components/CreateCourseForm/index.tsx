@@ -245,7 +245,7 @@ export const CreateCourseForm = () => {
           ]
         : []
 
-    if (courseType === Course_Type_Enum.Indirect && !acl.isTTAdmin()) {
+    if (isINDIRECTcourse && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
         {
           ...courseData,

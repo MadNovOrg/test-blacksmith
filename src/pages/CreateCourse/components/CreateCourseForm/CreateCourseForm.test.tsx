@@ -13,7 +13,7 @@ import {
   Course_Type_Enum,
   GetCoursesSourcesQuery,
 } from '@app/generated/graphql'
-import { Course_Level_Enum } from '@app/generated/graphql'
+import { Course_Level_Enum, Currency } from '@app/generated/graphql'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import useProfile from '@app/hooks/useProfile'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
@@ -301,7 +301,6 @@ describe('component: CreateCourseForm', () => {
             },
           }),
         ],
-        price: undefined,
         residingCountry: 'GB-ENG',
       },
     })
@@ -364,7 +363,6 @@ describe('component: CreateCourseForm', () => {
         type: Course_Type_Enum.Indirect,
         accreditedBy: Accreditors_Enum.Icm,
         level: Course_Level_Enum.Level_1,
-        //bildStrategies: [{ strategyName: BildStrategies.Primary }],
         bookingContact: undefined,
         max_participants: 10,
         schedule: [
@@ -375,7 +373,6 @@ describe('component: CreateCourseForm', () => {
             },
           }),
         ],
-        price: undefined,
         residingCountry: 'GB-ENG',
       },
     })
@@ -448,7 +445,7 @@ describe('component: CreateCourseForm', () => {
           }),
         ],
         includeVAT: true,
-        priceCurrency: 'GBP',
+        priceCurrency: Currency.Gbp,
         residingCountry: 'GB-ENG',
       },
     })
@@ -530,7 +527,7 @@ describe('component: CreateCourseForm', () => {
           }),
         ],
         includeVAT: true,
-        priceCurrency: 'GBP',
+        priceCurrency: Currency.Gbp,
         residingCountry: 'GB-ENG',
       },
     })
@@ -595,7 +592,7 @@ describe('component: CreateCourseForm', () => {
           }),
         ],
         includeVAT: true,
-        priceCurrency: 'GBP',
+        priceCurrency: Currency.Gbp,
         residingCountry: 'GB-ENG', // specifically set the country to UK
       },
     })
@@ -613,7 +610,7 @@ describe('component: CreateCourseForm', () => {
                 pricingSchedules: [
                   {
                     priceAmount: 150,
-                    priceCurrency: 'GBP',
+                    priceCurrency: Currency.Gbp,
                   },
                 ],
               },
@@ -716,7 +713,112 @@ describe('component: CreateCourseForm', () => {
                   pricingSchedules: [
                     {
                       priceAmount: 150,
-                      priceCurrency: 'GBP',
+                      priceCurrency: Currency.Gbp,
+                    },
+                  ],
+                },
+              ],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <CreateCourseProvider
+                initialValue={{
+                  courseData: courseToCourseInput(course) as ValidCourseInput,
+                }}
+                courseType={Course_Type_Enum.Closed}
+              >
+                <CreateCourseForm />
+              </CreateCourseProvider>
+            }
+          />
+        </Routes>
+      </Provider>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.Level_1],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=CLOSED'] }
+    )
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates away to the next step
+      expect(mockNavigate).toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('allows creating an ICM CLOSED Level 2 - Blended Learning course with UK residing country that has a scheduled price', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_2,
+        go1Integration: true,
+        organizationKeyContact: undefined,
+        max_participants: 5, // less than 8 participants will have manual price
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        includeVAT: true,
+        residingCountry: 'GB-ENG', // specifically set the country to UK
+      },
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+
+        if (query === COURSE_PRICE_QUERY) {
+          return fromValue<{ data: CoursePriceQuery }>({
+            data: {
+              coursePrice: [
+                {
+                  level: Course_Level_Enum.Level_2,
+                  type: Course_Type_Enum.Closed,
+                  blended: true,
+                  reaccreditation: false,
+                  pricingSchedules: [
+                    {
+                      priceAmount: 150,
+                      priceCurrency: Currency.Gbp,
                     },
                   ],
                 },
@@ -903,6 +1005,109 @@ describe('component: CreateCourseForm', () => {
                   level: Course_Level_Enum.Level_1,
                   type: Course_Type_Enum.Closed,
                   blended: false,
+                  reaccreditation: false,
+                  pricingSchedules: [],
+                },
+              ],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <CreateCourseProvider
+                initialValue={{
+                  courseData: courseToCourseInput(course) as ValidCourseInput,
+                }}
+                courseType={Course_Type_Enum.Closed}
+              >
+                <CreateCourseForm />
+              </CreateCourseProvider>
+            }
+          />
+        </Routes>
+      </Provider>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.Level_1],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=CLOSED'] }
+    )
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure price error banner is shown
+      expect(errorBanner).toBeInTheDocument()
+      expect(errorBanner).toHaveTextContent(
+        t('pages.create-course.no-course-price')
+      )
+
+      // ensure it did not navigate away to the next step
+      expect(mockNavigate).not.toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('does not allow creating an ICM CLOSED Level 2 - Blended Learning course with UK residing country that has no scheduled price', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_2,
+        go1Integration: true,
+        organizationKeyContact: undefined,
+        max_participants: 15, // more than 8 participants will take the scheduled price
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        includeVAT: true,
+        residingCountry: 'GB-ENG', // specifically set the country to UK
+      },
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+
+        if (query === COURSE_PRICE_QUERY) {
+          return fromValue<{ data: CoursePriceQuery }>({
+            data: {
+              coursePrice: [
+                {
+                  level: Course_Level_Enum.Level_2,
+                  type: Course_Type_Enum.Closed,
+                  blended: true,
                   reaccreditation: false,
                   pricingSchedules: [],
                 },
