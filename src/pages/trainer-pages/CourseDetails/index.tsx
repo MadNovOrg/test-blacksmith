@@ -199,12 +199,13 @@ export const CourseDetails = () => {
       graduationFinished,
       cancelRequested
     )
+    const hostingOrgId = course.organization?.id ?? ''
 
     const allowRequestCancelConditions = course
       ? [
           !acl.canCancelCourses(),
           !cancelRequested,
-          acl.isOrgAdmin(),
+          acl.isOrgAdminOf([hostingOrgId]),
           course.type === Course_Type_Enum.Closed,
           isFuture(new Date(course.schedule[0].end)),
           mappedStatus !== Course_Status_Enum.Cancelled &&
