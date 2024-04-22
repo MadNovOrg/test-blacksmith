@@ -9743,6 +9743,7 @@ export type TransferCourse = {
   level?: Maybe<CourseLevel>;
   reaccreditation: Scalars['Boolean'];
   startDate: Scalars['String'];
+  timezone?: Maybe<Scalars['String']>;
   type: CourseType;
   venue?: Maybe<Scalars['String']>;
   venueCity?: Maybe<Scalars['String']>;
@@ -46613,8 +46614,6 @@ export type Profile_Bool_Exp = {
 
 /** unique or primary key constraints on table "profile" */
 export enum Profile_Constraint {
-  /** unique or primary key constraint on columns "_email" */
-  ProfileEmailKey = 'profile__email_key',
   /** unique or primary key constraint on columns "id" */
   ProfilePkey = 'profile_pkey',
   /** unique or primary key constraint on columns "stripe_customer_id" */
@@ -59322,20 +59321,19 @@ export type DeleteOrganizationMemberMutationVariables = Exact<{
 
 export type DeleteOrganizationMemberMutation = { __typename?: 'mutation_root', delete_organization_member_by_pk?: { __typename?: 'organization_member', id: any } | null };
 
-export type FirstTagWithPostsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type FirstTagWithPostsQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', tags?: { __typename?: 'RootQueryToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string } | null> | null } | null } | null };
-
-export type FirstCategoryWithPostsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type FirstCategoryWithPostsQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', categories?: { __typename?: 'RootQueryToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string } | null> | null } | null } | null };
-
 export type ProfileByEmailQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ProfileByEmailQuery = { __typename?: 'query_root', profile: Array<{ __typename?: 'profile', id: any }> };
+
+export type InsertProfileMutationVariables = Exact<{
+  email: Scalars['String'];
+  givenName: Scalars['String'];
+  familyName: Scalars['String'];
+}>;
+
+
+export type InsertProfileMutation = { __typename?: 'mutation_root', insert_profile_one?: { __typename?: 'profile', id: any } | null };
 
 export type RemovePromoCodeMutationVariables = Exact<{
   id: Scalars['uuid'];
@@ -59343,6 +59341,16 @@ export type RemovePromoCodeMutationVariables = Exact<{
 
 
 export type RemovePromoCodeMutation = { __typename?: 'mutation_root', delete_promo_code_by_pk?: { __typename?: 'promo_code', id: any } | null };
+
+export type CleanupE2EMergeUsersMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CleanupE2EMergeUsersMutation = { __typename?: 'mutation_root', delete_profile?: { __typename?: 'profile_mutation_response', affected_rows: number } | null };
+
+export type CreateE2EMergeUsersMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CreateE2EMergeUsersMutation = { __typename?: 'mutation_root', insert_profile?: { __typename?: 'profile_mutation_response', returning: Array<{ __typename?: 'profile', id: any }> } | null };
 
 export type VenueByNameQueryVariables = Exact<{ [key: string]: never; }>;
 
