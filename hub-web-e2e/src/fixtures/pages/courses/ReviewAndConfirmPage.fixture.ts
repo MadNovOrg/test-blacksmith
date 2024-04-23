@@ -26,19 +26,19 @@ export class ReviewAndConfirmPage extends BasePage {
 
   async getCourseIdOnCreation(): Promise<number> {
     const responses = await Promise.all([
-      waitForGraphQLResponse(this.page, 'insertCourse', 'inserted'),
+      waitForGraphQLResponse(this.page, 'insertCourse', 'id'),
       this.createCourseButton.click(),
     ])
-    return responses[0].insertCourse.inserted[0].id
+    return responses[0].insertCourse.id
   }
 
   async getCourseIdAfterProceedingToCourseBuilder() {
     const responses = await Promise.all([
-      waitForGraphQLResponse(this.page, 'insertCourse', 'inserted'),
+      waitForGraphQLResponse(this.page, 'insertCourse', 'id'),
       this.courseBuilderButton.click(),
     ])
     const courseBuilderPage = new CourseBuilderPage(this.page)
-    const id = responses[0].insertCourse.inserted[0].id
+    const id = responses[0].insertCourse.id
     return { courseBuilderPage, id }
   }
 

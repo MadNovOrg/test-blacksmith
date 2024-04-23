@@ -74,10 +74,6 @@ for (const data of dataSet) {
     const reviewAndConfirmPage =
       await courseOrderDetailsPage.clickReviewAndConfirmButton()
     course.id = await reviewAndConfirmPage.getCourseIdOnCreation()
-    // eslint-disable-next-line playwright/no-conditional-in-test
-    if (data.user === 'admin') {
-      await reviewAndConfirmPage.confirmApproval()
-    }
 
     const trainerContext = await browser.newContext({
       storageState: stateFilePath('trainer'),

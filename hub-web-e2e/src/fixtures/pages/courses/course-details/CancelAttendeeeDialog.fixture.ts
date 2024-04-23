@@ -35,11 +35,9 @@ export class CancelAttendeeDialog extends BasePage {
   }
 
   async cancelAttendeeWithNoteUsingUser(
-    userRole = 'admin',
     note = 'Reason of removing the attendee'
   ) {
     await this.reasonForCancellationInput.type(note)
-    userRole !== 'admin' && (await this.confirmationCheckbox.click())
     await this.cancelAttendeeButton.click()
   }
 }

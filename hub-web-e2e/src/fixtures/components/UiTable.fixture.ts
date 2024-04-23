@@ -34,7 +34,10 @@ export class UiTable {
   }
 
   async getRows(
-    options: { ignoreEmptyHeaders?: boolean } = { ignoreEmptyHeaders: false }
+    options: { ignoreEmptyHeaders?: boolean; startsFromColumn?: number } = {
+      ignoreEmptyHeaders: false,
+      startsFromColumn: 0,
+    }
   ): Promise<CourseTableRow[]> {
     const result: CourseTableRow[] = []
     await this.root.scrollIntoViewIfNeeded()
@@ -52,7 +55,7 @@ export class UiTable {
           resultRow[filteredHeaders[j]] = (await this.rows
             .nth(i)
             .locator('td')
-            .nth(j)
+            .nth(j + (options.startsFromColumn ?? 0))
             .textContent()) as string
         }
         result.push(resultRow as CourseTableRow)

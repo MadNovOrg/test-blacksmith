@@ -16,6 +16,7 @@ import { users } from '@qa/data/users'
 import { ConfirmRescheduleModal } from '@qa/fixtures/pages/courses/ConfirmRescheduleModal.fixture'
 import { CourseDetailsPage } from '@qa/fixtures/pages/courses/course-details/CourseDetailsPage.fixture'
 import { CreateCoursePage } from '@qa/fixtures/pages/courses/CreateCoursePage.fixture'
+import { Course_Renewal_Cycle_Enum } from '@qa/generated/graphql'
 import { stateFilePath } from '@qa/util'
 
 const testDataMovingEarlier = [
@@ -30,6 +31,7 @@ const testDataMovingEarlier = [
       course.status = Course_Status_Enum.Scheduled
       course.schedule[0].start = addMonths(new Date().setHours(9, 0), 2)
       course.schedule[0].end = addMonths(new Date().setHours(17, 0), 2)
+      course.renewalCycle = Course_Renewal_Cycle_Enum.One
       course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
@@ -47,23 +49,55 @@ const testDataMovingEarlier = [
     course: async () => {
       const course = UNIQUE_COURSE()
       const order = await UNIQUE_ORDER(users.salesAdmin, [])
-      course.type = Course_Type_Enum.Closed
-      course.status = Course_Status_Enum.Scheduled
-      course.organization = { name: 'London First School' }
+
       course.assistTrainer = users.assistant
-      course.source = Course_Source_Enum.EmailEnquiry
-      course.salesRepresentative = users.salesAdmin
       course.bookingContactProfile = users.user1WithOrg
       course.freeSpaces = 0
       course.max_participants = 3
-      course.schedule[0].start = addMonths(new Date().setHours(9, 0), 3)
+      course.orders = {
+        data: [
+          {
+            order: {
+              data: {
+                attendeesQuantity: 3,
+                billingAddress: order.billingAddress,
+                billingEmail: order.billingEmail,
+                billingFamilyName: order.billingFamilyName,
+                billingGivenName: order.billingGivenName,
+                billingPhone: order.billingPhone,
+                clientPurchaseOrder: order.clientPurchaseOrder,
+                currency: 'GBP',
+                organizationId: order.organizationId,
+                paymentMethod: order.paymentMethod,
+                registrants: [],
+                salesRepresentativeId: order.salesRepresentativeId,
+                source: order.source,
+                user: {
+                  fullName: 'Full name',
+                  email: users.salesAdmin.email,
+                  phone: '5555555555',
+                },
+              },
+            },
+            quantity: 1,
+          },
+        ],
+      }
+      course.organization = { name: 'London First School' }
+      course.price = 100
+      course.renewalCycle = Course_Renewal_Cycle_Enum.One
+      course.salesRepresentative = users.salesAdmin
       course.schedule[0].end = addMonths(new Date().setHours(17, 0), 3)
+      course.schedule[0].start = addMonths(new Date().setHours(9, 0), 3)
+      course.source = Course_Source_Enum.EmailEnquiry
+      course.status = Course_Status_Enum.Scheduled
+      course.type = Course_Type_Enum.Closed
+
       course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
         InviteStatus.ACCEPTED,
-        true,
-        order
+        true
       )
       return course
     },
@@ -82,6 +116,33 @@ const testDataMovingEarlier = [
       course.schedule[0].end = addMonths(new Date().setHours(17, 0), 3)
       course.organization = { name: 'London First School' }
       course.assistTrainer = users.assistant
+      course.organizationKeyContactProfile = users.user1WithOrg
+      course.curriculum = [
+        {
+          id: '696749a5-689e-4866-9dab-37579a16d2f7',
+          name: 'Theory',
+          lessons: {
+            items: [
+              { name: 'Values Exercise', covered: true },
+              { name: 'Legal Framework', covered: true },
+              { name: 'Policies Practices & Procedure', covered: true },
+              { name: 'Understanding Emotions & Behaviour', covered: true },
+              { name: 'Six Stages Of Crisis', covered: true },
+              { name: 'Conflict Spiral', covered: true },
+              { name: 'Fizzy Pop Challenge', covered: true },
+              { name: 'Behaviours That Challenge', covered: true },
+              { name: 'De-escalation Scenario', covered: true },
+              { name: 'Handling Plans', covered: true },
+              { name: 'Scripts', covered: true },
+              { name: 'Post Listening & Learning', covered: true },
+              { name: 'Quiz', covered: true },
+            ],
+          },
+          mandatory: true,
+          __typename: 'module_v2',
+          displayName: null,
+        },
+      ]
       course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
@@ -138,6 +199,11 @@ for (const data of testDataMovingEarlier) {
       course.type
     )
 
+    if (data.user === 'trainer') {
+      await page.locator('[data-testid="submit-button"]').click()
+      await page.locator('[data-testid="dialog-confirm-button"]').click()
+    }
+
     const formattedNewStartDate = format(
       data.newStartDate,
       courseDetailsPage.dateFormat
@@ -168,6 +234,7 @@ const testDataMovingLater = [
       course.status = Course_Status_Enum.Scheduled
       course.schedule[0].start = addMonths(new Date().setHours(9, 0), 2)
       course.schedule[0].end = addMonths(new Date().setHours(17, 0), 2)
+      course.renewalCycle = Course_Renewal_Cycle_Enum.One
       course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
@@ -185,23 +252,55 @@ const testDataMovingLater = [
     course: async () => {
       const course = UNIQUE_COURSE()
       const order = await UNIQUE_ORDER(users.salesAdmin, [])
-      course.type = Course_Type_Enum.Closed
-      course.status = Course_Status_Enum.Scheduled
-      course.organization = { name: 'London First School' }
+
       course.assistTrainer = users.assistant
-      course.source = Course_Source_Enum.EmailEnquiry
-      course.salesRepresentative = users.salesAdmin
       course.bookingContactProfile = users.user1WithOrg
       course.freeSpaces = 0
       course.max_participants = 3
-      course.schedule[0].start = addMonths(new Date().setHours(9, 0), 3)
+      course.orders = {
+        data: [
+          {
+            order: {
+              data: {
+                attendeesQuantity: 3,
+                billingAddress: order.billingAddress,
+                billingEmail: order.billingEmail,
+                billingFamilyName: order.billingFamilyName,
+                billingGivenName: order.billingGivenName,
+                billingPhone: order.billingPhone,
+                clientPurchaseOrder: order.clientPurchaseOrder,
+                currency: 'GBP',
+                organizationId: order.organizationId,
+                paymentMethod: order.paymentMethod,
+                registrants: [],
+                salesRepresentativeId: order.salesRepresentativeId,
+                source: order.source,
+                user: {
+                  fullName: 'Full name',
+                  email: users.salesAdmin.email,
+                  phone: '5555555555',
+                },
+              },
+            },
+            quantity: 1,
+          },
+        ],
+      }
+      course.organization = { name: 'London First School' }
+      course.price = 100
+      course.renewalCycle = Course_Renewal_Cycle_Enum.One
+      course.salesRepresentative = users.salesAdmin
       course.schedule[0].end = addMonths(new Date().setHours(17, 0), 3)
+      course.schedule[0].start = addMonths(new Date().setHours(9, 0), 3)
+      course.source = Course_Source_Enum.EmailEnquiry
+      course.status = Course_Status_Enum.Scheduled
+      course.type = Course_Type_Enum.Closed
+
       course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
         InviteStatus.ACCEPTED,
-        true,
-        order
+        true
       )
       return course
     },
@@ -219,6 +318,7 @@ const testDataMovingLater = [
       course.schedule[0].start = addMonths(new Date().setHours(9, 0), 3)
       course.schedule[0].end = addMonths(new Date().setHours(17, 0), 3)
       course.organization = { name: 'London First School' }
+      course.organizationKeyContactProfile = users.user1WithOrg
       course.assistTrainer = users.assistant
       course.id = await API.course.insertCourse(
         course,
@@ -277,6 +377,11 @@ for (const data of testDataMovingLater) {
       data.newEndDate,
       courseDetailsPage.dateFormat
     )
+
+    if (data.user === 'trainer') {
+      await page.locator('[data-testid="submit-button"]').click()
+      await page.locator('[data-testid="dialog-confirm-button"]').click()
+    }
 
     await expect(await courseDetailsPage.startDateLabel).toContainText(
       formattedNewStartDate

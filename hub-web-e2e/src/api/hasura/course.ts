@@ -19,7 +19,7 @@ import {
 } from '@app/types'
 
 import { getModulesByLevel } from '@qa/data/modules'
-import { Course, OrderCreation, User } from '@qa/data/types'
+import { Course, User } from '@qa/data/types'
 import { Course_Certificate_Insert_Input } from '@qa/generated/graphql'
 
 import { getClient } from './client'
@@ -121,8 +121,7 @@ export const insertCourse = async (
   course: Course,
   email: string,
   trainerStatus = InviteStatus.ACCEPTED,
-  modules = true,
-  order?: OrderCreation
+  modules = true
 ): Promise<number> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const courseInput: any = {
@@ -135,7 +134,11 @@ export const insertCourse = async (
     max_participants: course.max_participants,
     min_participants: course.min_participants,
     name: course.name,
+    orders: course.orders,
+    price: course.price,
     reaccreditation: course.reaccreditation,
+    renewalCycle: course.renewalCycle,
+    source: course.source,
     status: course.status,
     type: course.type,
   }
@@ -156,18 +159,18 @@ export const insertCourse = async (
       profileId: bookingContactProfileId,
     }
   }
-  if (course.salesRepresentative && course.source && order) {
-    courseInput.orders = {
-      data: [
-        {
-          ...order,
-          salesRepresentativeId: await getProfileId(
-            course.salesRepresentative.email
-          ),
-          source: course.source,
-          user: course.salesRepresentative,
-        },
-      ],
+
+  if (course.organizationKeyContactProfile) {
+    const organizationKeyContactProfileId = await getProfileId(
+      course.organizationKeyContactProfile.email
+    )
+    courseInput.organizationKeyContactProfileId =
+      organizationKeyContactProfileId
+    courseInput.organizationKeyContactInviteData = {
+      email: course.organizationKeyContactProfile.email,
+      firstName: course.organizationKeyContactProfile.givenName,
+      lastName: course.organizationKeyContactProfile.familyName,
+      profileId: organizationKeyContactProfileId,
     }
   }
 
@@ -267,6 +270,10 @@ export const deleteCourse = async (id?: number) => {
   }
   const query = gql`
     mutation MyMutation($course_id: Int!) {
+      delete_course_order(where: { course_id: { _eq: $course_id } }) {
+        affected_rows
+      }
+
       delete_course_audit(where: { course_id: { _eq: $course_id } }) {
         affected_rows
       }

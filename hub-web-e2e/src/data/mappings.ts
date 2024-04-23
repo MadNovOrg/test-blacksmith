@@ -50,13 +50,15 @@ export function toAttendeesTableRow({
   email,
   organization,
   healthSafetyConsent,
+  evaluationSubmitted = false,
 }: User): AttendeesTableRow {
   return {
     Name: `${givenName} ${familyName}`,
     Email: email,
     Organisation: organization?.name || '',
+    'Evaluation submitted': evaluationSubmitted ? 'Yes' : 'No',
     'H&S submitted': healthSafetyConsent ? 'Yes' : 'No',
-    Actions: '-',
+    Actions: 'Manage attendance',
   }
 }
 

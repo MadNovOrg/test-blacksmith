@@ -14,7 +14,7 @@ const test = base.extend<{ course: Course }>({
     const course = UNIQUE_COURSE()
     course.type = Course_Type_Enum.Indirect
     course.organization = { name: 'London First School' }
-    course.bookingContactProfile = users.userOrgAdmin
+    course.organizationKeyContactProfile = users.userOrgAdmin
     course.freeSpaces = 1
     course.salesRepresentative = users.salesAdmin
     course.go1Integration = true
@@ -35,7 +35,7 @@ test(`create blended learning course: indirect f2f as trainer`, async ({
   await coursesListPage.goto()
   const createCoursePage =
     await coursesListPage.createCourseMenu.clickCreateCourseButton()
-  await createCoursePage.fillCourseDetails(course)
+  await createCoursePage.fillCourseDetails(course, true)
   const orderDetailsPage = await createCoursePage.clickOrderDetailsButton()
   await orderDetailsPage.fillInvoiceDetails(course.invoiceDetails)
   const reviewPage = await orderDetailsPage.clickReviewAndConfirmButton()

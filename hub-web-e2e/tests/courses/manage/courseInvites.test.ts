@@ -92,11 +92,11 @@ for (const data of testData) {
     const attendeePage = await browser.newPage()
     const email = await API.email.getLatestEmail(
       data.attendee.email,
-      'Register for training course'
+      'Team Teach Positive Behaviour Training: Level One Course Invitation'
     )
     const emailPage = new EmailPage(attendeePage)
     await emailPage.renderContent(email.html)
-    const invitationPage = await emailPage.clickRegisterNowButton()
+    const invitationPage = await emailPage.confirmAttendance()
     const attendeeCourseDetailsPage = await invitationPage.acceptInvitation(
       course
     )

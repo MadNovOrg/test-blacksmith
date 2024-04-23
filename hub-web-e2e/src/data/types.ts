@@ -7,15 +7,19 @@ import {
 } from '@app/generated/graphql'
 import { CourseTrainer, PaymentMethod, Venue } from '@app/types'
 
-import { Accreditors_Enum } from '@qa/generated/graphql'
+import {
+  Accreditors_Enum,
+  Course_Renewal_Cycle_Enum,
+} from '@qa/generated/graphql'
 
 export type User = {
-  givenName: string
-  familyName: string
   email: string
-  password: string
+  evaluationSubmitted?: boolean
+  familyName: string
+  givenName: string
   healthSafetyConsent?: boolean
   organization?: Organization
+  password: string
 }
 
 export type Email = {
@@ -28,6 +32,7 @@ export type Course = {
   accreditedBy: Accreditors_Enum
   assistTrainer?: User
   bookingContactProfile?: User
+  organizationKeyContactProfile?: User
   cancellationRequest?: { id: string; reason: string }
   course_code?: string
   createdAt?: Date
@@ -45,8 +50,10 @@ export type Course = {
   min_participants: number
   moderator?: User
   name: string
+  orders?: unknown
   organization?: Organization
   participants_aggregate?: { aggregate?: { count: number } }
+  price?: number
   reaccreditation: boolean
   salesRepresentative?: User
   schedule: CourseSchedule[]
@@ -54,6 +61,7 @@ export type Course = {
   status: Course_Status_Enum
   trainers?: CourseTrainer[]
   type: Course_Type_Enum
+  renewalCycle?: Course_Renewal_Cycle_Enum
 }
 
 export type CourseSchedule = {
@@ -120,10 +128,11 @@ export type OrderCreation = {
   organizationId: string
   paymentMethod: PaymentMethod
   promoCodes?: string[]
-  quantity: number
-  registrants: {
-    email: string
-    firstName: string
-    lastName: string
-  }[]
+  registrants: { email: string; firstName: string; lastName: string }[]
+  salesRepresentativeId?: string
+  source?: Course_Source_Enum.EmailEnquiry
+}
+
+export type CourseOrderCreation = {
+  order_id: string
 }

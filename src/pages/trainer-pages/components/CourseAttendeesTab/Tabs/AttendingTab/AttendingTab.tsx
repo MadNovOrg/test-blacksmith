@@ -486,7 +486,7 @@ export const AttendingTab = ({
               course={course}
               onClose={() => setAttendeeToCancel(undefined)}
               onSave={() => {
-                refreshParticipants()
+                refreshParticipants({ requestPolicy: 'network-only' })
                 updateAttendeesHandler()
               }}
             />

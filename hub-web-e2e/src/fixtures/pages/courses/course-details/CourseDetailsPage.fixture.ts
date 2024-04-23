@@ -72,7 +72,7 @@ export class CourseDetailsPage extends BasePage {
       '[data-testid="additional-notes-label"]'
     )
     this.attendeeRemoveButton = this.page.locator(
-      '[data-testid="attendee-remove"]'
+      '[data-testid="attendee-cancel"]'
     )
     this.manageAttendanceButtonSelector = '[data-testid=manage-attendance]'
     this.gradingTab = this.page.locator('data-testid=grading-tab')
@@ -149,7 +149,10 @@ export class CourseDetailsPage extends BasePage {
 
   async checkAttendeesTableRows(users: User[]) {
     const expectedRows = users.map(toAttendeesTableRow)
-    const actualRows = await this.attendeesTable.getRows()
+    const actualRows = await this.attendeesTable.getRows({
+      ignoreEmptyHeaders: true,
+      startsFromColumn: 1,
+    })
     expectedRows.forEach(expectedRow => {
       expect(actualRows).toContainEqual(expectedRow)
     })

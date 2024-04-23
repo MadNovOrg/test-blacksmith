@@ -12,24 +12,18 @@ export class ReplaceAttendeePopUp extends BasePage {
 
   constructor(page: Page) {
     super(page)
-    this.firstNameInput = this.page.locator('input[name=firstName]')
-    this.surnameInput = this.page.locator('input[name=surname]')
-    this.emailInput = this.page.locator('input[name=email]')
+    this.firstNameInput = this.page.locator('input[name="profile.firstName"]')
+    this.surnameInput = this.page.locator('input[name="profile.surname"]')
+    this.emailInput = this.page.locator('[data-testid="user-selector"] input')
     this.termsAcceptedCheckbox = this.page.locator('input[name=termsAccepted]')
     this.cancelButton = this.page.locator('[data-testid=replace-cancel]')
     this.submitButton = this.page.locator('[data-testid=replace-submit]')
   }
 
-  async enterDetails(
-    firstName: string,
-    surname: string,
-    email: string,
-    termsAccepted = true
-  ) {
+  async enterDetails(firstName: string, surname: string, email: string) {
+    await this.emailInput.fill(email)
     await this.firstNameInput.fill(firstName)
     await this.surnameInput.fill(surname)
-    await this.emailInput.fill(email)
-    await this.termsAcceptedCheckbox.setChecked(termsAccepted)
   }
 
   async clickSubmitButton() {

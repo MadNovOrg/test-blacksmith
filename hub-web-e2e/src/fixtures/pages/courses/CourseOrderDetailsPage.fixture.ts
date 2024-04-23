@@ -27,7 +27,7 @@ export class CourseOrderDetailsPage extends BasePage {
     this.phoneInput = this.page.locator('[data-testid="input-phone"]')
     this.purchaseOrderInput = this.page.locator('[data-testid="input-po"]')
     this.autocompleteOption = this.page.locator(
-      '[data-testid="org-selector-result-group-Found in Team Teach Connect"] [data-testid*="org-selector-result"]'
+      '.MuiAutocomplete-popper .MuiAutocomplete-option'
     )
     this.reviewAndConfirmButton = this.page.locator(
       '[data-testid="AssignTrainers-submit"]'
@@ -36,6 +36,9 @@ export class CourseOrderDetailsPage extends BasePage {
 
   async selectOrganisation(name: string) {
     await this.organisationInput.type(name)
+    await this.page.waitForResponse(
+      resp => resp.url().includes('/v1/graphql') && resp.status() === 200
+    )
     await this.autocompleteOption.locator(`text=${name}`).first().click()
   }
 

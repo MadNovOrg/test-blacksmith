@@ -2,15 +2,15 @@ import { expect, Locator, Page } from '@playwright/test'
 import { format } from 'date-fns'
 
 import {
-  Course_Source_Enum,
-  Course_Level_Enum,
-  Course_Type_Enum,
   Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+  Course_Renewal_Cycle_Enum,
+  Course_Source_Enum,
+  Course_Type_Enum,
 } from '@app/generated/graphql'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
-import { User } from '@qa/data/types'
-import { Course } from '@qa/data/types'
+import { Course, User } from '@qa/data/types'
 import { toUiTime } from '@qa/util'
 
 import { BasePage } from '../BasePage.fixture'
@@ -21,6 +21,7 @@ import { CourseOrderDetailsPage } from './CourseOrderDetailsPage.fixture'
 
 export class CreateCoursePage extends BasePage {
   readonly creationSteps: Locator
+  readonly certificateDurationRadioBtn: (duration: string) => Locator
   readonly levelDropDown: Locator
   readonly levelOption: (level: string) => Locator
   readonly go1Checkbox: Locator
@@ -49,12 +50,18 @@ export class CreateCoursePage extends BasePage {
   readonly parkingInstructionsDetails: Locator
   readonly bookingFirstName: Locator
   readonly bookingLastName: Locator
+  readonly orgKeyContactFirstName: Locator
+  readonly orgKeyContactLastName: Locator
   readonly saveChangesButton: Locator
   readonly renewalCycle: Locator
 
   constructor(page: Page) {
     super(page)
     this.creationSteps = this.page.locator('data-testid=create-course-nav')
+
+    this.certificateDurationRadioBtn = (duration: string) =>
+      this.page.locator(`input[name="renewalCycle"][value="${duration}"]`)
+
     this.levelDropDown = this.page.locator('#course-level')
     this.levelOption = (level: string) =>
       this.page.locator(`data-testid=course-level-option-${level}`)
@@ -119,6 +126,12 @@ export class CreateCoursePage extends BasePage {
     this.bookingLastName = this.page.locator(
       'input[name="bookingContact.lastName"]'
     )
+    this.orgKeyContactFirstName = this.page.locator(
+      'input[name="organizationKeyContact.firstName"]'
+    )
+    this.orgKeyContactLastName = this.page.locator(
+      'input[name="organizationKeyContact.lastName"]'
+    )
     this.renewalCycle = this.page.locator('[data-testid]="renewal-cycle"')
     this.saveChangesButton = this.page.locator('[data-testid="save-button"]')
   }
@@ -144,6 +157,10 @@ export class CreateCoursePage extends BasePage {
     await this.deliveryTypeRadioButton(type).check()
   }
 
+  async selectCertificateDuration(duration: Course_Renewal_Cycle_Enum) {
+    await this.certificateDurationRadioBtn(duration).check()
+  }
+
   async selectVenue(venue: string) {
     await this.venueInput.fill(venue)
     await this.autocompleteOption.locator(`text=${venue}`).first().click()
@@ -151,14 +168,24 @@ export class CreateCoursePage extends BasePage {
 
   async selectOrganisation(name: string) {
     await this.organisationInput.fill(name)
+    await this.page.waitForResponse(
+      resp => resp.url().includes('/v1/graphql') && resp.status() === 200
+    )
     await this.autocompleteOption.locator(`text=${name}`).first().click()
   }
 
   async selectContact(user: User) {
     await this.contactInput.fill(user.email)
-    await this.autocompleteOption.first().click()
+
     await this.bookingFirstName.fill(user.givenName)
     await this.bookingLastName.fill(user.familyName)
+  }
+
+  async selectOrgKeyContact(user: User) {
+    await this.contactInput.type(user.email)
+
+    await this.orgKeyContactFirstName.type(user.givenName)
+    await this.orgKeyContactLastName.type(user.familyName)
   }
 
   async selectSalesPerson(name: string) {
@@ -254,8 +281,12 @@ export class CreateCoursePage extends BasePage {
       .click()
   }
 
-  async fillCourseDetails(course: Course) {
-    if (course.type !== Course_Type_Enum.Open && course.organization) {
+  async fillCourseDetails(course: Course, ignoreOrganisationSelect = false) {
+    if (
+      course.type !== Course_Type_Enum.Open &&
+      course.organization &&
+      !ignoreOrganisationSelect
+    ) {
       await this.selectOrganisation(course.organization.name)
     }
     if (
@@ -264,6 +295,14 @@ export class CreateCoursePage extends BasePage {
     ) {
       await this.selectContact(course.bookingContactProfile)
     }
+
+    if (
+      course.type === Course_Type_Enum.Indirect &&
+      course.organizationKeyContactProfile
+    ) {
+      await this.selectOrgKeyContact(course.organizationKeyContactProfile)
+    }
+
     await this.selectCourseLevel(course.level)
     if (course.go1Integration) await this.selectGo1()
     if (course.reaccreditation) await this.selectReaccreditation()
@@ -289,6 +328,15 @@ export class CreateCoursePage extends BasePage {
     await this.setMaxAttendees(course.max_participants)
     if (course.type === Course_Type_Enum.Indirect) {
       await this.checkAcknowledgeCheckboxes()
+    }
+
+    if (
+      [Course_Type_Enum.Open, Course_Type_Enum.Closed].includes(course.type) &&
+      [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2].includes(
+        course.level
+      )
+    ) {
+      await this.selectCertificateDuration(Course_Renewal_Cycle_Enum.One)
     }
 
     if (
