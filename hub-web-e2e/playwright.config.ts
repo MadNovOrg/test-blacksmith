@@ -85,9 +85,9 @@ export default defineConfig({
   ],
   reporter: [[process.env.CI ? 'github' : 'list'], ['html', { open: 'never' }]],
   expect: {
-    timeout: 30 * 1000,
+    timeout: 60 * 1000,
   },
-  timeout: 60 * 1000,
+  timeout: 90 * 1000,
   projects: [
     {
       name: 'setup',

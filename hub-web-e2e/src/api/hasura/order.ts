@@ -12,9 +12,10 @@ import { getClient } from './client'
 
 export async function insertOrder(input: OrderCreation): Promise<string> {
   try {
-    const response = await getClient({
-      'x-hasura-user-id': '22015a3e-8907-4333-8811-85f782265a63',
-    }).request<{ order: { id: string } }>(CREATE_ORDER, { input: input })
+    const response = await getClient().request<{ order: { id: string } }>(
+      CREATE_ORDER,
+      { input: input }
+    )
     console.log(
       `Inserted order with ID "${response?.order.id}" for course "${input.courseId}"`
     )

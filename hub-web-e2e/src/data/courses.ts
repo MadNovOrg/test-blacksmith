@@ -156,7 +156,7 @@ export const UNIQUE_COURSE: () => Course = () => ({
     firstName: 'John',
     lastName: 'Doe',
     organisation: 'London First School',
-    phone: '1939394939',
+    phone: '+445555555555',
     purchaseOrder: '12345',
   },
   level: Course_Level_Enum.Level_1,

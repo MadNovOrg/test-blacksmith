@@ -174,18 +174,22 @@ export class CreateCoursePage extends BasePage {
     await this.autocompleteOption.locator(`text=${name}`).first().click()
   }
 
-  async selectContact(user: User) {
+  async selectContact(user: User, existsContact = false) {
     await this.contactInput.fill(user.email)
 
-    await this.bookingFirstName.fill(user.givenName)
-    await this.bookingLastName.fill(user.familyName)
+    if (!existsContact) {
+      await this.bookingFirstName.fill(user.givenName)
+      await this.bookingLastName.fill(user.familyName)
+    }
   }
 
-  async selectOrgKeyContact(user: User) {
-    await this.contactInput.type(user.email)
+  async selectOrgKeyContact(user: User, existsContact = false) {
+    await this.contactInput.fill(user.email)
 
-    await this.orgKeyContactFirstName.type(user.givenName)
-    await this.orgKeyContactLastName.type(user.familyName)
+    if (!existsContact) {
+      await this.orgKeyContactFirstName.fill(user.givenName)
+      await this.orgKeyContactLastName.fill(user.familyName)
+    }
   }
 
   async selectSalesPerson(name: string) {
@@ -293,7 +297,7 @@ export class CreateCoursePage extends BasePage {
       course.type === Course_Type_Enum.Closed &&
       course.bookingContactProfile
     ) {
-      await this.selectContact(course.bookingContactProfile)
+      await this.selectContact(course.bookingContactProfile, true)
     }
 
     if (

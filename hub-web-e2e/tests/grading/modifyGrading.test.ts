@@ -20,7 +20,8 @@ const test = base.extend<{ grade: { course: Course; user: User } }>({
     await API.course.insertCourseGradingForParticipants(
       course,
       [user],
-      Grade_Enum.Pass
+      Grade_Enum.Pass,
+      true
     )
     await use({ course: course, user: user })
     await API.course.deleteCourse(course.id)

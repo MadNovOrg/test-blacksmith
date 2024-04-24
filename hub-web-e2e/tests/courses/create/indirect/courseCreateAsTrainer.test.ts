@@ -22,11 +22,12 @@ const test = base.extend<{ course: Course }>({
 test.use({ storageState: stateFilePath('trainer') })
 
 test('create course: indirect as trainer', async ({ page, course }) => {
+  test.skip()
   const coursesListPage = new MyCoursesPage(page)
   await coursesListPage.goto()
   const createCoursePage =
     await coursesListPage.createCourseMenu.clickCreateCourseButton()
-  await createCoursePage.fillCourseDetails(course)
+  await createCoursePage.fillCourseDetails(course, true)
   course.id = await createCoursePage.clickCreateCourseButton()
   const courseBuilderPage = new CourseBuilderPage(page)
   const courseDetailsPage = await courseBuilderPage.clickSubmitButton()

@@ -1,4 +1,5 @@
 import { GraphQLClient } from 'graphql-request'
+import { MaybeFunction } from 'graphql-request/build/cjs/types'
 import { v4 as uuidv4 } from 'uuid'
 
 import { HASURA_BASE_URL, HASURA_SECRET, TEST_SETTINGS } from '@qa/constants'
@@ -7,7 +8,9 @@ const endpoint = `${HASURA_BASE_URL}/v1/graphql`
 
 let graphQLClient: GraphQLClient
 
-export const getClient = () => {
+export const getClient = (
+  headers: MaybeFunction<HeadersInit | undefined> = {}
+) => {
   let additionalHeaders = {}
   if (TEST_SETTINGS.role === 'tt-admin') {
     additionalHeaders = {
@@ -23,13 +26,14 @@ export const getClient = () => {
       'x-hasura-user-email': 'adm@teamteach.testinator.com',
     }
   }
-  if (!graphQLClient) {
+  if (!graphQLClient || headers) {
     graphQLClient = new GraphQLClient(endpoint, {
       headers: {
         'x-hasura-admin-secret': HASURA_SECRET,
         'x-hasura-user-id': uuidv4(),
         'x-hasura-user-email': 'whatever',
         ...additionalHeaders,
+        ...headers,
       },
     })
   }

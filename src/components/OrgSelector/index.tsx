@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { CountryCode } from 'libphonenumber-js'
 import { uniqBy } from 'lodash'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
 import { useDebounce } from 'use-debounce'
@@ -108,6 +108,10 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     const [adding, setAdding] = useState<OptionToAdd | null>()
     const [q, setQ] = useState('')
     const [debouncedQuery] = useDebounce(q, 300)
+
+    useEffect(() => {
+      if (q) setOpen(true)
+    }, [q])
 
     const orgIds =
       userOrgIds ?? profile?.organizations.map(org => org.organization.id)
@@ -224,7 +228,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         if (defaultOrg) onChange(defaultOrg)
         return myOrg as Option[]
       }
-      if (!debouncedQuery) {
+      if (!debouncedQuery || orgsFetching || dfeFetching) {
         return []
       }
       return uniqBy(
@@ -245,10 +249,12 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       autocompleteMode,
       debouncedQuery,
       defaultOrg,
+      dfeFetching,
       dfeOrgs?.establishments,
       hubOrgs?.orgs,
       myOrg,
       onChange,
+      orgsFetching,
       showDfeResults,
       showHubResults,
       showTrainerNonAOLOrgs,
@@ -287,9 +293,6 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           value={!value ? null : value}
           open={open}
           onOpen={() => {
-            if (q) {
-              setOpen(true)
-            }
             if (showTrainerNonAOLOrgs && myOrg?.length) {
               setOpen(true)
             }

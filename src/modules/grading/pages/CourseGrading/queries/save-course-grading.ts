@@ -28,6 +28,7 @@ export const SAVE_COURSE_GRADING_MUTATION = gql`
     $feedback: String
     $courseId: Int!
     $notes: [course_participant_note_insert_input!]!
+    $evaluationSubmitted: Boolean = false
   ) {
     saveModules: insert_course_participant_module(objects: $modules) {
       affectedRows: affected_rows
@@ -35,7 +36,7 @@ export const SAVE_COURSE_GRADING_MUTATION = gql`
 
     saveParticipantsGrade: update_course_participant(
       where: { id: { _in: $participantIds } }
-      _set: { grade: $grade, grading_feedback: $feedback, dateGraded: "${new Date().toISOString()}" }
+      _set: { grade: $grade, grading_feedback: $feedback, dateGraded: "${new Date().toISOString()}", completed_evaluation: $evaluationSubmitted}
     ) {
       affectedRows: affected_rows
     }

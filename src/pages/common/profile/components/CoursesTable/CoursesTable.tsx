@@ -190,6 +190,7 @@ export const CoursesTable: FC<PropsWithChildren<CoursesTableProps>> = ({
                   backgroundColor: 'common.white',
                 },
               }}
+              data-testid={`course-row-${row.course.id}`}
             >
               <TableCell>
                 {attendeeAction.course?.showLink ? (
@@ -200,7 +201,9 @@ export const CoursesTable: FC<PropsWithChildren<CoursesTableProps>> = ({
                   row.course.name
                 )}
               </TableCell>
-              <TableCell>{attendeeAction.course?.label}</TableCell>
+              <TableCell data-testid="course-action">
+                {attendeeAction.course?.label}
+              </TableCell>
               <TableCell>{attendeeAction.date}</TableCell>
             </TableRow>
           ) : null

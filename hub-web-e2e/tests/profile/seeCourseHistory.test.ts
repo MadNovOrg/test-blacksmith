@@ -34,8 +34,7 @@ const test = base.extend<{ course: Course }>({
 test.use({ storageState: stateFilePath('user1') })
 
 test('user can see their course history', async ({ page, course }) => {
-  test.fail(true, 'History as an attendee is not being populated')
   const profilePage = new ProfilePage(page)
   await profilePage.goto()
-  await profilePage.checkCourseHistory(course.id, 'Transferred')
+  await profilePage.checkCourseHistory(course.id, 'Attended')
 })

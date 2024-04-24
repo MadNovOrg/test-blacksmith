@@ -381,7 +381,8 @@ async function setStatus(
 export async function insertCourseGradingForParticipants(
   course: Course,
   users: User[],
-  grade: Grade_Enum
+  grade: Grade_Enum,
+  evaluationSubmitted = false
 ): Promise<void> {
   const courseId = course.id
   const participantIds = await Promise.all(
@@ -400,6 +401,7 @@ export async function insertCourseGradingForParticipants(
       grade,
       courseId,
       notes: [],
+      evaluationSubmitted,
     })
     console.log(`
       Updated the grade to "${grade}" for the following users on course "${courseId}":
@@ -505,7 +507,11 @@ export const cancelCourse = async (
   cancellationFeePercent = 0
 ) => {
   try {
-    await getClient().request<{
+    await getClient({
+      'x-hasura-role': 'tt-admin',
+      'x-hasura-user-id': '22015a3e-8907-4333-8811-85f782265a63',
+      'x-hasura-user-email': 'adm@teamteach.testinator.com',
+    }).request<{
       update_course_participant: { affected_rows: number }
     }>(CANCEL_COURSE_MUTATION, {
       courseId,

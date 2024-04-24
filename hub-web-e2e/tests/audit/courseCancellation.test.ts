@@ -26,7 +26,7 @@ test.beforeEach(async ({}) => {
   TEST_SETTINGS.role = 'tt-admin'
 })
 
-test.afterEach(async ({}) => {
+test.afterAll(async ({}) => {
   TEST_SETTINGS.role = undefined
 })
 

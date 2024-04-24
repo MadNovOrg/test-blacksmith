@@ -128,7 +128,7 @@ export class ProfilePage extends BasePage {
     return new CertificationPage(this.page)
   }
 
-  async checkCourseHistory(courseId: number, action: 'Transferred') {
+  async checkCourseHistory(courseId: number, action: string) {
     await expect(
       this.page
         .locator(`data-testid=course-row-${courseId}`)
