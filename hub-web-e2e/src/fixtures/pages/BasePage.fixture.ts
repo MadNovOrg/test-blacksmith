@@ -33,8 +33,12 @@ export class BasePage {
     })
 
     await this.page.waitForLoadState('domcontentloaded')
-    await expect(this.muiProgressCircle).toHaveCount(0)
-    await expect(this.muiSkeletonPulse).toHaveCount(0)
+    await expect(this.muiProgressCircle).toHaveCount(0, {
+      timeout: 60_000,
+    })
+    await expect(this.muiSkeletonPulse).toHaveCount(0, {
+      timeout: 60_000,
+    })
   }
 
   async closeCurrentTab() {

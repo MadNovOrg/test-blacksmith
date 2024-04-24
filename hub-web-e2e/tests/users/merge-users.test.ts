@@ -16,7 +16,8 @@ test('Should redirect to the merge users page when clicking on the merge users b
   const usersPage = new UsersPage(page)
   await usersPage.goto()
 
-  await usersPage.gotoMergeUsers()
+  const mergeUsersPage = await usersPage.gotoMergeUsers()
+  await mergeUsersPage.waitForPageLoad()
   const url = new URL(page.url())
   expect(url.pathname).toBe('/admin/users/merge')
 })

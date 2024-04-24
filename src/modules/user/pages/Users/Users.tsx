@@ -347,13 +347,17 @@ export const Users = () => {
   const handleMergeCancel = () => {
     setShowMergeDialog(false)
     setSelected([])
-    refreshUsers()
+    refreshUsers({
+      requestPolicy: 'network-only',
+    })
   }
 
   const handleMergeSuccess = () => {
     setShowMergeDialog(false)
     setSelected([])
-    refreshUsers()
+    refreshUsers({
+      requestPolicy: 'network-only',
+    })
   }
 
   return (
