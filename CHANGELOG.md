@@ -1,5 +1,76 @@
 # @teamteach/hub
 
+## 4.0.0
+
+### Major Changes
+
+- 229bd68: prepare order details section of CLOSED courses for international
+
+### Minor Changes
+
+- eaff25b: Unit tests for course creation scenarios
+- 897505c: store email notifications to Hasura
+- 216a58d: Delete organisation modal message display changes
+- 04d5a5f: Closed 3day srt course management.
+- 6f35791: Add filter for 3day srt level on organization page.
+- 04d5a5f: add modules for closed course 3 day SRT
+- 1e4ac37: Level One MVA course creation
+- 5568fdf: Renaming next button label for create Indirect course as Admin
+- 4c3f7e3: When creating a course of booking someone to a course, display error banner if there's no price set for the course
+- 1f8b52a: Residing org in register page to search by name and postcode
+- d431bda: Delete organisation without any entity linked
+- 1236ec7: add filter courses by reaccreditation
+- e75df75: Delete Indirect non blended learning courses
+- 1000d83: Add timezones to various places where hours are being displayed
+- cf003a0: Level 1 MVA course codes
+- cffeee9: Limit the venues to the selected residing country
+- b067f3e: Display course timezone when transfering participant.
+- 303195c: Enumerate all order references on orders page table
+- f0f2ec9: Do not allow editing a course without scheduled price
+- 3416741: Allow org admin to view cancellation requests made by booking contact.
+- e120faa: Add XeroInvoiceNumber column on course_audit and course_participant_audit tables. Create computed field for searching by query.
+- 646a5d4: Bring create course form to a standard.
+
+### Patch Changes
+
+- cc17e94: No price needed when creating INDIRECT course, therefore always allow creation
+- 48dfa48: Fix org enquiry on registration forms
+- b3e40f7: Add pricing for Closed 3 Day SRT courses
+- fd54828: Attempt to fix 'Failed to load Stripe.js' sentry error.
+- a14c2b3: Change venue selector required condition.
+- 69f5e3c: Display ' as it is, not as character entity reference.
+- 03dae06: Time zone on cancel attendee pop up
+- efacc2d: Refetch course prices with "network-only" policy.
+- 39c7c93: Fix Small Child and One Person Holds module
+- 01aaee0: Frontend clean up after monorepo migration tentative
+- 3df41d5: Fix data caching on delete org modal
+- b311e39: Fix curriculum is not iterable error
+- 022abac: fix race condition in approve/reject course exceptions
+- a730a25: Improve Postgress max connections on e2e tests
+- ca077cd: Send leader and moderator when checking for trainer ratios exceptions.
+- 06a9d3d: Fix User selector showing duplicate emails while replacing participants
+- 054f8db: If there are disabilities or dietary requirements, display them in text field on edit profile.
+- 39f5d24: fixing issues found during testing
+- 173e5fa: Display 'No' if user confirms that it doesn't have Disabilities or Dietary Requirements.
+- cb96a94: Fix not save course builder
+- e4d29dd: Attempts at fixing unexpected end of input error
+- 192b78c: UK date format on profile certifications
+- 04d5a5f: Fix Orders being saved with eronate names
+- 1235159: Disable blended learning switch for Closed courses
+- daeab88: Convert course pricing schedule effectiveFrom and effectiveTo dates to UTC.
+- 750b0f2: Allow only org admins of hosting organisations to request cancellation.
+- 2dbd27f: disable evaluation if H&S form is not submitted
+- 7c027fc: Stabilise unit tests
+- 16de251: Display certificates on user's profile only after it submits the course evaluation.
+- 04d5a5f: feat(TTHP-3636): amend 3 day SRT modules
+- fc9b7c5: show time zone in the replace attendee modal
+- 8dc0d16: extract all data when exporting audit logs
+- 04535f4: Only show UK countries when creating a BILD course
+- 12c2e03: No price needed for creating BILD Indirect course
+- 90e9714: Update Refresh of Intermediate Techniques module lessons
+- f55d75e: Add missing permissions for tt-ops, sales-admin and trainer to insert vat.
+- 2a154ef: Add validation for inserting and updating course pricing.
+
 ## 3.9.0
 
 ### Minor Changes
