@@ -10,16 +10,15 @@ import { stateFilePath } from '@qa/util'
 
 test.use({ storageState: stateFilePath('admin') })
 
+// eslint-disable-next-line playwright/expect-expect
 test('Should redirect to the merge users page when clicking on the merge users button', async ({
   page,
 }) => {
   const usersPage = new UsersPage(page)
   await usersPage.goto()
 
-  const mergeUsersPage = await usersPage.gotoMergeUsers()
-  await mergeUsersPage.waitForPageLoad()
-  const url = new URL(page.url())
-  expect(url.pathname).toBe('/admin/users/merge')
+  await usersPage.gotoMergeUsers()
+  await page.waitForURL(/.*\/admin\/users\/merge/)
 })
 
 test('Should enable the "Merge Users" button when exactly 2 users are selected', async ({
