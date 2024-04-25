@@ -54,9 +54,13 @@ export function useCoursePrice(courseData?: {
   courseLevel: Course_Level_Enum
   reaccreditation: boolean
   blended: boolean
+  maxParticipants: number | null
 }) {
   const { isUKCountry } = useWorldCountries()
   const isBILDcourse = courseData?.accreditedBy === Accreditors_Enum.Bild
+  const isICMcourse = courseData?.accreditedBy === Accreditors_Enum.Icm
+  const isCLOSEDcourse = courseData?.courseType === Course_Type_Enum.Closed
+  const isLevel2 = courseData?.courseLevel === Course_Level_Enum.Level_2
 
   const pauseQuery =
     !courseData ||
@@ -97,6 +101,15 @@ export function useCoursePrice(courseData?: {
       ) {
         const scheduledPrice = coursePrice.pricingSchedules
         if (scheduledPrice.length !== 0) {
+          if (
+            isCLOSEDcourse &&
+            isICMcourse &&
+            isLevel2 &&
+            (!courseData.maxParticipants || courseData?.maxParticipants <= 8)
+          ) {
+            return null
+          }
+
           return {
             priceCurrency: scheduledPrice[0].priceCurrency,
             priceAmount: scheduledPrice[0].priceAmount,
@@ -111,7 +124,11 @@ export function useCoursePrice(courseData?: {
       courseData?.blended,
       courseData?.courseLevel,
       courseData?.courseType,
+      courseData?.maxParticipants,
       courseData?.reaccreditation,
+      isCLOSEDcourse,
+      isICMcourse,
+      isLevel2,
     ]
   )
 

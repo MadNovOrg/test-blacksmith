@@ -855,6 +855,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     courseLevel: values.courseLevel as Course_Level_Enum,
     reaccreditation: values.reaccreditation,
     blended: values.blendedLearning,
+    maxParticipants: values.maxParticipants,
   })
 
   useEffectOnce(() => {
