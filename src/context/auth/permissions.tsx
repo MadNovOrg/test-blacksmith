@@ -807,7 +807,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return acl.isAdmin()
     },
     canViewCourseBuilderOnEditPage: (
-      course: Pick<CourseInput, 'accreditedBy' | 'type'> | undefined | null,
+      course:
+        | Pick<CourseInput, 'accreditedBy' | 'gradingConfirmed' | 'type'>
+        | undefined
+        | null,
       trainers: {
         profile: { id: string }
         type: Course_Trainer_Type_Enum | CourseTrainerType
@@ -817,7 +820,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         !(
           course?.accreditedBy === Accreditors_Enum.Icm &&
           (course?.type === Course_Type_Enum.Closed ||
-            course?.type === Course_Type_Enum.Indirect)
+            course?.type === Course_Type_Enum.Indirect) &&
+          !course.gradingConfirmed
         )
       ) {
         return false

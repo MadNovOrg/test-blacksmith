@@ -2719,6 +2719,7 @@ describe(getACL.name, () => {
         overrides: {
           accreditedBy: Accreditors_Enum.Icm,
           type: Course_Type_Enum.Closed,
+          gradingConfirmed: false,
         },
       })
 
@@ -2731,6 +2732,38 @@ describe(getACL.name, () => {
           },
         ])
       ).toBeTruthy()
+    })
+    it('should return false if active role is trainer and is lead trainer, but grading is confirmed', () => {
+      // Arrange
+      const profileId = '123'
+      const trainerType = Course_Trainer_Type_Enum.Leader
+
+      const acl = getACLStub({
+        profile: buildProfile({
+          overrides: {
+            id: profileId,
+          },
+        }),
+        activeRole: RoleName.TRAINER,
+      })
+
+      const course = buildCourse({
+        overrides: {
+          accreditedBy: Accreditors_Enum.Icm,
+          type: Course_Type_Enum.Closed,
+          gradingConfirmed: true,
+        },
+      })
+
+      // Act & Assert
+      expect(
+        acl.canViewCourseBuilderOnEditPage(course, [
+          {
+            profile: { id: profileId },
+            type: trainerType,
+          },
+        ])
+      ).toBeFalsy()
     })
     it('should return false if activerole is trainer and is not the lead trainer', () => {
       // Arrange

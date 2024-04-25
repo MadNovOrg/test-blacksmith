@@ -593,60 +593,62 @@ export type CourseCertificateChangelog = {
 } & Base
 
 export type CourseInput = {
-  type: Course_Type_Enum | null
-  id: number
-  organization: Organization | null
+  accountCode: string | null
+  accreditedBy: Accreditors_Enum | null
+  aolCountry: string | null
+  aolRegion: string | null
+  arloReferenceId?: string
+  bildStrategies: Record<BildStrategies, boolean> | null
+  blendedLearning: boolean
+
   bookingContact: {
-    profileId?: string
+    email: string
     firstName: string
     lastName: string
-    email: string
+    profileId?: string
   } | null
+
+  conversion: boolean
+  courseCost: number | null
+  courseLevel: Course_Level_Enum | Course_Level | ''
+  deliveryType: Course_Delivery_Type_Enum
+  displayOnWebsite?: boolean
+  endDate: Date | null
+  endDateTime: Date | null
+  endTime: string
+  freeSpaces: number | null
+  gradingConfirmed?: boolean | null
+  id: number
+  includeVAT?: boolean | null
+  maxParticipants: number | null
+  minParticipants: number | null
+  organization: Organization | null
 
   organizationKeyContact: {
-    profileId?: string
+    email: string
     firstName: string
     lastName: string
-    email: string
+    profileId?: string
   } | null
 
-  salesRepresentative: Profile | null | FindProfilesQuery['profiles'][0]
-  courseLevel: Course_Level_Enum | Course_Level | ''
-  blendedLearning: boolean
+  parkingInstructions: string
+  price: number | null | undefined
+  priceCurrency?: string
   reaccreditation: boolean
-  deliveryType: Course_Delivery_Type_Enum
-  startDateTime: Date | null
+  renewalCycle?: Course_Renewal_Cycle_Enum
+  residingCountry?: string
+  salesRepresentative: Profile | null | FindProfilesQuery['profiles'][0]
+  source: Course_Source_Enum | ''
+  specialInstructions: string
   startDate: Date | null
+  startDateTime: Date | null
   startTime: string
-  endDateTime: Date | null
-  endDate: Date | null
-  endTime: string
   timeZone?: TimeZoneDataType
-  minParticipants: number | null
-  maxParticipants: number | null
+  type: Course_Type_Enum | null
+  usesAOL: boolean
   venue: Venue | null
   zoomMeetingUrl: string | null
   zoomProfileId: string | null
-  freeSpaces: number | null
-  accountCode: string | null
-  usesAOL: boolean
-  aolCountry: string | null
-  aolRegion: string | null
-  courseCost: number | null
-  specialInstructions: string
-  parkingInstructions: string
-  source: Course_Source_Enum | ''
-  bildStrategies: Record<BildStrategies, boolean> | null
-  accreditedBy: Accreditors_Enum | null
-  conversion: boolean
-  price: number | null | undefined
-  displayOnWebsite?: boolean
-  renewalCycle?: Course_Renewal_Cycle_Enum
-  residingCountry?: string
-  priceCurrency?: string
-  includeVAT?: boolean | null
-  //TODO: Delete this after Arlo migration
-  arloReferenceId?: string
 }
 
 export type ValidCourseInput = DeepNonNullable<
