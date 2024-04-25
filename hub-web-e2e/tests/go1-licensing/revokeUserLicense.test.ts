@@ -19,23 +19,22 @@ const test = base.extend<{ licenseContext: Go1LicenseContext }>({
       API.organization.insertOrganization(UNIQUE_ORGANIZATION()),
       API.profile.getProfileId(users.user1.email),
     ])
-    const [memberId, licenseId] = await Promise.all([
-      API.organization.insertOrganizationMember({
-        profile_id: profileId,
-        organization_id: orgId,
-      }),
-      API.go1_licensing.insertGo1License({
-        profileId,
-        orgId,
-        expireDate: addYears(new Date(), 1),
-      }),
-    ])
+    const memberId = await API.organization.insertOrganizationMember({
+      profile_id: profileId,
+      organization_id: orgId,
+    })
+
+    const licenseId = await API.go1_licensing.insertGo1License({
+      profileId,
+      orgId,
+      expireDate: addYears(new Date(), 1),
+    })
+
     await use({ licenseId, orgId, profileId })
-    await Promise.all([
-      API.go1_licensing.deleteGo1License(licenseId),
-      API.organization.deleteOrganizationMember(memberId),
-      API.organization.deleteOrganization(orgId),
-    ])
+
+    await API.go1_licensing.deleteGo1License(licenseId)
+    await API.organization.deleteOrganizationMember(memberId)
+    await API.organization.deleteOrganization(orgId)
   },
 })
 

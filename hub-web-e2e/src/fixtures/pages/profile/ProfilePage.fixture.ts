@@ -30,8 +30,8 @@ export class ProfilePage extends BasePage {
 
   async goto(profileId?: string, orgId?: string) {
     const url = orgId
-      ? `profile/${profileId}?orgId=${orgId}`
-      : `profile/${profileId ?? ''}`
+      ? `/profile/${profileId}?orgId=${orgId}`
+      : `/profile/${profileId ?? ''}`
 
     await this.page.goto(url)
     await this.page.waitForURL(url)
