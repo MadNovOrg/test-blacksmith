@@ -105,6 +105,8 @@ export function useCoursePrice(courseData?: {
             isCLOSEDcourse &&
             isICMcourse &&
             isLevel2 &&
+            courseData?.blended &&
+            isUKCountry(courseData.residingCountry) &&
             (!courseData.maxParticipants || courseData?.maxParticipants <= 8)
           ) {
             return null
@@ -126,9 +128,11 @@ export function useCoursePrice(courseData?: {
       courseData?.courseType,
       courseData?.maxParticipants,
       courseData?.reaccreditation,
+      courseData?.residingCountry,
       isCLOSEDcourse,
       isICMcourse,
       isLevel2,
+      isUKCountry,
     ]
   )
 
