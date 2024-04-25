@@ -89,7 +89,12 @@ export const QUERY = gql`
       where: {
         _and: [
           { profileId: { _eq: $profileId } }
-          { participant: { completed_evaluation: { _eq: true } } }
+          {
+            _or: [
+              { participant: { completed_evaluation: { _eq: true } } }
+              { legacyCourseCode: { _is_null: false, _neq: "" } }
+            ]
+          }
         ]
       }
       order_by: { expiryDate: desc }

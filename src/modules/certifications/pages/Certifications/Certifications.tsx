@@ -65,7 +65,10 @@ export const Certifications: React.FC<
     const conditions: Course_Certificate_Bool_Exp[] = []
 
     conditions.push({
-      participant: { completed_evaluation: { _eq: true } },
+      _or: [
+        { participant: { completed_evaluation: { _eq: true } } },
+        { legacyCourseCode: { _is_null: false, _neq: '' } },
+      ],
     })
 
     if (keyword) {
