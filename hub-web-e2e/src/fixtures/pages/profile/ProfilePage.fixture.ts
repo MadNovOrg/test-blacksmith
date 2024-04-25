@@ -34,7 +34,7 @@ export class ProfilePage extends BasePage {
       : `/profile/${profileId ?? ''}`
 
     await this.page.goto(url)
-    await this.page.waitForURL(url)
+    await this.waitForPageLoad()
   }
 
   async clickEditButton() {
