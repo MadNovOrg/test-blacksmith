@@ -28,7 +28,7 @@ describe('getRequiredTrainersV2', () => {
     Course_Level_Enum.Level_1,
     Course_Level_Enum.Level_2,
     Course_Level_Enum.IntermediateTrainer,
-    Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+    Course_Level_Enum.FoundationTrainerPlus,
   ])('assist ratio value for %s course', courseLevel => {
     criteria.courseLevel = courseLevel
     criteria.type = Course_Type_Enum.Open

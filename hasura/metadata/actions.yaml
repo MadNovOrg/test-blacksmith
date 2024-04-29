@@ -575,7 +575,7 @@ custom_types:
           value: BILD_ADVANCED_TRAINER
         - description: null
           is_deprecated: null
-          value: THREE_DAY_SAFETY_RESPONSE_TRAINER
+          value: FOUNDATION_TRAINER_PLUS
     - name: SearchTrainerAvailability
       values:
         - description: null

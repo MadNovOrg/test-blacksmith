@@ -150,7 +150,7 @@
           "default": "$t(certificates.level-one) or $t(certificates.level-two) $t(certificate)",
           "reaccreditation": "$t(certificates.intermediate_trainer) $t(certificate)"
         },
-        "three-day-srt-trainer": {
+        "foundation-trainer-plus": {
           "default": "$t(certificates.level-one) or $t(certificates.level-two) $t(certificate)",
           "reaccreditation": "$t(certificates.intermediate_trainer) $t(certificate)"
         },
@@ -281,7 +281,7 @@
         "ICM-description": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the {{ duration }} duration.",
         "ICM-description-choose-modules": "To submit your course, choose from the modules available to create a course to be delivered over a minimum duration of {{ duration}}. Times indicated on the modules are the minimum recommended duration for each module.",
         "ICM-description-default": "To submit a course, choose from the modules available to create a course {{duration}} in duration. Times indicated on the modules are the minimum recommended duration for each.",
-        "3-day-STR-choose-modules": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 3 day duration.",
+        "foundation-trainer-plus-choose-modules": "To submit this course, please accept that you will deliver all modules and techniques highlighted below over the 3 day duration.",
         "mandatory-modules-notice": "*Please note, modules that cannot be deselected must be delivered as part of the core programme.",
         "location": "Location",
         "starts": "Starts",
@@ -1375,7 +1375,7 @@
           "bild_intermediate_trainer": "BILD Intermediate Trainer ({{ count }})",
           "bild_advanced_trainer": "BILD Advanced Trainer ({{ count }})",
           "advanced_trainer": "Advanced Trainer ({{ count }})",
-          "three_day_safety_response_trainer": "3-Day Safety Responses Trainer ({{count}})",
+          "foundation_trainer_plus": "Foundation Trainer Plus ({{count}})",
           "no-certification": "No certification ({{ count }})"
         },
         "all-organisation-members": "All organisation members",

@@ -2,7 +2,7 @@ import { addMonths, isPast } from 'date-fns'
 
 export const CertificateGracePeriod = {
   INTERMEDIATE_TRAINER: 3,
-  THREE_DAY_SAFETY_RESPONSE_TRAINER: 3,
+  FOUNDATION_TRAINER_PLUS: 3,
   ADVANCED_TRAINER: 1,
 }
 

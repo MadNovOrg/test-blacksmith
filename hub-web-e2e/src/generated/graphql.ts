@@ -1369,11 +1369,11 @@ export enum CourseLevel {
   BildAdvancedTrainer = 'BILD_ADVANCED_TRAINER',
   BildIntermediateTrainer = 'BILD_INTERMEDIATE_TRAINER',
   BildRegular = 'BILD_REGULAR',
+  FoundationTrainerPlus = 'FOUNDATION_TRAINER_PLUS',
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   Level_1 = 'LEVEL_1',
   Level_1Mva = 'LEVEL_1_MVA',
-  Level_2 = 'LEVEL_2',
-  ThreeDaySafetyResponseTrainer = 'THREE_DAY_SAFETY_RESPONSE_TRAINER'
+  Level_2 = 'LEVEL_2'
 }
 
 export type CourseParticipant = {
@@ -22083,11 +22083,11 @@ export enum Course_Level_Enum {
   BildAdvancedTrainer = 'BILD_ADVANCED_TRAINER',
   BildIntermediateTrainer = 'BILD_INTERMEDIATE_TRAINER',
   BildRegular = 'BILD_REGULAR',
+  FoundationTrainerPlus = 'FOUNDATION_TRAINER_PLUS',
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   Level_1 = 'LEVEL_1',
   Level_1Mva = 'LEVEL_1_MVA',
-  Level_2 = 'LEVEL_2',
-  ThreeDaySafetyResponseTrainer = 'THREE_DAY_SAFETY_RESPONSE_TRAINER'
+  Level_2 = 'LEVEL_2'
 }
 
 /** Boolean expression to compare columns of type "course_level_enum". All fields are combined with logical 'AND'. */

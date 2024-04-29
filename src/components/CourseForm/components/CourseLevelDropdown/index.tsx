@@ -35,8 +35,9 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   const onChangeRef = useRef<Props['onChange'] | undefined>()
 
   const { acl } = useAuth()
-  const threeDaySRTcourseLevelEnabled =
-    useFeatureFlagEnabled('3-day-srt-course')
+  const foundationTrainerPlusLevelEnabled = useFeatureFlagEnabled(
+    'foundation-trainer-plus-course'
+  )
   const levelOneMVAEnabled = useFeatureFlagEnabled('level-one-mva')
 
   useEffect(() => {
@@ -48,9 +49,9 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
       acl.allowedCourseLevels(
         getLevels(courseType, courseAccreditor).filter(level => {
           if (
-            !threeDaySRTcourseLevelEnabled &&
-            typeof threeDaySRTcourseLevelEnabled !== 'undefined' &&
-            level === Course_Level_Enum.ThreeDaySafetyResponseTrainer
+            !foundationTrainerPlusLevelEnabled &&
+            typeof foundationTrainerPlusLevelEnabled !== 'undefined' &&
+            level === Course_Level_Enum.FoundationTrainerPlus
           )
             return false
 
@@ -68,7 +69,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
       acl,
       courseType,
       courseAccreditor,
-      threeDaySRTcourseLevelEnabled,
+      foundationTrainerPlusLevelEnabled,
       levelOneMVAEnabled,
     ]
   )

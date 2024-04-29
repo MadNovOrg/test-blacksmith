@@ -68,8 +68,8 @@ const GroupsSelection: React.FC<Props> = ({
 }) => {
   const theme = useTheme()
 
-  const is3daySRTCourse =
-    level === Course_Level_Enum.ThreeDaySafetyResponseTrainer &&
+  const isFoundationTrainerPlusCourse =
+    level === Course_Level_Enum.FoundationTrainerPlus &&
     type === Course_Type_Enum.Open
 
   const [selectedIds, setSelectedIds] = useState<string[]>(
@@ -205,7 +205,8 @@ const GroupsSelection: React.FC<Props> = ({
             type === Course_Type_Enum.Open
 
           const hideDuration =
-            !is3daySRTCourse && moduleGroup.duration.aggregate?.sum?.duration
+            !isFoundationTrainerPlusCourse &&
+            moduleGroup.duration.aggregate?.sum?.duration
 
           return (
             <Accordion
@@ -345,7 +346,7 @@ const GroupsSelection: React.FC<Props> = ({
             }
 
             const hideDuration =
-              !is3daySRTCourse &&
+              !isFoundationTrainerPlusCourse &&
               selectedGroup.duration.aggregate?.sum?.duration
 
             return (

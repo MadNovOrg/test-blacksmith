@@ -67,7 +67,7 @@ export function getLevels(
         Course_Level_Enum.Level_2,
         Course_Level_Enum.IntermediateTrainer,
         Course_Level_Enum.AdvancedTrainer,
-        Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+        Course_Level_Enum.FoundationTrainerPlus,
       ]
     },
 
@@ -79,7 +79,7 @@ export function getLevels(
         Course_Level_Enum.Advanced,
         Course_Level_Enum.IntermediateTrainer,
         Course_Level_Enum.AdvancedTrainer,
-        Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+        Course_Level_Enum.FoundationTrainerPlus,
       ]
     },
 
@@ -132,7 +132,7 @@ export const changeCountryOnCourseLevelChange = (
     return courseResidingCountry
 
   if (
-    newCourseLevel === Course_Level_Enum.ThreeDaySafetyResponseTrainer ||
+    newCourseLevel === Course_Level_Enum.FoundationTrainerPlus ||
     newCourseLevel === Course_Level_Enum.Level_1Mva
   )
     return Countries_Code.IRELAND
@@ -288,7 +288,7 @@ export function canBeReacc(
           Course_Level_Enum.Level_2,
           Course_Level_Enum.IntermediateTrainer,
           Course_Level_Enum.AdvancedTrainer,
-          Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+          Course_Level_Enum.FoundationTrainerPlus,
         ]
         if (levels.includes(courseLevel)) return !blended
       }
@@ -297,7 +297,7 @@ export function canBeReacc(
         // OPEN + Mixed can only be Level 2 or 3-Day Safety Responses Trainer
         const levels = [
           Course_Level_Enum.Level_2,
-          Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+          Course_Level_Enum.FoundationTrainerPlus,
         ]
         if (levels.includes(courseLevel)) return !blended
       }
@@ -322,7 +322,7 @@ export function canBeReacc(
           Course_Level_Enum.Level_2,
           Course_Level_Enum.IntermediateTrainer,
           Course_Level_Enum.AdvancedTrainer,
-          Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+          Course_Level_Enum.FoundationTrainerPlus,
         ]
         return levels.includes(courseLevel)
       }
@@ -331,7 +331,7 @@ export function canBeReacc(
         const levels = [
           Course_Level_Enum.Level_1,
           Course_Level_Enum.Level_2,
-          Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+          Course_Level_Enum.FoundationTrainerPlus,
           Course_Level_Enum.Level_1Mva,
           Course_Level_Enum.Level_2,
         ]
@@ -341,7 +341,7 @@ export function canBeReacc(
       if (isVirtual) {
         const levels = [
           Course_Level_Enum.Level_1,
-          Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+          Course_Level_Enum.FoundationTrainerPlus,
         ]
         return levels.includes(courseLevel)
       }
@@ -435,7 +435,7 @@ export function canBeF2F(
         Course_Level_Enum.Level_2,
         Course_Level_Enum.IntermediateTrainer,
         Course_Level_Enum.AdvancedTrainer,
-        Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+        Course_Level_Enum.FoundationTrainerPlus,
       ]
       return levels.includes(courseLevel)
     },
@@ -450,7 +450,7 @@ export function canBeF2F(
         Course_Level_Enum.Advanced,
         Course_Level_Enum.IntermediateTrainer,
         Course_Level_Enum.AdvancedTrainer,
-        Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+        Course_Level_Enum.FoundationTrainerPlus,
       ]
       return levels.includes(courseLevel)
     },
@@ -480,7 +480,7 @@ export function canBeMixed(
 
       const levels = [
         Course_Level_Enum.Level_2,
-        Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+        Course_Level_Enum.FoundationTrainerPlus,
       ]
       return levels.includes(courseLevel)
     },
@@ -491,7 +491,7 @@ export function canBeMixed(
       const levels = [
         Course_Level_Enum.Level_1,
         Course_Level_Enum.Level_2,
-        Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+        Course_Level_Enum.FoundationTrainerPlus,
         Course_Level_Enum.Level_1Mva,
         Course_Level_Enum.Level_2,
       ]
@@ -574,7 +574,7 @@ export function getDefaultSpecialInstructions(
 
   if (
     level === Course_Level_Enum.Level_1 ||
-    Course_Level_Enum.ThreeDaySafetyResponseTrainer
+    Course_Level_Enum.FoundationTrainerPlus
   ) {
     key = `${key}.${deliveryType}`
   } else if (level === Course_Level_Enum.Level_2) {

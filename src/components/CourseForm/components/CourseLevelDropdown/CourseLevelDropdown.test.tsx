@@ -58,7 +58,7 @@ describe('component: CourseLevelDropdown', () => {
       getOption(t('common.course-levels.ADVANCED_TRAINER'))
     ).toBeInTheDocument()
     expect(
-      getOption(t('common.course-levels.THREE_DAY_SAFETY_RESPONSE_TRAINER'))
+      getOption(t('common.course-levels.FOUNDATION_TRAINER_PLUS'))
     ).toBeInTheDocument()
   })
 

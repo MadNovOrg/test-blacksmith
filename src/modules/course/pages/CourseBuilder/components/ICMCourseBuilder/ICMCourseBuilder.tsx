@@ -50,7 +50,7 @@ export const MAX_COURSE_DURATION_MAP = {
     [Course_Level_Enum.Level_1]: 6 * 60, // 1 training day
     [Course_Level_Enum.Level_1Mva]: 6 * 60, // 1 training day
     [Course_Level_Enum.Level_2]: 2 * 6 * 60, // 2 training days
-    [Course_Level_Enum.ThreeDaySafetyResponseTrainer]: 3 * 6 * 60, // 3 training days
+    [Course_Level_Enum.FoundationTrainerPlus]: 3 * 6 * 60, // 3 training days
     [Course_Level_Enum.IntermediateTrainer]: 5 * 6 * 60, // 5 training days
     [Course_Level_Enum.BildRegular]: 5 * 6 * 60, // 5 training days
     [Course_Level_Enum.AdvancedTrainer]: 5 * 6 * 60, // 5 training days
@@ -62,7 +62,7 @@ export const MAX_COURSE_DURATION_MAP = {
     [Course_Level_Enum.Level_1]: 6 * 60, // 1 training day
     [Course_Level_Enum.Level_1Mva]: 6 * 60, // 1 training day
     [Course_Level_Enum.Level_2]: 6 * 60, // 1 training day
-    [Course_Level_Enum.ThreeDaySafetyResponseTrainer]: 6 * 60, // 1 training day
+    [Course_Level_Enum.FoundationTrainerPlus]: 6 * 60, // 1 training day
     [Course_Level_Enum.IntermediateTrainer]: 2 * 6 * 60, // 2 training days
     [Course_Level_Enum.BildRegular]: 2 * 6 * 60, // 2 training days
     [Course_Level_Enum.AdvancedTrainer]: 2 * 6 * 60, // 2 training days
@@ -251,21 +251,21 @@ export const ICMCourseBuilder: React.FC<
     ],
     [
       matches({
-        level: Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+        level: Course_Level_Enum.FoundationTrainerPlus,
         reaccreditation: true,
       }),
       constant({
         duration: '1 day',
-        translationKey: '3-day-STR-choose-modules',
+        translationKey: 'foundation-trainer-plus-choose-modules',
       }),
     ],
     [
       matches({
-        level: Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+        level: Course_Level_Enum.FoundationTrainerPlus,
       }),
       constant({
         duration: '3 day',
-        translationKey: '3-day-STR-choose-modules',
+        translationKey: 'foundation-trainer-plus-choose-modules',
       }),
     ],
     [stubTrue, constant(null)],

@@ -432,7 +432,7 @@ it('displays already saved modules as preselected', () => {
 it.each([
   Course_Level_Enum.IntermediateTrainer,
   Course_Level_Enum.AdvancedTrainer,
-  Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+  Course_Level_Enum.FoundationTrainerPlus,
 ])(
   'does not display the course estimated duration for %s course (if not OPEN)',
   level => {
@@ -477,10 +477,10 @@ it.each([
 )
 
 it.each([true, false])(
-  'does not display the course estimated duration for 3 Day SRT and reaccreditation %s course',
+  'does not display the course estimated duration for Foundation Trainer Plus and reaccreditation %s course',
   reaccreditation => {
     const course = buildCourse({
-      level: Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+      level: Course_Level_Enum.FoundationTrainerPlus,
       type: Course_Type_Enum.Open,
       reaccreditation,
     })
@@ -521,7 +521,7 @@ it.each([true, false])(
 )
 
 it.each([true, false])(
-  'does not display the time commitment warning modal for 3 Day SRT and reaccreditation %s course',
+  'does not display the time commitment warning modal for Foundation Trainer Plus and reaccreditation %s course',
   reaccreditation => {
     const moduleSettings = Array.from({ length: 10 }, () =>
       buildModuleSetting({
@@ -531,7 +531,7 @@ it.each([true, false])(
     )
 
     const course = buildCourse({
-      level: Course_Level_Enum.ThreeDaySafetyResponseTrainer,
+      level: Course_Level_Enum.FoundationTrainerPlus,
       type: Course_Type_Enum.Open,
       reaccreditation,
     })

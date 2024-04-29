@@ -15,7 +15,7 @@ const {
   Level_1,
   Level_1Mva,
   Level_2,
-  ThreeDaySafetyResponseTrainer,
+  FoundationTrainerPlus,
 } = Course_Level_Enum
 
 export type TrainerRatio = {
@@ -64,12 +64,9 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
   }
 
   if (
-    [
-      IntermediateTrainer,
-      Level_1,
-      Level_2,
-      ThreeDaySafetyResponseTrainer,
-    ].includes(courseLevel)
+    [IntermediateTrainer, Level_1, Level_2, FoundationTrainerPlus].includes(
+      courseLevel
+    )
   ) {
     return ratio(0, 12, 12)
   }

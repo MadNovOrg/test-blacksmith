@@ -54,7 +54,7 @@ const LEVELS_IN_ORDER = [
   CourseLevel.IntermediateTrainer,
   CourseLevel.Level_1,
   CourseLevel.Level_2,
-  CourseLevel.ThreeDaySafetyResponseTrainer,
+  CourseLevel.FoundationTrainerPlus,
   null,
 ].sort()
 
