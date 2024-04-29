@@ -1,5 +1,17 @@
 # @teamteach/hub
 
+## 4.1.0
+
+### Minor Changes
+
+- d7ef54e: Remove price hint when creating ICM Closed course Level 2, Blended Learning with less than 8 participants
+
+### Patch Changes
+
+- e923baf: fix query invalidation after merging users
+- 8f6b381: Handle legacy certificates when displaying them on profiles
+- 6e6b50f: Restrict course builder edit after grading confirm
+
 ## 4.0.0
 
 ### Major Changes
