@@ -15,11 +15,13 @@ const testData = [
     name: 'accept open course as trainer',
     course: async () => {
       const course = UNIQUE_COURSE()
-      course.id = await API.course.insertCourse(
-        course,
-        users.trainer.email,
-        InviteStatus.PENDING
-      )
+      course.id = (
+        await API.course.insertCourse(
+          course,
+          users.trainer.email,
+          InviteStatus.PENDING
+        )
+      ).id
       return course
     },
   },
@@ -28,11 +30,13 @@ const testData = [
     course: async () => {
       const course = UNIQUE_COURSE()
       course.type = Course_Type_Enum.Indirect
-      course.id = await API.course.insertCourse(
-        course,
-        users.trainer.email,
-        InviteStatus.PENDING
-      )
+      course.id = (
+        await API.course.insertCourse(
+          course,
+          users.trainer.email,
+          InviteStatus.PENDING
+        )
+      ).id
       return course
     },
   },
@@ -41,11 +45,13 @@ const testData = [
     course: async () => {
       const course = UNIQUE_COURSE()
       course.type = Course_Type_Enum.Closed
-      course.id = await API.course.insertCourse(
-        course,
-        users.trainer.email,
-        InviteStatus.PENDING
-      )
+      course.id = (
+        await API.course.insertCourse(
+          course,
+          users.trainer.email,
+          InviteStatus.PENDING
+        )
+      ).id
       return course
     },
   },
