@@ -143,6 +143,7 @@ INSERT INTO organization_member (profile_id, organization_id) VALUES
 ('fb523ef0-7fd1-42b2-b078-dce29a1713fe', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- user1.with.org@teamteach.testinator.com
 ('a39bb4b3-a07a-4610-8da1-b0ce885cc263', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- user2.with.org@teamteach.testinator.com
 ('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- org.adm@teamteach.testinator.com
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- trainer@teamteach.testinator.com
 ('921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- trainer01@teamteach.testinator.com
 ('30ebb1e1-0491-44f8-b0a2-3087bd454b19', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- trainer02@teamteach.testinator.com
 ('e05cef9b-6b13-4c4c-b7b0-31181b6ad0a9', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- trainer03@teamteach.testinator.com

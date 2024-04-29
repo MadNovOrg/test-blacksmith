@@ -59367,7 +59367,7 @@ export type InsertCourseForCodesMutationVariables = Exact<{
 }>;
 
 
-export type InsertCourseForCodesMutation = { __typename?: 'mutation_root', insert_course_one?: { __typename?: 'course', id: number, course_code?: string | null } | null };
+export type InsertCourseForCodesMutation = { __typename?: 'mutation_root', insert_course_one?: { __typename?: 'course', id: number, course_code?: string | null, name: string } | null };
 
 export type CourseFreeSlotsQueryVariables = Exact<{
   id: Scalars['Int'];

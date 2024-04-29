@@ -12,7 +12,7 @@ import { Accreditors_Enum } from '@qa/generated/graphql'
 
 import { buildVenue } from '@test/mock-data-utils'
 
-import { Course } from './types'
+import { Course } from './types' // best to replace this with generated course type
 
 export const COURSES_TO_VIEW: Course[] = [
   {
@@ -48,6 +48,7 @@ export const COURSES_TO_VIEW: Course[] = [
     type: Course_Type_Enum.Closed,
     reaccreditation: false,
     organization: { name: 'London First School' },
+    course_code: '',
     schedule: [
       {
         start: addMonths(new Date(), 2),

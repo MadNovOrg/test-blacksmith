@@ -9,7 +9,7 @@ import {
 import { getClient } from './client'
 
 export const getOrganizationId = async (name: string): Promise<string> => {
-  const query = gql`query OrganizationById { organization(where: {name: {_eq: "${name}"}}) { id }}`
+  const query = gql`query OrganizationById { organization(where: {name: {_ilike: "%${name}%"}}) { id }}`
   const response: { organization: { id: string }[] } =
     await getClient().request(query)
   return response.organization[0].id

@@ -193,6 +193,7 @@ describe('component: ReviewLicenseOrder', () => {
             id: 1,
             orders: [],
             expenses: [],
+            name: '',
           },
         },
       })

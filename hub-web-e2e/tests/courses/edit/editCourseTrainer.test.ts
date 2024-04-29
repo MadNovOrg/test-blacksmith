@@ -22,12 +22,19 @@ const test = base.extend<{ course: Course }>({
 
 test.use({ storageState: stateFilePath('trainer') })
 
-test('search for a course id on manage courses as a trainer', async ({
+test('edit course notes for indirect course as a trainer', async ({
   page,
   course,
 }) => {
   const myCoursesPage = new MyCoursesPage(page)
-  await myCoursesPage.goto()
-  await myCoursesPage.searchCourse(`${course.id}`)
-  await myCoursesPage.checkNumberOfTableRows(1)
+  await myCoursesPage.goto(`${course.id}`)
+  const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
+    course.id
+  )
+  await courseDetailsPage.clickEditCourseButton()
+  await courseDetailsPage.fillNotes('notes3')
+  // Required at the moment due to additional trainers always being required
+  await courseDetailsPage.addAdditionalTrainer()
+  await courseDetailsPage.clickSaveButton()
+  await courseDetailsPage.checkNotesOnCoursePage('notes3')
 })

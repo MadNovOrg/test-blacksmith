@@ -16,7 +16,7 @@ const test = base.extend<{ course: Course }>({
     course.organization = { name: 'London First School' }
     course.bookingContactProfile = users.user1WithOrg
     course.salesRepresentative = users.user2WithOrg
-    course.id = await API.course.insertCourse(course, users.trainer.email)
+    course.id = (await API.course.insertCourse(course, users.trainer.email)).id
     await use(course)
     await API.course.deleteCourse(course.id)
   },

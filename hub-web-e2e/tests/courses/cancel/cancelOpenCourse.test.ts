@@ -11,7 +11,7 @@ const allowedRoles = ['salesAdmin', 'ops', 'admin']
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
-    course.id = await API.course.insertCourse(course, users.trainer.email)
+    course.id = (await API.course.insertCourse(course, users.trainer.email)).id
     await use(course)
     await API.course.deleteCourse(course.id)
   },

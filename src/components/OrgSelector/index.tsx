@@ -202,7 +202,6 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       setAdding(null)
       // TODO: Not auto selecting the newly added org, needs fixing
       onChange(org)
-
       refetchOrganisations({ requestPolicy: 'network-only' })
     }
     const handleChange = (
@@ -286,6 +285,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         .filter(Boolean)
         .join(', ')
     }
+
     return (
       <>
         <Autocomplete

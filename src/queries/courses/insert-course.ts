@@ -13,6 +13,7 @@ export const MUTATION = gql`
       expenses {
         id
       }
+      name
     }
   }
 `

@@ -29,7 +29,7 @@ const test = base.extend<{
   courseWithParticipantsId: number
 }>({
   noParticipantsCourseId: async ({}, use) => {
-    const id = await insertCourse(
+    const { id } = await insertCourse(
       COURSE_INPUT,
       'trainer@teamteach.testinator.com'
     )
@@ -39,7 +39,7 @@ const test = base.extend<{
     await deleteCourse(id)
   },
   courseWithParticipantsId: async ({}, use) => {
-    const id = await insertCourse(
+    const { id } = await insertCourse(
       COURSE_INPUT,
       'trainer@teamteach.testinator.com'
     )

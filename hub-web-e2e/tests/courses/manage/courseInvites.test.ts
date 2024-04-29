@@ -18,7 +18,9 @@ const testData = [
     course: async () => {
       const course = UNIQUE_COURSE()
       course.type = Course_Type_Enum.Indirect
-      course.id = await API.course.insertCourse(course, users.trainer.email)
+      course.id = (
+        await API.course.insertCourse(course, users.trainer.email)
+      ).id
       return course
     },
   },
@@ -29,7 +31,9 @@ const testData = [
     course: async () => {
       const course = UNIQUE_COURSE()
       course.type = Course_Type_Enum.Indirect
-      course.id = await API.course.insertCourse(course, users.trainer.email)
+      course.id = (
+        await API.course.insertCourse(course, users.trainer.email)
+      ).id
       return course
     },
   },
@@ -40,7 +44,9 @@ const testData = [
     course: async () => {
       const course = UNIQUE_COURSE()
       course.type = Course_Type_Enum.Closed
-      course.id = await API.course.insertCourse(course, users.trainer.email)
+      course.id = (
+        await API.course.insertCourse(course, users.trainer.email)
+      ).id
       return course
     },
   },
@@ -51,7 +57,9 @@ const testData = [
     course: async () => {
       const course = UNIQUE_COURSE()
       course.type = Course_Type_Enum.Closed
-      course.id = await API.course.insertCourse(course, users.trainer.email)
+      course.id = (
+        await API.course.insertCourse(course, users.trainer.email)
+      ).id
       return course
     },
   },

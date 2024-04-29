@@ -4211,8 +4211,6 @@ export enum MimeTypeEnum {
   AudioXMsWma = 'AUDIO_X_MS_WMA',
   /** MimeType audio/x-realaudio */
   AudioXRealaudio = 'AUDIO_X_REALAUDIO',
-  /** MimeType image/avif */
-  ImageAvif = 'IMAGE_AVIF',
   /** MimeType image/bmp */
   ImageBmp = 'IMAGE_BMP',
   /** MimeType image/gif */
@@ -59953,7 +59951,7 @@ export type InsertCourseMutationVariables = Exact<{
 }>;
 
 
-export type InsertCourseMutation = { __typename?: 'mutation_root', insertCourse?: { __typename?: 'course', id: number, course_code?: string | null, orders: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any } | null }>, expenses: Array<{ __typename?: 'course_expenses', id: any }> } | null };
+export type InsertCourseMutation = { __typename?: 'mutation_root', insertCourse?: { __typename?: 'course', id: number, course_code?: string | null, name: string, orders: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any } | null }>, expenses: Array<{ __typename?: 'course_expenses', id: any }> } | null };
 
 export type NotifyCourseEditMutationVariables = Exact<{
   oldCourse: NotifyCourseInput;

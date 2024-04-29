@@ -11,14 +11,11 @@ const test = base.extend<{ courseId: number }>({
   courseId: async ({}, use) => {
     const openCourse = UNIQUE_COURSE()
     openCourse.type = Course_Type_Enum.Open
-
-    const id = await insertCourse(
+    const { id } = await insertCourse(
       openCourse,
       'trainer@teamteach.testinator.com'
     )
-
     await use(id)
-
     await deleteCourse(id)
   },
 })

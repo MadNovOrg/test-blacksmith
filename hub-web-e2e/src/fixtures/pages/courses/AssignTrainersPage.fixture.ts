@@ -79,7 +79,7 @@ export class AssignTrainersPage extends BasePage {
 
   async getCourseIdOnCreation(): Promise<number> {
     const responses = await Promise.all([
-      waitForGraphQLResponse(this.page, 'insertCourse', 'id'),
+      waitForGraphQLResponse(this.page, 'insertCourse'),
       this.createCourseButton.click(),
     ])
     return responses[0].insertCourse.id

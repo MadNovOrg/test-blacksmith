@@ -221,7 +221,11 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             >
               {course.name}
             </Typography>
-            <Typography variant="body2" color="secondary">
+            <Typography
+              data-testid="course-code"
+              variant="body2"
+              color="secondary"
+            >
               {course.course_code}
             </Typography>
             {/* TODO: Delete this after Arlo migration */}

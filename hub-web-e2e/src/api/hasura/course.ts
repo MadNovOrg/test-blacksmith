@@ -39,19 +39,16 @@ export const getTrainerCourses = async (email: string): Promise<Course[]> => {
     }
   )
   // Update the start and end times for each course
-  const updatedCourses = courses.map(course => {
-    return {
-      ...course,
-      schedule: course.schedule.map(schedule => {
-        return {
-          ...schedule,
-          start: course.dates?.aggregate?.start.date as Date,
-          end: course.dates?.aggregate?.end.date as Date,
-        }
-      }),
-    }
-  })
-  return updatedCourses
+  return courses.map(course => ({
+    ...course,
+    schedule: course.schedule.map(schedule => {
+      return {
+        ...schedule,
+        start: course.dates?.aggregate?.start.date as Date,
+        end: course.dates?.aggregate?.end.date as Date,
+      }
+    }),
+  }))
 }
 
 export const getCourseParticipantId = async (
@@ -122,7 +119,7 @@ export const insertCourse = async (
   email: string,
   trainerStatus = InviteStatus.ACCEPTED,
   modules = true
-): Promise<number> => {
+): Promise<{ id: number; name: string; courseCode: string }> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const courseInput: any = {
     curriculum: course.curriculum,
@@ -241,12 +238,15 @@ export const insertCourse = async (
   }
   for (let i = 1; i <= 10; i++) {
     try {
-      const response: { insert_course: { returning: [{ id: number }] } } =
-        await getClient().request(query, variables)
-      const id = response.insert_course.returning[0].id
+      const response: {
+        insert_course: {
+          returning: [{ id: number; name: string; course_code: string }]
+        }
+      } = await getClient().request(query, variables)
+      const { id, name, course_code } = response.insert_course.returning[0]
       if (id) {
         console.log(`Inserted course with ID ${id} for ${email}`)
-        return id
+        return { id, name, courseCode: course_code }
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -297,7 +297,7 @@ export const makeSureTrainerHasCourses = async (
   const existingCourses = await getTrainerCourses(email)
   for (const course of courses) {
     if (!existingCourses.map(c => c.description).includes(course.description)) {
-      course.id = await insertCourse(course, email)
+      course.id = (await insertCourse(course, email)).id
     }
   }
   const allCourses = await getTrainerCourses(email)

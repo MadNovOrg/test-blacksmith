@@ -30,8 +30,7 @@ export function waitForGraphQLRequest(
 */
 export async function waitForGraphQLResponse(
   page: Page,
-  keyToFind: string,
-  valueToFind: string
+  keyToFind: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<{ [key: string]: any }> {
   const response = await page.waitForResponse(async response => {
@@ -43,7 +42,7 @@ export async function waitForGraphQLResponse(
   })
   const responseBody = await response.text()
   const { data } = JSON.parse(responseBody ?? '{}')
-  if (JSON.stringify(data[keyToFind]).includes(valueToFind)) {
+  if (JSON.stringify(data[keyToFind])) {
     return data
   }
   return {}

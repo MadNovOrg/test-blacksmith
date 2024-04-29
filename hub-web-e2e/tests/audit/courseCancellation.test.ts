@@ -16,7 +16,7 @@ const test = base.extend<{ course: Course; role: string }>({
     const course = UNIQUE_COURSE()
     course.organization = { name: 'London First School' }
     course.status = Course_Status_Enum.Scheduled
-    course.id = await API.course.insertCourse(course, users.trainer.email)
+    course.id = (await API.course.insertCourse(course, users.trainer.email)).id
     await use(course)
     await API.course.deleteCourse(course.id)
   },

@@ -16,7 +16,7 @@ const test = base.extend<{ course: Course }>({
     const course = UNIQUE_COURSE()
     course.type = Course_Type_Enum.Closed
     course.organization = { name: 'London First School' }
-    course.id = await API.course.insertCourse(course, users.trainer.email)
+    course.id = (await API.course.insertCourse(course, users.trainer.email)).id
     await use(course)
     await API.course.deleteCourse(course.id)
   },

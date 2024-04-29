@@ -21,6 +21,7 @@ const MUTATION = gql`
     insert_course_one(object: $input) {
       id
       course_code
+      name
     }
   }
 `

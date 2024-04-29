@@ -7,7 +7,7 @@ export class CourseApprovalRequiredModal extends BasePage {
 
   constructor(page: Page) {
     super(page)
-    this.proceedButton = this.page.locator('data-testid=proceed-button')
+    this.proceedButton = this.page.locator('[data-testid="proceed-button"]')
   }
 
   async confirmCourseException() {

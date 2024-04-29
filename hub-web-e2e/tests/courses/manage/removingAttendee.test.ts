@@ -29,7 +29,9 @@ for (const data of testData) {
   const test = base.extend<{ course: Course }>({
     course: async ({}, use) => {
       const course = UNIQUE_COURSE()
-      course.id = await API.course.insertCourse(course, users.trainer.email)
+      course.id = (
+        await API.course.insertCourse(course, users.trainer.email)
+      ).id
       await API.course.insertCourseParticipants(course.id, usersArray)
       await use(course)
       await API.course.deleteCourse(course.id)

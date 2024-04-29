@@ -19,7 +19,7 @@ const test = base.extend<{ course: Course }>({
         end: addSeconds(new Date(), 2),
       },
     ]
-    course.id = await API.course.insertCourse(course, users.trainer.email)
+    course.id = (await API.course.insertCourse(course, users.trainer.email)).id
     await API.course.insertCourseParticipants(course.id, [users.user1])
     await API.course.insertCourseGradingForParticipants(
       course,

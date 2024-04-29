@@ -39,6 +39,7 @@ export class CreateCoursePage extends BasePage {
   readonly maxAttendeesInput: Locator
   readonly acknowledgeCheckboxes: Locator
   readonly nextPageButton: Locator
+  readonly exceptionsConfirmButton: Locator
   readonly freeSpacesInput: Locator
   readonly salesPersonInput: Locator
   readonly sourceDropdown: Locator
@@ -54,6 +55,8 @@ export class CreateCoursePage extends BasePage {
   readonly orgKeyContactLastName: Locator
   readonly saveChangesButton: Locator
   readonly renewalCycle: Locator
+  readonly proceedButton: Locator
+  readonly autocompleteLoading: Locator
 
   constructor(page: Page) {
     super(page)
@@ -76,6 +79,9 @@ export class CreateCoursePage extends BasePage {
       '[data-testid="org-selector"] input'
     )
     this.contactInput = this.page.locator('[data-testid="user-selector"] input')
+    this.autocompleteLoading = this.page.locator(
+      '.MuiAutocomplete-popper .MuiAutocomplete-loading'
+    )
     this.autocompleteOption = this.page.locator(
       '.MuiAutocomplete-popper .MuiAutocomplete-option'
     )
@@ -134,6 +140,10 @@ export class CreateCoursePage extends BasePage {
     )
     this.renewalCycle = this.page.locator('[data-testid]="renewal-cycle"')
     this.saveChangesButton = this.page.locator('[data-testid="save-button"]')
+    this.exceptionsConfirmButton = this.page.locator(
+      '[data-testid="proceed-button"]'
+    )
+    this.proceedButton = this.page.locator('[data-testid="proceed-button"]')
   }
 
   async goto(courseType: string) {
@@ -163,14 +173,15 @@ export class CreateCoursePage extends BasePage {
 
   async selectVenue(venue: string) {
     await this.venueInput.fill(venue)
+    await expect(this.autocompleteLoading).toHaveCount(0)
+    await this.organisationInput.click()
     await this.autocompleteOption.locator(`text=${venue}`).first().click()
   }
 
   async selectOrganisation(name: string) {
     await this.organisationInput.fill(name)
-    await this.page.waitForResponse(
-      resp => resp.url().includes('/v1/graphql') && resp.status() === 200
-    )
+    await this.organisationInput.click()
+    await expect(this.autocompleteLoading).toHaveCount(0)
     await this.autocompleteOption.locator(`text=${name}`).first().click()
   }
 
@@ -241,17 +252,28 @@ export class CreateCoursePage extends BasePage {
     return new CourseOrderDetailsPage(this.page)
   }
 
-  async clickCreateCourseButton(): Promise<number> {
-    const responses = await Promise.all([
-      this.page.waitForResponse(
-        res =>
-          res.request().url().includes('/graphql') &&
-          (res.request().postData() as string).includes('insert_course')
-      ),
-      this.nextPageButton.click(),
-    ])
-    const data = await responses[0].json()
-    return data.data.insertCourse.inserted[0].id
+  async clickCreateCourseButton(): Promise<{
+    id: number
+    courseCode: string
+  }> {
+    await this.nextPageButton.click()
+    await this.proceedOnExceptions()
+    const response = await this.page.waitForResponse(
+      res =>
+        res.request().url().includes('/graphql') &&
+        (res.request().postData() as string).includes('insert_course')
+    )
+    const data = await response.json()
+    return {
+      id: data.data.insertCourse.id,
+      courseCode: data.data.insertCourse.course_code,
+    }
+  }
+
+  async proceedOnExceptions() {
+    if (await this.proceedButton.isVisible()) {
+      await this.proceedButton.click()
+    }
   }
 
   async checkAcknowledgeCheckboxes() {

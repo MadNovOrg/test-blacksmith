@@ -31,6 +31,8 @@ const TEST_SETTINGS: { role: undefined | 'tt-admin' | 'admin' } = {
   role: undefined,
 }
 
+const UK_TIMEZONE = 'Europe/London'
+
 export {
   TARGET_ENV,
   BASE_URL,
@@ -39,4 +41,5 @@ export {
   HASURA_SECRET,
   PER_PAGE,
   TEST_SETTINGS,
+  UK_TIMEZONE,
 }

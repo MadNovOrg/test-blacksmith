@@ -6,6 +6,7 @@ export const users: { [key: string]: User } = {
     familyName: 'Admin',
     email: 'adm@teamteach.testinator.com',
     password: 'Test12345!',
+    organization: { name: 'London First School' },
   },
   ops: {
     givenName: 'Lucas',
@@ -25,6 +26,7 @@ export const users: { [key: string]: User } = {
     familyName: 'Trainer',
     email: 'trainer@teamteach.testinator.com',
     password: 'Test12345!',
+    organization: { name: 'London First School' },
   },
   trainerWithOrg: {
     givenName: 'Mark',

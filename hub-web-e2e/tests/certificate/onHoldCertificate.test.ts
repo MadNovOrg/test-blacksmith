@@ -16,7 +16,7 @@ const test = base.extend<{ certificate: { course: Course; user: User } }>({
     const course = FINISHED_COURSE()
     course.type = Course_Type_Enum.Closed
     course.gradingConfirmed = true
-    course.id = await API.course.insertCourse(course, users.trainer.email)
+    course.id = (await API.course.insertCourse(course, users.trainer.email)).id
     await API.course.insertCourseParticipants(course.id, [user])
     await API.course.insertCourseGradingForParticipants(
       course,

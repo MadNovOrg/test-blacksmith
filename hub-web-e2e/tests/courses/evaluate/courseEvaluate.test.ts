@@ -13,7 +13,7 @@ const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = FINISHED_COURSE()
     course.type = Course_Type_Enum.Closed
-    course.id = await API.course.insertCourse(course, users.trainer.email)
+    course.id = (await API.course.insertCourse(course, users.trainer.email)).id
     await API.course.insertCourseParticipants(course.id, [users.user1])
     await use(course)
     await API.course.deleteCourse(course.id)

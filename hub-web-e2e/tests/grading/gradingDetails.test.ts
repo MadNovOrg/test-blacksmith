@@ -15,7 +15,7 @@ const test = base.extend<{
 }>({
   course: async ({}, use) => {
     const course = FINISHED_COURSE()
-    course.id = await API.course.insertCourse(course, users.trainer.email)
+    course.id = (await API.course.insertCourse(course, users.trainer.email)).id
     await use(course)
     await API.course.deleteCourse(course.id)
   },

@@ -18,7 +18,7 @@ const test = base.extend<{
     const course = FINISHED_COURSE()
     course.gradingConfirmed = true
     course.status = Course_Status_Enum.GradeMissing
-    course.id = await API.course.insertCourse(course, users.trainer.email)
+    course.id = (await API.course.insertCourse(course, users.trainer.email)).id
     await use(course)
     await API.course.deleteCourse(course.id)
   },

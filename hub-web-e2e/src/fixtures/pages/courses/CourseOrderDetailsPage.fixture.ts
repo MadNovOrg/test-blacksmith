@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test'
+import { Locator, Page, expect } from '@playwright/test'
 
 import { InvoiceDetails } from '@qa/data/types'
 
@@ -15,6 +15,7 @@ export class CourseOrderDetailsPage extends BasePage {
   readonly purchaseOrderInput: Locator
   readonly autocompleteOption: Locator
   readonly reviewAndConfirmButton: Locator
+  readonly autocompleteLoading: Locator
 
   constructor(page: Page) {
     super(page)
@@ -26,6 +27,9 @@ export class CourseOrderDetailsPage extends BasePage {
     this.emailInput = this.page.locator('[data-testid="input-email"]')
     this.phoneInput = this.page.locator('[data-testid="input-phone"]')
     this.purchaseOrderInput = this.page.locator('[data-testid="input-po"]')
+    this.autocompleteLoading = this.page.locator(
+      '.MuiAutocomplete-popper .MuiAutocomplete-loading'
+    )
     this.autocompleteOption = this.page.locator(
       '.MuiAutocomplete-popper .MuiAutocomplete-option'
     )
@@ -35,10 +39,9 @@ export class CourseOrderDetailsPage extends BasePage {
   }
 
   async selectOrganisation(name: string) {
-    await this.organisationInput.type(name)
-    await this.page.waitForResponse(
-      resp => resp.url().includes('/v1/graphql') && resp.status() === 200
-    )
+    await this.organisationInput.fill(name)
+    await this.organisationInput.click()
+    await expect(this.autocompleteLoading).toHaveCount(0)
     await this.autocompleteOption.locator(`text=${name}`).first().click()
   }
 
@@ -47,13 +50,13 @@ export class CourseOrderDetailsPage extends BasePage {
       throw 'Missing invoice details in the course object'
     }
     await this.selectOrganisation(invoiceDetails.organisation)
-    await this.firstNameInput.type(invoiceDetails.firstName)
-    await this.lastNameInput.type(invoiceDetails.lastName)
-    await this.emailInput.type(invoiceDetails.email)
+    await this.firstNameInput.fill(invoiceDetails.firstName)
+    await this.lastNameInput.fill(invoiceDetails.lastName)
+    await this.emailInput.fill(invoiceDetails.email)
     await this.phoneInput.clear()
     await this.phoneInput.fill(invoiceDetails.phone)
     invoiceDetails.purchaseOrder &&
-      (await this.purchaseOrderInput.type(invoiceDetails.purchaseOrder))
+      (await this.purchaseOrderInput.fill(invoiceDetails.purchaseOrder))
   }
 
   async clickReviewAndConfirmButton(): Promise<ReviewAndConfirmPage> {

@@ -40,17 +40,19 @@ export const CourseExceptionsConfirmation: React.FC<
     <Dialog
       open={open}
       onClose={onCancel}
-      title={
-        <Typography variant="h3" fontWeight={600}>
-          {t(
-            `pages.create-course.exceptions.${
-              approvalRequired
-                ? 'course-approval-required'
-                : 'no-approval-required'
-            }`
-          )}
-        </Typography>
-      }
+      slots={{
+        Title: () => (
+          <Typography variant="h3" fontWeight={600}>
+            {t(
+              `pages.create-course.exceptions.${
+                approvalRequired
+                  ? 'course-approval-required'
+                  : 'no-approval-required'
+              }`
+            )}
+          </Typography>
+        ),
+      }}
       maxWidth={600}
     >
       <Container sx={{ padding: isMobile ? 0 : 3 }}>
