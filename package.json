@@ -78,7 +78,7 @@
     "@mui/utils": "^5.15.11",
     "@mui/x-data-grid": "^6.19.4",
     "@mui/x-date-pickers": "^6.19.6",
-    "@react-pdf/renderer": "^3.4.2",
+    "@react-pdf/renderer": "^3.4.4",
     "@sentry/integrations": "^7.48.0",
     "@sentry/react": "^7.55.2",
     "@stripe/react-stripe-js": "^2.6.0",
