@@ -30,8 +30,8 @@ importers:
         specifier: ~5.7.1
         version: 5.7.1
       '@fastify/sensible':
-        specifier: ~5.2.0
-        version: 5.2.0
+        specifier: ~5.6.0
+        version: 5.6.0
       '@googlemaps/react-wrapper':
         specifier: ^1.1.35
         version: 1.1.35(react@18.2.0)
@@ -6746,14 +6746,14 @@ packages:
       fast-json-stringify: 5.8.0
     dev: false
 
-  /@fastify/sensible@5.2.0:
-    resolution: {integrity: sha512-fy5vqJJAMVQctUT+kYfGdaGYeW9d8JaWEqtdWN6UmzQQ3VX0qMXE7Qc/MmfE+Cj3v0g5kbeR+obd3HZr3IMf+w==}
+  /@fastify/sensible@5.6.0:
+    resolution: {integrity: sha512-Vq6Z2ZQy10GDqON+hvLF52K99s9et5gVVxTul5n3SIAf0Kq5QjPRUKkAMT3zPAiiGvoHtS3APa/3uaxfDgCODQ==}
     dependencies:
+      '@lukeed/ms': 2.0.2
       fast-deep-equal: 3.1.3
       fastify-plugin: 4.5.0
       forwarded: 0.2.0
       http-errors: 2.0.0
-      ms: 2.1.3
       type-is: 1.6.18
       vary: 1.1.2
     dev: false
@@ -7956,6 +7956,11 @@ packages:
       '@lexical/offset': 0.12.0(lexical@0.12.0)
       lexical: 0.12.0
       yjs: 13.6.14
+    dev: false
+
+  /@lukeed/ms@2.0.2:
+    resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
+    engines: {node: '>=8'}
     dev: false
 
   /@manypkg/find-root@1.1.0:
