@@ -115,7 +115,11 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
                 {t('remove')}
               </LoadingButton>
             </Box>
-            <Typography variant="body1" color="grey.700">
+            <Typography
+              variant="body1"
+              color="grey.700"
+              data-testId="promo-code-discount"
+            >
               - {t('currency', { amount: discounts[c]?.amountCurrency ?? 0 })}
             </Typography>
           </Box>

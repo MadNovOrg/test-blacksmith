@@ -678,7 +678,11 @@ export const CourseBookingDetails: React.FC<
             <Typography fontWeight="500" color="primary">
               {t('amount-due')} ({booking.currency})
             </Typography>
-            <Typography fontWeight="500" color="primary">
+            <Typography
+              fontWeight="500"
+              color="primary"
+              data-testId="amount-due"
+            >
               {formatCurrency(
                 {
                   amount: new Big(amounts.total).round(2).toNumber(),

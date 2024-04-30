@@ -59342,6 +59342,20 @@ export type RemovePromoCodeMutationVariables = Exact<{
 
 export type RemovePromoCodeMutation = { __typename?: 'mutation_root', delete_promo_code_by_pk?: { __typename?: 'promo_code', id: any } | null };
 
+export type RemoveDiscountByCodeMutationVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type RemoveDiscountByCodeMutation = { __typename?: 'mutation_root', delete_promo_code?: { __typename?: 'promo_code_mutation_response', affected_rows: number } | null };
+
+export type CreateSamplePromoCodeMutationVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type CreateSamplePromoCodeMutation = { __typename?: 'mutation_root', insert_promo_code_one?: { __typename?: 'promo_code', id: any } | null };
+
 export type CleanupE2EMergeUsersMutationVariables = Exact<{ [key: string]: never; }>;
 
 
