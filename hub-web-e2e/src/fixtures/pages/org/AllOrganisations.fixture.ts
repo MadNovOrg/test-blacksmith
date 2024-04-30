@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 import { Chance } from 'chance'
+import { concat } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import { readFile } from 'xlsx'
 
@@ -32,6 +33,10 @@ export class AllOrganisations extends BasePage {
   readonly saveDetails: Locator
   readonly saveOrganisation: Locator
   readonly seeAllOrgs: Locator
+  readonly seeAllCourses: Locator
+  readonly searchAvailableCourses: Locator
+  readonly bookNow: Locator
+  readonly joinWaitingList: Locator
   readonly sector: Locator
   readonly trustName: Locator
   readonly workEmail: Locator
@@ -80,6 +85,14 @@ export class AllOrganisations extends BasePage {
     )
     this.sector = this.page.locator('data-testid=sector-select')
     this.seeAllOrgs = this.page.locator('[data-testid="see-all-organisations"]')
+    this.seeAllCourses = this.page.locator('[data-testId="see-all-courses"]')
+    this.searchAvailableCourses = this.page.locator(
+      '[data-testid="FilterSearch-Input"]'
+    )
+    this.bookNow = this.page.locator('button:has-text("Book now")')
+    this.joinWaitingList = this.page.locator(
+      'button:has-text("Join waiting list")'
+    )
     this.trustName = this.page.locator('[data-testid="trust-name"]')
     this.workEmail = this.page.locator('[data-testid="input-admin-email"]')
     this.individualsTab = this.page.locator('[data-testid="org-individuals"]')
@@ -105,6 +118,29 @@ export class AllOrganisations extends BasePage {
 
   async gotoOrganisation(id: string) {
     await super.goto(`organisations/${id}`)
+  }
+  async clickSeeAllCourses() {
+    await this.seeAllCourses.click()
+  }
+  async clickSearchAvailableCourses() {
+    await this.searchAvailableCourses.click()
+  }
+
+  async insertCourseId(courseId: string) {
+    await this.searchAvailableCourses.fill(courseId)
+  }
+
+  async clickBookNow() {
+    await this.bookNow.nth(0).click()
+  }
+  async clickJoinWaitingList() {
+    await this.joinWaitingList.nth(0).click()
+  }
+
+  async maxCourses(): Promise<number> {
+    const bookNowLocators = await this.bookNow.all()
+    const joinWaitingListLocators = await this.joinWaitingList.all()
+    return concat(bookNowLocators, joinWaitingListLocators).length
   }
 
   async clickSeeAllOrganisations() {

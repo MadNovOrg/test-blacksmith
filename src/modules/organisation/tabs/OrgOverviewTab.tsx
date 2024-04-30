@@ -292,6 +292,7 @@ export const OrgOverviewTab: React.FC<
           variant="outlined"
           onClick={() => navigate('courses')}
           sx={{ mt: 2 }}
+          data-testId="see-all-courses"
         >
           {t('pages.org-details.tabs.overview.see-all-courses')}
         </Button>

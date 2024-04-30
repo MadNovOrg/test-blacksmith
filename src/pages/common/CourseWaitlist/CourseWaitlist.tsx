@@ -85,7 +85,12 @@ export const CourseWaitlist: React.FC<
         </Box>
       }
     >
-      <Box display="flex" flexDirection="column" alignItems="center">
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        data-testid="join-waiting-list-form"
+      >
         <Typography
           variant="h3"
           fontWeight="600"

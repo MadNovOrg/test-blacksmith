@@ -110,6 +110,13 @@ export const users: { [key: string]: User } = {
     password: 'Test12345!',
     organization: { name: 'London First School' },
   },
+  ttOrgAdmin: {
+    givenName: 'TeamTeach',
+    familyName: 'Org-Admin',
+    email: 'tt.org.adm@teamteach.testinator.com',
+    password: 'Test12345!',
+    organization: { name: 'Team Teach' },
+  },
 }
 
 export const credentials = [
@@ -120,4 +127,5 @@ export const credentials = [
   { name: 'user1', role: 'Individual' },
   { name: 'userOrgAdmin', role: 'Individual' },
   { name: 'salesAdmin', role: 'Sales administrator' },
+  { name: 'ttOrgAdmin', role: 'Individual' },
 ]
