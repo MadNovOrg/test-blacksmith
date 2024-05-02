@@ -225,306 +225,309 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const { countriesCodesWithUKs, isUKCountry } = useWorldCountries()
 
-  const schema = useMemo(
+  const formSchema = useMemo(
     () =>
-      yup.object({
-        accreditedBy: yup
-          .mixed()
-          .oneOf([Accreditors_Enum.Bild, Accreditors_Enum.Icm]),
-        ...(hasOrg
-          ? {
-              organization: yup
-                .object()
-                .required(t('components.course-form.organisation-required')),
-            }
-          : null),
-        ...(isOpenCourse
-          ? {
-              displayOnWebsite: yup.bool().required().default(true),
-            }
-          : null),
-        ...(isClosedCourse
-          ? {
-              bookingContact: yup.object({
-                profileId: yup.string(),
-                firstName: yup.string().required(requiredMsg(t, 'first-name')),
-                lastName: yup.string().required(requiredMsg(t, 'last-name')),
-                email: schemas.email(t).required(requiredMsg(t, 'email')),
-              }),
-              freeSpaces: yup
-                .number()
-                .typeError(t('components.course-form.free-spaces-required'))
-                .min(0, t('components.course-form.free-spaces-required'))
-                .max(
-                  yup.ref('maxParticipants', {}),
-                  t('components.course-form.free-spaces-less-equal')
+      yup
+        .object({
+          accreditedBy: yup
+            .mixed()
+            .oneOf([Accreditors_Enum.Bild, Accreditors_Enum.Icm]),
+          ...(hasOrg
+            ? {
+                organization: yup
+                  .object()
+                  .required(t('components.course-form.organisation-required')),
+              }
+            : null),
+          ...(isOpenCourse
+            ? {
+                displayOnWebsite: yup.bool().required().default(true),
+              }
+            : null),
+          ...(isClosedCourse
+            ? {
+                bookingContact: yup.object({
+                  profileId: yup.string(),
+                  firstName: yup
+                    .string()
+                    .required(requiredMsg(t, 'first-name')),
+                  lastName: yup.string().required(requiredMsg(t, 'last-name')),
+                  email: schemas.email(t).required(requiredMsg(t, 'email')),
+                }),
+                freeSpaces: yup
+                  .number()
+                  .typeError(t('components.course-form.free-spaces-required'))
+                  .min(0, t('components.course-form.free-spaces-required'))
+                  .max(
+                    yup.ref('maxParticipants', {}),
+                    t('components.course-form.free-spaces-less-equal')
+                  )
+                  .required(t('components.course-form.free-spaces-required')),
+                salesRepresentative: yup.object().required(),
+                source: yup
+                  .string()
+                  .oneOf(Object.values(Course_Source_Enum))
+                  .required(),
+                accountCode: yup.string().required(),
+              }
+            : null),
+          //TODO: Delete this after Arlo migration ------ search for Delete this after Arlo migration to find every occurence that needs to be deleted //
+          ...(!isIndirectCourse
+            ? {
+                arloReferenceId: yup.string(),
+              }
+            : null),
+          ...(isIndirectCourse
+            ? {
+                organizationKeyContact: yup.object({
+                  profileId: yup.string(),
+                  firstName: yup
+                    .string()
+                    .required(requiredMsg(t, 'first-name')),
+                  lastName: yup.string().required(requiredMsg(t, 'surname')),
+                  email: schemas.email(t).required(requiredMsg(t, 'email')),
+                }),
+              }
+            : null),
+          courseLevel: yup
+            .string()
+            .required(t('components.course-form.course-level-required')),
+          blendedLearning: yup.bool(),
+          reaccreditation: yup.bool(),
+          ...(isResidingCountryEnabled
+            ? {
+                residingCountry: yup
+                  .string()
+                  .oneOf(countriesCodesWithUKs)
+                  .required(
+                    requiredMsg(t, 'components.course-form.residing-country')
+                  ),
+              }
+            : {}),
+          deliveryType: yup
+            .mixed()
+            .oneOf([
+              Course_Delivery_Type_Enum.F2F,
+              Course_Delivery_Type_Enum.Virtual,
+              Course_Delivery_Type_Enum.Mixed,
+            ]),
+          venue: yup
+            .object()
+            .nullable()
+            .when('deliveryType', {
+              is: (deliveryType: Course_Delivery_Type_Enum) =>
+                deliveryType === Course_Delivery_Type_Enum.F2F ||
+                deliveryType === Course_Delivery_Type_Enum.Mixed,
+              then: schema =>
+                schema.required(t('components.course-form.venue-required')),
+            }),
+          startDate: yup
+            .date()
+            .nullable()
+            .typeError(t('components.course-form.start-date-format'))
+            .test(
+              'not-in-the-past',
+              t('components.course-form.start-date-in-the-past'),
+              value => {
+                if (
+                  !isCreation &&
+                  value &&
+                  courseInput?.startDate &&
+                  isPast(new Date(courseInput?.startDate))
                 )
-                .required(t('components.course-form.free-spaces-required')),
-              salesRepresentative: yup.object().required(),
-              source: yup
-                .string()
-                .oneOf(Object.values(Course_Source_Enum))
-                .required(),
-              accountCode: yup.string().required(),
+                  return !isBefore(value, courseInput?.startDate)
+                if (value) return !isPast(value)
+              }
+            )
+            .required(t('components.course-form.start-date-required')),
+          startTime: yup
+            .string()
+            .required(t('components.course-form.start-time-required')),
+          endDate: yup
+            .date()
+            .nullable()
+            .typeError(t('components.course-form.end-date-format'))
+            .test(
+              'not-in-the-past',
+              t('components.course-form.end-date-in-the-past'),
+              value => {
+                if (value) return !isPast(value)
+              }
+            )
+            .required(t('components.course-form.end-date-required')),
+          endTime: yup
+            .string()
+            .required(t('components.course-form.end-time-required')),
+          ...(hasMinParticipants
+            ? {
+                minParticipants: yup
+                  .number()
+                  .typeError(
+                    t('components.course-form.min-participants-required')
+                  )
+                  .positive(
+                    t('components.course-form.min-participants-positive')
+                  )
+                  .required(
+                    t('components.course-form.min-participants-required')
+                  )
+                  .max(
+                    yup.ref('maxParticipants', {}),
+                    t('components.course-form.min-participants-less-than')
+                  ),
+              }
+            : null),
+          ...(isResidingCountryEnabled
+            ? {
+                timeZone: yup
+                  .object()
+                  .required(t('components.course-form.timezone-required')),
+              }
+            : null),
+          maxParticipants: yup
+            .number()
+            .typeError(t('components.course-form.max-participants-required'))
+            .positive(t('components.course-form.max-participants-positive'))
+            .required(t('components.course-form.max-participants-required'))
+            .test(
+              'attendees-exceeded',
+              isCreation
+                ? t(
+                    'components.course-form.attendees-number-exceeds-trainer-ratio-message'
+                  )
+                : `${t('components.course-form.max-participants-exceeded')} ${
+                    courseInput?.maxParticipants
+                  }`,
+              maxParticipantsValue => {
+                if (isCreation) {
+                  return !trainerRatioNotMet || !acl.isTrainer()
+                }
+
+                const isBildCourse =
+                  courseInput?.accreditedBy === Accreditors_Enum.Bild
+                const initialParticipantsCount = courseInput?.maxParticipants
+                const updatedParticipantsCount = maxParticipantsValue
+                if (
+                  acl.isTrainer() &&
+                  !isCreation &&
+                  isBildCourse &&
+                  initialParticipantsCount &&
+                  updatedParticipantsCount > initialParticipantsCount
+                ) {
+                  return false
+                } else {
+                  return true
+                }
+              }
+            ),
+          usesAOL: yup.boolean(),
+          aolCountry: yup
+            .string()
+            .nullable()
+            .when('usesAOL', {
+              is: true,
+              then: schema => schema.required('Provide AOL Country'),
+            }),
+          aolRegion: yup
+            .string()
+            .nullable()
+            .when('usesAOL', {
+              is: true,
+              then: schema => schema.required('Provide AOL Region'),
+            }),
+          courseCost: yup
+            .number()
+            .typeError(
+              t('components.course-form.course-cost-positive-number-error')
+            )
+
+            .when('usesAOL', {
+              is: true,
+              then: schema =>
+                schema
+                  .required(
+                    t('components.course-form.course-cost-required-error')
+                  )
+                  .min(
+                    0,
+                    t(
+                      'components.course-form.course-cost-positive-number-error'
+                    )
+                  ),
+              otherwise: schema =>
+                schema
+                  .allowEmptyNumberField()
+                  .nullable()
+                  .positive(
+                    t(
+                      'components.course-form.course-cost-positive-number-error'
+                    )
+                  ),
+            }),
+          specialInstructions: yup.string().nullable().default(''),
+          parkingInstructions: yup.string().nullable().default(''),
+          bildStrategies: strategiesSchema.when(
+            ['accreditedBy', 'conversion'],
+            {
+              is: (accreditedBy: Accreditors_Enum, conversion: boolean) =>
+                accreditedBy === Accreditors_Enum.Bild && conversion === false,
+              then: s => validateStrategies(s, t),
+              otherwise: s => s,
             }
-          : null),
-        //TODO: Delete this after Arlo migration ------ search for Delete this after Arlo migration to find every occurence that needs to be deleted //
-        ...(!isIndirectCourse
-          ? {
-              arloReferenceId: yup.string(),
-            }
-          : null),
-        ...(isIndirectCourse
-          ? {
-              organizationKeyContact: yup.object({
-                profileId: yup.string(),
-                firstName: yup.string().required(requiredMsg(t, 'first-name')),
-                lastName: yup.string().required(requiredMsg(t, 'surname')),
-                email: schemas.email(t).required(requiredMsg(t, 'email')),
+          ),
+          conversion: yup.boolean(),
+          renewalCycle: renewalCycleSchema.when(['startDate', 'courseLevel'], {
+            is: (startDate: Date, courseLevel: Course_Level_Enum) =>
+              hasRenewalCycle({
+                courseType,
+                startDate,
+                courseLevel,
               }),
-            }
-          : null),
-        courseLevel: yup
-          .string()
-          .required(t('components.course-form.course-level-required')),
-        blendedLearning: yup.bool(),
-        reaccreditation: yup.bool(),
-        ...(isResidingCountryEnabled
-          ? {
-              residingCountry: yup
-                .string()
-                .oneOf(countriesCodesWithUKs)
-                .required(
-                  requiredMsg(t, 'components.course-form.residing-country')
-                ),
-            }
-          : {}),
-        ...(isInternationalFinanceEnabled
-          ? {
-              priceCurrency: yup.string().when('residingCountry', {
-                is: (residingCountry: WorldCountriesCodes) =>
-                  !isUKCountry(residingCountry),
-                then: schema =>
-                  schema.required(requiredMsg(t, 'common.currency-word')),
-              }),
-              includeVAT: yup
-                .bool()
-                .nullable()
-                .when('residingCountry', {
+            then: s =>
+              s.required(t('components.course-form.renewal-cycle-required')),
+            otherwise: s => s.nullable(),
+          }),
+          ...(isInternationalFinanceEnabled
+            ? {
+                priceCurrency: yup.string().when('residingCountry', {
                   is: (residingCountry: WorldCountriesCodes) =>
                     !isUKCountry(residingCountry),
                   then: schema =>
-                    schema.required(requiredMsg(t, 'vat')).default(false),
+                    schema.required(requiredMsg(t, 'common.currency-word')),
                 }),
-            }
-          : {}),
-        deliveryType: yup
-          .mixed()
-          .oneOf([
-            Course_Delivery_Type_Enum.F2F,
-            Course_Delivery_Type_Enum.Virtual,
-            Course_Delivery_Type_Enum.Mixed,
-          ]),
-        venue: yup
-          .object()
-          .nullable()
-          .when('deliveryType', {
-            is: (deliveryType: Course_Delivery_Type_Enum) =>
-              deliveryType === Course_Delivery_Type_Enum.F2F ||
-              deliveryType === Course_Delivery_Type_Enum.Mixed,
-            then: schema =>
-              schema.required(t('components.course-form.venue-required')),
-          }),
-        startDate: yup
-          .date()
-          .nullable()
-          .typeError(t('components.course-form.start-date-format'))
-          .test(
-            'not-in-the-past',
-            t('components.course-form.start-date-in-the-past'),
-            value => {
-              if (
-                !isCreation &&
-                value &&
-                courseInput?.startDate &&
-                isPast(new Date(courseInput?.startDate))
-              )
-                return !isBefore(value, courseInput?.startDate)
-              if (value) return !isPast(value)
-            }
-          )
-          .required(t('components.course-form.start-date-required')),
-        startTime: yup
-          .string()
-          .required(t('components.course-form.start-time-required')),
-        endDate: yup
-          .date()
-          .nullable()
-          .typeError(t('components.course-form.end-date-format'))
-          .test(
-            'not-in-the-past',
-            t('components.course-form.end-date-in-the-past'),
-            value => {
-              if (value) return !isPast(value)
-            }
-          )
-          .required(t('components.course-form.end-date-required')),
-        endTime: yup
-          .string()
-          .required(t('components.course-form.end-time-required')),
-        ...(hasMinParticipants
-          ? {
-              minParticipants: yup
+                includeVAT: yup
+                  .bool()
+                  .nullable()
+                  .when('residingCountry', {
+                    is: (residingCountry: WorldCountriesCodes) =>
+                      !isUKCountry(residingCountry),
+                    then: schema =>
+                      schema.required(requiredMsg(t, 'vat')).default(false),
+                  }),
+              }
+            : {}),
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .when((values: CourseInput[], schema: any) => {
+          const showPriceField = priceFieldIsMandatory({
+            accreditedBy: values[0].accreditedBy as Accreditors_Enum,
+            blendedLearning: values[0].blendedLearning,
+            maxParticipants: values[0].maxParticipants ?? 0,
+            courseLevel: values[0].courseLevel as Course_Level_Enum,
+            courseType,
+            residingCountry: values[0].residingCountry as Countries_Code,
+          })
+
+          if (showPriceField) {
+            return schema.shape({
+              price: yup
                 .number()
-                .typeError(
-                  t('components.course-form.min-participants-required')
-                )
-                .positive(t('components.course-form.min-participants-positive'))
-                .required(t('components.course-form.min-participants-required'))
-                .max(
-                  yup.ref('maxParticipants', {}),
-                  t('components.course-form.min-participants-less-than')
-                ),
-            }
-          : null),
-        ...(isResidingCountryEnabled
-          ? {
-              timeZone: yup
-                .object()
-                .required(t('components.course-form.timezone-required')),
-            }
-          : null),
-        maxParticipants: yup
-          .number()
-          .typeError(t('components.course-form.max-participants-required'))
-          .positive(t('components.course-form.max-participants-positive'))
-          .required(t('components.course-form.max-participants-required'))
-          .test(
-            'attendees-exceeded',
-            isCreation
-              ? t(
-                  'components.course-form.attendees-number-exceeds-trainer-ratio-message'
-                )
-              : `${t('components.course-form.max-participants-exceeded')} ${
-                  courseInput?.maxParticipants
-                }`,
-            maxParticipantsValue => {
-              if (isCreation) {
-                return !trainerRatioNotMet || !acl.isTrainer()
-              }
-
-              const isBildCourse =
-                courseInput?.accreditedBy === Accreditors_Enum.Bild
-              const initialParticipantsCount = courseInput?.maxParticipants
-              const updatedParticipantsCount = maxParticipantsValue
-              if (
-                acl.isTrainer() &&
-                !isCreation &&
-                isBildCourse &&
-                initialParticipantsCount &&
-                updatedParticipantsCount > initialParticipantsCount
-              ) {
-                return false
-              } else {
-                return true
-              }
-            }
-          ),
-        usesAOL: yup.boolean(),
-        aolCountry: yup
-          .string()
-          .nullable()
-          .when('usesAOL', {
-            is: true,
-            then: schema => schema.required('Provide AOL Country'),
-          }),
-        aolRegion: yup
-          .string()
-          .nullable()
-          .when('usesAOL', {
-            is: true,
-            then: schema => schema.required('Provide AOL Region'),
-          }),
-        courseCost: yup
-          .number()
-          .typeError(
-            t('components.course-form.course-cost-positive-number-error')
-          )
-
-          .when('usesAOL', {
-            is: true,
-            then: schema =>
-              schema
-                .required(
-                  t('components.course-form.course-cost-required-error')
-                )
-                .min(
-                  0,
-                  t('components.course-form.course-cost-positive-number-error')
-                ),
-            otherwise: schema =>
-              schema
-                .allowEmptyNumberField()
-                .nullable()
-                .positive(
-                  t('components.course-form.course-cost-positive-number-error')
-                ),
-          }),
-        specialInstructions: yup.string().nullable().default(''),
-        parkingInstructions: yup.string().nullable().default(''),
-        bildStrategies: strategiesSchema.when(['accreditedBy', 'conversion'], {
-          is: (accreditedBy: Accreditors_Enum, conversion: boolean) =>
-            accreditedBy === Accreditors_Enum.Bild && conversion === false,
-          then: s => validateStrategies(s, t),
-          otherwise: s => s,
+                .positive(t('components.course-form.price-number-error'))
+                .typeError(t('components.course-form.price-number-error'))
+                .required(),
+            })
+          }
         }),
-        conversion: yup.boolean(),
-        price: yup
-          .number()
-          .positive(t('components.course-form.price-number-error'))
-          .typeError(t('components.course-form.price-number-error'))
-          .when(
-            [
-              'accreditedBy',
-              'type',
-              'courseLevel',
-              'blendedLearning',
-              'maxParticipants',
-              'residingCountry',
-            ],
-            {
-              is: (
-                accreditedBy: Accreditors_Enum,
-                courseType: Course_Type_Enum,
-                courseLevel: Course_Level_Enum,
-                blendedLearning: boolean,
-                maxParticipants: number,
-                residingCountry: WorldCountriesCodes
-              ) =>
-                priceFieldIsMandatory({
-                  accreditedBy,
-                  blendedLearning,
-                  maxParticipants,
-                  courseLevel,
-                  courseType,
-                  residingCountry,
-                }),
-              then: s => s.required(),
-              otherwise: s => s.nullable(),
-            }
-          ),
-        renewalCycle: renewalCycleSchema.when(['startDate', 'courseLevel'], {
-          is: (startDate: Date, courseLevel: Course_Level_Enum) =>
-            hasRenewalCycle({
-              courseType,
-              startDate,
-              courseLevel,
-            }),
-          then: s =>
-            s.required(t('components.course-form.renewal-cycle-required')),
-          otherwise: s => s.nullable(),
-        }),
-      }),
 
     [
       acl,
@@ -656,7 +659,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   )
 
   const methods = useForm<CourseInput>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(formSchema),
     mode: 'all',
     defaultValues,
   })
