@@ -288,7 +288,9 @@ export const Organizations: React.FC<
                     {!showRegionCol.isEmpty ? (
                       <TableCell>{org?.region}</TableCell>
                     ) : null}
-                    <TableCell>{org?.sector}</TableCell>
+                    <TableCell>
+                      {t(`common.org-sectors.${org.sector}`)}
+                    </TableCell>
                     <TableCell>
                       {lastActivityData[org?.id]
                         ? t('dates.withTime', {

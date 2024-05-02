@@ -9,11 +9,7 @@ type Props = {
   onChange: (selected: string[]) => void
 }
 
-const sectors = [
-  'education',
-  'adults-health-and-social-care',
-  'childrens-health-and-social-care',
-]
+const sectors = ['edu', 'hsc_adult', 'hsc_child']
 
 export const FilterByOrgSector: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,

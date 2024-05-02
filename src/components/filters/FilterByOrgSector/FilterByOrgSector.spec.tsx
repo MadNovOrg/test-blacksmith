@@ -10,7 +10,7 @@ describe('FilterOrgSector', () => {
     await userEvent.click(screen.getByText('Adults Health and Social Care'))
 
     await waitFor(() => {
-      expect(onChange).toHaveBeenCalledWith(['adults-health-and-social-care'])
+      expect(onChange).toHaveBeenCalledWith(['hsc_adult'])
     })
   })
 })

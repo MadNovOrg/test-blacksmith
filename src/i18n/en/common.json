@@ -559,9 +559,9 @@
   "full-name": "Full Name",
   "all-fields-are-mandatory": "All fields are mandatory.",
   "org-sectors": {
-    "education": "Education",
-    "adults-health-and-social-care": "Adults Health and Social Care",
-    "childrens-health-and-social-care": "Childrens Health and Social Care"
+    "edu": "Education",
+    "hsc_adult": "Adults Health and Social Care",
+    "hsc_child": "Childrens Health and Social Care"
   },
   "org-email": "Organisation email",
   "org-type": "Organisation type",
