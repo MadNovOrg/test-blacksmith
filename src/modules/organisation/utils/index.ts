@@ -97,7 +97,7 @@ export const getFormSchema = (
     website: yup.string(),
     workEmail: yup.string().email(_t('validation-errors.email-invalid')),
     localAuthority: yup.string(),
-    ofstedRating: yup.string(),
+    ofstedRating: yup.string().nullable(),
     ofstedLastInspection: yup.date().nullable(),
     addressLine1: yup.string().required(
       _t('validation-errors.required-field', {

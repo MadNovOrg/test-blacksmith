@@ -690,8 +690,9 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                               onChange={field.onChange}
                               slotProps={{
                                 textField: {
-                                  error: !!errors.ofstedRating,
-                                  helperText: errors.ofstedRating?.message,
+                                  error: !!errors.ofstedLastInspection,
+                                  helperText:
+                                    errors.ofstedLastInspection?.message,
                                   label: t(
                                     'fields.ofsted-last-inspection-date'
                                   ),
