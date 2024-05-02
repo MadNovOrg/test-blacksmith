@@ -13,6 +13,7 @@ import {
 } from '@qa/generated/graphql'
 
 export type User = {
+  id?: string
   email: string
   evaluationSubmitted?: boolean
   familyName: string

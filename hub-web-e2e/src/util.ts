@@ -10,7 +10,17 @@ type KeyValue = {
   value: string
 }
 
-export const stateFilePath = (userKey: string) =>
+export type StoredCredentialKey =
+  | 'admin'
+  | 'ops'
+  | 'trainer'
+  | 'trainerWithOrg'
+  | 'user1'
+  | 'userOrgAdmin'
+  | 'salesAdmin'
+  | 'ttOrgAdmin'
+
+export const stateFilePath = (userKey: StoredCredentialKey) =>
   `${TEMP_DIR}/storage-${userKey}-${TARGET_ENV}.json`
 
 export const delay = (ms: number) =>

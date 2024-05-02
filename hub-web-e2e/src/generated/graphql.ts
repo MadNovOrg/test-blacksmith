@@ -59281,6 +59281,14 @@ export type DeleteGo1LicenseMutationVariables = Exact<{
 
 export type DeleteGo1LicenseMutation = { __typename?: 'mutation_root', delete_go1_licenses_by_pk?: { __typename?: 'go1_licenses', id: any } | null };
 
+export type GetInviteByEmailQueryVariables = Exact<{
+  courseId: Scalars['Int'];
+  email: Scalars['String'];
+}>;
+
+
+export type GetInviteByEmailQuery = { __typename?: 'query_root', course_invites: Array<{ __typename?: 'course_invites', id: any }> };
+
 export type OrganizationByIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -59321,7 +59329,9 @@ export type DeleteOrganizationMemberMutationVariables = Exact<{
 
 export type DeleteOrganizationMemberMutation = { __typename?: 'mutation_root', delete_organization_member_by_pk?: { __typename?: 'organization_member', id: any } | null };
 
-export type ProfileByEmailQueryVariables = Exact<{ [key: string]: never; }>;
+export type ProfileByEmailQueryVariables = Exact<{
+  email: Scalars['String'];
+}>;
 
 
 export type ProfileByEmailQuery = { __typename?: 'query_root', profile: Array<{ __typename?: 'profile', id: any }> };

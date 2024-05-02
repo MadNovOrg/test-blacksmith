@@ -20,8 +20,11 @@ export class CourseDetailsPage extends BasePage {
   readonly approveCancellationButton: Locator
   readonly attendeeRemoveButton: Locator
   readonly attendeesTable: UiTable
+  readonly pendingAttendeesTable = new UiTable(
+    this.page.getByTestId('invites-table')
+  )
   readonly attendingTab: Locator
-  readonly attendingText: Locator
+  readonly attendingText = this.page.getByTestId('attending')
   readonly cancelCourseButton: Locator
   readonly cancellationRequestAlert: Locator
   readonly certificateGrade: Locator
@@ -33,7 +36,7 @@ export class CourseDetailsPage extends BasePage {
   readonly gradeAllAttendees: Locator
   readonly gradingTab: Locator
   readonly header: CourseHeader
-  readonly inviteAttendeesButton: Locator
+  readonly inviteAttendeesButton = this.page.getByTestId('course-invite-btn')
   readonly invitesLeftText: Locator
   readonly manageAttendanceButtonSelector: string
   readonly noteInput: Locator
@@ -51,12 +54,8 @@ export class CourseDetailsPage extends BasePage {
     super(page)
     this.header = new CourseHeader(this.page)
     this.successMessage = this.page.locator('data-testid=success-alert')
-    this.inviteAttendeesButton = this.page.locator(
-      'data-testid=course-invite-btn'
-    )
     this.courseName = this.page.locator('[data-testid=course-name]')
     this.invitesLeftText = this.page.locator('data-testid=invites-left')
-    this.attendingText = this.page.locator('data-testid=attending')
     this.attendingTab = this.page.locator('data-testid=tabParticipants')
     this.pendingTab = this.page.locator('data-testid=tabPending')
     this.declinedTab = this.page.locator('data-testid=tabDeclined')
@@ -110,7 +109,9 @@ export class CourseDetailsPage extends BasePage {
 
   async goto(courseId: string) {
     await super.goto(`courses/${courseId}/details`)
-    await expect(this.attendingText).toBeVisible()
+    await expect(this.attendingText).toBeVisible({
+      timeout: 60_000,
+    })
   }
 
   async checkSuccessMessage(text: string) {

@@ -1,14 +1,29 @@
 import { Chance } from 'chance'
 import { gql } from 'graphql-request'
 
+import {
+  ProfileByEmailQuery,
+  ProfileByEmailQueryVariables,
+} from '@qa/generated/graphql'
+
 import { getClient } from './client'
 
 const client = getClient()
 const chance = new Chance()
 
 export const getProfileId = async (email: string): Promise<string> => {
-  const query = gql`query ProfileByEmail { profile(where: {email: {_eq: "${email}"}}) { id }}`
-  const response: { profile: { id: string }[] } = await client.request(query)
+  const query = gql`
+    query ProfileByEmail($email: String!) {
+      profile(where: { email: { _eq: $email } }) {
+        id
+      }
+    }
+  `
+  const response = await client.request<
+    ProfileByEmailQuery,
+    ProfileByEmailQueryVariables
+  >(query, { email })
+  console.log(`Email: ${email}, Profile ID: ${response.profile[0].id}`)
   return response.profile[0].id
 }
 

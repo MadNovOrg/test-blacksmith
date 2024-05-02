@@ -1,17 +1,16 @@
-import { Locator, Page } from '@playwright/test'
+import { Page } from '@playwright/test'
 
 import { BasePage } from '@qa/fixtures/pages/BasePage.fixture'
 
 export class InviteAttendeesPopUp extends BasePage {
-  readonly emailInput: Locator
-  readonly sendButton: Locator
+  readonly emailInput = this.page.locator(
+    '[data-testid="modal-invites-emails"] input'
+  )
+  readonly sendButton = this.page.locator('data-testid=modal-invites-send')
+  readonly error = this.page.locator('.Mui-error')
 
   constructor(page: Page) {
     super(page)
-    this.emailInput = this.page.locator(
-      '[data-testid="modal-invites-emails"] input'
-    )
-    this.sendButton = this.page.locator('data-testid=modal-invites-send')
   }
 
   async enterEmails(emails: string[]) {

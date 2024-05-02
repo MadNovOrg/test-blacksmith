@@ -1,7 +1,10 @@
-import { User } from './types'
+import { StoredCredentialKey } from '@qa/util'
 
-export const users: { [key: string]: User } = {
+import type { User } from './types'
+
+export const users = {
   admin: {
+    id: '22015a3e-8907-4333-8811-85f782265a63',
     givenName: 'Benjamin',
     familyName: 'Admin',
     email: 'adm@teamteach.testinator.com',
@@ -15,6 +18,7 @@ export const users: { [key: string]: User } = {
     password: 'Test12345!',
   },
   userOrgAdmin: {
+    id: 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa',
     givenName: 'Alex',
     familyName: 'Admin',
     email: 'org.adm@teamteach.testinator.com',
@@ -117,7 +121,7 @@ export const users: { [key: string]: User } = {
     password: 'Test12345!',
     organization: { name: 'Team Teach' },
   },
-}
+} as const satisfies Record<string, User>
 
 export const credentials = [
   { name: 'admin', role: 'Administrator' },
@@ -128,4 +132,4 @@ export const credentials = [
   { name: 'userOrgAdmin', role: 'Individual' },
   { name: 'salesAdmin', role: 'Sales administrator' },
   { name: 'ttOrgAdmin', role: 'Individual' },
-]
+] as const satisfies { name: StoredCredentialKey; role: string }[]
