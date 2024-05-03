@@ -62,6 +62,22 @@ jobs:
       - name: Install Dependencies
         run: pnpm pkg delete scripts.prepare && pnpm i
 
+      - name: Hasura Migration
+        run: |
+          cp hasura/.env.sample hasura/.env
+          pnpm hasura metadata apply
+          pnpm hasura migrate apply --database-name default
+          pnpm hasura migrate status --database-name default
+          pnpm hasura metadata reload
+          pnpm hasura migrate apply --goto 101 --database-name default
+          pnpm hasura migrate status --database-name default
+          pnpm hasura migrate apply --database-name default
+          pnpm hasura migrate status --database-name default
+          pnpm hasura metadata reload
+
+      - name: Hasura Seed Data
+        run: pnpm hasura seed apply --database-name default
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
