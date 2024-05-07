@@ -17,6 +17,7 @@ import {
   Course_Status_Enum,
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
+  Currency,
   EbookSummaryFragment,
   ExportBlendedLearningCourseDataQuery,
   GetCourseAuditLogsQuery,
@@ -324,7 +325,7 @@ export const buildCourse = build<Course>({
     courseExceptions: [],
     price: chance.integer({ min: 0, max: 200 }),
     includeVAT: chance.bool(),
-    priceCurrency: 'GBP',
+    priceCurrency: Currency.Gbp,
     renewalCycle: Course_Renewal_Cycle_Enum.One,
   },
 })

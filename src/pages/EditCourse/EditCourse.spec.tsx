@@ -738,6 +738,7 @@ describe(EditCourse.name, () => {
         level: Course_Level_Enum.BildIntermediateTrainer,
         residingCountry: 'GB-ENG',
         accreditedBy: Accreditors_Enum.Bild,
+        bildStrategies: [{ strategyName: BildStrategies.Primary }],
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -804,6 +805,189 @@ describe(EditCourse.name, () => {
       // ensure it succesfully navigates back to course details page
       expect(mockNavigate).toHaveBeenCalledWith(
         `/courses/${openBildCourse.id}/details`
+      )
+    })
+  })
+
+  it('allows editing a BILD CLOSED course and not show the price error banner', async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+
+    const closedBildCourse = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        level: Course_Level_Enum.BildRegular,
+        residingCountry: 'GB-ENG',
+        accreditedBy: Accreditors_Enum.Bild,
+        bildStrategies: [{ strategyName: BildStrategies.Primary }],
+        max_participants: 3,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: closedBildCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+
+        if (query === COURSE_PRICE_QUERY) {
+          return fromValue<{ data: CoursePriceQuery }>({
+            data: {
+              coursePrice: [
+                {
+                  level: Course_Level_Enum.BildRegular,
+                  type: Course_Type_Enum.Closed,
+                  blended: false,
+                  reaccreditation: false,
+                  pricingSchedules: [],
+                },
+              ],
+            },
+          })
+        }
+      },
+      executeMutation: () =>
+        fromValue<{ data: UpdateCourseMutation }>({
+          data: {
+            updateCourse: {
+              id: closedBildCourse.id,
+              level: Course_Level_Enum.BildRegular,
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: ['/courses/edit/1'] }
+    )
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+    const saveButton = screen.getByTestId('save-button')
+    await userEvent.click(saveButton)
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates back to course details page
+      expect(mockNavigate).toHaveBeenCalledWith(
+        `/courses/${closedBildCourse.id}/details`
+      )
+    })
+  })
+
+  it('allows editing a BILD INDIRECT course and not show the price error banner', async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+
+    const bildIndirectCourse = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Indirect,
+        level: Course_Level_Enum.BildIntermediateTrainer,
+        residingCountry: 'GB-ENG',
+        accreditedBy: Accreditors_Enum.Bild,
+        bildStrategies: [{ strategyName: BildStrategies.Primary }],
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: bildIndirectCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: CoursePriceQuery }>({
+          data: {
+            coursePrice: [
+              {
+                level: Course_Level_Enum.BildIntermediateTrainer,
+                type: Course_Type_Enum.Indirect,
+                blended: false,
+                reaccreditation: false,
+                pricingSchedules: [],
+              },
+            ],
+          },
+        }),
+      executeMutation: () =>
+        fromValue<{ data: UpdateCourseMutation }>({
+          data: {
+            updateCourse: {
+              id: bildIndirectCourse.id,
+              level: Course_Level_Enum.BildIntermediateTrainer,
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: ['/courses/edit/1'] }
+    )
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+    const saveButton = screen.getByTestId('save-button')
+    await userEvent.click(saveButton)
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates back to course details page
+      expect(mockNavigate).toHaveBeenCalledWith(
+        `/courses/${bildIndirectCourse.id}/details`
       )
     })
   })
@@ -996,6 +1180,112 @@ describe(EditCourse.name, () => {
     })
   })
 
+  it('allows editing an ICM CLOSED, Level 2, Blended Learning course with more than 8 participants and UK country that has a scheduled price', async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+
+    const closedCourse = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        level: Course_Level_Enum.Level_2,
+        residingCountry: 'GB-ENG', // specifically set the country to UK
+        accreditedBy: Accreditors_Enum.Icm,
+        go1Integration: true,
+        max_participants: 15,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: closedCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+
+        if (query === COURSE_PRICE_QUERY) {
+          return fromValue<{ data: CoursePriceQuery }>({
+            data: {
+              coursePrice: [
+                {
+                  level: Course_Level_Enum.Level_2,
+                  type: Course_Type_Enum.Closed,
+                  blended: true,
+                  reaccreditation: false,
+                  pricingSchedules: [
+                    {
+                      priceAmount: 150,
+                      priceCurrency: Currency.Gbp,
+                    },
+                  ],
+                },
+              ],
+            },
+          })
+        }
+      },
+      executeMutation: () =>
+        fromValue<{ data: UpdateCourseMutation }>({
+          data: {
+            updateCourse: {
+              id: closedCourse.id,
+              level: Course_Level_Enum.Level_2,
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: ['/courses/edit/1'] }
+    )
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+    const saveButton = screen.getByTestId('save-button')
+    await userEvent.click(saveButton)
+
+    await waitFor(() => {
+      // ensure there's no price error banner
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates back to course details page
+      expect(mockNavigate).toHaveBeenCalledWith(
+        `/courses/${closedCourse.id}/details`
+      )
+    })
+  })
+
   it('does not allow editing an ICM OPEN course with UK country that has no scheduled price', async () => {
     useFeatureFlagEnabledMock.mockResolvedValue(true)
     const startDate = addDays(new Date(), 2)
@@ -1145,6 +1435,108 @@ describe(EditCourse.name, () => {
             updateCourse: {
               id: closedCourse.id,
               level: Course_Level_Enum.Level_1,
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: ['/courses/edit/1'] }
+    )
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+    const saveButton = screen.getByTestId('save-button')
+    await userEvent.click(saveButton)
+
+    await waitFor(() => {
+      // ensure the price error banner is shown
+      expect(errorBanner).toBeInTheDocument()
+      expect(errorBanner).toHaveTextContent(
+        t('pages.create-course.no-course-price')
+      )
+
+      // ensure it doesn't navigate back to course details page
+      expect(mockNavigate).not.toHaveBeenCalled()
+    })
+  })
+
+  it('does not allow editing an ICM CLOSED, Level 2, Blended Learning course with more than 8 participants and UK country that has no scheduled price', async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+
+    const closedCourse = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        level: Course_Level_Enum.Level_2,
+        residingCountry: 'GB-ENG', // specifically set the country to UK
+        accreditedBy: Accreditors_Enum.Icm,
+        go1Integration: true,
+        max_participants: 15,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: closedCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+
+        if (query === COURSE_PRICE_QUERY) {
+          return fromValue<{ data: CoursePriceQuery }>({
+            data: {
+              coursePrice: [
+                {
+                  level: Course_Level_Enum.Level_2,
+                  type: Course_Type_Enum.Closed,
+                  blended: true,
+                  reaccreditation: false,
+                  pricingSchedules: [],
+                },
+              ],
+            },
+          })
+        }
+      },
+      executeMutation: () =>
+        fromValue<{ data: UpdateCourseMutation }>({
+          data: {
+            updateCourse: {
+              id: closedCourse.id,
+              level: Course_Level_Enum.Level_2,
             },
           },
         }),

@@ -765,7 +765,112 @@ describe('component: CreateCourseForm', () => {
     })
   })
 
-  it('allows creating an ICM CLOSED Level 2 - Blended Learning course with UK residing country that has a scheduled price', async () => {
+  it('allows creating an ICM CLOSED, Level 2, Blended Learning course with more than 8 participants and UK residing country that has a scheduled price', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_2,
+        go1Integration: true,
+        organizationKeyContact: undefined,
+        max_participants: 15, // more than 8 participants will take scheduled price
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        includeVAT: true,
+        residingCountry: 'GB-ENG', // specifically set the country to UK
+      },
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+
+        if (query === COURSE_PRICE_QUERY) {
+          return fromValue<{ data: CoursePriceQuery }>({
+            data: {
+              coursePrice: [
+                {
+                  level: Course_Level_Enum.Level_2,
+                  type: Course_Type_Enum.Closed,
+                  blended: true,
+                  reaccreditation: false,
+                  pricingSchedules: [
+                    {
+                      priceAmount: 150,
+                      priceCurrency: Currency.Gbp,
+                    },
+                  ],
+                },
+              ],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <CreateCourseProvider
+                initialValue={{
+                  courseData: courseToCourseInput(course) as ValidCourseInput,
+                }}
+                courseType={Course_Type_Enum.Closed}
+              >
+                <CreateCourseForm />
+              </CreateCourseProvider>
+            }
+          />
+        </Routes>
+      </Provider>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.Level_2],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=CLOSED'] }
+    )
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates away to the next step
+      expect(mockNavigate).toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('allows creating an ICM CLOSED, Level 2, Blended Learning course with less than 8 participants and UK residing and not show the price error banner', async () => {
     const startDate = addDays(new Date(), 2)
     const endDate = addHours(startDate, 8)
     const course = buildCourse({
@@ -815,12 +920,7 @@ describe('component: CreateCourseForm', () => {
                   type: Course_Type_Enum.Closed,
                   blended: true,
                   reaccreditation: false,
-                  pricingSchedules: [
-                    {
-                      priceAmount: 150,
-                      priceCurrency: Currency.Gbp,
-                    },
-                  ],
+                  pricingSchedules: [],
                 },
               ],
             },
@@ -1059,7 +1159,7 @@ describe('component: CreateCourseForm', () => {
     })
   })
 
-  it('does not allow creating an ICM CLOSED Level 2 - Blended Learning course with UK residing country that has no scheduled price', async () => {
+  it('does not allow creating an ICM CLOSED, Level 2, Blended Learning course with more than 8 participants and UK residing country that has no scheduled price', async () => {
     const startDate = addDays(new Date(), 2)
     const endDate = addHours(startDate, 8)
     const course = buildCourse({
