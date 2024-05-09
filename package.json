@@ -239,7 +239,7 @@
     "ts-essentials": "9.4.2",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.5",
     "vite": "^4.5.0",
     "vite-plugin-svgr": "^3.2.0",
     "vitest": "1.4.0",
