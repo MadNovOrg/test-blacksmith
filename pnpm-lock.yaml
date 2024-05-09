@@ -394,8 +394,8 @@ importers:
         specifier: ^2.0.7
         version: 2.0.7
       '@types/google.maps':
-        specifier: ^3.55.7
-        version: 3.55.7
+        specifier: ^3.55.8
+        version: 3.55.8
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
@@ -13109,8 +13109,8 @@ packages:
     resolution: {integrity: sha512-C3ydakLTQa8HxtYf9ge4q6uT9krDX8smSIxmmW3oACFi5g5vv6T068PRExF7UyWbWpuYiDG8Nm24q2X5XhcZWw==}
     dev: false
 
-  /@types/google.maps@3.55.7:
-    resolution: {integrity: sha512-SlWFx0vo7RSAOC63+PTz8FeqLDaRYs7PrS/L0bZSKswxIN5TnCuckbeIwZpgD/S+DWalPteXfDbg5JsUER5Cyw==}
+  /@types/google.maps@3.55.8:
+    resolution: {integrity: sha512-aSyvlCRXzF9Jtjqq4zmA24sczKZ0QWJnn4zRrkufCoohHulS6LCf4KsF22eAlnHBuVYwEhQoMXIufUS7kXF5uA==}
     dev: true
 
   /@types/graceful-fs@4.1.6:
