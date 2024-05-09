@@ -61,6 +61,8 @@ export function useCoursePrice(courseData?: {
   const isICMcourse = courseData?.accreditedBy === Accreditors_Enum.Icm
   const isCLOSEDcourse = courseData?.courseType === Course_Type_Enum.Closed
   const isLevel2 = courseData?.courseLevel === Course_Level_Enum.Level_2
+  const isBlended = Boolean(courseData?.blended)
+  const isReacc = Boolean(courseData?.reaccreditation)
 
   const pauseQuery =
     !courseData ||
@@ -105,6 +107,7 @@ export function useCoursePrice(courseData?: {
             isCLOSEDcourse &&
             isICMcourse &&
             isLevel2 &&
+            (isBlended || isReacc) &&
             (!courseData.maxParticipants || courseData?.maxParticipants <= 8)
           ) {
             return null
@@ -129,6 +132,8 @@ export function useCoursePrice(courseData?: {
       isCLOSEDcourse,
       isICMcourse,
       isLevel2,
+      isBlended,
+      isReacc,
     ]
   )
 
