@@ -31,7 +31,7 @@ export const CertificateStatusChip: React.FC<
       <Tooltip title={tooltip}>
         <Box display="flex" alignItems="center">
           <Chip
-            label={t(`common.certification-status.${status.toLowerCase()}`)}
+            label={t(`common.certification-status.${status?.toLowerCase()}`)}
             color={chipColor}
             size="small"
             {...rest}

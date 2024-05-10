@@ -53,6 +53,7 @@ const LEVELS_IN_ORDER = [
   CourseLevel.BildRegular,
   CourseLevel.IntermediateTrainer,
   CourseLevel.Level_1,
+  CourseLevel.Level_1Mva,
   CourseLevel.Level_2,
   CourseLevel.FoundationTrainerPlus,
   null,
