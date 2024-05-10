@@ -22086,7 +22086,7 @@ export enum Course_Level_Enum {
   FoundationTrainerPlus = 'FOUNDATION_TRAINER_PLUS',
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   Level_1 = 'LEVEL_1',
-  Level_1Bs = 'LEVEL_1_BS',
+  Level_1Mva = 'LEVEL_1_MVA',
   Level_2 = 'LEVEL_2'
 }
 
@@ -25662,8 +25662,12 @@ export type Course_Pricing_Changelog = {
   coursePricingScheduleId?: Maybe<Scalars['uuid']>;
   createdAt: Scalars['timestamptz'];
   id: Scalars['uuid'];
-  newPrice: Scalars['numeric'];
-  oldPrice: Scalars['numeric'];
+  newPrice?: Maybe<Scalars['numeric']>;
+  new_effective_from?: Maybe<Scalars['timestamptz']>;
+  new_effective_to?: Maybe<Scalars['timestamptz']>;
+  oldPrice?: Maybe<Scalars['numeric']>;
+  old_effective_from?: Maybe<Scalars['timestamptz']>;
+  old_effective_to?: Maybe<Scalars['timestamptz']>;
   updatedAt: Scalars['timestamptz'];
 };
 
@@ -25717,7 +25721,11 @@ export type Course_Pricing_Changelog_Bool_Exp = {
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   newPrice?: InputMaybe<Numeric_Comparison_Exp>;
+  new_effective_from?: InputMaybe<Timestamptz_Comparison_Exp>;
+  new_effective_to?: InputMaybe<Timestamptz_Comparison_Exp>;
   oldPrice?: InputMaybe<Numeric_Comparison_Exp>;
+  old_effective_from?: InputMaybe<Timestamptz_Comparison_Exp>;
+  old_effective_to?: InputMaybe<Timestamptz_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
@@ -25743,7 +25751,11 @@ export type Course_Pricing_Changelog_Insert_Input = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   newPrice?: InputMaybe<Scalars['numeric']>;
+  new_effective_from?: InputMaybe<Scalars['timestamptz']>;
+  new_effective_to?: InputMaybe<Scalars['timestamptz']>;
   oldPrice?: InputMaybe<Scalars['numeric']>;
+  old_effective_from?: InputMaybe<Scalars['timestamptz']>;
+  old_effective_to?: InputMaybe<Scalars['timestamptz']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -25756,7 +25768,11 @@ export type Course_Pricing_Changelog_Max_Fields = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
   newPrice?: Maybe<Scalars['numeric']>;
+  new_effective_from?: Maybe<Scalars['timestamptz']>;
+  new_effective_to?: Maybe<Scalars['timestamptz']>;
   oldPrice?: Maybe<Scalars['numeric']>;
+  old_effective_from?: Maybe<Scalars['timestamptz']>;
+  old_effective_to?: Maybe<Scalars['timestamptz']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -25769,7 +25785,11 @@ export type Course_Pricing_Changelog_Min_Fields = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
   newPrice?: Maybe<Scalars['numeric']>;
+  new_effective_from?: Maybe<Scalars['timestamptz']>;
+  new_effective_to?: Maybe<Scalars['timestamptz']>;
   oldPrice?: Maybe<Scalars['numeric']>;
+  old_effective_from?: Maybe<Scalars['timestamptz']>;
+  old_effective_to?: Maybe<Scalars['timestamptz']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -25799,7 +25819,11 @@ export type Course_Pricing_Changelog_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   newPrice?: InputMaybe<Order_By>;
+  new_effective_from?: InputMaybe<Order_By>;
+  new_effective_to?: InputMaybe<Order_By>;
   oldPrice?: InputMaybe<Order_By>;
+  old_effective_from?: InputMaybe<Order_By>;
+  old_effective_to?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
@@ -25823,7 +25847,15 @@ export enum Course_Pricing_Changelog_Select_Column {
   /** column name */
   NewPrice = 'newPrice',
   /** column name */
+  NewEffectiveFrom = 'new_effective_from',
+  /** column name */
+  NewEffectiveTo = 'new_effective_to',
+  /** column name */
   OldPrice = 'oldPrice',
+  /** column name */
+  OldEffectiveFrom = 'old_effective_from',
+  /** column name */
+  OldEffectiveTo = 'old_effective_to',
   /** column name */
   UpdatedAt = 'updatedAt'
 }
@@ -25836,7 +25868,11 @@ export type Course_Pricing_Changelog_Set_Input = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   newPrice?: InputMaybe<Scalars['numeric']>;
+  new_effective_from?: InputMaybe<Scalars['timestamptz']>;
+  new_effective_to?: InputMaybe<Scalars['timestamptz']>;
   oldPrice?: InputMaybe<Scalars['numeric']>;
+  old_effective_from?: InputMaybe<Scalars['timestamptz']>;
+  old_effective_to?: InputMaybe<Scalars['timestamptz']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -25877,7 +25913,11 @@ export type Course_Pricing_Changelog_Stream_Cursor_Value_Input = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   newPrice?: InputMaybe<Scalars['numeric']>;
+  new_effective_from?: InputMaybe<Scalars['timestamptz']>;
+  new_effective_to?: InputMaybe<Scalars['timestamptz']>;
   oldPrice?: InputMaybe<Scalars['numeric']>;
+  old_effective_from?: InputMaybe<Scalars['timestamptz']>;
+  old_effective_to?: InputMaybe<Scalars['timestamptz']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -25903,7 +25943,15 @@ export enum Course_Pricing_Changelog_Update_Column {
   /** column name */
   NewPrice = 'newPrice',
   /** column name */
+  NewEffectiveFrom = 'new_effective_from',
+  /** column name */
+  NewEffectiveTo = 'new_effective_to',
+  /** column name */
   OldPrice = 'oldPrice',
+  /** column name */
+  OldEffectiveFrom = 'old_effective_from',
+  /** column name */
+  OldEffectiveTo = 'old_effective_to',
   /** column name */
   UpdatedAt = 'updatedAt'
 }
@@ -26038,7 +26086,7 @@ export type Course_Pricing_Pk_Columns_Input = {
 /** Schedules for course pricing per participant */
 export type Course_Pricing_Schedule = {
   __typename?: 'course_pricing_schedule';
-  coursePricingId: Scalars['uuid'];
+  coursePricingId?: Maybe<Scalars['uuid']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   effectiveFrom: Scalars['date'];
   effectiveTo: Scalars['date'];

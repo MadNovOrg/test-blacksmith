@@ -126,6 +126,13 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
     ],
     [
       matches({
+        level: Course_Level_Enum.Level_1Bs,
+        type: Course_Type_Enum.Closed,
+      }),
+      constant({ duration: '6-hour', translationKey: 'ICM-description' }),
+    ],
+    [
+      matches({
         level: Course_Level_Enum.Level_1,
       }),
       constant({

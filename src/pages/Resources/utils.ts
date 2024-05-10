@@ -3,6 +3,7 @@ import { isPast, isFuture, parseISO } from 'date-fns'
 import { Grade_Enum } from '@app/generated/graphql'
 
 export enum TrainerCoursesEnum {
+  Level1BS = 'LEVEL_1_BS',
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   AdvancedTrainer = 'ADVANCED_TRAINER',
   BildIntermediateTrainer = 'BILD_INTERMEDIATE_TRAINER',
