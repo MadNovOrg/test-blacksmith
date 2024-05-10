@@ -276,7 +276,7 @@
     "CLOSED": "Closed",
     "INDIRECT": "Indirect"
   },
-  "certificate-types":{
+  "certificate-types": {
     "LEGACY": "Legacy",
     "CONNECT": "Connect"
   },

@@ -5,6 +5,7 @@ import {
   InputAdornment,
   TextField,
 } from '@mui/material'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -24,7 +25,13 @@ export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
     ? ''
     : t('components.selectLevels.placeholder')
 
-  const levels = Object.values(Course_Level_Enum)
+  const isMVAEnabled = !!useFeatureFlagEnabled('level-one-mva')
+
+  const levels = isMVAEnabled
+    ? Object.values(Course_Level_Enum)
+    : Object.values(Course_Level_Enum).filter(
+        level => level !== Course_Level_Enum.Level_1Mva
+      )
 
   const onSelected = (
     ev: React.SyntheticEvent,
