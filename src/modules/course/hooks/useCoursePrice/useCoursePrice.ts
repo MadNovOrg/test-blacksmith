@@ -62,7 +62,6 @@ export function useCoursePrice(courseData?: {
   const isCLOSEDcourse = courseData?.courseType === Course_Type_Enum.Closed
   const isLevel2 = courseData?.courseLevel === Course_Level_Enum.Level_2
   const isBlended = Boolean(courseData?.blended)
-  const isReacc = Boolean(courseData?.reaccreditation)
 
   const pauseQuery =
     !courseData ||
@@ -81,6 +80,13 @@ export function useCoursePrice(courseData?: {
       : undefined,
     pause: pauseQuery,
   })
+
+  const specialUKcondition =
+    isCLOSEDcourse &&
+    isICMcourse &&
+    isLevel2 &&
+    isBlended &&
+    (!courseData.maxParticipants || courseData?.maxParticipants <= 8)
 
   const extractCoursePrices = useCallback(
     (pricesList?: ICoursePrice[]) => {
@@ -103,15 +109,7 @@ export function useCoursePrice(courseData?: {
       ) {
         const scheduledPrice = coursePrice.pricingSchedules
         if (scheduledPrice.length !== 0) {
-          if (
-            isCLOSEDcourse &&
-            isICMcourse &&
-            isLevel2 &&
-            (isBlended || isReacc) &&
-            (!courseData.maxParticipants || courseData?.maxParticipants <= 8)
-          ) {
-            return null
-          }
+          if (specialUKcondition) return null
 
           return {
             priceCurrency: scheduledPrice[0].priceCurrency,
@@ -127,13 +125,8 @@ export function useCoursePrice(courseData?: {
       courseData?.blended,
       courseData?.courseLevel,
       courseData?.courseType,
-      courseData?.maxParticipants,
       courseData?.reaccreditation,
-      isCLOSEDcourse,
-      isICMcourse,
-      isLevel2,
-      isBlended,
-      isReacc,
+      specialUKcondition,
     ]
   )
 
