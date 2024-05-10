@@ -125,7 +125,7 @@ export function calculateGo1LicenseCost(
 
 export const getCourseRenewalCycle = (courseData: ValidCourseInput) => {
   if (courseData.renewalCycle) return courseData.renewalCycle
-  if (courseData.courseLevel === Course_Level_Enum.Level_1Mva)
+  if (courseData.courseLevel === Course_Level_Enum.Level_1Bs)
     return Course_Renewal_Cycle_Enum.One
   return null
 }

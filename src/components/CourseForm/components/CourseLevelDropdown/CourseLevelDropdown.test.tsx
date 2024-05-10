@@ -89,7 +89,7 @@ describe('component: CourseLevelDropdown', () => {
       getOption(t('common.course-levels.ADVANCED_TRAINER'))
     ).toBeInTheDocument()
     expect(
-      screen.getByTestId('course-level-option-LEVEL_1_MVA')
+      screen.getByTestId('course-level-option-LEVEL_1_BS')
     ).toBeInTheDocument()
   })
 

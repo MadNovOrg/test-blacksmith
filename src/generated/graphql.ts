@@ -1372,7 +1372,7 @@ export enum CourseLevel {
   FoundationTrainerPlus = 'FOUNDATION_TRAINER_PLUS',
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   Level_1 = 'LEVEL_1',
-  Level_1Mva = 'LEVEL_1_MVA',
+  Level_1Bs = 'LEVEL_1_BS',
   Level_2 = 'LEVEL_2'
 }
 
@@ -4211,6 +4211,8 @@ export enum MimeTypeEnum {
   AudioXMsWma = 'AUDIO_X_MS_WMA',
   /** MimeType audio/x-realaudio */
   AudioXRealaudio = 'AUDIO_X_REALAUDIO',
+  /** MimeType image/avif */
+  ImageAvif = 'IMAGE_AVIF',
   /** MimeType image/bmp */
   ImageBmp = 'IMAGE_BMP',
   /** MimeType image/gif */
@@ -22084,7 +22086,7 @@ export enum Course_Level_Enum {
   FoundationTrainerPlus = 'FOUNDATION_TRAINER_PLUS',
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   Level_1 = 'LEVEL_1',
-  Level_1Mva = 'LEVEL_1_MVA',
+  Level_1Bs = 'LEVEL_1_BS',
   Level_2 = 'LEVEL_2'
 }
 

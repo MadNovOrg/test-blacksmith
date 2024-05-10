@@ -184,10 +184,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const foundationTrainerPlusLevelEnabled = useFeatureFlagEnabled(
     'foundation-trainer-plus-course'
   )
-  const levelOneMVAEnabled = useFeatureFlagEnabled('level-one-mva')
+  const levelOneBSEnabled = useFeatureFlagEnabled('level-one-bs')
 
-  const MVAorFoundationTrainerPlusEnabled =
-    foundationTrainerPlusLevelEnabled || levelOneMVAEnabled
+  const BSor3DaySRTenabled =
+    foundationTrainerPlusLevelEnabled || levelOneBSEnabled
 
   const isResidingCountryEnabled = useMemo(
     () => residingCountryEnabled,
@@ -1630,7 +1630,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       labelId="course-level-dropdown"
                       onChange={event => {
                         field.onChange(event)
-                        MVAorFoundationTrainerPlusEnabled &&
+                        BSor3DaySRTenabled &&
                           setValue(
                             'residingCountry',
                             changeCountryOnCourseLevelChange(

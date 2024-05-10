@@ -38,7 +38,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   const foundationTrainerPlusLevelEnabled = useFeatureFlagEnabled(
     'foundation-trainer-plus-course'
   )
-  const levelOneMVAEnabled = useFeatureFlagEnabled('level-one-mva')
+  const levelOneBSEnabled = useFeatureFlagEnabled('level-one-bs')
 
   useEffect(() => {
     onChangeRef.current = onChange
@@ -56,9 +56,9 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
             return false
 
           if (
-            !levelOneMVAEnabled &&
-            typeof levelOneMVAEnabled !== 'undefined' &&
-            level === Course_Level_Enum.Level_1Mva
+            !levelOneBSEnabled &&
+            typeof levelOneBSEnabled !== 'undefined' &&
+            level === Course_Level_Enum.Level_1Bs
           )
             return false
 
@@ -70,7 +70,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
       courseType,
       courseAccreditor,
       foundationTrainerPlusLevelEnabled,
-      levelOneMVAEnabled,
+      levelOneBSEnabled,
     ]
   )
 

@@ -74,7 +74,7 @@ export function getLevels(
     [`${Accreditors_Enum.Icm}-${Course_Type_Enum.Closed}`]: () => {
       return [
         Course_Level_Enum.Level_1,
-        Course_Level_Enum.Level_1Mva,
+        Course_Level_Enum.Level_1Bs,
         Course_Level_Enum.Level_2,
         Course_Level_Enum.Advanced,
         Course_Level_Enum.IntermediateTrainer,
@@ -127,13 +127,13 @@ export const changeCountryOnCourseLevelChange = (
 
   if (
     courseResidingCountry !== Countries_Code.DEFAULT_RESIDING_COUNTRY &&
-    newCourseLevel === Course_Level_Enum.Level_1Mva
+    newCourseLevel === Course_Level_Enum.Level_1Bs
   )
     return courseResidingCountry
 
   if (
     newCourseLevel === Course_Level_Enum.FoundationTrainerPlus ||
-    newCourseLevel === Course_Level_Enum.Level_1Mva
+    newCourseLevel === Course_Level_Enum.Level_1Bs
   )
     return Countries_Code.IRELAND
 
@@ -197,14 +197,14 @@ export function canBeBlended(
       if (isF2F) {
         const levels = [
           Course_Level_Enum.Level_1,
-          Course_Level_Enum.Level_1Mva,
+          Course_Level_Enum.Level_1Bs,
           Course_Level_Enum.Level_2,
         ]
         return levels.includes(courseLevel)
       }
 
       if (isMixed) {
-        const levels = [Course_Level_Enum.Level_1Mva, Course_Level_Enum.Level_2]
+        const levels = [Course_Level_Enum.Level_1Bs, Course_Level_Enum.Level_2]
         return levels.includes(courseLevel)
       }
 
@@ -318,7 +318,7 @@ export function canBeReacc(
         }
 
         const levels = [
-          Course_Level_Enum.Level_1Mva,
+          Course_Level_Enum.Level_1Bs,
           Course_Level_Enum.Level_2,
           Course_Level_Enum.IntermediateTrainer,
           Course_Level_Enum.AdvancedTrainer,
@@ -332,7 +332,7 @@ export function canBeReacc(
           Course_Level_Enum.Level_1,
           Course_Level_Enum.Level_2,
           Course_Level_Enum.FoundationTrainerPlus,
-          Course_Level_Enum.Level_1Mva,
+          Course_Level_Enum.Level_1Bs,
           Course_Level_Enum.Level_2,
         ]
         return levels.includes(courseLevel)
@@ -445,7 +445,7 @@ export function canBeF2F(
 
       const levels = [
         Course_Level_Enum.Level_1,
-        Course_Level_Enum.Level_1Mva,
+        Course_Level_Enum.Level_1Bs,
         Course_Level_Enum.Level_2,
         Course_Level_Enum.Advanced,
         Course_Level_Enum.IntermediateTrainer,
@@ -492,7 +492,7 @@ export function canBeMixed(
         Course_Level_Enum.Level_1,
         Course_Level_Enum.Level_2,
         Course_Level_Enum.FoundationTrainerPlus,
-        Course_Level_Enum.Level_1Mva,
+        Course_Level_Enum.Level_1Bs,
         Course_Level_Enum.Level_2,
       ]
       return levels.includes(courseLevel)
@@ -630,6 +630,6 @@ export function hasRenewalCycle({
 }
 
 export const isRenewalCycleHiddenFromUI = (courseLevel: Course_Level_Enum) => {
-  const levelsToHideRenewalCycle = [Course_Level_Enum.Level_1Mva]
+  const levelsToHideRenewalCycle = [Course_Level_Enum.Level_1Bs]
   return levelsToHideRenewalCycle.includes(courseLevel)
 }

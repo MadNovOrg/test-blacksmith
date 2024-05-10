@@ -30,7 +30,7 @@ export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
   const levels = isMVAEnabled
     ? Object.values(Course_Level_Enum)
     : Object.values(Course_Level_Enum).filter(
-        level => level !== Course_Level_Enum.Level_1Mva
+        level => level !== Course_Level_Enum.Level_1Bs
       )
 
   const onSelected = (

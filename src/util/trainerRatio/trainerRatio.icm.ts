@@ -13,7 +13,7 @@ const {
   AdvancedTrainer,
   IntermediateTrainer,
   Level_1,
-  Level_1Mva,
+  Level_1Bs,
   Level_2,
   FoundationTrainerPlus,
 } = Course_Level_Enum
@@ -75,7 +75,7 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
 
   if (courseLevel === AdvancedTrainer) return ratio(1, 12, 12)
 
-  if (courseLevel === Level_1Mva) return ratio(0, 18, 18)
+  if (courseLevel === Level_1Bs) return ratio(0, 18, 18)
 
   return ratio(1, 24, 12)
 }
