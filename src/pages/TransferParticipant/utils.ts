@@ -15,6 +15,7 @@ export function isTrainTheTrainerCourse(courseLevel: Course_Level_Enum) {
     Course_Level_Enum.AdvancedTrainer,
     Course_Level_Enum.BildIntermediateTrainer,
     Course_Level_Enum.BildAdvancedTrainer,
+    Course_Level_Enum.FoundationTrainerPlus,
   ].includes(courseLevel)
 }
 
