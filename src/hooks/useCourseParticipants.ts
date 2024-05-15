@@ -1,7 +1,10 @@
 import { OperationContext, useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
-import { Course_Participant_Bool_Exp } from '@app/generated/graphql'
+import {
+  Course_Participant_Bool_Exp,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import {
   ParamsType,
   QUERY,
@@ -9,6 +12,8 @@ import {
 } from '@app/queries/participants/get-course-participants'
 import { SortOrder } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
+
+import useCourse from './useCourse'
 
 export default function useCourseParticipants(
   courseId?: number,
@@ -29,6 +34,9 @@ export default function useCourseParticipants(
   const { acl, profile } = useAuth()
   const sortBy = options?.sortBy ?? 'name'
   const order = options?.order ?? 'asc'
+
+  const { data: course } = useCourse(String(courseId))
+
   let orderBy: ParamsType['orderBy'] = {
     profile: { fullName: order },
   }
@@ -58,7 +66,7 @@ export default function useCourseParticipants(
       where: {
         _and: [
           ...queryConditions,
-          ...(acl.isOrgAdmin()
+          ...(acl.isOrgAdmin() && course?.course?.type === Course_Type_Enum.Open
             ? ([
                 {
                   profile: {
