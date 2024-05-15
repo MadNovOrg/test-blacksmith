@@ -25,9 +25,9 @@ export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
     ? ''
     : t('components.selectLevels.placeholder')
 
-  const isMVAEnabled = !!useFeatureFlagEnabled('level-one-mva')
+  const isBSEnabled = !!useFeatureFlagEnabled('level-one-bs')
 
-  const levels = isMVAEnabled
+  const levels = isBSEnabled
     ? Object.values(Course_Level_Enum)
     : Object.values(Course_Level_Enum).filter(
         level => level !== Course_Level_Enum.Level_1Bs
