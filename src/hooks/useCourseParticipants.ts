@@ -26,7 +26,7 @@ export default function useCourseParticipants(
   status: LoadingStatus
   mutate: (opts?: Partial<OperationContext> | undefined) => void
 } {
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
   const sortBy = options?.sortBy ?? 'name'
   const order = options?.order ?? 'asc'
   let orderBy: ParamsType['orderBy'] = {
@@ -55,7 +55,26 @@ export default function useCourseParticipants(
     variables: {
       limit: options?.pagination?.limit,
       offset: options?.pagination?.offset,
-      where: { _and: queryConditions },
+      where: {
+        _and: [
+          ...queryConditions,
+          ...(acl.isOrgAdmin()
+            ? ([
+                {
+                  profile: {
+                    organizations: {
+                      organization_id: {
+                        _in: profile?.organizations.map(
+                          org => org.organization.id
+                        ),
+                      },
+                    },
+                  },
+                },
+              ] as Course_Participant_Bool_Exp[])
+            : []),
+        ],
+      },
       withOrder: acl.canViewOrders(),
       orderBy,
     },

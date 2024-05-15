@@ -8,6 +8,7 @@ import {
 } from '@app/queries/fragments'
 import { CourseParticipant, SortOrder } from '@app/types'
 
+// TODO || Replace Response Type and Params type with generated types
 export type ResponseType = {
   courseParticipants: CourseParticipant[]
   courseParticipantsAggregation: { aggregate: { count: number } }
