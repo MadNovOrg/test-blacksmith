@@ -1,5 +1,30 @@
 # @teamteach/hub
 
+## 4.2.0
+
+### Minor Changes
+
+- 17f81b0: Rename 3 Day SRT course level into Foundation Trainer Plus
+- 027fcc0: additional unit tests for course creation and course edit
+- 6e1ef9c: Filter "individuals by training level" by MVA level
+- ed4112a: Closed Level 1 MVA course builder
+- 3d59565: add translations & enum for L1 MVA
+- 7294b11: Rename Level 1 MVA to Level 1 BS
+
+### Patch Changes
+
+- 19cab4a: Handle historical 3 Day SRT courses
+- 3e209c4: Add E2E tests for org admin, book open course from organisation page.
+- 7556dce: HOTFIX: Fix Organisation admins being able to see other course attendees data
+- c2e77c3: Change negative position for split_part function
+- f711f06: Enhancing course creation form schema
+- 7b2a419: fix creating discount codes for level 1 Behaviour Support
+- b20d187: Apply Trainer Fees for Foundation Trainer Plus when transfering attendee.
+- 1547bc0: Fix Organisation Sector Filter
+- 3d0bd9f: allow creating CLOSED ICM Level 2 course with UK country, non blended or non reaccreditation and less than 8 participants
+- 4cb8a42: change course crtificate number function
+- a2dccc6: Fix organisation form not null ofsted rating restriction
+
 ## 4.1.0
 
 ### Minor Changes
