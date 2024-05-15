@@ -330,7 +330,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         type: promoCode.type as Promo_Code_Type_Enum,
         amountCurrency:
           promoCode.type === Promo_Code_Type_Enum.FreePlaces
-            ? courseCost
+            ? courseCost * promoCode.amount
             : (courseCost * promoCode.amount) / 100,
       }
     }
