@@ -4,6 +4,14 @@ import { difference, isDate } from 'lodash-es'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { InviteStatus, SetCourseTrainerInput } from '@app/types'
 
+export const reschedulingFees = {
+  underOneWeekFee: 50,
+  underTwoWeeksFee: 25,
+  underFourWeeksUsualLevelsFee: 15,
+  underFourWeeksNonUsualLevelsFee: 25,
+  defaultFee: 0,
+}
+
 export const getCancellationTermsFee = (
   courseStartDate: Date | string
 ): number => {
@@ -36,14 +44,15 @@ export const getReschedulingTermsFee = (
       Course_Level_Enum.Level_2,
       Course_Level_Enum.Advanced,
       Course_Level_Enum.BildRegular,
+      Course_Level_Enum.Level_1Bs,
     ].includes(level)
   ) {
     if (diffInWeeks < 2) {
-      return 25
+      return reschedulingFees.underTwoWeeksFee
     } else if (diffInWeeks < 4) {
-      return 15
+      return reschedulingFees.underFourWeeksUsualLevelsFee
     } else {
-      return 0
+      return reschedulingFees.defaultFee
     }
   }
 
@@ -56,11 +65,11 @@ export const getReschedulingTermsFee = (
     ].includes(level)
   ) {
     if (diffInWeeks < 1) {
-      return 50
+      return reschedulingFees.underOneWeekFee
     } else if (diffInWeeks < 4) {
-      return 25
+      return reschedulingFees.underFourWeeksNonUsualLevelsFee
     } else {
-      return 0
+      return reschedulingFees.defaultFee
     }
   }
 
