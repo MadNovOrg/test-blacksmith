@@ -24,11 +24,6 @@ import ChooseTrainers, {
   FormValues as TrainersFormValues,
 } from '@app/components/ChooseTrainers'
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import CourseForm, { DisabledFields } from '@app/components/CourseForm'
-import {
-  hasRenewalCycle,
-  isRenewalCycleHiddenFromUI,
-} from '@app/components/CourseForm/helpers'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { Dialog } from '@app/components/dialogs'
 import { Sticky } from '@app/components/Sticky'
@@ -59,12 +54,20 @@ import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import useCourse from '@app/hooks/useCourse'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
+import {
+  CourseForm,
+  DisabledFields,
+} from '@app/modules/course/components/CourseForm'
+import {
+  hasRenewalCycle,
+  isRenewalCycleHiddenFromUI,
+} from '@app/modules/course/components/CourseForm/helpers'
+import { CourseExceptionsConfirmation } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
   checkCourseDetailsForExceptions,
   isTrainersRatioNotMet,
   shouldGoIntoExceptionApproval,
-} from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
+} from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import { CourseCancellationModal } from '@app/pages/EditCourse/components/CourseCancellationModal'
 import { RegistrantsCancellationModal } from '@app/pages/EditCourse/components/RegistrantsCancellationModal'
 import { INSERT_COURSE_AUDIT } from '@app/queries/courses/insert-course-audit'
@@ -92,8 +95,8 @@ import {
   profileToInput,
 } from '@app/util'
 
+import { getCourseRenewalCycle } from '../../modules/course/pages/CreateCourse/utils'
 import { NotFound } from '../common/NotFound'
-import { getCourseRenewalCycle } from '../CreateCourse/utils'
 
 import { FormValues, ReviewChangesModal } from './components/ReviewChangesModal'
 import { type CourseDiff, getChangedTrainers } from './shared'

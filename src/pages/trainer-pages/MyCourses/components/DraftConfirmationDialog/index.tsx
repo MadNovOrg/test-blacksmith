@@ -15,7 +15,7 @@ import { Trans } from 'react-i18next'
 import { Dialog } from '@app/components/dialogs'
 import { useSnackbar } from '@app/context/snackbar'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { useCreateCourse } from '@app/pages/CreateCourse/components/CreateCourseProvider'
+import { useCreateCourse } from '@app/modules/course/pages/CreateCourse/components/CreateCourseProvider'
 
 type Props = {
   open: boolean

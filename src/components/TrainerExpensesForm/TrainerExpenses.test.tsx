@@ -4,7 +4,7 @@ import {
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { CreateCourseProvider } from '@app/pages/CreateCourse/components/CreateCourseProvider'
+import { CreateCourseProvider } from '@app/modules/course/pages/CreateCourse/components/CreateCourseProvider'
 import { TrainerInput, TransportMethod } from '@app/types'
 
 import { render, screen, userEvent, waitFor, within, act } from '@test/index'

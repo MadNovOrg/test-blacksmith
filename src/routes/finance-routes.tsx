@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { CertificationsRoutes } from '@app/modules/certifications/routes'
+import { OrderDetails as CourseOrderDetails } from '@app/modules/course/pages/CreateCourse/components/OrderDetails'
 import { ParticipantGrade } from '@app/modules/grading/pages/ParticipantGrade/ParticipantGrade'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { UserRoutes } from '@app/modules/user/routes'
@@ -10,7 +11,6 @@ import { AdminPage } from '@app/pages/admin'
 import { AuditsPage } from '@app/pages/admin/Audits'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import { Contacts } from '@app/pages/admin/Contacts'
-import { OrderDetails as CourseOrderDetails } from '@app/pages/CreateCourse/components/OrderDetails'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
@@ -31,37 +31,41 @@ const NotFound = React.lazy(() =>
 )
 
 const CreateCourse = React.lazy(() =>
-  import('@app/pages/CreateCourse').then(module => ({
+  import('@app/modules/course/pages/CreateCourse').then(module => ({
     default: module.CreateCourse,
   }))
 )
 
 const AssignTrainers = React.lazy(() =>
-  import('@app/pages/CreateCourse/components/AssignTrainers').then(module => ({
+  import(
+    '@app/modules/course/pages/CreateCourse/components/AssignTrainers'
+  ).then(module => ({
     default: module.AssignTrainers,
   }))
 )
 
 const TrainerExpenses = React.lazy(() =>
-  import('@app/pages/CreateCourse/components/TrainerExpenses').then(module => ({
+  import(
+    '@app/modules/course/pages/CreateCourse/components/TrainerExpenses'
+  ).then(module => ({
     default: module.TrainerExpenses,
   }))
 )
 
 const ReviewAndConfirm = React.lazy(() =>
-  import('@app/pages/CreateCourse/components/ReviewAndConfirm').then(
-    module => ({
-      default: module.ReviewAndConfirm,
-    })
-  )
+  import(
+    '@app/modules/course/pages/CreateCourse/components/ReviewAndConfirm'
+  ).then(module => ({
+    default: module.ReviewAndConfirm,
+  }))
 )
 
 const CreateCourseForm = React.lazy(() =>
-  import('@app/pages/CreateCourse/components/CreateCourseForm').then(
-    module => ({
-      default: module.CreateCourseForm,
-    })
-  )
+  import(
+    '@app/modules/course/pages/CreateCourse/components/CreateCourseForm'
+  ).then(module => ({
+    default: module.CreateCourseForm,
+  }))
 )
 
 const EditCourse = React.lazy(() =>

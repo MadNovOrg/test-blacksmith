@@ -27,7 +27,6 @@ import { useNavigate } from 'react-router-dom'
 import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CountryDropdown } from '@app/components/CountryDropdown'
-import { SourceDropdown } from '@app/components/CourseForm/components/SourceDropdown'
 import { CourseDuration } from '@app/components/CourseTitleAndDuration/components/CourseDuration'
 import {
   formSchema as invoiceDetailsFormSchema,
@@ -51,6 +50,7 @@ import {
   PaymentMethod,
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
+import { SourceDropdown } from '@app/modules/course/components/CourseForm/components/SourceDropdown'
 import { schemas, yup } from '@app/schemas'
 import { InvoiceDetails, NonNullish, Profile } from '@app/types'
 import { formatCurrency, isValidUKPostalCode, requiredMsg } from '@app/util'

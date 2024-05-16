@@ -21,7 +21,7 @@ import {
   FindProfilesQuery,
 } from '@app/generated/graphql'
 import { TimeZoneDataType } from '@app/hooks/useTimeZones'
-import { StepsEnum } from '@app/pages/CreateCourse/types'
+import { StepsEnum } from '@app/modules/course/pages/CreateCourse/types'
 
 export type Base = {
   id: string

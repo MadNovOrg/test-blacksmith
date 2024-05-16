@@ -2,7 +2,6 @@ import { build, BuildTimeConfig, perBuild } from '@jackfranklin/test-data-bot'
 import { Chance } from 'chance'
 import { add, sub } from 'date-fns'
 
-import { getAccountCode } from '@app/components/CourseForm/helpers'
 import {
   Accreditors_Enum,
   BlendedLearningAttendeeExportData,
@@ -33,6 +32,7 @@ import {
   WaitlistSummaryFragment,
   WebinarSummaryFragment,
 } from '@app/generated/graphql'
+import { getAccountCode } from '@app/modules/course/components/CourseForm/helpers'
 import {
   Address,
   BlendedLearningStatus,
