@@ -164,6 +164,8 @@ export const VariantComplete = ({
     onClose()
   }
 
+  const allowCustomFee = acl.isTTAdmin() || acl.isTTOps() || acl.isSalesAdmin()
+
   return (
     <Container>
       <Dialog
@@ -178,7 +180,7 @@ export const VariantComplete = ({
           ),
           Actions: () => (
             <Actions
-              disabled={!confirmed && !(acl.isTTAdmin() || acl.isTTOps())}
+              disabled={!confirmed && !allowCustomFee}
               loading={fetching}
               onClose={onClose}
               onSubmit={handleSubmit(onFormSubmit)}
@@ -212,7 +214,7 @@ export const VariantComplete = ({
             errors={errors}
             feeType={feeType}
             currency={course.priceCurrency ?? 'GBP'}
-            showEditFeePercent={acl.isTTAdmin() || acl.isTTOps()}
+            showEditFeePercent={allowCustomFee}
             onSetFeeType={setFeeType}
           />
 
@@ -272,7 +274,7 @@ export const VariantComplete = ({
             {...register('cancellationReason')}
           />
 
-          {!(acl.isTTAdmin() || acl.isTTOps()) ? (
+          {!allowCustomFee ? (
             <Box mt={2}>
               <FormControlLabel
                 data-testid="confirmation-checkbox"
