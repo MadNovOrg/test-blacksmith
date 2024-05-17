@@ -217,6 +217,7 @@
             "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>"
           },
           "LEVEL_1_BS": {
+            "F2F": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>",
             "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>",
             "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>"
           },

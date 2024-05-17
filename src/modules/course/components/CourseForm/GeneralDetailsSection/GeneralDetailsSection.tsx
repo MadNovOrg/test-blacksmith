@@ -18,9 +18,8 @@ import {
   Radio,
   FormHelperText,
 } from '@mui/material'
-import { type TFunction } from 'i18next'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
-import { useCallback, useMemo, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useFormContext, Controller, useWatch } from 'react-hook-form'
 
 import CountriesSelector from '@app/components/CountriesSelector'
@@ -42,11 +41,9 @@ import { type DisabledFields } from '..'
 import { InstructionAccordionField } from '../components/AccordionTextField'
 import { CourseLevelDropdown } from '../components/CourseLevelDropdown'
 import { StrategyToggles } from '../components/StrategyToggles/StrategyToggles'
-import {
-  changeCountryOnCourseLevelChange,
-  getDefaultSpecialInstructions,
-} from '../helpers'
+import { changeCountryOnCourseLevelChange } from '../helpers'
 import { useCoursePermissions } from '../hooks/useCoursePermissions'
+import { useSpecialInstructions } from '../hooks/useSpecialInstructions'
 
 import { CourseDatesSubSection } from './CourseDatesSubSection'
 import { OrganizationSubSection } from './OrganizationSubSection'
@@ -130,48 +127,21 @@ export const GeneralDetailsSection = ({
     accreditedBy,
   })
 
+  const { defaultSpecialInstructions, resetSpecialInstructionsToDefault } =
+    useSpecialInstructions({
+      courseType,
+      courseLevel: courseLevel as Course_Level_Enum,
+      deliveryType,
+      conversion,
+      isCreation,
+      reaccreditation,
+      setValue,
+    })
+
   const hasSpecialInstructions = [
     Course_Delivery_Type_Enum.F2F,
     Course_Delivery_Type_Enum.Mixed,
   ].includes(deliveryType)
-
-  const defaultSpecialInstructions = useMemo(
-    () =>
-      getDefaultSpecialInstructions(
-        courseType,
-        courseLevel as Course_Level_Enum,
-        deliveryType,
-        reaccreditation,
-        conversion,
-        t
-      ),
-    [courseLevel, courseType, deliveryType, t, reaccreditation, conversion]
-  )
-
-  const resetSpecialInstructionsToDefault = useCallback(
-    (
-      type: Course_Type_Enum,
-      level: Course_Level_Enum | '',
-      deliveryType: Course_Delivery_Type_Enum,
-      reaccreditation: boolean,
-      conversion: boolean,
-      t: TFunction
-    ) => {
-      isCreation &&
-        setValue(
-          'specialInstructions',
-          getDefaultSpecialInstructions(
-            type,
-            level,
-            deliveryType,
-            reaccreditation,
-            conversion,
-            t
-          )
-        )
-    },
-    [isCreation, setValue]
-  )
 
   useEffect(() => {
     const mustChange = !canBlended && blendedLearning
@@ -183,51 +153,23 @@ export const GeneralDetailsSection = ({
     if (mustChange) {
       const newReaccreditationValue = false
       setValue('reaccreditation', newReaccreditationValue)
-      resetSpecialInstructionsToDefault(
-        courseType,
-        courseLevel as Course_Level_Enum,
-        Course_Delivery_Type_Enum.F2F,
-        newReaccreditationValue,
-        conversion,
-        t
-      )
+      resetSpecialInstructionsToDefault({
+        newCourseReacc: newReaccreditationValue,
+      })
     }
-  }, [
-    canReacc,
-    courseLevel,
-    courseType,
-    resetSpecialInstructionsToDefault,
-    setValue,
-    t,
-    reaccreditation,
-    conversion,
-  ])
+  }, [canReacc, reaccreditation, resetSpecialInstructionsToDefault, setValue])
 
   useEffect(() => {
     const isMixed = deliveryType === Course_Delivery_Type_Enum.Mixed
     const mustChange = !canMixed && isMixed
     if (mustChange) {
-      setValue('deliveryType', Course_Delivery_Type_Enum.F2F)
-      resetSpecialInstructionsToDefault(
-        courseType,
-        courseLevel as Course_Level_Enum,
-        Course_Delivery_Type_Enum.F2F,
-        reaccreditation,
-        conversion,
-        t
-      )
+      const newDeliveryType = Course_Delivery_Type_Enum.F2F
+      setValue('deliveryType', newDeliveryType)
+      resetSpecialInstructionsToDefault({
+        newCourseDeliveryType: newDeliveryType,
+      })
     }
-  }, [
-    canMixed,
-    courseLevel,
-    courseType,
-    resetSpecialInstructionsToDefault,
-    setValue,
-    t,
-    deliveryType,
-    reaccreditation,
-    conversion,
-  ])
+  }, [canMixed, deliveryType, resetSpecialInstructionsToDefault, setValue])
 
   return (
     <InfoPanel
@@ -265,6 +207,10 @@ export const GeneralDetailsSection = ({
                       setValue('residingCountry', 'GB-ENG')
                     }
                     setValue('venue', null)
+
+                    resetSpecialInstructionsToDefault({
+                      newCourseType: e.target.value as Course_Type_Enum,
+                    })
 
                     field.onChange(e)
                   }}
@@ -403,24 +349,22 @@ export const GeneralDetailsSection = ({
                 value={field.value as Course_Level_Enum}
                 labelId="course-level-dropdown"
                 onChange={event => {
+                  const newCourseLevel = event.target.value as Course_Level_Enum
+                  if (newCourseLevel === courseLevel) return
+
                   field.onChange(event)
                   BSor3DaySRTenabled &&
                     setValue(
                       'residingCountry',
                       changeCountryOnCourseLevelChange(
-                        event.target.value,
+                        newCourseLevel,
                         wasDefaultResidingCountryChanged,
                         residingCountry
                       )
                     )
-                  resetSpecialInstructionsToDefault(
-                    courseType,
-                    event.target.value as Course_Level_Enum,
-                    deliveryType,
-                    reaccreditation,
-                    conversion,
-                    t
-                  )
+                  resetSpecialInstructionsToDefault({
+                    newCourseLevel,
+                  })
                 }}
                 courseType={courseType}
                 courseAccreditor={accreditedBy ?? Accreditors_Enum.Icm}
@@ -603,14 +547,9 @@ export const GeneralDetailsSection = ({
               }
               trigger(['venue'])
 
-              resetSpecialInstructionsToDefault(
-                courseType,
-                courseLevel as Course_Level_Enum,
-                deliveryType,
-                reaccreditation,
-                conversion,
-                t
-              )
+              resetSpecialInstructionsToDefault({
+                newCourseDeliveryType: deliveryType,
+              })
             }}
           >
             <FormControlLabel
