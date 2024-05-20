@@ -30,7 +30,10 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
-import { courseWithManualPrice } from '@app/modules/course/pages/CreateCourse/utils'
+import {
+  courseWithManualPrice,
+  isCourseWithNoPrice,
+} from '@app/modules/course/pages/CreateCourse/utils'
 import { CourseInput } from '@app/types'
 
 import { AttendeesSection } from './AttendeesSection'
@@ -183,6 +186,13 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     values.residingCountry,
   ])
 
+  const courseWithNoPrice = useMemo(() => {
+    return isCourseWithNoPrice({
+      courseType,
+      blendedLearning: Boolean(values.blendedLearning),
+    })
+  }, [courseType, values.blendedLearning])
+
   /**
    * flag to display Finance Section for CLOSED courses
    * it shows following fields: priceCurrency, price & includeVAT
@@ -272,21 +282,19 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   ])
 
   useEffect(() => {
-    if (!isCreation && courseHasManualPrice) {
-      allowCourseEditWithoutScheduledPrice(true)
-    }
-
-    // do not allow editing a course if there's no scheduled price for it
-    if (!isCreation && !courseHasManualPrice && !coursePrice) {
-      allowCourseEditWithoutScheduledPrice(false)
-    } else if (!isCreation && !courseHasManualPrice && coursePrice) {
-      allowCourseEditWithoutScheduledPrice(true)
+    if (!isCreation) {
+      allowCourseEditWithoutScheduledPrice(
+        courseHasManualPrice ||
+          (!courseHasManualPrice && Boolean(coursePrice)) ||
+          courseWithNoPrice
+      )
     }
   }, [
     isCreation,
     coursePrice,
     courseHasManualPrice,
     allowCourseEditWithoutScheduledPrice,
+    courseWithNoPrice,
   ])
 
   // set VAT true for all UK countries

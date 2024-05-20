@@ -75,6 +75,7 @@ export const courseWithManualPrice = ({
   const isBILDcourse = accreditedBy === Accreditors_Enum.Bild
   const isICMcourse = accreditedBy === Accreditors_Enum.Icm
   const isIndirectCourse = courseType === Course_Type_Enum.Indirect
+  const isBLIndirectCourse = isIndirectCourse && blendedLearning
   const isClosedCourse = courseType === Course_Type_Enum.Closed
   const isOpenCourse = courseType === Course_Type_Enum.Open
   const isLEVEL2 = courseLevel === Course_Level_Enum.Level_2
@@ -88,7 +89,11 @@ export const courseWithManualPrice = ({
     isUKcountry &&
     maxParticipants <= 8
 
-  if (specialUKcountryCondition || isBILDcourse || isIndirectCourse) {
+  if (
+    specialUKcountryCondition ||
+    (isBILDcourse && !(isIndirectCourse && !blendedLearning)) ||
+    isBLIndirectCourse
+  ) {
     return true
   }
 
@@ -100,6 +105,16 @@ export const courseWithManualPrice = ({
   }
 
   return false
+}
+
+export const isCourseWithNoPrice = ({
+  courseType,
+  blendedLearning,
+}: {
+  courseType: Course_Type_Enum
+  blendedLearning: boolean
+}) => {
+  return courseType === Course_Type_Enum.Indirect && !blendedLearning
 }
 
 export function calculateGo1LicenseCost(

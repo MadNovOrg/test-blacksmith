@@ -28,7 +28,10 @@ import {
   isRenewalCycleHiddenFromUI,
 } from '@app/modules/course/components/CourseForm/helpers'
 import { shouldGoIntoExceptionApproval } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
-import { courseWithManualPrice } from '@app/modules/course/pages/CreateCourse/utils'
+import {
+  courseWithManualPrice,
+  isCourseWithNoPrice,
+} from '@app/modules/course/pages/CreateCourse/utils'
 import { MUTATION as INSERT_COURSE_MUTATION } from '@app/queries/courses/insert-course'
 import { QUERY as REMOVE_COURSE_DRAFT } from '@app/queries/courses/remove-course-draft'
 import { isModeratorNeeded } from '@app/rules/trainers'
@@ -181,9 +184,17 @@ export function useSaveCourse(): {
     internationalFlagEnabled: isInternationalFlagEnabled,
   })
 
+  const courseWithNoPrice = useMemo(() => {
+    return isCourseWithNoPrice({
+      courseType: courseData?.type as Course_Type_Enum,
+      blendedLearning: Boolean(courseData?.blendedLearning),
+    })
+  }, [courseData?.blendedLearning, courseData?.type])
+
   const allowCreateCourse = useMemo(
-    () => courseHasManualPrice || Boolean(courseData?.price),
-    [courseHasManualPrice, courseData?.price]
+    () =>
+      courseHasManualPrice || Boolean(courseData?.price) || courseWithNoPrice,
+    [courseHasManualPrice, courseData?.price, courseWithNoPrice]
   )
 
   const calculateVATrate = useMemo(() => {
@@ -428,7 +439,9 @@ export function useSaveCourse(): {
                 priceCurrency: courseData.priceCurrency,
               }
             : {}),
-          ...(courseHasManualPrice ? { price: courseData.price } : null),
+          ...(courseHasManualPrice
+            ? { price: courseData.price ?? undefined }
+            : undefined),
           ...(approveExceptions
             ? {
                 courseExceptions: {
